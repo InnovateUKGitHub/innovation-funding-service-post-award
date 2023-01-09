@@ -4,7 +4,7 @@ import { characterCount, deletePcr, pcrCommentBox, shouldShowAllAccordion, shoul
 describe("Creating Reallocate Project Costs PCR", () => {
   before(() => {
     // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/create");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });
 
   after(deletePcr);

@@ -17,7 +17,7 @@ import {
 
 describe("Project Documents page", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/documents");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/documents" });
   });
 
   it("Should show back to project link", () => {

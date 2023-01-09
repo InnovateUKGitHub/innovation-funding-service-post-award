@@ -3,7 +3,7 @@ import { shouldShowProjectTitle, shouldShowAllAccordion, pcrCommentBox, characte
 
 describe("Creating Remove a partner PCR", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/create");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });
 
   it("Should select 'Remove a partner' checkbox", () => {

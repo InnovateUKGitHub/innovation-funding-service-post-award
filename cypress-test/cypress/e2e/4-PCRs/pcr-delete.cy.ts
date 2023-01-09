@@ -3,7 +3,7 @@ import { shouldShowProjectTitle } from "./steps";
 
 describe("PCRs in Draft status can be deleted", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/dashboard");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
   });
 
   it("Should have a back option", () => {

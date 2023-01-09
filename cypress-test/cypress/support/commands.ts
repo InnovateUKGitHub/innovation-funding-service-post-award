@@ -26,7 +26,13 @@ const switchUserTo = (email: string, goHome: boolean = false) => {
 };
 
 const resetUser = (goHome: boolean = false) => {
-  cy.getByQA(`reset-and-${goHome ? "home" : "stay"}`).click();
+  cy.log("**resetUser**");
+  cy.contains("User Switcher").click().wait(1000);
+  cy.getByQA(`reset-and-${goHome ? "home" : "stay"}`)
+    .scrollIntoView()
+    .wait(5000)
+    .click()
+    .wait(5000);
 };
 
 const backLink = (name: string) => {

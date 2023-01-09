@@ -1,8 +1,6 @@
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 
-export const logInAsUserAndNavigateToProject = (email: string) => {
-  cy.switchUserTo(email, true);
-
+export const navigateToProject = () => {
   cy.contains("Projects").click({ force: true });
   cy.get(`${projectCardCss} a`).wait(1000).contains("CYPRESS_DO_NOT_USE").click();
 };

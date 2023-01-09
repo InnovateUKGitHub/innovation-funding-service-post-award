@@ -3,7 +3,7 @@ import { claimCommentBox, forecastView, shouldShowProjectTitle } from "./steps";
 
 describe("Updating forecasts after claim costs and document upload", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/summary");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/summary" });
   });
 
   it("Should have a back option", () => {

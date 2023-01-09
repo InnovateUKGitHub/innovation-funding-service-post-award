@@ -3,7 +3,7 @@ import { beforeYouSubmit, createRequestButton, explainPCRTypes, pcrCheckBoxes, s
 
 describe("Project Change Request front page", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/dashboard");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
   });
 
   it("Should have a back option", () => {

@@ -3,7 +3,7 @@ import { deletePcr, shouldShowProjectTitle } from "./steps";
 
 describe("Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/create");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });
 
   after(() => {

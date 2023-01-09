@@ -4,7 +4,7 @@ import { claimsDocUpload, claimsFileTable, learnFiles, selectFileDescription, sh
 describe("Claims documents upload screen", () => {
   before(() => {
     cy.intercept("POST", "/api/documents/claim-details/*").as("uploadDocument");
-    visitApp("projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
   });
 
   it("Should have a back option", () => {
