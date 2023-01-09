@@ -27,7 +27,7 @@ const ViewForecastComponent = (props: ViewForecastParams & ViewForecastData & Ba
     const { isFc: isPartnerFc } = getAuthRoles(data.partner.roles);
     // MO, PM & FC/PM should see partner name
 
-    const { isPmOrMo: isProjectPmOrMo } = getAuthRoles(data.project.roles);
+    const { isPmOrMo: isProjectPmOrMo, isFc } = getAuthRoles(data.project.roles);
     const partnerName = isProjectPmOrMo ? ACC.getPartnerName(data.partner) : undefined;
     const backLink = isProjectPmOrMo
       ? props.routes.forecastDashboard.getLink({ projectId: data.project.id })
@@ -38,7 +38,9 @@ const ViewForecastComponent = (props: ViewForecastParams & ViewForecastData & Ba
       <ACC.Content value={x => x.pages.forecastsDetails.backLink} />
     );
 
-    const allClaimsDashboardLink = props.routes.allClaimsDashboard.getLink({ projectId: props.projectId });
+    const claimsLink = isFc
+      ? props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId })
+      : props.routes.allClaimsDashboard.getLink({ projectId: props.projectId });
 
     return (
       <ACC.Page
@@ -50,7 +52,7 @@ const ViewForecastComponent = (props: ViewForecastParams & ViewForecastData & Ba
         {/* If the partner is not withdrawn, show messages */}
         {!data.partner.isWithdrawn && (
           <>
-            <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
+            <ForecastClaimAdvice claimLink={claimsLink} />
             {renderFinalClaimMessage(data, isPartnerFc)}
           </>
         )}
