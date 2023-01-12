@@ -6,6 +6,7 @@
   "scripts": {
     "cypress": "cross-env ELECTRON_EXTRA_LAUNCH_ARGS=--no-sandbox cypress",
     "start": "npm run cypress -- open",
+    "local": "cross-env TEST_URL=http://localhost:8080 npm run cypress -- open",
     "test": "npm run cypress -- run",
     "test:headed": "npm run cypress -- run --headed",
     "prettier": "prettier . --write",
