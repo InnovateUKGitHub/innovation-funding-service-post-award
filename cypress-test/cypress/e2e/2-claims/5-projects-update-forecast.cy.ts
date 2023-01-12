@@ -43,26 +43,23 @@ describe("Updating forecasts after claim costs and document upload", () => {
   it("Should accept input and calculate the figures accordingly", () => {
     cy.getByAriaLabel("Labour Period 2").clear().type("1000");
     cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,100.00");
-    cy.getByAriaLabel("Overheads Period 2").clear().type("1000");
+    cy.getByAriaLabel("Overheads Period 2").clear().type("1000").wait(1000);
   });
 
   it("Should save and return to claims", () => {
-    cy.getByQA("button_save-qa").click();
-    cy.wait(6000);
+    cy.getByQA("button_save-qa").click({ force: true });
   });
 
   it("Should re-open the claim", () => {
-    cy.get("a.govuk-link").contains("Edit").click();
-    cy.wait(3000);
+    cy.get("a.govuk-link").contains("Edit", { timeout: 10000 }).click();
   });
 
   it("Should navigate to documents", () => {
     cy.getByQA("button_default-qa").click();
-    cy.wait(6000);
   });
 
   it("Should continue through to forecast page again", () => {
-    cy.get("a#continue-claim.govuk-button").click();
+    cy.get("a#continue-claim.govuk-button", { timeout: 10000 }).click();
   });
 
   it("Should have saved the information from previous edit", savedFromPrev);

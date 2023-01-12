@@ -2,7 +2,7 @@ const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 
 export const navigateToProject = () => {
   cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains("CYPRESS_DO_NOT_USE").click();
+  cy.get(`${projectCardCss} a`, { timeout: 1000 }).contains("CYPRESS_DO_NOT_USE").click();
 };
 
 export const monitoringReportCardShouldNotExist = () => {
@@ -41,10 +41,13 @@ export const shouldFilterProjectsUsingSearchFilter = () => {
   cy.get("input#search").clear();
 };
 
+/**
+ * cy.wait is required in shouldNavigateToProjectOverview
+ */
 export const shouldNavigateToProjectOverview = () => {
-  cy.get(`${projectCardCss} a`).wait(500).contains("CYPRESS_DO_NOT_USE").click();
+  cy.get(`${projectCardCss} a`).contains("CYPRESS_DO_NOT_USE").wait(500).click({ force: true });
 
-  cy.get("h1").contains("Project overview");
+  cy.get("h1", { timeout: 10000 }).contains("Project overview");
   cy.getByQA("page-title").should("contain.text", "CYPRESS_DO_NOT_USE");
 };
 

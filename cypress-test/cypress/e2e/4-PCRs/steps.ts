@@ -63,7 +63,7 @@ export const characterCount = () => {
 };
 
 export const deletePcr = () => {
-  visitApp("projects/a0E2600000kSotUEAS/pcrs/dashboard");
-  cy.getByQA("pcrDeleteLink").contains("Delete").click();
+  visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+  cy.getByQA("pcrDeleteLink").contains("Delete", { timeout: 10000 }).click();
   cy.getByQA("button_delete-qa").click();
 };

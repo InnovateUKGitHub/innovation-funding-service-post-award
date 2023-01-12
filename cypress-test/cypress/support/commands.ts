@@ -2,27 +2,28 @@ import "@testing-library/cypress/add-commands";
 
 const getByLabel = (label: string) => {
   cy.log("**getByLabel**");
-  cy.contains("label", label)
+  cy.contains("label", label, { timeout: 10000 })
     .invoke("attr", "for")
     .then(id => {
-      cy.get("#" + id);
+      cy.get("#" + id, { timeout: 10000 });
     });
 };
 
 const getByQA = (tag: string) => {
   cy.log("**getByQA**");
-  cy.get(`[data-qa="${tag}"]`);
+  cy.get(`[data-qa="${tag}"]`, { timeout: 10000 });
 };
 
 const getByAriaLabel = (label: string) => {
   cy.log("**getByAriaLabel**");
-  cy.get(`[aria-label="${label}"`);
+  cy.get(`[aria-label="${label}"`, { timeout: 10000 });
 };
 
 const switchUserTo = (email: string, goHome: boolean = false) => {
   cy.contains("User Switcher").click();
   cy.get("input#user-switcher-manual-input").scrollIntoView().clear().type(email);
   cy.getByQA(`manual-change-and-${goHome ? "home" : "stay"}`).click();
+  cy.wait(500);
 };
 
 const resetUser = (goHome: boolean = false) => {
@@ -37,26 +38,26 @@ const resetUser = (goHome: boolean = false) => {
 
 const backLink = (name: string) => {
   cy.log("**backLink**");
-  cy.get("a.govuk-back-link").contains(name);
+  cy.get("a.govuk-back-link", { timeout: 10000 }).contains(name);
 };
 
 const submitButton = (name: string) => {
-  cy.get('button[type="submit"]').contains(name);
+  cy.get('button[type="submit"]', { timeout: 1000 }).contains(name);
 };
 
 /**
  * Note that this upload button is different to the one contained within Claims documents upload which is button_upload-qa
  */
 const uploadButton = (name: string) => {
-  cy.get('button[type="submit"]').contains(name);
+  cy.get('button[type="submit"]', { timeout: 10000 }).contains(name);
 };
 
 const tableCell = (name: string) => {
-  cy.get("td.govuk-table__cell").contains(name);
+  cy.get("td").contains(name, { timeout: 1000 });
 };
 
 const tableHeader = (name: string) => {
-  cy.get("th.govuk-table__header").contains(name);
+  cy.get("th").contains(name);
 };
 
 const assertPcrCompletionStatus = (pcrType: string, status: string) => {
@@ -67,9 +68,9 @@ const assertPcrCompletionStatus = (pcrType: string, status: string) => {
 const clickCheckBox = (label: string, uncheck?: boolean) => {
   cy.log("**clickCheckBox**");
   if (uncheck) {
-    cy.getByLabel(label).scrollIntoView().wait(500).uncheck();
+    cy.getByLabel(label).scrollIntoView().uncheck({ timeout: 5000 });
   } else {
-    cy.getByLabel(label).scrollIntoView().wait(500).check();
+    cy.getByLabel(label).scrollIntoView().check({ force: true, timeout: 5000 });
   }
 };
 

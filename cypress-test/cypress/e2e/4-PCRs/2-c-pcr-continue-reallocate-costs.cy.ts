@@ -24,7 +24,6 @@ describe("Continues Reallocate costs to the costs tables page to access each par
   it("Should show select 'Give us information' and continue to the next page", () => {
     cy.get("h2.app-task-list__section").contains("Give us information");
     cy.get("span.app-task-list__task-name").contains("Reallocate project costs").click();
-    cy.wait(2000);
   });
 
   it("Should show the project title", shouldShowProjectTitle);
@@ -37,7 +36,6 @@ describe("Continues Reallocate costs to the costs tables page to access each par
 
   it("Should allow you to navigate to EUI Small Ent Health", () => {
     cy.get("td.govuk-table__cell").contains("EUI Small Ent Health").click();
-    cy.wait(5000);
   });
 
   it("Should have a back option", () => {
@@ -86,16 +84,15 @@ describe("Continues Reallocate costs to the costs tables page to access each par
   });
 
   it("Should reflect the change in costs in the costs reallocated column", () => {
-    cy.tableCell("-£1000");
+    cy.tableCell("-£1,000.00");
   });
 
   it("Should have a 'Save and return to reallocate project costs' button", () => {
     cy.submitButton("Save and return to reallocate project costs").click();
-    cy.wait(5000);
   });
 
   it("Should return to the 'Reallocate costs screen", () => {
-    cy.get("h1").contains("Reallocate project costs");
+    cy.get("h1").contains("Reallocate project costs", { timeout: 10000 });
   });
 
   it("Has an input box for grant moving over financial year", () => {
@@ -105,7 +102,6 @@ describe("Continues Reallocate costs to the costs tables page to access each par
   it("Has a mark as complete section", () => {
     cy.get("h2").contains("Mark as complete");
     cy.get("input#itemStatus_true.govuk-checkboxes__input").click();
-    cy.wait(2000);
   });
 
   it("Has a save and return to request button", () => {

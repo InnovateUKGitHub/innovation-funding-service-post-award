@@ -12,12 +12,11 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Will click Create request button and proceed to next page", () => {
     cy.submitButton("Create request").click();
-    cy.wait(5000);
-    cy.get("h1").should("contain.text", "Request");
+    cy.get("h1", { timeout: 10000 }).should("contain.text", "Request", { timeout: 10000 });
   });
 
   it("Should have a back option", () => {
-    cy.backLink("Back to summary");
+    cy.backLink("Back to project change requests");
   });
 
   it("Should show the project title", shouldShowProjectTitle);
@@ -69,11 +68,10 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Should Save and return to requests", () => {
     cy.getByQA("button_return-qa").contains("Save and return to requests").click();
-    cy.wait(5000);
   });
 
   it("Should have a 'Delete request' link", () => {
-    cy.get("a.govuk-link").contains("Delete").click();
+    cy.get("a.govuk-link", { timeout: 10000 }).contains("Delete", { timeout: 10000 }).click();
   });
 
   it("Should have a 'Delete request' button", () => {

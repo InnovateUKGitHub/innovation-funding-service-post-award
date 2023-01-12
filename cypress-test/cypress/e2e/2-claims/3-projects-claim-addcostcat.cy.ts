@@ -49,14 +49,8 @@ describe("Editing a claim by accessing cost categories", () => {
 
   it("Should display relevant messaging surrounding Supporting documents", evidenceRequiredMessage);
 
-  /**
-   * The cy intercept and cy waits in this file are not currently functioning correctly despite the api link being a match
-   */
-
   it("Should navigate to files upload area", () => {
-    //cy.intercept("POST", "/api/claim-details/*").as("uploadArea");
     cy.submitButton("Upload and remove documents").click();
-    cy.wait(5000);
   });
 
   it("Should allow a file to be uploaded", allowFileUpload);
@@ -77,7 +71,6 @@ describe("Editing a claim by accessing cost categories", () => {
 
   it("Should save and return to the first claims screen", () => {
     cy.submitButton("Save and return to claims").click();
-    cy.wait(5000);
   });
 
   it("Should reflect the £1000 change to the claim in the cost cat table", reflectCostAdded);

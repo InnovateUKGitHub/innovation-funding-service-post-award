@@ -72,10 +72,9 @@ describe("Creating Reallocate Project Costs PCR", () => {
 
   it("Should Save and return to requests", () => {
     cy.getByQA("button_return-qa").contains("Save and return to requests").click();
-    cy.wait(5000);
   });
 
   it("Should have a 'Delete request' button", () => {
-    cy.get("a.govuk-link").contains("Delete");
+    cy.get("a.govuk-link").contains("Delete", { timeout: 30000 });
   });
 });

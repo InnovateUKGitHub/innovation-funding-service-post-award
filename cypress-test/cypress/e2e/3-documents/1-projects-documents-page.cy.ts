@@ -57,7 +57,7 @@ describe("Project Documents page", () => {
   it("Should display the file just uploaded under the Innovate UK and MO section", displayEUIFile);
 
   it("Should show the correct partner it is shared with (EUI Small Ent Health)", () => {
-    cy.get("tr.govuk-table__row").contains("EUI Small Ent Health");
+    cy.get("tr.govuk-table__row").contains("EUI Small Ent Health", { timeout: 10000 });
   });
 
   it("Should then delete the document uploaded to this area", deleteDocFromArea);
@@ -71,7 +71,7 @@ describe("Project Documents page", () => {
   it("Should display the file just uploaded under the Innovate UK and MO section", displayABFile);
 
   it("Should show the correct partner it is shared with (A B Cad Services)", () => {
-    cy.get("tr.govuk-table__row").contains("A B Cad Services");
+    cy.get("tr.govuk-table__row").contains("A B Cad Services", { timeout: 10000 });
   });
 
   it("Should then delete the document uploaded to this area", deleteDocFromArea);
@@ -85,7 +85,7 @@ describe("Project Documents page", () => {
   it("Should display the file just uploaded under the Innovate UK and MO section", displayEUIMedFile);
 
   it("Should show the correct partner it is shared with (ABS EUI Medium Enterprise)", () => {
-    cy.get("tr.govuk-table__row").contains("ABS EUI Medium Enterprise");
+    cy.get("tr.govuk-table__row").contains("ABS EUI Medium Enterprise", { timeout: 10000 });
   });
 
   it("Should then delete the document uploaded to this area", deleteDocFromArea);
