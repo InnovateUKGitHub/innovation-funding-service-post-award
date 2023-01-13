@@ -1,5 +1,4 @@
 import { getAuthRoles, PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
-import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { Pending } from "@shared/pending";
 import {
   PartnerContactRoleTable,
@@ -41,12 +40,7 @@ interface ContactsProps {
 type ProjectContactRole = ProjectContactDto["role"];
 
 const useRoles = () => {
-  const primaryRoles: ProjectContactRole[] = ["Monitoring officer", "Project Manager"];
-  const { data } = useClientOptionsQuery();
-
-  if (data.clientConfig.features.displayOtherContacts) {
-    primaryRoles.push("Innovation lead", "IPM");
-  }
+  const primaryRoles: ProjectContactRole[] = ["Monitoring officer", "Project Manager", "Innovation lead", "IPM"];
 
   // Note: Excluded roles are already rendered elsewhere on page
   const excludedOtherRoles: ProjectContactRole[] = [...primaryRoles, "Finance contact"];
@@ -59,9 +53,6 @@ const useRoles = () => {
 
 const OtherContactProjectDetailsComponent = ({ contacts }: ContactsProps) => {
   const { excludedOtherRoles } = useRoles();
-  const { data } = useClientOptionsQuery();
-
-  if (!data.clientConfig.features.displayOtherContacts) return null;
 
   const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
 
@@ -138,6 +129,7 @@ const PartnerInformationTable = ({ project, partners }: { project: ProjectDto; p
 
 const ProjectDetailsComponent = ({ project, partners, contacts }: Props) => {
   const { isLoans, isKTP } = checkProjectCompetition(project.competitionType);
+
   const routes = useRoutes();
 
   // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
@@ -146,6 +138,8 @@ const ProjectDetailsComponent = ({ project, partners, contacts }: Props) => {
   const monitoringOfficers = getContactRole({ contacts, partners, partnerRole: "Monitoring officer" });
   const projectManagers = getContactRole({ contacts, partners, partnerRole: "Project Manager" });
   const financeContacts = getContactRole({ contacts, partners, partnerRole: "Finance contact" });
+  const innovationLead = getContactRole({ contacts, partners, partnerRole: "Innovation lead" });
+  const ipm = getContactRole({ contacts, partners, partnerRole: "IPM" });
 
   return (
     <Page
@@ -206,6 +200,18 @@ const ProjectDetailsComponent = ({ project, partners, contacts }: Props) => {
             }
           />
         </Section>
+
+        {innovationLead?.length > 0 && (
+          <Section title={x => x.projectLabels.innovationLeads({ count: innovationLead.length })}>
+            <PartnerContactRoleTable hidePartnerColumn qa="innovation-lead-details" contactRoles={innovationLead} />
+          </Section>
+        )}
+
+        {ipm?.length > 0 && (
+          <Section title={x => x.projectLabels.ipms({ count: ipm.length })}>
+            <PartnerContactRoleTable hidePartnerColumn qa="ipm-details" contactRoles={ipm} />
+          </Section>
+        )}
 
         <OtherContactProjectDetailsComponent contacts={contacts} />
       </Section>
