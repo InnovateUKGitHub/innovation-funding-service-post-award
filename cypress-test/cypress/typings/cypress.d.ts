@@ -22,6 +22,8 @@ declare global {
        */
       getByQA(tag: string): Chainable<Element>;
 
+      getByPageQA(tag: string): Chainable<Element>;
+
       /**
        * Gets an element based on the aria-label
        */

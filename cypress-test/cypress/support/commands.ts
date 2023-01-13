@@ -14,6 +14,11 @@ const getByQA = (tag: string) => {
   cy.get(`[data-qa="${tag}"]`, { timeout: 10000 });
 };
 
+const getByPageQA = (tag: string) => {
+  cy.log("**getByQA**");
+  cy.get(`[data-page-qa="${tag}"]`, { timeout: 10000 });
+};
+
 const getByAriaLabel = (label: string) => {
   cy.log("**getByAriaLabel**");
   cy.get(`[aria-label="${label}"`, { timeout: 10000 });
@@ -21,9 +26,9 @@ const getByAriaLabel = (label: string) => {
 
 const switchUserTo = (email: string, goHome: boolean = false) => {
   cy.contains("User Switcher").click();
-  cy.get("input#user-switcher-manual-input").scrollIntoView().clear().type(email);
-  cy.getByQA(`manual-change-and-${goHome ? "home" : "stay"}`).click();
-  cy.wait(500);
+  cy.get("input#user-switcher-manual-input").scrollIntoView().clear().wait(1000).type(email);
+  cy.getByQA(`manual-change-and-${goHome ? "home" : "stay"}`).click({ force: true });
+  cy.wait(1000);
 };
 
 const resetUser = (goHome: boolean = false) => {
@@ -31,9 +36,9 @@ const resetUser = (goHome: boolean = false) => {
   cy.contains("User Switcher").click().wait(1000);
   cy.getByQA(`reset-and-${goHome ? "home" : "stay"}`)
     .scrollIntoView()
-    .wait(5000)
+    .wait(1000)
     .click()
-    .wait(5000);
+    .wait(1000);
 };
 
 const backLink = (name: string) => {
@@ -76,6 +81,7 @@ const clickCheckBox = (label: string, uncheck?: boolean) => {
 
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
+Cypress.Commands.add("getByPageQA", getByPageQA);
 Cypress.Commands.add("getByAriaLabel", getByAriaLabel);
 Cypress.Commands.add("switchUserTo", switchUserTo);
 Cypress.Commands.add("resetUser", resetUser);
