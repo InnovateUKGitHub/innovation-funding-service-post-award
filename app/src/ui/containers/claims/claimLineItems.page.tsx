@@ -189,10 +189,12 @@ export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams,
     claim: ClaimDto,
   ) => {
     const route =
-      this.props.routes.claimLineItems.routeName === ReviewClaimLineItemsRoute.routeName
+      this.props.currentRoute.routeName === ReviewClaimLineItemsRoute.routeName
         ? ReviewClaimLineItemsRoute
         : ClaimLineItemsRoute;
+
     const navigationLinks = this.getLinks(costCategories, project, partner, claim.overheadRate, route);
+
     if (navigationLinks === null) return null;
 
     return navigationLinks ? <ACC.NavigationArrows {...navigationLinks} /> : null;
