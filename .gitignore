@@ -12,3 +12,4 @@ provision.sh
 /testframework/screenCaptures/
 app/security
 .env
+.sfdx

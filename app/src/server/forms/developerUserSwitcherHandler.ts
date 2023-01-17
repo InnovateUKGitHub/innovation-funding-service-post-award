@@ -1,11 +1,11 @@
 import { DeveloperUserChangeDto } from "@framework/dtos/developerUserChange";
+import { DeveloperUserSwitcherPage } from "@ui/containers/developer/UserSwitcher.page";
 import express from "express";
-import { HomeRoute } from "../../ui/containers";
 import { configuration } from "../features/common/config";
 import { IFormHandler } from "./formHandlerBase";
 
 export class DeveloperUserSwitcherHandler implements IFormHandler {
-  public readonly routePath = HomeRoute.routePath;
+  public readonly routePath = DeveloperUserSwitcherPage.routePath;
   public readonly middleware: express.RequestHandler[] = [];
 
   public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
@@ -41,7 +41,7 @@ export class DeveloperUserSwitcherHandler implements IFormHandler {
     if (dto.currentUrl) {
       res.redirect(dto.currentUrl);
     } else {
-      res.redirect(HomeRoute.routePath);
+      res.redirect(DeveloperUserSwitcherPage.routePath);
     }
   }
 }

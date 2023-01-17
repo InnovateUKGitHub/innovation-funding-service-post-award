@@ -8,6 +8,7 @@ import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
 
 /**
  * Get the link to the current page
@@ -121,7 +122,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({
         header={x => x.components.userChanger.tableHeaderSwitchOptions}
         value={x => {
           return (
-            <SelectContactForm.Form data="" action="/">
+            <SelectContactForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
               <SelectContactForm.Hidden name="project_id" value={() => projectId} />
               <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
               <SelectContactForm.Hidden
@@ -165,8 +166,13 @@ const UserSwitcherProjectSelector = ({ projects }: { projects: ProjectDto[] }) =
   // Create options for dropdown to select a project.
   const projectOptions: DropdownListOption[] = projects
     .sort((a, b) => {
-      const competitionCompare = a.competitionType.localeCompare(b.competitionType);
-      const nameCompare = a.title.localeCompare(b.title);
+      const compA = a.competitionType ?? "";
+      const compB = b.competitionType ?? "";
+      const titleA = a.title ?? "";
+      const titleB = b.title ?? "";
+
+      const competitionCompare = compA.localeCompare(compB);
+      const nameCompare = titleA.localeCompare(titleB);
 
       if (competitionCompare) return competitionCompare;
       return nameCompare;
@@ -174,7 +180,7 @@ const UserSwitcherProjectSelector = ({ projects }: { projects: ProjectDto[] }) =
     .map(p => ({
       id: p.id,
       value: p.id,
-      displayName: `[${p.competitionType}] ${p.title}`,
+      displayName: `[${p.competitionType ?? "Unknown"}] ${p.title ?? "Untitled"}`,
       qa: p.id,
     }));
 
@@ -184,7 +190,7 @@ const UserSwitcherProjectSelector = ({ projects }: { projects: ProjectDto[] }) =
       setProjectId(e.projectId);
       setEmail(e.email);
     },
-    action: "/",
+    action: DeveloperUserSwitcherPage.routePath,
   };
 
   return (
@@ -224,7 +230,7 @@ const UserSwitcherReset = () => {
   const returnLocation = useReturnLocation();
 
   return (
-    <ResetUserForm.Form data="" action="/">
+    <ResetUserForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
       <ResetUserForm.Hidden name="current_url" value={() => returnLocation} />
       <ResetUserForm.Hidden name="reset" value={() => ""} />
       <ResetUserForm.Button name="stay" styling="Primary" qa="reset-and-stay">
@@ -249,7 +255,7 @@ const UserSwitcherManualEmailEntry = () => {
       onChange={e => {
         setEmail(e.email);
       }}
-      action="/"
+      action={DeveloperUserSwitcherPage.routePath}
     >
       <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
 

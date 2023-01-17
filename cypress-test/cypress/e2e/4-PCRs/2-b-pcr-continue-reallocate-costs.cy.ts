@@ -1,9 +1,9 @@
 import { visitApp } from "../../common/visit";
-import { backToProject, backToRequest, deletePcr, shouldShowProjectTitle } from "./steps";
+import { deletePcr, shouldShowProjectTitle } from "./steps";
 
 describe("Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/create");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });
 
   after(() => {
@@ -21,7 +21,9 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.get("h1").should("contain.text", "Request");
   });
 
-  it("Should show back to request link", backToRequest);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project change requests");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 
@@ -49,11 +51,10 @@ describe("Continues Reallocate costs to the costs tables page to access each par
   it("Should show select 'Give us information' and continue to the next page", () => {
     cy.get("h2.app-task-list__section").contains("Give us information");
     cy.get("span.app-task-list__task-name").contains("Reallocate project costs").click();
-    cy.wait(2000);
   });
 
   it("Should show back to project link", () => {
-    cy.get("a.govuk-back-link").contains("Back to request");
+    cy.get("a.govuk-back-link", { timeout: 10000 }).contains("Back to request");
   });
 
   it("Should show the project title", shouldShowProjectTitle);

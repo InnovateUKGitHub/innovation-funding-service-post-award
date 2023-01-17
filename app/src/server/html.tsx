@@ -5,7 +5,7 @@ import { configuration } from "../server/features/common";
 
 import * as pkg from "../../package.json";
 import { execSync } from "child_process";
-import { RootState } from "@ui/redux";
+import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 
 let versionInformation = "";
 
@@ -58,12 +58,19 @@ try {
 /**
  * The template into which the React App is injected. It includes the meta tags, links and google tag manager
  */
-export function renderHtml(
-  HelmetInstance: HelmetData,
-  html: string,
-  preloadedState: PreloadedState<RootState>,
-  nonce: string,
-) {
+export function renderHtml({
+  HelmetInstance,
+  html,
+  preloadedState = {},
+  nonce,
+  relayData = [],
+}: {
+  HelmetInstance: HelmetData;
+  html: string;
+  preloadedState: any;
+  nonce: string;
+  relayData?: SSRCache;
+}) {
   const titleMetaTag = HelmetInstance.title.toString();
 
   const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
@@ -106,6 +113,7 @@ export function renderHtml(
             }, 10);
             document.body.className = document.body.className + ' js-enabled';
             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
+            window.__RELAY_BOOTSTRAP_DATA__ = ${JSON.stringify(relayData).replace(/</g, "\\u003c")}
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${

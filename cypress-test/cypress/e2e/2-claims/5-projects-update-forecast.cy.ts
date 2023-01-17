@@ -9,11 +9,11 @@ import {
 
 describe("Updating forecasts after claim costs and document upload", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
   });
 
   it("Should have a back option", () => {
-    cy.get(".govuk-back-link").contains("Back to costs to be claimed");
+    cy.backLink("Back to costs to be claimed");
   });
 
   it("Should let you navigate from the documents screen to forecasts", () => {
@@ -43,26 +43,23 @@ describe("Updating forecasts after claim costs and document upload", () => {
   it("Should accept input and calculate the figures accordingly", () => {
     cy.getByAriaLabel("Labour Period 2").clear().type("1000");
     cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,100.00");
-    cy.getByAriaLabel("Overheads Period 2").clear().type("1000");
+    cy.getByAriaLabel("Overheads Period 2").clear().type("1000").wait(1000);
   });
 
   it("Should save and return to claims", () => {
-    cy.getByQA("button_save-qa").click();
-    cy.wait(6000);
+    cy.getByQA("button_save-qa").click({ force: true });
   });
 
   it("Should re-open the claim", () => {
-    cy.get("a.govuk-link").contains("Edit").click();
-    cy.wait(3000);
+    cy.get("a.govuk-link").contains("Edit", { timeout: 10000 }).click();
   });
 
   it("Should navigate to documents", () => {
     cy.getByQA("button_default-qa").click();
-    cy.wait(6000);
   });
 
   it("Should continue through to forecast page again", () => {
-    cy.get("a#continue-claim.govuk-button").click();
+    cy.get("a#continue-claim.govuk-button", { timeout: 10000 }).click();
   });
 
   it("Should have saved the information from previous edit", savedFromPrev);

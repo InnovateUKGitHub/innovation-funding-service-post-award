@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export {};
 
 declare global {
@@ -41,7 +42,7 @@ declare global {
       /**
        * Gets the back link element
        */
-      backLink(): Chainable<Element>;
+      backLink(name: string): Chainable<Element>;
 
       /**
        * Gets the submit button with the matching name

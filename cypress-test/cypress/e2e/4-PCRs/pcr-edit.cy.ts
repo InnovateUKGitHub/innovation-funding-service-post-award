@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { backToProject, shouldShowProjectTitle } from "./steps";
+import { shouldShowProjectTitle } from "./steps";
 
 /**
  * Note there is a requirement for a PCR to be in a draft state prior to this script being run - potentially add that step at the beginning of this
@@ -7,10 +7,12 @@ import { backToProject, shouldShowProjectTitle } from "./steps";
 
 describe("PCRs in Draft status can be deleted", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/dashboard");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
   });
 
-  it("Should have a back to project link", backToProject);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project");
+  });
 
   it("Should display the project title", shouldShowProjectTitle);
 

@@ -186,8 +186,8 @@ export const createTypedForm = <T,>() => {
     options: SelectOption[];
   }
 
-  interface DropdownFieldProps extends ExternalFieldProps<DropdownOption> {
-    options: DropdownOption[];
+  interface DropdownFieldProps<T extends DropdownOption = DropdownOption> extends ExternalFieldProps<T> {
+    options: T[];
     hasEmptyOption?: boolean;
   }
 

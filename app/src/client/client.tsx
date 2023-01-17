@@ -23,10 +23,12 @@ import { getPolyfills } from "./polyfill";
 import { Logger } from "@shared/developmentLogger";
 import { allLanguages, allNamespaces, CopyLanguages, CopyNamespaces } from "@copy/data";
 import { initReactI18next } from "react-i18next";
+import { ClientGraphQLEnvironment } from "@gql/ClientGraphQLEnvironment";
+import { parseLogLevel } from "@framework/types/logLevel";
 
 // get servers store to initialise client store
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
-Logger.setDefaultOptions({ logLevel: serverState.config.logLevel });
+Logger.setDefaultOptions({ logLevel: parseLogLevel(serverState.config.logLevel) });
 
 const middleware = composeWithDevTools(setupClientMiddleware());
 const store = createStore(rootReducer, serverState, middleware);
@@ -63,7 +65,7 @@ const Client = () => {
       <BrowserRouter>
         <StoresProvider value={getStores()}>
           <ModalProvider value={new ModalRegister()}>
-            <App store={store} />
+            <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
           </ModalProvider>
         </StoresProvider>
       </BrowserRouter>

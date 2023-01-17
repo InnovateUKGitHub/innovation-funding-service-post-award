@@ -1,17 +1,10 @@
 import { visitApp } from "../../common/visit";
-import {
-  backToProject,
-  characterCount,
-  deletePcr,
-  pcrCommentBox,
-  shouldShowAllAccordion,
-  shouldShowProjectTitle,
-} from "./steps";
+import { characterCount, deletePcr, pcrCommentBox, shouldShowAllAccordion, shouldShowProjectTitle } from "./steps";
 
 describe("Creating Reallocate Project Costs PCR", () => {
   before(() => {
     // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/create");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });
 
   after(deletePcr);
@@ -27,7 +20,9 @@ describe("Creating Reallocate Project Costs PCR", () => {
     cy.get("h1").should("contain.text", "Request");
   });
 
-  it("Should show back to project link", backToProject);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 
@@ -77,10 +72,9 @@ describe("Creating Reallocate Project Costs PCR", () => {
 
   it("Should Save and return to requests", () => {
     cy.getByQA("button_return-qa").contains("Save and return to requests").click();
-    cy.wait(5000);
   });
 
   it("Should have a 'Delete request' button", () => {
-    cy.get("a.govuk-link").contains("Delete");
+    cy.get("a.govuk-link").contains("Delete", { timeout: 30000 });
   });
 });

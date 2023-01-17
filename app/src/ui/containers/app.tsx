@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import { Store, Dispatch } from "redux";
 import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
+import { RelayEnvironmentProvider } from "relay-hooks";
 
 import { IRouteDefinition } from "@ui/containers/containerBase";
 import { RoutesProvider, useModal, useStores } from "@ui/redux";
@@ -26,6 +27,8 @@ import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { useAppMount } from "./app/app-mount.hook";
 import { ErrorPayload } from "@shared/create-error-payload";
 import { DeveloperSection } from "@ui/components/layout/DeveloperSection";
+import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -51,11 +54,11 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const content = useInitContent(params);
   const modalRegister = useModal();
   const auth = stores.users.getCurrentUserAuthorisation();
-  const config = stores.config.getConfig();
+  const { data } = useClientOptionsQuery();
   const messages = stores.messages.messages();
 
   // Note: We treat no invocation as valid
-  const hasAccess = currentRoute.accessControl ? currentRoute.accessControl(auth, params, config) : true;
+  const hasAccess = currentRoute.accessControl ? currentRoute.accessControl(auth, params, data.clientConfig) : true;
   const titlePayload = currentRoute.getTitle({ params, stores, content });
 
   const navigationType = useNavigationType();
@@ -70,7 +73,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   // TODO: Deprecating 'routes' and create a typed solution to fetch route with required url params
   const baseProps: BaseProps = {
     messages,
-    config,
+    config: data.clientConfig,
     routes: routeConfig,
     currentRoute,
     ...params,
@@ -101,27 +104,28 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               Skip to main content
             </a>
 
-            <Header headingLink={`${config.ifsRoot}/competition/search`} />
+            <Header headingLink={`${data.clientConfig.ifsRoot}/competition/search`} />
 
             <FullHeight.Content>
               <GovWidthContainer>
                 <PhaseBanner />
-                {hasAccess ? (
-                  <ProjectParticipantProvider projectId={routePathParams.projectId as string}>
-                    <ProjectStatusCheck
-                      projectId={routePathParams.projectId as string}
-                      overrideAccess={!!currentRoute.allowRouteInActiveAccess}
-                    >
-                      <PageContainer {...baseProps} />
-                    </ProjectStatusCheck>
-                  </ProjectParticipantProvider>
-                ) : (
-                  <ErrorContainer from="app" {...(params as ErrorPayload["params"])} />
-                )}
               </GovWidthContainer>
+
+              {hasAccess ? (
+                <ProjectParticipantProvider projectId={routePathParams.projectId as string}>
+                  <ProjectStatusCheck
+                    projectId={routePathParams.projectId as string}
+                    overrideAccess={!!currentRoute.allowRouteInActiveAccess}
+                  >
+                    <PageContainer {...baseProps} />
+                  </ProjectStatusCheck>
+                </ProjectParticipantProvider>
+              ) : (
+                <ErrorContainer from="app" {...(params as ErrorPayload["params"])} />
+              )}
             </FullHeight.Content>
 
-            {!config.ssoEnabled && <DeveloperSection />}
+            {!data.clientConfig.ssoEnabled && <DeveloperSection />}
             <Footer />
 
             {modalRegister.getModals().map(modal => (
@@ -136,42 +140,42 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
 interface AppRoute {
   store: Store;
+  relayEnvironment: RelayModernEnvironment;
 }
 
 /**
  * `<App />`
  * Handles routes and error boundary
  */
-export function App(props: AppRoute) {
+export function App({ store, relayEnvironment }: AppRoute) {
   const routesList = getRoutes();
-  const error = props.store.getState().globalError;
+  const error = store.getState().globalError;
 
   return (
-    <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...errorProps} />}>
-      <RoutesProvider value={routeConfig}>
-        <MountedProvider>
-          <Routes>
-            {error ? (
-              <Route path="*" element={<AppView currentRoute={ErrorRoute} dispatch={props.store.dispatch} />} />
-            ) : (
-              <>
-                {routesList.map(([routeKey, route]) => (
-                  <Route
-                    key={routeKey}
-                    path={route.routePath}
-                    element={<AppView currentRoute={route} dispatch={props.store.dispatch} />}
-                  />
-                ))}
+    <RelayEnvironmentProvider environment={relayEnvironment}>
+      <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...errorProps} />}>
+        <RoutesProvider value={routeConfig}>
+          <MountedProvider>
+            <Routes>
+              {error ? (
+                <Route path="*" element={<AppView currentRoute={ErrorRoute} dispatch={store.dispatch} />} />
+              ) : (
+                <>
+                  {routesList.map(([routeKey, route]) => (
+                    <Route
+                      key={routeKey}
+                      path={route.routePath}
+                      element={<AppView currentRoute={route} dispatch={store.dispatch} />}
+                    />
+                  ))}
 
-                <Route
-                  path="*"
-                  element={<AppView currentRoute={ErrorNotFoundRoute} dispatch={props.store.dispatch} />}
-                />
-              </>
-            )}
-          </Routes>
-        </MountedProvider>
-      </RoutesProvider>
-    </ErrorBoundary>
+                  <Route path="*" element={<AppView currentRoute={ErrorNotFoundRoute} dispatch={store.dispatch} />} />
+                </>
+              )}
+            </Routes>
+          </MountedProvider>
+        </RoutesProvider>
+      </ErrorBoundary>
+    </RelayEnvironmentProvider>
   );
 }

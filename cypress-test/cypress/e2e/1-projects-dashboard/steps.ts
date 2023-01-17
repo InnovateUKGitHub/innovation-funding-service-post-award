@@ -1,11 +1,8 @@
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
-const testProjectName = "CYPRESS";
 
-export const logInAsUserAndNavigateToProject = (email: string) => {
-  cy.switchUserTo(email, true);
-
+export const navigateToProject = () => {
   cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains(testProjectName).click();
+  cy.get(`${projectCardCss} a`, { timeout: 1000 }).contains("CYPRESS_DO_NOT_USE").click();
 };
 
 export const monitoringReportCardShouldNotExist = () => {
@@ -13,11 +10,11 @@ export const monitoringReportCardShouldNotExist = () => {
 };
 
 export const shouldNavigateToProjectDashboard = () => {
-  cy.contains("Projects").click();
-  cy.get("h1").contains("Dashboard");
+  cy.get("h2").contains("Projects").click();
+  cy.get("h1", { timeout: 10000 }).contains("Dashboard");
 };
 
-export const shouldFindMatchingProjectCard = projectCard => {
+export const shouldFindMatchingProjectCard = (projectCard: string) => {
   cy.get(".card-link h2").contains(projectCard);
 };
 
@@ -29,7 +26,7 @@ export const shouldShowAListOfProjectCards = () => {
   cy.get(projectCardCss).should("have.length.greaterThan", 5);
 };
 
-export const shouldFilterProjectsUsingCheckboxes = ([label, expectedText]) => {
+export const shouldFilterProjectsUsingCheckboxes = ([label, expectedText]: [string, string]) => {
   cy.getByLabel(label).click();
 
   cy.get(projectCardCss).each(card => cy.wrap(card).contains(expectedText));
@@ -39,15 +36,19 @@ export const shouldFilterProjectsUsingCheckboxes = ([label, expectedText]) => {
 };
 
 export const shouldFilterProjectsUsingSearchFilter = () => {
-  cy.get("input#search").type(testProjectName);
-  cy.get(projectCardCss).each(card => cy.wrap(card).contains(testProjectName));
+  cy.get("input#search").type("CYPRESS");
+  cy.get(projectCardCss).each(card => cy.wrap(card).contains("CYPRESS"));
+  cy.get("input#search").clear();
 };
 
+/**
+ * cy.wait is required in shouldNavigateToProjectOverview
+ */
 export const shouldNavigateToProjectOverview = () => {
-  cy.get(`${projectCardCss} a`).wait(500).contains(testProjectName).click();
+  cy.get(`${projectCardCss} a`).contains("CYPRESS_DO_NOT_USE").wait(500).click({ force: true });
 
-  cy.get("h1").contains("Project overview");
-  cy.getByQA("page-title").should("contain.text", testProjectName);
+  cy.get("h1", { timeout: 10000 }).contains("Project overview");
+  cy.getByQA("page-title").should("contain.text", "CYPRESS_DO_NOT_USE");
 };
 
 export const shouldShowProjectTitle = () => {

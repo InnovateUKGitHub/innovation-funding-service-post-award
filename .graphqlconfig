@@ -1,0 +1,33 @@
+{
+  "name": "GraphQL",
+  "schemaPath": "schema.gql",
+  "includes": ["src/**"],
+  "extensions": {
+    "endpoints": {
+      "localhost": {
+        "url": "http://localhost:8080/graphql",
+        "introspect": true
+      },
+      "acc-dev": {
+        "url": "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org/graphql",
+        "introspect": true
+      },
+      "acc-demo": {
+        "url": "https://www-acc-demo.apps.org-env-0.org.innovateuk.ukri.org/graphql",
+        "introspect": true
+      },
+      "acc-preprod": {
+        "url": "https://www-acc-preprod.apps.org-env-0.org.innovateuk.ukri.org/graphql",
+        "introspect": true
+      },
+      "acc-uat": {
+        "url": "https://www-acc-uat.apps.org-env-0.org.innovateuk.ukri.org/graphql",
+        "introspect": true
+      },
+      "Production": {
+        "url": "https://apply-for-innovation-funding.service.gov.uk/graphql",
+        "introspect": true
+      }
+    }
+  }
+}

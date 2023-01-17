@@ -1,9 +1,9 @@
 export const shouldShowProjectTitle = () => {
-  cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
+  cy.getByQA("page-title-caption").should("contain.text", "CYPRESS", { timeout: 10000 });
 };
 
 export const shouldShowAllAccordion = () => {
-  cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click();
+  cy.get("span.govuk-accordion__show-all-text", { timeout: 10000 }).contains("Show all sections").click();
 };
 
 export const shouldShowCostCatTable = () => {
@@ -24,34 +24,34 @@ export const correctTableHeaders = () => {
   cy.tableHeader("Last updated");
 };
 
+/**
+ * Wait required in newCostCatLineItem below
+ */
 export const newCostCatLineItem = () => {
-  cy.get("a.govuk-link").contains("Add a cost").click();
-  cy.get("input#description0.govuk-input").clear().type("Test line item");
-  cy.get("input#value0.govuk-input.govuk-table__cell--numeric").clear().type("1000");
+  cy.get("a").contains("Add a cost").click();
+  cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
+  cy.getByAriaLabel("value of claim line item 1").clear().type("1000").wait(800);
 };
 
 export const allowFileUpload = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
-  //cy.intercept("POST", "/api/documents/claim-details/*").as("uploadDocuments");
+  cy.get("input#attachment.govuk-file-upload", { timeout: 20000 }).selectFile("cypress/common/testfile.doc", {
+    timeout: 10000,
+  });
   cy.submitButton("Upload documents").click();
-  cy.wait(7000);
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.", { timeout: 10000 });
 };
 
 export const reflectCostAdded = () => {
-  cy.get("tr.govuk-table__row").contains("Labour");
-  cy.get("span.currency").contains("£1,000.00");
+  cy.get("tr.govuk-table__row", { timeout: 10000 }).contains("Labour", { timeout: 10000 });
+  cy.get("span.currency", { timeout: 2000 }).contains("£1,000.00");
 };
 
 export const clearUpCostCat = () => {
   cy.get("td.govuk-table__cell").contains("Labour").click();
   cy.getByQA("button_upload-qa").click();
-  cy.wait(5000);
   cy.getByQA("button_delete-qa").contains("Remove").click();
-  cy.wait(5000);
-  cy.get("a.govuk-back-link").click();
-  cy.wait(5000);
-  cy.get("a.govuk-link").contains("Remove").click();
+  cy.get("a.govuk-back-link", { timeout: 5000 }).click();
+  cy.get("a.govuk-link", { timeout: 5000 }).contains("Remove").click();
   cy.get("textarea#comments").clear();
 };
 
@@ -66,26 +66,22 @@ export const additionalInformationHeading = () => {
 };
 
 export const returnToCostCatPage = () => {
-  //cy.intercept("POST", "api/claim-details/*/1/*").as("saveToCostCat");
-  cy.getByQA("button_default-qa").click();
-  cy.wait(10000);
+  cy.submitButton("Save and return to claims").click();
 };
 
 export const selectFileDescription = () => {
-  cy.get("select#description.govuk-select").select("10");
-  cy.get("select#description.govuk-select").select("30");
-  cy.get("select#description.govuk-select").select("60");
-  cy.get("select#description.govuk-select").select("110");
-  cy.get("select#description.govuk-select").select("120");
-  cy.get("select#description.govuk-select").select("210");
-  cy.get("select#description.govuk-select").select("220");
+  cy.get("select#description").select("10");
+  cy.get("select#description").select("30");
+  cy.get("select#description").select("60");
+  cy.get("select#description").select("110");
+  cy.get("select#description").select("120");
+  cy.get("select#description").select("210");
+  cy.get("select#description").select("220");
 };
 
 export const claimsDocUpload = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
-  cy.wait(3000);
-  cy.getByQA("button_upload-qa").contains("Upload documents").click();
-  cy.wait(3000);
+  cy.get("input#attachment", { timeout: 5000 }).selectFile("cypress/common/testfile.doc", { timeout: 5000 });
+  cy.uploadButton("Upload documents").click();
 };
 
 export const claimsFileTable = () => {
@@ -113,18 +109,18 @@ export const displayForecastTable = () => {
 };
 
 export const forecastCostCats = () => {
-  cy.tableHeader("Labour");
-  cy.tableHeader("Overheads");
-  cy.tableHeader("Materials");
-  cy.tableHeader("Capital usage");
-  cy.tableHeader("Subcontracting");
-  cy.tableHeader("Travel and subsistence");
-  cy.tableHeader("Other costs");
-  cy.tableHeader("Other costs 2");
-  cy.tableHeader("Other costs 3");
-  cy.tableHeader("Other costs 4");
-  cy.tableHeader("Other costs 5");
-  cy.tableHeader("Total");
+  cy.tableCell("Labour");
+  cy.tableCell("Overheads");
+  cy.tableCell("Materials");
+  cy.tableCell("Capital usage");
+  cy.tableCell("Subcontracting");
+  cy.tableCell("Travel and subsistence");
+  cy.tableCell("Other costs");
+  cy.tableCell("Other costs 2");
+  cy.tableCell("Other costs 3");
+  cy.tableCell("Other costs 4");
+  cy.tableCell("Other costs 5");
+  cy.tableCell("Total");
 };
 
 export const accessOpenClaim = () => {
@@ -141,12 +137,13 @@ export const forecastView = () => {
 
 export const claimCommentBox = () => {
   cy.get("h2").contains("Add comments");
-  cy.get("textarea#comments.govuk-textarea").clear().type(standardComments);
+  cy.getByQA("info-text-area").clear().type(standardComments);
 };
 
 export const learnFiles = () => {
-  cy.get("span.govuk-details__summary-text").contains("Learn more about files you can upload").click();
-  cy.get("span.govuk-body.markdown").contains("You can upload");
+  cy.get("span").contains("Learn more about files you can upload").click();
+  cy.get("p").contains("You can upload");
+  cy.get("p").contains("There is no limit");
 };
 
 export const savedFromPrev = () => {

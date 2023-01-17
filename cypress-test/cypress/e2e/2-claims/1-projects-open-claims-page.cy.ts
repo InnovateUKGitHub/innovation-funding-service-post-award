@@ -3,7 +3,7 @@ import { shouldShowAllAccordion, shouldShowProjectTitle } from "./steps";
 
 describe("project dashboard as Finance Contact", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/overview");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/overview" });
   });
 
   describe("FC should be able to navigate to the claims page", () => {
@@ -11,7 +11,7 @@ describe("project dashboard as Finance Contact", () => {
       cy.get("h2.card-link__title").contains("Claims").click();
     });
     it("Should have a back option", () => {
-      cy.get(".govuk-back-link").contains("Back to project");
+      cy.backLink("Back to project");
     });
     it("Should have the project name displayed", shouldShowProjectTitle);
 

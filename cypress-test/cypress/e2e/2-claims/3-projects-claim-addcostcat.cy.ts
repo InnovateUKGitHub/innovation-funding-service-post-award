@@ -16,11 +16,11 @@ import {
 
 describe("Editing a claim by accessing cost categories", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
   });
 
   it("Should have a back option", () => {
-    cy.backLink().contains("Back to claims");
+    cy.backLink("Back to claims");
   });
 
   it("Should have the cost category table", shouldShowCostCatTable);
@@ -49,14 +49,8 @@ describe("Editing a claim by accessing cost categories", () => {
 
   it("Should display relevant messaging surrounding Supporting documents", evidenceRequiredMessage);
 
-  /**
-   * The cy intercept and cy waits in this file are not currently functioning correctly despite the api link being a match
-   */
-
   it("Should navigate to files upload area", () => {
-    //cy.intercept("POST", "/api/claim-details/*").as("uploadArea");
     cy.submitButton("Upload and remove documents").click();
-    cy.wait(7000);
   });
 
   it("Should allow a file to be uploaded", allowFileUpload);
@@ -68,7 +62,7 @@ describe("Editing a claim by accessing cost categories", () => {
   it("Should contain additional information heading and messaging", additionalInformationHeading);
 
   it("Has an area for writing free-text comments", () => {
-    cy.get("textarea#comments").type(standardComments);
+    cy.getByQA("info-text-area").clear().type(standardComments);
   });
 
   it("Should count how many characters you have used", () => {
@@ -76,8 +70,7 @@ describe("Editing a claim by accessing cost categories", () => {
   });
 
   it("Should save and return to the first claims screen", () => {
-    cy.getByQA("button_default-qa").click();
-    cy.wait(5000);
+    cy.submitButton("Save and return to claims").click();
   });
 
   it("Should reflect the £1000 change to the claim in the cost cat table", reflectCostAdded);

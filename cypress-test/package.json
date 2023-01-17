@@ -4,18 +4,34 @@
   "description": "cypress test package",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env ELECTRON_EXTRA_LAUNCH_ARGS=--no-sandbox cypress open",
-    "prettier": "prettier . --write"
+    "cypress": "cross-env ELECTRON_EXTRA_LAUNCH_ARGS=--no-sandbox cypress",
+    "start": "npm run cypress -- open",
+    "local": "cross-env TEST_URL=http://localhost:8080 npm run cypress -- open",
+    "test": "npm run cypress -- run",
+    "test:headed": "npm run cypress -- run --headed",
+    "prettier": "prettier . --write",
+    "lint": "eslint ./cypress/**/*.ts",
+    "lint:staged": "lint-staged"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cypress": "^11.2.0",
+    "@testing-library/cypress": "^9.0.0",
+    "cypress": "^12.2.0",
     "dotenv": "^16.0.3"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
     "cross-env": "^7.0.3",
+    "eslint": "^8.30.0",
+    "eslint-plugin-cypress": "^2.12.1",
+    "lint-staged": "^13.1.0",
     "prettier": "^2.8.0",
     "typescript": "^4.8.4"
+  },
+  "lint-staged": {
+    "cypress/**/*.ts": "eslint",
+    "cypress/**/*.{ts,json,yml,yaml,md}": "prettier --write"
   }
 }

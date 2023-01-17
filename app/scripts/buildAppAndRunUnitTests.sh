@@ -14,6 +14,8 @@ echo "About to run ci"
 npm ci --no-optional
 echo "About to run patch-package"
 npm run patch-package
+echo "About to auto-generate Relay files"
+npm run relay
 echo "About to build with Webpack"
 npm run build
 echo "About to build with ESBuild"

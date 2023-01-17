@@ -1,6 +1,5 @@
 import { ErrorPayload } from "@shared/create-error-payload";
 import { PageTitle } from "@ui/features/page-title";
-import { useStores } from "@ui/redux";
 
 import { Page } from "../layout/page";
 import { Section } from "../layout/section";
@@ -8,15 +7,16 @@ import { H2 } from "../typography";
 import { ExternalLink } from "../renderers";
 import { SimpleString } from "../renderers/simpleString";
 import { Content } from "../content";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export type GenericFallbackErrorProps = ErrorPayload["params"];
 
 export const GenericFallbackError = ({ errorStack, errorMessage }: GenericFallbackErrorProps) => {
-  const { ssoEnabled } = useStores().config.getConfig();
+  const { data } = useClientOptionsQuery();
 
   const goToDashboardLink = <ExternalLink href="/projects/dashboard"> </ExternalLink>;
 
-  const internalError = !ssoEnabled && (errorStack || errorMessage);
+  const internalError = !data.clientConfig.ssoEnabled && (errorStack || errorMessage);
 
   return (
     <Page qa="fallback-error" pageTitle={<PageTitle />}>

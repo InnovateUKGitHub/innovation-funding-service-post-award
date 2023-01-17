@@ -1,14 +1,14 @@
 import { visitApp } from "../../common/visit";
 import { testEach } from "../../support/methods";
-import { logInAsUserAndNavigateToProject, shouldFindMatchingProjectCard } from "./steps";
+import { navigateToProject, shouldFindMatchingProjectCard } from "./steps";
 
 const monitoringOfficerEmail = "testman2@testing.com";
 
 describe("project dashboard as Monitoring Officer", () => {
   before(() => {
-    visitApp();
+    visitApp({ asUser: monitoringOfficerEmail });
 
-    logInAsUserAndNavigateToProject(monitoringOfficerEmail);
+    navigateToProject();
   });
 
   testEach([

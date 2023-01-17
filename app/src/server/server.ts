@@ -5,7 +5,7 @@ import crypto from "crypto";
 
 import { router as authRouter } from "@server/auth";
 import { router as cspRouter } from "@server/csp";
-import { noAuthRouter, router } from "@server/router";
+import { noAuthRouter, getServerRoutes } from "@server/router";
 import { useBasicAuth } from "./basicAuth";
 
 import { allowCache, noCache, setOwaspHeaders, setBasicAuth } from "@server/cacheHeaders";
@@ -21,21 +21,21 @@ export class Server {
   private readonly app: express.Express;
   private readonly logger: Logger;
 
-  constructor(private readonly port: number, development = false) {
+  constructor(private readonly port: number, private readonly isDevelopment: boolean) {
     this.app = express();
     this.logger = new Logger("Webserver");
+  }
 
+  public async start(serveHttps: boolean) {
     this.app.enable("trust proxy");
 
-    if (development) {
+    if (this.isDevelopment) {
       this.development();
     }
 
     this.middleware();
-    this.routing();
-  }
+    await this.routing();
 
-  public async start(serveHttps: boolean) {
     try {
       await initInternationalisation();
       await this.initialiseCustomContent(false);
@@ -126,7 +126,7 @@ export class Server {
     next();
   };
 
-  private routing(): void {
+  private async routing(): Promise<void> {
     this.app.use(this.setNonceValue);
     this.app.use(setOwaspHeaders, allowCache, setBasicAuth, express.static("public"));
     this.app.use(useBasicAuth);
@@ -134,7 +134,7 @@ export class Server {
     this.app.use(noCache, cspRouter);
     this.app.use(authRouter);
     this.app.use(internationalisationRouter);
-    this.app.use(setOwaspHeaders, noCache, router);
+    this.app.use(setOwaspHeaders, noCache, await getServerRoutes());
     this.app.disable("x-powered-by");
   }
 

@@ -13,6 +13,7 @@ import { IBankCheckService } from "@server/resources/bankCheckService";
 import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
 import { ILogger } from "@shared/developmentLogger";
+import { Connection } from "jsforce";
 
 export interface IRepositories {
   readonly accounts: Repositories.IAccountsRepository;
@@ -70,6 +71,7 @@ export interface IContext {
   startTimer: (message: string) => ITimer;
   asSystemUser: () => IContext;
   asBankDetailsValidationUser: () => IContext;
+  getSalesforceConnection: () => Promise<Connection>;
   internationalisation: IInternationalisation;
 }
 

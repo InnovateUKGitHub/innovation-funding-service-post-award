@@ -1,9 +1,9 @@
 import { visitApp } from "../../common/visit";
-import { backToProject, shouldShowProjectTitle, shouldShowAllAccordion, pcrCommentBox, characterCount } from "./steps";
+import { shouldShowProjectTitle, shouldShowAllAccordion, pcrCommentBox, characterCount } from "./steps";
 
 describe("Creating Remove a partner PCR", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/create");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });
 
   it("Should select 'Remove a partner' checkbox", () => {
@@ -12,11 +12,12 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Will click Create request button and proceed to next page", () => {
     cy.submitButton("Create request").click();
-    cy.wait(5000);
-    cy.get("h1").should("contain.text", "Request");
+    cy.get("h1", { timeout: 10000 }).should("contain.text", "Request", { timeout: 10000 });
   });
 
-  it("Should show back to project link", backToProject);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project change requests");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 
@@ -67,11 +68,10 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Should Save and return to requests", () => {
     cy.getByQA("button_return-qa").contains("Save and return to requests").click();
-    cy.wait(5000);
   });
 
   it("Should have a 'Delete request' link", () => {
-    cy.get("a.govuk-link").contains("Delete").click();
+    cy.get("a.govuk-link", { timeout: 10000 }).contains("Delete", { timeout: 10000 }).click();
   });
 
   it("Should have a 'Delete request' button", () => {

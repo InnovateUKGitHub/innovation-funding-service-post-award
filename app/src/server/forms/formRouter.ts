@@ -66,6 +66,8 @@ import { LoanRequestFormHandler } from "./loan/LoanRequestFormHandler";
 import { ProjectSetupBankDetailsHandler } from "./project/setup/ProjectSetupBankDetailsHandler";
 import { ProjectSetupBankDetailsVerifyHandler } from "./project/setup/ProjectSetupBankDetailsVerifyHandler";
 import { ProjectSetupBankStatementHandler } from "./project/setup/ProjectSetupBankStatementHandler";
+import { GraphQLSchema } from "graphql";
+import { DeveloperProjectCreatorHandler } from "./developerProjectCreatorHandler";
 
 export const standardFormHandlers: StandardFormHandlerBase<AnyObject, EditorStateKeys>[] = [
   new ClaimForecastFormHandler(),
@@ -133,52 +135,66 @@ const getRoute = (handler: IFormHandler) => {
 };
 
 const handlePost =
-  (handler: IFormHandler) => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  ({ schema }: { schema: GraphQLSchema }) =>
+  (handler: IFormHandler) =>
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       await handler.handle(req, res, next);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       console.log(e);
-      return serverRender(req, res, e);
+      return serverRender({ schema })(req, res, e);
     }
   };
 
-const handleError = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error: any,
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
-  if (error) {
-    serverRender(req, res, error);
-  } else {
-    next();
-  }
-};
+const handleError =
+  ({ schema }: { schema: GraphQLSchema }) =>
+  (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    error: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
+    if (error) {
+      serverRender({ schema })(req, res, error);
+    } else {
+      next();
+    }
+  };
 
-export const configureFormRouter = (csrfProtection: RequestHandler) => {
-  const result = express.Router();
-  const badRequestHandler = new BadRequestHandler();
+export const configureFormRouter =
+  ({ schema }: { schema: GraphQLSchema }) =>
+  (csrfProtection: RequestHandler) => {
+    const result = express.Router();
+    const badRequestHandler = new BadRequestHandler();
 
-  singleFileFormHandlers.forEach(x => {
-    result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost(x), handleError);
-  });
+    singleFileFormHandlers.forEach(x => {
+      result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost({ schema })(x), handleError);
+    });
 
-  multiFileFormHandlers.forEach(x => {
-    result.post(getRoute(x), upload.array("attachment"), csrfProtection, handlePost(x), handleError);
-  });
+    multiFileFormHandlers.forEach(x => {
+      result.post(getRoute(x), upload.array("attachment"), csrfProtection, handlePost({ schema })(x), handleError);
+    });
 
-  standardFormHandlers.forEach(x => {
-    result.post(getRoute(x), csrfProtection, handlePost(x), handleError);
-  });
+    standardFormHandlers.forEach(x => {
+      result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError);
+    });
 
-  if (!configuration.sso.enabled) {
-    const homeFormHandler = new DeveloperUserSwitcherHandler();
-    result.post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle, handleError);
-  }
+    if (!configuration.sso.enabled) {
+      const homeFormHandler = new DeveloperUserSwitcherHandler();
+      const developerProjectCreatorHandler = new DeveloperProjectCreatorHandler();
+      result
+        .post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle, handleError)
+        .post(
+          getRoute(developerProjectCreatorHandler),
+          csrfProtection,
+          developerProjectCreatorHandler.handle,
+          handleError,
+        );
+    }
 
-  result.post("*", badRequestHandler.handle, handleError);
+    result.post("*", badRequestHandler.handle, handleError);
 
-  return result;
-};
+    return result;
+  };

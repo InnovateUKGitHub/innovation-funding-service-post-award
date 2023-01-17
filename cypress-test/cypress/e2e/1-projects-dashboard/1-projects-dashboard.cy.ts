@@ -12,7 +12,7 @@ import {
 
 describe("projects dashboard", () => {
   before(() => {
-    visitApp();
+    visitApp({});
   });
 
   it("displays two cards", shouldDisplayTwoProjectCards);

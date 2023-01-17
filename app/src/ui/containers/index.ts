@@ -1,7 +1,6 @@
 export * from "./broadcasts";
 export * from "./claims";
 export * from "./errors.page";
-export * from "./developer/home.page";
 export * from "./forecasts";
 export * from "./monitoringReports";
 export * from "./pcrs";

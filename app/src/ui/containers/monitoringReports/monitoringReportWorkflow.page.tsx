@@ -3,10 +3,11 @@ import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, ContainerBase, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { ILinkInfo, ProjectRole } from "@framework/types";
 import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
+import { scrollToTheTopSmoothly } from "@framework/util";
 
 export interface MonitoringReportWorkflowParams {
   projectId: string;
@@ -25,6 +26,12 @@ interface Callbacks {
 }
 
 class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Callbacks> {
+  componentDidUpdate(prevProps: Readonly<ContainerProps<MonitoringReportWorkflowParams, Data, Callbacks>>): void {
+    if (this.props.step !== prevProps.step) {
+      scrollToTheTopSmoothly();
+    }
+  }
+
   render() {
     const combined = Pending.combine({
       editor: this.props.editor,

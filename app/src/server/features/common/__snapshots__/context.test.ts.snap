@@ -8,7 +8,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -32,7 +32,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -61,7 +61,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -94,7 +94,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -124,7 +124,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -153,7 +153,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -178,7 +178,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -225,7 +225,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -257,7 +257,7 @@ Object {
       "logger": Logger {
         "identifier": "Context",
         "options": Object {
-          "logLevel": 5,
+          "logLevel": "ERROR",
           "prefixLines": Array [
             "user@email.com",
           ],
@@ -281,7 +281,7 @@ Object {
       "logger": Logger {
         "identifier": "Context",
         "options": Object {
-          "logLevel": 5,
+          "logLevel": "ERROR",
           "prefixLines": Array [
             "user@email.com",
           ],
@@ -303,7 +303,7 @@ Object {
       "logger": Logger {
         "identifier": "Context",
         "options": Object {
-          "logLevel": 5,
+          "logLevel": "ERROR",
           "prefixLines": Array [
             "user@email.com",
           ],
@@ -333,7 +333,7 @@ Object {
     "logger": Logger {
       "identifier": "DocumentsRepository",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [],
       },
     },
@@ -344,7 +344,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -376,7 +376,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -412,7 +412,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -445,7 +445,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -476,7 +476,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -506,7 +506,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -532,7 +532,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -560,7 +560,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -647,7 +647,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -692,7 +692,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -720,7 +720,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -751,7 +751,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -780,7 +780,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -810,7 +810,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -842,7 +842,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -933,7 +933,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -965,7 +965,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],
@@ -1020,7 +1020,7 @@ Object {
     "logger": Logger {
       "identifier": "Context",
       "options": Object {
-        "logLevel": 5,
+        "logLevel": "ERROR",
         "prefixLines": Array [
           "user@email.com",
         ],

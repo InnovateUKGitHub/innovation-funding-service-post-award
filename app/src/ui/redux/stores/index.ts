@@ -6,7 +6,6 @@ export * from "./claimDocumentsStore";
 export * from "./claimsStore";
 export * from "./claimOverridesStore";
 export * from "./companiesStore";
-export * from "./configStore";
 export * from "./contactsStore";
 export * from "./costCategoriesStore";
 export * from "./costsSummariesStore";

@@ -131,10 +131,19 @@ const EditPage = ({
   onChange,
 }: EditPageProps) => {
   const content = useEditPageContent();
+
+  /*
+   * get the data for the currently selected partner
+   * and get the matching validator
+   */
   const currentPartnerVirement = editor.data.partners.find(x => x.partnerId === partnerId);
   if (!currentPartnerVirement) throw new Error(`Cannot find current partner virement matching ${partnerId}`);
   const partnerVirementsValidator = editor.validator.partners.results.find(x => x.model.partnerId === partnerId);
 
+  /*
+   * maps the costCategories to include the virement data
+   * and also includes the new remaining grant
+   */
   const costCategoriesWithVirement = costCategories.map(x => {
     const overrideFundingLevel =
       claimOverrides.type === AwardRateOverrideType.BY_COST_CATEGORY
@@ -157,6 +166,7 @@ const EditPage = ({
       newRemainingGrant: roundCurrency((fundingLevel / 100) * virement.newEligibleCosts),
     };
   });
+
   const validation = costCategories.map(
     x => partnerVirementsValidator?.virements.results.find(y => y.model.costCategoryId === x.id) || null,
   );
@@ -168,26 +178,49 @@ const EditPage = ({
   const displayIntroMessage: boolean = isKTP && isPm;
 
   const updateValue = (costCategory: CostCategoryDto, value: number | null) => {
+    /*
+     * get the financial virements data for the project
+     */
     const projectCosts = editor.data;
     if (!projectCosts) throw new Error("Cannot find projectCosts");
+
+    /*
+     * get the data for the currently selected partner
+     */
     const currentPartner = projectCosts.partners.find(x => x.partnerId === partner.id);
     if (!currentPartner) throw new Error(`Cannot find current partner matching ${partner.id}`);
+
+    /*
+     * get the currently edited virement
+     */
     const costCategoryVirements = currentPartner.virements.find(x => x.costCategoryId === costCategory.id);
     if (!costCategoryVirements) throw new Error(`Cannot find cost category virements matching ${costCategory.id}`);
 
+    /*
+     * evaluate the funding level
+     */
     const overrideFundingLevel =
       claimOverrides.type === AwardRateOverrideType.BY_COST_CATEGORY
         ? claimOverrides.overrides.find(y => y.costCategoryId === costCategory.id)?.amount
         : undefined;
     const fundingLevel = overrideFundingLevel ?? currentPartnerVirement.originalFundingLevel;
 
+    /**
+     * mutate the selected costCategoryVirement data to include the newly updated remaining grant using the following business logic
+     * `((new eligible costs - Costs claimed to date) x Award rate for Cost cat) - ((original eligible costs - cost claimed to date) x Award rate for cost cat)`
+     */
     costCategoryVirements.newEligibleCosts = value ?? 0;
     costCategoryVirements.newRemainingCosts =
       costCategoryVirements.newEligibleCosts - costCategoryVirements.costsClaimedToDate;
+
     costCategoryVirements.newRemainingGrant = roundCurrency(
-      costCategoryVirements.newEligibleCosts * (fundingLevel / 100),
+      costCategoryVirements.newRemainingCosts * (fundingLevel / 100),
     );
 
+    /*
+     * This section finds out the related newEligibleCosts if a partner has a separate overheadRate
+     * and mutates the partner newEligibleCosts
+     */
     if (partner.overheadRate) {
       const calculatedCostCategoryIds = costCategories.filter(y => y.isCalculated).map(y => y.id);
       const related = currentPartner.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
@@ -199,15 +232,27 @@ const EditPage = ({
       }
     }
 
+    /*
+     * Total up the currentPartner total new eligible costs by summing the virements new Eligible costs
+     * Total up the currentPartner total new remaining grant by summing virements new remaining grant
+     */
     currentPartner.newEligibleCosts = currentPartner.virements.reduce((total, x) => total + x.newEligibleCosts, 0);
     currentPartner.newRemainingGrant = sumBy(currentPartner.virements, x => x.newRemainingGrant);
 
+    /*
+     * Total the projects new eligible costs by adding up the costs for all the partners
+     */
     projectCosts.newEligibleCosts = projectCosts.partners
       .filter(x => !!x.newEligibleCosts)
       .reduce((total, x) => total + x.newEligibleCosts, 0);
+
+    /**
+     * Total the projects new total remaining grant by summing the total new remaining grants for all partners
+     */
     projectCosts.newRemainingGrant = roundCurrency(
       projectCosts.partners.reduce((total, p) => total + p.newRemainingGrant, 0),
     );
+
     onChange(false, projectCosts);
   };
 

@@ -1,12 +1,14 @@
 import { visitApp } from "../../common/visit";
-import { backToProject, shouldShowProjectTitle } from "./steps";
+import { shouldShowProjectTitle } from "./steps";
 
 describe("PCRs in Draft status can be deleted", () => {
   before(() => {
-    visitApp("projects/a0E2600000kSotUEAS/pcrs/dashboard");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
   });
 
-  it("Should have a back to project link", backToProject);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project");
+  });
 
   it("Should display the project title", shouldShowProjectTitle);
 
@@ -30,7 +32,9 @@ describe("PCRs in Draft status can be deleted", () => {
     cy.getByQA("pcrDeleteLink").contains("Delete").click();
   });
 
-  it("Should present new page with 'Back to project change requests' link", backToProject);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project change requests");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 

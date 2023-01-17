@@ -1,6 +1,8 @@
 import "module-alias/register";
 import "isomorphic-fetch";
 import "isomorphic-form-data";
+import "reflect-metadata";
+
 import { Command } from "commander";
 
 import { Server } from "./server";

@@ -16,3 +16,4 @@ test-report.html
 
 # Generated files
 /dashboard/
+__generated__

@@ -5,14 +5,16 @@ const path = require("path");
 const { nodeExternalsPlugin } = require("esbuild-node-externals");
 const { typecheckPlugin } = require("@jgoz/esbuild-plugin-typecheck");
 const replaceModulesPlugin = require("./replaceModulesPlugin");
+const replaceGraphqlRelayPlugin = require("./replaceGraphqlRelayPlugin");
 const Restarter = require("./Restarter");
+const { execSync } = require("child_process");
 
 class ESBuildConfiguration {
   /**
    * A server configuration for production builds.
    * Extensible to make suitable for development/watch modes.
    *
-   * @type {Partial<BuildOptions>}
+   * @type {BuildOptions}
    */
   serverBuild;
 
@@ -20,7 +22,7 @@ class ESBuildConfiguration {
    * A client configuration for production builds.
    * Extensible to make suitable for development/watch modes.
    *
-   * @type {Partial<BuildOptions>}
+   * @type {BuildOptions}
    */
   clientBuild;
 
@@ -51,7 +53,10 @@ class ESBuildConfiguration {
       minify: false,
       tsconfig: path.join(dirname, "tsconfig.json"),
       logLevel: "info",
-      plugins: [nodeExternalsPlugin()],
+      plugins: [nodeExternalsPlugin(), replaceGraphqlRelayPlugin],
+      loader: {
+        ".apex": "text",
+      },
     };
 
     this.clientBuild = {
@@ -63,7 +68,7 @@ class ESBuildConfiguration {
       outdir: "public/build",
       minify: true,
       tsconfig: path.join(dirname, "tsconfig.json"),
-      plugins: [replaceModulesPlugin],
+      plugins: [replaceModulesPlugin, replaceGraphqlRelayPlugin],
       external: ["*.png", "*.woff2", "*.woff"],
       logLevel: "info",
     };
@@ -86,6 +91,9 @@ class ESBuildConfiguration {
     Object.assign(this.clientBuild, {
       watch: {
         onRebuild: () => {
+          // Run relay
+          execSync("npm run relay", { stdio: "inherit" });
+
           // On a rebuild, tell the client to reload.
           this.getRestarter().refreshClient();
         },

@@ -12,7 +12,7 @@ These make the relevant api calls to data stores
 
 `./models/`
 
-These are the intefaces of the shapes returned from the CQRS layer and are used in the Api layer and on the client. As we are expected to be the only consumer of the Api it is safe to share the dtos between the client and api layer with the results of the CQRS layer. If this changes the CQRS layer will need to return result objects that are mapped to api classes to allow for versioning of the api. This layer should only ever contain interfaces - it is important that there is no logic at this layer even mapping.
+These are the interfaces of the shapes returned from the CQRS layer and are used in the Api layer and on the client. As we are expected to be the only consumer of the Api it is safe to share the dtos between the client and api layer with the results of the CQRS layer. If this changes the CQRS layer will need to return result objects that are mapped to api classes to allow for versioning of the api. This layer should only ever contain interfaces - it is important that there is no logic at this layer even mapping.
 
 ### CQRS
 
@@ -41,33 +41,33 @@ It is constructed using a `contextProvider`
 
 `./server/apis`
 
-This is where rest endpoints are exposed. Defined as a class and exported as `controller`. Each api should generally return a single type of dto or maybe a summary dto and a full dto. They inherit from `ControllerBase<TDto>` or `ControllerBaseSummary<TFullDto, TSummaryDto>` *(todo when first required)*.
+This is where rest endpoints are exposed. Defined as a class and exported as `controller`. Each api should generally return a single type of dto or maybe a summary dto and a full dto. They inherit from `ControllerBase<TDto>` or `ControllerBaseSummary<TFullDto, TSummaryDto>` _(todo when first required)_.
 
 In order to support the isomorphic rendering it is important to define an interface which is also implemented by the `apiClient` that runs on the client side using `fetch` (see below).
 
 In the constructor these methods which match the interface are bound to express using protected methods in the base that separate extracting and typing parameters from the url and calling on to the methods in the class.
 
-New contollers interfaces are added to the `IApiClient` are registered with the server by adding to the `serverApis` const in `./server/apis/index.ts`
+New controller interfaces are added to the `IApiClient` are registered with the server by adding to the `serverApis` const in `./server/apis/index.ts`
 
-	export interface IProjectContactsApi {
-	    getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>
-	}
-	
-	class Controller extends ControllerBase<ProjectContactDto> implements IProjectContactsApi {
-	    constructor() {
-	        super();
-	
-	        this.getItems("/", (p, q) => ({ projectId: q.projectId }), p => this.getAllByProjectId(p.projectId));
-	    }
-	
-	    public async getAllByProjectId(projectId: string) {
-	        const query = new GetAllForProjectQuery(projectId);
-	        return await contextProvider.start().runQuery(query);
-	    }
-	
-	}
-	
-	export const controller = new Controller();
+    export interface IProjectContactsApi {
+        getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>
+    }
+
+    class Controller extends ControllerBase<ProjectContactDto> implements IProjectContactsApi {
+        constructor() {
+            super();
+
+            this.getItems("/", (p, q) => ({ projectId: q.projectId }), p => this.getAllByProjectId(p.projectId));
+        }
+
+        public async getAllByProjectId(projectId: string) {
+            const query = new GetAllForProjectQuery(projectId);
+            return await contextProvider.start().runQuery(query);
+        }
+
+    }
+
+    export const controller = new Controller();
 
 ### Routing
 
@@ -76,14 +76,13 @@ New contollers interfaces are added to the `IApiClient` are registered with the 
 Routes are defined and used on the server to do initial rendering and on the client when javascript is enabled. `Router5` is used to match the routes.
 
 Routes are objects that inherit from `AsyncRoute<T>` and provide the following properties
- 
+
 - `name` - used by router5 to identify route
 - `path` - used by router5 to match the route and define params
 - `fromPrams<T>` - used to extract strongly typed params from the route
 - `component` - used to define the container to render
 - `title` - method to get the title
 - `loadData` - method that returns actions that are dispatched when the component first loads
-
 
 ### Containers
 
