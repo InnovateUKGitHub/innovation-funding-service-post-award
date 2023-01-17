@@ -1,5 +1,12 @@
 import { visitApp } from "../../common/visit";
-import { clickForecastsTile, displayForecastTable, navigateToProject } from "./steps";
+import {
+  clickEditDisplayClaim,
+  clickForecastsTile,
+  displayForecastTable,
+  makeClaimFC,
+  navigateToProject,
+  shouldShowProjectTitle,
+} from "./steps";
 
 const financeContactEmail = "wed.addams@test.test.co.uk";
 
@@ -22,8 +29,29 @@ describe("Test the claims link from Forecast Page", () => {
 
   it("should show the forecast table", displayForecastTable);
 
-  it("should click the 'make a claim' link and land you on the claimsDashboard", () => {
-    cy.get("a.govuk-link").contains("make a claim").click({ force: true });
-    cy.getByPageQA("claimsDashboard").should("exist", { timeout: 5000 });
+  it("should click the 'make a claim' link and land you on the claimsDashboard", makeClaimFC);
+
+  it("Should have the project title", shouldShowProjectTitle);
+
+  it("Should have a back link", () => {
+    cy.backLink("Back to project");
+  });
+
+  it("Should have an Open claims section", () => {
+    cy.get("h2").contains("Open");
+  });
+
+  it("Should have a Closed claims section", () => {
+    cy.get("h2").contains("Closed");
+  });
+
+  it("Will allow the FC to click edit and it will display the claims page", clickEditDisplayClaim);
+
+  it("Has a 'Continue to claims document' button", () => {
+    cy.submitButton("Continue to claims documents");
+  });
+
+  it("Has a 'Save and return to claims' button", () => {
+    cy.submitButton("Save and return to claims");
   });
 });
