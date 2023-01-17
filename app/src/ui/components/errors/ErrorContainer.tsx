@@ -2,7 +2,6 @@ import { IAppError } from "@framework/types";
 import { ErrorPayload, createErrorPayload } from "@shared/create-error-payload";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { PageTitleProvider } from "@ui/features/page-title";
-import { MountedProvider } from "@ui/features";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { FullHeight, GovWidthContainer, Header } from "@ui/components";
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./error.config";
@@ -32,22 +31,20 @@ export function ErrorBoundaryFallback({ error }: FallbackProps) {
   const { data } = useClientOptionsQuery();
 
   return (
-    <MountedProvider>
-      <ContentProvider value={content}>
-        <PageTitleProvider title="Sorry, there is a problem with the service">
-          <FullHeight.Container>
-            <a href="#main-content" className="govuk-skip-link">
-              Skip to main content
-            </a>
-            <Header headingLink={`${data.clientConfig.ifsRoot}/competition/search`} />
-            <FullHeight.Content>
-              <GovWidthContainer>
-                <ErrorContainer {...errorPayload.params} />
-              </GovWidthContainer>
-            </FullHeight.Content>
-          </FullHeight.Container>
-        </PageTitleProvider>
-      </ContentProvider>
-    </MountedProvider>
+    <ContentProvider value={content}>
+      <PageTitleProvider title="Sorry, there is a problem with the service">
+        <FullHeight.Container>
+          <a href="#main-content" className="govuk-skip-link">
+            Skip to main content
+          </a>
+          <Header headingLink={`${data.clientConfig.ifsRoot}/competition/search`} />
+          <FullHeight.Content>
+            <GovWidthContainer>
+              <ErrorContainer {...errorPayload.params} />
+            </GovWidthContainer>
+          </FullHeight.Content>
+        </FullHeight.Container>
+      </PageTitleProvider>
+    </ContentProvider>
   );
 }

@@ -153,7 +153,13 @@ export function App({ store, relayEnvironment }: AppRoute) {
 
   return (
     <RelayEnvironmentProvider environment={relayEnvironment}>
-      <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...errorProps} />}>
+      <ErrorBoundary
+        fallbackRender={errorProps => (
+          <MountedProvider>
+            <ErrorBoundaryFallback {...errorProps} />
+          </MountedProvider>
+        )}
+      >
         <RoutesProvider value={routeConfig}>
           <MountedProvider>
             <Routes>
