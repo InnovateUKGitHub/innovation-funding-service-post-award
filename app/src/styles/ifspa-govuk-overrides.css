@@ -406,7 +406,7 @@ body,
   z-index: -1;
 }
 
-.sticky-col-right-1::after,
+/* .sticky-col-right-1::after,
 .sticky-col-right-2::after,
 .sticky-col-right-3::after,
 .sticky-col-left-1::after,
@@ -421,7 +421,7 @@ body,
   right: -1px;
   margin: 0;
   border-bottom: 1px solid var(--govukBorderColour);
-}
+} */
 
 .acc-sticky-table .table__row--warning {
   border-left: 5px none;
