@@ -103,8 +103,12 @@ export class ForecastTable extends React.Component<Props> {
     const periodId = this.getPeriodId(data.project, data.claims, data.claim);
     const intervals = this.calculateClaimPeriods(data);
     const tableRows = this.parseClaimData(data, editor, periodId, data.project.numberOfPeriods);
+    if (!tableRows.length) {
+      throw new Error("Unable to display the spend profile table, has the project been correctly set up?");
+    }
 
     const firstRow = tableRows[0];
+
     const claims = Object.keys(firstRow.claims);
     const forecasts = Object.keys(firstRow.forecasts);
     const periods = claims.concat(forecasts);

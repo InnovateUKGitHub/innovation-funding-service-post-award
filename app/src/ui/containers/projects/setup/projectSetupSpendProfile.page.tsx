@@ -76,7 +76,11 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
             }
             qa="project-setup-spend-profile-form"
           >
-            <ACC.Claims.ForecastTable data={combined} editor={editor} />
+            <Form.Custom
+              name="forecastTable"
+              update={() => null}
+              value={({ onChange }) => <ACC.Claims.ForecastTable onChange={onChange} data={combined} editor={editor} />}
+            />
             <Form.Fieldset heading={x => x.pages.projectSetupSpendProfile.markAsComplete}>
               <Form.Checkboxes
                 name="isComplete"
