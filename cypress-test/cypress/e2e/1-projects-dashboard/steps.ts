@@ -2,7 +2,7 @@ const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 
 export const navigateToProject = () => {
   cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`, { timeout: 1000 }).contains("CYPRESS_DO_NOT_USE").click();
+  cy.get(`${projectCardCss} a`, { timeout: 1000 }).contains("1_CYPRESS_DO_NOT_USE").click();
 };
 
 export const monitoringReportCardShouldNotExist = () => {

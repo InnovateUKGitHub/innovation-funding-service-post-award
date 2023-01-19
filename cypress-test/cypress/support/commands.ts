@@ -43,7 +43,7 @@ const resetUser = (goHome: boolean = false) => {
 
 const backLink = (name: string) => {
   cy.log("**backLink**");
-  cy.get("a.govuk-back-link", { timeout: 10000 }).contains(name);
+  cy.get("a.govuk-back-link", { timeout: 10000 }).contains(name, { timeout: 10000 });
 };
 
 const submitButton = (name: string) => {
