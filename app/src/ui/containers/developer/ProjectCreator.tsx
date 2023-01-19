@@ -181,7 +181,7 @@ const ProjectCreator = () => {
             update={(_, value) => setStartDate(value)}
           />
         </ProjectCreatorForm.Fieldset>
-        <ProjectCreatorForm.Submit>Submit</ProjectCreatorForm.Submit>
+        <ProjectCreatorForm.Submit>Create project</ProjectCreatorForm.Submit>
       </ProjectCreatorForm.Form>
     </Section>
   );
