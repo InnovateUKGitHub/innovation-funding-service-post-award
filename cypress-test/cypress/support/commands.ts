@@ -21,7 +21,7 @@ const getByPageQA = (tag: string) => {
 
 const getByAriaLabel = (label: string) => {
   cy.log("**getByAriaLabel**");
-  cy.get(`[aria-label="${label}"`, { timeout: 10000 });
+  cy.get(`[aria-label="${label}"]`, { timeout: 10000 });
 };
 
 const switchUserTo = (email: string, goHome: boolean = false) => {
