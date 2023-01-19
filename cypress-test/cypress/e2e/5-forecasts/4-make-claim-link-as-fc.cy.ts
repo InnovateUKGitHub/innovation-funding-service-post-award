@@ -4,7 +4,7 @@ import {
   clickForecastsTile,
   displayForecastTable,
   makeClaimFC,
-  navigateToProject,
+  navigateToProjectWithClaims,
   shouldShowProjectTitle,
 } from "./steps";
 
@@ -14,11 +14,11 @@ const financeContactEmail = "wed.addams@test.test.co.uk";
  * See ACC-9157 for the original issue this test relates to
  */
 
-describe("Test the claims link from Forecast Page", () => {
+describe("Test the claims link from Forecast Page as Finance Contact", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 
-    navigateToProject();
+    navigateToProjectWithClaims();
   });
 
   it("should click the forecast tile", clickForecastsTile);

@@ -2,6 +2,11 @@ const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 
 export const navigateToProject = () => {
   cy.contains("Projects").click({ force: true });
+  cy.get(`${projectCardCss} a`).wait(1000).contains("1_CYPRESS_DO_NOT_USE").click({ force: true });
+};
+
+export const navigateToProjectWithClaims = () => {
+  cy.contains("Projects").click({ force: true });
   cy.get(`${projectCardCss} a`).wait(1000).contains("CYPRESS_DO_NOT_USE_WITH_CLAIMS").click();
 };
 
@@ -10,8 +15,15 @@ export const shouldShowProjectTitle = () => {
 };
 
 export const displayForecastTable = () => {
-  cy.getByQA("forecast-table");
-  cy.get("thead.govuk-table__head").get("tbody.govuk-table__body");
+  cy.tableHeader("Period");
+  cy.tableHeader("1");
+  cy.tableHeader("Total");
+  cy.tableHeader("Total eligible costs");
+  cy.tableHeader("Difference");
+  cy.tableHeader("IAR Due");
+  cy.tableHeader("Month");
+  cy.tableHeader("Total");
+  cy.tableHeader;
 };
 
 export const clickForecastTile = () => {
@@ -52,4 +64,41 @@ export const clickViewDisplayClaim = () => {
 
 export const shouldShowAllAccordion = () => {
   cy.get("span.govuk-accordion__show-all-text", { timeout: 10000 }).contains("Show all sections").click();
+};
+
+export const updateLabourFields = () => {
+  cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true }).type("111").wait(500);
+  cy.get(`input[aria-label="Labour Period 4"]`).clear({ force: true }).type("111").wait(500);
+  cy.get(`input[aria-label="Labour Period 5"]`).clear({ force: true }).type("111").wait(500);
+  cy.get(`input[aria-label="Labour Period 6"]`).clear({ force: true }).type("111").wait(500);
+  cy.get(`input[aria-label="Labour Period 7"]`).clear({ force: true }).type("111").wait(500);
+  cy.get(`input[aria-label="Labour Period 8"]`).clear({ force: true }).type("111").wait(500);
+};
+
+export const exceedGrantValue = () => {
+  cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true }).type("34446").wait(500);
+  cy.getByQA("forecasts-warning-fc-content").contains(
+    "The amount you are requesting is more than the agreed costs for:",
+  );
+};
+
+export const clearCostCategories = () => {
+  cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true });
+  cy.get(`input[aria-label="Labour Period 4"]`).clear({ force: true });
+  cy.get(`input[aria-label="Labour Period 5"]`).clear({ force: true });
+  cy.get(`input[aria-label="Labour Period 6"]`).clear({ force: true });
+  cy.get(`input[aria-label="Labour Period 7"]`).clear({ force: true });
+  cy.get(`input[aria-label="Labour Period 8"]`).clear({ force: true });
+  cy.submitButton("Submit");
+  cy.get("h2").contains("There is a problem");
+};
+
+export const populateCategoriesZeroSubmit = () => {
+  cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true }).type("0").wait(500);
+  cy.get(`input[aria-label="Labour Period 4"]`).clear({ force: true }).type("0").wait(500);
+  cy.get(`input[aria-label="Labour Period 5"]`).clear({ force: true }).type("0").wait(500);
+  cy.get(`input[aria-label="Labour Period 6"]`).clear({ force: true }).type("0").wait(500);
+  cy.get(`input[aria-label="Labour Period 7"]`).clear({ force: true }).type("0").wait(500);
+  cy.get(`input[aria-label="Labour Period 8"]`).clear({ force: true }).type("0").wait(500);
+  cy.submitButton("Submit");
 };

@@ -4,7 +4,7 @@ import {
   clickViewDisplayClaim,
   displayForecastTable,
   makeClaimPM,
-  navigateToProject,
+  navigateToProjectWithClaims,
   shouldShowAllAccordion,
   shouldShowProjectTitle,
   showPartnerTable,
@@ -16,11 +16,11 @@ const projectManagerEmail = "james.black@euimeabs.test";
  * See ACC-9157 for the original issue this test relates to
  */
 
-describe("Test the claims link from Forecast Page", () => {
+describe("Test the claims link from Forecast Page as Project manager", () => {
   before(() => {
     visitApp({ asUser: projectManagerEmail });
 
-    navigateToProject();
+    navigateToProjectWithClaims();
   });
 
   it("should click the forecast tile", clickForecastTile);
