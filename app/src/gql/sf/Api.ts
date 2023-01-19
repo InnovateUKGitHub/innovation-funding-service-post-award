@@ -1,11 +1,6 @@
 import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { configuration } from "@server/features/common";
-import {
-  getCachedSalesforceAccessToken,
-  // getSalesforceAccessToken,
-  // salesforceConnectionWithToken,
-} from "@server/repositories/salesforceConnection";
-// import { Logger } from "@shared/developmentLogger";
+import { getCachedSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { print } from "graphql";
 import fetch from "isomorphic-fetch";
 

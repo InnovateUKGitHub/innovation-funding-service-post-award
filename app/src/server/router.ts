@@ -54,6 +54,11 @@ const getServerRoutes = async () => {
       res.locals.email = req.query.sudo;
       const api = await Api.asUser(req.query.sudo);
       res.locals.api = api;
+    } else {
+      const email = req?.session?.user.email ?? null;
+      const api = await Api.asUser(email);
+      res.locals.email = email;
+      res.locals.api = api;
     }
 
     logger.debug("Executing GraphQL", res.locals.email);

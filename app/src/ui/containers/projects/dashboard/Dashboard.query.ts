@@ -118,4 +118,4 @@ const projectDashboardQuery = graphql`
   }
 `;
 
-export { projectDashboardQuery }
+export { projectDashboardQuery };

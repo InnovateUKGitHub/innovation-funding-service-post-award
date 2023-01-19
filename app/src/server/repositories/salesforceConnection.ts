@@ -74,7 +74,6 @@ export const getCachedSalesforceAccessToken = async (
   const fetchToken = async () => await getSalesforceAccessToken(salesforceDetails);
   const signedToken = await tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
 
-  console.log("signedToken", signedToken);
   return signedToken;
 };
 
