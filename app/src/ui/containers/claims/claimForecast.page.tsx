@@ -79,11 +79,12 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
     editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>,
   ) {
     const periodsClaimed = new Set(this.props.claimDetails?.data?.map(x => x.periodId));
-
+    const arrayExcludingClaimedPeriods = getArrayExcludingPeriods(editor.data, periodsClaimed);
+    const lastChanceToEditPeriod = arrayExcludingClaimedPeriods[0]?.periodId;
     const handleSubmit = () => {
       return this.props.onUpdate(
         true,
-        getArrayExcludingPeriods(editor.data, periodsClaimed),
+        arrayExcludingClaimedPeriods,
         this.props.routes.claimSummary.getLink({
           projectId: this.props.projectId,
           partnerId: this.props.partnerId,
@@ -93,11 +94,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
     };
 
     const onFormSave = () => {
-      this.props.onUpdate(
-        true,
-        getArrayExcludingPeriods(editor.data, periodsClaimed),
-        this.getBackLink(combined.project),
-      );
+      this.props.onUpdate(true, arrayExcludingClaimedPeriods, this.getBackLink(combined.project));
     };
 
     return (
@@ -128,7 +125,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
             )}
             <ACC.ValidationMessage
               messageType="info"
-              message={x => x.claimsMessages.lastChanceToChangeForecast({ periodId: combined.project.periodId })}
+              message={x => x.claimsMessages.lastChanceToChangeForecast({ periodId: lastChanceToEditPeriod })}
             />
           </ACC.Renderers.AriaLive>
           <ACC.Forecasts.Warning {...combined} editor={editor} />
