@@ -14,6 +14,7 @@ import { Router } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import { configuration } from "./features/common";
 
+let index = 0;
 export const noAuthRouter = Router();
 
 // Support routes
@@ -30,6 +31,7 @@ const getServerRoutes = async () => {
 
   router.use(async (req, res, next) => {
     // Obtain a Salesforce access token and URL
+    console.log("fetching sf access token");
     try {
       const email = req.session?.user.email ?? null;
 
@@ -38,6 +40,7 @@ const getServerRoutes = async () => {
 
         res.locals.api = api;
         res.locals.email = email;
+        console.log("setting api email as ", res.locals.email);
       }
     } catch {
       res.locals.email = null;
@@ -50,21 +53,27 @@ const getServerRoutes = async () => {
   router.use("/api", apiRoutes);
   router.use("/graphql", async (req, res, next) => {
     // Allow the override of the user email if `sudo` is included.
+
+    let api: Api;
+
+    console.log(`\n===\ngraphql request: ${index++}\n======`);
     if (!configuration.sso.enabled && typeof req.query.sudo === "string") {
       res.locals.email = req.query.sudo;
-      const api = await Api.asUser(req.query.sudo);
+      api = await Api.asUser(req.query.sudo);
       res.locals.api = api;
     } else {
       const email = req?.session?.user.email ?? null;
-      const api = await Api.asUser(email);
+      api = await Api.asUser(email);
       res.locals.email = email;
       res.locals.api = api;
     }
 
+    const requestSchema = await getGraphQLSchema({ api });
+
     logger.debug("Executing GraphQL", res.locals.email);
 
     createHandler({
-      schema: schema,
+      schema: requestSchema,
       context: createContext({ logger: new Logger("Client GraphQL"), res }),
     })(req, res, next);
   });
