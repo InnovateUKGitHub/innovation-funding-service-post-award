@@ -67,3 +67,64 @@ export const deletePcr = () => {
   cy.getByQA("pcrDeleteLink").contains("Delete", { timeout: 10000 }).click();
   cy.getByQA("button_delete-qa").click();
 };
+
+export const learnFiles = () => {
+  cy.get("span").contains("Learn more about files you can upload").click();
+  cy.get("p").contains("You can upload");
+  cy.get("p").contains("There is no limit");
+};
+
+export const pcrDocUpload = () => {
+  cy.get("input#attachment", { timeout: 10000 }).selectFile("cypress/common/testfile.doc", { timeout: 5000 });
+  cy.uploadButton("Upload documents").click();
+};
+
+export const pcrFileTable = () => {
+  cy.tableHeader("File name");
+  cy.tableHeader("Type");
+  cy.tableHeader("Date uploaded");
+  cy.tableHeader("Uploaded by");
+};
+
+export const learnOrganisations = () => {
+  cy.get("span").contains("What are the different types?").click();
+  cy.get("p").contains("Business");
+  cy.get("p").contains("Research");
+  cy.get("p").contains("Research and technology organisation (RTO)");
+  cy.get("p").contains("Public sector, charity or non Je-S");
+};
+
+export const completeNewPartnerInfoAsBus = () => {
+  cy.getByLabel("Collaborator").click();
+  cy.getByLabel("Yes").click();
+  cy.getByLabel("Business").click();
+  cy.submitButton("Save and continue").click();
+};
+
+export const completeNewPartnerInfoAsResearch = () => {
+  cy.getByLabel("Collaborator").click();
+  cy.getByLabel("Yes").click();
+  cy.getByLabel("Research").click();
+  cy.submitButton("Save and continue").click();
+};
+
+export const completeNewPartnerInfoAsRto = () => {
+  cy.getByLabel("Collaborator").click();
+  cy.getByLabel("Yes").click();
+  cy.getByLabel("Research and Technology Organisation (RTO)").click();
+  cy.submitButton("Save and continue").click();
+};
+
+export const completeNewPartnerInfoAsPublic = () => {
+  cy.getByLabel("Collaborator").click();
+  cy.getByLabel("Yes").click();
+  cy.getByLabel("Public Sector, charity or non Je-S registered research organisation").click();
+  cy.submitButton("Save and continue").click();
+};
+
+export const completeNewPartnerInfoNonAid = () => {
+  cy.getByLabel("Collaborator").click();
+  cy.getByLabel("No").click();
+  cy.getByLabel("Business").click();
+  cy.submitButton("Save and continue").click();
+};

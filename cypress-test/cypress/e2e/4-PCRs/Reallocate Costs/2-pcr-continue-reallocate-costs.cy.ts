@@ -1,5 +1,5 @@
-import { visitApp } from "../../common/visit";
-import { deletePcr, shouldShowProjectTitle } from "./steps";
+import { visitApp } from "../../../common/visit";
+import { deletePcr, shouldShowProjectTitle } from "../steps";
 
 describe("Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {

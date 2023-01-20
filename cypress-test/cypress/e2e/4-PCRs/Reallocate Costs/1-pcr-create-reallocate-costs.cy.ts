@@ -1,5 +1,5 @@
-import { visitApp } from "../../common/visit";
-import { characterCount, deletePcr, pcrCommentBox, shouldShowAllAccordion, shouldShowProjectTitle } from "./steps";
+import { visitApp } from "../../../common/visit";
+import { characterCount, deletePcr, pcrCommentBox, shouldShowAllAccordion, shouldShowProjectTitle } from "../steps";
 
 describe("Creating Reallocate Project Costs PCR", () => {
   before(() => {

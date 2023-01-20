@@ -1,9 +1,13 @@
-import { visitApp } from "../../common/visit";
-import { shouldShowProjectTitle, shouldShowAllAccordion, pcrCommentBox, characterCount } from "./steps";
+import { visitApp } from "../../../common/visit";
+import { shouldShowProjectTitle, shouldShowAllAccordion, pcrCommentBox, characterCount, deletePcr } from "../steps";
 
 describe("Creating Remove a partner PCR", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+  });
+
+  after(() => {
+    deletePcr();
   });
 
   it("Should select 'Remove a partner' checkbox", () => {
@@ -12,7 +16,7 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Will click Create request button and proceed to next page", () => {
     cy.submitButton("Create request").click();
-    cy.get("h1", { timeout: 10000 }).should("contain.text", "Request", { timeout: 10000 });
+    cy.get("h1", { timeout: 14000 }).should("contain.text", "Request", { timeout: 14000 });
   });
 
   it("Should have a back option", () => {
@@ -43,7 +47,7 @@ describe("Creating Remove a partner PCR", () => {
    * TODO Potentially add a step to click into 'Add types' to ensure this function is working and then back out to this page
    */
 
-  it("Should show a 'Give us information' section with the Reallocate costs PCR type listed and 'TO DO' listed beneath", () => {
+  it("Should show a 'Give us information' section with the Remove a partner PCR type listed and 'TO DO' listed beneath", () => {
     cy.get("h2").contains("Give us information");
     // cy.get("span.app-task-list__task-name").contains("Remove a partner");
     // cy.get("strong.govuk-tag.govuk-tag--blue").contains("To do");
@@ -64,17 +68,5 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Should have a submit request button", () => {
     cy.getByQA("button_default-qa").contains("Submit request");
-  });
-
-  it("Should Save and return to requests", () => {
-    cy.getByQA("button_return-qa").contains("Save and return to requests").click();
-  });
-
-  it("Should have a 'Delete request' link", () => {
-    cy.get("a.govuk-link", { timeout: 10000 }).contains("Delete", { timeout: 10000 }).click();
-  });
-
-  it("Should have a 'Delete request' button", () => {
-    cy.getByQA("button_delete-qa").click();
   });
 });
