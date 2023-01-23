@@ -1,10 +1,14 @@
 import { visitApp } from "../../../common/visit";
 import {
+  completeNewPartnerInfoAsBus,
   shouldShowProjectTitle,
   deletePcr,
-  completeNewPartnerInfoAsPublic,
   clickCreateRequestButtonProceed,
   stateAidAddPartnerHeading,
+  addPartnerCompanyHouseHeader,
+  searchCompanyHouseGuidance,
+  typeASearchResults,
+  companyHouseAutofillAssert,
   saveContinueSaveSummary,
 } from "../steps";
 
@@ -27,7 +31,13 @@ describe("Creating Remove a partner PCR", () => {
     cy.get("a").contains("Add a partner", { timeout: 10000 }).click();
   });
 
-  it("Should complete this page as a business and continue to the next page", completeNewPartnerInfoAsPublic);
+  it("Should complete this page as a business and continue to the next page", completeNewPartnerInfoAsBus);
+
+  it("Should display a 'Add a partner' heading and 'State aid eligibility' heading", stateAidAddPartnerHeading);
+
+  it("Should click 'Save and continue' button", () => {
+    cy.submitButton("Save and continue").click();
+  });
 
   it("Should have a back option", () => {
     cy.backLink("Back to request");
@@ -35,11 +45,22 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should display a 'Add a partner' heading and 'State aid eligibility' heading", stateAidAddPartnerHeading);
+  it("Should display a 'Add a partner' heading and 'Company house heading", addPartnerCompanyHouseHeader);
 
-  it("Should have further information on state aid eligibility", () => {
-    cy.get("p").contains("If we decide to award this organisation");
-  });
+  it(
+    "Should have a 'Search companies house' subheading and guidance information beneath search box",
+    searchCompanyHouseGuidance,
+  );
+
+  it(
+    "Should type 'A' in the search box and display 'Companies house search results' and the company 'A Limited'",
+    typeASearchResults,
+  );
+
+  it(
+    "Should auto-fill the 'Organisation name', 'Registration number' and 'Registered address' fields",
+    companyHouseAutofillAssert,
+  );
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
 });

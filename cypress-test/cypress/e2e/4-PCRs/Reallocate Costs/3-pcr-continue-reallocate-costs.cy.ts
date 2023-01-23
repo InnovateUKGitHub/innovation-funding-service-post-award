@@ -1,5 +1,15 @@
 import { visitApp } from "../../../common/visit";
-import { deletePcr, shouldShowProjectTitle } from "../steps";
+import {
+  clickCreateRequestButtonProceed,
+  deletePcr,
+  reallocateCostsGiveUsInfoContinue,
+  markAsComplete,
+  reallocateCostsAndPartner,
+  reallocateCostsCats,
+  reallocateCostsTableHeaders,
+  shouldShowProjectTitle,
+  showPartners,
+} from "../steps";
 
 describe("Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
@@ -14,25 +24,13 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.clickCheckBox("Reallocate project costs");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-    cy.submitButton("Create request").click();
-    cy.wait("@pcrPrepare");
-    cy.get("h1").should("contain.text", "Request");
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
-  it("Should show select 'Give us information' and continue to the next page", () => {
-    cy.get("h2.app-task-list__section").contains("Give us information");
-    cy.get("span.app-task-list__task-name").contains("Reallocate project costs").click();
-  });
+  it("Should show select 'Give us information' and continue to the next page", reallocateCostsGiveUsInfoContinue);
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should show the partners listed", () => {
-    cy.tableCell("EUI Small Ent Health");
-    cy.tableCell("A B Cad Services");
-    cy.tableCell("ABS EUI Medium Enterprise");
-  });
+  it("Should show the partners listed", showPartners);
 
   it("Should allow you to navigate to EUI Small Ent Health", () => {
     cy.get("td.govuk-table__cell").contains("EUI Small Ent Health").click();
@@ -44,33 +42,11 @@ describe("Continues Reallocate costs to the costs tables page to access each par
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should display a 'Reallocate costs' heading and partner name", () => {
-    cy.get("h1").contains("Reallocate costs");
-    cy.get("h2").contains("EUI Small Ent Health");
-  });
+  it("Should display a 'Reallocate costs' heading and partner name", reallocateCostsAndPartner);
 
-  it("Should display reallocate costs table headers", () => {
-    cy.tableHeader("Cost category");
-    cy.tableHeader("Total eligible costs");
-    cy.tableHeader("Costs claimed");
-    cy.tableHeader("New total eligible costs");
-    cy.tableHeader("Costs reallocated");
-  });
+  it("Should display reallocate costs table headers", reallocateCostsTableHeaders);
 
-  it("Should display the reallocate costs table cost categories", () => {
-    cy.tableCell("Labour");
-    cy.tableCell("Overheads");
-    cy.tableCell("Materials");
-    cy.tableCell("Capital usage");
-    cy.tableCell("Subcontracting");
-    cy.tableCell("Travel and subsistence");
-    cy.tableCell("Other costs");
-    cy.tableCell("Other costs 2");
-    cy.tableCell("Other costs 3");
-    cy.tableCell("Other costs 4");
-    cy.tableCell("Other costs 5");
-    cy.tableCell("Partner totals");
-  });
+  it("Should display the reallocate costs table cost categories", reallocateCostsCats);
 
   it("Should display a 'Summary of project costs' section", () => {
     cy.tableHeader("Total eligible costs");
@@ -99,10 +75,7 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.get("input#grantMovingOverFinancialYear").type("0");
   });
 
-  it("Has a mark as complete section", () => {
-    cy.get("h2").contains("Mark as complete");
-    cy.get("input#itemStatus_true.govuk-checkboxes__input").click();
-  });
+  it("Has a mark as complete section", markAsComplete);
 
   it("Has a save and return to request button", () => {
     cy.submitButton("Save and return to request").click();

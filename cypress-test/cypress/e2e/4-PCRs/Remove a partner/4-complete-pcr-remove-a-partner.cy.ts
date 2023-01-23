@@ -1,5 +1,12 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, learnFiles, pcrDocUpload, deletePcr } from "../steps";
+import {
+  shouldShowProjectTitle,
+  pcrDocUpload,
+  deletePcr,
+  clickCreateRequestButtonProceed,
+  clickPartnerAddPeriod,
+  removePartnerTable,
+} from "../steps";
 
 describe("Continuing editing the Remove a partner section once a partner is selected", () => {
   before(() => {
@@ -14,20 +21,13 @@ describe("Continuing editing the Remove a partner section once a partner is sele
     cy.clickCheckBox("Remove a partner");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.submitButton("Create request").click();
-    cy.get("h1", { timeout: 14000 }).should("contain.text", "Request", { timeout: 14000 });
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should click the Remove partner link to begin editing the PCR", () => {
     cy.get("a").contains("Remove a partner").click();
   });
 
-  it("Should click a partner name before entering a period number and proceeding", () => {
-    cy.getByLabel("EUI Small Ent Health").click();
-    cy.get(`input[id="removalPeriod"]`).clear().type("3");
-    cy.submitButton("Save and continue").click();
-  });
+  it("Should click a partner name before entering a period number and proceeding", clickPartnerAddPeriod);
 
   it("should allow you to upload a file", pcrDocUpload);
 
@@ -45,11 +45,7 @@ describe("Continuing editing the Remove a partner section once a partner is sele
     cy.get("h1").contains("Remove a partner");
   });
 
-  it("Should display a remove partner table containing information on the request entered so far", () => {
-    cy.getByQA("partnerToRemove").contains("Partner being removed");
-    cy.getByQA("removalPeriod").contains("Last period");
-    cy.getByQA("supportingDocuments").contains("Documents");
-  });
+  it("Should display a remove partner table containing information on the request entered so far", removePartnerTable);
 
   it("Has a subheading 'Mark as complete' with an 'I agree with this change' checkbox", () => {
     cy.get("h2").contains("Mark as complete");

@@ -5,6 +5,8 @@ import {
   clickStartNewReportButton,
   continueAndReturnButtons,
   navigateToProject,
+  periodSelection,
+  q1ScoreChoice,
   q1SelectEachRadioButton,
   shouldShowProjectTitle,
   standardComments,
@@ -23,11 +25,7 @@ describe("MO can continue a report", () => {
 
   it("Should click the 'Start a new report' button", clickStartNewReportButton);
 
-  it("Should display a period selection box and allow a figure to be entered", () => {
-    cy.getByQA("field-period").contains("Period");
-    cy.get("input#period").type("1");
-    cy.wait(500);
-  });
+  it("Should display a period selection box and allow a figure to be entered", periodSelection);
 
   it("Should continue to the next page", () => {
     cy.getByQA("button_save-continue-qa").click();
@@ -59,13 +57,7 @@ describe("MO can continue a report", () => {
     cy.get("p").contains("For each question score the project");
   });
 
-  it("Should have a number of score options", () => {
-    cy.get("label").contains("The consortium has identified");
-    cy.get("label").contains("The project remains");
-    cy.get("label").contains("There is a possibility");
-    cy.get("label").contains("It appears highly likely");
-    cy.get("label").contains("It is certain that");
-  });
+  it("Should have a number of score options", q1ScoreChoice);
 
   it("Should be able to select each radio button in turn", q1SelectEachRadioButton);
 

@@ -6,6 +6,7 @@ import {
   continueAndReturnButtons,
   navigateToProject,
   navigateToSection5,
+  q5ScoreChoice,
   q5SelectEachRadioButton,
   shouldShowProjectTitle,
   standardComments,
@@ -44,13 +45,7 @@ describe("MO can continue a report", () => {
     cy.get("h2").contains("Risk management");
   });
 
-  it("Should have a number of score options", () => {
-    cy.get("label").contains("Exceeding expectations");
-    cy.get("label").contains("Good practice");
-    cy.get("label").contains("Scope for improvement");
-    cy.get("label").contains("Very poor");
-    cy.get("label").contains("Unacceptable");
-  });
+  it("Should have a number of score options", q5ScoreChoice);
 
   it("Should be able to select each radio button in turn", q5SelectEachRadioButton);
 

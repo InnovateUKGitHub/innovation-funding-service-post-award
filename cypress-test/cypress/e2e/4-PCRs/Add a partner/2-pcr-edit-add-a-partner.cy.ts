@@ -1,5 +1,14 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, deletePcr, learnOrganisations } from "../steps";
+import {
+  shouldShowProjectTitle,
+  deletePcr,
+  learnOrganisations,
+  clickCreateRequestButtonProceed,
+  projectOutputs,
+  organisationRadios,
+  saveContinueSaveSummary,
+  projectRoleRadios,
+} from "../steps";
 
 describe("Creating Remove a partner PCR", () => {
   before(() => {
@@ -14,9 +23,7 @@ describe("Creating Remove a partner PCR", () => {
     cy.clickCheckBox("Add a partner");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.submitButton("Create request").click();
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should let you click 'Add a partner' and continue to the next screen", () => {
     cy.get("a").contains("Add a partner", { timeout: 10000 }).click();
@@ -37,21 +44,12 @@ describe("Creating Remove a partner PCR", () => {
     cy.getByQA("validation-message-content").contains("You cannot change this information after you continue.");
   });
 
-  it("Should have a subheading called 'Project role' and allow radio buttons to be selected", () => {
-    cy.get("h2").contains("Project role");
-    cy.getByLabel("Collaborator").click();
-    cy.getByLabel("Project Lead").click();
-  });
+  it("Should have a subheading called 'Project role' and allow radio buttons to be selected", projectRoleRadios);
 
-  it("Should have a subheading called 'Project outputs' with further information and allow radio buttons to be selected", () => {
-    cy.get("h2").contains("Project outputs");
-    cy.getByQA("field-isCommercialWork").contains(
-      "Will the new partner's work on the project be mostly commercial or economic",
-    );
-    cy.getByLabel("Yes").click();
-    cy.getByLabel("No").click();
-    cy.getByLabel("Yes").click();
-  });
+  it(
+    "Should have a subheading called 'Project outputs' with further information and allow radio buttons to be selected",
+    projectOutputs,
+  );
 
   it("Should have the subheading 'Organisation type'", () => {
     cy.get("h2").contains("Organisation type");
@@ -63,15 +61,7 @@ describe("Creating Remove a partner PCR", () => {
     cy.getByQA("field-partnerType").contains("If the new partner's organisation type is not listed");
   });
 
-  it("Should click the radio buttons to select the organisation type", () => {
-    cy.getByLabel("Business").click();
-    cy.getByLabel("Research").click();
-    cy.getByLabel("Research and Technology Organisation (RTO)").click();
-    cy.getByLabel("Public Sector, charity or non Je-S").click();
-  });
+  it("Should click the radio buttons to select the organisation type", organisationRadios);
 
-  it("Should have a 'Save and continue' button and a 'Save and return to summary' button", () => {
-    cy.submitButton("Save and continue");
-    cy.submitButton("Save and return to summary");
-  });
+  it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
 });

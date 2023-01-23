@@ -6,6 +6,7 @@ import {
   continueAndReturnButtons,
   navigateToProject,
   navigateToSection3,
+  q3ScoreChoice,
   q3SelectEachRadioButton,
   shouldShowProjectTitle,
   standardComments,
@@ -48,13 +49,7 @@ describe("MO can continue a report", () => {
     cy.get("h2").contains("Cost");
   });
 
-  it("Should have a number of score options", () => {
-    cy.get("label").contains("Expenditure is lower");
-    cy.get("label").contains("Expenditure is in line");
-    cy.get("label").contains("Limited forecast evidence");
-    cy.get("label").contains("Forecasts not updated properly");
-    cy.get("label").contains("Forecasts not updated, and");
-  });
+  it("Should have a number of score options", q3ScoreChoice);
 
   it("Should be able to select each radio button in turn", q3SelectEachRadioButton);
 

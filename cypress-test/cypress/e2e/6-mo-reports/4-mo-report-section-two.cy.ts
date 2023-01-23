@@ -6,6 +6,7 @@ import {
   continueAndReturnButtons,
   navigateToProject,
   navigateToSection2,
+  q2ScoreChoice,
   q2SelectEachRadioButton,
   shouldShowProjectTitle,
   standardComments,
@@ -48,13 +49,7 @@ describe("MO can continue a report", () => {
     cy.get("h2").contains("Time");
   });
 
-  it("Should have a number of score options", () => {
-    cy.get("label").contains("ahead of schedule");
-    cy.get("label").contains("planned timetable");
-    cy.get("label").contains("current period have been met");
-    cy.get("label").contains("slipped by up to three months");
-    cy.get("label").contains("slipped by more than three months");
-  });
+  it("Should have a number of score options", q2ScoreChoice);
 
   it("Should be able to select each radio button in turn", q2SelectEachRadioButton);
 

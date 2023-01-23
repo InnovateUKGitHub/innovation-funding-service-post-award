@@ -1,5 +1,5 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle } from "../steps";
+import { clickCreateRequestButtonProceed, shouldShowProjectTitle, showPartners } from "../steps";
 
 describe("Begin editing the Remove a partner section", () => {
   before(() => {
@@ -10,10 +10,7 @@ describe("Begin editing the Remove a partner section", () => {
     cy.clickCheckBox("Remove a partner");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.submitButton("Create request").click();
-    cy.get("h1", { timeout: 14000 }).should("contain.text", "Request", { timeout: 14000 });
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should click the Remove partner link to begin editing the PCR", () => {
     cy.get("a").contains("Remove a partner").click();
@@ -33,11 +30,7 @@ describe("Begin editing the Remove a partner section", () => {
     cy.get("h2").contains("Select partner to remove");
   });
 
-  it("Should have a list of partners and the option to select which partner you wish to remove", () => {
-    cy.getByLabel("EUI Small Ent Health").click();
-    cy.getByLabel("A B Cad Services").click();
-    cy.getByLabel("ABS EUI Medium Enterprise").click();
-  });
+  it("Should have a list of partners and the option to select which partner you wish to remove", showPartners);
 
   it("Should have a 'When is their last period?' heading", () => {
     cy.get("h2").contains("When is their last period?");

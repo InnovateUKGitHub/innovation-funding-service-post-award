@@ -1,5 +1,13 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, deletePcr, completeNewPartnerInfoNonAid } from "../steps";
+import {
+  shouldShowProjectTitle,
+  deletePcr,
+  completeNewPartnerInfoNonAid,
+  clickCreateRequestButtonProceed,
+  stateAidAddPartnerHeading,
+  saveContinueSaveSummary,
+  stateAidFurtherInfo,
+} from "../steps";
 
 describe("Creating Remove a partner PCR", () => {
   before(() => {
@@ -14,9 +22,7 @@ describe("Creating Remove a partner PCR", () => {
     cy.clickCheckBox("Add a partner");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.submitButton("Create request").click();
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should let you click 'Add a partner' and continue to the next screen", () => {
     cy.get("a").contains("Add a partner", { timeout: 10000 }).click();
@@ -30,20 +36,9 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should display a 'Add a partner' heading and 'Non-aid funding' heading", () => {
-    cy.get("h1").contains("Add a partner", { timeout: 10000 });
-    cy.get("h2").contains("Non-aid funding", { timeout: 10000 });
-  });
+  it("Should display a 'Add a partner' heading and 'Non-aid funding' heading", stateAidAddPartnerHeading);
 
-  it("Should have further information on state aid eligibility", () => {
-    cy.get("p").contains("This competition provides funding that is classed as non-aid");
-    cy.get("p").contains("Non-aid is only granted to organisations which declare");
-    cy.get("p").contains("in any way which gives them");
-    cy.get("p").contains("in any other way which would");
-  });
+  it("Should have further information on state aid eligibility", stateAidFurtherInfo);
 
-  it("Should have a 'Save and continue' button and a 'Save and return to summary' button", () => {
-    cy.submitButton("Save and continue");
-    cy.submitButton("Save and return to summary");
-  });
+  it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
 });

@@ -1,5 +1,12 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, deletePcr, completeNewPartnerInfoAsRto } from "../steps";
+import {
+  shouldShowProjectTitle,
+  deletePcr,
+  completeNewPartnerInfoAsRto,
+  clickCreateRequestButtonProceed,
+  stateAidAddPartnerHeading,
+  saveContinueSaveSummary,
+} from "../steps";
 
 describe("Creating Remove a partner PCR", () => {
   before(() => {
@@ -14,9 +21,7 @@ describe("Creating Remove a partner PCR", () => {
     cy.clickCheckBox("Add a partner");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.submitButton("Create request").click();
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should let you click 'Add a partner' and continue to the next screen", () => {
     cy.get("a").contains("Add a partner", { timeout: 10000 }).click();
@@ -30,17 +35,11 @@ describe("Creating Remove a partner PCR", () => {
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should display a 'Add a partner' heading and 'State aid eligibility' heading", () => {
-    cy.get("h1").contains("Add a partner", { timeout: 10000 });
-    cy.get("h2").contains("State aid eligibility");
-  });
+  it("Should display a 'Add a partner' heading and 'State aid eligibility' heading", stateAidAddPartnerHeading);
 
   it("Should have further information on state aid eligibility", () => {
     cy.get("p").contains("If we decide to award this organisation");
   });
 
-  it("Should have a 'Save and continue' button and a 'Save and return to summary' button", () => {
-    cy.submitButton("Save and continue");
-    cy.submitButton("Save and return to summary");
-  });
+  it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
 });

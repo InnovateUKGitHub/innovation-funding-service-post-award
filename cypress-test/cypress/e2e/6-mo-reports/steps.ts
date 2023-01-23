@@ -243,3 +243,72 @@ export const continueAndReturnButtons = () => {
   cy.submitButton("Continue");
   cy.submitButton("Save and return to summary");
 };
+
+export const openHeadingArchivedHeading = () => {
+  cy.get("h2").contains("Open");
+  cy.get("h2").contains("Archived");
+};
+
+export const reportGuidance = () => {
+  cy.getByQA("section-content").contains("Each report refers to a period");
+  cy.getByQA("section-content").contains("For each section score the project");
+};
+
+export const periodSelection = () => {
+  cy.getByQA("field-period").contains("Period");
+  cy.get("input#period").type("1");
+  cy.wait(500);
+};
+
+export const saveContinueSaveReturn = () => {
+  cy.getByQA("button_save-continue-qa").contains("Continue");
+  cy.getByQA("button_save-return-qa").contains("Save and return to monitoring reports");
+};
+
+export const q1ScoreChoice = () => {
+  cy.get("label").contains("The consortium has identified");
+  cy.get("label").contains("The project remains");
+  cy.get("label").contains("There is a possibility");
+  cy.get("label").contains("It appears highly likely");
+  cy.get("label").contains("It is certain that");
+};
+
+export const q2ScoreChoice = () => {
+  cy.get("label").contains("ahead of schedule");
+  cy.get("label").contains("planned timetable");
+  cy.get("label").contains("current period have been met");
+  cy.get("label").contains("slipped by up to three months");
+  cy.get("label").contains("slipped by more than three months");
+};
+
+export const q3ScoreChoice = () => {
+  cy.get("label").contains("Expenditure is lower");
+  cy.get("label").contains("Expenditure is in line");
+  cy.get("label").contains("Limited forecast evidence");
+  cy.get("label").contains("Forecasts not updated properly");
+  cy.get("label").contains("Forecasts not updated, and");
+};
+
+export const q4ScoreChoice = () => {
+  cy.get("label").contains("Exceeding expectations");
+  cy.get("label").contains("Good");
+  cy.get("label").contains("Scope for improvement");
+  cy.get("label").contains("Very poor");
+  cy.get("label").contains("Unacceptable");
+};
+
+export const q5ScoreChoice = () => {
+  cy.get("label").contains("Exceeding expectations");
+  cy.get("label").contains("Good practice");
+  cy.get("label").contains("Scope for improvement");
+  cy.get("label").contains("Very poor");
+  cy.get("label").contains("Unacceptable");
+};
+
+export const q6ScoreChoice = () => {
+  cy.get("label").contains("Exceeding expectations");
+  cy.get("label").contains("Good");
+  cy.get("label").contains("Scope for improvement");
+  cy.get("label").contains("Very poor");
+  cy.get("label").contains("Unacceptable");
+};

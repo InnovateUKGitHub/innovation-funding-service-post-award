@@ -1,5 +1,16 @@
 import { visitApp } from "../../../common/visit";
-import { characterCount, deletePcr, pcrCommentBox, shouldShowAllAccordion, shouldShowProjectTitle } from "../steps";
+import {
+  characterCount,
+  clickCreateRequestButtonProceed,
+  deletePcr,
+  explainChangesReasoning,
+  pcrCommentBox,
+  reallocateCostsGiveInfoTodo,
+  reallocateCostsPcrType,
+  requestHeadingDetailsHeading,
+  shouldShowAllAccordion,
+  shouldShowProjectTitle,
+} from "../steps";
 
 describe("Creating Reallocate Project Costs PCR", () => {
   before(() => {
@@ -13,12 +24,7 @@ describe("Creating Reallocate Project Costs PCR", () => {
     cy.clickCheckBox("Reallocate project costs");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-    cy.submitButton("Create request").click();
-    cy.wait("@pcrPrepare");
-    cy.get("h1").should("contain.text", "Request");
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should have a back option", () => {
     cy.backLink("Back to project");
@@ -26,19 +32,13 @@ describe("Creating Reallocate Project Costs PCR", () => {
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should display a 'Request' heading and 'Details' heading", () => {
-    cy.get("h1").contains("Request");
-    cy.get("h2").contains("Details");
-  });
+  it("Should display a 'Request' heading and 'Details' heading", requestHeadingDetailsHeading);
 
   it("Should show the Request number", () => {
     cy.get("dt.govuk-summary-list__key").contains("Request number");
   });
 
-  it("Should show the correct PCR type", () => {
-    cy.get("dt.govuk-summary-list__key").contains("Types");
-    cy.get("dd.govuk-summary-list__value").contains("Reallocate project costs");
-  });
+  it("Should show the correct PCR type", reallocateCostsPcrType);
 
   it("Should allow you to add more types of PCR", () => {
     cy.get("a.govuk-link").contains("Add types");
@@ -48,17 +48,15 @@ describe("Creating Reallocate Project Costs PCR", () => {
    * Potentially add a step to click into 'Add types' to ensure this function is working and then back out to this page
    */
 
-  it("Should show a 'Give us information' section with the Reallocate costs PCR type listed and 'TO DO' listed beneath", () => {
-    cy.get("h2.app-task-list__section").contains("Give us information");
-    cy.get("span.app-task-list__task-name").contains("Reallocate project costs");
-    cy.get("strong.govuk-tag.govuk-tag--blue").contains("To do");
-  });
+  it(
+    "Should show a 'Give us information' section with the Reallocate costs PCR type listed and 'TO DO' listed beneath",
+    reallocateCostsGiveInfoTodo,
+  );
 
-  it("Should show an 'Explain why you want to make changes' section with 'Provide reasoning to Innovate UK' listed and displays 'TO DO'", () => {
-    cy.get("h2.app-task-list__section").contains("Explain why you want to make the changes");
-    cy.get("span.app-task-list__task-name").contains("Provide reasoning to Innovate UK");
-    cy.get("strong.govuk-tag.govuk-tag--blue").contains("To do");
-  });
+  it(
+    "Should show an 'Explain why you want to make changes' section with 'Provide reasoning to Innovate UK' listed and displays 'TO DO'",
+    explainChangesReasoning,
+  );
 
   it("Should display accordions", shouldShowAllAccordion);
 

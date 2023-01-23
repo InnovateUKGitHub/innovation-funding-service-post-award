@@ -1,5 +1,15 @@
+import { showPartnerTable } from "e2e/5-forecasts/steps";
 import { visitApp } from "../../../common/visit";
-import { deletePcr, shouldShowProjectTitle } from "../steps";
+import {
+  clickCreateRequestButtonProceed,
+  deletePcr,
+  reallocateCostsGiveInfoTodo,
+  reallocateCostsPcrType,
+  reallocateCostsTableHeaders,
+  requestHeadingDetailsHeading,
+  shouldShowProjectTitle,
+  showPartners,
+} from "../steps";
 
 describe("Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
@@ -14,12 +24,7 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.clickCheckBox("Reallocate project costs");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-    cy.submitButton("Create request").click();
-    cy.wait("@pcrPrepare");
-    cy.get("h1").should("contain.text", "Request");
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should have a back option", () => {
     cy.backLink("Back to project change requests");
@@ -27,19 +32,13 @@ describe("Continues Reallocate costs to the costs tables page to access each par
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should display a 'Request' heading and 'Details' heading", () => {
-    cy.get("h1").contains("Request");
-    cy.get("h2").contains("Details");
-  });
+  it("Should display a 'Request' heading and 'Details' heading", requestHeadingDetailsHeading);
 
   it("Should show the Request number", () => {
     cy.get("dt.govuk-summary-list__key").contains("Request number");
   });
 
-  it("Should show the correct PCR type", () => {
-    cy.get("dt.govuk-summary-list__key").contains("Types");
-    cy.get("dd.govuk-summary-list__value").contains("Reallocate project costs");
-  });
+  it("Should show the correct PCR type", reallocateCostsPcrType);
 
   /**
    * Potentially add a step to click into 'Add types' to ensure this function is working and then back out to this page
@@ -48,10 +47,7 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.get("a.govuk-link").contains("Add types");
   });
 
-  it("Should show select 'Give us information' and continue to the next page", () => {
-    cy.get("h2.app-task-list__section").contains("Give us information");
-    cy.get("span.app-task-list__task-name").contains("Reallocate project costs").click();
-  });
+  it("Should show select 'Give us information' and continue to the next page", reallocateCostsGiveInfoTodo);
 
   it("Should show back to project link", () => {
     cy.get("a.govuk-back-link", { timeout: 10000 }).contains("Back to request");
@@ -63,21 +59,9 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.get("h1").contains("Reallocate project costs");
   });
 
-  it("Should show correct table headers", () => {
-    cy.tableHeader("Partner");
-    cy.tableHeader("Total eligible costs");
-    cy.tableHeader("Remaining costs");
-    cy.tableHeader("Remaining grant");
-    cy.tableHeader("New total eligible costs");
-    cy.tableHeader("New remaining costs");
-    cy.tableHeader("New remaining grant");
-  });
+  it("Should show correct table headers", reallocateCostsTableHeaders);
 
-  it("Should show the partners listed", () => {
-    cy.tableCell("EUI Small Ent Health");
-    cy.tableCell("A B Cad Services");
-    cy.tableCell("ABS EUI Medium Enterprise");
-  });
+  it("Should show the partners listed", showPartners);
 
   it("Should contain remaining grant message", () => {
     cy.get("p.govuk-body").contains("remaining grant");

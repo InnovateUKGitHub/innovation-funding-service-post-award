@@ -1,5 +1,14 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, learnFiles, pcrDocUpload, pcrFileTable, deletePcr } from "../steps";
+import {
+  shouldShowProjectTitle,
+  learnFiles,
+  pcrDocUpload,
+  pcrFileTable,
+  deletePcr,
+  clickCreateRequestButtonProceed,
+  clickPartnerAddPeriod,
+  removePartnerGuidanceInfo,
+} from "../steps";
 
 describe("Continuing editing the Remove a partner section once a partner is selected", () => {
   before(() => {
@@ -14,20 +23,13 @@ describe("Continuing editing the Remove a partner section once a partner is sele
     cy.clickCheckBox("Remove a partner");
   });
 
-  it("Will click Create request button and proceed to next page", () => {
-    cy.submitButton("Create request").click();
-    cy.get("h1", { timeout: 14000 }).should("contain.text", "Request", { timeout: 14000 });
-  });
+  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should click the Remove partner link to begin editing the PCR", () => {
     cy.get("a").contains("Remove a partner").click();
   });
 
-  it("Should click a partner name before entering a period number and proceeding", () => {
-    cy.getByLabel("EUI Small Ent Health").click();
-    cy.get(`input[id="removalPeriod"]`).clear().type("3");
-    cy.submitButton("Save and continue").click();
-  });
+  it("Should click a partner name before entering a period number and proceeding", clickPartnerAddPeriod);
 
   it("Should have a back option", () => {
     cy.backLink("Back to request");
@@ -43,12 +45,7 @@ describe("Continuing editing the Remove a partner section once a partner is sele
     cy.get("h2").contains("Upload withdrawal of partner certificate");
   });
 
-  it("Should have guidance information on what is required", () => {
-    cy.get("p").contains("You must upload these documents");
-    cy.get("li").contains("a confirmation letter");
-    cy.get("li").contains("a brief list of");
-    cy.get("li").contains("copies of signed letters");
-  });
+  it("Should have guidance information on what is required", removePartnerGuidanceInfo);
 
   it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
 
