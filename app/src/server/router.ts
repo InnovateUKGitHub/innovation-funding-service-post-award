@@ -14,7 +14,7 @@ import { Router } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import { configuration } from "./features/common";
 
-let index = 0;
+const index = 0;
 export const noAuthRouter = Router();
 
 // Support routes
@@ -54,27 +54,15 @@ const getServerRoutes = async () => {
   router.use("/graphql", async (req, res, next) => {
     // Allow the override of the user email if `sudo` is included.
 
-    let api: Api;
-
-    console.log(`\n===\ngraphql request: ${index++}\n======`);
-    if (!configuration.sso.enabled && typeof req.query.sudo === "string") {
-      res.locals.email = req.query.sudo;
-      api = await Api.asUser(req.query.sudo);
-      res.locals.api = api;
-    } else {
-      const email = req?.session?.user.email ?? null;
-      api = await Api.asUser(email);
-      res.locals.email = email;
-      res.locals.api = api;
-    }
-
-    const requestSchema = await getGraphQLSchema({ api });
-
     logger.debug("Executing GraphQL", res.locals.email);
 
     createHandler({
-      schema: requestSchema,
-      context: createContext({ logger: new Logger("Client GraphQL"), res }),
+      schema,
+      context: {
+        api: res.locals.api,
+        email: res.locals.email,
+        logger,
+      },
     })(req, res, next);
   });
 

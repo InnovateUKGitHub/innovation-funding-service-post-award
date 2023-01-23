@@ -65,40 +65,45 @@ interface RolesData {
 }
 
 const rolesResolver = (salesforceSubschema: ExecutableSchema): IFieldResolverOptions => {
-  const projectLoader = new DataLoader<string, ProjectData>(async keys => {
-    const { data } = await salesforceSubschema.executor<RolesData>({
-      document: gql`
-        query UserRolesQuery($keys: [ID]) {
-          uiapi {
-            query {
-              Acc_Project__c(first: 2000, where: { Id: { in: $keys } }) {
-                edges {
-                  node {
-                    Acc_ProjectParticipantsProject__r {
-                      edges {
-                        node {
-                          Acc_ProjectRole__c {
-                            value
-                          }
-                          Acc_AccountId__c {
-                            value
-                          }
-                        }
-                      }
-                    }
-                    Project_Contact_Links__r {
-                      edges {
-                        node {
-                          Acc_Role__c {
-                            value
-                          }
-                          Acc_ContactId__r {
-                            Email__c {
-                              value
+  return {
+    selectionSet: `{ Id }`,
+    async resolve(input, args, ctx: GraphQLContext, info) {
+      const projectLoader = new DataLoader<string, ProjectData>(async keys => {
+        const { data } = await salesforceSubschema.executor<RolesData>({
+          document: gql`
+            query UserRolesQuery($keys: [ID]) {
+              uiapi {
+                query {
+                  Acc_Project__c(first: 2000, where: { Id: { in: $keys } }) {
+                    edges {
+                      node {
+                        Acc_ProjectParticipantsProject__r {
+                          edges {
+                            node {
+                              Acc_ProjectRole__c {
+                                value
+                              }
+                              Acc_AccountId__c {
+                                value
+                              }
                             }
                           }
-                          Acc_AccountId__c {
-                            value
+                        }
+                        Project_Contact_Links__r {
+                          edges {
+                            node {
+                              Acc_Role__c {
+                                value
+                              }
+                              Acc_ContactId__r {
+                                Email__c {
+                                  value
+                                }
+                              }
+                              Acc_AccountId__c {
+                                value
+                              }
+                            }
                           }
                         }
                       }
@@ -107,26 +112,22 @@ const rolesResolver = (salesforceSubschema: ExecutableSchema): IFieldResolverOpt
                 }
               }
             }
-          }
-        }
-      `,
-      variables: {
-        keys,
-      },
-    });
+          `,
+          variables: {
+            keys,
+          },
+          context: ctx,
+        });
 
-    return data.uiapi.query.Acc_Project__c.edges;
-  });
+        return data.uiapi.query.Acc_Project__c.edges;
+      });
 
-  return {
-    selectionSet: `{ Id }`,
-    async resolve(input, args, ctx: GraphQLContext, info) {
-      const isSalesforceSystemUser = ctx.api.email === configuration.salesforceServiceUser.serviceUsername;
+      const isSalesforceSystemUser = ctx.email === configuration.salesforceServiceUser.serviceUsername;
 
       const { node: project } = await projectLoader.load(input.Id);
 
       const userPcl = project.Project_Contact_Links__r.edges.filter(
-        ({ node }) => ctx.api.email === node.Acc_ContactId__r.Email__c.value,
+        ({ node }) => ctx.email === node.Acc_ContactId__r.Email__c.value,
       );
 
       const permissions: ExternalProjectRoles = {
@@ -150,7 +151,7 @@ const rolesResolver = (salesforceSubschema: ExecutableSchema): IFieldResolverOpt
             isMo: isSalesforceSystemUser,
             isFc: isSalesforceSystemUser,
             isPm: isSalesforceSystemUser,
-            isSalesforceSystemUser: ctx.api.email === configuration.salesforceServiceUser.serviceUsername,
+            isSalesforceSystemUser: ctx.email === configuration.salesforceServiceUser.serviceUsername,
             partnerId: projectParticipant.Acc_AccountId__c.value,
           };
 

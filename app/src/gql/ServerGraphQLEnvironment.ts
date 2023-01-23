@@ -39,8 +39,12 @@ const getServerGraphQLEnvironment = ({
 
   const network = new RelayNetworkLayer([
     relayServerSSR.getMiddleware(async () => ({
-      schema: schema,
-      contextValue: createContext({ logger: new Logger("Server GraphQL"), res }),
+      schema,
+      contextValue: {
+        api: res.locals.api,
+        email: res.locals.email,
+        logger: new Logger("SSR GQL"),
+      },
     })),
   ]);
 
