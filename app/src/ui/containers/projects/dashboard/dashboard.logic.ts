@@ -8,13 +8,13 @@ import { getProjectSection, IDashboardProjectData } from "./DashboardProject";
  * Get the filter options to allow a user to filter projects.
  * Filter options depend on the roles that a user has.
  *
- * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  * @returns The checkbox options a user can use to filter projects
  */
 const getFilterOptions = ({ projects }: { projects: IDashboardProjectData[] }): SelectOption[] => {
   // Start off with no options
   const filterOptions: SelectOption[] = [];
 
+  // Check if the user is any of the following roles.
   const isAnyMo = projects.some(x => x.project.roles.isMo);
   const isAnyFc = projects.some(x => x.project.roles.isFc);
   const isAnyPm = projects.some(x => x.project.roles.isPm);
@@ -39,7 +39,6 @@ const getFilterOptions = ({ projects }: { projects: IDashboardProjectData[] }): 
 /**
  * Filter and sort projects.
  *
- * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  * @returns A set of filtered projects, ordered into categories.
  */
 const getFilteredProjects = ({
@@ -63,7 +62,7 @@ const getFilteredProjects = ({
   claimsToRespond: boolean;
   projects: IDashboardProjectData[];
 }) => {
-  // Only display "filtering" messages if any filter options are enabled.
+  // Only display the "filtering" messages if any filter options are enabled.
   const isFiltering =
     pcrsQueried ||
     claimsToReview ||
@@ -73,7 +72,7 @@ const getFilteredProjects = ({
     claimsToUploadReport ||
     claimsToRespond;
 
-  // If filters are enabled, perform filtering.
+  // If filter options are selected, perform filtering.
   // Otherwise, if all filters are missing, use all projects.
   const filteredProjects = isFiltering
     ? projects.filter(({ project, partner, projectSection }) => {
@@ -101,6 +100,7 @@ const getFilteredProjects = ({
       ]).map(x => x.item)
     : filteredProjects;
 
+  // Sort projects into their corresponding categories.
   const currentProjects = searchedProjects.filter(x => ["open", "pending", "awaiting"].includes(x.projectSection));
   const openAndAwaitingProjects = searchedProjects.filter(x => ["open", "awaiting"].includes(x.projectSection));
   const pendingProjects = searchedProjects.filter(x => ["pending"].includes(x.projectSection));
@@ -117,6 +117,12 @@ const getFilteredProjects = ({
   };
 };
 
+/**
+ * For a given project (with an optional partner associated with the user),
+ * display messages that a user will need to act on the project.
+ *
+ * @returns An array of internationalised strings.
+ */
 const useProjectActions = ({
   project,
   partner,

@@ -77,7 +77,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
 
   useEffect(() => {
     // When the search filters are adjusted...
-    // Collate the params
+    // Get an array of all enabled filter options.
     const arrayFilters: FilterKey[] = [];
     if (pcrsQueried) arrayFilters.push("PCRS_QUERIED");
     if (claimsToReview) arrayFilters.push("CLAIMS_TO_REVIEW");
@@ -115,22 +115,23 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
     navigate,
   ]);
 
+  // For each project...
   const allProjects = getDefinedEdges(data.uiapi.query.Acc_Project__c?.edges)
     .map(({ node: project }) => {
+      // Get the partner a user is assoiated with, as well
+      // as the section the project should be displayed in.
       const partner = getPartnerOnProject({ project });
       const projectSection = getProjectSection({ project, partner });
 
-      const data: IDashboardProjectData = {
+      return {
         project,
         partner,
         projectSection,
-      };
-
-      return data;
+      } as IDashboardProjectData;
     })
     .sort((a, b) => {
-      // Bubble "pending" to the top.
-      // PCR/Claim sorting is performed in the GraphQL query.
+      // Bubble "pending" to the top so it is more visible to the user.
+      // Sorting other metrics such as PCR/Claim sorting is done within the GraphQL query itself.
       if (a.projectSection === "pending" && b.projectSection !== "pending") return -1;
       if (b.projectSection === "pending") return 1;
       return 0;
@@ -141,6 +142,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
     getDefinedEdges(data.uiapi.query.Acc_Project__c?.edges).length >=
     data.clientConfig.options.numberOfProjectsToSearch;
 
+  // Sort and filter all projects, and split them into the sections to display.
   const { currentProjects, upcomingProjects, archivedProjects, openAndAwaitingProjects, pendingProjects, isFiltering } =
     getFilteredProjects({
       searchQuery,

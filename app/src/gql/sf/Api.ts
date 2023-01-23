@@ -4,8 +4,6 @@ import { getCachedSalesforceAccessToken } from "@server/repositories/salesforceC
 import { print } from "graphql";
 import fetch from "isomorphic-fetch";
 
-let index = 0;
-
 interface FetcherConfiguration extends RequestInit {
   searchParams?: Record<string, string>;
 }
@@ -19,8 +17,6 @@ export class Api {
   private readonly instanceUrl: string;
   private readonly accessToken: string;
   public readonly email: string;
-
-  public readonly instanceNumber: number;
 
   constructor({
     version = "v56.0",
@@ -38,9 +34,6 @@ export class Api {
     this.instanceUrl = instanceUrl;
     this.accessToken = accessToken;
     this.email = email;
-    this.instanceNumber = index++;
-
-    console.log("new api instance created", { version, instanceUrl, accessToken, email, index });
   }
 
   /**
@@ -83,12 +76,6 @@ export class Api {
       }
     }
 
-    console.log("graphql fetch operation", {
-      accessToken: this.accessToken,
-      email: this.email,
-      instanceNumber: this.instanceNumber,
-    });
-
     const response = await fetch(url, {
       ...init,
       headers: {
@@ -115,7 +102,6 @@ export class Api {
    */
   public executeGraphQL({ document, variables }: ExecutionRequest) {
     const query = print(document);
-    console.log("executeGraphql");
     return this.fetch(`/services/data/${this.version}/graphql`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

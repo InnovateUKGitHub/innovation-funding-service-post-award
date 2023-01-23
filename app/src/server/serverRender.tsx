@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import { renderToPipeableStream, renderToString } from "react-dom/server";
+import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Store } from "redux";
 import { Provider } from "react-redux";
 import { StaticRouter } from "react-router-dom/server";

@@ -1,5 +1,4 @@
 import { getGraphQLSchema } from "@gql/getGraphQLSchema";
-import { createContext } from "@gql/GraphQLContext";
 import { Api } from "@gql/sf/Api";
 import { router as apiRoutes } from "@server/apis";
 import { componentGuideRender } from "@server/componentGuideRender";
@@ -12,9 +11,7 @@ import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
 import csrf from "csurf";
 import { Router } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
-import { configuration } from "./features/common";
 
-const index = 0;
 export const noAuthRouter = Router();
 
 // Support routes
@@ -31,16 +28,16 @@ const getServerRoutes = async () => {
 
   router.use(async (req, res, next) => {
     // Obtain a Salesforce access token and URL
-    console.log("fetching sf access token");
     try {
       const email = req.session?.user.email ?? null;
 
       if (email) {
+        // If a user is logged in, use their email to create a connection to Salesforce.
+        // Store this connection into `res.locals` so that either "/graphql" or serverRender
+        // can use this.
         const api = await Api.asUser(email);
-
         res.locals.api = api;
         res.locals.email = email;
-        console.log("setting api email as ", res.locals.email);
       }
     } catch {
       res.locals.email = null;
@@ -52,8 +49,6 @@ const getServerRoutes = async () => {
   // App routes
   router.use("/api", apiRoutes);
   router.use("/graphql", async (req, res, next) => {
-    // Allow the override of the user email if `sudo` is included.
-
     logger.debug("Executing GraphQL", res.locals.email);
 
     createHandler({

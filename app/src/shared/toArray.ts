@@ -3,8 +3,8 @@ import isNull from "@ui/helpers/is-null";
 /**
  * Always returns a non-null array, coercing null/undefined to an empty array.
  *
- * @param input An array to filter null/undefined out of.
- * @returns An array with only defined results. Will return empty array for null input.
+ * @param input An array to filter null/undefined results out of.
+ * @returns An array with only defined results. If all inputs are null/undefined, returns an empty array.
  */
 const toDefinedArray = <T>(
   input: (T | undefined | null)[] | ReadonlyArray<T | undefined | null> | undefined | null,
@@ -13,6 +13,12 @@ const toDefinedArray = <T>(
   return [];
 };
 
+/**
+ * Discard all null/undefined nodes within a GraphQL edge
+ *
+ * @param input An array of edges to filter null/undefined results out of.
+ * @returns An array with only defined edges. If all edges are null/undefined, returns an empty array.
+ */
 const getDefinedEdges = <T>(
   input:
     | ({ node: T | undefined | null } | undefined | null)[]
