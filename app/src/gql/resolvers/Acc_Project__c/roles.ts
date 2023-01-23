@@ -126,10 +126,6 @@ const rolesResolver = (salesforceSubschema: ExecutableSchema): IFieldResolverOpt
 
       const { node: project } = await projectLoader.load(input.Id);
 
-      const userPcl = project.Project_Contact_Links__r.edges.filter(
-        ({ node }) => ctx.email === node.Acc_ContactId__r.Email__c.value,
-      );
-
       const permissions: ExternalProjectRoles = {
         isMo: isSalesforceSystemUser,
         isFc: isSalesforceSystemUser,
@@ -138,10 +134,12 @@ const rolesResolver = (salesforceSubschema: ExecutableSchema): IFieldResolverOpt
         partnerRoles: [],
       };
 
-      for (const { node: projectContactLink } of userPcl) {
-        if (projectContactLink.Acc_Role__c.value === "Monitoring officer") permissions.isMo = true;
-        if (projectContactLink.Acc_Role__c.value === "Finance contact") permissions.isFc = true;
-        if (projectContactLink.Acc_Role__c.value === "Project Manager") permissions.isPm = true;
+      for (const { node: projectContactLink } of project.Project_Contact_Links__r.edges) {
+        if (ctx.email === projectContactLink.Acc_ContactId__r.Email__c.value) {
+          if (projectContactLink.Acc_Role__c.value === "Monitoring officer") permissions.isMo = true;
+          if (projectContactLink.Acc_Role__c.value === "Finance contact") permissions.isFc = true;
+          if (projectContactLink.Acc_Role__c.value === "Project Manager") permissions.isPm = true;
+        }
 
         for (const { node: projectParticipant } of project.Acc_ProjectParticipantsProject__r.edges) {
           const existingPartnerPermissions = permissions.partnerRoles.find(
