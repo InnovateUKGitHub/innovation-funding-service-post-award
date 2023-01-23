@@ -1,0 +1,47 @@
+import { visitApp } from "../../../common/visit";
+import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToPartnerOrgPage } from "../steps";
+
+describe("Continuing editing Add a partner PCR organisation details section", () => {
+  before(() => {
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+  });
+
+  after(() => {
+    deletePcr();
+  });
+
+  it("Should navigate to the Partner organisation page", navigateToPartnerOrgPage);
+
+  it("Should display the subheading 'Organisation details'", () => {
+    cy.get("h2").contains("Organisation details", { timeout: 10000 });
+  });
+
+  it("Should have a back option", () => {
+    cy.backLink("Back to request");
+  });
+
+  it("Should show the project title", shouldShowProjectTitle);
+
+  it("Should display a 'Add a partner' heading", () => {
+    cy.get("h1").contains("Add a partner");
+  });
+
+  it("Should have a 'Size' subheading and guidance information", () => {
+    cy.get("h2").contains("Size");
+    cy.get("p").contains("This definition must include");
+    cy.get("p").contains("Use the European Commission (EC)");
+  });
+
+  it("Should have 'Small', 'Medium' and 'Large' radio button options and click in turn", () => {
+    cy.getByLabel("Small").click();
+    cy.getByLabel("Medium").click();
+    cy.getByLabel("Large").click();
+  });
+
+  it("Should have a 'Number of full time employees' subheading and enter 1000 in the text box", () => {
+    cy.get("h2").contains("Number of full time employees");
+    cy.get(`input[id="numberOfEmployees"]`).type("1000");
+  });
+
+  it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
+});

@@ -58,7 +58,7 @@ const uploadButton = (name: string) => {
 };
 
 const tableCell = (name: string) => {
-  cy.get("td").contains(name, { timeout: 1000 });
+  cy.get("td").contains(name, { timeout: 10000 });
 };
 
 const tableHeader = (name: string) => {

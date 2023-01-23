@@ -9,7 +9,7 @@ import {
   stateAidFurtherInfo,
 } from "../steps";
 
-describe("Creating Remove a partner PCR", () => {
+describe("Continuing editing Add a partner PCR as a non-aid organisation", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

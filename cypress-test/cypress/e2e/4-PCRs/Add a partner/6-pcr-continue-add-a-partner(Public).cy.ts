@@ -8,7 +8,7 @@ import {
   saveContinueSaveSummary,
 } from "../steps";
 
-describe("Creating Remove a partner PCR", () => {
+describe("Continuing editing Add a partner PCR as Public organisation", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });
