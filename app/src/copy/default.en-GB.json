@@ -143,7 +143,8 @@
       "tableHeaderMonitoringOfficer": "MO",
       "tableHeaderProjectManager": "PM",
       "tableHeaderFinancialContact": "FC",
-      "tableHeaderSwitchOptions": "After changing..."
+      "tableHeaderSwitchOptions": "After changing...",
+      "loadingUsers": "Loading PCL list..."
     },
     "projectCreator": {
       "sectionTitle": "Project Creator",

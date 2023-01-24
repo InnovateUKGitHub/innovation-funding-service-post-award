@@ -1,17 +1,24 @@
-import { ProjectDto } from "@framework/dtos";
 import { DeveloperUser } from "@framework/dtos/developerUser";
-import { createTypedForm, H3, Info, Loader, Section, TypedTable } from "@ui/components";
+import { SalesforceRole } from "@server/repositories";
+import { getDefinedEdges } from "@shared/toArray";
+import { createTypedForm, H3, Info, Section, TypedTable } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
 import { useMounted } from "@ui/features";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 import { useState } from "react";
-import { graphql } from "react-relay";
 import { useLocation } from "react-router-dom";
-import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
 import { useQuery } from "relay-hooks";
+import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
+import {
+  userSwitcherCurrentUserQuery,
+  userSwitcherProjectQuery,
+  userSwitcherProjectsQuery,
+} from "./UserSwitcher.query";
 import { UserSwitcherCurrentUserQuery } from "./__generated__/UserSwitcherCurrentUserQuery.graphql";
+import { UserSwitcherProjectQuery } from "./__generated__/UserSwitcherProjectQuery.graphql";
+import { UserSwitcherProjectsQuery } from "./__generated__/UserSwitcherProjectsQuery.graphql";
 
 /**
  * Get the link to the current page
@@ -45,14 +52,7 @@ const SelectProjectForm = createTypedForm<UserSwitcherFormInputs>();
 const SelectContactForm = createTypedForm<string>();
 
 const UserSwitcherCurrentUser = () => {
-  const { data, isLoading } = useQuery<UserSwitcherCurrentUserQuery>(graphql`
-    query UserSwitcherCurrentUserQuery {
-      currentUser {
-        email
-        isSystemUser
-      }
-    }
-  `);
+  const { data, isLoading } = useQuery<UserSwitcherCurrentUserQuery>(userSwitcherCurrentUserQuery);
 
   if (isLoading) return null;
 
@@ -66,13 +66,8 @@ const UserSwitcherCurrentUser = () => {
   );
 };
 
-const UserSwitcherProjectSelectorPartnerSelector = ({
-  users,
-  projectId,
-}: {
-  users: DeveloperUser[];
-  projectId: string;
-}) => {
+const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: string }) => {
+  const { data, isLoading } = useQuery<UserSwitcherProjectQuery>(userSwitcherProjectQuery, { projectId });
   const { getContent } = useContent();
   const returnLocation = useReturnLocation();
   const ProjectContactTable = TypedTable<UserSwitcherTableRow>();
@@ -80,32 +75,56 @@ const UserSwitcherProjectSelectorPartnerSelector = ({
   // A contact email-to-role record to collate a user's roles together.
   const contactRoleInfo: Record<string, UserSwitcherTableRow> = {};
 
-  // For each contact...
-  for (const user of users) {
-    // If the contact has not yet been seen before...
-    if (!contactRoleInfo[user.email]) {
-      // Initialise the record with default options
-      contactRoleInfo[user.email] = { isMo: false, isFc: false, isPm: false, user };
-    }
+  if (isLoading) {
+    return <SimpleString>{getContent(x => x.components.userChanger.loadingUsers)}</SimpleString>;
+  }
 
-    // Add the relevant role to the contact's role info.
-    if (user.role === "Monitoring officer") {
-      contactRoleInfo[user.email].isMo = true;
-    } else if (user.role === "Finance contact") {
-      contactRoleInfo[user.email].isFc = true;
-    } else if (user.role === "Project Manager") {
-      contactRoleInfo[user.email].isPm = true;
+  const project = getDefinedEdges(data?.uiapi.query.Acc_Project__c?.edges)?.[0]?.node;
+
+  if (project) {
+    // For each contact...
+    for (const { node: user } of getDefinedEdges(project.Project_Contact_Links__r?.edges)) {
+      if (user.Acc_EmailOfSFContact__c?.value && user.Acc_Role__c?.value) {
+        const email = user.Acc_EmailOfSFContact__c.value;
+        const role = user.Acc_Role__c.value;
+
+        // If the contact has not yet been seen before...
+        if (!contactRoleInfo[email]) {
+          // Initialise the record with default options
+          contactRoleInfo[email] = {
+            isMo: false,
+            isFc: false,
+            isPm: false,
+            user: {
+              externalUsername: user.Acc_ContactId__r?.Email?.value ?? "Undefined Email",
+              internalUsername: email,
+              email,
+              name: user.Acc_ContactId__r?.Name?.value ?? "Untitled User",
+              role: role as SalesforceRole,
+            },
+          };
+        }
+
+        // Add the relevant role to the contact's role info.
+        if (role === "Monitoring officer") {
+          contactRoleInfo[email].isMo = true;
+        } else if (role === "Finance contact") {
+          contactRoleInfo[email].isFc = true;
+        } else if (role === "Project Manager") {
+          contactRoleInfo[email].isPm = true;
+        }
+      }
     }
   }
+
+  const users = Object.values(contactRoleInfo);
 
   if (users.length === 0) {
     return <SimpleString>{getContent(x => x.components.userChanger.contactListEmpty)}</SimpleString>;
   }
 
-  const sortedData = Object.values(contactRoleInfo).sort((a, b) => a.user.name.localeCompare(b.user.name));
-
   return (
-    <ProjectContactTable.Table qa="user-switcher-contacts" data={sortedData}>
+    <ProjectContactTable.Table qa="user-switcher-contacts" data={users}>
       <ProjectContactTable.String
         qa="partner-name"
         header={x => x.projectContactLabels.contactName}
@@ -168,18 +187,8 @@ const UserSwitcherProjectSelectorPartnerSelector = ({
   );
 };
 
-const UserSwitcherProjectSelectorPartnerLoader = ({ projectId }: { projectId: string }) => {
-  const stores = useStores();
-
-  return (
-    <Loader
-      pending={stores.developerUsers.getAllByProjectId(projectId)}
-      render={users => <UserSwitcherProjectSelectorPartnerSelector projectId={projectId} users={users} />}
-    />
-  );
-};
-
-const UserSwitcherProjectSelector = ({ projects }: { projects: ProjectDto[] }) => {
+const UserSwitcherProjectSelector = () => {
+  const { data } = useQuery<UserSwitcherProjectsQuery>(userSwitcherProjectsQuery);
   const { getContent } = useContent();
   const returnLocation = useReturnLocation();
   const { email: initialEmailState, projectId: initialProjectIdState } = useStores().users.getCurrentUser();
@@ -189,25 +198,16 @@ const UserSwitcherProjectSelector = ({ projects }: { projects: ProjectDto[] }) =
   const isMounted = useMounted();
 
   // Create options for dropdown to select a project.
-  const projectOptions: DropdownListOption[] = projects
-    .sort((a, b) => {
-      const compA = a.competitionType ?? "";
-      const compB = b.competitionType ?? "";
-      const titleA = a.title ?? "";
-      const titleB = b.title ?? "";
-
-      const competitionCompare = compA.localeCompare(compB);
-      const nameCompare = titleA.localeCompare(titleB);
-
-      if (competitionCompare) return competitionCompare;
-      return nameCompare;
-    })
-    .map(p => ({
-      id: p.id,
-      value: p.id,
-      displayName: `[${p.competitionType ?? "Unknown"}] ${p.title ?? "Untitled"}`,
-      qa: p.id,
-    }));
+  const projectOptions: DropdownListOption[] = getDefinedEdges(data?.uiapi.query.Acc_Project__c?.edges).map(
+    ({ node }) => ({
+      id: node.Id,
+      value: node.Id,
+      displayName: `[${node.Acc_CompetitionId__r?.Acc_CompetitionType__c?.displayValue ?? "Unknown"}] ${
+        node?.Acc_ProjectTitle__c?.value ?? "Untitled"
+      }`,
+      qa: node.Id,
+    }),
+  );
 
   const userFormProps = {
     data: { projectId, email },
@@ -235,18 +235,8 @@ const UserSwitcherProjectSelector = ({ projects }: { projects: ProjectDto[] }) =
           <SelectProjectForm.Button name="search">Search for users in project</SelectProjectForm.Button>
         )}
       </SelectProjectForm.Form>
-      {projectId && <UserSwitcherProjectSelectorPartnerLoader projectId={projectId} />}
+      {projectId && <UserSwitcherProjectSelectorPartnerSelector projectId={projectId} />}
     </>
-  );
-};
-
-const UserSwitcherProjectLoader = () => {
-  const stores = useStores();
-  return (
-    <Loader
-      pending={stores.projects.getProjectsAsDeveloper()}
-      render={projects => <UserSwitcherProjectSelector projects={projects} />}
-    />
   );
 };
 
@@ -311,7 +301,7 @@ const UserSwitcher = () => (
   <Section title={x => x.components.userChanger.sectionTitle}>
     <UserSwitcherCurrentUser />
     <UserSwitcherReset />
-    <UserSwitcherProjectLoader />
+    <UserSwitcherProjectSelector />
     <UserSwitcherManualEmailEntry />
   </Section>
 );
