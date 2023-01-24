@@ -2,6 +2,7 @@ import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { configuration } from "@server/features/common";
 import { getCachedSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { print } from "graphql";
+import { decode as decodeHTMLEntities } from "html-entities";
 import fetch from "isomorphic-fetch";
 
 interface FetcherConfiguration extends RequestInit {
@@ -84,15 +85,21 @@ export class Api {
       },
     });
 
-    const res = await response.json();
+    const jsonAsText = await response.text();
 
     if (response.status !== 200) {
       let message = `Failed to fetch "${url.toString()}" (status code ${response.status})`;
-      message += `Body:\n${JSON.stringify(res)}`;
+      message += `Body:\n${JSON.stringify(jsonAsText)}`;
       throw new Error(message);
     }
 
-    return res;
+    try {
+      // TODO: See if Salesforce decides to not encode their JSON output.
+      const json = JSON.parse(decodeHTMLEntities(jsonAsText));
+      return json;
+    } catch {
+      throw new Error("Failed to decode JSON");
+    }
   }
 
   /**
