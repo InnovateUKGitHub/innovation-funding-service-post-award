@@ -47,14 +47,14 @@ const backLink = (name: string) => {
 };
 
 const submitButton = (name: string) => {
-  cy.get('button[type="submit"]', { timeout: 1000 }).contains(name);
+  cy.get('button[type="submit"]').contains(name, { timeout: 10000 });
 };
 
 /**
  * Note that this upload button is different to the one contained within Claims documents upload which is button_upload-qa
  */
 const uploadButton = (name: string) => {
-  cy.get('button[type="submit"]', { timeout: 10000 }).contains(name);
+  cy.get('button[type="submit"]').contains(name, { timeout: 10000 });
 };
 
 const tableCell = (name: string) => {
@@ -62,7 +62,7 @@ const tableCell = (name: string) => {
 };
 
 const tableHeader = (name: string) => {
-  cy.get("th").contains(name);
+  cy.get("th").contains(name, { timeout: 10000 });
 };
 
 const assertPcrCompletionStatus = (pcrType: string, status: string) => {

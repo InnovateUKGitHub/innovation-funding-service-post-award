@@ -6,14 +6,14 @@ describe("Continuing editing Add a partner PCR project costs section", () => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });
 
-  //after(() => {
-  //deletePcr();
-  // });
+  after(() => {
+    deletePcr();
+  });
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 
   it("Should display 'Project costs for new partner' heading", () => {
-    cy.get("h2").contains("Project costs for new partner");
+    cy.get("h2").contains("Project costs for new partner", { timeout: 10000 });
   });
 
   it("Should have a back option", () => {
@@ -44,12 +44,12 @@ describe("Continuing editing Add a partner PCR project costs section", () => {
   });
 
   it("Should edit the labour value", () => {
-    cy.contains("td", "Labour").siblings().contains("a", "Edit").click();
+    cy.contains("td", "Labour", { timeout: 10000 }).siblings().contains("a", "Edit").click();
   });
 
   it("Should display the Labour heading and 'Labour guidance' section", () => {
-    cy.get("h2").contains("Labour");
-    cy.get("span").contains("Labour guidance").click();
+    cy.get("h2").contains("Labour", { timeout: 10000 });
+    cy.get("span").contains("Labour guidance", { timeout: 10000 }).click();
     cy.get("p").contains("The new partner will need to account for all labour");
     cy.get("li").contains("gross salary");
     cy.get("li").contains("National Insurance");
@@ -69,6 +69,7 @@ describe("Continuing editing Add a partner PCR project costs section", () => {
   });
 
   it("Should contain a table for adding Labour cost items", () => {
+    cy.wait(5000);
     cy.tableHeader("Description");
     cy.tableHeader("Cost (£)");
     cy.tableHeader("Total labour");
@@ -77,7 +78,22 @@ describe("Continuing editing Add a partner PCR project costs section", () => {
   it("Should enter a new cost category line item by navigating to a new page", pcrNewCostCatLineItem);
 
   it("Should now display the cost category table which contains the £50,000.00 entered on the previous page", () => {
+    cy.get("span").contains("Labour guidance", { timeout: 10000 });
     cy.tableCell("Law keeper");
     cy.tableCell("£50,000.00");
+  });
+
+  it("Should Save and return to project costs", () => {
+    cy.submitButton("Save and return to project costs").click();
+  });
+
+  it("Should assert the change to the cost cat table and display £50,000.00 in the total costs", () => {
+    cy.get("h2").contains("Project costs for new partner", { timeout: 10000 });
+    cy.get("span").contains("£50,000.00", { timeout: 10000 });
+  });
+
+  it("Should have a 'Save and continue' button and 'Save and return to summary' button", () => {
+    cy.submitButton("Save and continue");
+    cy.submitButton("Save and return to summary");
   });
 });

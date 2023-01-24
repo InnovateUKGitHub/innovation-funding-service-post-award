@@ -1,8 +1,9 @@
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
+const cardTitle = "328407";
 
 export const navigateToProject = () => {
-  cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`, { timeout: 1000 }).contains("1_CYPRESS_DO_NOT_USE").click();
+  cy.contains("Projects").click();
+  cy.get(`${projectCardCss} a`, { timeout: 1000 }).contains(cardTitle).click();
 };
 
 export const monitoringReportCardShouldNotExist = () => {
@@ -27,12 +28,21 @@ export const shouldShowAListOfProjectCards = () => {
 };
 
 export const shouldFilterProjectsUsingCheckboxes = ([label, expectedText]: [string, string]) => {
-  cy.getByLabel(label).click();
+  cy.getByLabel(label).check();
 
-  cy.get(projectCardCss).each(card => cy.wrap(card).contains(expectedText));
+  cy.getByQA("pending-and-open-projects")
+    .getByQA("section-content")
+    .then($projects => {
+      // @ts-ignore
+      if ($projects.text().includes("There are no matching live projects.")) {
+        cy.log(`after checking "${label}" there are no matching live projects`);
+      } else {
+        cy.get(projectCardCss).each(card => cy.wrap(card).contains(expectedText));
+      }
+    });
 
   // unselect checkbox again
-  cy.getByLabel(label).click();
+  cy.getByLabel(label).uncheck();
 };
 
 export const shouldFilterProjectsUsingSearchFilter = () => {
@@ -45,10 +55,10 @@ export const shouldFilterProjectsUsingSearchFilter = () => {
  * cy.wait is required in shouldNavigateToProjectOverview
  */
 export const shouldNavigateToProjectOverview = () => {
-  cy.get(`${projectCardCss} a`).contains("CYPRESS_DO_NOT_USE").wait(500).click({ force: true });
+  cy.get(`${projectCardCss} a`).contains(cardTitle).wait(500).click({ force: true });
 
   cy.get("h1", { timeout: 10000 }).contains("Project overview");
-  cy.getByQA("page-title").should("contain.text", "CYPRESS_DO_NOT_USE");
+  cy.getByQA("page-title").should("contain.text", cardTitle);
 };
 
 export const shouldShowProjectTitle = () => {

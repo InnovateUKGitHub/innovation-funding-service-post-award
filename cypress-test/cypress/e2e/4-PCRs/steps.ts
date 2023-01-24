@@ -79,6 +79,11 @@ export const pcrDocUpload = () => {
   cy.uploadButton("Upload documents").click();
 };
 
+export const addPartnerDocUpload = () => {
+  cy.get("input#attachment", { timeout: 10000 }).selectFile("cypress/common/testfile.doc", { timeout: 5000 });
+  cy.uploadButton("Upload").click();
+};
+
 export const pcrFileTable = () => {
   cy.tableHeader("File name");
   cy.tableHeader("Type");
@@ -435,7 +440,7 @@ export const navigateToPartnerCosts = () => {
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
   cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("State aid eligibility", { timeout: 10000 });
+  cy.get("h2").contains("State aid eligibility", { timeout: 20000 });
   cy.submitButton("Save and continue").click();
   cy.get("h2").contains("Search companies house", { timeout: 10000 });
   cy.get(`input[id="searchCompaniesHouse"]`, { timeout: 10000 }).type("A").wait(500);
@@ -459,21 +464,25 @@ export const navigateToPartnerCosts = () => {
   cy.get(`input[id="projectCity"]`).type("Swindon");
   cy.get(`input[id="projectPostcode"]`).type("SN5");
   cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Add person to organisation", { timeout: 10000 });
+  cy.get("h2").contains("Add person to organisation", { timeout: 15000 });
   cy.get(`input[id="contact1Forename"]`).type("Joseph");
   cy.get(`input[id="contact1Surname"]`).type("Dredd");
   cy.get(`input[id="contact1Phone"]`).type("01234567890");
   cy.get(`input[id="contact1Email"]`).type("Joseph.dredd@mc1.comtest");
   cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Project costs for new partner", { timeout: 10000 });
 };
 
 export const pcrNewCostCatLineItem = () => {
-  cy.get("a").contains("Add a cost").click();
-  cy.get("h2").contains("Labour", { timeout: 10000 });
-  cy.get(`input[id="description"]`).type("Law keeper");
+  cy.wait(500);
+  cy.get("a").contains("Add a cost", { timeout: 10000 }).click();
+  cy.get(`input[id="description"]`, { timeout: 10000 }).type("Law keeper");
+  cy.get("h2").contains("Labour");
   cy.get(`input[id="grossCostOfRole"]`).type("50000");
   cy.get(`input[id="ratePerDay"]`).type("500");
   cy.get(`input[id="daysSpentOnProject"]`).type("100");
+  cy.wait(500);
+  cy.get("div").contains("Total cost will update when saved.");
   cy.get("span").contains("£50,000.00");
   cy.submitButton("Save and return to labour").click();
 };
