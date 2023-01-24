@@ -104,7 +104,15 @@ export function PageLoader<T>(props: LoadingProps<T>) {
 }
 
 const SuspensePageLoader = ({ children }: { children: ReactNode }) => (
-  <Suspense fallback={<LoadingMessage />}>{children}</Suspense>
+  <Suspense
+    fallback={
+      <GovWidthContainer>
+        <LoadingMessage />
+      </GovWidthContainer>
+    }
+  >
+    {children}
+  </Suspense>
 );
 
 type graphqlLoadingAndErrorType<T extends OperationType> = ReturnType<typeof useQuery<T>>;
