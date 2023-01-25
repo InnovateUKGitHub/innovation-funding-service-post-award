@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { StaticRouter } from "react-router-dom/server";
 import { Request, Response } from "express";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
-import { matchRoute } from "@ui/routing";
+import { matchRoute, routeConfig } from "@ui/routing";
 import { ErrorCode, IAppError, IClientUser, IContext, Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import * as Actions from "@ui/redux/actions";
@@ -35,6 +35,7 @@ import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { loadQuery } from "relay-hooks";
 import { GraphQLSchema } from "graphql";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
+import { Logger } from "@shared/developmentLogger";
 
 interface IServerApp {
   requestUrl: string;
@@ -43,6 +44,8 @@ interface IServerApp {
   modalRegister: ModalRegister;
   relayEnvironment: RelayModernEnvironment;
 }
+
+const logger = new Logger("HTML Render");
 
 const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment }: IServerApp) => (
   <Provider store={store}>
@@ -73,6 +76,7 @@ const serverRender =
     const modalRegister = new ModalRegister();
     const { ServerGraphQLEnvironment, relayServerSSR } = getServerGraphQLEnvironment({ req, res, error, schema });
     const preloadedQuery = loadQuery();
+    let isErrorPage = false;
 
     // Pre-load site configuration options
     await preloadedQuery.next(ServerGraphQLEnvironment, clientConfigQueryQuery, {});
@@ -115,7 +119,7 @@ const serverRender =
             store.dispatch(
               Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results as Results<any>),
             );
-          } else if (error) {
+          } else {
             // Some other validation error occurred, so we need to add it into store as actual error.
             // Need to pair with the submit action to keep count in sync.
             store.dispatch(Actions.handleEditorSubmit(error.key, error.store, error.dto, error.result));
@@ -134,20 +138,27 @@ const serverRender =
           statusCode = getErrorStatus(error);
           const errorPayload = createErrorPayload(error, false).params;
           store.dispatch(Actions.setError(errorPayload));
+          isErrorPage = true;
         }
       }
 
-      const matched = matchRoute(req.url);
-      const { params } = getParamsFromUrl(matched.routePath, req.url);
+      // If a fatal error has NOT occured...
+      if (!isErrorPage) {
+        const matched = matchRoute(req.url);
+        const { params } = getParamsFromUrl(matched.routePath, req.url);
 
-      if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
-        throw new ForbiddenError();
+        // Check if they are allowed to access this page.
+        if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
+          throw new ForbiddenError();
+        }
       }
+
+      const renderUrl = isErrorPage ? routeConfig.error.routePath : req.url;
 
       // Note: Keep resolving app queries + actions until completion for final render below
       await loadAllData(store, () => {
         renderApp({
-          requestUrl: req.url,
+          requestUrl: renderUrl,
           nonce,
           store,
           stores,
@@ -162,7 +173,7 @@ const serverRender =
 
       res.status(statusCode).send(
         renderApp({
-          requestUrl: req.url,
+          requestUrl: renderUrl,
           nonce,
           store,
           stores,
@@ -172,6 +183,8 @@ const serverRender =
         }),
       );
     } catch (renderError: unknown) {
+      logger.error("Caught a server render error", renderError);
+
       // If an error occured, re-do our render with an error message instead.
       serverRender({ schema, errorCount: errorCount + 1 })(req, res, renderError as IAppError);
     }
