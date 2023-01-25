@@ -1,14 +1,18 @@
-import * as ACC from "@ui/components";
-import { Pending } from "@shared/pending";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
+import { Pending } from "@shared/pending";
+import { BackLink, Page, PageLoader, Projects, Section } from "@ui/components";
+import { createTypedForm } from "@ui/components/form";
+import { Content } from "@ui/components/content";
+import { DocumentEdit, DocumentGuidance } from "@ui/components/documents";
+import { Messages, SimpleString } from "@ui/components/renderers";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { useContent } from "@ui/hooks";
+import { useStores } from "@ui/redux";
 import { IEditorStore } from "@ui/redux/reducers";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
-import { useStores } from "@ui/redux";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { useContent } from "@ui/hooks";
-import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ClaimDetailDocumentsPageParams {
@@ -37,7 +41,7 @@ interface Callbacks {
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocumentsPageParams, Data, Callbacks> {
   public render() {
@@ -48,7 +52,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
+    return <PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private renderContents({ project, costCategories, documents, editor }: CombinedData) {
@@ -62,36 +66,36 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
 
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={back}>
-            <ACC.Content value={x => x.documentMessages.backLink({ previousPage: costCategory.name })} />
-          </ACC.BackLink>
+          <BackLink route={back}>
+            <Content value={x => x.documentMessages.backLink({ previousPage: costCategory.name })} />
+          </BackLink>
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Projects.Title {...project} />}
       >
         {isCombinationOfSBRI ? (
           <>
-            <ACC.Renderers.SimpleString qa="sbriDocumentGuidance">
-              <ACC.Content
+            <SimpleString qa="sbriDocumentGuidance">
+              <Content
                 value={x => x.claimsMessages.sbriDocumentDetailGuidance({ costCategoryName: costCategory.name })}
               />
-            </ACC.Renderers.SimpleString>
-            <ACC.Renderers.SimpleString qa="sbriSupportingDocumentGuidance">
-              <ACC.Content value={x => x.claimsMessages.sbriSupportingDocumentGuidance} />
-            </ACC.Renderers.SimpleString>
+            </SimpleString>
+            <SimpleString qa="sbriSupportingDocumentGuidance">
+              <Content value={x => x.claimsMessages.sbriSupportingDocumentGuidance} />
+            </SimpleString>
           </>
         ) : (
-          <ACC.Renderers.SimpleString qa="guidanceText">
-            <ACC.Content value={x => x.claimsMessages.documentDetailGuidance} />
-          </ACC.Renderers.SimpleString>
+          <SimpleString qa="guidanceText">
+            <Content value={x => x.claimsMessages.documentDetailGuidance} />
+          </SimpleString>
         )}
 
-        <ACC.Renderers.Messages messages={this.props.messages} />
+        <Messages messages={this.props.messages} />
 
-        <ACC.Section title={x => x.documentMessages.uploadTitle}>
+        <Section title={x => x.documentMessages.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -100,7 +104,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
             qa="claimDetailDocuments"
           >
             <UploadForm.Fieldset>
-              <ACC.DocumentGuidance />
+              <DocumentGuidance />
 
               <UploadForm.Hidden name="description" value={dto => dto.description} />
 
@@ -115,19 +119,19 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
             </UploadForm.Fieldset>
 
             <UploadForm.Submit>
-              <ACC.Content value={x => x.documentMessages.uploadDocuments} />
+              <Content value={x => x.documentMessages.uploadDocuments} />
             </UploadForm.Submit>
           </UploadForm.Form>
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section className="govuk-!-margin-bottom-4">
-          <ACC.DocumentEdit
+        <Section className="govuk-!-margin-bottom-4">
+          <DocumentEdit
             qa="supporting-documents"
             onRemove={document => this.props.onDelete(editor.data, document)}
             documents={documents}
           />
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 }
