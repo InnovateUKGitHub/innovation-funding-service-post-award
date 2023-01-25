@@ -28,6 +28,16 @@ export const correctTableHeaders = () => {
  * Wait required in newCostCatLineItem below
  */
 export const newCostCatLineItem = () => {
+
+  /** 
+   * click remove first if there is already a line item
+   */
+  cy.getByQA("current-claim-summary-table").find("tbody.govuk-table__body").then($table => {
+    if($table.find("tr").length > 0) {
+      cy.get("a").contains("Remove").click();
+    }
+  })
+
   cy.get("a").contains("Add a cost").click();
   cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
   cy.getByAriaLabel("value of claim line item 1").clear().type("1000").wait(800);
@@ -51,7 +61,7 @@ export const clearUpCostCat = () => {
   cy.getByQA("button_upload-qa").click();
   cy.getByQA("button_delete-qa").contains("Remove").click();
   cy.get("a.govuk-back-link", { timeout: 5000 }).click();
-  cy.get("a.govuk-link", { timeout: 5000 }).contains("Remove").click();
+  cy.get("a.govuk-link", { timeout: 5000 }).contains("Remove").first().click();
   cy.get("textarea#comments").clear();
 };
 
