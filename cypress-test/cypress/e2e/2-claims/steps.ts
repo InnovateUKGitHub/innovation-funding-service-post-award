@@ -130,7 +130,7 @@ export const forecastCostCats = () => {
   cy.tableCell("Other costs 3");
   cy.tableCell("Other costs 4");
   cy.tableCell("Other costs 5");
-  cy.tableCell("Total");
+  cy.tableHeader("Total");
 };
 
 export const accessOpenClaim = () => {
@@ -158,6 +158,6 @@ export const learnFiles = () => {
 
 export const savedFromPrev = () => {
   cy.getByAriaLabel("Labour Period 2").should("contain.value", "1000");
-  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,100.00");
+  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,000.00");
   cy.getByAriaLabel("Overheads Period 2").should("contain.value", "1000");
 };

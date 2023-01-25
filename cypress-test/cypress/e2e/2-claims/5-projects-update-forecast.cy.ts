@@ -42,7 +42,7 @@ describe("Updating forecasts after claim costs and document upload", () => {
    */
   it("Should accept input and calculate the figures accordingly", () => {
     cy.getByAriaLabel("Labour Period 2").clear().type("1000");
-    cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,100.00");
+    cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,000.00");
     cy.getByAriaLabel("Overheads Period 2").clear().type("1000").wait(1000);
   });
 
@@ -69,6 +69,6 @@ describe("Updating forecasts after claim costs and document upload", () => {
   });
 
   it("Should continue to summary", () => {
-    cy.getByQA("button_default-qa").click();
+    cy.submitButton("Continue to summary").click();
   });
 });

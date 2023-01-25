@@ -22,7 +22,6 @@ import { defineConfig } from "cypress";
 
 const accNumber = (process.env.ACC || "").trim();
 let accDevUrl = `https://www-acc-dev${accNumber}.apps.ocp4.innovateuk.ukri.org`;
-//let accDevUrl = `http://localhost:8080`;
 export default defineConfig({
   e2e: {
     baseUrl: process.env.TEST_URL || accDevUrl,
