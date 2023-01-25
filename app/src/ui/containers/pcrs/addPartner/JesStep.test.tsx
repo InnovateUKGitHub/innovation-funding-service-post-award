@@ -59,16 +59,6 @@ describe("<JesStepUI />", () => {
   };
 
   const stubStore = {
-    config: {
-      getConfig: () => ({
-        options: {
-          maxFileSize: 1024,
-        },
-        features: {
-          contentHint: false,
-        },
-      }),
-    },
     users: {
       getCurrentUser: jest.fn().mockReturnValue({ csrf: "stub-csrf" }),
     },

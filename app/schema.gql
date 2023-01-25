@@ -58765,9 +58765,7 @@ type ClientConfigObject {
 
 type ClientConfigFeaturesObject {
   changePeriodLengthWorkflow: Boolean!
-  contentHint: Boolean!
   customContent: Boolean!
-  displayOtherContacts: Boolean!
   searchDocsMinThreshold: Int!
   futureTimeExtensionInYears: Int!
 }

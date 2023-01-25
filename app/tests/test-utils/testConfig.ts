@@ -27,9 +27,7 @@ export class TestConfig implements IConfig {
 
   public features = {
     changePeriodLengthWorkflow: false,
-    contentHint: true,
     customContent: true,
-    displayOtherContacts: true,
     searchDocsMinThreshold: 3,
     futureTimeExtensionInYears: 5,
   };

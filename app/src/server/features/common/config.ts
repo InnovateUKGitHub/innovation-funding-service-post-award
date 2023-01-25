@@ -115,9 +115,7 @@ const disableCsp = getFeatureFlagValue(process.env.DISABLE_CSP, false);
 
 const features: IFeatureFlags = {
   changePeriodLengthWorkflow: getFeatureFlagValue(process.env.FEATURE_CHANGE_PERIOD_LENGTH, false),
-  contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
   customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
-  displayOtherContacts: getFeatureFlagValue(process.env.FEATURE_OTHER_CONTACTS, false),
   searchDocsMinThreshold: Number(process.env.SEARCH_DOCS_MIN_THRESHOLD) || 5,
   futureTimeExtensionInYears: Number(process.env.FUTURE_TIME_EXTENSION_IN_YEARS) || 5,
 };

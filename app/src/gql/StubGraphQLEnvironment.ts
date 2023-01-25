@@ -6,9 +6,7 @@ const stubGraphQLGraph = {
     clientConfig: {
       features: {
         changePeriodLengthWorkflow: false,
-        contentHint: false,
         customContent: false,
-        displayOtherContacts: true,
         searchDocsMinThreshold: 9999,
         futureTimeExtensionInYears: 5,
       },

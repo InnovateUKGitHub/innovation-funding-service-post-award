@@ -291,13 +291,6 @@ describe("<FinancialVirementSummary />", () => {
   };
 
   const stubStore = {
-    config: {
-      getConfig: jest.fn().mockReturnValue({
-        features: {
-          contentHint: false,
-        },
-      }),
-    },
     partners: {
       getPartnersForProject: jest.fn().mockReturnValue(Pending.done([{}, {}])),
     },

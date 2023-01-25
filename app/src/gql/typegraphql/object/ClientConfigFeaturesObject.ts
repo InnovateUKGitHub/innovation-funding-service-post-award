@@ -7,13 +7,7 @@ class ClientConfigFeaturesObject implements IFeatureFlags {
   changePeriodLengthWorkflow!: boolean;
 
   @Field(() => Boolean)
-  contentHint!: boolean;
-
-  @Field(() => Boolean)
   customContent!: boolean;
-
-  @Field(() => Boolean)
-  displayOtherContacts!: boolean;
 
   @Field(() => Int)
   searchDocsMinThreshold!: number;

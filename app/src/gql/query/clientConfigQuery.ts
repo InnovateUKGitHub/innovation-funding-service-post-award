@@ -5,9 +5,7 @@ const clientConfigQueryQuery = graphql`
     clientConfig {
       features {
         changePeriodLengthWorkflow
-        contentHint
         customContent
-        displayOtherContacts
         searchDocsMinThreshold
         futureTimeExtensionInYears
       }
