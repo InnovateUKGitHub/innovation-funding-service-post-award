@@ -71,7 +71,7 @@ export const ProjectDocumentPage = (
   return (
     <Page
       pageTitle={<Projects.Title {...project} />}
-      backLink={<Projects.ProjectBackLink project={project} routes={routes} />}
+      backLink={<Projects.ProjectBackLink projectId={project.id} />}
       validator={editor.validator}
       error={editor.error}
       project={project}

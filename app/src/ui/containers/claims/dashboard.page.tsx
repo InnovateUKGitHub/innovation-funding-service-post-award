@@ -49,7 +49,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title {...project} />}
-        backLink={<Acc.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
+        backLink={<Acc.Projects.ProjectBackLink projectId={project.id} />}
         project={project}
         partner={partner}
       >

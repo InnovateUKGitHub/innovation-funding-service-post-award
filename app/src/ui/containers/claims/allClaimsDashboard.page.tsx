@@ -51,7 +51,7 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title {...projectDetails} />}
-        backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={props.routes} />}
+        backLink={<Acc.Projects.ProjectBackLink projectId={projectDetails.id} />}
         project={projectDetails}
         partner={isLeadPartnerFc ? leadPartner : undefined}
       >
