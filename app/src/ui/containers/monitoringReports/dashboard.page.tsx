@@ -57,7 +57,7 @@ const MonitoringReportDashboard = (
 
     return (
       <ACC.Page
-        backLink={<ACC.Projects.ProjectBackLink project={project} routes={props.routes} />}
+        backLink={<ACC.Projects.ProjectBackLink projectId={project.id} />}
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
       >
