@@ -305,6 +305,7 @@ export class Logger implements ILogger {
     // Print the log type name, followed by the identifier, followed by the message.
     output += colouring.byNum(logLevelName, fg);
     output += colouring.byNum(this.identifier.padEnd(Logger.LOG_IDENTIFIER_PADDING), ForegroundColourCode.CYAN);
+    output += " ";
     output += message;
 
     // If any params exist...

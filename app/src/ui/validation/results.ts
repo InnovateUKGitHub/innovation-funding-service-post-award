@@ -31,7 +31,7 @@ export class Results<T> implements IValidationResult {
     return this.errors
       .filter(x => !x.isValid)
       .map(x => x.log())
-      .join("/n");
+      .join("\n");
   }
 
   public inspect = () => this.log();
