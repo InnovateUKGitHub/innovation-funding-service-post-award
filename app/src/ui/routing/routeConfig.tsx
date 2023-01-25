@@ -1,5 +1,7 @@
 import * as Containers from "@ui/containers";
 import { DeveloperHomePage } from "@ui/containers/developer/home.page";
+import { DeveloperPageCrasherPage } from "@ui/containers/developer/PageCrasher.page";
+import { DeveloperPageCrasherForbiddenPage } from "@ui/containers/developer/PageCrasherForbidden.page";
 import { DeveloperProjectCreatorPage } from "@ui/containers/developer/ProjectCreator.page";
 import { DeveloperUserSwitcherPage } from "@ui/containers/developer/UserSwitcher.page";
 
@@ -23,6 +25,8 @@ export const routeConfig = {
   home: DeveloperHomePage,
   developerUserSwitcherPage: DeveloperUserSwitcherPage,
   developerProjectCreatorPage: DeveloperProjectCreatorPage,
+  developerPageCrasherPage: DeveloperPageCrasherPage,
+  developerPageCrasherForbiddenPage: DeveloperPageCrasherForbiddenPage,
   monitoringReportCreate: Containers.MonitoringReportCreateRoute,
   monitoringReportDashboard: Containers.MonitoringReportDashboardRoute,
   monitoringReportDelete: Containers.MonitoringReportDeleteRoute,

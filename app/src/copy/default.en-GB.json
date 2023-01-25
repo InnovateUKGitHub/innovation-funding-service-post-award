@@ -155,8 +155,14 @@
       "placeholderProjectParticipantOrgType": "Participant organisation type",
       "placeholderProjectCreatorProjectId": "Project ID",
       "placeholderProjectCreatorCompetitionCode": "Competition Code"
+    },
+    "pageCrasher": {
+      "sectionTitle": "Page Crasher",
+      "throw": "Throw a {{ name }} exception",
+      "accessControl": "Fail access control"
     }
   },
+
   "pages": {
     "genericFallbackError": {
       "title": {

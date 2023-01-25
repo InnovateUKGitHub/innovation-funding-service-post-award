@@ -1,3 +1,4 @@
+import { HiddenPageCrasher } from "@ui/containers/developer/PageCrasher";
 import { HiddenProjectCreator } from "@ui/containers/developer/ProjectCreator";
 import { HiddenUserSwitcher } from "@ui/containers/developer/UserSwitcher";
 import { useContent } from "@ui/hooks";
@@ -14,6 +15,7 @@ const DeveloperSection = () => {
         </H3>
         <HiddenUserSwitcher />
         <HiddenProjectCreator />
+        <HiddenPageCrasher />
       </GovWidthContainer>
     </div>
   );

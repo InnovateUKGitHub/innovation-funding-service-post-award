@@ -68,6 +68,7 @@ import { ProjectSetupBankDetailsVerifyHandler } from "./project/setup/ProjectSet
 import { ProjectSetupBankStatementHandler } from "./project/setup/ProjectSetupBankStatementHandler";
 import { GraphQLSchema } from "graphql";
 import { DeveloperProjectCreatorHandler } from "./developerProjectCreatorHandler";
+import { DeveloperPageCrasherHandler } from "./developerPageCrasherHandler";
 
 export const standardFormHandlers: StandardFormHandlerBase<AnyObject, EditorStateKeys>[] = [
   new ClaimForecastFormHandler(),
@@ -129,6 +130,12 @@ export const multiFileFormHandlers: MultipleFileFormHandlerBase<AnyObject, Edito
   new LoanRequestDocumentUploadHandler(),
 ];
 
+export const developerFormhandlers = [
+  new DeveloperUserSwitcherHandler(),
+  new DeveloperProjectCreatorHandler(),
+  new DeveloperPageCrasherHandler(),
+] as const;
+
 const getRoute = (handler: IFormHandler) => {
   // map router 5 to express syntax - remove < & >
   return handler.routePath.replace(/(<|>)/g, "");
@@ -142,7 +149,6 @@ const handlePost =
       await handler.handle(req, res, next);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
-      console.log(e);
       return serverRender({ schema })(req, res, e);
     }
   };
@@ -182,16 +188,9 @@ export const configureFormRouter =
     });
 
     if (!configuration.sso.enabled) {
-      const homeFormHandler = new DeveloperUserSwitcherHandler();
-      const developerProjectCreatorHandler = new DeveloperProjectCreatorHandler();
-      result
-        .post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle, handleError)
-        .post(
-          getRoute(developerProjectCreatorHandler),
-          csrfProtection,
-          developerProjectCreatorHandler.handle,
-          handleError,
-        );
+      for (const x of developerFormhandlers) {
+        result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError);
+      }
     }
 
     result.post("*", badRequestHandler.handle, handleError);
