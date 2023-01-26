@@ -7,6 +7,7 @@ import {
   reportGuidance,
   saveContinueSaveReturn,
   shouldShowProjectTitle,
+  deleteMoReport,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -16,6 +17,10 @@ describe("MO can start a new report", () => {
     visitApp({ asUser: moContactEmail });
 
     navigateToProject();
+  });
+
+  after(() => {
+    deleteMoReport();
   });
 
   it("should click the MO Reports tile", clickMoReportTile);

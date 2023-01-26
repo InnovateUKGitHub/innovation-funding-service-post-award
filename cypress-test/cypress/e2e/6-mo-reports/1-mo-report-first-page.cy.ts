@@ -6,6 +6,7 @@ import {
   openReportTable,
   shouldShowProjectTitle,
   startNewReportButton,
+  deleteMoReport,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -15,6 +16,10 @@ describe("MO can navigate to the MO Reports tile", () => {
     visitApp({ asUser: moContactEmail });
 
     navigateToProject();
+  });
+
+  after(() => {
+    deleteMoReport();
   });
 
   it("should click the MO Reports tile", clickMoReportTile);

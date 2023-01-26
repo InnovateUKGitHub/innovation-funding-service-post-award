@@ -8,6 +8,7 @@ import {
   navigateToSection7,
   shouldShowProjectTitle,
   standardComments,
+  deleteMoReport,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -17,6 +18,10 @@ describe("MO can continue a report", () => {
     visitApp({ asUser: moContactEmail });
 
     navigateToProject();
+  });
+
+  after(() => {
+    deleteMoReport();
   });
 
   it("should click the MO Reports tile", clickMoReportTile);

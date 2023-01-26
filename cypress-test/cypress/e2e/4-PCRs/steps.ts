@@ -486,3 +486,35 @@ export const pcrNewCostCatLineItem = () => {
   cy.get("span").contains("£50,000.00");
   cy.submitButton("Save and return to labour").click();
 };
+
+export const addPartnerSummaryTable = () => {
+  cy.get("h2").contains("Organisation", { timeout: 10000 });
+  cy.get("dt").contains("Project role");
+  cy.get("dt").contains("Commercial or economic project outputs?");
+  cy.get("dt").contains("Organisation type");
+  cy.get("dt").contains("Eligibility of aid declaration").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Organisation name").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Registration number").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Registered address").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Size").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Number of full time employees").siblings().contains("a", "Edit");
+  cy.get("dt").contains("End of financial year").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Turnover").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Project location").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Name of town or city").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Postcode, postal code or zip code").siblings().contains("a", "Edit");
+  cy.get("h2").contains("Contacts");
+  cy.get("h3").contains("Finance contact");
+  cy.get("dt").contains("First name").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Last name").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Phone number").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Email").siblings().contains("a", "Edit");
+  cy.get("h2").contains("Funding");
+  cy.get("dt").contains("Project costs for new partner").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Other sources of funding").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Funding level").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Funding sought");
+  cy.get("dt").contains("Partner contribution to project");
+  cy.get("h2").contains("Agreement");
+  cy.get("dt").contains("Partner agreement").siblings().contains("a", "Edit");
+};
