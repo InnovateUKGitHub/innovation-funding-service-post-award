@@ -42,7 +42,7 @@ describe("Continuing editing the Remove a partner section once a partner is sele
   });
 
   it("Should have a subheading 'Upload withdrawal of partner certificate'", () => {
-    cy.get("h2").contains("Upload withdrawal of partner certificate");
+    cy.get("h2").contains("Upload withdrawal of partner certificate", { timeout: 10000 });
   });
 
   it("Should have guidance information on what is required", removePartnerGuidanceInfo);

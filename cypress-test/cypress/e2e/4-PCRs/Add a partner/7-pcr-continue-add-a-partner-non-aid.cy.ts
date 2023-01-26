@@ -4,7 +4,7 @@ import {
   deletePcr,
   completeNewPartnerInfoNonAid,
   clickCreateRequestButtonProceed,
-  stateAidAddPartnerHeading,
+  nonAidAddPartnerHeading,
   saveContinueSaveSummary,
   stateAidFurtherInfo,
 } from "../steps";
@@ -36,7 +36,7 @@ describe("Continuing editing Add a partner PCR as a non-aid organisation", () =>
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should display a 'Add a partner' heading and 'Non-aid funding' heading", stateAidAddPartnerHeading);
+  it("Should display a 'Add a partner' heading and 'Non-aid funding' heading", nonAidAddPartnerHeading);
 
   it("Should have further information on state aid eligibility", stateAidFurtherInfo);
 

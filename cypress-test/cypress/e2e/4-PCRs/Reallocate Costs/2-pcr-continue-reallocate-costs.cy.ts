@@ -49,6 +49,10 @@ describe("Continues Reallocate costs to the costs tables page to access each par
 
   it("Should show select 'Give us information' and continue to the next page", reallocateCostsGiveInfoTodo);
 
+  it("Should click 'Reallocate project costs' and continue to the next page", () => {
+    cy.get("a").contains("Reallocate project costs").click();
+  });
+
   it("Should show back to project link", () => {
     cy.get("a.govuk-back-link", { timeout: 10000 }).contains("Back to request");
   });

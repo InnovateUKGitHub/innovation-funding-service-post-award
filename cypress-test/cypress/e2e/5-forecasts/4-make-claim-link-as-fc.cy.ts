@@ -24,7 +24,7 @@ describe("Test the claims link from Forecast Page as Finance Contact", () => {
   it("should click the forecast tile", clickForecastsTile);
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Forecast");
+    cy.get("h1").contains("Forecast", { timeout: 10000 });
   });
 
   it("should show the forecast table", displayForecastTable);

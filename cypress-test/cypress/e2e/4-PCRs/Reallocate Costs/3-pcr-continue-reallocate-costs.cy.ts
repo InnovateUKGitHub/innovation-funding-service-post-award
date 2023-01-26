@@ -30,6 +30,8 @@ describe("Continues Reallocate costs to the costs tables page to access each par
 
   it("Should show the project title", shouldShowProjectTitle);
 
+  it("Should display reallocate costs table headers", reallocateCostsTableHeaders);
+
   it("Should show the partners listed", showPartners);
 
   it("Should allow you to navigate to EUI Small Ent Health", () => {
@@ -43,8 +45,6 @@ describe("Continues Reallocate costs to the costs tables page to access each par
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Reallocate costs' heading and partner name", reallocateCostsAndPartner);
-
-  it("Should display reallocate costs table headers", reallocateCostsTableHeaders);
 
   it("Should display the reallocate costs table cost categories", reallocateCostsCats);
 

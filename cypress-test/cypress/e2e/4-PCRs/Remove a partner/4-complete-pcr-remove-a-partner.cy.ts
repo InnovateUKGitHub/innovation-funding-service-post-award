@@ -57,6 +57,6 @@ describe("Continuing editing the Remove a partner section once a partner is sele
   });
 
   it("Should show that the first section has completed", () => {
-    cy.get("strong", { timeout: 10000 }).contains("Complete");
+    cy.get("strong").contains("Complete", { timeout: 10000 });
   });
 });

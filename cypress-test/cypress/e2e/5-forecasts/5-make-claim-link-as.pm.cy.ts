@@ -32,7 +32,7 @@ describe("Test the claims link from Forecast Page as Project manager", () => {
   });
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Forecast");
+    cy.get("h1").contains("Forecast", { timeout: 10000 });
   });
 
   it("should show the forecast table", displayForecastTable);

@@ -189,6 +189,11 @@ export const stateAidAddPartnerHeading = () => {
   cy.get("h2").contains("State aid eligibility", { timeout: 10000 });
 };
 
+export const nonAidAddPartnerHeading = () => {
+  cy.get("h1").contains("Add a partner", { timeout: 10000 });
+  cy.get("h2").contains("Non-aid funding", { timeout: 10000 });
+};
+
 export const stateAidFurtherInfo = () => {
   cy.get("p").contains("This competition provides funding that is classed as non-aid");
   cy.get("p").contains("Non-aid is only granted to organisations which declare");
@@ -240,15 +245,15 @@ export const reallocateCostsPcrType = () => {
 };
 
 export const reallocateCostsGiveInfoTodo = () => {
-  cy.get("h2.app-task-list__section").contains("Give us information");
   cy.get("span.app-task-list__task-name").contains("Reallocate project costs");
+  cy.get("h2.app-task-list__section").contains("Give us information");
   cy.get("strong.govuk-tag.govuk-tag--blue").contains("To do");
 };
 
 export const showPartners = () => {
-  cy.tableCell("EUI Small Ent Health");
-  cy.tableCell("A B Cad Services");
-  cy.tableCell("ABS EUI Medium Enterprise");
+  cy.get("label").contains("EUI Small Ent Health").click();
+  cy.get("label").contains("A B Cad Services").click();
+  cy.get("label").contains("ABS EUI Medium Enterprise").click();
 };
 
 export const markAsComplete = () => {

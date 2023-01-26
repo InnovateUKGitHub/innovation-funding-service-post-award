@@ -19,10 +19,6 @@ describe("MO can start a new report", () => {
     navigateToProject();
   });
 
-  after(() => {
-    deleteMoReport();
-  });
-
   it("should click the MO Reports tile", clickMoReportTile);
 
   it("Should click the 'Start a new report' button", clickStartNewReportButton);
