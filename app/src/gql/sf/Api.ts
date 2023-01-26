@@ -1,6 +1,7 @@
 import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { configuration } from "@server/features/common";
 import { getCachedSalesforceAccessToken } from "@server/repositories/salesforceConnection";
+import { Logger } from "@shared/developmentLogger";
 import { print } from "graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
 import fetch from "isomorphic-fetch";
@@ -22,6 +23,7 @@ export class Api {
   private readonly version: string;
   private readonly instanceUrl: string;
   private readonly accessToken: string;
+  private readonly logger: Logger = new Logger("Salesforce");
   public readonly email: string;
 
   constructor({
@@ -124,6 +126,7 @@ export class Api {
     decodeHTMLEntities,
   }: ExecutionRequest & ExecuteConfiguration): Promise<T> {
     const query = print(document);
+    this.logger.debug("Query", query, variables);
     return this.fetch(`/services/data/${this.version}/graphql`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
