@@ -6,6 +6,8 @@ import RelayClientSSR from "react-relay-network-modern-ssr/node8/client";
 import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/node8/server";
 import { RelayNetworkLayer } from "react-relay-network-modern/node8";
 import { Environment, RecordSource, Store } from "relay-runtime";
+import { createContext } from "./GraphQLContext";
+import { Api } from "./sf/Api";
 
 const getServerGraphQLFinalRenderEnvironment = (relayData: SSRCache) => {
   // Create a client that takes in server cache
@@ -23,7 +25,8 @@ const getServerGraphQLFinalRenderEnvironment = (relayData: SSRCache) => {
   return ServerGraphQLEnvironment;
 };
 
-const getServerGraphQLEnvironment = ({
+const getServerGraphQLEnvironment = async ({
+  req,
   res,
   schema,
 }: {
@@ -39,12 +42,7 @@ const getServerGraphQLEnvironment = ({
   const network = new RelayNetworkLayer([
     relayServerSSR.getMiddleware(async () => ({
       schema,
-      contextValue: {
-        // Use the connection to Salesforce as injected in `/app/src/server/router.ts`
-        api: res.locals.api,
-        email: res.locals.email,
-        logger: new Logger("SSR GQL"),
-      },
+      contextValue: await createContext({ req, res }),
     })),
   ]);
 

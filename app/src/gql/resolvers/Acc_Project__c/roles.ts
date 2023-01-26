@@ -1,6 +1,6 @@
 import { ExecutableSchema } from "@gql/getGraphQLSchema";
 import { GraphQLContext } from "@gql/GraphQLContext";
-import type { IFieldResolverOptions } from "@graphql-tools/utils";
+import type { IFieldResolver, IFieldResolverOptions } from "@graphql-tools/utils";
 import { configuration } from "@server/features/common";
 import gql from "graphql-tag";
 import DataLoader from "dataloader";
@@ -20,111 +20,13 @@ interface ExternalProjectRoles extends ExternalRoles {
   partnerRoles: ExternalPartnerRoles[];
 }
 
-interface ProjectData {
-  node: {
-    Acc_ProjectParticipantsProject__r: {
-      edges: {
-        node: {
-          Acc_ProjectRole__c: {
-            value: string;
-          } | null;
-          Acc_AccountId__c: {
-            value: string;
-          } | null;
-        } | null;
-      }[];
-    };
-    Project_Contact_Links__r: {
-      edges: {
-        node: {
-          Acc_Role__c: {
-            value: string;
-          } | null;
-          Acc_ContactId__r: {
-            Email__c: {
-              value: string;
-            } | null;
-          } | null;
-          Acc_AccountId__c: {
-            value: string;
-          } | null;
-        } | null;
-      }[];
-    };
-  };
-}
-
-interface RolesData {
-  uiapi: {
-    query: {
-      Acc_Project__c: {
-        edges: ProjectData[];
-      };
-    };
-  };
-}
-
 const rolesResolver = (salesforceSubschema: ExecutableSchema): IFieldResolverOptions => {
   return {
     selectionSet: `{ Id }`,
     async resolve(input, args, ctx: GraphQLContext, info) {
-      const projectLoader = new DataLoader<string, ProjectData>(async keys => {
-        const { data } = await salesforceSubschema.executor<RolesData>({
-          document: gql`
-            query UserRolesQuery($keys: [ID]) {
-              uiapi {
-                query {
-                  Acc_Project__c(first: 2000, where: { Id: { in: $keys } }) {
-                    edges {
-                      node {
-                        Acc_ProjectParticipantsProject__r {
-                          edges {
-                            node {
-                              Acc_ProjectRole__c {
-                                value
-                              }
-                              Acc_AccountId__c {
-                                value
-                              }
-                            }
-                          }
-                        }
-                        Project_Contact_Links__r {
-                          edges {
-                            node {
-                              Acc_Role__c {
-                                value
-                              }
-                              Acc_ContactId__r {
-                                Email__c {
-                                  value
-                                }
-                              }
-                              Acc_AccountId__c {
-                                value
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            keys,
-          },
-          context: ctx,
-        });
-
-        return data.uiapi.query.Acc_Project__c.edges;
-      });
-
       const isSalesforceSystemUser = ctx.email === configuration.salesforceServiceUser.serviceUsername;
 
-      const { node: project } = await projectLoader.load(input.Id);
+      const { node: project } = await ctx.projectRolesDataLoader.load(input.Id);
 
       const permissions: ExternalProjectRoles = {
         isMo: isSalesforceSystemUser,

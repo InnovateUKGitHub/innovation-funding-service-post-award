@@ -9,6 +9,8 @@ import { rolesResolver } from "./resolvers/Acc_Project__c/roles";
 import { Api } from "./sf/Api";
 import typeDefs from "./typeDefs.gql";
 import { getTypeGraphQLSchema } from "./typegraphql/schema";
+import { GraphQLContext } from "./GraphQLContext";
+import { DocumentNode } from "graphql/language";
 
 export interface ExecutableSchema {
   schema: GraphQLSchema;
