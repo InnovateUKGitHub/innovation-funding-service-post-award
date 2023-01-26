@@ -15,8 +15,11 @@ import { configuration } from "./features/common";
 import { Connection } from "@gql/sfdc-graphql-endpoint/src/sfdc/connection";
 import { Api } from "@gql/sfdc-graphql-endpoint/src/sfdc/api";
 import { getGraphQLSchema } from "@gql/getGraphQLSchema";
+import { Logger } from "@shared/developmentLogger";
+import { isSalesforceTokenError, SalesforceTokenError } from "./repositories";
 
 export const noAuthRouter = Router();
+const logger = new Logger("Router");
 
 // Support routes
 noAuthRouter.use("/api/health", healthRouter);
@@ -26,16 +29,28 @@ const getServerRoutes = async () => {
 
   const csrfProtection = csrf();
 
-  // Obtain a Salesforce access token and URL
-  const { accessToken, url } = await getSalesforceAccessToken({
-    clientId: configuration.salesforceServiceUser.clientId,
-    connectionUrl: configuration.salesforceServiceUser.connectionUrl,
-    currentUsername: configuration.salesforceServiceUser.serviceUsername,
-  });
+  let connection: Connection | undefined;
+  let api: Api | undefined;
 
-  // Create a new Connection and API object to fetch Salesforce data from.
-  const connection = new Connection({ instanceUrl: url, accessToken });
-  const api = new Api({ connection });
+  try {
+    // Obtain a Salesforce access token and URL
+    const { accessToken, url } = await getSalesforceAccessToken({
+      clientId: configuration.salesforceServiceUser.clientId,
+      connectionUrl: configuration.salesforceServiceUser.connectionUrl,
+      currentUsername: configuration.salesforceServiceUser.serviceUsername,
+    });
+
+    // Create a new Connection and API object to fetch Salesforce data from.
+    connection = new Connection({ instanceUrl: url, accessToken });
+    api = new Api({ connection });
+  } catch (e: unknown) {
+    if (isSalesforceTokenError(e)) {
+      logger.error("Failed to connect to Salesforce.", e, e.tokenError);
+    } else {
+      logger.error("Failed to connect to Salesforce.", e);
+    }
+  }
+
   const schema = await getGraphQLSchema({ connection, api });
 
   // App routes
