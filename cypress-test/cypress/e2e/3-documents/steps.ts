@@ -35,7 +35,7 @@ export const uploadToMO = () => {
   });
   cy.get("select#partnerId.govuk-select").select("Innovate UK and MO only");
   cy.get("select#description.govuk-select").select("130");
-  cy.getByQA("button_default-qa").click();
+  cy.submitButton("Upload documents").click();
 };
 
 export const displayMOFile = () => {
@@ -51,7 +51,7 @@ export const uploadToEUI = () => {
   cy.get("input#attachment.govuk-file-upload", { timeout: 5000 }).selectFile("cypress/common/testfile.doc");
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and EUI Small Ent Health");
   cy.get("select#description.govuk-select").select("130");
-  cy.getByQA("button_default-qa").click();
+  cy.submitButton("Upload documents").click();
 };
 
 export const displayEUIFile = () => {
@@ -65,7 +65,7 @@ export const uploadToAB = () => {
   });
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and A B Cad Services");
   cy.get("select#description.govuk-select").select("130");
-  cy.getByQA("button_default-qa").click();
+  cy.submitButton("Upload documents").click();
 };
 
 export const displayABFile = () => {
@@ -79,7 +79,7 @@ export const uploadToEUIMed = () => {
   });
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and ABS EUI Medium Enterprise");
   cy.get("select#description.govuk-select").select("130");
-  cy.getByQA("button_default-qa").click();
+  cy.submitButton("Upload documents").click();
 };
 
 export const displayEUIMedFile = () => {

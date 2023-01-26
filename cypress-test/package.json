@@ -8,6 +8,7 @@
     "start": "npm run cypress -- open",
     "local": "cross-env TEST_URL=http://localhost:8080 npm run cypress -- open",
     "test": "npm run cypress -- run",
+    "test:local": "cross-env TEST_URL=http://localhost:8080 npm run cypress -- run",
     "test:headed": "npm run cypress -- run --headed",
     "prettier": "prettier . --write",
     "lint": "eslint ./cypress/**/*.ts",

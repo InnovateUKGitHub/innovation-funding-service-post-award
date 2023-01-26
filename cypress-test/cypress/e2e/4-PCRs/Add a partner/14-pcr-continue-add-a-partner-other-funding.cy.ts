@@ -50,7 +50,7 @@ describe("Continuing editing Add a partner PCR project costs section", () => {
   });
 
   it("Should display guidance and the 'Other public sector funding?' subheading", () => {
-    cy.get("p").contains("Include all sources of funding the new partner is receiving");
+    cy.get("p").contains("Include all sources of funding the new partner is receiving", { timeout: 10000 });
     cy.get("h2").contains("Other public sector funding?");
   });
 
