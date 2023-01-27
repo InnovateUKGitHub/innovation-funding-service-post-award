@@ -40,6 +40,8 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.194.0",
     "@babel/runtime": "^7.19.4",
+    "@graphql-tools/graphql-file-loader": "^7.5.14",
+    "@graphql-tools/load": "^7.8.9",
     "@graphql-tools/stitch": "^8.7.34",
     "@graphql-tools/wrap": "^9.2.23",
     "bytes": "^3.1.2",

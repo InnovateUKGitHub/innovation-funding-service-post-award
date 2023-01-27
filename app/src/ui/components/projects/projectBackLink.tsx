@@ -1,10 +1,11 @@
-import { ProjectOverviewRoute } from "@ui/containers";
+
 import { BackLink } from "../links";
 
 interface Props {
   projectId: string;
+  routes: IRoutes;
 }
 
 export const ProjectBackLink = (props: Props) => (
-  <BackLink route={ProjectOverviewRoute.getLink({ projectId: props.projectId })}>Back to project</BackLink>
+  <BackLink route={props.routes.projectOverview.getLink({ projectId: props.projectId })}>Back to project</BackLink>
 );

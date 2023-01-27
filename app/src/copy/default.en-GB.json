@@ -1063,6 +1063,8 @@
     "startDate": "Project start date",
     "endDate": "Project end date",
     "duration": "Duration",
+    "months_one": "{{ count }} month",
+    "months_other": "{{ count }} months",
     "numberOfPeriods": "Number of periods",
     "scope": "Project scope statement",
     "projectMembers": "Project members",

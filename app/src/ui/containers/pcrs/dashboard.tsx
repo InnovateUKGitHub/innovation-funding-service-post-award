@@ -34,7 +34,7 @@ const PCRsDashboardComponent = (props: PCRDashboardParams & PCRDashboardData & B
 
     return (
       <ACC.Page
-        backLink={<ACC.Projects.ProjectBackLink projectId={project.id} />}
+        backLink={<ACC.Projects.ProjectBackLink routes={props.routes} projectId={project.id} />}
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
       >
