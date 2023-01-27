@@ -54,7 +54,7 @@ const getGraphQLSchema = async ({ api }: { api: Api }) => {
       }
     }),
     executor: async ({ document, variables, context }) => {
-      const data = await context.api.executeGraphQL({ document, variables });
+      const data = await context.api.executeGraphQL({ document, variables, decodeHTMLEntities: true });
       logger.trace("Queried", print(document), data, variables);
       return data;
     },

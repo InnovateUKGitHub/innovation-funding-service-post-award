@@ -7,6 +7,11 @@ import fetch from "isomorphic-fetch";
 
 interface FetcherConfiguration extends RequestInit {
   searchParams?: Record<string, string>;
+  decodeHTMLEntities?: boolean;
+}
+
+interface ExecuteConfiguration {
+  decodeHTMLEntities?: boolean;
 }
 
 /**
@@ -85,7 +90,12 @@ export class Api {
       },
     });
 
-    const jsonAsText = await response.text();
+    let jsonAsText = await response.text();
+
+    // Decode Salesforce HTML Entities.
+    if (init?.decodeHTMLEntities) {
+      jsonAsText = decodeHTMLEntities(jsonAsText);
+    }
 
     if (response.status !== 200) {
       let message = `Failed to fetch "${url.toString()}" (status code ${response.status})`;
@@ -95,7 +105,7 @@ export class Api {
 
     try {
       // TODO: See if Salesforce decides to not encode their JSON output.
-      const json = JSON.parse(decodeHTMLEntities(jsonAsText));
+      const json = JSON.parse(jsonAsText);
       return json;
     } catch {
       throw new Error("Failed to decode JSON");
@@ -105,14 +115,20 @@ export class Api {
   /**
    * Execute a GraphQL Query AST via the Salesforce GraphQL API.
    *
+   * @todo Remove decodeHTMLEntities when Salesforce no longer returns encoded results.
    * @returns GraphQL Result - Is typed as `any` because the result may vary, including potential errors.
    */
-  public executeGraphQL({ document, variables }: ExecutionRequest) {
+  public executeGraphQL<T>({
+    document,
+    variables,
+    decodeHTMLEntities,
+  }: ExecutionRequest & ExecuteConfiguration): Promise<T> {
     const query = print(document);
     return this.fetch(`/services/data/${this.version}/graphql`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
+      decodeHTMLEntities,
     });
   }
 }
