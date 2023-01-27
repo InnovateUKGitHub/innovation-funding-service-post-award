@@ -10,7 +10,7 @@ export const convertDateAndTime = (date: DateConvertible): DateTime | null => {
 
 const appendMeridian = (date: DateTime, format: string) => format + (date.hour >= 12 ? "'pm'" : "'am'");
 
-export const formatDate = (jsDate: Date | null | undefined, format: DateFormat) => {
+export const formatDate = (jsDate: DateConvertible, format: DateFormat) => {
   if (!jsDate) return null;
   const date = convertDateAndTime(jsDate);
   if (!date || !date.isValid) return "INVALID DATE FORMAT";

@@ -46,7 +46,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data> {
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title {...project} />}
-        backLink={<ACC.Projects.ProjectBackLink projectId={project.id} />}
+        backLink={<ACC.Projects.ProjectBackLink routes={this.props.routes} projectId={project.id} />}
         project={project}
       >
         <ACC.Section qa="project-forecasts">

@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import { convertDateAndTime, DateConvertible, formatDate } from "@framework/util";
 import { DateFormat } from "@framework/constants";
 
-const render = (value: Date | null, format: DateFormat) => {
+const render = (value: DateConvertible, format: DateFormat) => {
   const date = formatDate(value, format);
   return date ? <span>{date}</span> : null;
 };
@@ -46,39 +46,39 @@ export const ShortDateRange: React.FunctionComponent<{ start: DateConvertible; e
   return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMM");
 };
 
-export const ShortMonth: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const ShortMonth: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.SHORT_MONTH);
 };
 
-export const DayAndLongMonth: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const DayAndLongMonth: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.DAY_AND_LONG_MONTH);
 };
 
-export const LongYear: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const LongYear: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.LONG_YEAR);
 };
 
-export const MonthYear: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const MonthYear: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.MONTH_YEAR);
 };
 
-export const FullDate: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const FullDate: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.FULL_DATE);
 };
 
-export const FullNumericDate: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const FullNumericDate: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.FULL_NUMERIC_DATE);
 };
 
-export const FullDateTime: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const FullDateTime: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.FULL_DATE_TIME);
 };
 
-export const ShortDate: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const ShortDate: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.SHORT_DATE);
 };
 
-export const ShortDateTime: React.FunctionComponent<{ value: Date | null }> = ({ value }) => {
+export const ShortDateTime: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
   return render(value, DateFormat.SHORT_DATE_TIME);
 };
 
