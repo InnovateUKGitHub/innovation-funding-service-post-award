@@ -1,6 +1,6 @@
 module.exports = {
   src: "./src/",
-  schema: "./schema.gql",
+  schema: "./ocdata/fullSchema.gql",
   language: "typescript",
   customScalars: {
     String: "string",

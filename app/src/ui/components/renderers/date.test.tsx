@@ -326,7 +326,6 @@ describe("MonthYear", () => {
   });
 
   it("should show that invalid date is provided", () => {
-    // @ts-expect-error testing invalid date format
     const { queryByText } = render(<MonthYear value={"hello world"} />);
     expect(queryByText("INVALID DATE FORMAT")).toBeInTheDocument();
   });

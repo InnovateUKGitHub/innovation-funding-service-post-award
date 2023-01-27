@@ -24,6 +24,7 @@ type Ext_Project_Roles implements Ext_Roles {
 
 extend type Acc_Project__c {
   roles: Ext_Project_Roles!
+  isActive: Boolean!
 }
 
 # 
