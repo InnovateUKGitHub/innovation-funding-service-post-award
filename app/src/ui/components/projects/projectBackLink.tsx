@@ -1,4 +1,4 @@
-
+import { IRoutes } from "@ui/routing";
 import { BackLink } from "../links";
 
 interface Props {

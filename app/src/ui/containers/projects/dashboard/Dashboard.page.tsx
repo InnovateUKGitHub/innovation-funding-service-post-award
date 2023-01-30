@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";
-import { getDefinedEdges } from "@shared/toArray";
 import {
   Accordion,
   AccordionItem,
@@ -29,6 +28,7 @@ import {
 } from "./DashboardProject";
 import { DashboardProjectCount } from "./DashboardProjectCount";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
+import { getDefinedEdges } from "@gql/selectors/edges";
 
 type FilterKey =
   | "PCRS_QUERIED"
