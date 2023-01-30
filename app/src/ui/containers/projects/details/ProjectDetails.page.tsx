@@ -1,4 +1,5 @@
 import { ProjectRole } from "@framework/types";
+import { getFirstEdge } from "@gql/selectors/edges";
 import { Content, EmailContent, Page, Section } from "@ui/components";
 import { ProjectBackLink } from "@ui/components/projects";
 import { ProjectStatusMessage } from "@ui/components/projects/ProjectStatusMessage";
@@ -19,14 +20,11 @@ interface Params {
 }
 
 const ProjectDetailsPage = (props: Params & BaseProps) => {
-  const { data, isLoading } = useLazyLoadQuery<ProjectDetailsQuery>(projectDetailsQuery, {
+  const { data } = useLazyLoadQuery<ProjectDetailsQuery>(projectDetailsQuery, {
     projectId: props.projectId,
   });
   const { getContent } = useContent();
-
-  if (isLoading || !data) return null;
-  const project = data?.uiapi.query.Acc_Project__c?.edges?.[0]?.node;
-  if (!project) throw new Error("no project");
+  const project = getFirstEdge(data?.uiapi.query.Acc_Project__c?.edges).node;
 
   return (
     <Page
