@@ -7,19 +7,27 @@
     "cypress": "cross-env ELECTRON_EXTRA_LAUNCH_ARGS=--no-sandbox cypress",
     "start": "npm run cypress -- open",
     "local": "cross-env TEST_URL=http://localhost:8080 npm run cypress -- open",
-    "test": "npm run cypress -- run",
-    "test:local": "cross-env TEST_URL=http://localhost:8080 npm run cypress -- run",
+    "test": "node launch.js",
+    "test:local": "cross-env TEST_URL=http://localhost:8080 node launch.js",
+    "pretest": "npm run delete:reports",
+    "pretest:local": "npm run delete:reports",
     "test:headed": "npm run cypress -- run --headed",
+    "delete:reports": "rimraf cypress/results/*",
     "prettier": "prettier . --write",
     "lint": "eslint ./cypress/**/*.ts",
-    "lint:staged": "lint-staged"
+    "lint:staged": "lint-staged",
+    "report:mac": "open mochawesome-report/mochawesome.html"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@testing-library/cypress": "^9.0.0",
     "cypress": "^12.2.0",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "mochawesome": "^7.1.3",
+    "mochawesome-merge": "^4.2.2",
+    "mochawesome-report-generator": "^6.2.0",
+    "rimraf": "^4.1.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.47.0",

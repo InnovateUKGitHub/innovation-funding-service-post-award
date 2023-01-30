@@ -19,29 +19,29 @@ import { defineConfig } from "cypress";
  * To run against local host:
  * `npm run local`
  */
-
-const accNumber = (process.env.ACC ?? "").trim();
-let accDevUrl = `https://www-acc-dev${accNumber}.apps.ocp4.innovateuk.ukri.org`;
+let accDevUrl = `https://www-acc-dev${(process.env.ACC ?? "").trim()}.apps.ocp4.innovateuk.ukri.org`;
 
 /**
  * By default Cypress will run all tests in the e2e folder.
  *
- * Setting env var SPEC_PATTERN with the glob value for matching folder and test file will filter those tests
- * do not include .cy.ts at end of file name
+ * Setting env var SPEC_PATTERN with the glob value for matching folder and test file will filter those tests.
+ * 
+ * Do not include .cy.ts at end of file name
  * @example
  * SPEC_PATTERN="5-forecasts/1-forecast-front-page-as-fc"
  * SPEC_PATTERN="5-forecasts/*"
  */
-const overridePattern: string = undefined;
-const specPatternGlob = (process.env.SPEC_PATTERN ?? overridePattern ?? "**/*").trim();
-let specPattern = `cypress/e2e/${specPatternGlob}.cy.ts`;
-console.log(`cypress tests configured with spec_pattern ${specPattern}`);
+const overridePattern: string = "1-projects-dashboard/*"; // this value should always be committed as undefined
+let specPattern = `cypress/e2e/${(process.env.SPEC_PATTERN ?? overridePattern ?? "**/*").trim()}.cy.ts`;
+console.info(`***\ncypress tests configured with specPattern "${specPattern}"\n**\n`);
 
 export default defineConfig({
-  reporter: "junit",
+  reporter: "mochawesome",
   reporterOptions: {
-    mochaFile: "cypress/results/test-output.xml",
-    toConsole: true,
+    reportDir: "cypress/results",
+    overwrite: false,
+    html: false,
+    json: true
   },
   e2e: {
     baseUrl: process.env.TEST_URL || accDevUrl,

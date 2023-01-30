@@ -1,9 +1,9 @@
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
-const cardTitle = "328407";
+const cardId = "328407";
 
 export const navigateToProject = () => {
   cy.contains("Projects").click();
-  cy.get(`${projectCardCss} a`, { timeout: 1000 }).contains(cardTitle).click();
+  cy.getByQA(`project-${cardId}`).contains(cardId).click();
 };
 
 export const monitoringReportCardShouldNotExist = () => {
@@ -55,10 +55,10 @@ export const shouldFilterProjectsUsingSearchFilter = () => {
  * cy.wait is required in shouldNavigateToProjectOverview
  */
 export const shouldNavigateToProjectOverview = () => {
-  cy.get(`${projectCardCss} a`).contains(cardTitle).wait(500).click({ force: true });
+  cy.get(`${projectCardCss} a`).contains(cardId).wait(500).click({ force: true });
 
   cy.get("h1", { timeout: 10000 }).contains("Project overview");
-  cy.getByQA("page-title").should("contain.text", cardTitle);
+  cy.getByQA("page-title").should("contain.text", cardId);
 };
 
 export const shouldShowProjectTitle = () => {

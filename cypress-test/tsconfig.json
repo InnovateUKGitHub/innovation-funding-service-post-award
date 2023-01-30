@@ -6,5 +6,5 @@
     "baseUrl": "./cypress",
     "noImplicitAny": true
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "launch.js"]
 }

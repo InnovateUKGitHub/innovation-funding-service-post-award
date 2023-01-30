@@ -1,5 +1,7 @@
 import "@testing-library/cypress/add-commands";
 
+type CommandOptions = Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>;
+
 const getByLabel = (label: string) => {
   cy.log("**getByLabel**");
   cy.contains("label", label, { timeout: 10000 })
@@ -9,9 +11,9 @@ const getByLabel = (label: string) => {
     });
 };
 
-const getByQA = (tag: string) => {
+const getByQA = (tag: string, options?: CommandOptions) => {
   cy.log("**getByQA**");
-  cy.get(`[data-qa="${tag}"]`, { timeout: 10000 });
+  cy.get(`[data-qa="${tag}"]`, options ?? { timeout: 10000 });
 };
 
 const getByPageQA = (tag: string) => {
@@ -25,7 +27,7 @@ const getByAriaLabel = (label: string) => {
 };
 
 const switchUserTo = (email: string, goHome: boolean = false) => {
-  cy.contains("User Switcher").click();
+  cy.contains("User Switcher", { timeout: 10000 }).click();
   cy.get("input#user-switcher-manual-input").scrollIntoView().clear().wait(1000).type(email);
   cy.getByQA(`manual-change-and-${goHome ? "home" : "stay"}`).click({ force: true });
   cy.wait(1000);
