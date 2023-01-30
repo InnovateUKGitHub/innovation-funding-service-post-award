@@ -1,6 +1,6 @@
 import { DeveloperUser } from "@framework/dtos/developerUser";
+import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
 import { SalesforceRole } from "@server/repositories";
-import { getDefinedEdges } from "@shared/toArray";
 import { createTypedForm, H3, Info, Section, TypedTable } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
@@ -79,40 +79,38 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
     return <SimpleString>{getContent(x => x.components.userChanger.loadingUsers)}</SimpleString>;
   }
 
-  const project = getDefinedEdges(data?.uiapi.query.Acc_Project__c?.edges)?.[0]?.node;
+  const project = getFirstEdge(data?.uiapi.query.Acc_Project__c?.edges).node;
 
-  if (project) {
-    // For each contact...
-    for (const { node: user } of getDefinedEdges(project.Project_Contact_Links__r?.edges)) {
-      if (user.Acc_EmailOfSFContact__c?.value && user.Acc_Role__c?.value) {
-        const email = user.Acc_EmailOfSFContact__c.value;
-        const role = user.Acc_Role__c.value;
+  // For each contact...
+  for (const { node: user } of getDefinedEdges(project.Project_Contact_Links__r?.edges)) {
+    if (user.Acc_EmailOfSFContact__c?.value && user.Acc_Role__c?.value) {
+      const email = user.Acc_EmailOfSFContact__c.value;
+      const role = user.Acc_Role__c.value;
 
-        // If the contact has not yet been seen before...
-        if (!contactRoleInfo[email]) {
-          // Initialise the record with default options
-          contactRoleInfo[email] = {
-            isMo: false,
-            isFc: false,
-            isPm: false,
-            user: {
-              externalUsername: user.Acc_ContactId__r?.Email?.value ?? "Undefined Email",
-              internalUsername: email,
-              email,
-              name: user.Acc_ContactId__r?.Name?.value ?? "Untitled User",
-              role: role as SalesforceRole,
-            },
-          };
-        }
+      // If the contact has not yet been seen before...
+      if (!contactRoleInfo[email]) {
+        // Initialise the record with default options
+        contactRoleInfo[email] = {
+          isMo: false,
+          isFc: false,
+          isPm: false,
+          user: {
+            externalUsername: user.Acc_ContactId__r?.Email?.value ?? "Undefined Email",
+            internalUsername: email,
+            email,
+            name: user.Acc_ContactId__r?.Name?.value ?? "Untitled User",
+            role: role as SalesforceRole,
+          },
+        };
+      }
 
-        // Add the relevant role to the contact's role info.
-        if (role === "Monitoring officer") {
-          contactRoleInfo[email].isMo = true;
-        } else if (role === "Finance contact") {
-          contactRoleInfo[email].isFc = true;
-        } else if (role === "Project Manager") {
-          contactRoleInfo[email].isPm = true;
-        }
+      // Add the relevant role to the contact's role info.
+      if (role === "Monitoring officer") {
+        contactRoleInfo[email].isMo = true;
+      } else if (role === "Finance contact") {
+        contactRoleInfo[email].isFc = true;
+      } else if (role === "Project Manager") {
+        contactRoleInfo[email].isPm = true;
       }
     }
   }

@@ -1,4 +1,4 @@
-import { getDefinedEdges } from "@shared/toArray";
+import { getDefinedEdges } from "@gql/selectors/edges";
 import { Section } from "@ui/components/layout/section";
 import { TypedTable } from "@ui/components/table";
 import { SimpleString } from "@ui/components/renderers";
