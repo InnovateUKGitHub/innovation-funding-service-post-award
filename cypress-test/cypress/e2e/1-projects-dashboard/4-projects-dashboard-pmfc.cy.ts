@@ -4,7 +4,7 @@ import { navigateToProject, monitoringReportCardShouldNotExist, shouldFindMatchi
 
 const projectManagerFinanceContactEmail = "james.black@euimeabs.test";
 
-describe("project dashboard as Project Manager - Finance Contact", () => {
+describe("projects dashboard > Project Manager - Finance Contact", () => {
   before(() => {
     visitApp({ asUser: projectManagerFinanceContactEmail });
 

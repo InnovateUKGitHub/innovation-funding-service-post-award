@@ -7,12 +7,11 @@ import {
   reportGuidance,
   saveContinueSaveReturn,
   shouldShowProjectTitle,
-  deleteMoReport,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
 
-describe("MO can start a new report", () => {
+describe("MO report > can start a new report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 

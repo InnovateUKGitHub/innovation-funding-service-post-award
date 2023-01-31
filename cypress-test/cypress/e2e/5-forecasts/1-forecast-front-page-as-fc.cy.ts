@@ -3,7 +3,7 @@ import { clickForecastsTile, displayForecastTable, navigateToProjectWithClaims, 
 
 const financeContactEmail = "wed.addams@test.test.co.uk";
 
-describe("Forecast front page", () => {
+describe("Forecast > front page as FC", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 

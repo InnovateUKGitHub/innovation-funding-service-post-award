@@ -1,7 +1,7 @@
 import { visitApp } from "../../../common/visit";
 import { clickCreateRequestButtonProceed, shouldShowProjectTitle, showPartners } from "../steps";
 
-describe("Begin editing the Remove a partner section", () => {
+describe("PCR > Remove partner > Begin editing the Remove a partner section", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

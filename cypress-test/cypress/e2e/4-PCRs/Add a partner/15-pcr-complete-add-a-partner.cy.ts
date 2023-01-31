@@ -7,7 +7,7 @@ import {
   addPartnerSummaryTable,
 } from "../steps";
 
-describe("Continuing editing Add a partner PCR project costs section", () => {
+describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

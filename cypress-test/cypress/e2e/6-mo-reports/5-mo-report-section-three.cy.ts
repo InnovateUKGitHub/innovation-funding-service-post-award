@@ -15,7 +15,7 @@ import {
 
 const moContactEmail = "testman2@testing.com";
 
-describe("MO can continue a report", () => {
+describe("MO report > section 3 - can continue a report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 

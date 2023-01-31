@@ -1,7 +1,7 @@
 import { visitApp } from "../../common/visit";
 import { shouldShowAllAccordion, shouldShowProjectTitle } from "./steps";
 
-describe("project dashboard as Finance Contact", () => {
+describe("claims > open claims as FC", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/overview" });
   });

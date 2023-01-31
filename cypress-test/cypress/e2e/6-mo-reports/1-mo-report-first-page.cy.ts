@@ -6,12 +6,11 @@ import {
   openReportTable,
   shouldShowProjectTitle,
   startNewReportButton,
-  deleteMoReport,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
 
-describe("MO can navigate to the MO Reports tile", () => {
+describe("MO report > can navigate to the MO Reports tile", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 

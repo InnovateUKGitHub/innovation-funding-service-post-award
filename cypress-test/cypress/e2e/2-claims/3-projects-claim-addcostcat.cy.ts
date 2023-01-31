@@ -14,7 +14,7 @@ import {
   standardComments,
 } from "./steps";
 
-describe("Editing a claim by accessing cost categories", () => {
+describe("claims > Editing a claim by accessing cost categories", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
   });

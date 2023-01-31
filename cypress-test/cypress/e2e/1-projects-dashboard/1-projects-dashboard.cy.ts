@@ -10,7 +10,7 @@ import {
   shouldShowAListOfProjectCards,
 } from "./steps";
 
-describe("projects dashboard", () => {
+describe("projects dashboard > general", () => {
   before(() => {
     visitApp({});
   });

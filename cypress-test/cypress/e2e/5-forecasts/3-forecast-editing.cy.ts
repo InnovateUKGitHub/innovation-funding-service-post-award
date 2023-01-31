@@ -11,7 +11,7 @@ import {
 
 const financeContactEmail = "james.black@euimeabs.test";
 
-describe("Forecast front page", () => {
+describe("Forecast > edit", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 

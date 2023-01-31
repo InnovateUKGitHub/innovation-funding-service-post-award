@@ -8,7 +8,7 @@ import {
   removePartnerTable,
 } from "../steps";
 
-describe("Continuing editing the Remove a partner section once a partner is selected", () => {
+describe("PCR > Remove partner > Continuing editing the Remove a partner section once a partner is selected", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

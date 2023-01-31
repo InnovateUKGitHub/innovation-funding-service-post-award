@@ -11,7 +11,7 @@ import {
   showPartners,
 } from "../steps";
 
-describe("Continues Reallocate costs to the costs tables page to access each partner", () => {
+describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

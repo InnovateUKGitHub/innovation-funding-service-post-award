@@ -1,7 +1,7 @@
 import { visitApp } from "../../common/visit";
 import { beforeYouSubmit, createRequestButton, explainPCRTypes, pcrCheckBoxes, shouldShowProjectTitle } from "./steps";
 
-describe("Project Change Request front page", () => {
+describe("PCR > Project Change Request front page", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
   });

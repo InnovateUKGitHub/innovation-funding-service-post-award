@@ -12,7 +12,7 @@ import {
   explainChangesReasoning,
 } from "../steps";
 
-describe("Creating Add a partner PCR", () => {
+describe("PCR >  Add a partner > Create PCR", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

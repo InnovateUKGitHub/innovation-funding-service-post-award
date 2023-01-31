@@ -1,7 +1,7 @@
 import { visitApp } from "../../../common/visit";
 import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToPartnerLocation } from "../steps";
 
-describe("Continuing editing Add a partner PCR location details section", () => {
+describe("PCR > Add partner > Continuing editing PCR location details section", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

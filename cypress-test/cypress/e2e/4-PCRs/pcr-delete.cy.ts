@@ -1,7 +1,7 @@
 import { visitApp } from "../../common/visit";
 import { shouldShowProjectTitle } from "./steps";
 
-describe("PCRs in Draft status can be deleted", () => {
+describe("PCR > PCRs in Draft status can be deleted", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
   });

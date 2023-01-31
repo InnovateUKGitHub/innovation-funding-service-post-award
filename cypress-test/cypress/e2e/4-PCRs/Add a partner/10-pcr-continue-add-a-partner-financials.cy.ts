@@ -1,7 +1,7 @@
 import { visitApp } from "../../../common/visit";
 import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToFinancialsPage } from "../steps";
 
-describe("Continuing editing Add a partner PCR financial details section", () => {
+describe("PCR > Add partner > Continuing editing PCR financial details section", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

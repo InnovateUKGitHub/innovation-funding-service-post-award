@@ -4,7 +4,7 @@ import { navigateToProject, shouldFindMatchingProjectCard } from "./steps";
 
 const monitoringOfficerEmail = "testman2@testing.com";
 
-describe("project dashboard as Monitoring Officer", () => {
+describe("projects dashboard > Monitoring Officer", () => {
   before(() => {
     visitApp({ asUser: monitoringOfficerEmail });
 

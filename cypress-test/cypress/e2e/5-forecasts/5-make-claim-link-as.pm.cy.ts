@@ -16,7 +16,7 @@ const projectManagerEmail = "james.black@euimeabs.test";
  * See ACC-9157 for the original issue this test relates to
  */
 
-describe("Test the claims link from Forecast Page as Project manager", () => {
+describe("Forecast > link to claims page as PM", () => {
   before(() => {
     visitApp({ asUser: projectManagerEmail });
 

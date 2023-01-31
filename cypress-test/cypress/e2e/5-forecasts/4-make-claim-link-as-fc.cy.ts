@@ -14,7 +14,7 @@ const financeContactEmail = "wed.addams@test.test.co.uk";
  * See ACC-9157 for the original issue this test relates to
  */
 
-describe("Test the claims link from Forecast Page as Finance Contact", () => {
+describe("Forecast > Link to claims page as FC", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 

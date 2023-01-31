@@ -12,7 +12,7 @@ import {
   shouldShowProjectTitle,
 } from "../steps";
 
-describe("Creating Reallocate Project Costs PCR", () => {
+describe("PCR > Reallocate Costs > Creating  PCR", () => {
   before(() => {
     // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });

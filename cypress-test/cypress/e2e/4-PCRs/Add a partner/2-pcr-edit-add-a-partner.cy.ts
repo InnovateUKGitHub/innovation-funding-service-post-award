@@ -10,7 +10,7 @@ import {
   projectRoleRadios,
 } from "../steps";
 
-describe("Edit Add a partner PCR", () => {
+describe("PCR > Add partner > Edit PCR", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
   });

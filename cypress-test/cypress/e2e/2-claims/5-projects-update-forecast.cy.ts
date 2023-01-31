@@ -7,7 +7,7 @@ import {
   shouldShowProjectTitle,
 } from "./steps";
 
-describe("Updating forecasts after claim costs and document upload", () => {
+describe("claims > Updating forecasts after claim costs and document upload", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
   });

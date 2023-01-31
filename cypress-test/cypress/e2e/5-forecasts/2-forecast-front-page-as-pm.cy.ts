@@ -9,7 +9,7 @@ import {
 
 const projectManagerEmail = "james.black@euimeabs.test";
 
-describe("Forecast front page", () => {
+describe("Forecast front page as PM", () => {
   before(() => {
     visitApp({ asUser: projectManagerEmail });
 
