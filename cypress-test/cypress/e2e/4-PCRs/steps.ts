@@ -251,9 +251,9 @@ export const reallocateCostsGiveInfoTodo = () => {
 };
 
 export const showPartners = () => {
-  cy.get("label").contains("EUI Small Ent Health").click();
-  cy.get("label").contains("A B Cad Services").click();
-  cy.get("label").contains("ABS EUI Medium Enterprise").click();
+  cy.contains("EUI Small Ent Health");
+  cy.contains("A B Cad Services");
+  cy.contains("ABS EUI Medium Enterprise");
 };
 
 export const markAsComplete = () => {

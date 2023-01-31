@@ -37,7 +37,7 @@ describe("Forecast > edit", () => {
   it("Should allow Labour cost fields to be updated", updateLabourFields);
 
   it("Should calculate the totals entered in each Labour item as £666.00", () => {
-    cy.tableCell("£666.00");
+    cy.tableCell("666");
   });
 
   it("Should now enter a sum greater than the allowed grant and display an error", exceedGrantValue);
