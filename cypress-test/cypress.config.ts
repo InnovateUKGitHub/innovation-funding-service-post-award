@@ -60,10 +60,15 @@ export default defineConfig({
     // setupNodeEvents(on, config) {
     //   // implement node event listeners here
     // },
-    specPattern,
+    specPattern: getSpecPatternArray(specPattern),
     env: {
       BASIC_AUTH: process.env.BASIC_AUTH,
     },
     testIsolation: false,
   },
 });
+
+
+function getSpecPatternArray (s: string) {
+  return s.split(/\s?[ ;,]\s?/).map(x => x.trim());
+}
