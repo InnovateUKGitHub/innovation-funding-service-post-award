@@ -11,6 +11,7 @@ import path from "path";
 import { GraphQLContext } from "./GraphQLContext";
 import { projectIsActiveResolver } from "./resolvers/Acc_Project__c/isActive";
 import { rolesResolver } from "./resolvers/Acc_Project__c/roles";
+import { schemaToString } from "./schemaToString";
 import { Api } from "./sf/Api";
 import typeDefs from "./typeDefs.gql";
 import { getTypeGraphQLSchema } from "./typegraphql/schema";
@@ -89,7 +90,7 @@ const getGraphQLSchema = async ({ api }: { api: Api }) => {
     },
   });
 
-  writeFileSync(fullSchemaFilePath, printSchema(schema), { encoding: "utf-8" });
+  writeFileSync(fullSchemaFilePath, schemaToString(schema), { encoding: "utf-8" });
   logger.warn("Schema", `Written the full schema to "${fullSchemaFilePath}".`);
 
   return schema;

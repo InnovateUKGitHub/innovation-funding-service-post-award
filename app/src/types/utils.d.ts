@@ -24,3 +24,7 @@ declare type UnwrapArray<T> = T extends Array<infer U> ? U : T extends ReadonlyA
 type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
+
+// https://stackoverflow.com/a/43001581
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+type DeepWriteable<T> = { -readonly [P in keyof T]: DeepWriteable<T[P]> };

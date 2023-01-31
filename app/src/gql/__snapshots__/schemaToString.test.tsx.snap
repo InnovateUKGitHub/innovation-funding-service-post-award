@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GraphQL Schema to String schemaToString Expect already sorted schema to not change order 1`] = `
+"type Hello {
+  a: String
+  b: Int!
+  c: Boolean
+}"
+`;
+
+exports[`GraphQL Schema to String schemaToString Expect multiple types to change order 1`] = `
+"type Bellows implements Hello {
+  a: String
+  b: Int!
+  c: Boolean
+  d: World!
+}
+
+type Hello {
+  a: String
+  b: Int!
+  c: Boolean
+}
+
+type World {
+  c: [Int]
+  d: Boolean
+  nicole_hedges: Int!
+}"
+`;
+
+exports[`GraphQL Schema to String schemaToString Expect type fields to change order 1`] = `
+"type Hello {
+  a: String
+  b: Int!
+  c: Boolean
+}"
+`;
+
+exports[`GraphQL Schema to String schemaToString Expect types and enums to keep order 1`] = `
+"enum ACCOUNTBRAND_SCOPE {
+  EVERYTHING
+  MINE
+  QUEUE_OWNED
+  TEAM
+  USER_OWNED
+}
+
+type Bellows implements Hello {
+  a: String
+  b: Int!
+  c: Boolean
+  d: World!
+}
+
+type Hello {
+  a: String
+  b: Int!
+  c: Boolean
+}
+
+enum THISISATEST {
+  APPLE
+  BANANA
+  CARROT
+  DECADES
+  ESTROGEN
+  FLIGHT
+  GARY
+}
+
+type World {
+  c: [Int]
+  d: Boolean
+  nicole_hedges: Int!
+}"
+`;
