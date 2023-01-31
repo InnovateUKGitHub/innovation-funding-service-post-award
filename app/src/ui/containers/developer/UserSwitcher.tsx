@@ -165,22 +165,29 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
         qa="delete"
         header={x => x.components.userChanger.tableHeaderSwitchOptions}
         value={x => {
-          return (
-            <SelectContactForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
-              <SelectContactForm.Hidden name="project_id" value={() => projectId} />
-              <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
-              <SelectContactForm.Hidden
-                name="user"
-                value={() => x.user.externalUsername || x.user.internalUsername || x.user.email}
-              />
-              <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19" qa="btn-home">
-                {getContent(x => x.components.userChanger.switchAndHome)}
-              </SelectContactForm.Button>
-              <SelectContactForm.Button name="stay" styling="Link" className="govuk-!-font-size-19" qa="btn-stay">
-                {getContent(x => x.components.userChanger.switchAndStay)}
-              </SelectContactForm.Button>
-            </SelectContactForm.Form>
-          );
+          // If the user has an external username (aka can use IFSPA),
+          // show the switcher buttons.
+          if (x.user.externalUsername) {
+            return (
+              <SelectContactForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
+                <SelectContactForm.Hidden name="project_id" value={() => projectId} />
+                <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
+                <SelectContactForm.Hidden
+                  name="user"
+                  value={() => x.user.externalUsername || x.user.internalUsername || x.user.email}
+                />
+                <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19" qa="btn-home">
+                  {getContent(x => x.components.userChanger.switchAndHome)}
+                </SelectContactForm.Button>
+                <SelectContactForm.Button name="stay" styling="Link" className="govuk-!-font-size-19" qa="btn-stay">
+                  {getContent(x => x.components.userChanger.switchAndStay)}
+                </SelectContactForm.Button>
+              </SelectContactForm.Form>
+            );
+          } else {
+            // Otherwise, hide the form.
+            return null;
+          }
         }}
       />
     </ProjectContactTable.Table>
