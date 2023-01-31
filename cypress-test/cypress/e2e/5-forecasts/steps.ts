@@ -2,7 +2,7 @@ const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 
 export const navigateToProject = () => {
   cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains("1_CYPRESS_DO_NOT_USE").click({ force: true });
+  cy.get(`${projectCardCss} a`).wait(1000).contains("1_CYPRESS_DO_NOT_USE", { timeout: 10000 }).click({ force: true });
 };
 
 export const navigateToProjectWithClaims = () => {

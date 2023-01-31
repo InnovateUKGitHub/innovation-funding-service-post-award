@@ -31,9 +31,19 @@ let accDevUrl = `https://www-acc-dev${(process.env.ACC ?? "").trim()}.apps.ocp4.
  * SPEC_PATTERN="5-forecasts/1-forecast-front-page-as-fc"
  * SPEC_PATTERN="5-forecasts/*"
  */
-const overridePattern: string = "1-projects-dashboard/*"; // this value should always be committed as undefined
+const overridePattern: string = undefined; // this value should always be committed as undefined
 let specPattern = `cypress/e2e/${(process.env.SPEC_PATTERN ?? overridePattern ?? "**/*").trim()}.cy.ts`;
 console.info(`***\ncypress tests configured with specPattern "${specPattern}"\n**\n`);
+
+
+/**
+ * For controlling if we want to generate screenshots and videos.
+ * 
+ * Default is not
+ */
+const isTrue = (s: string = "") => s.toLowerCase() === "true";
+const screenshots = false;
+const videos = false;
 
 export default defineConfig({
   reporter: "mochawesome",
@@ -43,6 +53,8 @@ export default defineConfig({
     html: false,
     json: true
   },
+  screenshotOnRunFailure: isTrue(process.env.SCREENSHOTS) || screenshots,
+  video: isTrue(process.env.VIDEOS) || videos,
   e2e: {
     baseUrl: process.env.TEST_URL || accDevUrl,
     // setupNodeEvents(on, config) {
