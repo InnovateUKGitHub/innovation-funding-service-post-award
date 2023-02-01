@@ -1,5 +1,11 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToPartnerLocation } from "../steps";
+import {
+  shouldShowProjectTitle,
+  deletePcr,
+  saveContinueSaveSummary,
+  navigateToPartnerLocation,
+  addPartnerLocation,
+} from "../steps";
 
 describe("PCR > Add partner > Continuing editing PCR location details section", () => {
   before(() => {
@@ -13,7 +19,7 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
   it("Should navigate to the partner location section", navigateToPartnerLocation);
 
   it("Should display the 'Project location' heading and guidance text", () => {
-    cy.get("h2").contains("Project location", { timeout: 20000 });
+    cy.get("h2").contains("Project location");
     cy.getByQA("field-projectLocation").contains("Indicate where the majority");
   });
 
@@ -28,20 +34,19 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
   });
 
   it("Should show radio buttons for 'Inside the UK' and 'Outside of the UK' and click in turn", () => {
-    cy.get(`input[id="projectLocation_10"]`).click();
-    cy.get(`input[id="projectLocation_20"]`).click();
-    cy.get(`input[id="projectLocation_10"]`).click();
+    cy.get("#projectLocation_10").click();
+    cy.get("#projectLocation_20").click();
+    cy.get("#projectLocation_10").click();
   });
 
-  it("Should show the 'Name of town or city' heading and 'Postcode, Postal code or zip code' heading and guidance message", () => {
-    cy.get("h2").contains("Name of town or city");
-    cy.get("h2").contains("Postcode, postal code or zip code");
-    cy.getByQA("field-projectPostcode").contains("If this is not available,");
-  });
+  it(
+    "Should show the 'Name of town or city' heading and 'Postcode, Postal code or zip code' heading and guidance message",
+    addPartnerLocation,
+  );
 
   it("Should complete the text boxes for name of town and postcode", () => {
-    cy.get(`input[id="projectCity"]`).type("Swindon");
-    cy.get(`input[id="projectPostcode"]`).type("SN5");
+    cy.get("#projectCity").type("Swindon");
+    cy.get("#projectPostcode").type("SN5");
   });
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);

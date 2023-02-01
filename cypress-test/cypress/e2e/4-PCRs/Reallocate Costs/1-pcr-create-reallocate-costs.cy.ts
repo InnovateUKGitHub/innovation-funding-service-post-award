@@ -73,6 +73,6 @@ describe("PCR > Reallocate Costs > Creating  PCR", () => {
   });
 
   it("Should have a 'Delete request' button", () => {
-    cy.get("a.govuk-link").contains("Delete", { timeout: 30000 });
+    cy.get("a.govuk-link").contains("Delete");
   });
 });

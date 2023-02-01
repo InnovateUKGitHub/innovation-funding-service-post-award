@@ -26,7 +26,7 @@ describe("PCR > Add partner > Edit PCR", () => {
   it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should let you click 'Add a partner' and continue to the next screen", () => {
-    cy.get("a").contains("Add a partner", { timeout: 10000 }).click();
+    cy.get("a").contains("Add a partner").click();
   });
 
   it("Should have a back option", () => {

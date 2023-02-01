@@ -3,7 +3,7 @@ export const shouldShowProjectTitle = () => {
 };
 
 export const shouldShowAllAccordion = () => {
-  cy.get("span.govuk-accordion__show-all-text", { timeout: 10000 }).contains("Show all sections").click();
+  cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click();
 };
 
 export const shouldShowCostCatTable = () => {
@@ -14,6 +14,10 @@ export const shouldShowCostCatTable = () => {
   cy.tableHeader("Eligible costs claimed to date");
   cy.tableHeader("Costs claimed this period");
   cy.tableHeader("Remaining eligible costs");
+};
+
+export const shouldHaveCostCategoryTable = (category: string) => {
+  cy.tableHeader(category);
 };
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
@@ -28,15 +32,16 @@ export const correctTableHeaders = () => {
  * Wait required in newCostCatLineItem below
  */
 export const newCostCatLineItem = () => {
-
-  /** 
+  /**
    * click remove first if there is already a line item
    */
-  cy.getByQA("current-claim-summary-table").find("tbody.govuk-table__body").then($table => {
-    if($table.find("tr").length > 0) {
-      cy.get("a").contains("Remove").click();
-    }
-  })
+  cy.getByQA("current-claim-summary-table")
+    .find("tbody.govuk-table__body")
+    .then($table => {
+      if ($table.find("tr").length > 0) {
+        cy.get("a").contains("Remove").click();
+      }
+    });
 
   cy.get("a").contains("Add a cost").click();
   cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
@@ -44,24 +49,22 @@ export const newCostCatLineItem = () => {
 };
 
 export const allowFileUpload = () => {
-  cy.get("input#attachment.govuk-file-upload", { timeout: 20000 }).selectFile("cypress/common/testfile.doc", {
-    timeout: 10000,
-  });
+  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
   cy.submitButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded.", { timeout: 10000 });
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
 
 export const reflectCostAdded = () => {
-  cy.get("tr.govuk-table__row", { timeout: 10000 }).contains("Labour", { timeout: 10000 });
-  cy.get("span.currency", { timeout: 2000 }).contains("£1,000.00");
+  cy.get("tr.govuk-table__row").contains("Labour");
+  cy.get("span.currency").contains("£1,000.00");
 };
 
 export const clearUpCostCat = () => {
   cy.get("td.govuk-table__cell").contains("Labour").click();
   cy.getByQA("button_upload-qa").click();
   cy.getByQA("button_delete-qa").contains("Remove").click();
-  cy.get("a.govuk-back-link", { timeout: 5000 }).click();
-  cy.get("a.govuk-link", { timeout: 5000 }).contains("Remove").first().click();
+  cy.get("a.govuk-back-link").click();
+  cy.get("a.govuk-link").contains("Remove").first().click();
   cy.get("textarea#comments").clear();
 };
 
@@ -90,7 +93,7 @@ export const selectFileDescription = () => {
 };
 
 export const claimsDocUpload = () => {
-  cy.get("input#attachment", { timeout: 5000 }).selectFile("cypress/common/testfile.doc", { timeout: 5000 });
+  cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
   cy.uploadButton("Upload documents").click();
 };
 

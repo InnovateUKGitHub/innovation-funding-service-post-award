@@ -33,7 +33,7 @@ describe("MO report > section 2 - can continue a report", () => {
   it("Should navigate to section 2", navigateToSection2);
 
   it("Should show Section 2 of 8 heading", () => {
-    cy.get("h3").contains("Section 2 of 8", { timeout: 5000 });
+    cy.get("h3").contains("Section 2 of 8");
   });
 
   it("Should have a back link", () => {
@@ -43,7 +43,7 @@ describe("MO report > section 2 - can continue a report", () => {
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should show the heading 'Monitoring report'", () => {
-    cy.get("h1").contains("Monitoring report", { timeout: 5000 });
+    cy.get("h1").contains("Monitoring report");
   });
 
   it("Should show the period title", () => {

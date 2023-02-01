@@ -10,6 +10,20 @@ const replaceTitleTemplateWithArg = (title: string, args: any): string =>
       )
     : title;
 
+/**
+ *
+ * Test each allows you to run multiple similar tests.
+ * First call should be an array of arguments, if there is more than one argument this should also be an array.
+ * Second call takes two arguments. The first is the title string and the second is the test function that will be called with the argument from the first call.
+ *
+ * To interpolate the argument into the title string use the syntax `$0` for the first element in the array in the arguments list etc.
+ *
+ * @example
+ * testEach(["apple","banana"]) ("$0 should be a fruit", shouldBeAFruit)
+ *
+ * testEach([["fly", 6],["spider", 8], ["slug", 0]]) ("$0 should have $1 legs", shouldHaveLegs)
+ *
+ **/
 export const testEach =
   <T>(testArray: T[]) =>
   // eslint-disable-next-line no-unused-vars

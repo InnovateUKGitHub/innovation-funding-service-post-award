@@ -2,7 +2,7 @@ const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 
 export const navigateToProject = () => {
   cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains("1_CYPRESS_DO_NOT_USE", { timeout: 10000 }).click({ force: true });
+  cy.get(`${projectCardCss} a`).wait(1000).contains("1_CYPRESS_DO_NOT_USE").click({ force: true });
 };
 
 export const navigateToProjectWithClaims = () => {
@@ -44,26 +44,26 @@ export const showPartnerTable = () => {
 
 export const makeClaimFC = () => {
   cy.get("a.govuk-link").contains("make a claim").click({ force: true });
-  cy.getByPageQA("claimsDashboard").should("exist", { timeout: 5000 });
+  cy.getByPageQA("claimsDashboard").should("exist");
 };
 
 export const makeClaimPM = () => {
   cy.get("a.govuk-link").contains("make a claim").click({ force: true });
-  cy.getByPageQA("allClaimsDashboard").should("exist", { timeout: 5000 });
+  cy.getByPageQA("allClaimsDashboard").should("exist");
 };
 
 export const clickEditDisplayClaim = () => {
-  cy.get("a").contains("Edit", { timeout: 5000 }).click();
-  cy.get("h1").contains("Costs to be claimed", { timeout: 5000 });
+  cy.get("a").contains("Edit").click();
+  cy.get("h1").contains("Costs to be claimed");
 };
 
 export const clickViewDisplayClaim = () => {
-  cy.get("a").contains("View", { timeout: 5000 }).click();
-  cy.get("h1").contains("Claim", { timeout: 5000 });
+  cy.get("a").contains("View").click();
+  cy.get("h1").contains("Claim");
 };
 
 export const shouldShowAllAccordion = () => {
-  cy.get("span.govuk-accordion__show-all-text", { timeout: 10000 }).contains("Show all sections").click();
+  cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click();
 };
 
 export const updateLabourFields = () => {

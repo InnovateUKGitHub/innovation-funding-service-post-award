@@ -24,7 +24,7 @@ describe("Forecast > Link to claims page as FC", () => {
   it("should click the forecast tile", clickForecastsTile);
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Forecast", { timeout: 10000 });
+    cy.get("h1").contains("Forecast");
   });
 
   it("should show the forecast table", displayForecastTable);

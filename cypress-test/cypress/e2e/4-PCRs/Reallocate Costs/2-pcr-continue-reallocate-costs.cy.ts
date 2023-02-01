@@ -53,7 +53,7 @@ describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs ta
   });
 
   it("Should show back to project link", () => {
-    cy.get("a.govuk-back-link", { timeout: 10000 }).contains("Back to request");
+    cy.get("a.govuk-back-link").contains("Back to request");
   });
 
   it("Should show the project title", shouldShowProjectTitle);

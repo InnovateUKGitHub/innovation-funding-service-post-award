@@ -6,6 +6,11 @@ import {
   learnFiles,
   addPartnerDocUpload,
   pcrFileTable,
+  otherFundingTable,
+  addSourceOfFunding,
+  fundingLevelPage,
+  uploadPartnerInfo,
+  otherFundingOptions,
 } from "../steps";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
@@ -24,7 +29,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should display the 'Other public sector funding?' subheading and guidance information", () => {
-    cy.get("h2").contains("Other public sector funding?", { timeout: 15000 });
+    cy.get("h2").contains("Other public sector funding?");
     cy.get("p").contains("Is the new partner receiving any other public sector funding");
   });
 
@@ -38,11 +43,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.get("h1").contains("Add a partner");
   });
 
-  it("Should click both radio buttons for 'Yes' and 'No'", () => {
-    cy.get(`input[id="hasOtherFunding_true"]`).click();
-    cy.get(`input[id="hasOtherFunding_false"]`).click();
-    cy.get(`input[id="hasOtherFunding_true"]`).click();
-  });
+  it("Should click both radio buttons for 'Yes' and 'No'", otherFundingOptions);
 
   it("Should click'Save and continue'", () => {
     cy.submitButton("Save and return to summary");
@@ -50,16 +51,11 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should display guidance and the 'Other public sector funding?' subheading", () => {
-    cy.get("p").contains("Include all sources of funding the new partner is receiving", { timeout: 10000 });
+    cy.get("p").contains("Include all sources of funding the new partner is receiving");
     cy.get("h2").contains("Other public sector funding?");
   });
 
-  it("Should have a table containing any other sources of funding", () => {
-    cy.tableHeader("Source of funding");
-    cy.tableHeader("Date secured (MM YYYY)");
-    cy.tableHeader("Funding amount (£)");
-    cy.tableCell("Total other funding");
-  });
+  it("Should have a table containing any other sources of funding", otherFundingTable);
 
   it("Should contain an 'Add another source of funding'", () => {
     cy.getByQA("add-fund").contains("Add another source of funding");
@@ -70,14 +66,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.submitButton("Save and return to summary");
   });
 
-  it("Should click 'Add another source of funding' and enter information", () => {
-    cy.getByQA("add-fund").contains("Add another source of funding").click();
-    cy.get(`input[id="item_0_description"]`).type("Public");
-    cy.get(`input[id="item_0_date_month"]`).type("12");
-    cy.get(`input[id="item_0_date_year"]`).type("2022");
-    cy.get(`input[id="item_0_value"]`).type("50000");
-    cy.wait(500);
-  });
+  it("Should click 'Add another source of funding' and enter information", addSourceOfFunding);
 
   it("Should reflect the value entered in the table", () => {
     cy.tableCell("£50,000.00");
@@ -87,11 +76,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.submitButton("Save and continue").click();
   });
 
-  it("Should land on the 'Funding level' page and contain subheading and guidance information", () => {
-    cy.get("h2").contains("Funding level", { timeout: 10000 });
-    cy.get("p").contains("The maximum the new organisation can enter");
-    cy.get("p").contains("The percentage applied for");
-  });
+  it("Should land on the 'Funding level' page and contain subheading and guidance information", fundingLevelPage);
 
   it("Should have a back option", () => {
     cy.backLink("Back to request");
@@ -108,10 +93,10 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.submitButton("Save and continue").click();
   });
 
-  it("Should land on a document upload page and contain 'Upload partner agreement' subheading and display guidance information", () => {
-    cy.get("h2").contains("Upload partner agreement", { timeout: 10000 });
-    cy.get("p").contains("You must upload copies of signed letters");
-  });
+  it(
+    "Should land on a document upload page and contain 'Upload partner agreement' subheading and display guidance information",
+    uploadPartnerInfo,
+  );
 
   it("Should have a back option", () => {
     cy.backLink("Back to request");
@@ -128,7 +113,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should upload a file", addPartnerDocUpload);
 
   it("Should display a document upload success message", () => {
-    cy.getByQA("validation-message-content").contains("Your document has been uploaded", { timeout: 10000 });
+    cy.getByQA("validation-message-content").contains("Your document has been uploaded");
   });
 
   it("Should display a file upload table once document is uploaded", pcrFileTable);
