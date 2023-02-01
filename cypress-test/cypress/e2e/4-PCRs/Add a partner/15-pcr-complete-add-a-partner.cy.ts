@@ -5,6 +5,7 @@ import {
   navigateToPartnerCosts,
   addPartnerDocUpload,
   addPartnerSummaryTable,
+  fundingLevelPercentage,
 } from "../steps";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
@@ -23,25 +24,24 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should click the 'No' radio button and then save and continue", () => {
-    cy.get(`input[id="hasOtherFunding_false"]`).click();
+    cy.get("#hasOtherFunding_false").click();
     cy.submitButton("Save and continue").click();
   });
 
-  it("Should display 'Funding level' heading and enter a percentage and click 'Save and continue'", () => {
-    cy.get("h2").contains("Funding level");
-    cy.get(`input[id="awardRate"]`).type("5");
-    cy.submitButton("Save and continue").click();
-  });
+  it(
+    "Should display 'Funding level' heading and enter a percentage and click 'Save and continue'",
+    fundingLevelPercentage,
+  );
 
   it("Should land on a document upload page and contain 'Upload partner agreement' subheading and display guidance information", () => {
-    cy.get("h2").contains("Upload partner agreement", { timeout: 10000 });
+    cy.get("h2").contains("Upload partner agreement");
     cy.get("p").contains("You must upload copies of signed letters");
   });
 
   it("Should upload a file", addPartnerDocUpload);
 
   it("Should save and continue", () => {
-    cy.getByQA("validation-message-content").contains("Your document has been uploaded", { timeout: 10000 });
+    cy.getByQA("validation-message-content").contains("Your document has been uploaded");
     cy.submitButton("Save and continue").click();
   });
 

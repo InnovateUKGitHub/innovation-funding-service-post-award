@@ -11,7 +11,7 @@ export const navigateToProject = () => {
 
 export const deleteMoReport = () => {
   visitApp({ path: "projects/a0E2600000kSotUEAS/monitoring-reports" });
-  cy.getByQA("deleteLink").contains("Delete report", { timeout: 10000 }).click();
+  cy.getByQA("deleteLink").contains("Delete report").click();
   cy.getByQA("button_delete-qa").click({ force: true });
 };
 
@@ -23,7 +23,7 @@ export const navigateToSection2 = () => {
   cy.getByQA("question-1-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 2 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 2 of 8");
 };
 
 export const navigateToSection3 = () => {
@@ -34,11 +34,11 @@ export const navigateToSection3 = () => {
   cy.getByQA("question-1-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 2 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 3 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 3 of 8");
 };
 
 export const navigateToSection4 = () => {
@@ -49,15 +49,15 @@ export const navigateToSection4 = () => {
   cy.getByQA("question-1-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 2 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 3 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 4 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 4 of 8");
 };
 
 export const navigateToSection5 = () => {
@@ -68,19 +68,19 @@ export const navigateToSection5 = () => {
   cy.getByQA("question-1-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 2 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 3 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 4 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 5 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 5 of 8");
 };
 
 export const navigateToSection6 = () => {
@@ -91,23 +91,23 @@ export const navigateToSection6 = () => {
   cy.getByQA("question-1-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 2 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 3 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 4 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 5 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 5 of 8");
   cy.getByQA("question-5-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 6 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 6 of 8");
 };
 
 export const navigateToSection7 = () => {
@@ -118,27 +118,27 @@ export const navigateToSection7 = () => {
   cy.getByQA("question-1-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 2 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 3 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 4 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 5 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 5 of 8");
   cy.getByQA("question-5-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 6 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 6 of 8");
   cy.getByQA("question-6-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 7 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 7 of 8");
 };
 
 export const navigateToSection8 = () => {
@@ -149,27 +149,27 @@ export const navigateToSection8 = () => {
   cy.getByQA("question-1-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 2 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 3 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 4 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 5 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 5 of 8");
   cy.getByQA("question-5-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 6 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 6 of 8");
   cy.getByQA("question-6-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
-  cy.get("h3").contains("Section 7 of 8", { timeout: 13000 });
+  cy.get("h3").contains("Section 7 of 8");
   cy.submitButton("Continue").click();
 };
 

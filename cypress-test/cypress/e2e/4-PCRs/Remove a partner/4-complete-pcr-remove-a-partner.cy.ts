@@ -57,6 +57,6 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
   });
 
   it("Should show that the first section has completed", () => {
-    cy.get("strong").contains("Complete", { timeout: 10000 });
+    cy.get("strong").contains("Complete");
   });
 });

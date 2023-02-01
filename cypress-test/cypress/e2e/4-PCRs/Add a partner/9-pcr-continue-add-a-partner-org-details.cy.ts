@@ -1,5 +1,12 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToPartnerOrgPage } from "../steps";
+import {
+  shouldShowProjectTitle,
+  deletePcr,
+  saveContinueSaveSummary,
+  navigateToPartnerOrgPage,
+  addPartnerSize,
+  addPartnerSizeOptions,
+} from "../steps";
 
 describe("PCR > Add partner > Continuing editing PCR organisation details section", () => {
   before(() => {
@@ -13,7 +20,7 @@ describe("PCR > Add partner > Continuing editing PCR organisation details sectio
   it("Should navigate to the Partner organisation page", navigateToPartnerOrgPage);
 
   it("Should display the subheading 'Organisation details'", () => {
-    cy.get("h2").contains("Organisation details", { timeout: 10000 });
+    cy.get("h2").contains("Organisation details");
   });
 
   it("Should have a back option", () => {
@@ -26,21 +33,13 @@ describe("PCR > Add partner > Continuing editing PCR organisation details sectio
     cy.get("h1").contains("Add a partner");
   });
 
-  it("Should have a 'Size' subheading and guidance information", () => {
-    cy.get("h2").contains("Size");
-    cy.get("p").contains("This definition must include");
-    cy.get("p").contains("Use the European Commission (EC)");
-  });
+  it("Should have a 'Size' subheading and guidance information", addPartnerSize);
 
-  it("Should have 'Small', 'Medium' and 'Large' radio button options and click in turn", () => {
-    cy.getByLabel("Small").click();
-    cy.getByLabel("Medium").click();
-    cy.getByLabel("Large").click();
-  });
+  it("Should have 'Small', 'Medium' and 'Large' radio button options and click in turn", addPartnerSizeOptions);
 
   it("Should have a 'Number of full time employees' subheading and enter 1000 in the text box", () => {
     cy.get("h2").contains("Number of full time employees");
-    cy.get(`input[id="numberOfEmployees"]`).type("1000");
+    cy.get("#numberOfEmployees").type("1000");
   });
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);

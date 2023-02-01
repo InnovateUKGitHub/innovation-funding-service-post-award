@@ -25,7 +25,7 @@ let accDevUrl = `https://www-acc-dev${(process.env.ACC ?? "").trim()}.apps.ocp4.
  * By default Cypress will run all tests in the e2e folder.
  *
  * Setting env var SPEC_PATTERN with the glob value for matching folder and test file will filter those tests.
- * 
+ *
  * Do not include .cy.ts at end of file name
  * @example
  * SPEC_PATTERN="5-forecasts/1-forecast-front-page-as-fc"
@@ -35,10 +35,14 @@ const overridePattern: string = undefined; // this value should always be commit
 let specPattern = `cypress/e2e/${(process.env.SPEC_PATTERN ?? overridePattern ?? "**/*").trim()}.cy.ts`;
 console.info(`***\ncypress tests configured with specPattern "${specPattern}"\n**\n`);
 
+/**
+ * Set global timeout from environment variable
+ */
+const defaultCommandTimeout: number = parseInt(process.env.TIMEOUT) ?? 4000;
 
 /**
  * For controlling if we want to generate screenshots and videos.
- * 
+ *
  * Default is not
  */
 const isTrue = (s: string = "") => s.toLowerCase() === "true";
@@ -51,7 +55,7 @@ export default defineConfig({
     reportDir: "cypress/results",
     overwrite: false,
     html: false,
-    json: true
+    json: true,
   },
   screenshotOnRunFailure: isTrue(process.env.SCREENSHOTS) || screenshots,
   video: isTrue(process.env.VIDEOS) || videos,
@@ -60,6 +64,7 @@ export default defineConfig({
     // setupNodeEvents(on, config) {
     //   // implement node event listeners here
     // },
+    defaultCommandTimeout,
     specPattern: getSpecPatternArray(specPattern),
     env: {
       BASIC_AUTH: process.env.BASIC_AUTH,
@@ -68,7 +73,6 @@ export default defineConfig({
   },
 });
 
-
-function getSpecPatternArray (s: string) {
+function getSpecPatternArray(s: string) {
   return s.split(/\s?[ ;,]\s?/).map(x => x.trim());
 }

@@ -1,5 +1,11 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToFinancialsPage } from "../steps";
+import {
+  shouldShowProjectTitle,
+  deletePcr,
+  saveContinueSaveSummary,
+  navigateToFinancialsPage,
+  addPartnerTurnover,
+} from "../steps";
 
 describe("PCR > Add partner > Continuing editing PCR financial details section", () => {
   before(() => {
@@ -13,7 +19,7 @@ describe("PCR > Add partner > Continuing editing PCR financial details section",
   it("Should navigate to the Partner financials page", navigateToFinancialsPage);
 
   it("Should show the 'Financial details' heading and 'End of financial year' subheading", () => {
-    cy.get("h2").contains("Financial details", { timeout: 10000 });
+    cy.get("h2").contains("Financial details");
     cy.get("h2").contains("End of financial year");
   });
 
@@ -31,11 +37,7 @@ describe("PCR > Add partner > Continuing editing PCR financial details section",
     cy.getByQA("field-financialYearEndDate").contains("This is the end of the last financial year");
   });
 
-  it("Should enter a month and year of last financial year and enter a turnover amount", () => {
-    cy.get(`input[id="financialYearEndDate_month"]`).type("03");
-    cy.get(`input[id="financialYearEndDate_year"]`).type("2022");
-    cy.get(`input[id="financialYearEndTurnover"]`).type("1000000");
-  });
+  it("Should enter a month and year of last financial year and enter a turnover amount", addPartnerTurnover);
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
 });

@@ -25,7 +25,7 @@ describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation",
   it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should let you click 'Add a partner' and continue to the next screen", () => {
-    cy.get("a").contains("Add a partner", { timeout: 10000 }).click();
+    cy.get("a").contains("Add a partner").click();
   });
 
   it("Should complete this page as a business and continue to the next page", completeNewPartnerInfoNonAid);

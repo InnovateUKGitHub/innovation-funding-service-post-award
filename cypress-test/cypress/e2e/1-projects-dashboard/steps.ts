@@ -12,7 +12,7 @@ export const monitoringReportCardShouldNotExist = () => {
 
 export const shouldNavigateToProjectDashboard = () => {
   cy.get("h2").contains("Projects").click();
-  cy.get("h1", { timeout: 10000 }).contains("Dashboard");
+  cy.get("h1").contains("Dashboard");
 };
 
 export const shouldFindMatchingProjectCard = (projectCard: string) => {
@@ -57,7 +57,7 @@ export const shouldFilterProjectsUsingSearchFilter = () => {
 export const shouldNavigateToProjectOverview = () => {
   cy.get(`${projectCardCss} a`).contains(cardId).wait(500).click({ force: true });
 
-  cy.get("h1", { timeout: 10000 }).contains("Project overview");
+  cy.get("h1").contains("Project overview");
   cy.getByQA("page-title").should("contain.text", cardId);
 };
 

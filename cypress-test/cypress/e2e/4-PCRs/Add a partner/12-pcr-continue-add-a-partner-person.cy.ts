@@ -1,5 +1,11 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToPartnerPerson } from "../steps";
+import {
+  shouldShowProjectTitle,
+  deletePcr,
+  saveContinueSaveSummary,
+  navigateToPartnerPerson,
+  fieldNameInputs,
+} from "../steps";
 
 describe("PCR > Add partner > Continuing editing PCR person details section", () => {
   before(() => {
@@ -13,7 +19,7 @@ describe("PCR > Add partner > Continuing editing PCR person details section", ()
   it("Should navigate to the Add a person page", navigateToPartnerPerson);
 
   it("Should have 'Add person to organisation' heading with guidance text", () => {
-    cy.get("h2").contains("Add person to organisation", { timeout: 10000 });
+    cy.get("h2").contains("Add person to organisation");
     cy.get("p").contains("This information will be used to create an account");
   });
 
@@ -31,17 +37,10 @@ describe("PCR > Add partner > Continuing editing PCR person details section", ()
     cy.get("h2").contains("Finance contact");
   });
 
-  it("Should have field names for First, Last name, Phone number and Email and complete the input boxes", () => {
-    cy.getByQA("field-contact1Forename").contains("First name");
-    cy.getByQA("field-contact1Surname").contains("Last name");
-    cy.getByQA("field-contact1Phone").contains("Phone number");
-    cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
-    cy.getByQA("field-contact1Email").contains("Email");
-    cy.get(`input[id="contact1Forename"]`).type("Joseph");
-    cy.get(`input[id="contact1Surname"]`).type("Dredd");
-    cy.get(`input[id="contact1Phone"]`).type("01234567890");
-    cy.get(`input[id="contact1Email"]`).type("Joseph.dredd@mc1.comtest");
-  });
+  it(
+    "Should have field names for First, Last name, Phone number and Email and complete the input boxes",
+    fieldNameInputs,
+  );
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
 });

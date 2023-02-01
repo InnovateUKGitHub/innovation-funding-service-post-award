@@ -51,7 +51,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   });
 
   it("Should re-open the claim", () => {
-    cy.get("a.govuk-link").contains("Edit", { timeout: 10000 }).click();
+    cy.get("a.govuk-link").contains("Edit").click();
   });
 
   it("Should navigate to documents", () => {
@@ -59,7 +59,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   });
 
   it("Should continue through to forecast page again", () => {
-    cy.get("a#continue-claim.govuk-button", { timeout: 10000 }).click();
+    cy.get("a#continue-claim.govuk-button").click();
   });
 
   it("Should have saved the information from previous edit", savedFromPrev);

@@ -68,7 +68,7 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   });
 
   it("Should return to the 'Reallocate costs screen", () => {
-    cy.get("h1").contains("Reallocate project costs", { timeout: 10000 });
+    cy.get("h1").contains("Reallocate project costs");
   });
 
   it("Has an input box for grant moving over financial year", () => {

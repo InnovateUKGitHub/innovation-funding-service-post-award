@@ -1,3 +1,4 @@
+import { testEach } from "support/methods";
 import { visitApp } from "../../common/visit";
 import {
   additionalInformationHeading,
@@ -9,8 +10,8 @@ import {
   reflectCostAdded,
   returnToCostCatPage,
   shouldShowAllAccordion,
-  shouldShowCostCatTable,
   shouldShowProjectTitle,
+  shouldHaveCostCategoryTable,
   standardComments,
 } from "./steps";
 
@@ -23,7 +24,13 @@ describe("claims > Editing a claim by accessing cost categories", () => {
     cy.backLink("Back to claims");
   });
 
-  it("Should have the cost category table", shouldShowCostCatTable);
+  testEach([
+    "Category",
+    "Total eligible costs",
+    "Eligible costs claimed to date",
+    "Costs claimed this period",
+    "Remaining eligible costs",
+  ])('should have a cost category table with "$0" category', shouldHaveCostCategoryTable);
 
   it("Should let you click on the cost category 'Labour'", () => {
     cy.get("td.govuk-table__cell").contains("Labour").click();
