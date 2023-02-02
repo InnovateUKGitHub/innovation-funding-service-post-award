@@ -11,6 +11,8 @@ import {
   ProjectDetailProjectContactLinkTableFragment$key,
 } from "./__generated__/ProjectDetailProjectContactLinkTableFragment.graphql";
 
+const kebab = (label:string) => label.replace(" ", "-").toLowerCase();
+
 const PartnersTable =
   TypedTable<
     NonNullable<
@@ -92,7 +94,7 @@ const ProjectDetailProjectContactLinkTable = ({
   return (
     <Section title={sectionName}>
       {beforeContent}
-      <PartnersTable.Table qa="partner-information" data={pcl}>
+      <PartnersTable.Table qa={`partner-information-${kebab(sectionName)}`} data={pcl}>
         <PartnersTable.String
           header={x => x.projectContactLabels.contactName}
           value={x =>
