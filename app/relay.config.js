@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   src: "./src/",
-  schema: path.join("src", "gql", "fullSchema.gql"),
+  schema: path.join("src", "gql", "schema", "fullSchema.gql"),
   language: "typescript",
   customScalars: {
     String: "string",
