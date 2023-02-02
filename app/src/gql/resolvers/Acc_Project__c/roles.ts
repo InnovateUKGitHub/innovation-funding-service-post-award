@@ -33,7 +33,7 @@ const rolesResolver: IFieldResolverOptions = {
     };
 
     for (const { node: projectContactLink } of project.Project_Contact_Links__r.edges) {
-      if (ctx.email === projectContactLink.Acc_ContactId__r.Email__c.value) {
+      if (ctx.email === projectContactLink?.Acc_ContactId__r?.Email__c?.value) {
         if (projectContactLink.Acc_Role__c.value === "Monitoring officer") permissions.isMo = true;
         if (projectContactLink.Acc_Role__c.value === "Finance contact") permissions.isFc = true;
         if (projectContactLink.Acc_Role__c.value === "Project Manager") permissions.isPm = true;

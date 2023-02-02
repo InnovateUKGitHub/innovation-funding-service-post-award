@@ -26,9 +26,9 @@ interface ProjectData {
           };
           Acc_ContactId__r: {
             Email__c: {
-              value: string;
-            };
-          };
+              value: string | null;
+            } | null;
+          } | null;
           Acc_AccountId__c: {
             value: string;
           };
