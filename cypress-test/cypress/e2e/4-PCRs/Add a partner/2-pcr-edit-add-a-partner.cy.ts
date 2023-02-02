@@ -9,10 +9,12 @@ import {
   saveContinueSaveSummary,
   projectRoleRadios,
 } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Edit PCR", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Add a partner");
   });
 
   after(() => {

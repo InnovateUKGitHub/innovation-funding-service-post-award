@@ -212,15 +212,15 @@ export const searchCompanyHouseGuidance = () => {
 };
 
 export const typeASearchResults = () => {
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
+  cy.get("#searchCompaniesHouse").type("A").wait(500);
   cy.get("h2").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
 };
 
 export const companyHouseAutofillAssert = () => {
-  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
-  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
-  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
+  cy.get(`"#organisationName", [value="A LIMITED"]`);
+  cy.get(`"#registrationNumber", [value="11790215"]`);
+  cy.get(`"#registeredAddress", [value="Springfield Road"]`);
 };
 
 export const projectRoleRadios = () => {
@@ -298,7 +298,7 @@ export const removePartnerGiveInfoTodo = () => {
 
 export const clickPartnerAddPeriod = () => {
   cy.getByLabel("EUI Small Ent Health").click();
-  cy.get(`input[id="removalPeriod"]`).clear().type("3");
+  cy.get("#removalPeriod").clear().type("3");
   cy.submitButton("Save and continue").click();
 };
 
@@ -329,7 +329,7 @@ export const navigateToPartnerOrgPage = () => {
   cy.get("h2").contains("State aid eligibility");
   cy.submitButton("Save and continue").click();
   cy.get("h2").contains("Search companies house");
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
+  cy.get("#searchCompaniesHouse").type("A").wait(500);
   cy.get("h2").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
@@ -539,18 +539,20 @@ export const fieldNameInputs = () => {
 export const addPartnerCostCat = () => {
   cy.tableHeader("Category");
   cy.tableHeader("Cost (£)");
-  cy.tableCell("Labour");
-  cy.tableCell("Overheads");
-  cy.tableCell("Materials");
-  cy.tableCell("Capital usage");
-  cy.tableCell("Subcontracting");
-  cy.tableCell("Travel and subsistence");
-  cy.tableCell("Other costs");
-  cy.tableCell("Other costs 2");
-  cy.tableCell("Other costs 3");
-  cy.tableCell("Other costs 4");
-  cy.tableCell("Other costs 5");
-  cy.tableCell("Total costs (£)");
+  [
+    "Labour",
+    "Overheads",
+    "Materials",
+    "Capital usage",
+    "Subcontracting",
+    "Travel and subsistence",
+    "Other costs",
+    "Other costs 2",
+    "Other costs 3",
+    "Other costs 4",
+    "Other costs 5",
+    "Total costs (£)",
+  ].forEach(cat => cy.tableCell(cat));
 };
 
 export const addPartnerLabourGuidance = () => {
@@ -590,10 +592,10 @@ export const otherFundingTable = () => {
 
 export const addSourceOfFunding = () => {
   cy.getByQA("add-fund").contains("Add another source of funding").click();
-  cy.get(`input[id="item_0_description"]`).type("Public");
-  cy.get(`input[id="item_0_date_month"]`).type("12");
-  cy.get(`input[id="item_0_date_year"]`).type("2022");
-  cy.get(`input[id="item_0_value"]`).type("50000");
+  cy.get("#item_0_description").type("Public");
+  cy.get("#item_0_date_month").type("12");
+  cy.get("#item_0_date_year").type("2022");
+  cy.get("#item_0_value").type("50000");
   cy.wait(500);
 };
 
@@ -610,7 +612,7 @@ export const uploadPartnerInfo = () => {
 
 export const fundingLevelPercentage = () => {
   cy.get("h2").contains("Funding level");
-  cy.get(`input[id="awardRate"]`).type("5");
+  cy.get("#awardRate").type("5");
   cy.submitButton("Save and continue").click();
 };
 

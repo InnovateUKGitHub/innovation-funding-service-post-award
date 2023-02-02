@@ -1,15 +1,11 @@
 import { visitApp } from "../../../common/visit";
-import {
-  shouldShowProjectTitle,
-  deletePcr,
-  saveContinueSaveSummary,
-  navigateToFinancialsPage,
-  addPartnerTurnover,
-} from "../steps";
+import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToFinancialsPage } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR financial details section", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Add a partner");
   });
 
   after(() => {
@@ -37,7 +33,11 @@ describe("PCR > Add partner > Continuing editing PCR financial details section",
     cy.getByQA("field-financialYearEndDate").contains("This is the end of the last financial year");
   });
 
-  it("Should enter a month and year of last financial year and enter a turnover amount", addPartnerTurnover);
+  it("Should enter a month and year of last financial year and enter a turnover amount", () => {
+    cy.getByLabel("Month").type("03");
+    cy.getByLabel("Year").type("2022");
+    cy.get("#financialYearEndTurnover").type("1000000");
+  });
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
 });

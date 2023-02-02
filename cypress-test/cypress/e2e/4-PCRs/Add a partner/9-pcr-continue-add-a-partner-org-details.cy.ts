@@ -7,10 +7,12 @@ import {
   addPartnerSize,
   addPartnerSizeOptions,
 } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR organisation details section", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Add a partner");
   });
 
   after(() => {
@@ -39,7 +41,7 @@ describe("PCR > Add partner > Continuing editing PCR organisation details sectio
 
   it("Should have a 'Number of full time employees' subheading and enter 1000 in the text box", () => {
     cy.get("h2").contains("Number of full time employees");
-    cy.get("#numberOfEmployees").type("1000");
+    cy.get(`input[id="numberOfEmployees"]`).type("1000");
   });
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);

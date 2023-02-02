@@ -7,10 +7,12 @@ import {
   addPartnerSummaryTable,
   fundingLevelPercentage,
 } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Add a partner");
   });
 
   after(() => {

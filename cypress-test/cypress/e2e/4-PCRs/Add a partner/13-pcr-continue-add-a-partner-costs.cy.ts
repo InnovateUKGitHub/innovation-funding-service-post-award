@@ -6,12 +6,13 @@ import {
   pcrNewCostCatLineItem,
   addPartnerCostCat,
   addPartnerLabourGuidance,
-  addPartnerLabourCost,
 } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Add a partner");
   });
 
   after(() => {
@@ -42,14 +43,20 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should display the Labour heading and 'Labour guidance' section", addPartnerLabourGuidance);
 
-  it("Should contain a table for adding Labour cost items", addPartnerLabourCost);
+  it("Should contain a table for adding Labour cost items", () => {
+    cy.wait(5000);
+    cy.tableHeader("Description");
+    cy.tableHeader("Cost (£)");
+    cy.tableHeader("Total labour");
+  });
 
   it("Should enter a new cost category line item by navigating to a new page", pcrNewCostCatLineItem);
 
-  it(
-    "Should now display the cost category table which contains the £50,000.00 entered on the previous page",
-    addPartnerLabourGuidance,
-  );
+  it("Should now display the cost category table which contains the £50,000.00 entered on the previous page", () => {
+    cy.get("span").contains("Labour guidance");
+    cy.tableCell("Law keeper");
+    cy.tableCell("£50,000.00");
+  });
 
   it("Should Save and return to project costs", () => {
     cy.submitButton("Save and return to project costs").click();

@@ -7,10 +7,12 @@ import {
   clickPartnerAddPeriod,
   removePartnerTable,
 } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Remove partner > Continuing editing the Remove a partner section once a partner is selected", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Remove a partner");
   });
 
   after(() => {

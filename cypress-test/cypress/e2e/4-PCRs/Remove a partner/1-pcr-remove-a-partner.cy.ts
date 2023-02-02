@@ -11,10 +11,12 @@ import {
   removePartnerGiveInfoTodo,
   explainChangesReasoning,
 } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Remove partner > Creating PCR", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Remove a partner");
   });
 
   after(() => {

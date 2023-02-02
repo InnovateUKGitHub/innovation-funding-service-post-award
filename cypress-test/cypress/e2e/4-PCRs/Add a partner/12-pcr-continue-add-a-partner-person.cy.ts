@@ -1,15 +1,11 @@
 import { visitApp } from "../../../common/visit";
-import {
-  shouldShowProjectTitle,
-  deletePcr,
-  saveContinueSaveSummary,
-  navigateToPartnerPerson,
-  fieldNameInputs,
-} from "../steps";
+import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToPartnerPerson } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR person details section", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Add a partner");
   });
 
   after(() => {
@@ -37,10 +33,13 @@ describe("PCR > Add partner > Continuing editing PCR person details section", ()
     cy.get("h2").contains("Finance contact");
   });
 
-  it(
-    "Should have field names for First, Last name, Phone number and Email and complete the input boxes",
-    fieldNameInputs,
-  );
+  it("Should have field names for First, Last name, Phone number and Email and complete the input boxes", () => {
+    cy.getByLabel("First name").type("Joseph");
+    cy.getByLabel("Last name").type("Dredd");
+    cy.getByLabel("Phone number").type("01234567890");
+    cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
+    cy.getByLabel("Email").type("Joseph.dredd@mc1.comtest");
+  });
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
 });

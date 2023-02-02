@@ -10,15 +10,16 @@ import {
   shouldShowProjectTitle,
   showPartners,
 } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Reallocate project costs");
   });
 
-  after(() => {
-    deletePcr();
-  });
+  after(deletePcr);
 
   it("Should select 'Reallocate project costs' checkbox", () => {
     cy.clickCheckBox("Reallocate project costs");

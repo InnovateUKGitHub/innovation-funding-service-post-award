@@ -63,6 +63,7 @@ export const clearUpCostCat = () => {
   cy.get("td.govuk-table__cell").contains("Labour").click();
   cy.getByQA("button_upload-qa").click();
   cy.getByQA("button_delete-qa").contains("Remove").click();
+  cy.wait(2000);
   cy.get("a.govuk-back-link").click();
   cy.get("a.govuk-link").contains("Remove").first().click();
   cy.get("textarea#comments").clear();

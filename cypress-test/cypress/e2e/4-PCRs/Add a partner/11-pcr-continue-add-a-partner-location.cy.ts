@@ -1,15 +1,11 @@
 import { visitApp } from "../../../common/visit";
-import {
-  shouldShowProjectTitle,
-  deletePcr,
-  saveContinueSaveSummary,
-  navigateToPartnerLocation,
-  addPartnerLocation,
-} from "../steps";
+import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToPartnerLocation } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR location details section", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/create" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Add a partner");
   });
 
   after(() => {
@@ -34,15 +30,16 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
   });
 
   it("Should show radio buttons for 'Inside the UK' and 'Outside of the UK' and click in turn", () => {
-    cy.get("#projectLocation_10").click();
-    cy.get("#projectLocation_20").click();
-    cy.get("#projectLocation_10").click();
+    cy.getByLabel("Inside the United Kingdom").click();
+    cy.getByLabel("Outside the United Kingdom").click();
+    cy.getByLabel("Inside the United Kingdom").click();
   });
 
-  it(
-    "Should show the 'Name of town or city' heading and 'Postcode, Postal code or zip code' heading and guidance message",
-    addPartnerLocation,
-  );
+  it("Should show the 'Name of town or city' heading and 'Postcode, Postal code or zip code' heading and guidance message", () => {
+    cy.get("h2").contains("Name of town or city");
+    cy.get("h2").contains("Postcode, postal code or zip code");
+    cy.getByQA("field-projectPostcode").contains("If this is not available,");
+  });
 
   it("Should complete the text boxes for name of town and postcode", () => {
     cy.get("#projectCity").type("Swindon");
