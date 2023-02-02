@@ -4,6 +4,7 @@ import { stitchSchemas } from "@graphql-tools/stitch";
 import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { introspectSchema } from "@graphql-tools/wrap";
 import { Logger } from "@shared/developmentLogger";
+import { isLocalDevelopment } from "@shared/isEnv";
 import { existsSync, writeFileSync } from "fs";
 import { GraphQLSchema, printSchema } from "graphql";
 import { DocumentNode } from "graphql/language";
@@ -22,8 +23,8 @@ export interface ExecutableSchema {
 
 const logger = new Logger("GraphQL");
 
-const sfSchemaFilePath = path.join(process.env.GQL_SCHEMA_DIR ?? "", "salesforceSchema.gql");
-const fullSchemaFilePath = path.join(process.env.GQL_SCHEMA_DIR ?? "", "fullSchema.gql");
+const sfSchemaFilePath = path.join("src", "gql", "schema", "sfSchema.gql");
+const fullSchemaFilePath = path.join("src", "gql", "schema", "fullSchema.gql");
 
 /**
  * Fetch the GraphQL server used by clients of IFSPA.
@@ -55,8 +56,12 @@ const getGraphQLSchema = async ({ api }: { api: Api }) => {
       return data;
     });
 
-    writeFileSync(sfSchemaFilePath, printSchema(salesforceSchema), { encoding: "utf-8" });
-    logger.warn("Salesforce Subschema", `Completed! Written the schema to "${sfSchemaFilePath}" for the future.`);
+    logger.warn("Salesforce Subschema", "Completed!");
+
+    if (isLocalDevelopment) {
+      writeFileSync(sfSchemaFilePath, printSchema(salesforceSchema), { encoding: "utf-8" });
+      logger.warn("Salesforce Subschema", `Written the schema to "${sfSchemaFilePath}" for the future.`);
+    }
   }
 
   const salesforceSubschema: ExecutableSchema = {
@@ -89,8 +94,10 @@ const getGraphQLSchema = async ({ api }: { api: Api }) => {
     },
   });
 
-  writeFileSync(fullSchemaFilePath, printSchema(schema), { encoding: "utf-8" });
-  logger.warn("Schema", `Written the full schema to "${fullSchemaFilePath}".`);
+  if (isLocalDevelopment) {
+    writeFileSync(fullSchemaFilePath, printSchema(schema), { encoding: "utf-8" });
+    logger.warn("Schema", `Written the full schema to "${fullSchemaFilePath}".`);
+  }
 
   return schema;
 };

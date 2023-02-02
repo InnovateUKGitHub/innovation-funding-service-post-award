@@ -1,9 +1,8 @@
-import { GraphQLContext } from "@gql/GraphQLContext";
 import type { IFieldResolverOptions } from "@graphql-tools/utils";
 
 const projectIsActiveResolver: IFieldResolverOptions = {
   selectionSet: `{ Acc_ProjectStatus__c { value } }`,
-  async resolve(input, args, ctx: GraphQLContext, info) {
+  resolve(input) {
     switch (input.Acc_ProjectStatus__c.value) {
       case "Offer Letter Sent":
       case "Live":
