@@ -43,7 +43,10 @@ class Component extends ContainerBase<MonitoringReportCreateParams, Data, Callba
       <ACC.Page
         backLink={
           <ACC.BackLink
-            route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}
+            route={this.props.routes.monitoringReportDashboard.getLink({
+              projectId: this.props.projectId,
+              periodId: undefined,
+            })}
           >
             <ACC.Content value={x => x.pages.monitoringReportsCreate.backLink} />
           </ACC.BackLink>
@@ -64,11 +67,14 @@ class Component extends ContainerBase<MonitoringReportCreateParams, Data, Callba
   private getLink(progress: boolean) {
     return (id: string) => {
       if (!progress) {
-        return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
+        return this.props.routes.monitoringReportDashboard.getLink({
+          projectId: this.props.projectId,
+          periodId: undefined,
+        });
       }
       return this.props.routes.monitoringReportWorkflow.getLink({
         projectId: this.props.projectId,
-        id,
+        id: id as MonitoringReportId,
         mode: "prepare",
         step: 1,
       });
@@ -100,7 +106,7 @@ export const MonitoringReportCreateRoute = defineRoute({
   routeName: "monitoringReportCreate",
   routePath: "/projects/:projectId/monitoring-reports/create",
   container: Container,
-  getParams: r => ({ projectId: r.params.projectId }),
+  getParams: r => ({ projectId: r.params.projectId as ProjectId }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsCreate.title),
 });

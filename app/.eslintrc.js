@@ -31,6 +31,7 @@ module.exports = {
         "jsdoc/require-returns-type": "off",
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
+        "@typescript-eslint/no-unused-vars": "error",
       },
     },
     {
@@ -54,6 +55,7 @@ module.exports = {
         "jsdoc/require-param-type": "off",
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
+        "@typescript-eslint/no-explicit-any": "error",
       },
     },
     {

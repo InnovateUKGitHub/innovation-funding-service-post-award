@@ -14,7 +14,7 @@ interface Callbacks {
 
 export interface MonitoringReportDeleteParams {
   projectId: ProjectId;
-  id: string;
+  id: MonitoringReportId;
 }
 
 interface Data {
@@ -43,7 +43,10 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
         pageTitle={<ACC.Projects.Title {...project} />}
         backLink={
           <ACC.BackLink
-            route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}
+            route={this.props.routes.monitoringReportDashboard.getLink({
+              projectId: this.props.projectId,
+              periodId: undefined,
+            })}
           >
             <ACC.Content value={x => x.pages.monitoringReportsDelete.backLink} />
           </ACC.BackLink>
@@ -88,7 +91,10 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams & BaseP
           props.id,
           dto,
           getContent(x => x.monitoringReportsMessages.onDeleteMonitoringReportMessage),
-          () => navigate(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }).path),
+          () =>
+            navigate(
+              props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId, periodId: undefined }).path,
+            ),
         )
       }
       {...props}
@@ -101,8 +107,8 @@ export const MonitoringReportDeleteRoute = defineRoute({
   routePath: "/projects/:projectId/monitoring-reports/:id/delete",
   container: DeleteVerificationContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    id: route.params.id,
+    projectId: route.params.projectId as ProjectId,
+    id: route.params.id as MonitoringReportId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsDelete.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),

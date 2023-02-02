@@ -69,7 +69,7 @@ export const ProjectOverviewRoute = defineRoute({
   allowRouteInActiveAccess: true,
   routeName: "projectOverview",
   routePath: "/projects/:projectId/overview",
-  getParams: r => ({ projectId: r.params.projectId }),
+  getParams: r => ({ projectId: r.params.projectId as ProjectId }),
   container: ProjectOverviewPage,
   accessControl: (auth, params) =>
     auth

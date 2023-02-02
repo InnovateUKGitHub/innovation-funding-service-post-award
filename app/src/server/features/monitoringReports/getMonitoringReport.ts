@@ -34,7 +34,7 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
     const questions = questionArray.map(q => this.populateAnswer(q, results));
 
     return {
-      headerId: header.Id,
+      headerId: header.Id as MonitoringReportId,
       status: mapMonitoringReportStatus(header.Acc_MonitoringReportStatus__c),
       statusName: header.MonitoringReportStatusName,
       projectId: header.Acc_Project__c as ProjectId,

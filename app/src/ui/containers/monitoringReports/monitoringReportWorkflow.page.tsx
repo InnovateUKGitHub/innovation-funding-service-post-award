@@ -9,11 +9,13 @@ import { ILinkInfo, ProjectRole } from "@framework/types";
 import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
 import { scrollToTheTopSmoothly } from "@framework/util";
 
+type Mode = "view" | "prepare";
+
 export interface MonitoringReportWorkflowParams {
   projectId: ProjectId;
-  id: string;
+  id: MonitoringReportId;
   step: number | undefined;
-  mode: "view" | "prepare";
+  mode: Mode;
 }
 
 interface Data {
@@ -122,7 +124,10 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
       });
     }
     if (workflow.isOnSummary()) {
-      return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
+      return this.props.routes.monitoringReportDashboard.getLink({
+        projectId: this.props.projectId,
+        periodId: undefined,
+      });
     }
     return this.props.routes.monitoringReportWorkflow.getLink({
       projectId: this.props.projectId,
@@ -135,7 +140,12 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
   private getBackLink(workflow: MonitoringReportWorkflowDef) {
     if (this.props.mode === "view") {
       return (
-        <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>
+        <ACC.BackLink
+          route={this.props.routes.monitoringReportDashboard.getLink({
+            projectId: this.props.projectId,
+            periodId: undefined,
+          })}
+        >
           <ACC.Content value={x => x.pages.monitoringReportsWorkflow.backLink} />
         </ACC.BackLink>
       );
@@ -198,10 +208,10 @@ export const MonitoringReportWorkflowRoute = defineRoute({
   routePathWithQuery: "/projects/:projectId/monitoring-reports/:id/:mode?:step",
   container: Container,
   getParams: r => ({
-    projectId: r.params.projectId,
-    id: r.params.id,
-    mode: r.params.mode,
-    step: parseInt(r.params.step, 10),
+    projectId: r.params.projectId as ProjectId,
+    id: r.params.id as MonitoringReportId,
+    mode: r.params.mode as Mode,
+    step: r.params.step ? parseInt(r.params.step, 10) : undefined,
   }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({ params, content }) =>

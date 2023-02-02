@@ -211,8 +211,8 @@ export const LoansRequestRoute = defineRoute<LoansRequestParams>({
   routePath: "/loans/:projectId/:loanId",
   container: LoansRequestContainer,
   getParams: r => ({
-    projectId: r.params.projectId,
-    loanId: r.params.loanId,
+    projectId: r.params.projectId as ProjectId,
+    loanId: r.params.loanId as LoanId,
   }),
   getTitle: x => x.content.getTitleCopy(x => x.pages.loansRequest.title),
 });

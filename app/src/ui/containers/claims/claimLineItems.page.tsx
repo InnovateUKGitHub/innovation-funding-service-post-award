@@ -343,10 +343,10 @@ const ClaimLineItemsContainer = (props: ClaimLineItemsParams & BaseProps) => {
 };
 
 const getParams = (route: RouteState): ClaimLineItemsParams => ({
-  projectId: route.params.projectId ?? "",
-  partnerId: route.params.partnerId ?? "",
-  costCategoryId: route.params.costCategoryId ?? "",
-  periodId: parseInt(route.params.periodId ?? "", 10),
+  projectId: route.params.projectId as ProjectId,
+  partnerId: route.params.partnerId as PartnerId,
+  costCategoryId: route.params.costCategoryId,
+  periodId: parseInt(route.params.periodId, 10),
 });
 
 export const ClaimLineItemsRoute = defineRoute({

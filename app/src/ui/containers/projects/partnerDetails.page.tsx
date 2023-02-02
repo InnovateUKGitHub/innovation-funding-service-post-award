@@ -99,7 +99,7 @@ export const PartnerDetailsRoute = defineRoute<Params>({
   routeName: "partnerDetails",
   routePath: "/projects/:projectId/details/:partnerId",
   container: PartnerDetailsContainer,
-  getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
+  getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.partnerDetails.title),
   accessControl: (auth, { projectId }) =>
     auth

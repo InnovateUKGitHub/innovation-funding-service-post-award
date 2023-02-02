@@ -267,7 +267,7 @@ export const ProjectChangeRequestPrepareRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare",
   container: PCRPrepareContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
   }),
   getTitle: () => ({

@@ -9,7 +9,7 @@ import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/do
 export abstract class NonAuthorisedCommandBase<T> {
   protected abstract run(context: IContext): Promise<T>;
 
-  protected logMessage(): any {
+  protected logMessage(): unknown {
     return [this.constructor.name, this];
   }
 }
@@ -25,7 +25,7 @@ export abstract class CommandBase<T> {
     return;
   }
 
-  protected logMessage(): any {
+  protected logMessage(): unknown {
     return [this.constructor.name, this];
   }
 }
@@ -77,7 +77,7 @@ export abstract class CommandDocumentBase<T> extends CommandBase<T> {
 export abstract class SyncCommandBase<T> {
   protected abstract run(context: IContext): T;
 
-  protected logMessage(): any {
+  protected logMessage(): unknown {
     return [this.constructor.name, this];
   }
 }

@@ -29,8 +29,6 @@ import {
   RootState,
 } from "../reducers";
 
-// TODO: replace the typecasting as string for redux actions with a safer type annotation.
-
 type InferDataStore<T> = T extends IDataStore<infer U> ? U : never;
 export type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;
 export type InferEditorStoreValidator<T> = T extends IEditorStore<infer U, infer V> ? V : never;

@@ -6,7 +6,7 @@ import { StaticRouter } from "react-router-dom/server";
 import { NextFunction, Request, Response } from "express";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { matchRoute, routeConfig } from "@ui/routing";
-import { ErrorCode, IAppError, IClientUser, IContext, Authorisation } from "@framework/types";
+import { ErrorCode, IClientUser, IContext, Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import * as Actions from "@ui/redux/actions";
 import { App } from "@ui/containers/app";
@@ -64,6 +64,7 @@ const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment 
  */
 const serverRender =
   ({ schema }: { schema: GraphQLSchema }) =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async ({ req, res, next, err }: { req: Request; res: Response; next: NextFunction; err?: any }): Promise<void> => {
     const { nonce } = res.locals;
     const middleware = setupServerMiddleware();
@@ -116,6 +117,7 @@ const serverRender =
           // Mark the error message that we obtained into the Redux store.
           if (err?.code === ErrorCode.VALIDATION_ERROR) {
             // We've got some kind of validation error, so let the user know that happened.
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             store.dispatch(Actions.updateEditorAction(err.key, err.store, err.dto, err.error.results as Results<any>));
           } else {
             // Some other validation error occurred, so we need to add it into store as actual error.
@@ -147,6 +149,7 @@ const serverRender =
         const { params } = getParamsFromUrl(matched.routePath, req.url);
 
         // Check if they are allowed to access this page.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
           return next(new ForbiddenError());
         }

@@ -86,6 +86,6 @@ export const ProjectDocumentsRoute = defineRoute({
   routeName: "projectDocuments",
   routePath: "/projects/:projectId/documents",
   container: ProjectDocumentsContainer,
-  getParams: route => ({ projectId: route.params.projectId }),
+  getParams: route => ({ projectId: route.params.projectId as ProjectId }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectDocuments.title),
 });

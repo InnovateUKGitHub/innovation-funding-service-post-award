@@ -180,8 +180,8 @@ export const UpdateForecastRoute = defineRoute({
   routePath: "/projects/:projectId/claims/:partnerId/updateForecast/:periodId",
   container: UpdateForecastContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
+    projectId: route.params.projectId as ProjectId,
+    partnerId: route.params.partnerId as PartnerId,
     periodId: parseInt(route.params.periodId, 10),
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.forecastsUpdate.title),

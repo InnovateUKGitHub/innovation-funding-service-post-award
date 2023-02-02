@@ -21,6 +21,8 @@ export interface ISalesforceProjectContact {
   } | null;
 }
 
+type UserResult = { ContactId: string };
+
 export interface IProjectContactsRepository {
   getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]>;
   getAllForUser(login: string): Promise<ISalesforceProjectContact[]>;
@@ -58,14 +60,14 @@ export class ProjectContactsRepository
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
     const conn = await this.getSalesforceConnection();
 
-    const userResult = (await conn
-      .sobject("User")
+    const userResult: Partial<UserResult> | undefined | Error = (await conn
+      .sobject<UserResult>("User")
       .select(["ContactId"])
       .where({ Username: email })
       .execute()
-      .then(x => x.pop() as { ContactId: string })
-      .catch(e => this.constructError(e))) as any;
+      .then(x => x.pop())
+      .catch(e => this.constructError(e))) as UserResult; // type hack here
 
-    return this.where(`Acc_ContactId__c = '${sss(userResult.ContactId)}'`);
+    return this.where(`Acc_ContactId__c = '${sss(userResult?.ContactId ?? "")}'`);
   }
 }

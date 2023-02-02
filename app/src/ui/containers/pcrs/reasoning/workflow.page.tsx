@@ -239,7 +239,7 @@ export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReas
   routeName: "pcrViewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/reasoning",
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
   }),
   container: function PCRViewReasoningWorkflowContainer(props) {
@@ -257,7 +257,7 @@ export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareRe
     return <PCRReasoningWorkflowContainer mode="review" {...props} />;
   },
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningWorkflow.title),
@@ -272,7 +272,7 @@ export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareR
     return <PCRReasoningWorkflowContainer mode="prepare" {...props} />;
   },
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     step: parseInt(route.params.step, 10),
   }),

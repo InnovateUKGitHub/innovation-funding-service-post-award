@@ -168,8 +168,8 @@ export const ProjectSetupBankDetailsVerifyRoute = defineRoute({
   routePath: "/projects/:projectId/setup/:partnerId/bank-details-verify",
   container: ProjectSetupBankDetailsVerifyContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
+    projectId: route.params.projectId as ProjectId,
+    partnerId: route.params.partnerId as PartnerId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupBankDetailsVerify.title),
   accessControl: (auth, { projectId, partnerId }) =>

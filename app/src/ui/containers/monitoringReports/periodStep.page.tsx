@@ -9,7 +9,7 @@ import { ILinkInfo, ProjectRole } from "@framework/types";
 
 export interface MonitoringReportPreparePeriodParams {
   projectId: ProjectId;
-  id: string;
+  id: MonitoringReportId;
 }
 
 interface Data {
@@ -63,7 +63,10 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
   }
   private getLink(progress: boolean) {
     if (!progress) {
-      return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
+      return this.props.routes.monitoringReportDashboard.getLink({
+        projectId: this.props.projectId,
+        periodId: undefined,
+      });
     }
     return this.props.routes.monitoringReportWorkflow.getLink({
       projectId: this.props.projectId,
@@ -97,7 +100,7 @@ export const MonitoringReportPreparePeriodRoute = defineRoute({
   routeName: "monitoringReportPreparePeriod",
   routePath: "/projects/:projectId/monitoring-reports/:id/prepare-period",
   container: Container,
-  getParams: r => ({ projectId: r.params.projectId, id: r.params.id }),
+  getParams: r => ({ projectId: r.params.projectId as ProjectId, id: r.params.id as MonitoringReportId }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsPeriodStep.title),
 });

@@ -109,7 +109,7 @@ export const ProjectDetailsRoute = defineRoute({
   routeName: "projectDetails",
   routePath: "/projects/:projectId/details",
   container: ProjectDetailsPage,
-  getParams: r => ({ projectId: r.params.projectId }),
+  getParams: r => ({ projectId: r.params.projectId as ProjectId }),
   getTitle: x => x.content.getTitleCopy(x => x.pages.projectDetails.title),
   accessControl: (auth, params) =>
     auth

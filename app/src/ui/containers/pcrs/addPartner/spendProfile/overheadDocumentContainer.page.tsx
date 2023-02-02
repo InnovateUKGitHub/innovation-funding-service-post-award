@@ -213,7 +213,7 @@ export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocument
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/documents",
   container: OverheadDocumentContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,

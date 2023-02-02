@@ -16,7 +16,7 @@ export interface MonitoringReportReportStepProps extends IStepProps {
 
 export interface MonitoringReportReportSummaryProps extends ISummaryProps {
   projectId: ProjectId;
-  id: string;
+  id: MonitoringReportId;
   mode: "prepare" | "view";
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   onChange: (dto: Dtos.MonitoringReportDto) => void;

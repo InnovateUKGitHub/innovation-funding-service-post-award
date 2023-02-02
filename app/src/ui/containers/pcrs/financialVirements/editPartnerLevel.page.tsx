@@ -261,7 +261,7 @@ export const FinancialVirementEditPartnerLevelRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/partner",
   container: Container,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
   }),

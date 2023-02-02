@@ -496,10 +496,10 @@ export const FinancialVirementEditRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/financial/:partnerId",
   container: Container,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
-    partnerId: route.params.partnerId,
+    partnerId: route.params.partnerId as PartnerId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementEdit.title),
 });

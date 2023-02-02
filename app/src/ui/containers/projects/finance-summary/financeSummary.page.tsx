@@ -189,8 +189,8 @@ export const FinanceSummaryRoute = defineRoute({
   routePath: "/projects/:projectId/finance-summary/:partnerId",
   container: FinanceSummaryPage,
   getParams: x => ({
-    projectId: x.params.projectId,
-    partnerId: x.params.partnerId,
+    projectId: x.params.projectId as ProjectId,
+    partnerId: x.params.partnerId as PartnerId,
   }),
   accessControl: (auth, params) =>
     auth

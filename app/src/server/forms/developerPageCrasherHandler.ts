@@ -38,7 +38,7 @@ export class DeveloperPageCrasherHandler implements IFormHandler {
       case "ConfigurationError":
         throw new ConfigurationError("This page has crashed on purpose.");
       case "FormHandlerError":
-        throw new FormHandlerError("test", null, null, null, {
+        throw new FormHandlerError("test", "test", null, null, {
           code: ErrorCode.UNKNOWN_ERROR,
           message: "This page has crashed on purpose.",
         });

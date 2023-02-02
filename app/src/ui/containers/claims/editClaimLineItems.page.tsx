@@ -733,8 +733,8 @@ export const EditClaimLineItemsRoute = defineRoute({
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId",
   container: EditClaimLineItemsContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
+    projectId: route.params.projectId as ProjectId,
+    partnerId: route.params.partnerId as PartnerId,
     costCategoryId: route.params.costCategoryId,
     periodId: parseInt(route.params.periodId, 10),
   }),

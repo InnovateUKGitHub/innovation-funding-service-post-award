@@ -33,11 +33,12 @@ interface UrlParamsBase {
   [key: string]: string;
 }
 
-interface RequestUrlParams extends UrlParamsBase, NominalTypes {}
+interface RequestUrlParams extends UrlParamsBase, INominalTypes {}
 
-interface RequestQueryParams extends UrlParamsBase, NominalTypes {}
-
+interface RequestQueryParams extends UrlParamsBase, INominalTypes {}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type GetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body?: any) => T;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type InnerGetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body: any, req: Express.Request) => T;
 type Run<T, TR> = (params: ApiParams<T>) => Promise<TR>;
 

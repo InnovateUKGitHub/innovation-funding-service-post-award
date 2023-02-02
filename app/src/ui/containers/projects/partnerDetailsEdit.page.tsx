@@ -95,7 +95,10 @@ export const PartnerDetailsEditRoute = defineRoute<PartnerDetailsParams>({
   routeName: "partnerDetailsEdit",
   routePath: "/projects/:projectId/setup/:partnerId/project-location",
   container: PartnerDetailsEditContainer,
-  getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
+  getParams: r => ({
+    projectId: r.params.projectId as ProjectId,
+    partnerId: r.params.partnerId as PartnerId,
+  }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.partnerDetailsEdit.title),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager),

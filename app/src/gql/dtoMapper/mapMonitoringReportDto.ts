@@ -28,7 +28,7 @@ const mapper: GQL.DtoMapper<MonitoringReportDtoMapping, MonitoringReportNode> = 
   },
 
   headerId: function (node) {
-    return node?.Id ?? "";
+    return (node?.Id ?? "") as MonitoringReportId;
   },
   periodId: function (node) {
     return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;

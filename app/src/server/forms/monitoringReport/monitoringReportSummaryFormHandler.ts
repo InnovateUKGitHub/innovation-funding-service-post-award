@@ -47,6 +47,6 @@ export class MonitoringReportSummaryFormHandler extends StandardFormHandlerBase<
   ): Promise<ILinkInfo> {
     const command = new SaveMonitoringReport(dto, button.name === "submit");
     await context.runCommand(command);
-    return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+    return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId, periodId: undefined });
   }
 }

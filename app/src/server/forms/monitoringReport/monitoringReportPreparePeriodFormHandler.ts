@@ -48,7 +48,7 @@ export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandle
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
     if (button.name === "save-return") {
-      return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+      return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId, periodId: undefined });
     }
     return MonitoringReportWorkflowRoute.getLink({
       projectId: params.projectId,

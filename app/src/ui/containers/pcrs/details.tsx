@@ -171,7 +171,7 @@ export const PCRDetailsRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/:pcrId/details",
   container: PCRDetailsContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
   }),
   getTitle: () => ({

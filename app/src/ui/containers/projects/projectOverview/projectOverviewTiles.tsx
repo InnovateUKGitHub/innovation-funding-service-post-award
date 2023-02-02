@@ -159,7 +159,7 @@ const ProjectOverviewTiles = ({
     },
     {
       textContent: x => x.pages.projectOverview.monitoringReportLink,
-      link: routes.monitoringReportDashboard.getLink({ projectId }),
+      link: routes.monitoringReportDashboard.getLink({ projectId, periodId: 0 }),
     },
     {
       textContent: x => x.pages.projectOverview.forecastsLink,

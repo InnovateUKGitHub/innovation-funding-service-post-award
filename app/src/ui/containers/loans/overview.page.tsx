@@ -50,7 +50,7 @@ export const LoansSummaryRoute = defineRoute<LoanOverviewParams>({
   routePath: "/loans/:projectId",
   container: LoansOverviewPage,
   getParams: r => ({
-    projectId: r.params.projectId,
+    projectId: r.params.projectId as ProjectId,
   }),
   getTitle: x => x.content.getTitleCopy(x => x.pages.loansSummary.title),
 });

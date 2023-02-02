@@ -118,7 +118,7 @@ async function getCreateDto(context: TestContext, startDate?: string, endDate?: 
 
   return {
     projectId: project.Id,
-    headerId: "",
+    headerId: "" as MonitoringReportId,
     status: MonitoringReportStatus.Draft,
     statusName: "Draft",
     startDate: null,

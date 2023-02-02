@@ -1,4 +1,5 @@
 import express from "express";
+import { Params } from "react-router";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { EditorState, EditorStateKeys } from "@ui/redux";
@@ -13,7 +14,7 @@ import { ISession, ServerFileWrapper } from "../apis/controllerBase";
 interface RouteInfo<TParams> {
   routeName: string;
   routePath: string;
-  getParams: (route: { name: string; path: string; params: any }) => TParams;
+  getParams: (route: { name: string; path: string; params: AnyObject }) => TParams;
 }
 
 export interface IFormHandler {
@@ -26,15 +27,12 @@ export interface IFormButton {
   value: string;
 }
 
-// export interface IFormBody {
-//   [key: string]: string;
-// }
-
 export type IFormBody = {
   [key: string]: string;
 } & { partnerId: PartnerId; projectId: ProjectId };
 type StoreKey<TStore extends EditorStateKeys> = keyof EditorState[TStore];
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyEditor = InferEditorStoreDto<any>;
 
 abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implements IFormHandler {
@@ -48,13 +46,17 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
   public readonly routePath: string;
   public readonly routeName: string;
   public readonly buttons: string[];
-  private readonly getParams: (route: { name: string; path: string; params: any }) => TParams;
+  private readonly getParams: (route: { name: string; path: string; params: Params }) => TParams;
 
   public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     // Used by BadRequestHandler to determine that the route has been matched
     res.locals.isMatchedRoute = true;
 
-    const params = this.getParams({ name: this.routeName, params: { ...req.params, ...req.query }, path: req.path });
+    const params = this.getParams({
+      name: this.routeName,
+      params: { ...req.params, ...req.query } as Params, // casting from express request param type to react router param type
+      path: req.path,
+    });
 
     const buttonName = this.buttons.find(x => `button_${x}` in req.body);
 
@@ -83,6 +85,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
       return;
     } catch (error: unknown) {
       context.logger.error("Error handling form submission", error);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const key = this.getStoreKey(params, dto as any);
       throw new FormHandlerError(
         key,
@@ -111,10 +114,10 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
 
   protected abstract createValidationResult(
     params: TParams,
-    // dto: InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>,
     dto: AnyEditor,
     button: IFormButton,
-  ): InferEditorStoreValidator<any>;
+  ): // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  InferEditorStoreValidator<any>;
 }
 export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<
   TParams,

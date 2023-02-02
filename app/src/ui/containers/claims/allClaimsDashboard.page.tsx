@@ -306,7 +306,7 @@ export const AllClaimsDashboardRoute = defineRoute({
   routePath: "/projects/:projectId/claims/dashboard",
   container: AllClaimsDashboardContainer,
   getParams: route => ({
-    projectId: route.params.projectId ?? "",
+    projectId: route.params.projectId as ProjectId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.allClaimsDashboard.title),
   accessControl: (auth, { projectId }) =>

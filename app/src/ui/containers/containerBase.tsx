@@ -7,9 +7,7 @@ import { Copy } from "@copy/Copy";
 import { makeUrlWithQuery } from "@ui/helpers/make-url";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 
-interface RouteStateParams {
-  [key: string]: any;
-}
+type RouteStateParams = { [key: string]: string };
 
 export interface RouteState {
   name: string;
@@ -22,6 +20,7 @@ export interface BaseProps {
   config: IClientConfig;
   routes: IRoutes;
   projectId?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   currentRoute: IRouteDefinition<any>;
 }
 
@@ -66,6 +65,7 @@ interface IRouteOptions<TParams> {
   routePathWithQuery?: string;
   container: React.FunctionComponent<TParams & BaseProps>;
   getParams: (route: RouteState) => TParams;
+
   accessControl?: (auth: Authorisation, params: TParams, accessControlOptions: IAccessControlOptions) => boolean;
   getTitle: (getTitleArgs: { params: TParams; stores: IStores; content: Copy }) => {
     htmlTitle: string;

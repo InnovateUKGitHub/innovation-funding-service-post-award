@@ -13,6 +13,7 @@ export class Pending<T> {
   constructor(
     public state: LoadingStatus = LoadingStatus.Preload,
     public data: T | null | undefined = null,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public error?: any,
   ) {}
 
@@ -23,6 +24,7 @@ export class Pending<T> {
    * @param noData - a function to use when no data present to return data T2
    * @returns Pending<T2>
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   then<T2>(map: (data: T, state?: LoadingStatus, error?: any) => T2, noData?: () => T2) {
     let newData: T2 | null | undefined = null;
     if (Pending.canResolve([this])) {
@@ -65,6 +67,7 @@ export class Pending<T> {
    *
    * @param pendings - an associative array of Pendings that defines the shape of the returned pending with it's keys
    */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static combine<V extends { [k: string]: Pending<any> }, TR extends MapPendings<V>>(pendings: V): Pending<TR> {
     const keys = Object.keys(pendings);
     const errors = keys.map(k => pendings[k].error).find(x => !!x);

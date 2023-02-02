@@ -156,8 +156,8 @@ export const ViewForecastRoute = defineRoute({
   routePath: "/projects/:projectId/claims/:partnerId/viewForecast",
   container: ViewForecastPage,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
+    projectId: route.params.projectId as ProjectId,
+    partnerId: route.params.partnerId as PartnerId,
   }),
   accessControl: (auth, { projectId, partnerId }) => {
     const isMOOrPM = auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);

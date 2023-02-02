@@ -259,8 +259,8 @@ export const ProjectSetupBankDetailsRoute = defineRoute({
   routePath: "/projects/:projectId/setup/:partnerId/bank-details",
   container: ProjectSetupBankDetailsContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
+    projectId: route.params.projectId as ProjectId,
+    partnerId: route.params.partnerId as PartnerId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupBankDetails.title),
   accessControl: (auth, { projectId, partnerId }) =>

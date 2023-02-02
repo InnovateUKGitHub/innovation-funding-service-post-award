@@ -524,7 +524,7 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
   routeName: "pcrViewItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     itemId: route.params.itemId,
     pcrId: route.params.pcrId,
   }),
@@ -544,7 +544,7 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
     return <PCRItemContainer {...props} mode="review" />;
   },
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     itemId: route.params.itemId,
     pcrId: route.params.pcrId,
     step: parseInt(route.params.step, 10),
@@ -561,7 +561,7 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
     return <PCRItemContainer {...props} mode="prepare" />;
   },
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     step: parseInt(route.params.step, 10),

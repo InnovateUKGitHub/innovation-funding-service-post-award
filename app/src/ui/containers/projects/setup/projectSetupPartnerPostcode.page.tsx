@@ -38,7 +38,7 @@ export const ProjectSetupPartnerPostcodeRoute = defineRoute<PartnerDetailsParams
   routeName: "projectSetupPostcode",
   routePath: "/projects/:projectId/postcode/:partnerId",
   container: ProjectSetupPartnerPostcodeContainer,
-  getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
+  getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
   getTitle: x => x.content.getTitleCopy(x => x.pages.projectSetupPostcodeDetails.title),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager),

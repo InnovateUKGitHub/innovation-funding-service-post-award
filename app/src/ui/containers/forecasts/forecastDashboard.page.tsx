@@ -67,7 +67,7 @@ export const ForecastDashboardRoute = defineRoute({
   routeName: "projectForecasts",
   routePath: "/projects/:projectId/forecasts",
   container: ForecastDashboardPage,
-  getParams: r => ({ projectId: r.params.projectId }),
+  getParams: r => ({ projectId: r.params.projectId as ProjectId }),
   accessControl: (auth, { projectId }) =>
     auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.forecastsDashboard.title),

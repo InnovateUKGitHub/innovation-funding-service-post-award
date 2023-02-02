@@ -4,12 +4,14 @@ declare type LoanId = Nominal<string, "LoanId">;
 declare type DocumentId = Nominal<string, "DocumentId">;
 declare type MonitoringReportId = Nominal<string, "MonitoringReportId">;
 
-interface NominalTypes {
+interface INominalTypes {
   projectId: ProjectId;
   partnerId: PartnerId;
   loanId: LoanId;
   documentId: DocumentId;
 }
+
+declare type NominalTypes = ProjectId | PartnerId | LoanId | DocumentId | MonitoringReportId;
 
 declare interface SfRoles {
   isPm: boolean;

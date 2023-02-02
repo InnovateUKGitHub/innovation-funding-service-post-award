@@ -205,8 +205,8 @@ export const ClaimsDashboardRoute = defineRoute({
   routePathWithQuery: "/projects/:projectId/claims?:partnerId",
   container: ClaimsDashboardRouteContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
+    projectId: route.params.projectId as ProjectId,
+    partnerId: route.params.partnerId as PartnerId,
   }),
   accessControl: (auth, params) => {
     const isFC = auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact);

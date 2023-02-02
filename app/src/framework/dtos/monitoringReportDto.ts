@@ -2,7 +2,7 @@ import { MonitoringReportStatus } from "../constants/monitoringReportStatus";
 
 export interface MonitoringReportSummaryDto {
   endDate: Date | null;
-  headerId: string;
+  headerId: MonitoringReportId;
   lastUpdated: Date | null;
   periodId: number;
   projectId: ProjectId;

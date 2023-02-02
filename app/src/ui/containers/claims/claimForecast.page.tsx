@@ -224,8 +224,8 @@ export const ClaimForecastRoute = defineRoute({
   routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
   container: ClaimForecastContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
+    projectId: route.params.projectId as ProjectId,
+    partnerId: route.params.partnerId as PartnerId,
     periodId: parseInt(route.params.periodId, 10),
   }),
   accessControl: (auth, { projectId, partnerId }) =>

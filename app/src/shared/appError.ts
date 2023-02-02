@@ -2,7 +2,7 @@ import { ErrorCode, IAppError } from "@framework/types";
 import { Results } from "@ui/validation/results";
 
 export class AppError extends Error implements IAppError {
-  public results: Results<{}> | null = null;
+  public results: Results<ResultBase> | null = null;
 
   constructor(public code: ErrorCode, public message: string, public original?: Error) {
     super();
@@ -30,9 +30,11 @@ export class InActiveProjectError extends ForbiddenError {
 export class FormHandlerError extends AppError {
   constructor(
     public key: string,
-    public store: any,
+    public store: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public dto: any,
-    public result: any, // TODO: fix this any issue
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public result: any,
     public error: IAppError,
   ) {
     super(error.code, error.message || "Not Found");
@@ -46,7 +48,7 @@ export class BadRequestError extends AppError {
 }
 
 export class ValidationError extends AppError {
-  constructor(results: Results<{}>, readonly original?: Error) {
+  constructor(results: Results<ResultBase>, readonly original?: Error) {
     super(ErrorCode.VALIDATION_ERROR, "Validation Error", original);
     this.results = results;
   }

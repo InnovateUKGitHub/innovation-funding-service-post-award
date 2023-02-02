@@ -210,7 +210,7 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId/delete",
   container: SpendProfileDeleteCostContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,

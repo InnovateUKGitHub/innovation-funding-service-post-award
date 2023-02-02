@@ -52,7 +52,7 @@ export class MonitoringReportsStore extends StoreBase {
       this.getKey(projectId, undefined),
       () =>
         this.getMonitoringReportQuestions().then<MonitoringReportDto>(questions => ({
-          headerId: "",
+          headerId: "" as MonitoringReportId,
           startDate: new Date(),
           endDate: new Date(),
           status: MonitoringReportStatus.Draft,

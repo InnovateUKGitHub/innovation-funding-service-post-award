@@ -64,7 +64,7 @@ export const PCRsDashboardRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/dashboard",
   container: PCRsDashboardContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
   }),
   getTitle: x => x.content.getTitleCopy(y => y.pages.pcrsDashboard.title),
   accessControl: (auth, { projectId }) =>

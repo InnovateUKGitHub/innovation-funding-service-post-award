@@ -115,7 +115,7 @@ export const PCRDeleteRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/:pcrId/delete",
   container: PCRDeleteContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
   }),
   getTitle: () => ({

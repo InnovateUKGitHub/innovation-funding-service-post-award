@@ -26,7 +26,7 @@ export type Project = {
 };
 
 export type MonitoringReport = {
-  headerId: string;
+  headerId: MonitoringReportId;
   status: MonitoringReportStatus;
   periodId: number;
   startDate: Date | null;

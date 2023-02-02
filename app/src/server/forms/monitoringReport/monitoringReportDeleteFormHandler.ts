@@ -29,7 +29,7 @@ export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<
     dto: MonitoringReportDto,
   ): Promise<ILinkInfo> {
     await context.runCommand(new DeleteMonitoringReportCommand(dto.projectId, dto.headerId));
-    return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+    return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId, periodId: undefined });
   }
 
   protected getStoreKey(params: MonitoringReportDeleteParams) {

@@ -37,7 +37,7 @@ function toNumber(value: string) {
   return value;
 }
 
-export type Params = Record<string, string | string[] | number>;
+export type Params = Record<string, string | string[] | number> & Partial<INominalTypes>;
 
 interface IParams {
   queryParams: Params;

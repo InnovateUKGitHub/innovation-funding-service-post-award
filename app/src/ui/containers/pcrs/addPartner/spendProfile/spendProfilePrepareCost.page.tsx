@@ -361,7 +361,7 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost",
   container: ContainerAdd,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
@@ -375,7 +375,7 @@ export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostP
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId",
   container: ContainerEdit,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,

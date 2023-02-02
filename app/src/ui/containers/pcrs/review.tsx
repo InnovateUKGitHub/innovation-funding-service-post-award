@@ -241,7 +241,7 @@ export const PCRReviewRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/:pcrId/review",
   container: PCRReviewContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
   }),
   getTitle: () => ({

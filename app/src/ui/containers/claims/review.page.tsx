@@ -518,8 +518,8 @@ export const ReviewClaimRoute = defineRoute({
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId",
   container: ReviewContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
+    projectId: route.params.projectId as ProjectId,
+    partnerId: route.params.partnerId as PartnerId,
     periodId: parseInt(route.params.periodId, 10),
   }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),

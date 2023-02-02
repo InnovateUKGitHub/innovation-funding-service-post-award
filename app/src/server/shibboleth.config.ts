@@ -48,6 +48,7 @@ const shibbolethConfig: SamlConfig = {
 };
 
 // Note: Configure passport to use shibboleth configured saml
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const shibbolethStrategy = new Strategy(shibbolethConfig, (payload: any, onSuccess: VerifiedCallback) =>
   onSuccess(null, payload, {}),
 );

@@ -65,8 +65,8 @@ export const FailedBankCheckConfirmationRoute = defineRoute<FailedBankCheckConfi
   routeName: "failedBankCheckConfirmation",
   routePath: "/projects/:projectId/setup/:partnerId/further-information-required",
   getParams: r => ({
-    projectId: r.params.projectId,
-    partnerId: r.params.partnerId,
+    projectId: r.params.projectId as ProjectId,
+    partnerId: r.params.partnerId as PartnerId,
   }),
   container: FailedBankCheckConfirmationContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),

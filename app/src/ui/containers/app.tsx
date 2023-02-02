@@ -40,6 +40,7 @@ import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 interface IAppProps {
   dispatch: Dispatch;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   currentRoute: IRouteDefinition<any>;
 }
 

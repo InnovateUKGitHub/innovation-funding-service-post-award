@@ -165,7 +165,10 @@ export const MonitoringReportDashboardRoute = defineRoute({
   allowRouteInActiveAccess: true,
   routeName: "monitoringReportDashboard",
   routePath: "/projects/:projectId/monitoring-reports",
-  getParams: r => ({ projectId: r.params.projectId, periodId: parseInt(r.params.periodId, 10) }),
+  getParams: r => ({
+    projectId: r.params.projectId as ProjectId,
+    periodId: r.params.periodId ? parseInt(r.params.periodId, 10) : undefined,
+  }),
   container: MonitoringReportDashboard,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsDashboard.title),

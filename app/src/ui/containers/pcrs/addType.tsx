@@ -170,7 +170,7 @@ export const ProjectChangeRequestAddTypeRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/:projectChangeRequestId/prepare/add",
   container: PCRAddTypeContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     projectChangeRequestId: route.params.projectChangeRequestId,
   }),
   getTitle: () => ({

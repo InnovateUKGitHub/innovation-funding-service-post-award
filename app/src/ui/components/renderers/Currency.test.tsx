@@ -1,4 +1,4 @@
-import { queryByTestId, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { Currency, CurrencyProps } from "@ui/components/renderers/currency";
 
 describe("<Currency />", () => {

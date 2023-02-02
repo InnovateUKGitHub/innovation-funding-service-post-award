@@ -170,7 +170,7 @@ const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
 export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routeName: "projectSetup",
   routePath: "/projects/:projectId/setup/:partnerId",
-  getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
+  getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
   container: ProjectSetupContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetup.title),

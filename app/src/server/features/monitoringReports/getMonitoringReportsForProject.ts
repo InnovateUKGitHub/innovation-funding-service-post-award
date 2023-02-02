@@ -17,7 +17,7 @@ export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSu
     const headers = await context.repositories.monitoringReportHeader.getAllForProject(this.projectId);
     return headers
       .map<MonitoringReportSummaryDto>(x => ({
-        headerId: x.Id,
+        headerId: x.Id as MonitoringReportId,
         projectId: x.Acc_Project__c as ProjectId,
         status: mapMonitoringReportStatus(x.Acc_MonitoringReportStatus__c),
         statusName: x.MonitoringReportStatusName,

@@ -5,6 +5,7 @@ import { configuration } from "../server/features/common";
 import * as pkg from "../../package.json";
 import { execSync } from "child_process";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
+import { PreloadedState } from "redux";
 
 let versionInformation = "";
 
@@ -66,7 +67,7 @@ export function renderHtml({
 }: {
   HelmetInstance: HelmetData;
   html: string;
-  preloadedState: any;
+  preloadedState: PreloadedState<AnyObject>;
   nonce: string;
   relayData?: SSRCache;
 }) {

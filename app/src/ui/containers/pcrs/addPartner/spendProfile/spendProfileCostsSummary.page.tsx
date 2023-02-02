@@ -273,7 +273,7 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId",
   container: SpendProfileCostsSummaryContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,

@@ -8,12 +8,14 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { roundCurrency } from "@framework/util";
 import { getAuthRoles } from "@framework/types";
 
+type Mode = "review" | "view";
+
 interface Params {
   projectId: ProjectId;
   partnerId: PartnerId;
   pcrId: string;
   itemId: string;
-  mode: "review" | "view";
+  mode: Mode;
 }
 
 interface Props {
@@ -163,11 +165,11 @@ export const FinancialVirementDetailsRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/:pcrId/:mode/item/:itemId/financial/:partnerId",
   container: Container,
   getParams: route => ({
-    projectId: route.params.projectId,
+    projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
-    partnerId: route.params.partnerId,
-    mode: route.params.mode,
+    partnerId: route.params.partnerId as PartnerId,
+    mode: route.params.mode as Mode,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementDetails.title),
 });

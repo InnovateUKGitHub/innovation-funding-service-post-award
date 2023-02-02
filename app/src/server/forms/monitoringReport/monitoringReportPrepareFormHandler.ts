@@ -47,7 +47,7 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
 
   private getLink(progress: boolean, dto: MonitoringReportDto, params: MonitoringReportWorkflowParams) {
     if (!progress) {
-      return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+      return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId, periodId: undefined });
     }
 
     const nextStep = MonitoringReportWorkflowDef.getWorkflow(dto, params.step).getNextStepInfo();
@@ -70,7 +70,7 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     if (button.name === "save-return") {
       const workflow = MonitoringReportWorkflowDef.getWorkflow(dto, params.step);
       if (workflow.isOnSummary()) {
-        return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
+        return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId, periodId: undefined });
       }
       return MonitoringReportWorkflowRoute.getLink({
         projectId: params.projectId,
