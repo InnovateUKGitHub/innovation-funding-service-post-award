@@ -16,5 +16,5 @@ test-report.html
 
 # Generated files
 /dashboard/
-__generated__
-ocdata/salesforceSchema.gql
+sfSchema.gql
+fullSchema.gql
