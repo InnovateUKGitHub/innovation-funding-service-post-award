@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6e5c194bde2026afaeca5295614eb434>>
+ * @generated SignedSource<<195fac7feb86f49b311a972d5548ede8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -31,6 +31,11 @@ export type ProjectDetailProjectContactLinkTableFragment$data = {
         } | null;
         readonly Acc_Role__c: {
           readonly value: string | null;
+        } | null;
+        readonly Acc_UserId__r: {
+          readonly Name: {
+            readonly value: string | null;
+          } | null;
         } | null;
       } | null;
     } | null> | null;
@@ -73,7 +78,10 @@ v2 = {
   "plural": false,
   "selections": (v1/*: any*/),
   "storageKey": null
-};
+},
+v3 = [
+  (v2/*: any*/)
+];
 return {
   "argumentDefinitions": [],
   "kind": "Fragment",
@@ -154,9 +162,7 @@ return {
                   "kind": "LinkedField",
                   "name": "Acc_ContactId__r",
                   "plural": false,
-                  "selections": [
-                    (v2/*: any*/)
-                  ],
+                  "selections": (v3/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -170,6 +176,16 @@ return {
                     (v2/*: any*/),
                     (v0/*: any*/)
                   ],
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "Acc_UserId__r",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -197,6 +213,6 @@ return {
 };
 })();
 
-(node as any).hash = "2b3db498f763dd04002d5a9c2616d246";
+(node as any).hash = "bbb1cfa21d72158fad05fd8d6025e71b";
 
 export default node;

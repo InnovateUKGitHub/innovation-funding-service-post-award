@@ -258,7 +258,10 @@
       "projectManagerInfo": "Only project managers can raise project change requests.",
       "financeContactInfo": "Only finance contacts can submit claims.",
       "changeInfo": "If you need to change the lead project manager or finance contact, please email <0>{{ emailAddress }}</0>.",
-      "changeEmail": "grants_service@iuk.ukri.org"
+      "changeEmail": "grants_service@iuk.ukri.org",
+      "unknownName": "Unknown Name",
+      "unknownRole": "Unknown Role",
+      "unknownPartner": "Unknown Partner"
     },
     "projectDocuments": {
       "title": "Project documents",
