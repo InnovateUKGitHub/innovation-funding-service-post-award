@@ -17,3 +17,6 @@ provision.sh
 *.min.css
 *.min.js
 package-lock.json
+__generated__
+fullSchema.gql
+sfSchema.gql
