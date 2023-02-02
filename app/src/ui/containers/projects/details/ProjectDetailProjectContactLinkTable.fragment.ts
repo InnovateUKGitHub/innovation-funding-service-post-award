@@ -25,6 +25,11 @@ const projectDetailprojectContactLinkTableFragment = graphql`
             }
             Id
           }
+          Acc_UserId__r {
+            Name {
+              value
+            }
+          }
           Acc_Role__c {
             value
           }

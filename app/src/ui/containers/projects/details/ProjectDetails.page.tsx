@@ -7,7 +7,7 @@ import { SimpleString } from "@ui/components/renderers";
 import { ShortDateRange } from "@ui/components/renderers/date";
 import { PageTitle } from "@ui/features/page-title";
 import { useContent } from "@ui/hooks";
-import { useLazyLoadQuery } from "relay-hooks";
+import { useLazyLoadQuery } from "react-relay";
 import { BaseProps, defineRoute } from "../../containerBase";
 import { ProjectDetailProjectContactLinkTable } from "./ProjectDetailProjectContactLinkTable";
 import { ProjectDetailProjectInformationTable } from "./ProjectDetailProjectInformationTable";
@@ -20,7 +20,7 @@ interface Params {
 }
 
 const ProjectDetailsPage = (props: Params & BaseProps) => {
-  const { data } = useLazyLoadQuery<ProjectDetailsQuery>(projectDetailsQuery, {
+  const data = useLazyLoadQuery<ProjectDetailsQuery>(projectDetailsQuery, {
     projectId: props.projectId,
   });
   const { getContent } = useContent();
@@ -78,7 +78,17 @@ const ProjectDetailsPage = (props: Params & BaseProps) => {
         />
         <ProjectDetailProjectContactLinkTable
           project={project}
-          partnerTypeBlacklist={["Monitoring officer", "Project Manager", "Finance contact"]}
+          partnerTypeWhitelist={["Innovation lead"]}
+          hideIfNoContactsFound={true}
+        />
+        <ProjectDetailProjectContactLinkTable
+          project={project}
+          partnerTypeWhitelist={["IPM"]}
+          hideIfNoContactsFound={true}
+        />
+        <ProjectDetailProjectContactLinkTable
+          project={project}
+          partnerTypeBlacklist={["Monitoring officer", "Project Manager", "Finance contact", "Innovation lead", "IPM"]}
         />
       </Section>
       <ProjectDetailProjectParticipantsProjectTable project={project} />

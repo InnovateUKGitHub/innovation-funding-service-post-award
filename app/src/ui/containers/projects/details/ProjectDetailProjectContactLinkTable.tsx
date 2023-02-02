@@ -24,12 +24,14 @@ const ProjectDetailProjectContactLinkTable = ({
   partnerTypeBlacklist,
   beforeContent,
   afterContent,
+  hideIfNoContactsFound,
 }: {
   project: ProjectDetailProjectContactLinkTableFragment$key;
   partnerTypeWhitelist?: string[];
   partnerTypeBlacklist?: string[];
   beforeContent?: ReactNode;
   afterContent?: ReactNode;
+  hideIfNoContactsFound?: boolean;
 }) => {
   const { getContent } = useContent();
   const data = useFragment<ProjectDetailProjectContactLinkTableFragment$key>(
@@ -72,11 +74,15 @@ const ProjectDetailProjectContactLinkTable = ({
   }
 
   if (pcl.length === 0) {
-    return (
-      <Section title={sectionName}>
-        <SimpleString>{getContent(x => x.projectContactLabels.noContactsMessage)}</SimpleString>
-      </Section>
-    );
+    if (hideIfNoContactsFound) {
+      return null;
+    } else {
+      return (
+        <Section title={sectionName}>
+          <SimpleString>{getContent(x => x.projectContactLabels.noContactsMessage)}</SimpleString>
+        </Section>
+      );
+    }
   }
 
   return (
@@ -85,20 +91,24 @@ const ProjectDetailProjectContactLinkTable = ({
       <PartnersTable.Table qa="partner-information" data={pcl}>
         <PartnersTable.String
           header={x => x.projectContactLabels.contactName}
-          value={x => x.node?.Acc_ContactId__r?.Name?.value ?? "Unknown Name"}
+          value={x =>
+            x.node?.Acc_ContactId__r?.Name?.value ??
+            x.node?.Acc_UserId__r?.Name?.value ??
+            getContent(x => x.pages.projectDetails.unknownName)
+          }
           qa="pcl-contact-name"
         />
         {/* If there is no single-role whitelist, show the roles column. */}
         {partnerTypeWhitelist?.length !== 1 ? (
           <PartnersTable.String
             header={x => x.projectContactLabels.roleName}
-            value={x => x.node?.Acc_Role__c?.value ?? "Unknown Role"}
+            value={x => x.node?.Acc_Role__c?.value ?? getContent(x => x.pages.projectDetails.unknownRole)}
             qa="pcl-role-name"
           />
         ) : null}
         <PartnersTable.String
           header={x => x.projectContactLabels.partnerName}
-          value={x => x.node?.Acc_AccountId__r?.Name?.value ?? "Unknown Partner"}
+          value={x => x.node?.Acc_AccountId__r?.Name?.value ?? getContent(x => x.pages.projectDetails.unknownPartner)}
           qa="pcl-partner-name"
         />
         <PartnersTable.Email

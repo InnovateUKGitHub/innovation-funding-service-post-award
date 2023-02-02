@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f7295e91f1d5ace68e51bb72c7efcf94>>
+ * @generated SignedSource<<29cfd66e82f96da3c9796780103a368b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -435,6 +435,16 @@ return {
                                       {
                                         "alias": null,
                                         "args": null,
+                                        "concreteType": "User",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_UserId__r",
+                                        "plural": false,
+                                        "selections": (v14/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
                                         "concreteType": "PicklistValue",
                                         "kind": "LinkedField",
                                         "name": "Acc_Role__c",
@@ -649,12 +659,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "23b723dbaabeb14b0786514a2c98f19e",
+    "cacheID": "89c9badae3bc75ec5ab296f0f2770479",
     "id": null,
     "metadata": {},
     "name": "ProjectDetailsQuery",
     "operationKind": "query",
-    "text": "query ProjectDetailsQuery(\n  $projectId: ID!\n) {\n  uiapi {\n    query {\n      Acc_Project__c(where: {Id: {eq: $projectId}}) {\n        edges {\n          node {\n            Id\n            ...ProjectStatusFragment\n            ...ProjectDetailProjectContactLinkTableFragment\n            ...ProjectDetailProjectParticipantsProjectTableFragment\n            ...ProjectDetailProjectInformationTableFragment\n            Acc_ProjectNumber__c {\n              value\n            }\n            Acc_ProjectTitle__c {\n              value\n            }\n            Acc_CurrentPeriodNumber__c {\n              value\n            }\n            Acc_NumberofPeriods__c {\n              value\n            }\n            Acc_CurrentPeriodStartDate__c {\n              value\n              displayValue\n            }\n            Acc_CurrentPeriodEndDate__c {\n              value\n              displayValue\n            }\n            Acc_CompetitionType__c {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectDetailProjectContactLinkTableFragment on Acc_Project__c {\n  Id\n  isActive\n  roles {\n    isPm\n    isMo\n  }\n  Project_Contact_Links__r {\n    edges {\n      node {\n        Acc_EmailOfSFContact__c {\n          value\n        }\n        Acc_ContactId__r {\n          Name {\n            value\n          }\n        }\n        Acc_AccountId__r {\n          Name {\n            value\n          }\n          Id\n        }\n        Acc_Role__c {\n          value\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectDetailProjectInformationTableFragment on Acc_Project__c {\n  Acc_CompetitionId__r {\n    Name {\n      value\n    }\n  }\n  Acc_CompetitionType__c {\n    value\n  }\n  Acc_StartDate__c {\n    value\n  }\n  Acc_EndDate__c {\n    value\n  }\n  Loan_LoanEndDate__c {\n    value\n  }\n  Loan_LoanAvailabilityPeriodLength__c {\n    value\n  }\n  Loan_LoanExtensionPeriodLength__c {\n    value\n  }\n  Loan_LoanRepaymentPeriodLength__c {\n    value\n  }\n  Acc_Duration__c {\n    value\n  }\n  Acc_NumberofPeriods__c {\n    value\n  }\n  Acc_ProjectSummary__c {\n    value\n  }\n}\n\nfragment ProjectDetailProjectParticipantsProjectTableFragment on Acc_Project__c {\n  Acc_ProjectParticipantsProject__r {\n    edges {\n      node {\n        Acc_AccountId__r {\n          Name {\n            value\n          }\n        }\n        Acc_ParticipantType__c {\n          value\n        }\n        Acc_ParticipantStatus__c {\n          value\n        }\n        Acc_NonfundedParticipant__c {\n          value\n        }\n        Acc_Postcode__c {\n          value\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectStatusFragment on Acc_Project__c {\n  Acc_ProjectStatus__c {\n    value\n  }\n}\n"
+    "text": "query ProjectDetailsQuery(\n  $projectId: ID!\n) {\n  uiapi {\n    query {\n      Acc_Project__c(where: {Id: {eq: $projectId}}) {\n        edges {\n          node {\n            Id\n            ...ProjectStatusFragment\n            ...ProjectDetailProjectContactLinkTableFragment\n            ...ProjectDetailProjectParticipantsProjectTableFragment\n            ...ProjectDetailProjectInformationTableFragment\n            Acc_ProjectNumber__c {\n              value\n            }\n            Acc_ProjectTitle__c {\n              value\n            }\n            Acc_CurrentPeriodNumber__c {\n              value\n            }\n            Acc_NumberofPeriods__c {\n              value\n            }\n            Acc_CurrentPeriodStartDate__c {\n              value\n              displayValue\n            }\n            Acc_CurrentPeriodEndDate__c {\n              value\n              displayValue\n            }\n            Acc_CompetitionType__c {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectDetailProjectContactLinkTableFragment on Acc_Project__c {\n  Id\n  isActive\n  roles {\n    isPm\n    isMo\n  }\n  Project_Contact_Links__r {\n    edges {\n      node {\n        Acc_EmailOfSFContact__c {\n          value\n        }\n        Acc_ContactId__r {\n          Name {\n            value\n          }\n        }\n        Acc_AccountId__r {\n          Name {\n            value\n          }\n          Id\n        }\n        Acc_UserId__r {\n          Name {\n            value\n          }\n        }\n        Acc_Role__c {\n          value\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectDetailProjectInformationTableFragment on Acc_Project__c {\n  Acc_CompetitionId__r {\n    Name {\n      value\n    }\n  }\n  Acc_CompetitionType__c {\n    value\n  }\n  Acc_StartDate__c {\n    value\n  }\n  Acc_EndDate__c {\n    value\n  }\n  Loan_LoanEndDate__c {\n    value\n  }\n  Loan_LoanAvailabilityPeriodLength__c {\n    value\n  }\n  Loan_LoanExtensionPeriodLength__c {\n    value\n  }\n  Loan_LoanRepaymentPeriodLength__c {\n    value\n  }\n  Acc_Duration__c {\n    value\n  }\n  Acc_NumberofPeriods__c {\n    value\n  }\n  Acc_ProjectSummary__c {\n    value\n  }\n}\n\nfragment ProjectDetailProjectParticipantsProjectTableFragment on Acc_Project__c {\n  Acc_ProjectParticipantsProject__r {\n    edges {\n      node {\n        Acc_AccountId__r {\n          Name {\n            value\n          }\n        }\n        Acc_ParticipantType__c {\n          value\n        }\n        Acc_ParticipantStatus__c {\n          value\n        }\n        Acc_NonfundedParticipant__c {\n          value\n        }\n        Acc_Postcode__c {\n          value\n        }\n      }\n    }\n  }\n}\n\nfragment ProjectStatusFragment on Acc_Project__c {\n  Acc_ProjectStatus__c {\n    value\n  }\n}\n"
   }
 };
 })();
