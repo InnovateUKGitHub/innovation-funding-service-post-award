@@ -1,4 +1,5 @@
 import { getDefinedEdges } from "@gql/selectors/edges";
+import { Link } from "@ui/components/links";
 import { Section } from "@ui/components/layout/section";
 import { TypedTable } from "@ui/components/table";
 import { useContent } from "@ui/hooks";
@@ -9,6 +10,7 @@ import {
   ProjectDetailProjectParticipantsProjectTableFragment$data,
   ProjectDetailProjectParticipantsProjectTableFragment$key,
 } from "./__generated__/ProjectDetailProjectParticipantsProjectTableFragment.graphql";
+import { PartnerDetailsRoute } from "../partnerDetails.page";
 
 const ParticipantsTable =
   TypedTable<
@@ -42,9 +44,29 @@ const ProjectDetailProjectParticipantsProjectTable = ({
     <Section title={x => x.projectLabels.partners}>
       {beforeContent}
       <ParticipantsTable.Table qa="partner-information" data={projectParticipants}>
-        <ParticipantsTable.String
+        <ParticipantsTable.Custom
           header={x => x.projectContactLabels.partnerName}
-          value={x => x.node?.Acc_AccountId__r?.Name?.value ?? ""}
+          value={x => {
+            const partnerName =
+              x.node?.Acc_AccountId__r?.Name?.value ?? getContent(y => y.pages.projectDetails.unknownPartner);
+
+            const displayValue =
+              x.node?.Id === data.Acc_LeadParticipantID__c?.value
+                ? getContent(y => y.pages.projectDetails.leadPartner({ name: partnerName }))
+                : partnerName;
+
+            const isLinkable = x.node?.Id !== undefined;
+
+            if (isLinkable) {
+              return (
+                <Link route={PartnerDetailsRoute.getLink({ projectId: data.Id, partnerId: x.node.Id })}>
+                  {displayValue}
+                </Link>
+              );
+            } else {
+              return displayValue;
+            }
+          }}
           qa="pp-partner-name"
         />
         <ParticipantsTable.String

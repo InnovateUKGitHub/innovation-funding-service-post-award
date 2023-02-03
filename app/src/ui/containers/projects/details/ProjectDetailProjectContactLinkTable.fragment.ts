@@ -8,7 +8,10 @@ const projectDetailprojectContactLinkTableFragment = graphql`
       isPm
       isMo
     }
-    Project_Contact_Links__r {
+    Acc_LeadParticipantID__c {
+      value
+    }
+    Project_Contact_Links__r(orderBy: { Acc_AccountId__r: { Name: { order: ASC, nulls: LAST } } }, first: 2000) {
       edges {
         node {
           Acc_EmailOfSFContact__c {

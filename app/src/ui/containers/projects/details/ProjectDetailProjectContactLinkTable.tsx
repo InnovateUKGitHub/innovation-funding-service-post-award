@@ -26,6 +26,7 @@ const ProjectDetailProjectContactLinkTable = ({
   afterContent,
   hideIfNoContactsFound = false,
   hidePartnerColumn = false,
+  leadParticipantId,
 }: {
   project: ProjectDetailProjectContactLinkTableFragment$key;
   partnerTypeWhitelist?: string[];
@@ -34,6 +35,7 @@ const ProjectDetailProjectContactLinkTable = ({
   afterContent?: ReactNode;
   hideIfNoContactsFound?: boolean;
   hidePartnerColumn?: boolean;
+  leadParticipantId?: string;
 }) => {
   const { getContent } = useContent();
   const data = useFragment<ProjectDetailProjectContactLinkTableFragment$key>(
@@ -111,7 +113,14 @@ const ProjectDetailProjectContactLinkTable = ({
         {hidePartnerColumn ? null : (
           <PartnersTable.String
             header={x => x.projectContactLabels.partnerName}
-            value={x => x.node?.Acc_AccountId__r?.Name?.value ?? getContent(x => x.pages.projectDetails.unknownPartner)}
+            value={x => {
+              const partnerName =
+                x.node?.Acc_AccountId__r?.Name?.value ?? getContent(y => y.pages.projectDetails.unknownPartner);
+
+              return x.node?.Acc_AccountId__r?.Id === data.Acc_LeadParticipantID__c?.value
+                ? getContent(y => y.pages.projectDetails.leadPartner({ name: partnerName }))
+                : partnerName;
+            }}
             qa="pcl-partner-name"
           />
         )}

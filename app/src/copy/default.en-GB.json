@@ -259,6 +259,7 @@
       "financeContactInfo": "Only finance contacts can submit claims.",
       "changeInfo": "If you need to change the lead project manager or finance contact, please email <0>{{ emailAddress }}</0>.",
       "changeEmail": "grants_service@iuk.ukri.org",
+      "leadPartner": "{{ name }} (Lead)",
       "unknownName": "Unknown Name",
       "unknownRole": "Unknown Role",
       "unknownPartner": "Unknown Partner"
