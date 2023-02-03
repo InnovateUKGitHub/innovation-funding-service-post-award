@@ -11,28 +11,30 @@ const userSwitcherCurrentUserQuery = graphql`
 
 const userSwitcherProjectsQuery = graphql`
   query UserSwitcherProjectsQuery {
-    uiapi {
-      query {
-        Acc_Project__c(
-          orderBy: {
-            Acc_CompetitionId__r: { Acc_CompetitionType__c: { order: ASC } }
-            Acc_ProjectNumber__c: { order: ASC }
-          }
-          first: 2000
-        ) {
-          edges {
-            node {
-              Id
-              Acc_CompetitionId__r {
-                Acc_CompetitionType__c {
-                  displayValue
+    salesforce(login: "system") {
+      uiapi {
+        query {
+          Acc_Project__c(
+            orderBy: {
+              Acc_CompetitionId__r: { Acc_CompetitionType__c: { order: ASC } }
+              Acc_ProjectNumber__c: { order: ASC }
+            }
+            first: 2000
+          ) {
+            edges {
+              node {
+                Id
+                Acc_CompetitionId__r {
+                  Acc_CompetitionType__c {
+                    displayValue
+                  }
                 }
-              }
-              Acc_ProjectNumber__c {
-                value
-              }
-              Acc_ProjectTitle__c {
-                value
+                Acc_ProjectNumber__c {
+                  value
+                }
+                Acc_ProjectTitle__c {
+                  value
+                }
               }
             }
           }
@@ -44,27 +46,34 @@ const userSwitcherProjectsQuery = graphql`
 
 const userSwitcherProjectQuery = graphql`
   query UserSwitcherProjectQuery($projectId: ID) {
-    uiapi {
-      query {
-        Acc_Project__c(where: { Id: { eq: $projectId } }) {
-          edges {
-            node {
-              Project_Contact_Links__r(orderBy: { Acc_ContactId__r: { Name: { order: ASC } } }) {
-                edges {
-                  node {
-                    Acc_EmailOfSFContact__c {
-                      value
-                    }
-                    Acc_ContactId__r {
-                      Name {
+    salesforce(login: "system") {
+      uiapi {
+        query {
+          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+            edges {
+              node {
+                Project_Contact_Links__r(orderBy: { Acc_ContactId__r: { Name: { order: ASC } } }) {
+                  edges {
+                    node {
+                      Acc_EmailOfSFContact__c {
                         value
                       }
-                      Email {
+                      Acc_ContactId__r {
+                        Name {
+                          value
+                        }
+                        Email {
+                          value
+                        }
+                      }
+                      Acc_UserId__r {
+                        Name {
+                          value
+                        }
+                      }
+                      Acc_Role__c {
                         value
                       }
-                    }
-                    Acc_Role__c {
-                      value
                     }
                   }
                 }

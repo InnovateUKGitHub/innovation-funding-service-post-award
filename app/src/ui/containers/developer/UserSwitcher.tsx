@@ -79,7 +79,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
     return <SimpleString>{getContent(x => x.components.userChanger.loadingUsers)}</SimpleString>;
   }
 
-  const project = getFirstEdge(data?.uiapi.query.Acc_Project__c?.edges).node;
+  const project = getFirstEdge(data?.salesforce.uiapi.query.Acc_Project__c?.edges).node;
 
   // For each contact...
   for (const { node: user } of getDefinedEdges(project.Project_Contact_Links__r?.edges)) {
@@ -95,10 +95,10 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
           isFc: false,
           isPm: false,
           user: {
-            externalUsername: user.Acc_ContactId__r?.Email?.value ?? "Undefined Email",
+            externalUsername: user.Acc_ContactId__r?.Email?.value ?? undefined,
             internalUsername: email,
             email,
-            name: user.Acc_ContactId__r?.Name?.value ?? "Untitled User",
+            name: user.Acc_ContactId__r?.Name?.value ?? user.Acc_UserId__r?.Name?.value ?? "Untitled User",
             role: role as SalesforceRole,
           },
         };
@@ -150,7 +150,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
       <ProjectContactTable.String
         qa="partner-external-username"
         header={x => x.projectContactLabels.contactExternalUsername}
-        value={x => x.user.externalUsername.replace("@", "\u200B@")} // Add ZWSP to allow line break
+        value={x => x.user.externalUsername?.replace("@", "\u200B@") ?? "Undefined Email"} // Add ZWSP to allow line break
       />
 
       <ProjectContactTable.String
@@ -203,7 +203,7 @@ const UserSwitcherProjectSelector = () => {
   const isMounted = useMounted();
 
   // Create options for dropdown to select a project.
-  const projectOptions: DropdownListOption[] = getDefinedEdges(data?.uiapi.query.Acc_Project__c?.edges).map(
+  const projectOptions: DropdownListOption[] = getDefinedEdges(data?.salesforce.uiapi.query.Acc_Project__c?.edges).map(
     ({ node }) => ({
       id: node.Id,
       value: node.Id,

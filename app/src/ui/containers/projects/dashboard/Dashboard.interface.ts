@@ -11,7 +11,9 @@ export type CuratedSection<T> = { [key in CuratedSections]: T };
 export type IProject = NonNullable<
   NonNullable<
     UnwrapArray<
-      NonNullable<NonNullable<DashboardProjectDashboardQuery$data["uiapi"]["query"]["Acc_Project__c"]>["edges"]>
+      NonNullable<
+        NonNullable<DashboardProjectDashboardQuery$data["salesforce"]["uiapi"]["query"]["Acc_Project__c"]>["edges"]
+      >
     >
   >["node"]
 >;

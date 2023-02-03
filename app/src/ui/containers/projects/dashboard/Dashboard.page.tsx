@@ -116,7 +116,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
   ]);
 
   // For each project...
-  const allProjects = getDefinedEdges(data.uiapi.query.Acc_Project__c?.edges)
+  const allProjects = getDefinedEdges(data.salesforce.uiapi.query.Acc_Project__c?.edges)
     .map(({ node: project }) => {
       // Get the partner a user is assoiated with, as well
       // as the section the project should be displayed in.
@@ -139,7 +139,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
 
   // Only display the search bar if there's enough projects.
   const displaySearch =
-    getDefinedEdges(data.uiapi.query.Acc_Project__c?.edges).length >=
+    getDefinedEdges(data.salesforce.uiapi.query.Acc_Project__c?.edges).length >=
     data.clientConfig.options.numberOfProjectsToSearch;
 
   // Sort and filter all projects, and split them into the sections to display.

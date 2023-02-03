@@ -24,7 +24,7 @@ const ProjectDetailsPage = (props: Params & BaseProps) => {
     projectId: props.projectId,
   });
   const { getContent } = useContent();
-  const project = getFirstEdge(data?.uiapi.query.Acc_Project__c?.edges).node;
+  const project = getFirstEdge(data?.salesforce.uiapi.query.Acc_Project__c?.edges).node;
 
   return (
     <Page
