@@ -53,7 +53,11 @@ const ProjectDetailsPage = (props: Params & BaseProps) => {
         </SimpleString>
       </Section>
       <Section title={getContent(x => x.projectLabels.projectMembers)}>
-        <ProjectDetailProjectContactLinkTable project={project} partnerTypeWhitelist={["Monitoring officer"]} />
+        <ProjectDetailProjectContactLinkTable
+          project={project}
+          partnerTypeWhitelist={["Monitoring officer"]}
+          hidePartnerColumn={true}
+        />
         <ProjectDetailProjectContactLinkTable
           beforeContent={
             project.Acc_CompetitionType__c?.value !== "KTP" && (
@@ -80,15 +84,18 @@ const ProjectDetailsPage = (props: Params & BaseProps) => {
           project={project}
           partnerTypeWhitelist={["Innovation lead"]}
           hideIfNoContactsFound={true}
+          hidePartnerColumn={true}
         />
         <ProjectDetailProjectContactLinkTable
           project={project}
           partnerTypeWhitelist={["IPM"]}
           hideIfNoContactsFound={true}
+          hidePartnerColumn={true}
         />
         <ProjectDetailProjectContactLinkTable
           project={project}
           partnerTypeBlacklist={["Monitoring officer", "Project Manager", "Finance contact", "Innovation lead", "IPM"]}
+          hidePartnerColumn={true}
         />
       </Section>
       <ProjectDetailProjectParticipantsProjectTable project={project} />

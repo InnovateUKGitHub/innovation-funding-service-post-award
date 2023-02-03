@@ -24,7 +24,8 @@ const ProjectDetailProjectContactLinkTable = ({
   partnerTypeBlacklist,
   beforeContent,
   afterContent,
-  hideIfNoContactsFound,
+  hideIfNoContactsFound = false,
+  hidePartnerColumn = false,
 }: {
   project: ProjectDetailProjectContactLinkTableFragment$key;
   partnerTypeWhitelist?: string[];
@@ -32,6 +33,7 @@ const ProjectDetailProjectContactLinkTable = ({
   beforeContent?: ReactNode;
   afterContent?: ReactNode;
   hideIfNoContactsFound?: boolean;
+  hidePartnerColumn?: boolean;
 }) => {
   const { getContent } = useContent();
   const data = useFragment<ProjectDetailProjectContactLinkTableFragment$key>(
@@ -106,11 +108,13 @@ const ProjectDetailProjectContactLinkTable = ({
             qa="pcl-role-name"
           />
         ) : null}
-        <PartnersTable.String
-          header={x => x.projectContactLabels.partnerName}
-          value={x => x.node?.Acc_AccountId__r?.Name?.value ?? getContent(x => x.pages.projectDetails.unknownPartner)}
-          qa="pcl-partner-name"
-        />
+        {hidePartnerColumn ? null : (
+          <PartnersTable.String
+            header={x => x.projectContactLabels.partnerName}
+            value={x => x.node?.Acc_AccountId__r?.Name?.value ?? getContent(x => x.pages.projectDetails.unknownPartner)}
+            qa="pcl-partner-name"
+          />
+        )}
         <PartnersTable.Email
           header={x => x.projectContactLabels.contactEmail}
           value={x => x.node?.Acc_EmailOfSFContact__c?.value ?? ""}

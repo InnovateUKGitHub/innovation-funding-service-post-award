@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ccc3cd42ec0d10239c28afb7e63f574c>>
+ * @generated SignedSource<<e16c25a75e0ebcb815ebd1cc5335384c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,9 +15,7 @@ export type clientConfigQuery$data = {
   readonly clientConfig: {
     readonly features: {
       readonly changePeriodLengthWorkflow: boolean;
-      readonly contentHint: boolean;
       readonly customContent: boolean;
-      readonly displayOtherContacts: boolean;
       readonly futureTimeExtensionInYears: number;
       readonly searchDocsMinThreshold: number;
     };
@@ -79,21 +77,7 @@ var v0 = [
             "alias": null,
             "args": null,
             "kind": "ScalarField",
-            "name": "contentHint",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
             "name": "customContent",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "displayOtherContacts",
             "storageKey": null
           },
           {
@@ -283,16 +267,16 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "1fd03c98c38a202e474428243667a169",
+    "cacheID": "b35a503fdc9608fd5424ed5e28306d24",
     "id": null,
     "metadata": {},
     "name": "clientConfigQuery",
     "operationKind": "query",
-    "text": "query clientConfigQuery {\n  clientConfig {\n    features {\n      changePeriodLengthWorkflow\n      contentHint\n      customContent\n      displayOtherContacts\n      searchDocsMinThreshold\n      futureTimeExtensionInYears\n    }\n    options {\n      maxFileSize\n      maxUploadFileCount\n      permittedFileTypes\n      permittedTypes {\n        pdfTypes\n        textTypes\n        presentationTypes\n        spreadsheetTypes\n        imageTypes\n      }\n      bankCheckValidationRetries\n      bankCheckAddressScorePass\n      bankCheckCompanyNameScorePass\n      standardOverheadRate\n      numberOfProjectsToSearch\n      maxClaimLineItems\n      nonJsMaxClaimLineItems\n    }\n    ifsRoot\n    ssoEnabled\n    logLevel\n  }\n}\n"
+    "text": "query clientConfigQuery {\n  clientConfig {\n    features {\n      changePeriodLengthWorkflow\n      customContent\n      searchDocsMinThreshold\n      futureTimeExtensionInYears\n    }\n    options {\n      maxFileSize\n      maxUploadFileCount\n      permittedFileTypes\n      permittedTypes {\n        pdfTypes\n        textTypes\n        presentationTypes\n        spreadsheetTypes\n        imageTypes\n      }\n      bankCheckValidationRetries\n      bankCheckAddressScorePass\n      bankCheckCompanyNameScorePass\n      standardOverheadRate\n      numberOfProjectsToSearch\n      maxClaimLineItems\n      nonJsMaxClaimLineItems\n    }\n    ifsRoot\n    ssoEnabled\n    logLevel\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "76f6af905aeaf1a9ecb24833b6c7796f";
+(node as any).hash = "764f2f698443b96a8976c3ad3fce44ae";
 
 export default node;
