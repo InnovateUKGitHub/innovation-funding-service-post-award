@@ -1,14 +1,17 @@
 
 pipelines:
-  default:
-    - step:
-        name: Mirror to GitHub
-        image: ibm-semeru-runtimes:open-17-jre-jammy
-        clone:
-          enabled: false
-        script:
-          - wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar
-          - git clone --bare ${BITBUCKET_GIT_HTTP_ORIGIN}
-          - java -jar bfg-1.14.0.jar --delete-folders "{openshift,performance-tests,security-tools,docker}" --no-blob-protection acc-ui
-          - cd acc-ui
-          - git push --force --mirror git@bitbucket.org:user-fhdycxm2sxuooq5dkbinka/external-ui-filtering.git
+  custom:
+    mirror_to_github:
+      - step:
+          name: Mirror to GitHub
+          image: ibm-semeru-runtimes:open-17-jre-jammy
+          clone:
+            enabled: false
+          script:
+            - apt-get update
+            - apt-get install -y wget git
+            - wget https://repo1.maven.org/maven2/com/madgag/bfg/1.14.0/bfg-1.14.0.jar
+            - git clone --bare ${BITBUCKET_GIT_SSH_ORIGIN}
+            - java -jar bfg-1.14.0.jar --delete-folders "{openshift,performance-tests,security-tools,docker,bamboo-specs,testframework}" --no-blob-protection acc-ui
+            - cd acc-ui.git
+            - git push --force --mirror git@github.com:InnovateUKGitHub/innovation-funding-service-post-award.git
