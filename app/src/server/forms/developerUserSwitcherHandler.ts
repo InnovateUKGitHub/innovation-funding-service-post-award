@@ -1,4 +1,5 @@
 import { DeveloperUserChangeDto } from "@framework/dtos/developerUserChange";
+import { DeveloperHomePage } from "@ui/containers/developer/home.page";
 import { DeveloperUserSwitcherPage } from "@ui/containers/developer/UserSwitcher.page";
 import express from "express";
 import { configuration } from "../features/common/config";
@@ -41,7 +42,7 @@ export class DeveloperUserSwitcherHandler implements IFormHandler {
     if (dto.currentUrl) {
       res.redirect(dto.currentUrl);
     } else {
-      res.redirect(DeveloperUserSwitcherPage.routePath);
+      res.redirect(DeveloperHomePage.routePath);
     }
   }
 }
