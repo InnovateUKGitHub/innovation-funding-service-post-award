@@ -58,7 +58,7 @@ describe("useUpdateStateValueFromProps", () => {
 
   const TestComponent = ({ value }: { value: number }) => {
     const [state, setState] = useState<{ value: number }>({ value });
-    useUpdateStateValueOnPropsChange(value, setState);
+    useUpdateStateValueOnPropsChange<number>(value, state.value, setState);
     return <h1 data-qa="hook-test">{state.value}</h1>;
   };
 

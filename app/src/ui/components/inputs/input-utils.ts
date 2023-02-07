@@ -46,12 +46,19 @@ export function useDebounce<T extends BasicFn>(
 }
 
 /**
- * Hook will update the state value property when props change (not on initial mount)
+ * Hook will update the state value property when value property from the props does not match the state value
+ * Used for externally updating the input field
  */
-export function useUpdateStateValueOnPropsChange<S>(value: S, setState: Dispatch<SetStateAction<{ value: S }>>) {
+export function useUpdateStateValueOnPropsChange<S>(
+  propValue: S,
+  stateValue: S,
+  setState: Dispatch<SetStateAction<{ value: S }>>,
+) {
   useDidUpdate(() => {
-    setState(s => ({ ...s, value }));
-  }, [value]);
+    if (propValue !== stateValue) {
+      setState(s => ({ ...s, value: propValue }));
+    }
+  }, [propValue]);
 }
 
 /**
