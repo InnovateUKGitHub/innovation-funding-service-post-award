@@ -82,5 +82,11 @@ module.exports = {
         "jest/no-identical-title": "warn",
       },
     },
+    {
+      files: ["**/__generated__/*.ts"],
+      rules: {
+        "jsdoc/check-tag-names": "off",
+      },
+    },
   ],
 };

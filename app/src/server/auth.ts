@@ -56,7 +56,7 @@ router.post(successfulValidationRoute, (req, res) =>
       logger.error("Authentication Error", authError);
 
       const errorMessage =
-        "An authentication error occurred when loading the application, please trying logging in again.";
+        "An authentication error occurred when loading the application, please try logging in again.";
 
       const errorResponse = {
         error: errorMessage,

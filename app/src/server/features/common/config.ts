@@ -1,5 +1,4 @@
 import bytes from "bytes";
-import fs from "fs";
 import { parseLogLevel } from "@framework/types/logLevel";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFeatureFlags, LogLevel } from "@framework/types";
@@ -40,6 +39,7 @@ export interface IConfig {
   readonly certificates: {
     salesforce: string;
     shibboleth: string;
+    shibbolethPublic: string;
   };
 
   readonly features: IFeatureFlags;
@@ -106,9 +106,10 @@ const timeouts = {
   contentRefreshSeconds: parseFloat(process.env.CONTENT_REFRESH_TIMEOUT_SECONDS ?? "") || 0,
 };
 
-const certificates = {
+const certificates: IConfig["certificates"] = {
   salesforce: process.env.SALESFORCE_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
   shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
+  shibbolethPublic: process.env.SHIBBOLETH_PUBKEY_FILE || "/etc/pki/AccKey.crt",
 };
 
 const disableCsp = getFeatureFlagValue(process.env.DISABLE_CSP, false);
