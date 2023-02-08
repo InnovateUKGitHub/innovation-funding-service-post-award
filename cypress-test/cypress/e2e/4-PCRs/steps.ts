@@ -218,9 +218,9 @@ export const typeASearchResults = () => {
 };
 
 export const companyHouseAutofillAssert = () => {
-  cy.get(`"#organisationName", [value="A LIMITED"]`);
-  cy.get(`"#registrationNumber", [value="11790215"]`);
-  cy.get(`"#registeredAddress", [value="Springfield Road"]`);
+  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
+  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
+  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
 };
 
 export const projectRoleRadios = () => {
