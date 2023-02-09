@@ -1,6 +1,6 @@
 export * from "./create";
 export * from "./addType";
-export * from "./dashboard";
+export * from "./dashboard/PCRDashboard.page";
 export * from "./details";
 export * from "./delete";
 export * from "./prepare";

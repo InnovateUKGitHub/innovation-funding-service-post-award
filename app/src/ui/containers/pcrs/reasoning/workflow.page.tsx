@@ -133,13 +133,9 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
       <>
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
+            <ACC.SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
             <ACC.SummaryListItem
-              label={x => x.pcrReasoningLabels.requestNumber}
-              content={pcr.requestNumber}
-              qa="numberRow"
-            />
-            <ACC.SummaryListItem
-              label={x => x.pcrReasoningLabels.types}
+              label={x => x.pcrLabels.types}
               content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />}
               qa="typesRow"
             />

@@ -198,6 +198,13 @@
         "display": "View Broadcast"
       }
     },
+    "pcrsDashboard": {
+      "title": "Project change requests",
+      "create": "Create request",
+      "noOngoingRequests": "You have no ongoing requests.",
+      "noPastRequests": "You have no past requests.",
+      "requestNumber": "Request number"
+    },
     "projectsDashboard": {
       "title": "Dashboard",
       "projectsTitle": "Projects",
@@ -1286,9 +1293,19 @@
     "proposedName": "Proposed name",
     "certificate": "Change of name certificate"
   },
-  "pcrReasoningLabels": {
+  "pcrLabels": {
     "requestNumber": "Request number",
     "types": "Types",
+    "started": "Started",
+    "status": "Status",
+    "lastUpdated": "Last updated",
+    "edit": "Edit",
+    "review": "Review",
+    "view": "View",
+    "actions": "Actions",
+    "delete": "Delete"
+  },
+  "pcrReasoningLabels": {
     "comments": "Comments",
     "files": "Files"
   },
