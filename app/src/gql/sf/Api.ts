@@ -161,6 +161,8 @@ export class Api {
       const data = await dataloader.loadMany(ids);
       return data;
     }
+
+    this.logger.error("Dataloader not initialised", baseQuery);
     throw new Error("Dataloader not init");
   }
 

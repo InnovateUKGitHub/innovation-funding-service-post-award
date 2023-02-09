@@ -14,8 +14,6 @@ class SalesforceApiResolver {
     @Info() info: GraphQLResolveInfo,
     @Arg("login", () => String, { nullable: true }) login?: string,
   ) {
-    
-
     setupDataLoaders({ context, info });
 
     return {};
@@ -23,7 +21,7 @@ class SalesforceApiResolver {
 
   @FieldResolver(() => SalesforceAccProjectObject)
   async project(@Arg("id", () => String) id: string, @Ctx() context: GraphQLContext, @Info() info: GraphQLResolveInfo) {
-    return sfResolver({ context, info, ids: [id] });
+    return sfResolver({ context, info, ids: [id], singular: true });
   }
 
   @FieldResolver(() => SalesforceAccProjectParticipantObject)
@@ -32,7 +30,7 @@ class SalesforceApiResolver {
     @Ctx() context: GraphQLContext,
     @Info() info: GraphQLResolveInfo,
   ) {
-    return sfResolver({ context, info, ids: [id] });
+    return sfResolver({ context, info, ids: [id], singular: true });
   }
 
   @FieldResolver(() => [SalesforceAccProjectObject])
