@@ -1,4 +1,3 @@
-import { DeveloperUserChangeDto } from "@framework/dtos/developerUserChange";
 import { DeveloperHomePage } from "@ui/containers/developer/home.page";
 import { DeveloperUserSwitcherPage } from "@ui/containers/developer/UserSwitcher.page";
 import express from "express";
@@ -16,12 +15,13 @@ export class DeveloperUserSwitcherHandler implements IFormHandler {
 
     const dto = {
       user: req.body.user,
-      buttonUser: req.body.button_user,
       projectId: req.body.project_id,
-      currentUrl: req.body.button_stay === "" ? req.body.current_url : undefined,
+      buttonStay: req.body.button_stay === "",
+      buttonHome: req.body.button_home === "",
       isSearch: req.body.button_search === "",
       isReset: req.body.reset === "",
-    } as DeveloperUserChangeDto;
+      currentUrl: req.body.current_url,
+    };
 
     if (!req.session) req.session = {};
     if (!req.session.user) req.session.user = {};
@@ -29,17 +29,18 @@ export class DeveloperUserSwitcherHandler implements IFormHandler {
     if (dto.isReset) {
       req.session.user.email = configuration.salesforceServiceUser.serviceUsername;
       req.session.user.projectId = undefined;
-    } else if ("isSearch" in dto && dto.isSearch) {
-      req.session.user.projectId = dto.projectId;
     } else if ("user" in dto && dto.user) {
       req.session.user.email = dto.user;
       req.session.user.projectId = undefined;
-    } else if ("buttonUser" in dto && dto.buttonUser) {
-      req.session.user.email = dto.buttonUser;
+    }
+
+    if ("projectId" in dto && dto.projectId) {
       req.session.user.projectId = dto.projectId;
     }
 
-    if (dto.currentUrl) {
+    if (dto.buttonHome) {
+      res.redirect("/");
+    } else if (dto.buttonStay) {
       res.redirect(dto.currentUrl);
     } else {
       res.redirect(DeveloperHomePage.routePath);
