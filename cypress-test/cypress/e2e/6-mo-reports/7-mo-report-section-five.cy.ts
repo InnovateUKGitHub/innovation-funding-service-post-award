@@ -4,7 +4,6 @@ import {
   clickMoReportTile,
   clickStartNewReportButton,
   continueAndReturnButtons,
-  navigateToProject,
   navigateToSection5,
   q5ScoreChoice,
   q5SelectEachRadioButton,
@@ -19,7 +18,7 @@ describe("MO report > section 5 - can continue a report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 
-    navigateToProject();
+    cy.navigateToProject();
   });
 
   after(() => {

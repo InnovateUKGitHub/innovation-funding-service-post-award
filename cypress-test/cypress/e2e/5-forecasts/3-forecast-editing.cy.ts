@@ -3,7 +3,6 @@ import {
   clearCostCategories,
   clickForecastTile,
   exceedGrantValue,
-  navigateToProject,
   populateCategoriesZeroSubmit,
   showPartnerTable,
   updateLabourFields,
@@ -15,7 +14,7 @@ describe("Forecast > edit", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 
-    navigateToProject();
+    cy.navigateToProject();
   });
 
   it("should click the forecast tile", clickForecastTile);

@@ -4,7 +4,6 @@ import {
   clickMoReportTile,
   clickStartNewReportButton,
   continueAndReturnButtons,
-  navigateToProject,
   navigateToSection7,
   shouldShowProjectTitle,
   standardComments,
@@ -17,7 +16,7 @@ describe("MO report > section 7 - can continue a report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 
-    navigateToProject();
+    cy.navigateToProject();
   });
 
   after(() => {

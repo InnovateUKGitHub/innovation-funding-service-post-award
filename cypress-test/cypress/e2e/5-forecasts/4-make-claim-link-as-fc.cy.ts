@@ -4,7 +4,6 @@ import {
   clickForecastsTile,
   displayForecastTable,
   makeClaimFC,
-  navigateToProjectWithClaims,
   shouldShowProjectTitle,
 } from "./steps";
 
@@ -18,7 +17,7 @@ describe("Forecast > Link to claims page as FC", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 
-    navigateToProjectWithClaims();
+    cy.navigateToProjectWithClaims();
   });
 
   it("should click the forecast tile", clickForecastsTile);

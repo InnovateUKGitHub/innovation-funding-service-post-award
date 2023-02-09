@@ -4,7 +4,6 @@ import {
   clickViewDisplayClaim,
   displayForecastTable,
   makeClaimPM,
-  navigateToProjectWithClaims,
   shouldShowAllAccordion,
   shouldShowProjectTitle,
   showPartnerTable,
@@ -20,7 +19,7 @@ describe("Forecast > link to claims page as PM", () => {
   before(() => {
     visitApp({ asUser: projectManagerEmail });
 
-    navigateToProjectWithClaims();
+    cy.navigateToProjectWithClaims();
   });
 
   it("should click the forecast tile", clickForecastTile);

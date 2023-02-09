@@ -1,13 +1,6 @@
 import { visitApp } from "../../common/visit";
 
-const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
-
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
-
-export const navigateToProject = () => {
-  cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains("1_CYPRESS_DO_NOT_USE").click({ force: true });
-};
 
 export const deleteMoReport = () => {
   visitApp({ path: "projects/a0E2600000kSotUEAS/monitoring-reports" });

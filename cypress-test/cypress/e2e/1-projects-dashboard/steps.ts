@@ -1,11 +1,6 @@
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const cardId = "328407";
 
-export const navigateToProject = () => {
-  cy.contains("Projects").click();
-  cy.getByQA(`project-${cardId}`).contains(cardId).click();
-};
-
 export const monitoringReportCardShouldNotExist = () => {
   cy.get(".card-link h2").contains("Monitoring reports").should("not.exist");
 };

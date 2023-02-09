@@ -2,7 +2,6 @@ import { visitApp } from "../../common/visit";
 import {
   clickMoReportTile,
   clickStartNewReportButton,
-  navigateToProject,
   periodSelection,
   reportGuidance,
   saveContinueSaveReturn,
@@ -16,7 +15,7 @@ describe("MO report > can start a new report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 
-    navigateToProject();
+    cy.navigateToProject();
   });
 
   it("should click the MO Reports tile", clickMoReportTile);

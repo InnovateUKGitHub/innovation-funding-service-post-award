@@ -1,7 +1,6 @@
 import { visitApp } from "../../common/visit";
 import {
   clickMoReportTile,
-  navigateToProject,
   openHeadingArchivedHeading,
   openReportTable,
   shouldShowProjectTitle,
@@ -14,7 +13,7 @@ describe("MO report > can navigate to the MO Reports tile", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 
-    navigateToProject();
+    cy.navigateToProject();
   });
 
   it("should click the MO Reports tile", clickMoReportTile);

@@ -1,6 +1,6 @@
 import { visitApp } from "../../common/visit";
 import { testEach } from "../../support/methods";
-import { navigateToProject, shouldFindMatchingProjectCard } from "./steps";
+import { shouldFindMatchingProjectCard } from "./steps";
 
 const monitoringOfficerEmail = "testman2@testing.com";
 
@@ -8,7 +8,7 @@ describe("projects dashboard > Monitoring Officer", () => {
   before(() => {
     visitApp({ asUser: monitoringOfficerEmail });
 
-    navigateToProject();
+    cy.navigateToProject();
   });
 
   testEach([

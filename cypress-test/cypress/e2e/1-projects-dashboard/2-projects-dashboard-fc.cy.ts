@@ -1,6 +1,6 @@
 import { visitApp } from "../../common/visit";
 import { testEach } from "../../support/methods";
-import { navigateToProject, monitoringReportCardShouldNotExist, shouldFindMatchingProjectCard } from "./steps";
+import { monitoringReportCardShouldNotExist, shouldFindMatchingProjectCard } from "./steps";
 
 const financeContactEmail = "contact77@test.co.uk";
 
@@ -8,7 +8,7 @@ describe("project dashboard as Finance Contact", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 
-    navigateToProject();
+    cy.navigateToProject();
   });
 
   testEach(["Claims", "Forecast", "Project change requests", "Documents", "Project details", "Finance summary"])(

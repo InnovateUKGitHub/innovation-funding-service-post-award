@@ -1,11 +1,5 @@
 import { visitApp } from "../../common/visit";
-import {
-  clickForecastTile,
-  displayForecastTable,
-  navigateToProjectWithClaims,
-  shouldShowProjectTitle,
-  showPartnerTable,
-} from "./steps";
+import { clickForecastTile, displayForecastTable, shouldShowProjectTitle, showPartnerTable } from "./steps";
 
 const projectManagerEmail = "james.black@euimeabs.test";
 
@@ -13,7 +7,7 @@ describe("Forecast front page as PM", () => {
   before(() => {
     visitApp({ asUser: projectManagerEmail });
 
-    navigateToProjectWithClaims();
+    cy.navigateToProjectWithClaims();
   });
 
   it("should click the forecast tile", clickForecastTile);

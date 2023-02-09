@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { clickForecastsTile, displayForecastTable, navigateToProjectWithClaims, shouldShowProjectTitle } from "./steps";
+import { clickForecastsTile, displayForecastTable, shouldShowProjectTitle } from "./steps";
 
 const financeContactEmail = "wed.addams@test.test.co.uk";
 
@@ -7,7 +7,7 @@ describe("Forecast > front page as FC", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 
-    navigateToProjectWithClaims();
+    cy.navigateToProjectWithClaims();
   });
 
   it("should click the forecast tile", clickForecastsTile);

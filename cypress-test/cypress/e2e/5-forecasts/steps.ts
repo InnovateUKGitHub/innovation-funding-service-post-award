@@ -1,15 +1,3 @@
-const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
-
-export const navigateToProject = () => {
-  cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains("1_CYPRESS_DO_NOT_USE").click({ force: true });
-};
-
-export const navigateToProjectWithClaims = () => {
-  cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains("CYPRESS_DO_NOT_USE_WITH_CLAIMS").click();
-};
-
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
