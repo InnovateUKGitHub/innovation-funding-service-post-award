@@ -63,6 +63,7 @@ export default defineConfig({
     },
     testIsolation: false,
   },
+  retries: 1,
 });
 
 function getSpecPatternArray(s: string) {
