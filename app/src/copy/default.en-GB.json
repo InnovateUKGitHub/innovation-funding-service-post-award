@@ -198,6 +198,13 @@
         "display": "View Broadcast"
       }
     },
+    "pcrsDashboard": {
+      "title": "Project change requests",
+      "create": "Create request",
+      "noOngoingRequests": "You have no ongoing requests.",
+      "noPastRequests": "You have no past requests.",
+      "requestNumber": "Request number"
+    },
     "projectsDashboard": {
       "title": "Dashboard",
       "projectsTitle": "Projects",
@@ -1229,6 +1236,33 @@
     "returnToRequestButton": "Save and return to request",
     "uploadDocumentsButton": "Upload documents"
   },
+  "pcrTypes": {
+    "unknown": "Unknown PCR Type",
+    "accountNameChange": "Account Name Change",
+    "addAPartner": "Add a partner",
+    "betweenPartnerFinancialVirement": "Financial Virement",
+    "changeAPartnersName": "Change a partner's name",
+    "changeLoansDuration": "Change Loans Duration",
+    "changePeriodLength": "Change period length",
+    "changeProjectDuration": "Change project duration",
+    "changeProjectScope": "Change project scope",
+    "endTheProjectEarly": "End the project early",
+    "financialVirement": "Financial Virement",
+    "loanDrawdownChange": "Loan Drawdown Change",
+    "multiplePartnerFinancialVirement": "Financial Virement",
+    "partnerAddition": "Partner Addition",
+    "partnerWithdrawl": "Partner Withdrawal",
+    "projectSuspension": "Project Suspension",
+    "projectTermination": "Project Termination",
+    "putProjectOnHold": "Put project on hold",
+    "reallocateOnePartnersProjectCost": "Reallocate project costs",
+    "reallocateSeveralPartnersProjectCost": "Reallocate project costs",
+    "removeAPartner": "Remove a partner",
+    "requestHeader": "Request Header",
+    "scopeChange": "Scope Change",
+    "singlePartnerFinancialVirement": "Financial Virement",
+    "timeExtension": "Time Extension"
+  },
   "pcrAddPartnerLabels": {
     "roleHeading": "Project role",
     "commercialWorkHeading": "Project outputs",
@@ -1286,9 +1320,19 @@
     "proposedName": "Proposed name",
     "certificate": "Change of name certificate"
   },
-  "pcrReasoningLabels": {
+  "pcrLabels": {
     "requestNumber": "Request number",
     "types": "Types",
+    "started": "Started",
+    "status": "Status",
+    "lastUpdated": "Last updated",
+    "edit": "Edit",
+    "review": "Review",
+    "view": "View",
+    "actions": "Actions",
+    "delete": "Delete"
+  },
+  "pcrReasoningLabels": {
     "comments": "Comments",
     "files": "Files"
   },

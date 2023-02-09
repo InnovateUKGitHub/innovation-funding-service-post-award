@@ -20,6 +20,7 @@ import type { ContentSelector } from "@copy/type";
 import { useContent } from "@ui/hooks";
 
 import { TableSortKey, useTableSorter } from "./documents/table-sorter";
+import { DateConvertible } from "@framework/util";
 
 export type DividerTypes = "normal" | "bold";
 type ColumnMode = "cell" | "header" | "footer" | "col";
@@ -355,19 +356,19 @@ const NumberColumn = <T extends AnyObject>(props: ExternalColumnProps<T, number 
   <TableColumn<T> {...props} classSuffix="numeric" renderCell={(data, index) => props.value(data, index)} />
 );
 
-const FullDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, Date | null>) => (
+const FullDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, DateConvertible>) => (
   <TableColumn<T> {...props} renderCell={(data, index) => <FullDate value={props.value(data, index)} />} />
 );
 
-const FullNumericDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, Date | null>) => (
+const FullNumericDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, DateConvertible>) => (
   <TableColumn<T> {...props} renderCell={(data, index) => <FullNumericDate value={props.value(data, index)} />} />
 );
 
-const ShortDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, Date | null>) => (
+const ShortDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, DateConvertible>) => (
   <TableColumn<T> {...props} renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} />
 );
 
-const ShortDateTimeColumn = <T extends AnyObject>(props: ExternalColumnProps<T, Date | null>) => (
+const ShortDateTimeColumn = <T extends AnyObject>(props: ExternalColumnProps<T, DateConvertible>) => (
   <TableColumn<T> {...props} renderCell={(data, index) => <ShortDateTime value={props.value(data, index)} />} />
 );
 
@@ -409,10 +410,10 @@ export interface ITypedTable<T extends Record<keyof T, unknown>> {
   Number: React.FunctionComponent<ExternalColumnProps<T, number | null>>;
   Currency: React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>;
   Percentage: React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>;
-  FullDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
-  FullNumericDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
-  ShortDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
-  ShortDateTime: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
+  FullDate: React.FunctionComponent<ExternalColumnProps<T, DateConvertible>>;
+  FullNumericDate: React.FunctionComponent<ExternalColumnProps<T, DateConvertible>>;
+  ShortDate: React.FunctionComponent<ExternalColumnProps<T, DateConvertible>>;
+  ShortDateTime: React.FunctionComponent<ExternalColumnProps<T, DateConvertible>>;
   Email: React.FunctionComponent<ExternalColumnProps<T, string | null>>;
   Link: React.FunctionComponent<ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }>;
 }
@@ -430,10 +431,10 @@ export const TypedTable = <T extends Partial<Record<keyof T, unknown>>>(): IType
   Percentage: PercentageColumn as React.FunctionComponent<
     ExternalColumnProps<T, number | null> & { fractionDigits?: number }
   >,
-  FullDate: FullDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
-  FullNumericDate: FullNumericDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
-  ShortDate: ShortDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
-  ShortDateTime: ShortDateTimeColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
+  FullDate: FullDateColumn as React.FunctionComponent<ExternalColumnProps<T, DateConvertible>>,
+  FullNumericDate: FullNumericDateColumn as React.FunctionComponent<ExternalColumnProps<T, DateConvertible>>,
+  ShortDate: ShortDateColumn as React.FunctionComponent<ExternalColumnProps<T, DateConvertible>>,
+  ShortDateTime: ShortDateTimeColumn as React.FunctionComponent<ExternalColumnProps<T, DateConvertible>>,
   Email: EmailColumn as React.FunctionComponent<ExternalColumnProps<T, string | null>>,
   Link: LinkColumn as React.FunctionComponent<ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }>,
 });

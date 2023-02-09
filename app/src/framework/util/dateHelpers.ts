@@ -3,7 +3,17 @@ import { DateTime } from "luxon";
 
 export type DateConvertible = Date | string | null | undefined;
 export const convertDateAndTime = (date: DateConvertible): DateTime | null => {
-  if (typeof date === "string") return DateTime.fromFormat(date, "yyyy-MM-dd");
+  if (typeof date === "string") {
+    // Attempt to parse "2020-01-04" style dates
+    const format1 = DateTime.fromFormat(date, "yyyy-MM-dd");
+    // If the date is valid, use that.
+    if (format1.isValid) return format1;
+
+    // Otherwise, try to parse ISO dates.
+    const format2 = DateTime.fromISO(date);
+    // Even if the date is invalid, return it.
+    return format2;
+  }
   if (typeof date === "undefined") return null;
   return date && DateTime.fromJSDate(date).setZone("Europe/London");
 };
