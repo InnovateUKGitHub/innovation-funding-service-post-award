@@ -1,5 +1,12 @@
 import { visitApp } from "../../common/visit";
-import { beforeYouSubmit, createRequestButton, explainPCRTypes, pcrCheckBoxes, shouldShowProjectTitle } from "./steps";
+import {
+  beforeYouSubmit,
+  createRequestButton,
+  explainPCRTypes,
+  pcrCheckBoxes,
+  shouldShowAllAccordion,
+  shouldShowProjectTitle,
+} from "./steps";
 
 describe("PCR > Project Change Request front page", () => {
   before(() => {
@@ -14,6 +21,16 @@ describe("PCR > Project Change Request front page", () => {
 
   it("Should display a page heading", () => {
     cy.get("h1").contains("Project change requests");
+  });
+
+  it("Should display an 'ongoing requests' message", () => {
+    cy.get("p").contains("You have no ongoing requests.");
+  });
+
+  it("Should click accordions", shouldShowAllAccordion);
+
+  it("Should have a past requests message", () => {
+    cy.get("p").contains("You have no past requests.");
   });
 
   it("Should have a Create request button and will allow you to start a PCR", createRequestButton);

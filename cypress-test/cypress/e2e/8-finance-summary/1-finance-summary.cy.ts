@@ -1,7 +1,5 @@
 import { visitApp } from "common/visit";
-import { partnerFinanceDetails, projCostsToDate, whenIarNeeded } from "./steps";
-var currentYear = new Date();
-var thisYear = currentYear.getFullYear();
+import { partnerFinanceDetails, periodSubWithDate, projCostsToDate, whenIarNeeded } from "./steps";
 
 describe("Finance summary", () => {
   before(() => {
@@ -25,10 +23,7 @@ describe("Finance summary", () => {
     cy.get("h1").contains("Finance summary");
   });
 
-  it("Should display the project period subheading and date", () => {
-    cy.get("h2").contains("Project period");
-    cy.get("span").contains(thisYear);
-  });
+  it("Should display the project period subheading and date", periodSubWithDate);
 
   it("Should display the 'Project costs to date' table with heading", projCostsToDate);
 
