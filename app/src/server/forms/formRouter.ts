@@ -189,7 +189,7 @@ export const configureFormRouter =
 
     if (!configuration.sso.enabled) {
       for (const x of developerFormhandlers) {
-        result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError);
+        result.post(getRoute(x), handlePost({ schema })(x), handleError);
       }
     }
 
