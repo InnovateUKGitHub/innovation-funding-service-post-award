@@ -1,8 +1,8 @@
 import { configuration } from "@server/features/common";
 import { Query, Resolver } from "type-graphql";
-import { ClientConfigObject } from "@gql/typegraphql/object/ClientConfigObject";
+import { ClientConfigObject } from "@gql/typegraphql/object/client/ClientConfigObject";
 
-@Resolver(ClientConfigObject)
+@Resolver()
 class ClientConfigResolver {
   @Query(() => ClientConfigObject)
   async clientConfig(): Promise<ClientConfigObject> {

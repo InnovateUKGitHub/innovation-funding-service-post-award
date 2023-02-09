@@ -1,7 +1,9 @@
 import { LogLevel } from "@framework/constants";
 import { buildSchema, registerEnumType } from "type-graphql";
-import { ClientConfigResolver } from "./resolver/ClientConfigResolver";
-import { CurrentUserResolver } from "./resolver/CurrentUserResolver";
+import { ClientConfigResolver } from "./resolver/client/ClientConfigResolver";
+import { ClientCurrentUserResolver } from "./resolver/client/ClientCurrentUserResolver";
+import { SalesforceApiProjectResolver } from "./resolver/sf/SalesforceAccProjectResolver";
+import { SalesforceApiResolver } from "./resolver/sf/SalesforceApiResolver";
 
 registerEnumType(LogLevel, {
   name: "LogLevel",
@@ -10,7 +12,12 @@ registerEnumType(LogLevel, {
 
 const getTypeGraphQLSchema = async () => {
   const schema = await buildSchema({
-    resolvers: [ClientConfigResolver, CurrentUserResolver] as const,
+    resolvers: [
+      ClientConfigResolver,
+      ClientCurrentUserResolver,
+      SalesforceApiProjectResolver,
+      SalesforceApiResolver,
+    ] as const,
   });
 
   return schema;

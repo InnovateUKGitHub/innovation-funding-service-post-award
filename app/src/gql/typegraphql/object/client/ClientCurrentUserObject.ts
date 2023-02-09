@@ -1,7 +1,7 @@
 import { Field, ObjectType } from "type-graphql";
 
 @ObjectType()
-class CurrentUserObject {
+class ClientCurrentUserObject {
   @Field(() => String, { nullable: true })
   email!: string | null;
 
@@ -9,4 +9,4 @@ class CurrentUserObject {
   isSystemUser!: boolean;
 }
 
-export { CurrentUserObject };
+export { ClientCurrentUserObject };

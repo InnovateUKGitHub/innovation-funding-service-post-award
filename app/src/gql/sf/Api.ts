@@ -5,6 +5,8 @@ import { Logger } from "@shared/developmentLogger";
 import { print } from "graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
 import fetch from "isomorphic-fetch";
+import DataLoader from "dataloader";
+import { sleep } from "@shared/sleep";
 
 interface FetcherConfiguration extends RequestInit {
   searchParams?: Record<string, string>;
@@ -25,6 +27,7 @@ export class Api {
   private readonly accessToken: string;
   private readonly logger: Logger = new Logger("Salesforce");
   public readonly email: string;
+  private readonly dataloaders: Map<string, DataLoader<string, any>> = new Map();
 
   constructor({
     version = "v56.0",
@@ -120,13 +123,60 @@ export class Api {
    * @todo Remove decodeHTMLEntities when Salesforce no longer returns encoded results.
    * @returns GraphQL Result - Is typed as `any` because the result may vary, including potential errors.
    */
+  public executeSOQL<T>(query: string): Promise<T> {
+    this.logger.debug("SOQL", query);
+    return this.fetch(`/services/data/${this.version}/query`, {
+      method: "GET",
+      searchParams: { q: query },
+    });
+  }
+
+  public async select<T = any>(table: string, columns: string[]): Promise<T> {
+    const data = (await this.executeSOQL<any>(`SELECT ${columns.join(",")} FROM ${table}`))
+
+    return data.records;
+  }
+
+  public async createDataLoader(table: string, columns: string[]) {
+    const baseQuery = `SELECT ${columns.join(",")} FROM ${table}`;
+
+    this.logger.debug("Created a dataloader", baseQuery);
+
+    const dataloader = new DataLoader<string, any>(async keys => {
+      const data = await this.executeSOQL<any>(`${baseQuery} WHERE Id in (${keys.map(id => `'${id}'`).join(",")})`);
+      return keys.map(x => data.records.find(y => y.Id === x));
+    });
+
+    this.dataloaders.set(baseQuery, dataloader);
+  }
+
+  public async selectKeys(table: string, columns: string[], ids: string[]): Promise<any[]> {
+    const baseQuery = `SELECT ${columns.join(",")} FROM ${table}`;
+
+    const dataloader = this.dataloaders.get(baseQuery);
+
+    if (ids.length === 0) return [];
+
+    if (dataloader) {
+      const data = await dataloader.loadMany(ids);
+      return data;
+    }
+    throw new Error("Dataloader not init");
+  }
+
+  /**
+   * Execute a GraphQL Query AST via the Salesforce GraphQL API.
+   *
+   * @todo Remove decodeHTMLEntities when Salesforce no longer returns encoded results.
+   * @returns GraphQL Result - Is typed as `any` because the result may vary, including potential errors.
+   */
   public executeGraphQL<T>({
     document,
     variables,
     decodeHTMLEntities,
   }: ExecutionRequest & ExecuteConfiguration): Promise<T> {
     const query = print(document);
-    this.logger.debug("Query", query, variables);
+    this.logger.debug("GraphQL", query, variables);
     return this.fetch(`/services/data/${this.version}/graphql`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

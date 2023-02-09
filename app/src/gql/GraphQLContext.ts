@@ -1,7 +1,6 @@
 import { ForbiddenError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { Request, Response } from "express";
-import { getProjectRolesDataLoader } from "./dataloader/projectRolesDataLoader";
 import { Api } from "./sf/Api";
 
 const logger = new Logger("GraphQLContext");
@@ -11,9 +10,7 @@ export type PartialGraphQLContext = Record<string, unknown> & {
   email: string;
 };
 
-export type GraphQLContext = PartialGraphQLContext & {
-  projectRolesDataLoader: ReturnType<typeof getProjectRolesDataLoader>;
-};
+export type GraphQLContext = PartialGraphQLContext;
 
 export const createContext = async ({
   req,
@@ -29,15 +26,9 @@ export const createContext = async ({
       const api = await Api.asUser(email);
 
       // Create an incomplete GraphQL context for use in Dataloaders.
-      const partialCtx: PartialGraphQLContext = {
+      const ctx: GraphQLContext = {
         email,
         api,
-      };
-
-      // Create a full context, including dataloaders.
-      const ctx: GraphQLContext = {
-        ...partialCtx,
-        projectRolesDataLoader: getProjectRolesDataLoader(partialCtx),
       };
 
       return ctx;
