@@ -15,6 +15,8 @@ import { createHandler } from "graphql-http/lib/use/express";
 
 export const noAuthRouter = Router();
 
+const logger = new Logger("Router");
+
 // Support routes
 noAuthRouter.use("/api/health", healthRouter);
 
@@ -22,7 +24,12 @@ const getServerRoutes = async () => {
   const router = Router();
   const csrfProtection = csrf();
 
-  const adminApi = await Api.asSystemUser();
+  let adminApi: Api | undefined;
+  try {
+    adminApi = await Api.asSystemUser();
+  } catch {
+    logger.error("Failed to create GraphQL Admin Salesforce API connector.");
+  }
   const schema = await getGraphQLSchema({ api: adminApi });
 
   // App routes
