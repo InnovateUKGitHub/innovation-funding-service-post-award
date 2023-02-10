@@ -11,7 +11,7 @@ import {
   ProjectDetailProjectContactLinkTableFragment$key,
 } from "./__generated__/ProjectDetailProjectContactLinkTableFragment.graphql";
 
-const kebab = (label:string) => label.replace(" ", "-").toLowerCase();
+const kebab = (label: string) => label.replace(" ", "-").toLowerCase();
 
 const PartnersTable =
   TypedTable<
