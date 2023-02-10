@@ -1,5 +1,6 @@
 import { ILinkInfo } from "@framework/types";
-import { Link, TypedTable } from "@ui/components";
+import { TypedTable } from "@ui/components/table";
+import { Link } from "@ui/components/links";
 import { LineBreakList, SimpleString } from "@ui/components/renderers";
 import { BaseProps } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
