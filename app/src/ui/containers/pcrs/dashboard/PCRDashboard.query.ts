@@ -1,10 +1,6 @@
 import { graphql } from "relay-hooks";
 
 const pcrDashboardQuery = graphql`
-  # Welcome to Altair GraphQL Client.
-  # You can send your request using CmdOrCtrl + Enter.
-
-  # Enter your graphQL query here.
   query PCRDashboardQuery($projectId: ID) {
     salesforce {
       uiapi {
@@ -25,7 +21,7 @@ const pcrDashboardQuery = graphql`
                 Acc_ProjectTitle__c {
                   value
                 }
-                Project_Change_Requests__r(first: 2000) {
+                Project_Change_Requests__r(first: 2000, orderBy: { Acc_RequestNumber__c: { order: DESC } }) {
                   edges {
                     node {
                       Id

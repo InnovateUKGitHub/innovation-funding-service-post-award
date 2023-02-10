@@ -2,9 +2,9 @@ import { ProjectRole } from "@framework/types";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
 import { Accordion, AccordionItem, Link, Page } from "@ui/components";
 import { ProjectBackLink } from "@ui/components/projects";
-import { SimpleString } from "@ui/components/renderers";
 import { PageTitle } from "@ui/features/page-title";
 import { useContent } from "@ui/hooks";
+import { useEffect, useState } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { BaseProps, defineRoute } from "../../containerBase";
 import { collateProjectChangeRequests } from "./PCRDashboard.logic";
@@ -14,9 +14,19 @@ import { PCRDashboardQuery } from "./__generated__/PCRDashboardQuery.graphql";
 
 const PCRsDashboardContainer = (props: BaseProps) => {
   const { getContent } = useContent();
-  const data = useLazyLoadQuery<PCRDashboardQuery>(pcrDashboardQuery, {
-    projectId: props.projectId,
-  });
+
+  const data = useLazyLoadQuery<PCRDashboardQuery>(
+    pcrDashboardQuery,
+    {
+      projectId: props.projectId,
+    },
+    {
+      fetchPolicy: "network-only",
+      networkCacheConfig: {
+        force: true,
+      },
+    },
+  );
 
   const { node: project } = getFirstEdge(data.salesforce.uiapi.query.Acc_Project__c?.edges);
   const { isPm } = project.roles;

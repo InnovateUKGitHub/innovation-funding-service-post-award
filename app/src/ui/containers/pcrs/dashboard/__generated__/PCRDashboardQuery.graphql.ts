@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d4c71cf8cc512cf117c6fb29da8edd15>>
+ * @generated SignedSource<<0f04521457093ae09f3b79ccfc7b4a39>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -229,6 +229,15 @@ v3 = [
                                 "kind": "Literal",
                                 "name": "first",
                                 "value": 2000
+                              },
+                              {
+                                "kind": "Literal",
+                                "name": "orderBy",
+                                "value": {
+                                  "Acc_RequestNumber__c": {
+                                    "order": "DESC"
+                                  }
+                                }
                               }
                             ],
                             "concreteType": "Acc_ProjectChangeRequest__cConnection",
@@ -331,7 +340,7 @@ v3 = [
                                 "storageKey": null
                               }
                             ],
-                            "storageKey": "Project_Change_Requests__r(first:2000)"
+                            "storageKey": "Project_Change_Requests__r(first:2000,orderBy:{\"Acc_RequestNumber__c\":{\"order\":\"DESC\"}})"
                           }
                         ],
                         "storageKey": null
@@ -370,16 +379,16 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "f5af3b63b0fef7a6a1a08f0d9d2d0343",
+    "cacheID": "2282daf4001156ed27df446bd0da3605",
     "id": null,
     "metadata": {},
     "name": "PCRDashboardQuery",
     "operationKind": "query",
-    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1e3dc1507d5e32dcca215aec9ed65212";
+(node as any).hash = "f9bf88da0901f459be62da30891c777e";
 
 export default node;
