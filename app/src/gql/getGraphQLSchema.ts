@@ -32,22 +32,28 @@ const fullSchemaFilePath = path.join("src", "gql", "schema", "fullSchema.gql");
  *
  * @returns A server-executable GraphQL schema
  */
-const getGraphQLSchema = async ({ api }: { api: Api }) => {
-  const salesforceSubschema = await getSalesforceSubschema({ api });
-  const localSchema = await getTypeGraphQLSchema();
+const getGraphQLSchema = async ({ api }: { api?: Api }) => {
+  const stitchConfig: Parameters<typeof stitchSchemas>[0] = {
+    subschemas: [],
+  };
+
+  if (api) {
+    stitchConfig.subschemas?.push(await getSalesforceSubschema({ api }));
+    Object.assign(stitchConfig, {
+      typeDefs,
+      resolvers: {
+        Acc_Project__c: {
+          roles: rolesResolver,
+          isActive: projectIsActiveResolver,
+        },
+      },
+    });
+  }
+  stitchConfig.subschemas?.push(await getTypeGraphQLSchema());
 
   // Stitch the Salesforce API and our "local options" GraphQL schemas together.
   // See `typeDefs.gql` for extensions; extra resolvers used to resolve extensions.
-  const schema = stitchSchemas({
-    subschemas: [salesforceSubschema, localSchema],
-    typeDefs,
-    resolvers: {
-      Acc_Project__c: {
-        roles: rolesResolver,
-        isActive: projectIsActiveResolver,
-      },
-    },
-  });
+  const schema = stitchSchemas(stitchConfig);
 
   if (isLocalDevelopment) {
     writeFileSync(fullSchemaFilePath, printSchema(schema), { encoding: "utf-8" });
