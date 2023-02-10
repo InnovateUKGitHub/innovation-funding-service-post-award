@@ -22,7 +22,10 @@ exports[`<ClaimsDashboardGuidance /> @renders when overdue claim 1`] = `
       class="govuk-link govuk-!-font-size-19"
       href="mailto:webmaster@example.com"
     >
-      webmaster@example.com
+      webmaster
+      <wbr />
+      @
+      example.com
     </a>
      for more information.
   </div>

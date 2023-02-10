@@ -3,7 +3,7 @@ import cx from "classnames";
 
 type AnchorAttr = React.HTMLProps<HTMLAnchorElement>;
 export interface EmailProps extends AnchorAttr {
-  children: string;
+  children?: string;
   qa?: string;
   href?: string;
   className?: string;
@@ -13,8 +13,11 @@ export interface EmailProps extends AnchorAttr {
  * Email component, rendered as anchor
  */
 export function Email({ href, className, qa, children, ...props }: EmailProps) {
+  if (!children) return null;
+
   const fallbackHref = children.trim();
-  if (!children.length) return null;
+
+  const [mailbox, domain] = children.split("@");
 
   return (
     <a
@@ -23,7 +26,8 @@ export function Email({ href, className, qa, children, ...props }: EmailProps) {
       className={cx("govuk-link govuk-!-font-size-19", className)}
       {...props}
     >
-      {children}
+      {mailbox}
+      <wbr />@{domain}
     </a>
   );
 }

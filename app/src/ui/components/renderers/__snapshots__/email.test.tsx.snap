@@ -7,7 +7,10 @@ exports[`Email @renders should return as default 1`] = `
     data-qa="email-qa"
     href="mailto:stub-children@email.com"
   >
-    stub-children@email.com
+    stub-children
+    <wbr />
+    @
+    email.com
   </a>
 </div>
 `;

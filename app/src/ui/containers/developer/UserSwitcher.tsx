@@ -147,16 +147,16 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
         value={x => (x.isFc ? getContent(x => x.components.userChanger.tableHeaderFinancialContact) : "")}
       />
 
-      <ProjectContactTable.String
+      <ProjectContactTable.Email
         qa="partner-external-username"
         header={x => x.projectContactLabels.contactExternalUsername}
-        value={x => x.user.externalUsername?.replace("@", "\u200B@") ?? "Undefined Email"} // Add ZWSP to allow line break
+        value={x => x.user.externalUsername ?? null} // Add ZWSP to allow line break
       />
 
-      <ProjectContactTable.String
+      <ProjectContactTable.Email
         qa="partner-email"
         header={x => x.projectContactLabels.contactEmail}
-        value={x => x.user.email.replace("@", "\u200B@")} // Add ZWSP to allow line break
+        value={x => x.user.email ?? null} // Add ZWSP to allow line break
       />
 
       <ProjectContactTable.Custom

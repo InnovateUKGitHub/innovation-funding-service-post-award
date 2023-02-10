@@ -69,7 +69,10 @@ exports[`<PartnersAndFinanceContacts /> @renders matching FC snapshot 1`] = `
               class="govuk-link govuk-!-font-size-19"
               href="mailto:bobbaker@nowhere.com"
             >
-              bobbaker@nowhere.com
+              bobbaker
+              <wbr />
+              @
+              nowhere.com
             </a>
           </td>
         </tr>
@@ -93,7 +96,10 @@ exports[`<PartnersAndFinanceContacts /> @renders matching FC snapshot 1`] = `
               class="govuk-link govuk-!-font-size-19"
               href="mailto:tedtester@nowhere.com"
             >
-              tedtester@nowhere.com
+              tedtester
+              <wbr />
+              @
+              nowhere.com
             </a>
           </td>
         </tr>
@@ -117,7 +123,10 @@ exports[`<PartnersAndFinanceContacts /> @renders matching FC snapshot 1`] = `
               class="govuk-link govuk-!-font-size-19"
               href="mailto:joebloggs@nowhere.com"
             >
-              joebloggs@nowhere.com
+              joebloggs
+              <wbr />
+              @
+              nowhere.com
             </a>
           </td>
         </tr>
@@ -250,7 +259,10 @@ exports[`<PartnersAndFinanceContacts /> @renders matching PM snapshot 1`] = `
               class="govuk-link govuk-!-font-size-19"
               href="mailto:davedeveloper@nowhere.com"
             >
-              davedeveloper@nowhere.com
+              davedeveloper
+              <wbr />
+              @
+              nowhere.com
             </a>
           </td>
         </tr>

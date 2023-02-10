@@ -413,7 +413,7 @@ export interface ITypedTable<T extends Record<keyof T, unknown>> {
   FullNumericDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
   ShortDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
   ShortDateTime: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
-  Email: React.FunctionComponent<ExternalColumnProps<T, string>>;
+  Email: React.FunctionComponent<ExternalColumnProps<T, string | null>>;
   Link: React.FunctionComponent<ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }>;
 }
 
@@ -434,6 +434,6 @@ export const TypedTable = <T extends Partial<Record<keyof T, unknown>>>(): IType
   FullNumericDate: FullNumericDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDate: ShortDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDateTime: ShortDateTimeColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
-  Email: EmailColumn as React.FunctionComponent<ExternalColumnProps<T, string>>,
+  Email: EmailColumn as React.FunctionComponent<ExternalColumnProps<T, string | null>>,
   Link: LinkColumn as React.FunctionComponent<ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }>,
 });
