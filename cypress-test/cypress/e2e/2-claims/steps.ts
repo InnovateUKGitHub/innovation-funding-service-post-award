@@ -114,7 +114,7 @@ export const forecastHeaders = () => {
   cy.tableHeader("IAR Due");
   cy.tableHeader("No");
   cy.tableHeader("Month");
-  cy.tableHeader("2022");
+  cy.tableHeader("2023");
 };
 
 export const displayForecastTable = () => {
