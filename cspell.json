@@ -73,7 +73,11 @@
         "vals",
         "virement",
         "virements",
-        "Whitesource"
+        "Whitesource",
+        "Loggable",
+        "Timeoutable",
+        "Withinable",
+        "UEAS"
     ],
     "ignoreWords": [],
     "import": []

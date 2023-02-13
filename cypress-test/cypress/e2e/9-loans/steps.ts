@@ -1,4 +1,5 @@
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
+import { visitApp } from "common/visit";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const cardId = "191431";
@@ -198,4 +199,82 @@ export const giveUsInfoTodo = () => {
 export const explainReasoningTodo = () => {
   cy.get("h2").contains("Explain why you want to make the changes");
   cy.assertPcrCompletionStatus("Provide reasoning to Innovate UK", "To do");
+};
+
+export const shouldShowAllAccordion = () => {
+  cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click();
+};
+
+export const deletePcr = () => {
+  visitApp({ path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
+  cy.getByQA("pcrDeleteLink").contains("Delete").click();
+  cy.getByQA("button_delete-qa").click({ force: true });
+};
+
+export const loansEditTable = () => {
+  [
+    "Drawdown",
+    "Current date",
+    "Current amount",
+    "New date",
+    "New amount",
+    "Total",
+    "Day",
+    "Month",
+    "Year",
+    "£114,000.00",
+    "£10,000.00",
+    "£11,000.00",
+    "£13,000.00",
+    "£14,000.00",
+    "£15,000.00",
+    "£16,000.00",
+    "£17,000.00",
+    "£18,000.00",
+  ].forEach(loanItem => {
+    cy.getByQA("loan-edit-table").contains(loanItem);
+  });
+};
+
+export const updateLoansValue = () => {
+  [
+    "input#1_newValue",
+    "input#2_newValue",
+    "input#3_newValue",
+    "input#4_newValue",
+    "input#5_newValue",
+    "input#6_newValue",
+    "input#7_newValue",
+    "input#8_newValue",
+  ].forEach(inputItem => {
+    cy.get(inputItem).clear().wait(100).type("1").wait(100);
+  });
+};
+
+export const amendLoansTable = () => {
+  [
+    "Drawdown",
+    "Current date",
+    "Current amount",
+    "New date",
+    "New amount",
+    "Total",
+    "£8.00",
+    "£114,000.00",
+    "Edit",
+  ].forEach(editItem => {
+    cy.getByQA("loan-edit-table").contains(editItem);
+  });
+};
+
+export const changeFirstValue = () => {
+  cy.get("tr > td:nth-child(6)").contains("a", "Edit").click();
+  cy.get("input#1_newValue").clear().wait(100).type("2").wait(200);
+  cy.get("td").contains("£9.00");
+};
+
+export const markAndContinue = () => {
+  cy.get("h2").contains("Mark as complete");
+  cy.getByLabel("I agree with this change.").check();
+  cy.submitButton("Save and return to request").click();
 };

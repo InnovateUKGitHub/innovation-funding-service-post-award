@@ -4,30 +4,30 @@ type CommandOptions = Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.W
 
 const getByLabel = (label: string) => {
   cy.log("**getByLabel**");
-  cy.contains("label", label, { timeout: 10000 })
+  cy.contains("label", label)
     .invoke("attr", "for")
     .then(id => {
-      cy.get("#" + id, { timeout: 10000 });
+      cy.get("#" + id);
     });
 };
 
 const getByQA = (tag: string, options?: CommandOptions) => {
   cy.log("**getByQA**");
-  cy.get(`[data-qa="${tag}"]`, options ?? { timeout: 10000 });
+  cy.get(`[data-qa="${tag}"]`, options ?? { timeout: 15000 });
 };
 
 const getByPageQA = (tag: string) => {
   cy.log("**getByQA**");
-  cy.get(`[data-page-qa="${tag}"]`, { timeout: 10000 });
+  cy.get(`[data-page-qa="${tag}"]`);
 };
 
 const getByAriaLabel = (label: string) => {
   cy.log("**getByAriaLabel**");
-  cy.get(`[aria-label="${label}"]`, { timeout: 10000 });
+  cy.get(`[aria-label="${label}"]`);
 };
 
 const switchUserTo = (email: string, goHome: boolean = false) => {
-  cy.contains("User Switcher", { timeout: 10000 }).click({ force: true });
+  cy.contains("User Switcher").click({ force: true });
   cy.get("input#user-switcher-manual-input").scrollIntoView().clear().wait(1000).type(email);
   cy.getByQA(`manual-change-and-${goHome ? "home" : "stay"}`).click({ force: true });
   cy.wait(1000);
@@ -45,26 +45,26 @@ const resetUser = (goHome: boolean = false) => {
 
 const backLink = (name: string) => {
   cy.log("**backLink**");
-  cy.get("a.govuk-back-link", { timeout: 10000 }).contains(name, { timeout: 10000 });
+  cy.get("a.govuk-back-link").contains(name);
 };
 
 const submitButton = (name: string) => {
-  cy.get('button[type="submit"]').contains(name, { timeout: 10000 });
+  cy.get('button[type="submit"]').contains(name);
 };
 
 /**
  * Note that this upload button is different to the one contained within Claims documents upload which is button_upload-qa
  */
 const uploadButton = (name: string) => {
-  cy.get('button[type="submit"]').contains(name, { timeout: 10000 });
+  cy.get('button[type="submit"]').contains(name);
 };
 
 const tableCell = (name: string) => {
-  cy.get("td").contains(name, { timeout: 10000 });
+  cy.get("td").contains(name);
 };
 
 const tableHeader = (name: string) => {
-  cy.get("th").contains(name, { timeout: 10000 });
+  cy.get("th").contains(name);
 };
 
 const assertPcrCompletionStatus = (pcrType: string, status: string) => {
@@ -75,9 +75,9 @@ const assertPcrCompletionStatus = (pcrType: string, status: string) => {
 const clickCheckBox = (label: string, uncheck?: boolean) => {
   cy.log("**clickCheckBox**");
   if (uncheck) {
-    cy.getByLabel(label).scrollIntoView().uncheck({ timeout: 5000 });
+    cy.getByLabel(label).scrollIntoView().uncheck();
   } else {
-    cy.getByLabel(label).scrollIntoView().check({ force: true, timeout: 5000 });
+    cy.getByLabel(label).scrollIntoView().check({ force: true });
   }
 };
 

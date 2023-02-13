@@ -34,9 +34,7 @@ describe("PCR > Project Change Request front page", () => {
   });
 
   it("Should have a Create request button and will allow you to start a PCR", createRequestButton);
-});
 
-describe("Start a new request screen loads", () => {
   it("Should display the project title", shouldShowProjectTitle);
 
   it("Should show the page title", () => {
