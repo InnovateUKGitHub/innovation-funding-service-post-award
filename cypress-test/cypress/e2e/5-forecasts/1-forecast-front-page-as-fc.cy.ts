@@ -7,7 +7,7 @@ describe("Forecast > front page as FC", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 
-    cy.navigateToProjectWithClaims();
+    cy.navigateToProject("879546");
   });
 
   it("should click the forecast tile", clickForecastsTile);

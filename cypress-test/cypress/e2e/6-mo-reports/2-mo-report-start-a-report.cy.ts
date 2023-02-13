@@ -15,7 +15,7 @@ describe("MO report > can start a new report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 
-    cy.navigateToProject();
+    cy.navigateToProject("328407");
   });
 
   it("should click the MO Reports tile", clickMoReportTile);

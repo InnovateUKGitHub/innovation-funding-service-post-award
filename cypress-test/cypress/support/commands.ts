@@ -81,17 +81,11 @@ const clickCheckBox = (label: string, uncheck?: boolean) => {
   }
 };
 
-const navigateToProject = () => {
+const navigateToProject = (projectId: string) => {
   const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
   cy.log("**navigateToProject**");
   cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains("1_CYPRESS_DO_NOT_USE").click({ force: true });
-};
-
-const navigateToProjectWithClaims = () => {
-  const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
-  cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains("CYPRESS_DO_NOT_USE_WITH_CLAIMS").click();
+  cy.get(`${projectCardCss} a`).wait(1000).contains(projectId).click({ force: true });
 };
 
 Cypress.Commands.add("getByLabel", getByLabel);
@@ -108,4 +102,3 @@ Cypress.Commands.add("tableHeader", tableHeader);
 Cypress.Commands.add("assertPcrCompletionStatus", assertPcrCompletionStatus);
 Cypress.Commands.add("clickCheckBox", clickCheckBox);
 Cypress.Commands.add("navigateToProject", navigateToProject);
-Cypress.Commands.add("navigateToProjectWithClaims", navigateToProjectWithClaims);

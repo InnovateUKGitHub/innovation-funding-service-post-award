@@ -8,7 +8,7 @@ describe("projects dashboard > Project Manager - Finance Contact", () => {
   before(() => {
     visitApp({ asUser: projectManagerFinanceContactEmail });
 
-    cy.navigateToProject();
+    cy.navigateToProject("328407");
   });
 
   testEach(["Claims", "Forecast", "Project change requests", "Documents", "Project details", "Finance summary"])(

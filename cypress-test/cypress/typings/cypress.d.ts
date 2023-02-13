@@ -72,9 +72,11 @@ declare global {
        */
       clickCheckBox(label: string, uncheck?: boolean): void;
 
-      navigateToProject(): Chainable<Element>;
-
-      navigateToProjectWithClaims(): Chainable<Element>;
+      /**
+       *
+       * Finds the defined project name or number and navigates to it from projects main page
+       */
+      navigateToProject(projectId: string): Chainable<Element>;
     }
   }
 }

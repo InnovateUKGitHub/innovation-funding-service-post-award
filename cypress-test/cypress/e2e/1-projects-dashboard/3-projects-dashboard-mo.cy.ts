@@ -8,7 +8,7 @@ describe("projects dashboard > Monitoring Officer", () => {
   before(() => {
     visitApp({ asUser: monitoringOfficerEmail });
 
-    cy.navigateToProject();
+    cy.navigateToProject("328407");
   });
 
   testEach([

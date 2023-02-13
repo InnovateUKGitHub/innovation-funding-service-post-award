@@ -18,7 +18,7 @@ describe("MO report > section 1 - can continue a report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 
-    cy.navigateToProject();
+    cy.navigateToProject("328407");
   });
 
   after(() => {

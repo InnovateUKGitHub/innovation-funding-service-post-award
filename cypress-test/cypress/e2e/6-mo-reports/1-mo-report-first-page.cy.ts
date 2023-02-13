@@ -13,7 +13,7 @@ describe("MO report > can navigate to the MO Reports tile", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
 
-    cy.navigateToProject();
+    cy.navigateToProject("328407");
   });
 
   it("should click the MO Reports tile", clickMoReportTile);

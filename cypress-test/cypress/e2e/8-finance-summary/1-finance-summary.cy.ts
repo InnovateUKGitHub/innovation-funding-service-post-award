@@ -4,7 +4,7 @@ import { partnerFinanceDetails, periodSubWithDate, projCostsToDate, whenIarNeede
 describe("Finance summary", () => {
   before(() => {
     visitApp({});
-    cy.navigateToProject();
+    cy.navigateToProject("328407");
   });
 
   it("Should click the Finance summary tile", () => {

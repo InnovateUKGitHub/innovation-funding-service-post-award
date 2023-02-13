@@ -14,7 +14,7 @@ describe("Forecast > edit", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
 
-    cy.navigateToProject();
+    cy.navigateToProject("879546");
   });
 
   it("should click the forecast tile", clickForecastTile);

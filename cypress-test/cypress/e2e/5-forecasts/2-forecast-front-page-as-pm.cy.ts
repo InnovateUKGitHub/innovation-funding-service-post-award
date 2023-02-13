@@ -7,7 +7,7 @@ describe("Forecast front page as PM", () => {
   before(() => {
     visitApp({ asUser: projectManagerEmail });
 
-    cy.navigateToProjectWithClaims();
+    cy.navigateToProject("879546");
   });
 
   it("should click the forecast tile", clickForecastTile);
