@@ -9,4 +9,5 @@ export const visitApp = ({
 }) => {
   cy.visit(path, { auth: { username, password } });
   cy.switchUserTo(asUser);
+  cy.log(`Currently running: ${Cypress.spec.name}`);
 };
