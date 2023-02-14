@@ -171,7 +171,7 @@ export const shouldShowProjectTitle = () => {
 };
 
 export const clickMoReportTile = () => {
-  cy.get("h2.card-link__title").contains("Monitoring reports").click();
+  cy.selectTile("Monitoring reports");
 };
 
 export const startNewReportButton = () => {
@@ -193,51 +193,75 @@ export const characterCount = () => {
 };
 
 export const q1SelectEachRadioButton = () => {
-  cy.getByQA("question-1-score-5").check();
-  cy.getByQA("question-1-score-4").check();
-  cy.getByQA("question-1-score-3").check();
-  cy.getByQA("question-1-score-2").check();
-  cy.getByQA("question-1-score-1").check();
+  [
+    "question-1-score-5",
+    "question-1-score-4",
+    "question-1-score-3",
+    "question-1-score-2",
+    "question-1-score-1",
+  ].forEach(q1Radio => {
+    cy.getByQA(q1Radio).check();
+  });
 };
 
 export const q2SelectEachRadioButton = () => {
-  cy.getByQA("question-2-score-5").check();
-  cy.getByQA("question-2-score-4").check();
-  cy.getByQA("question-2-score-3").check();
-  cy.getByQA("question-2-score-2").check();
-  cy.getByQA("question-2-score-1").check();
+  [
+    "question-2-score-5",
+    "question-2-score-4",
+    "question-2-score-3",
+    "question-2-score-2",
+    "question-2-score-1",
+  ].forEach(q2Radio => {
+    cy.getByQA(q2Radio).check();
+  });
 };
 
 export const q3SelectEachRadioButton = () => {
-  cy.getByQA("question-3-score-5").check();
-  cy.getByQA("question-3-score-4").check();
-  cy.getByQA("question-3-score-3").check();
-  cy.getByQA("question-3-score-2").check();
-  cy.getByQA("question-3-score-1").check();
+  [
+    "question-3-score-5",
+    "question-3-score-4",
+    "question-3-score-3",
+    "question-3-score-2",
+    "question-3-score-1",
+  ].forEach(q3Radio => {
+    cy.getByQA(q3Radio).check();
+  });
 };
 
 export const q4SelectEachRadioButton = () => {
-  cy.getByQA("question-4-score-5").check();
-  cy.getByQA("question-4-score-4").check();
-  cy.getByQA("question-4-score-3").check();
-  cy.getByQA("question-4-score-2").check();
-  cy.getByQA("question-4-score-1").check();
+  [
+    "question-4-score-5",
+    "question-4-score-4",
+    "question-4-score-3",
+    "question-4-score-2",
+    "question-4-score-1",
+  ].forEach(q4Radio => {
+    cy.getByQA(q4Radio).check();
+  });
 };
 
 export const q5SelectEachRadioButton = () => {
-  cy.getByQA("question-5-score-5").check();
-  cy.getByQA("question-5-score-4").check();
-  cy.getByQA("question-5-score-3").check();
-  cy.getByQA("question-5-score-2").check();
-  cy.getByQA("question-5-score-1").check();
+  [
+    "question-5-score-5",
+    "question-5-score-4",
+    "question-5-score-3",
+    "question-5-score-2",
+    "question-5-score-1",
+  ].forEach(q5Radio => {
+    cy.getByQA(q5Radio).check();
+  });
 };
 
 export const q6SelectEachRadioButton = () => {
-  cy.getByQA("question-6-score-5").check();
-  cy.getByQA("question-6-score-4").check();
-  cy.getByQA("question-6-score-3").check();
-  cy.getByQA("question-6-score-2").check();
-  cy.getByQA("question-6-score-1").check();
+  [
+    "question-6-score-5",
+    "question-6-score-4",
+    "question-6-score-3",
+    "question-6-score-2",
+    "question-6-score-1",
+  ].forEach(q6Radio => {
+    cy.getByQA(q6Radio).check();
+  });
 };
 
 export const continueAndReturnButtons = () => {
@@ -267,49 +291,57 @@ export const saveContinueSaveReturn = () => {
 };
 
 export const q1ScoreChoice = () => {
-  cy.get("label").contains("The consortium has identified");
-  cy.get("label").contains("The project remains");
-  cy.get("label").contains("There is a possibility");
-  cy.get("label").contains("It appears highly likely");
-  cy.get("label").contains("It is certain that");
+  [
+    "The consortium has identified",
+    "The project remains",
+    "There is a possibility",
+    "It appears highly likely",
+    "It is certain that",
+  ].forEach(q1Choice => {
+    cy.get("label").contains(q1Choice);
+  });
 };
 
 export const q2ScoreChoice = () => {
-  cy.get("label").contains("ahead of schedule");
-  cy.get("label").contains("planned timetable");
-  cy.get("label").contains("current period have been met");
-  cy.get("label").contains("slipped by up to three months");
-  cy.get("label").contains("slipped by more than three months");
+  [
+    "ahead of schedule",
+    "planned timetable",
+    "current period have been met",
+    "slipped by up to three months",
+    "slipped by more than three months",
+  ].forEach(q2Choice => {
+    cy.get("label").contains(q2Choice);
+  });
 };
 
 export const q3ScoreChoice = () => {
-  cy.get("label").contains("Expenditure is lower");
-  cy.get("label").contains("Expenditure is in line");
-  cy.get("label").contains("Limited forecast evidence");
-  cy.get("label").contains("Forecasts not updated properly");
-  cy.get("label").contains("Forecasts not updated, and");
+  [
+    "Expenditure is lower",
+    "Expenditure is in line",
+    "Limited forecast evidence",
+    "Forecasts not updated properly",
+    "Forecasts not updated, and",
+  ].forEach(q3Choice => {
+    cy.get("label").contains(q3Choice);
+  });
 };
 
 export const q4ScoreChoice = () => {
-  cy.get("label").contains("Exceeding expectations");
-  cy.get("label").contains("Good");
-  cy.get("label").contains("Scope for improvement");
-  cy.get("label").contains("Very poor");
-  cy.get("label").contains("Unacceptable");
+  ["Exceeding expectations", "Good", "Scope for improvement", "Very poor", "Unacceptable"].forEach(q4Choice => {
+    cy.get("label").contains(q4Choice);
+  });
 };
 
 export const q5ScoreChoice = () => {
-  cy.get("label").contains("Exceeding expectations");
-  cy.get("label").contains("Good practice");
-  cy.get("label").contains("Scope for improvement");
-  cy.get("label").contains("Very poor");
-  cy.get("label").contains("Unacceptable");
+  ["Exceeding expectations", "Good practice", "Scope for improvement", "Very poor", "Unacceptable"].forEach(
+    q5Choice => {
+      cy.get("label").contains(q5Choice);
+    },
+  );
 };
 
 export const q6ScoreChoice = () => {
-  cy.get("label").contains("Exceeding expectations");
-  cy.get("label").contains("Good");
-  cy.get("label").contains("Scope for improvement");
-  cy.get("label").contains("Very poor");
-  cy.get("label").contains("Unacceptable");
+  ["Exceeding expectations", "Good", "Scope for improvement", "Very poor", "Unacceptable"].forEach(q6Choice => {
+    cy.get("label").contains(q6Choice);
+  });
 };

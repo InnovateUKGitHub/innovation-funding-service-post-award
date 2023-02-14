@@ -8,7 +8,7 @@ describe("claims > open claims as FC", () => {
 
   describe("FC should be able to navigate to the claims page", () => {
     it("clicking Claims will navigate to claims screen", () => {
-      cy.get("h2.card-link__title").contains("Claims").click();
+      cy.selectTile("Claims");
     });
     it("Should have a back option", () => {
       cy.backLink("Back to project");

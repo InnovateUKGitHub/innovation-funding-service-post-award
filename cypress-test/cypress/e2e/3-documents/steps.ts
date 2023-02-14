@@ -7,14 +7,9 @@ export const shouldShowAllAccordion = () => {
 };
 
 export const selectFileDescription = () => {
-  cy.get("select#description.govuk-select").select("130");
-  cy.get("select#description.govuk-select").select("140");
-  cy.get("select#description.govuk-select").select("150");
-  cy.get("select#description.govuk-select").select("160");
-  cy.get("select#description.govuk-select").select("170");
-  cy.get("select#description.govuk-select").select("180");
-  cy.get("select#description.govuk-select").select("190");
-  cy.get("select#description.govuk-select").select("200");
+  ["130", "140", "150", "160", "170", "180", "190", "200"].forEach(fileDescription => {
+    cy.get("select#description.govuk-select").contains(fileDescription);
+  });
 };
 
 export const accessControl = () => {

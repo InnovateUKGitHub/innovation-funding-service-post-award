@@ -88,6 +88,10 @@ const navigateToProject = (projectId: string) => {
   cy.get(`${projectCardCss} a`).wait(1000).contains(projectId).click({ force: true });
 };
 
+const selectTile = (label: string) => {
+  cy.get(".card-link").contains(label).click();
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
@@ -102,3 +106,4 @@ Cypress.Commands.add("tableHeader", tableHeader);
 Cypress.Commands.add("assertPcrCompletionStatus", assertPcrCompletionStatus);
 Cypress.Commands.add("clickCheckBox", clickCheckBox);
 Cypress.Commands.add("navigateToProject", navigateToProject);
+Cypress.Commands.add("selectTile", selectTile);

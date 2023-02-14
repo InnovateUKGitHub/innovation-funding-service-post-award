@@ -99,10 +99,9 @@ export const claimsDocUpload = () => {
 };
 
 export const claimsFileTable = () => {
-  cy.tableHeader("File name");
-  cy.tableHeader("Type");
-  cy.tableHeader("Date uploaded");
-  cy.tableHeader("Uploaded by");
+  ["File name", "Type", "Date uploaded", "Uploaded by"].forEach(fileTable => {
+    cy.tableHeader(fileTable);
+  });
 };
 
 export const forecastHeaders = () => {
@@ -117,17 +116,21 @@ export const displayForecastTable = () => {
 };
 
 export const forecastCostCats = () => {
-  cy.tableCell("Labour");
-  cy.tableCell("Overheads");
-  cy.tableCell("Materials");
-  cy.tableCell("Capital usage");
-  cy.tableCell("Subcontracting");
-  cy.tableCell("Travel and subsistence");
-  cy.tableCell("Other costs");
-  cy.tableCell("Other costs 2");
-  cy.tableCell("Other costs 3");
-  cy.tableCell("Other costs 4");
-  cy.tableCell("Other costs 5");
+  [
+    "Labour",
+    "Overheads",
+    "Materials",
+    "Capital usage",
+    "Subcontracting",
+    "Travel and subsistence",
+    "Other costs",
+    "Other costs 2",
+    "Other costs 3",
+    "Other costs 4",
+    "Other costs 5",
+  ].forEach(forecastCostCat => {
+    cy.tableCell(forecastCostCat);
+  });
   cy.tableHeader("Total");
 };
 

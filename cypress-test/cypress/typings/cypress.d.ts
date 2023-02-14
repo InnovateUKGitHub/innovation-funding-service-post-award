@@ -77,6 +77,8 @@ declare global {
        * Finds the defined project name or number and navigates to it from projects main page
        */
       navigateToProject(projectId: string): Chainable<Element>;
+
+      selectTile(label: string): Chainable<Element>;
     }
   }
 }

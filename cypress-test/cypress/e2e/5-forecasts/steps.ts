@@ -3,31 +3,27 @@ export const shouldShowProjectTitle = () => {
 };
 
 export const displayForecastTable = () => {
-  cy.tableHeader("Period");
-  cy.tableHeader("1");
-  cy.tableHeader("Total");
-  cy.tableHeader("Total eligible costs");
-  cy.tableHeader("Difference");
-  cy.tableHeader("IAR Due");
-  cy.tableHeader("Month");
-  cy.tableHeader("Total");
-  cy.tableHeader;
+  ["Period", "1", "Total", "Total eligible costs", "Difference", "IAR Due", "Month", "Total"].forEach(
+    forecastHeader => {
+      cy.tableHeader(forecastHeader);
+    },
+  );
 };
 
 export const clickForecastTile = () => {
-  cy.get("h2.card-link__title").contains("Forecast").click();
+  cy.selectTile("Forecast");
 };
 
 export const clickForecastsTile = () => {
-  cy.get("h2.card-link__title").contains("Forecasts").click();
+  cy.selectTile("Forecasts");
 };
 
 export const showPartnerTable = () => {
-  cy.tableHeader("Partner");
-  cy.tableHeader("Total eligible costs");
-  cy.tableHeader("Forecasts and costs");
-  cy.tableHeader("Underspend");
-  cy.tableHeader("Date of last update");
+  ["Partner", "Total eligible costs", "Forecasts and costs", "Underspend", "Date of last update"].forEach(
+    partnerHeader => {
+      cy.tableHeader(partnerHeader);
+    },
+  );
 };
 
 export const makeClaimFC = () => {
@@ -55,12 +51,16 @@ export const shouldShowAllAccordion = () => {
 };
 
 export const updateLabourFields = () => {
-  cy.getByAriaLabel("Labour Period 3").clear({ force: true }).type("111").wait(500);
-  cy.getByAriaLabel("Labour Period 4").clear({ force: true }).type("111").wait(500);
-  cy.getByAriaLabel("Labour Period 5").clear({ force: true }).type("111").wait(500);
-  cy.getByAriaLabel("Labour Period 6").clear({ force: true }).type("111").wait(500);
-  cy.getByAriaLabel("Labour Period 7").clear({ force: true }).type("111").wait(500);
-  cy.getByAriaLabel("Labour Period 8").clear({ force: true }).type("111").wait(500);
+  [
+    "Labour Period 3",
+    "Labour Period 4",
+    "Labour Period 5",
+    "Labour Period 6",
+    "Labour Period 7",
+    "Labour Period 8",
+  ].forEach(labourField => {
+    cy.getByAriaLabel(labourField).clear({ force: true }).type("111").wait(500);
+  });
 };
 
 export const exceedGrantValue = () => {
@@ -71,22 +71,30 @@ export const exceedGrantValue = () => {
 };
 
 export const clearCostCategories = () => {
-  cy.getByAriaLabel("Labour Period 3").clear({ force: true });
-  cy.getByAriaLabel("Labour Period 4").clear({ force: true });
-  cy.getByAriaLabel("Labour Period 5").clear({ force: true });
-  cy.getByAriaLabel("Labour Period 6").clear({ force: true });
-  cy.getByAriaLabel("Labour Period 7").clear({ force: true });
-  cy.getByAriaLabel("Labour Period 8").clear({ force: true });
+  [
+    "Labour Period 3",
+    "Labour Period 4",
+    "Labour Period 5",
+    "Labour Period 6",
+    "Labour Period 7",
+    "Labour Period 8",
+  ].forEach(clearCost => {
+    cy.getByAriaLabel(clearCost).clear({ force: true });
+  });
   cy.submitButton("Submit").click();
   cy.get("h2").contains("There is a problem");
 };
 
 export const populateCategoriesZeroSubmit = () => {
-  cy.getByAriaLabel("Labour Period 3").clear({ force: true }).type("0").wait(500);
-  cy.getByAriaLabel("Labour Period 4").clear({ force: true }).type("0").wait(500);
-  cy.getByAriaLabel("Labour Period 5").clear({ force: true }).type("0").wait(500);
-  cy.getByAriaLabel("Labour Period 6").clear({ force: true }).type("0").wait(500);
-  cy.getByAriaLabel("Labour Period 7").clear({ force: true }).type("0").wait(500);
-  cy.getByAriaLabel("Labour Period 8").clear({ force: true }).type("0").wait(500);
+  [
+    "Labour Period 3",
+    "Labour Period 4",
+    "Labour Period 5",
+    "Labour Period 6",
+    "Labour Period 7",
+    "Labour Period 8",
+  ].forEach(populateCat => {
+    cy.getByAriaLabel(populateCat).clear({ force: true }).type("0").wait(500);
+  });
   cy.submitButton("Submit").click();
 };

@@ -44,7 +44,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should display the Labour heading and 'Labour guidance' section", addPartnerLabourGuidance);
 
   it("Should contain a table for adding Labour cost items", () => {
-    cy.wait(5000);
+    cy.wait(1000);
     cy.tableHeader("Description");
     cy.tableHeader("Cost (£)");
     cy.tableHeader("Total labour");

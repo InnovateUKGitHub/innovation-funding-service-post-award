@@ -1,14 +1,13 @@
 import { visitApp } from "../../common/visit";
 import {
   clearCostCategories,
-  clickForecastTile,
+  clickForecastsTile,
   exceedGrantValue,
   populateCategoriesZeroSubmit,
-  showPartnerTable,
   updateLabourFields,
 } from "./steps";
 
-const financeContactEmail = "james.black@euimeabs.test";
+const financeContactEmail = "wed.addams@test.test.co.uk";
 
 describe("Forecast > edit", () => {
   before(() => {
@@ -17,13 +16,7 @@ describe("Forecast > edit", () => {
     cy.navigateToProject("879546");
   });
 
-  it("should click the forecast tile", clickForecastTile);
-
-  it("Should display the partner table", showPartnerTable);
-
-  it("Should click the first View forecast link", () => {
-    cy.contains("td", "EUI Small Ent Health (Lead)").siblings().contains("a", "View forecast").click();
-  });
+  it("should click the forecast tile", clickForecastsTile);
 
   it("Should display a page heading", () => {
     cy.get("h1").contains("Forecast");

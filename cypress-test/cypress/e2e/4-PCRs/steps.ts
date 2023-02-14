@@ -15,13 +15,17 @@ export const createRequestButton = () => {
 };
 
 export const explainPCRTypes = () => {
-  cy.getByQA("form-guidance-list").contains("Reallocate project costs");
-  cy.getByQA("form-guidance-list").contains("Remove a partner");
-  cy.getByQA("form-guidance-list").contains("Add a partner");
-  cy.getByQA("form-guidance-list").contains("Change project scope");
-  cy.getByQA("form-guidance-list").contains("Change project duration");
-  cy.getByQA("form-guidance-list").contains("Change partner's name");
-  cy.getByQA("form-guidance-list").contains("Put a project on hold");
+  [
+    "Reallocate project costs",
+    "Remove a partner",
+    "Add a partner",
+    "Change project scope",
+    "Change project duration",
+    "Change partner's name",
+    "Put a project on hold",
+  ].forEach(pcrType => {
+    cy.getByQA("form-guidance-list").contains(pcrType);
+  });
 };
 
 export const pcrCheckBoxes = () => {
@@ -230,13 +234,17 @@ export const projectRoleRadios = () => {
 };
 
 export const reallocateCostsTableHeaders = () => {
-  cy.tableHeader("Partner");
-  cy.tableHeader("Total eligible costs");
-  cy.tableHeader("Remaining costs");
-  cy.tableHeader("Remaining grant");
-  cy.tableHeader("New total eligible costs");
-  cy.tableHeader("New remaining costs");
-  cy.tableHeader("New remaining grant");
+  [
+    "Partner",
+    "Total eligible costs",
+    "Remaining costs",
+    "Remaining grant",
+    "New total eligible costs",
+    "New remaining costs",
+    "New remaining grant",
+  ].forEach(costHeader => {
+    cy.tableHeader(costHeader);
+  });
 };
 
 export const reallocateCostsPcrType = () => {
@@ -272,18 +280,22 @@ export const reallocateCostsAndPartner = () => {
 };
 
 export const reallocateCostsCats = () => {
-  cy.tableCell("Labour");
-  cy.tableCell("Overheads");
-  cy.tableCell("Materials");
-  cy.tableCell("Capital usage");
-  cy.tableCell("Subcontracting");
-  cy.tableCell("Travel and subsistence");
-  cy.tableCell("Other costs");
-  cy.tableCell("Other costs 2");
-  cy.tableCell("Other costs 3");
-  cy.tableCell("Other costs 4");
-  cy.tableCell("Other costs 5");
-  cy.tableCell("Partner totals");
+  [
+    "Labour",
+    "Overheads",
+    "Materials",
+    "Capital usage",
+    "Subcontracting",
+    "Travel and subsistence",
+    "Other costs",
+    "Other costs 2",
+    "Other costs 3",
+    "Other costs 4",
+    "Other costs 5",
+    "Partner totals",
+  ].forEach(costCat => {
+    cy.tableCell(costCat);
+  });
 };
 
 export const removePartnerPcrType = () => {
@@ -556,24 +568,32 @@ export const addPartnerCostCat = () => {
 };
 
 export const addPartnerLabourGuidance = () => {
-  cy.get("h2").contains("Labour");
+  [
+    "gross salary",
+    "National Insurance",
+    "company pension",
+    "life insurance",
+    "other non-discretionary package costs",
+    "discretionary bonuses",
+    "performance related payments",
+    "sick days",
+    "waiting time",
+    "training days",
+    "non-productive time",
+  ].forEach(labourGuidance => {
+    cy.get("li").contains(labourGuidance);
+  });
   cy.get("span").contains("Labour guidance").click();
-  cy.get("p").contains("The new partner will need to account for all labour");
-  cy.get("li").contains("gross salary");
-  cy.get("li").contains("National Insurance");
-  cy.get("li").contains("company pension");
-  cy.get("li").contains("life insurance");
-  cy.get("li").contains("other non-discretionary package costs");
-  cy.get("p").contains("You cannot include:");
-  cy.get("li").contains("discretionary bonuses");
-  cy.get("li").contains("performance related payments");
-  cy.get("p").contains("You may include the total number");
-  cy.get("li").contains("sick days");
-  cy.get("li").contains("waiting time");
-  cy.get("li").contains("training days");
-  cy.get("li").contains("non-productive time");
-  cy.get("p").contains("List the total days worked");
-  cy.get("p").contains("We will review the total");
+  cy.get("h2").contains("Labour");
+  [
+    "The new partner will need to account for all labour",
+    "You cannot include:",
+    "You may include the total number",
+    "List the total days worked",
+    "We will review the total",
+  ].forEach(pGuidance => {
+    cy.get("p").contains(pGuidance);
+  });
 };
 
 export const addPartnerLabourCost = () => {

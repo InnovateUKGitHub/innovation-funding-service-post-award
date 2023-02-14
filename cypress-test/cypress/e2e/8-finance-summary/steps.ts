@@ -1,5 +1,5 @@
-var currentYear = new Date();
-var thisYear = currentYear.getFullYear();
+let currentYear = new Date();
+let thisYear = currentYear.getFullYear();
 
 export const projCostsToDate = () => {
   [

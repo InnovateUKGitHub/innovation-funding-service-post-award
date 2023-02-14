@@ -63,7 +63,7 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   it("Should allow a file to be uploaded", allowFileUpload);
 
   it("Should return to the previous page", () => {
-    cy.get("a.govuk-back-link").click();
+    cy.backLink("Back to Labour").click();
   });
 
   it("Should contain additional information heading and messaging", additionalInformationHeading);

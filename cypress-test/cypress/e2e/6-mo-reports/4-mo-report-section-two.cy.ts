@@ -11,14 +11,15 @@ import {
   standardComments,
   deleteMoReport,
 } from "./steps";
+import { moReportTidyup } from "common/mo-report-tidyup";
 
 const moContactEmail = "testman2@testing.com";
 
 describe("MO report > section 2 - can continue a report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
-
     cy.navigateToProject("328407");
+    moReportTidyup("Draft");
   });
 
   after(() => {
