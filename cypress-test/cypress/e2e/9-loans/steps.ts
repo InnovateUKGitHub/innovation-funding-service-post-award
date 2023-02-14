@@ -201,10 +201,6 @@ export const explainReasoningTodo = () => {
   cy.assertPcrCompletionStatus("Provide reasoning to Innovate UK", "To do");
 };
 
-export const shouldShowAllAccordion = () => {
-  cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click();
-};
-
 export const deletePcr = () => {
   visitApp({ path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
   cy.getByQA("pcrDeleteLink").contains("Delete").click();
@@ -276,5 +272,137 @@ export const changeFirstValue = () => {
 export const markAndContinue = () => {
   cy.get("h2").contains("Mark as complete");
   cy.getByLabel("I agree with this change.").check();
+  cy.submitButton("Save and return to request").click();
+};
+
+export const currentLoanTable = () => {
+  [
+    "Phase",
+    "Current length (quarters)",
+    "Current end date",
+    "New length (quarters)",
+    "New end date",
+    "Availability Period",
+    "Extension Period",
+    "Repayment Period",
+  ].forEach(loanChange => {
+    cy.getByQA("loanChangeDuration").contains(loanChange);
+  });
+};
+
+export const newLoanDurationTable = () => {
+  [
+    "1 quarter",
+    "2 quarters",
+    "3 quarters",
+    "4 quarters",
+    "5 quarters",
+    "6 quarters",
+    "7 quarters",
+    "8 quarters",
+    "9 quarters",
+    "10 quarters",
+    "11 quarters",
+    "12 quarters",
+    "13 quarters",
+    "14 quarters",
+    "15 quarters",
+    "16 quarters",
+    "17 quarters",
+    "18 quarters",
+    "19 quarters",
+    "20 quarters",
+    "21 quarters",
+    "22 quarters",
+    "23 quarters",
+    "24 quarters",
+    "25 quarters",
+  ].forEach(availQuarter => {
+    cy.get(`select[name="availabilityPeriodChange"]`).select(availQuarter);
+  }),
+    [
+      "1 quarter",
+      "2 quarters",
+      "3 quarters",
+      "4 quarters",
+      "5 quarters",
+      "6 quarters",
+      "7 quarters",
+      "8 quarters",
+      "9 quarters",
+      "10 quarters",
+      "11 quarters",
+      "12 quarters",
+      "13 quarters",
+      "14 quarters",
+      "15 quarters",
+      "16 quarters",
+      "17 quarters",
+      "18 quarters",
+      "19 quarters",
+      "20 quarters",
+      "21 quarters",
+      "22 quarters",
+      "23 quarters",
+      "24 quarters",
+      "25 quarters",
+    ].forEach(extensionQuarter => {
+      cy.get(`select[name="extensionPeriodChange"]`).select(extensionQuarter);
+    }),
+    [
+      "1 quarter",
+      "2 quarters",
+      "3 quarters",
+      "4 quarters",
+      "5 quarters",
+      "6 quarters",
+      "7 quarters",
+      "8 quarters",
+      "9 quarters",
+      "10 quarters",
+      "11 quarters",
+      "12 quarters",
+      "13 quarters",
+      "14 quarters",
+      "15 quarters",
+      "16 quarters",
+      "17 quarters",
+      "18 quarters",
+      "19 quarters",
+      "20 quarters",
+      "21 quarters",
+      "22 quarters",
+      "23 quarters",
+      "24 quarters",
+      "25 quarters",
+    ].forEach(repaymentQuarter => {
+      cy.get(`select[name="repaymentPeriodChange"]`).select(repaymentQuarter);
+    });
+};
+
+export const updatedLoansTable = () => {
+  [
+    "Phase",
+    "Current length (quarters)",
+    "Current end date",
+    "New length (quarters)",
+    "New end date",
+    "Availability Period",
+    "Extension Period",
+    "Repayment Period",
+    "Edit",
+  ].forEach(updatedChange => {
+    cy.getByQA("loanChangeDuration").contains(updatedChange);
+  });
+  cy.get("td:nth-child(4)").contains("25");
+};
+
+export const loanDurationGuidance = () => {
+  cy.get("p").contains("You can request a change to the duration of the phases of your loans project.");
+  cy.get("p").contains("Project start date:");
+};
+
+export const markAndReturn = () => {
+  cy.getByLabel("I agree with this change").click();
   cy.submitButton("Save and return to request").click();
 };

@@ -1,5 +1,5 @@
 export const shouldShowProjectTitle = () => {
-  cy.getByQA("page-title-caption").should("contain.text", "CYPRESS", { timeout: 10000 });
+  cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
 
 export const shouldShowAllAccordion = () => {
@@ -106,15 +106,9 @@ export const claimsFileTable = () => {
 };
 
 export const forecastHeaders = () => {
-  cy.tableHeader("Period");
-  cy.tableHeader("1");
-  cy.tableHeader("2");
-  cy.tableHeader("3");
-  cy.tableHeader("4");
-  cy.tableHeader("IAR Due");
-  cy.tableHeader("No");
-  cy.tableHeader("Month");
-  cy.tableHeader("2023");
+  ["Period", "1", "2", "3", "4", "IAR Due", "No", "Month", "2023"].forEach(forecastHeads => {
+    cy.tableHeader(forecastHeads);
+  });
 };
 
 export const displayForecastTable = () => {
