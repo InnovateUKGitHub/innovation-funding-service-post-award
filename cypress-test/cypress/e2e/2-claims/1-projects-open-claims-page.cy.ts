@@ -25,11 +25,11 @@ describe("claims > open claims as FC", () => {
     it("Should have a Closed section", () => {
       cy.get("h2").contains("Closed");
     });
+
     it("Should show a claim", () => {
       cy.get("h3").should("contain.text", "Period");
     });
-  });
-  describe("The claims page should have accordions", () => {
+
     it("Should have Show all sections option", shouldShowAllAccordion);
   });
 });

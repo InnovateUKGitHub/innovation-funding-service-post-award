@@ -1,39 +1,31 @@
 import { visitApp } from "../../common/visit";
-import { shouldShowProjectTitle } from "./steps";
+import { openClosedSection, shouldShowProjectTitle } from "./steps";
+
+const fcContact = "s.shuang@irc.trde.org.uk.test";
 
 describe("claims > projects without claims", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/overview" });
+    visitApp({ asUser: fcContact, path: "projects/a0E2600000kSotUEAS/overview" });
   });
 
-  describe("FC should be able to navigate to the claims page", () => {
-    it("clicking Claims will navigate to claims screen", () => {
-      cy.selectTile("Claims");
-    });
-
-    it("Should have a back option", () => {
-      cy.backLink("Back to project");
-    });
-
-    it("Should have the project name displayed", shouldShowProjectTitle);
-
-    it("Should display messaging", () => {
-      cy.getByQA("guidance-message").should("contain.text", "evidence");
-    });
-
-    it("Should have an Open section", () => {
-      cy.get("h2").contains("Open");
-    });
-
-    it("Should have a Closed section", () => {
-      cy.get("h2").contains("Closed");
-    });
-
-    /**
-     * @see https://ukri.atlassian.net/browse/ACC-9060
-     */
-    it("Open & Closed section should have correct messaging", () => {
-      cy.get("p.govuk-body").should("not.contain", "{{nextClaimStartDate}}");
-    });
+  it("clicking Claims will navigate to claims screen", () => {
+    cy.selectTile("Claims");
   });
+
+  it("Should have a back option", () => {
+    cy.backLink("Back to project");
+  });
+
+  it("Should have the project name displayed", shouldShowProjectTitle);
+
+  it("Should display the 'Claims' heading", () => {
+    cy.get("h1").contains("Claims");
+  });
+
+  it("Should display messaging", () => {
+    cy.getByQA("guidance-message").contains("All partners in this project must upload evidence");
+    cy.get("a").contains("Managing Public Money government handbook");
+  });
+
+  it("Should have an Open and Closed section", openClosedSection);
 });

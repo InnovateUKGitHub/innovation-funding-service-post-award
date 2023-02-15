@@ -10,7 +10,7 @@ import {
 
 describe("PCR > Project Change Request front page", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ path: "/projects/a0E2600000kSotUEAS/pcrs/dashboard" });
   });
 
   it("Should have a back option", () => {

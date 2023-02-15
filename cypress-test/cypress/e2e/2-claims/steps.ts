@@ -162,3 +162,10 @@ export const savedFromPrev = () => {
   cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,000.00");
   cy.getByAriaLabel("Overheads Period 2").should("contain.value", "1000");
 };
+
+export const openClosedSection = () => {
+  cy.get("h2").contains("Open");
+  cy.get("h2").contains("Closed");
+  cy.get("p").contains("There are no open claims.");
+  cy.get("p").contains("There are no closed claims for this partner.");
+};
