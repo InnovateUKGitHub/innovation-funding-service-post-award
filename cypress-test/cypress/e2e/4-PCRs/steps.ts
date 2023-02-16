@@ -1,6 +1,8 @@
 import { visitApp } from "../../common/visit";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
+export const newPubDescription = "I am a new public description. I am 55 characters long.";
+export const newPubSummary = "I am a new public summary. I am 51 characters long.";
 
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
@@ -664,4 +666,62 @@ export const otherFundingOptions = () => {
   cy.get("#hasOtherFunding_true").click();
   cy.get("#hasOtherFunding_false").click();
   cy.get("#hasOtherFunding_true").click();
+};
+
+export const headingAndGuidance = () => {
+  [
+    "Your public description is published in line",
+    "It should describe your project",
+    "Do not include any information that is confidential",
+    "Your project summary should provide a clear overview",
+  ].forEach(guidance => {
+    cy.get("p").contains(guidance);
+  }),
+    ["your vision for the project", "key objectives", "main areas of focus", "details of how it is innovative"].forEach(
+      bullet => {
+        cy.get("li").contains(bullet);
+      },
+    ),
+    cy.get("h1").contains("Change project scope");
+};
+
+export const proposedDescription = () => {
+  cy.get("h2").contains("Proposed public description");
+  cy.get("span").contains("Published public description").click();
+  cy.get("p").contains("Hello! I am the public description for this Cypress project.");
+};
+
+export const newDescriptionEntry = () => {
+  cy.get("textarea")
+    .contains("Hello! I am the public description for this Cypress project.")
+    .clear()
+    .type(newPubDescription);
+  cy.get("p.character-count.character-count--default.govuk-body").contains("You have 55 characters");
+};
+
+export const proposedSummary = () => {
+  cy.get("h2").contains("Proposed project summary");
+  cy.get("span").contains("Published project summary").click();
+  cy.get("p").contains("Howdy! I am the public summary for this Cypress project.");
+};
+
+export const newSummaryEntry = () => {
+  cy.get("textarea").contains("Howdy! I am the public summary for this Cypress project.").clear().type(newPubSummary);
+  cy.get("p.character-count.character-count--default.govuk-body").contains("You have 51 characters");
+};
+
+export const scopeSummaryPage = () => {
+  [
+    "Existing public description",
+    "Hello! I am the public description for this Cypress project.",
+    "New public description",
+    "I am a new public description. I am 55 characters long.",
+    "Existing project summary",
+    "Howdy! I am the public summary for this Cypress project.",
+    "New project summary",
+    "I am a new public summary. I am 51 characters long.",
+    "Edit",
+  ].forEach(summaryItem => {
+    cy.getByQA("scope-change-summary").contains(summaryItem);
+  });
 };
