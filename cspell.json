@@ -88,6 +88,10 @@
         "Whitesource",
         "Withinable"
     ],
-    "ignoreWords": ["numberof"],
-    "import": []
+    "ignoreWords": [],
+    "import": [],
+    "ignoreRegExpList":
+     [
+        "\\/[a-zA-z\\d]{18}"
+    ]
 }
