@@ -8,7 +8,7 @@
     "esbuild": "node --enable-source-maps esbuild.js",
     "esbuild:tsc": "node --enable-source-maps esbuild.js --tsc",
     "start": "node -r dotenv/config esbuild.js --watch --tsc --devtools",
-    "start:server": "node --enable-source-maps ./dist/src/server/index.js",
+    "start:server": "node ./dist/src/server/index.js",
     "serve": "node --inspect --enable-source-maps -r dotenv/config ./dist/src/server/index.js",
     "postinstall": "npm run patch-package",
     "patch-package": "patch-package",

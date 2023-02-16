@@ -4,12 +4,14 @@ import { CompaniesHouse } from "@server/repositories";
 import { configuration, AppError } from "@server/features/common";
 import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { HealthCheckResult } from "@server/health-check/health-check.interface";
-import { ILogger } from "@shared/developmentLogger";
+import { Logger } from "@shared/developmentLogger";
+
+const logger = new Logger("Health checker");
 
 /**
  * Checks the health of the salesforce connection
  */
-export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResult> {
+export async function checkSalesforce(): Promise<HealthCheckResult> {
   const check = { id: "salesforce" };
 
   const tokenPayload = {
@@ -37,7 +39,7 @@ export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResul
 /**
  * checks the health of the google analytics connection
  */
-export async function checkGoogleAnalytics(logger: ILogger): Promise<HealthCheckResult> {
+export async function checkGoogleAnalytics(): Promise<HealthCheckResult> {
   const check = { id: "googleAnalytics" };
 
   if (!configuration.googleTagManagerCode) {
@@ -66,7 +68,7 @@ export async function checkGoogleAnalytics(logger: ILogger): Promise<HealthCheck
 /**
  * checks the health of the companies house connection
  */
-export async function checkCompaniesHouse(logger: ILogger): Promise<HealthCheckResult> {
+export async function checkCompaniesHouse(): Promise<HealthCheckResult> {
   const check = { id: "companiesHouse" };
 
   try {
