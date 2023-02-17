@@ -1,7 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
-  deletePcr,
   saveContinueSaveSummary,
   navigateToPartnerOrgPage,
   addPartnerSize,
@@ -16,7 +15,7 @@ describe("PCR > Add partner > Continuing editing PCR organisation details sectio
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should navigate to the Partner organisation page", navigateToPartnerOrgPage);

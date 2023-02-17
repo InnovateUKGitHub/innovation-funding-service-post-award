@@ -68,11 +68,17 @@ export const characterCount = () => {
   cy.get("p.character-count.character-count--default.govuk-body").contains("You have 926 characters remaining");
 };
 
-export const deletePcr = () => {
-  visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
-  cy.getByQA("pcrDeleteLink").contains("Delete").click();
-  cy.getByQA("button_delete-qa").click({ force: true });
-};
+//export const deletePcr = () => {
+//  visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+//  cy.getByQA("pcrDeleteLink").contains("Delete").click();
+//  cy.getByQA("button_delete-qa").click({ force: true });
+//};
+//
+//export const ktpDeletePcr = () => {
+//  visitApp({ path: "projects/a0E2600000kTfqTEAS/pcrs/dashboard" });
+//  cy.getByQA("pcrDeleteLink").contains("Delete").click();
+//  cy.getByQA("button_delete-qa").click({ force: true });
+//};
 
 export const learnFiles = () => {
   cy.get("span").contains("Learn more about files you can upload").click();
@@ -569,6 +575,24 @@ export const addPartnerCostCat = () => {
   ].forEach(cat => cy.tableCell(cat));
 };
 
+export const ktpAddPartnerCostCat = () => {
+  cy.tableHeader("Category");
+  cy.tableHeader("Cost (£)");
+  [
+    "Associate Employment",
+    "Travel and subsistence",
+    "Consumables",
+    "Associate development",
+    "Knowledge base supervisor",
+    "Estate",
+    "Indirect costs",
+    "Other costs",
+    "Additional associate support",
+    "Subcontracting",
+    "Total costs (£)",
+  ].forEach(cat => cy.tableCell(cat));
+};
+
 export const addPartnerLabourGuidance = () => {
   [
     "gross salary",
@@ -724,4 +748,96 @@ export const scopeSummaryPage = () => {
   ].forEach(summaryItem => {
     cy.getByQA("scope-change-summary").contains(summaryItem);
   });
+};
+
+export const correctKtpMessaging = () => {
+  [
+    "This project does not follow the normal grant calculation rules",
+    "The project and any partner may have one or more cost categories",
+  ].forEach(validation => {
+    cy.getByQA("validation-message-content").contains(validation);
+  });
+  [
+    "The knowledge base partner may vire funds between the 'Travel and subsistence' and 'Consumables' cost categories",
+    "Funds can also be vired out of these 2 categories into the 'Associate development' category",
+    "Virements are subject to approval by the Local Management Committee (LMC).",
+    "Requests for virements must be submitted online using the Innovation Funding Service",
+  ].forEach(sentence => {
+    cy.get("p").contains(sentence);
+  });
+};
+
+export const ktpCostsTable = () => {
+  [
+    "Associate employment",
+    "Travel and subsistence",
+    "Consumables",
+    "Associate development",
+    "Knowledge base supervisor",
+    "Estate",
+    "Indirect costs",
+    "Other costs",
+    "Additional associate support",
+    "Subcontracting",
+    "Partner totals",
+    "Cost category",
+    "Total eligible costs",
+    "Costs claimed",
+    "New total eligible costs",
+    "Costs reallocated",
+    "Remaining grant",
+    "Award rate",
+    "New remaining grant",
+  ].forEach(virements => {
+    cy.getByQA("partnerVirements").contains(virements);
+  });
+  [
+    "Total eligible costs",
+    "New total eligible costs",
+    "Difference",
+    "Total remaining grant",
+    "New total remaining grant",
+  ].forEach(summary => {
+    cy.getByQA("summary-table").contains(summary);
+  });
+  cy.get("h2").contains("Summary of project costs");
+};
+
+export const ktpUpdateVirement = () => {
+  [
+    "Associate Employment",
+    "Travel and subsistence",
+    "Consumables",
+    "Associate development",
+    "Knowledge base supervisor",
+    "Estate",
+    "Indirect costs",
+    "Other costs",
+    "Additional associate support",
+    "Subcontracting",
+  ].forEach(input => {
+    cy.getByAriaLabel(input).clear().type("100");
+  });
+  cy.get("td:nth-child(4)").contains("£1,000.00");
+  [
+    "Associate Employment",
+    "Travel and subsistence",
+    "Consumables",
+    "Associate development",
+    "Knowledge base supervisor",
+    "Estate",
+    "Indirect costs",
+    "Other costs",
+    "Additional associate support",
+    "Subcontracting",
+  ].forEach(input => {
+    cy.getByAriaLabel(input).clear().type("0");
+  });
+};
+
+export const saveAndReturn = () => {
+  cy.get("#grantMovingOverFinancialYear").type("0");
+  cy.clickCheckBox("I agree with this change");
+  cy.getByQA("button_default-qa").contains("Save and return to request").click();
+  cy.get("h1").contains("Request");
 };

@@ -1,4 +1,5 @@
 import "@testing-library/cypress/add-commands";
+import { visitApp } from "common/visit";
 
 type CommandOptions = Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>;
 
@@ -92,6 +93,14 @@ const selectTile = (label: string) => {
   cy.get(".card-link").contains(label).click();
 };
 
+const deletePcr = (projectId: string) => {
+  visitApp({});
+  cy.navigateToProject(projectId);
+  cy.selectTile("Project change requests");
+  cy.getByQA("pcrDeleteLink").contains("Delete").click();
+  cy.getByQA("button_delete-qa").click({ force: true });
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
@@ -107,3 +116,4 @@ Cypress.Commands.add("assertPcrCompletionStatus", assertPcrCompletionStatus);
 Cypress.Commands.add("clickCheckBox", clickCheckBox);
 Cypress.Commands.add("navigateToProject", navigateToProject);
 Cypress.Commands.add("selectTile", selectTile);
+Cypress.Commands.add("deletePcr", deletePcr);

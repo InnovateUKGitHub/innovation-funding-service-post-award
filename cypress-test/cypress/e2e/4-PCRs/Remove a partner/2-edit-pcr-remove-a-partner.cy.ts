@@ -8,6 +8,10 @@ describe("PCR > Remove partner > Begin editing the Remove a partner section", ()
     pcrTidyUp("Remove a partner");
   });
 
+  after(() => {
+    cy.deletePcr("328407");
+  });
+
   it("Should select 'Remove a partner' checkbox", () => {
     cy.clickCheckBox("Remove a partner");
   });

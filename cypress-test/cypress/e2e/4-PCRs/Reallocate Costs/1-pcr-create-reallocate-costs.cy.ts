@@ -2,7 +2,6 @@ import { visitApp } from "../../../common/visit";
 import {
   characterCount,
   clickCreateRequestButtonProceed,
-  deletePcr,
   explainChangesReasoning,
   pcrCommentBox,
   reallocateCostsGiveInfoTodo,
@@ -20,7 +19,9 @@ describe("PCR > Reallocate Costs > Creating  PCR", () => {
     pcrTidyUp("Reallocate project costs");
   });
 
-  after(deletePcr);
+  after(() => {
+    cy.deletePcr("328407");
+  });
 
   it("Should select 'Reallocate project costs' checkbox", () => {
     cy.clickCheckBox("Reallocate project costs");

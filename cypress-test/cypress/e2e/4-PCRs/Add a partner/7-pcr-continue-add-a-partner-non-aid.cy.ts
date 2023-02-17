@@ -1,7 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
-  deletePcr,
   completeNewPartnerInfoNonAid,
   clickCreateRequestButtonProceed,
   nonAidAddPartnerHeading,
@@ -17,7 +16,7 @@ describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation",
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should select 'Add a partner' checkbox", () => {

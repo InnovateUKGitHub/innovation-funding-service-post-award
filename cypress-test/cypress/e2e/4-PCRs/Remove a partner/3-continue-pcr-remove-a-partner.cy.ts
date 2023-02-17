@@ -4,7 +4,6 @@ import {
   learnFiles,
   pcrDocUpload,
   pcrFileTable,
-  deletePcr,
   clickCreateRequestButtonProceed,
   clickPartnerAddPeriod,
   removePartnerGuidanceInfo,
@@ -18,7 +17,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should select 'Remove a partner' checkbox", () => {

@@ -134,6 +134,24 @@ export const forecastCostCats = () => {
   cy.tableHeader("Total");
 };
 
+export const ktpCostCats = () => {
+  [
+    "Associate Employment",
+    "Travel and subsistence",
+    "Consumables",
+    "Associate development",
+    "Knowledge base supervisor",
+    "Estate",
+    "Indirect costs",
+    "Other costs",
+    "Additional associate support",
+    "Subcontracting",
+  ].forEach(ktpCostCat => {
+    cy.tableCell(ktpCostCat);
+  });
+  cy.tableHeader("Total");
+};
+
 export const accessOpenClaim = () => {
   cy.get("tbody").contains("Draft");
   cy.get("tbody").contains("Edit").click();

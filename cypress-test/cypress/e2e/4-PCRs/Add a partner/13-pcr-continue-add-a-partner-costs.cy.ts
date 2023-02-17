@@ -1,7 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
-  deletePcr,
   navigateToPartnerCosts,
   pcrNewCostCatLineItem,
   addPartnerCostCat,
@@ -16,7 +15,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);

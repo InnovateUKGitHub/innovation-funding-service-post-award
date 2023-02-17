@@ -79,6 +79,8 @@ declare global {
       navigateToProject(projectId: string): Chainable<Element>;
 
       selectTile(label: string): Chainable<Element>;
+
+      deletePcr(projectId: string): Chainable<Element>;
     }
   }
 }

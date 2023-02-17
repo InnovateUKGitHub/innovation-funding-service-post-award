@@ -1,7 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
-  deletePcr,
   learnOrganisations,
   clickCreateRequestButtonProceed,
   projectOutputs,
@@ -18,7 +17,7 @@ describe("PCR > Add partner > Edit PCR", () => {
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should select 'Add a partner' checkbox", () => {

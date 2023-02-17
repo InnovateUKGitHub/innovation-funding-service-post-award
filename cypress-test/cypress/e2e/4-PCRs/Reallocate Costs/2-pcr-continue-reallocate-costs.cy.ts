@@ -17,7 +17,9 @@ describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs ta
     pcrTidyUp("Reallocate project costs");
   });
 
-  after(deletePcr);
+  after(() => {
+    cy.deletePcr("328407");
+  });
 
   it("Should select 'Reallocate project costs' checkbox", () => {
     cy.clickCheckBox("Reallocate project costs");

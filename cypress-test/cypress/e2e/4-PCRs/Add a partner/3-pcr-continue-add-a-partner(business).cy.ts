@@ -2,7 +2,6 @@ import { visitApp } from "../../../common/visit";
 import {
   completeNewPartnerInfoAsBus,
   shouldShowProjectTitle,
-  deletePcr,
   clickCreateRequestButtonProceed,
   stateAidAddPartnerHeading,
   saveContinueSaveSummary,
@@ -16,7 +15,7 @@ describe("PCR > Add partner > Continuing editing PCR as business", () => {
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should select 'Add a partner' checkbox", () => {

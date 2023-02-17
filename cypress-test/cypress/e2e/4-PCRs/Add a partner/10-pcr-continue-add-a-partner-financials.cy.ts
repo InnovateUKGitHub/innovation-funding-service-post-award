@@ -1,5 +1,5 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, deletePcr, saveContinueSaveSummary, navigateToFinancialsPage } from "../steps";
+import { shouldShowProjectTitle, saveContinueSaveSummary, navigateToFinancialsPage } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR financial details section", () => {
@@ -9,7 +9,7 @@ describe("PCR > Add partner > Continuing editing PCR financial details section",
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should navigate to the Partner financials page", navigateToFinancialsPage);

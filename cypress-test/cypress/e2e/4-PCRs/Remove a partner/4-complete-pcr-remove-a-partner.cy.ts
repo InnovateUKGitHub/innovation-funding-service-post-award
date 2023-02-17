@@ -2,7 +2,6 @@ import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
   pcrDocUpload,
-  deletePcr,
   clickCreateRequestButtonProceed,
   clickPartnerAddPeriod,
   removePartnerTable,
@@ -16,7 +15,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should select 'Remove a partner' checkbox", () => {

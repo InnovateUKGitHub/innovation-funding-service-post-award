@@ -4,7 +4,6 @@ import {
   shouldShowAllAccordion,
   pcrCommentBox,
   characterCount,
-  deletePcr,
   clickCreateRequestButtonProceed,
   requestHeadingDetailsHeading,
   correctPcrType,
@@ -20,7 +19,7 @@ describe("PCR >  Add a partner > Create PCR", () => {
   });
 
   after(() => {
-    deletePcr();
+    cy.deletePcr("328407");
   });
 
   it("Should select 'Add a partner' checkbox", () => {

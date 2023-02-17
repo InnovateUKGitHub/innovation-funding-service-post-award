@@ -5,7 +5,7 @@ const fcContact = "s.shuang@irc.trde.org.uk.test";
 
 describe("claims > projects without claims", () => {
   before(() => {
-    visitApp({ asUser: fcContact, path: "projects/a0E2600000kSotUEAS/overview" });
+    visitApp({ path: "projects/a0E2600000kSotUEAS/overview" });
   });
 
   it("clicking Claims will navigate to claims screen", () => {
