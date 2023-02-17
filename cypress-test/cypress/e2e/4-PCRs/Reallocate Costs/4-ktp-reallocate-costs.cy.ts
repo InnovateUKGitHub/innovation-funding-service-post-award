@@ -9,7 +9,7 @@ import {
 
 import { pcrTidyUp } from "common/pcrtidyup";
 
-describe("PCR > Reallocate Costs > Creating  PCR", () => {
+describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
   before(() => {
     // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
     visitApp({ path: "projects/a0E2600000kTfqTEAS/pcrs/dashboard" });

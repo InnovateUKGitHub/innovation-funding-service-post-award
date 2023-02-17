@@ -98,3 +98,93 @@ export const populateCategoriesZeroSubmit = () => {
   });
   cy.submitButton("Submit").click();
 };
+
+export const ktpCostCats = () => {
+  [
+    "Associate Employment",
+    "Travel and subsistence",
+    "Consumables",
+    "Associate development",
+    "Knowledge base supervisor",
+    "Estate",
+    "Indirect costs",
+    "Other costs",
+    "Additional associate support",
+    "Subcontracting",
+  ].forEach(ktpCostCat => {
+    cy.tableCell(ktpCostCat);
+  });
+  cy.tableHeader("Total");
+};
+
+export const ktpUpdateForecast = () => {
+  [
+    "Associate Employment Period 2",
+    "Associate Employment Period 3",
+    "Associate Employment Period 4",
+    "Travel and subsistence Period 2",
+    "Travel and subsistence Period 3",
+    "Travel and subsistence Period 4",
+    "Consumables Period 2",
+    "Consumables Period 3",
+    "Consumables Period 4",
+    "Associate development Period 2",
+    "Associate development Period 3",
+    "Associate development Period 4",
+    "Knowledge base supervisor Period 2",
+    "Knowledge base supervisor Period 3",
+    "Knowledge base supervisor Period 4",
+    "Estate Period 2",
+    "Estate Period 3",
+    "Estate Period 4",
+    "Indirect costs Period 2",
+    "Indirect costs Period 3",
+    "Indirect costs Period 4",
+    "Other costs Period 2",
+    "Other costs Period 3",
+    "Other costs Period 4",
+    "Additional associate support Period 2",
+    "Additional associate support Period 3",
+    "Additional associate support Period 4",
+    "Subcontracting Period 2",
+    "Subcontracting Period 3",
+    "Subcontracting Period 4",
+  ].forEach(forecastInput => {
+    cy.getByAriaLabel(forecastInput).clear().type("100");
+  });
+  cy.get("td:nth-child(6)").contains("£3,000.00");
+  [
+    "Associate Employment Period 2",
+    "Associate Employment Period 3",
+    "Associate Employment Period 4",
+    "Travel and subsistence Period 2",
+    "Travel and subsistence Period 3",
+    "Travel and subsistence Period 4",
+    "Consumables Period 2",
+    "Consumables Period 3",
+    "Consumables Period 4",
+    "Associate development Period 2",
+    "Associate development Period 3",
+    "Associate development Period 4",
+    "Knowledge base supervisor Period 2",
+    "Knowledge base supervisor Period 3",
+    "Knowledge base supervisor Period 4",
+    "Estate Period 2",
+    "Estate Period 3",
+    "Estate Period 4",
+    "Indirect costs Period 2",
+    "Indirect costs Period 3",
+    "Indirect costs Period 4",
+    "Other costs Period 2",
+    "Other costs Period 3",
+    "Other costs Period 4",
+    "Additional associate support Period 2",
+    "Additional associate support Period 3",
+    "Additional associate support Period 4",
+    "Subcontracting Period 2",
+    "Subcontracting Period 3",
+    "Subcontracting Period 4",
+  ].forEach(forecastInput => {
+    cy.getByAriaLabel(forecastInput).clear().type("0");
+  });
+};

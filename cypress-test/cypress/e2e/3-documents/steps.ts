@@ -8,7 +8,7 @@ export const shouldShowAllAccordion = () => {
 
 export const selectFileDescription = () => {
   ["130", "140", "150", "160", "170", "180", "190", "200"].forEach(fileDescription => {
-    cy.get("select#description.govuk-select").contains(fileDescription);
+    cy.get("select#description.govuk-select").select(fileDescription);
   });
 };
 

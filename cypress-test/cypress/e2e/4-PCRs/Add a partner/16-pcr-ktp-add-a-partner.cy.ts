@@ -2,7 +2,7 @@ import { visitApp } from "../../../common/visit";
 import { ktpAddPartnerCostCat, navigateToPartnerCosts } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
-describe("PCR >  Add a partner > Create PCR", () => {
+describe("PCR > KTP > Add a partner > Create PCR", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kTfqTEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
