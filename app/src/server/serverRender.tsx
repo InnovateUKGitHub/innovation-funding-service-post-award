@@ -36,6 +36,8 @@ import { loadQuery } from "relay-hooks";
 import { GraphQLSchema } from "graphql";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
 import { Logger } from "@shared/developmentLogger";
+import staticHTMLError from "./staticError.html";
+import { configuration } from "./features/common";
 
 interface IServerApp {
   requestUrl: string;
@@ -67,7 +69,11 @@ const serverRender =
   async (req: Request, res: Response, error?: IAppError): Promise<void> => {
     // If we've already tried to render the page 5 other times,
     // throw it.
-    if (errorCount >= 5) throw error;
+    if (errorCount >= 5) {
+      logger.error("Failed to render React error page.", `Attempt ${errorCount}`, error);
+      res.status(500).send(staticHTMLError.replace(/<<ifsroot>>/g, configuration.urls.ifsRoot));
+      return;
+    }
 
     const { nonce } = res.locals;
     const middleware = setupServerMiddleware();

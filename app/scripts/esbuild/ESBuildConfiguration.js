@@ -56,6 +56,7 @@ class ESBuildConfiguration {
       loader: {
         ".apex": "text",
         ".gql": "text",
+        ".html": "text",
       },
     };
 

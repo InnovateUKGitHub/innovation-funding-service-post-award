@@ -66,7 +66,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
     module: {
       rules: [
         {
-          test: /\.(apex|gql)$/,
+          test: /\.(apex|gql|html)$/,
           type: "asset/source",
         },
         {
