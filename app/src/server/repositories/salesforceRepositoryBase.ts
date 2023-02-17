@@ -39,7 +39,17 @@ export abstract class RepositoryBase {
 
   protected constructError(e: unknown | Errors.SalesforceErrorResponse) {
     if (Errors.isSalesforceErrorResponse(e)) {
-      this.logger.error("Salesforce Error", e.errorCode, e.message);
+      if (e.message.length < 10_000) {
+        this.logger.error("Salesforce Error", e.errorCode, e.message);
+      } else {
+        this.logger.error(
+          "Salesforce Error",
+          e.errorCode,
+          "This error has not been printed by IFSPA because it is over 10K characters long.",
+          "This could be because Salesforce is returning a complete HTML webpage, for example, a Salesforce EDGE Connection error",
+          "This needs to be investigated manually.",
+        );
+      }
 
       if (e.errorCode === "INVALID_FIELD") {
         throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
