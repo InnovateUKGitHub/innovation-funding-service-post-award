@@ -39,6 +39,7 @@ import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { loadQuery } from "relay-hooks";
 import { GraphQLSchema } from "graphql";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
+import { Logger } from "@shared/developmentLogger";
 
 interface IServerApp {
   requestUrl: string;
@@ -47,6 +48,8 @@ interface IServerApp {
   modalRegister: ModalRegister;
   relayEnvironment: RelayModernEnvironment;
 }
+
+const logger = new Logger("HTML Render");
 
 const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment }: IServerApp) => (
   <Provider store={store}>
@@ -64,8 +67,11 @@ const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment 
  * The main server side process handled here.
  */
 const serverRender =
-  ({ schema }: { schema: GraphQLSchema }) =>
+  ({ schema, errorCount = 0 }: { schema: GraphQLSchema; errorCount?: number }) =>
   async (req: Request, res: Response, error?: IAppError): Promise<void> => {
+    // If we've already tried to render the page 5 other times,
+    // throw it.
+
     const { nonce } = res.locals;
     const middleware = setupServerMiddleware();
     const context = contextProvider.start({ user: req.session?.user });
@@ -76,6 +82,12 @@ const serverRender =
 
     // Pre-load site configuration options
     await preloadedQuery.next(relayEnvironment, clientConfigQueryQuery, {});
+
+    if (errorCount >= 5) {
+      logger.error("Failed to render React error page. Falling back to Express.", `Attempt ${errorCount}`, error);
+      res.status(500).send("An error has occured whilst processing your request. Furthermore, an error has occured whilst serving an error message.");
+      return;
+    }
 
     try {
       let auth: Authorisation;
@@ -165,8 +177,10 @@ const serverRender =
         }),
       );
     } catch (renderError: unknown) {
+      logger.error("Caught a server render error", `Attempt ${errorCount}`, renderError);
+
       // If an error occured, re-do our render with an error message instead.
-      serverRender({ schema })(req, res, renderError as IAppError);
+      serverRender({ schema, errorCount: errorCount + 1 })(req, res, renderError as IAppError);
     }
   };
 
