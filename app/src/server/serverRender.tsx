@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { StaticRouter } from "react-router-dom/server";
 import { Request, Response } from "express";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
-import { matchRoute } from "@ui/routing";
+import { matchRoute, routeConfig } from "@ui/routing";
 import { ErrorCode, IAppError, IClientUser, IContext, Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import * as Actions from "@ui/redux/actions";
@@ -40,6 +40,7 @@ import { loadQuery } from "relay-hooks";
 import { GraphQLSchema } from "graphql";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
 import { Logger } from "@shared/developmentLogger";
+import staticHtmlError from "./staticError.html";
 
 interface IServerApp {
   requestUrl: string;
@@ -69,9 +70,6 @@ const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment 
 const serverRender =
   ({ schema, errorCount = 0 }: { schema: GraphQLSchema; errorCount?: number }) =>
   async (req: Request, res: Response, error?: IAppError): Promise<void> => {
-    // If we've already tried to render the page 5 other times,
-    // throw it.
-
     const { nonce } = res.locals;
     const middleware = setupServerMiddleware();
     const context = contextProvider.start({ user: req.session?.user });
@@ -79,13 +77,16 @@ const serverRender =
     const modalRegister = new ModalRegister();
     const relayEnvironment = await getServerGraphQLEnvironment({ schema });
     const preloadedQuery = loadQuery();
+    let isErrorPage = false;
 
     // Pre-load site configuration options
     await preloadedQuery.next(relayEnvironment, clientConfigQueryQuery, {});
 
-    if (errorCount >= 5) {
+    // If we've already tried to render the page 2 other times,
+    // throw it.
+    if (errorCount > 2) {
       logger.error("Failed to render React error page. Falling back to Express.", `Attempt ${errorCount}`, error);
-      res.status(500).send("An error has occured whilst processing your request. Furthermore, an error has occured whilst serving an error message.");
+      res.status(500).send(staticHtmlError);
       return;
     }
 
@@ -146,19 +147,26 @@ const serverRender =
           statusCode = getErrorStatus(error);
           const errorPayload = createErrorPayload(error, false).params;
           store.dispatch(Actions.setError(errorPayload));
+          isErrorPage = true;
         }
       }
 
-      const matched = matchRoute(req.url);
-      const { params } = getParamsFromUrl(matched.routePath, req.url);
+      // If a fatal error has NOT occured...
+      if (!isErrorPage) {
+        const matched = matchRoute(req.url);
+        const { params } = getParamsFromUrl(matched.routePath, req.url);
 
-      if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
-        throw new ForbiddenError();
+        // Check if they are allowed to access this page.
+        if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
+          throw new ForbiddenError();
+        }
       }
+
+      const renderUrl = isErrorPage ? routeConfig.error.routePath : req.url;
 
       // Note: Keep resolving app queries + actions until completion for final render below
       await loadAllData(store, () => {
-        renderApp({ requestUrl: req.url, nonce, store, stores, modalRegister, relayEnvironment });
+        renderApp({ requestUrl: renderUrl, nonce, store, stores, modalRegister, relayEnvironment });
       });
 
       // Wait until all Relay queries have been made.
@@ -167,7 +175,7 @@ const serverRender =
 
       res.status(statusCode).send(
         renderApp({
-          requestUrl: req.url,
+          requestUrl: renderUrl,
           nonce,
           store,
           stores,

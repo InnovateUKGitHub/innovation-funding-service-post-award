@@ -66,6 +66,10 @@ const configGenerator = ({ env = "production", devtools = false }) => {
     module: {
       rules: [
         {
+          test: /\.(apex|gql|html)$/,
+          type: "asset/source",
+        },
+        {
           test: /\.tsx?$/,
           loader: "babel-loader",
         },

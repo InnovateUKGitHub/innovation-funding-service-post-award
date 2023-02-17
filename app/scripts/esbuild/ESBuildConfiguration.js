@@ -56,6 +56,8 @@ class ESBuildConfiguration {
       plugins: [nodeExternalsPlugin(), replaceGraphqlRelayPlugin],
       loader: {
         ".apex": "text",
+        ".gql": "text",
+        ".html": "text",
       },
     };
 
