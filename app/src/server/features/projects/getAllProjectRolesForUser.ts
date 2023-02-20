@@ -1,5 +1,5 @@
 import { Authorisation, getAuthRoles, IContext, ProjectRole } from "@framework/types";
-import { SalesforceProjectRole } from "@server/constants/enums";
+import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { Partner } from "@framework/entities";
 import { QueryBase } from "../common/queryBase";
 import { ISalesforceProjectContact, SalesforceRole } from "../../repositories";

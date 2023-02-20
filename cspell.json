@@ -3,6 +3,10 @@
     "ignorePaths": [],
     "dictionaryDefinitions": [],
     "dictionaries": [],
+    "flagWords": [],
+    "ignoreRegExpList": [
+        "\\/[a-zA-z\\d]{18}"
+    ],
     "words": [
         "authorisation",
         "Authorised",
@@ -41,7 +45,9 @@
         "minimis",
         "mochawesome",
         "navigations",
+        "nocheck",
         "noemail",
+        "nogrep",
         "Openshift",
         "organisation",
         "organisations",
@@ -82,6 +88,6 @@
         "Whitesource",
         "Withinable"
     ],
-    "ignoreWords": [],
+    "ignoreWords": ["numberof"],
     "import": []
 }

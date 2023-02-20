@@ -1,4 +1,4 @@
-import { graphql } from "relay-hooks";
+import { graphql } from "react-relay";
 
 const pcrDashboardQuery = graphql`
   query PCRDashboardQuery($projectId: ID) {

@@ -4,7 +4,6 @@ import { Accordion, AccordionItem, Link, Page } from "@ui/components";
 import { ProjectBackLink } from "@ui/components/projects";
 import { PageTitle } from "@ui/features/page-title";
 import { useContent } from "@ui/hooks";
-import { useEffect, useState } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { BaseProps, defineRoute } from "../../containerBase";
 import { collateProjectChangeRequests } from "./PCRDashboard.logic";

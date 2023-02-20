@@ -1,6 +1,6 @@
 export * from "./dashboard/Dashboard.page";
 export * from "./details/ProjectDetails.page";
-export * from "./financeSummary.page";
+export * from "./finance-summary/financeSummary.page";
 export * from "./failedBankCheckConfirmation.page";
 export * from "./documents/projectDocuments.page";
 export * from "./overview.page";

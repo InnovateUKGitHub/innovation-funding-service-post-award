@@ -9,7 +9,7 @@ import {
   ProjectRole,
   SpendProfileStatus,
 } from "@framework/types";
-import { SalesforceProjectRole } from "@server/constants/enums";
+import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { Partner } from "@framework/entities";
 import { SyncCommandBase } from "../common/commandBase";
 
