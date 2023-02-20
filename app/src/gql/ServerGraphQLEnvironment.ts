@@ -1,5 +1,3 @@
-import { IAppError } from "@framework/types";
-import { Logger } from "@shared/developmentLogger";
 import { Request, Response } from "express";
 import { GraphQLSchema } from "graphql";
 import RelayClientSSR from "react-relay-network-modern-ssr/node8/client";
@@ -7,7 +5,6 @@ import RelayServerSSR, { SSRCache } from "react-relay-network-modern-ssr/node8/s
 import { RelayNetworkLayer } from "react-relay-network-modern/node8";
 import { Environment, RecordSource, Store } from "relay-runtime";
 import { createContext } from "./GraphQLContext";
-import { Api } from "./sf/Api";
 
 const getServerGraphQLFinalRenderEnvironment = (relayData: SSRCache) => {
   // Create a client that takes in server cache
@@ -32,7 +29,6 @@ const getServerGraphQLEnvironment = async ({
 }: {
   req: Request;
   res: Response;
-  error?: IAppError;
   schema: GraphQLSchema;
 }) => {
   const relayServerSSR = new RelayServerSSR();

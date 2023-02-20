@@ -1,3 +1,5 @@
+import express, { RequestHandler } from "express";
+
 import { ProjectChangeRequestItemDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentDeleteHandler";
 import { ProjectChangeRequestItemUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemUpdateHandler";
 import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentDeleteHandler";
@@ -5,7 +7,6 @@ import { ProjectChangeRequestReasoningDocumentUploadHandler } from "@server/form
 import { ProjectChangeRequestReasoningUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningUpdateHandler";
 import { ProjectChangeRequestCreateFormHandler } from "@server/forms/projectChangeRequest/createProjectChangeRequestFormHandler";
 import { ProjectChangeRequestAddTypeFormHandler } from "@server/forms/projectChangeRequest/projectChangeRequestAddTypeFormHandler";
-import express, { RequestHandler } from "express";
 import { ProjectChangeRequestItemDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandler";
 
 import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
@@ -147,9 +148,8 @@ const handlePost =
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       await handler.handle(req, res, next);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      return serverRender({ schema })(req, res, e);
+    } catch (err: unknown) {
+      return serverRender({ schema })({ req, res, err, next });
     }
   };
 
@@ -163,37 +163,41 @@ const handleError =
     next: express.NextFunction,
   ) => {
     if (error) {
-      serverRender({ schema })(req, res, error);
+      serverRender({ schema })({ req, res, err: error, next });
     } else {
-      next();
+      next(error);
     }
   };
 
-export const configureFormRouter =
-  ({ schema }: { schema: GraphQLSchema }) =>
-  (csrfProtection: RequestHandler) => {
-    const result = express.Router();
-    const badRequestHandler = new BadRequestHandler();
+export const configureFormRouter = ({
+  schema,
+  csrfProtection,
+}: {
+  schema: GraphQLSchema;
+  csrfProtection: RequestHandler;
+}) => {
+  const result = express.Router();
+  const badRequestHandler = new BadRequestHandler();
 
-    singleFileFormHandlers.forEach(x => {
-      result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost({ schema })(x), handleError);
-    });
+  singleFileFormHandlers.forEach(x => {
+    result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost({ schema })(x), handleError);
+  });
 
-    multiFileFormHandlers.forEach(x => {
-      result.post(getRoute(x), upload.array("attachment"), csrfProtection, handlePost({ schema })(x), handleError);
-    });
+  multiFileFormHandlers.forEach(x => {
+    result.post(getRoute(x), upload.array("attachment"), csrfProtection, handlePost({ schema })(x), handleError);
+  });
 
-    standardFormHandlers.forEach(x => {
+  standardFormHandlers.forEach(x => {
+    result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError);
+  });
+
+  if (!configuration.sso.enabled) {
+    for (const x of developerFormhandlers) {
       result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError);
-    });
-
-    if (!configuration.sso.enabled) {
-      for (const x of developerFormhandlers) {
-        result.post(getRoute(x), handlePost({ schema })(x), handleError);
-      }
     }
+  }
 
-    result.post("*", badRequestHandler.handle, handleError);
+  result.post("*", badRequestHandler.handle);
 
-    return result;
-  };
+  return result;
+};

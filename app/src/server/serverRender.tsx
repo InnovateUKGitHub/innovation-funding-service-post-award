@@ -3,7 +3,7 @@ import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Store } from "redux";
 import { Provider } from "react-redux";
 import { StaticRouter } from "react-router-dom/server";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { matchRoute, routeConfig } from "@ui/routing";
 import { ErrorCode, IAppError, IClientUser, IContext, Authorisation } from "@framework/types";
@@ -36,8 +36,6 @@ import { loadQuery } from "relay-hooks";
 import { GraphQLSchema } from "graphql";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
 import { Logger } from "@shared/developmentLogger";
-import staticHTMLError from "./staticError.html";
-import { configuration } from "./features/common";
 
 interface IServerApp {
   requestUrl: string;
@@ -65,22 +63,14 @@ const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment 
  * The main server side process handled here.
  */
 const serverRender =
-  ({ schema, errorCount = 0 }: { schema: GraphQLSchema; errorCount?: number }) =>
-  async (req: Request, res: Response, error?: IAppError): Promise<void> => {
-    // If we've already tried to render the page 5 other times,
-    // throw it.
-    if (errorCount >= 5) {
-      logger.error("Failed to render React error page.", `Attempt ${errorCount}`, error);
-      res.status(500).send(staticHTMLError.replace(/<<ifsroot>>/g, configuration.urls.ifsRoot));
-      return;
-    }
-
+  ({ schema }: { schema: GraphQLSchema }) =>
+  async ({ req, res, next, err }: { req: Request; res: Response; next: NextFunction; err?: any }): Promise<void> => {
     const { nonce } = res.locals;
     const middleware = setupServerMiddleware();
     const context = contextProvider.start({ user: req.session?.user });
     const clientConfig = getClientConfig(context);
     const modalRegister = new ModalRegister();
-    const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, error, schema });
+    const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
     const preloadedQuery = loadQuery();
     let isErrorPage = false;
 
@@ -92,7 +82,7 @@ const serverRender =
       let user: IClientUser;
       let statusCode = 200;
 
-      if (error && !(error instanceof FormHandlerError)) {
+      if (err && !(err instanceof FormHandlerError)) {
         auth = new Authorisation({});
         user = {
           roleInfo: auth.permissions,
@@ -118,32 +108,35 @@ const serverRender =
         action => process.nextTick(() => store.dispatch(action as AnyAction)),
       );
 
-      if (error) {
-        if (error instanceof FormHandlerError) {
-          if (error?.code === ErrorCode.VALIDATION_ERROR) {
+      let renderUrl = req.url;
+
+      if (err) {
+        if (err instanceof FormHandlerError) {
+          // A form handler error is an error that renders the original page.
+          // Mark the error message that we obtained into the Redux store.
+          if (err?.code === ErrorCode.VALIDATION_ERROR) {
             // We've got some kind of validation error, so let the user know that happened.
-            store.dispatch(
-              Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results as Results<any>),
-            );
+            store.dispatch(Actions.updateEditorAction(err.key, err.store, err.dto, err.error.results as Results<any>));
           } else {
             // Some other validation error occurred, so we need to add it into store as actual error.
             // Need to pair with the submit action to keep count in sync.
-            store.dispatch(Actions.handleEditorSubmit(error.key, error.store, error.dto, error.result));
+            store.dispatch(Actions.handleEditorSubmit(err.key, err.store, err.dto, err.result));
             store.dispatch(
               Actions.handleEditorError({
-                id: error.key,
-                dto: error.dto,
-                error: error.error,
-                store: error.store,
+                id: err.key,
+                dto: err.dto,
+                error: err.error,
+                store: err.store,
                 scrollToTop: false,
               }),
             );
           }
         } else {
           // We cannot handle these beautifully.
-          statusCode = getErrorStatus(error);
-          const errorPayload = createErrorPayload(error, false).params;
+          statusCode = getErrorStatus(err);
+          const errorPayload = createErrorPayload(err, false).params;
           store.dispatch(Actions.setError(errorPayload));
+          renderUrl = routeConfig.error.getLink({}).path;
           isErrorPage = true;
         }
       }
@@ -155,11 +148,9 @@ const serverRender =
 
         // Check if they are allowed to access this page.
         if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
-          throw new ForbiddenError();
+          return next(new ForbiddenError());
         }
       }
-
-      const renderUrl = isErrorPage ? routeConfig.error.routePath : req.url;
 
       // Note: Keep resolving app queries + actions until completion for final render below
       await loadAllData(store, () => {
@@ -190,9 +181,7 @@ const serverRender =
       );
     } catch (renderError: unknown) {
       logger.error("Caught a server render error", renderError);
-
-      // If an error occured, re-do our render with an error message instead.
-      serverRender({ schema, errorCount: errorCount + 1 })(req, res, renderError as IAppError);
+      next(renderError);
     }
   };
 
