@@ -48,10 +48,14 @@ export const health = async (
     return { ...results, [id]: payload };
   }, {});
 
-  return {
+  const healthCheckResponse = {
     status: hasInvalidResponse ? 500 : 200,
     response,
   };
+
+  if (hasInvalidResponse) logger.error("A health check has failed to execute.", healthCheckResponse);
+
+  return healthCheckResponse;
 };
 
 const getHealthCheck = async (_req: Request, res: Response) => {
@@ -59,7 +63,7 @@ const getHealthCheck = async (_req: Request, res: Response) => {
 
   const { status, response } = await health(healthCheckLogger);
 
-  healthCheckLogger.debug("HEALTH CHECK COMPLETE", { status, response });
+  healthCheckLogger.debug("Health check completed.", { status, response });
 
   return res.status(status).json(response);
 };
