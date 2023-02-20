@@ -13,6 +13,8 @@ declare type ContentJson = { [key: string]: string | ContentJson };
 
 declare type ResultBase = AnyObject | null;
 
+declare type Nullable<T> = T | null | undefined;
+
 // https://stackoverflow.com/a/53050575
 declare type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b4b8bdd71501d8b8c1762ae475313691>>
+ * @generated SignedSource<<106b8af6f4a2a3d81126aae06de67cba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,13 +20,13 @@ export type ProjectDetailProjectInformationTableFragment$data = {
     readonly value: string | null;
   } | null;
   readonly Acc_Duration__c: {
-    readonly value: any | null;
+    readonly value: number | null;
   } | null;
   readonly Acc_EndDate__c: {
     readonly value: string | null;
   } | null;
   readonly Acc_NumberofPeriods__c: {
-    readonly value: any | null;
+    readonly value: number | null;
   } | null;
   readonly Acc_ProjectSummary__c: {
     readonly value: any | null;
@@ -35,16 +35,16 @@ export type ProjectDetailProjectInformationTableFragment$data = {
     readonly value: string | null;
   } | null;
   readonly Loan_LoanAvailabilityPeriodLength__c: {
-    readonly value: any | null;
+    readonly value: number | null;
   } | null;
   readonly Loan_LoanEndDate__c: {
     readonly value: string | null;
   } | null;
   readonly Loan_LoanExtensionPeriodLength__c: {
-    readonly value: any | null;
+    readonly value: number | null;
   } | null;
   readonly Loan_LoanRepaymentPeriodLength__c: {
-    readonly value: any | null;
+    readonly value: number | null;
   } | null;
   readonly " $fragmentType": "ProjectDetailProjectInformationTableFragment";
 };

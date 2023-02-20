@@ -1,6 +1,6 @@
 import { ForecastDetailsDTO, IContext } from "@framework/types";
 import { ISalesforceProfileDetails } from "../../repositories";
-import { salesforceDateFormat } from "../common";
+import { salesforceDateFormat } from "@framework/util/clock";
 
 const mapCommon = (
   context: IContext,

@@ -1,5 +1,5 @@
 import { ISalesforceClaimDetails, ISalesforceClaimLineItem } from "@server/repositories";
-import { salesforceDateFormat } from "@server/features/common";
+import { salesforceDateFormat } from "@framework/util/clock";
 import { ClaimDetailsDto, ClaimDetailsSummaryDto, IContext } from "@framework/types";
 import mapClaimLineItem from "@server/features/claimDetails/mapClaimLineItem";
 

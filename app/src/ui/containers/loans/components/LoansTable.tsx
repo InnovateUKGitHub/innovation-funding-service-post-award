@@ -1,13 +1,13 @@
-import { LoanDto } from "@framework/dtos";
-import { LoanStatus } from "@framework/entities";
-import { getAuthRoles, ILinkInfo } from "@framework/types";
-import * as ACC from "@ui/components";
 import cx from "classnames";
+import { LoanStatus } from "@framework/entities";
+import { ILinkInfo } from "@framework/types";
+import * as ACC from "@ui/components";
+import type { Loan } from "../loanOverview.logic";
 
 export interface LoansTableProps {
-  items: LoanDto[];
-  createLink: (selectedPeriod: LoanDto["id"]) => ILinkInfo;
-  roles: ReturnType<typeof getAuthRoles>;
+  items: Loan[];
+  createLink: (selectedPeriod: string) => ILinkInfo;
+  roles: { readonly isMo: boolean; readonly isFc: boolean; readonly isPm: boolean };
 }
 
 export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {

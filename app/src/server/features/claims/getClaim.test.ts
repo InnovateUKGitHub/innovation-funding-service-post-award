@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { GetClaim } from "@server/features/claims";
-import { salesforceDateFormat } from "@server/features/common";
+import { salesforceDateFormat } from "@framework/util/clock";
 import { ClaimStatus } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 describe("GetClaim", () => {

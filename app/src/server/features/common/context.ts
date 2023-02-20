@@ -1,6 +1,7 @@
 import i18next from "i18next";
 import * as Common from "@server/features/common";
 import * as Framework from "@framework/types";
+import { Clock, IClock } from "@framework/util";
 import * as Entities from "@framework/entities";
 import { IInternationalisation } from "@framework/types";
 import { CustomContentStore } from "@server/resources/customContentStore";
@@ -151,7 +152,7 @@ export class Context implements Framework.IContext {
   public readonly repositories: Framework.IRepositories;
   public readonly logger: ILogger;
   public readonly config: Common.IConfig;
-  public readonly clock: Common.IClock = new Common.Clock();
+  public readonly clock: IClock = new Clock();
   public readonly caches: Framework.ICaches;
   public readonly resources: Framework.IResources;
 

@@ -1,6 +1,7 @@
 # Generated Directories
 dashboard/
 node_modules/
+/__generated__/
 
 # Static Assets
 .vscode/

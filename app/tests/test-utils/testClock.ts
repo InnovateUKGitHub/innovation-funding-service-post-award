@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { Clock, IClock } from "../../src/server/features/common/clock";
+import { Clock, IClock } from "../../src/framework/util/clock";
 
 export class TestClock implements IClock {
   private testClockNow: Date | null;

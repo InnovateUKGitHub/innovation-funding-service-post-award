@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { ISalesforceClaim, ISalesforceProfileTotalPeriod } from "@server/repositories";
-import { salesforceDateFormat } from "@server/features/common";
+import { salesforceDateFormat } from "@framework/util/clock";
 import { ClaimDto, ClaimStatus, IContext, PartnerDto } from "@framework/types";
 import { ReceivedStatus } from "@framework/entities";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";

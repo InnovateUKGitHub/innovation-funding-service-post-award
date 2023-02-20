@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<78f93cb0aae46a6d641c72fe2f09086c>>
+ * @generated SignedSource<<fef85f8ce638f1ea4b7bc7582a91af86>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -25,19 +25,19 @@ export type DashboardProjectDashboardQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ClaimsForReview__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_ClaimsOverdue__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_ClaimsUnderQuery__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_CurrentPeriodEndDate__c: {
                 readonly value: string | null;
               } | null;
               readonly Acc_CurrentPeriodNumber__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_CurrentPeriodStartDate__c: {
                 readonly value: string | null;
@@ -52,16 +52,16 @@ export type DashboardProjectDashboardQuery$data = {
                 readonly value: string | null;
               } | null;
               readonly Acc_NumberOfOpenClaims__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_NumberofPeriods__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_PCRsForReview__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_PCRsUnderQuery__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_ProjectNumber__c: {
                 readonly value: string | null;

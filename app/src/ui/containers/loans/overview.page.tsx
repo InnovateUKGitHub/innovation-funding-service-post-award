@@ -1,92 +1,54 @@
-import { LoanDto, ProjectDto } from "@framework/dtos";
+import { Section, Page, Projects, BackLink, Renderers } from "@ui/components";
 import { LoanStatus } from "@framework/entities";
-import { getAuthRoles } from "@framework/types";
-import { Pending } from "@shared/pending";
-import * as ACC from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { getPending } from "@ui/helpers/get-pending";
 import { useContent } from "@ui/hooks";
-import { useStores } from "@ui/redux";
 import { LoansTable } from "./components/LoansTable";
+import { useLoanOverviewData } from "./loanOverview.logic";
 
-interface LoansOverviewParams {
+interface LoanOverviewParams {
   projectId: string;
 }
 
-interface LoansOverviewProps extends BaseProps {
-  project: ProjectDto;
-  loans: LoanDto[];
-}
+const LoansOverviewPage = (props: BaseProps & LoanOverviewParams) => {
+  const { getContent } = useContent();
 
-const LoansOverview = ({ loans, routes, project }: LoansOverviewProps) => {
+  const { project, loans } = useLoanOverviewData(props.projectId);
   const pendingLoanIndex = loans.findIndex(x => x.status === LoanStatus.REQUESTED);
   const pendingLoan = loans[pendingLoanIndex];
 
   const isLastItem = pendingLoanIndex === loans.length - 1;
-  const roles = getAuthRoles(project.roles);
 
   return (
-    <ACC.Section>
-      {pendingLoan && (
-        <ACC.Renderers.SimpleString>
-          {isLastItem
-            ? "Your last drawdown request has been received. It is currently being reviewed."
-            : `You can request your next drawdown once drawdown ${pendingLoan.period} is approved.`}
-        </ACC.Renderers.SimpleString>
-      )}
-
-      <LoansTable
-        items={loans}
-        roles={roles}
-        createLink={loanId => routes.loansRequest.getLink({ projectId: project.id, loanId })}
-      />
-    </ACC.Section>
-  );
-};
-
-export type LoansOverviewContainerProps = BaseProps & LoansOverviewParams;
-
-export const LoansOverviewContainer = ({ projectId, ...props }: LoansOverviewContainerProps) => {
-  const { getContent } = useContent();
-  const stores = useStores();
-
-  const loansPending = stores.loans.getAll(projectId);
-  const projectPending = stores.projects.getById(projectId);
-  const pagePending = Pending.combine({ project: projectPending, loans: loansPending });
-
-  const { isRejected, isResolved, payload } = getPending(pagePending);
-
-  const pageTitleValue =
-    isResolved && !!payload ? (
-      <ACC.Projects.Title {...payload.project} />
-    ) : (
-      <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansSummary.loadingDrawdowns)}</ACC.Renderers.SimpleString>
-    );
-
-  return (
-    <ACC.Page
-      pageTitle={pageTitleValue}
+    <Page
       backLink={
-        <ACC.BackLink route={props.routes.projectOverview.getLink({ projectId })}>
+        <BackLink route={props.routes.projectOverview.getLink({ projectId: props.projectId })}>
           {getContent(x => x.pages.projectOverview.backToProjects)}
-        </ACC.BackLink>
+        </BackLink>
       }
+      pageTitle={<Projects.Title title={project.title} projectNumber={project.projectNumber} />}
     >
-      {isRejected && (
-        <ACC.Renderers.SimpleString>
-          {getContent(x => x.pages.loansSummary.rejectedDrawdownsError)}
-        </ACC.Renderers.SimpleString>
-      )}
-
-      {payload && <LoansOverview project={payload.project} loans={payload.loans} {...props} />}
-    </ACC.Page>
+      <Section>
+        {pendingLoan && (
+          <Renderers.SimpleString>
+            {isLastItem
+              ? "Your last drawdown request has been received. It is currently being reviewed."
+              : `You can request your next drawdown once drawdown ${pendingLoan.period} is approved.`}
+          </Renderers.SimpleString>
+        )}
+        <LoansTable
+          items={loans}
+          roles={project.roles}
+          createLink={loanId => props.routes.loansRequest.getLink({ projectId: project.id, loanId })}
+        />
+      </Section>
+    </Page>
   );
 };
 
-export const LoansSummaryRoute = defineRoute<LoansOverviewParams>({
+export const LoansSummaryRoute = defineRoute<LoanOverviewParams>({
   routeName: "loansSummary",
   routePath: "/loans/:projectId",
-  container: LoansOverviewContainer,
+  container: LoansOverviewPage,
   getParams: r => ({
     projectId: r.params.projectId,
   }),

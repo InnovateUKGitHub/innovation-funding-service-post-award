@@ -1,8 +1,8 @@
-import { LoanDto } from "@framework/dtos";
 import { LoanStatus } from "@framework/entities";
 import { ILinkInfo } from "@framework/types";
 import { TestBed } from "@shared/TestBed";
 import { render } from "@testing-library/react";
+import { Loan } from "../loanOverview.logic";
 import { LoansTable, LoansTableProps } from "@ui/containers/loans/components/LoansTable";
 import { v4 as uuid } from "uuid";
 
@@ -23,10 +23,6 @@ describe("<LoansTable />", () => {
       isMo: false,
       isFc: true,
       isPm: true,
-      isPmAndFc: true,
-      isPmOrMo: true,
-      isSuperAdmin: true,
-      isUnknown: true,
     },
   };
 
@@ -40,13 +36,12 @@ describe("<LoansTable />", () => {
   beforeEach(jest.clearAllMocks);
 
   describe("@returns", () => {
-    const stubLoanItem: LoanDto = {
+    const stubLoanItem: Loan = {
       id: uuid(),
       status: LoanStatus.REQUESTED,
       period: 1,
       requestDate: new Date(Date.UTC(2021, 9, 1)),
       forecastAmount: 10000,
-      amount: 10000,
       comments: "",
     };
 
@@ -59,13 +54,12 @@ describe("<LoansTable />", () => {
     });
 
     test("with single item defined", () => {
-      const stubItem: LoanDto = {
+      const stubItem: Loan = {
         id: uuid(),
         status: LoanStatus.PLANNED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 9, 1)),
         forecastAmount: 10000,
-        amount: 10000,
         comments: "This is a test comment for period 1\r\n\r\n45345456\r\n\r\n!@£$%^&*()",
       };
 
@@ -87,23 +81,21 @@ describe("<LoansTable />", () => {
     });
 
     test("with multiple items defined", () => {
-      const stubFirstItem: LoanDto = {
+      const stubFirstItem: Loan = {
         id: uuid(),
         status: LoanStatus.REQUESTED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 9, 1)),
         forecastAmount: 10000,
-        amount: 10000,
         comments: "This is a test comment for period 1\r\n\r\n45345456\r\n\r\n!@£$%^&*()",
       };
 
-      const stubSecondItem: LoanDto = {
+      const stubSecondItem: Loan = {
         id: uuid(),
         status: LoanStatus.PLANNED,
         period: 2,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
         forecastAmount: 11000,
-        amount: 11000,
         comments: "",
       };
 
@@ -145,13 +137,12 @@ describe("<LoansTable />", () => {
 
   describe("@events", () => {
     test("with no call to createLink as status is not 'PLANNED'", () => {
-      const stubItem: LoanDto = {
+      const stubItem: Loan = {
         id: uuid(),
         status: LoanStatus.REQUESTED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
         forecastAmount: 11000,
-        amount: 11000,
         comments: "",
       };
 
@@ -171,13 +162,13 @@ describe("<LoansTable />", () => {
     test("calls createLink with planned loan id", () => {
       const stubIdToBeCalled = "stub-id-to-be-called";
 
-      const stubItem: LoanDto = {
+      const stubItem: Loan = {
         id: stubIdToBeCalled,
         status: LoanStatus.PLANNED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
         forecastAmount: 11000,
-        amount: 11000,
+
         comments: "",
       };
 

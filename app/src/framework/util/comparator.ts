@@ -6,7 +6,7 @@ export type IComparer<T> = (x: T, y: T) => number;
 
 export const numberComparator: IComparer<number> = (a, b) => a - b;
 
-export const nullableNumberComparator: IComparer<number | null> = (a, b) => {
+export const nullableNumberComparator: IComparer<Nullable<number>> = (a, b) => {
   if (typeof a === "number" && typeof b === "number") return numberComparator(a, b);
   if (typeof a === "number") return 1;
   if (typeof b === "number") return -1;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6e75087e6b976df0494496f7f21e1762>>
+ * @generated SignedSource<<1eeae028ff92ae9e1b2f1983edc32f23>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -28,14 +28,14 @@ export type ProjectDetailsQuery$data = {
                 readonly value: string | null;
               } | null;
               readonly Acc_CurrentPeriodNumber__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_CurrentPeriodStartDate__c: {
                 readonly displayValue: string | null;
                 readonly value: string | null;
               } | null;
               readonly Acc_NumberofPeriods__c: {
-                readonly value: any | null;
+                readonly value: number | null;
               } | null;
               readonly Acc_ProjectNumber__c: {
                 readonly value: string | null;

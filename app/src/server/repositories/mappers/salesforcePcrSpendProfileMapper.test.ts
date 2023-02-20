@@ -3,7 +3,7 @@ import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pc
 import { PcrSpendProfileEntity } from "@framework/entities";
 import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 import { DateTime } from "luxon";
-import { salesforceDateFormat } from "@server/features/common";
+import { salesforceDateFormat } from "@framework/util/clock";
 
 const pcrSpendProfileType = "PCR_SPEND_PROFILE_TYPE";
 

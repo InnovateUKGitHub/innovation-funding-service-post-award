@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0f04521457093ae09f3b79ccfc7b4a39>>
+ * @generated SignedSource<<78a731ef4864dc8f4857733fa3c47c95>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -33,7 +33,7 @@ export type PCRDashboardQuery$data = {
                       readonly value: string | null;
                     } | null;
                     readonly Acc_RequestNumber__c: {
-                      readonly value: any | null;
+                      readonly value: number | null;
                     } | null;
                     readonly Acc_Status__c: {
                       readonly value: string | null;

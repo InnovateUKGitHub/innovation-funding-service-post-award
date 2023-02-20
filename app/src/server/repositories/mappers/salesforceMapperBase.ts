@@ -1,4 +1,4 @@
-import { Clock } from "@server/features/common/clock";
+import { Clock } from "@framework/util/clock";
 
 export interface ISalesforceMapper<TSalesforce, TEntity> {
   map: (item: TSalesforce) => TEntity;

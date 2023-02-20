@@ -5,4 +5,5 @@ export * from "./dateHelpers";
 export * from "./numberHelper";
 export * from "./arrayHelpers";
 export * from "./windowHelpers";
+export * from "./clock";
 export * from "./files";
