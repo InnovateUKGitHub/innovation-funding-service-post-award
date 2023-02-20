@@ -39,7 +39,16 @@ export abstract class RepositoryBase {
 
   protected constructError(e: unknown | Errors.SalesforceErrorResponse) {
     if (Errors.isSalesforceErrorResponse(e)) {
-      this.logger.error("Salesforce Error", e.errorCode, e.message);
+      if (e.message.length < 10_000) {
+        this.logger.error("Salesforce Error", e.errorCode, e.message);
+      } else {
+        this.logger.error(
+          "Salesforce Error",
+          e.errorCode,
+          "This error message was truncated because Salesforce sent a message with more than 10K characters.",
+          "This could be because Salesforce is returning a full HTML error page, such as a Salesforce EDGE connection error.",
+        );
+      }
 
       if (e.errorCode === "INVALID_FIELD") {
         throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
