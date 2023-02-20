@@ -167,7 +167,7 @@ const handleError =
     } else {
       next(error);
     }
-  };
+  }
 
 export const configureFormRouter = ({
   schema,

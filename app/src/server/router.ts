@@ -45,9 +45,15 @@ const getServerRoutes = async () => {
     })(req, res, next);
   });
 
+  /**
+   * CSRF Protection
+   * TODO: Swap this out for another CSRF package.
+   */
+  router.use(csrfProtection);
+
   // Only enable the components page if we're in development mode.
   if (isAccDevOrDemo || isLocalDevelopment) {
-    router.use("/components", csrfProtection, componentGuideRender);
+    router.use("/components", componentGuideRender);
   }
 
   /**
