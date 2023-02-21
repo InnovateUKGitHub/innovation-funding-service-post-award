@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { accessOpenClaim, shouldShowAllAccordion, shouldShowCostCatTable, shouldShowProjectTitle } from "./steps";
+import { accessEUIOpenClaim, shouldShowAllAccordion, shouldShowCostCatTable, shouldShowProjectTitle } from "./steps";
 
 describe("claims > edit claims as FC", () => {
   before(() => {
@@ -10,7 +10,7 @@ describe("claims > edit claims as FC", () => {
     cy.selectTile("Claims");
   });
 
-  it("Displays a claim in draft state", accessOpenClaim);
+  it("Displays a claim in draft state", accessEUIOpenClaim);
 
   it("Should have a back option", () => {
     cy.backLink("Back to claims");

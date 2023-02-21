@@ -16,6 +16,35 @@ export const shouldShowCostCatTable = () => {
   cy.tableHeader("Remaining eligible costs");
 };
 
+export const shouldShowAcademicCostCatTable = () => {
+  [
+    "Directly incurred - Staff",
+    "Directly incurred - Travel and subsistence",
+    "Directly incurred - Equipment",
+    "Directly incurred - Other costs",
+    "Directly allocated - Investigations",
+    "Directly allocated - Estates costs",
+    "Directly allocated - Other costs",
+    "Indirect costs - Investigations",
+    "Exceptions - Staff",
+    "Exceptions - Travel and subsistence",
+    "Exceptions - Equipment",
+    "Exceptions - Other costs",
+  ].forEach(academicCosts => {
+    cy.tableCell(academicCosts);
+  });
+  [
+    "Category",
+    "Total eligible costs",
+    "Eligible costs claimed to date",
+    "Costs claimed this period",
+    "Remaining eligible costs",
+    "Total",
+  ].forEach(header => {
+    cy.tableHeader(header);
+  });
+};
+
 export const shouldHaveCostCategoryTable = (category: string) => {
   cy.tableHeader(category);
 };
@@ -152,9 +181,12 @@ export const ktpCostCats = () => {
   cy.tableHeader("Total");
 };
 
-export const accessOpenClaim = () => {
-  cy.get("tbody").contains("Draft");
-  cy.get("tbody").contains("Edit").click();
+export const accessEUIOpenClaim = () => {
+  cy.get("td").contains("EUI Small Ent Health (Lead)").siblings().contains("Edit").click();
+};
+
+export const accessABSOpenClaim = () => {
+  cy.get("td").contains("ABS EUI Medium Enterprise").siblings().contains("Edit").click();
 };
 
 export const forecastView = () => {
@@ -274,5 +306,109 @@ export const ktpCorrectCats = () => {
     "Total",
   ].forEach(tableHeader => {
     cy.tableHeader(tableHeader);
+  });
+};
+
+export const academicCosts = () => {
+  [
+    "Directly incurred - Staff",
+    "Directly incurred - Travel and subsistence",
+    "Directly incurred - Equipment",
+    "Directly incurred - Other costs",
+    "Directly allocated - Investigations",
+    "Directly allocated - Estates costs",
+    "Directly allocated - Other costs",
+    "Indirect costs - Investigations",
+    "Exceptions - Staff",
+    "Exceptions - Travel and subsistence",
+    "Exceptions - Equipment",
+    "Exceptions - Other costs",
+  ].forEach(academicCosts => {
+    cy.tableCell(academicCosts);
+  });
+  cy.tableHeader("Total");
+};
+
+export const updateAcademicCosts = () => {
+  [
+    "Directly incurred - Staff Period 2",
+    "Directly incurred - Staff Period 3",
+    "Directly incurred - Staff Period 4",
+    "Directly incurred - Travel and subsistence Period 2",
+    "Directly incurred - Travel and subsistence Period 3",
+    "Directly incurred - Travel and subsistence Period 4",
+    "Directly incurred - Equipment Period 2",
+    "Directly incurred - Equipment Period 3",
+    "Directly incurred - Equipment Period 4",
+    "Directly incurred - Other costs Period 2",
+    "Directly incurred - Other costs Period 3",
+    "Directly incurred - Other costs Period 4",
+    "Directly allocated - Investigations Period 2",
+    "Directly allocated - Investigations Period 3",
+    "Directly allocated - Investigations Period 4",
+    "Directly allocated - Estates costs Period 2",
+    "Directly allocated - Estates costs Period 3",
+    "Directly allocated - Estates costs Period 4",
+    "Directly allocated - Other costs Period 2",
+    "Directly allocated - Other costs Period 3",
+    "Directly allocated - Other costs Period 4",
+    "Indirect costs - Investigations Period 2",
+    "Indirect costs - Investigations Period 3",
+    "Indirect costs - Investigations Period 4",
+    "Exceptions - Staff Period 2",
+    "Exceptions - Staff Period 3",
+    "Exceptions - Staff Period 4",
+    "Exceptions - Travel and subsistence Period 2",
+    "Exceptions - Travel and subsistence Period 3",
+    "Exceptions - Travel and subsistence Period 4",
+    "Exceptions - Equipment Period 2",
+    "Exceptions - Equipment Period 3",
+    "Exceptions - Equipment Period 4",
+    "Exceptions - Other costs Period 2",
+    "Exceptions - Other costs Period 3",
+    "Exceptions - Other costs Period 4",
+  ].forEach(forecastInput => {
+    cy.getByAriaLabel(forecastInput).clear().type("100");
+  });
+  cy.get("td:nth-child(14)").contains("£3,600.00");
+  [
+    "Directly incurred - Staff Period 2",
+    "Directly incurred - Staff Period 3",
+    "Directly incurred - Staff Period 4",
+    "Directly incurred - Travel and subsistence Period 2",
+    "Directly incurred - Travel and subsistence Period 3",
+    "Directly incurred - Travel and subsistence Period 4",
+    "Directly incurred - Equipment Period 2",
+    "Directly incurred - Equipment Period 3",
+    "Directly incurred - Equipment Period 4",
+    "Directly incurred - Other costs Period 2",
+    "Directly incurred - Other costs Period 3",
+    "Directly incurred - Other costs Period 4",
+    "Directly allocated - Investigations Period 2",
+    "Directly allocated - Investigations Period 3",
+    "Directly allocated - Investigations Period 4",
+    "Directly allocated - Estates costs Period 2",
+    "Directly allocated - Estates costs Period 3",
+    "Directly allocated - Estates costs Period 4",
+    "Directly allocated - Other costs Period 2",
+    "Directly allocated - Other costs Period 3",
+    "Directly allocated - Other costs Period 4",
+    "Indirect costs - Investigations Period 2",
+    "Indirect costs - Investigations Period 3",
+    "Indirect costs - Investigations Period 4",
+    "Exceptions - Staff Period 2",
+    "Exceptions - Staff Period 3",
+    "Exceptions - Staff Period 4",
+    "Exceptions - Travel and subsistence Period 2",
+    "Exceptions - Travel and subsistence Period 3",
+    "Exceptions - Travel and subsistence Period 4",
+    "Exceptions - Equipment Period 2",
+    "Exceptions - Equipment Period 3",
+    "Exceptions - Equipment Period 4",
+    "Exceptions - Other costs Period 2",
+    "Exceptions - Other costs Period 3",
+    "Exceptions - Other costs Period 4",
+  ].forEach(forecastInput => {
+    cy.getByAriaLabel(forecastInput).clear().type("0");
   });
 };

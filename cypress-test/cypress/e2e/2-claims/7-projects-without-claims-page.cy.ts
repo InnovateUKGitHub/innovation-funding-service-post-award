@@ -1,7 +1,7 @@
 import { visitApp } from "../../common/visit";
 import { openClosedSection, shouldShowProjectTitle } from "./steps";
 
-const fcContact = "s.shuang@irc.trde.org.uk.test";
+const fcContact = "contact77@test.co.uk";
 
 describe("claims > projects without claims", () => {
   before(() => {

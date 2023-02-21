@@ -99,6 +99,7 @@ export const populateCategoriesZeroSubmit = () => {
   cy.submitButton("Submit").click();
 };
 
+<<<<<<< HEAD
 export const ktpCostCats = () => {
   [
     "Associate Employment",
@@ -113,10 +114,29 @@ export const ktpCostCats = () => {
     "Subcontracting",
   ].forEach(ktpCostCat => {
     cy.tableCell(ktpCostCat);
+=======
+export const academicCosts = () => {
+  [
+    "Directly incurred - Staff",
+    "Directly incurred - Travel and subsistence",
+    "Directly incurred - Equipment",
+    "Directly incurred - Other costs",
+    "Directly allocated - Investigations",
+    "Directly allocated - Estates costs",
+    "Directly allocated - Other costs",
+    "Indirect costs - Investigations",
+    "Exceptions - Staff",
+    "Exceptions - Travel and subsistence",
+    "Exceptions - Equipment",
+    "Exceptions - Other costs",
+  ].forEach(academicCosts => {
+    cy.tableCell(academicCosts);
+>>>>>>> ec09abba8 (ACC-9263:(cy) Forecast and claims-based tests added for academic partners)
   });
   cy.tableHeader("Total");
 };
 
+<<<<<<< HEAD
 export const ktpUpdateForecast = () => {
   [
     "Associate Employment Period 2",
@@ -184,6 +204,87 @@ export const ktpUpdateForecast = () => {
     "Subcontracting Period 2",
     "Subcontracting Period 3",
     "Subcontracting Period 4",
+=======
+export const updateAcademicCosts = () => {
+  [
+    "Directly incurred - Staff Period 2",
+    "Directly incurred - Staff Period 3",
+    "Directly incurred - Staff Period 4",
+    "Directly incurred - Travel and subsistence Period 2",
+    "Directly incurred - Travel and subsistence Period 3",
+    "Directly incurred - Travel and subsistence Period 4",
+    "Directly incurred - Equipment Period 2",
+    "Directly incurred - Equipment Period 3",
+    "Directly incurred - Equipment Period 4",
+    "Directly incurred - Other costs Period 2",
+    "Directly incurred - Other costs Period 3",
+    "Directly incurred - Other costs Period 4",
+    "Directly allocated - Investigations Period 2",
+    "Directly allocated - Investigations Period 3",
+    "Directly allocated - Investigations Period 4",
+    "Directly allocated - Estates costs Period 2",
+    "Directly allocated - Estates costs Period 3",
+    "Directly allocated - Estates costs Period 4",
+    "Directly allocated - Other costs Period 2",
+    "Directly allocated - Other costs Period 3",
+    "Directly allocated - Other costs Period 4",
+    "Indirect costs - Investigations Period 2",
+    "Indirect costs - Investigations Period 3",
+    "Indirect costs - Investigations Period 4",
+    "Exceptions - Staff Period 2",
+    "Exceptions - Staff Period 3",
+    "Exceptions - Staff Period 4",
+    "Exceptions - Travel and subsistence Period 2",
+    "Exceptions - Travel and subsistence Period 3",
+    "Exceptions - Travel and subsistence Period 4",
+    "Exceptions - Equipment Period 2",
+    "Exceptions - Equipment Period 3",
+    "Exceptions - Equipment Period 4",
+    "Exceptions - Other costs Period 2",
+    "Exceptions - Other costs Period 3",
+    "Exceptions - Other costs Period 4",
+  ].forEach(forecastInput => {
+    cy.getByAriaLabel(forecastInput).clear().type("100");
+  });
+  cy.get("td:nth-child(14)").contains("£3,600.00");
+  [
+    "Directly incurred - Staff Period 2",
+    "Directly incurred - Staff Period 3",
+    "Directly incurred - Staff Period 4",
+    "Directly incurred - Travel and subsistence Period 2",
+    "Directly incurred - Travel and subsistence Period 3",
+    "Directly incurred - Travel and subsistence Period 4",
+    "Directly incurred - Equipment Period 2",
+    "Directly incurred - Equipment Period 3",
+    "Directly incurred - Equipment Period 4",
+    "Directly incurred - Other costs Period 2",
+    "Directly incurred - Other costs Period 3",
+    "Directly incurred - Other costs Period 4",
+    "Directly allocated - Investigations Period 2",
+    "Directly allocated - Investigations Period 3",
+    "Directly allocated - Investigations Period 4",
+    "Directly allocated - Estates costs Period 2",
+    "Directly allocated - Estates costs Period 3",
+    "Directly allocated - Estates costs Period 4",
+    "Directly allocated - Other costs Period 2",
+    "Directly allocated - Other costs Period 3",
+    "Directly allocated - Other costs Period 4",
+    "Indirect costs - Investigations Period 2",
+    "Indirect costs - Investigations Period 3",
+    "Indirect costs - Investigations Period 4",
+    "Exceptions - Staff Period 2",
+    "Exceptions - Staff Period 3",
+    "Exceptions - Staff Period 4",
+    "Exceptions - Travel and subsistence Period 2",
+    "Exceptions - Travel and subsistence Period 3",
+    "Exceptions - Travel and subsistence Period 4",
+    "Exceptions - Equipment Period 2",
+    "Exceptions - Equipment Period 3",
+    "Exceptions - Equipment Period 4",
+    "Exceptions - Other costs Period 2",
+    "Exceptions - Other costs Period 3",
+    "Exceptions - Other costs Period 4",
+>>>>>>> ec09abba8 (ACC-9263:(cy) Forecast and claims-based tests added for academic partners)
   ].forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("0");
   });

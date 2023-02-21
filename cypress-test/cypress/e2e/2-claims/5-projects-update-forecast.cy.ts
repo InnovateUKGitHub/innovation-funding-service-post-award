@@ -1,5 +1,6 @@
 import { visitApp } from "../../common/visit";
 import {
+  accessEUIOpenClaim,
   displayForecastTable,
   forecastCostCats,
   forecastHeaders,
@@ -50,9 +51,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
     cy.getByQA("button_save-qa").click({ force: true });
   });
 
-  it("Should re-open the claim", () => {
-    cy.get("a.govuk-link").contains("Edit").click();
-  });
+  it("Should re-open the claim", accessEUIOpenClaim);
 
   it("Should navigate to documents", () => {
     cy.getByQA("button_default-qa").click();
