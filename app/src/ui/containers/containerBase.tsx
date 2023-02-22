@@ -5,6 +5,7 @@ import { IStores } from "@ui/redux";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { Copy } from "@copy/Copy";
 import { makeUrlWithQuery } from "@ui/helpers/make-url";
+import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 
 interface RouteStateParams {
   [key: string]: any;
@@ -65,7 +66,7 @@ interface IRouteOptions<TParams> {
   routePathWithQuery?: string;
   container: React.FunctionComponent<TParams & BaseProps>;
   getParams: (route: RouteState) => TParams;
-  accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
+  accessControl?: (auth: Authorisation, params: TParams, accessControlOptions: IAccessControlOptions) => boolean;
   getTitle: (getTitleArgs: { params: TParams; stores: IStores; content: Copy }) => {
     htmlTitle: string;
     displayTitle: string;
@@ -82,19 +83,6 @@ export interface IRouteDefinition<TParams> extends IRouteOptions<TParams> {
  *
  * takes route config and generates a link object and returns config with link
  */
-// export function defineRoute<TParams extends AnyObject>(options: IRouteOptions<TParams>): IRouteDefinition<TParams> {
-//   return {
-//     ...options,
-//     getLink: params => ({
-//       path: makeUrlWithQuery(options.routePathWithQuery || options.routePath, convertToParameters(params)),
-//       routeName: options.routeName,
-//       routeParams: convertToParameters(params),
-//       accessControl: (user: IClientUser, config: IClientConfig) =>
-//         options.accessControl?.(new Authorisation(user.roleInfo), params, config) ?? true,
-//     }),
-//   };
-// }
-
 export function defineRoute<TParams extends AnyObject>(options: IRouteOptions<TParams>): IRouteDefinition<TParams> {
   return {
     ...options,
@@ -102,8 +90,8 @@ export function defineRoute<TParams extends AnyObject>(options: IRouteOptions<TP
       path: makeUrlWithQuery(options.routePathWithQuery || options.routePath, convertToParameters(params)),
       routeName: options.routeName,
       routeParams: convertToParameters(params),
-      accessControl: (user: IClientUser, config: IClientConfig) =>
-        options.accessControl?.(new Authorisation(user.roleInfo), params, config) ?? true,
+      accessControl: (user: IClientUser, accessControlOptions: IAccessControlOptions) =>
+        options.accessControl?.(new Authorisation(user.roleInfo), params, accessControlOptions) ?? true,
     }),
   };
 }

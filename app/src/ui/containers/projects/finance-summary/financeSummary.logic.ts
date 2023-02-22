@@ -2,19 +2,10 @@ import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { useContent } from "@ui/hooks";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { DateConvertible } from "@framework/util";
+import { calcPercentage, DateConvertible } from "@framework/util";
 import { financeSummaryQuery } from "./FinanceSummary.query";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { FinanceSummaryQuery, FinanceSummaryQuery$data } from "./__generated__/FinanceSummaryQuery.graphql";
-import { sortPartners } from "@server/features/partners/sortPartners";
-
-/**
- * calculates the percentage claimed so far
- */
-function calcPercentageClaimed(total: number, claimed: number) {
-  if (!total) return null;
-  return (100 * (claimed || 0)) / total;
-}
 
 export const useFinanceSummaryContent = () => {
   const { getContent } = useContent();
@@ -87,7 +78,7 @@ export const useFinanceSummaryData = (projectId: string) => {
       isWithdrawn: ["Voluntary Withdrawal", "Involuntary Withdrawal", "Migrated - Withdrawn"].includes(
         x?.node?.Acc_ParticipantStatus__c?.value ?? "",
       ),
-      percentageParticipantCostsSubmitted: calcPercentageClaimed(
+      percentageParticipantCostsSubmitted: calcPercentage(
         x?.node?.Acc_TotalParticipantCosts__c?.value ?? 0,
         x?.node?.Acc_TotalCostsSubmitted__c?.value ?? 0,
       ),

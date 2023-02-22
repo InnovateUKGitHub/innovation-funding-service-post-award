@@ -1,8 +1,8 @@
 import { Authorisation } from "@framework/types";
+import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { Content, H1, NavigationCard, NavigationCardsGrid, Page } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
 const DeveloperHomePageContainer = (props: BaseProps) => {
   const { getContent } = useContent();
@@ -36,6 +36,6 @@ export const DeveloperHomePage = defineRoute({
   routePath: "/",
   container: DeveloperHomePageContainer,
   getParams: () => ({}),
-  accessControl: (auth: Authorisation, params: EmptyObject, config: IClientConfig) => !config.ssoEnabled,
+  accessControl: (auth: Authorisation, params: EmptyObject, options: IAccessControlOptions) => !options.ssoEnabled,
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.home.title),
 });

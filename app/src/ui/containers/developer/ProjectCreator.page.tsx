@@ -1,7 +1,7 @@
 import { Authorisation } from "@framework/types";
+import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { H1, Page } from "@ui/components";
 import { defineRoute } from "@ui/containers/containerBase";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { ProjectCreator } from "./ProjectCreator";
 
 const ProjectCreatorPage = () => {
@@ -17,6 +17,6 @@ export const DeveloperProjectCreatorPage = defineRoute({
   routePath: "/developer/projectcreator",
   container: ProjectCreatorPage,
   getParams: () => ({}),
-  accessControl: (auth: Authorisation, params: EmptyObject, config: IClientConfig) => !config.ssoEnabled,
+  accessControl: (auth: Authorisation, params: EmptyObject, options: IAccessControlOptions) => !options.ssoEnabled,
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.home.title),
 });

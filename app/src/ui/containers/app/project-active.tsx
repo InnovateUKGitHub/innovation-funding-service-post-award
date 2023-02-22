@@ -21,7 +21,7 @@ interface GetProjectStatusProps {
 }
 
 /**
- * @deprecated Consume this if you are a Class Compoent otherwise favour useProjectStatus()
+ * @deprecated Consume this if you are a Class Component otherwise favour useProjectStatus()
  */
 export function GetProjectStatus(props: GetProjectStatusProps) {
   const projectStatus = useProjectStatus();

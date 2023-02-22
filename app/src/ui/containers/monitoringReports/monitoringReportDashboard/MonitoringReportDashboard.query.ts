@@ -1,5 +1,5 @@
 import { graphql } from "react-relay";
-// (orderBy: { Acc_AccountId__r: { Name: { order: ASC } } })
+
 export const monitoringReportDashboardQuery = graphql`
   query MonitoringReportDashboardQuery($projectId: ID!) {
     salesforce {

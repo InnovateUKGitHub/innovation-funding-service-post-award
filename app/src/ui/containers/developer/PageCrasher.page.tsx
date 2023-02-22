@@ -1,7 +1,7 @@
 import { Authorisation } from "@framework/types";
+import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { H1, Page } from "@ui/components";
 import { defineRoute } from "@ui/containers/containerBase";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { PageCrasher } from "./PageCrasher";
 
 const PageCrasherPage = () => {
@@ -17,6 +17,6 @@ export const DeveloperPageCrasherPage = defineRoute({
   routePath: "/developer/crash",
   container: PageCrasherPage,
   getParams: () => ({}),
-  accessControl: (auth: Authorisation, params: EmptyObject, config: IClientConfig) => !config.ssoEnabled,
+  accessControl: (auth: Authorisation, params: EmptyObject, options: IAccessControlOptions) => !options.ssoEnabled,
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.home.title),
 });

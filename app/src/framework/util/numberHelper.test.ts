@@ -1,4 +1,5 @@
 import {
+  calcPercentage,
   diffAsPercentage,
   isNumber,
   parseNumber,
@@ -140,5 +141,21 @@ describe("numberHelper", () => {
 
       expect(isWithinRange).toBe(expectedValue);
     });
+  });
+
+  describe("calcPercentage", () => {
+    test.each`
+      total        | amount | expected
+      ${null}      | ${10}  | ${null}
+      ${undefined} | ${10}  | ${null}
+      ${0}         | ${10}  | ${null}
+      ${100}       | ${10}  | ${10}
+      ${50}        | ${10}  | ${20}
+    `(
+      "it should return $expected when called with $total and $amount",
+      ({ total, amount, expected }: { total: Nullable<number>; amount: number; expected: number }) => {
+        expect(calcPercentage(total, amount)).toBe(expected);
+      },
+    );
   });
 });

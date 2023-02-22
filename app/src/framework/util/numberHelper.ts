@@ -75,3 +75,12 @@ export const withinRange = <T = number>(numberToCheck: T, startRange: T, endRang
 
   return withinBottomRange && withinTopRange;
 };
+
+/**
+ * returns the percentage value of passed in numbers.
+ * Pass in the 100% value first as total and the divisor second
+ */
+export function calcPercentage(total: Nullable<number>, amount: number) {
+  if (!total) return null;
+  return (100 * (amount || 0)) / total;
+}

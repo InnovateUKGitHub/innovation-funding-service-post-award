@@ -2,7 +2,7 @@ import { toDefinedArray } from "@shared/toArray";
 import { Content, H4, Link, ListItem, Renderers } from "@ui/components";
 import { SimpleString } from "@ui/components/renderers";
 import { useContent } from "@ui/hooks";
-import { ProjectOverviewRoute } from "../overview.page";
+import { ProjectOverviewRoute } from "../projectOverview/projectOverview.page";
 import { ProjectSetupRoute } from "../setup";
 import { IDashboardProjectData, IPartner, IProject } from "./Dashboard.interface";
 import { useProjectActions } from "./dashboard.logic";

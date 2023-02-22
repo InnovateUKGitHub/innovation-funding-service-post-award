@@ -1,5 +1,5 @@
 import React from "react";
-import { IAppError, PartnerDto, PartnerStatus, ProjectDto, ProjectStatus } from "@framework/types";
+import { IAppError, PartnerStatus, ProjectStatus } from "@framework/types";
 import { CombinedResultsValidator, Results } from "@ui/validation";
 import { useContent } from "@ui/hooks";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
@@ -11,13 +11,7 @@ import { ProjectInactive } from "../ProjectInactive";
 import { Section } from "./section";
 import { GovWidthContainer } from ".";
 
-export type PageValidationProjectStatus = ProjectDto["status"];
-export type PageValidationPartnerStatus = PartnerDto["partnerStatus"];
-
-export const usePageValidationMessage = (
-  projectStatus?: PageValidationProjectStatus,
-  partnerStatus?: PageValidationPartnerStatus,
-) => {
+export const usePageValidationMessage = (projectStatus?: ProjectStatus, partnerStatus?: PartnerStatus) => {
   const { getContent } = useContent();
 
   if (projectStatus === ProjectStatus.OnHold) {

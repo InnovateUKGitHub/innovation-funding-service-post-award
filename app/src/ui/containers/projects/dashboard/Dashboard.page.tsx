@@ -118,7 +118,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
   // For each project...
   const allProjects = getDefinedEdges(data.salesforce.uiapi.query.Acc_Project__c?.edges)
     .map(({ node: project }) => {
-      // Get the partner a user is assoiated with, as well
+      // Get the partner a user is associated with, as well
       // as the section the project should be displayed in.
       const partner = getPartnerOnProject({ project });
       const projectSection = getProjectSection({ project, partner });
@@ -160,7 +160,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
     <Page
       pageTitle={<PageTitle />}
       backLink={
-        data.clientConfig.ssoEnabled ? (
+        data?.clientConfig?.ssoEnabled ? (
           // Note: This has been added as the content component cannot infer the static string length of min 4 characters
           <a className="govuk-back-link" href={`${data.clientConfig.ifsRoot}/dashboard-selection`}>
             <Content value={x => x.pages.projectsDashboard.backToDashboard} />
