@@ -75,6 +75,6 @@ export const routeConfig = {
   forecastDashboard: Containers.ForecastDashboardRoute,
   forecastDetails: Containers.ForecastDetailsRoute,
   forecastUpdate: Containers.UpdateForecastRoute,
-};
+} as const;
 
 export const getRoutes = () => Object.entries(routeConfig);
