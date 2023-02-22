@@ -1,8 +1,11 @@
 import { visitApp } from "../../common/visit";
 import { newLocation, shouldShowProjectTitle } from "./steps";
+
+const pmEmail = "james.black@euimeabs.test";
+
 describe("Project setup > Provide your project location postcode", () => {
   before(() => {
-    visitApp({});
+    visitApp({ asUser: pmEmail });
     cy.navigateToProject("365447");
   });
 

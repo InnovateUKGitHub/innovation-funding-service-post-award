@@ -66,16 +66,11 @@ export const fillAddressInformation = () => {
   cy.getByQA("billingAddressFieldsetGuidance").contains(
     "This is the billing address connected to this bank account. This is not the address of the bank.",
   );
-  cy.getByLabel("Building");
-  cy.get("#accountBuilding").type("Polaris House");
-  cy.getByLabel("Street");
-  cy.get("#accountStreet").type("North Star Avenue");
-  cy.getByLabel("Locality");
-  cy.get("#accountLocality").type("Off Great Western Way");
-  cy.getByLabel("Town or city");
-  cy.get("#accountTownOrCity").type("Swindon");
-  cy.getByLabel("Postcode");
-  cy.get("#accountPostcode").type("SN2 1FL");
+  cy.getByLabel("Building").type("Polaris House");
+  cy.getByLabel("Street").type("North Star Avenue");
+  cy.getByLabel("Locality").type("Off Great Western Way");
+  cy.getByLabel("Town or city").type("Swindon");
+  cy.getByLabel("Postcode").type("SN2 1FL");
 };
 
 export const newLocation = () => {

@@ -1,9 +1,11 @@
 import { visitApp } from "../../common/visit";
 import { fillAccountInformation, fillAddressInformation, fillOrgInformation, shouldShowProjectTitle } from "./steps";
 
+const pmEmail = "james.black@euimeabs.test";
+
 describe("Project setup > Provide your bank details", () => {
   before(() => {
-    visitApp({});
+    visitApp({ asUser: pmEmail });
     cy.navigateToProject("365447");
   });
 

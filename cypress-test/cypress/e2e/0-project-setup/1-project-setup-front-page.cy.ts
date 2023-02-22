@@ -1,9 +1,11 @@
 import { visitApp } from "../../common/visit";
 import { shouldShowProjectTitle } from "./steps";
 
+const pmEmail = "james.black@euimeabs.test";
+
 describe("Project setup > general", () => {
   before(() => {
-    visitApp({});
+    visitApp({ asUser: pmEmail });
     cy.navigateToProject("365447");
   });
 

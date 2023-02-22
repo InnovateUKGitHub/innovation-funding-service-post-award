@@ -2,9 +2,11 @@ import { spendTableEdit } from "common/spend-table-edit";
 import { visitApp } from "../../common/visit";
 import { displayForecastTable, shouldShowProjectTitle } from "./steps";
 
+const pmEmail = "james.black@euimeabs.test";
+
 describe("Project setup > Set spend profile", () => {
   before(() => {
-    visitApp({});
+    visitApp({ asUser: pmEmail });
     cy.navigateToProject("365447");
   });
 
