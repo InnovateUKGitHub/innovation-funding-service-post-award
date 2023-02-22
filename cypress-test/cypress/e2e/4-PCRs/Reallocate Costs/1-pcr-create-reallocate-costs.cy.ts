@@ -16,7 +16,6 @@ import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Reallocate Costs > Creating  PCR", () => {
   before(() => {
-    // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Reallocate project costs");
   });

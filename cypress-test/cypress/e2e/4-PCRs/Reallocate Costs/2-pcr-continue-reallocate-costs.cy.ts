@@ -13,7 +13,6 @@ import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
-    // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Reallocate project costs");
   });
