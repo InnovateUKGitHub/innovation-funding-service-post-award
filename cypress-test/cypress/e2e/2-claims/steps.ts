@@ -187,3 +187,92 @@ export const openClosedSection = () => {
   cy.get("p").contains("There are no open claims.");
   cy.get("p").contains("There are no closed claims for this partner.");
 };
+
+export const ktpGuidance = () => {
+  [
+    "For KTP claims, you must upload one of these claim approval documents",
+    "LMC minutes",
+    "LMC virtual approval",
+  ].forEach(ktpDocGuidance => {
+    cy.getByQA("iarText").contains(ktpDocGuidance);
+  });
+};
+
+export const ktpForecastUpdate = () => {
+  cy.get("a").contains("Continue to update forecast").click();
+  [
+    "Associate Employment",
+    "Travel and subsistence",
+    "Consumables",
+    "Associate development",
+    "Knowledge base supervisor",
+    "Estate",
+    "Indirect costs",
+    "Other costs",
+    "Additional associate support",
+    "Subcontracting",
+  ].forEach(ktpCostCat => {
+    cy.getByQA("field-claimForecastTable").contains(ktpCostCat);
+  });
+};
+
+export const ktpAssociateEmployment = () => {
+  ["Associate Employment Period 2", "Associate Employment Period 3", "Associate Employment Period 4"].forEach(
+    ktpInput => {
+      cy.getByAriaLabel(ktpInput).clear().type("100");
+    },
+  );
+  ["td:nth-child(3)", "td:nth-child(4)", "td:nth-child(5)"].forEach(column => {
+    cy.get(column).contains("£100.00");
+  });
+
+  cy.get("td:nth-child(6)").contains("£300.00");
+  ["Associate Employment Period 2", "Associate Employment Period 3", "Associate Employment Period 4"].forEach(
+    ktpInput => {
+      cy.getByAriaLabel(ktpInput).clear().type("0");
+    },
+  );
+};
+
+export const ktpHeadings = () => {
+  cy.get("h1").contains("Associate Employment");
+  cy.getByQA("validation-message-content").contains("This project does not follow the normal grant calculation rules");
+  cy.getByQA("validation-message-content").contains(
+    "The project and any partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
+  );
+
+  cy.getByQA("guidance-currency-message").contains("You can enter up to 120 separate lines of costs");
+};
+
+export const ktpCostsToClaim = () => {
+  cy.get("h1").contains("Costs to be claimed");
+  cy.getByQA("validation-message-content").contains("This project does not follow the normal grant calculation rules");
+  cy.getByQA("validation-message-content").contains("The project and any partner may have one or more cost categories");
+};
+
+export const ktpCorrectCats = () => {
+  [
+    "Associate Employment",
+    "Travel and subsistence",
+    "Consumables",
+    "Associate development",
+    "Knowledge base supervisor",
+    "Estate",
+    "Indirect costs",
+    "Other costs",
+    "Additional associate support",
+    "Subcontracting",
+  ].forEach(ktpCostCat => {
+    cy.getByQA("cost-cat").contains(ktpCostCat);
+  });
+  [
+    "Category",
+    "Total eligible costs",
+    "Eligible costs claimed to date",
+    "Costs claimed this period",
+    "Remaining eligible costs",
+    "Total",
+  ].forEach(tableHeader => {
+    cy.tableHeader(tableHeader);
+  });
+};
