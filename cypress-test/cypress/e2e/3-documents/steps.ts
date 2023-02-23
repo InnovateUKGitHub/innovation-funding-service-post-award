@@ -38,6 +38,7 @@ export const displayMOFile = () => {
 
 export const deleteDocFromArea = () => {
   cy.getByQA("button_delete-qa").contains("Remove").click();
+  cy.getByQA("validation-message-content").contains("has been deleted.");
 };
 
 export const uploadToEUI = () => {

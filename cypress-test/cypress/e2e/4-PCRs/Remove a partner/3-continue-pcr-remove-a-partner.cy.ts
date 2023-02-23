@@ -72,6 +72,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should allow you to delete the document that was just uploaded", () => {
     cy.getByQA("button_delete-qa").contains("Remove").click();
+    cy.getByQA("validation-message-content").contains("has been removed.");
   });
 
   it("Should have a 'Save and continue' button", () => {

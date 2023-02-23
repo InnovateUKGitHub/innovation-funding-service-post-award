@@ -89,11 +89,13 @@ export const learnFiles = () => {
 export const pcrDocUpload = () => {
   cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
   cy.uploadButton("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
 
 export const addPartnerDocUpload = () => {
   cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
   cy.uploadButton("Upload").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
 
 export const pcrFileTable = () => {

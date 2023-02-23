@@ -45,6 +45,10 @@ describe("claims > documents upload screen", () => {
     cy.getByQA("button_delete-qa").contains("Remove").click();
   });
 
+  it("Should display a document removal validation message", () => {
+    cy.getByQA("validation-message-content").contains("has been deleted.");
+  });
+
   it("Should save and return to claims", () => {
     cy.get("a.govuk-button--secondary").click();
   });
