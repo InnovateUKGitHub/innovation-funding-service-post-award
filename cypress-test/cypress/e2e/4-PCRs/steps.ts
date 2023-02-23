@@ -833,6 +833,7 @@ export const ktpUpdateVirement = () => {
   ].forEach(input => {
     cy.getByAriaLabel(input).clear().type("0");
   });
+  cy.wait(500);
 };
 
 export const saveAndReturn = () => {

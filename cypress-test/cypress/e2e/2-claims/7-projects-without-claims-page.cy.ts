@@ -5,7 +5,7 @@ const fcContact = "contact77@test.co.uk";
 
 describe("claims > projects without claims", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/overview" });
+    visitApp({ asUser: fcContact, path: "projects/a0E2600000kSotUEAS/overview" });
   });
 
   it("clicking Claims will navigate to claims screen", () => {

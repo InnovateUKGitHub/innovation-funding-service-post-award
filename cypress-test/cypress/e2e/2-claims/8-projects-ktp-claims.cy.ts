@@ -2,6 +2,7 @@ import { visitApp } from "../../common/visit";
 import {
   accessOpenClaim,
   ktpAssociateEmployment,
+  ktpCorrectCats,
   ktpCostsToClaim,
   ktpForecastUpdate,
   ktpGuidance,
@@ -28,7 +29,7 @@ describe("claims > KTP", () => {
 
   it("Should display 'Costs to be claimed' title and guidance messaging", ktpCostsToClaim);
 
-  it("Should contain the correct KTP cost categories");
+  it("Should contain the correct KTP cost categories", ktpCorrectCats);
 
   it("Should click into the 'Associate Employment' category and take you to that page", () => {
     cy.get("td").contains("Associate Employment").click();
@@ -55,7 +56,7 @@ describe("claims > KTP", () => {
   );
 
   it("Should continue to summary and display the correct messaging", () => {
-    cy.submitButton("Continue to summary").click();
+    cy.submitButton("Continue to summary").click({ force: true });
     cy.get("h1").contains("Claim summary");
   });
 

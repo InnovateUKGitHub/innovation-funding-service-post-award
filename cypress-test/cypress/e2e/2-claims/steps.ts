@@ -185,6 +185,10 @@ export const accessEUIOpenClaim = () => {
   cy.get("td").contains("EUI Small Ent Health (Lead)").siblings().contains("Edit").click();
 };
 
+export const accessOpenClaim = () => {
+  cy.get("td").contains("Edit").click();
+};
+
 export const accessABSOpenClaim = () => {
   cy.get("td").contains("ABS EUI Medium Enterprise").siblings().contains("Edit").click();
 };
@@ -257,13 +261,13 @@ export const ktpAssociateEmployment = () => {
   ["td:nth-child(3)", "td:nth-child(4)", "td:nth-child(5)"].forEach(column => {
     cy.get(column).contains("£100.00");
   });
-
   cy.get("td:nth-child(6)").contains("£300.00");
   ["Associate Employment Period 2", "Associate Employment Period 3", "Associate Employment Period 4"].forEach(
     ktpInput => {
       cy.getByAriaLabel(ktpInput).clear().type("0");
     },
   );
+  cy.wait(500);
 };
 
 export const ktpHeadings = () => {

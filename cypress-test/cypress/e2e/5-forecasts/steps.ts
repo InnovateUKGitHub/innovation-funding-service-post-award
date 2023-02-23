@@ -99,7 +99,6 @@ export const populateCategoriesZeroSubmit = () => {
   cy.submitButton("Submit").click();
 };
 
-<<<<<<< HEAD
 export const ktpCostCats = () => {
   [
     "Associate Employment",
@@ -114,7 +113,9 @@ export const ktpCostCats = () => {
     "Subcontracting",
   ].forEach(ktpCostCat => {
     cy.tableCell(ktpCostCat);
-=======
+  });
+};
+
 export const academicCosts = () => {
   [
     "Directly incurred - Staff",
@@ -131,12 +132,10 @@ export const academicCosts = () => {
     "Exceptions - Other costs",
   ].forEach(academicCosts => {
     cy.tableCell(academicCosts);
->>>>>>> ec09abba8 (ACC-9263:(cy) Forecast and claims-based tests added for academic partners)
   });
   cy.tableHeader("Total");
 };
 
-<<<<<<< HEAD
 export const ktpUpdateForecast = () => {
   [
     "Associate Employment Period 2",
@@ -204,7 +203,12 @@ export const ktpUpdateForecast = () => {
     "Subcontracting Period 2",
     "Subcontracting Period 3",
     "Subcontracting Period 4",
-=======
+  ].forEach(costCat => {
+    cy.getByAriaLabel(costCat).clear().type("0");
+  });
+  cy.wait(500);
+};
+
 export const updateAcademicCosts = () => {
   [
     "Directly incurred - Staff Period 2",
@@ -284,8 +288,8 @@ export const updateAcademicCosts = () => {
     "Exceptions - Other costs Period 2",
     "Exceptions - Other costs Period 3",
     "Exceptions - Other costs Period 4",
->>>>>>> ec09abba8 (ACC-9263:(cy) Forecast and claims-based tests added for academic partners)
   ].forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("0");
   });
+  cy.wait(500);
 };

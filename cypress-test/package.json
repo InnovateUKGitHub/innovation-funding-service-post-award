@@ -12,7 +12,7 @@
     "pretest": "npm run delete:reports",
     "pretest:local": "npm run delete:reports",
     "test:headed": "npm run cypress -- run --headed",
-    "delete:reports": "rimraf cypress/results/*",
+    "delete:reports": "rimraf cypress/results/",
     "prettier": "prettier . --write",
     "lint": "eslint ./cypress/**/*.ts",
     "lint:staged": "lint-staged",
