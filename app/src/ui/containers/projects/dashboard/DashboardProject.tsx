@@ -28,9 +28,6 @@ const getProjectNotes = ({
   // Caveat: they will be withdrawn for a few minutes while another lead partner is set, but we're not worrying about this
   messages.push(<>{project.Acc_LeadParticipantName__c?.value}</>);
 
-  // Note: If project is not available then just bail early!
-  if (isNotAvailable) return messages;
-
   if (projectSection === "upcoming") {
     const upcomingMessage = (
       <Renderers.ShortDateRange start={project.Acc_StartDate__c?.value} end={project.Acc_EndDate__c?.value} />
@@ -38,8 +35,11 @@ const getProjectNotes = ({
     messages.push(upcomingMessage);
   }
 
+  // Note: If project is not available then just bail early!
+  if (isNotAvailable) return messages;
+
   // TODO: Ensure Salesforce dates are not nillable.
-  if (new Date(project.Acc_EndDate__c!.value!) < new Date() || isPartnerWithdrawn) {
+  if ((project.Acc_EndDate__c?.value && new Date(project.Acc_EndDate__c?.value) < new Date())|| isPartnerWithdrawn) {
     messages.push(<Content value={x => x.projectMessages.projectEndedMessage} />);
   } else {
     const projectDate = (
