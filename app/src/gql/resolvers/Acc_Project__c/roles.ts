@@ -19,10 +19,10 @@ interface ExternalProjectRoles extends ExternalRoles {
 
 const rolesResolver: IFieldResolverOptions = {
   selectionSet: `{ Id }`,
-  async resolve(input, args, ctx: GraphQLContext, info) {
+  async resolve(input, args, ctx: GraphQLContext, info): Promise<ExternalProjectRoles> {
     const isSalesforceSystemUser = ctx.email === configuration.salesforceServiceUser.serviceUsername;
 
-    const { node: project } = await ctx.projectRolesDataLoader.load(input.Id);
+    const edge = await ctx.projectRolesDataLoader.load(input.Id);
 
     const permissions: ExternalProjectRoles = {
       isMo: isSalesforceSystemUser,
@@ -31,6 +31,10 @@ const rolesResolver: IFieldResolverOptions = {
       isSalesforceSystemUser,
       partnerRoles: [],
     };
+
+    if (!edge) return permissions;
+
+    const project = edge.node;
 
     for (const { node: projectContactLink } of project.Project_Contact_Links__r.edges) {
       if (ctx.email === projectContactLink?.Acc_ContactId__r?.Email__c?.value) {

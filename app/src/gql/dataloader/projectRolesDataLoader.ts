@@ -6,6 +6,7 @@ import gql from "graphql-tag";
 
 interface ProjectData {
   node: {
+    Id: string;
     Acc_ProjectParticipantsProject__r: {
       edges: {
         node: {
@@ -48,8 +49,15 @@ interface RolesData {
   };
 }
 
+/**
+ * Get an instance of the Roles dataloader, which batches requests to fetch roles,
+ * then fetches all data required in one go instead of many separate requests.
+ *
+ * @param ctx The GraphQL Context
+ * @returns A dataloader that fetches the roles for each project
+ */
 const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
-  return new DataLoader<string, ProjectData>(async keys => {
+  return new DataLoader<string, ProjectData | null>(async keys => {
     const { data } = await ctx.api.executeGraphQL<{ data: RolesData }>({
       document: gql`
         query UserRolesQuery($keys: [ID]) {
@@ -58,6 +66,7 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
               Acc_Project__c(first: 2000, where: { Id: { in: $keys } }) {
                 edges {
                   node {
+                    Id
                     Acc_ProjectParticipantsProject__r {
                       edges {
                         node {
@@ -99,7 +108,10 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
       },
       context: ctx,
     });
-    return data.uiapi.query.Acc_Project__c.edges;
+
+    // For each key that was passed in, find the roles data.
+    // A map is chosen to ensure the data is in the EXACT order as requested.
+    return keys.map(key => data.uiapi.query.Acc_Project__c.edges.find(x => x.node.Id === key) ?? null);
   });
 };
 
