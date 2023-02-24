@@ -11,7 +11,7 @@ import { GraphQLSchema, printSchema } from "graphql";
 import { DocumentNode } from "graphql/language";
 import { GraphQLString } from "graphql/type";
 import path from "path";
-import { GraphQLContext } from "../GraphQLContext";
+import { createContextFromEmail, GraphQLContext } from "../GraphQLContext";
 
 const typesToRemove = [
   "AttachedContentNoteConnection",
@@ -112,10 +112,13 @@ const getSalesforceSubschema = async ({ api }: { api: Api }) => {
               if (!configuration.sso.enabled && args.login) {
                 switch (args.login) {
                   case "system":
-                    ctx.api = await Api.asSystemUser();
+                    Object.assign(
+                      ctx ?? {},
+                      await createContextFromEmail({ email: configuration.salesforceServiceUser.serviceUsername }),
+                    );
                     break;
                   default:
-                    ctx.api = await Api.asUser(args.login);
+                    Object.assign(ctx ?? {}, await createContextFromEmail({ email: args.login }));
                     break;
                 }
               }
