@@ -62,8 +62,8 @@ export abstract class RepositoryBase {
       if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
         throw new Errors.FileTypeNotAllowedError(e.message);
       }
-      return e instanceof Error ? e : new Error(`${e}`);
     }
+    return e instanceof Error ? e : new Error(`${e}`);
   }
 
   protected executeArray<T>(query: Query<AnyObject>): Promise<T[]> {
