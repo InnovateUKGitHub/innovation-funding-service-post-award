@@ -38,7 +38,7 @@ const getServerGraphQLEnvironment = async ({
   const network = new RelayNetworkLayer([
     relayServerSSR.getMiddleware(async () => ({
       schema,
-      contextValue: await createContext({ req, res }),
+      contextValue: await createContext({ req }),
     })),
   ]);
 
