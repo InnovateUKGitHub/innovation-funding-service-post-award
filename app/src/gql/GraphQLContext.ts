@@ -1,6 +1,6 @@
 import { ForbiddenError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
-import { Request, Response } from "express";
+import { Request } from "express";
 import { getProjectRolesDataLoader } from "./dataloader/projectRolesDataLoader";
 import { Api } from "./sf/Api";
 
@@ -32,8 +32,8 @@ export const createContextFromEmail = async ({ email }: { email: string }): Prom
     };
 
     return ctx;
-  } catch {
-    logger.warn("Failed to login", email);
+  } catch (e) {
+    logger.warn("Failed to login", email, e);
     return undefined;
   }
 };
@@ -41,7 +41,7 @@ export const createContextFromEmail = async ({ email }: { email: string }): Prom
 export const createContext = ({ req }: { req: Request }): Promise<GraphQLContext | undefined> => {
   const email = req.session?.user.email ?? null;
 
-  if (email) return createContextFromEmail(email);
+  if (email) return createContextFromEmail({ email });
 
   throw new ForbiddenError("You are not logged in.");
 };
