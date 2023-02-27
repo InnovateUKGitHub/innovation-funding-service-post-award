@@ -96,6 +96,11 @@ export class Api {
 
     // Decode Salesforce HTML Entities.
     if (init?.decodeHTMLEntities) {
+      // Ensure quotes are escaped with a "\".
+      jsonAsText = jsonAsText.replaceAll("&quot;", '\\"');
+      jsonAsText = jsonAsText.replaceAll("&#34;", '\\"');
+
+      // Decode all other HTML entities.
       jsonAsText = decodeHTMLEntities(jsonAsText);
     }
 
@@ -110,6 +115,7 @@ export class Api {
       const json = JSON.parse(jsonAsText);
       return json;
     } catch {
+      this.logger.error("Failed to decode Salesforce GraphQL JSON response", jsonAsText);
       throw new Error("Failed to decode JSON");
     }
   }
