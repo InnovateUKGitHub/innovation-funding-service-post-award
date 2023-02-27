@@ -81,11 +81,11 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
         backLink={this.getBackLink()}
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
-        validator={[editor.validator, documentsEditor.validator]}
         error={editor.error || documentsEditor.error}
+        // If we are on the final summary step, remove all the validators.
+        validator={!this.props.step ? [] : [editor.validator, documentsEditor.validator]}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
-
+        {!!this.props.step && <ACC.Renderers.Messages messages={this.props.messages} />}
         {this.props.mode === "prepare" &&
           !!this.props.step &&
           this.renderStep(this.props.step, pcr, editor, documentsEditor)}
