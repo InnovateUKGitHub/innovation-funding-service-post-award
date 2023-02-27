@@ -180,24 +180,36 @@ export const configureFormRouter = ({
   const badRequestHandler = new BadRequestHandler();
 
   singleFileFormHandlers.forEach(x => {
-    result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost({ schema })(x), handleError);
+    result.post(
+      getRoute(x),
+      upload.single("attachment"),
+      csrfProtection,
+      handlePost({ schema })(x),
+      handleError({ schema }),
+    );
   });
 
   multiFileFormHandlers.forEach(x => {
-    result.post(getRoute(x), upload.array("attachment"), csrfProtection, handlePost({ schema })(x), handleError);
+    result.post(
+      getRoute(x),
+      upload.array("attachment"),
+      csrfProtection,
+      handlePost({ schema })(x),
+      handleError({ schema }),
+    );
   });
 
   standardFormHandlers.forEach(x => {
-    result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError);
+    result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError({ schema }));
   });
 
   if (!configuration.sso.enabled) {
     for (const x of developerFormhandlers) {
-      result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError);
+      result.post(getRoute(x), handlePost({ schema })(x), handleError({ schema }));
     }
   }
 
-  result.post("*", badRequestHandler.handle);
+  result.post("*", badRequestHandler.handle, handleError({ schema }));
 
   return result;
 };
