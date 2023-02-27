@@ -43,8 +43,16 @@ export interface PageProps {
   error?: IAppError | null;
 
   validator?: Results<ResultBase> | Results<ResultBase>[] | null;
-  project?: ProjectDto;
-  partner?: PartnerDto;
+  /**
+   * @deprecated
+   */
+  project?: { status: ProjectStatus };
+  projectStatus?: ProjectStatus;
+  /**
+   * @deprecated
+   */
+  partner?: { partnerStatus: PartnerStatus };
+  partnerStatus?: PartnerStatus;
   qa?: string;
   className?: string;
 }
@@ -52,11 +60,26 @@ export interface PageProps {
 /**
  * Page Component
  */
-export function Page({ pageTitle, backLink, error, children, project, partner, validator, qa, className }: PageProps) {
+export function Page({
+  pageTitle,
+  backLink,
+  error,
+  children,
+  project,
+  partner,
+  validator,
+  qa,
+  className,
+  projectStatus,
+  partnerStatus,
+}: PageProps) {
   const validation = validator && Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;
 
-  const pageErrorMessage = usePageValidationMessage(project?.status, partner?.partnerStatus);
+  const pageErrorMessage = usePageValidationMessage(
+    project?.status || projectStatus,
+    partner?.partnerStatus || partnerStatus,
+  );
   const projectState = useProjectStatus();
 
   const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;

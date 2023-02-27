@@ -23,7 +23,7 @@ export const forecastDashboardQuery = graphql`
                 Acc_ProjectStatus__c {
                   value
                 }
-                Acc_ProjectParticipantsProject__r(orderBy: { Acc_AccountId__r: { Name: { order: DESC } } }) {
+                Acc_ProjectParticipantsProject__r(orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }) {
                   edges {
                     node {
                       Id

@@ -5,13 +5,7 @@ import TestBed, { hookTestBed } from "@shared/TestBed";
 import { ErrorCode, IAppError, PartnerStatus, ProjectStatus } from "@framework/types";
 import { Result, Results } from "@ui/validation";
 
-import {
-  Page,
-  PageProps,
-  PageValidationPartnerStatus,
-  PageValidationProjectStatus,
-  usePageValidationMessage,
-} from "@ui/components/layout/page";
+import { Page, PageProps, usePageValidationMessage } from "@ui/components/layout/page";
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("usePageValidationMessage()", () => {
@@ -24,7 +18,7 @@ describe("usePageValidationMessage()", () => {
     },
   };
 
-  const renderPageContent = (project: PageValidationProjectStatus, partner: PageValidationPartnerStatus) => {
+  const renderPageContent = (project: ProjectStatus, partner: PartnerStatus) => {
     return renderHook(() => usePageValidationMessage(project, partner), hookTestBed({}));
   };
 

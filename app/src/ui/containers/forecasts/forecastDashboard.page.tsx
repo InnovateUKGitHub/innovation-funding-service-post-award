@@ -1,4 +1,3 @@
-import { ProjectDto } from "@framework/dtos";
 import { roundCurrency } from "@framework/util";
 import { ProjectRole } from "@framework/constants";
 import { Page, Projects, Section, TypedTable, getPartnerName, Content } from "../../components";
@@ -13,13 +12,11 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
   const Table = TypedTable<Partner>();
   const { project, partners } = useForecastDashboardData(props.projectId);
 
-  // TODO: remove this type casting to ProjectDto. It's necessary for now to avoid duplicating the page component while we
-  // migrate to graphql
   return (
     <Page
       pageTitle={<Projects.Title {...project} />}
       backLink={<Projects.ProjectBackLink routes={props.routes} projectId={project.id} />}
-      project={project as unknown as ProjectDto}
+      projectStatus={project.status}
     >
       <Section qa="project-forecasts">
         <Table.Table data={partners} qa="partner-table">
