@@ -164,6 +164,7 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
       props.costCategoryId,
       dto,
       document,
+      getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
     );
   };
 
