@@ -505,7 +505,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
           props.periodId,
           dto,
           document,
-          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document })),
+          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
           () => stores.claims.markClaimAsStale(props.partnerId, props.periodId),
         );
       }}
