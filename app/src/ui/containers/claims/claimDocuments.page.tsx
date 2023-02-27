@@ -275,7 +275,14 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
       }}
       onDelete={(dto, document) => {
         stores.messages.clearMessages();
-        stores.claimDocuments.deleteClaimDocument(props.projectId, props.partnerId, props.periodId, dto, document);
+        stores.claimDocuments.deleteClaimDocument(
+          props.projectId,
+          props.partnerId,
+          props.periodId,
+          dto,
+          document,
+          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
+        );
       }}
     />
   );
