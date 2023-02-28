@@ -74,7 +74,8 @@ const getSalesforceSubschema = async ({ api }: { api: Api }) => {
       variables?: AnyObject;
     }) => {
       if (!context) throw new Error("No context was provided to the GraphQL executor");
-      return await context.api.executeGraphQL({ document, variables, decodeHTMLEntities: true });
+      const data = await context.api.executeGraphQL({ document, variables, decodeHTMLEntities: true });
+      return data;
     },
     transforms: [
       /**

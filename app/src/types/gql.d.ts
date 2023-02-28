@@ -1,6 +1,6 @@
 declare namespace GQL {
   type NodeValue<T> = T extends {
-    readonly edges: ReadonlyArray<infer Node> | null;
+    readonly edges: ArrayLike<infer Node> | null;
   }
     ? NodeValue<Node>
     : T extends { readonly node: infer U }

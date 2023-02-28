@@ -6,6 +6,12 @@ export interface DocumentUploadDto {
   description?: DocumentDescription;
 }
 
+export interface WhatwgMultipleDocumentUploadDto {
+  files: File[];
+  description?: DocumentDescription;
+  partnerId?: string;
+}
+
 export interface MultipleDocumentUploadDto {
   files: IFileWrapper[];
   description?: DocumentDescription;

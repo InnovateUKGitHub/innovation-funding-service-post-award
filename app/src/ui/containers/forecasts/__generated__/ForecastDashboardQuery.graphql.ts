@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a04a014a2092bb515006b1228ac417b2>>
+ * @generated SignedSource<<7457f4a55dbd6ad3d5c1102c18e8b2ba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -250,7 +250,7 @@ v3 = [
                                 "value": {
                                   "Acc_AccountId__r": {
                                     "Name": {
-                                      "order": "ASC"
+                                      "order": "DESC"
                                     }
                                   }
                                 }
@@ -376,7 +376,7 @@ v3 = [
                                 "storageKey": null
                               }
                             ],
-                            "storageKey": "Acc_ProjectParticipantsProject__r(orderBy:{\"Acc_AccountId__r\":{\"Name\":{\"order\":\"ASC\"}}})"
+                            "storageKey": "Acc_ProjectParticipantsProject__r(orderBy:{\"Acc_AccountId__r\":{\"Name\":{\"order\":\"DESC\"}}})"
                           }
                         ],
                         "storageKey": null
@@ -415,16 +415,16 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "9341f019161a8eb480b6b8ea24a9a333",
+    "cacheID": "37d092cc7b222242495955ab8bcbff7c",
     "id": null,
     "metadata": {},
     "name": "ForecastDashboardQuery",
     "operationKind": "query",
-    "text": "query ForecastDashboardQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_TotalParticipantGrant__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ForecastLastModifiedDate__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalFutureForecastsForParticipant__c {\n                      value\n                    }\n                    Acc_TotalApprovedCosts__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ForecastDashboardQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_TotalParticipantGrant__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ForecastLastModifiedDate__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalFutureForecastsForParticipant__c {\n                      value\n                    }\n                    Acc_TotalApprovedCosts__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "8191751c8514082fce4b1f4c4d6fdb56";
+(node as any).hash = "726bc3d36a619139090cef1e05bd9600";
 
 export default node;

@@ -6,6 +6,8 @@ import { IEditorStore } from "@ui/redux";
 import { Result } from "@ui/validation";
 import cx from "classnames";
 import React, { createContext, CSSProperties, isValidElement, ReactNode, useContext } from "react";
+import { useMutation } from "react-relay";
+import { ConcreteRequest, GraphQLTaggedNode, MutationParameters } from "relay-runtime";
 import { Content } from "./content";
 import { DropdownList, DropdownListOption } from "./inputs";
 import { CheckboxList } from "./inputs/checkboxList";
@@ -17,6 +19,7 @@ import { RadioList } from "./inputs/radioList";
 import { SearchInput } from "./inputs/searchInput";
 import { TextAreaInput, TextAreaInputProps } from "./inputs/textAreaInput";
 import { TextInput } from "./inputs/textInput";
+import { WhatwgMultipleFileUpload } from "./inputs/whatwgFileUpload";
 import { SecurityTokenInput } from "./SecurityTokenInput";
 import { Button } from "./styledButton";
 import { ValidationError } from "./validationError";
@@ -25,7 +28,7 @@ import { ValidationError } from "./validationError";
 export type DropdownOption = DropdownListOption;
 
 // Return type of our `createTypedForm` function
-export type FormBuilder<T> = ReturnType<typeof createTypedForm<T>>;
+export type FormBuilder<T extends AnyObject> = ReturnType<typeof createTypedForm<T>>;
 
 // Type of a form Select option.
 export interface SelectOption {
@@ -84,7 +87,17 @@ const createFieldHintId = (name: string) => `${name}-hint`;
  *   );
  * };
  */
-export const createTypedForm = <T,>() => {
+export const createTypedForm = <T extends AnyObject,>() => {
+
+  interface GraphQLFormProps {
+    onChange?: (data: T) => void;
+    qa?: string;
+    disabled?: boolean;
+    children: ReactNode;
+    mutation: GraphQLTaggedNode;
+    data: T;
+  }
+
   // Props shared by the <Form /> element, whether it is an editor or just a visualizer.
   interface SharedFormProps {
     onChange?: (data: T) => void;
@@ -340,6 +353,52 @@ export const createTypedForm = <T,>() => {
             onChange,
             onSubmit,
             disabled: isFormDisabled,
+          }}
+        >
+          {children}
+        </FormDataContextProvider>
+      </form>
+    );
+  };
+
+  /**
+   * A controlled form component.
+   * Controlled forms pass form data to children automatically via React Context.
+   */
+  const GraphQLFormComponent = <MutationKey extends MutationParameters,>({
+    qa,
+    children,
+    onChange,
+    disabled = false,
+    mutation,
+    data,
+    ...props
+  }: GraphQLFormProps) => {
+    const [commitMutation, isLoading] = useMutation<MutationKey>(mutation);
+    const isDisabled = disabled || isLoading;
+
+    return (
+      <form
+        encType="multipart/form-data"
+        method="post"
+        action="/graphql/nojs"
+        data-qa={qa}
+        onSubmit={e => {
+          e.preventDefault();
+          commitMutation({
+            variables: data
+          })
+        }}
+      >
+        <SecurityTokenInput />
+        <input type="hidden" name="_mutation" value={JSON.stringify(mutation)} />
+
+        <FormDataContextProvider
+          value={{
+            formData: data,
+            onChange,
+            onSubmit: () => {},
+            disabled: isDisabled,
           }}
         >
           {children}
@@ -673,6 +732,29 @@ export const createTypedForm = <T,>() => {
   };
 
   /**
+   * A multi-file upload input that returns Whatwg compliant File/Blob objects
+   *
+   * @returns A form-controlled multi-file upload area
+   */
+  const WhatwgMultipleFileUploadComponent = (props: ExternalFieldProps<File[]>) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <FieldComponent
+        {...props}
+        field={({ formData, disabled, hasError }) => (
+          <WhatwgMultipleFileUpload
+            value={props.value(formData, disabled)}
+            name={props.name}
+            onChange={handleChange}
+            disabled={disabled}
+            error={hasError}
+          />
+        )}
+      />
+    );
+  };
+
+  /**
    * A multi-file upload input.
    *
    * @returns A form-controlled multi-file upload area
@@ -756,6 +838,7 @@ export const createTypedForm = <T,>() => {
   };
 
   return {
+    GraphQLForm: GraphQLFormComponent,
     Form: FormComponent,
     Fieldset: FieldsetComponent,
     String: StringField,
@@ -773,5 +856,6 @@ export const createTypedForm = <T,>() => {
     Date: FullDateComponent,
     MonthYear: MonthYearComponent,
     Custom: CustomComponent,
+    WhatwgMultipleFileUpload: WhatwgMultipleFileUploadComponent,
   };
 };

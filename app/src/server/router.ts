@@ -14,6 +14,9 @@ import { ErrorRequestHandler, Request, Router } from "express";
 import { createYoga } from "graphql-yoga";
 import { configuration } from "./features/common";
 import staticHtmlError from "./staticError.html";
+import { getServerGraphQLEnvironment } from "@gql/ServerGraphQLEnvironment"
+import { commitMutation, GraphQLTaggedNode } from "relay-runtime";
+import { upload } from "./forms/memoryStorage"
 
 export const noAuthRouter = Router();
 
@@ -39,12 +42,24 @@ const getServerRoutes = async () => {
   }>({
     schema,
     context: async initialContext => await createContext({ req: initialContext.req }),
+    graphiql: false,
   });
 
   /**
    * API routes
    */
   router.use("/api", apiRoutes);
+  router.post("/graphql/nojs", upload.any() ,async (req, res) => {
+    const {
+      _csrf, _mutation, ...variables
+    } = req.body;
+
+    const env = await getServerGraphQLEnvironment({ req, schema });
+    commitMutation(env.ServerGraphQLEnvironment, {
+      mutation: JSON.parse(_mutation) as GraphQLTaggedNode,
+      variables
+    })
+  })
   router.use("/graphql", (req, res) => {
     yoga(req, res);
   });
@@ -80,7 +95,9 @@ const getServerRoutes = async () => {
     ((err, req, res, next) => {
       // Form validation errors are technically "an error" which could be caught.
       // This means CSRF protection may still be required.
-      csrfProtection(req, res, next);
+      csrfProtection(req, res, () => {
+        next(err);
+      });
     }) as ErrorRequestHandler,
     ((err, req, res, next) => {
       serverRender({ schema })({ req, res, err, next });

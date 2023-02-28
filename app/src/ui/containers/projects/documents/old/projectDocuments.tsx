@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants";
-import { MultipleDocumentUploadDto } from "@framework/dtos";
+import { MultipleDocumentUploadDto, WhatwgMultipleDocumentUploadDto } from "@framework/dtos";
 import { getAuthRoles } from "@framework/types";
 import {
   Content,
@@ -19,11 +19,14 @@ import { ContainerProps } from "@ui/containers/containerBase";
 import { getCurrentPartnerName } from "@ui/helpers/getCurrentPartnerName";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
+import { useMutation } from "react-relay";
 import { Callbacks, ProjectDocumentPageData, ProjectDocumentPageParams } from "./projectDocuments.page";
+import { projectDocumentsUploadMutation } from "./ProjectDocumentsUpload.mutation";
 import { ProjectDocumentTableLoader } from "./projectDocumentTableLoader";
 import { ProjectPartnerDocumentTableLoader } from "./projectPartnerDocumentTableLoader";
+import { ProjectDocumentsUploadMutation } from "./__generated__/ProjectDocumentsUploadMutation.graphql";
 
-const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
+const UploadForm = createTypedForm<WhatwgMultipleDocumentUploadDto>();
 
 export const ProjectDocumentPage = (
   props: ContainerProps<ProjectDocumentPageParams, ProjectDocumentPageData, Callbacks>,
@@ -31,15 +34,17 @@ export const ProjectDocumentPage = (
   const { project, partners, editor, routes, messages, onChange } = props;
   const { getContent } = useContent();
 
+  const [commitMutation, isMutationInFlight] = useMutation<ProjectDocumentsUploadMutation>(projectDocumentsUploadMutation);
+
   const stores = useStores();
 
-  const filterDropdownList = (selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) => {
+  const filterDropdownList = (selectedDocument: WhatwgMultipleDocumentUploadDto, documents: DropdownOption[]) => {
     if (!documents.length || !selectedDocument.description) return undefined;
     const targetId = selectedDocument.description.toString();
     return documents.find(x => x.id === targetId);
   };
 
-  const filterVisibilityList = (selectedOption: MultipleDocumentUploadDto, visibilityOptions: DropdownOption[]) =>
+  const filterVisibilityList = (selectedOption: WhatwgMultipleDocumentUploadDto, visibilityOptions: DropdownOption[]) =>
     visibilityOptions.find(x => x.value === selectedOption.partnerId);
 
   const allowedProjectDocuments: DocumentDescription[] = [
@@ -93,13 +98,23 @@ export const ProjectDocumentPage = (
               enctype="multipart"
               editor={editor}
               onChange={dto => onChange(false, dto)}
-              onSubmit={() => onChange(true, editor.data)}
+              onSubmit={() => {
+                commitMutation({
+                  variables: {
+                    documentType: "Email",
+                    projectId: project.id,
+                    partnerId: editor.data.partnerId,
+                    files: editor.data.files,
+                  }
+                })
+                editor.data.files = [];
+              }}
               qa="projectDocumentUpload"
             >
               <UploadForm.Fieldset>
                 <DocumentGuidance />
 
-                <UploadForm.MultipleFileUpload
+                <UploadForm.WhatwgMultipleFileUpload
                   label={x => x.documentLabels.uploadInputLabel}
                   name="attachment"
                   labelHidden

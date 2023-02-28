@@ -2,7 +2,7 @@ import isNull from "@ui/helpers/is-null";
 
 type Leaf<T> = T | undefined | null;
 type Edge<T> = Leaf<{ node: Leaf<T> }>;
-type Edges<T> = Leaf<Edge<T>[] | ReadonlyArray<Edge<T>>>;
+type Edges<T> = Leaf<ArrayLike<Edge<T>>>;
 
 /**
  * Discard all null/undefined nodes within a GraphQL edge
