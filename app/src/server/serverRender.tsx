@@ -70,7 +70,7 @@ const serverRender =
     const context = contextProvider.start({ user: req.session?.user });
     const clientConfig = getClientConfig(context);
     const modalRegister = new ModalRegister();
-    const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
+    const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, schema });
     const preloadedQuery = loadQuery();
     let isErrorPage = false;
 

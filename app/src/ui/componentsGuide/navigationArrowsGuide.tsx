@@ -1,6 +1,6 @@
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
-import { createMemoryHistory } from "history";
+import { createMemoryHistory } from "../history";
 import { createStore } from "redux";
 import { IGuide, ILinkInfo } from "@framework/types";
 import { NavigationArrows } from "../components";

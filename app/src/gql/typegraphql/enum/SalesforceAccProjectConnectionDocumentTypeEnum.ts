@@ -1,0 +1,28 @@
+enum SalesforceAccProjectConnectionDocumentTypeEnum {
+  Invoice = "Invoice",
+  IAR = "IAR",
+  Evidence = "Evidence",
+  ClaimValidationForm = "ClaimValidationForm",
+  DeMinimisDeclartionForm = "DeMinimisDeclartionForm",
+  StatementOfExpenditure = "StatementOfExpenditure",
+  EndOfProjectSurvey = "EndOfProjectSurvey",
+  JeSForm = "JeSForm",
+  OverheadCalculationSpreadsheet = "OverheadCalculationSpreadsheet",
+  BankStatement = "BankStatement",
+  AgreementToPCR = "AgreementToPCR",
+  LMCMinutes = "LMCMinutes",
+  ScheduleThree = "ScheduleThree",
+  ReviewMeeting = "ReviewMeeting",
+  Plans = "Plans",
+  CollaborationAgreement = "CollaborationAgreement",
+  RiskRegister = "RiskRegister",
+  AnnexThree = "AnnexThree",
+  Presentation = "Presentation",
+  Email = "Email",
+  MeetingAgenda = "MeetingAgenda",
+  ProjectCompletionForm = "ProjectCompletionForm",
+  ProofOfSatisfiedConditions = "ProofOfSatisfiedConditions",
+  Loan = "Loan",
+}
+
+export { SalesforceAccProjectConnectionDocumentTypeEnum };

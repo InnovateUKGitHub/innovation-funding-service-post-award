@@ -10,8 +10,8 @@ import { NotFoundError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
 import csrf from "csurf";
-import { ErrorRequestHandler, Router } from "express";
-import { createHandler } from "graphql-http/lib/use/express";
+import { ErrorRequestHandler, Request, Router } from "express";
+import { createYoga } from "graphql-yoga";
 import { configuration } from "./features/common";
 import staticHtmlError from "./staticError.html";
 
@@ -34,15 +34,19 @@ const getServerRoutes = async () => {
   }
   const schema = await getGraphQLSchema({ api: adminApi });
 
+  const yoga = createYoga<{
+    req: Request;
+  }>({
+    schema,
+    context: async initialContext => await createContext({ req: initialContext.req }),
+  });
+
   /**
    * API routes
    */
   router.use("/api", apiRoutes);
-  router.use("/graphql", async (req, res, next) => {
-    createHandler({
-      schema,
-      context: await createContext({ req, res }),
-    })(req, res, next);
+  router.use("/graphql", (req, res) => {
+    yoga(req, res);
   });
 
   /**

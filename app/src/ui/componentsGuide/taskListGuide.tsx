@@ -1,7 +1,7 @@
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
-import { createMemoryHistory } from "history";
+import { createMemoryHistory } from "../history";
 
 import { Result } from "@ui/validation";
 import { Task, TaskListSection, OL } from "@ui/components";

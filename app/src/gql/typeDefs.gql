@@ -1,3 +1,6 @@
+# GraphQL Upload type declaration
+scalar File
+
 # Salesforce GraphQL API extensions
 interface Ext_Roles {
   isMo: Boolean!

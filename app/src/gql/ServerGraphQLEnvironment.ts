@@ -22,15 +22,7 @@ const getServerGraphQLFinalRenderEnvironment = (relayData: SSRCache) => {
   return ServerGraphQLEnvironment;
 };
 
-const getServerGraphQLEnvironment = async ({
-  req,
-  res,
-  schema,
-}: {
-  req: Request;
-  res: Response;
-  schema: GraphQLSchema;
-}) => {
+const getServerGraphQLEnvironment = async ({ req, schema }: { req: Request; schema: GraphQLSchema }) => {
   const relayServerSSR = new RelayServerSSR();
   const source = new RecordSource();
   const store = new Store(source);
@@ -38,7 +30,7 @@ const getServerGraphQLEnvironment = async ({
   const network = new RelayNetworkLayer([
     relayServerSSR.getMiddleware(async () => ({
       schema,
-      contextValue: await createContext({ req, res }),
+      contextValue: await createContext({ req }),
     })),
   ]);
 

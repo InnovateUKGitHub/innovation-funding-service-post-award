@@ -52,7 +52,9 @@ class ESBuildConfiguration {
       minify: false,
       tsconfig: path.join(dirname, "tsconfig.json"),
       logLevel: "info",
-      plugins: [nodeExternalsPlugin(), replaceGraphqlRelayPlugin],
+      plugins: [nodeExternalsPlugin({
+        allowList: [ "graphql-upload" ]
+      }), replaceGraphqlRelayPlugin],
       loader: {
         ".apex": "text",
         ".gql": "text",

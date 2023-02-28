@@ -1,0 +1,18 @@
+diff --git a/node_modules/graphql-upload/package.json b/node_modules/graphql-upload/package.json
+index 577a90d..64121b9 100644
+--- a/node_modules/graphql-upload/package.json
++++ b/node_modules/graphql-upload/package.json
+@@ -42,7 +42,12 @@
+     "./graphqlUploadKoa.mjs": "./graphqlUploadKoa.mjs",
+     "./package.json": "./package.json",
+     "./processRequest.mjs": "./processRequest.mjs",
+-    "./Upload.mjs": "./Upload.mjs"
++    "./Upload.mjs": "./Upload.mjs",
++    "./GraphQLUpload": "./GraphQLUpload.mjs",
++    "./graphqlUploadExpress": "./graphqlUploadExpress.mjs",
++    "./graphqlUploadKoa": "./graphqlUploadKoa.mjs",
++    "./processRequest": "./processRequest.mjs",
++    "./Upload": "./Upload.mjs"
+   },
+   "engines": {
+     "node": "^14.17.0 || ^16.0.0 || >= 18.0.0"
