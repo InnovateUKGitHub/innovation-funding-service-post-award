@@ -6,16 +6,22 @@ import {
   clickPartnerAddPeriod,
   removePartnerTable,
 } from "../steps";
-import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Remove partner > Continuing editing the Remove a partner section once a partner is selected", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
-    pcrTidyUp("Remove a partner");
+    /**
+     * Note that the pcrTidyUp will not currently work for 'remove partner' as we are keeping two 'remove partner' PCRs open
+     * As such, this step will be missed from this particular test
+     */
   });
 
   after(() => {
     cy.deletePcr("328407");
+  });
+
+  it("Should click the 'Create request' button", () => {
+    cy.get("a").contains("Create request").click();
   });
 
   it("Should select 'Remove a partner' checkbox", () => {

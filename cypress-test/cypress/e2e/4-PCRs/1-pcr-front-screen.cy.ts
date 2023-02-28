@@ -23,8 +23,10 @@ describe("PCR > Project Change Request front page", () => {
     cy.get("h1").contains("Project change requests");
   });
 
-  it("Should display an 'ongoing requests' message", () => {
-    cy.get("p").contains("You have no ongoing requests.");
+  it("Should display a table containing any ongoing requests", () => {
+    ["Request number", "Types", "Started", "Status", "Last updated"].forEach(header => {
+      cy.tableHeader(header);
+    });
   });
 
   it("Should click accordions", shouldShowAllAccordion);

@@ -59,3 +59,8 @@ export const shouldNavigateToProjectOverview = () => {
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
+
+export const navigateFilter = () => {
+  cy.getByQA("projects-dashboard-label").click();
+  cy.get("#search").type("328407");
+};

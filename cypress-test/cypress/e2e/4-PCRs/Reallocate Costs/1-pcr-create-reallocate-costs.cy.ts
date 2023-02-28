@@ -72,10 +72,11 @@ describe("PCR > Reallocate Costs > Creating  PCR", () => {
   });
 
   it("Should Save and return to requests", () => {
-    cy.getByQA("button_return-qa").contains("Save and return to requests").click();
+    cy.getByQA("button_return-qa").contains("Save and return to requests").wait(500).click();
   });
 
-  it("Should have a 'Delete request' button", () => {
-    cy.get("a.govuk-link").contains("Delete");
+  it("Should return to 'Project change requests' screen and show a 'Delete request' button", () => {
+    cy.get("h1").contains("Project change requests");
+    cy.get("a").contains("Delete");
   });
 });

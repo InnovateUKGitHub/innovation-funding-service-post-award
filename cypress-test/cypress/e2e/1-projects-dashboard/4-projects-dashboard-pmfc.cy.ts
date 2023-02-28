@@ -1,14 +1,24 @@
 import { visitApp } from "../../common/visit";
 import { testEach } from "../../support/methods";
-import { monitoringReportCardShouldNotExist, shouldFindMatchingProjectCard } from "./steps";
+import { monitoringReportCardShouldNotExist, shouldFindMatchingProjectCard, navigateFilter } from "./steps";
 
 const projectManagerFinanceContactEmail = "james.black@euimeabs.test";
 
 describe("projects dashboard > Project Manager - Finance Contact", () => {
   before(() => {
     visitApp({ asUser: projectManagerFinanceContactEmail });
+  });
 
-    cy.navigateToProject("328407");
+  it("Should navigate to the project list and filter the correct project", navigateFilter);
+
+  it("Should display the correct project card which displays 1 PCR to review", () => {
+    ["Project change request queried", "EUI Small Ent Health"].forEach(cardItem => {
+      cy.getByQA("project-328407").contains(cardItem);
+    });
+  });
+
+  it("Should now navigate to the project", () => {
+    cy.get("a").contains("328407").click();
   });
 
   testEach(["Claims", "Forecast", "Project change requests", "Documents", "Project details", "Finance summary"])(
@@ -20,4 +30,8 @@ describe("projects dashboard > Project Manager - Finance Contact", () => {
     "should not show the Monitoring Reports card to combined Project Manager/Finance Contact",
     monitoringReportCardShouldNotExist,
   );
+
+  it("Should show a PCR is queried", () => {
+    cy.getByQA("message-pcrQueried").contains("Project change request queried");
+  });
 });

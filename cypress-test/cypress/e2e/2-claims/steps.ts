@@ -68,7 +68,7 @@ export const newCostCatLineItem = () => {
     .find("tbody.govuk-table__body")
     .then($table => {
       if ($table.find("tr").length > 0) {
-        cy.get("a").contains("Remove").click();
+        cy.get("a").contains("Remove").click({ multiple: true });
       }
     });
 
