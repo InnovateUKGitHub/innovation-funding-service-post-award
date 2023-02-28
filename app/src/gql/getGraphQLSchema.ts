@@ -5,7 +5,6 @@ import { Logger } from "@shared/developmentLogger";
 import { isLocalDevelopment } from "@shared/isEnv";
 import { writeFileSync } from "fs";
 import { GraphQLSchema, printSchema } from "graphql";
-import GraphQLUpload from "graphql-upload/GraphQLUpload";
 import path from "path";
 import { projectIsActiveResolver } from "./resolvers/Acc_Project__c/isActive";
 import { rolesResolver } from "./resolvers/Acc_Project__c/roles";
@@ -47,7 +46,6 @@ const getGraphQLSchema = async ({ api }: { api?: Api }) => {
           roles: rolesResolver,
           isActive: projectIsActiveResolver,
         },
-        Upload: GraphQLUpload,
       },
     });
   }

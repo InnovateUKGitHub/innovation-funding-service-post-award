@@ -1,5 +1,5 @@
 import _merge from "lodash.merge";
-import { createMemoryHistory } from "../history";
+import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
 import { mountedContext } from "@ui/features";
 import { PageTitleProvider } from "@ui/features/page-title";

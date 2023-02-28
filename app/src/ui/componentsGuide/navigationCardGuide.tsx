@@ -1,5 +1,5 @@
 import { Router } from "react-router-dom";
-import { createMemoryHistory } from "../history";
+import { createMemoryHistory } from "history";
 import { NavigationCard, NavigationCardsGrid } from "@ui/components/navigationCard";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
