@@ -10,7 +10,7 @@ import * as ACC from "../../../components";
 import { BaseProps, ContainerBase } from "../../containerBase";
 
 export interface Props {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
   pcr: PCRDto;
   editor: IEditorStore<PCRDto, PCRDtoValidator>;

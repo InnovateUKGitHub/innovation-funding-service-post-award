@@ -1,7 +1,7 @@
 import { ClaimFrequency, ProjectRole, ProjectStatus } from "@framework/constants";
 
 export interface ProjectDto {
-  id: string;
+  id: ProjectId;
   title: string;
   startDate: Date;
   endDate: Date;

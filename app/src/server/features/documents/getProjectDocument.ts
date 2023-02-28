@@ -2,7 +2,7 @@ import { Authorisation, ProjectRole } from "@framework/types";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetProjectDocumentQuery extends DocumentQueryBase {
-  constructor(private readonly projectId: string, documentId: string) {
+  constructor(private readonly projectId: ProjectId, documentId: string) {
     super(documentId);
   }
 

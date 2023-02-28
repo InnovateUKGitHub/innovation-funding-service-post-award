@@ -1,6 +1,6 @@
 import { PCROrganisationType } from "@framework/constants";
 export interface Partner {
-  id: string;
+  id: PartnerId;
   accountId: string;
   name: string;
   organisationType: PCROrganisationType;
@@ -8,7 +8,7 @@ export interface Partner {
   participantSize: string;
   projectRole: string;
   projectRoleName: string;
-  projectId: string;
+  projectId: ProjectId;
   competitionType: string;
   competitionName?: string;
   totalParticipantCosts: number;

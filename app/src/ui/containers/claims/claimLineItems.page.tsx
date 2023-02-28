@@ -21,8 +21,8 @@ import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute, RouteState } from "../containerBase";
 
 interface ClaimLineItemsParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   costCategoryId: string;
   periodId: number;
 }

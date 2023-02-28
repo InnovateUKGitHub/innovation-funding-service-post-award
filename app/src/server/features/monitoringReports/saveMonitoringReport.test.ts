@@ -24,7 +24,7 @@ describe("saveMonitoringReports", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
@@ -42,7 +42,7 @@ describe("saveMonitoringReports", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     dto.questions[0].optionId = question1Answer.Id;
     dto.questions[0].comments = "Question 1 comments";
@@ -83,7 +83,7 @@ describe("saveMonitoringReports", () => {
       Acc_QuestionComments__c: "Question 2 comments",
     });
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     dto.questions[0].optionId = question1NewAnswer.Id;
     dto.questions[0].comments = "Question 1 new comments";
@@ -117,7 +117,7 @@ describe("saveMonitoringReports", () => {
       Acc_QuestionComments__c: "Question 2 - old answer",
     });
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     dto.questions[0].responseId = null;
     dto.questions[0].optionId = null;
@@ -136,11 +136,15 @@ describe("saveMonitoringReports", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const expectedDto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const expectedDto = await context.runQuery(
+      new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id),
+    );
     expectedDto.addComments = "Test comment";
     await context.runCommand(new SaveMonitoringReport(expectedDto, false));
 
-    const updatedDto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const updatedDto = await context.runQuery(
+      new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id),
+    );
 
     expect(updatedDto.addComments).toEqual(expectedDto.addComments);
   });
@@ -150,15 +154,19 @@ describe("saveMonitoringReports", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
     dto.addComments = "Test comment";
     await context.runCommand(new SaveMonitoringReport(dto, false));
 
-    const expectedDto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const expectedDto = await context.runQuery(
+      new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id),
+    );
     expectedDto.addComments = "Updated test comment";
     await context.runCommand(new SaveMonitoringReport(expectedDto, false));
 
-    const updatedDto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const updatedDto = await context.runQuery(
+      new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id),
+    );
 
     expect(updatedDto.addComments).toEqual(expectedDto.addComments);
   });
@@ -168,7 +176,7 @@ describe("saveMonitoringReports", () => {
 
     const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, false));
 
@@ -180,7 +188,7 @@ describe("saveMonitoringReports", () => {
 
     const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
 
@@ -191,7 +199,7 @@ describe("saveMonitoringReports", () => {
     const context = new TestContext();
     const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
     expect(
@@ -202,7 +210,7 @@ describe("saveMonitoringReports", () => {
   it("should not create a status change if the report is not submitted", async () => {
     const context = new TestContext();
     const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, false));
     expect(context.repositories.monitoringReportStatusChange.Items).toHaveLength(0);
@@ -212,7 +220,7 @@ describe("saveMonitoringReports", () => {
     const context = new TestContext();
     const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
     dto.addComments = "Test comment";
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
@@ -230,7 +238,7 @@ describe("saveMonitoringReports", () => {
       Acc_AddComments__c: "Test comment",
     });
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
     const statusChange = context.repositories.monitoringReportStatusChange.Items.find(
@@ -250,7 +258,7 @@ describe("saveMonitoringReports validation", () => {
       Acc_MonitoringReportStatus__c: "Awaiting IUK Approval",
     });
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     await expect(context.runCommand(new SaveMonitoringReport(dto, true))).rejects.toThrow(BadRequestError);
   });
@@ -262,7 +270,7 @@ describe("saveMonitoringReports validation", () => {
 
     // @ts-expect-error invalid(missing) id
     report.Acc_ProjectPeriodNumber__c = null;
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     const command = new SaveMonitoringReport(dto, false);
 
@@ -277,7 +285,7 @@ describe("saveMonitoringReports validation", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     // save 2nd question with option from first question
     dto.questions[0].optionId = question1Options[1].Id;
@@ -301,7 +309,7 @@ describe("saveMonitoringReports validation", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     dto.questions[0].optionId = question1Options[1].Id;
     dto.questions[0].comments = "Comment 1";
@@ -327,7 +335,7 @@ describe("saveMonitoringReports validation", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
 
     dto.questions[0].comments = "Comment 1";
     dto.questions[1].optionId = question2Options[2].Id;
@@ -349,12 +357,12 @@ describe("saveMonitoringReports validation", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id));
     dto.projectId = project2.Id;
 
     await expect(context.runCommand(new SaveMonitoringReport(dto, false))).rejects.toThrow(BadRequestError);
 
-    dto.projectId = report.Acc_Project__c;
+    dto.projectId = report.Acc_Project__c as ProjectId;
 
     await expect(context.runCommand(new SaveMonitoringReport(dto, false))).resolves.toBe(true);
   });

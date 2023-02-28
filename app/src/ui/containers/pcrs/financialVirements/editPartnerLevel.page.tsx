@@ -45,7 +45,7 @@ export function useEditPartnerLevelContent() {
 }
 
 export interface FinancialVirementParams {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
   itemId: string;
 }

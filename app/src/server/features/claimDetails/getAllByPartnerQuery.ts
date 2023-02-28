@@ -3,7 +3,7 @@ import { ClaimDetailsSummaryDto, IContext } from "@framework/types";
 import { mapClaimDetailsSummary } from "./mapClaimDetails";
 
 export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsSummaryDto[]> {
-  constructor(private readonly partnerId: string) {
+  constructor(private readonly partnerId: PartnerId) {
     super();
   }
 

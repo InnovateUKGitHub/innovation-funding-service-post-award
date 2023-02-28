@@ -6,7 +6,7 @@ import { LoanOverviewQuery } from "./__generated__/LoanOverviewQuery.graphql";
 import { mapToLoanDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 
 export type Loan = {
-  id: string;
+  id: LoanId;
   period: number;
   status: string;
   forecastAmount: number;
@@ -14,7 +14,7 @@ export type Loan = {
   requestDate: Date | null;
 };
 
-export const useLoanOverviewData = (projectId: string) => {
+export const useLoanOverviewData = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<LoanOverviewQuery>(loanOverviewQuery, { projectId }, { fetchPolicy: "network-only" });
 
   return useMemo(() => {

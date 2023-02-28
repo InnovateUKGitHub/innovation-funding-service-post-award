@@ -13,7 +13,7 @@ export type Partner = Pick<
 
 type ProjectGQL = GQL.ObjectNodeSelector<ForecastDashboardQuery$data, "Acc_Project__c">;
 
-export const useForecastDashboardData = (projectId: string) => {
+export const useForecastDashboardData = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<ForecastDashboardQuery>(forecastDashboardQuery, { projectId });
   const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 

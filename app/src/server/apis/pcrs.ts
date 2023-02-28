@@ -35,16 +35,16 @@ import { GetTimeExtensionOptionsQuery } from "@server/features/pcrs/getTimeExten
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 
 export interface IPCRsApi {
-  create: (params: ApiParams<{ projectId: string; projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
-  getAll: (params: ApiParams<{ projectId: string }>) => Promise<PCRSummaryDto[]>;
-  get: (params: ApiParams<{ projectId: string; id: string }>) => Promise<PCRDto>;
-  getTypes: (params: ApiParams<{ projectId: string }>) => Promise<PCRItemTypeDto[]>;
-  getAvailableTypes: (params: ApiParams<{ projectId: string; pcrId?: string }>) => Promise<PCRItemTypeDto[]>;
-  getTimeExtensionOptions: (params: ApiParams<{ projectId: string }>) => Promise<PCRTimeExtensionOption[]>;
-  update: (params: ApiParams<{ projectId: string; id: string; pcr: PCRDto }>) => Promise<PCRDto>;
-  delete: (params: ApiParams<{ projectId: string; id: string }>) => Promise<boolean>;
+  create: (params: ApiParams<{ projectId: ProjectId; projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
+  getAll: (params: ApiParams<{ projectId: ProjectId }>) => Promise<PCRSummaryDto[]>;
+  get: (params: ApiParams<{ projectId: ProjectId; id: string }>) => Promise<PCRDto>;
+  getTypes: (params: ApiParams<{ projectId: ProjectId }>) => Promise<PCRItemTypeDto[]>;
+  getAvailableTypes: (params: ApiParams<{ projectId: ProjectId; pcrId?: string }>) => Promise<PCRItemTypeDto[]>;
+  getTimeExtensionOptions: (params: ApiParams<{ projectId: ProjectId }>) => Promise<PCRTimeExtensionOption[]>;
+  update: (params: ApiParams<{ projectId: ProjectId; id: string; pcr: PCRDto }>) => Promise<PCRDto>;
+  delete: (params: ApiParams<{ projectId: ProjectId; id: string }>) => Promise<boolean>;
   getStatusChanges: (
-    params: ApiParams<{ projectId: string; projectChangeRequestId: string }>,
+    params: ApiParams<{ projectId: ProjectId; projectChangeRequestId: string }>,
   ) => Promise<ProjectChangeRequestStatusChangeDto[]>;
   getPcrProjectRoles: (params: ApiParams) => Promise<Option<PCRProjectRole>[]>;
   getPcrPartnerTypes: (params: ApiParams) => Promise<Option<PCRPartnerType>[]>;
@@ -93,17 +93,17 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     this.deleteItem("/:projectId/:id", p => ({ projectId: p.projectId, id: p.id }), this.delete);
   }
 
-  getAll(params: ApiParams<{ projectId: string }>): Promise<PCRSummaryDto[]> {
+  getAll(params: ApiParams<{ projectId: ProjectId }>): Promise<PCRSummaryDto[]> {
     const query = new GetAllPCRsQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  get(params: ApiParams<{ projectId: string; id: string }>): Promise<PCRDto> {
+  get(params: ApiParams<{ projectId: ProjectId; id: string }>): Promise<PCRDto> {
     const query = new GetPCRByIdQuery(params.projectId, params.id);
     return contextProvider.start(params).runQuery(query);
   }
 
-  async create(params: ApiParams<{ projectId: string; projectChangeRequestDto: PCRDto }>): Promise<PCRDto> {
+  async create(params: ApiParams<{ projectId: ProjectId; projectChangeRequestDto: PCRDto }>): Promise<PCRDto> {
     const context = contextProvider.start(params);
     const id = await context.runCommand(
       new CreateProjectChangeRequestCommand(params.projectId, params.projectChangeRequestDto),
@@ -111,33 +111,33 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return context.runQuery(new GetPCRByIdQuery(params.projectId, id));
   }
 
-  public getTypes(params: ApiParams<{ projectId: string }>): Promise<PCRItemTypeDto[]> {
+  public getTypes(params: ApiParams<{ projectId: ProjectId }>): Promise<PCRItemTypeDto[]> {
     const query = new GetPCRItemTypesQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  getAvailableTypes(params: ApiParams<{ projectId: string; pcrId?: string }>): Promise<PCRItemTypeDto[]> {
+  getAvailableTypes(params: ApiParams<{ projectId: ProjectId; pcrId?: string }>): Promise<PCRItemTypeDto[]> {
     const query = new GetAvailableItemTypesQuery(params.projectId, params.pcrId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public getTimeExtensionOptions(params: ApiParams<{ projectId: string }>): Promise<PCRTimeExtensionOption[]> {
+  public getTimeExtensionOptions(params: ApiParams<{ projectId: ProjectId }>): Promise<PCRTimeExtensionOption[]> {
     const query = new GetTimeExtensionOptionsQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  async update(params: ApiParams<{ projectId: string; id: string; pcr: PCRDto }>): Promise<PCRDto> {
+  async update(params: ApiParams<{ projectId: ProjectId; id: string; pcr: PCRDto }>): Promise<PCRDto> {
     const context = contextProvider.start(params);
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.id, params.pcr));
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
   }
 
-  delete(params: ApiParams<{ projectId: string; id: string }>): Promise<boolean> {
+  delete(params: ApiParams<{ projectId: ProjectId; id: string }>): Promise<boolean> {
     const command = new DeleteProjectChangeRequestCommand(params.projectId, params.id);
     return contextProvider.start(params).runCommand(command);
   }
 
-  public getStatusChanges(params: ApiParams<{ projectId: string; projectChangeRequestId: string }>) {
+  public getStatusChanges(params: ApiParams<{ projectId: ProjectId; projectChangeRequestId: string }>) {
     const query = new GetProjectChangeRequestStatusChanges(params.projectId, params.projectChangeRequestId);
     return contextProvider.start(params).runQuery(query);
   }

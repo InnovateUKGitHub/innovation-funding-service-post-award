@@ -121,7 +121,7 @@ export const ProjectDocumentPage = (
                     value={selectedOption => filterVisibilityList(selectedOption, partnerOptions)}
                     update={(dto, option) => {
                       if (typeof option?.value === "string") {
-                        dto.partnerId = option.value;
+                        dto.partnerId = option.value as PartnerId;
                       } else {
                         dto.partnerId = undefined;
                       }

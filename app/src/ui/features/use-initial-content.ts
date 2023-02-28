@@ -11,7 +11,7 @@ export function useInitContent(params?: Params): Copy {
 
   // Note: It is likely that the visitor is on a non-project page or dev has forgotten 'projectId' in getParams()
   if (params && typeof params.projectId === "string") {
-    const { payload } = getPending(stores.projects.getById(params.projectId));
+    const { payload } = getPending(stores.projects.getById(params.projectId as ProjectId));
     return new Copy(payload?.competitionType);
   } else {
     return new Copy();

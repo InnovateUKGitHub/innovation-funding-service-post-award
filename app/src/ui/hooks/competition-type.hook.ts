@@ -4,7 +4,7 @@ import { useStores } from "@ui/redux";
 /**
  * hook returns competition type from project id
  */
-export function useCompetitionType(projectId: string | undefined): string | undefined {
+export function useCompetitionType(projectId: ProjectId | undefined): string | undefined {
   const { projects } = useStores();
 
   // Note: It is likely that the visitor is on a non-project page or dev has forgotten 'projectId' in getParams()

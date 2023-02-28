@@ -2,7 +2,7 @@ import { QueryBase } from "@server/features/common";
 import { LoanDto, Authorisation, IContext, ProjectRole } from "@framework/types";
 
 export class GetAllLoans extends QueryBase<LoanDto[]> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 

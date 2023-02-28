@@ -4,8 +4,8 @@ import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetClaimDetailDocumentsQuery extends DocumentsSummaryQueryBase {
   constructor(
-    private readonly projectId: string,
-    private readonly partnerId: string,
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
     private readonly periodId: number,
     private readonly costCategoryId: string,
   ) {

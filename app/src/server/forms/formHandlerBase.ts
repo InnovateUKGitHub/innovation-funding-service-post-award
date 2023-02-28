@@ -25,10 +25,14 @@ export interface IFormButton {
   name: string;
   value: string;
 }
-export interface IFormBody {
-  [key: string]: string;
-}
 
+// export interface IFormBody {
+//   [key: string]: string;
+// }
+
+export type IFormBody = {
+  [key: string]: string;
+} & { partnerId: PartnerId; projectId: ProjectId };
 type StoreKey<TStore extends EditorStateKeys> = keyof EditorState[TStore];
 
 type AnyEditor = InferEditorStoreDto<any>;

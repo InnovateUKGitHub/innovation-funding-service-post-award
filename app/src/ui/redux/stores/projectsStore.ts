@@ -38,13 +38,13 @@ export class ProjectsStore extends StoreBase {
     });
   }
 
-  public getById(projectId: string): Pending<ProjectDto> {
+  public getById(projectId: ProjectId): Pending<ProjectDto> {
     return this.getData("project", storeKeys.getProjectKey(projectId), p =>
       apiClient.projects.get({ ...p, projectId }),
     );
   }
 
-  public isValidProject(projectId: string): Pending<ProjectStatusDto> {
+  public isValidProject(projectId: ProjectId): Pending<ProjectStatusDto> {
     return this.getData("validate", storeKeys.getValidProjectStatusKey(projectId), p =>
       apiClient.projects.isProjectActive({ ...p, projectId }),
     );

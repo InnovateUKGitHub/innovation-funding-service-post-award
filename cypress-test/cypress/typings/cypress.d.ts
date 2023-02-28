@@ -76,11 +76,11 @@ declare global {
        *
        * Finds the defined project name or number and navigates to it from projects main page
        */
-      navigateToProject(projectId: string): Chainable<Element>;
+      navigateToProject(projectId: ProjectId): Chainable<Element>;
 
       selectTile(label: string): Chainable<Element>;
 
-      deletePcr(projectId: string): Chainable<Element>;
+      deletePcr(projectId: ProjectId): Chainable<Element>;
     }
   }
 }

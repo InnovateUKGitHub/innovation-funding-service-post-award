@@ -4,8 +4,8 @@ import { Authorisation, CostsSummaryForPeriodDto, IContext, ProjectRole } from "
 
 export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeriodDto[]> {
   constructor(
-    private readonly projectId: string,
-    private readonly partnerId: string,
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
     private readonly periodId: number,
   ) {
     super();

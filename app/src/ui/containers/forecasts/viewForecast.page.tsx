@@ -18,8 +18,8 @@ import { useViewForecastData, Data } from "./viewForecast.logic";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 
 interface ViewForecastParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {

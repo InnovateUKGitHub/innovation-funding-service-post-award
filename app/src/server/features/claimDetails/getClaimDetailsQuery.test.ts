@@ -7,7 +7,7 @@ describe("GetClaimDetailsQuery", () => {
   it("returns single result", async () => {
     const context = new TestContext();
     const expectedCostCategoryId = "Expected_CostCategory_Id";
-    const expectedParticipantId = "Expected_Participant_Id";
+    const expectedParticipantId = "Expected_Participant_Id" as PartnerId;
     const expectedId = "Expected_Id";
     const expectedPeriod = 3;
     const expectedValue = 2000;
@@ -51,11 +51,16 @@ describe("GetClaimDetailsQuery", () => {
     const context = new TestContext();
 
     const expectedCostCategoryId = "Expected_CostCategory_Id";
-    const expectedParticipantId = "Expected_Participant_Id";
+    const expectedParticipantId = "Expected_Participant_Id" as PartnerId;
     const expectedPeriod = 3;
     const requestedPeriodId = expectedPeriod + 1;
 
-    const query = new GetClaimDetailsQuery("", expectedParticipantId, requestedPeriodId, expectedCostCategoryId);
+    const query = new GetClaimDetailsQuery(
+      "" as ProjectId,
+      expectedParticipantId,
+      requestedPeriodId,
+      expectedCostCategoryId,
+    );
     const result = await context.runQuery(query);
 
     expect(result).not.toBeNull();
@@ -126,14 +131,14 @@ describe("GetClaimDetailsQuery", () => {
 
     it("returns empty array if none found", async () => {
       const context = new TestContext();
-      const project = context.testData.createPartner();
+      const project = context.testData.createProject();
       const partner = context.testData.createPartner();
 
       const testData = context.testData;
       const period = 1;
       const costCat = testData.createCostCategory();
 
-      const query = new GetClaimDetailsQuery(project.id, partner.id, period, costCat.id);
+      const query = new GetClaimDetailsQuery(project.Id, partner.id, period, costCat.id);
       const result = await context.runQuery(query);
 
       expect(result.lineItems).toEqual([]);

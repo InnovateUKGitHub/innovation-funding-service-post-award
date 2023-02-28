@@ -20,8 +20,8 @@ const isBankCheckValidationError = (e: unknown): e is BankCheckValidationError =
 };
 
 export interface ProjectSetupBankDetailsParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 interface Data {

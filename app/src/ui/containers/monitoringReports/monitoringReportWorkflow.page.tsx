@@ -10,7 +10,7 @@ import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/mo
 import { scrollToTheTopSmoothly } from "@framework/util";
 
 export interface MonitoringReportWorkflowParams {
-  projectId: string;
+  projectId: ProjectId;
   id: string;
   step: number | undefined;
   mode: "view" | "prepare";

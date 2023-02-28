@@ -16,8 +16,8 @@ import { GetProjectStatusQuery } from "../projects";
 
 export class SaveClaimDetails extends CommandBase<boolean> {
   constructor(
-    private readonly projectId: string,
-    private readonly partnerId: string,
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
     private readonly periodId: number,
     private readonly costCategoryId: string,
     private readonly claimDetails: ClaimDetailsDto,

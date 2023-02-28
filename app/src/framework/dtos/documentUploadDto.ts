@@ -9,5 +9,5 @@ export interface DocumentUploadDto {
 export interface MultipleDocumentUploadDto {
   files: IFileWrapper[];
   description?: DocumentDescription;
-  partnerId?: string;
+  partnerId?: PartnerId;
 }

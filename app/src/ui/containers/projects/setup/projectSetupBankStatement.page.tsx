@@ -11,8 +11,8 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { useContent } from "@ui/hooks";
 
 export interface ProjectSetupBankStatementParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 interface Data {

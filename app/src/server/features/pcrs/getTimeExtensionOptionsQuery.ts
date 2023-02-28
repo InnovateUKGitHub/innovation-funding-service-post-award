@@ -7,7 +7,7 @@ import { GetByIdQuery } from "@server/features/projects";
 import { monthDifference, totalCalendarMonths } from "@shared/date-helpers";
 
 export class GetTimeExtensionOptionsQuery extends QueryBase<PCRTimeExtensionOption[]> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 

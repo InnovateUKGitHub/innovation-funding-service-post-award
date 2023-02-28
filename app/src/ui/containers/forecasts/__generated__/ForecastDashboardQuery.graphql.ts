@@ -10,7 +10,7 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type ForecastDashboardQuery$variables = {
-  projectId: string;
+  projectId: ProjectId;
 };
 export type ForecastDashboardQuery$data = {
   readonly salesforce: {

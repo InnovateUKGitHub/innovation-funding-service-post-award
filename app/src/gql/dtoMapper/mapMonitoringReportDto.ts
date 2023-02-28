@@ -46,7 +46,7 @@ const mapper: GQL.DtoMapper<MonitoringReportDtoMapping, MonitoringReportNode> = 
     return !!node?.LastModifiedDate?.value ? new Date(node?.LastModifiedDate?.value) : null;
   },
   projectId: function (node) {
-    return node?.Acc_Project__c?.value ?? "";
+    return (node?.Acc_Project__c?.value ?? "") as ProjectId;
   },
 };
 

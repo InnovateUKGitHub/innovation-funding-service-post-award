@@ -41,7 +41,7 @@ interface BaseEntityFields {
 
 export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   constructor(
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly pcrItemId: string,
     private readonly spendProfileDto: PcrSpendProfileDto,
   ) {

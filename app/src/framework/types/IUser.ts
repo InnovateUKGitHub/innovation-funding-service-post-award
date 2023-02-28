@@ -11,6 +11,6 @@ export interface ISessionUser {
 }
 
 export interface IClientUser extends ISessionUser {
-  roleInfo: { [projectId: string]: IRoleInfo };
+  roleInfo: { [projectId: ProjectId]: IRoleInfo };
   csrf: string;
 }

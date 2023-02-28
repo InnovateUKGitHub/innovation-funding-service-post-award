@@ -41,18 +41,18 @@ class LoansApi extends ControllerBase<LoanDto> {
     );
   }
 
-  public async getAll(params: ApiParams<{ projectId: string }>): Promise<LoanDto[]> {
+  public async getAll(params: ApiParams<{ projectId: ProjectId }>): Promise<LoanDto[]> {
     const query = new GetAllLoans(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ projectId: string; loanId?: string; periodId?: number }>): Promise<LoanDto> {
+  public async get(params: ApiParams<{ projectId: ProjectId; loanId?: string; periodId?: number }>): Promise<LoanDto> {
     const loanQuery = new GetLoan(params.projectId, params);
 
     return contextProvider.start(params).runQuery(loanQuery);
   }
 
-  public async update(params: ApiParams<{ projectId: string; loanId: string; loan: LoanDto }>): Promise<LoanDto> {
+  public async update(params: ApiParams<{ projectId: ProjectId; loanId: string; loan: LoanDto }>): Promise<LoanDto> {
     const context = contextProvider.start(params);
 
     const loanCommand = new UpdateLoanCommand(params.projectId, params.loanId, params.loan);

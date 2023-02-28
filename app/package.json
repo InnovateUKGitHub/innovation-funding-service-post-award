@@ -25,7 +25,8 @@
     "update": "npm-check -u",
     "prepare": "cd .. && husky install",
     "cy": "cd ../cypress-test && npm start",
-    "relay": "relay-compiler"
+    "relay": "relay-compiler",
+    "typecheck": "tsc --watch --noEmit"
   },
   "author": "BJSS Ltd",
   "license": "ISC",

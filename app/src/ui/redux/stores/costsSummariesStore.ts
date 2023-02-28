@@ -3,7 +3,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { StoreBase } from "./storeBase";
 
 export class CostSummariesStore extends StoreBase {
-  public getForPeriod(projectId: string, partnerId: string, periodId: number) {
+  public getForPeriod(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
     return this.getData("costsSummary", storeKeys.getClaimKey(partnerId, periodId), p =>
       apiClient.costsSummary.getAllByPartnerIdForPeriod({ projectId, partnerId, periodId, ...p }),
     );

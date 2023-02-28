@@ -29,7 +29,7 @@ describe("GetClaimDetailDocumentQuery", () => {
     expect(result.stream).not.toBeNull();
   });
 
-  it("should return null if document dosnt exist", async () => {
+  it("should return null if document doesn't exist", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);

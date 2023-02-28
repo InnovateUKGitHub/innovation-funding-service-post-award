@@ -19,7 +19,7 @@ const currentStatuses = [
 type ProjectGql = GQL.ObjectNodeSelector<MonitoringReportDashboardQuery$data, "Acc_Project__c">;
 
 export type Project = {
-  id: string;
+  id: ProjectId;
   projectNumber: string;
   title: string;
   status: ProjectStatus;
@@ -33,10 +33,10 @@ export type MonitoringReport = {
   endDate: Date | null;
   statusName: string;
   lastUpdated: Date | null;
-  projectId: string;
+  projectId: ProjectId;
 };
 
-export const useMonitoringReportDashboardQuery = (projectId: string) => {
+export const useMonitoringReportDashboardQuery = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<MonitoringReportDashboardQuery>(
     monitoringReportDashboardQuery,
     {

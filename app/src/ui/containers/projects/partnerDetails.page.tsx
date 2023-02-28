@@ -10,8 +10,8 @@ interface Data {
 }
 
 interface Params {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 interface CombinedData {

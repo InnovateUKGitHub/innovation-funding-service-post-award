@@ -7,8 +7,8 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 
 export interface ProjectSetupBankDetailsVerifyParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 interface Data {

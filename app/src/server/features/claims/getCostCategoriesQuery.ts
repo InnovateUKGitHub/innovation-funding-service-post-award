@@ -30,7 +30,7 @@ export class GetUnfilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[
 }
 
 export class GetFilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
-  constructor(private readonly partnerId: string) {
+  constructor(private readonly partnerId: PartnerId) {
     super();
   }
 

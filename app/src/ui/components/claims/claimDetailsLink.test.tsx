@@ -8,8 +8,8 @@ import { testInitialiseInternationalisation } from "@shared/testInitialiseIntern
 
 // TODO: This test data needs updating there are way too many "as any" overrides here...
 describe("<ClaimDetailsLink />", () => {
-  const partnerId = "a0B0Q000001eWRHUA2";
-  const projectId = "a0C0Q000001uK5VUAU";
+  const partnerId = "a0B0Q000001eWRHUA2" as PartnerId;
+  const projectId = "a0C0Q000001uK5VUAU" as ProjectId;
 
   const stubContent = {
     components: {

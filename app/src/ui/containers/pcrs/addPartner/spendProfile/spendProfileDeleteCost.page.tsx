@@ -46,7 +46,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onDelete: (dto: PCRDto, projectId: string) => void;
+  onDelete: (dto: PCRDto, projectId: ProjectId) => void;
 }
 
 export interface SpendProfileDeleteFormProps<T extends PCRSpendProfileCostDto> {

@@ -7,18 +7,18 @@ import { IEditorStore } from "..";
 import { StoreBase } from "./storeBase";
 
 export class FinancialLoanVirementsStore extends StoreBase {
-  private getKey(projectId: string, pcrId: string, pcrItemId: string): string {
+  private getKey(projectId: ProjectId, pcrId: string, pcrItemId: string): string {
     return storeKeys.getFinancialLoanVirementKey(projectId, pcrId, pcrItemId);
   }
 
-  public get(projectId: string, pcrId: string, pcrItemId: string): Pending<FinancialLoanVirementDto> {
+  public get(projectId: ProjectId, pcrId: string, pcrItemId: string): Pending<FinancialLoanVirementDto> {
     return this.getData("financialLoanVirement", this.getKey(projectId, pcrId, pcrItemId), p =>
       apiClient.financialLoanVirements.get({ ...p, projectId, pcrItemId }),
     );
   }
 
   public getFinancialVirementEditor(
-    projectId: string,
+    projectId: ProjectId,
     pcrId: string,
     pcrItemId: string,
     displayValidations: boolean,
@@ -36,7 +36,7 @@ export class FinancialLoanVirementsStore extends StoreBase {
 
   public updateFinancialVirementEditor(
     saving: boolean,
-    projectId: string,
+    projectId: ProjectId,
     pcrId: string,
     pcrItemId: string,
     dto: FinancialLoanVirementDto,

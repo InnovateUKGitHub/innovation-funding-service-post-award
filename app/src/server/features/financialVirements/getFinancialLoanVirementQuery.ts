@@ -2,7 +2,7 @@ import { QueryBase } from "@server/features/common";
 import { Authorisation, FinancialLoanVirementDto, IContext, ProjectRole } from "@framework/types";
 
 export class GetFinancialLoanVirementQuery extends QueryBase<FinancialLoanVirementDto> {
-  constructor(private readonly projectId: string, private readonly pcrItemId: string) {
+  constructor(private readonly projectId: ProjectId, private readonly pcrItemId: string) {
     super();
   }
 

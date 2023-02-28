@@ -31,8 +31,8 @@ import { EnumDocuments } from "./components";
 import { Markdown } from "@ui/components/renderers";
 
 export interface ReviewClaimParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   periodId: number;
 }
 

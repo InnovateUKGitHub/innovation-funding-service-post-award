@@ -20,7 +20,7 @@ export class CostCategoriesStore extends StoreBase {
   /**
    * @todo deprecate this api in favour of getAllFiltered()
    */
-  public getAllForPartner(partnerId: string) {
+  public getAllForPartner(partnerId: PartnerId) {
     const competitionType = this.partnerStore.getById(partnerId).then(x => x.competitionType);
     const organisationType = this.partnerStore.getById(partnerId).then(x => x.organisationType);
     const costCategories = this.getAllFiltered(partnerId);
@@ -43,7 +43,7 @@ export class CostCategoriesStore extends StoreBase {
   /**
    * @todo Add support for filtering (competitionType, organisationType)
    */
-  public getAllFiltered(partnerId: string) {
+  public getAllFiltered(partnerId: PartnerId) {
     return this.getData("costCategories", storeKeys.getCostCategoryKey(partnerId), p =>
       apiClient.costCategories.getAllFiltered({ ...p, partnerId }),
     );

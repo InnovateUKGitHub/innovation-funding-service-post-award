@@ -39,7 +39,7 @@ const getProjectNotes = ({
   if (isNotAvailable) return messages;
 
   // TODO: Ensure Salesforce dates are not nillable.
-  if ((project.Acc_EndDate__c?.value && new Date(project.Acc_EndDate__c?.value) < new Date())|| isPartnerWithdrawn) {
+  if ((project.Acc_EndDate__c?.value && new Date(project.Acc_EndDate__c?.value) < new Date()) || isPartnerWithdrawn) {
     messages.push(<Content value={x => x.projectMessages.projectEndedMessage} />);
   } else {
     const projectDate = (
@@ -75,8 +75,8 @@ const DashboardProjectTitle = ({
   const projectNotSetup = partner && projectSection === "pending";
 
   const route = projectNotSetup
-    ? ProjectSetupRoute.getLink({ projectId: project.Id, partnerId: partner.Id })
-    : ProjectOverviewRoute.getLink({ projectId: project.Id });
+    ? ProjectSetupRoute.getLink({ projectId: project.Id as ProjectId, partnerId: partner.Id as PartnerId })
+    : ProjectOverviewRoute.getLink({ projectId: project.Id as ProjectId });
 
   return <Link route={route}>{titleContent}</Link>;
 };

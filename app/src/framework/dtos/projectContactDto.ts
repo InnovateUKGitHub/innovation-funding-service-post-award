@@ -5,5 +5,5 @@ export interface ProjectContactDto {
   roleName: string;
   email: string;
   accountId?: string;
-  projectId: string;
+  projectId: ProjectId;
 }

@@ -8,7 +8,7 @@ type CreateDTO<DTO> = (objectToMerge?: Partial<DTO>) => DTO;
 
 export const createProjectDto: CreateDTO<ProjectDto> = (objectToMerge?) => {
   const stubProject: ProjectDto = {
-    id: "stub-id",
+    id: "stub-id" as ProjectId,
     title: "stub-title",
     summary: "stub-summary",
     description: "stub-description",
@@ -52,7 +52,7 @@ export const createProjectDto: CreateDTO<ProjectDto> = (objectToMerge?) => {
 
 export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
   const stubPartner: PartnerDto = {
-    id: "a0D0C000001AEZzUAO",
+    id: "a0D0C000001AEZzUAO" as PartnerId,
     name: "Test account 2A",
     accountId: "0010C00000AtnOAQAZ",
     type: "Business",
@@ -63,7 +63,7 @@ export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
     competitionType: "CR&D",
     isLead: true,
     projectRoleName: "Project Lead",
-    projectId: "a0E0C000001zU2sUAE",
+    projectId: "a0E0C000001zU2sUAE" as ProjectId,
     totalParticipantGrant: 186000,
     totalParticipantCostsClaimed: 37000,
     percentageParticipantCostsClaimed: 19.892473118279568,
@@ -1237,7 +1237,7 @@ export const createPCRSummaryDto: CreateDTO<PCRSummaryDto> = (objectToMerge?) =>
     lastUpdated: new Date(),
     status: 1,
     statusName: "Draft",
-    projectId: "a0E0C000001zU2tUAE",
+    projectId: "a0E0C000001zU2tUAE" as ProjectId,
     items: [
       { type: 60, typeName: "Reallocate project costs", shortName: "Move partners’ costs" },
       { type: 30, typeName: "Remove a partner", shortName: "Remove partner" },

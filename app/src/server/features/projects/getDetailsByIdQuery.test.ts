@@ -6,7 +6,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
   it("when exists expect item", async () => {
     const context = new TestContext();
 
-    const expectedId = "Expected Id";
+    const expectedId = "Expected_Id" as ProjectId;
     const expectedName = "Expected Name";
 
     const project = context.testData.createProject(x => ((x.Id = expectedId), (x.Acc_ProjectTitle__c = expectedName)));
@@ -17,7 +17,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
     expect(result.title).toBe(expectedName);
   });
 
-  it("when mutiple returns expected item", async () => {
+  it("when multiple returns expected item", async () => {
     const context = new TestContext();
     const project2 = context.testData.createProject();
     const result = await context.runQuery(new GetByIdQuery(project2.Id));
@@ -32,7 +32,7 @@ describe("ProjectsGetDetailsByIdQuery", () => {
     // create a project to check we are filtering
     context.testData.createProject();
 
-    await expect(context.runQuery(new GetByIdQuery("NOTFOUND"))).rejects.toThrow();
+    await expect(context.runQuery(new GetByIdQuery("NOTFOUND" as ProjectId))).rejects.toThrow();
   });
 
   it("when user is finance contact expect role returns correctly", async () => {

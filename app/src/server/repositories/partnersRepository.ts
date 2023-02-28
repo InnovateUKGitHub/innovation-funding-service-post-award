@@ -79,8 +79,8 @@ export interface ISalesforcePartner {
 }
 
 export interface IPartnerRepository {
-  getAllByProjectId(projectId: string): Promise<Partner[]>;
-  getById(partnerId: string): Promise<Partner>;
+  getAllByProjectId(projectId: ProjectId): Promise<Partner[]>;
+  getById(partnerId: PartnerId): Promise<Partner>;
   update(updatedPartner: Updatable<ISalesforcePartner>): Promise<boolean>;
   getAll(): Promise<Partner[]>;
 }
@@ -169,11 +169,11 @@ export class PartnerRepository
 
   mapper = new SalesforcePartnerMapper();
 
-  getAllByProjectId(projectId: string) {
+  getAllByProjectId(projectId: ProjectId) {
     return super.where(`Acc_ProjectId__c = '${sss(projectId)}'`);
   }
 
-  getById(partnerId: string) {
+  getById(partnerId: PartnerId) {
     return super.loadItem({ Id: partnerId });
   }
 

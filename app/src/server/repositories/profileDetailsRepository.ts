@@ -37,7 +37,7 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
     "Acc_ProjectPeriodEndDate__c",
   ];
 
-  public async getAllByPartner(partnerId: string): Promise<ISalesforceProfileDetails[]> {
+  public async getAllByPartner(partnerId: PartnerId): Promise<ISalesforceProfileDetails[]> {
     const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(
       this.recordType,
     )}' AND Acc_CostCategory__c != null`;
@@ -45,7 +45,7 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
   }
 
   public async getById(
-    partnerId: string,
+    partnerId: PartnerId,
     periodId: number,
     costCategoryId: string,
   ): Promise<ISalesforceProfileDetails> {
@@ -58,7 +58,7 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
     return super.where(filter).then(res => (res && res[0]) || null);
   }
 
-  public async getRequiredCategories(partnerId: string): Promise<ISalesforceProfileDetails[]> {
+  public async getRequiredCategories(partnerId: PartnerId): Promise<ISalesforceProfileDetails[]> {
     const filter = `
       Acc_ProjectParticipant__c = '${sss(partnerId)}'
       AND RecordType.Name = '${sss(this.requiredCategoryType)}'

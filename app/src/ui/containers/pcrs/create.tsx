@@ -14,11 +14,11 @@ import { useProjectParticipants } from "@ui/features/project-participants";
 import { PcrTypesGuidance } from "./components/PcrTypesGuidance";
 
 export interface CreatePcrParams {
-  projectId: string;
+  projectId: ProjectId;
 }
 
 interface CreatePcrProps extends CreatePcrParams, BaseProps {
-  projectId: string;
+  projectId: ProjectId;
   project: Pending<Dtos.ProjectDto>;
   itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
   editor: Pending<IEditorStore<Dtos.PCRDto, PCRDtoValidator>>;

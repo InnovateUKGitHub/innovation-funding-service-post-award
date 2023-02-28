@@ -22,7 +22,7 @@ export interface ISalesforceProjectContact {
 }
 
 export interface IProjectContactsRepository {
-  getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]>;
+  getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]>;
   getAllForUser(login: string): Promise<ISalesforceProjectContact[]>;
 }
 
@@ -51,7 +51,7 @@ export class ProjectContactsRepository
     "Acc_UserId__r.Username",
   ];
 
-  getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
+  getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProjectContact[]> {
     return this.where(`Acc_ProjectId__c = '${sss(projectId)}'`);
   }
 

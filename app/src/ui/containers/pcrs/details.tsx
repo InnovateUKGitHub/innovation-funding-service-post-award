@@ -9,7 +9,7 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { getPcrItemTaskStatus } from "./utils/get-pcr-item-task-status";
 
 interface Params {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
 }
 

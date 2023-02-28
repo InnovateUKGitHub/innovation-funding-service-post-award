@@ -4,7 +4,7 @@ import { mapClaim } from "./mapClaim";
 
 // @TODO - nullable or throw to be decided
 export class GetClaim extends QueryBase<ClaimDto> {
-  constructor(private readonly partnerId: string, private readonly periodId: number) {
+  constructor(private readonly partnerId: PartnerId, private readonly periodId: number) {
     super();
   }
 

@@ -12,8 +12,8 @@ import { GetProjectStatus } from "../app/project-active";
 import { ClaimsDashboardGuidance } from "./components";
 
 export interface ClaimDashboardPageParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 interface Data {

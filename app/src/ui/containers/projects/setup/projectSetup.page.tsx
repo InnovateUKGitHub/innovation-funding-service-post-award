@@ -8,8 +8,8 @@ import * as ACC from "@ui/components";
 import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus, ProjectRole } from "@framework/constants";
 
 export interface ProjectSetupParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 interface Data {

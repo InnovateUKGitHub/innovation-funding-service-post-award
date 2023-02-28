@@ -4,8 +4,8 @@ import { TestContext } from "@tests/test-utils/testContextProvider";
 import { GetClaimOverrideRates } from "./getClaimOverrideRates";
 
 describe("GetClaimOverrideRates", () => {
-  const projectId = "stub-project-id";
-  const partnerId = "stub-partner-id";
+  const projectId = "stub-project-id" as ProjectId;
+  const partnerId = "stub-partner-id" as PartnerId;
   const periodNum = 1;
   const nonFecClaimTotal = 1000;
 

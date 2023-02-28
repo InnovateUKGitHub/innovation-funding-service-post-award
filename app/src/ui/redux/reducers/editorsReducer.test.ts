@@ -51,7 +51,7 @@ describe("editorsReducer", () => {
 
     it("should update the dto", () => {
       const claimDto = createClaim();
-      const updatedDto = createClaim({ partnerId: "hello world" });
+      const updatedDto = createClaim({ partnerId: "hello world" as PartnerId });
       const originalState = setupInitialState(x => (x.data = claimDto));
       const validator = new Results(updatedDto, true);
 

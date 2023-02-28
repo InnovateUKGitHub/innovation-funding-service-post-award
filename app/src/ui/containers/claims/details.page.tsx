@@ -18,8 +18,8 @@ import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 interface Params {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   periodId: number;
 }
 

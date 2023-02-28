@@ -13,7 +13,7 @@ describe("<ClaimDrawdownTable />", () => {
   const stubProject = createProjectDto({ competitionType: "LOANS" });
 
   const stubLoan: LoanDto = {
-    id: "a0H3M0000002GRYUA2",
+    id: "a0H3M0000002GRYUA2" as LoanId,
     status: LoanStatus.APPROVED,
     period: 1,
     requestDate: new Date(Date.UTC(1, 10)),

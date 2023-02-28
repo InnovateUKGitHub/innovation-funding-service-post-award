@@ -10,9 +10,10 @@ describe("useCompetitionType()", () => {
   beforeEach(jest.clearAllMocks);
 
   describe("@returns", () => {
+    const stubProjectId = "123456" as ProjectId;
+
     describe("with valid response", () => {
       test("with valid payload", () => {
-        const stubProjectId = "123456";
         const mockCompetitionType = "stub-competitionType";
         const mockGetById = jest
           .fn()
@@ -38,10 +39,9 @@ describe("useCompetitionType()", () => {
       describe("with no errors", () => {
         test("with no projectId", () => {
           const mockLoadingError = jest.fn();
-          const stubProjectId = undefined;
 
           const { result } = renderHook(
-            () => useCompetitionType(stubProjectId),
+            () => useCompetitionType(undefined),
             hookTestBed({
               stores: {
                 projects: {
@@ -57,7 +57,6 @@ describe("useCompetitionType()", () => {
 
         test("with no valid response from a pending", () => {
           const mockBadResponse = jest.fn().mockReturnValue(new Pending(LoadingStatus.Done, { competitionType: null }));
-          const stubProjectId = "1234";
 
           const { result } = renderHook(
             () => useCompetitionType(stubProjectId),
@@ -80,7 +79,6 @@ describe("useCompetitionType()", () => {
         jest.spyOn(console, "error").mockImplementation(jest.fn);
 
         test("when a project query returns as failed", () => {
-          const stubProjectId = "123456";
           const mockLoadingError = jest
             .fn()
             .mockReturnValue(new Pending(LoadingStatus.Failed, { competitionType: stubProjectId }));
@@ -100,7 +98,6 @@ describe("useCompetitionType()", () => {
         });
 
         test("with error message", () => {
-          const stubProjectId = "123456";
           const stubError = "There is an error";
           const mockLoadingError = jest.fn().mockReturnValue(new Pending(LoadingStatus.Failed, undefined, stubError));
 
@@ -119,7 +116,6 @@ describe("useCompetitionType()", () => {
         });
 
         test("with no error", () => {
-          const stubProjectId = "123456";
           const mockLoadingError = jest.fn().mockReturnValue(new Pending(LoadingStatus.Failed, undefined));
 
           expect(() =>

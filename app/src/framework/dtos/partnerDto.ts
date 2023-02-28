@@ -49,7 +49,7 @@ export interface PartnerBankDetailsDto {
 }
 
 export interface PartnerDto {
-  id: string;
+  id: PartnerId;
   type: string;
 
   postcode: string | null;
@@ -58,7 +58,7 @@ export interface PartnerDto {
   isLead: boolean;
   isWithdrawn: boolean;
   projectRoleName: string;
-  projectId: string;
+  projectId: ProjectId;
   accountId: string;
   name: string;
   organisationType: string;

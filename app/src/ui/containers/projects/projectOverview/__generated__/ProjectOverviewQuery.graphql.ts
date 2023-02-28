@@ -111,7 +111,7 @@ export type ProjectOverviewQuery$data = {
                   readonly isFc: boolean;
                   readonly isMo: boolean;
                   readonly isPm: boolean;
-                  readonly partnerId: string;
+                  readonly partnerId: PartnerId;
                 }>;
               };
             } | null;

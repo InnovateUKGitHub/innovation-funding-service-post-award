@@ -2,7 +2,7 @@ import { ProjectStatusContext, ProjectStatusProvider } from "@ui/context/project
 import { useProjectStatus, useProjectStatusCheck } from "@ui/hooks/project-status.hook";
 
 interface ProjectStatusCheckProps {
-  projectId: string | undefined;
+  projectId: ProjectId | undefined;
   children: React.ReactElement;
   overrideAccess: boolean;
 }

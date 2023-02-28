@@ -3,7 +3,7 @@ import { QueryBase } from "../common";
 import { GetByIdQuery } from ".";
 
 export class GetProjectStatusQuery extends QueryBase<ProjectStatusDto> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 

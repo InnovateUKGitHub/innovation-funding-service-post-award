@@ -6,7 +6,7 @@ import type { Loan } from "../loanOverview.logic";
 
 export interface LoansTableProps {
   items: Loan[];
-  createLink: (selectedPeriod: string) => ILinkInfo;
+  createLink: (id: LoanId) => ILinkInfo;
   roles: { readonly isMo: boolean; readonly isFc: boolean; readonly isPm: boolean };
 }
 

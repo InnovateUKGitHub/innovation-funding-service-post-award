@@ -104,7 +104,7 @@ export class TestData {
     const seed = this.repositories.projects.Items.length + 1;
 
     const newItem: Repositories.ISalesforceProject = {
-      Id: "Project" + seed,
+      Id: ("Project" + seed) as ProjectId,
       Acc_ProjectTitle__c: "Project " + seed,
       Acc_CompetitionType__c: "CR&D",
       Acc_StartDate__c: "",
@@ -159,7 +159,7 @@ export class TestData {
     project = project || this.createProject();
 
     const newItem: Entities.Partner = {
-      id: `Partner${seed}`,
+      id: `Partner${seed}` as PartnerId,
       accountId: `AccountId${seed}`,
       name: `Participant Name ${seed}`,
       participantType: "Academic",
@@ -845,7 +845,7 @@ export class TestData {
       projectDurationSnapshot: null,
       projectSummary: "",
       publicDescription: "",
-      partnerId: "",
+      partnerId: "" as PartnerId,
       status: PCRItemStatus.Complete,
       statusName: "Complete",
       suspensionStartDate: null,

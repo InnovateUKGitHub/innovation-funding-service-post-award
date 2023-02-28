@@ -8,7 +8,7 @@ import { mapToPartnerDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 export class GetAllPartnerDocumentsQuery extends QueryBase<AllPartnerDocumentSummaryDto> {
   public logger: Logger = new Logger("GetAllPartnerDocumentsQuery");
 
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 
@@ -18,7 +18,7 @@ export class GetAllPartnerDocumentsQuery extends QueryBase<AllPartnerDocumentSum
       .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact, ProjectRole.ProjectManager);
   }
 
-  protected getUrl(partnerId: string, document: DocumentEntity): string {
+  protected getUrl(partnerId: PartnerId, document: DocumentEntity): string {
     return `/api/documents/partners/${this.projectId}/${partnerId}/${document.id}/content`;
   }
 

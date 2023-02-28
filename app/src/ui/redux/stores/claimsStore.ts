@@ -29,17 +29,17 @@ export class ClaimsStore extends StoreBase {
     super(getState, queue);
   }
 
-  private getClaimKey(partnerId: string, periodId: number) {
+  private getClaimKey(partnerId: PartnerId, periodId: number) {
     return storeKeys.getClaimKey(partnerId, periodId);
   }
 
-  public get(partnerId: string, periodId: number) {
+  public get(partnerId: PartnerId, periodId: number) {
     return this.getData("claim", this.getClaimKey(partnerId, periodId), p =>
       apiClient.claims.get({ partnerId, periodId, ...p }),
     );
   }
 
-  public getAllClaimsForProject(projectId: string): Pending<ClaimDto[]> {
+  public getAllClaimsForProject(projectId: ProjectId): Pending<ClaimDto[]> {
     return this.getData("claims", storeKeys.getProjectKey(projectId), p =>
       apiClient.claims.getAllByProjectId({ projectId, ...p }),
     ).then(
@@ -48,15 +48,15 @@ export class ClaimsStore extends StoreBase {
     );
   }
 
-  public getInactiveClaimsForProject(projectId: string) {
+  public getInactiveClaimsForProject(projectId: ProjectId) {
     return this.getAllClaimsForProject(projectId).then(x => x.filter(claim => claim.isApproved));
   }
 
-  public getActiveClaimsForProject(projectId: string) {
+  public getActiveClaimsForProject(projectId: ProjectId) {
     return this.getAllClaimsForProject(projectId).then(x => x.filter(claim => !claim.isApproved));
   }
 
-  public getAllClaimsForPartner(partnerId: string) {
+  public getAllClaimsForPartner(partnerId: PartnerId) {
     return this.getData("claims", storeKeys.getPartnerKey(partnerId), p =>
       apiClient.claims.getAllByPartnerId({ partnerId, ...p }),
     ).then(
@@ -65,28 +65,28 @@ export class ClaimsStore extends StoreBase {
     );
   }
 
-  public getIARDueOnClaimPeriods(partnerId: string) {
+  public getIARDueOnClaimPeriods(partnerId: PartnerId) {
     return this.getData("allClaimsIncludingNew", storeKeys.getPartnerKey(partnerId), p =>
       apiClient.claims.getAllIncludingNewByPartnerId({ partnerId, ...p }),
     ).then(periodsWithIARDue, () => []);
   }
 
-  public getActiveClaimForPartner(partnerId: string) {
+  public getActiveClaimForPartner(partnerId: PartnerId) {
     return this.getAllClaimsForPartner(partnerId).then(x => x.find(y => !y.isApproved) || null);
   }
 
-  public getInactiveClaimsForPartner(partnerId: string) {
+  public getInactiveClaimsForPartner(partnerId: PartnerId) {
     return this.getAllClaimsForPartner(partnerId).then(x => x.filter(y => y.isApproved) || null);
   }
 
-  public markClaimAsStale(partnerId: string, periodId: number): void {
+  public markClaimAsStale(partnerId: PartnerId, periodId: number): void {
     this.markStale("claim", this.getClaimKey(partnerId, periodId), undefined);
   }
 
   public getClaimEditor(
     isClaimSummary: boolean,
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     periodId: number,
     init?: (dto: ClaimDto) => void,
   ) {
@@ -102,8 +102,8 @@ export class ClaimsStore extends StoreBase {
   public updateClaimEditor(
     isClaimSummary: boolean,
     saving: boolean,
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     periodId: number,
     dto: ClaimDto,
     message?: string,
@@ -129,8 +129,8 @@ export class ClaimsStore extends StoreBase {
   }
 
   private validate(
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     periodId: number,
     claim: ClaimDto,
     showErrors: boolean,
@@ -161,14 +161,14 @@ export class ClaimsStore extends StoreBase {
     );
   }
 
-  public getStatusChanges(projectId: string, partnerId: string, periodId: number) {
+  public getStatusChanges(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
     return this.getData("claimStatusChanges", this.getClaimKey(partnerId, periodId), p =>
       apiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }),
     );
   }
 
-  public getTotalCosts(projectId: string, partnerId: string, periodId: number) {
-    return this.getData("claimTotalCosts", storeKeys.getClaimTotalCostsKey(projectId, partnerId, periodId), p =>
+  public getTotalCosts(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
+    return this.getData("claimTotalCosts", storeKeys.getClaimTotalCostsKey(partnerId, projectId, periodId), p =>
       apiClient.claims.getTotalCosts({ partnerId, projectId, periodId, ...p }),
     );
   }

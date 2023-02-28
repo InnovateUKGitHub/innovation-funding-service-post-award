@@ -18,7 +18,7 @@ export interface ISalesforceClaimLineItem {
 }
 
 export interface IClaimLineItemRepository {
-  getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
+  getAllForCategory(partnerId: PartnerId, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]>;
   delete(ids: string[]): Promise<void>;
   update(update: Updatable<ISalesforceClaimLineItem>[]): Promise<boolean>;
   insert(insert: Partial<ISalesforceClaimLineItem>[]): Promise<string[]>;
@@ -58,7 +58,7 @@ export class ClaimLineItemRepository
     "LastModifiedDate",
   ];
 
-  getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]> {
+  getAllForCategory(partnerId: PartnerId, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]> {
     const filter = `
       Acc_ProjectParticipant__c = '${sss(partnerId)}'
       AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}

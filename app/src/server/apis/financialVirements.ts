@@ -29,7 +29,7 @@ class Controller extends ControllerBase<FinancialVirementDto> {
   }
 
   async get(
-    params: ApiParams<{ projectId: string; pcrId: string; pcrItemId: string; partnerId?: string }>,
+    params: ApiParams<{ projectId: ProjectId; pcrId: string; pcrItemId: string; partnerId?: PartnerId }>,
   ): Promise<FinancialVirementDto> {
     const query = new GetFinancialVirementQuery(params.projectId, params.pcrItemId, params.partnerId);
     return contextProvider.start(params).runQuery(query);
@@ -37,10 +37,10 @@ class Controller extends ControllerBase<FinancialVirementDto> {
 
   async update(
     params: ApiParams<{
-      projectId: string;
+      projectId: ProjectId;
       pcrId: string;
       pcrItemId: string;
-      partnerId?: string;
+      partnerId?: PartnerId;
       financialVirement: FinancialVirementDto;
       submit: boolean;
     }>,

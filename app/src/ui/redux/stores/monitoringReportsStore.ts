@@ -18,23 +18,23 @@ export class MonitoringReportsStore extends StoreBase {
     super(getState, queue);
   }
 
-  private getKey(projectId: string, reportId: string | undefined) {
+  private getKey(projectId: ProjectId, reportId: string | undefined) {
     return storeKeys.getMonitoringReportKey(projectId, reportId);
   }
 
-  getStatusChanges(projectId: string, reportId: string) {
+  getStatusChanges(projectId: ProjectId, reportId: string) {
     return this.getData("monitoringReportStatusChanges", this.getKey(projectId, reportId), p =>
       apiClient.monitoringReports.getStatusChanges({ projectId, reportId, ...p }),
     );
   }
 
-  getAllForProject(projectId: string): Pending<MonitoringReportSummaryDto[]> {
+  getAllForProject(projectId: ProjectId): Pending<MonitoringReportSummaryDto[]> {
     return this.getData("monitoringReports", storeKeys.getProjectKey(projectId), p =>
       apiClient.monitoringReports.getAllForProject({ projectId, ...p }),
     );
   }
 
-  getById(projectId: string, reportId: string) {
+  getById(projectId: ProjectId, reportId: string) {
     return this.getData("monitoringReport", this.getKey(projectId, reportId), p =>
       apiClient.monitoringReports.get({ projectId, reportId, ...p }),
     );
@@ -46,7 +46,7 @@ export class MonitoringReportsStore extends StoreBase {
     );
   }
 
-  getCreateMonitoringReportEditor(projectId: string, init?: (dto: MonitoringReportDto) => void) {
+  getCreateMonitoringReportEditor(projectId: ProjectId, init?: (dto: MonitoringReportDto) => void) {
     return this.getEditor(
       "monitoringReport",
       this.getKey(projectId, undefined),
@@ -68,7 +68,7 @@ export class MonitoringReportsStore extends StoreBase {
     );
   }
 
-  getUpdateMonitoringReportEditor(projectId: string, reportId: string, init?: (dto: MonitoringReportDto) => void) {
+  getUpdateMonitoringReportEditor(projectId: ProjectId, reportId: string, init?: (dto: MonitoringReportDto) => void) {
     return this.getEditor(
       "monitoringReport",
       this.getKey(projectId, reportId),
@@ -80,7 +80,7 @@ export class MonitoringReportsStore extends StoreBase {
 
   updateMonitoringReportEditor(
     saving: boolean,
-    projectId: string,
+    projectId: ProjectId,
     dto: MonitoringReportDto,
     submit?: boolean,
     onComplete?: (dto: MonitoringReportDto) => void,
@@ -125,7 +125,13 @@ export class MonitoringReportsStore extends StoreBase {
     );
   }
 
-  deleteReport(projectId: string, reportId: string, dto: MonitoringReportDto, message: string, onComplete: () => void) {
+  deleteReport(
+    projectId: ProjectId,
+    reportId: string,
+    dto: MonitoringReportDto,
+    message: string,
+    onComplete: () => void,
+  ) {
     this.deleteEditor(
       "monitoringReport",
       this.getKey(projectId, reportId),
@@ -139,7 +145,7 @@ export class MonitoringReportsStore extends StoreBase {
     );
   }
 
-  private getValidator(projectId: string, dto: MonitoringReportDto, submit: boolean, showErrors: boolean) {
+  private getValidator(projectId: ProjectId, dto: MonitoringReportDto, submit: boolean, showErrors: boolean) {
     const combined = Pending.combine({
       questions: this.getMonitoringReportQuestions(),
       maxPeriodId: this.projectStore.getById(projectId).then(x => x.periodId),

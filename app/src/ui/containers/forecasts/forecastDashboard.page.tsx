@@ -7,7 +7,7 @@ import { useContent } from "@ui/hooks";
 import { AccessibilityText } from "@ui/components/renderers";
 
 interface Params {
-  projectId: string;
+  projectId: ProjectId;
 }
 
 const Table = createTypedTable<Partner>();

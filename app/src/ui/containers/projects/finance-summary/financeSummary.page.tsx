@@ -15,8 +15,8 @@ import {
 } from "@ui/components";
 
 type Props = {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 };
 
 const FinanceSummaryPage = (props: Props & BaseProps) => {

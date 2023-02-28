@@ -16,8 +16,8 @@ import { AwardRateOverrideType } from "@framework/constants/awardRateOverride";
 
 export class GetClaimsTotalCosts extends QueryBase<TotalCosts> {
   constructor(
-    private readonly partnerId: string,
-    private readonly projectId: string,
+    private readonly partnerId: PartnerId,
+    private readonly projectId: ProjectId,
     private readonly periodId: number,
   ) {
     super();

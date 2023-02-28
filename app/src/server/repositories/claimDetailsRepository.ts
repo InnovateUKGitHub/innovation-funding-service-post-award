@@ -7,7 +7,7 @@ import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase"
 export interface ISalesforceClaimDetails {
   Id: string;
   Acc_ProjectParticipant__r: {
-    Id: string;
+    Id: PartnerId;
     Acc_ProjectId__c: string;
   };
   Acc_CostCategory__c: string;
@@ -22,9 +22,9 @@ export interface ISalesforceClaimDetails {
 }
 
 export interface IClaimDetailsRepository {
-  getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
+  getAllByPartnerForPeriod(partnerId: PartnerId, periodId: number): Promise<ISalesforceClaimDetails[]>;
   get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails | null>;
-  getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
+  getAllByPartner(partnerId: PartnerId): Promise<ISalesforceClaimDetails[]>;
   update(item: Updatable<ISalesforceClaimDetails>): Promise<boolean>;
   insert(insert: Partial<ISalesforceClaimDetails>): Promise<string>;
 }
@@ -64,7 +64,7 @@ export class ClaimDetailsRepository
     "Owner.Email",
   ];
 
-  getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
+  getAllByPartnerForPeriod(partnerId: PartnerId, periodId: number): Promise<ISalesforceClaimDetails[]> {
     const filter = `
       Acc_ProjectParticipant__c = '${sss(partnerId)}'
       AND RecordType.Name = '${sss(this.recordType)}'
@@ -88,7 +88,7 @@ export class ClaimDetailsRepository
     return super.filterOne(filter);
   }
 
-  getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]> {
+  getAllByPartner(partnerId: PartnerId): Promise<ISalesforceClaimDetails[]> {
     const filter = `
       Acc_ProjectParticipant__c = '${sss(partnerId)}'
       AND RecordType.Name = '${sss(this.recordType)}'

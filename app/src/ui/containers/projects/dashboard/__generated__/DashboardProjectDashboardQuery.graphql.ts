@@ -109,7 +109,7 @@ export type DashboardProjectDashboardQuery$data = {
                 readonly partnerRoles: ReadonlyArray<{
                   readonly isFc: boolean;
                   readonly isPm: boolean;
-                  readonly partnerId: string;
+                  readonly partnerId: PartnerId;
                 }>;
               };
             } | null;

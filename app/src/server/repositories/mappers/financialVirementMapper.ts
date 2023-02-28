@@ -30,7 +30,7 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<
     return {
       id: partnerItem.Id,
       pcrItemId: partnerItem.Acc_ProjectChangeRequest__c,
-      partnerId: partnerItem.Acc_ProjectParticipant__c,
+      partnerId: partnerItem.Acc_ProjectParticipant__c as PartnerId,
       newFundingLevel: partnerItem.Acc_NewAwardRate__c,
       originalFundingLevel: partnerItem.Acc_CurrentAwardRate__c,
       newEligibleCosts: partnerItem.Acc_NewTotalEligibleCosts__c,

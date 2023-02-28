@@ -29,13 +29,13 @@ export interface ISession {
 
 export type ApiParams<T = undefined> = T extends undefined ? ISession : Merge<T, ISession>;
 
-interface RequestUrlParams {
+interface UrlParamsBase {
   [key: string]: string;
 }
 
-interface RequestQueryParams {
-  [key: string]: string;
-}
+interface RequestUrlParams extends UrlParamsBase, NominalTypes {}
+
+interface RequestQueryParams extends UrlParamsBase, NominalTypes {}
 
 type GetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body?: any) => T;
 type InnerGetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body: any, req: Express.Request) => T;
@@ -171,7 +171,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
 
       const p = Object.assign(
         { user },
-        getParams(req.params || {}, (req.query as RequestQueryParams) || {}, req.body || {}, req),
+        getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}, req),
       ) as ApiParams<TParams>;
 
       run(p)
@@ -194,7 +194,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       const user: ISessionUser = req.session?.user;
       const p = Object.assign(
         { user },
-        getParams(req.params || {}, (req.query as RequestQueryParams) || {}, req.body || {}),
+        getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}),
       ) as ApiParams<TParams>;
       run(p)
         .then(result => {

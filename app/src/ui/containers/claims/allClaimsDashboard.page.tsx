@@ -21,7 +21,7 @@ import { DateTime } from "luxon";
 import { ClaimsDashboardGuidance } from "./components";
 
 export interface AllClaimsDashboardParams {
-  projectId: string;
+  projectId: ProjectId;
 }
 
 interface AllClaimsDashboardData {

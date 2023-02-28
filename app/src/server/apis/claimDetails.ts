@@ -7,7 +7,7 @@ import { ClaimDetailKey } from "@framework/types";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 
 export interface IClaimDetailsApi {
-  getAllByPartner: (params: ApiParams<{ partnerId: string }>) => Promise<ClaimDetailsSummaryDto[]>;
+  getAllByPartner: (params: ApiParams<{ partnerId: PartnerId }>) => Promise<ClaimDetailsSummaryDto[]>;
   get: (params: ApiParams<ClaimDetailKey>) => Promise<ClaimDetailsDto>;
   saveClaimDetails: (params: ApiParams<ClaimDetailKey & { claimDetails: ClaimDetailsDto }>) => Promise<ClaimDetailsDto>;
 }
@@ -47,7 +47,7 @@ class Controller
     );
   }
 
-  public async getAllByPartner(params: ApiParams<{ partnerId: string }>) {
+  public async getAllByPartner(params: ApiParams<{ partnerId: PartnerId }>) {
     const { partnerId } = params;
     const query = new GetAllClaimDetailsByPartner(partnerId);
     return contextProvider.start(params).runQuery(query);

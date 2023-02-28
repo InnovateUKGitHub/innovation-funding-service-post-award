@@ -38,7 +38,7 @@ const InnerContainer = (
             options={partnerOptions}
             inline={false}
             value={() => selectedPartnerOption}
-            update={(x, value) => (x.partnerId = value && value.id)}
+            update={(x, value) => (x.partnerId = value && (value.id as PartnerId))}
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>

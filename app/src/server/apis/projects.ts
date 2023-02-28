@@ -13,16 +13,16 @@ class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
     if (!configuration.sso.enabled) {
       this.getItems("/allAsDeveloper", () => ({}), this.getAllAsDeveloper);
     }
-    this.getCustom("/project-active/:projectId", p => ({ projectId: p.projectId }), this.isProjectActive);
-    this.getItem("/:projectId", p => ({ projectId: p.projectId }), this.get);
+    this.getCustom("/project-active/:projectId", p => ({ projectId: p.projectId as ProjectId }), this.isProjectActive);
+    this.getItem("/:projectId", p => ({ projectId: p.projectId as ProjectId }), this.get);
   }
 
-  public async isProjectActive(params: ApiParams<{ projectId: string }>): Promise<ProjectStatusDto> {
+  public async isProjectActive(params: ApiParams<{ projectId: ProjectId }>): Promise<ProjectStatusDto> {
     const query = new GetProjectStatusQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ projectId: string }>): Promise<ProjectDto> {
+  public async get(params: ApiParams<{ projectId: ProjectId }>): Promise<ProjectDto> {
     const query = new GetByIdQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }

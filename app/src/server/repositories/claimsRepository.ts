@@ -6,7 +6,7 @@ import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase"
 export interface ISalesforceClaim {
   Id: string;
   Acc_ProjectParticipant__r: {
-    Id: string;
+    Id: PartnerId;
     Acc_OverheadRate__c: number;
     Acc_ProjectRole__c: string;
     Acc_ProjectId__c: string;
@@ -36,11 +36,11 @@ export interface ISalesforceClaim {
 }
 
 export interface IClaimRepository {
-  getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]>;
-  getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
-  getAllIncludingNewByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
-  get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
-  getByProjectId(projectId: string, partnerId: string, periodId: number): Promise<ISalesforceClaim>;
+  getAllByProjectId(projectId: ProjectId): Promise<ISalesforceClaim[]>;
+  getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceClaim[]>;
+  getAllIncludingNewByPartnerId(partnerId: PartnerId): Promise<ISalesforceClaim[]>;
+  get(partnerId: PartnerId, periodId: number): Promise<ISalesforceClaim>;
+  getByProjectId(projectId: ProjectId, partnerId: PartnerId, periodId: number): Promise<ISalesforceClaim>;
   getClaimStatuses(): Promise<IPicklistEntry[]>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
@@ -92,7 +92,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     `;
   }
 
-  public getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
+  public getAllByProjectId(projectId: ProjectId): Promise<ISalesforceClaim[]> {
     const filter =
       this.getStandardFilter() +
       `
@@ -102,7 +102,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     return super.where(filter);
   }
 
-  public getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
+  public getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceClaim[]> {
     const filter =
       this.getStandardFilter() +
       `
@@ -112,7 +112,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     return super.where(filter);
   }
 
-  public getAllIncludingNewByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
+  public getAllIncludingNewByPartnerId(partnerId: PartnerId): Promise<ISalesforceClaim[]> {
     const filter = `
       RecordType.Name = '${sss(this.recordType)}'
       AND Acc_ClaimStatus__c != 'Not used'
@@ -122,7 +122,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     return super.where(filter);
   }
 
-  public async get(partnerId: string, periodId: number) {
+  public async get(partnerId: PartnerId, periodId: number) {
     const filter =
       this.getStandardFilter() +
       `
@@ -139,7 +139,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     return claim;
   }
 
-  public async getByProjectId(projectId: string, partnerId: string, periodId: number) {
+  public async getByProjectId(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
     const filter =
       this.getStandardFilter() +
       `

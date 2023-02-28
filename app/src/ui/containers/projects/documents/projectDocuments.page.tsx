@@ -14,7 +14,7 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploa
 import { ProjectDocumentsPageLoader } from "./projectDocumentsPageLoader";
 
 export interface ProjectDocumentPageParams {
-  projectId: string;
+  projectId: ProjectId;
 }
 export interface ProjectDocumentData {
   project: Pending<ProjectDto>;

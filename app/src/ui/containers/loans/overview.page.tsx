@@ -6,7 +6,7 @@ import { LoansTable } from "./components/LoansTable";
 import { useLoanOverviewData } from "./loanOverview.logic";
 
 interface LoanOverviewParams {
-  projectId: string;
+  projectId: ProjectId;
 }
 
 const LoansOverviewPage = (props: BaseProps & LoanOverviewParams) => {

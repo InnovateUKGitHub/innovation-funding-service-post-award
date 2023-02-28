@@ -16,8 +16,8 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploa
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ClaimDetailDocumentsPageParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   costCategoryId: string;
   periodId: number;
 }

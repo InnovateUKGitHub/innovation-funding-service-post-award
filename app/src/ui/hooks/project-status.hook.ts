@@ -29,7 +29,7 @@ export function useProjectStatus(): ProjectStatusContext {
  *
  * We avoid useEffect/useCallback since this does not run on the server
  */
-export function useProjectStatusCheck(projectId: string | undefined, overrideAccess: boolean): ProjectStatusContext {
+export function useProjectStatusCheck(projectId: ProjectId | undefined, overrideAccess: boolean): ProjectStatusContext {
   const stores = useStores();
 
   if (!projectId) return initialProjectStatusState;

@@ -9,7 +9,7 @@ import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { LoanStatus } from "@framework/entities";
 
 export class UpdateLoanCommand extends CommandBase<boolean> {
-  constructor(private readonly projectId: string, private readonly loanId: string, private readonly loan: LoanDto) {
+  constructor(private readonly projectId: ProjectId, private readonly loanId: string, private readonly loan: LoanDto) {
     super();
   }
 

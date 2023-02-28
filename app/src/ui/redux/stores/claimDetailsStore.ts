@@ -5,25 +5,25 @@ import { ClaimDetailsDto } from "@framework/dtos";
 import { StoreBase } from "./storeBase";
 
 export class ClaimsDetailsStore extends StoreBase {
-  private getKey(partnerId: string, periodId: number, costCategoryId: string) {
+  private getKey(partnerId: PartnerId, periodId: number, costCategoryId: string) {
     return storeKeys.getClaimDetailKey(partnerId, periodId, costCategoryId);
   }
 
-  public getAllByPartner(partnerId: string) {
+  public getAllByPartner(partnerId: PartnerId) {
     return this.getData("claimDetails", storeKeys.getPartnerKey(partnerId), p =>
       apiClient.claimDetails.getAllByPartner({ partnerId, ...p }),
     );
   }
 
-  public get(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
+  public get(projectId: ProjectId, partnerId: PartnerId, periodId: number, costCategoryId: string) {
     return this.getData("claimDetail", this.getKey(partnerId, periodId, costCategoryId), p =>
       apiClient.claimDetails.get({ projectId, partnerId, periodId, costCategoryId, ...p }),
     );
   }
 
   public getClaimDetailsEditor(
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     periodId: number,
     costCategoryId: string,
     init?: (dto: ClaimDetailsDto) => void,
@@ -39,8 +39,8 @@ export class ClaimsDetailsStore extends StoreBase {
 
   public updateClaimDetailsEditor(
     saving: boolean,
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     periodId: number,
     costCategoryId: string,
     dto: ClaimDetailsDto,

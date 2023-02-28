@@ -22,8 +22,8 @@ import { GetProjectStatusQuery } from "../projects";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
-    private readonly projectId: string,
-    private readonly partnerId: string,
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
     private readonly forecasts: ForecastDetailsDTO[],
     private readonly isSubmitting: boolean,
   ) {

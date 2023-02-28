@@ -10,7 +10,7 @@ import { GetAvailableItemTypesQuery } from "./getAvailableItemTypesQuery";
 import { GetAllPCRsQuery } from "./getAllPCRsQuery";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
-  constructor(private readonly projectId: string, private readonly projectChangeRequestDto: PCRDto) {
+  constructor(private readonly projectId: ProjectId, private readonly projectChangeRequestDto: PCRDto) {
     super();
   }
 

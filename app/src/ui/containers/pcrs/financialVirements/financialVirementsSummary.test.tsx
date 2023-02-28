@@ -299,12 +299,12 @@ describe("<FinancialVirementSummary />", () => {
     },
   } as unknown as TestBedStore;
 
-  // Note: We omit "children" as this is context provider. "virement" is ommited as we add this in each test case below, see setup()
+  // Note: We omit "children" as this is context provider. "virement" is omitted as we add this in each test case below, see setup()
   const stubPcrSummaryProviderProps: Omit<PcrSummaryProviderProps, "children" | "virement"> = {
     type: PCRItemType.MultiplePartnerFinancialVirement,
     partners: [
       {
-        id: "a0D0C000001JvgGUAS",
+        id: "a0D0C000001JvgGUAS" as PartnerId,
         name: "Test account 1",
         accountId: "0010C00000AtnO8QAJ",
         type: "Business",
@@ -316,7 +316,7 @@ describe("<FinancialVirementSummary />", () => {
         competitionName: "Competition 1",
         isLead: true,
         projectRoleName: "Project Lead",
-        projectId: "a0E0C000002CfsoUAC",
+        projectId: "a0E0C000002CfsoUAC" as ProjectId,
         totalParticipantGrant: 248000,
         totalParticipantCostsClaimed: 37000,
         percentageParticipantCostsClaimed: 14.919354838709678,
@@ -383,7 +383,7 @@ describe("<FinancialVirementSummary />", () => {
         isNonFunded: false,
       },
       {
-        id: "a0D0C000001JvgHUAS",
+        id: "a0D0C000001JvgHUAS" as PartnerId,
         name: "Test account 1b",
         accountId: "0010C00000AtnO9QAJ",
         type: "Business",
@@ -395,7 +395,7 @@ describe("<FinancialVirementSummary />", () => {
         competitionName: "Competition 1",
         isLead: false,
         projectRoleName: "Collaborator",
-        projectId: "a0E0C000002CfsoUAC",
+        projectId: "a0E0C000002CfsoUAC" as ProjectId,
         totalParticipantGrant: 248000,
         totalParticipantCostsClaimed: 37000,
         percentageParticipantCostsClaimed: 14.919354838709678,
@@ -472,10 +472,10 @@ describe("<FinancialVirementSummary />", () => {
       ...stubPcrSummaryProviderProps,
       virement: grantVirement,
     };
-
+    const projectId = "stub-id" as ProjectId;
     return render(
       <TestBed stores={stubStore}>
-        <ProjectParticipantProvider projectId="stub-id">
+        <ProjectParticipantProvider projectId={projectId}>
           <PcrSummaryProvider {...summaryProviderProps}>
             <FinancialVirementSummary {...requiredProps} mode={mode} />
           </PcrSummaryProvider>
@@ -506,10 +506,10 @@ describe("<FinancialVirementSummary />", () => {
           newRemainingCosts: 422000,
           newRemainingGrant: 211000,
           newFundingLevel: 50,
-          currentPartnerId: "undefined",
+          currentPartnerId: "undefined" as PartnerId,
           partners: [
             {
-              partnerId: "a0D0C000001JvgGUAS",
+              partnerId: "a0D0C000001JvgGUAS" as PartnerId,
               costsClaimedToDate: 37000,
               originalEligibleCosts: 248000,
               originalRemainingCosts: 211000,
@@ -600,7 +600,7 @@ describe("<FinancialVirementSummary />", () => {
               ],
             },
             {
-              partnerId: "a0D0C000001JvgHUAS",
+              partnerId: "a0D0C000001JvgHUAS" as PartnerId,
               costsClaimedToDate: 37000,
               originalEligibleCosts: 248000,
               originalRemainingCosts: 211000,
@@ -719,7 +719,7 @@ describe("<FinancialVirementSummary />", () => {
           newFundingLevel: 50,
           partners: [
             {
-              partnerId: "a0D0C000001JvgGUAS",
+              partnerId: "a0D0C000001JvgGUAS" as PartnerId,
               costsClaimedToDate: 37000,
               originalEligibleCosts: 248000,
               originalRemainingCosts: 211000,
@@ -810,7 +810,7 @@ describe("<FinancialVirementSummary />", () => {
               ],
             },
             {
-              partnerId: "a0D0C000001JvgHUAS",
+              partnerId: "a0D0C000001JvgHUAS" as PartnerId,
               costsClaimedToDate: 37000,
               originalEligibleCosts: 248000,
               originalRemainingCosts: 211000,
@@ -928,7 +928,7 @@ describe("<FinancialVirementSummary />", () => {
           newFundingLevel: 50,
           partners: [
             {
-              partnerId: "a0D0C000001JvgGUAS",
+              partnerId: "a0D0C000001JvgGUAS" as PartnerId,
               costsClaimedToDate: 37000,
               originalEligibleCosts: 248000,
               originalRemainingCosts: 211000,
@@ -1019,7 +1019,7 @@ describe("<FinancialVirementSummary />", () => {
               ],
             },
             {
-              partnerId: "a0D0C000001JvgHUAS",
+              partnerId: "a0D0C000001JvgHUAS" as PartnerId,
               costsClaimedToDate: 37000,
               originalEligibleCosts: 248000,
               originalRemainingCosts: 211000,

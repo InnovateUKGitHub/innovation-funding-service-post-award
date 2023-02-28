@@ -16,7 +16,7 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
     const comments = item.Loan_UserComments__c || "";
 
     return {
-      id: item.Id,
+      id: item.Id as LoanId,
       status: LoanMapper.loanStatusFromSfMap(item.Loan_DrawdownStatus__c),
       period: item.Acc_PeriodNumber__c,
       requestDate,

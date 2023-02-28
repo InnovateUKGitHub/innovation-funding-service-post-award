@@ -29,7 +29,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
 
   it("returns empty array if no claim detail", async () => {
     const context = new TestContext();
-    const query = new GetClaimDetailDocumentsQuery("", "", 1, "");
+    const query = new GetClaimDetailDocumentsQuery("" as ProjectId, "" as PartnerId, 1, "");
     const result = await context.runQuery(query);
 
     expect(result).toBeInstanceOf(Array);
@@ -56,7 +56,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
       return { context, query, project, claimDto };
     };
 
-    test("accessControl - Finance Contect can get documents for their claim", async () => {
+    test("accessControl - Finance Contact can get documents for their claim", async () => {
       const { context, query, project, claimDto } = setupAccessControlContext();
 
       const auth = new Authorisation({
@@ -69,7 +69,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
-    test("accessControl - Finance Contect cannot get documents for other partners claim", async () => {
+    test("accessControl - Finance Contact cannot get documents for other partners claim", async () => {
       const { context, query, project } = setupAccessControlContext();
 
       const partner2 = context.testData.createPartner(project);

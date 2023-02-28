@@ -41,11 +41,11 @@ const PCRsDashboardContainer = (props: BaseProps) => {
           caption={`${project?.Acc_ProjectNumber__c?.value} : ${project?.Acc_ProjectTitle__c?.value}`}
         />
       }
-      backLink={<ProjectBackLink routes={props.routes} projectId={project.Id} />}
+      backLink={<ProjectBackLink routes={props.routes} projectId={project.Id as ProjectId} />}
     >
       <PCRDashboardTable active qa="pcrs-active" collated={collated} project={project} routes={props.routes} />
       {project.isActive && isPm && (
-        <Link route={props.routes.pcrCreate.getLink({ projectId: project.Id })} className="govuk-button">
+        <Link route={props.routes.pcrCreate.getLink({ projectId: project.Id as ProjectId })} className="govuk-button">
           {getContent(x => x.pages.pcrsDashboard.create)}
         </Link>
       )}

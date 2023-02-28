@@ -11,7 +11,7 @@ import { SalesforceBaseMapper } from "./salesforceMapperBase";
 export class SalesforcePartnerBankDetailsMapper extends SalesforceBaseMapper<ISalesforcePartner, PartnerBankDetails> {
   public map(item: ISalesforceBankPartnerDetails): PartnerBankDetails {
     return {
-      id: item.Id,
+      id: item.Id as PartnerId,
       accountId: (item.Acc_AccountId__r && item.Acc_AccountId__r.Id) || "",
       accountPostcode: item.Acc_AddressPostcode__c,
       accountStreet: item.Acc_AddressStreet__c,

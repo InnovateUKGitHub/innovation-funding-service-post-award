@@ -22,7 +22,7 @@ describe("mapToProjectDto", () => {
     const periodEndDate = DateTime.fromFormat("2009-03-31", "yyyy-MM-dd");
 
     const expected: ProjectDto = {
-      id: "Expected Id",
+      id: "Expected_Id" as ProjectId,
       title: "Expected title",
       startDate: projectStartDate.set(midnight).toJSDate(),
       endDate: projectEndDate.set(midnight).toJSDate(),

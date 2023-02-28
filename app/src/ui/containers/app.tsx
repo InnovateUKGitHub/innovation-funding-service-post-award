@@ -121,9 +121,9 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
               <SuspensePageLoader>
                 {hasAccess ? (
-                  <ProjectParticipantProvider projectId={routePathParams.projectId as string}>
+                  <ProjectParticipantProvider projectId={routePathParams.projectId as ProjectId}>
                     <ProjectStatusCheck
-                      projectId={routePathParams.projectId as string}
+                      projectId={routePathParams.projectId as ProjectId}
                       overrideAccess={!!currentRoute.allowRouteInActiveAccess}
                     >
                       <PageContainer {...baseProps} />

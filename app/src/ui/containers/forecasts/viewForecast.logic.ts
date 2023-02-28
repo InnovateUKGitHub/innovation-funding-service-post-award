@@ -74,7 +74,7 @@ export type Data = {
 
 const defaultRole = { isPm: false, isMo: false, isFc: false };
 
-export const useViewForecastData = (projectId: string, partnerId: string): Data => {
+export const useViewForecastData = (projectId: ProjectId, partnerId: PartnerId): Data => {
   const data = useLazyLoadQuery<ViewForecastQuery>(
     viewForecastQuery,
     {

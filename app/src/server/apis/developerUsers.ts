@@ -5,7 +5,7 @@ import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IDeveloperUsersApi {
-  getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<DeveloperUser[]>;
+  getAllByProjectId: (params: ApiParams<{ projectId: ProjectId }>) => Promise<DeveloperUser[]>;
 }
 
 class Controller extends ControllerBase<DeveloperUser> implements IDeveloperUsersApi {
@@ -21,7 +21,7 @@ class Controller extends ControllerBase<DeveloperUser> implements IDeveloperUser
     }
   }
 
-  public async getAllByProjectId(params: ApiParams<{ projectId: string }>) {
+  public async getAllByProjectId(params: ApiParams<{ projectId: ProjectId }>) {
     const query = new GetAllUsersForProjectQuery(params.projectId);
     return contextProvider.start(params).asSystemUser().runQuery(query);
   }

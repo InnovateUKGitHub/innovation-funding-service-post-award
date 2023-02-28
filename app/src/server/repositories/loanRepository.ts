@@ -43,7 +43,7 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
     return super.updateItem(loanToUpdate);
   }
 
-  public async getAll(projectId: string): Promise<LoanDto[]> {
+  public async getAll(projectId: ProjectId): Promise<LoanDto[]> {
     const projectWhereQuery = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(
       projectId,
     )}' ORDER BY Acc_PeriodNumber__c ASC`;
@@ -51,7 +51,7 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
     return super.where(projectWhereQuery);
   }
 
-  public async get(projectId: string, options: { loanId?: string; periodId?: number }): Promise<LoanDto> {
+  public async get(projectId: ProjectId, options: { loanId?: string; periodId?: number }): Promise<LoanDto> {
     let whereClause = "";
 
     if (options.periodId) whereClause = `WHERE Acc_PeriodNumber__c = ${sss(options.periodId)}`;
@@ -63,7 +63,7 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
     return new LoanMapper().mapWithTotals(loanItem);
   }
 
-  public getLoanQuery(projectId: string, whereClause: string): string {
+  public getLoanQuery(projectId: ProjectId, whereClause: string): string {
     const sqlLoanColumns = this.salesforceFieldNames.map(sss).join(", ");
     const subRequest = `SELECT ${sqlLoanColumns} FROM ${sss(this.salesforcePrePaymentTable)} ${whereClause}`;
     const totalCostColumns = `Id, Acc_TotalParticipantCosts__c, Acc_TotalGrantApproved__c, (${subRequest})`;

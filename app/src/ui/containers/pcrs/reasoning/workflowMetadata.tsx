@@ -7,7 +7,7 @@ import { BaseProps } from "@ui/containers/containerBase";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export interface ReasoningStepProps extends BaseProps {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;

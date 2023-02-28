@@ -3,7 +3,7 @@ import { QueryBase } from "../common";
 import { ISalesforceProjectContact } from "../../repositories/projectContactsRepository";
 
 export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 
@@ -26,7 +26,7 @@ export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
       roleName: x.RoleName,
       email: x.Acc_EmailOfSFContact__c,
       accountId: x.Acc_AccountId__c,
-      projectId: x.Acc_ProjectId__c,
+      projectId: x.Acc_ProjectId__c as ProjectId,
     };
   }
 }

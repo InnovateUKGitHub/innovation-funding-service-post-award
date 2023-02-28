@@ -4,7 +4,7 @@ import { ClaimDto } from "@framework/dtos";
 export default (mod?: Partial<ClaimDto>): ClaimDto => {
   const template: ClaimDto = {
     id: "",
-    partnerId: "",
+    partnerId: "" as PartnerId,
     allowIarEdit: false,
     approvedDate: null,
     comments: null,

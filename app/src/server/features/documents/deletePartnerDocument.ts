@@ -3,8 +3,8 @@ import { CommandBase } from "@server/features/common";
 
 export class DeletePartnerDocumentCommand extends CommandBase<void> {
   constructor(
-    private readonly projectId: string,
-    private readonly partnerId: string,
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
     private readonly documentId: string,
   ) {
     super();

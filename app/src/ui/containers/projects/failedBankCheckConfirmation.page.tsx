@@ -8,12 +8,12 @@ import * as ACC from "@ui/components";
 import { useContent } from "@ui/hooks";
 
 export interface FailedBankCheckConfirmationParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 interface FailedBankCheckConfirmationProps extends BaseProps, FailedBankCheckConfirmationParams {
-  projectId: string;
+  projectId: ProjectId;
   project: Pending<ProjectDto>;
 }
 

@@ -25,10 +25,10 @@ export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<string>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
-  getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]>;
-  getById(projectId: string, id: string): Promise<ProjectChangeRequestEntity>;
+  getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
+  getById(projectId: ProjectId, id: string): Promise<ProjectChangeRequestEntity>;
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
-  isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean>;
+  isExisting(projectId: ProjectId, projectChangeRequestId: string): Promise<boolean>;
   delete(pcr: ProjectChangeRequestEntity): Promise<void>;
   getPcrChangeStatuses(): Promise<IPicklistEntry[]>;
   getProjectRoles(): Promise<IPicklistEntry[]>;
@@ -269,14 +269,14 @@ export class ProjectChangeRequestRepository
     "Loan_RepaymentPeriodChange__c",
   ];
 
-  async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
+  async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     const data = await super.where(`Acc_Project__c='${sss(projectId)}'`);
     const mapper = new SalesforcePCRMapper(headerRecordTypeId);
     return mapper.map(data);
   }
 
-  async getById(projectId: string, id: string): Promise<ProjectChangeRequestEntity> {
+  async getById(projectId: ProjectId, id: string): Promise<ProjectChangeRequestEntity> {
     const data = await super.where(
       `Acc_Project__c='${sss(projectId)}' AND (Id = '${sss(id)}' OR Acc_RequestHeader__c = '${sss(id)}')`,
     );
@@ -291,7 +291,7 @@ export class ProjectChangeRequestRepository
     return mapped;
   }
 
-  async isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean> {
+  async isExisting(projectId: ProjectId, projectChangeRequestId: string): Promise<boolean> {
     const data = await super.filterOne(`Acc_Project__c='${sss(projectId)}' AND Id = '${sss(projectChangeRequestId)}'`);
 
     return !!data;

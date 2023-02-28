@@ -8,10 +8,10 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
     const competitionName = item.Acc_ProjectId__r?.Acc_CompetitionId__r?.Name ?? undefined;
 
     return {
-      id: item.Id,
+      id: item.Id as PartnerId,
       accountId: (item.Acc_AccountId__r && item.Acc_AccountId__r.Id) || "",
       name: (item.Acc_AccountId__r && item.Acc_AccountId__r.Name) || "",
-      projectId: (item.Acc_ProjectId__r && item.Acc_ProjectId__r.Id) || "",
+      projectId: ((item.Acc_ProjectId__r && item.Acc_ProjectId__r.Id) || "") as ProjectId,
       competitionType,
       competitionName,
       organisationType: item.Acc_OrganisationType__c,

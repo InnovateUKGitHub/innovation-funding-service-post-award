@@ -58,8 +58,8 @@ export type Data = {
 const defaultRole = { isPm: false, isMo: false, isFc: false };
 
 export const useUpdateForecastData = (
-  projectId: string,
-  partnerId: string,
+  projectId: ProjectId,
+  partnerId: PartnerId,
   refreshedQueryOptions: { fetchKey: number; fetchPolicy: "store-only" } | undefined,
 ): Data => {
   const data = useLazyLoadQuery<UpdateForecastQuery>(

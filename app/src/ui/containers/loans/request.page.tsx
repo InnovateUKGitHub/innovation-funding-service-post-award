@@ -15,12 +15,12 @@ import { LoanRequestTable } from "./components/LoanTable";
 import { Content } from "@ui/components";
 
 export interface LoansRequestParams {
-  projectId: string;
-  loanId: string;
+  projectId: ProjectId;
+  loanId: LoanId;
 }
 
 interface LoansRequestPageProps extends LoansRequestParams, BaseProps {
-  projectId: string;
+  projectId: ProjectId;
   loan: Required<LoanDto>;
   documents: DocumentSummaryDto[];
   loanEditor: IEditorStore<LoanDto, LoanDtoValidator>;

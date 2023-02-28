@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 
 import { scrollToTheTopInstantly } from "@framework/util";
-import { Params } from "@ui/helpers/make-url";
 import { useStores } from "@ui/redux";
 
 /**
@@ -9,7 +8,7 @@ import { useStores } from "@ui/redux";
  *
  * Notice this is not invoked within any react hooks, these DO NOT RUN on SSR (Server Side Request)
  */
-export function useAppMount(params: Params): void {
+export function useAppMount<T extends { projectId?: ProjectId | undefined | null }>(params: T): void {
   const { projectId } = params;
   const stores = useStores();
 

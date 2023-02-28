@@ -19,7 +19,7 @@ interface PCRBaseDto {
   lastUpdated: Date;
   status: PCRStatus;
   statusName: string;
-  projectId: string;
+  projectId: ProjectId;
 }
 
 export interface PCRItemSummaryDto {
@@ -95,14 +95,14 @@ export interface PCRItemForProjectSuspensionDto extends PCRItemBaseDto {
 export interface PCRItemForAccountNameChangeDto extends PCRItemBaseDto {
   type: PCRItemType.AccountNameChange;
   accountName: string | null;
-  partnerId: string | null;
+  partnerId: PartnerId | null;
   partnerNameSnapshot: string | null;
 }
 
 export interface PCRItemForPartnerWithdrawalDto extends PCRItemBaseDto {
   type: PCRItemType.PartnerWithdrawal;
   partnerNameSnapshot: string | null;
-  partnerId: string | null;
+  partnerId: PartnerId | null;
   removalPeriod: number | null;
 }
 

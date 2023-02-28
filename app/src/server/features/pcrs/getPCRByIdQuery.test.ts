@@ -343,7 +343,7 @@ describe("GetPCRByIdQuery", () => {
 
     const pcr = context.testData.createPCR();
 
-    const query = new GetPCRByIdQuery(pcr.projectId + "_", pcr.id);
+    const query = new GetPCRByIdQuery((pcr.projectId + "_") as ProjectId, pcr.id);
     await expect(context.runQuery(query)).rejects.toThrowError();
   });
 });

@@ -11,7 +11,7 @@ import * as ACC from "../../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
   step?: number;
 }

@@ -4,7 +4,7 @@ import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 
 export class GetByIdQuery extends QueryBase<PartnerDto> {
-  constructor(private readonly partnerId: string) {
+  constructor(private readonly partnerId: PartnerId) {
     super();
   }
 

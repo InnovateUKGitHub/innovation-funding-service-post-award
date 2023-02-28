@@ -53,7 +53,7 @@ import {
 import { IRoutes } from "@ui/routing";
 
 export interface PcrAddSpendProfileCostParams {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
   itemId: string;
   costCategoryId: string;
@@ -281,7 +281,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 }
 
-const onSave = (stores: IStores, dto: PCRDto, projectId: string, link: ILinkInfo, navigate: NavigateFunction) => {
+const onSave = (stores: IStores, dto: PCRDto, projectId: ProjectId, link: ILinkInfo, navigate: NavigateFunction) => {
   stores.messages.clearMessages();
   stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, undefined, () => navigate(link.path));
 };

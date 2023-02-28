@@ -7,11 +7,11 @@ import { GetAllForProjectQuery, GetAllQuery, GetByIdQuery } from "../features/pa
 
 export interface IPartnersApi {
   getAll: (params: ApiParams) => Promise<PartnerDto[]>;
-  getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<PartnerDto[]>;
-  get: (params: ApiParams<{ partnerId: string }>) => Promise<PartnerDto>;
+  getAllByProjectId: (params: ApiParams<{ projectId: ProjectId }>) => Promise<PartnerDto[]>;
+  get: (params: ApiParams<{ partnerId: PartnerId }>) => Promise<PartnerDto>;
   updatePartner: (
     params: ApiParams<{
-      partnerId: string;
+      partnerId: PartnerId;
       partnerDto: PartnerDto;
       validateBankDetails?: boolean;
       verifyBankDetails?: boolean;
@@ -23,7 +23,7 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
   constructor() {
     super("partners");
 
-    this.getItems(
+    this.getItems<{ projectId: ProjectId }>(
       "/",
       (p, q) => ({ projectId: q.projectId }),
       p => (p.projectId ? this.getAllByProjectId(p) : this.getAll(p)),
@@ -50,13 +50,13 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAllByProjectId(params: ApiParams<{ projectId: string }>) {
+  public async getAllByProjectId(params: ApiParams<{ projectId: ProjectId }>) {
     const { projectId } = params;
     const query = new GetAllForProjectQuery(projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ partnerId: string }>) {
+  public async get(params: ApiParams<{ partnerId: PartnerId }>) {
     const { partnerId } = params;
     const query = new GetByIdQuery(partnerId);
     return contextProvider.start(params).runQuery(query);
@@ -64,7 +64,7 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
 
   public async updatePartner(
     params: ApiParams<{
-      partnerId: string;
+      partnerId: PartnerId;
       partnerDto: PartnerDto;
       validateBankDetails?: boolean;
       verifyBankDetails?: boolean;

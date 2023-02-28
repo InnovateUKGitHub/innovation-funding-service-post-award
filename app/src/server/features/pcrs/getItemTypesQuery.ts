@@ -42,7 +42,7 @@ You should not increase the overhead percentage rate.
 `;
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
-  constructor(public readonly projectId: string) {
+  constructor(public readonly projectId: ProjectId) {
     super();
   }
 

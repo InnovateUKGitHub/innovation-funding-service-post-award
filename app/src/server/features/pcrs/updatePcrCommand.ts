@@ -14,7 +14,7 @@ import { mapToPcrDto } from "./mapToPCRDto";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly projectChangeRequestId: string,
     private readonly pcr: PCRDto,
   ) {

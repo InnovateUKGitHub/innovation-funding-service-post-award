@@ -5,28 +5,31 @@ import { partnerSummaryData } from "@ui/containers/pcrs/components/PcrSummary/su
 
 describe("partnerSummaryData()", () => {
   const stubFirstVirement = createDto<PartnerVirementsDto>({
-    partnerId: "stub-stubFirstVirement-uid",
+    partnerId: "stub-stubFirstVirement-uid" as PartnerId,
     originalRemainingGrant: 100,
     newRemainingGrant: 90,
   });
 
   const stubSecondVirement = createDto<PartnerVirementsDto>({
-    partnerId: "stub-stubSecondVirement-uid",
+    partnerId: "stub-stubSecondVirement-uid" as PartnerId,
     originalRemainingGrant: 100,
     newRemainingGrant: 105,
   });
+
+  const firstPartnerUid = "stub-firstPartner-uid" as PartnerId;
+  const secondPartnerUid = "stub-secondPartner-uid" as PartnerId;
 
   const stubBaseVirement = createDto<FinancialVirementDto>({ partners: [stubFirstVirement, stubSecondVirement] });
 
   describe("@returns correctly", () => {
     describe("with different partner population", () => {
       test("with one partner with no matching virement", () => {
-        const stubPartnerUid = "stub-secondPartner-uid";
-        const stubPartner = createDto<PartnerDto>({ id: stubPartnerUid });
+        const stubPartner = createDto<PartnerDto>({ id: secondPartnerUid });
         const stubVirementPartner = {
           ...stubFirstVirement,
           partnerId: "I should not match stubPartnerUid :(",
         };
+        // @ts-expect-error string not assignable to PartnerId
         const stubVirement = createDto<FinancialVirementDto>({ partners: [stubVirementPartner] });
 
         const payload = partnerSummaryData({ partners: [stubPartner], virement: stubVirement });
@@ -41,7 +44,6 @@ describe("partnerSummaryData()", () => {
       });
 
       test("with one partner", () => {
-        const firstPartnerUid = "stub-firstPartner-uid";
         const stubFirstPartner = createDto<PartnerDto>({ id: firstPartnerUid });
         const stubVirementPartner = { ...stubFirstVirement, partnerId: firstPartnerUid };
         const stubVirement = createDto<FinancialVirementDto>({ partners: [stubVirementPartner] });
@@ -52,8 +54,6 @@ describe("partnerSummaryData()", () => {
       });
 
       test("with multiple partners", () => {
-        const firstPartnerUid = "stub-firstPartner-uid";
-        const secondPartnerUid = "stub-secondPartner-uid";
         const stubFirstPartner = createDto<PartnerDto>({ id: firstPartnerUid });
         const stubSecondPartner = createDto<PartnerDto>({ id: secondPartnerUid });
 
@@ -76,7 +76,6 @@ describe("partnerSummaryData()", () => {
     describe("with correct values", () => {
       describe("with total partner count", () => {
         test("with one partner", () => {
-          const firstPartnerUid = "stub-firstPartner-uid";
           const stubFirstPartner = createDto<PartnerDto>({ id: firstPartnerUid });
           const stubVirementPartner = createDto<PartnerVirementsDto>({
             partnerId: firstPartnerUid,
@@ -112,7 +111,6 @@ describe("partnerSummaryData()", () => {
         });
 
         test("with multiple partners", () => {
-          const firstPartnerUid = "stub-firstPartner-uid";
           const stubFirstPartner = createDto<PartnerDto>({ id: firstPartnerUid });
           const stubFirstVirementPartner = {
             ...stubFirstVirement,
@@ -121,7 +119,6 @@ describe("partnerSummaryData()", () => {
             originalRemainingGrant: 100,
           };
 
-          const secondPartnerUid = "stub-secondPartner-uid";
           const stubSecondPartner = createDto<PartnerDto>({ id: secondPartnerUid });
           const stubSecondVirementPartner = {
             ...stubFirstVirement,
@@ -173,7 +170,6 @@ describe("partnerSummaryData()", () => {
 
       describe("with newRemainingGrant value", () => {
         test("when matching the originalRemainingGrant", () => {
-          const firstPartnerUid = "stub-firstPartner-uid";
           const stubFirstPartner = createDto<PartnerDto>({ id: firstPartnerUid });
           const stubFirstVirementPartner = {
             ...stubFirstVirement,
@@ -197,7 +193,6 @@ describe("partnerSummaryData()", () => {
         });
 
         test("when lower than originalRemainingGrant", () => {
-          const firstPartnerUid = "stub-firstPartner-uid";
           const stubFirstPartner = createDto<PartnerDto>({ id: firstPartnerUid });
           const stubFirstVirementPartner = {
             ...stubFirstVirement,
@@ -206,7 +201,6 @@ describe("partnerSummaryData()", () => {
             originalRemainingGrant: 100,
           };
 
-          const secondPartnerUid = "stub-secondPartner-uid";
           const stubSecondPartner = createDto<PartnerDto>({ id: secondPartnerUid });
           const stubSecondVirementPartner = {
             ...stubFirstVirement,
@@ -234,7 +228,6 @@ describe("partnerSummaryData()", () => {
         });
 
         test("when higher than originalRemainingGrant", () => {
-          const firstPartnerUid = "stub-firstPartner-uid";
           const stubFirstPartner = createDto<PartnerDto>({ id: firstPartnerUid });
           const stubFirstVirementPartner = {
             ...stubFirstVirement,
@@ -243,7 +236,6 @@ describe("partnerSummaryData()", () => {
             originalRemainingGrant: 100,
           };
 
-          const secondPartnerUid = "stub-secondPartner-uid";
           const stubSecondPartner = createDto<PartnerDto>({ id: secondPartnerUid });
           const stubSecondVirementPartner = {
             ...stubFirstVirement,

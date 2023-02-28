@@ -4,7 +4,7 @@ import { ISalesforceProjectContact } from "../../repositories/projectContactsRep
 import { QueryBase } from "../common";
 
 export class GetAllUsersForProjectQuery extends QueryBase<DeveloperUser[]> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 

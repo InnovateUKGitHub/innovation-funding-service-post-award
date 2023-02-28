@@ -82,17 +82,17 @@ export class Authorisation {
 
   public readonly permissions: { [key: string]: IRoleInfo };
 
-  public forPartner(projectId: string, partnerId: string) {
+  public forPartner(projectId: ProjectId, partnerId: PartnerId) {
     const roles = this.getRolesForPartner(projectId, partnerId);
     return new RoleChecker(roles);
   }
 
-  public forProject(projectId: string) {
+  public forProject(projectId: ProjectId) {
     const roles = this.getRolesForProject(projectId);
     return new RoleChecker(roles);
   }
 
-  private getRolesForPartner(projectId: string, partnerId: string) {
+  private getRolesForPartner(projectId: ProjectId, partnerId: PartnerId) {
     const project = this.permissions && this.permissions[projectId];
     if (project) {
       const partner = project.partnerRoles[partnerId];
@@ -103,7 +103,7 @@ export class Authorisation {
     return ProjectRole.Unknown;
   }
 
-  private getRolesForProject(projectId: string) {
+  private getRolesForProject(projectId: ProjectId) {
     const project = this.permissions && this.permissions[projectId];
     if (project) {
       return project.projectRoles;

@@ -1,5 +1,5 @@
 export interface ClaimKey {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   periodId: number;
 }

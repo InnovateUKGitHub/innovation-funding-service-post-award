@@ -34,7 +34,7 @@ import { Pending } from "@shared/pending";
 import { PcrSummaryProvider, PcrSummaryConsumer } from "./components/PcrSummary";
 
 export interface ProjectChangeRequestPrepareItemParams {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
   itemId: string;
   step?: number;

@@ -4,7 +4,7 @@ import { GetAllForProjectQuery } from "../features/projectContacts/getAllForProj
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IProjectContactsApi {
-  getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<ProjectContactDto[]>;
+  getAllByProjectId: (params: ApiParams<{ projectId: ProjectId }>) => Promise<ProjectContactDto[]>;
 }
 
 class Controller extends ControllerBase<ProjectContactDto> implements IProjectContactsApi {
@@ -18,7 +18,7 @@ class Controller extends ControllerBase<ProjectContactDto> implements IProjectCo
     );
   }
 
-  public async getAllByProjectId(params: ApiParams<{ projectId: string }>) {
+  public async getAllByProjectId(params: ApiParams<{ projectId: ProjectId }>) {
     const query = new GetAllForProjectQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }

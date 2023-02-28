@@ -67,7 +67,7 @@ const UserSwitcherCurrentUser = () => {
   );
 };
 
-const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: string }) => {
+const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: ProjectId }) => {
   const { data, isLoading } = useQuery<UserSwitcherProjectQuery>(userSwitcherProjectQuery, { projectId });
   const { getContent } = useContent();
   const returnLocation = useReturnLocation();
@@ -206,7 +206,7 @@ const UserSwitcherProjectSelector = () => {
   const returnLocation = useReturnLocation();
   const { email: initialEmailState, projectId: initialProjectIdState } = useStores().users.getCurrentUser();
 
-  const [projectId, setProjectId] = useState<string | undefined>(initialProjectIdState);
+  const [projectId, setProjectId] = useState<ProjectId | undefined>(initialProjectIdState as ProjectId);
   const [email, setEmail] = useState<string | undefined>(initialEmailState);
   const isMounted = useMounted();
 
@@ -225,7 +225,7 @@ const UserSwitcherProjectSelector = () => {
   const userFormProps = {
     data: { projectId, email },
     onChange: (e: UserSwitcherFormInputs) => {
-      setProjectId(e.projectId);
+      setProjectId(e.projectId as ProjectId);
       setEmail(e.email);
     },
     action: DeveloperUserSwitcherPage.routePath,

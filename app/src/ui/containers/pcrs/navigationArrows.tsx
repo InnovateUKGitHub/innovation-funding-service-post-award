@@ -33,7 +33,7 @@ export const NavigationArrowsForPCRs = (props: Props) => {
 const getLinkForReviewingItem = (
   routes: IRoutes,
   pcrItem: PCRItemDto,
-  projectId: string,
+  projectId: ProjectId,
   pcrId: string,
   allowReasoningLink: boolean,
 ) => {
@@ -54,7 +54,7 @@ const getLinkForReviewingItem = (
 const getLinkForViewingItem = (
   routes: IRoutes,
   pcrItem: PCRItemDto,
-  projectId: string,
+  projectId: ProjectId,
   pcrId: string,
   allowReasoning: boolean,
 ) => {

@@ -53,7 +53,7 @@ type ProjectDtoMapping = Pick<
 
 const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   id: function (node) {
-    return node?.Id ?? "";
+    return (node?.Id ?? "") as ProjectId;
   },
   claimedPercentage: function (node) {
     return !!node?.Acc_GOLTotalCostAwarded__c?.value

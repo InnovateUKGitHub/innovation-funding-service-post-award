@@ -6,11 +6,11 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
-  private getKey(projectId: string, pcrOrPCrItemId: string) {
+  private getKey(projectId: ProjectId, pcrOrPCrItemId: string) {
     return storeKeys.getPcrKey(projectId, pcrOrPCrItemId);
   }
 
-  public pcrOrPcrItemDocuments(projectId: string, projectChangeRequestIdOrItemId: string) {
+  public pcrOrPcrItemDocuments(projectId: ProjectId, projectChangeRequestIdOrItemId: string) {
     return this.getData("documents", this.getKey(projectId, projectChangeRequestIdOrItemId), p =>
       apiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({
         projectId,
@@ -21,7 +21,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
   }
 
   public getPcrOrPcrItemDocumentsEditor(
-    projectId: string,
+    projectId: ProjectId,
     projectChangeRequestIdOrItemId: string,
     init?: (dto: MultipleDocumentUploadDto) => void,
   ) {
@@ -36,7 +36,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
 
   public updatePcrOrPcrItemDocumentsEditor(
     saving: boolean,
-    projectId: string,
+    projectId: ProjectId,
     projectChangeRequestIdOrItemId: string,
     dto: MultipleDocumentUploadDto,
     filesRequired: boolean,
@@ -61,7 +61,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
   }
 
   public deletePcrOrPcrItemDocumentsEditor(
-    projectId: string,
+    projectId: ProjectId,
     projectChangeRequestIdOrItemId: string,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto,

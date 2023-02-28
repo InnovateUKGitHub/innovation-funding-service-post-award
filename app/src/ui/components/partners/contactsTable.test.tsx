@@ -58,7 +58,7 @@ describe("<ContactsTable />", () => {
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
           accountId: "321",
-          projectId: "456",
+          projectId: "456" as ProjectId,
         },
         {
           id: "101",
@@ -67,7 +67,7 @@ describe("<ContactsTable />", () => {
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
           accountId: "312",
-          projectId: "456",
+          projectId: "456" as ProjectId,
         },
       ];
 
@@ -89,7 +89,7 @@ describe("<ContactsTable />", () => {
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
           accountId: "321",
-          projectId: "456",
+          projectId: "456" as ProjectId,
         },
       ];
 
@@ -111,7 +111,7 @@ describe("<ContactsTable />", () => {
           roleName: "Finance Contact",
           email: "tedtester@nowhere.com",
           accountId: "321",
-          projectId: "456",
+          projectId: "456" as ProjectId,
         },
         {
           id: "101",
@@ -120,7 +120,7 @@ describe("<ContactsTable />", () => {
           roleName: "Project Manager",
           email: "davedeveloper@nowhere.com",
           accountId: "312",
-          projectId: "456",
+          projectId: "456" as ProjectId,
         },
       ];
 

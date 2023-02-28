@@ -21,7 +21,7 @@ import { GetProjectStatusQuery } from "../projects";
 
 export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
   constructor(
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly pcrId: string,
     private readonly pcrItemId: string,
     private readonly data: FinancialVirementDto,

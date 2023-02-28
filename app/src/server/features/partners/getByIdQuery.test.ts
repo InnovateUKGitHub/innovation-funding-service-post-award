@@ -80,7 +80,7 @@ describe("getAllForProjectQuery", () => {
     expect(result).not.toBe(null);
 
     const expected: PartnerDto = {
-      id: "Partner1",
+      id: "Partner1" as PartnerId,
       name: "Expected name",
       accountId: "AccountId1",
       type: "Academic",
@@ -89,7 +89,7 @@ describe("getAllForProjectQuery", () => {
       postcodeStatus: PostcodeTaskStatus.Complete,
       isLead: true,
       projectRoleName: "Lead",
-      projectId: "Project1",
+      projectId: "Project1" as ProjectId,
       organisationType: "Industrial",
       competitionType: "SBRI",
       totalPaidCosts: 25555,
@@ -289,6 +289,7 @@ describe("getAllForProjectQuery", () => {
 
   it("when partner doesn't exist", async () => {
     const context = new TestContext();
+    // @ts-expect-error invalid partner id
     await expect(context.runQuery(new GetByIdQuery("fakePartnerId"))).rejects.toThrow();
   });
 

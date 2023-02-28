@@ -10,7 +10,7 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type LoanOverviewQuery$variables = {
-  projectId: string;
+  projectId: ProjectId;
 };
 export type LoanOverviewQuery$data = {
   readonly salesforce: {

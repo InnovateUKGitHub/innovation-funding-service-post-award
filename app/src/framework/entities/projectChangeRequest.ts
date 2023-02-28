@@ -11,7 +11,7 @@ import {
 } from "@framework/constants";
 
 export interface ProjectChangeRequestForCreateEntity {
-  projectId: string;
+  projectId: ProjectId;
   status: PCRStatus;
   reasoningStatus: PCRItemStatus;
   items: ProjectChangeRequestItemForCreateEntity[];
@@ -32,7 +32,7 @@ export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreat
 export interface ProjectChangeRequestItemForCreateEntity {
   recordTypeId: string;
   status: PCRItemStatus;
-  projectId: string;
+  projectId: ProjectId;
   projectDuration?: number | null;
   offsetMonths?: number;
   publicDescription?: string | null;
@@ -40,7 +40,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   projectSummary?: string | null;
   suspensionStartDate?: Date | null;
   suspensionEndDate?: Date | null;
-  partnerId?: string | null;
+  partnerId?: PartnerId | null;
   removalPeriod?: number | null;
 
   // add partner

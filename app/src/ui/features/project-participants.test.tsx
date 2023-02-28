@@ -9,7 +9,7 @@ import { LoadingStatus } from "@framework/constants";
 import { noop } from "@ui/helpers/noop";
 
 describe("useProjectParticipants", () => {
-  const setup = (stubProjectId: string | undefined, stubPartnerQuery: Pending<PartnerDto[] | undefined>) => {
+  const setup = (stubProjectId: ProjectId | undefined, stubPartnerQuery: Pending<PartnerDto[] | undefined>) => {
     const stubStore = {
       partners: {
         getPartnersForProject: jest.fn().mockReturnValue(stubPartnerQuery),
@@ -28,7 +28,7 @@ describe("useProjectParticipants", () => {
   };
 
   describe("@returns", () => {
-    const stubProjectId = "stub-project-id";
+    const stubProjectId = "stub-project-id" as ProjectId;
 
     const stubDefinedPartner = createPartnerDto();
     const stubSinglePartner = [stubDefinedPartner];

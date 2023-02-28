@@ -5,7 +5,7 @@ import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { sortPartners } from "./sortPartners";
 
 export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 

@@ -59,7 +59,12 @@ const ProjectDetailProjectParticipantsProjectTable = ({
 
             if (isLinkable) {
               return (
-                <Link route={PartnerDetailsRoute.getLink({ projectId: data.Id, partnerId: x.node.Id })}>
+                <Link
+                  route={PartnerDetailsRoute.getLink({
+                    projectId: data.Id as ProjectId,
+                    partnerId: x.node.Id as PartnerId,
+                  })}
+                >
                   {displayValue}
                 </Link>
               );

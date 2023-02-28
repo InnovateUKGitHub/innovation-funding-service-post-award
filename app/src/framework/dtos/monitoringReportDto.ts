@@ -1,7 +1,7 @@
 import { MonitoringReportStatus } from "../constants/monitoringReportStatus";
 
 export interface MonitoringReportSummaryDto {
-  projectId: string;
+  projectId: ProjectId;
   headerId: string;
   status: MonitoringReportStatus;
   statusName: string;

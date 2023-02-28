@@ -20,7 +20,7 @@ export interface ISalesforceProjectChangeRequestStatusChange extends ICreateProj
 export interface IProjectChangeRequestStatusChangeRepository {
   createStatusChange(statusChange: ICreateProjectChangeRequestStatusChange): Promise<string>;
   getStatusChanges(
-    projectId: string,
+    projectId: ProjectId,
     projectChangeRequestId: string,
   ): Promise<ProjectChangeRequestStatusChangeEntity[]>;
 }
@@ -61,7 +61,7 @@ export class ProjectChangeRequestStatusChangeRepository
   }
 
   public getStatusChanges(
-    projectId: string,
+    projectId: ProjectId,
     projectChangeRequestId: string,
   ): Promise<ProjectChangeRequestStatusChangeEntity[]> {
     return super.where(

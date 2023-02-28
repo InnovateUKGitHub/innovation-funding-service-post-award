@@ -26,3 +26,9 @@ declare type UnwrapArray<T> = T extends Array<infer U> ? U : T extends ReadonlyA
 type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
+
+declare const __nominal__type: unique symbol;
+
+declare type Nominal<Type, Identifier> = Type & {
+  readonly [__nominal__type]: Identifier;
+};

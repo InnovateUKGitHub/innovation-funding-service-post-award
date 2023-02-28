@@ -4,7 +4,7 @@ import { QueryBase } from "../common";
 import { GetAllProjectRolesForUser } from "./getAllProjectRolesForUser";
 
 export class GetByIdQuery extends QueryBase<ProjectDto> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 

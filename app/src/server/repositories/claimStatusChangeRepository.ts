@@ -13,7 +13,7 @@ export interface ISalesforceClaimStatusChange {
 }
 
 export interface IClaimStatusChangeRepository {
-  getAllForClaim(partnerId: string, periodId: number): Promise<ISalesforceClaimStatusChange[]>;
+  getAllForClaim(partnerId: PartnerId, periodId: number): Promise<ISalesforceClaimStatusChange[]>;
   create(item: Partial<ISalesforceClaimStatusChange>): Promise<string>;
 }
 
@@ -45,7 +45,7 @@ export class ClaimStatusChangeRepository
     return super.insertItem(item);
   }
 
-  getAllForClaim(partnerId: string, periodId: number): Promise<ISalesforceClaimStatusChange[]> {
+  getAllForClaim(partnerId: PartnerId, periodId: number): Promise<ISalesforceClaimStatusChange[]> {
     return super.where(
       `Acc_Claim__r.Acc_ProjectParticipant__c = '${sss(partnerId)}' and Acc_Claim__r.Acc_ProjectPeriodNumber__c = ${sss(
         periodId,

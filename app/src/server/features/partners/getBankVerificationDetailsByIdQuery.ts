@@ -19,7 +19,7 @@ export class GetBankVerificationDetailsByIdQuery extends QueryBase<PartnerBankDe
     return context.user.email === context.config.bankDetailsValidationUser.serviceUsername;
   }
 
-  constructor(private readonly partnerId: string) {
+  constructor(private readonly partnerId: PartnerId) {
     super();
   }
 

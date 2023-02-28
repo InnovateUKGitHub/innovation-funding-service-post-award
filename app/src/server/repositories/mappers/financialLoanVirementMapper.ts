@@ -23,7 +23,7 @@ export class SalesforceFinancialLoanVirementMapper extends SalesforceBaseMapper<
     const isEditable = status === LoanStatus.PLANNED;
 
     return {
-      id: item.Id,
+      id: item.Id as LoanId,
       isEditable,
       period: item.Loan_PeriodNumber__c,
       status,

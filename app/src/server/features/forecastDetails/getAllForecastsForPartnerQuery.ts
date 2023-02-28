@@ -3,7 +3,7 @@ import { mapLatestForecastDetail } from "@server/features/forecastDetails/mapFor
 import { QueryBase } from "../common";
 
 export class GetAllForecastsForPartnerQuery extends QueryBase<ForecastDetailsDTO[]> {
-  constructor(private readonly partnerId: string) {
+  constructor(private readonly partnerId: PartnerId) {
     super();
   }
 

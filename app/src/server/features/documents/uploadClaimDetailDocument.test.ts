@@ -87,7 +87,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const context = new TestContext();
 
     const claimDetailKey = {
-      projectId: "",
+      projectId: "" as ProjectId,
       partnerId: "",
       periodId: NaN,
       costCategoryId: "",
@@ -95,6 +95,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
     const file = context.testData.createFile();
 
+    // @ts-expect-error invalid partner id
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { files: [file] });
     await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
@@ -110,7 +111,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
       const claimDetailKey = {
         projectId: project.Id,
-        partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
+        partnerId: claimDetail.Acc_ProjectParticipant__r.Id as PartnerId,
         periodId: claimDetail.Acc_ProjectPeriodNumber__c,
         costCategoryId: claimDetail.Acc_CostCategory__c,
       };

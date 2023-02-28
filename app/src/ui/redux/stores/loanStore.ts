@@ -17,7 +17,7 @@ export class LoansStore extends StoreBase {
     super(getState, dispatch);
   }
 
-  private getKey(projectId: string, loanId: string | undefined, periodId?: number | undefined): string {
+  private getKey(projectId: ProjectId, loanId: LoanId | undefined, periodId?: number | undefined): string {
     if (loanId) {
       return storeKeys.getLoanKey(projectId, loanId);
     }
@@ -29,23 +29,23 @@ export class LoansStore extends StoreBase {
     throw Error("You must supply param after projectId for getKey to work.");
   }
 
-  public getAll(projectId: string): Pending<LoanDto[]> {
+  public getAll(projectId: ProjectId): Pending<LoanDto[]> {
     return this.getData("loans", storeKeys.getLoansKey(projectId), p => apiClient.loans.getAll({ ...p, projectId }));
   }
 
-  public get(projectId: string, loanId?: string, periodId?: number): Pending<LoanDto> {
+  public get(projectId: ProjectId, loanId?: LoanId, periodId?: number): Pending<LoanDto> {
     return this.getData("loan", this.getKey(projectId, loanId, periodId), p =>
       apiClient.loans.get({ ...p, projectId, loanId, periodId }),
     );
   }
 
-  public update(loan: LoanDto, projectId: string, loanId: string): Pending<LoanDto> {
+  public update(loan: LoanDto, projectId: ProjectId, loanId: LoanId): Pending<LoanDto> {
     return this.getData("loan", this.getKey(projectId, loanId), p =>
       apiClient.loans.update({ ...p, projectId, loanId, loan }),
     );
   }
 
-  public getLoanEditor(projectId: string, loanId: string, init?: (dto: LoanDto) => void) {
+  public getLoanEditor(projectId: ProjectId, loanId: LoanId, init?: (dto: LoanDto) => void) {
     return this.getEditor(
       "loan",
       this.getKey(projectId, loanId),
@@ -56,8 +56,8 @@ export class LoansStore extends StoreBase {
   }
 
   public updateLoanEditor(
-    projectId: string,
-    loanId: string,
+    projectId: ProjectId,
+    loanId: LoanId,
     dto: LoanDto,
     message?: string,
     onComplete?: (result: LoanDto) => void,
@@ -81,8 +81,8 @@ export class LoansStore extends StoreBase {
 
   private validate(
     loanDto: LoanDto,
-    projectId: string,
-    loanId: string,
+    projectId: ProjectId,
+    loanId: LoanId,
     showErrors: boolean,
   ): Pending<LoanDtoValidator> {
     const documents = this.loanDocumentsStore.getLoanDocuments(projectId, loanId);

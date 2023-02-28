@@ -9,8 +9,8 @@ import { IForecastDetailsDtosValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
 
 export interface ProjectSetupSpendProfileParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 interface Data {

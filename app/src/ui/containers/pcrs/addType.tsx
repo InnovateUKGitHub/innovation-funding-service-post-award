@@ -10,7 +10,7 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { PcrTypesGuidance } from "./components/PcrTypesGuidance";
 
 export interface ProjectChangeRequestAddTypeParams {
-  projectId: string;
+  projectId: ProjectId;
   projectChangeRequestId: string;
 }
 

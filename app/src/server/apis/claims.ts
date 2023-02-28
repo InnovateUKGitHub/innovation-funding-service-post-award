@@ -84,29 +84,29 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
     );
   }
 
-  public async getAllByProjectId(params: ApiParams<{ projectId: string }>): Promise<ClaimDto[]> {
+  public async getAllByProjectId(params: ApiParams<{ projectId: ProjectId }>): Promise<ClaimDto[]> {
     const query = new GetAllClaimsForProjectQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAllByPartnerId(params: ApiParams<{ partnerId: string }>): Promise<ClaimDto[]> {
+  public async getAllByPartnerId(params: ApiParams<{ partnerId: PartnerId }>): Promise<ClaimDto[]> {
     const query = new GetAllForPartnerQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAllIncludingNewByPartnerId(params: ApiParams<{ partnerId: string }>): Promise<ClaimDto[]> {
+  public async getAllIncludingNewByPartnerId(params: ApiParams<{ partnerId: PartnerId }>): Promise<ClaimDto[]> {
     const query = new GetAllIncludingNewForPartnerQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ partnerId: string; periodId: number }>): Promise<ClaimDto> {
+  public async get(params: ApiParams<{ partnerId: PartnerId; periodId: number }>): Promise<ClaimDto> {
     const { partnerId, periodId } = params;
     const query = new GetClaim(partnerId, periodId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async update(
-    params: ApiParams<{ projectId: string; partnerId: string; periodId: number; claim: ClaimDto }>,
+    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: number; claim: ClaimDto }>,
   ): Promise<ClaimDto> {
     const { projectId, partnerId, periodId, claim } = params;
 
@@ -123,14 +123,14 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
   }
 
   public async getStatusChanges(
-    params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>,
+    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
   ): Promise<ClaimStatusChangeDto[]> {
     const query = new GetClaimStatusChangesQuery(params.projectId, params.partnerId, params.periodId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async getTotalCosts(
-    params: ApiParams<{ partnerId: string; projectId: string; periodId: number }>,
+    params: ApiParams<{ partnerId: PartnerId; projectId: ProjectId; periodId: number }>,
   ): Promise<TotalCosts> {
     const query = new GetClaimsTotalCosts(params.partnerId, params.projectId, params.periodId);
     return contextProvider.start(params).runQuery(query);

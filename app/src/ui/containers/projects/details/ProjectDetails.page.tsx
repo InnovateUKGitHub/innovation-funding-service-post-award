@@ -16,7 +16,7 @@ import { projectDetailsQuery } from "./ProjectDetails.query";
 import { ProjectDetailsQuery } from "./__generated__/ProjectDetailsQuery.graphql";
 
 interface Params {
-  projectId: string;
+  projectId: ProjectId;
 }
 
 const ProjectDetailsPage = (props: Params & BaseProps) => {
@@ -34,7 +34,7 @@ const ProjectDetailsPage = (props: Params & BaseProps) => {
           caption={`${project?.Acc_ProjectNumber__c?.value} : ${project?.Acc_ProjectTitle__c?.value}`}
         />
       }
-      backLink={<ProjectBackLink routes={props.routes} projectId={project.Id} />}
+      backLink={<ProjectBackLink routes={props.routes} projectId={project.Id as ProjectId} />}
     >
       {project && <ProjectStatusMessage project={project} />}
       <Section

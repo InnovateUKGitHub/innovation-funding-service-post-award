@@ -23,7 +23,7 @@ import classNames from "classnames";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 
 export interface PcrSpendProfileCostSummaryParams {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
   itemId: string;
   costCategoryId: string;
@@ -198,7 +198,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     );
   }
 
-  private renderLinks(itemId: string, costId: string, costCategoryId: string, projectId: string, pcrId: string) {
+  private renderLinks(itemId: string, costId: string, costCategoryId: string, projectId: ProjectId, pcrId: string) {
     const links: { route: ILinkInfo; text: React.ReactNode; qa: string }[] = [];
     links.push({
       route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({

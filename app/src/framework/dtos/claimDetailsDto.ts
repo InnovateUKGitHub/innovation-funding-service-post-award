@@ -1,7 +1,7 @@
 import { ClaimLineItemDto } from "@framework/types";
 
 export interface ClaimDetailsSummaryDto {
-  partnerId: string;
+  partnerId: PartnerId;
   costCategoryId: string;
   periodId: number;
   periodStart: Date | null;

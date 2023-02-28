@@ -64,7 +64,7 @@ describe("claims by project", () => {
         context.testStore.getState,
         context.testStore.dispatch,
       );
-      const foundClaims = claimsStore.getAllClaimsForProject("not real").data;
+      const foundClaims = claimsStore.getAllClaimsForProject("not real" as ProjectId).data;
       expect(foundClaims).toEqual([]);
     });
   });
@@ -256,7 +256,7 @@ describe("claims by partner", () => {
         context.testStore.getState,
         context.testStore.dispatch,
       );
-      const foundClaims = claimsStore.getAllClaimsForPartner("not real").data;
+      const foundClaims = claimsStore.getAllClaimsForPartner("not real" as PartnerId).data;
       expect(foundClaims).toEqual([]);
     });
   });

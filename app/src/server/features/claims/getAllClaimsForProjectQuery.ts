@@ -6,7 +6,7 @@ import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRol
 import { mapClaim } from "./mapClaim";
 
 export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 

@@ -9,12 +9,12 @@ import { ForecastDetailsDTO } from "@framework/dtos";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IForecastDetailsApi {
-  getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ForecastDetailsDTO[]>;
+  getAllByPartnerId: (params: ApiParams<{ partnerId: PartnerId }>) => Promise<ForecastDetailsDTO[]>;
   get: (
-    params: ApiParams<{ partnerId: string; periodId: number; costCategoryId: string }>,
+    params: ApiParams<{ partnerId: PartnerId; periodId: number; costCategoryId: string }>,
   ) => Promise<ForecastDetailsDTO>;
   update: (
-    params: ApiParams<{ projectId: string; partnerId: string; forecasts: ForecastDetailsDTO[]; submit: boolean }>,
+    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; forecasts: ForecastDetailsDTO[]; submit: boolean }>,
   ) => Promise<ForecastDetailsDTO[]>;
 }
 
@@ -46,18 +46,18 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     );
   }
 
-  public async getAllByPartnerId(params: ApiParams<{ partnerId: string }>) {
+  public async getAllByPartnerId(params: ApiParams<{ partnerId: PartnerId }>) {
     const query = new GetAllForecastsForPartnerQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ partnerId: string; periodId: number; costCategoryId: string }>) {
+  public async get(params: ApiParams<{ partnerId: PartnerId; periodId: number; costCategoryId: string }>) {
     const query = new GetForecastDetailQuery(params.partnerId, params.periodId, params.costCategoryId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async update(
-    params: ApiParams<{ projectId: string; partnerId: string; forecasts: ForecastDetailsDTO[]; submit: boolean }>,
+    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; forecasts: ForecastDetailsDTO[]; submit: boolean }>,
   ) {
     const context = contextProvider.start(params);
     const forecastCmd = new UpdateForecastDetailsCommand(

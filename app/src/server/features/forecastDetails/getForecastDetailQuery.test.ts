@@ -22,7 +22,7 @@ describe("GetForecastDetailQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileDetail(costCat, partner);
 
-    const query = new GetForecastDetailQuery("test", 1, costCat.id);
+    const query = new GetForecastDetailQuery("test" as PartnerId, 1, costCat.id);
     const item = await context.runQuery(query);
 
     expect(item.costCategoryId).toBe(costCat.id);

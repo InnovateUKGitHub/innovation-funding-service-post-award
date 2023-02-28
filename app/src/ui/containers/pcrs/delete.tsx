@@ -9,7 +9,7 @@ import * as ACC from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface PCRDeleteParams {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
 }
 
@@ -20,7 +20,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onDelete: (projectId: string, pcrId: string, dto: PCRDto) => void;
+  onDelete: (projectId: ProjectId, pcrId: string, dto: PCRDto) => void;
 }
 
 const DeleteForm = ACC.createTypedForm<PCRDto>();

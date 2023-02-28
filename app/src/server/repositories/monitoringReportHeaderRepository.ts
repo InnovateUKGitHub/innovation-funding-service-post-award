@@ -19,10 +19,10 @@ export interface ISalesforceMonitoringReportHeader {
 
 export interface IMonitoringReportHeaderRepository {
   getById(id: string): Promise<ISalesforceMonitoringReportHeader>;
-  get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader>;
+  get(projectId: ProjectId, periodId: number): Promise<ISalesforceMonitoringReportHeader>;
   update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean>;
   create(updateDto: Partial<ISalesforceMonitoringReportHeader>): Promise<string>;
-  getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]>;
+  getAllForProject(projectId: ProjectId): Promise<ISalesforceMonitoringReportHeader[]>;
   delete(reportId: string): Promise<void>;
   getMonitoringReportStatuses(): Promise<IPicklistEntry[]>;
 }
@@ -66,7 +66,7 @@ export class MonitoringReportHeaderRepository
     return super.loadItem({ Id: id });
   }
 
-  async get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader> {
+  async get(projectId: ProjectId, periodId: number): Promise<ISalesforceMonitoringReportHeader> {
     return super.loadItem(
       `Acc_Project__c = '${sss(projectId)}' AND Acc_ProjectPeriodNumber__c = ${sss(
         periodId,
@@ -83,7 +83,7 @@ export class MonitoringReportHeaderRepository
     return super.insertItem(Object.assign({}, item, { RecordTypeId }));
   }
 
-  async getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]> {
+  async getAllForProject(projectId: ProjectId): Promise<ISalesforceMonitoringReportHeader[]> {
     return super.where(`Acc_Project__c = '${sss(projectId)}' AND RecordType.Name = '${sss(this.recordType)}'`);
   }
 

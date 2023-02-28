@@ -3,7 +3,7 @@ import { LoanDto, IContext, ProjectRole, Authorisation } from "@framework/types"
 
 export class GetLoan extends QueryBase<LoanDto> {
   constructor(
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly options: {
       loanId?: string;
       periodId?: number;

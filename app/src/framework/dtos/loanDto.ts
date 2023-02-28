@@ -1,7 +1,7 @@
 import { LoanStatus } from "@framework/entities";
 
 export interface LoanDto {
-  id: string;
+  id: LoanId;
   period: number;
   status: LoanStatus;
   amount: number;

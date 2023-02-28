@@ -3,7 +3,7 @@ import { DocumentEntity } from "@framework/entities/document";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetPartnerDocumentsQuery extends DocumentsSummaryQueryBase {
-  constructor(private readonly projectId: string, private readonly partnerId: string) {
+  constructor(private readonly projectId: ProjectId, private readonly partnerId: PartnerId) {
     super();
   }
 

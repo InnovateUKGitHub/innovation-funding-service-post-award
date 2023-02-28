@@ -6,20 +6,20 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class PartnerDocumentsStore extends DocumentsStoreBase {
-  private getKey(partnerId: string) {
+  private getKey(partnerId: PartnerId) {
     return storeKeys.getPartnerKey(partnerId);
   }
-  private getProjectKey(projectId: string) {
+  private getProjectKey(projectId: ProjectId) {
     return storeKeys.getProjectKey(projectId);
   }
 
-  public getPartnerDocuments(projectId: string, partnerId: string) {
+  public getPartnerDocuments(projectId: ProjectId, partnerId: PartnerId) {
     return this.getData("documents", this.getKey(partnerId), p =>
       apiClient.documents.getPartnerDocuments({ projectId, partnerId, ...p }),
     );
   }
 
-  public getAllPartnerDocuments(projectId: string) {
+  public getAllPartnerDocuments(projectId: ProjectId) {
     // When obtaining ALL partner documents, the documents Redux key is linked to the projectId,
     // instead of each individual partner id.
     return this.getData("partnerDocuments", this.getProjectKey(projectId), p =>
@@ -27,7 +27,7 @@ export class PartnerDocumentsStore extends DocumentsStoreBase {
     );
   }
 
-  public getPartnerDocumentEditor(partnerId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
+  public getPartnerDocumentEditor(partnerId: PartnerId, init?: (dto: MultipleDocumentUploadDto) => void) {
     return this.getEditor(
       "multipleDocuments",
       this.getKey(partnerId),
@@ -39,8 +39,8 @@ export class PartnerDocumentsStore extends DocumentsStoreBase {
 
   public updatePartnerDocumentsEditor(
     saving: boolean,
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     dto: MultipleDocumentUploadDto,
     message: string,
     onComplete?: () => void,
@@ -57,8 +57,8 @@ export class PartnerDocumentsStore extends DocumentsStoreBase {
   }
 
   public deletePartnerDocumentsEditor(
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto,
     message: string,

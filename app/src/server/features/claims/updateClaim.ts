@@ -9,7 +9,7 @@ import { GetProjectStatusQuery } from "../projects";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly claimDto: ClaimDto,
     private readonly isClaimSummary?: boolean,
   ) {

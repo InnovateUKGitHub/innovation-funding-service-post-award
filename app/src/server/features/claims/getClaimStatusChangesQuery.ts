@@ -9,8 +9,8 @@ import { mapToClaimStatus, mapToClaimStatusLabel } from "@server/features/claims
 
 export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]> {
   constructor(
-    private readonly projectId: string,
-    private readonly partnerId: string,
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
     private readonly periodId: number,
   ) {
     super();

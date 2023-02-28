@@ -17,13 +17,13 @@ describe("ProjectsGetAllQuery", () => {
     const context = new TestContext();
 
     context.testData.createProject(x => {
-      x.Id = "Expected Id";
+      x.Id = "Expected_Id" as ProjectId;
       x.Acc_ProjectTitle__c = "Expected Name";
     });
 
     const result = (await context.runQuery(new GetAllQuery()))[0];
 
-    expect(result.id).toBe("Expected Id");
+    expect(result.id).toBe("Expected_Id");
     expect(result.title).toBe("Expected Name");
   });
 

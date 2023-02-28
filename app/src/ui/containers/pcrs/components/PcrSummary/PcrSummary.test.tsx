@@ -14,8 +14,8 @@ import {
 import { createDto } from "@tests/test-utils/dtoHelpers";
 
 describe("PcrSummary", () => {
-  const firstPartner = createDto<PartnerDto>({ id: "1-partner" });
-  const secondPartner = createDto<PartnerDto>({ id: "2-partner" });
+  const firstPartner = createDto<PartnerDto>({ id: "1-partner" as PartnerId });
+  const secondPartner = createDto<PartnerDto>({ id: "2-partner" as PartnerId });
   const stubVirement = createDto<FinancialVirementDto>({ partners: [] });
 
   const stubPartners: PartnerDto[] = [firstPartner, secondPartner];

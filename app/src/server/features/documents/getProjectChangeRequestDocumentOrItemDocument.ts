@@ -4,7 +4,7 @@ import { DocumentQueryBase } from "@server/features/documents/documentQueryBase"
 
 export class GetProjectChangeRequestDocumentOrItemDocumentQuery extends DocumentQueryBase {
   constructor(
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly projectChangeRequestIdOrItemId: string,
     documentId: string,
   ) {

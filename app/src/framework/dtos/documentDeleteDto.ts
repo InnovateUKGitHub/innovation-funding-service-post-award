@@ -3,5 +3,5 @@ export interface DocumentDeleteDto {
   // Instead, file to delete is specified with documentId.
   files: never[];
   documentId: string;
-  partnerId?: string;
+  partnerId?: PartnerId;
 }

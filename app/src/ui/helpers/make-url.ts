@@ -38,6 +38,7 @@ function toNumber(value: string) {
 }
 
 export type Params = Record<string, string | string[] | number>;
+
 interface IParams {
   queryParams: Params;
   routePathParams: Params;

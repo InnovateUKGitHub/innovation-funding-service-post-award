@@ -25,8 +25,8 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { AwardRateOverridesMessage } from "@ui/components/claims";
 
 export interface ClaimSummaryParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   periodId: number;
 }
 
@@ -43,7 +43,7 @@ interface CombinedData {
 }
 
 interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
-  projectId: string;
+  projectId: ProjectId;
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
   claim: Pending<ClaimDto>;

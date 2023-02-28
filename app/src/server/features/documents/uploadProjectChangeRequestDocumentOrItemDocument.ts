@@ -9,7 +9,7 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
   protected showValidationErrors = true;
 
   constructor(
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly projectChangeRequestIdOrItemId: string,
     protected readonly documents: MultipleDocumentUploadDto,
   ) {

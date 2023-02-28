@@ -58,13 +58,13 @@ export function useClaimDocumentContent() {
 }
 
 export interface ClaimDocumentsPageParams {
-  projectId: string;
+  projectId: ProjectId;
   periodId: number;
-  partnerId: string;
+  partnerId: PartnerId;
 }
 
 interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BaseProps {
-  projectId: string;
+  projectId: ProjectId;
   content: ClaimDocumentContent;
   project: Pending<ProjectDto>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;

@@ -7,7 +7,7 @@ import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { GetAllProjectRolesForUser } from "../projects";
 
 export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: ProjectId) {
     super();
   }
 

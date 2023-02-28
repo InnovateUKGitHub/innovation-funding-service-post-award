@@ -7,7 +7,7 @@ import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 
 export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]> {
-  constructor(private readonly projectId: string, private readonly pcrId?: string) {
+  constructor(private readonly projectId: ProjectId, private readonly pcrId?: string) {
     super();
   }
 

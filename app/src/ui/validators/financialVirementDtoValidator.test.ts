@@ -110,7 +110,7 @@ describe("FinancialLoanVirementDtoValidator", () => {
     const currentDate = new Date(Date.UTC(2022, 1));
 
     return {
-      id: uuid(),
+      id: uuid() as LoanId,
       isEditable: true,
       period: 1,
       status: LoanStatus.PLANNED,

@@ -13,7 +13,7 @@ import { Option } from "@framework/types";
 import { GetMonitoringReportStatusesQuery } from "./getMonitoringReportStatusesQuery";
 
 export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportStatusChangeDto[]> {
-  constructor(private readonly projectId: string, private readonly reportId: string) {
+  constructor(private readonly projectId: ProjectId, private readonly reportId: string) {
     super();
   }
 

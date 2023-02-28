@@ -22,8 +22,8 @@ import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
 import { AwardRateOverridesMessage } from "@ui/components/claims";
 
 export interface PrepareClaimParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   periodId: number;
 }
 

@@ -2,8 +2,8 @@ import { GetClaimsTotalCosts } from "@server/features/claims/getClaimsTotalCosts
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetClaimsTotalCosts", () => {
-  const projectId = "stub-project-id";
-  const partnerId = "stub-partner-id";
+  const projectId = "stub-project-id" as ProjectId;
+  const partnerId = "stub-partner-id" as PartnerId;
   const periodNum = 1;
   const nonFecClaimTotal = 1000;
 

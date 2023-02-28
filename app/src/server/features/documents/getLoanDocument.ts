@@ -2,7 +2,7 @@ import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetLoanDocumentQuery extends DocumentQueryBase {
-  constructor(private readonly projectId: string, private readonly loanId: string, documentId: string) {
+  constructor(private readonly projectId: ProjectId, private readonly loanId: string, documentId: string) {
     super(documentId);
   }
 

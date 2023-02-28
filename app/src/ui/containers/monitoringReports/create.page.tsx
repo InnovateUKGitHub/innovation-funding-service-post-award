@@ -8,7 +8,7 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { ILinkInfo, ProjectRole } from "@framework/types";
 
 export interface MonitoringReportCreateParams {
-  projectId: string;
+  projectId: ProjectId;
 }
 
 interface Data {

@@ -3,7 +3,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { StoreBase } from "./storeBase";
 
 export class ForecastGolCostsStore extends StoreBase {
-  public getAllByPartner(partnerId: string) {
+  public getAllByPartner(partnerId: PartnerId) {
     return this.getData("forecastGolCosts", storeKeys.getPartnerKey(partnerId), p =>
       apiClient.forecastGolCosts.getAllByPartnerId({ partnerId, ...p }),
     );

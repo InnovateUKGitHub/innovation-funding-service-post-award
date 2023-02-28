@@ -57,8 +57,8 @@ export function useEditPageContent() {
 }
 
 export interface VirementCostsParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   pcrId: string;
   itemId: string;
 }

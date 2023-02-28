@@ -27,7 +27,7 @@ const PCRDashboardTable = ({
   const { getContent } = useContent();
 
   /**
-   * Convert a Salesforce PCR name to an internationalised PCR name.
+   * Convert a Salesforce PCR name to an internationalized PCR name.
    *
    * @param value The Salesforce name of the PCR type
    */
@@ -119,7 +119,7 @@ const PCRDashboardTable = ({
         value={x => x.head.node.CreatedDate?.value}
       />
       <PCRTable.String
-        qa="stauts"
+        qa="status"
         header={getContent(x => x.pcrLabels.status)}
         value={x => x.head.node.Acc_Status__c?.value ?? null}
       />
@@ -134,7 +134,7 @@ const PCRDashboardTable = ({
         hideHeader
         value={x => {
           const links: { route: ILinkInfo; text: string; qa: string }[] = [];
-          const pcrLinkArgs = { pcrId: x.head.node.Id, projectId: project.Id };
+          const pcrLinkArgs = { pcrId: x.head.node.Id, projectId: project.Id as ProjectId };
 
           if (
             (x.head.node.Acc_Status__c?.value === "Draft" ||

@@ -20,8 +20,8 @@ import { useContent } from "@ui/hooks";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface ClaimForecastParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   periodId: number;
 }
 

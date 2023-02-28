@@ -5,7 +5,7 @@ import { CommandBase } from "@server/features/common";
 export class DeleteProjectChangeRequestDocumentOrItemDocument extends CommandBase<void> {
   constructor(
     private readonly documentId: string,
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly projectChangeRequestIdOrItemId: string,
   ) {
     super();

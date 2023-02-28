@@ -26,25 +26,25 @@ export class ForecastDetailsStore extends StoreBase {
     super(getState, queue);
   }
 
-  public get(partnerId: string, periodId: number, costCategoryId: string) {
+  public get(partnerId: PartnerId, periodId: number, costCategoryId: string) {
     return this.getData("forecastDetail", storeKeys.getForecastDetailKey(partnerId, periodId, costCategoryId), p =>
       apiClient.forecastDetails.get({ partnerId, periodId, costCategoryId, ...p }),
     );
   }
 
-  public getAllByPartner(partnerId: string) {
+  public getAllByPartner(partnerId: PartnerId) {
     return this.getData("forecastDetails", storeKeys.getPartnerKey(partnerId), p =>
       apiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }),
     );
   }
 
-  public getAllInitialByPartner(partnerId: string) {
+  public getAllInitialByPartner(partnerId: PartnerId) {
     return this.getData("initialForecastDetails", storeKeys.getPartnerKey(partnerId), p =>
       apiClient.initialForecastDetails.getAllByPartnerId({ partnerId, ...p }),
     );
   }
 
-  private getValidator(partnerId: string, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
+  private getValidator(partnerId: PartnerId, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
     const combined = Pending.combine({
       claims: this.claimsStore.getAllClaimsForPartner(partnerId),
       claimDetails: this.claimDetailsStore.getAllByPartner(partnerId),
@@ -58,7 +58,7 @@ export class ForecastDetailsStore extends StoreBase {
   }
 
   private getInitialValidator(
-    partnerId: string,
+    partnerId: PartnerId,
     dto: ForecastDetailsDTO[],
     submit: boolean,
     showValidationErrors: boolean,
@@ -73,7 +73,7 @@ export class ForecastDetailsStore extends StoreBase {
     );
   }
 
-  public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
+  public getForecastEditor(partnerId: PartnerId, init?: (data: ForecastDetailsDTO[]) => void) {
     return this.getEditor(
       "forecastDetails",
       storeKeys.getPartnerKey(partnerId),
@@ -83,7 +83,7 @@ export class ForecastDetailsStore extends StoreBase {
     );
   }
 
-  public getInitialForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
+  public getInitialForecastEditor(partnerId: PartnerId, init?: (data: ForecastDetailsDTO[]) => void) {
     return this.getEditor(
       "initialForecastDetails",
       storeKeys.getPartnerKey(partnerId),
@@ -95,8 +95,8 @@ export class ForecastDetailsStore extends StoreBase {
 
   public updateForecastEditor(
     saving: boolean,
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     dtos: ForecastDetailsDTO[],
     submitClaim: boolean,
     message?: string,
@@ -115,8 +115,8 @@ export class ForecastDetailsStore extends StoreBase {
 
   public updateInitialForecastEditor(
     saving: boolean,
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     payload: ForecastDetailsDTO[],
     submit: boolean,
     message?: string,

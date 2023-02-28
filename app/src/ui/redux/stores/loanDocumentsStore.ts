@@ -6,15 +6,15 @@ import { DocumentSummaryDto } from "@framework/dtos";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class LoanDocumentsStore extends DocumentsStoreBase {
-  private getKey(projectId: string, loanId: string) {
+  private getKey(projectId: ProjectId, loanId: LoanId) {
     return storeKeys.getLoanKey(projectId, loanId);
   }
-  public getLoanDocuments(projectId: string, loanId: string) {
+  public getLoanDocuments(projectId: ProjectId, loanId: LoanId) {
     return this.getData("documents", this.getKey(projectId, loanId), p =>
       apiClient.documents.getLoanDocuments({ ...p, projectId, loanId }),
     );
   }
-  public getLoanDocumentsEditor(projectId: string, loanId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
+  public getLoanDocumentsEditor(projectId: ProjectId, loanId: LoanId, init?: (dto: MultipleDocumentUploadDto) => void) {
     return this.getEditor(
       "multipleDocuments",
       this.getKey(projectId, loanId),
@@ -26,8 +26,8 @@ export class LoanDocumentsStore extends DocumentsStoreBase {
 
   public updateLoanDocumentsEditor(
     saving: boolean,
-    projectId: string,
-    loanId: string,
+    projectId: ProjectId,
+    loanId: LoanId,
     dto: MultipleDocumentUploadDto,
     message: string,
     onComplete?: () => void,
@@ -44,8 +44,8 @@ export class LoanDocumentsStore extends DocumentsStoreBase {
   }
 
   public deleteLoanDocument(
-    projectId: string,
-    loanId: string,
+    projectId: ProjectId,
+    loanId: LoanId,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto,
     message?: string,

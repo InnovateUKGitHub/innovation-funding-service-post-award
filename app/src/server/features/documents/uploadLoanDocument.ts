@@ -9,7 +9,7 @@ export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<stri
 
   constructor(
     protected readonly documents: MultipleDocumentUploadDto,
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly loanId: string,
   ) {
     super();

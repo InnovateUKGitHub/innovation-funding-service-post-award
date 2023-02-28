@@ -1,7 +1,7 @@
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceProject {
-  Id: string;
+  Id: ProjectId;
   Acc_ClaimFrequency__c: string;
   Acc_EndDate__c: string;
   Acc_GOLTotalCostAwarded__c: number;
@@ -38,7 +38,7 @@ export interface ISalesforceProject {
 }
 
 export interface IProjectRepository {
-  getById(id: string): Promise<ISalesforceProject>;
+  getById(id: ProjectId): Promise<ISalesforceProject>;
   getAll(): Promise<ISalesforceProject[]>;
 }
 
@@ -82,7 +82,7 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Loan_LoanRepaymentPeriodLength__c",
   ];
 
-  getById(id: string) {
+  getById(id: ProjectId) {
     return super.loadItem({ Id: id });
   }
 

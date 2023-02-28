@@ -385,6 +385,7 @@ describe("SaveClaimDetails", () => {
       const costCategory = context.testData.createCostCategory();
       const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
       const dto = createDto(context, claimDetail);
+      // @ts-expect-error invalid partner id
       dto.partnerId = "Invalid";
 
       const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
@@ -468,6 +469,7 @@ describe("SaveClaimDetails", () => {
 
       const dto = createDto(context, claimDetail);
       const lineItem = createNewLineItemDto(dto);
+      // @ts-expect-error invalid partner id
       lineItem.partnerId = "Invalid";
 
       dto.lineItems = [lineItem];

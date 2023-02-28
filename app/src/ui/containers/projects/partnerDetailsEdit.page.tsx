@@ -19,8 +19,8 @@ interface PartnerDetailsEditComponentProps extends PartnerDetailsParams {
 }
 
 export interface PartnerDetailsParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
 }
 
 /**

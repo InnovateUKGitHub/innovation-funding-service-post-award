@@ -7,7 +7,7 @@ import ProjectOverviewTiles from "./projectOverviewTiles";
 import { useProjectOverviewData, isPartnerWithdrawn } from "./projectOverview.logic";
 
 type Props = {
-  projectId: string;
+  projectId: ProjectId;
 };
 
 const ProjectOverviewPage = (props: Props & BaseProps) => {

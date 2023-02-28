@@ -8,8 +8,8 @@ export class UploadPartnerDocumentCommand extends CommandMultipleDocumentBase<st
   protected showValidationErrors = true;
 
   constructor(
-    private readonly projectId: string,
-    private readonly partnerId: string,
+    private readonly projectId: ProjectId,
+    private readonly partnerId: PartnerId,
     protected readonly documents: MultipleDocumentUploadDto,
   ) {
     super();

@@ -6,7 +6,7 @@ interface IStream {
 
 export type AllPartnerDocumentSummaryDto = PartnerDocumentSummaryDto[];
 export interface PartnerDocumentSummaryDto extends DocumentSummaryDto {
-  partnerId: string;
+  partnerId: PartnerId;
   partnerName: string;
 }
 

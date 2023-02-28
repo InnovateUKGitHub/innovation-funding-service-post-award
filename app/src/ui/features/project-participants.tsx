@@ -19,7 +19,7 @@ const initialProjectStatusState: IProjectParticipants = {
 /**
  *  hook to return all project participants
  */
-function useGetProjectParticipants(projectId?: string): IProjectParticipants {
+function useGetProjectParticipants(projectId?: ProjectId): IProjectParticipants {
   const stores = useStores();
 
   // Note: Bail from non-project pages
@@ -44,7 +44,7 @@ function useGetProjectParticipants(projectId?: string): IProjectParticipants {
 }
 
 interface ProjectParticipantProviderProps {
-  projectId: string | undefined;
+  projectId: ProjectId | undefined;
   children: React.ReactElement;
 }
 

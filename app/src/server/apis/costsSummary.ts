@@ -5,7 +5,7 @@ import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface ICostsSummaryApi {
   getAllByPartnerIdForPeriod: (
-    params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>,
+    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
   ) => Promise<CostsSummaryForPeriodDto[]>;
 }
 
@@ -25,7 +25,7 @@ class Controller extends ControllerBase<CostsSummaryForPeriodDto> implements ICo
   }
 
   public async getAllByPartnerIdForPeriod(
-    params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>,
+    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
   ) {
     const query = new GetCostsSummaryForPeriodQuery(params.projectId, params.partnerId, params.periodId);
     return contextProvider.start(params).runQuery(query);

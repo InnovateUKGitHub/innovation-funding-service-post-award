@@ -28,23 +28,23 @@ export class PartnersStore extends StoreBase {
     return this.getData("partners", storeKeys.getPartnersKey(), p => apiClient.partners.getAll({ ...p }));
   }
 
-  public getPartnersForProject(projectId: string) {
+  public getPartnersForProject(projectId: ProjectId) {
     return this.getData("partners", storeKeys.getProjectKey(projectId), p =>
       apiClient.partners.getAllByProjectId({ projectId, ...p }),
     );
   }
 
-  public getById(partnerId: string) {
+  public getById(partnerId: PartnerId) {
     return this.getData("partner", storeKeys.getPartnerKey(partnerId), p =>
       apiClient.partners.get({ partnerId, ...p }),
     );
   }
 
-  public getLeadPartner(projectId: string) {
+  public getLeadPartner(projectId: ProjectId) {
     return this.getPartnersForProject(projectId).then(x => x.find(y => y.isLead));
   }
 
-  public getPartnerEditor(projectId: string, partnerId: string, init?: (dto: PartnerDto) => void) {
+  public getPartnerEditor(projectId: ProjectId, partnerId: PartnerId, init?: (dto: PartnerDto) => void) {
     const partnerDocumentsPending = this.partnerDocumentsStore.getPartnerDocuments(projectId, partnerId);
     return partnerDocumentsPending.chain(partnerDocuments =>
       this.getEditor(
@@ -60,7 +60,7 @@ export class PartnersStore extends StoreBase {
 
   public updatePartner(
     submit: boolean,
-    partnerId: string,
+    partnerId: PartnerId,
     partnerDto: PartnerDto,
     options?: UpdatePartnerOptions,
   ): void {

@@ -13,7 +13,7 @@ interface Callbacks {
 }
 
 export interface MonitoringReportDeleteParams {
-  projectId: string;
+  projectId: ProjectId;
   id: string;
 }
 

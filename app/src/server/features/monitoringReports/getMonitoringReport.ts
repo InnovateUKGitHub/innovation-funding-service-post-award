@@ -13,7 +13,7 @@ import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
   private readonly updatableStatuses: ISalesforceMonitoringReportStatus[] = ["New", "Draft", "IUK Queried"];
 
-  constructor(private readonly projectId: string, private readonly id: string) {
+  constructor(private readonly projectId: ProjectId, private readonly id: string) {
     super();
   }
 
@@ -37,7 +37,7 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
       headerId: header.Id,
       status: mapMonitoringReportStatus(header.Acc_MonitoringReportStatus__c),
       statusName: header.MonitoringReportStatusName,
-      projectId: header.Acc_Project__c,
+      projectId: header.Acc_Project__c as ProjectId,
       startDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodStartDate__c),
       endDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodEndDate__c),
       periodId: header.Acc_ProjectPeriodNumber__c,

@@ -17,19 +17,19 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
     super(getState, queue);
   }
 
-  private getKey(partnerId: string, periodId: number) {
+  private getKey(partnerId: PartnerId, periodId: number) {
     return storeKeys.getClaimKey(partnerId, periodId);
   }
 
-  public getClaimDocuments(projectId: string, partnerId: string, periodId: number) {
+  public getClaimDocuments(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
     return this.getData("documents", this.getKey(partnerId, periodId), p =>
       apiClient.documents.getClaimDocuments({ projectId, partnerId, description: undefined, periodId, ...p }),
     );
   }
 
   public getClaimDocumentsEditor(
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     periodId: number,
     init?: (dto: MultipleDocumentUploadDto) => void,
   ) {
@@ -44,8 +44,8 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
 
   public updateClaimDocumentsEditor(
     saving: boolean,
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     periodId: number,
     dto: MultipleDocumentUploadDto,
     message?: string,
@@ -64,8 +64,8 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
   }
 
   public deleteClaimDocument(
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     periodId: number,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto,

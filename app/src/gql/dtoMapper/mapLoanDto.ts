@@ -30,7 +30,7 @@ type LoanDtoMapping = Pick<LoanDto, "id" | "period" | "status" | "forecastAmount
 
 const mapper: GQL.DtoMapper<LoanDtoMapping, LoanNode> = {
   id: function (node) {
-    return node?.Id ?? "";
+    return (node?.Id ?? "") as LoanId;
   },
   period: function (node) {
     return node?.Acc_PeriodNumber__c?.value ?? 0;

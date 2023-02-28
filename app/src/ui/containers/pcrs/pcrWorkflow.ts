@@ -38,7 +38,7 @@ export interface PcrStepProps<TDto, TVal> extends IStepProps {
 }
 
 export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, BaseProps {
-  projectId: string;
+  projectId: ProjectId;
   pcr: PCRDto;
   pcrItem: TDto;
   project: ProjectDto;

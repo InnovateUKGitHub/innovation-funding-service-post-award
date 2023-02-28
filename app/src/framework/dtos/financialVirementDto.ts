@@ -19,13 +19,13 @@ export interface FinancialVirementDto {
   newFundingLevel: number;
   newRemainingGrant: number;
 
-  currentPartnerId?: string;
+  currentPartnerId?: PartnerId;
 
   partners: PartnerVirementsDto[];
 }
 
 export interface PartnerVirementsDto {
-  partnerId: string;
+  partnerId: PartnerId;
   costsClaimedToDate: number;
 
   originalEligibleCosts: number;

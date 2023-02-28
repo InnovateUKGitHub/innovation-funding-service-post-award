@@ -3,7 +3,7 @@ import { QueryBase } from "../common";
 import { GetUnfilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
 
 export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
-  constructor(private readonly partnerId: string) {
+  constructor(private readonly partnerId: PartnerId) {
     super();
   }
 

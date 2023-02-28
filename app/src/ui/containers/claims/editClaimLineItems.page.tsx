@@ -27,8 +27,8 @@ import { useNavigate } from "react-router-dom";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export interface EditClaimDetailsParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   costCategoryId: string;
   periodId: number;
 }

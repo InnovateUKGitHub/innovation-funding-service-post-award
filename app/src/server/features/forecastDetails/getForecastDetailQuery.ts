@@ -4,7 +4,7 @@ import { QueryBase } from "../common";
 
 export class GetForecastDetailQuery extends QueryBase<ForecastDetailsDTO> {
   constructor(
-    private readonly partnerId: string,
+    private readonly partnerId: PartnerId,
     private readonly periodId: number,
     private readonly costCategoryId: string,
   ) {

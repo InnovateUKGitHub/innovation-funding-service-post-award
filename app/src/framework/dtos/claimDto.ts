@@ -13,7 +13,7 @@ export interface ClaimDto {
   lastModifiedDate: Date;
   overheadRate: number;
   paidDate: Date | null;
-  partnerId: string;
+  partnerId: PartnerId;
   periodEndDate: Date;
   periodId: number;
   periodStartDate: Date;

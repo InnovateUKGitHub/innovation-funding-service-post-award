@@ -11,7 +11,7 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { getPcrItemTaskStatus } from "./utils/get-pcr-item-task-status";
 
 export interface PCRReviewParams {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
 }
 

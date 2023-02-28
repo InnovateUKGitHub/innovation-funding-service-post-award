@@ -21,7 +21,7 @@ export interface ISalesforceBankPartnerDetails {
 }
 
 export interface IPartnerBankDetailsRepository {
-  getById(partnerId: string): Promise<PartnerBankDetails>;
+  getById(partnerId: PartnerId): Promise<PartnerBankDetails>;
 }
 
 /**
@@ -56,7 +56,7 @@ export class PartnerBankDetailsRepository
 
   mapper = new SalesforcePartnerBankDetailsMapper();
 
-  getById(partnerId: string) {
+  getById(partnerId: PartnerId) {
     return super.loadItem({ Id: partnerId });
   }
 }

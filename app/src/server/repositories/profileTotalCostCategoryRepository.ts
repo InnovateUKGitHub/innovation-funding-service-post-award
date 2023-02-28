@@ -14,7 +14,7 @@ export interface ISalesforceProfileTotalCostCategory {
 }
 
 export interface IProfileTotalCostCategoryRepository {
-  getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalCostCategory[]>;
+  getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceProfileTotalCostCategory[]>;
 }
 
 /**
@@ -44,7 +44,7 @@ export class ProfileTotalCostCategoryRepository
     "Acc_ProfileOverrideAwardRate__c",
   ];
 
-  getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalCostCategory[]> {
+  getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceProfileTotalCostCategory[]> {
     const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(
       this.recordType,
     )}' AND Acc_CostCategory__c != null`;

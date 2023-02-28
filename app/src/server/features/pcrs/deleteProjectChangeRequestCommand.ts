@@ -3,7 +3,7 @@ import { PCRStatus } from "@framework/constants";
 import { BadRequestError, CommandBase } from "../common";
 
 export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
-  constructor(private readonly projectId: string, private readonly pcrId: string) {
+  constructor(private readonly projectId: ProjectId, private readonly pcrId: string) {
     super();
   }
 

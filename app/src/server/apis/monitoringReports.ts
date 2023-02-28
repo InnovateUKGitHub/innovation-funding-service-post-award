@@ -19,15 +19,15 @@ export interface IMonitoringReportsApi {
   createMonitoringReport: (
     params: ApiParams<{ monitoringReportDto: MonitoringReportDto; submit: boolean }>,
   ) => Promise<MonitoringReportDto>;
-  get: (params: ApiParams<{ projectId: string; reportId: string }>) => Promise<MonitoringReportDto>;
-  getAllForProject: (params: ApiParams<{ projectId: string }>) => Promise<MonitoringReportSummaryDto[]>;
+  get: (params: ApiParams<{ projectId: ProjectId; reportId: string }>) => Promise<MonitoringReportDto>;
+  getAllForProject: (params: ApiParams<{ projectId: ProjectId }>) => Promise<MonitoringReportSummaryDto[]>;
   saveMonitoringReport: (
     params: ApiParams<{ monitoringReportDto: MonitoringReportDto; submit: boolean }>,
   ) => Promise<MonitoringReportDto>;
-  deleteMonitoringReport: (params: ApiParams<{ projectId: string; reportId: string }>) => Promise<boolean>;
+  deleteMonitoringReport: (params: ApiParams<{ projectId: ProjectId; reportId: string }>) => Promise<boolean>;
   getActiveQuestions: (params: ApiParams) => Promise<MonitoringReportQuestionDto[]>;
   getStatusChanges: (
-    params: ApiParams<{ projectId: string; reportId: string }>,
+    params: ApiParams<{ projectId: ProjectId; reportId: string }>,
   ) => Promise<MonitoringReportStatusChangeDto[]>;
 }
 
@@ -75,7 +75,7 @@ class Controller
     );
   }
 
-  public async get(params: ApiParams<{ projectId: string; reportId: string }>) {
+  public async get(params: ApiParams<{ projectId: ProjectId; reportId: string }>) {
     const { projectId, reportId } = params;
     const query = new GetMonitoringReportById(projectId, reportId);
     return contextProvider.start(params).runQuery(query);
@@ -99,7 +99,7 @@ class Controller
     return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, id));
   }
 
-  public async getAllForProject(params: ApiParams<{ projectId: string }>) {
+  public async getAllForProject(params: ApiParams<{ projectId: ProjectId }>) {
     const { projectId } = params;
     const query = new GetMonitoringReportsForProject(projectId);
     return contextProvider.start(params).runQuery(query);
@@ -109,13 +109,13 @@ class Controller
     return contextProvider.start(params).runQuery(new GetMonitoringReportActiveQuestions());
   }
 
-  public getStatusChanges(params: ApiParams<{ projectId: string; reportId: string }>) {
+  public getStatusChanges(params: ApiParams<{ projectId: ProjectId; reportId: string }>) {
     const { projectId, reportId } = params;
     const query = new GetMonitoringReportStatusChanges(projectId, reportId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async deleteMonitoringReport(params: ApiParams<{ projectId: string; reportId: string }>) {
+  public async deleteMonitoringReport(params: ApiParams<{ projectId: ProjectId; reportId: string }>) {
     const { projectId, reportId } = params;
     const command = new DeleteMonitoringReportCommand(projectId, reportId);
     await contextProvider.start(params).runCommand(command);

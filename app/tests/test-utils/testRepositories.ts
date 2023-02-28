@@ -64,11 +64,11 @@ class ProjectsTestRepository
 }
 
 class PartnerTestRepository extends TestRepository<Entities.Partner> implements Repositories.IPartnerRepository {
-  getAllByProjectId(projectId: string) {
+  getAllByProjectId(projectId: ProjectId) {
     return super.getWhere(x => x.projectId === projectId);
   }
 
-  getById(partnerId: string) {
+  getById(partnerId: PartnerId) {
     return super.getOne(x => x.id === partnerId);
   }
 
@@ -160,7 +160,7 @@ class ProjectContactTestRepository
   extends TestRepository<Repositories.ISalesforceProjectContact>
   implements Repositories.IProjectContactsRepository
 {
-  getAllByProjectId(projectId: string) {
+  getAllByProjectId(projectId: ProjectId) {
     return super.getWhere(x => x.Acc_ProjectId__c === projectId);
   }
 
@@ -191,24 +191,24 @@ class ClaimsTestRepository
     super();
   }
 
-  getAllByProjectId(projectId: string) {
+  getAllByProjectId(projectId: ProjectId) {
     const partnerIds = this.partnerRepository.Items.filter(x => x.projectId === projectId).map(x => x.id);
-    return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__r.Id) !== -1);
+    return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__r.Id as PartnerId) !== -1);
   }
 
-  getAllByPartnerId(partnerId: string) {
+  getAllByPartnerId(partnerId: PartnerId) {
     return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
   }
 
-  getAllIncludingNewByPartnerId(partnerId: string) {
+  getAllIncludingNewByPartnerId(partnerId: PartnerId) {
     return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
   }
 
-  get(partnerId: string, periodId: number) {
+  get(partnerId: PartnerId, periodId: number) {
     return super.getOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
-  getByProjectId(projectId: string, partnerId: string, periodId: number) {
+  getByProjectId(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
     return super.getOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
@@ -241,13 +241,13 @@ class ClaimDetailsTestRepository
   extends TestRepository<Repositories.ISalesforceClaimDetails>
   implements Repositories.IClaimDetailsRepository
 {
-  getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
+  getAllByPartnerForPeriod(partnerId: PartnerId, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
     return super.getWhere(
       x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId,
     );
   }
 
-  getAllByPartner(partnerId: string): Promise<Repositories.ISalesforceClaimDetails[]> {
+  getAllByPartner(partnerId: PartnerId): Promise<Repositories.ISalesforceClaimDetails[]> {
     return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
   }
 
@@ -381,7 +381,7 @@ class ClaimLineItemsTestRepository
   extends TestRepository<Repositories.ISalesforceClaimLineItem>
   implements Repositories.IClaimLineItemRepository
 {
-  getAllForCategory(partnerId: string, categoryId: string, periodId: number) {
+  getAllForCategory(partnerId: PartnerId, categoryId: string, periodId: number) {
     return super.getWhere(
       x =>
         x.Acc_ProjectPeriodNumber__c === periodId &&
@@ -434,7 +434,7 @@ class MonitoringReportHeaderTestRepository
     return super.getOne(x => x.Id === id);
   }
 
-  get(projectId: string, periodId: number): Promise<Repositories.ISalesforceMonitoringReportHeader> {
+  get(projectId: ProjectId, periodId: number): Promise<Repositories.ISalesforceMonitoringReportHeader> {
     return super.getOne(x => x.Acc_Project__c === projectId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
@@ -450,7 +450,7 @@ class MonitoringReportHeaderTestRepository
     return Promise.resolve(item.Id);
   }
 
-  getAllForProject(projectId: string): Promise<Repositories.ISalesforceMonitoringReportHeader[]> {
+  getAllForProject(projectId: ProjectId): Promise<Repositories.ISalesforceMonitoringReportHeader[]> {
     return super.getWhere(x => x.Acc_Project__c === projectId);
   }
 
@@ -521,7 +521,7 @@ class ClaimTotalCostTestRepository
   extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory>
   implements Repositories.IClaimTotalCostCategoryRepository
 {
-  getAllByPartnerId(partnerId: string) {
+  getAllByPartnerId(partnerId: PartnerId) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 }
@@ -530,14 +530,14 @@ class ProfileDetailsTestRepository
   extends TestRepository<Repositories.ISalesforceProfileDetails>
   implements Repositories.IProfileDetailsRepository
 {
-  getRequiredCategories(partnerId: string): Promise<Repositories.ISalesforceProfileDetails[]> {
+  getRequiredCategories(partnerId: PartnerId): Promise<Repositories.ISalesforceProfileDetails[]> {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
-  getAllByPartner(partnerId: string) {
+  getAllByPartner(partnerId: PartnerId) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 
-  getById(partnerId: string, periodId: number, costCategoryId: string) {
+  getById(partnerId: PartnerId, periodId: number, costCategoryId: string) {
     return super
       .getWhere(
         x =>
@@ -569,24 +569,26 @@ class ProfileTotalPeriodTestRepository
     super();
   }
 
-  get(partnerId: string, periodId: number): Promise<Repositories.ISalesforceProfileTotalPeriod> {
+  get(partnerId: PartnerId, periodId: number): Promise<Repositories.ISalesforceProfileTotalPeriod> {
     return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
-  getAllByPartnerId(partnerId: string): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
+  getAllByPartnerId(partnerId: PartnerId): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 
-  getByProjectIdAndPeriodId(projectId: string, periodId: number) {
+  getByProjectIdAndPeriodId(projectId: ProjectId, periodId: number) {
     const partnerIds = this.partnerRepository.Items.filter(x => x.projectId === projectId).map(x => x.id);
     return super.getWhere(
-      x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1 && x.Acc_ProjectPeriodNumber__c === periodId,
+      x =>
+        partnerIds.indexOf(x.Acc_ProjectParticipant__c as PartnerId) !== -1 &&
+        x.Acc_ProjectPeriodNumber__c === periodId,
     );
   }
 
-  getAllByProjectId(projectId: string): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
+  getAllByProjectId(projectId: ProjectId): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
     const partnerIds = this.partnerRepository.Items.filter(x => x.projectId === projectId).map(x => x.id);
-    return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1);
+    return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__c as PartnerId) !== -1);
   }
 }
 
@@ -594,7 +596,7 @@ class ProfileTotalCostCategoryTestRepository
   extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory>
   implements Repositories.IProfileTotalCostCategoryRepository
 {
-  getAllByPartnerId(partnerId: string) {
+  getAllByPartnerId(partnerId: PartnerId) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 }
@@ -637,7 +639,7 @@ class ClaimStatusChangeTestRepository
     super();
   }
 
-  getAllForClaim(partnerId: string, periodId: number) {
+  getAllForClaim(partnerId: PartnerId, periodId: number) {
     const claim = this.claimsRepository.Items.find(
       x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId,
     );
@@ -682,11 +684,11 @@ class PCRTestRepository
 {
   public PreviousStatus: { [key: string]: PCRStatus } = {};
 
-  getAllByProjectId(projectId: string): Promise<Entities.ProjectChangeRequestEntity[]> {
+  getAllByProjectId(projectId: ProjectId): Promise<Entities.ProjectChangeRequestEntity[]> {
     return super.getWhere(x => x.projectId === projectId);
   }
 
-  getById(projectId: string, id: string): Promise<Entities.ProjectChangeRequestEntity> {
+  getById(projectId: ProjectId, id: string): Promise<Entities.ProjectChangeRequestEntity> {
     return super
       .getOne(x => x.projectId === projectId && x.id === id)
       .then(x => {
@@ -718,7 +720,7 @@ class PCRTestRepository
       return {
         id: itemId,
         pcrId: headerId,
-        partnerId: "",
+        partnerId: "" as PartnerId,
         typeOfAid: TypeOfAid.Unknown,
         accountName: "",
         statusName: "",
@@ -765,7 +767,7 @@ class PCRTestRepository
     return id;
   }
 
-  isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean> {
+  isExisting(projectId: ProjectId, projectChangeRequestId: string): Promise<boolean> {
     const data = super.filterOne(x => x.projectId === projectId && x.id === projectChangeRequestId);
     return Promise.resolve(!!data);
   }
@@ -871,7 +873,7 @@ class ProjectChangeRequestStatusChangeTestRepository
   }
 
   getStatusChanges(
-    projectId: string,
+    projectId: ProjectId,
     projectChangeRequestId: string,
   ): Promise<Entities.ProjectChangeRequestStatusChangeEntity[]> {
     return super.getWhere(x => x.pcrId === projectChangeRequestId);
@@ -938,7 +940,7 @@ class LoansTestRepository {
     return Promise.resolve(loans);
   }
 
-  get(projectId: string, options: { loanId?: string; periodId?: number }) {
+  get(projectId: ProjectId, options: { loanId?: string; periodId?: number }) {
     return new Promise<LoanDto>(resolve => {
       if (options.loanId) {
         const loanItem = this.Items.find(x => x.Id === options.loanId);

@@ -4,7 +4,7 @@ import { QueryBase } from "../common/queryBase";
 import { mapClaim } from "./mapClaim";
 
 export class GetAllIncludingNewForPartnerQuery extends QueryBase<ClaimDto[]> {
-  constructor(private readonly partnerId: string) {
+  constructor(private readonly partnerId: PartnerId) {
     super();
   }
 

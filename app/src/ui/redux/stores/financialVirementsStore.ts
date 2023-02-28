@@ -9,19 +9,24 @@ import { IEditorStore } from "..";
 import { StoreBase } from "./storeBase";
 
 export class FinancialVirementsStore extends StoreBase {
-  private getKey(projectId: string, pcrId: string, pcrItemId: string, partnerId?: string): string {
+  private getKey(projectId: ProjectId, pcrId: string, pcrItemId: string, partnerId?: PartnerId): string {
     return storeKeys.getFinancialVirementKey(projectId, pcrId, pcrItemId, partnerId);
   }
 
-  public get(projectId: string, pcrId: string, pcrItemId: string, partnerId?: string): Pending<FinancialVirementDto> {
+  public get(
+    projectId: ProjectId,
+    pcrId: string,
+    pcrItemId: string,
+    partnerId?: PartnerId,
+  ): Pending<FinancialVirementDto> {
     return this.getData("financialVirement", this.getKey(projectId, pcrId, pcrItemId, partnerId), p =>
       apiClient.financialVirements.get({ projectId, pcrItemId, pcrId, partnerId, ...p }),
     );
   }
 
   public getPartnerVirements(
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     pcrId: string,
     pcrItemId: string,
   ): Pending<PartnerVirementsDto> {
@@ -36,10 +41,10 @@ export class FinancialVirementsStore extends StoreBase {
   }
 
   public getFinancialVirementEditor(
-    projectId: string,
+    projectId: ProjectId,
     pcrId: string,
     pcrItemId: string,
-    partnerId?: string,
+    partnerId?: PartnerId,
   ): Pending<IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>> {
     return super.getEditor(
       "financialVirement",
@@ -52,13 +57,13 @@ export class FinancialVirementsStore extends StoreBase {
 
   public updateFinancialVirementEditor(
     saving: boolean,
-    projectId: string,
+    projectId: ProjectId,
     pcrId: string,
     pcrItemId: string,
     dto: FinancialVirementDto,
     submit: boolean,
     onComplete: () => void,
-    partnerId?: string,
+    partnerId?: PartnerId,
   ): void {
     return super.updateEditor(
       saving,

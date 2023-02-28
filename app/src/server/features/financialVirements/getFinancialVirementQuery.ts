@@ -17,9 +17,9 @@ import { GetFilteredCostCategoriesQuery, GetUnfilteredCostCategoriesQuery } from
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(
-    private readonly projectId: string,
+    private readonly projectId: ProjectId,
     private readonly pcrItemId: string,
-    private readonly partnerId?: string,
+    private readonly partnerId?: PartnerId,
   ) {
     super();
   }

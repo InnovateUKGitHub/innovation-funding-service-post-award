@@ -18,7 +18,7 @@ import type { ContentSelector } from "@copy/type";
 import { useMonitoringReportDashboardQuery, MonitoringReport } from "./monitoringReportDashboard.logic";
 
 interface MonitoringReportDashboardParams {
-  projectId: string;
+  projectId: ProjectId;
 }
 
 const editStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried];

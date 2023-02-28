@@ -13,10 +13,10 @@ export interface ISalesforceProfileTotalPeriod {
 }
 
 export interface IProfileTotalPeriodRepository {
-  getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]>;
-  getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]>;
-  getByProjectIdAndPeriodId(projectId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod[]>;
-  get(partnerId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod>;
+  getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProfileTotalPeriod[]>;
+  getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceProfileTotalPeriod[]>;
+  getByProjectIdAndPeriodId(projectId: ProjectId, periodId: number): Promise<ISalesforceProfileTotalPeriod[]>;
+  get(partnerId: PartnerId, periodId: number): Promise<ISalesforceProfileTotalPeriod>;
 }
 
 /**
@@ -45,7 +45,7 @@ export class ProfileTotalPeriodRepository
     "Acc_ProfileOverrideAwardRate__c",
   ];
 
-  getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {
+  getAllByProjectId(projectId: ProjectId): Promise<ISalesforceProfileTotalPeriod[]> {
     const filter = `
       Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
       AND RecordType.Name = '${sss(this.recordType)}'
@@ -53,12 +53,12 @@ export class ProfileTotalPeriodRepository
     return super.where(filter);
   }
 
-  getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]> {
+  getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceProfileTotalPeriod[]> {
     const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(this.recordType)}'`;
     return super.where(filter);
   }
 
-  getByProjectIdAndPeriodId(projectId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod[]> {
+  getByProjectIdAndPeriodId(projectId: ProjectId, periodId: number): Promise<ISalesforceProfileTotalPeriod[]> {
     const filter = `
       Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
       AND RecordType.Name = '${sss(this.recordType)}'
@@ -67,7 +67,7 @@ export class ProfileTotalPeriodRepository
     return super.where(filter);
   }
 
-  get(partnerId: string, periodId: number) {
+  get(partnerId: PartnerId, periodId: number) {
     const filter = `
       Acc_ProjectParticipant__c = '${sss(partnerId)}'
       AND RecordType.Name = '${sss(this.recordType)}'

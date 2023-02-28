@@ -35,7 +35,7 @@ export const useFinanceSummaryContent = () => {
 export type Project = GQL.ObjectNodeSelector<FinanceSummaryQuery$data, "Acc_Project__c">;
 
 export type Partner = {
-  id: string;
+  id: PartnerId;
   name: string;
   totalParticipantGrant: number | null;
   totalCostsSubmitted: number | null;
@@ -50,7 +50,7 @@ export type Partner = {
   auditReportFrequencyName: string;
 };
 
-export const useFinanceSummaryData = (projectId: string) => {
+export const useFinanceSummaryData = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<FinanceSummaryQuery>(financeSummaryQuery, {
     projectId,
   });

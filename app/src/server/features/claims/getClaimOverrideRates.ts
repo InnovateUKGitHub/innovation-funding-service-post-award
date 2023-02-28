@@ -11,7 +11,7 @@ import { IContext } from "@framework/types";
 import { QueryBase } from "@server/features/common";
 
 export class GetClaimOverrideRates extends QueryBase<ClaimOverrideRateDto> {
-  constructor(private readonly partnerId: string) {
+  constructor(private readonly partnerId: PartnerId) {
     super();
   }
 

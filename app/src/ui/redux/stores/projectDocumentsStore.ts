@@ -6,15 +6,15 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class ProjectDocumentsStore extends DocumentsStoreBase {
-  private getProjectDocumentsKey(projectId: string) {
+  private getProjectDocumentsKey(projectId: ProjectId) {
     return storeKeys.getProjectKey(projectId);
   }
-  public getProjectDocuments(projectId: string) {
+  public getProjectDocuments(projectId: ProjectId) {
     return this.getData("documents", this.getProjectDocumentsKey(projectId), p =>
       apiClient.documents.getProjectDocuments({ projectId, ...p }),
     );
   }
-  public getProjectDocumentEditor(projectId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
+  public getProjectDocumentEditor(projectId: ProjectId, init?: (dto: MultipleDocumentUploadDto) => void) {
     return this.getEditor(
       "multipleDocuments",
       this.getProjectDocumentsKey(projectId),
@@ -26,7 +26,7 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
 
   public updateProjectDocumentsEditor(
     saving: boolean,
-    projectId: string,
+    projectId: ProjectId,
     dto: MultipleDocumentUploadDto,
     message: string,
     onComplete?: () => void,
@@ -43,7 +43,7 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
   }
 
   public deleteProjectDocument(
-    projectId: string,
+    projectId: ProjectId,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto | PartnerDocumentSummaryDto,
     message?: string,
@@ -61,8 +61,8 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
   }
 
   public deleteProjectPartnerDocumentsEditor(
-    projectId: string,
-    partnerId: string,
+    projectId: ProjectId,
+    partnerId: PartnerId,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto,
     message: string,

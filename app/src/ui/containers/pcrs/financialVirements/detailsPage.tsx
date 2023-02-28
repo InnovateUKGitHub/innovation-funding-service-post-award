@@ -9,8 +9,8 @@ import { roundCurrency } from "@framework/util";
 import { getAuthRoles } from "@framework/types";
 
 interface Params {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   pcrId: string;
   itemId: string;
   mode: "review" | "view";

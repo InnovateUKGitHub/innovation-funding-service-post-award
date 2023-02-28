@@ -8,7 +8,7 @@ export interface ISalesforceClaimTotalCostCategory {
 }
 
 export interface IClaimTotalCostCategoryRepository {
-  getAllByPartnerId(partnerId: string): Promise<ISalesforceClaimTotalCostCategory[]>;
+  getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceClaimTotalCostCategory[]>;
 }
 
 /**
@@ -32,7 +32,7 @@ export class ClaimTotalCostCategoryRepository
     "Acc_ProjectParticipant__c",
   ];
 
-  getAllByPartnerId(partnerId: string): Promise<ISalesforceClaimTotalCostCategory[]> {
+  getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceClaimTotalCostCategory[]> {
     const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(this.recordType)}'`;
     return super.where(filter);
   }

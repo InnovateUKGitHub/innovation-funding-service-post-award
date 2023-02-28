@@ -50,7 +50,7 @@ In the constructor these methods which match the interface are bound to express 
 New controller interfaces are added to the `IApiClient` are registered with the server by adding to the `serverApis` const in `./server/apis/index.ts`
 
     export interface IProjectContactsApi {
-        getAllByProjectId: (projectId: string) => Promise<ProjectContactDto[]>
+        getAllByProjectId: (projectId: ProjectId) => Promise<ProjectContactDto[]>
     }
 
     class Controller extends ControllerBase<ProjectContactDto> implements IProjectContactsApi {
@@ -60,7 +60,7 @@ New controller interfaces are added to the `IApiClient` are registered with the 
             this.getItems("/", (p, q) => ({ projectId: q.projectId }), p => this.getAllByProjectId(p.projectId));
         }
 
-        public async getAllByProjectId(projectId: string) {
+        public async getAllByProjectId(projectId: ProjectId) {
             const query = new GetAllForProjectQuery(projectId);
             return await contextProvider.start().runQuery(query);
         }

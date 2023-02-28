@@ -22,7 +22,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const profileDetail = context.testData.createProfileDetail();
     const project = context.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
-    const partnerId = profileDetail.Acc_ProjectParticipant__c;
+    const partnerId = profileDetail.Acc_ProjectParticipant__c as PartnerId;
     const dto: ForecastDetailsDTO[] = [
       {
         id: "123",
@@ -43,7 +43,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const profileDetail = context.testData.createProfileDetail();
     const project = context.testData.createProject();
-    const partnerId = profileDetail.Acc_ProjectParticipant__c;
+    const partnerId = profileDetail.Acc_ProjectParticipant__c as PartnerId;
     const dto: ForecastDetailsDTO[] = [
       {
         // @ts-expect-error invalid id scenario

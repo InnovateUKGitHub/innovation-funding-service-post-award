@@ -10,21 +10,21 @@ const testPartnerData: PartnerDto[] = [
   {
     id: "123",
     isLead: true,
-    projectId: "456",
+    projectId: "456" as ProjectId,
     accountId: "321",
     name: "Steel Manufacturing",
   },
   {
     id: "912",
     isLead: false,
-    projectId: "456",
+    projectId: "456" as ProjectId,
     accountId: "312",
     name: "University of Life",
   },
   {
     id: "431",
     isLead: false,
-    projectId: "456",
+    projectId: "456" as ProjectId,
     accountId: "832",
     name: "Driverless Cars",
   },
@@ -38,7 +38,7 @@ const testContactData: ProjectContactDto[] = [
     roleName: "Finance Contact",
     email: "tedtester@nowhere.com",
     accountId: "321",
-    projectId: "456",
+    projectId: "456" as ProjectId,
   },
   {
     id: "101",
@@ -47,7 +47,7 @@ const testContactData: ProjectContactDto[] = [
     roleName: "Project Manager",
     email: "davedeveloper@nowhere.com",
     accountId: "312",
-    projectId: "456",
+    projectId: "456" as ProjectId,
   },
   {
     id: "102",
@@ -56,7 +56,7 @@ const testContactData: ProjectContactDto[] = [
     roleName: "Finance Contact",
     email: "joebloggs@nowhere.com",
     accountId: "312",
-    projectId: "456",
+    projectId: "456" as ProjectId,
   },
   {
     id: "103",
@@ -65,7 +65,7 @@ const testContactData: ProjectContactDto[] = [
     roleName: "Finance Contact",
     email: "bobbaker@nowhere.com",
     accountId: "832",
-    projectId: "456",
+    projectId: "456" as ProjectId,
   },
 ];
 

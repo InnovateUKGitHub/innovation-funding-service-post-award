@@ -32,8 +32,8 @@ import {
 } from "@ui/components";
 
 export interface UpdateForecastParams {
-  projectId: string;
-  partnerId: string;
+  projectId: ProjectId;
+  partnerId: PartnerId;
   periodId: number;
 }
 

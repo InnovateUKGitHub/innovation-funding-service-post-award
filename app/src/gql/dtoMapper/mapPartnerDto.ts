@@ -61,7 +61,7 @@ type PartnerDtoMapping = Pick<
 
 const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles: SfRoles }> = {
   id: function (node) {
-    return node?.Id ?? "";
+    return (node?.Id ?? "") as PartnerId;
   },
   accountId: function (node) {
     return node?.Acc_AccountId__c?.value ?? "";

@@ -10,7 +10,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 
 export interface OverheadDocumentsPageParams {
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
   costCategoryId: string;
   itemId: string;

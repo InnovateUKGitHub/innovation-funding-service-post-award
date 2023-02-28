@@ -13,7 +13,7 @@ export interface LoanFinancialVirement extends Pick<LoanDto, "id" | "status" | "
 export interface PartnerFinancialVirement {
   id: string;
   pcrItemId: string;
-  partnerId: string;
+  partnerId: PartnerId;
   originalFundingLevel: number;
   newFundingLevel: number;
   newEligibleCosts?: number;
