@@ -3,7 +3,7 @@ import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { DocumentDescriptionMapper } from "@server/repositories/mappers/documentMapper";
 import { Arg, Ctx, ID, Mutation, Resolver } from "type-graphql";
 import { SalesforceAccProjectConnectionDocumentTypeEnum } from "../enum/SalesforceAccProjectConnectionDocumentTypeEnum";
-import { GraphQLFileScalar } from "../scalar/GraphQLBlobScalar";
+import { GraphQLFileScalar } from "../scalar/GraphQLFileScalar";
 import { File } from "@whatwg-node/fetch"
 
 @Resolver()
