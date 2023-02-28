@@ -70,7 +70,9 @@ const getServerRoutes = async () => {
     ((err, req, res, next) => {
       // Form validation errors are technically "an error" which could be caught.
       // This means CSRF protection may still be required.
-      csrfProtection(req, res, next);
+      csrfProtection(req, res, () => {
+        next(err);
+      });
     }) as ErrorRequestHandler,
     ((err, req, res, next) => {
       serverRender({ schema })({ req, res, err, next });
