@@ -82,6 +82,7 @@ export function renderHtml({
 
   <html lang="en-GB">
       <head>
+          <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
           ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
           
           <meta charset="utf-8" />
@@ -111,7 +112,6 @@ export function renderHtml({
             setTimeout(function () {
               document.body.style.visibility = "visible";
             }, 10);
-            document.body.className = document.body.className + ' js-enabled';
             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
             window.__RELAY_BOOTSTRAP_DATA__ = ${JSON.stringify(relayData).replace(/</g, "\\u003c")}
           </script>
@@ -120,7 +120,6 @@ export function renderHtml({
     configuration.build
   }"></script>
           <script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>
-         
       </body>
   </html>
 `;
