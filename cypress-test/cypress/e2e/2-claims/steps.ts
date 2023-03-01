@@ -4,16 +4,38 @@ export const shouldShowProjectTitle = () => {
 
 export const shouldShowAllAccordion = () => {
   cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click();
+  cy.getByQA("noClosedClaims-0012600001amaskAAA").contains("There are no closed claims for this partner.");
+  cy.getByQA("noClosedClaims-0012600001amb0ZAAQ").contains("There are no closed claims for this partner.");
+  cy.getByQA("noClosedClaims-0012600001amb0RAAQ").contains("There are no closed claims for this partner.");
 };
 
 export const shouldShowCostCatTable = () => {
-  cy.get("thead.govuk-table__head");
-  cy.get("tr.govuk-table__row");
-  cy.tableHeader("Category");
-  cy.tableHeader("Total eligible costs");
-  cy.tableHeader("Eligible costs claimed to date");
-  cy.tableHeader("Costs claimed this period");
-  cy.tableHeader("Remaining eligible costs");
+  [
+    "Category",
+    "Total eligible costs",
+    "Eligible costs claimed to date",
+    "Costs claimed this period",
+    "Remaining eligible costs",
+  ].forEach(header => {
+    cy.tableHeader(header);
+  });
+
+  [
+    "Labour",
+    "Overheads",
+    "Materials",
+    "Capital usage",
+    "Subcontracting",
+    "Travel and subsistence",
+    "Other costs",
+    "Other costs 2",
+    "Other costs 3",
+    "Other costs 4",
+    "Other costs 5",
+    "Total",
+  ].forEach(cat => {
+    cy.tableCell(cat);
+  });
 };
 
 export const shouldShowAcademicCostCatTable = () => {
@@ -45,16 +67,15 @@ export const shouldShowAcademicCostCatTable = () => {
   });
 };
 
-export const shouldHaveCostCategoryTable = (category: string) => {
-  cy.tableHeader(category);
-};
-
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 
 export const correctTableHeaders = () => {
-  cy.tableHeader("Description");
-  cy.tableHeader("Cost (£)");
-  cy.tableHeader("Last updated");
+  ["Description", "Cost (£)", "Last updated"].forEach(header => {
+    cy.tableHeader(header);
+  });
+  ["Total costs", "Forecast costs"].forEach(cell => {
+    cy.tableCell(cell);
+  });
 };
 
 /**
@@ -92,7 +113,7 @@ export const clearUpCostCat = () => {
   cy.get("td.govuk-table__cell").contains("Labour").click();
   cy.getByQA("button_upload-qa").click();
   cy.getByQA("button_delete-qa").contains("Remove").click();
-  cy.wait(2000);
+  cy.wait(1000);
   cy.get("a.govuk-back-link").click();
   cy.get("a.govuk-link").contains("Remove").first().click();
   cy.get("textarea#comments").clear();
@@ -100,12 +121,14 @@ export const clearUpCostCat = () => {
 
 export const evidenceRequiredMessage = () => {
   cy.get("h2").contains("Supporting documents");
-  cy.get("div.govuk-grid-column-full").contains("evidence");
+  cy.getByQA("section-content").contains("Upload evidence of the costs");
+  cy.get("h2").contains("Files uploaded");
+  cy.get("p").contains("No documents uploaded");
 };
 
 export const additionalInformationHeading = () => {
-  cy.get("h2.govuk-fieldset__heading").contains("Additional information");
-  cy.get("div.govuk-form-group").contains("Explain");
+  cy.get("h2").contains("Additional information");
+  cy.get("#comments-hint").contains("Explain any difference");
 };
 
 export const returnToCostCatPage = () => {
@@ -113,13 +136,9 @@ export const returnToCostCatPage = () => {
 };
 
 export const selectFileDescription = () => {
-  cy.get("select#description").select("10");
-  cy.get("select#description").select("30");
-  cy.get("select#description").select("60");
-  cy.get("select#description").select("110");
-  cy.get("select#description").select("120");
-  cy.get("select#description").select("210");
-  cy.get("select#description").select("220");
+  ["10", "30", "60", "110", "120", "210", "220"].forEach(selection => {
+    cy.get("select#description").select(selection);
+  });
 };
 
 export const claimsDocUpload = () => {
@@ -207,8 +226,12 @@ export const claimCommentBox = () => {
 
 export const learnFiles = () => {
   cy.get("span").contains("Learn more about files you can upload").click();
-  cy.get("p").contains("You can upload");
-  cy.get("p").contains("There is no limit");
+  ["PDF", "test", "presentation", "spreadsheet", "images", "be less than 32MB", "have a unique file"].forEach(list => {
+    cy.get("li").contains(list);
+  });
+  ["You can upload", "There is no limit", "Each document must"].forEach(description => {
+    cy.get("p").contains(description);
+  });
 };
 
 export const savedFromPrev = () => {
@@ -414,5 +437,20 @@ export const updateAcademicCosts = () => {
     "Exceptions - Other costs Period 4",
   ].forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("0");
+  });
+};
+
+export const showAClaim = () => {
+  cy.get("h3").should("contain.text", "Period");
+  cy.get("a").contains("Edit");
+  [
+    "Partner",
+    "Forecast costs for period",
+    "Actual costs for period",
+    "Difference",
+    "Status",
+    "Date of last update",
+  ].forEach(header => {
+    cy.tableHeader(header);
   });
 };

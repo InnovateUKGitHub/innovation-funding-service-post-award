@@ -11,8 +11,8 @@ import {
   returnToCostCatPage,
   shouldShowAllAccordion,
   shouldShowProjectTitle,
-  shouldHaveCostCategoryTable,
   standardComments,
+  shouldShowCostCatTable,
 } from "./steps";
 
 describe("claims > Editing a claim by accessing cost categories", () => {
@@ -30,7 +30,7 @@ describe("claims > Editing a claim by accessing cost categories", () => {
     "Eligible costs claimed to date",
     "Costs claimed this period",
     "Remaining eligible costs",
-  ])('should have a cost category table with "$0" category', shouldHaveCostCategoryTable);
+  ])('should have a cost category table with "$0" category', shouldShowCostCatTable);
 
   it("Should let you click on the cost category 'Labour'", () => {
     cy.get("td.govuk-table__cell").contains("Labour").click();
@@ -39,14 +39,10 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   it("Should still display the project title", shouldShowProjectTitle);
 
   it("Should show relevant messaging at the top of the page", () => {
-    cy.getByQA("guidance-message").should("contain.text", "evidence");
+    cy.getByQA("guidance-message").should("contain.text", "You must break down your total costs");
   });
 
-  it("Should display a table for updating cost categories", () => {
-    cy.get("table.govuk-table");
-  });
-
-  it("The table should have correct headers", correctTableHeaders);
+  it("Should present a table with line item information", correctTableHeaders);
 
   it("Should allow you to enter a new cost category line item", newCostCatLineItem);
 
@@ -86,5 +82,8 @@ describe("claims > Editing a claim by accessing cost categories", () => {
 
   it("Should return you to the cost category page", returnToCostCatPage);
 
-  it("Should have accordions", shouldShowAllAccordion);
+  it("Should show accordions", () => {
+    cy.get("span").contains("Show all sections").click();
+    cy.get("p").contains("There are no changes");
+  });
 });

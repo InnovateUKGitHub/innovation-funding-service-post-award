@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { shouldShowAllAccordion, shouldShowProjectTitle } from "./steps";
+import { shouldShowAllAccordion, shouldShowProjectTitle, showAClaim } from "./steps";
 
 describe("claims > open claims as FC", () => {
   before(() => {
@@ -16,7 +16,7 @@ describe("claims > open claims as FC", () => {
     it("Should have the project name displayed", shouldShowProjectTitle);
 
     it("Should display messaging", () => {
-      cy.getByQA("guidance-message").should("contain.text", "evidence");
+      cy.getByQA("guidance-message").should("contain.text", "All partners in this project");
     });
     it("Should have an Open section", () => {
       cy.get("h2").contains("Open");
@@ -26,9 +26,7 @@ describe("claims > open claims as FC", () => {
       cy.get("h2").contains("Closed");
     });
 
-    it("Should show a claim", () => {
-      cy.get("h3").should("contain.text", "Period");
-    });
+    it("Should show a claim", showAClaim);
 
     it("Should have Show all sections option", shouldShowAllAccordion);
   });

@@ -11,7 +11,7 @@ describe("projects dashboard > Project Manager - Finance Contact", () => {
 
   it("Should navigate to the project list and filter the correct project", navigateFilter);
 
-  it("Should display the correct project card which displays 1 PCR to review", () => {
+  it("Should display the correct project card which shows a PCR has been queried", () => {
     ["Project change request queried", "EUI Small Ent Health"].forEach(cardItem => {
       cy.getByQA("project-328407").contains(cardItem);
     });
