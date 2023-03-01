@@ -35,6 +35,11 @@ export const PublicDescriptionChangeStep = (
             validation={props.validator.publicDescription}
             qa="newDescription"
             rows={15}
+            maxLength={32_000}
+            characterCountOptions={{
+              type: "descending",
+              maxValue: 32_000,
+            }}
           />
         </Form.Fieldset>
         <Form.Submit>

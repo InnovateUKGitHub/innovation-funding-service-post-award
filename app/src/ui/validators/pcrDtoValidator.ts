@@ -70,6 +70,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     this.original && !!this.monitoringOfficerPermittedStatus.get(this.original.status);
 
   static readonly maxCommentsLength = 1000;
+  static readonly maxSalesforceFieldLength = 32000;
 
   public comments = this.validateComments();
   public status = this.validateStatus();
@@ -778,10 +779,22 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
         "Project summary cannot be changed.",
       );
     }
+
     const isComplete = this.model.status === PCRItemStatus.Complete;
-    return isComplete
-      ? Validation.required(this, this.model.projectSummary, "Enter a project summary")
-      : Validation.valid(this);
+    return Validation.all(
+      this,
+      () =>
+        isComplete
+          ? Validation.required(this, this.model.projectSummary, "Enter a project summary")
+          : Validation.valid(this),
+      () =>
+        Validation.maxLength(
+          this,
+          this.model.projectSummary,
+          PCRDtoValidator.maxSalesforceFieldLength,
+          `Project summary can be a maximum of ${PCRDtoValidator.maxSalesforceFieldLength} characters`,
+        ),
+    );
   }
 
   private validatePublicDescription() {
@@ -794,9 +807,21 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
       );
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
-    return isComplete
-      ? Validation.required(this, this.model.publicDescription, "Enter a public description")
-      : Validation.valid(this);
+
+    return Validation.all(
+      this,
+      () =>
+        isComplete
+          ? Validation.required(this, this.model.publicDescription, "Enter a public description")
+          : Validation.valid(this),
+      () =>
+        Validation.maxLength(
+          this,
+          this.model.publicDescription,
+          PCRDtoValidator.maxSalesforceFieldLength,
+          `Public description can be a maximum of ${PCRDtoValidator.maxSalesforceFieldLength} characters`,
+        ),
+    );
   }
 
   projectSummary = this.validateProjectSummary();

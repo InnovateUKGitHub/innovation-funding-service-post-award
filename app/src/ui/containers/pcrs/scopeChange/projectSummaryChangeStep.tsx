@@ -33,6 +33,11 @@ export const ProjectSummaryChangeStep = (
             validation={props.validator.projectSummary}
             qa="newSummary"
             rows={15}
+            maxLength={32_000}
+            characterCountOptions={{
+              type: "descending",
+              maxValue: 32_000,
+            }}
           />
         </Form.Fieldset>
         <Form.Submit>
