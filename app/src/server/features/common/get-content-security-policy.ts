@@ -11,7 +11,8 @@ type CspPolicySources =
   | "img-src"
   | "connect-src"
   | "font-src"
-  | "report-uri";
+  | "report-uri"
+  | "frame-src";
 
 export const policyConfig = (nonce: string): Record<CspPolicySources, (string | typeof cspSourceKeyWords[0])[]> => ({
   "default-src": ["self"],
@@ -43,6 +44,7 @@ export const policyConfig = (nonce: string): Record<CspPolicySources, (string | 
     "https://www.gstatic.com",
     "https://fonts.gstatic.com",
   ],
+  "frame-src": ["https://www.googletagmanager.com"],
   "connect-src": ["self", "https://*.google-analytics.com"],
   "font-src": ["self", "https://assets.publishing.service.gov.uk/frontend/", "https://fonts.gstatic.com"],
   "report-uri": ["/api/csp/violation-report"],
