@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import fireEvent from "@testing-library/user-event";
 
 import { TestBed } from "@shared/TestBed";
-import { TypedTable } from "@ui/components/table";
+import { createTypedTable } from "@ui/components/table";
 import { SortOptions } from "@ui/components/documents/table-sorter";
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 import React from "react";
@@ -55,7 +55,7 @@ describe("Table", () => {
       it("as string", () => {
         const stubHeader = "stub-header";
 
-        const NumericTable = TypedTable<number>();
+        const NumericTable = createTypedTable<number>();
 
         const { queryByText } = setup(
           <NumericTable.Table data={[1234]} qa="">
@@ -69,7 +69,7 @@ describe("Table", () => {
       it("as content solution", () => {
         const stubHeader = stubContent.components.loading.message;
 
-        const NumericTable = TypedTable<number>();
+        const NumericTable = createTypedTable<number>();
 
         const { queryByText } = setup(
           <NumericTable.Table data={[1234]} qa="">
@@ -84,7 +84,7 @@ describe("Table", () => {
         const stubHeader = "react-header";
         const StubHeaderElement = () => <>{stubHeader}</>;
 
-        const NumericTable = TypedTable<number>();
+        const NumericTable = createTypedTable<number>();
 
         const { queryByText } = setup(
           <NumericTable.Table data={[1234]} qa="">
@@ -99,7 +99,7 @@ describe("Table", () => {
     it("with <td> with given number", () => {
       const stubNumber = 12345;
 
-      const NumericTable = TypedTable<number>();
+      const NumericTable = createTypedTable<number>();
       const { queryByText } = setup(
         <NumericTable.Table data={[stubNumber]} qa="">
           <NumericTable.Number header="" value={x => x} qa="val" />
@@ -110,7 +110,7 @@ describe("Table", () => {
 
     it("with <td> with given string", () => {
       const stubData = "stub-data";
-      const StringTable = TypedTable<string>();
+      const StringTable = createTypedTable<string>();
       const { queryByText } = setup(
         <StringTable.Table data={[stubData]} qa="">
           <StringTable.String header="" value={x => x} qa="val" />
@@ -121,7 +121,7 @@ describe("Table", () => {
 
     it("with <tr> with number nodes", () => {
       const rows = [1, 2, 3];
-      const NumberTable = TypedTable<number>();
+      const NumberTable = createTypedTable<number>();
       const { queryByText } = setup(
         <NumberTable.Table data={rows} qa="">
           <NumberTable.Number header="" value={x => x} qa="val" />
@@ -136,7 +136,7 @@ describe("Table", () => {
     it("with th with given content", () => {
       const stubHeader = "stub-header";
       const data = ["Item"];
-      const TableComponent = TypedTable<string>();
+      const TableComponent = createTypedTable<string>();
 
       const { queryByText } = setup(
         <TableComponent.Table data={data} qa="">
@@ -149,7 +149,7 @@ describe("Table", () => {
     it("with hidden header with given content", () => {
       const stubHiddenHeader = "stub-hidden-header";
       const data = ["Item"];
-      const TableComponent = TypedTable<string>();
+      const TableComponent = createTypedTable<string>();
 
       const { queryByText } = setup(
         <TableComponent.Table data={data} qa="">
@@ -162,7 +162,7 @@ describe("Table", () => {
     it("with tr as expected", () => {
       const stubTrItem = "stub-tr-item";
       const data = [stubTrItem];
-      const TableComponent = TypedTable<string>();
+      const TableComponent = createTypedTable<string>();
 
       const { queryByText } = setup(
         <TableComponent.Table data={data} qa="">
@@ -176,7 +176,7 @@ describe("Table", () => {
       it("with no sortable columns", () => {
         const testData = [{ name: "Superman", age: 34 }];
 
-        const NumericTable = TypedTable<typeof testData[0]>();
+        const NumericTable = createTypedTable<typeof testData[0]>();
 
         const { container } = setup(
           <NumericTable.Table data={testData} qa="stub-table-qa">
@@ -199,7 +199,7 @@ describe("Table", () => {
           { name: "Flash", age: 28 },
         ];
 
-        const NumericTable = TypedTable<typeof testData[0]>();
+        const NumericTable = createTypedTable<typeof testData[0]>();
 
         const { container } = setup(
           <NumericTable.Table data={testData} qa="stub-table-qa">
@@ -238,7 +238,7 @@ describe("Table", () => {
           { name: "Superman", age: 99 },
         ];
 
-        const NumericTable = TypedTable<typeof testData[0]>();
+        const NumericTable = createTypedTable<typeof testData[0]>();
 
         const { container } = setup(
           <NumericTable.Table data={testData} qa="stub-table-qa">
@@ -303,7 +303,7 @@ describe("Table", () => {
           { name: "Superman", age: 99 },
         ];
 
-        const NumericTable = TypedTable<typeof testData[0]>();
+        const NumericTable = createTypedTable<typeof testData[0]>();
 
         const { container } = setup(
           <NumericTable.Table data={testData} qa="stub-table-qa">

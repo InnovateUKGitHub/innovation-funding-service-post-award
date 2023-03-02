@@ -1,11 +1,13 @@
 import { ProjectContactDto } from "@framework/dtos";
-import { TypedTable } from "../table";
+import { createTypedTable } from "../table";
 import { SimpleString } from "../renderers";
 import { Content } from "../content";
 
 export interface IContactsTable {
   contacts: ProjectContactDto[];
 }
+
+const ContactsUI = createTypedTable<ProjectContactDto>();
 
 /**
  * ContactsTable component
@@ -18,8 +20,6 @@ export function ContactsTable({ contacts }: IContactsTable) {
       </SimpleString>
     );
   }
-
-  const ContactsUI = TypedTable<ProjectContactDto>();
 
   return (
     <ContactsUI.Table qa="contacts-table-details" data={contacts}>

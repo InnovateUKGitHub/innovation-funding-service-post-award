@@ -5,9 +5,8 @@ import * as ACC from "@ui/components";
 // Note: The totals property has to be required to render the table
 type LoanTableProps = Required<LoanDto>;
 
+const Request = ACC.createTypedTable<LoanTableProps>();
 export const LoanRequestTable = (props: LoanTableProps) => {
-  const Request = ACC.TypedTable<typeof props>();
-
   return (
     <Request.Table data={[props]} qa="drawdown-request" className="loan-table">
       <Request.String header="Drawdown" qa="drawdown-request-period" value={x => `${x.period}`} />

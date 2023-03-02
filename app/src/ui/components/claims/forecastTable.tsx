@@ -20,7 +20,7 @@ import { AccessibilityText } from "../renderers/accessibilityText";
 import { Currency } from "../renderers/currency";
 import { CondensedDateRange } from "../renderers/date";
 import { Percentage } from "../renderers/percentage";
-import { TypedTable } from "../table";
+import { createTypedTable } from "../table";
 import { Content } from "../content";
 
 export interface ForecastData {
@@ -59,6 +59,8 @@ interface Props {
   isSubmitting?: boolean;
   allowRetroactiveForecastEdit?: boolean;
 }
+
+const Table = createTypedTable<TableRow>();
 
 export class ForecastTable extends React.Component<Props> {
   animationFrame?: number;
@@ -112,7 +114,6 @@ export class ForecastTable extends React.Component<Props> {
     const claims = Object.keys(firstRow.claims);
     const forecasts = Object.keys(firstRow.forecasts);
     const periods = claims.concat(forecasts);
-    const Table = TypedTable<typeof firstRow>();
 
     const isDivider = (i: number) => {
       // always show a divider on the right hand side of the last claim

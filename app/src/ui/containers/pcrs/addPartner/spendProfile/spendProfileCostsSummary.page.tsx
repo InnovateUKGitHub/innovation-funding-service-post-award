@@ -41,6 +41,7 @@ interface Callbacks {
 }
 
 const Form = ACC.createTypedForm<PCRDto>();
+const Table = ACC.createTypedTable<PCRSpendProfileCostDto>();
 
 class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Callbacks> {
   render() {
@@ -157,7 +158,6 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
   }
 
   private renderTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
-    const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
     const total = costs.reduce((acc, cost) => acc + (cost.value || 0), 0);
     const footers = [
       <tr key={1} className="govuk-table__row">

@@ -8,7 +8,7 @@ export interface PcrSummaryEmpty {
   data: null;
 }
 
-interface ProjectReallocationCosts {
+export interface ProjectReallocationCosts {
   partner: PartnerDto;
   partnerVirement: PartnerVirementsDto;
 }

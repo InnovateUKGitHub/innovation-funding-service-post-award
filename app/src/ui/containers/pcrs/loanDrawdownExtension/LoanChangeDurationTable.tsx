@@ -4,6 +4,7 @@ import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos";
 import { PCRLoanExtensionItemDtoValidator } from "@ui/validators";
 import * as ACC from "@ui/components";
 import { useMounted } from "@ui/features";
+import { Result } from "@ui/validation";
 
 type BaseChangeDurationTable =
   | {
@@ -23,6 +24,18 @@ type LoanChangeDurationTableProps = BaseChangeDurationTable & {
   formData?: PCRItemForLoanDrawdownExtensionDto;
   validator: PCRLoanExtensionItemDtoValidator;
 };
+
+interface LoanEditTableData {
+  label: string;
+  phaseId: string;
+  currentLength: number;
+  currentEndDate: Date;
+  newLength: number;
+  newEndDate: Date;
+  validator: Result;
+}
+
+const LoanEditTable = ACC.createTypedTable<LoanEditTableData>();
 
 export const LoanChangeDurationTable = ({
   editMode = false,
@@ -83,13 +96,11 @@ export const LoanChangeDurationTable = ({
     onUpdate?.(latestPayload);
   };
 
-  const LoanEdit = ACC.TypedTable<typeof payload[0]>();
-
   // Note: Avoid display stale data - JS gives real dynamic values
   const noDynamicUpdates = isServer && editMode;
 
   return (
-    <LoanEdit.Table
+    <LoanEditTable.Table
       qa="loanChangeDuration"
       data={payload}
       bodyRowClass={x => {
@@ -98,18 +109,18 @@ export const LoanChangeDurationTable = ({
         return "govuk-table__row--editable";
       }}
     >
-      <LoanEdit.String qa="phase-name" header="Phase" value={x => x.label} />
+      <LoanEditTable.String qa="phase-name" header="Phase" value={x => x.label} />
 
-      <LoanEdit.Custom
+      <LoanEditTable.Custom
         qa="current-length"
         header="Current length (quarters)"
         cellClassName={() => "govuk-!-text-align-centre"}
         value={x => getQuarterInMonths(x.currentLength)}
       />
 
-      <LoanEdit.FullNumericDate qa="current-date" header="Current end date" value={x => x.currentEndDate} />
+      <LoanEditTable.FullNumericDate qa="current-date" header="Current end date" value={x => x.currentEndDate} />
 
-      <LoanEdit.Custom
+      <LoanEditTable.Custom
         qa="new-length"
         header="New length (quarters)"
         cellClassName={!editMode ? () => "govuk-!-text-align-centre" : undefined}
@@ -145,7 +156,7 @@ export const LoanChangeDurationTable = ({
       />
 
       {noDynamicUpdates ? null : (
-        <LoanEdit.Custom
+        <LoanEditTable.Custom
           qa="new-date"
           header="New end date"
           value={x =>
@@ -160,8 +171,8 @@ export const LoanChangeDurationTable = ({
         />
       )}
 
-      {editMode ? null : <LoanEdit.Custom qa="edit-link" header="" value={() => editLink} />}
-    </LoanEdit.Table>
+      {editMode ? null : <LoanEditTable.Custom qa="edit-link" header="" value={() => editLink} />}
+    </LoanEditTable.Table>
   );
 };
 

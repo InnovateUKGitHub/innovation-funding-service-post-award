@@ -24,6 +24,13 @@ interface Props {
   financialVirements: Pending<PartnerVirementsDto>;
 }
 
+interface TableData {
+  costCategory: CostCategoryDto;
+  virement: CostCategoryVirementDto;
+}
+
+const VirementTable = ACC.createTypedTable<TableData>();
+
 class Component extends ContainerBase<Params, Props> {
   render() {
     const combined = Pending.combine({
@@ -51,13 +58,12 @@ class Component extends ContainerBase<Params, Props> {
     financialVirements: PartnerVirementsDto,
     pcr: PCRDto,
   ) {
-    const data = costCategories.map(costCategory => ({
+    const data: TableData[] = costCategories.map(costCategory => ({
       costCategory,
       virement:
         financialVirements.virements.find(x => x.costCategoryId === costCategory.id) ||
         createDto<CostCategoryVirementDto>({}),
     }));
-    const VirementTable = ACC.TypedTable<typeof data[0]>();
     return (
       <ACC.Page backLink={this.getBackLink()} pageTitle={<ACC.Projects.Title {...project} />}>
         <ACC.Section title={partner.name}>

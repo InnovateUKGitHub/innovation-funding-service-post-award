@@ -3,8 +3,8 @@ import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
-import { FinancialVirementDtoValidator } from "@ui/validators";
-import { FinancialVirementDto, PartnerDto, ProjectDto } from "@framework/dtos";
+import { FinancialVirementDtoValidator, PartnerVirementsDtoValidator } from "@ui/validators";
+import { FinancialVirementDto, PartnerDto, PartnerVirementsDto, ProjectDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import { IRoutes } from "@ui/routing";
 import { EditorStatus } from "@ui/constants/enums";
@@ -59,6 +59,13 @@ interface EditPartnerLevelProps {
   onChange: (saving: boolean, dto: FinancialVirementDto) => void;
 }
 
+interface VirementTableData {
+  partner: PartnerDto;
+  virement: PartnerVirementsDto;
+  validator: PartnerVirementsDtoValidator | undefined;
+}
+const VirementTable = ACC.createTypedTable<VirementTableData>();
+
 const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirementParams) => {
   const combined = Pending.combine({
     project: props.project,
@@ -99,8 +106,6 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
             };
           })
           .filter(x => !!x.virement);
-
-        const VirementTable = ACC.TypedTable<typeof data[0]>();
 
         const backLink = (
           <ACC.BackLink

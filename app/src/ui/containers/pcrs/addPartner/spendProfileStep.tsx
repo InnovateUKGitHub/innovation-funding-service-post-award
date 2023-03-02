@@ -18,6 +18,7 @@ interface TableData {
 }
 
 const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Table = ACC.createTypedTable<TableData>();
 
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
@@ -76,7 +77,6 @@ class Component extends React.Component<
         .reduce((t, v) => t + (v.value || 0), 0),
     }));
     const total = data.map(x => x.cost).reduce((t, val) => t + val, 0);
-    const Table = ACC.TypedTable<TableData>();
 
     return (
       <ACC.Section>

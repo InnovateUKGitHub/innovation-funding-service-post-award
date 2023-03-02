@@ -21,6 +21,8 @@ interface Data {
   costDto: PCRSpendProfileAcademicCostDto;
 }
 
+const Table = ACC.createTypedTable<Data>();
+
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
   Data
@@ -38,8 +40,6 @@ class Component extends React.Component<
       })
       .filter(x => !!x);
     const total = sumBy(data, x => (x.costDto ? x.costDto.value : 0) || 0);
-
-    const Table = ACC.TypedTable<Data>();
 
     return (
       <MountedHoc>

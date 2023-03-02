@@ -1,6 +1,6 @@
 import { IGuide } from "@framework/types";
 import { range } from "../../shared/range";
-import { TypedTable } from "../components/table";
+import { createTypedTable } from "../components/table";
 import { FullDateTime } from "../components/renderers";
 import { Currency } from "../components/renderers/currency";
 
@@ -31,7 +31,7 @@ export const tableGuide: IGuide = {
           <p>This is the example for the following data</p>
           <pre>{JSON.stringify(exampleData, null, 5)}</pre>
           <pre>
-            {"const ExampleTable = TypedTable<ExampleData>();\n" +
+            {"const ExampleTable = createTypedTable<ExampleData>();\n" +
               "return (\n" +
               "\t<ExampleTable.Table data={exampleData}>\n" +
               '\t\t<ExampleTable.Number header="Id" value={(x) => x.id} />\n' +
@@ -45,7 +45,7 @@ export const tableGuide: IGuide = {
         </div>
       ),
       render: () => {
-        const ExampleTable = TypedTable<ExampleData>();
+        const ExampleTable = createTypedTable<ExampleData>();
         return (
           <ExampleTable.Table qa="example" data={exampleData}>
             <ExampleTable.String header="Id" qa="id" value={x => x.id} />
@@ -61,7 +61,7 @@ export const tableGuide: IGuide = {
       name: "Custom column",
       comments: "Custom columns can also be added",
       example:
-        "const ExampleTable = TypedTable<ExampleData>();\n" +
+        "const ExampleTable = createTypedTable<ExampleData>();\n" +
         "return (\n" +
         "\t<ExampleTable.Table data={exampleData}>\n" +
         '\t\t<ExampleTable.Number header="Id" value={(x) => x.id} />\n' +
@@ -73,7 +73,7 @@ export const tableGuide: IGuide = {
         "\t</ExampleTable.Table>\n" +
         ");`",
       render: () => {
-        const ExampleTable = TypedTable<ExampleData>();
+        const ExampleTable = createTypedTable<ExampleData>();
         return (
           <ExampleTable.Table qa="example" data={exampleData}>
             <ExampleTable.String header="Id" qa="id" value={x => x.id} />
@@ -94,7 +94,7 @@ export const tableGuide: IGuide = {
       name: "Footers",
       comments: "Footers can be added to columns",
       example:
-        "const ExampleTable = TypedTable<ExampleData>();\n" +
+        "const ExampleTable = createTypedTable<ExampleData>();\n" +
         "return (\n" +
         "\t<ExampleTable.Table data={exampleData}>\n" +
         "\t\t<ExampleTable.Number \n" +
@@ -110,7 +110,7 @@ export const tableGuide: IGuide = {
         "\t</ExampleTable.Table>\n" +
         ");",
       render: () => {
-        const ExampleTable = TypedTable<ExampleData>();
+        const ExampleTable = createTypedTable<ExampleData>();
         return (
           <ExampleTable.Table qa="example" data={exampleData}>
             <ExampleTable.String footer="Total costs" header="Id" qa="id" value={x => x.id} />

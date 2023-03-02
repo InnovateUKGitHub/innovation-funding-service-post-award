@@ -1,6 +1,6 @@
 import { getDefinedEdges } from "@gql/selectors/edges";
 import { Section } from "@ui/components/layout/section";
-import { TypedTable } from "@ui/components/table";
+import { createTypedTable } from "@ui/components/table";
 import { SimpleString } from "@ui/components/renderers";
 import { useContent } from "@ui/hooks";
 import { ReactNode } from "react";
@@ -14,7 +14,7 @@ import {
 const kebab = (label: string) => label.replace(" ", "-").toLowerCase();
 
 const PartnersTable =
-  TypedTable<
+  createTypedTable<
     NonNullable<
       UnwrapArray<NonNullable<ProjectDetailProjectContactLinkTableFragment$data["Project_Contact_Links__r"]>["edges"]>
     >

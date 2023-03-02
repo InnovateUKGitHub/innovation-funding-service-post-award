@@ -19,6 +19,7 @@ import * as ACC from "@ui/components";
 
 import { PcrSummaryConsumer } from "../components/PcrSummary";
 import { EmailContent } from "@ui/components";
+import { ProjectReallocationCosts } from "../components/PcrSummary/pcr-summary.interface";
 
 export interface FinancialVirementSummaryProps
   extends PcrSummaryProps<
@@ -28,6 +29,7 @@ export interface FinancialVirementSummaryProps
   > {
   virement: Pending<FinancialVirementDto>;
 }
+const Table = ACC.createTypedTable<ProjectReallocationCosts>();
 
 export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialVirementSummaryProps) => {
   const { getContent } = useContent();
@@ -87,7 +89,6 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
         const displayHighlight = !!grantMessage && (isSummaryValid ? "positive-hightlight" : "negative-hightlight");
 
         const projectCostsOfPartners = data.projectCostsOfPartners;
-        const Table = ACC.TypedTable<typeof projectCostsOfPartners[0]>();
 
         return (
           <>
