@@ -14,7 +14,7 @@ const FCProjectOverviewDetails = ({ partner }: { partner: Partner }) => {
       <DualDetails>
         <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
           <PartnerSummaryDetails.Currency
-            label={<Content value={x => x.projectLabels.totalEligibleCostsClaimedLabel} />}
+            label={<Content value={x => x.projectLabels.totalEligibleCostsLabel} />}
             qa="gol-costs"
             value={x => x.totalParticipantGrant}
           />
