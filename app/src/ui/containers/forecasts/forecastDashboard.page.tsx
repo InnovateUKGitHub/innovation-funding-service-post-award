@@ -1,6 +1,6 @@
 import { roundCurrency } from "@framework/util";
 import { ProjectRole } from "@framework/constants";
-import { Page, Projects, Section, TypedTable, getPartnerName, Content } from "../../components";
+import { Page, Projects, Section, createTypedTable, getPartnerName, Content } from "../../components";
 import { BaseProps, defineRoute } from "../containerBase";
 import { useForecastDashboardData, Partner } from "./forecastDashboard.logic";
 
@@ -8,8 +8,8 @@ interface Params {
   projectId: string;
 }
 
+const Table = createTypedTable<Partner>();
 const ForecastDashboardPage = (props: Params & BaseProps) => {
-  const Table = TypedTable<Partner>();
   const { project, partners } = useForecastDashboardData(props.projectId);
 
   return (

@@ -3,14 +3,16 @@ import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/d
 import { getAuthRoles } from "@framework/types";
 import { getFileSize } from "@framework/util/files";
 import { Content } from "@ui/components/content";
-import { ITypedTable, TableChild, TypedTable } from "@ui/components/table";
+import { createTypedTable } from "@ui/components/table";
 import { createTypedForm } from "../form";
 import { DocumentsBase } from "./documents.interface";
 import { DocumentsUnavailable } from "./DocumentsUnavailable";
 import { ProjectPartnerDocumentEditProps } from "./DocumentView";
 
 export interface DocumentTableProps<T extends DocumentSummaryDto> extends DocumentsBase<T> {
-  customContent?: (table: ITypedTable<T>) => TableChild<T> | TableChild<T>[] | null;
+  customContent?: (
+    table: ReturnType<typeof createTypedTable<T>>,
+  ) => UnwrapArray<Parameters<ReturnType<typeof createTypedTable<T>>["Table"]>["0"]["children"]>;
 }
 
 const Form = createTypedForm<DocumentSummaryDto[]>();
@@ -20,7 +22,7 @@ export const DocumentTable = <T extends DocumentSummaryDto>({
   qa,
   customContent,
 }: DocumentTableProps<T>) => {
-  const ProjectDocumentsTable = TypedTable<T>();
+  const ProjectDocumentsTable = createTypedTable<T>();
 
   return (
     <ProjectDocumentsTable.Table data={documents} qa={qa}>

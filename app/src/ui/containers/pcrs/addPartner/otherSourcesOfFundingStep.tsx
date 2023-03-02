@@ -21,6 +21,7 @@ interface ContainerProps {
 }
 
 const Form = ACC.createTypedForm<null>();
+const Table = ACC.createTypedTable<PCRSpendProfileOtherFundingDto>();
 
 const OtherSourcesOfFunding = ({
   pcrItem,
@@ -124,8 +125,6 @@ const OtherSourcesOfFunding = ({
 
     return footers;
   };
-
-  const Table = ACC.TypedTable<PCRSpendProfileOtherFundingDto>();
 
   return (
     <ACC.Section title={x => x.pages.pcrAddPartnerOtherFundingSources.formSectionTitle}>

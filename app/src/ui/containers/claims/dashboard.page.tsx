@@ -23,6 +23,8 @@ interface Data {
   currentClaim: Pending<ClaimDto | null>;
 }
 
+const ClaimTable = Acc.createTypedTable<ClaimDto>();
+
 class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
   public render() {
     const combined = Pending.combine({
@@ -130,8 +132,6 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
     partner: PartnerDto,
     tableCaption?: string,
   ) {
-    const ClaimTable = Acc.TypedTable<ClaimDto>();
-
     return (
       <GetProjectStatus>
         {projectStatus => (
