@@ -48,6 +48,8 @@ interface CombinedData {
   claim: ClaimDto;
 }
 
+const LineItemTable = ACC.createTypedTable<ClaimLineItemDto>();
+
 export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams, Data> {
   public render() {
     const combined = Pending.combine({
@@ -220,8 +222,6 @@ const ClaimLineItemsTable = ({
   forecastDetail: ForecastDetailsDTO;
   content: Record<string, string>;
 }) => {
-  const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
-
   const renderFooterRow = (row: {
     key: string;
     title: string;

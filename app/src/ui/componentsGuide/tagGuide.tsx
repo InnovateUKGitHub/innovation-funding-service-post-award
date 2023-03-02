@@ -1,5 +1,5 @@
 import { IGuide } from "@framework/types";
-import { TypedTable } from "@ui/components/table";
+import { createTypedTable } from "@ui/components/table";
 import { Tag, TagTypeOptions } from "@ui/components/Tag";
 
 export const tagGuide: IGuide = {
@@ -17,7 +17,7 @@ export const tagGuide: IGuide = {
           ["Error", "red"],
         ];
 
-        const ExampleTable = TypedTable<typeof tagOptions[0]>();
+        const ExampleTable = createTypedTable<typeof tagOptions[0]>();
 
         return (
           <ExampleTable.Table qa="example" data={tagOptions}>

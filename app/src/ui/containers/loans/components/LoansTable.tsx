@@ -10,9 +10,8 @@ export interface LoansTableProps {
   roles: { readonly isMo: boolean; readonly isFc: boolean; readonly isPm: boolean };
 }
 
+const Drawdown = ACC.createTypedTable<Loan>();
 export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
-  const Drawdown = ACC.TypedTable<typeof items[0]>();
-
   const nextLoanIndex = items.findIndex(x => x.status === LoanStatus.PLANNED);
   const isFirstLoanRequest = nextLoanIndex === 0;
   const nextLoan = items[nextLoanIndex];

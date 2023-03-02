@@ -16,7 +16,7 @@ import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
 import * as ACC from "@ui/components";
 import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
-import { createTypedForm, UL } from "@ui/components";
+import { createTypedForm, createTypedTable, UL } from "@ui/components";
 import { EditorStatus } from "@ui/constants/enums";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MountedHoc, useMounted } from "@ui/features";
@@ -59,6 +59,8 @@ export interface EditClaimLineItemsCallbacks {
 }
 
 const LineItemForm = createTypedForm<ClaimDetailsDto>();
+const LineItemTable = createTypedTable<ClaimLineItemDto>();
+
 const DeleteByEnteringZero = () => (
   <ACC.ValidationMessage
     messageType="info"
@@ -219,7 +221,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       },
     ];
 
-    const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const supportingDocumentContent = this.getCompetitionRenderCalculatedDocumentSection(
       competitionType,
       documents,
@@ -272,7 +273,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     documents: DocumentSummaryDto[],
     competitionType: string,
   ) {
-    const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
+    const LineItemTable = ACC.createTypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
 
     const documentSection = this.getCompetitionRenderTableDocumentContent(competitionType, documents, editor);

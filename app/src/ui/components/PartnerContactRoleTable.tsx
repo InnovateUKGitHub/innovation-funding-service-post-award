@@ -1,7 +1,7 @@
 import { getPartnerName } from "@ui/components/partners";
 import { ReactNode } from "react";
 import { IContactRole } from "./partners/getContactRole";
-import { TypedTable } from "./table";
+import { createTypedTable } from "./table";
 
 export interface PartnersAndFinanceContactsProps {
   comment?: ReactNode;
@@ -11,7 +11,7 @@ export interface PartnersAndFinanceContactsProps {
   hidePartnerColumn?: boolean;
 }
 
-const PartnersTable = TypedTable<IContactRole>();
+const PartnersTable = createTypedTable<IContactRole>();
 
 export const PartnerContactRoleTable = ({
   contactRoles,

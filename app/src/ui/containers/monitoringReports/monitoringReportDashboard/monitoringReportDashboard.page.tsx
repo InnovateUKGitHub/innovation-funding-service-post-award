@@ -9,7 +9,7 @@ import {
   Link,
   Content,
   Section,
-  TypedTable,
+  createTypedTable,
   PeriodTitle,
 } from "@ui/components";
 import { useContent } from "@ui/hooks";
@@ -22,6 +22,7 @@ interface MonitoringReportDashboardParams {
 }
 
 const editStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried];
+const ReportsTable = createTypedTable<MonitoringReport>();
 
 const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & BaseProps) => {
   const { project, reportSections } = useMonitoringReportDashboardQuery(props.projectId);
@@ -78,7 +79,6 @@ const MonitoringReportTable = ({
   routes: IRoutes;
 }) => {
   const { getContent } = useContent();
-  const ReportsTable = TypedTable<MonitoringReport>();
 
   return (
     <ReportsTable.Table

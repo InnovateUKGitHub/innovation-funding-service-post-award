@@ -1,12 +1,12 @@
 import { ILinkInfo } from "@framework/types";
-import { TypedTable } from "@ui/components/table";
+import { createTypedTable } from "@ui/components/table";
 import { Link } from "@ui/components/links";
 import { LineBreakList, SimpleString } from "@ui/components/renderers";
 import { BaseProps } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
 import { collateProjectChangeRequests, Project } from "./PCRDashboard.logic";
 
-const PCRTable = TypedTable<UnwrapArray<ReturnType<typeof collateProjectChangeRequests>>>();
+const PCRTable = createTypedTable<UnwrapArray<ReturnType<typeof collateProjectChangeRequests>>>();
 
 const PCRDashboardTable = ({
   collated,

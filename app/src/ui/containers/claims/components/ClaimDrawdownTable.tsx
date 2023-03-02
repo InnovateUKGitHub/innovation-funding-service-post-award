@@ -12,6 +12,8 @@ export interface ClaimDrawdownTableProps extends ProjectOptions {
   requiredPeriod: number;
 }
 
+const PeriodDrawdownTable = ACC.createTypedTable<Required<LoanDto>>();
+
 const useClaimDrawdown = (props: ClaimDrawdownTableProps) => {
   const { isLoans } = checkProjectCompetition(props.competitionType);
   const stores = useStores();
@@ -43,8 +45,6 @@ export const ClaimDrawdownTable = (props: ClaimDrawdownTableProps) => {
   if (!claimDrawdown) return null;
 
   if (claimDrawdown.isLoading) return <ACC.LoadingMessage />;
-
-  const PeriodDrawdownTable = ACC.TypedTable<Required<LoanDto>>();
 
   return (
     <PeriodDrawdownTable.Table qa="period-loan-table" data={[claimDrawdown.payload as Required<LoanDto>]}>

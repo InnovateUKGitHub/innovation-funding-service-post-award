@@ -1,19 +1,23 @@
-import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import * as Acc from "@ui/components";
-import { Pending } from "@shared/pending";
-import { DateTime } from "luxon";
-import { useStores } from "@ui/redux";
-import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
-import { getPartnerName } from "@ui/components";
-import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { formatDate, roundCurrency } from "@framework/util";
 import { DateFormat, ProjectRole, ProjectStatus } from "@framework/constants";
-import { IRoutes } from "@ui/routing";
+import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { getAuthRoles } from "@framework/types";
+import { formatDate, roundCurrency } from "@framework/util";
 import { getLeadPartner } from "@framework/util/partnerHelper";
-import { useProjectStatus } from "@ui/hooks";
+import { Pending } from "@shared/pending";
+import { getPartnerName, Loader, Page, PageLoader, Projects, Section, ValidationMessage } from "@ui/components";
+import { Content } from "@ui/components/content";
+import { createTypedTable } from "@ui/components/table";
+import { Accordion, AccordionItem } from "@ui/components/accordion";
+import { ClaimPeriodDate } from "@ui/components/claims";
+import { ClaimDetailsLink, getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
+import { Messages, ShortDateRange, SimpleString } from "@ui/components/renderers";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useProjectParticipants } from "@ui/features/project-participants";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { useProjectStatus } from "@ui/hooks";
+import { useStores } from "@ui/redux";
+import { IRoutes } from "@ui/routing";
+import { DateTime } from "luxon";
 import { ClaimsDashboardGuidance } from "./components";
 
 export interface AllClaimsDashboardParams {
@@ -28,6 +32,8 @@ interface AllClaimsDashboardData {
   routes: IRoutes;
   messages: string[];
 }
+
+const ClaimTable = createTypedTable<ClaimDto>();
 
 const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaimsDashboardData & BaseProps) => {
   const { isMultipleParticipants } = useProjectParticipants();
@@ -49,39 +55,39 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
     const hasWithdrawnPartners = partners.some(partner => partner.isWithdrawn);
 
     return (
-      <Acc.Page
-        pageTitle={<Acc.Projects.Title {...projectDetails} />}
-        backLink={<Acc.Projects.ProjectBackLink routes={props.routes} projectId={projectDetails.id} />}
+      <Page
+        pageTitle={<Projects.Title {...projectDetails} />}
+        backLink={<Projects.ProjectBackLink routes={props.routes} projectId={projectDetails.id} />}
         project={projectDetails}
         partner={isLeadPartnerFc ? leadPartner : undefined}
       >
         {isMultipleParticipants && isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
 
         {hasWithdrawnPartners && (
-          <Acc.ValidationMessage messageType="info" message={x => x.claimsMessages.hasWithdrawnPartner} />
+          <ValidationMessage messageType="info" message={x => x.claimsMessages.hasWithdrawnPartner} />
         )}
 
-        <Acc.Renderers.Messages messages={props.messages} />
+        <Messages messages={props.messages} />
 
-        <Acc.Section qa="current-claims-section" title={x => x.claimsLabels.openSectionTitle}>
-          <Acc.Loader
+        <Section qa="current-claims-section" title={x => x.claimsLabels.openSectionTitle}>
+          <Loader
             pending={props.currentClaims}
             render={(currentClaims, isLoading) =>
               isLoading ? (
-                <Acc.Renderers.SimpleString qa="claimsLoadingMessage">
-                  <Acc.Content value={x => x.claimsMessages.loadingClaims} />
-                </Acc.Renderers.SimpleString>
+                <SimpleString qa="claimsLoadingMessage">
+                  <Content value={x => x.claimsMessages.loadingClaims} />
+                </SimpleString>
               ) : (
                 renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)
               )
             }
           />
-        </Acc.Section>
+        </Section>
 
-        <Acc.Section qa="closed-claims-section" title={x => x.claimsLabels.closedSectionTitle}>
+        <Section qa="closed-claims-section" title={x => x.claimsLabels.closedSectionTitle}>
           {renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
-        </Acc.Section>
-      </Acc.Page>
+        </Section>
+      </Page>
     );
   };
 
@@ -91,9 +97,9 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
 
     if (!isCurrentOverduePartner && isCombinationOfSBRI) {
       return (
-        <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-          <Acc.Content value={x => x.pages.allClaimsDashboard.sbriGuidanceMessage} />
-        </Acc.Renderers.SimpleString>
+        <SimpleString qa="theFinalClaimApprovedNotificationMessage">
+          <Content value={x => x.pages.allClaimsDashboard.sbriGuidanceMessage} />
+        </SimpleString>
       );
     }
 
@@ -118,20 +124,20 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
     if (groupedClaims.length === 0) {
       if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
         return (
-          <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-            <Acc.Content value={x => x.claimsMessages.noRemainingClaims} />
-          </Acc.Renderers.SimpleString>
+          <SimpleString qa="theFinalClaimApprovedNotificationMessage">
+            <Content value={x => x.claimsMessages.noRemainingClaims} />
+          </SimpleString>
         );
       }
 
       if (!project.periodEndDate) return null;
       const date = DateTime.fromJSDate(project.periodEndDate).plus({ days: 1 }).toJSDate();
       return (
-        <Acc.Renderers.SimpleString qa="notificationMessage">
-          <Acc.Content
+        <SimpleString qa="notificationMessage">
+          <Content
             value={x => x.claimsMessages.noOpenClaims({ nextClaimStartDate: formatDate(date, DateFormat.FULL_DATE) })}
           />
-        </Acc.Renderers.SimpleString>
+        </SimpleString>
       );
     }
     return groupedClaims.map((x, i) => renderCurrentClaims(x.periodId, x.start, x.end, x.claims, project, partners, i));
@@ -148,22 +154,21 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
   ) => {
     const title = (
       <>
-        Period {periodId}: <Acc.Renderers.ShortDateRange start={start} end={end} />
+        Period {periodId}: <ShortDateRange start={start} end={end} />
       </>
     );
-    const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];
-      if (p) return Acc.getPartnerName(p, true);
+      if (p) return getPartnerName(p, true);
       return null;
     };
 
     return (
-      <Acc.Section title={title} qa="current-claims-section" key={index}>
+      <Section title={title} qa="current-claims-section" key={index}>
         <ClaimTable.Table
           data={claims}
           bodyRowFlag={x => (getBodyRowFlag(x, project, partners) ? "edit" : null)}
-          caption={<Acc.Content value={x => x.claimsLabels.openCaption} />}
+          caption={<Content value={x => x.claimsLabels.openCaption} />}
           qa="current-claims-table"
         >
           <ClaimTable.Custom header={x => x.claimsLabels.partner} qa="partner" value={renderPartnerName} />
@@ -189,7 +194,7 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
             hideHeader
             qa="link"
             value={x => (
-              <Acc.Claims.ClaimDetailsLink
+              <ClaimDetailsLink
                 claim={x}
                 project={project}
                 partner={partners.find(p => p.id === x.partnerId) as PartnerDto}
@@ -198,7 +203,7 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
             )}
           />
         </ClaimTable.Table>
-      </Acc.Section>
+      </Section>
     );
   };
 
@@ -217,29 +222,29 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
     const grouped = partners.map(x => ({ partner: x, claims: previousClaims.filter(y => y.partnerId === x.id) }));
 
     return (
-      <Acc.Accordion qa="previous-claims">
+      <Accordion qa="previous-claims">
         {grouped.map((x, i) => {
           const partnerName = getPartnerName(x.partner, true);
 
           return (
-            <Acc.AccordionItem key={i} title={partnerName} qa={`accordion-item-${i}`}>
+            <AccordionItem key={i} title={partnerName} qa={`accordion-item-${i}`}>
               {previousClaimsSection(project, x.partner, x.claims)}
-            </Acc.AccordionItem>
+            </AccordionItem>
           );
         })}
-      </Acc.Accordion>
+      </Accordion>
     );
   };
 
   const previousClaimsSection = (project: ProjectDto, partner: PartnerDto, previousClaims: ClaimDto[]) => {
     if (previousClaims.length === 0) {
       return (
-        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}>
-          <Acc.Content value={x => x.claimsMessages.noClosedClaims} />
-        </Acc.Renderers.SimpleString>
+        <SimpleString qa={`noClosedClaims-${partner.accountId}`}>
+          <Content value={x => x.claimsMessages.noClosedClaims} />
+        </SimpleString>
       );
     }
-    const ClaimTable = Acc.TypedTable<ClaimDto>();
+    const ClaimTable = createTypedTable<ClaimDto>();
     const partnerName = getPartnerName(partner);
 
     return (
@@ -267,9 +272,7 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
             header={x => x.claimsLabels.actionHeader}
             hideHeader
             qa="link"
-            value={x => (
-              <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={props.routes} />
-            )}
+            value={x => <ClaimDetailsLink claim={x} project={project} partner={partner} routes={props.routes} />}
           />
         </ClaimTable.Table>
       </div>
@@ -277,12 +280,10 @@ const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaims
   };
 
   const renderClosedPeriodColumn = (claim: ClaimDto) => {
-    return <Acc.Claims.ClaimPeriodDate claim={claim} />;
+    return <ClaimPeriodDate claim={claim} />;
   };
 
-  return (
-    <Acc.PageLoader pending={combined} render={x => renderContents(x.projectDetails, x.partners, x.previousClaims)} />
-  );
+  return <PageLoader pending={combined} render={x => renderContents(x.projectDetails, x.partners, x.previousClaims)} />;
 };
 
 const AllClaimsDashboardContainer = (props: AllClaimsDashboardParams & BaseProps) => {

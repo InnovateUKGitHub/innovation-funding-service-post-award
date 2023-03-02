@@ -1,7 +1,7 @@
 import { getDefinedEdges } from "@gql/selectors/edges";
 import { Link } from "@ui/components/links";
 import { Section } from "@ui/components/layout/section";
-import { TypedTable } from "@ui/components/table";
+import { createTypedTable } from "@ui/components/table";
 import { useContent } from "@ui/hooks";
 import { ReactNode } from "react";
 import { useFragment } from "relay-hooks";
@@ -13,7 +13,7 @@ import {
 import { PartnerDetailsRoute } from "../partnerDetails.page";
 
 const ParticipantsTable =
-  TypedTable<
+  createTypedTable<
     NonNullable<
       UnwrapArray<
         NonNullable<

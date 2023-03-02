@@ -1,14 +1,15 @@
 import cx from "classnames";
 import { useContent } from "@ui/hooks";
 
-import { TypedTable } from "../table";
+import { createTypedTable } from "../table";
 import { ValidationListMessage } from "../ValidationListMessage";
 
 import { ClaimProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
 
+const CostCategoriesTable = createTypedTable<ClaimTableRow>();
+
 export const ClaimTable = (props: ClaimProps) => {
   const { getContent } = useContent();
-  const CostCategoriesTable = TypedTable<ClaimTableRow>();
 
   const { costCategories, totalNegativeCategories } = createTableData(props);
   const displayWarningMessage = totalNegativeCategories.length > 0;

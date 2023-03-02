@@ -1,7 +1,7 @@
 import { DeveloperUser } from "@framework/dtos/developerUser";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
 import { SalesforceRole } from "@server/repositories";
-import { createTypedForm, H3, Info, Section, TypedTable } from "@ui/components";
+import { createTypedForm, H3, Info, Section, createTypedTable } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
 import { useMounted } from "@ui/features";
@@ -50,6 +50,7 @@ const ResetUserForm = createTypedForm<string>();
 const ManuallyEnterUserForm = createTypedForm<UserSwitcherEmailFormInput>();
 const SelectProjectForm = createTypedForm<UserSwitcherFormInputs>();
 const SelectContactForm = createTypedForm<string>();
+const ProjectContactTable = createTypedTable<UserSwitcherTableRow>();
 
 const UserSwitcherCurrentUser = () => {
   const { data, isLoading } = useQuery<UserSwitcherCurrentUserQuery>(userSwitcherCurrentUserQuery);
@@ -70,7 +71,6 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
   const { data, isLoading } = useQuery<UserSwitcherProjectQuery>(userSwitcherProjectQuery, { projectId });
   const { getContent } = useContent();
   const returnLocation = useReturnLocation();
-  const ProjectContactTable = TypedTable<UserSwitcherTableRow>();
 
   // A contact email-to-role record to collate a user's roles together.
   const contactRoleInfo: Record<string, UserSwitcherTableRow> = {};

@@ -24,6 +24,7 @@ interface Data {
 }
 
 const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Table = ACC.createTypedTable<Data>();
 
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
@@ -78,8 +79,6 @@ class Component extends React.Component<
       })
       .filter(x => !!x);
     const total = sumBy(data, x => x.costDto.value || 0);
-
-    const Table = ACC.TypedTable<Data>();
 
     return (
       <form.Fieldset heading={x => x.pages.pcrAddPartnerAcademicCosts.costsSectionTitle}>

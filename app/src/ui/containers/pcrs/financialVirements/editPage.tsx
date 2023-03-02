@@ -83,6 +83,14 @@ interface EditPageProps extends EditPageBaseProps {
   editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>;
 }
 
+interface VirementData {
+  costCategory: CostCategoryDto;
+  virement: CostCategoryVirementDto;
+  fundingLevel: number;
+  originalRemainingGrant: number;
+  newRemainingGrant: number;
+}
+
 interface EditPageInputRowProps {
   costCategory: CostCategoryDto;
   virement: CostCategoryVirementDto;
@@ -114,6 +122,8 @@ const EditPageLoader = ({
 };
 
 const VirementForm = ACC.createTypedForm<FinancialVirementDto>();
+const SummaryTable = ACC.createTypedTable<FinancialVirementDto>();
+const VirementTable = ACC.createTypedTable<VirementData>();
 
 /**
  * A page for editing Loans virements for a PCR.
@@ -170,8 +180,6 @@ const EditPage = ({
   const validation = costCategories.map(
     x => partnerVirementsValidator?.virements.results.find(y => y.model.costCategoryId === x.id) || null,
   );
-  const VirementTable = ACC.TypedTable<typeof costCategoriesWithVirement[0]>();
-  const SummaryTable = ACC.TypedTable<FinancialVirementDto>();
 
   const { isPm } = getAuthRoles(project.roles);
   const { isKTP } = checkProjectCompetition(project.competitionType);

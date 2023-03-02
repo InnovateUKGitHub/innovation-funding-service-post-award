@@ -7,6 +7,7 @@ import { FinancialLoanVirementDto } from "@framework/dtos";
 import { EditorStatus } from "@ui/constants/enums";
 import { Currency, FullNumericDate, getCurrency } from "@ui/components/renderers";
 import { NumberInput, FullDateInput } from "@ui/components/inputs";
+import { LoanFinancialVirement } from "@framework/entities";
 
 type LoanEditStore = IEditorStore<FinancialLoanVirementDto, FinancialLoanVirementDtoValidator>;
 
@@ -23,6 +24,8 @@ interface LoanEditTableViewProps {
 }
 
 type LoanEditTableProps = LoanEditStore & (LoanEditTableEditProps | LoanEditTableViewProps);
+
+const LoanEdit = ACC.createTypedTable<LoanFinancialVirement>();
 
 export const LoanEditTable = ({ data, validator, status, mode, onEdit, onEditLink }: LoanEditTableProps) => {
   const isEditMode = mode === "edit";
@@ -64,8 +67,6 @@ export const LoanEditTable = ({ data, validator, status, mode, onEdit, onEditLin
 
     preparePayload(updatedLoans);
   };
-
-  const LoanEdit = ACC.TypedTable<typeof data.loans[0]>();
 
   return (
     <LoanEdit.Table

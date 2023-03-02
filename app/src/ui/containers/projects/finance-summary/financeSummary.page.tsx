@@ -3,7 +3,16 @@ import { roundCurrency } from "@framework/util";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useFinanceSummaryContent, useFinanceSummaryData } from "./financeSummary.logic";
 import type { Partner } from "./financeSummary.logic";
-import { Page, Projects, BackLink, Section, Renderers, Content, TypedTable, getPartnerName } from "@ui/components";
+import {
+  Page,
+  Projects,
+  BackLink,
+  Section,
+  Renderers,
+  Content,
+  createTypedTable,
+  getPartnerName,
+} from "@ui/components";
 
 type Props = {
   projectId: string;
@@ -12,7 +21,7 @@ type Props = {
 
 const FinanceSummaryPage = (props: Props & BaseProps) => {
   const content = useFinanceSummaryContent();
-  const FinanceSummaryTable = TypedTable<Partner>();
+  const FinanceSummaryTable = createTypedTable<Partner>();
   const { project, partners } = useFinanceSummaryData(props.projectId);
 
   const isPmOrMo = project.roles?.isPm || project.roles?.isMo;

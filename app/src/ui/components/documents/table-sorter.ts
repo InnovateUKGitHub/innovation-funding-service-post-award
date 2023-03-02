@@ -5,7 +5,6 @@ import { useMemo, useState } from "react";
 
 export type SortOptions = "none" | "ascending" | "descending";
 
-export type TableSortKey = string | null;
 interface ColumnSortState<T> {
   sortKey?: T;
   sortDirection: SortOptions;
@@ -57,7 +56,7 @@ const initialSortState: SortOptions = "none";
  *
  * hook returns sorted table configuration
  */
-export function useTableSorter<T extends AnyObject>(sortKeys: (keyof T | null | undefined)[], tableRows: T[]) {
+export function useTableSorter<T>(sortKeys: (keyof T | null | undefined)[], tableRows: T[]) {
   const { isServer } = useMounted();
   const [sortColumn, setSortColumn] = useState<ColumnSortState<keyof T | null | undefined>>({
     sortDirection: initialSortState,

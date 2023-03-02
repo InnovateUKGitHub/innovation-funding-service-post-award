@@ -1,6 +1,6 @@
 import { IAppError } from "@framework/types";
 import { ErrorTypes } from "@ui/components/errors/error.config";
-import { ErrorNotFoundRoute, ErrorRoute } from "@ui/containers";
+import { ErrorNotFoundRoute, ErrorRoute } from "@ui/containers/errors.page";
 
 export interface ErrorPayload {
   name: string;
