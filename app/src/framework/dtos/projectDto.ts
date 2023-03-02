@@ -28,7 +28,7 @@ export interface ProjectDto {
   costsClaimedToDate: number;
   claimedPercentage: number | null;
 
-  roles: ProjectRole;
+  roles: ProjectRole | SfRoles;
   roleTitles: string[];
 
   status: ProjectStatus;

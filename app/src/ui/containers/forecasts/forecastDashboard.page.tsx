@@ -48,7 +48,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
           <Table.Link
             header={x => x.pages.forecastsDashboard.headerAction}
             hideHeader
-            value={x => props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: x.id })}
+            value={x => props.routes.viewForecast.getLink({ projectId: props.projectId, partnerId: x.id })}
             content={<Content value={x => x.pages.forecastsDashboard.viewForecast} />}
             qa="view-partner-forecast"
           />

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { getProjectStatus } from "@framework/util/projectStatus";
+import { getProjectStatus } from "@framework/mappers/projectStatus";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { forecastDashboardQuery } from "./ForecastDashboard.query";
 import { ForecastDashboardQuery, ForecastDashboardQuery$data } from "./__generated__/ForecastDashboardQuery.graphql";

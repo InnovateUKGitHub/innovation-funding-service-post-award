@@ -72,7 +72,7 @@ export interface PartnerDto {
   capLimit: number | null;
   totalFutureForecastsForParticipants: number | null;
   totalCostsSubmitted: number | null;
-  roles: ProjectRole;
+  roles: ProjectRole | SfRoles;
   forecastLastModifiedDate: Date | null;
   overdueProject: boolean;
   claimsOverdue: number | null;

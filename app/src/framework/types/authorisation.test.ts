@@ -1,4 +1,4 @@
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, ProjectRole, getAuthRoles } from "@framework/types";
 
 describe("authorisation", () => {
   const roles = {
@@ -223,5 +223,46 @@ describe("authorisation", () => {
     it("when partner found and has other roles as well returns false", async () => {
       expect(auth.forPartner("Project2", "Partner2B").hasOnlyRole(ProjectRole.FinancialContact)).toBe(false);
     });
+  });
+
+  describe("gets auth values for when using sf roles object directly", () => {
+    test.each`
+      sfRoles                                      | expected
+      ${{ isPm: false, isMo: false, isFc: false }} | ${{}}
+      ${{ isPm: true, isMo: false, isFc: false }}  | ${{ isPm: true, isPmOrMo: true }}
+      ${{ isPm: false, isMo: true, isFc: false }}  | ${{ isMo: true, isPmOrMo: true }}
+      ${{ isPm: false, isMo: false, isFc: true }}  | ${{ isFc: true }}
+      ${{ isPm: true, isMo: false, isFc: true }}   | ${{ isPm: true, isFc: true, isPmAndFc: true, isPmOrMo: true }}
+      ${{ isPm: true, isMo: true, isFc: false }}   | ${{ isPm: true, isMo: true, isPmOrMo: true }}
+      ${{ isPm: true, isMo: true, isFc: true }}    | ${{ isPm: true, isMo: true, isFc: true, isPmOrMo: true, isPmAndFc: false, isSuperAdmin: true }}
+    `(
+      "should return the expected auth object",
+      ({
+        sfRoles,
+        expected,
+      }: {
+        sfRoles: SfRoles;
+        expected: Partial<{
+          isUnknown: boolean;
+          isMo: boolean;
+          isFc: boolean;
+          isPm: boolean;
+          isSuperAdmin: boolean;
+          isPmAndFc: boolean;
+          isPmOrMo: boolean;
+        }>;
+      }) => {
+        const defaultResults = {
+          isUnknown: false,
+          isMo: false,
+          isFc: false,
+          isPm: false,
+          isSuperAdmin: false,
+          isPmAndFc: false,
+          isPmOrMo: false,
+        };
+        expect(getAuthRoles(sfRoles)).toEqual({ ...defaultResults, ...expected });
+      },
+    );
   });
 });

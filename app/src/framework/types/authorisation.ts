@@ -6,15 +6,24 @@ type AvailableAuthRoles = "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc" | "Unknown" 
 /**
  * Gets object with auth roles as series of booleans
  *
- * @param {ProjectRole} role role of user for project
  */
-export function getAuthRoles(role: ProjectRole): Record<`is${AvailableAuthRoles}`, boolean> {
-  // Note: As 'Unknown' there is never an overlap so we check against itself
-  const isUnknown = (role & ProjectRole.Unknown) === ProjectRole.Unknown && role === ProjectRole.Unknown;
+export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${AvailableAuthRoles}`, boolean> {
+  let isFc: boolean;
+  let isPm: boolean;
+  let isMo: boolean;
+  let isUnknown = false;
+  if (typeof role == "number") {
+    isUnknown = (role & ProjectRole.Unknown) === ProjectRole.Unknown && role === ProjectRole.Unknown;
 
-  const isFc = !!(role & ProjectRole.FinancialContact);
-  const isPm = !!(role & ProjectRole.ProjectManager);
-  const isMo = !!(role & ProjectRole.MonitoringOfficer);
+    isFc = !!(role & ProjectRole.FinancialContact);
+    isPm = !!(role & ProjectRole.ProjectManager);
+    isMo = !!(role & ProjectRole.MonitoringOfficer);
+  } else {
+    isFc = role.isFc;
+    isPm = role.isPm;
+    isMo = role.isMo;
+  }
+  // Note: As 'Unknown' there is never an overlap so we check against itself
 
   const isSuperAdmin = isFc && isPm && isMo;
 

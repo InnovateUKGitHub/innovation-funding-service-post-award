@@ -35,6 +35,21 @@ export interface ForecastData {
   costCategories: CostCategoryDto[];
 }
 
+export interface ForecastDataForTableLayout {
+  project: Pick<ProjectDto, "periodId" | "numberOfPeriods" | "competitionType">;
+  partner: Pick<PartnerDto, "name" | "organisationType" | "partnerStatus" | "overheadRate">;
+  claim: Pick<ClaimDto, "periodId"> | null;
+  claims: Pick<ClaimDto, "isApproved" | "periodId">[];
+  IARDueOnClaimPeriods?: string[];
+  claimDetails: Pick<ClaimDetailsSummaryDto, "costCategoryId" | "periodId" | "value" | "periodEnd" | "periodStart">[];
+  forecastDetails: ForecastDetailsDTO[];
+  golCosts: Pick<GOLCostDto, "costCategoryId" | "value">[];
+  costCategories: Pick<
+    CostCategoryDto,
+    "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type"
+  >[];
+}
+
 interface TableRow {
   categoryId: string;
   categoryName: string;
@@ -53,7 +68,7 @@ interface Index {
 
 interface Props {
   hideValidation?: boolean;
-  data: ForecastData;
+  data: ForecastDataForTableLayout;
   editor?: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
   onChange?: (data: ForecastDetailsDTO[]) => void;
   isSubmitting?: boolean;
@@ -84,7 +99,11 @@ export class ForecastTable extends React.Component<Props> {
     if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
   }
 
-  private getPeriodId(project: ProjectDto, claims: ClaimDto[], draftClaim: ClaimDto | null) {
+  private getPeriodId(
+    project: Pick<ProjectDto, "periodId">,
+    claims: Pick<ClaimDto, "periodId" | "isApproved">[],
+    draftClaim: Pick<ClaimDto, "periodId"> | null,
+  ) {
     // If there is a draft claim in progress then return the smallest of the claim period and the project period
     if (draftClaim) return Math.min(project.periodId, draftClaim.periodId);
     // Sort a copy of the claims array so the original array is not affected
@@ -127,7 +146,7 @@ export class ForecastTable extends React.Component<Props> {
       <Table.Table
         data={tableRows}
         qa="forecast-table"
-        headers={this.renderTableHeaders(periods, periodId, data.claim, data.claims, data.IARDueOnClaimPeriods ?? [])}
+        headers={this.renderTableHeaders(periods, periodId, data.claim, data.IARDueOnClaimPeriods ?? [])}
         footers={this.renderTableFooters(
           periods,
           tableRows,
@@ -210,7 +229,7 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   private parseClaimData(
-    data: ForecastData,
+    data: ForecastDataForTableLayout,
     editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined,
     periodId: number,
     numberOfPeriods: number | null,
@@ -265,8 +284,8 @@ export class ForecastTable extends React.Component<Props> {
 
   private addClaimDetailInfoToRow(
     periodId: number,
-    costCategory: CostCategoryDto,
-    claimDetails: ClaimDetailsSummaryDto[],
+    costCategory: Pick<CostCategoryDto, "id">,
+    claimDetails: Pick<ClaimDetailsSummaryDto, "costCategoryId" | "periodId" | "value">[],
     row: TableRow,
   ) {
     const detail = claimDetails.find(x => x.costCategoryId === costCategory.id && x.periodId === periodId);
@@ -280,8 +299,8 @@ export class ForecastTable extends React.Component<Props> {
 
   private addForecastInfoToRow(
     periodId: number,
-    costCategory: CostCategoryDto,
-    forecasts: ForecastDetailsDTO[],
+    costCategory: Pick<CostCategoryDto, "id">,
+    forecasts: Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId">[],
     row: TableRow,
   ) {
     const forecast = forecasts.find(x => x.costCategoryId === costCategory.id && x.periodId === periodId);
@@ -293,14 +312,14 @@ export class ForecastTable extends React.Component<Props> {
     }
   }
 
-  private calculateClaimPeriods(data: ForecastData) {
+  private calculateClaimPeriods(data: ForecastDataForTableLayout) {
     const periods: { [k: string]: React.ReactElement<typeof CondensedDateRange> } = {};
     data.claimDetails.forEach(x => (periods[x.periodId] = this.renderDateRange(x)));
     data.forecastDetails.forEach(x => (periods[x.periodId] = this.renderDateRange(x)));
     return periods;
   }
 
-  private renderDateRange(details: ClaimDetailsSummaryDto | ForecastDetailsDTO) {
+  private renderDateRange(details: Pick<ClaimDetailsSummaryDto | ForecastDetailsDTO, "periodEnd" | "periodStart">) {
     return <CondensedDateRange start={details.periodStart} end={details.periodEnd} />;
   }
 
@@ -308,7 +327,7 @@ export class ForecastTable extends React.Component<Props> {
     forecastRow: TableRow,
     periodId: number,
     index: Index,
-    data: ForecastData,
+    data: ForecastDataForTableLayout,
     editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined,
     isSubmitting: boolean,
     allowRetroactiveForecastEdit?: boolean,
@@ -380,8 +399,7 @@ export class ForecastTable extends React.Component<Props> {
   private renderTableHeaders(
     periods: string[],
     claimPeriod: number,
-    claim: ClaimDto | null,
-    claims: ClaimDto[] | null,
+    claim: Pick<ClaimDto, "periodId"> | null,
     periodsWithIARDue: string[],
   ) {
     // If there is a draft claim then show "Costs you are claiming"
@@ -549,9 +567,9 @@ export class ForecastTable extends React.Component<Props> {
  * gets the overhead rate
  */
 function getOverheadRate(
-  partner: ForecastData["partner"],
-  project: ForecastData["project"],
-  costCategories: ForecastData["costCategories"],
+  partner: ForecastDataForTableLayout["partner"],
+  project: ForecastDataForTableLayout["project"],
+  costCategories: ForecastDataForTableLayout["costCategories"],
   cell: ForecastDetailsDTO,
   data: ForecastDetailsDTO[],
 ) {

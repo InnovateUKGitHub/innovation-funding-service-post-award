@@ -162,13 +162,13 @@ const ProjectOverviewTiles = ({
       link: routes.monitoringReportDashboard.getLink({ projectId }),
     },
     {
-      textContent: x => x.pages.projectOverview.forecastLink,
+      textContent: x => x.pages.projectOverview.forecastsLink,
       link: routes.forecastDashboard.getLink({ projectId }),
       messages: () => getForecastMessages(partner),
     },
     {
-      textContent: x => x.pages.projectOverview.forecastsLink,
-      link: routes.forecastDetails.getLink({ projectId, partnerId }),
+      textContent: x => x.pages.projectOverview.forecastLink,
+      link: routes.viewForecast.getLink({ projectId, partnerId }),
       messages: () => getForecastMessages(partner),
     },
     {
@@ -203,7 +203,7 @@ const ProjectOverviewTiles = ({
 
   // special case if not fc shouldn't have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
   if (isPmOrMo) {
-    links = links.filter(x => x.link.routeName !== routes.forecastDetails.routeName);
+    links = links.filter(x => x.link.routeName !== routes.viewForecast.routeName);
   }
 
   return (

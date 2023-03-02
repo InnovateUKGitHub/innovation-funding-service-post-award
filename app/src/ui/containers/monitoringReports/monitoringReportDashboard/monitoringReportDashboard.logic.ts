@@ -1,5 +1,5 @@
 import { MonitoringReportStatus, ProjectStatus } from "@framework/constants";
-import { getProjectStatus } from "@framework/util/projectStatus";
+import { getProjectStatus } from "@framework/mappers/projectStatus";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { monitoringReportDashboardQuery } from "./MonitoringReportDashboard.query";

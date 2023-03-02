@@ -1,4 +1,4 @@
-import { convertRolesToPermissionsValue, Role } from "./rolesToPermissions";
+import { convertRolesToPermissionsValue } from "./rolesToPermissions";
 
 describe("rolesToPermissions", () => {
   test.each`
@@ -13,7 +13,7 @@ describe("rolesToPermissions", () => {
     ${{ isPm: true, isMo: true, isFc: true }}    | ${7}
   `(
     "it should return the matching permissions for the roles",
-    ({ roles, permissions }: { roles: Role; permissions: number }) => {
+    ({ roles, permissions }: { roles: SfRoles; permissions: number }) => {
       expect(convertRolesToPermissionsValue(roles)).toEqual(permissions);
     },
   );

@@ -22,4 +22,16 @@ declare namespace GQL {
     : Field extends keyof T
     ? NodeValue<T[Field]>
     : never;
+
+  type ObjectEdgeSelector<T, Field extends string> = T extends { readonly salesforce: AnyObject }
+    ? ObjectNodeSelector<T["salesforce"], Field>
+    : T extends { readonly uiapi: AnyObject }
+    ? ObjectNodeSelector<T["uiapi"], Field>
+    : T extends { readonly query: AnyObject }
+    ? ObjectNodeSelector<T["query"], Field>
+    : Field extends keyof T
+    ? T[Field] extends { readonly edges: ReadonlyArray<infer U> }
+      ? U
+      : null
+    : never;
 }

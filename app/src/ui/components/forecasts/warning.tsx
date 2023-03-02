@@ -16,13 +16,13 @@ import { Content } from "../content";
 import { UL } from "../layout";
 
 interface Props {
-  project: ProjectDto;
-  partner: PartnerDto;
-  claims: ClaimDto[];
-  claimDetails: ClaimDetailsSummaryDto[];
-  forecastDetails: ForecastDetailsDTO[];
-  golCosts: GOLCostDto[];
-  costCategories: CostCategoryDto[];
+  project: Pick<ProjectDto, "id">;
+  partner: Pick<PartnerDto, "id" | "roles">;
+  claims: Pick<ClaimDto, "periodId">[];
+  claimDetails: Pick<ClaimDetailsSummaryDto, "costCategoryId" | "periodId" | "value">[];
+  forecastDetails: Pick<ForecastDetailsDTO, "costCategoryId" | "periodId" | "value">[];
+  golCosts: Pick<GOLCostDto, "value" | "costCategoryId">[];
+  costCategories: Pick<CostCategoryDto, "id" | "name">[];
   editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
 }
 

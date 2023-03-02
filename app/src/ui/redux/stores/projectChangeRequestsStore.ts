@@ -16,6 +16,7 @@ import {
   PCRProjectLocation,
   PCRProjectRole,
   PCRStatus,
+  ProjectRole,
   TypeOfAid,
 } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
@@ -26,6 +27,7 @@ import { dataLoadAction, messageSuccess, RootActionsOrThunk } from "../actions";
 import { IEditorStore, RootState } from "../reducers";
 import { ProjectsStore } from "./projectsStore";
 import { StoreBase } from "./storeBase";
+import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissions";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(
@@ -376,7 +378,25 @@ export class ProjectChangeRequestStore extends StoreBase {
       original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
       itemTypes: this.getAllPcrTypes(projectId),
       project: this.projectStore.getById(projectId),
-    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.project, x.original));
+    }).then(
+      x =>
+        new PCRDtoValidator(
+          dto,
+          this.convertRolesToEnumType(x.projectRoles),
+          x.itemTypes,
+          showErrors,
+          x.project,
+          x.original,
+        ),
+    );
+  }
+
+  private convertRolesToEnumType(roles: ProjectRole | SfRoles) {
+    if (typeof roles == "number") {
+      return roles as ProjectRole;
+    } else {
+      return convertRolesToPermissionsValue(roles) as ProjectRole;
+    }
   }
 
   public deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void) {

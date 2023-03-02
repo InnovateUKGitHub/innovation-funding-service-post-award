@@ -1,14 +1,14 @@
 import { useLazyLoadQuery } from "react-relay";
 import { calcPercentage, Clock, dayComparator, roundCurrency } from "@framework/util";
 import { getLeadPartner } from "@framework/util/partnerHelper";
-import { getProjectStatus } from "@framework/util/projectStatus";
+import { getProjectStatus } from "@framework/mappers/projectStatus";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { projectOverviewQuery } from "./ProjectOverview.query";
 import { ProjectOverviewQuery, ProjectOverviewQuery$data } from "./__generated__/ProjectOverviewQuery.graphql";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { PartnerClaimStatus, PartnerStatus, ProjectStatus } from "@framework/constants";
-import { getClaimStatus } from "@framework/util/claimStatus";
-import { getPartnerStatus } from "@framework/util/partnerStatus";
+import { getClaimStatus } from "@framework/mappers/claimStatus";
+import { getPartnerStatus } from "@framework/mappers/partnerStatus";
 import { IClientUser } from "@framework/types";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissions";

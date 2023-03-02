@@ -141,7 +141,7 @@ const serverRender =
         }
       }
 
-      // If a fatal error has NOT occured...
+      // If a fatal error has NOT occurred...
       if (!isErrorPage) {
         const matched = matchRoute(req.url);
         const { params } = getParamsFromUrl(matched.routePath, req.url);

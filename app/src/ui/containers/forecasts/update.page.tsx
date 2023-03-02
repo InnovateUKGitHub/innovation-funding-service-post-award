@@ -62,7 +62,7 @@ const UpdateForecastComponent = (props: ForecastUpdateParams & ForecastUpdateDat
     return (
       <ACC.Page
         backLink={
-          <ACC.BackLink route={routes.forecastDetails.getLink({ projectId, partnerId })}>
+          <ACC.BackLink route={routes.viewForecast.getLink({ projectId, partnerId })}>
             <ACC.Content value={x => x.pages.forecastsUpdate.backLink} />
           </ACC.BackLink>
         }
@@ -143,7 +143,7 @@ const UpdateForecastContainer = (props: ForecastUpdateParams & BaseProps) => {
           forecastUpdatedMessage,
           () => {
             navigate(
-              props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path,
+              props.routes.viewForecast.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path,
             );
           },
         );

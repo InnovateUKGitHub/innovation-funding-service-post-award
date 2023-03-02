@@ -27,7 +27,7 @@ const getDefinedEdges = <T>(input: Edges<T>): { node: T }[] => {
  */
 const getFirstEdge = <T>(input: Edges<T>): { node: T } => {
   const edges = getDefinedEdges(input);
-  if (edges.length === 0) throw new Error("No GraphQL edges detected when only 1 was expected.");
+  if (edges.length === 0) throw new Error("No GraphQL edges detected when 1 was expected.");
   if (edges.length > 1) throw new Error("Multiple GraphQL edges detected when only 1 was expected.");
   return edges[0];
 };

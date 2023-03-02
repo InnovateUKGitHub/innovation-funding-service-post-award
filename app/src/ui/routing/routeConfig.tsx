@@ -73,7 +73,7 @@ export const routeConfig = {
   reviewClaim: Containers.ReviewClaimRoute,
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
   forecastDashboard: Containers.ForecastDashboardRoute,
-  forecastDetails: Containers.ForecastDetailsRoute,
+  viewForecast: Containers.ViewForecastRoute,
   forecastUpdate: Containers.UpdateForecastRoute,
 } as const;
 

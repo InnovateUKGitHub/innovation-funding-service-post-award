@@ -1,7 +1,7 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { ForecastUpdateParams, UpdateForecastRoute } from "@ui/containers/forecasts/update.page";
-import { ForecastDetailsRoute } from "@ui/containers/forecasts/details.page";
+import { ViewForecastRoute } from "@ui/containers/forecasts/viewForecast.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ForecastDetailsDTO } from "@framework/dtos";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
@@ -44,7 +44,7 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastU
     dto: ForecastDetailsDTO[],
   ): Promise<ILinkInfo> {
     await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, false));
-    return ForecastDetailsRoute.getLink(params);
+    return ViewForecastRoute.getLink(params);
   }
 
   protected getStoreKey(params: ForecastUpdateParams) {
