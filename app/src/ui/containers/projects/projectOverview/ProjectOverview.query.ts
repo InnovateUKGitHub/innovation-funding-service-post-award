@@ -91,7 +91,7 @@ export const projectOverviewQuery = graphql`
                       Acc_TotalParticipantCosts__c {
                         value
                       }
-                      Acc_TotalCostsSubmitted__c {
+                      Acc_TotalApprovedCosts__c {
                         value
                       }
                       Acc_NewForecastNeeded__c {

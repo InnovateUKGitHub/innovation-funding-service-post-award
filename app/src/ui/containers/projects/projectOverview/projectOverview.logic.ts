@@ -153,10 +153,10 @@ export const useProjectOverviewData = (
         },
         name: x?.node?.Acc_AccountId__r?.Name?.value ?? "",
         totalParticipantGrant: x?.node?.Acc_TotalParticipantCosts__c?.value ?? 0,
-        totalParticipantCostsClaimed: x?.node?.Acc_TotalCostsSubmitted__c?.value ?? 0,
+        totalParticipantCostsClaimed: x?.node?.Acc_TotalApprovedCosts__c?.value ?? 0,
         percentageParticipantCostsClaimed: calcPercentage(
           x?.node?.Acc_TotalParticipantCosts__c?.value ?? 0,
-          x?.node?.Acc_TotalCostsSubmitted__c?.value ?? 0,
+          x?.node?.Acc_TotalApprovedCosts__c?.value ?? 0,
         ),
         newForecastNeeded: x?.node?.Acc_NewForecastNeeded__c?.value ?? false,
         claimStatus: getClaimStatus(x?.node?.Acc_TrackingClaims__c?.value ?? ""),
