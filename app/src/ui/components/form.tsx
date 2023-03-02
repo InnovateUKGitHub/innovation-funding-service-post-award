@@ -249,13 +249,11 @@ export const createTypedForm = <T,>() => {
    * - Form Data
    * - Form `onChange` and `onSubmit` handlers
    * - Whether the form is disabled or not
-   *
-   * @author Leondro Lio <leondro.lio@iuk.ukri.org>
    */
   const useFormDataContext = () => {
     const context = useContext(FormDataContext);
     if (context === undefined) {
-      throw new Error("Form components must be used within <FormComponent />");
+      throw new Error("Form components must be used within the form returned by useTypedForm!");
     }
     return context;
   };

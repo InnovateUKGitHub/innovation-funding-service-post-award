@@ -1,4 +1,4 @@
-import React, { cloneElement, isValidElement, useMemo } from "react";
+import React, { createContext, isValidElement, useContext, useMemo, ReactElement } from "react";
 import cx from "classnames";
 import _isPlainObject from "lodash.isplainobject";
 
@@ -23,25 +23,78 @@ import { useContent } from "@ui/hooks";
 import { useTableSorter } from "./documents/table-sorter";
 import { DateConvertible } from "@framework/util";
 
+const rowClassesStates: Record<"warning" | "error" | "info" | "edit", string> = {
+  warning: "table__row--warning",
+  error: "table__row--error",
+  info: "table__row--info",
+  edit: "table__row--info",
+};
+
+const standardRowCssClass = "govuk-table__row";
+
+interface SortButtonProps {
+  children: React.ReactNode;
+  isSortable: boolean;
+}
+
+const SortButton = ({ isSortable, ...props }: SortButtonProps) => {
+  if (!isSortable) return <>{props.children}</>;
+  return <button {...props} type="button" className="table-sort-button" />;
+};
+
+/**
+ * Create a collection of typed table child elements, and it's corresponding parent table.
+ * All returned input elements, such as <Table.String />, <Table.FullNumericDate />, <Table.Percentage /> etc., **must**
+ * be surrounded by the returned <Table.Table /> element.
+ *
+ * @example
+ * interface TestData {
+ *   foo: string;
+ *   bar: string;
+ * }
+ *
+ * const TestTable = createTypedTable<TestData>();
+ *
+ * // Display information about Nicole Hedge's favourite food.
+ * const NicoleHedgesTableDeluxe = () => {
+ *   return (
+ *     <TestTable.Table data={[
+ *       { foo: "hello", bar: "world!" },
+ *     ]}>
+ *       <TestTable.String
+ *          header="Foo"
+ *          value={x => x.foo}
+ *       />
+ *       <TestTable.String
+ *          header="Bar"
+ *          value={x => x.bar}
+ *       />
+ *     </TestTable.Table>
+ *   );
+ * };
+ */
 export const createTypedTable = <T,>() => {
   type DividerTypes = "normal" | "bold";
   type ColumnMode = "cell" | "header" | "footer" | "col";
-  interface InternalColumnProps {
-    header?: string | ContentSelector | React.ReactElement<unknown>; // Note: Some currency components return values as element not strings
-    onSortClick?: () => void;
-    "aria-sort"?: "none" | "ascending" | "descending";
+
+  interface ITableDataContext {
+    mode?: ColumnMode;
+    columnIndex?: number;
+    rowIndex?: number;
     dataItem?: T;
+    header?: string | number | ContentSelector | ReactElement;
+    ariaSort?: "none" | "ascending" | "descending";
+    onSortClick?: () => void;
+  }
+
+  interface InternalColumnProps {
     footer?: React.ReactNode;
     classSuffix?: "numeric";
     cellClassName?: (data: T, index: { column: number; row: number }) => string | null | undefined;
     colClassName?: (col: number) => string;
     renderCell: (data: T, index: { column: number; row: number }) => React.ReactNode;
-    mode?: ColumnMode;
-    rowIndex?: number;
-    columnIndex?: number;
     qa: string;
     width?: number;
-    validation?: Results<ResultBase>;
     isDivider?: DividerTypes;
     paddingRight?: string;
     hideHeader?: boolean;
@@ -61,14 +114,6 @@ export const createTypedTable = <T,>() => {
     hideHeader?: boolean;
   }
 
-  interface ClonedExternalColumnProps<TResult> extends ExternalColumnProps<TResult> {
-    mode?: ColumnMode;
-    columnIndex?: number;
-    rowIndex?: number;
-    dataItem?: T;
-    validation?: Results<TResult> | Result;
-  }
-
   type TableChild = React.ReactElement<ExternalColumnProps<ResultBase>> | null;
 
   interface TableProps {
@@ -86,35 +131,36 @@ export const createTypedTable = <T,>() => {
     footerRowClass?: string;
   }
 
-  interface SortButtonProps {
-    children: React.ReactNode;
-    isSortable: boolean;
-  }
+  // Create a context for all child components to consume table data
+  const TableDataContext = createContext<ITableDataContext | undefined>(undefined);
+  const TableDataContextProvider = TableDataContext.Provider;
 
-  const SortButton = ({ isSortable, ...props }: SortButtonProps) => {
-    if (!isSortable) return <>{props.children}</>;
-    return <button {...props} type="button" className="table-sort-button" />;
+  /**
+   * A hook to obtain information from the parent <Table />, such as...
+   */
+  const useTableDataContext = () => {
+    const context = useContext(TableDataContext);
+    if (context === undefined) {
+      throw new Error("Table components must be used within the table returned by useTypedTable!");
+    }
+    return context;
   };
 
   /**
    * Creates a table column
    */
-  function TableColumn({
-    header,
-    columnIndex,
-    paddingRight,
-    classSuffix,
-    "aria-sort": ariaSort,
-    ...props
-  }: InternalColumnProps) {
+  function TableColumn({ paddingRight, classSuffix, ...props }: InternalColumnProps) {
     const { getContent } = useContent();
-    if (!props.mode) return null;
+    const { header, columnIndex, ariaSort, mode, onSortClick, dataItem, rowIndex } = useTableDataContext();
+    if (!mode) return null;
 
     const renderHeader = (column: number): JSX.Element => {
       let headerValue: string | React.ReactElement<unknown>;
 
       if (typeof header === "string" || isValidElement(header)) {
         headerValue = header;
+      } else if (typeof header === "number" || typeof header === "boolean") {
+        headerValue = `${header}`;
       } else if (header) {
         headerValue = getContent(header);
       } else {
@@ -128,7 +174,7 @@ export const createTypedTable = <T,>() => {
       return (
         <th
           key={column}
-          onClick={props.onSortClick}
+          onClick={onSortClick}
           aria-sort={ariaSort}
           scope="col"
           className={cx("govuk-table__header", props.colClassName?.(column), {
@@ -198,20 +244,11 @@ export const createTypedTable = <T,>() => {
       header: () => renderHeader(columnIndex ?? 0),
       footer: () => renderFooter(columnIndex ?? 0),
       col: () => renderCol(columnIndex ?? 0),
-      cell: () => renderCell(props.dataItem as T, columnIndex ?? 0, props.rowIndex ?? 0),
+      cell: () => renderCell(dataItem as T, columnIndex ?? 0, rowIndex ?? 0),
     };
 
-    return tableColumnOptions[props.mode]();
+    return tableColumnOptions[mode]();
   }
-
-  const rowClassesStates: Record<"warning" | "error" | "info" | "edit", string> = {
-    warning: "table__row--warning",
-    error: "table__row--error",
-    info: "table__row--info",
-    edit: "table__row--info",
-  };
-
-  const standardRowCssClass = "govuk-table__row";
 
   /**
    * Gets the keys for sorting the data items.
@@ -250,35 +287,46 @@ export const createTypedTable = <T,>() => {
 
     const headers = children.map(
       (column, columnIndex) =>
-        isValidElement<InternalColumnProps>(column) &&
-        cloneElement(column, {
-          mode: "header",
-          columnIndex,
-          header:
-            typeof column?.props.header === "undefined" ||
-            typeof column?.props.header === "string" ||
-            isValidElement(column?.props.header)
-              ? column?.props.header
-              : getContent(column?.props.header || ""),
-          "aria-sort": getColumnOption?.(columnIndex),
-          onSortClick: () => handleSort(columnIndex),
-        }),
+        isValidElement<InternalColumnProps>(column) && (
+          <TableDataContextProvider
+            value={{
+              mode: "header",
+              columnIndex,
+              header:
+                typeof column?.props.header === "undefined" ||
+                typeof column?.props.header === "string" ||
+                isValidElement(column?.props.header)
+                  ? column?.props.header
+                  : getContent(column?.props.header || ""),
+              ariaSort: getColumnOption?.(columnIndex),
+              onSortClick: () => handleSort(columnIndex),
+            }}
+          >
+            {column}
+          </TableDataContextProvider>
+        ),
     );
 
-    const cols = children.map((column, columnIndex) =>
-      cloneElement(column as React.ReactElement<ClonedExternalColumnProps<ResultBase>>, { mode: "col", columnIndex }),
-    );
+    const cols = children.map((column, columnIndex) => (
+      <TableDataContextProvider key={columnIndex} value={{ mode: "col", columnIndex }}>
+        {column}
+      </TableDataContextProvider>
+    ));
 
     const contents = sortedRows.map((dataItem, rowIndex) =>
-      children.map((column, columnIndex) =>
-        cloneElement(column as React.ReactElement<ClonedExternalColumnProps<ResultBase>>, {
-          mode: "cell",
-          rowIndex,
-          columnIndex,
-          dataItem,
-          validation: validationResults?.[rowIndex] ?? undefined,
-        }),
-      ),
+      children.map((column, columnIndex) => (
+        <TableDataContextProvider
+          key={rowIndex}
+          value={{
+            mode: "cell",
+            rowIndex,
+            columnIndex,
+            dataItem,
+          }}
+        >
+          {column}
+        </TableDataContextProvider>
+      )),
     );
 
     const rowClass = data.map((dataItem, rowIndex) => props.bodyRowClass?.(dataItem, rowIndex) || "");
@@ -311,12 +359,17 @@ export const createTypedTable = <T,>() => {
     const childColumnsHasFooters = children.some(x => x?.props?.footer);
 
     const footerColumns = childColumnsHasFooters
-      ? children.map((column, columnIndex) =>
-          cloneElement(column as React.ReactElement<ClonedExternalColumnProps<ResultBase>>, {
-            mode: "footer",
-            columnIndex,
-          }),
-        )
+      ? children.map((column, columnIndex) => (
+          <TableDataContextProvider
+            key={columnIndex}
+            value={{
+              mode: "footer",
+              columnIndex,
+            }}
+          >
+            {column}
+          </TableDataContextProvider>
+        ))
       : [];
     const hasFooterColumns = !!footerColumns.length;
     const displayFooter = hasFooterColumns || !!footers?.length;
