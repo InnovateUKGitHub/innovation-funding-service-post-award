@@ -78,9 +78,16 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
     combined: ACC.Claims.ForecastData,
     editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>,
   ) {
-    const periodsClaimed = new Set(this.props.claimDetails?.data?.map(x => x.periodId));
+    // Get a set of periods that we have ALREADY claimed.
+    const periodsClaimed = new Set(this.props.claims?.data?.map(x => x.periodId));
+
+    // Get a DTO array of periods that we have not yet claimed.
     const arrayExcludingClaimedPeriods = getArrayExcludingPeriods(editor.data, periodsClaimed);
     const lastChanceToEditPeriod = arrayExcludingClaimedPeriods[0]?.periodId;
+
+    /**
+     * Submit all non-claimed periods
+     */
     const handleSubmit = () => {
       return this.props.onUpdate(
         true,
