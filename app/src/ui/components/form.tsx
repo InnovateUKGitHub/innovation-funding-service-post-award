@@ -8,12 +8,12 @@ import cx from "classnames";
 import React, { createContext, CSSProperties, isValidElement, ReactNode, useContext } from "react";
 import { Content } from "./content";
 import { DropdownList, DropdownListOption } from "./inputs";
-import { CheckboxList } from "./inputs/checkboxList";
+import { CheckboxList, CheckboxOptionProps } from "./inputs/checkboxList";
 import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
 import { MultipleFileUpload } from "./inputs/fileUpload";
 import { FormInputWidths } from "./inputs/input-utils";
 import { NumberInput } from "./inputs/numberInput";
-import { RadioList } from "./inputs/radioList";
+import { RadioList, RadioOptionProps } from "./inputs/radioList";
 import { SearchInput } from "./inputs/searchInput";
 import { TextAreaInput, TextAreaInputProps } from "./inputs/textAreaInput";
 import { TextInput } from "./inputs/textInput";
@@ -177,13 +177,13 @@ export const createTypedForm = <T,>() => {
     width?: FormInputWidths;
   }
 
-  interface RadioFieldProps extends ExternalFieldProps<SelectOption> {
-    options: SelectOption[];
+  interface RadioFieldProps extends ExternalFieldProps<RadioOptionProps> {
+    options: RadioOptionProps[];
     inline: boolean;
   }
 
-  interface CheckboxFieldProps extends ExternalFieldProps<SelectOption[]> {
-    options: SelectOption[];
+  interface CheckboxFieldProps extends ExternalFieldProps<CheckboxOptionProps[]> {
+    options: CheckboxOptionProps[];
   }
 
   interface DropdownFieldProps<T extends DropdownOption = DropdownOption> extends ExternalFieldProps<T> {

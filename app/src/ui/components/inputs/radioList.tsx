@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { InputProps } from "./common";
 
-interface RadioOptionProps {
+export interface RadioOptionProps {
   id: string;
   value: React.ReactNode;
   qa?: string;

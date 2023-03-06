@@ -1,9 +1,5 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import {
-  ProjectChangeRequestAddTypeParams,
-  ProjectChangeRequestAddTypeRoute,
-  ProjectChangeRequestPrepareRoute,
-} from "@ui/containers";
+import { ProjectChangeRequestAddTypeRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDto, PCRStandardItemDto, ProjectDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { PCRDtoValidator } from "@ui/validators";
@@ -11,18 +7,16 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { PCRItemStatus, ProjectRole } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PcrUpdateParams } from "@ui/containers/pcrs/modifyOptions/PcrModifyOptions";
 
-export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerBase<
-  ProjectChangeRequestAddTypeParams,
-  "pcr"
-> {
+export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerBase<PcrUpdateParams, "pcr"> {
   constructor() {
     super(ProjectChangeRequestAddTypeRoute, ["default"], "pcr");
   }
 
   protected async getDto(
     context: IContext,
-    params: ProjectChangeRequestAddTypeParams,
+    params: PcrUpdateParams,
     button: IFormButton,
     body: IFormBody,
   ): Promise<PCRDto> {
@@ -50,7 +44,7 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
 
   protected async run(
     context: IContext,
-    params: ProjectChangeRequestAddTypeParams,
+    params: PcrUpdateParams,
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
@@ -61,11 +55,11 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
     });
   }
 
-  protected getStoreKey(params: ProjectChangeRequestAddTypeParams) {
+  protected getStoreKey(params: PcrUpdateParams) {
     return storeKeys.getPcrKey(params.projectId, params.projectChangeRequestId);
   }
 
-  protected createValidationResult(params: ProjectChangeRequestAddTypeParams, dto: PCRDto) {
+  protected createValidationResult(params: PcrUpdateParams, dto: PCRDto) {
     return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
   }
 }
