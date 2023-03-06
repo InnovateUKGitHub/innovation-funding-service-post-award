@@ -21,26 +21,26 @@ export function PcrTypesGuidance({ qa, types }: PcrTypesGuidanceProps) {
   const { getContent } = useContent();
 
   const content = {
-    reallocateCostsMessage: getContent(x => x.pages.pcrCreate.reallocateCostsMessage),
-    reallocateCostsTitle: getContent(x => x.pages.pcrCreate.reallocateCostsTitle),
-    removePartnerTitle: getContent(x => x.pages.pcrCreate.removePartnerTitle),
-    removePartnerMessage: getContent(x => x.pages.pcrCreate.removePartnerMessage),
-    addPartnerTitle: getContent(x => x.pages.pcrCreate.addPartnerTitle),
-    addPartnerMessage: getContent(x => x.pages.pcrCreate.addPartnerMessage),
-    changeScopeTitle: getContent(x => x.pages.pcrCreate.changeScopeTitle),
-    changeScopeMessage: getContent(x => x.pages.pcrCreate.changeScopeMessage),
-    changeDurationTitle: getContent(x => x.pages.pcrCreate.changeDurationTitle),
-    changeDurationMessage: getContent(x => x.pages.pcrCreate.changeDurationMessage),
-    changePartnersNameTitle: getContent(x => x.pages.pcrCreate.changePartnersNameTitle),
-    changePartnersNameMessage: getContent(x => x.pages.pcrCreate.changePartnersNameMessage),
-    putProjectOnHoldTitle: getContent(x => x.pages.pcrCreate.putProjectOnHoldTitle),
-    putProjectOnHoldMessage: getContent(x => x.pages.pcrCreate.putProjectOnHoldMessage),
-    endProjectEarlyTitle: getContent(x => x.pages.pcrCreate.endProjectEarlyTitle),
-    endProjectEarlyMessage: getContent(x => x.pages.pcrCreate.endProjectEarlyMessage),
-    loanDrawdownChangeTitle: getContent(x => x.pages.pcrCreate.loanDrawdownChangeTitle),
-    loanDrawdownChangeMessage: getContent(x => x.pages.pcrCreate.loanDrawdownChangeMessage),
-    loanDrawdownExtensionTitle: getContent(x => x.pages.pcrCreate.loanDrawdownExtensionTitle),
-    loanDrawdownExtensionMessage: getContent(x => x.pages.pcrCreate.loanDrawdownExtensionMessage),
+    reallocateCostsMessage: getContent(x => x.pages.pcrModifyOptions.reallocateCostsMessage),
+    reallocateCostsTitle: getContent(x => x.pages.pcrModifyOptions.reallocateCostsTitle),
+    removePartnerTitle: getContent(x => x.pages.pcrModifyOptions.removePartnerTitle),
+    removePartnerMessage: getContent(x => x.pages.pcrModifyOptions.removePartnerMessage),
+    addPartnerTitle: getContent(x => x.pages.pcrModifyOptions.addPartnerTitle),
+    addPartnerMessage: getContent(x => x.pages.pcrModifyOptions.addPartnerMessage),
+    changeScopeTitle: getContent(x => x.pages.pcrModifyOptions.changeScopeTitle),
+    changeScopeMessage: getContent(x => x.pages.pcrModifyOptions.changeScopeMessage),
+    changeDurationTitle: getContent(x => x.pages.pcrModifyOptions.changeDurationTitle),
+    changeDurationMessage: getContent(x => x.pages.pcrModifyOptions.changeDurationMessage),
+    changePartnersNameTitle: getContent(x => x.pages.pcrModifyOptions.changePartnersNameTitle),
+    changePartnersNameMessage: getContent(x => x.pages.pcrModifyOptions.changePartnersNameMessage),
+    putProjectOnHoldTitle: getContent(x => x.pages.pcrModifyOptions.putProjectOnHoldTitle),
+    putProjectOnHoldMessage: getContent(x => x.pages.pcrModifyOptions.putProjectOnHoldMessage),
+    endProjectEarlyTitle: getContent(x => x.pages.pcrModifyOptions.endProjectEarlyTitle),
+    endProjectEarlyMessage: getContent(x => x.pages.pcrModifyOptions.endProjectEarlyMessage),
+    loanDrawdownChangeTitle: getContent(x => x.pages.pcrModifyOptions.loanDrawdownChangeTitle),
+    loanDrawdownChangeMessage: getContent(x => x.pages.pcrModifyOptions.loanDrawdownChangeMessage),
+    loanDrawdownExtensionTitle: getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTitle),
+    loanDrawdownExtensionMessage: getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionMessage),
   };
 
   const guidanceContent: PcrTypeContent[] = [
@@ -97,8 +97,8 @@ export function PcrTypesGuidance({ qa, types }: PcrTypesGuidanceProps) {
     return pcrTypeContent ? [...previous, pcrTypeContent] : previous;
   }, []);
 
-  const title = getContent(x => x.pages.pcrCreate.learnMoreTitle);
-  const hint = getContent(x => x.pages.pcrCreate.selectTypesHint);
+  const title = getContent(x => x.pages.pcrModifyOptions.learnMoreTitle);
+  const hint = getContent(x => x.pages.pcrModifyOptions.selectTypesHint);
 
   return (
     <div data-qa={qa}>

@@ -1,20 +1,21 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { CreatePcrParams, PCRCreateRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
+import { PCRCreateRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, PCRStandardItemDto, ProjectDto } from "@framework/dtos";
 import { IContext, ILinkInfo, PCRItemType } from "@framework/types";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRStatus, ProjectRole } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PcrModifyParams } from "@ui/containers/pcrs/modifyOptions/PcrModifyOptions";
 
-export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<CreatePcrParams, "pcr"> {
+export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<PcrModifyParams, "pcr"> {
   constructor() {
     super(PCRCreateRoute, ["default"], "pcr");
   }
 
   protected async getDto(
     context: IContext,
-    params: CreatePcrParams,
+    params: PcrModifyParams,
     button: IFormButton,
     body: IFormBody & { types?: string | string[] },
   ): Promise<PCRDto> {
@@ -49,7 +50,7 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
 
   protected async run(
     context: IContext,
-    params: CreatePcrParams,
+    params: PcrModifyParams,
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
@@ -57,11 +58,11 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
     return ProjectChangeRequestPrepareRoute.getLink({ projectId: params.projectId, pcrId: id });
   }
 
-  protected getStoreKey(params: CreatePcrParams) {
+  protected getStoreKey(params: PcrModifyParams) {
     return storeKeys.getPcrKey(params.projectId);
   }
 
-  protected createValidationResult(params: CreatePcrParams, dto: PCRDto) {
+  protected createValidationResult(params: PcrModifyParams, dto: PCRDto) {
     return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
   }
 }

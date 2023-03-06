@@ -2,7 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { InputProps } from "./common";
 
-interface CheckboxOptionProps {
+export interface CheckboxOptionProps {
   id: string;
   value: React.ReactNode;
   disabled?: boolean;

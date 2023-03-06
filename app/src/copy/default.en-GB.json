@@ -719,18 +719,17 @@
       "backLink": "Back to overheads costs",
       "headingTemplate": "Templates"
     },
-    "pcrCreate": {
-      "title": "Start a new request",
-      "guidanceIntroMessage": "Before you submit, you must:",
-      "guidanceList": {
-        "row1": "ensure all project partners have approved the change(s)",
-        "row2": "discuss this request with your monitoring officer"
-      },
+    "pcrModifyOptions": {
+      "createTitle": "Start a new request",
+      "updateTitle": "Add types",
+      "guidance": "Before you submit, you must:\n- ensure all project partners have approved the change(s)\n- discuss this request with your monitoring officer",
       "selectRequestTypesTitle": "Select request types",
       "selectTypesHint": "You can select more than one type of request. If an option is not selectable, then a Project Change Request (PCR) of that type has already been started. The current PCR must be deleted - if still in draft - or concluded by Innovate UK, before a new one can be started.",
-      "backLink": "Back to project change requests",
+      "backToPcrs": "Back to project change requests",
+      "backToPcr": "Back to request",
       "buttonCreateRequest": "Create request",
       "buttonCancelRequest": "Cancel",
+      "buttonUpdateRequest": "Add to request",
       "learnMoreTitle": "Learn more about request types",
       "reallocateCostsTitle": "Reallocate project costs",
       "reallocateCostsMessage": "This allows you to move costs from one category to another.",
