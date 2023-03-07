@@ -1,9 +1,19 @@
-import { DateTime } from "luxon";
+import {
+  PCRItemStatus,
+  PCRItemType,
+  PCROrganisationType,
+  PCRProjectRole,
+  PCRStatus,
+  pcrUnduplicatableMatrix,
+  ProjectRole,
+} from "@framework/constants";
 import {
   PartnerDto,
   PCRDto,
   PCRItemDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForLoanDrawdownChangeDto,
+  PCRItemForLoanDrawdownExtensionDto,
   PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
@@ -14,23 +24,13 @@ import {
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
   PCRStandardItemDto,
-  ProjectDto,
   PCRSummaryDto,
-  PCRItemForLoanDrawdownChangeDto,
-  PCRItemForLoanDrawdownExtensionDto,
+  ProjectDto,
 } from "@framework/dtos";
-import {
-  PCRItemStatus,
-  PCRItemType,
-  PCROrganisationType,
-  PCRProjectRole,
-  PCRStatus,
-  pcrUnduplicatableMatrix,
-  ProjectRole,
-} from "@framework/constants";
-import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { getUnavailablePcrItemsMatrix, getAuthRoles } from "@framework/types";
+import { getAuthRoles, getUnavailablePcrItemsMatrix } from "@framework/types";
 import isNull from "@ui/helpers/is-null";
+import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import { DateTime } from "luxon";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
 
@@ -349,6 +349,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
           () => {
             const seenProjectPcrs = new Set<PCRItemType>();
             const seenPartnerRemovalIds = new Set<string>();
+            const seenPartnerAddCompanyIds = new Set<string>();
 
             if (this.projectPcrs) {
               for (const projectPcr of this.model.items) {
@@ -363,6 +364,12 @@ export class PCRDtoValidator extends Results<PCRDto> {
                     return children.invalid("You cannot remove the same partner twice in the same PCR.");
                   }
                   seenPartnerRemovalIds.add(projectPcr.partnerId);
+                } else if (projectPcr.type === PCRItemType.PartnerAddition && projectPcr.registrationNumber) {
+                  // Check that a partner addition isn't attempting to add the same company twice
+                  if (seenPartnerAddCompanyIds.has(projectPcr.registrationNumber)) {
+                    return children.invalid("You cannot add the same partner twice in the same PCR.");
+                  }
+                  seenPartnerAddCompanyIds.add(projectPcr.registrationNumber);
                 }
                 seenProjectPcrs.add(projectPcr.type);
               }
