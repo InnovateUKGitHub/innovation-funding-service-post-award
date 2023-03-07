@@ -347,12 +347,22 @@ export class PCRDtoValidator extends Results<PCRDto> {
           //     "The item type you have requested is not available",
           //   ),
           () => {
-            const seenProjectPcrs = new Set();
+            const seenProjectPcrs = new Set<PCRItemType>();
+            const seenPartnerRemovalIds = new Set<string>();
 
             if (this.projectPcrs) {
               for (const projectPcr of this.model.items) {
+                // Check that a PCR type isn't already in the set of PCR types (if it is not duplicatable)
                 if (pcrUnduplicatableMatrix[projectPcr.type] && seenProjectPcrs.has(projectPcr.type)) {
-                  return children.invalid("No duplicate PCR types allowed");
+                  return children.invalid("A duplicate PCR of this type is not allowed");
+                }
+
+                if (projectPcr.type === PCRItemType.PartnerWithdrawal && projectPcr.partnerId) {
+                  // Check that a partner removal isn't removing the same partner twice
+                  if (seenPartnerRemovalIds.has(projectPcr.partnerId)) {
+                    return children.invalid("You cannot remove the same partner twice in the same PCR.");
+                  }
+                  seenPartnerRemovalIds.add(projectPcr.partnerId);
                 }
                 seenProjectPcrs.add(projectPcr.type);
               }

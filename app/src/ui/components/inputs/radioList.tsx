@@ -5,6 +5,7 @@ import { InputProps } from "./common";
 export interface RadioOptionProps {
   id: string;
   value: React.ReactNode;
+  disabled?: boolean;
   qa?: string;
 }
 
@@ -35,7 +36,7 @@ export const RadioList = (props: RadioListProps) => {
           onChange={() => handleChange(item)}
           checked={selected}
           aria-checked={selected}
-          disabled={props.disabled}
+          disabled={item.disabled ?? props.disabled}
         />
         <label className="govuk-label govuk-radios__label" htmlFor={inputId}>
           {item.value}
