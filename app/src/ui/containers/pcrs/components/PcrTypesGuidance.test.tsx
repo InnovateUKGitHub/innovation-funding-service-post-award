@@ -12,7 +12,7 @@ describe("PcrTypes Components", () => {
     describe("@renders", () => {
       const stubContent = {
         pages: {
-          pcrCreate: {
+          pcrModifyOptions: {
             selectRequestTypesTitle: "stub-selectRequestTypesTitle",
             selectTypesHint: "stub-selectTypesHint",
             backLink: "stub-backLink",
@@ -64,15 +64,19 @@ describe("PcrTypes Components", () => {
           </TestBed>,
         );
 
-        const getReallocateCostsMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.reallocateCostsMessage);
-        const getRemovePartnerMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.removePartnerMessage);
-        const getAddPartnerMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.addPartnerMessage);
-        const getChangeScopeMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.changeScopeMessage);
-        const getChangeDurationMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.changeDurationMessage);
+        const getReallocateCostsMessage = () =>
+          rtl.queryByText(stubContent.pages.pcrModifyOptions.reallocateCostsMessage);
+        const getRemovePartnerMessage = () => rtl.queryByText(stubContent.pages.pcrModifyOptions.removePartnerMessage);
+        const getAddPartnerMessage = () => rtl.queryByText(stubContent.pages.pcrModifyOptions.addPartnerMessage);
+        const getChangeScopeMessage = () => rtl.queryByText(stubContent.pages.pcrModifyOptions.changeScopeMessage);
+        const getChangeDurationMessage = () =>
+          rtl.queryByText(stubContent.pages.pcrModifyOptions.changeDurationMessage);
         const getChangePartnersNameMessage = () =>
-          rtl.queryByText(stubContent.pages.pcrCreate.changePartnersNameMessage);
-        const getPutProjectOnHoldMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.putProjectOnHoldMessage);
-        const getEndProjectEarlyMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.endProjectEarlyMessage);
+          rtl.queryByText(stubContent.pages.pcrModifyOptions.changePartnersNameMessage);
+        const getPutProjectOnHoldMessage = () =>
+          rtl.queryByText(stubContent.pages.pcrModifyOptions.putProjectOnHoldMessage);
+        const getEndProjectEarlyMessage = () =>
+          rtl.queryByText(stubContent.pages.pcrModifyOptions.endProjectEarlyMessage);
 
         return {
           ...rtl,
@@ -95,8 +99,8 @@ describe("PcrTypes Components", () => {
         test("as default", () => {
           const { queryByText } = setup();
 
-          const titleElement = queryByText(stubContent.pages.pcrCreate.learnMoreTitle);
-          const hintElement = queryByText(stubContent.pages.pcrCreate.selectTypesHint);
+          const titleElement = queryByText(stubContent.pages.pcrModifyOptions.learnMoreTitle);
+          const hintElement = queryByText(stubContent.pages.pcrModifyOptions.selectTypesHint);
 
           expect(titleElement).toBeInTheDocument();
           expect(hintElement).toBeInTheDocument();
@@ -163,8 +167,8 @@ describe("PcrTypes Components", () => {
           const types: PCRItemTypeDto[] = [{ ...stubPcrItem, type: PCRItemType.MultiplePartnerFinancialVirement }];
           const { queryByText, getByText } = setup({ types });
 
-          const reallocateCostsMessage = queryByText(stubContent.pages.pcrCreate.reallocateCostsMessage);
-          const toggleElement = getByText(stubContent.pages.pcrCreate.learnMoreTitle);
+          const reallocateCostsMessage = queryByText(stubContent.pages.pcrModifyOptions.reallocateCostsMessage);
+          const toggleElement = getByText(stubContent.pages.pcrModifyOptions.learnMoreTitle);
 
           await userEvent.click(toggleElement);
           expect(reallocateCostsMessage).toBeVisible();
@@ -174,8 +178,8 @@ describe("PcrTypes Components", () => {
           const types: PCRItemTypeDto[] = [{ ...stubPcrItem, type: PCRItemType.MultiplePartnerFinancialVirement }];
           const { queryByText, getByText } = setup({ types });
 
-          const reallocateCostsMessage = queryByText(stubContent.pages.pcrCreate.reallocateCostsMessage);
-          const toggleElement = getByText(stubContent.pages.pcrCreate.learnMoreTitle);
+          const reallocateCostsMessage = queryByText(stubContent.pages.pcrModifyOptions.reallocateCostsMessage);
+          const toggleElement = getByText(stubContent.pages.pcrModifyOptions.learnMoreTitle);
 
           await userEvent.click(toggleElement);
           expect(reallocateCostsMessage).toBeVisible();

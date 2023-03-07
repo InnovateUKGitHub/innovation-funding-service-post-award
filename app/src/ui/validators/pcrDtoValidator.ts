@@ -350,7 +350,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
             const seenProjectPcrs = new Set();
 
             if (this.projectPcrs) {
-              for (const projectPcr of this.recordTypes) {
+              for (const projectPcr of this.model.items) {
                 if (pcrUnduplicatableMatrix[projectPcr.type] && seenProjectPcrs.has(projectPcr.type)) {
                   return children.invalid("No duplicate PCR types allowed");
                 }
