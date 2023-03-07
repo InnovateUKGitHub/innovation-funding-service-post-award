@@ -1,4 +1,4 @@
-import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 
 export enum PCRStatus {
   Unknown = 0,
@@ -202,5 +202,5 @@ export const getUnavailablePcrItemsMatrix = (pcrs: PCRSummaryDto[]): PCRItemType
   return [...disallowedPCRs];
 };
 
-export const getUnduplicatablePcrItemsMatrix = (pcr?: PCRSummaryDto): PCRItemType[] =>
+export const getUnduplicatablePcrItemsMatrix = (pcr?: PCRDto): PCRItemType[] =>
   pcr?.items.map(x => x.type).filter(x => pcrUnduplicatableMatrix[x]) ?? [];
