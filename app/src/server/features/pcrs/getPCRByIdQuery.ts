@@ -18,11 +18,13 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
     const item = await context.repositories.projectChangeRequests.getById(this.projectId, this.id);
     const pcrDto = mapToPcrDto(item, itemTypes);
-    const addPartnerItem = pcrDto.items.find(x => x.type === PCRItemType.PartnerAddition);
-    if (addPartnerItem) {
+
+    const addPartnerItems = pcrDto.items.filter(x => x.type === PCRItemType.PartnerAddition);
+    for (const addPartnerItem of addPartnerItems) {
       const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(addPartnerItem.id));
       (addPartnerItem as PCRItemForPartnerAdditionDto).spendProfile = spendProfile;
     }
+
     return pcrDto;
   }
 }
