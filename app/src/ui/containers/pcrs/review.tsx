@@ -8,7 +8,7 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PCRItemType, PCRStatus } from "@framework/constants";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { getPcrItemTaskStatus } from "./utils/get-pcr-item-task-status";
+import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
 
 export interface PCRReviewParams {
   projectId: ProjectId;

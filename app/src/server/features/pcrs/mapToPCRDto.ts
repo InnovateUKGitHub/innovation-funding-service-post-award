@@ -57,8 +57,7 @@ const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemType
       itemType: itemTypes.find(itemType => x.recordTypeId === itemType.recordTypeId),
     }))
     .filter(({ itemType }) => itemType)
-    .map(({ pcr, itemType }) => mapItem(pcr, itemType))
-    .sort((a, b) => a.typeName.localeCompare(b.typeName));
+    .map(({ pcr, itemType }) => mapItem(pcr, itemType));
 };
 
 const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto | undefined) => {

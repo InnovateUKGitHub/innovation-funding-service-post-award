@@ -6,7 +6,7 @@ import { useStores } from "@ui/redux";
 import { PCRItemType, PCRStatus } from "@framework/constants";
 import * as ACC from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { getPcrItemTaskStatus } from "./utils/get-pcr-item-task-status";
+import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
 
 interface Params {
   projectId: ProjectId;

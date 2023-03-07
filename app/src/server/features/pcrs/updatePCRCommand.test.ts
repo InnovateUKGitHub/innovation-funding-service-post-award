@@ -357,7 +357,7 @@ describe("UpdatePCRCommand", () => {
         expect(pcr.items).toHaveLength(3);
       });
 
-      it("does not allow duplicate item types", async () => {
+      it("does not allow non remove/add/rename partner duplicate item types", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
@@ -368,8 +368,8 @@ describe("UpdatePCRCommand", () => {
         });
         const recordTypes = context.testData.createPCRRecordTypes();
 
-        context.testData.createPCRItem(pcr, recordTypes[1], { status: PCRItemStatus.Incomplete });
-        context.testData.createPCRItem(pcr, recordTypes[2], { status: PCRItemStatus.Incomplete });
+        context.testData.createPCRItem(pcr, recordTypes[7], { status: PCRItemStatus.Incomplete });
+        context.testData.createPCRItem(pcr, recordTypes[8], { status: PCRItemStatus.Incomplete });
 
         context.testData.createCurrentUserAsProjectManager(project);
 
@@ -383,6 +383,43 @@ describe("UpdatePCRCommand", () => {
         const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
 
         await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      });
+
+      it("allows duplicate Remove/Add/Rename partner", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+        context.testData.createPartner(project);
+        const pcr = context.testData.createPCR(project, {
+          status: PCRStatus.Draft,
+          reasoningStatus: PCRItemStatus.Complete,
+        });
+        const recordTypes = context.testData.createPCRRecordTypes();
+
+        // Create a "Remove a partner", "Add a partner" and an "Account Name Change" PCR
+        context.testData.createPCRItem(pcr, recordTypes[1], { status: PCRItemStatus.Incomplete });
+        context.testData.createPCRItem(pcr, recordTypes[2], { status: PCRItemStatus.Incomplete });
+        context.testData.createPCRItem(pcr, recordTypes[6], { status: PCRItemStatus.Incomplete });
+        context.testData.createCurrentUserAsProjectManager(project);
+
+        // Grab the dto to copy.
+        const initialDto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+
+        // Copy the "Remove a partner" and "Add a partner" item.
+        initialDto.items.push(
+          {
+            ...initialDto.items[0],
+          },
+          {
+            ...initialDto.items[1],
+          },
+          {
+            ...initialDto.items[2],
+          },
+        );
+
+        // And make sure it DOES NOT THROW
+        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, initialDto))).resolves.toBe(true);
       });
 
       it("adds status change record if status is changing", async () => {

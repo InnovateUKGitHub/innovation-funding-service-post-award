@@ -10,7 +10,10 @@ import * as ACC from "@ui/components";
 import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { getPcrItemTaskStatus } from "./utils/get-pcr-item-task-status";
+import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
+import { IRoutes } from "@ui/routing";
+import { useContent } from "@ui/hooks";
+import { usePcrItemName } from "./utils/getPcrItemName";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -174,7 +177,17 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
     return (
       <ACC.TaskListSection step={1} title="Give us information" qa="WhatDoYouWantToDo">
-        {editableItems.map((x, i) => this.getItemTasks(x, editor, i))}
+        {editableItems.map((x, i) => (
+          <GetItemTasks
+            item={x}
+            editor={editor}
+            index={i}
+            pcrId={this.props.pcrId}
+            projectId={this.props.projectId}
+            routes={this.props.routes}
+            key={i}
+          />
+        ))}
       </ACC.TaskListSection>
     );
   }
@@ -202,25 +215,6 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
           validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]}
         />
       </ACC.TaskListSection>
-    );
-  }
-
-  private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
-    const validationErrors = editor.validator.items.results[index].errors;
-    const workflow = PcrWorkflow.getWorkflow(item, 1);
-    return (
-      <ACC.Task
-        key={uuid()}
-        name={item.typeName}
-        status={getPcrItemTaskStatus(item.status)}
-        route={this.props.routes.pcrPrepareItem.getLink({
-          projectId: this.props.projectId,
-          pcrId: this.props.pcrId,
-          itemId: item.id,
-          step: item.status === PCRItemStatus.ToDo && workflow && workflow.getCurrentStepInfo() ? 1 : undefined,
-        })}
-        validation={validationErrors}
-      />
     );
   }
 
@@ -258,6 +252,40 @@ const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProp
         )
       }
       editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
+    />
+  );
+};
+
+const GetItemTasks = ({
+  editor,
+  index,
+  item,
+  routes,
+  projectId,
+  pcrId,
+}: {
+  editor: IEditorStore<PCRDto, PCRDtoValidator>;
+  index: number;
+  item: PCRItemDto;
+  routes: IRoutes;
+  projectId: string;
+  pcrId: string;
+}) => {
+  const validationErrors = editor.validator.items.results[index].errors;
+  const workflow = PcrWorkflow.getWorkflow(item, 1);
+  const { getPcrItemName } = usePcrItemName();
+
+  return (
+    <ACC.Task
+      name={getPcrItemName(item.typeName, item)}
+      status={getPcrItemTaskStatus(item.status)}
+      route={routes.pcrPrepareItem.getLink({
+        projectId: projectId,
+        pcrId: pcrId,
+        itemId: item.id,
+        step: item.status === PCRItemStatus.ToDo && workflow && workflow.getCurrentStepInfo() ? 1 : undefined,
+      })}
+      validation={validationErrors}
     />
   );
 };
