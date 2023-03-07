@@ -1,4 +1,4 @@
-import { getUnavailablePcrItemsMatrix } from "@framework/types";
+import { getUnavailablePcrItemsMatrix, getUnduplicatablePcrItemsMatrix } from "@framework/types";
 import * as Dtos from "@framework/dtos";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 
@@ -24,7 +24,7 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
     const editingPcr = projectPcrs.find(pcr => pcr.id === this.pcrId);
 
     const disabledMatrixTypes = getUnavailablePcrItemsMatrix(projectPcrs);
-    const currentPcrItemTypes = editingPcr?.items.map(x => x.type) || [];
+    const currentPcrItemTypes = getUnduplicatablePcrItemsMatrix(editingPcr);
 
     const disabledTypes = [...currentPcrItemTypes, ...disabledMatrixTypes];
 

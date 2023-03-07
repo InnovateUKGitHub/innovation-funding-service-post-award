@@ -124,9 +124,50 @@ export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisa
 };
 
 /**
+ * A matrix of PCR types that CANNOT have more than one instance of itself in ANY PCR.
+ *
+ * Note: Matches business logic to prevent unneeded reconciliation with duplicate pcrs
+ */
+const pcrDisabledMatrix = {
+  [PCRItemType.Unknown]: [],
+  [PCRItemType.AccountNameChange]: [],
+  [PCRItemType.PartnerAddition]: [],
+  [PCRItemType.PartnerWithdrawal]: [],
+  [PCRItemType.ProjectSuspension]: [],
+  [PCRItemType.ProjectTermination]: [],
+  [PCRItemType.MultiplePartnerFinancialVirement]: [PCRItemType.MultiplePartnerFinancialVirement],
+  [PCRItemType.SinglePartnerFinancialVirement]: [],
+  [PCRItemType.ScopeChange]: [PCRItemType.ScopeChange],
+  [PCRItemType.TimeExtension]: [PCRItemType.TimeExtension],
+  [PCRItemType.PeriodLengthChange]: [],
+  [PCRItemType.LoanDrawdownChange]: [PCRItemType.LoanDrawdownChange],
+  [PCRItemType.LoanDrawdownExtension]: [PCRItemType.LoanDrawdownExtension],
+} as const;
+
+/**
+ * A matrix of PCR types that CANNOT have more than one instance of itself in a single PCR.
+ * Used to allow duplicate Partner Addition/Removal/Rename in a single PCR.
+ */
+export const pcrUnduplicatableMatrix = {
+  [PCRItemType.Unknown]: true,
+  [PCRItemType.AccountNameChange]: false,
+  [PCRItemType.PartnerAddition]: false,
+  [PCRItemType.PartnerWithdrawal]: false,
+  [PCRItemType.ProjectSuspension]: true,
+  [PCRItemType.ProjectTermination]: true,
+  [PCRItemType.MultiplePartnerFinancialVirement]: true,
+  [PCRItemType.SinglePartnerFinancialVirement]: true,
+  [PCRItemType.ScopeChange]: true,
+  [PCRItemType.TimeExtension]: true,
+  [PCRItemType.PeriodLengthChange]: true,
+  [PCRItemType.LoanDrawdownChange]: true,
+  [PCRItemType.LoanDrawdownExtension]: true,
+} as const;
+
+/**
  * Gets a list of PCR items that are not available
  */
-export function getUnavailablePcrItemsMatrix(pcrs: PCRSummaryDto[]): PCRItemType[] {
+export const getUnavailablePcrItemsMatrix = (pcrs: PCRSummaryDto[]): PCRItemType[] => {
   // Note: Avoid wasting time upfront
   if (!pcrs.length) return [];
 
@@ -137,38 +178,29 @@ export function getUnavailablePcrItemsMatrix(pcrs: PCRSummaryDto[]): PCRItemType
     PCRStatus.Actioned,
   ];
 
-  const filteredPcrs: PCRSummaryDto[] = pcrs.filter(x => !statusesToIgnore.includes(x.status));
+  // Get a list of all our in progress PCRs.
+  const inProgressPCRs: PCRSummaryDto[] = pcrs.filter(x => !statusesToIgnore.includes(x.status));
 
-  // Note: escape hatch if no available statuses found
-  if (!filteredPcrs.length) return [];
+  // Create a set of all disallowed PCRs.
+  const disallowedPCRs: Set<PCRItemType> = new Set();
 
-  // Note: Matches business logic to prevent unneeded reconciliation with duplicate pcrs
-  const pcrDisabledMatrix: Record<PCRItemType, PCRItemType[]> = {
-    [PCRItemType.Unknown]: [],
-    [PCRItemType.AccountNameChange]: [],
-    [PCRItemType.PartnerAddition]: [],
-    [PCRItemType.PartnerWithdrawal]: [],
-    [PCRItemType.ProjectSuspension]: [],
-    [PCRItemType.ProjectTermination]: [],
-    [PCRItemType.MultiplePartnerFinancialVirement]: [PCRItemType.MultiplePartnerFinancialVirement],
-    [PCRItemType.SinglePartnerFinancialVirement]: [],
-    [PCRItemType.ScopeChange]: [PCRItemType.ScopeChange],
-    [PCRItemType.TimeExtension]: [PCRItemType.TimeExtension],
-    [PCRItemType.PeriodLengthChange]: [],
-    [PCRItemType.LoanDrawdownChange]: [PCRItemType.LoanDrawdownChange],
-    [PCRItemType.LoanDrawdownExtension]: [PCRItemType.LoanDrawdownExtension],
-  };
+  // For each in-progress PCR...
+  for (const inProgressPcr of inProgressPCRs) {
+    // Get the types of PCR within the PCR
+    const inProgressTypes = inProgressPcr.items.map(x => x.type);
 
-  let matrixItems: PCRItemType[] = [];
-
-  for (const filteredPcr of filteredPcrs) {
-    const itemKeys = filteredPcr.items.map(x => x.type);
-
-    for (const key of itemKeys) {
-      matrixItems = [...matrixItems, ...pcrDisabledMatrix[key]];
+    // For each PCR type within the PCR...
+    for (const type of inProgressTypes) {
+      // Iterate over the list of disallowed duplicate PCRs.
+      for (const disallowedType of pcrDisabledMatrix[type]) {
+        // Then add that disallow list to the list of disallowed duplicate PCRs.
+        disallowedPCRs.add(disallowedType);
+      }
     }
   }
 
-  // Note: Remove duplicates on final parse
-  return [...new Set([...matrixItems])];
-}
+  return [...disallowedPCRs];
+};
+
+export const getUnduplicatablePcrItemsMatrix = (pcr?: PCRSummaryDto): PCRItemType[] =>
+  pcr?.items.map(x => x.type).filter(x => pcrUnduplicatableMatrix[x]) ?? [];

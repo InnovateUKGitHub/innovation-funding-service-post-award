@@ -25,6 +25,7 @@ import {
   PCROrganisationType,
   PCRProjectRole,
   PCRStatus,
+  pcrUnduplicatableMatrix,
   ProjectRole,
 } from "@framework/constants";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
@@ -345,7 +346,20 @@ export class PCRDtoValidator extends Results<PCRDto> {
           //     items => items.some(x => ![PCRItemType.ProjectTermination].includes(x.type)),
           //     "The item type you have requested is not available",
           //   ),
-          () => children.hasNoDuplicates(x => x.type, "No duplicate items allowed"),
+          () => {
+            const seenProjectPcrs = new Set();
+
+            if (this.projectPcrs) {
+              for (const projectPcr of this.recordTypes) {
+                if (pcrUnduplicatableMatrix[projectPcr.type] && seenProjectPcrs.has(projectPcr.type)) {
+                  return children.invalid("No duplicate PCR types allowed");
+                }
+                seenProjectPcrs.add(projectPcr.type);
+              }
+            }
+
+            return children.valid();
+          },
           () => {
             if (!this.projectPcrs?.length) return children.valid();
 

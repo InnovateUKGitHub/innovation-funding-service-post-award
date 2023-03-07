@@ -69,7 +69,11 @@ const PcrModifySelectedPage = ({
     };
 
     dtoOptions.push(dtoOption);
-    if (editor.data.items.some(editorItemType => itemType.type === editorItemType.type)) {
+    if (
+      editor.data.items
+        .filter(editorItemType => editorItemType.id.length === 0)
+        .some(editorItemType => itemType.type === editorItemType.type)
+    ) {
       dtoSelected.push(dtoOption);
     }
   }
@@ -107,9 +111,14 @@ const PcrModifySelectedPage = ({
               value={() => dtoSelected}
               update={(model, selectedValues) => {
                 const selectedOptions = itemTypes.filter(x => selectedValues?.some(y => y.id === `${x.type}`));
-                const updatedItems = selectedOptions.map(
-                  x => model.items.find(y => x.type === y.type) || createNewChangeRequestItem(x),
-                );
+                const updatedItems = [
+                  ...model.items.filter(x => x.id.length !== 0),
+                  ...selectedOptions.map(
+                    x =>
+                      model.items.filter(x => x.id.length === 0).find(y => x.type === y.type) ||
+                      createNewChangeRequestItem(x),
+                  ),
+                ];
 
                 model.items = updatedItems;
               }}

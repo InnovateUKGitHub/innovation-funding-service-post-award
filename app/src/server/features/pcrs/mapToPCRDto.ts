@@ -43,20 +43,28 @@ export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemT
   items: mapItems(pcr.items, itemTypes),
 });
 
+/**
+ * Map a Salesforce PCR item within a PCR header to it's correct frontend PCR item DTO.
+ *
+ * @param pcrs The PCRs associated with the PCR header
+ * @param itemTypes The valid PCR types associated with this competition type
+ * @returns A list of PCR items
+ */
 const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemTypeDto[]) => {
-  const filtered = itemTypes.filter(itemType => pcrs.some(x => x.recordTypeId === itemType.recordTypeId));
-  return filtered.map(itemType =>
-    mapItem(
-      pcrs.find(x => x.recordTypeId === itemType.recordTypeId),
-      itemType,
-    ),
-  );
+  return pcrs
+    .map(x => ({
+      pcr: x,
+      itemType: itemTypes.find(itemType => x.recordTypeId === itemType.recordTypeId),
+    }))
+    .filter(({ itemType }) => itemType)
+    .map(({ pcr, itemType }) => mapItem(pcr, itemType))
+    .sort((a, b) => a.typeName.localeCompare(b.typeName));
 };
 
-const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto) => {
+const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto | undefined) => {
   if (!pcr) throw new Error("Cannot map undefined pcr");
 
-  switch (itemType.type) {
+  switch (itemType?.type) {
     case PCRItemType.TimeExtension:
       return mapItemForTimeExtension(pcr, itemType.displayName, itemType.type);
     case PCRItemType.ScopeChange:
