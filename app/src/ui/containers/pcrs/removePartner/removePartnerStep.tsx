@@ -1,9 +1,12 @@
 import * as ACC from "@ui/components";
-import { PartnerDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
+import { PartnerDto, PCRDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { useStores } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
+import { Pending } from "@shared/pending";
+import { RadioOptionProps } from "@ui/components/inputs";
+import { PCRItemType } from "@framework/constants";
 
 interface InnerProps {
   partners: PartnerDto[];
@@ -14,12 +17,20 @@ const Form = ACC.createTypedForm<PCRItemForPartnerWithdrawalDto>();
 const InnerContainer = (
   props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> & InnerProps,
 ) => {
-  const partnerOptions: ACC.SelectOption[] = props.partners
+  // Find all PCR items that are partner withdrawal items,
+  // that are also not the current PCR item.
+  const withdrawalPCRs = props.pcr.items
+    .filter(x => x.type === PCRItemType.PartnerWithdrawal)
+    .filter(x => x.id !== props.pcrItem.id) as PCRItemForPartnerWithdrawalDto[];
+
+  const partnerOptions: RadioOptionProps[] = props.partners
     .filter(x => !x.isWithdrawn)
     .map(x => ({
       id: x.id,
       value: ACC.getPartnerName(x),
+      disabled: withdrawalPCRs.some(withdrawalPCR => withdrawalPCR.partnerId === x.id),
     }));
+
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
 
   return (
@@ -67,10 +78,9 @@ export const RemovePartnerStep = (
 ) => {
   const stores = useStores();
 
-  return (
-    <ACC.Loader
-      pending={stores.partners.getPartnersForProject(props.project.id)}
-      render={x => <InnerContainer partners={x} {...props} />}
-    />
-  );
+  const pending = Pending.combine({
+    partners: stores.partners.getPartnersForProject(props.project.id),
+  });
+
+  return <ACC.Loader pending={pending} render={({ partners }) => <InnerContainer partners={partners} {...props} />} />;
 };
