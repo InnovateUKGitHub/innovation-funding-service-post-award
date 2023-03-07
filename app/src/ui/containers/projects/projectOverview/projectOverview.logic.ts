@@ -62,13 +62,13 @@ export type Partner = {
   partnerStatus: PartnerStatus;
 };
 
-const generateUserInfo = (rolesForPartner: PartnerRole[], rolesForProject: Role) => {
+const generateUserInfo = (rolesForPartner: (PartnerRole & { urlId: string })[], rolesForProject: Role) => {
   const partnerRoles =
     rolesForPartner &&
     rolesForPartner.reduce(
       (acc, cur) => ({
         ...acc,
-        [cur.partnerId]: convertRolesToPermissionsValue(cur),
+        [cur.urlId]: convertRolesToPermissionsValue(cur),
       }),
       {},
     );
@@ -142,14 +142,19 @@ export const useProjectOverviewData = (
   const partners =
     projectNode?.Acc_ProjectParticipantsProject__r?.edges?.map(x => {
       return {
-        id: x?.node?.Acc_AccountId__c?.value ?? "unknown",
+        id: x?.node?.Id ?? "unknown",
         isLead: x?.node?.Acc_ProjectRole__c?.value === SalesforceProjectRole.ProjectLead,
         isWithdrawn: ["Voluntary Withdrawal", "Involuntary Withdrawal", "Migrated - Withdrawn"].includes(
           x?.node?.Acc_ParticipantStatus__c?.value ?? "",
         ),
-        roles: partnerRoles?.find(partnerRole => partnerRole.partnerId === x?.node?.Acc_AccountId__c?.value) ?? {
-          ...defaultRole,
-          partnerId: "unknown-partner",
+        roles: {
+          ...(partnerRoles?.find(partnerRole => partnerRole.partnerId === x?.node?.Acc_AccountId__c?.value) ?? {
+            ...defaultRole,
+            // partner id is used for linking to the account id of the project
+            partnerId: "unknown-partner",
+          }),
+          // copy of the actual partner id value to be used in the navigation hashes
+          urlId: x?.node?.Id ?? "unknown",
         },
         name: x?.node?.Acc_AccountId__r?.Name?.value ?? "",
         totalParticipantGrant: x?.node?.Acc_TotalParticipantCosts__c?.value ?? 0,
@@ -172,7 +177,10 @@ export const useProjectOverviewData = (
 
   const user = {
     roleInfo: {
-      [projectId]: generateUserInfo(partnerRoles, project.roles),
+      [projectId]: generateUserInfo(
+        partners.map(x => x?.roles),
+        project.roles,
+      ),
     },
     csrf: "",
     email: data?.currentUser?.email ?? "unknown-user@email.com",

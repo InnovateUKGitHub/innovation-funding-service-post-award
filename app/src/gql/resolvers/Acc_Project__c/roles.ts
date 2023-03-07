@@ -55,7 +55,10 @@ const rolesResolver: IFieldResolverOptions = {
           partnerId: projectParticipant.Acc_AccountId__c.value,
         };
 
-        if (projectContactLink.Acc_AccountId__c.value === projectParticipant.Acc_AccountId__c.value) {
+        if (
+          ctx.email === projectContactLink?.Acc_ContactId__r?.Email__c?.value &&
+          projectContactLink.Acc_AccountId__c.value === projectParticipant.Acc_AccountId__c.value
+        ) {
           if (permissions.isFc) partnerPermissions.isFc = true;
           if (permissions.isPm && projectParticipant.Acc_ProjectRole__c.value === "Lead")
             partnerPermissions.isPm = true;
