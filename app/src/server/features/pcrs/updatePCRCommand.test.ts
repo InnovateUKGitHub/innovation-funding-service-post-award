@@ -389,7 +389,7 @@ describe("UpdatePCRCommand", () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
-        
+
         // Create not enough partners to accept all the types.
         context.testData.createPartner(project);
         context.testData.createPartner(project);
@@ -425,14 +425,16 @@ describe("UpdatePCRCommand", () => {
         );
 
         // And make sure it DOES NOT THROW
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, initialDto))).rejects.toThrow(ValidationError);
+        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, initialDto))).rejects.toThrow(
+          ValidationError,
+        );
       });
 
       it("allows duplicate Remove/Add/Rename partner if enough partners available", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
-        
+
         // Create enough partners to accept all the types.
         const partner1 = context.testData.createPartner(project);
         const partner2 = context.testData.createPartner(project);
@@ -448,9 +450,18 @@ describe("UpdatePCRCommand", () => {
         const recordTypes = context.testData.createPCRRecordTypes();
 
         // Create a "Remove a partner", "Add a partner" and an "Account Name Change" PCR
-        context.testData.createPCRItem(pcr, recordTypes[1], { status: PCRItemStatus.Incomplete, partnerId: partner1.id });
-        context.testData.createPCRItem(pcr, recordTypes[2], { status: PCRItemStatus.Incomplete, partnerId: partner2.id });
-        context.testData.createPCRItem(pcr, recordTypes[6], { status: PCRItemStatus.Incomplete, partnerId: partner3.id });
+        context.testData.createPCRItem(pcr, recordTypes[1], {
+          status: PCRItemStatus.Incomplete,
+          partnerId: partner1.id,
+        });
+        context.testData.createPCRItem(pcr, recordTypes[2], {
+          status: PCRItemStatus.Incomplete,
+          partnerId: partner2.id,
+        });
+        context.testData.createPCRItem(pcr, recordTypes[6], {
+          status: PCRItemStatus.Incomplete,
+          partnerId: partner3.id,
+        });
         context.testData.createCurrentUserAsProjectManager(project);
 
         // Grab the dto to copy.
