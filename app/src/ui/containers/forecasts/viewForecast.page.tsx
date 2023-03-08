@@ -14,7 +14,6 @@ import {
   getPartnerName,
 } from "@ui/components";
 import { PrepareClaimRoute } from "@ui/containers";
-import { useProjectStatus } from "@ui/hooks";
 import { useViewForecastData, Data } from "./viewForecast.logic";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 
@@ -24,7 +23,6 @@ interface ViewForecastParams {
 }
 
 const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
-  const { isActive } = useProjectStatus();
   const data = useViewForecastData(props.projectId, props.partnerId);
 
   const { isFc: isPartnerFc } = getAuthRoles(data.partner.roles);
@@ -49,7 +47,7 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
   const partnerName = isProjectPmOrMo ? getPartnerName(data.partner) : undefined;
 
   const showUpdateSection =
-    isActive &&
+    data.project.isActive &&
     isPartnerFc &&
     !data.partner.isWithdrawn &&
     !data.claims.some(x => x.isFinalClaim) &&

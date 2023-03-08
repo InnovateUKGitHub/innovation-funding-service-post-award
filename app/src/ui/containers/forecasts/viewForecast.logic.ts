@@ -28,7 +28,7 @@ type PartnerRoles = SfRoles & {
 export type Project = Pick<
   ProjectDto,
   "id" | "projectNumber" | "title" | "status" | "periodId" | "numberOfPeriods" | "competitionType" | "roles"
->;
+> & { isActive: boolean };
 
 export type Partner = Pick<
   PartnerDto,
@@ -93,6 +93,7 @@ export const useViewForecastData = (projectId: string, partnerId: string): Data 
   // PROJECT
   const project: Project = {
     id: projectNode?.Id ?? "",
+    isActive: projectNode?.isActive ?? false,
     projectNumber: projectNode?.Acc_ProjectNumber__c?.value ?? "",
     title: projectNode?.Acc_ProjectTitle__c?.value ?? "",
     status: getProjectStatus(projectNode?.Acc_ProjectStatus__c?.value ?? "unknown"),
