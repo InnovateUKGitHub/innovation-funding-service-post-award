@@ -82,7 +82,7 @@ export function renderHtml({
 
   <html lang="en-GB">
       <head>
-          <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+          <script nonce="${nonce}">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
           ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
           
           <meta charset="utf-8" />
