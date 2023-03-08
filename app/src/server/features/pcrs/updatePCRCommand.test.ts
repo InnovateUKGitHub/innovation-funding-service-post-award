@@ -357,13 +357,13 @@ describe("UpdatePCRCommand", () => {
         expect(pcr.items).toHaveLength(3);
       });
 
-      it("does not allow non remove/add/rename partner duplicate item types", async () => {
+      it("does not allow non remove/add/rename partner duplicate item types when submitting", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
         context.testData.createPartner(project);
         const pcr = context.testData.createPCR(project, {
-          status: PCRStatus.Draft,
+          status: PCRStatus.SubmittedToInnovateUK,
           reasoningStatus: PCRItemStatus.Complete,
         });
         const recordTypes = context.testData.createPCRRecordTypes();
@@ -385,13 +385,19 @@ describe("UpdatePCRCommand", () => {
         await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       });
 
-      it("allows duplicate Remove/Add/Rename partner", async () => {
+      it("disallows duplicate Remove/Add/Rename partner if not enough partners available", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
+
+        // Create not enough partners to accept all the types.
         context.testData.createPartner(project);
+        context.testData.createPartner(project);
+        context.testData.createPartner(project);
+        context.testData.createPartner(project);
+
         const pcr = context.testData.createPCR(project, {
-          status: PCRStatus.Draft,
+          status: PCRStatus.SubmittedToInnovateUK,
           reasoningStatus: PCRItemStatus.Complete,
         });
         const recordTypes = context.testData.createPCRRecordTypes();
@@ -416,6 +422,65 @@ describe("UpdatePCRCommand", () => {
           {
             ...initialDto.items[2],
           },
+        );
+
+        // And make sure it DOES NOT THROW
+        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, initialDto))).rejects.toThrow(
+          ValidationError,
+        );
+      });
+
+      it("allows duplicate Remove/Add/Rename partner if enough partners available", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+
+        // Create enough partners to accept all the types.
+        const partner1 = context.testData.createPartner(project);
+        const partner2 = context.testData.createPartner(project);
+        const partner3 = context.testData.createPartner(project);
+        const partner4 = context.testData.createPartner(project);
+        const partner5 = context.testData.createPartner(project);
+        const partner6 = context.testData.createPartner(project);
+
+        const pcr = context.testData.createPCR(project, {
+          status: PCRStatus.Draft,
+          reasoningStatus: PCRItemStatus.Complete,
+        });
+        const recordTypes = context.testData.createPCRRecordTypes();
+
+        // Create a "Remove a partner", "Add a partner" and an "Account Name Change" PCR
+        context.testData.createPCRItem(pcr, recordTypes[1], {
+          status: PCRItemStatus.Incomplete,
+          partnerId: partner1.id,
+        });
+        context.testData.createPCRItem(pcr, recordTypes[2], {
+          status: PCRItemStatus.Incomplete,
+          partnerId: partner2.id,
+        });
+        context.testData.createPCRItem(pcr, recordTypes[6], {
+          status: PCRItemStatus.Incomplete,
+          partnerId: partner3.id,
+        });
+        context.testData.createCurrentUserAsProjectManager(project);
+
+        // Grab the dto to copy.
+        const initialDto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+
+        // Copy the "Remove a partner" and "Add a partner" item.
+        initialDto.items.push(
+          {
+            ...initialDto.items[0],
+            partnerId: partner4.id,
+          } as PCRItemDto,
+          {
+            ...initialDto.items[1],
+            partnerId: partner5.id,
+          } as PCRItemDto,
+          {
+            ...initialDto.items[2],
+            partnerId: partner6.id,
+          } as PCRItemDto,
         );
 
         // And make sure it DOES NOT THROW

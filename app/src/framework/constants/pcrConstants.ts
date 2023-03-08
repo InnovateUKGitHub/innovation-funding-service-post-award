@@ -165,6 +165,12 @@ export const pcrUnduplicatableMatrix = {
 } as const;
 
 /**
+ * A list of all types that cannot have more instances of this type
+ * than there are partners.
+ */
+export const pcrOverpopulatedList = [PCRItemType.AccountNameChange, PCRItemType.PartnerWithdrawal];
+
+/**
  * Gets a list of PCR items that are not available
  */
 export const getUnavailablePcrItemsMatrix = (pcrs: PCRSummaryDto[]): PCRItemType[] => {

@@ -8,6 +8,7 @@ import { GetAllProjectRolesForUser, GetByIdQuery } from "@server/features/projec
 import { PCRItemType, ProjectRole } from "@framework/constants";
 import { GetAvailableItemTypesQuery } from "./getAvailableItemTypesQuery";
 import { GetAllPCRsQuery } from "./getAllPCRsQuery";
+import { GetAllForProjectQuery } from "../partners";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
   constructor(private readonly projectId: ProjectId, private readonly projectChangeRequestDto: PCRDto) {
@@ -57,6 +58,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       .runQuery(new GetAllProjectRolesForUser())
       .then(x => x.forProject(this.projectId).getRoles());
     const projectDto = await context.runQuery(new GetByIdQuery(this.projectId));
+    const partners = await context.runQuery(new GetAllForProjectQuery(this.projectId));
     const projectPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
 
     const validationResult = new PCRDtoValidator(
@@ -66,7 +68,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       true,
       projectDto,
       undefined,
-      undefined,
+      partners,
       projectPcrs,
     );
 

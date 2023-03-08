@@ -48,7 +48,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     messages: new Stores.MessagesStore(getState, dispatch),
     monitoringReports: new Stores.MonitoringReportsStore(projects, getState, dispatch),
     projectChangeRequestDocuments: new Stores.ProjectChangeRequestDocumentsStore(getState, dispatch),
-    projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, getState, dispatch),
+    projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, partners, getState, dispatch),
     projectDocuments: new Stores.ProjectDocumentsStore(getState, dispatch),
     partnerDocuments: new Stores.PartnerDocumentsStore(getState, dispatch),
     projects,
