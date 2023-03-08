@@ -5,6 +5,7 @@ import {
   getUnduplicatablePcrItemsMatrix,
   IContext,
   PCRItemType,
+  pcrOverpopulatedList,
   PCRSummaryDto,
   ProjectRole,
 } from "@framework/types";
@@ -36,8 +37,10 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
    */
   private getOverpopulatedPcrItems(numberOfPartners: number, currentPcr?: PCRSummaryDto): PCRItemType[] {
     if (!currentPcr) return [];
-    if (currentPcr.items.filter(x => x.type === PCRItemType.PartnerWithdrawal).length === numberOfPartners)
-      return [PCRItemType.PartnerWithdrawal];
+
+    if (currentPcr.items.filter(x => pcrOverpopulatedList.includes(x.type)).length >= numberOfPartners)
+      return pcrOverpopulatedList;
+
     return [];
   }
 

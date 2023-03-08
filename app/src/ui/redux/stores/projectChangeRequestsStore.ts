@@ -28,10 +28,12 @@ import { IEditorStore, RootState } from "../reducers";
 import { ProjectsStore } from "./projectsStore";
 import { StoreBase } from "./storeBase";
 import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissions";
+import { PartnersStore } from "./partnersStore";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(
     private readonly projectStore: ProjectsStore,
+    private readonly partnersStore: PartnersStore,
     getState: () => RootState,
     queue: (action: RootActionsOrThunk) => void,
   ) {
@@ -378,6 +380,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
       itemTypes: this.getAllPcrTypes(projectId),
       project: this.projectStore.getById(projectId),
+      partners: this.partnersStore.getPartnersForProject(projectId),
     }).then(
       x =>
         new PCRDtoValidator(
@@ -387,6 +390,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           showErrors,
           x.project,
           x.original,
+          x.partners,
         ),
     );
   }

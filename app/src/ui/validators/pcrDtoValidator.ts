@@ -2,6 +2,7 @@ import {
   PCRItemStatus,
   PCRItemType,
   PCROrganisationType,
+  pcrOverpopulatedList,
   PCRProjectRole,
   PCRStatus,
   pcrUnduplicatableMatrix,
@@ -347,36 +348,48 @@ export class PCRDtoValidator extends Results<PCRDto> {
           //     "The item type you have requested is not available",
           //   ),
           () => {
-            const seenProjectPcrs = new Set<PCRItemType>();
-            const seenPartnerRemovalIds = new Set<string>();
-            const seenPartnerAddCompanyIds = new Set<string>();
+            return children.isTrue(items => {
+              const seenProjectPcrs = new Set<PCRItemType>();
 
-            if (this.projectPcrs) {
-              for (const projectPcr of this.model.items) {
-                // Check that a PCR type isn't already in the set of PCR types (if it is not duplicatable)
+              for (const projectPcr of items) {
+                // If a PCR type is non-duplicatable, check if it has not already been added to the PCR.
                 if (pcrUnduplicatableMatrix[projectPcr.type] && seenProjectPcrs.has(projectPcr.type)) {
-                  return children.invalid("A duplicate PCR of this type is not allowed");
+                  return false;
                 }
 
-                if (projectPcr.type === PCRItemType.PartnerWithdrawal && projectPcr.partnerId) {
-                  // Check that a partner removal isn't removing the same partner twice
-                  if (seenPartnerRemovalIds.has(projectPcr.partnerId)) {
-                    return children.invalid("You cannot remove the same partner twice in the same PCR.");
-                  }
-                  seenPartnerRemovalIds.add(projectPcr.partnerId);
-                } else if (projectPcr.type === PCRItemType.PartnerAddition && projectPcr.registrationNumber) {
-                  // Check that a partner addition isn't attempting to add the same company twice
-                  if (seenPartnerAddCompanyIds.has(projectPcr.registrationNumber)) {
-                    return children.invalid("You cannot add the same partner twice in the same PCR.");
-                  }
-                  seenPartnerAddCompanyIds.add(projectPcr.registrationNumber);
-                }
                 seenProjectPcrs.add(projectPcr.type);
               }
-            }
-
-            return children.valid();
+              return true;
+            }, "A duplicate PCR of this type is not allowed");
           },
+          () =>
+            children.isTrue(items => {
+              const seenPartnerIds = new Set<string>();
+
+              for (const projectPcr of items) {
+                // Ensure "Remove a partner" request doesn't have the same partner twice (or more!)
+                if (
+                  (projectPcr.type === PCRItemType.PartnerWithdrawal ||
+                    projectPcr.type === PCRItemType.AccountNameChange) &&
+                  projectPcr.partnerId
+                ) {
+                  if (seenPartnerIds.has(projectPcr.partnerId)) {
+                    return false;
+                  } else {
+                    seenPartnerIds.add(projectPcr.partnerId);
+                  }
+                }
+              }
+              return true;
+            }, "You cannot select the same partner to rename and/or delete more than once in a single PCR."),
+          () =>
+            children.isTrue(
+              items =>
+                this.partners?.length
+                  ? items.filter(x => pcrOverpopulatedList.includes(x.type)).length <= this.partners.length
+                  : true,
+              'You cannot add any more "Remove a partner" and/or "Change a partner\'s name" types because you do not have enough partners to action these types upon.',
+            ),
           () => {
             if (!this.projectPcrs?.length) return children.valid();
 

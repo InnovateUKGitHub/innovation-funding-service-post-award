@@ -58,9 +58,9 @@ describe("GetAvailableItemTypesQuery", () => {
       const query = new GetAvailableItemTypesQuery(project.Id, editingPcr.id);
       const disabledItems = (await context.runQuery(query)).filter(res => res.disabled === true);
 
-      // MultiplePartnerFinancialVirement, TimeExtension and Remove Partner should be disabled.
+      // MultiplePartnerFinancialVirement, TimeExtension, Remove Partner and Rename Partner should be disabled.
       // Remove Partner is disabled because there are no partners in this project to remove.
-      expect(disabledItems).toHaveLength(3);
+      expect(disabledItems).toHaveLength(4);
     });
   });
 });

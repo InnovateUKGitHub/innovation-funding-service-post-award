@@ -1,12 +1,12 @@
-import * as ACC from "@ui/components";
-import { PartnerDto, PCRDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
-import { useStores } from "@ui/redux";
-import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
-import { EditorStatus } from "@ui/constants/enums";
+import { pcrOverpopulatedList } from "@framework/constants";
+import { PartnerDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
+import * as ACC from "@ui/components";
 import { RadioOptionProps } from "@ui/components/inputs";
-import { PCRItemType } from "@framework/constants";
+import { EditorStatus } from "@ui/constants/enums";
+import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { useStores } from "@ui/redux";
+import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 
 interface InnerProps {
   partners: PartnerDto[];
@@ -20,7 +20,7 @@ const InnerContainer = (
   // Find all PCR items that are partner withdrawal items,
   // that are also not the current PCR item.
   const withdrawalPCRs = props.pcr.items
-    .filter(x => x.type === PCRItemType.PartnerWithdrawal)
+    .filter(x => pcrOverpopulatedList.includes(x.type))
     .filter(x => x.id !== props.pcrItem.id) as PCRItemForPartnerWithdrawalDto[];
 
   const partnerOptions: RadioOptionProps[] = props.partners

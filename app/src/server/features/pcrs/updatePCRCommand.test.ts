@@ -357,13 +357,13 @@ describe("UpdatePCRCommand", () => {
         expect(pcr.items).toHaveLength(3);
       });
 
-      it("does not allow non remove/add/rename partner duplicate item types", async () => {
+      it("does not allow non remove/add/rename partner duplicate item types when submitting", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
         context.testData.createPartner(project);
         const pcr = context.testData.createPCR(project, {
-          status: PCRStatus.Draft,
+          status: PCRStatus.SubmittedToInnovateUK,
           reasoningStatus: PCRItemStatus.Complete,
         });
         const recordTypes = context.testData.createPCRRecordTypes();
