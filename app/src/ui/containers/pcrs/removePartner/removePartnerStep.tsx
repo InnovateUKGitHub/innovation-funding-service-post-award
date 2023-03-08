@@ -17,18 +17,11 @@ const Form = ACC.createTypedForm<PCRItemForPartnerWithdrawalDto>();
 const InnerContainer = (
   props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> & InnerProps,
 ) => {
-  // Find all PCR items that are partner withdrawal items,
-  // that are also not the current PCR item.
-  const withdrawalPCRs = props.pcr.items
-    .filter(x => pcrOverpopulatedList.includes(x.type))
-    .filter(x => x.id !== props.pcrItem.id) as PCRItemForPartnerWithdrawalDto[];
-
   const partnerOptions: RadioOptionProps[] = props.partners
     .filter(x => !x.isWithdrawn)
     .map(x => ({
       id: x.id,
       value: ACC.getPartnerName(x),
-      disabled: withdrawalPCRs.some(withdrawalPCR => withdrawalPCR.partnerId === x.id),
     }));
 
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);

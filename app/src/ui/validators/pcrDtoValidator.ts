@@ -334,6 +334,13 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 
   private validateItems() {
+    const statusWhenNotRequiredToBeComplete = [
+      PCRStatus.Draft,
+      PCRStatus.QueriedByInnovateUK,
+      PCRStatus.QueriedByMonitoringOfficer,
+      PCRStatus.QueriedByInnovationLead,
+    ];
+
     return Validation.child(
       this,
       this.model.items,
@@ -364,6 +371,9 @@ export class PCRDtoValidator extends Results<PCRDto> {
           },
           () =>
             children.isTrue(items => {
+              // If we are in a draft, allow the same partner to be selected more than once.
+              if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
+
               const seenPartnerIds = new Set<string>();
 
               for (const projectPcr of items) {
@@ -381,7 +391,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
                 }
               }
               return true;
-            }, "You cannot select the same partner to rename and/or delete more than once in a single PCR."),
+            }, "You cannot select the same partner to remove and/or rename more than once in a single PCR"),
           () =>
             children.isTrue(
               items =>
