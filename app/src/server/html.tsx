@@ -82,7 +82,6 @@ export function renderHtml({
 
   <html lang="en-GB">
       <head>
-          <script nonce="${nonce}">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
           ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
           
           <meta charset="utf-8" />
@@ -102,6 +101,7 @@ export function renderHtml({
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
       <body class="govuk-template__body">
+          <script nonce="${nonce}">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
           ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}
 
           <div id="root">${html}</div>
