@@ -1,6 +1,4 @@
-import { ExecutableSchema } from "@gql/getGraphQLSchema";
 import { PartialGraphQLContext } from "@gql/GraphQLContext";
-import { Api } from "@gql/sf/Api";
 import DataLoader from "dataloader";
 import gql from "graphql-tag";
 
@@ -26,9 +24,7 @@ interface ProjectData {
             value: string;
           };
           Acc_ContactId__r: {
-            Email__c: {
-              value: string | null;
-            } | null;
+            Id: string | null;
           } | null;
           Acc_AccountId__c: {
             value: string;
@@ -86,9 +82,7 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
                             value
                           }
                           Acc_ContactId__r {
-                            Email__c {
-                              value
-                            }
+                            Id
                           }
                           Acc_AccountId__c {
                             value
@@ -105,6 +99,7 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
       `,
       variables: {
         keys,
+        username: ctx.email,
       },
       context: ctx,
     });

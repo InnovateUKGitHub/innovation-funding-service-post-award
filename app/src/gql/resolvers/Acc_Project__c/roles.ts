@@ -22,8 +22,10 @@ const rolesResolver: IFieldResolverOptions = {
   async resolve(input, args, ctx: GraphQLContext, info): Promise<ExternalProjectRoles> {
     const isSalesforceSystemUser = ctx.email === configuration.salesforceServiceUser.serviceUsername;
 
-    const edge = await ctx.projectRolesDataLoader.load(input.Id);
+    const contactData = await ctx.userContactDataLoader.load(ctx.email);
+    const roleData = await ctx.projectRolesDataLoader.load(input.Id);
 
+    // Initialise an empty list of permissions.
     const permissions: ExternalProjectRoles = {
       isMo: isSalesforceSystemUser,
       isFc: isSalesforceSystemUser,
@@ -32,12 +34,19 @@ const rolesResolver: IFieldResolverOptions = {
       partnerRoles: [],
     };
 
-    if (!edge) return permissions;
+    // Make sure our role data and contact data exists first.
+    // If it doesn't, return the empty list of permissions.
+    if (!(roleData && contactData)) return permissions;
 
-    const project = edge.node;
+    // Grab the Contact ID that is related to the current logged in user.
+    const contactId = contactData.node?.ContactId?.value;
+    if (!contactId) return permissions;
+
+    const project = roleData.node;
 
     for (const { node: projectContactLink } of project.Project_Contact_Links__r.edges) {
-      if (ctx.email === projectContactLink?.Acc_ContactId__r?.Email__c?.value) {
+      // If the user's Contact ID is the same as the Contact ID for the PCL, then apply the role for the PCL.
+      if (projectContactLink?.Acc_ContactId__r?.Id === contactId) {
         if (projectContactLink.Acc_Role__c.value === "Monitoring officer") permissions.isMo = true;
         if (projectContactLink.Acc_Role__c.value === "Finance contact") permissions.isFc = true;
         if (projectContactLink.Acc_Role__c.value === "Project Manager") permissions.isPm = true;
@@ -55,7 +64,10 @@ const rolesResolver: IFieldResolverOptions = {
           partnerId: projectParticipant.Acc_AccountId__c.value,
         };
 
-        if (projectContactLink.Acc_AccountId__c.value === projectParticipant.Acc_AccountId__c.value) {
+        if (
+          projectContactLink?.Acc_ContactId__r?.Id === contactId &&
+          projectContactLink.Acc_AccountId__c.value === projectParticipant.Acc_AccountId__c.value
+        ) {
           if (permissions.isFc) partnerPermissions.isFc = true;
           if (permissions.isPm && projectParticipant.Acc_ProjectRole__c.value === "Lead")
             partnerPermissions.isPm = true;
