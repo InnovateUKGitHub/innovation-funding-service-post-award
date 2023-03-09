@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { TestBed } from "@shared/TestBed";
 import { PcrTypesGuidance, PcrTypesGuidanceProps } from "@ui/containers/pcrs/components/PcrTypesGuidance";
 import { PCRItemTypeDto } from "@framework/dtos";
-import { PCRItemType } from "@framework/constants";
+import { PCRItemDisabledReason, PCRItemType } from "@framework/constants";
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("PcrTypes Components", () => {
@@ -54,6 +54,7 @@ describe("PcrTypes Components", () => {
         recordTypeId: "stub-recordTypeId",
         enabled: true,
         disabled: false,
+        disabledReason: PCRItemDisabledReason.NONE,
         files: [],
       };
 

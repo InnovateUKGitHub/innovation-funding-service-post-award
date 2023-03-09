@@ -26,7 +26,7 @@ const PCRDashboardTable = ({
 }) => {
   const { isPm, isMo } = project.roles;
   const { getContent } = useContent();
-  const { getPcrItemName } = usePcrItemName();
+  const { getPcrItemContent } = usePcrItemName();
 
   let filteredCollatedPCRs = collated;
 
@@ -52,7 +52,7 @@ const PCRDashboardTable = ({
         qa="types"
         header={getContent(x => x.pcrLabels.types)}
         value={x => (
-          <LineBreakList items={x.children.map(y => getPcrItemName(y.node.RecordType?.Name?.value ?? undefined))} />
+          <LineBreakList items={x.children.map(y => getPcrItemContent(y.node.RecordType?.Name?.value ?? undefined).name)} />
         )}
       />
       <PCRTable.ShortDate
