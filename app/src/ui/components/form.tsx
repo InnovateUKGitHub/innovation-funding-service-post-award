@@ -6,8 +6,9 @@ import { IEditorStore } from "@ui/redux";
 import { Result } from "@ui/validation";
 import cx from "classnames";
 import React, { createContext, CSSProperties, isValidElement, ReactNode, useContext } from "react";
-import { useMutation } from "react-relay";
-import { ConcreteRequest, GraphQLTaggedNode, MutationParameters } from "relay-runtime";
+import { useMutation, useRelayEnvironment } from "react-relay";
+import { useLocation } from "react-router";
+import { ConcreteRequest, getRequest, GraphQLTaggedNode, MutationParameters, getNode } from "relay-runtime";
 import { Content } from "./content";
 import { DropdownList, DropdownListOption } from "./inputs";
 import { CheckboxList } from "./inputs/checkboxList";
@@ -87,14 +88,15 @@ const createFieldHintId = (name: string) => `${name}-hint`;
  *   );
  * };
  */
-export const createTypedForm = <T extends AnyObject,>() => {
-
+export const createTypedForm = <T extends AnyObject>() => {
   interface GraphQLFormProps {
     onChange?: (data: T) => void;
     qa?: string;
     disabled?: boolean;
     children: ReactNode;
     mutation: GraphQLTaggedNode;
+    mutationData: ConcreteRequest;
+    successLocation: string;
     data: T;
   }
 
@@ -365,17 +367,21 @@ export const createTypedForm = <T extends AnyObject,>() => {
    * A controlled form component.
    * Controlled forms pass form data to children automatically via React Context.
    */
-  const GraphQLFormComponent = <MutationKey extends MutationParameters,>({
+  const GraphQLFormComponent = <MutationKey extends MutationParameters>({
     qa,
     children,
     onChange,
     disabled = false,
     mutation,
+    mutationData,
     data,
+    successLocation,
     ...props
   }: GraphQLFormProps) => {
     const [commitMutation, isLoading] = useMutation<MutationKey>(mutation);
     const isDisabled = disabled || isLoading;
+
+    if (!mutationData.params.text) throw new Error("Failed to find mutation string :heejintears:");
 
     return (
       <form
@@ -386,12 +392,13 @@ export const createTypedForm = <T extends AnyObject,>() => {
         onSubmit={e => {
           e.preventDefault();
           commitMutation({
-            variables: data
-          })
+            variables: data,
+          });
         }}
       >
         <SecurityTokenInput />
-        <input type="hidden" name="_mutation" value={JSON.stringify(mutation)} />
+        <input type="hidden" name="_mutation" value={mutationData.params.text} />
+        <input type="hidden" name="_success" value={successLocation} />
 
         <FormDataContextProvider
           value={{
@@ -742,13 +749,16 @@ export const createTypedForm = <T extends AnyObject,>() => {
       <FieldComponent
         {...props}
         field={({ formData, disabled, hasError }) => (
-          <WhatwgMultipleFileUpload
-            value={props.value(formData, disabled)}
-            name={props.name}
-            onChange={handleChange}
-            disabled={disabled}
-            error={hasError}
-          />
+          <>
+            <WhatwgMultipleFileUpload
+              value={props.value(formData, disabled)}
+              name={props.name}
+              onChange={handleChange}
+              disabled={disabled}
+              error={hasError}
+            />
+            <input type="hidden" name="_map" value={JSON.stringify({ [props.name]: [`variables.${props.name}`] })} />
+          </>
         )}
       />
     );

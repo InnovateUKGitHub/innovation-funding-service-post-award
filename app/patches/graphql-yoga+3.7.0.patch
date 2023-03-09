@@ -1,0 +1,12 @@
+diff --git a/node_modules/graphql-yoga/cjs/plugins/requestValidation/useCheckGraphQLQueryParams.js b/node_modules/graphql-yoga/cjs/plugins/requestValidation/useCheckGraphQLQueryParams.js
+index 0f83a6d..dde495c 100644
+--- a/node_modules/graphql-yoga/cjs/plugins/requestValidation/useCheckGraphQLQueryParams.js
++++ b/node_modules/graphql-yoga/cjs/plugins/requestValidation/useCheckGraphQLQueryParams.js
+@@ -7,6 +7,7 @@ const expectedParameters = new Set([
+     'variables',
+     'operationName',
+     'extensions',
++    'id',
+ ]);
+ function assertInvalidParams(params) {
+     if (params == null || typeof params !== 'object') {

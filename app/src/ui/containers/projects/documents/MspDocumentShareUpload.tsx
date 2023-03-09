@@ -1,7 +1,9 @@
 import { SalesforceAccProjectConnectionDocumentTypeEnum } from "@gql/typegraphql/enum/SalesforceAccProjectConnectionDocumentTypeEnum";
 import { Button, createTypedForm, Section } from "@ui/components";
 import { useState } from "react";
+import { useLocation } from "react-router";
 import { projectDocumentsUploadMutation } from "./ProjectDocumentsUpload.mutation";
+import noddy from "./__generated__/ProjectDocumentsUploadMutation.graphql";
 
 const Form = createTypedForm<{
   files: File[];
@@ -9,7 +11,7 @@ const Form = createTypedForm<{
   documentType: SalesforceAccProjectConnectionDocumentTypeEnum;
 }>();
 
-const MspDocumentShareUpload = ({ projectId }: { projectId: string }) => {
+const MspDocumentShareUpload = ({ projectId, success }: { projectId: string; success: string }) => {
   const [files, setFiles] = useState<File[]>([]);
   const [fileType, setFileType] = useState<SalesforceAccProjectConnectionDocumentTypeEnum>(
     SalesforceAccProjectConnectionDocumentTypeEnum.AgreementToPCR,
@@ -24,7 +26,9 @@ const MspDocumentShareUpload = ({ projectId }: { projectId: string }) => {
   return (
     <Section title="Upload">
       <Form.GraphQLForm
-        mutation={projectDocumentsUploadMutation}
+        successLocation={success}
+        mutation={noddy}
+        mutationData={noddy}
         data={{
           files,
           projectId,

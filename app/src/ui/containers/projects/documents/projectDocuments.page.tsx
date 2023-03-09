@@ -19,6 +19,8 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
   const project = getFirstEdge(data.salesforce.uiapi.query.Acc_Project__c?.edges);
   const partners = getDefinedEdges(data.salesforce.uiapi.query.Acc_ProjectParticipant__c?.edges);
 
+  const currentLink = props.currentRoute.getLink({ projectId: props.projectId }).path
+
   return (
     <Page
       pageTitle={
@@ -29,7 +31,7 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
       }
       backLink={<Projects.ProjectBackLink routes={props.routes} projectId={props.projectId} />}
     >
-      <MspDocumentShareUpload projectId={props.projectId} />
+      <MspDocumentShareUpload projectId={props.projectId} success={currentLink} />
       <Section title="Project">
         <NewDocumentsTable documents={project.node.ContentDocumentLinks} />
       </Section>

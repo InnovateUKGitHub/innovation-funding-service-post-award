@@ -11,12 +11,13 @@ import { Logger } from "@shared/developmentLogger";
 import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
 import csrf from "csurf";
 import { ErrorRequestHandler, Request, Router } from "express";
+import { execute, parse } from "graphql";
 import { createYoga } from "graphql-yoga";
+import { ConcreteRequest } from "relay-runtime";
 import { configuration } from "./features/common";
+import { upload } from "./forms/memoryStorage";
 import staticHtmlError from "./staticError.html";
-import { getServerGraphQLEnvironment } from "@gql/ServerGraphQLEnvironment"
-import { commitMutation, GraphQLTaggedNode } from "relay-runtime";
-import { upload } from "./forms/memoryStorage"
+import { File } from "@whatwg-node/fetch"
 
 export const noAuthRouter = Router();
 
@@ -49,17 +50,28 @@ const getServerRoutes = async () => {
    * API routes
    */
   router.use("/api", apiRoutes);
-  router.post("/graphql/nojs", upload.any() ,async (req, res) => {
-    const {
-      _csrf, _mutation, ...variables
-    } = req.body;
+  router.post("/graphql/nojs", upload.any(), async (req, res, next) => {
+    const { _csrf, _mutation, _success, ...variables } = req.body;
 
-    const env = await getServerGraphQLEnvironment({ req, schema });
-    commitMutation(env.ServerGraphQLEnvironment, {
-      mutation: JSON.parse(_mutation) as GraphQLTaggedNode,
-      variables
-    })
-  })
+    const context = await createContext({ req });
+
+    try {
+      const value = await execute({
+        schema,
+        document: parse(_mutation),
+        contextValue: context,
+        variableValues: {...variables, files: req.files?.map(x => new File([x.buffer], x.originalname))},
+      });
+
+      if (_success) {
+        res.redirect(_success);
+      } else {
+        res.json(value);
+      }
+    } catch (err: unknown) {
+      next(err);
+    }
+  });
   router.use("/graphql", (req, res) => {
     yoga(req, res);
   });
