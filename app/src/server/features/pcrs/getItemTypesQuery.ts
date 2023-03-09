@@ -1,6 +1,6 @@
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types";
-import { PCRItemType } from "@framework/constants";
+import { PCRItemDisabledReason, PCRItemType } from "@framework/constants";
 import { RecordType } from "@framework/entities";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 import { IConfig, QueryBase } from "../common";
@@ -61,6 +61,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       displayName: metaInfo.displayName || metaInfo.typeName,
       enabled: this.getEnabledStatus(metaInfo, context.config),
       disabled: false,
+      disabledReason: PCRItemDisabledReason.NONE,
       recordTypeId: this.findRecordType(metaInfo.typeName, pcrRecordTypes),
       files: this.getPCRFiles(metaInfo.files),
     }));

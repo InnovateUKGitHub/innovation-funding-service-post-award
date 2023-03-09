@@ -8,7 +8,7 @@ import {
   ProjectChangeRequestPrepareRoute,
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemStatus, PCRItemType } from "@framework/constants";
+import { PCRItemDisabledReason, PCRItemStatus, PCRItemType } from "@framework/constants";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
@@ -74,6 +74,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
         recordTypeId: "",
         enabled: false,
         disabled: false,
+        disabledReason: PCRItemDisabledReason.NONE,
         files: [],
       },
     ];

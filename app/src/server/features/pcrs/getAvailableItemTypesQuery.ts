@@ -4,6 +4,7 @@ import {
   getUnavailablePcrItemsMatrix,
   getUnduplicatablePcrItemsMatrix,
   IContext,
+  PCRItemDisabledReason,
   PCRItemType,
   pcrOverpopulatedList,
   PCRSummaryDto,
@@ -28,14 +29,14 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
   }
 
   /**
-   * Get a list of PCR items that should be disabled, to prevent too many of a specific type
-   * from being added to a PCR.
+   * Get a list of PCR items that should be disabled, to prevent too many items that action on
+   * partners.
    *
    * @param numberOfPartners The number of partners in the project.
    * @param currentPcr The current PCR
    * @returns A list of PCR item types that should no longer have any more of the specified type.
    */
-  private getOverpopulatedPcrItems(numberOfPartners: number, currentPcr?: PCRSummaryDto): PCRItemType[] {
+  private getPcrItemsLimitedByNumberOfPartners(numberOfPartners: number, currentPcr?: PCRSummaryDto): PCRItemType[] {
     if (!currentPcr) return [];
 
     if (currentPcr.items.filter(x => pcrOverpopulatedList.includes(x.type)).length >= numberOfPartners)
@@ -60,19 +61,29 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
     const partners = await partnersPromise;
     const currentPcr = await currentPcrPromise;
 
-    const disabledMatrixTypes = getUnavailablePcrItemsMatrix(projectPcrs);
-    const currentPcrItemTypes = getUnduplicatablePcrItemsMatrix(currentPcr);
-    const tooManyItemTypes = this.getOverpopulatedPcrItems(partners.length, currentPcr);
-
-    const disabledTypes = [...currentPcrItemTypes, ...disabledMatrixTypes, ...tooManyItemTypes];
+    const nonDuplicatableItemTypesInAnyPcr = getUnavailablePcrItemsMatrix(projectPcrs);
+    const nonDuplicatableItemTypesInThisPcr = getUnduplicatablePcrItemsMatrix(currentPcr);
+    const tooManyItemTypes = this.getPcrItemsLimitedByNumberOfPartners(partners.length, currentPcr);
 
     return itemTypeDtos.reduce<Dtos.PCRItemTypeDto[]>((validPcrItems, pcrItem) => {
       // Note: Include items that are only true
       if (!pcrItem.enabled) return validPcrItems;
 
-      const disabled = disabledTypes.some(disabledType => disabledType === pcrItem.type);
+      let disabledReason = PCRItemDisabledReason.NONE;
 
-      return validPcrItems.concat({ ...pcrItem, disabled });
+      if (nonDuplicatableItemTypesInAnyPcr.includes(pcrItem.type)) {
+        disabledReason = PCRItemDisabledReason.ANOTHER_PCR_ALREADY_HAS_THIS_TYPE;
+      } else if (nonDuplicatableItemTypesInThisPcr.includes(pcrItem.type)) {
+        disabledReason = PCRItemDisabledReason.THIS_PCR_ALREADY_HAS_THIS_TYPE;
+      } else if (tooManyItemTypes.includes(pcrItem.type)) {
+        disabledReason = PCRItemDisabledReason.NOT_ENOUGH_PARTNERS_TO_ACTION_THIS_TYPE;
+      }
+
+      return validPcrItems.concat({
+        ...pcrItem,
+        disabled: disabledReason !== PCRItemDisabledReason.NONE,
+        disabledReason,
+      });
     }, []);
   }
 }

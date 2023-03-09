@@ -1,19 +1,17 @@
-import { useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid";
+import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { PCRItemDto, PCRItemStatus, PCRItemType, PCRStatus, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
+import * as ACC from "@ui/components";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import * as ACC from "@ui/components";
-import { ProjectParticipantsHoc } from "@ui/features/project-participants";
+import { useNavigate } from "react-router-dom";
 
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
 import { IRoutes } from "@ui/routing";
-import { useContent } from "@ui/hooks";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { usePcrItemName } from "./utils/getPcrItemName";
+import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -273,11 +271,11 @@ const GetItemTasks = ({
 }) => {
   const validationErrors = editor.validator.items.results[index].errors;
   const workflow = PcrWorkflow.getWorkflow(item, 1);
-  const { getPcrItemName } = usePcrItemName();
+  const { getPcrItemContent } = usePcrItemName();
 
   return (
     <ACC.Task
-      name={getPcrItemName(item.typeName, item)}
+      name={getPcrItemContent(item.typeName, item).label}
       status={getPcrItemTaskStatus(item.status)}
       route={routes.pcrPrepareItem.getLink({
         projectId: projectId,

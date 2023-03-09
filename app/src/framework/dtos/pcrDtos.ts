@@ -1,5 +1,6 @@
 import {
   PCRContactRole,
+  PCRItemDisabledReason,
   PCRItemStatus,
   PCRItemType,
   PCROrganisationType,
@@ -178,6 +179,7 @@ export interface PCRItemTypeDto {
    */
   enabled: boolean;
   disabled: boolean;
+  disabledReason: PCRItemDisabledReason;
   files: { name: string; relativeUrl: string }[];
 }
 

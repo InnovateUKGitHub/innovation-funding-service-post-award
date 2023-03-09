@@ -1,9 +1,10 @@
+import { ReactNode } from "react";
 import { Info } from "../layout/info";
 import { DetailContentList } from "./detailContentList";
 
 export interface ExpandedItem {
   header: string;
-  description: string;
+  description: ReactNode;
 }
 
 export interface FormGuidanceExpanderProps {

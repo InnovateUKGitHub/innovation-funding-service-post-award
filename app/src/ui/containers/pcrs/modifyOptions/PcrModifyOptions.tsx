@@ -7,6 +7,7 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { useNavigate } from "react-router-dom";
 import { BaseProps } from "../../containerBase";
+import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisabledReasoning";
 import { PcrTypesGuidance } from "../components/PcrTypesGuidance";
 
 /**
@@ -57,24 +58,29 @@ const PcrModifySelectedPage = ({
     ? routes.pcrPrepare.getLink({ projectId, pcrId: projectChangeRequestId })
     : routes.pcrsDashboard.getLink({ projectId });
 
-  const dtoOptions: CheckboxOptionProps[] = [];
-  const dtoSelected: CheckboxOptionProps[] = [];
+  const availableOptions: CheckboxOptionProps[] = [];
+  const selectedOptions: CheckboxOptionProps[] = [];
+  const dtoUnavailable: PCRItemTypeDto[] = [];
 
   for (const itemType of itemTypes) {
     const dtoOption: CheckboxOptionProps = {
       id: String(itemType.type),
       value: itemType.displayName,
-      disabled: itemType.disabled,
       qa: `pcr-modify-option-${itemType.type}`,
     };
 
-    dtoOptions.push(dtoOption);
+    if (!itemType.disabled) {
+      availableOptions.push(dtoOption);
+    } else {
+      dtoUnavailable.push(itemType);
+    }
+
     if (
       editor.data.items
         .filter(editorItemType => editorItemType.id.length === 0)
         .some(editorItemType => itemType.type === editorItemType.type)
     ) {
-      dtoSelected.push(dtoOption);
+      selectedOptions.push(dtoOption);
     }
   }
 
@@ -105,10 +111,10 @@ const PcrModifySelectedPage = ({
             <PcrTypesGuidance qa="pcr-modify-options-guidance" types={itemTypes} />
 
             <PCRForm.Checkboxes
-              options={dtoOptions}
+              options={availableOptions}
               name="types"
               validation={editor.validator.items}
-              value={() => dtoSelected}
+              value={() => selectedOptions}
               update={(model, selectedValues) => {
                 const selectedOptions = itemTypes.filter(x => selectedValues?.some(y => y.id === `${x.type}`));
                 const updatedItems = [
@@ -123,6 +129,8 @@ const PcrModifySelectedPage = ({
                 model.items = updatedItems;
               }}
             />
+
+            <PcrDisabledReasoning items={dtoUnavailable} />
           </PCRForm.Fieldset>
 
           <PCRForm.Fieldset>

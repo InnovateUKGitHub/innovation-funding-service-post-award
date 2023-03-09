@@ -724,7 +724,7 @@
       "updateTitle": "Add types",
       "guidance": "Before you submit, you must:\n- ensure all project partners have approved the change(s)\n- discuss this request with your monitoring officer",
       "selectRequestTypesTitle": "Select request types",
-      "selectTypesHint": "You can select more than one type of request. If an option is not selectable, then a Project Change Request (PCR) of that type has already been started. The current PCR must be deleted - if still in draft - or concluded by Innovate UK, before a new one can be started.",
+      "selectTypesHint": "You can select more than one type of request.",
       "backToPcrs": "Back to project change requests",
       "backToPcr": "Back to request",
       "buttonCreateRequest": "Create request",
@@ -750,7 +750,13 @@
       "loanDrawdownChangeTitle": "Change loan drawdown",
       "loanDrawdownChangeMessage": "This allows for you to change the date and/or amount of forecasted drawdowns in the case of unforeseen circumstances leading to significant variations between drawn amounts and amounts spent (over or underspent).",
       "loanDrawdownExtensionTitle": "Change loans duration",
-      "loanDrawdownExtensionMessage": "This allows you to extend or reduce the duration of your loan periods (availability, extension and repayment)."
+      "loanDrawdownExtensionMessage": "This allows you to extend or reduce the duration of your loan periods (availability, extension and repayment).",
+      "anotherPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to another PCR.",
+      "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted - if still in draft - or concluded by Innovate UK, before a new one can be started.",
+      "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
+      "thisPcrAlreadyHasThisTypeMessage": "These types of request are already a part of this current PCR.",
+      "notEnoughPartnersToActionThisTypeTitle": "Some types are unavailable because you have reached the maximum number of this type in a single PCR.",
+      "notEnoughPartnersToActionThisTypeMessage": "You cannot add more than the number of partners on this project."
     },
     "pcrTimeExtensionStep": {
       "existingProjectHeading": "Existing project details",

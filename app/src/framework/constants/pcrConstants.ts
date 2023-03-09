@@ -45,6 +45,13 @@ export enum PCRItemStatus {
   Complete = 3,
 }
 
+export enum PCRItemDisabledReason {
+  NONE = 0,
+  ANOTHER_PCR_ALREADY_HAS_THIS_TYPE = 1,
+  THIS_PCR_ALREADY_HAS_THIS_TYPE = 2,
+  NOT_ENOUGH_PARTNERS_TO_ACTION_THIS_TYPE = 3,
+}
+
 export const enum PCRItemType {
   Unknown = 0,
   AccountNameChange = 10,
