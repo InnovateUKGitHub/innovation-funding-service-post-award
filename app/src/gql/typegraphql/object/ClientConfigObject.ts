@@ -5,7 +5,7 @@ import { Field, ObjectType } from "type-graphql";
 import { ClientConfigAppOptionsObject } from "./ClientConfigAppOptionsObject";
 import { ClientConfigFeaturesObject } from "./ClientConfigFeaturesObject";
 
-@ObjectType()
+@ObjectType("ClientConfigObject")
 class ClientConfigObject implements IClientConfig {
   @Field(() => ClientConfigFeaturesObject)
   features!: ClientConfigFeaturesObject;

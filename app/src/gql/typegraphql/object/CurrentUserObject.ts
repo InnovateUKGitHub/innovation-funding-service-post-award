@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 
-@ObjectType()
+@ObjectType("CurrentUserObject")
 class CurrentUserObject {
   @Field(() => String, { nullable: true })
   email!: string | null;
