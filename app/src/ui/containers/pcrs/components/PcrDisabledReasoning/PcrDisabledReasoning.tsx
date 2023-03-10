@@ -1,6 +1,6 @@
 import { PCRItemDisabledReason } from "@framework/constants";
 import { PCRItemTypeDto } from "@framework/dtos";
-import { UL } from "@ui/components";
+import { Info, UL } from "@ui/components";
 import { Bold, SimpleString } from "@ui/components/renderers";
 import { useContent } from "@ui/hooks";
 import { ReactNode, useMemo } from "react";
@@ -76,7 +76,7 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
     return returnList;
   }, [items]);
 
-  return <>{list}</>;
+  return <Info summary={getContent(x => x.pages.pcrModifyOptions.learnMoreMissingTitle)}>{list}</Info>;
 };
 
 export { PcrDisabledReasoning };
