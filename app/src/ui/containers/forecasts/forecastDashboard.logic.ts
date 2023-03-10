@@ -42,7 +42,7 @@ export const useForecastDashboardData = (projectId: string) => {
         forecastLastModifiedDate: x?.node?.Acc_ForecastLastModifiedDate__c?.value ?? "",
         forecastsAndCosts:
           (x?.node?.Acc_TotalFutureForecastsForParticipant__c?.value ?? 0) +
-          (x?.node?.Acc_TotalApprovedCosts__c?.value ?? 0),
+          (x?.node?.Acc_TotalCostsSubmitted__c?.value ?? 0),
       })) ?? [];
 
     const lead = partners.filter(x => x.isLead);

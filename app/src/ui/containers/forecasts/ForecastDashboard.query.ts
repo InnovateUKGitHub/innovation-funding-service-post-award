@@ -47,10 +47,10 @@ export const forecastDashboardQuery = graphql`
                       Acc_TotalFutureForecastsForParticipant__c {
                         value
                       }
-                      Acc_TotalApprovedCosts__c {
+                      Acc_TotalParticipantCosts__c {
                         value
                       }
-                      Acc_TotalParticipantCosts__c {
+                      Acc_TotalCostsSubmitted__c {
                         value
                       }
                     }
