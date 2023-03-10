@@ -8,9 +8,18 @@ import {
   shouldShowProjectTitle,
 } from "./steps";
 
+const pm = "james.black@euimeabs.test";
+
 describe("claims > Updating forecasts after claim costs and document upload", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
+    visitApp({ asUser: pm });
+    cy.navigateToProject("328407");
+  });
+
+  it("Should select the Claims tile, edit the current claim and navigate to documents page", () => {
+    cy.selectTile("Claims");
+    cy.get("a").contains("Edit").click();
+    cy.getByQA("button_default-qa").contains("Continue to claims documents").click();
   });
 
   it("Should have a back option", () => {

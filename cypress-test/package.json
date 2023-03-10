@@ -22,7 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "@testing-library/cypress": "^9.0.0",
-    "cypress": "^12.2.0",
+    "cypress": "^12.7.0",
     "dotenv": "^16.0.3",
     "mochawesome": "^7.1.3",
     "mochawesome-merge": "^4.2.2",

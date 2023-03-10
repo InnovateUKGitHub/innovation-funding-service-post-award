@@ -10,7 +10,7 @@ describe("Forecast > Academic", () => {
   });
 
   it("Should click the Forecast tile and continue to the Forecast page", () => {
-    cy.selectTile("Forecasts");
+    cy.selectTile("Forecast");
     cy.get("h1").contains("Forecast");
   });
 

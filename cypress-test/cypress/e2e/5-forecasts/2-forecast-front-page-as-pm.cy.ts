@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { clickForecastTile, displayForecastTable, shouldShowProjectTitle, showPartnerTable } from "./steps";
+import { clickForecastsTile, displayForecastTable, shouldShowProjectTitle, showPartnerTable } from "./steps";
 
 const projectManagerEmail = "james.black@euimeabs.test";
 
@@ -10,7 +10,7 @@ describe("Forecast front page as PM", () => {
     cy.navigateToProject("879546");
   });
 
-  it("should click the forecast tile", clickForecastTile);
+  it("should click the forecast tile", clickForecastsTile);
 
   it("Should display the partner table", showPartnerTable);
 

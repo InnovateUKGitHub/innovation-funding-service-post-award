@@ -1,7 +1,7 @@
 import { visitApp } from "../../common/visit";
 import {
   clickEditDisplayClaim,
-  clickForecastsTile,
+  clickForecastTile,
   displayForecastTable,
   makeClaimFC,
   shouldShowProjectTitle,
@@ -20,7 +20,7 @@ describe("Forecast > Link to claims page as FC", () => {
     cy.navigateToProject("879546");
   });
 
-  it("should click the forecast tile", clickForecastsTile);
+  it("should click the forecast tile", clickForecastTile);
 
   it("Should display a page heading", () => {
     cy.get("h1").contains("Forecast");
