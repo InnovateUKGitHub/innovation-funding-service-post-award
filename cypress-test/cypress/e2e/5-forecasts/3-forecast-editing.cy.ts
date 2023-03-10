@@ -1,7 +1,7 @@
 import { visitApp } from "../../common/visit";
 import {
   clearCostCategories,
-  clickForecastsTile,
+  clickForecastTile,
   exceedGrantValue,
   populateCategoriesZeroSubmit,
   updateLabourFields,
@@ -16,7 +16,7 @@ describe("Forecast > edit", () => {
     cy.navigateToProject("879546");
   });
 
-  it("should click the forecast tile", clickForecastsTile);
+  it("should click the forecast tile", clickForecastTile);
 
   it("Should display a page heading", () => {
     cy.get("h1").contains("Forecast");

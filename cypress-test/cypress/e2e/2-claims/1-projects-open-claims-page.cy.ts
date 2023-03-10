@@ -3,7 +3,8 @@ import { shouldShowAllAccordion, shouldShowProjectTitle, showAClaim } from "./st
 
 describe("claims > open claims as FC", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/overview" });
+    visitApp({});
+    cy.navigateToProject("328407");
   });
 
   describe("FC should be able to navigate to the claims page", () => {

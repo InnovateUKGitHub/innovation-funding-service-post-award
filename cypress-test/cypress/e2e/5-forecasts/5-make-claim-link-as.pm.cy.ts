@@ -1,6 +1,6 @@
 import { visitApp } from "../../common/visit";
 import {
-  clickForecastTile,
+  clickForecastsTile,
   clickViewDisplayClaim,
   displayForecastTable,
   makeClaimPM,
@@ -22,7 +22,7 @@ describe("Forecast > link to claims page as PM", () => {
     cy.navigateToProject("879546");
   });
 
-  it("should click the forecast tile", clickForecastTile);
+  it("should click the forecast tile", clickForecastsTile);
 
   it("Should display the partner table", showPartnerTable);
 

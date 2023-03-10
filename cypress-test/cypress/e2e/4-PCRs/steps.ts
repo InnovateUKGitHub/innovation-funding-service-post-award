@@ -1,5 +1,3 @@
-import { visitApp } from "../../common/visit";
-
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 export const newPubDescription = "I am a new public description. I am 55 characters long.";
 export const newPubSummary = "I am a new public summary. I am 51 characters long.";
@@ -841,6 +839,7 @@ export const ktpUpdateVirement = () => {
 export const saveAndReturn = () => {
   cy.get("#grantMovingOverFinancialYear").type("0");
   cy.clickCheckBox("I agree with this change");
-  cy.getByQA("button_default-qa").contains("Save and return to request").click();
+  cy.wait(500);
+  cy.getByQA("button_default-qa").contains("Save and return to request").click({ force: true });
   cy.get("h1").contains("Request");
 };

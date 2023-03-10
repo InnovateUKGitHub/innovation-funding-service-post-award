@@ -7,6 +7,8 @@ export const visitApp = ({
   path?: string;
   asUser?: string;
 }) => {
+  cy.log(`**visitApp:${path} asUser:${asUser}**`);
+  cy.wait(500);
   cy.visit(path, { auth: { username, password } });
   cy.wait(500);
   cy.switchUserTo(asUser);
