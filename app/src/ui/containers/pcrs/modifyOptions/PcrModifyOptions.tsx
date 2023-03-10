@@ -8,7 +8,7 @@ import { PCRDtoValidator } from "@ui/validators";
 import { useNavigate } from "react-router-dom";
 import { BaseProps } from "../../containerBase";
 import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisabledReasoning";
-import { PcrTypesGuidance } from "../components/PcrTypesGuidance";
+import { usePcrItemName } from "../utils/getPcrItemName";
 
 /**
  * Difference between "Create", "Modify" and "Update"
@@ -54,6 +54,7 @@ const PcrModifySelectedPage = ({
   projectChangeRequestId,
 }: PcrModifySelectedProps & BaseProps) => {
   const { getContent } = useContent();
+  const { getPcrItemContent } = usePcrItemName();
   const cancelLink = projectChangeRequestId
     ? routes.pcrPrepare.getLink({ projectId, pcrId: projectChangeRequestId })
     : routes.pcrsDashboard.getLink({ projectId });
@@ -63,9 +64,17 @@ const PcrModifySelectedPage = ({
   const dtoUnavailable: PCRItemTypeDto[] = [];
 
   for (const itemType of itemTypes) {
+    const { name, description } = getPcrItemContent(itemType.displayName);
+
     const dtoOption: CheckboxOptionProps = {
       id: String(itemType.type),
-      value: itemType.displayName,
+      value: (
+        <>
+          <span>{name}</span>
+          <br />
+          <span className="govuk-hint">{description}</span>
+        </>
+      ),
       qa: `pcr-modify-option-${itemType.type}`,
     };
 
@@ -108,8 +117,6 @@ const PcrModifySelectedPage = ({
           onChange={dto => onChange(false, dto)}
         >
           <PCRForm.Fieldset heading={x => x.pages.pcrModifyOptions.selectRequestTypesTitle}>
-            <PcrTypesGuidance qa="pcr-modify-options-guidance" types={itemTypes} />
-
             <PCRForm.Checkboxes
               options={availableOptions}
               name="types"
