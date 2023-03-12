@@ -55,7 +55,7 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
             <FinanceSummaryTable.Currency
               qa="TotalEligibleCosts"
               header={content.totalEligibleCostsLabel}
-              value={x => x.totalEligibleCosts}
+              value={x => x.totalParticipantGrant}
             />
 
             <FinanceSummaryTable.Currency
@@ -83,7 +83,7 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
               <FinanceSummaryTable.Currency
                 qa="TotalEligibleCosts"
                 header={content.totalEligibleCostsLabel}
-                value={x => x.totalEligibleCosts}
+                value={x => x.totalParticipantGrant}
               />
 
               <FinanceSummaryTable.Percentage
@@ -137,11 +137,11 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
 };
 
 const renderTotalValueFooters = (
-  partners: Pick<Partner, "totalEligibleCosts" | "totalCostsSubmitted">[],
+  partners: Pick<Partner, "totalParticipantGrant" | "totalCostsSubmitted">[],
   totalsFooterLabel: string,
 ) => {
   const totalEligibleCostsTotal = partners.reduce<number>(
-    (val, partner) => roundCurrency(val + (partner.totalEligibleCosts || 0)),
+    (val, partner) => roundCurrency(val + (partner.totalParticipantGrant || 0)),
     0,
   );
   const totalCostsSubmittedTotal = partners.reduce<number>(

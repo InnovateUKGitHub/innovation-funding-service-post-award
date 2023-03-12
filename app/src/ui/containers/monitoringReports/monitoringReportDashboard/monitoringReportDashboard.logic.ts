@@ -1,5 +1,4 @@
 import { MonitoringReportStatus, ProjectStatus } from "@framework/constants";
-import { getProjectStatus } from "@framework/mappers/projectStatus";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { monitoringReportDashboardQuery } from "./MonitoringReportDashboard.query";
@@ -9,6 +8,7 @@ import {
 } from "./__generated__/MonitoringReportDashboardQuery.graphql";
 import { mapMonitoringReportStatus } from "@framework/util/monitoringReportStatus";
 import { useMemo } from "react";
+import { mapToMonitoringReportDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 
 const currentStatuses = [
   MonitoringReportStatus.New,
@@ -45,26 +45,12 @@ export const useMonitoringReportDashboardQuery = (projectId: string) => {
   return useMemo(() => {
     const { node: projectNode } = getFirstEdge<ProjectGql>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-    const project = {
-      id: projectNode?.Id ?? "unknown-project-id",
-      projectNumber: projectNode?.Acc_ProjectNumber__c?.value ?? "",
-      title: projectNode?.Acc_ProjectTitle__c?.value ?? "",
-      status: getProjectStatus(projectNode?.Acc_ProjectStatus__c?.value ?? "unknown"),
-    };
+    const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status"]);
 
-    const reportsGql = data?.salesforce?.uiapi?.query?.Acc_MonitoringAnswer__c?.edges;
-
-    const reports: MonitoringReport[] =
-      reportsGql?.map(x => ({
-        status: mapMonitoringReportStatus(x?.node?.Acc_MonitoringReportStatus__c?.value ?? "unknown"),
-        headerId: x?.node?.Id ?? "",
-        periodId: x?.node?.Acc_ProjectPeriodNumber__c?.value ?? 0,
-        startDate: new Date(x?.node?.Acc_PeriodStartDate__c?.value ?? ""),
-        endDate: new Date(x?.node?.Acc_PeriodEndDate__c?.value ?? ""),
-        statusName: x?.node?.Acc_MonitoringReportStatus__c?.label ?? "unknown",
-        lastUpdated: new Date(x?.node?.LastModifiedDate?.value ?? ""),
-        projectId: x?.node?.Acc_Project__c?.value ?? "",
-      })) ?? [];
+    const reports = mapToMonitoringReportDtoArray(
+      data?.salesforce?.uiapi?.query?.Acc_MonitoringAnswer__c?.edges ?? [],
+      ["headerId", "endDate", "lastUpdated", "periodId", "startDate", "projectId", "status", "statusName"],
+    );
 
     const reportSections = reports.reduce<{
       open: MonitoringReport[];

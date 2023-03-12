@@ -46,3 +46,8 @@ export interface ProjectDto {
   loanExtensionPeriodLength: number | null;
   loanRepaymentPeriodLength: number | null;
 }
+
+export interface ProjectDtoGql extends ProjectDto {
+  roles: SfRoles;
+  isActive: boolean;
+}

@@ -34,4 +34,19 @@ declare namespace GQL {
       ? U
       : null
     : never;
+
+  type Value<T> = {
+    value: T | null;
+  } | null;
+
+  type DtoMapper<Dto, Node, AdditionalData = undefined> = AdditionalData extends undefined
+    ? {
+        [Key in keyof Dto]: (node: Node) => Dto[Key];
+      }
+    : {
+        [Key in keyof Dto]: (
+          node: Node,
+          additionalData: AdditionalData extends undefined ? never : AdditionalData,
+        ) => Dto[Key];
+      };
 }

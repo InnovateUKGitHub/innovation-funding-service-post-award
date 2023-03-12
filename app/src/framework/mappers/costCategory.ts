@@ -1,11 +1,11 @@
 import { CostCategoryType } from "@framework/constants";
 import { CostCategoryList } from "@framework/types";
 
-export const costCategoryTypeMapper = (name: string): CostCategoryType => {
+export const costCategoryTypeMapper = (organisationType: string, costCategoryType: string): CostCategoryType => {
   // Academic cost categories are always Academic.
-  if (name === "Academic") {
+  if (organisationType === "Academic") {
     return CostCategoryType.Academic;
   }
 
-  return new CostCategoryList().fromName(name).id;
+  return new CostCategoryList().fromName(costCategoryType).id;
 };

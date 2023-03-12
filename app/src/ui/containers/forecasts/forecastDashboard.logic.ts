@@ -1,49 +1,34 @@
 import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { getProjectStatus } from "@framework/mappers/projectStatus";
-import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { forecastDashboardQuery } from "./ForecastDashboard.query";
 import { ForecastDashboardQuery, ForecastDashboardQuery$data } from "./__generated__/ForecastDashboardQuery.graphql";
+import { mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
+import { PartnerDtoGql } from "@framework/dtos";
 
-export type Partner = {
-  id: string;
-  name: string;
-  isLead: boolean;
-  isWithdrawn: boolean;
-  forecastLastModifiedDate: string;
-  forecastsAndCosts: number;
-  totalParticipantCosts: number;
-};
+export type Partner = Pick<
+  PartnerDtoGql,
+  "id" | "name" | "isLead" | "isWithdrawn" | "forecastLastModifiedDate" | "forecastsAndCosts" | "totalParticipantGrant"
+>;
+
 type ProjectGQL = GQL.ObjectNodeSelector<ForecastDashboardQuery$data, "Acc_Project__c">;
 
 export const useForecastDashboardData = (projectId: string) => {
   const data = useLazyLoadQuery<ForecastDashboardQuery>(forecastDashboardQuery, { projectId });
-  const projectGqlData = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   return useMemo(() => {
-    const project = {
-      id: projectGqlData?.node?.Id ?? "",
-      title: projectGqlData?.node?.Acc_ProjectTitle__c?.value ?? "",
-      projectNumber: projectGqlData?.node?.Acc_ProjectNumber__c?.value ?? "",
-      roles: projectGqlData?.node?.roles ?? { isMo: false, isPm: false, isFc: false },
-      status: getProjectStatus(projectGqlData?.node?.Acc_ProjectStatus__c?.value ?? ""),
-    };
+    const project = mapToProjectDto(projectNode, ["id", "title", "projectNumber", "roles", "status"]);
 
-    const partners: Partner[] =
-      projectGqlData?.node?.Acc_ProjectParticipantsProject__r?.edges?.map(x => ({
-        id: x?.node?.Id ?? "",
-        name: x?.node?.Acc_AccountId__r?.Name?.value ?? "",
-        isLead: x?.node?.Acc_ProjectRole__c?.value === SalesforceProjectRole.ProjectLead,
-        isWithdrawn: ["Voluntary Withdrawal", "Involuntary Withdrawal", "Migrated - Withdrawn"].includes(
-          x?.node?.Acc_ParticipantStatus__c?.value ?? "",
-        ),
-        totalParticipantCosts: x?.node?.Acc_TotalParticipantCosts__c?.value ?? 0,
-        forecastLastModifiedDate: x?.node?.Acc_ForecastLastModifiedDate__c?.value ?? "",
-        forecastsAndCosts:
-          (x?.node?.Acc_TotalFutureForecastsForParticipant__c?.value ?? 0) +
-          (x?.node?.Acc_TotalCostsSubmitted__c?.value ?? 0),
-      })) ?? [];
+    const partners = mapToPartnerDtoArray(projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [], [
+      "id",
+      "name",
+      "isLead",
+      "isWithdrawn",
+      "forecastLastModifiedDate",
+      "totalParticipantGrant",
+      "forecastsAndCosts",
+    ]);
 
     const lead = partners.filter(x => x.isLead);
     const notLead = partners.filter(x => !x.isLead);

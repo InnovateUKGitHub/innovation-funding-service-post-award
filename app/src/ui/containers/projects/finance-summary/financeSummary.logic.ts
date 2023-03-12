@@ -2,10 +2,9 @@ import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { useContent } from "@ui/hooks";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { calcPercentage, DateConvertible } from "@framework/util";
 import { financeSummaryQuery } from "./FinanceSummary.query";
-import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { FinanceSummaryQuery, FinanceSummaryQuery$data } from "./__generated__/FinanceSummaryQuery.graphql";
+import { mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 
 export const useFinanceSummaryContent = () => {
   const { getContent } = useContent();
@@ -38,16 +37,16 @@ export type Project = GQL.ObjectNodeSelector<FinanceSummaryQuery$data, "Acc_Proj
 export type Partner = {
   id: string;
   name: string;
-  totalEligibleCosts: number;
-  totalCostsSubmitted: number;
+  totalParticipantGrant: number | null;
+  totalCostsSubmitted: number | null;
   isLead: boolean;
   isWithdrawn: boolean;
   percentageParticipantCostsSubmitted: number | null;
   awardRate: number | null;
-  totalGrantApproved: number;
-  remainingParticipantGrant: number;
-  totalPrepayment: number;
-  capLimit: number;
+  totalGrantApproved: number | null;
+  remainingParticipantGrant: number | null;
+  totalPrepayment: number | null;
+  capLimit: number | null;
   auditReportFrequencyName: string;
 };
 
@@ -58,37 +57,32 @@ export const useFinanceSummaryData = (projectId: string) => {
 
   const { node } = getFirstEdge<Project>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
-  const project = {
-    projectNumber: node?.Acc_ProjectNumber__c?.value ?? "",
-    title: node?.Acc_ProjectTitle__c?.value ?? "",
-    periodStartDate: (node?.Acc_CurrentPeriodStartDate__c?.value ?? "") as DateConvertible,
-    periodEndDate: (node?.Acc_CurrentPeriodEndDate__c?.value ?? "") as DateConvertible,
-    periodId: node?.Acc_CurrentPeriodNumber__c?.value ?? "",
-    numberOfPeriods: node?.Acc_NumberofPeriods__c?.value ?? "",
-    roles: node?.roles,
-  };
+  const project = mapToProjectDto(node, [
+    "id",
+    "title",
+    "periodStartDate",
+    "periodEndDate",
+    "periodId",
+    "numberOfPeriods",
+    "roles",
+    "projectNumber",
+  ]);
 
-  const partners: Partner[] =
-    node?.Acc_ProjectParticipantsProject__r?.edges?.map(x => ({
-      id: x?.node?.Id ?? "",
-      name: x?.node?.Acc_AccountId__r?.Name?.value ?? "",
-      totalEligibleCosts: x?.node?.Acc_TotalParticipantCosts__c?.value ?? 0,
-      totalCostsSubmitted: x?.node?.Acc_TotalCostsSubmitted__c?.value ?? 0,
-      isLead: x?.node?.Acc_ProjectRole__c?.value === SalesforceProjectRole.ProjectLead,
-      isWithdrawn: ["Voluntary Withdrawal", "Involuntary Withdrawal", "Migrated - Withdrawn"].includes(
-        x?.node?.Acc_ParticipantStatus__c?.value ?? "",
-      ),
-      percentageParticipantCostsSubmitted: calcPercentage(
-        x?.node?.Acc_TotalParticipantCosts__c?.value ?? 0,
-        x?.node?.Acc_TotalCostsSubmitted__c?.value ?? 0,
-      ),
-      awardRate: x?.node?.Acc_Award_Rate__c?.value ?? null,
-      totalGrantApproved: x?.node?.Acc_TotalGrantApproved__c?.value ?? 0,
-      remainingParticipantGrant: x?.node?.Acc_RemainingParticipantGrant__c?.value ?? 0,
-      totalPrepayment: x?.node?.Acc_TotalPrepayment__c?.value ?? 0,
-      capLimit: x?.node?.Acc_Cap_Limit__c?.value ?? 0,
-      auditReportFrequencyName: x?.node?.Acc_AuditReportFrequency__c?.value ?? "",
-    })) ?? [];
+  const partners: Partner[] = mapToPartnerDtoArray(node?.Acc_ProjectParticipantsProject__r?.edges ?? [], [
+    "id",
+    "name",
+    "isLead",
+    "isWithdrawn",
+    "totalParticipantGrant",
+    "totalCostsSubmitted",
+    "percentageParticipantCostsSubmitted",
+    "awardRate",
+    "totalGrantApproved",
+    "remainingParticipantGrant",
+    "totalPrepayment",
+    "capLimit",
+    "auditReportFrequencyName",
+  ]);
 
   const lead = partners.filter(x => x.isLead);
   const notLead = partners.filter(x => !x.isLead);

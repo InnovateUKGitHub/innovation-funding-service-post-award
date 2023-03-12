@@ -9,9 +9,8 @@ interface Params {
 }
 
 const ForecastDashboardPage = (props: Params & BaseProps) => {
-  const Table = TypedTable<Partner>();
   const { project, partners } = useForecastDashboardData(props.projectId);
-
+  const Table = TypedTable<Partner>();
   return (
     <Page
       pageTitle={<Projects.Title {...project} />}
@@ -27,7 +26,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
           />
           <Table.Currency
             header={x => x.pages.forecastsDashboard.headerTotalEligibleCosts}
-            value={x => x.totalParticipantCosts}
+            value={x => x.totalParticipantGrant ?? 0}
             qa="grant-offered"
           />
           <Table.Currency
@@ -37,7 +36,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
           />
           <Table.Currency
             header={x => x.pages.forecastsDashboard.headerUnderspend}
-            value={x => roundCurrency(x.totalParticipantCosts ?? 0 - x.forecastsAndCosts)}
+            value={x => roundCurrency(x.totalParticipantGrant ?? 0 - x.forecastsAndCosts)}
             qa="underspend"
           />
           <Table.ShortDate

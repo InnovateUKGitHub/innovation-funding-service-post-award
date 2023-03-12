@@ -105,3 +105,8 @@ export interface PartnerDto {
 
   isNonFunded: boolean;
 }
+
+export interface PartnerDtoGql extends PartnerDto {
+  roles: SfRoles;
+  forecastsAndCosts: number;
+}
