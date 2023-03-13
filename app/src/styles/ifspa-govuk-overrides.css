@@ -122,6 +122,10 @@ body,
   padding-bottom: 4px;
 }
 
+.govuk-table__cell .govuk-date-input__item .govuk-form-group {
+  margin-bottom: 0;
+}
+
 .govuk-table__cell div:last-child {
   padding-bottom: 0px;
 }

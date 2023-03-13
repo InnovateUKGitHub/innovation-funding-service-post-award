@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import cx from "classnames";
 
 import { isNumber } from "@framework/util";
@@ -37,9 +37,24 @@ export function getCurrency(value: CurrentArgs["value"], fractionDigits: Current
 export function Currency({ value, fractionDigits = 2, className, ...props }: CurrencyProps) {
   const formattedValue = getCurrency(value, fractionDigits);
 
+  // Enable word wrap if the value is above a trillion pounds.
+  // If Innovate UK ever gives out a grant worth over trillion pounds, please fix.
+  const wordWrap = isNumber(value) && value > 1_000_000_000_000 ? "normal" : "nowrap";
+
   return (
-    <span {...props} className={cx("currency", className)} style={{ ...props.style, whiteSpace: "nowrap" }}>
-      {formattedValue}
+    <span {...props} className={cx("currency", className)} style={{ ...props.style, whiteSpace: wordWrap }}>
+      {formattedValue.split(",").map((x, i, a) => (
+        // Inject ZWSP after commas as a word wrap hint.
+        <Fragment key={i}>
+          {x}
+          {i < a.length - 1 && (
+            <>
+              ,
+              <wbr />
+            </>
+          )}
+        </Fragment>
+      ))}
     </span>
   );
 }
