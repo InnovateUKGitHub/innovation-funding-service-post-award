@@ -720,7 +720,7 @@ export const newDescriptionEntry = () => {
     .contains("Hello! I am the public description for this Cypress project.")
     .clear()
     .type(newPubDescription);
-  cy.get("p.character-count.character-count--default.govuk-body").contains("You have 55 characters");
+  cy.get("p.character-count.character-count--default.govuk-body").contains("You have 31945 characters remaining");
 };
 
 export const proposedSummary = () => {
@@ -731,7 +731,7 @@ export const proposedSummary = () => {
 
 export const newSummaryEntry = () => {
   cy.get("textarea").contains("Howdy! I am the public summary for this Cypress project.").clear().type(newPubSummary);
-  cy.get("p.character-count.character-count--default.govuk-body").contains("You have 51 characters");
+  cy.get("p.character-count.character-count--default.govuk-body").contains("You have 31949 characters remaining");
 };
 
 export const scopeSummaryPage = () => {
