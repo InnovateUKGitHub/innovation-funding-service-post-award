@@ -154,14 +154,23 @@ export const LoanEditTable = ({ data, validator, status, mode, onEdit, onEditLin
               value={x.newValue}
               ariaLabel={`Period ${x.period} new amount`}
               onChange={updatedValue => handleValueChange(x.period, updatedValue)}
-              className={cx({ "loan-table__cell--date-error": isTotalValueInValid || isNewValueInvalid })}
+              className={cx("govuk-input--width-10", {
+                "loan-table__cell--date-error": isTotalValueInValid || isNewValueInvalid,
+              })}
               disabled={isDisabled}
             />
           ) : (
             <Currency value={x.newValue} fractionDigits={0} />
           );
         }}
-        footer={getCurrency(validator.totals.updatedTotal)}
+        footer={
+          <Currency
+            value={validator.totals.updatedTotal}
+            style={{ display: "block" }}
+            className="govuk-input--width-10"
+            fractionDigits={0}
+          />
+        }
       />
 
       {isViewMode ? <LoanEdit.Custom qa="edit-loan" value={x => isViewMode && x.isEditable && onEditLink} /> : null}
