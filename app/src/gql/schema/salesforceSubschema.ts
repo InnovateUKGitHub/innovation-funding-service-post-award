@@ -112,6 +112,7 @@ const getSalesforceSubschema = async ({ api }: { api: Api }) => {
               if (!configuration.sso.enabled && args.login) {
                 switch (args.login) {
                   case "system":
+                    // Replace the items within the context with our new context.
                     Object.assign(
                       ctx ?? {},
                       await createContextFromEmail({ email: configuration.salesforceServiceUser.serviceUsername }),

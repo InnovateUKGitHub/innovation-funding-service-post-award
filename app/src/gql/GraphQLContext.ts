@@ -17,7 +17,11 @@ export type GraphQLContext = PartialGraphQLContext & {
   userContactDataLoader: ReturnType<typeof getUserContactDataLoader>;
 };
 
-export const createContextFromEmail = async ({ email }: { email: string }): Promise<GraphQLContext | undefined> => {
+export const createContextFromEmail = async ({
+  email,
+}: {
+  email: string;
+}): Promise<GraphQLContext | Record<string, never>> => {
   try {
     const api = await Api.asUser(email);
 
@@ -37,11 +41,11 @@ export const createContextFromEmail = async ({ email }: { email: string }): Prom
     return ctx;
   } catch (e) {
     logger.warn("Failed to login", email, e);
-    return undefined;
+    return {};
   }
 };
 
-export const createContext = ({ req }: { req: Request }): Promise<GraphQLContext | undefined> => {
+export const createContext = ({ req }: { req: Request }): Promise<GraphQLContext | Record<string, never>> => {
   const email = req.session?.user.email ?? null;
 
   if (email) return createContextFromEmail({ email });
