@@ -67,7 +67,7 @@ const createFieldHintId = (name: string) => `${name}-hint`;
  *       }}
  *       action="/"
  *     >
- *       <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
+ *       <H3>{getContent(x => x.components.userSwitcher.enterUserSubtitle)}</H3>
  *
  *       <InputForm.String
  *         label="user"
@@ -78,7 +78,7 @@ const createFieldHintId = (name: string) => `${name}-hint`;
  *       />
  *
  *       <InputForm.Submit>
- *         {getContent(x => x.components.userChanger.changeUserMessage)}
+ *         {getContent(x => x.components.userSwitcher.changeUserMessage)}
  *       </InputForm.Submit>
  *     </InputForm.Form>
  *   );

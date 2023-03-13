@@ -126,13 +126,15 @@
       "broadcastLabelStartDate": "Start date:",
       "broadcastLabelEndDate": "End date:"
     },
-    "userChanger": {
+    "userSwitcher": {
       "sectionTitle": "User Switcher",
       "pickUserSubtitle": "From Salesforce",
       "enterUserSubtitle": "Manually from E-Mail",
       "projectDropdownPlaceholder": "-- Select a project --",
       "contactDropdownPlaceholder": "-- Select a contact --",
       "contactListEmpty": "There are no contacts to select for this project",
+      "projectNull": "Salesforce returned a null object when fetching projects",
+      "projectMissing": "Salesforce did not return a single project when fetching projects",
       "switchAndHome": "Go to home",
       "switchAndStay": "Stay on page",
       "manualSwitchAndHome": "Switch user and go to home",

@@ -76,7 +76,15 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
   const contactRoleInfo: Record<string, UserSwitcherTableRow> = {};
 
   if (isLoading) {
-    return <SimpleString>{getContent(x => x.components.userChanger.loadingUsers)}</SimpleString>;
+    return <SimpleString>{getContent(x => x.components.userSwitcher.loadingUsers)}</SimpleString>;
+  }
+
+  if (!data) {
+    return <SimpleString>{getContent(x => x.components.userSwitcher.projectNull)}</SimpleString>;
+  }
+
+  if (data?.salesforce.uiapi.query.Acc_Project__c?.edges?.length !== 1) {
+    return <SimpleString>{getContent(x => x.components.userSwitcher.projectMissing)}</SimpleString>;
   }
 
   const project = getFirstEdge(data?.salesforce.uiapi.query.Acc_Project__c?.edges).node;
@@ -118,7 +126,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
   const users = Object.values(contactRoleInfo);
 
   if (users.length === 0) {
-    return <SimpleString>{getContent(x => x.components.userChanger.contactListEmpty)}</SimpleString>;
+    return <SimpleString>{getContent(x => x.components.userSwitcher.contactListEmpty)}</SimpleString>;
   }
 
   return (
@@ -131,20 +139,20 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
 
       <ProjectContactTable.String
         qa="partner-mo"
-        header={x => x.components.userChanger.tableHeaderMonitoringOfficer}
-        value={x => (x.isMo ? getContent(x => x.components.userChanger.tableHeaderMonitoringOfficer) : "")}
+        header={x => x.components.userSwitcher.tableHeaderMonitoringOfficer}
+        value={x => (x.isMo ? getContent(x => x.components.userSwitcher.tableHeaderMonitoringOfficer) : "")}
       />
 
       <ProjectContactTable.String
         qa="partner-pm"
-        header={x => x.components.userChanger.tableHeaderProjectManager}
-        value={x => (x.isPm ? getContent(x => x.components.userChanger.tableHeaderProjectManager) : "")}
+        header={x => x.components.userSwitcher.tableHeaderProjectManager}
+        value={x => (x.isPm ? getContent(x => x.components.userSwitcher.tableHeaderProjectManager) : "")}
       />
 
       <ProjectContactTable.String
         qa="partner-fc"
-        header={x => x.components.userChanger.tableHeaderFinancialContact}
-        value={x => (x.isFc ? getContent(x => x.components.userChanger.tableHeaderFinancialContact) : "")}
+        header={x => x.components.userSwitcher.tableHeaderFinancialContact}
+        value={x => (x.isFc ? getContent(x => x.components.userSwitcher.tableHeaderFinancialContact) : "")}
       />
 
       <ProjectContactTable.Email
@@ -161,7 +169,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
 
       <ProjectContactTable.Custom
         qa="delete"
-        header={x => x.components.userChanger.tableHeaderSwitchOptions}
+        header={x => x.components.userSwitcher.tableHeaderSwitchOptions}
         value={x => {
           // If the user has an external username (aka can use IFSPA),
           // show the switcher buttons.
@@ -175,10 +183,10 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
                   value={() => x.user.externalUsername || x.user.internalUsername || x.user.email}
                 />
                 <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19" qa="btn-home">
-                  {getContent(x => x.components.userChanger.switchAndHome)}
+                  {getContent(x => x.components.userSwitcher.switchAndHome)}
                 </SelectContactForm.Button>
                 <SelectContactForm.Button name="stay" styling="Link" className="govuk-!-font-size-19" qa="btn-stay">
-                  {getContent(x => x.components.userChanger.switchAndStay)}
+                  {getContent(x => x.components.userSwitcher.switchAndStay)}
                 </SelectContactForm.Button>
               </SelectContactForm.Form>
             );
@@ -226,12 +234,12 @@ const UserSwitcherProjectSelector = () => {
   return (
     <>
       <SelectProjectForm.Form {...userFormProps}>
-        <H3>{getContent(x => x.components.userChanger.pickUserSubtitle)}</H3>
+        <H3>{getContent(x => x.components.userSwitcher.pickUserSubtitle)}</H3>
         <SelectProjectForm.DropdownList
           name="project_id"
           options={projectOptions}
           hasEmptyOption
-          placeholder={getContent(x => x.components.userChanger.projectDropdownPlaceholder)}
+          placeholder={getContent(x => x.components.userSwitcher.projectDropdownPlaceholder)}
           value={p => projectOptions.find(x => p.projectId === x.value)}
           update={(x, value) => (x.projectId = value?.value as string | undefined)}
         />
@@ -254,10 +262,10 @@ const UserSwitcherReset = () => {
       <ResetUserForm.Hidden name="current_url" value={() => returnLocation} />
       <ResetUserForm.Hidden name="reset" value={() => ""} />
       <ResetUserForm.Button name="stay" styling="Primary" qa="reset-and-stay">
-        {getContent(x => x.components.userChanger.resetAndStay)}
+        {getContent(x => x.components.userSwitcher.resetAndStay)}
       </ResetUserForm.Button>
       <ResetUserForm.Button name="home" qa="reset-and-home">
-        {getContent(x => x.components.userChanger.resetAndHome)}
+        {getContent(x => x.components.userSwitcher.resetAndHome)}
       </ResetUserForm.Button>
     </ResetUserForm.Form>
   );
@@ -277,7 +285,7 @@ const UserSwitcherManualEmailEntry = () => {
       }}
       action={DeveloperUserSwitcherPage.routePath}
     >
-      <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
+      <H3>{getContent(x => x.components.userSwitcher.enterUserSubtitle)}</H3>
 
       <ManuallyEnterUserForm.String
         label="user"
@@ -290,10 +298,10 @@ const UserSwitcherManualEmailEntry = () => {
 
       <ManuallyEnterUserForm.Hidden name="current_url" value={() => returnLocation} />
       <ManuallyEnterUserForm.Button name="stay" styling="Primary" qa="manual-change-and-stay">
-        {getContent(x => x.components.userChanger.manualSwitchAndStay)}
+        {getContent(x => x.components.userSwitcher.manualSwitchAndStay)}
       </ManuallyEnterUserForm.Button>
       <ManuallyEnterUserForm.Button name="home" qa="manual-change-and-home">
-        {getContent(x => x.components.userChanger.manualSwitchAndHome)}
+        {getContent(x => x.components.userSwitcher.manualSwitchAndHome)}
       </ManuallyEnterUserForm.Button>
     </ManuallyEnterUserForm.Form>
   );
@@ -303,7 +311,7 @@ const UserSwitcherManualEmailEntry = () => {
  * A development user switching interface to help select a valid contact for projects.
  */
 const UserSwitcher = () => (
-  <Section title={x => x.components.userChanger.sectionTitle}>
+  <Section title={x => x.components.userSwitcher.sectionTitle}>
     <UserSwitcherCurrentUser />
     <UserSwitcherReset />
     <UserSwitcherProjectSelector />
@@ -317,7 +325,7 @@ const UserSwitcher = () => (
 const HiddenUserSwitcher = () => {
   const { getContent } = useContent();
   return (
-    <Info summary={getContent(x => x.components.userChanger.sectionTitle)}>
+    <Info summary={getContent(x => x.components.userSwitcher.sectionTitle)}>
       <UserSwitcher />
     </Info>
   );
