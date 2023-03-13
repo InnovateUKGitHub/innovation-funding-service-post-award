@@ -1,7 +1,7 @@
 import { IFeatureFlags } from "@framework/types";
 import { Field, Int, ObjectType } from "type-graphql";
 
-@ObjectType("ClientConfigFeaturesObject")
+@ObjectType()
 class ClientConfigFeaturesObject implements IFeatureFlags {
   @Field(() => Boolean)
   changePeriodLengthWorkflow!: boolean;

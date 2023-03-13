@@ -1,6 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 
-@ObjectType("ClientConfigAppOptionsPermittedFileTypesObject")
+@ObjectType()
 class ClientConfigAppOptionsPermittedFileTypesObject {
   @Field(() => [String])
   pdfTypes!: string[];
