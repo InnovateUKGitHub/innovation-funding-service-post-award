@@ -39,9 +39,9 @@ const rolesResolver: IFieldResolverOptions = {
     if (!(roleData && contactData)) return permissions;
 
     // Grab the Contact ID that is related to the current logged in user.
-    // In the event the contactId is undefined, for example, incorrectly setup Salesforce,
-    // none of the following checks will set a role properly.
     const contactId = contactData.node?.ContactId?.value;
+    if (!contactId) return permissions;
+
     const project = roleData.node;
 
     for (const { node: projectContactLink } of project.Project_Contact_Links__r.edges) {
