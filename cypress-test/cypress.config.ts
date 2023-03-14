@@ -41,6 +41,10 @@ const defaultCommandTimeout: number = parseInt(process.env.TIMEOUT) ?? 4000;
 
 const isTrue = (s: string = "") => s.toLowerCase() === "true";
 
+const baseUrl = process.env.TEST_URL || accDevUrl;
+
+console.info("*** Targetting url:", baseUrl);
+
 export default defineConfig({
   reporter: "mochawesome",
   reporterOptions: {
@@ -52,7 +56,7 @@ export default defineConfig({
   screenshotOnRunFailure: isTrue(process.env.SCREENSHOTS),
   video: isTrue(process.env.VIDEOS),
   e2e: {
-    baseUrl: process.env.TEST_URL || accDevUrl,
+    baseUrl,
     // setupNodeEvents(on, config) {
     //   // implement node event listeners here
     // },
