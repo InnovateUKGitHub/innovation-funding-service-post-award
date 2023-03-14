@@ -83,7 +83,7 @@ export const createTypedTable = <T,>() => {
     rowIndex?: number;
     dataItem?: T;
     header?: string | number | ContentSelector | ReactElement;
-    ariaSort?: "none" | "ascending" | "descending";
+    "aria-sort"?: "none" | "ascending" | "descending";
     onSortClick?: () => void;
   }
 
@@ -151,7 +151,15 @@ export const createTypedTable = <T,>() => {
    */
   function TableColumn({ paddingRight, classSuffix, ...props }: InternalColumnProps) {
     const { getContent } = useContent();
-    const { header, columnIndex, ariaSort, mode, onSortClick, dataItem, rowIndex } = useTableDataContext();
+    const {
+      header,
+      columnIndex,
+      ["aria-sort"]: ariaSort,
+      mode,
+      onSortClick,
+      dataItem,
+      rowIndex,
+    } = useTableDataContext();
     if (!mode) return null;
 
     const renderHeader = (column: number): JSX.Element => {
@@ -298,7 +306,7 @@ export const createTypedTable = <T,>() => {
                 isValidElement(column?.props.header)
                   ? column?.props.header
                   : getContent(column?.props.header || ""),
-              ariaSort: getColumnOption?.(columnIndex),
+              "aria-sort": getColumnOption?.(columnIndex),
               onSortClick: () => handleSort(columnIndex),
             }}
           >
