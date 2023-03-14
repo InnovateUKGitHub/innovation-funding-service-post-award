@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getIARDueOnClaimPeriods should map to an array of projectIds for which IAR is due 1`] = `
+Array [
+  "1",
+  "2",
+]
+`;

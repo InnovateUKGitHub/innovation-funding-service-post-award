@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapToProjectDto should map the node to a subset of the project dto 1`] = `
+Object {
+  "claimedPercentage": 90,
+  "claimsToReview": 3,
+  "competitionType": "CR&D",
+  "id": "0",
+  "projectNumber": "2345",
+  "roles": Object {
+    "isFc": true,
+    "isMo": false,
+    "isPm": false,
+  },
+  "status": 0,
+  "title": "Allan's Plans",
+}
+`;
+
+exports[`mapToProjectDto should map the node to the projectDto structure 1`] = `
+Object {
+  "claimedPercentage": 90,
+  "claimsToReview": 3,
+  "competitionType": "CR&D",
+  "costsClaimedToDate": 90000,
+  "grantOfferLetterCosts": 100000,
+  "id": "0",
+  "isActive": true,
+  "isPastEndDate": false,
+  "numberOfPeriods": 12,
+  "pcrsQueried": 2,
+  "pcrsToReview": 1,
+  "periodEndDate": 2022-03-24T00:00:00.000Z,
+  "periodId": 1,
+  "periodStartDate": 2022-01-24T00:00:00.000Z,
+  "projectNumber": "2345",
+  "roles": Object {
+    "isFc": true,
+    "isMo": false,
+    "isPm": false,
+  },
+  "status": 0,
+  "title": "Allan's Plans",
+}
+`;

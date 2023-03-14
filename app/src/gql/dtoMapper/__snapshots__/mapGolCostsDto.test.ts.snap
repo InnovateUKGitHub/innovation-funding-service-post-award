@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapToGolCostDtoArray should map the gql data only including fields on the picklist 1`] = `
+Array [
+  Object {
+    "costCategoryId": "0",
+  },
+  Object {
+    "costCategoryId": "2",
+  },
+  Object {
+    "costCategoryId": "unknown category",
+  },
+]
+`;
+
+exports[`mapToGolCostDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
+Array [
+  Object {
+    "costCategoryId": "0",
+    "costCategoryName": "Labour",
+    "value": 1000,
+  },
+  Object {
+    "costCategoryId": "2",
+    "costCategoryName": "Materials",
+    "value": 1000,
+  },
+  Object {
+    "costCategoryId": "unknown category",
+    "costCategoryName": undefined,
+    "value": 0,
+  },
+]
+`;

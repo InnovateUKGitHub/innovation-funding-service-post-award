@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapToMonitoringReportDtoArray should map the gql data only including fields on the picklist 1`] = `
+Array [
+  Object {
+    "headerId": "0",
+    "periodId": 1,
+    "status": 20,
+  },
+  Object {
+    "headerId": "1",
+    "periodId": 2,
+    "status": 40,
+  },
+  Object {
+    "headerId": "2",
+    "periodId": 3,
+    "status": 30,
+  },
+  Object {
+    "headerId": "3",
+    "periodId": 0,
+    "status": 0,
+  },
+]
+`;
+
+exports[`mapToMonitoringReportDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
+Array [
+  Object {
+    "endDate": 2022-04-24T00:00:00.000Z,
+    "headerId": "0",
+    "lastUpdated": 2022-04-24T00:00:00.000Z,
+    "periodId": 1,
+    "projectId": "1",
+    "startDate": 2022-02-24T00:00:00.000Z,
+    "status": 20,
+    "statusName": "Draft label",
+  },
+  Object {
+    "endDate": 2022-04-24T00:00:00.000Z,
+    "headerId": "1",
+    "lastUpdated": 2022-04-24T00:00:00.000Z,
+    "periodId": 2,
+    "projectId": "1",
+    "startDate": 2022-02-24T00:00:00.000Z,
+    "status": 40,
+    "statusName": "Approved label",
+  },
+  Object {
+    "endDate": 2022-04-24T00:00:00.000Z,
+    "headerId": "2",
+    "lastUpdated": 2022-04-24T00:00:00.000Z,
+    "periodId": 3,
+    "projectId": "1",
+    "startDate": 2022-02-24T00:00:00.000Z,
+    "status": 30,
+    "statusName": "Awaiting IUK Approval label",
+  },
+  Object {
+    "endDate": null,
+    "headerId": "3",
+    "lastUpdated": null,
+    "periodId": 0,
+    "projectId": "",
+    "startDate": null,
+    "status": 0,
+    "statusName": "unknown",
+  },
+]
+`;

@@ -3,6 +3,9 @@ import type { CostCategoryDto } from "@framework/dtos";
 import { costCategoryTypeMapper } from "@framework/mappers/costCategory";
 import { numberComparator } from "@framework/util";
 
+/**
+ * from the root `Acc_CostCategory__c` node
+ */
 type CostCategoryNode = Readonly<
   Partial<{
     Id: string;
@@ -12,6 +15,15 @@ type CostCategoryNode = Readonly<
     Acc_DisplayOrder__c: GQL.Value<number>;
   }>
 > | null;
+
+/**
+ * from the root `Acc_Profile__c` node
+ */
+type ProfileNodeForRequiredCostCategories = ReadonlyArray<{
+  node: {
+    Acc_CostCategory__c: GQL.Value<string>;
+  } | null;
+} | null> | null;
 
 type CostCategoryDtoMapping = Pick<
   CostCategoryDto,
@@ -77,21 +89,27 @@ export function mapToCostCategoryDtoArray<
  * Maps CostCategory Edge to filtered and sorted list of cost categories.
  *
  * `id`, `name` and `displayOrder` are required fields as is an array of requiredCategory Ids
+ *
+ * This also requires the `Acc_Profile__c` root node containing `Acc_CostCategory__c`
  */
 export function mapToRequiredSortedCostCategoryDtoArray<
   T extends ReadonlyArray<{ node: CostCategoryNode } | null> | null,
   PickList extends keyof CostCategoryDtoMapping,
 >(
   edges: T,
-  // pickList: ("id" | "name" | "displayOrder" | PickList)[],
   pickList: [...["id", "name", "displayOrder"], ...PickList[]],
-  // pickList: PickList[],
-  requiredCategoryIds: string[],
+  profileNode: ProfileNodeForRequiredCostCategories,
 ): Pick<CostCategoryDtoMapping, "id" | "name" | "displayOrder" | PickList>[] {
   return (edges ?? [])
     .map(node => {
       return mapToCostCategoryDto(node?.node ?? null, pickList);
     })
-    .filter(x => !!x?.name && requiredCategoryIds?.includes(x.id))
+    .filter(
+      x =>
+        !!x?.name &&
+        (profileNode ?? []).some(
+          profile => (profile?.node?.Acc_CostCategory__c?.value ?? "unknown category id") === x.id,
+        ),
+    )
     .sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
 }

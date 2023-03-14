@@ -7,7 +7,6 @@ import {
   PartnerDtoGql,
   ProjectDtoGql,
 } from "@framework/dtos";
-import { numberComparator } from "@framework/util";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { viewForecastQuery } from "./ViewForecast.query";
@@ -16,14 +15,13 @@ import {
   mapToProjectDto,
   getPartnerRoles,
   mapToPartnerDto,
-  mapToCostCategoryDtoArray,
+  mapToRequiredSortedCostCategoryDtoArray,
   getIARDueOnClaimPeriods,
   mapToForecastDetailsDtoArray,
   mapToClaimDetailsDtoArray,
   mapToClaimDtoArray,
   mapToGolCostDtoArray,
 } from "@gql/dtoMapper";
-import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 
 export type Project = Pick<
   ProjectDtoGql,
@@ -127,12 +125,10 @@ export const useViewForecastData = (projectId: string, partnerId: string): Data 
   const claims = mapToClaimDtoArray(claimsGql, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"]);
 
   // COST CATEGORIES
-  const requiredCategoryIds = profileGql.map(x => x?.node?.Acc_CostCategory__c?.value ?? "unknown id");
-
   const costCategories = mapToRequiredSortedCostCategoryDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
     ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
-    requiredCategoryIds,
+    profileGql,
   );
 
   // GOL COSTS

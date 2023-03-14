@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapPartnerDtoArray should map the gql data only including fields on the picklist 1`] = `
+Array [
+  Object {
+    "id": "0",
+    "isLead": true,
+    "roles": Object {
+      "isFc": true,
+      "isMo": false,
+      "isPm": true,
+      "partnerId": "123",
+    },
+  },
+  Object {
+    "id": "1",
+    "isLead": false,
+    "roles": Object {
+      "isFc": true,
+      "isMo": false,
+      "isPm": false,
+      "partnerId": "124",
+    },
+  },
+]
+`;
+
+exports[`mapPartnerDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
+Array [
+  Object {
+    "accountId": "123",
+    "auditReportFrequencyName": "monthly",
+    "awardRate": 10,
+    "capLimit": 100,
+    "claimStatus": 3,
+    "forecastLastModifiedDate": 2022-01-24T00:00:00.000Z,
+    "forecastsAndCosts": 15000,
+    "id": "0",
+    "isLead": true,
+    "isWithdrawn": false,
+    "name": "Swindon University",
+    "newForecastNeeded": true,
+    "organisationType": "Academic",
+    "overheadRate": 100,
+    "partnerStatus": 1,
+    "percentageParticipantCostsClaimed": 200,
+    "percentageParticipantCostsSubmitted": 50,
+    "remainingParticipantGrant": 3000,
+    "roles": Object {
+      "isFc": true,
+      "isMo": false,
+      "isPm": true,
+      "partnerId": "123",
+    },
+    "totalCostsSubmitted": 5000,
+    "totalGrantApproved": 100000,
+    "totalParticipantCostsClaimed": 20000,
+    "totalParticipantGrant": 10000,
+    "totalPrepayment": 4000,
+  },
+  Object {
+    "accountId": "124",
+    "auditReportFrequencyName": "monthly",
+    "awardRate": 10,
+    "capLimit": 100,
+    "claimStatus": 3,
+    "forecastLastModifiedDate": 2022-01-24T00:00:00.000Z,
+    "forecastsAndCosts": 15000,
+    "id": "1",
+    "isLead": false,
+    "isWithdrawn": true,
+    "name": "Kettering Nursing College",
+    "newForecastNeeded": true,
+    "organisationType": "Academic",
+    "overheadRate": 100,
+    "partnerStatus": 4,
+    "percentageParticipantCostsClaimed": 200,
+    "percentageParticipantCostsSubmitted": 50,
+    "remainingParticipantGrant": 3000,
+    "roles": Object {
+      "isFc": true,
+      "isMo": false,
+      "isPm": false,
+      "partnerId": "124",
+    },
+    "totalCostsSubmitted": 5000,
+    "totalGrantApproved": 100000,
+    "totalParticipantCostsClaimed": 20000,
+    "totalParticipantGrant": 10000,
+    "totalPrepayment": 4000,
+  },
+]
+`;

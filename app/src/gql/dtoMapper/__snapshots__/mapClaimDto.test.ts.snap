@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapToClaimDtoArray should map the gql data only including fields on the picklist 1`] = `
+Array [
+  Object {
+    "id": "id-0",
+    "paidDate": 2020-01-21T00:00:00.000Z,
+  },
+  Object {
+    "id": "id-1",
+    "paidDate": null,
+  },
+  Object {
+    "id": "id-2",
+    "paidDate": null,
+  },
+  Object {
+    "id": "id-3-defaults",
+    "paidDate": null,
+  },
+]
+`;
+
+exports[`mapToClaimDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
+Array [
+  Object {
+    "id": "id-0",
+    "isApproved": true,
+    "isFinalClaim": true,
+    "paidDate": 2020-01-21T00:00:00.000Z,
+    "periodId": 2,
+  },
+  Object {
+    "id": "id-1",
+    "isApproved": true,
+    "isFinalClaim": false,
+    "paidDate": null,
+    "periodId": 3,
+  },
+  Object {
+    "id": "id-2",
+    "isApproved": true,
+    "isFinalClaim": false,
+    "paidDate": null,
+    "periodId": 3,
+  },
+  Object {
+    "id": "id-3-defaults",
+    "isApproved": false,
+    "isFinalClaim": false,
+    "paidDate": null,
+    "periodId": 0,
+  },
+]
+`;

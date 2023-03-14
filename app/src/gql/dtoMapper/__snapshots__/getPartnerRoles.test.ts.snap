@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getPartnerRoles should map from the partnerRoles object to a list of partner roles 1`] = `
+Array [
+  Object {
+    "isFc": true,
+    "isMo": false,
+    "isPm": false,
+    "partnerId": "1",
+  },
+  Object {
+    "isFc": false,
+    "isMo": false,
+    "isPm": true,
+    "partnerId": "2",
+  },
+  Object {
+    "isFc": false,
+    "isMo": true,
+    "isPm": false,
+    "partnerId": "3",
+  },
+]
+`;

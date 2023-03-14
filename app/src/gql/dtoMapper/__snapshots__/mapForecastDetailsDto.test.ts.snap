@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapToForecastDetailsDtoArray should map the gql data only including fields on the picklist 1`] = `
+Array [
+  Object {
+    "id": "0",
+    "periodId": 3,
+    "value": 1000,
+  },
+  Object {
+    "id": "1",
+    "periodId": 2,
+    "value": 1000,
+  },
+  Object {
+    "id": "3",
+    "periodId": 0,
+    "value": 0,
+  },
+]
+`;
+
+exports[`mapToForecastDetailsDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
+Array [
+  Object {
+    "costCategoryId": "Labour",
+    "id": "0",
+    "periodEnd": 2021-03-25T00:00:00.000Z,
+    "periodId": 3,
+    "periodStart": 2021-01-25T00:00:00.000Z,
+    "value": 1000,
+  },
+  Object {
+    "costCategoryId": "Travel",
+    "id": "1",
+    "periodEnd": 2021-03-25T00:00:00.000Z,
+    "periodId": 2,
+    "periodStart": 2021-01-25T00:00:00.000Z,
+    "value": 1000,
+  },
+  Object {
+    "costCategoryId": "unknown",
+    "id": "3",
+    "periodEnd": null,
+    "periodId": 0,
+    "periodStart": null,
+    "value": 0,
+  },
+]
+`;
