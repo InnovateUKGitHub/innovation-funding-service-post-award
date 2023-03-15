@@ -168,7 +168,7 @@ export const LoanEditTable = ({ data, validator, status, mode, onEdit, onEditLin
             value={validator.totals.updatedTotal}
             style={{ display: "block" }}
             className="govuk-input--width-10"
-            fractionDigits={0}
+            fractionDigits={2}
           />
         }
       />
