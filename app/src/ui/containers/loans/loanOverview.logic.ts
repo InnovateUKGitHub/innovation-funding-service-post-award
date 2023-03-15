@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { loanOverviewQuery } from "./LoanOverview.query";
-import { LoanOverviewQuery, LoanOverviewQuery$data } from "./__generated__/LoanOverviewQuery.graphql";
+import { LoanOverviewQuery } from "./__generated__/LoanOverviewQuery.graphql";
 import { mapToLoanDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 
 export type Loan = {

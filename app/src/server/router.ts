@@ -65,7 +65,7 @@ const getServerRoutes = async () => {
   // If no error was thrown, render a "Not Found Error"
   router.use((req, res, next) => serverRender({ schema })({ req, res, next, err: new NotFoundError() }));
 
-  // If an error occured, render the error.
+  // If an error occurred, render the error.
   router.use(
     ((err, req, res, next) => {
       // Form validation errors are technically "an error" which could be caught.
@@ -79,8 +79,8 @@ const getServerRoutes = async () => {
     }) as ErrorRequestHandler,
   );
 
-  // If an error occured, and all of our React rendering has failed, render the fallback error page.
-  router.use(((err, req, res, next) => {
+  // If an error occurred, and all of our React rendering has failed, render the fallback error page.
+  router.use(((err, req, res) => {
     logger.error("Failed to render React error page.", err);
     res.status(500).send(staticHtmlError.replace(/<<ifsroot>>/g, configuration.urls.ifsRoot));
   }) as ErrorRequestHandler);

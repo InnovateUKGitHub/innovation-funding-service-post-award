@@ -30,7 +30,18 @@ export function parseLogLevel(value?: string | LogLevel): LogLevel {
   }
 }
 
-export function getLogLevelNumber(value: LogLevel) {
+/**
+ * converts from LogLevel<string> enum to numerical value
+ *
+ * @example
+    [LogLevel.TRACE]: 0;
+    [LogLevel.VERBOSE]: 1;
+    [LogLevel.DEBUG]: 2;
+    [LogLevel.INFO]: 3;
+    [LogLevel.WARN]: 4;
+    [LogLevel.ERROR]: 5;
+ */
+export function getLogLevelNumber(value: LogLevel): number {
   switch (value) {
     case LogLevel.TRACE:
       return 0;

@@ -28,7 +28,6 @@ const ProjectDetailProjectContactLinkTable = ({
   afterContent,
   hideIfNoContactsFound = false,
   hidePartnerColumn = false,
-  leadParticipantId,
 }: {
   project: ProjectDetailProjectContactLinkTableFragment$key;
   partnerTypeWhitelist?: string[];

@@ -19,7 +19,7 @@ interface ExternalProjectRoles extends ExternalRoles {
 
 const rolesResolver: IFieldResolverOptions = {
   selectionSet: `{ Id }`,
-  async resolve(input, args, ctx: GraphQLContext, info): Promise<ExternalProjectRoles> {
+  async resolve(input, args, ctx: GraphQLContext): Promise<ExternalProjectRoles> {
     const isSalesforceSystemUser = ctx.email === configuration.salesforceServiceUser.serviceUsername;
 
     const contactData = await ctx.userContactDataLoader.load(ctx.email);

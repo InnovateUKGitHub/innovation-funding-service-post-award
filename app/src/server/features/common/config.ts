@@ -1,5 +1,4 @@
 import bytes from "bytes";
-import fs from "fs";
 import { parseLogLevel } from "@framework/types/logLevel";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFeatureFlags, LogLevel } from "@framework/types";

@@ -1,4 +1,4 @@
-import { Button, createTypedForm, H3, Info, Section } from "@ui/components";
+import { Button, createTypedForm, Info, Section } from "@ui/components";
 import { useContent } from "@ui/hooks";
 import { DeveloperPageCrasherPage } from "./PageCrasher.page";
 import { DeveloperPageCrasherForbiddenPage } from "./PageCrasherForbidden.page";

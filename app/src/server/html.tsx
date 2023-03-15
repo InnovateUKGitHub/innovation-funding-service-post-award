@@ -1,5 +1,4 @@
 import { HelmetData } from "react-helmet";
-import type { PreloadedState } from "redux";
 import * as colour from "../ui/styles/colours";
 import { configuration } from "../server/features/common";
 

@@ -28,7 +28,7 @@ const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 export const ProjectDocumentPage = (
   props: ContainerProps<ProjectDocumentPageParams, ProjectDocumentPageData, Callbacks>,
 ) => {
-  const { project, partners, editor, routes, messages, onChange } = props;
+  const { project, partners, editor, messages, onChange } = props;
   const { getContent } = useContent();
 
   const stores = useStores();

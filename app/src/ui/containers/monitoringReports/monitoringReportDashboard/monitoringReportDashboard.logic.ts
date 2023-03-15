@@ -6,7 +6,6 @@ import {
   MonitoringReportDashboardQuery,
   MonitoringReportDashboardQuery$data,
 } from "./__generated__/MonitoringReportDashboardQuery.graphql";
-import { mapMonitoringReportStatus } from "@framework/util/monitoringReportStatus";
 import { useMemo } from "react";
 import { mapToMonitoringReportDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 

@@ -189,9 +189,6 @@ const ProjectCreator = () => {
 
 /**
  * A development user switching interface, hidden behind an info-box.
- *
- * @param props.isOnUnauthenticatedPage If the page you are currently on is the "Unauthenticated" page. Disables page returns.
- * @returns A React Component
  */
 const HiddenProjectCreator = () => {
   const { getContent } = useContent();

@@ -13,6 +13,7 @@ module.exports = {
       version: "18.2.0",
     },
   },
+  ignorePatterns: ["*/__generated__/**/*"],
   rules: {
     "no-unused-vars": ["error", { ignoreRestSiblings: true, argsIgnorePattern: "^_" }],
   },
