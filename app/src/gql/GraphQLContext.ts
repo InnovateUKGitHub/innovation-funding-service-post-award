@@ -17,21 +17,17 @@ export type GraphQLContext = PartialGraphQLContext & {
   userContactDataLoader: ReturnType<typeof getUserContactDataLoader>;
 };
 
-export const createContextFromEmail = async ({
-  email,
-}: {
-  email: string;
-}): Promise<GraphQLContext | Record<string, never>> => {
+export const createContextFromEmail = async ({ email }: { email: string }): Promise<GraphQLContext | EmptyObject> => {
   try {
     const api = await Api.asUser(email);
 
-    // Create an incomplete GraphQL context for use in Dataloaders.
+    // Create an incomplete GraphQL context for use in DataLoaders.
     const partialCtx: PartialGraphQLContext = {
       email,
       api,
     };
 
-    // Create a full context, including dataloaders.
+    // Create a full context, including DataLoaders.
     const ctx: GraphQLContext = {
       ...partialCtx,
       projectRolesDataLoader: getProjectRolesDataLoader(partialCtx),
@@ -45,7 +41,7 @@ export const createContextFromEmail = async ({
   }
 };
 
-export const createContext = ({ req }: { req: Request }): Promise<GraphQLContext | Record<string, never>> => {
+export const createContext = ({ req }: { req: Request }): Promise<GraphQLContext | EmptyObject> => {
   const email = req.session?.user.email ?? null;
 
   if (email) return createContextFromEmail({ email });
