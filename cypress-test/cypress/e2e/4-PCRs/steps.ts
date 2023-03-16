@@ -173,6 +173,11 @@ export const changeDurationPcrType = () => {
   cy.get("dd.govuk-summary-list__value").contains("Change project duration");
 };
 
+export const projectOnHoldPcrType = () => {
+  cy.get("dt.govuk-summary-list__key").contains("Types");
+  cy.get("dd.govuk-summary-list__value").contains("Put project on hold");
+};
+
 export const giveUsInfoTodo = () => {
   cy.get("h2").contains("Give us information");
   cy.assertPcrCompletionStatus("Add a partner", "To do");
@@ -866,6 +871,12 @@ export const changeDurationHeadings = () => {
   shouldShowProjectTitle;
 };
 
+export const projectOnHoldHeadings = () => {
+  cy.get("h1").contains("Put project on hold");
+  cy.backLink("Back to request");
+  shouldShowProjectTitle;
+};
+
 export const tickEachPartner = () => {
   cy.get("p").contains("This will change the partner's name in all projects");
   cy.get("h2").contains("Select partner");
@@ -903,7 +914,7 @@ export const summaryOfChanges = () => {
     "Proposed name",
     "Change of name certificate",
     "ABS EUI Medium Enterprise",
-    "	Cyberdyne systems",
+    "Munce Inc",
     "testfile.doc",
     "Edit",
   ].forEach(item => {
@@ -966,4 +977,19 @@ export const markAsCompleteSave = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.getByQA("button_default-qa").contains("Save and return to request").click();
   cy.get("strong").contains("Complete");
+};
+
+export const populateDateFields = () => {
+  cy.get("#suspensionStartDate_month").type("12");
+  cy.get("#suspensionStartDate_year").type("2023");
+  cy.get("#suspensionEndDate_month").type("03");
+  cy.get("#suspensionEndDate_year").type("2024");
+};
+
+export const dateChangeSummary = () => {
+  cy.get("a").contains("Edit");
+  projectOnHoldHeadings;
+  ["First day of pause", "2023", "Edit", "Last day of pause (if known)", "2024"].forEach(summary => {
+    cy.getByQA("projectSuspension").contains(summary);
+  });
 };
