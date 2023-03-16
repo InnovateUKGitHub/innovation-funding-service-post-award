@@ -163,6 +163,11 @@ export const correctPcrType = () => {
   cy.get("dd.govuk-summary-list__value").contains("Add a partner");
 };
 
+export const changeNamePcrType = () => {
+  cy.get("dt.govuk-summary-list__key").contains("Types");
+  cy.get("dd.govuk-summary-list__value").contains("Change a partner's name");
+};
+
 export const giveUsInfoTodo = () => {
   cy.get("h2").contains("Give us information");
   cy.assertPcrCompletionStatus("Add a partner", "To do");
@@ -842,4 +847,68 @@ export const saveAndReturn = () => {
   cy.wait(500);
   cy.getByQA("button_default-qa").contains("Save and return to request").click({ force: true });
   cy.get("h1").contains("Request");
+};
+
+export const correctHeadings = () => {
+  cy.get("h1").contains("Change a partner's name");
+  cy.backLink("Back to request");
+  shouldShowProjectTitle;
+};
+
+export const tickEachPartner = () => {
+  cy.get("p").contains("This will change the partner's name in all projects");
+  cy.get("h2").contains("Select partner");
+  cy.getByLabel("EUI Small Ent Health").click();
+  cy.getByLabel("A B Cad Services").wait(500).click();
+  cy.getByLabel("ABS EUI Medium Enterprise").wait(500).click({ force: true });
+};
+
+export const saveContinueProceed = () => {
+  cy.getByQA("button_default-qa").contains("Save and continue").click();
+  cy.get("h2").contains("Upload change of name certificate");
+  shouldShowProjectTitle;
+  cy.get("h1").contains("Change a partner's name");
+};
+
+export const uploadNameChange = () => {
+  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.submitButton("Upload").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+};
+
+export const showUploadedFiles = () => {
+  cy.get("h2").contains("Files uploaded");
+  ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach(header => {
+    cy.tableHeader(header);
+  });
+  ["testfile.doc", "Unknown", "0KB", "James Black", "Remove"].forEach(cell => {
+    cy.tableCell(cell);
+  });
+};
+
+export const summaryOfChanges = () => {
+  [
+    "Existing name",
+    "Proposed name",
+    "Change of name certificate",
+    "ABS EUI Medium Enterprise",
+    "	Cyberdyne systems",
+    "testfile.doc",
+    "Edit",
+  ].forEach(item => {
+    cy.getByQA("name-change-summary-list").contains(item);
+  });
+};
+
+export const assertChangeNamePage = () => {
+  cy.get("h1").contains("Change a partner's name");
+  cy.backLink("Back to request");
+  shouldShowProjectTitle;
+};
+
+export const completeChangeName = () => {
+  cy.get("h2").contains("Mark as complete");
+  cy.getByLabel("I agree with this change").click();
+  cy.getByQA("button_default-qa").contains("Save and return to request").click();
+  cy.get("strong").contains("Complete");
 };

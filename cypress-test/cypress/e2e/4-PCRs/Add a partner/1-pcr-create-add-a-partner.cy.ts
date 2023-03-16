@@ -47,7 +47,7 @@ describe("PCR >  Add a partner > Create PCR", () => {
   });
 
   it(
-    "Should show a 'Give us information' section with the Remove a partner PCR type listed and 'TO DO' listed beneath",
+    "Should show a 'Give us information' section with the Add a partner PCR type listed and 'TO DO' listed beneath",
     giveUsInfoTodo,
   );
 
