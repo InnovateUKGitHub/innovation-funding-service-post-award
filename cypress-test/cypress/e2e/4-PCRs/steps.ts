@@ -168,6 +168,11 @@ export const changeNamePcrType = () => {
   cy.get("dd.govuk-summary-list__value").contains("Change a partner's name");
 };
 
+export const changeDurationPcrType = () => {
+  cy.get("dt.govuk-summary-list__key").contains("Types");
+  cy.get("dd.govuk-summary-list__value").contains("Change project duration");
+};
+
 export const giveUsInfoTodo = () => {
   cy.get("h2").contains("Give us information");
   cy.assertPcrCompletionStatus("Add a partner", "To do");
@@ -849,8 +854,14 @@ export const saveAndReturn = () => {
   cy.get("h1").contains("Request");
 };
 
-export const correctHeadings = () => {
+export const changeNameHeadings = () => {
   cy.get("h1").contains("Change a partner's name");
+  cy.backLink("Back to request");
+  shouldShowProjectTitle;
+};
+
+export const changeDurationHeadings = () => {
+  cy.get("h1").contains("Change project duration");
   cy.backLink("Back to request");
   shouldShowProjectTitle;
 };
@@ -909,6 +920,50 @@ export const assertChangeNamePage = () => {
 export const completeChangeName = () => {
   cy.get("h2").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
+  cy.getByQA("button_default-qa").contains("Save and return to request").click();
+  cy.get("strong").contains("Complete");
+};
+
+export const existingProjectDetails = () => {
+  cy.get("h2").contains("Existing project details");
+  ["Start and end date", "2023"].forEach(dates => {
+    cy.getByQA("field-currentDates").contains(dates);
+  });
+  ["Duration", "12 months"].forEach(duration => {
+    cy.getByQA("field-currentDuration").contains(duration);
+  });
+};
+
+export const selectDateDropdown = () => {
+  cy.get(`select[id="timeExtension"]`).select("March 2024");
+  ["Duration", "13 months"].forEach(duration => {
+    cy.getByQA("field-proposedDuration").contains(duration);
+  });
+};
+
+export const existingSubheadings = () => {
+  cy.get("h2").contains("Existing project details");
+  ["Start and end date", "2023"].forEach(date => {
+    cy.getByQA("currentStartToEndDate").contains(date);
+  });
+  ["Duration", "12 months"].forEach(duration => {
+    cy.getByQA("currentDuration").contains(duration);
+  });
+};
+
+export const proposedSubheadings = () => {
+  cy.get("h2").contains("Proposed project details");
+  ["Start and end date", "2024"].forEach(date => {
+    cy.getByQA("newStartToEndDate").contains(date);
+  });
+  cy.get("a").contains("Edit");
+  ["Duration", "13 months"].forEach(duration => {
+    cy.getByQA("newDuration").contains(duration);
+  });
+};
+
+export const markAsCompleteSave = () => {
+  cy.getByLabel("I agree with this change.").click();
   cy.getByQA("button_default-qa").contains("Save and return to request").click();
   cy.get("strong").contains("Complete");
 };

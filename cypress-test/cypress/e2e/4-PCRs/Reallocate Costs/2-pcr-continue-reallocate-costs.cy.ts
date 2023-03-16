@@ -1,7 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
   clickCreateRequestButtonProceed,
-  deletePcr,
   reallocateCostsGiveInfoTodo,
   reallocateCostsPcrType,
   reallocateCostsTableHeaders,

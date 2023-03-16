@@ -12,10 +12,11 @@ import {
   summaryOfChanges,
   assertChangeNamePage,
   completeChangeName,
-  correctHeadings,
+  changeNameHeadings,
 } from "../steps";
 
 const projectManager = "james.black@euimeabs.test";
+
 describe("PCR >  Change a partner's name > Create PCR", () => {
   before(() => {
     visitApp({ asUser: projectManager, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
@@ -49,7 +50,7 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
     cy.get("a").contains("Change a partner's name").click();
   });
 
-  it("Should contain the PCR title, correct project title and back button", correctHeadings);
+  it("Should contain the PCR title, correct project title and back button", changeNameHeadings);
 
   it("Should contain guidance information and tick each list item of partners", tickEachPartner);
 
