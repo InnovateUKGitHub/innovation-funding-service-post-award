@@ -1,0 +1,113 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Currency /> @renders number below a trillion with large number above a trillion 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: normal;"
+>
+  £4
+  ,
+  <wbr />
+  123
+  ,
+  <wbr />
+  456
+  ,
+  <wbr />
+  789
+  ,
+  <wbr />
+  999.00
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with large number below a negative trillion 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  -£999,999,999,999,999.00
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with negative four digit number 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  -£9,876.00
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with negative two digit number 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  -£98.00
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with negative value with pence 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  -£12.34
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with null 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  £0.00
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with positive four digit number 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  £1,234.00
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with positive two digit number 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  £12.00
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with positive value with pence 1`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  £98.76
+</span>
+`;
+
+exports[`<Currency /> @renders number below a trillion with positive value with pence 2`] = `
+<span
+  class="currency"
+  data-qa="testbed-currency"
+  style="white-space: nowrap;"
+>
+  £98.76
+</span>
+`;

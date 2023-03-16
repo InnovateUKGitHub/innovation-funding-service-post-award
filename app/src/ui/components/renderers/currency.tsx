@@ -11,6 +11,7 @@ interface CurrentArgs {
 export interface CurrencyProps extends CurrentArgs {
   className?: string | false;
   style?: React.CSSProperties;
+  qa?: string;
 }
 
 /**
@@ -34,27 +35,35 @@ export function getCurrency(value: CurrentArgs["value"], fractionDigits: Current
 /**
  * Formatted currency component
  */
-export function Currency({ value, fractionDigits = 2, className, ...props }: CurrencyProps) {
+export function Currency({ qa, value, fractionDigits = 2, className, ...props }: CurrencyProps) {
   const formattedValue = getCurrency(value, fractionDigits);
 
   // Enable word wrap if the value is above a trillion pounds.
   // If Innovate UK ever gives out a grant worth over trillion pounds, please fix.
-  const wordWrap = isNumber(value) && value > 1_000_000_000_000 ? "normal" : "nowrap";
+  const shouldWordWrap = isNumber(value) && value > 1_000_000_000_000;
+  const wordWrap = shouldWordWrap ? "normal" : "nowrap";
 
   return (
-    <span {...props} className={cx("currency", className)} style={{ ...props.style, whiteSpace: wordWrap }}>
-      {formattedValue.split(",").map((x, i, a) => (
-        // Inject ZWSP after commas as a word wrap hint.
-        <Fragment key={i}>
-          {x}
-          {i < a.length - 1 && (
-            <>
-              ,
-              <wbr />
-            </>
-          )}
-        </Fragment>
-      ))}
+    <span
+      {...props}
+      data-qa={qa}
+      className={cx("currency", className)}
+      style={{ ...props.style, whiteSpace: wordWrap }}
+    >
+      {shouldWordWrap
+        ? formattedValue.split(",").map((x, i, a) => (
+            // Inject ZWSP after commas as a word wrap hint.
+            <Fragment key={i}>
+              {x}
+              {shouldWordWrap && i < a.length - 1 && (
+                <>
+                  ,
+                  <wbr />
+                </>
+              )}
+            </Fragment>
+          ))
+        : formattedValue}
     </span>
   );
 }

@@ -81,10 +81,7 @@ exports[`<ClaimDrawdownTable /> @returns with UI when competition is LOANS 1`] =
             class="currency"
             style="white-space: nowrap;"
           >
-            £30
-            ,
-            <wbr />
-            000.00
+            £30,000.00
           </span>
         </td>
         <td
@@ -94,10 +91,7 @@ exports[`<ClaimDrawdownTable /> @returns with UI when competition is LOANS 1`] =
             class="currency"
             style="white-space: nowrap;"
           >
-            £6
-            ,
-            <wbr />
-            000.00
+            £6,000.00
           </span>
         </td>
         <td
@@ -107,10 +101,7 @@ exports[`<ClaimDrawdownTable /> @returns with UI when competition is LOANS 1`] =
             class="currency"
             style="white-space: nowrap;"
           >
-            £10
-            ,
-            <wbr />
-            000.00
+            £10,000.00
           </span>
         </td>
         <td
@@ -120,10 +111,7 @@ exports[`<ClaimDrawdownTable /> @returns with UI when competition is LOANS 1`] =
             class="currency"
             style="white-space: nowrap;"
           >
-            £14
-            ,
-            <wbr />
-            000.00
+            £14,000.00
           </span>
         </td>
       </tr>

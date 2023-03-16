@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { queryByTestId, render } from "@testing-library/react";
 import { Currency, CurrencyProps } from "@ui/components/renderers/currency";
 
 describe("<Currency />", () => {
@@ -29,20 +29,24 @@ describe("<Currency />", () => {
     });
 
     test.each`
-      name                                 | inboundValue | expectedValue
-      ${"with null"}                       | ${null}      | ${"£0.00"}
-      ${"with positive value with pence"}  | ${98.76}     | ${"£98.76"}
-      ${"with positive value with pence"}  | ${98.76}     | ${"£98.76"}
-      ${"with positive two digit number"}  | ${12}        | ${"£12.00"}
-      ${"with positive four digit number"} | ${1234}      | ${"£1,234.00"}
-      ${"with negative value with pence"}  | ${-12.34}    | ${"-£12.34"}
-      ${"with negative two digit number"}  | ${-98}       | ${"-£98.00"}
-      ${"with negative four digit number"} | ${-9876}     | ${"-£9,876.00"}
-    `("$name", ({ inboundValue, expectedValue }) => {
-      const { queryByText } = setup({ value: inboundValue });
+      name                                             | inboundValue            | expectedValue
+      ${"with null"}                                   | ${null}                 | ${"£0.00"}
+      ${"with positive value with pence"}              | ${98.76}                | ${"£98.76"}
+      ${"with positive value with pence"}              | ${98.76}                | ${"£98.76"}
+      ${"with positive two digit number"}              | ${12}                   | ${"£12.00"}
+      ${"with positive four digit number"}             | ${1234}                 | ${"£1,234.00"}
+      ${"with negative value with pence"}              | ${-12.34}               | ${"-£12.34"}
+      ${"with negative two digit number"}              | ${-98}                  | ${"-£98.00"}
+      ${"with negative four digit number"}             | ${-9876}                | ${"-£9,876.00"}
+      ${"with large number above a trillion"}          | ${4_123_456_789_999}    | ${"£4,123,456,789,999.00"}
+      ${"with large number below a negative trillion"} | ${-999_999_999_999_999} | ${"-£999,999,999,999,999.00"}
+    `("number below a trillion $name", ({ inboundValue, expectedValue }) => {
+      const { queryByTestId } = setup({ qa: "testbed-currency", value: inboundValue });
 
-      const targetValue = queryByText(expectedValue);
+      const targetValue = queryByTestId("testbed-currency");
       expect(targetValue).toBeInTheDocument();
+      expect(targetValue).toHaveTextContent(expectedValue);
+      expect(targetValue).toMatchSnapshot();
     });
 
     describe("with className", () => {
