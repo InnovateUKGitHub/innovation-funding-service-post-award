@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { ForecastDetailsDTO, ProjectRole } from "@framework/types";
-import { getArrayFromPeriod, isNumber } from "@framework/util";
+import { getArrayExcludingPeriods, isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
 import { IEditorStore, useStores } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
@@ -36,14 +36,18 @@ const UpdateForecastComponent = (props: ForecastUpdateParams & ForecastUpdateDat
     forecastData: ForecastData,
     editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>,
   ) => {
-    const { partnerId, projectId, periodId, routes, onChange } = props;
+    const { partnerId, projectId, routes, onChange } = props;
     const { project, claim, partner } = forecastData;
 
     const handleSubmit = () => {
       if (!isProjectActive) return;
 
-      const forecasts = getArrayFromPeriod(editor.data, periodId, project.numberOfPeriods);
-      return props.onChange(true, forecasts);
+      // Get a set of periods that we have ALREADY claimed.
+      const periodsClaimed = new Set(combined.data?.data.claims?.map(x => x.periodId));
+
+      // Get a DTO array of periods that we have not yet claimed.
+      const arrayExcludingClaimedPeriods = getArrayExcludingPeriods(editor.data, periodsClaimed);
+      return props.onChange(true, arrayExcludingClaimedPeriods);
     };
 
     const renderOverheadsRate = (overheadRate: number | null) => {
