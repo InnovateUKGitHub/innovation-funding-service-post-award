@@ -454,3 +454,120 @@ export const showAClaim = () => {
     cy.tableHeader(header);
   });
 };
+
+export const openSectionClaimData = () => {
+  cy.get("h2").contains("Open");
+  [
+    "Partner",
+    "Forecast costs for period",
+    "Actual costs for period",
+    "Difference",
+    "Status",
+    "Date of last update",
+  ].forEach(header => {
+    cy.tableHeader(header);
+  });
+  [
+    "EUI Small Ent Health (Lead)",
+    "£350,000.00",
+    "£0.00",
+    "Draft",
+    "View",
+    "ABS EUI Medium Enterprise",
+    "£3,300.00",
+    "-£3,300.00",
+    "Submitted to Monitoring Officer",
+  ].forEach(cell => {
+    cy.tableCell(cell);
+  });
+};
+
+export const closedSectionAccordions = () => {
+  cy.get("h2").contains("Closed");
+  cy.get("span").contains("Show all sections").click();
+  ["EUI Small Ent Health (Lead)", "A B Cad Services", "ABS EUI Medium Enterprise"].forEach(project => {
+    cy.get("span").contains(project);
+  });
+  cy.get("p").contains("There are no closed claims for this partner");
+};
+
+export const compNameAndHeadings = () => {
+  ["Competition name:", "Competition type:"].forEach(comp => {
+    cy.get("span").contains(comp);
+  }),
+    shouldShowProjectTitle,
+    cy.get("h1").contains("Claim");
+  cy.get("h2").contains("ABS EUI Medium Enterprise claim");
+};
+
+export const costCatWithClaimDetails = () => {
+  ["Category", "Forecast for period", "Costs claimed this period", "Difference (£)", "Difference (%)"].forEach(
+    claimHead => {
+      cy.tableHeader(claimHead);
+    },
+  ),
+    [
+      "Labour",
+      "Overheads",
+      "Materials",
+      "Capital usage",
+      "Subcontracting",
+      "Travel and subsistence",
+      "Other costs",
+      "Other costs 2",
+      "Other costs 3",
+      "Other costs 4",
+      "Other costs 5",
+      "Total",
+    ].forEach(costCat => {
+      cy.get("td:nth-child(1)").contains(costCat);
+    }),
+    ["£2,000.00", "£100.00", "£200.00", "£1,000.00", "£0.00", "£3,300.00"].forEach(claimCost => {
+      cy.get("td:nth-child(3)").contains(claimCost);
+    }),
+    ["-£2,000.00", "-£100.00", "-£200.00", "-£1,000.00", "£0.00", "-£3,300.00"].forEach(currencyDifference => {
+      cy.get("td:nth-child(4)").contains(currencyDifference);
+    });
+  cy.tableCell("0.00%");
+};
+
+export const queryOrSubmitOptions = () => {
+  cy.get("h2").contains("How do you want to proceed with this claim?");
+  cy.get(`input[id="status_MO Queried"]`).click({ force: true });
+  cy.get(`input[id="status_Awaiting IUK Approval"]`).click({ force: true });
+};
+
+export const additionalInfoSection = () => {
+  cy.get("h2").contains("Additional information");
+  cy.get("p").contains("If you query the claim, you must explain");
+  cy.get("p").contains("I am satisfied that the costs claimed appear to comply with the terms and conditions");
+  cy.getByQA("cr&d-reminder").contains("You must submit a monitoring report");
+};
+
+export const queryClaimToFc = () => {
+  cy.get(`input[id="status_MO Queried"]`).click({ force: true });
+  cy.get("textarea").clear().type(standardComments);
+  cy.get("p").contains("You have 926 characters remaining");
+  cy.getByQA("button_default-qa").contains("Send query").click({ force: true });
+};
+
+export const navigateToDashSwitchToFC = () => {
+  cy.backLink("Back to project").click();
+  cy.get("h1").contains("Project overview");
+  cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
+};
+
+export const navigateToQueriedClaim = () => {
+  cy.selectTile("Claims");
+  cy.tableCell("Queried by Monitoring Officer");
+  cy.get("a").contains("Edit").click();
+};
+
+export const resubmitClaimAsFc = () => {
+  cy.get("td").contains("This is a standard message for use in a text box.");
+  cy.getByQA("button_default-qa").contains("Continue to claims documents").click();
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.getByQA("button_default-qa").contains("Continue to summary").click();
+  cy.get("h1").contains("Claim summary");
+  cy.getByQA("button_default-qa").contains("Submit claim").click();
+};
