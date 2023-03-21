@@ -273,7 +273,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     documents: DocumentSummaryDto[],
     competitionType: string,
   ) {
-    const LineItemTable = ACC.createTypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
 
     const documentSection = this.getCompetitionRenderTableDocumentContent(competitionType, documents, editor);

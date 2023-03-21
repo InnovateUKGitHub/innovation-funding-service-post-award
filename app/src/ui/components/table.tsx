@@ -1,4 +1,4 @@
-import React, { createContext, isValidElement, useContext, useMemo, ReactElement } from "react";
+import React, { createContext, isValidElement, useContext, useMemo, ReactElement, Fragment } from "react";
 import cx from "classnames";
 import _isPlainObject from "lodash.isplainobject";
 
@@ -293,9 +293,9 @@ export const createTypedTable = <T,>() => {
 
     const { handleSort, getColumnOption, sortedRows } = useTableSorter(getSortKeys(children), data);
 
-    const headers = children.map(
-      (column, columnIndex) =>
-        isValidElement<InternalColumnProps>(column) && (
+    const headers = children.map((column, columnIndex) => (
+      <Fragment key={columnIndex}>
+        {isValidElement<InternalColumnProps>(column) && (
           <TableDataContextProvider
             value={{
               mode: "header",
@@ -312,8 +312,9 @@ export const createTypedTable = <T,>() => {
           >
             {column}
           </TableDataContextProvider>
-        ),
-    );
+        )}
+      </Fragment>
+    ));
 
     const cols = children.map((column, columnIndex) => (
       <TableDataContextProvider key={columnIndex} value={{ mode: "col", columnIndex }}>
@@ -321,21 +322,23 @@ export const createTypedTable = <T,>() => {
       </TableDataContextProvider>
     ));
 
-    const contents = sortedRows.map((dataItem, rowIndex) =>
-      children.map((column, columnIndex) => (
-        <TableDataContextProvider
-          key={rowIndex}
-          value={{
-            mode: "cell",
-            rowIndex,
-            columnIndex,
-            dataItem,
-          }}
-        >
-          {column}
-        </TableDataContextProvider>
-      )),
-    );
+    const contents = sortedRows.map((dataItem, rowIndex) => (
+      <Fragment key={rowIndex}>
+        {children.map((column, columnIndex) => (
+          <TableDataContextProvider
+            key={columnIndex}
+            value={{
+              mode: "cell",
+              rowIndex,
+              columnIndex,
+              dataItem,
+            }}
+          >
+            {column}
+          </TableDataContextProvider>
+        ))}
+      </Fragment>
+    ));
 
     const rowClass = data.map((dataItem, rowIndex) => props.bodyRowClass?.(dataItem, rowIndex) || "");
 
@@ -353,9 +356,9 @@ export const createTypedTable = <T,>() => {
 
       if (validation?.showValidationErrors) {
         if ("errors" in validation) {
-          return validation.errors[0].key;
+          return validation?.errors?.[0]?.key;
         } else {
-          return validation.key;
+          return validation?.key;
         }
       }
 
