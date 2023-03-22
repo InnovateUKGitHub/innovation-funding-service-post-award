@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from "type-graphql";
 import { ClientConfigAppOptionsPermittedFileTypesObject } from "./ClientConfigAppOptionsPermittedFileTypesObject";
 
-@ObjectType()
+@ObjectType("ClientConfigAppOptionsObject")
 class ClientConfigAppOptionsObject {
   @Field(() => Int)
   maxFileSize!: number;
