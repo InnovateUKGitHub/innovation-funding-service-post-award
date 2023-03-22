@@ -62,7 +62,9 @@ const getUserContactDataLoader = (ctx: PartialGraphQLContext) => {
     // For each key that was passed in, find the user data.
     // A map is chosen to ensure the data is in the EXACT order as requested.
     return usernames.map(
-      username => data.uiapi.query.User.edges.find(x => x.node?.Username?.value === username) ?? null,
+      username =>
+        data.uiapi.query.User.edges.find(x => x.node?.Username?.value?.toLowerCase() === username.toLowerCase()) ??
+        null,
     );
   });
 };
