@@ -1,10 +1,18 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { DateTime } from "luxon";
 import { convertDateAndTime, DateConvertible, formatDate } from "@framework/util";
 import { DateFormat } from "@framework/constants";
+export interface BaseDateProps {
+  invalidDisplay?: ReactNode;
+  nullDisplay?: ReactNode;
+}
 
-const render = (value: DateConvertible, format: DateFormat) => {
-  const date = formatDate(value, format);
+interface DateProps extends BaseDateProps {
+  value: DateConvertible;
+}
+
+const render = ({ value, invalidDisplay, nullDisplay }: DateProps, format: DateFormat) => {
+  const date = formatDate(value, format, invalidDisplay, nullDisplay);
   return date ? <span>{date}</span> : null;
 };
 
@@ -46,40 +54,40 @@ export const ShortDateRange: React.FunctionComponent<{ start: DateConvertible; e
   return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMM");
 };
 
-export const ShortMonth: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.SHORT_MONTH);
+export const ShortMonth: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.SHORT_MONTH);
 };
 
-export const DayAndLongMonth: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.DAY_AND_LONG_MONTH);
+export const DayAndLongMonth: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.DAY_AND_LONG_MONTH);
 };
 
-export const LongYear: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.LONG_YEAR);
+export const LongYear: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.LONG_YEAR);
 };
 
-export const MonthYear: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.MONTH_YEAR);
+export const MonthYear: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.MONTH_YEAR);
 };
 
-export const FullDate: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.FULL_DATE);
+export const FullDate: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.FULL_DATE);
 };
 
-export const FullNumericDate: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.FULL_NUMERIC_DATE);
+export const FullNumericDate: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.FULL_NUMERIC_DATE);
 };
 
-export const FullDateTime: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.FULL_DATE_TIME);
+export const FullDateTime: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.FULL_DATE_TIME);
 };
 
-export const ShortDate: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.SHORT_DATE);
+export const ShortDate: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.SHORT_DATE);
 };
 
-export const ShortDateTime: React.FunctionComponent<{ value: DateConvertible }> = ({ value }) => {
-  return render(value, DateFormat.SHORT_DATE_TIME);
+export const ShortDateTime: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.SHORT_DATE_TIME);
 };
 
 export const Duration: React.FunctionComponent<{ startDate: DateConvertible; endDate: DateConvertible }> = props => {
