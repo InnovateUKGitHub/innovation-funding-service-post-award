@@ -54,7 +54,8 @@
       "message": "You can upload up to {{documentCount}} documents at a time. Each document must:\n\n- be less than {{maxFileSize}} in file size\n- have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.\n\nYou can upload these file types:\n\n- PDF ({{ documentFormats, arrayJoin }})\n- text ({{ textFormats, arrayJoin }})\n- presentation ({{ presentationFormats, arrayJoin }})\n- spreadsheet ({{ spreadsheetFormats, arrayJoin }})\n- images ({{ imageFormats, arrayJoin }})\n"
     },
     "claimLastModified": {
-      "message": "Changes last saved"
+      "message": "Changes last saved",
+      "never": "Never"
     },
     "awardRateOverridesMessage": {
       "periodAwardRateOverride": "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThe partner may have one or more periods paid at a different funding award rate compared to your overall funding award rate.",

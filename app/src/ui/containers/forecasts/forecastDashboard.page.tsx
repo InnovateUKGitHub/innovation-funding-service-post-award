@@ -3,6 +3,8 @@ import { ProjectRole } from "@framework/constants";
 import { Page, Projects, Section, TypedTable, getPartnerName, Content } from "../../components";
 import { BaseProps, defineRoute } from "../containerBase";
 import { useForecastDashboardData, Partner } from "./forecastDashboard.logic";
+import { useContent } from "@ui/hooks";
+import { AccessibilityText } from "@ui/components/renderers";
 
 interface Params {
   projectId: string;
@@ -10,6 +12,7 @@ interface Params {
 
 const ForecastDashboardPage = (props: Params & BaseProps) => {
   const { project, partners } = useForecastDashboardData(props.projectId);
+  const { getContent } = useContent();
   const Table = TypedTable<Partner>();
   return (
     <Page
@@ -43,6 +46,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
             header={x => x.pages.forecastsDashboard.headerLastUpdate}
             value={x => x.forecastLastModifiedDate}
             qa="last-updated"
+            nullDisplay={<AccessibilityText>{getContent(x => x.components.claimLastModified.never)}</AccessibilityText>}
           />
           <Table.Link
             header={x => x.pages.forecastsDashboard.headerAction}

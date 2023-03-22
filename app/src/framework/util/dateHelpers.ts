@@ -1,5 +1,6 @@
 import { DateFormat } from "@framework/constants";
 import { DateTime } from "luxon";
+import { ReactNode } from "react";
 
 export type DateConvertible = Date | string | null | undefined;
 export const convertDateAndTime = (date: DateConvertible): DateTime | null => {
@@ -20,10 +21,15 @@ export const convertDateAndTime = (date: DateConvertible): DateTime | null => {
 
 const appendMeridian = (date: DateTime, format: string) => format + (date.hour >= 12 ? "'pm'" : "'am'");
 
-export const formatDate = (jsDate: DateConvertible, format: DateFormat) => {
-  if (!jsDate) return null;
+export const formatDate = (
+  jsDate: DateConvertible,
+  format: DateFormat,
+  invalidDisplay: ReactNode = "INVALID DATE FORMAT",
+  nullDisplay: ReactNode = null,
+): ReactNode => {
+  if (!jsDate) return nullDisplay;
   const date = convertDateAndTime(jsDate);
-  if (!date || !date.isValid) return "INVALID DATE FORMAT";
+  if (!date || !date.isValid) return invalidDisplay;
 
   switch (format) {
     case DateFormat.FULL_DATE: {

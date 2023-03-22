@@ -79,7 +79,10 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles: SfRoles }> 
     return getClaimStatus(node?.Acc_TrackingClaims__c?.value ?? "");
   },
   forecastLastModifiedDate: function (node) {
-    return new Date(node?.Acc_ForecastLastModifiedDate__c?.value ?? "") ?? null;
+    const dateValue = node?.Acc_ForecastLastModifiedDate__c?.value;
+    if (dateValue === null) return null;
+    if (dateValue === undefined) return null;
+    return new Date(dateValue);
   },
   forecastsAndCosts: function (node) {
     return (
