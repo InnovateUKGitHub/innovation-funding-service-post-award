@@ -79,7 +79,7 @@ const projectDashboardQuery = graphql`
                 Acc_CurrentPeriodEndDate__c {
                   value
                 }
-                Acc_ProjectParticipantsProject__r {
+                Acc_ProjectParticipantsProject__r(first: 500) {
                   edges {
                     node {
                       Acc_AccountId__r {

@@ -59,11 +59,11 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
         query UserRolesQuery($keys: [ID]) {
           uiapi {
             query {
-              Acc_Project__c(first: 2000, where: { Id: { in: $keys } }) {
+              Acc_Project__c(first: 500, where: { Id: { in: $keys } }) {
                 edges {
                   node {
                     Id
-                    Acc_ProjectParticipantsProject__r {
+                    Acc_ProjectParticipantsProject__r(first: 500) {
                       edges {
                         node {
                           Acc_ProjectRole__c {
@@ -75,7 +75,7 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
                         }
                       }
                     }
-                    Project_Contact_Links__r {
+                    Project_Contact_Links__r(first: 500) {
                       edges {
                         node {
                           Acc_Role__c {
