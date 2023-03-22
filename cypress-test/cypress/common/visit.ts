@@ -8,9 +8,9 @@ export const visitApp = ({
   asUser?: string;
 }) => {
   cy.log(`**visitApp:${path} asUser:${asUser}**`);
-  cy.wait(500);
+  cy.wait(1000);
   cy.visit(path, { auth: { username, password } });
-  cy.wait(500);
+  cy.wait(1000);
   cy.switchUserTo(asUser);
   cy.log(`Currently running: ${Cypress.spec.name}`);
 };
