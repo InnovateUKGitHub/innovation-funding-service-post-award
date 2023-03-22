@@ -6,7 +6,7 @@ const projectDetailProjectParticipantsProjectTableFragment = graphql`
     Acc_LeadParticipantID__c {
       value
     }
-    Acc_ProjectParticipantsProject__r {
+    Acc_ProjectParticipantsProject__r(first: 500) {
       edges {
         node {
           Id
