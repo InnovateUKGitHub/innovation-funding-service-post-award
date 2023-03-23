@@ -1,5 +1,6 @@
 @import url("./govuk-frontend-4.3.1.css");
 @import url("./ifspa-govuk-overrides-modal.css");
+@import url("./ifspa-govuk-overrides-sticky-table.css");
 @import url("./ifspa-govuk-overrides.css");
 @import url("./ifspa-govuk-print-overrides.css");
 @import url("./ifspa-developer-section.css");

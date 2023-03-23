@@ -203,6 +203,7 @@ export const createTypedTable = <T,>() => {
         key={column}
         className={cx("govuk-table__header", {
           [`govuk-table__header--${classSuffix}`]: !!classSuffix,
+          "acc-table__cell-right-border": props.isDivider,
         })}
       >
         {props.footer}
@@ -222,6 +223,7 @@ export const createTypedTable = <T,>() => {
             props.colClassName?.(column),
             {
               ["govuk-table__cell--" + classSuffix]: !!classSuffix,
+              "acc-table__cell-right-border": props.isDivider,
             },
           )}
         >

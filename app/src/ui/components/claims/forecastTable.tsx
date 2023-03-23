@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject, useEffect, useRef } from "react";
 import {
   ClaimDetailsSummaryDto,
   ClaimDto,
@@ -22,6 +22,7 @@ import { CondensedDateRange } from "../renderers/date";
 import { Percentage } from "../renderers/percentage";
 import { createTypedTable } from "../table";
 import { Content } from "../content";
+import cx from "classnames";
 
 export interface ForecastData {
   project: ProjectDto;
@@ -80,25 +81,106 @@ const Table = createTypedTable<TableRow>();
 export class ForecastTable extends React.Component<Props> {
   animationFrame?: number;
 
+  constructor(props: Props) {
+    super(props);
+    this.requestAnimate = this.requestAnimate.bind(this);
+    this.animate = this.animate.bind(this);
+  }
+
   componentDidMount() {
     // Keep resizing the columns to fit.
-    this.animationFrame = requestAnimationFrame(() => {
-      const col1 = document.getElementsByClassName("sticky-col-right-1");
-      const col2 = document.getElementsByClassName("sticky-col-right-2");
-      const col3 = document.getElementsByClassName("sticky-col-right-3");
+    this.requestAnimate();
 
-      if (!col1.length || !col2.length) return;
+    window.addEventListener("resize", this.requestAnimate);
+  }
 
-      const width1 = Math.floor(col1[0].getBoundingClientRect().width);
-      const width2 = Math.floor(col2[0].getBoundingClientRect().width);
-
-      (Array.from(col2) as HTMLElement[]).forEach(x => (x.style.right = `${width1}px`));
-      (Array.from(col3) as HTMLElement[]).forEach(x => (x.style.right = `${width1 + width2}px`));
-    });
+  componentDidUpdate(): void {
+    this.requestAnimate();
   }
 
   componentWillUnmount() {
     if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+    window.removeEventListener("resize", this.requestAnimate);
+  }
+
+  requestAnimate() {
+    this.animationFrame = requestAnimationFrame(this.animate);
+  }
+
+  animate() {
+    const table = document.querySelector(".acc-sticky-table") as HTMLTableElement;
+    const scrollPane = document.querySelector(".acc-sticky-table-scrollable") as HTMLDivElement;
+    const classNames = [
+      {
+        selector: ".sticky-col-left-1",
+        side: "left",
+      },
+      {
+        selector: ".sticky-col-right-1",
+        side: "right",
+      },
+      {
+        selector: ".sticky-col-right-2",
+        side: "right",
+      },
+      {
+        selector: ".sticky-col-right-3",
+        side: "right",
+      },
+    ] as const;
+
+    table.style.whiteSpace = "normal";
+
+    const accumulator = {
+      left: 0,
+      right: 0,
+    };
+
+    const rowElements = [...scrollPane.querySelectorAll("tr")];
+
+    for (const { selector, side } of classNames) {
+      const columnElements = [...scrollPane.querySelectorAll(selector)] as HTMLTableCellElement[];
+      for (const col of columnElements) {
+        col.classList.add("disable-sticky-col-width");
+      }
+
+      let maxWidth = 0;
+
+      for (const col of columnElements) {
+        const { width } = col.getBoundingClientRect();
+        if (width > maxWidth) maxWidth = width;
+      }
+
+      for (const col of columnElements) {
+        col.classList.remove("disable-sticky-col-width");
+        col.style[side] = `${accumulator[side]}px`;
+        col.style.width = `${maxWidth}px`;
+      }
+
+      accumulator[side] += maxWidth;
+    }
+
+    for (const row of rowElements) {
+      const cells = [...row.querySelectorAll("th, td")] as HTMLTableCellElement[];
+
+      for (const cell of cells) {
+        cell.style.height = `unset`;
+      }
+
+      let maxHeight = 0;
+
+      for (const cell of cells) {
+        const { height } = cell.getBoundingClientRect();
+        if (height > maxHeight) maxHeight = height;
+      }
+
+      for (const cell of cells) {
+        cell.style.height = `${maxHeight}px`;
+      }
+    }
+
+    scrollPane.style.marginLeft = `${accumulator.left}px`;
+    scrollPane.style.marginRight = `${accumulator.right}px`;
   }
 
   private getPeriodId(
@@ -124,6 +206,8 @@ export class ForecastTable extends React.Component<Props> {
     const periodId = this.getPeriodId(data.project, data.claims, data.claim);
     const intervals = this.calculateClaimPeriods(data);
     const tableRows = this.parseClaimData(data, editor, periodId, data.project.numberOfPeriods);
+    const isEditing = !!editor;
+
     if (!tableRows.length) {
       throw new Error("Unable to display the spend profile table, has the project been correctly set up?");
     }
@@ -144,88 +228,122 @@ export class ForecastTable extends React.Component<Props> {
     };
 
     return (
-      <Table.Table
-        data={tableRows}
-        qa="forecast-table"
-        headers={this.renderTableHeaders(periods, periodId, data.claim, data.IARDueOnClaimPeriods ?? [])}
-        footers={this.renderTableFooters(
-          periods,
-          tableRows,
-          hideValidation !== true && editor ? editor.validator : undefined,
-        )}
-        headerRowClass="govuk-body-s govuk-table__header--light"
-        bodyRowClass={x =>
-          classNames("govuk-body-s", {
-            "table__row--warning": !hideValidation && x.total > x.golCosts,
-            "table__row--error": !hideValidation && x.validators.some(v => !v.isValid),
-          })
-        }
-        className="acc-sticky-table"
-        validationResult={!hideValidation ? editor && editor.validator.costCategoryForecasts.results : undefined}
-      >
-        <Table.String
-          header="Month"
-          value={x => x.categoryName}
-          colClassName={() => "sticky-col sticky-col-left-1"}
-          qa="category-name"
-        />
-
-        {claims.map((p, i) => (
-          <Table.Currency
-            key={p}
-            header={intervals[p]}
-            value={x => x.claims[p]}
-            qa={!!data.claim && i === claims.length - 1 ? "current-claim" : "category-claim" + i}
-            isDivider={isDivider(i) ? "normal" : undefined}
-          />
-        ))}
-
-        {forecasts.map((p, i) => (
-          <Table.Custom
-            key={p}
-            header={intervals[p]}
-            value={(x, index) =>
-              this.renderForecastCell(
-                x,
-                parseInt(p, 10),
-                index,
-                data,
-                editor,
-                isSubmitting || false,
-                this.props.allowRetroactiveForecastEdit ?? false,
-              )
+      <div className="acc-sticky-table-container">
+        <div className="acc-sticky-table-scrollable">
+          <Table.Table
+            data={tableRows}
+            qa="forecast-table"
+            headers={this.renderTableHeaders(periods, periodId, data.claim, data.IARDueOnClaimPeriods ?? [])}
+            footers={this.renderTableFooters(
+              periods,
+              periodId,
+              tableRows,
+              hideValidation !== true && editor ? editor.validator : undefined,
+            )}
+            headerRowClass="govuk-body-s govuk-table__header--light"
+            bodyRowClass={x =>
+              classNames("govuk-body-s", {
+                "table__row--warning": !hideValidation && x.total > x.golCosts,
+                "table__row--error": !hideValidation && x.validators.some(v => !v.isValid),
+              })
             }
-            cellClassName={() => "govuk-table__cell--numeric"}
-            classSuffix="numeric"
-            qa={"category-forecast" + i}
-            isDivider={i === forecasts.length - 1 ? "bold" : undefined}
-          />
-        ))}
+            className="acc-sticky-table"
+            validationResult={!hideValidation ? editor && editor.validator.costCategoryForecasts.results : undefined}
+          >
+            <Table.String
+              header="Month"
+              value={x => x.categoryName}
+              colClassName={() => "sticky-col sticky-col-left-1"}
+              qa="category-name"
+              cellClassName={() =>
+                cx({
+                  "sticky-data-editor": isEditing,
+                })
+              }
+            />
 
-        <Table.Currency
-          colClassName={() => "sticky-col sticky-col-right-3"}
-          header="No data"
-          hideHeader
-          value={x => x.total}
-          qa="category-total"
-          isDivider="normal"
-        />
-        <Table.Currency
-          colClassName={() => "sticky-col sticky-col-right-2"}
-          header="No data"
-          hideHeader
-          value={x => x.golCosts}
-          qa="category-gol-costs"
-          isDivider="normal"
-        />
-        <Table.Percentage
-          colClassName={() => "sticky-col sticky-col-right-1"}
-          header="No data"
-          hideHeader
-          value={x => x.difference}
-          qa="category-difference"
-        />
-      </Table.Table>
+            {claims.map((p, i) => (
+              <Table.Currency
+                key={p}
+                header={intervals[p]}
+                value={x => x.claims[p]}
+                qa={!!data.claim && i === claims.length - 1 ? "current-claim" : "category-claim" + i}
+                isDivider={isDivider(i) ? "normal" : undefined}
+                cellClassName={() =>
+                  cx({
+                    "sticky-data-editor": isEditing,
+                  })
+                }
+              />
+            ))}
+
+            {forecasts.map((p, i) => (
+              <Table.Custom
+                key={p}
+                header={intervals[p]}
+                value={(x, index) =>
+                  this.renderForecastCell(
+                    x,
+                    parseInt(p, 10),
+                    index,
+                    data,
+                    editor,
+                    isSubmitting || false,
+                    this.props.allowRetroactiveForecastEdit ?? false,
+                  )
+                }
+                cellClassName={() =>
+                  cx("govuk-table__cell--numeric", {
+                    "sticky-data-editor": isEditing,
+                  })
+                }
+                classSuffix="numeric"
+                qa={"category-forecast" + i}
+                // isDivider={i === forecasts.length - 1 ? "bold" : undefined}
+              />
+            ))}
+
+            <Table.Currency
+              colClassName={() => "sticky-col sticky-col-right-3"}
+              header="No data"
+              hideHeader
+              value={x => x.total}
+              qa="category-total"
+              isDivider="normal"
+              cellClassName={() =>
+                cx({
+                  "sticky-data-editor": isEditing,
+                })
+              }
+            />
+            <Table.Currency
+              colClassName={() => "sticky-col sticky-col-right-2"}
+              header="No data"
+              hideHeader
+              value={x => x.golCosts}
+              qa="category-gol-costs"
+              isDivider="normal"
+              cellClassName={() =>
+                cx({
+                  "sticky-data-editor": isEditing,
+                })
+              }
+            />
+            <Table.Percentage
+              colClassName={() => "sticky-col sticky-col-right-1"}
+              header="No data"
+              hideHeader
+              value={x => x.difference}
+              qa="category-difference"
+              cellClassName={() =>
+                cx({
+                  "sticky-data-editor": isEditing,
+                })
+              }
+            />
+          </Table.Table>
+        </div>
+      </div>
     );
   }
 
@@ -424,12 +542,19 @@ export class ForecastTable extends React.Component<Props> {
           <AccessibilityText>{costCategoriesText}</AccessibilityText>
         </th>
         {previous > 0 ? (
-          <th className="govuk-table__header govuk-table__header--numeric" data-qa="costs-claimed" colSpan={previous}>
+          <th
+            className="govuk-table__header govuk-table__header--numeric acc-table__cell-right-border"
+            data-qa="costs-claimed"
+            colSpan={previous}
+          >
             {costsClaimedText}
           </th>
         ) : null}
         {!!claim && claimPeriod > 0 ? (
-          <th className="govuk-table__header govuk-table__header--numeric" data-qa="costs-claiming">
+          <th
+            className="govuk-table__header govuk-table__header--numeric acc-table__cell-right-border"
+            data-qa="costs-claiming"
+          >
             {costsClaimingText}
           </th>
         ) : null}
@@ -443,13 +568,13 @@ export class ForecastTable extends React.Component<Props> {
           </th>
         ) : null}
         <th
-          className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-3"
+          className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-3 acc-table__cell-right-border"
           data-qa="total-header"
         >
           {totalText}
         </th>
         <th
-          className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-2"
+          className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-2 acc-table__cell-right-border"
           data-qa="total-eligible-cost"
         >
           {totalEligibleCostsText}
@@ -461,14 +586,18 @@ export class ForecastTable extends React.Component<Props> {
       <tr key="cHeader2" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header sticky-col sticky-col-left-1">{periodText}</th>
         {periods.map((p, i) => (
-          <th key={i} className="govuk-table__header" style={{ textAlign: "right" }}>
+          <th
+            key={i}
+            className={cx("govuk-table__header", { "acc-table__cell-right-border": i === claimPeriod - 1 })}
+            style={{ textAlign: "right" }}
+          >
             {p}
           </th>
         ))}
-        <th className="govuk-table__header sticky-col sticky-col-right-3">
+        <th className="govuk-table__header sticky-col sticky-col-right-3 acc-table__cell-right-border">
           <AccessibilityText>{noDataText}</AccessibilityText>
         </th>
-        <th className="govuk-table__header sticky-col sticky-col-right-2">
+        <th className="govuk-table__header sticky-col sticky-col-right-2 acc-table__cell-right-border">
           <AccessibilityText>{noDataText}</AccessibilityText>
         </th>
         <th className="govuk-table__header sticky-col sticky-col-right-1">
@@ -477,15 +606,19 @@ export class ForecastTable extends React.Component<Props> {
       </tr>,
       <tr key="cHeader3" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header sticky-col sticky-col-left-1">{iarDueText}</th>
-        {periods.map((p: string, i: number) => (
-          <th key={i} className="govuk-table__header" style={{ textAlign: "right" }}>
+        {periods.map((p, i) => (
+          <th
+            key={i}
+            className={cx("govuk-table__header", { "acc-table__cell-right-border": i === claimPeriod - 1 })}
+            style={{ textAlign: "right" }}
+          >
             {periodsWithIARDue?.includes(p) ? "Yes" : "No"}
           </th>
         ))}
-        <th className="govuk-table__header sticky-col sticky-col-right-3">
+        <th className="govuk-table__header sticky-col sticky-col-right-3 acc-table__cell-right-border">
           <AccessibilityText>{noDataText}</AccessibilityText>
         </th>
-        <th className="govuk-table__header sticky-col sticky-col-right-2">
+        <th className="govuk-table__header sticky-col sticky-col-right-2 acc-table__cell-right-border">
           <AccessibilityText>{noDataText}</AccessibilityText>
         </th>
         <th className="govuk-table__header sticky-col sticky-col-right-1">
@@ -497,6 +630,7 @@ export class ForecastTable extends React.Component<Props> {
 
   private renderTableFooters(
     periods: string[],
+    claimPeriod: number,
     parsed: TableRow[],
     validator: IForecastDetailsDtosValidator | undefined,
   ) {
@@ -522,17 +656,23 @@ export class ForecastTable extends React.Component<Props> {
         Total
       </th>,
     );
-    cells.push(totals.map((value, index) => this.renderTableFooterCell(value, index)));
+    cells.push(totals.map((value, index) => this.renderTableFooterCell(value, index, claimPeriod)));
     cells.push(
       this.renderTableFooterCell(
         costTotal,
         totals.length + 1,
-        "sticky-col sticky-col-right-3 acc-sticky-footer-cell",
+        claimPeriod,
+        "sticky-col sticky-col-right-3 acc-sticky-footer-cell acc-table__cell-right-border",
         "qa-costs-remaining",
       ),
     );
     cells.push(
-      this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2 acc-sticky-footer-cell"),
+      this.renderTableFooterCell(
+        golTotal,
+        totals.length + 2,
+        claimPeriod,
+        "sticky-col sticky-col-right-2 acc-sticky-footer-cell acc-table__cell-right-border",
+      ),
     );
     cells.push(
       <td
@@ -554,10 +694,22 @@ export class ForecastTable extends React.Component<Props> {
     ];
   }
 
-  private readonly renderTableFooterCell = (total: number, key: number, className = "", qa?: string) => (
+  private readonly renderTableFooterCell = (
+    total: number,
+    key: number,
+    claimedPeriod: number,
+    className = "",
+    qa?: string,
+  ) => (
     <td
       key={key}
-      className={`govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular acc-sticky-footer-cell ${className}`}
+      className={cx(
+        `govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular acc-sticky-footer-cell`,
+        {
+          "acc-table__cell-right-border": key === claimedPeriod - 1,
+        },
+        className,
+      )}
     >
       <Currency data-qa={qa} value={total} />
     </td>

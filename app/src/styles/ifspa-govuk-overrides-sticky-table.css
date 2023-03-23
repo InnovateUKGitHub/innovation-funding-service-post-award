@@ -1,0 +1,114 @@
+/* Setup a context for the table data cells to be stuck to */
+.acc-sticky-table-container {
+  position: relative;
+  display: grid;
+}
+
+/* Ensure scrolling is performed in the "acc-sticky-table" instead of the "govuk-table-wrapper" */
+.acc-sticky-table-scrollable {
+  overflow-x: scroll;
+}
+.acc-sticky-table-scrollable .govuk-table-wrapper {
+  overflow-x: unset;
+}
+
+/* Allow word wrapping in the table by default */
+.acc-sticky-table {
+  white-space: normal;
+}
+
+/* Ensure that the right hand sticky column has padding */
+.sticky-col-right-1 {
+  padding-left: 10px;
+}
+
+/* Ensure the boundary columns have the correct border lines */
+.sticky-col-left-1 {
+  border-right: 1px solid #b1b4b6;
+}
+.sticky-col-right-3 {
+  border-left: 1px solid #b1b4b6;
+}
+
+/* When you are on a smaller device, such as a mobile device */
+@media (max-width: 859px) {
+  /* Force the left/right margin to be 0, when we are not in a sticky column mode (for mobile) */
+  /* This is because JavaScript is always setting the L/R margins, which only apply to sticky tables */
+  .acc-sticky-table-scrollable {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .acc-sticky-table {
+    white-space: normal !important;
+  }
+
+  td, th {
+    width: unset !important;
+    height: unset !important;
+  }
+}
+
+/* When you are on a larger device, such as half a 1080p screen... */
+@media (min-width: 860px) {
+  /* Ensure our borders don't collapse and disable white-space */
+  .acc-sticky-table {
+    border-collapse: separate;
+
+    /* We disable white-space to ensure our cells are ALWAYS of the same height. */
+    white-space: nowrap;
+  }
+
+  /* Set-up default margins to slot our sticky columns within. */
+  /* JavaScript (if it exists) will automatically adjust the margins to fit. */
+  .acc-sticky-table-scrollable {
+    width: auto;
+    margin-left: 200px;
+    margin-right: 450px;
+    box-sizing: border-box;
+  }
+
+  .acc-sticky-table .govuk-table__cell,
+  .acc-sticky-table .govuk-table__header {
+    box-sizing: border-box;
+  }
+
+  /* Ensure our "visually hidden" boxes still have some width/height to pad up empty cells. */
+  .acc-sticky-table .govuk-visually-hidden {
+    position: unset !important;
+    width: unset !important;
+    height: unset !important;
+  }
+
+  /* When we are in an editor, make rows this height to fit the text box. */
+  .sticky-data-editor {
+    height: 61px;
+  }
+
+  /*  */
+  .disable-sticky-col-width {
+    width: min-content !important;
+  }
+
+  /* Default alignments for sticky columns. */
+  .sticky-col-left-1 {
+    position: absolute;
+    left: 0;
+    width: 200px;
+  }
+  .sticky-col-right-1 {
+    position: absolute;
+    width: 150px;
+    right: 0;
+  }
+  .sticky-col-right-2 {
+    position: absolute;
+    width: 150px;
+    right: 150px;
+  }
+  .sticky-col-right-3 {
+    position: absolute;
+    width: 150px;
+    right: 300px;
+  }
+}
