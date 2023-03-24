@@ -6,7 +6,7 @@ const relayClientSSR = new RelayClientSSR(window.__RELAY_BOOTSTRAP_DATA__);
 
 const network = new RelayNetworkLayer([
   relayClientSSR.getMiddleware({
-    lookup: true,
+    lookup: false,
   }),
 ]);
 
