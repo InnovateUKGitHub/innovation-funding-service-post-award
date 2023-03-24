@@ -37,9 +37,15 @@ export type MonitoringReport = {
 };
 
 export const useMonitoringReportDashboardQuery = (projectId: string) => {
-  const data = useLazyLoadQuery<MonitoringReportDashboardQuery>(monitoringReportDashboardQuery, {
-    projectId,
-  });
+  const data = useLazyLoadQuery<MonitoringReportDashboardQuery>(
+    monitoringReportDashboardQuery,
+    {
+      projectId,
+    },
+    {
+      fetchPolicy: "network-only",
+    },
+  );
 
   return useMemo(() => {
     const { node: projectNode } = getFirstEdge<ProjectGql>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
