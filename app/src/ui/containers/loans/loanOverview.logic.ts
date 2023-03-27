@@ -15,7 +15,7 @@ export type Loan = {
 };
 
 export const useLoanOverviewData = (projectId: string) => {
-  const data = useLazyLoadQuery<LoanOverviewQuery>(loanOverviewQuery, { projectId });
+  const data = useLazyLoadQuery<LoanOverviewQuery>(loanOverviewQuery, { projectId }, { fetchPolicy: "network-only" });
 
   return useMemo(() => {
     const projectGqlData = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
