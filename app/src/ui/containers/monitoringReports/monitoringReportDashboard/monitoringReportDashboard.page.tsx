@@ -161,7 +161,10 @@ const Links = ({ report, routes }: { report: MonitoringReport; routes: IRoutes }
   );
 };
 
-export const MonitoringReportDashboardRoute = defineRoute({
+export const MonitoringReportDashboardRoute = defineRoute<{
+  projectId: ProjectId;
+  periodId?: number;
+}>({
   allowRouteInActiveAccess: true,
   routeName: "monitoringReportDashboard",
   routePath: "/projects/:projectId/monitoring-reports",

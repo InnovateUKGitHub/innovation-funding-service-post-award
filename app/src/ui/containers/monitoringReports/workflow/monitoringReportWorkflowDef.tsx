@@ -2,11 +2,13 @@ import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/t
 import * as Dtos from "@framework/dtos";
 import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
 import { numberComparator } from "@framework/util";
-import { MonitoringReportQuestionStep } from "@ui/containers/monitoringReports/questionStep";
+import { MonitoringReportQuestionStep } from "@ui/containers/monitoringReports/workflow/questionStep";
 import { IEditorStore } from "@ui/redux";
-import { MonitoringReportSummary } from "@ui/containers";
+import { MonitoringReportSummary } from "@ui/containers/monitoringReports/workflow/monitoringReportSummary";
 import { IRoutes } from "@ui/routing";
 import { ILinkInfo } from "@framework/types";
+import { BaseProps } from "@ui/containers/containerBase";
+import { MonitoringReportWorkflowParams, MonitoringReportWorkflowWorkflow } from "./MonitoringReportWorkflowProps";
 
 export interface MonitoringReportReportStepProps extends IStepProps {
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
@@ -58,6 +60,34 @@ const monitoringReportWorkflowDef = (dto: Dtos.MonitoringReportDto): IMonitoring
       summaryRender: MonitoringReportSummary,
     },
   };
+};
+
+export const getForwardLink = ({
+  mode,
+  routes,
+  projectId,
+  workflow,
+  id,
+  progress,
+}: MonitoringReportWorkflowParams & MonitoringReportWorkflowWorkflow & BaseProps & { progress: boolean }) => {
+  if (progress) {
+    const nextStep = workflow.getNextStepInfo();
+    return routes.monitoringReportWorkflow.getLink({
+      projectId,
+      id,
+      mode,
+      step: nextStep && nextStep.stepNumber,
+    });
+  }
+  if (workflow.isOnSummary()) {
+    return routes.monitoringReportDashboard.getLink({ projectId });
+  }
+  return routes.monitoringReportWorkflow.getLink({
+    projectId,
+    id,
+    mode,
+    step: undefined,
+  });
 };
 
 export class MonitoringReportWorkflowDef extends WorkflowBase<

@@ -3,8 +3,8 @@ import * as Dtos from "@framework/types";
 import { IEditorStore, useStores } from "@ui/redux";
 import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
-import { MonitoringReportReportSummaryProps } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
-import * as ACC from "../../components";
+import { MonitoringReportReportSummaryProps } from "@ui/containers/monitoringReports/workflow/monitoringReportWorkflowDef";
+import * as ACC from "../../../components";
 
 interface InnerProps {
   statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
