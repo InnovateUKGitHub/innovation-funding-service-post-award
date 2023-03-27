@@ -7,6 +7,7 @@ export const visitApp = ({
   path?: string;
   asUser?: string;
 }) => {
+  cy.clearAllCookies();
   cy.log(`**visitApp:${path} asUser:${asUser}**`);
   cy.wait(1000);
   cy.visit(path, { auth: { username, password } });

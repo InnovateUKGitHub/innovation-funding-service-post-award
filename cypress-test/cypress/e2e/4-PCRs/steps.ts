@@ -1,3 +1,6 @@
+let date = new Date();
+let year = date.getFullYear();
+
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 export const newPubDescription = "I am a new public description. I am 55 characters long.";
 export const newPubSummary = "I am a new public summary. I am 51 characters long.";
@@ -899,11 +902,12 @@ export const uploadNameChange = () => {
 };
 
 export const showUploadedFiles = () => {
+  cy.get("td").contains(year);
   cy.get("h2").contains("Files uploaded");
   ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach(header => {
     cy.tableHeader(header);
   });
-  ["testfile.doc", "Unknown", "0KB", "James Black", "Remove"].forEach(cell => {
+  ["testfile.doc", "Certificate of name change", "0KB", "James Black", "Remove"].forEach(cell => {
     cy.tableCell(cell);
   });
 };
