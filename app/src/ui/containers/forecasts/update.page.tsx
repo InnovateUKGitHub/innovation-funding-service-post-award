@@ -95,7 +95,12 @@ const UpdateForecastComponent = (props: ForecastUpdateParams & ForecastUpdateDat
               name="forecastTable"
               update={() => null}
               value={({ onChange }) => (
-                <ACC.Claims.ForecastTable onChange={onChange} data={forecastData} editor={editor} />
+                <ACC.Claims.ForecastTable
+                  onChange={onChange}
+                  data={forecastData}
+                  editor={editor}
+                  allowRetroactiveForecastEdit
+                />
               )}
             />
 

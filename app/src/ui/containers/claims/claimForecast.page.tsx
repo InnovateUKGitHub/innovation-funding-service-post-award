@@ -38,7 +38,6 @@ interface Data {
   editor: Pending<IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
 }
 
-// TODO: ACC-7460
 interface Callbacks {
   onUpdate: (saving: boolean, dto: ForecastDetailsDTO[], link?: ILinkInfo) => void;
 }
