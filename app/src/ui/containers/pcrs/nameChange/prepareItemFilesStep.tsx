@@ -8,6 +8,7 @@ import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { EditorStatus } from "@ui/constants/enums";
+import { DocumentDescription } from "@framework/constants";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -34,6 +35,8 @@ class Component extends React.Component<
           qa="projectChangeRequestItemUpload"
           disabled={isSaving}
         >
+          <UploadForm.Hidden name="description" value={() => DocumentDescription.CertificateOfNameChange} />
+
           <UploadForm.Fieldset heading={x => x.pages.pcrNameChangePrepareItemFiles.headingUploadCertificate}>
             <ACC.DocumentGuidance />
 
@@ -42,7 +45,10 @@ class Component extends React.Component<
               name="attachment"
               labelHidden
               value={data => data.files}
-              update={(dto, files) => (dto.files = files || [])}
+              update={(dto, files) => {
+                dto.files = files || [];
+                dto.description = DocumentDescription.CertificateOfNameChange;
+              }}
               validation={documentsEditor.validator.files}
             />
           </UploadForm.Fieldset>

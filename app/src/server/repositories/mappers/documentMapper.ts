@@ -32,6 +32,7 @@ export class DocumentDescriptionMapper {
     Evidence: "Evidence",
     ClaimValidationForm: "ClaimValidationForm",
     DeMinimisDeclartionForm: "DeMinimisDeclartionForm",
+    CertificateOfNameChange: "CertificateOfNameChange",
     StatementOfExpenditure: "StatementOfExpenditure",
     EndOfProjectSurvey: "EndOfProjectSurvey",
     JeSForm: "JeSForm",
@@ -67,6 +68,8 @@ export class DocumentDescriptionMapper {
         return DocumentDescription.ClaimValidationForm;
       case this.types.DeMinimisDeclartionForm:
         return DocumentDescription.DeMinimisDeclarationForm;
+      case this.types.CertificateOfNameChange:
+        return DocumentDescription.CertificateOfNameChange;
       case this.types.StatementOfExpenditure:
         return DocumentDescription.StatementOfExpenditure;
       case this.types.JeSForm:
@@ -122,6 +125,8 @@ export class DocumentDescriptionMapper {
         return this.types.ClaimValidationForm;
       case DocumentDescription.DeMinimisDeclarationForm:
         return this.types.DeMinimisDeclartionForm;
+      case DocumentDescription.CertificateOfNameChange:
+        return this.types.CertificateOfNameChange;
       case DocumentDescription.StatementOfExpenditure:
         return this.types.StatementOfExpenditure;
       case DocumentDescription.JeSForm:
