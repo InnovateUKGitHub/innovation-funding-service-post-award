@@ -1,4 +1,5 @@
 import { CopyLanguages, CopyNamespaces } from "@copy/data";
+import { i18nInterpolationOptions } from "@copy/interpolation";
 import express from "express";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
@@ -10,13 +11,7 @@ export const initInternationalisation = async () => {
     fallbackLng: CopyLanguages.en_GB,
     defaultNS: CopyNamespaces.DEFAULT,
     fallbackNS: CopyNamespaces.DEFAULT,
-    interpolation: {
-      format: (value, format) => {
-        if (typeof value === "string" && format === "lowercase") return value.toLocaleLowerCase();
-        if (Array.isArray(value) && format === "arrayJoin") return value.join(", ");
-        return value;
-      },
-    },
+    interpolation: i18nInterpolationOptions,
   });
 };
 

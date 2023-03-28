@@ -25,6 +25,7 @@ import { allLanguages, allNamespaces, CopyLanguages, CopyNamespaces } from "@cop
 import { initReactI18next } from "react-i18next";
 import { ClientGraphQLEnvironment } from "@gql/ClientGraphQLEnvironment";
 import { parseLogLevel } from "@framework/types/logLevel";
+import { i18nInterpolationOptions } from "@copy/interpolation";
 
 // get servers store to initialise client store
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
@@ -87,12 +88,7 @@ const Client = () => {
     fallbackLng: CopyLanguages.en_GB,
     defaultNS: CopyNamespaces.DEFAULT,
     fallbackNS: CopyNamespaces.DEFAULT,
-    interpolation: {
-      format: (value: string, format) => {
-        if (format === "lowercase") return value.toLocaleLowerCase();
-        return value;
-      },
-    },
+    interpolation: i18nInterpolationOptions,
   });
 
   const promises = [];
