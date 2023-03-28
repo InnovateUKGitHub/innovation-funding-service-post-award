@@ -84,27 +84,27 @@ describe("<DocumentFilter />", () => {
   describe("@events", () => {
     describe("with onSearch", () => {
       test("does not get called on load", () => {
-        const stubOnSeach = jest.fn();
+        const stubOnSearch = jest.fn();
 
-        setup({ onSearch: stubOnSeach });
+        setup({ onSearch: stubOnSearch });
 
-        expect(stubOnSeach).toHaveBeenCalledTimes(0);
+        expect(stubOnSearch).toHaveBeenCalledTimes(0);
       });
 
       test("with input change calls when a value is changed", () => {
         const stubSearchValue = "stub-search-value";
 
         jest.useFakeTimers();
-        const stubOnSeach = jest.fn();
+        const stubOnSearch = jest.fn();
 
-        const { changeInputValue } = setup({ onSearch: stubOnSeach });
+        const { changeInputValue } = setup({ onSearch: stubOnSearch });
 
         act(() => {
           changeInputValue(stubSearchValue);
         });
 
-        expect(stubOnSeach).toHaveBeenCalledTimes(1);
-        expect(stubOnSeach).toHaveBeenCalledWith(stubSearchValue);
+        expect(stubOnSearch).toHaveBeenCalledTimes(1);
+        expect(stubOnSearch).toHaveBeenCalledWith(stubSearchValue);
       });
     });
   });

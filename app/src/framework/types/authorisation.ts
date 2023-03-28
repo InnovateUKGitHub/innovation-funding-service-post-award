@@ -14,7 +14,6 @@ export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${Available
   let isUnknown = false;
   if (typeof role == "number") {
     isUnknown = (role & ProjectRole.Unknown) === ProjectRole.Unknown && role === ProjectRole.Unknown;
-
     isFc = !!(role & ProjectRole.FinancialContact);
     isPm = !!(role & ProjectRole.ProjectManager);
     isMo = !!(role & ProjectRole.MonitoringOfficer);
@@ -23,7 +22,6 @@ export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${Available
     isPm = role.isPm;
     isMo = role.isMo;
   }
-  // Note: As 'Unknown' there is never an overlap so we check against itself
 
   const isSuperAdmin = isFc && isPm && isMo;
 

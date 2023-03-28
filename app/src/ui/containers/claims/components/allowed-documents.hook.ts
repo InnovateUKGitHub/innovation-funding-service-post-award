@@ -5,8 +5,6 @@ import { useContent } from "@ui/hooks";
 
 /**
  * ### useEnumDocuments
- *
- * Not sure what this does exactly
  */
 export function useEnumDocuments(
   enumDocuments: typeof DocumentDescription,

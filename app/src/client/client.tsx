@@ -51,7 +51,7 @@ const Client = () => {
     });
 
     // Whenever our IFS-PA store changes...
-    const unsub = store.subscribe(() => {
+    const unsubscribe = store.subscribe(() => {
       // Wait for the render to finish, before setting state to trigger a rerender.
       setTimeout(() => setState(s => s + 1));
     });
@@ -59,7 +59,7 @@ const Client = () => {
     // Unsubscribe when the <Client /> will unmount.
     // Cancel adding js-enabled class if the client unmounts.
     return () => {
-      unsub();
+      unsubscribe();
       clearTimeout(jsEnabledAnimationFrame);
     };
   }, []);

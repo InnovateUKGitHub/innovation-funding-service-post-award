@@ -270,7 +270,6 @@ export const createTypedForm = <T,>() => {
       if (update) {
         update(formData, value);
       }
-
       if (onChange) {
         onChange(formData);
       }
@@ -315,9 +314,7 @@ export const createTypedForm = <T,>() => {
         : props.isSaving ?? false); /// If we're in a data form, check for "isSaving" prop
 
     const formData = "editor" in props ? props.editor.data : props.data;
-
     const methodValue = isGet ? "get" : "post";
-
     return (
       <form
         encType={enctype === "multipart" ? "multipart/form-data" : "application/x-www-form-urlencoded"}
@@ -577,20 +574,23 @@ export const createTypedForm = <T,>() => {
    */
   const DropdownListField = (props: DropdownFieldProps) => {
     const handleChange = useHandleChange(props.update);
+
     return (
       <FieldComponent
         {...props}
-        field={({ formData, disabled }) => (
-          <DropdownList
-            placeholder={props.placeholder}
-            options={props.options}
-            name={props.name}
-            hasEmptyOption={props.hasEmptyOption}
-            value={props.value(formData, disabled)}
-            onChange={handleChange}
-            disabled={disabled}
-          />
-        )}
+        field={({ formData, disabled }) => {
+          return (
+            <DropdownList
+              placeholder={props.placeholder}
+              options={props.options}
+              name={props.name}
+              hasEmptyOption={props.hasEmptyOption}
+              value={props.value(formData, disabled)}
+              onChange={handleChange}
+              disabled={disabled}
+            />
+          );
+        }}
       />
     );
   };
@@ -677,6 +677,7 @@ export const createTypedForm = <T,>() => {
    */
   const MultipleFileUploadComponent = (props: ExternalFieldProps<IFileWrapper[]>) => {
     const handleChange = useHandleChange(props.update);
+
     return (
       <FieldComponent
         {...props}

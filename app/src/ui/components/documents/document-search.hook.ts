@@ -8,7 +8,10 @@ import { DocumentSummaryDto } from "@framework/dtos";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { fuzzySearch } from "@framework/util/fuzzySearch";
 
-const filterItems = <T extends DocumentSummaryDto>(valueToSearch: string, items: T[]) => {
+const filterItems = <T extends Pick<DocumentSummaryDto, "id" | "dateCreated" | "fileSize">>(
+  valueToSearch: string,
+  items: T[],
+) => {
   if (!valueToSearch.trim().length) return items;
 
   const preParsedItems = items.map(x => {
@@ -32,7 +35,10 @@ const filterItems = <T extends DocumentSummaryDto>(valueToSearch: string, items:
 /**
  * hook to handle document search functionality
  */
-export function useDocumentSearch<T extends DocumentSummaryDto>(disableSearch: boolean, originalDocuments: T[]) {
+export function useDocumentSearch<T extends Pick<DocumentSummaryDto, "id" | "dateCreated" | "fileSize">>(
+  disableSearch: boolean,
+  originalDocuments: T[],
+) {
   const { data } = useClientOptionsQuery();
   const { isClient } = useMounted();
 

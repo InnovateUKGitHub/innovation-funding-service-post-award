@@ -38,11 +38,19 @@ export interface PageProps {
 
   validator?: Results<ResultBase> | Results<ResultBase>[] | null;
   /**
+   * should just pass in the `project.status` to the `projectStatus` prop.
+   *
+   * Do not need the whole dto object
+   *
    * @deprecated
    */
   project?: { status: ProjectStatus };
   projectStatus?: ProjectStatus;
   /**
+   * should just pass in the `partner.status` to the `partnerStatus` prop
+   *
+   * do not need the whole dto object
+   *
    * @deprecated
    */
   partner?: { partnerStatus: PartnerStatus };

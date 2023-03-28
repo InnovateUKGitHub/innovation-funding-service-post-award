@@ -155,7 +155,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
             if (hideRemove && hideRemove(x)) return null;
 
             return (
-              <Form.Form data={documents}>
+              <Form.Form data={documents} qa={`${qa}-form`}>
                 <Form.Button
                   name="delete"
                   styling="Link"

@@ -19,7 +19,6 @@ export interface MultipleFileUploadProps extends InputAttr {
 
 export const MultipleFileUpload = ({ name, qa, error, onChange, value, ...props }: MultipleFileUploadProps) => {
   const fileInput = useRef<HTMLInputElement | null>(null);
-
   useEffect(() => {
     if (fileInput.current?.value && (!value || !value.length)) {
       fileInput.current.value = "";

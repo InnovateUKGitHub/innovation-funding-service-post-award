@@ -30,7 +30,12 @@ interface DocumentDisplayProps<T extends DocumentSummaryDto>
 /**
  * Component displays uploaded documents
  */
-function DocumentDisplay<T extends DocumentSummaryDto>({
+function DocumentDisplay<
+  T extends Pick<
+    DocumentSummaryDto,
+    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner"
+  >,
+>({
   hideHeader,
   hideSubtitle,
   disableSearch = false,
@@ -74,7 +79,7 @@ export const DocumentView = <T extends DocumentSummaryDto>(props: DocumentViewPr
 
 export type DocumentEditProps<T extends DocumentSummaryDto> = DocumentShow & DocumentTableWithDeleteProps<T>;
 export type ProjectPartnerDocumentEditProps<T extends DocumentSummaryDto> = DocumentEditProps<T> & {
-  project: ProjectDto;
+  project: Pick<ProjectDto, "roles">;
 };
 
 export const DocumentEdit = (props: DocumentEditProps<DocumentSummaryDto>) => {
