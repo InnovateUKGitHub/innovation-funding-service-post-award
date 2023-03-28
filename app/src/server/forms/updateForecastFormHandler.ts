@@ -1,6 +1,6 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { ForecastUpdateParams, UpdateForecastRoute } from "@ui/containers/forecasts/update.page";
+import { UpdateForecastParams, UpdateForecastRoute } from "@ui/containers/forecasts/updateForecast.page";
 import { ViewForecastRoute } from "@ui/containers/forecasts/viewForecast.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ForecastDetailsDTO } from "@framework/dtos";
@@ -11,13 +11,13 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
-export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastUpdateParams, "forecastDetails"> {
+export class UpdateForecastFormHandler extends StandardFormHandlerBase<UpdateForecastParams, "forecastDetails"> {
   constructor() {
     super(UpdateForecastRoute, ["default"], "forecastDetails");
   }
   protected async getDto(
     context: IContext,
-    params: ForecastUpdateParams,
+    params: UpdateForecastParams,
     button: IFormButton,
     body: { [key: string]: string },
   ): Promise<ForecastDetailsDTO[]> {
@@ -39,7 +39,7 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastU
 
   protected async run(
     context: IContext,
-    params: ForecastUpdateParams,
+    params: UpdateForecastParams,
     button: IFormButton,
     dto: ForecastDetailsDTO[],
   ): Promise<ILinkInfo> {
@@ -47,11 +47,11 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastU
     return ViewForecastRoute.getLink(params);
   }
 
-  protected getStoreKey(params: ForecastUpdateParams) {
+  protected getStoreKey(params: UpdateForecastParams) {
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(params: ForecastUpdateParams, dto: ForecastDetailsDTO[]) {
+  protected createValidationResult(params: UpdateForecastParams, dto: ForecastDetailsDTO[]) {
     return new ForecastDetailsDtosValidator(dto, [], [], [], undefined, false);
   }
 }

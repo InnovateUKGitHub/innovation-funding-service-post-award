@@ -1,6 +1,6 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { ForecastUpdateParams } from "@ui/containers/forecasts/update.page";
+import { UpdateForecastParams } from "@ui/containers/forecasts/updateForecast.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ProjectSetupRoute, ProjectSetupSpendProfileParams, ProjectSetupSpendProfileRoute } from "@ui/containers";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
@@ -27,7 +27,7 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
 
   protected async getDto(
     context: IContext,
-    params: ForecastUpdateParams,
+    params: UpdateForecastParams,
     button: IFormButton,
     body: { [key: string]: string },
   ): Promise<Dto[]> {
@@ -52,7 +52,7 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
 
   protected async run(
     context: IContext,
-    params: ForecastUpdateParams,
+    params: UpdateForecastParams,
     button: IFormButton,
     dto: Dto[],
   ): Promise<ILinkInfo> {
@@ -62,11 +62,11 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
     return ProjectSetupRoute.getLink(params);
   }
 
-  protected getStoreKey(params: ForecastUpdateParams) {
+  protected getStoreKey(params: UpdateForecastParams) {
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(params: ForecastUpdateParams, dto: Dto[]) {
+  protected createValidationResult(params: UpdateForecastParams, dto: Dto[]) {
     return new InitialForecastDetailsDtosValidator(dto, [], [], false, false);
   }
 }

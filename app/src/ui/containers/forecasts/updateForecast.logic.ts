@@ -9,8 +9,8 @@ import {
 } from "@framework/dtos";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
-import { viewForecastQuery } from "./ViewForecast.query";
-import { ViewForecastQuery, ViewForecastQuery$data } from "./__generated__/ViewForecastQuery.graphql";
+import { updateForecastQuery } from "./UpdateForecast.query";
+import { UpdateForecastQuery, UpdateForecastQuery$data } from "./__generated__/UpdateForecastQuery.graphql";
 import {
   mapToProjectDto,
   getPartnerRoles,
@@ -25,29 +25,12 @@ import {
 
 export type Project = Pick<
   ProjectDtoGql,
-  | "id"
-  | "projectNumber"
-  | "title"
-  | "status"
-  | "periodId"
-  | "numberOfPeriods"
-  | "competitionType"
-  | "roles"
-  | "isActive"
+  "id" | "projectNumber" | "title" | "periodId" | "numberOfPeriods" | "competitionType" | "roles" | "isActive"
 >;
 
 export type Partner = Pick<
   PartnerDtoGql,
-  | "id"
-  | "name"
-  | "isWithdrawn"
-  | "partnerStatus"
-  | "isLead"
-  | "newForecastNeeded"
-  | "overheadRate"
-  | "organisationType"
-  | "roles"
-  | "forecastLastModifiedDate"
+  "id" | "name" | "partnerStatus" | "overheadRate" | "organisationType" | "roles" | "forecastLastModifiedDate"
 >;
 
 type Claim = Pick<ClaimDto, "id" | "isApproved" | "periodId" | "isFinalClaim" | "paidDate">;
@@ -57,7 +40,7 @@ type CostCategory = Pick<
   "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type"
 >;
 
-type ProjectGQL = GQL.ObjectNodeSelector<ViewForecastQuery$data, "Acc_Project__c">;
+type ProjectGQL = GQL.ObjectNodeSelector<UpdateForecastQuery$data, "Acc_Project__c">;
 type PartnerGql = GQL.ObjectNodeSelector<ProjectGQL, "Acc_ProjectParticipantsProject__r">;
 
 export type Data = {
@@ -74,15 +57,19 @@ export type Data = {
 
 const defaultRole = { isPm: false, isMo: false, isFc: false };
 
-export const useViewForecastData = (projectId: string, partnerId: string): Data => {
-  const data = useLazyLoadQuery<ViewForecastQuery>(
-    viewForecastQuery,
+export const useUpdateForecastData = (
+  projectId: string,
+  partnerId: string,
+  refreshedQueryOptions: { fetchKey: number; fetchPolicy: "store-only" } | undefined,
+): Data => {
+  const data = useLazyLoadQuery<UpdateForecastQuery>(
+    updateForecastQuery,
     {
       projectId,
       projectIdStr: projectId,
       partnerId,
     },
-    { fetchPolicy: "store-and-network" },
+    refreshedQueryOptions,
   );
 
   const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
@@ -100,7 +87,6 @@ export const useViewForecastData = (projectId: string, partnerId: string): Data 
     "isActive",
     "projectNumber",
     "title",
-    "status",
     "roles",
     "periodId",
     "numberOfPeriods",
@@ -110,18 +96,7 @@ export const useViewForecastData = (projectId: string, partnerId: string): Data 
   // PARTNER
   const partner = mapToPartnerDto(
     partnerNode,
-    [
-      "id",
-      "name",
-      "isWithdrawn",
-      "partnerStatus",
-      "isLead",
-      "newForecastNeeded",
-      "overheadRate",
-      "organisationType",
-      "roles",
-      "forecastLastModifiedDate",
-    ],
+    ["id", "name", "partnerStatus", "overheadRate", "organisationType", "roles", "forecastLastModifiedDate"],
     { roles: partnerRoles.find(x => x.partnerId === partnerNode?.Acc_AccountId__c?.value ?? "unknown") ?? defaultRole },
   );
 
