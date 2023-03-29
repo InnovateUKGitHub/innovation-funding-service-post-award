@@ -82,7 +82,7 @@ export const useViewForecastData = (projectId: string, partnerId: string): Data 
       projectIdStr: projectId,
       partnerId,
     },
-    { fetchPolicy: "store-and-network" },
+    { fetchPolicy: "network-only" },
   );
 
   const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
