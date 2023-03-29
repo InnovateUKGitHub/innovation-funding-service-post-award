@@ -29,7 +29,7 @@ type WindowWithGDSLoaded = typeof window & {
  *
  * initializes govFrontend module
  */
-export function useGovFrontend(module: keyof GDSModules) {
+export function useGovFrontend(gdsModule: keyof GDSModules) {
   const { isClient } = useMounted();
 
   const hasGovFrontendLoaded: boolean = isClient ? "GOVUKFrontend" in window : false;
@@ -39,9 +39,9 @@ export function useGovFrontend(module: keyof GDSModules) {
     (node: HTMLElement | null) => {
       if (!govFrontend || !node) return;
 
-      new govFrontend[module](node).init();
+      new govFrontend[gdsModule](node).init();
     },
-    [govFrontend, module],
+    [govFrontend, gdsModule],
   );
 
   return { setRef };
