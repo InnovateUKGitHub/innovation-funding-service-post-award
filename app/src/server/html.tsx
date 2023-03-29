@@ -100,7 +100,6 @@ export function renderHtml({
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
       <body class="govuk-template__body">
-          <script nonce="${nonce}">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
           ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}
 
           <div id="root">${html}</div>
