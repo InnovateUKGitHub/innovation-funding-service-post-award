@@ -75,11 +75,15 @@ export type Data = {
 const defaultRole = { isPm: false, isMo: false, isFc: false };
 
 export const useViewForecastData = (projectId: string, partnerId: string): Data => {
-  const data = useLazyLoadQuery<ViewForecastQuery>(viewForecastQuery, {
-    projectId,
-    projectIdStr: projectId,
-    partnerId,
-  });
+  const data = useLazyLoadQuery<ViewForecastQuery>(
+    viewForecastQuery,
+    {
+      projectId,
+      projectIdStr: projectId,
+      partnerId,
+    },
+    { fetchPolicy: "network-only" },
+  );
 
   const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge<PartnerGql>(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
