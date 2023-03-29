@@ -48,6 +48,10 @@ const Client = () => {
   const [, setState] = useState(0);
 
   useEffect(() => {
+    const jsEnabledAnimationFrame = setTimeout(() => {
+      window.document.body.classList.add("js-enabled");
+    }, 100);
+
     // Whenever our IFS-PA store changes...
     const unsub = store.subscribe(() => {
       // Wait for the render to finish, before setting state to trigger a rerender.
@@ -55,8 +59,10 @@ const Client = () => {
     });
 
     // Unsubscribe when the <Client /> will unmount.
+    // Cancel adding js-enabled class if the client unmounts.
     return () => {
       unsub();
+      clearTimeout(jsEnabledAnimationFrame);
     };
   }, []);
 
