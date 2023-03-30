@@ -5,6 +5,7 @@ import {
   exceedGrantValue,
   populateCategoriesZeroSubmit,
   updateLabourFields,
+  submitCalculations,
 } from "./steps";
 
 const financeContactEmail = "wed.addams@test.test.co.uk";
@@ -28,11 +29,15 @@ describe("Forecast > edit", () => {
 
   it("Should allow Labour cost fields to be updated", updateLabourFields);
 
-  it("Should calculate the totals entered in each Labour item as £666.00", () => {
-    cy.tableCell("666");
-  });
+  it(
+    "Should calculate the totals entered in each Labour item as £33,999.00 and submit the forecast",
+    submitCalculations,
+  );
 
-  it("Should now enter a sum greater than the allowed grant and display an error", exceedGrantValue);
+  it(
+    "Should click update forecast and enter a sum greater than the allowed grant and display an error",
+    exceedGrantValue,
+  );
 
   it(
     "Should clear the cost categories and submit with null values which should generate an error",

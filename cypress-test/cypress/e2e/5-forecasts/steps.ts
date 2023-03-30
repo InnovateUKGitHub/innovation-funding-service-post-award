@@ -64,6 +64,7 @@ export const updateLabourFields = () => {
 };
 
 export const exceedGrantValue = () => {
+  cy.get("a").contains("Update forecast").click();
   cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true }).type("34446").wait(500);
   cy.getByQA("forecasts-warning-fc-content").contains(
     "The amount you are requesting is more than the agreed costs for:",
@@ -292,4 +293,12 @@ export const updateAcademicCosts = () => {
     cy.getByAriaLabel(forecastInput).clear().type("0");
   });
   cy.wait(500);
+};
+
+export const submitCalculations = () => {
+  cy.tableCell("£33,999.00");
+  cy.getByQA("button_default-qa").contains("Submit").click();
+  cy.get("a").contains("Update forecast");
+  cy.get("td:nth-child(4)").contains("111");
+  cy.get("td:nth-child(14)").contains("£33,999.00");
 };
