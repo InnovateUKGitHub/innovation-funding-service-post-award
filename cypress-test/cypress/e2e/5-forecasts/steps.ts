@@ -52,12 +52,12 @@ export const shouldShowAllAccordion = () => {
 
 export const updateLabourFields = () => {
   [
+    "Labour Period 2",
     "Labour Period 3",
     "Labour Period 4",
     "Labour Period 5",
     "Labour Period 6",
     "Labour Period 7",
-    "Labour Period 8",
   ].forEach(labourField => {
     cy.getByAriaLabel(labourField).clear({ force: true }).type("111").wait(500);
   });
