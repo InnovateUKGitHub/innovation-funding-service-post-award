@@ -33,7 +33,7 @@ export interface ProjectDto {
   projectNumber: string;
   roles: ProjectRole | SfRoles;
   roleTitles: string[];
-  startDate: Date;
+  startDate: Date | null;
   status: ProjectStatus;
   statusName: string;
   summary: string;
@@ -42,5 +42,7 @@ export interface ProjectDto {
 
 export interface ProjectDtoGql extends ProjectDto {
   isActive: boolean;
+  partnerRoles: SfPartnerRoles[];
   roles: SfRoles;
+  leadPartnerId: string | null;
 }

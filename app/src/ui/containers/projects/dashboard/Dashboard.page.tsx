@@ -1,172 +1,83 @@
-import { useEffect, useState } from "react";
-import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { noop } from "@ui/helpers/noop";
+
 import {
+  Page,
+  SelectOption,
+  Content,
+  BackLink,
+  H2,
+  createTypedForm,
+  Section,
   Accordion,
   AccordionItem,
-  BackLink,
-  Content,
-  createTypedForm,
-  H2,
-  Page,
-  Section,
-  SelectOption,
 } from "@ui/components";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { DeveloperHomePage } from "@ui/containers/developer/home.page";
-import { useMountedState } from "@ui/features";
-import { PageTitle } from "@ui/features/page-title";
-import { noop } from "@ui/helpers/noop";
-import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
-import { getFilteredProjects, getFilterOptions } from "./dashboard.logic";
-import { projectDashboardQuery } from "./Dashboard.query";
-import {
-  DashboardProjectList,
-  getPartnerOnProject,
-  getProjectSection,
-  IDashboardProjectData,
-} from "./DashboardProject";
-import { DashboardProjectCount } from "./DashboardProjectCount";
-import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
-import { getDefinedEdges } from "@gql/selectors/edges";
 
-type FilterKey =
-  | "PCRS_QUERIED"
-  | "CLAIMS_TO_REVIEW"
-  | "PCRS_TO_REVIEW"
-  | "SETUP_REQUIRED"
-  | "CLAIMS_TO_SUBMIT"
-  | "CLAIMS_TO_UPLOAD_REPORT"
-  | "CLAIMS_TO_RESPOND";
+import { useMountedState } from "@ui/features/has-mounted/Mounted";
+import { PageTitle } from "@ui/features/page-title";
+import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
+import { DashboardProjectList } from "./DashboardProjectList";
+import { DashboardProjectCount } from "./DashboardProjectCount";
+import { FilterOptions } from "./Dashboard.interface";
+import { generateFilteredProjects, getAvailableProjectFilters, useProjectsDashboardData } from "./dashboard.logic";
 
 interface ProjectDashboardParams {
   search?: string | number;
-  arrayFilters?: FilterKey[];
+  arrayFilters?: FilterOptions[];
 }
 
-const Form = createTypedForm<null>();
+interface IProjectDashboardForm {
+  searchValue: string;
+  filterValue: FilterOptions[];
+}
 
-/**
- * Project Dashboard Page
- */
-const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) => {
-  const data = useLazyLoadQuery<DashboardProjectDashboardQuery>(projectDashboardQuery, {});
+const Form = createTypedForm<IProjectDashboardForm>();
 
-  const { isServer } = useMountedState();
-
-  // Filtering options
-  // Automatically initializes to the search parameter values
-  const [searchQuery, setSearchQuery] = useState<string>(String(props.search ?? "").trim());
-  const [pcrsQueried, setPcrsQueried] = useState<boolean>(props.arrayFilters?.includes("PCRS_QUERIED") ?? false);
-  const [claimsToReview, setClaimsToReview] = useState<boolean>(
-    props.arrayFilters?.includes("CLAIMS_TO_REVIEW") ?? false,
-  );
-  const [pcrsToReview, setPcrsToReview] = useState<boolean>(props.arrayFilters?.includes("PCRS_TO_REVIEW") ?? false);
-  const [setupRequired, setSetupRequired] = useState<boolean>(props.arrayFilters?.includes("SETUP_REQUIRED") ?? false);
-  const [claimsToSubmit, setClaimsToSubmit] = useState<boolean>(
-    props.arrayFilters?.includes("CLAIMS_TO_SUBMIT") ?? false,
-  );
-  const [claimsToUploadReport, setClaimsToUploadReport] = useState<boolean>(
-    props.arrayFilters?.includes("CLAIMS_TO_UPLOAD_REPORT") ?? false,
-  );
-  const [claimsToRespond, setClaimsToRespond] = useState<boolean>(
-    props.arrayFilters?.includes("CLAIMS_TO_RESPOND") ?? false,
-  );
-
+const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: ProjectDashboardParams & BaseProps) => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // When the search filters are adjusted...
-    // Get an array of all enabled filter options.
-    const arrayFilters: FilterKey[] = [];
-    if (pcrsQueried) arrayFilters.push("PCRS_QUERIED");
-    if (claimsToReview) arrayFilters.push("CLAIMS_TO_REVIEW");
-    if (pcrsToReview) arrayFilters.push("PCRS_TO_REVIEW");
-    if (setupRequired) arrayFilters.push("SETUP_REQUIRED");
-    if (claimsToSubmit) arrayFilters.push("CLAIMS_TO_SUBMIT");
-    if (claimsToUploadReport) arrayFilters.push("CLAIMS_TO_UPLOAD_REPORT");
-    if (claimsToRespond) arrayFilters.push("CLAIMS_TO_RESPOND");
+  const { projects, unfilteredObjects, totalNumberOfProjects } = useProjectsDashboardData(searchQuery ?? "");
 
-    const params: ProjectDashboardParams = {};
+  const onSearch = (searchParams: { search?: string | number; arrayFilters: FilterOptions[] }) => {
+    const routeInfo = ProjectDashboardRoute.getLink(searchParams);
+    return navigate(routeInfo.path, { replace: true });
+  };
 
-    // Add to URL search bar if any values exist
-    if (arrayFilters.length || searchQuery.length) {
-      params.arrayFilters = arrayFilters;
-      params.search = searchQuery;
-    }
+  // TODO: Ideally this would be an api which would be non-js / js agnostic
+  // Note: 'unfilteredObjects' is needed as the filter options are derived from projects, when filtered there could be nothing to search.
+  const [filterOptions] = useState(() => getAvailableProjectFilters(unfilteredObjects));
+  const search = searchQuery === undefined ? "" : "" + searchQuery;
 
-    // Create the new path
-    const { path } = ProjectDashboardRoute.getLink(params);
+  const { isServer } = useMountedState();
+  const [arrayFilters, setFilters] = useState<FilterOptions[]>(props.arrayFilters ?? []);
+  const { curatedProjects, curatedTotals, totalProjects } = generateFilteredProjects(arrayFilters, projects);
 
-    // Replace the current path with the same path, but with new search parameters.
-    // Use "replace" to avoid filling up the user's back button.
-    navigate(path, {
-      replace: true,
-    });
-  }, [
-    searchQuery,
-    pcrsQueried,
-    claimsToReview,
-    pcrsToReview,
-    setupRequired,
-    claimsToSubmit,
-    claimsToUploadReport,
-    claimsToRespond,
-    navigate,
-  ]);
+  const searchFilterState = {
+    searchValue: search,
+    filterValue: arrayFilters,
+  };
 
-  // For each project...
-  const allProjects = getDefinedEdges(data.salesforce.uiapi.query.Acc_Project__c?.edges)
-    .map(({ node: project }) => {
-      // Get the partner a user is associated with, as well
-      // as the section the project should be displayed in.
-      const partner = getPartnerOnProject({ project });
-      const projectSection = getProjectSection({ project, partner });
+  const projectListProps = {
+    routes: props.routes,
+    isFiltering: !!search || !!arrayFilters.length,
+  };
 
-      return {
-        project,
-        partner,
-        projectSection,
-      } as IDashboardProjectData;
-    })
-    .sort((a, b) => {
-      // Bubble "pending" to the top so it is more visible to the user.
-      // Sorting other metrics such as PCR/Claim sorting is done within the GraphQL query itself.
-      if (a.projectSection === "pending" && b.projectSection !== "pending") return -1;
-      if (b.projectSection === "pending") return 1;
-      return 0;
-    });
-
-  // Only display the search bar if there's enough projects.
-  const displaySearch =
-    getDefinedEdges(data.salesforce.uiapi.query.Acc_Project__c?.edges).length >=
-    data.clientConfig.options.numberOfProjectsToSearch;
-
-  // Sort and filter all projects, and split them into the sections to display.
-  const { currentProjects, upcomingProjects, archivedProjects, openAndAwaitingProjects, pendingProjects, isFiltering } =
-    getFilteredProjects({
-      searchQuery,
-      pcrsQueried,
-      claimsToReview,
-      pcrsToReview,
-      setupRequired,
-      claimsToSubmit,
-      claimsToUploadReport,
-      claimsToRespond,
-      projects: allProjects,
-    });
+  const displaySearch: boolean = totalNumberOfProjects >= config.options.numberOfProjectsToSearch;
+  const options: SelectOption[] = filterOptions.map(x => ({ id: x.id, value: x.label }));
 
   return (
     <Page
       pageTitle={<PageTitle />}
       backLink={
-        data?.clientConfig?.ssoEnabled ? (
+        config.ssoEnabled ? (
           // Note: This has been added as the content component cannot infer the static string length of min 4 characters
-          <a className="govuk-back-link" href={`${data.clientConfig.ifsRoot}/dashboard-selection`}>
+          <a className="govuk-back-link" href={`${config.ifsRoot}/dashboard-selection`}>
             <Content value={x => x.pages.projectsDashboard.backToDashboard} />
           </a>
         ) : (
-          <BackLink route={DeveloperHomePage.getLink({})}>
+          <BackLink route={props.routes.home.getLink({})}>
             <Content value={x => x.pages.projectsDashboard.backToHomepage} />
           </BackLink>
         )
@@ -179,7 +90,18 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
       </H2>
 
       {displaySearch && (
-        <Form.Form data={null} qa="projectSearch" onSubmit={noop} isGet>
+        <Form.Form
+          data={searchFilterState}
+          qa="projectSearch"
+          isGet
+          onSubmit={noop}
+          onChange={model =>
+            onSearch({
+              search: model.searchValue,
+              arrayFilters,
+            })
+          }
+        >
           <Form.Fieldset heading={x => x.pages.projectsDashboard.searchTitle}>
             <Form.Search
               width="one-half"
@@ -187,8 +109,8 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
               label={x => x.pages.projectsDashboard.searchLabel}
               labelHidden
               name="search"
-              value={() => searchQuery}
-              update={(_, v) => setSearchQuery(v || "")}
+              value={x => x.searchValue}
+              update={(x, v) => (x.searchValue = v ?? "")}
             />
           </Form.Fieldset>
 
@@ -196,29 +118,13 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
             <Form.Checkboxes
               hint="You can select more than one."
               name="arrayFilters"
-              options={getFilterOptions({ projects: allProjects })}
-              value={() => {
-                const options: SelectOption[] = [];
-
-                if (pcrsQueried) options.push({ id: "PCRS_QUERIED", value: "PCR's being queried" });
-                if (claimsToReview) options.push({ id: "CLAIMS_TO_REVIEW", value: "Claims to review" });
-                if (pcrsToReview) options.push({ id: "PCRS_TO_REVIEW", value: "PCR's to review" });
-                if (setupRequired) options.push({ id: "SETUP_REQUIRED", value: "Not completed setup" });
-                if (claimsToSubmit) options.push({ id: "CLAIMS_TO_SUBMIT", value: "Claims to submit" });
-                if (claimsToUploadReport)
-                  options.push({ id: "CLAIMS_TO_UPLOAD_REPORT", value: "Claims missing documents" });
-                if (claimsToRespond) options.push({ id: "CLAIMS_TO_RESPOND", value: "Claims needing responses" });
-
-                return options;
-              }}
+              options={options}
+              value={() =>
+                arrayFilters.length ? options.filter(x => arrayFilters.includes(x.id as FilterOptions)) : null
+              }
               update={(_, selectOptions) => {
-                setPcrsQueried(!!selectOptions?.some(x => x.id === "PCRS_QUERIED"));
-                setClaimsToReview(!!selectOptions?.some(x => x.id === "CLAIMS_TO_REVIEW"));
-                setPcrsToReview(!!selectOptions?.some(x => x.id === "PCRS_TO_REVIEW"));
-                setSetupRequired(!!selectOptions?.some(x => x.id === "SETUP_REQUIRED"));
-                setClaimsToSubmit(!!selectOptions?.some(x => x.id === "CLAIMS_TO_SUBMIT"));
-                setClaimsToUploadReport(!!selectOptions?.some(x => x.id === "CLAIMS_TO_UPLOAD_REPORT"));
-                setClaimsToRespond(!!selectOptions?.some(x => x.id === "CLAIMS_TO_RESPOND"));
+                const latestFilters = selectOptions?.map(x => x.id) as FilterOptions[];
+                setFilters(latestFilters);
               }}
             />
           </Form.Fieldset>
@@ -227,26 +133,23 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
         </Form.Form>
       )}
 
-      <DashboardProjectCount
-        curatedTotals={{
-          archived: archivedProjects.length,
-          open: openAndAwaitingProjects.length,
-          upcoming: upcomingProjects.length,
-          pending: pendingProjects.length,
-        }}
-      />
+      <DashboardProjectCount curatedTotals={curatedTotals} totalProjectCount={totalProjects} />
 
       <Section qa="pending-and-open-projects">
-        <DashboardProjectList isFiltering={isFiltering} displaySection="live" projectsData={currentProjects} />
+        <DashboardProjectList
+          {...projectListProps}
+          projects={[...curatedProjects.pending, ...curatedProjects.open]}
+          errorType="live"
+        />
       </Section>
 
       <Accordion>
         <AccordionItem title="Upcoming" qa="upcoming-projects">
-          <DashboardProjectList isFiltering={isFiltering} displaySection="upcoming" projectsData={upcomingProjects} />
+          <DashboardProjectList errorType="upcoming" {...projectListProps} projects={curatedProjects.upcoming} />
         </AccordionItem>
 
         <AccordionItem title="Archived" qa="archived-projects">
-          <DashboardProjectList isFiltering={isFiltering} displaySection="archived" projectsData={archivedProjects} />
+          <DashboardProjectList errorType="archived" {...projectListProps} projects={curatedProjects.archived} />
         </AccordionItem>
       </Accordion>
     </Page>
@@ -256,8 +159,8 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
 export const ProjectDashboardRoute = defineRoute({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
-  routePathWithQuery: "/projects/dashboard?:search&:arrayFilters",
-  container: ProjectDashboardContainer,
+  routePathWithQuery: "/projects/dashboard?:search",
+  container: ProjectDashboardPage,
   getParams: () => ({}),
   getTitle: x => x.content.getTitleCopy(x => x.pages.projectsDashboard.title),
 });

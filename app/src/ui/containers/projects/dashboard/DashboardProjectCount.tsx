@@ -1,14 +1,18 @@
 import { useContent } from "@ui/hooks";
 import { SimpleString } from "@ui/components/renderers";
+
 import { CuratedSection } from "./Dashboard.interface";
 
 interface DashboardProjectCountProps {
   curatedTotals: CuratedSection<number>;
+  totalProjectCount: number;
 }
 
-export function DashboardProjectCount({ curatedTotals }: DashboardProjectCountProps) {
+export function DashboardProjectCount({ curatedTotals, totalProjectCount }: DashboardProjectCountProps) {
   const { getContent } = useContent();
   const { open: openTotal, upcoming: upcomingTotal, archived: archivedTotal, pending: pendingTotal } = curatedTotals;
+
+  if (!totalProjectCount) return null;
 
   const results: string[] = [];
 
@@ -25,14 +29,7 @@ export function DashboardProjectCount({ curatedTotals }: DashboardProjectCountPr
     results.push(getContent(x => x.pages.projectsDashboard.countMessages.archivedMessage({ count: archivedTotal })));
   }
 
-  // If there are no totals at all, return null.
-  if (results.length === 0) {
-    return null;
-  }
-
-  const prefixMessage = getContent(x =>
-    x.pages.projectsDashboard.projectPrefixCount({ count: pendingTotal + openTotal + upcomingTotal + archivedTotal }),
-  );
+  const prefixMessage = getContent(x => x.pages.projectsDashboard.projectPrefixCount({ count: totalProjectCount }));
   const listOfProjects = `(${results.join(", ")})`;
 
   return (

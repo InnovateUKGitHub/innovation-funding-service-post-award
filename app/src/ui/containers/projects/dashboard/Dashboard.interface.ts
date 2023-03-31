@@ -1,29 +1,43 @@
 import { BaseProps } from "@ui/containers/containerBase";
-import { PartnerDto, ProjectDto } from "@framework/dtos";
-import { DashboardProjectDashboardQuery$data } from "./__generated__/DashboardProjectDashboardQuery.graphql";
-import { getPartnerOnProject, getProjectSection } from "./DashboardProject";
+import { PartnerDtoGql, ProjectDtoGql } from "@framework/dtos";
 
 export type Section = "archived" | "open" | "awaiting" | "upcoming" | "pending";
 
 export type CuratedSections = Exclude<Section, "awaiting">;
 export type CuratedSection<T> = { [key in CuratedSections]: T };
+export type Project = Pick<
+  ProjectDtoGql,
+  | "claimsOverdue"
+  | "claimsToReview"
+  | "endDate"
+  | "id"
+  | "isPastEndDate"
+  | "leadPartnerId"
+  | "leadPartnerName"
+  | "numberOfOpenClaims"
+  | "numberOfPeriods"
+  | "partnerRoles"
+  | "pcrsQueried"
+  | "pcrsToReview"
+  | "periodEndDate"
+  | "periodId"
+  | "periodStartDate"
+  | "projectNumber"
+  | "roles"
+  | "startDate"
+  | "status"
+  | "statusName"
+  | "title"
+> & { partners: Partner[] };
+export type Partner = Pick<
+  PartnerDtoGql,
+  "id" | "claimStatus" | "partnerStatus" | "newForecastNeeded" | "name" | "isWithdrawn" | "isLead" | "projectId"
+>;
 
-export type IProject = NonNullable<
-  NonNullable<
-    UnwrapArray<
-      NonNullable<
-        NonNullable<DashboardProjectDashboardQuery$data["salesforce"]["uiapi"]["query"]["Acc_Project__c"]>["edges"]
-      >
-    >
-  >["node"]
->;
-export type IPartner = NonNullable<
-  NonNullable<UnwrapArray<NonNullable<IProject["Acc_ProjectParticipantsProject__r"]>["edges"]>>["node"]
->;
 export interface ProjectProps {
   section: Section;
-  project: IProject;
-  partner?: PartnerDto;
+  project: Project;
+  partner?: Partner;
 }
 
 export interface DashboardProjectProps extends ProjectProps {
@@ -33,15 +47,9 @@ export interface DashboardProjectProps extends ProjectProps {
 export type DashboardProjectAttr = Pick<DashboardProjectProps, "partner" | "routes" | "section">;
 
 export interface ProjectData {
-  project: ProjectDto;
-  partner?: PartnerDto;
+  project: Project;
+  partner?: Partner;
   curatedSection: Section;
-}
-
-export interface IDashboardProjectData {
-  project: IProject;
-  partner: ReturnType<typeof getPartnerOnProject>;
-  projectSection: ReturnType<typeof getProjectSection>;
 }
 
 export type FilterOptions =

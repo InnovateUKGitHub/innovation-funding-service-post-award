@@ -9,6 +9,7 @@ describe("mapPartnerDtoArray", () => {
         Acc_ParticipantStatus__c: { value: "Active" },
         Acc_AccountId__r: {
           Name: { value: "Swindon University" },
+          Id: "123",
         },
         Acc_AccountId__c: { value: "123" },
         Acc_TotalParticipantCosts__c: { value: 10000 },
@@ -26,6 +27,7 @@ describe("mapPartnerDtoArray", () => {
         Acc_TotalPrepayment__c: { value: 4000 },
         Acc_Cap_Limit__c: { value: 100 },
         Acc_AuditReportFrequency__c: { value: "monthly" },
+        Acc_OpenClaimStatus__c: { value: "Draft" },
       },
     },
     {
@@ -35,6 +37,7 @@ describe("mapPartnerDtoArray", () => {
         Acc_ParticipantStatus__c: { value: "Voluntary Withdrawal" },
         Acc_AccountId__r: {
           Name: { value: "Kettering Nursing College" },
+          Id: "124",
         },
         Acc_AccountId__c: { value: "124" },
         Acc_TotalParticipantCosts__c: { value: 10000 },
@@ -52,6 +55,7 @@ describe("mapPartnerDtoArray", () => {
         Acc_TotalPrepayment__c: { value: 4000 },
         Acc_Cap_Limit__c: { value: 100 },
         Acc_AuditReportFrequency__c: { value: "monthly" },
+        Acc_OpenClaimStatus__c: { value: "New" },
       },
     },
   ];

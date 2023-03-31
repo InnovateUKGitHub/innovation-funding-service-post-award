@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 
 import { ProjectSortableFragment$data } from "@gql/fragment/__generated__/ProjectSortableFragment.graphql";
+import { ProjectDto } from "@framework/dtos";
 
 export type IComparer<T> = (x: T, y: T) => number;
 
@@ -28,6 +29,12 @@ export const dayComparator: IComparer<Date> = (a, b) => {
   return DateTime.fromJSDate(a).startOf("day").toMillis() - DateTime.fromJSDate(b).startOf("day").toMillis();
 };
 
+export const projectPriorityComparator: IComparer<
+  Pick<ProjectDto, "claimsToReview" | "pcrsToReview" | "pcrsQueried">
+> = (a, b) => {
+  return b.claimsToReview - a.claimsToReview || b.pcrsToReview - a.pcrsToReview || b.pcrsQueried - a.pcrsQueried;
+};
+
 /**
  * Compares the sortable position of two projects, from most important to least important.
  *
@@ -38,7 +45,7 @@ export const dayComparator: IComparer<Date> = (a, b) => {
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#description
  * @example projects.open.sort(projectPriorityComparator)
  */
-export const projectPriorityComparator: IComparer<ProjectSortableFragment$data> = (a, b) => {
+export const projectPriorityComparatorGql: IComparer<ProjectSortableFragment$data> = (a, b) => {
   const claimsForReviewComparison = nullableNumberComparator(
     b.Acc_ClaimsForReview__c?.value,
     a.Acc_ClaimsForReview__c?.value,

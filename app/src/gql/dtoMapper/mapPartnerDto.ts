@@ -10,12 +10,14 @@ type PartnerNode = Readonly<
     Acc_AccountId__c: GQL.Value<string>;
     Acc_AccountId__r: {
       Name: GQL.Value<string>;
+      Id?: string | null;
     } | null;
     Acc_AuditReportFrequency__c: GQL.Value<string>;
     Acc_Award_Rate__c: GQL.Value<number>;
     Acc_Cap_Limit__c: GQL.Value<number>;
     Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
     Acc_NewForecastNeeded__c: GQL.Value<boolean>;
+    Acc_OpenClaimStatus__c: GQL.Value<string>;
     Acc_OrganisationType__c: GQL.Value<string>;
     Acc_OverheadRate__c: GQL.Value<number>;
     Acc_ProjectRole__c: GQL.Value<string>;
@@ -50,6 +52,7 @@ type PartnerDtoMapping = Pick<
   | "partnerStatus"
   | "percentageParticipantCostsClaimed"
   | "percentageParticipantCostsSubmitted"
+  | "projectId"
   | "remainingParticipantGrant"
   | "roles"
   | "totalCostsSubmitted"
@@ -117,6 +120,9 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles: SfRoles }> 
   },
   percentageParticipantCostsSubmitted(node) {
     return calcPercentage(node?.Acc_TotalParticipantCosts__c?.value ?? 0, node?.Acc_TotalCostsSubmitted__c?.value ?? 0);
+  },
+  projectId: function (node) {
+    return (node?.Acc_AccountId__r?.Id ?? "") as ProjectId;
   },
   remainingParticipantGrant(node) {
     return node?.Acc_RemainingParticipantGrant__c?.value ?? 0;

@@ -13,18 +13,26 @@ type ProjectNode = Readonly<
     };
     isActive: boolean;
     Acc_ClaimsForReview__c: GQL.Value<number>;
+    Acc_ClaimsOverdue__c: GQL.Value<number>;
     Acc_CompetitionType__c: GQL.Value<string>;
     Acc_CurrentPeriodEndDate__c: GQL.Value<string>;
     Acc_CurrentPeriodNumber__c: GQL.Value<number>;
     Acc_CurrentPeriodStartDate__c: GQL.Value<string>;
     Acc_EndDate__c: GQL.Value<string>;
     Acc_GOLTotalCostAwarded__c: GQL.Value<number>;
+    Acc_LeadParticipantID__c: GQL.Value<string>;
+    Acc_LeadParticipantName__c: GQL.Value<string>;
+    Acc_NumberOfOpenClaims__c: GQL.Value<number>;
     Acc_NumberofPeriods__c: GQL.Value<number>;
     Acc_PCRsForReview__c: GQL.Value<number>;
     Acc_PCRsUnderQuery__c: GQL.Value<number>;
     Acc_ProjectNumber__c: GQL.Value<string>;
-    Acc_ProjectStatus__c: GQL.Value<string>;
+    Acc_ProjectStatus__c: {
+      value: string | null;
+      label?: string | null;
+    } | null;
     Acc_ProjectTitle__c: GQL.Value<string>;
+    Acc_StartDate__c: GQL.Value<string>;
     Acc_TotalProjectCosts__c: GQL.Value<number>;
   }>
 > | null;
@@ -33,12 +41,17 @@ type ProjectDtoMapping = Pick<
   ProjectDtoGql,
   | "id"
   | "claimedPercentage"
+  | "claimsOverdue"
   | "claimsToReview"
   | "competitionType"
   | "costsClaimedToDate"
+  | "endDate"
   | "isActive"
   | "isPastEndDate"
   | "grantOfferLetterCosts"
+  | "leadPartnerName"
+  | "leadPartnerId"
+  | "numberOfOpenClaims"
   | "numberOfPeriods"
   | "pcrsQueried"
   | "pcrsToReview"
@@ -47,69 +60,96 @@ type ProjectDtoMapping = Pick<
   | "periodStartDate"
   | "projectNumber"
   | "roles"
+  | "startDate"
   | "status"
+  | "statusName"
   | "title"
+  | "partnerRoles"
 >;
 
 const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
-  id: function (node) {
+  id(node) {
     return (node?.Id ?? "") as ProjectId;
   },
-  claimedPercentage: function (node) {
+  claimedPercentage(node) {
     return !!node?.Acc_GOLTotalCostAwarded__c?.value
       ? roundCurrency((100 * (node?.Acc_TotalProjectCosts__c?.value ?? 0)) / node?.Acc_GOLTotalCostAwarded__c?.value)
       : null;
   },
-  claimsToReview: function (node) {
+  claimsOverdue(node) {
+    return node?.Acc_ClaimsOverdue__c?.value ?? 0;
+  },
+  claimsToReview(node) {
     return node?.Acc_ClaimsForReview__c?.value ?? 0;
   },
-  competitionType: function (node) {
+  competitionType(node) {
     return node?.Acc_CompetitionType__c?.value ?? "Unknown";
   },
-  costsClaimedToDate: function (node) {
+  costsClaimedToDate(node) {
     return node?.Acc_TotalProjectCosts__c?.value ?? 0;
   },
-  isActive: function (node) {
+  endDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Acc_EndDate__c?.value ?? null) as Date;
+  },
+  isActive(node) {
     return !!node?.isActive;
   },
-  isPastEndDate: function (node) {
+  isPastEndDate(node) {
     return dayComparator(clock.parseOptionalSalesforceDate(node?.Acc_EndDate__c?.value ?? "") as Date, new Date()) < 0;
   },
-  grantOfferLetterCosts: function (node) {
+  grantOfferLetterCosts(node) {
     return node?.Acc_GOLTotalCostAwarded__c?.value ?? 0;
   },
-  numberOfPeriods: function (node) {
+  leadPartnerId(node) {
+    return node?.Acc_LeadParticipantID__c?.value ?? "unknown_lead_partner_id";
+  },
+  leadPartnerName(node) {
+    return node?.Acc_LeadParticipantName__c?.value ?? "";
+  },
+  numberOfOpenClaims(node) {
+    return node?.Acc_NumberOfOpenClaims__c?.value ?? 0;
+  },
+  numberOfPeriods(node) {
     return Number(node?.Acc_NumberofPeriods__c?.value ?? 0);
   },
-  pcrsQueried: function (node) {
+  partnerRoles(node) {
+    return (node?.roles?.partnerRoles ?? []) as Mutable<SfPartnerRoles>[];
+  },
+  pcrsQueried(node) {
     return node?.Acc_PCRsUnderQuery__c?.value ?? 0;
   },
-  pcrsToReview: function (node) {
+  pcrsToReview(node) {
     return node?.Acc_PCRsForReview__c?.value ?? 0;
   },
-  periodEndDate: function (node) {
+  periodEndDate(node) {
     return !!node?.Acc_CurrentPeriodEndDate__c?.value ? new Date(node?.Acc_CurrentPeriodEndDate__c?.value) : null;
   },
-  periodId: function (node) {
-    return node?.Acc_CurrentPeriodNumber__c?.value ?? 0;
+  periodId(node) {
+    return node?.Acc_CurrentPeriodNumber__c?.value ?? -1;
   },
-  periodStartDate: function (node) {
+  periodStartDate(node) {
     return !!node?.Acc_CurrentPeriodStartDate__c?.value ? new Date(node?.Acc_CurrentPeriodStartDate__c?.value) : null;
   },
-  projectNumber: function (node) {
+  projectNumber(node) {
     return node?.Acc_ProjectNumber__c?.value ?? "";
   },
-  roles: function (node) {
+  roles(node) {
     return {
       isPm: node?.roles?.isPm ?? false,
       isMo: node?.roles?.isMo ?? false,
       isFc: node?.roles?.isFc ?? false,
     };
   },
-  status: function (node) {
+  startDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Acc_StartDate__c?.value ?? null);
+  },
+  status(node) {
     return getProjectStatus(node?.Acc_ProjectStatus__c?.value ?? "Unknown");
   },
-  title: function (node) {
+  statusName(node) {
+    return node?.Acc_ProjectStatus__c?.label ?? "Unknown";
+  },
+  title(node) {
     return node?.Acc_ProjectTitle__c?.value ?? "";
   },
 };

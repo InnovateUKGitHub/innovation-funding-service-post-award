@@ -20,14 +20,26 @@ Object {
 exports[`mapToProjectDto should map the node to the projectDto structure 1`] = `
 Object {
   "claimedPercentage": 90,
+  "claimsOverdue": 1,
   "claimsToReview": 3,
   "competitionType": "CR&D",
   "costsClaimedToDate": 90000,
+  "endDate": 2024-03-24T00:00:00.000Z,
   "grantOfferLetterCosts": 100000,
   "id": "0",
   "isActive": true,
   "isPastEndDate": false,
+  "leadPartnerName": "",
+  "numberOfOpenClaims": 1,
   "numberOfPeriods": 12,
+  "partnerRoles": Array [
+    Object {
+      "isFc": true,
+      "isMo": false,
+      "isPm": false,
+      "partnerId": "1",
+    },
+  ],
   "pcrsQueried": 2,
   "pcrsToReview": 1,
   "periodEndDate": 2022-03-24T00:00:00.000Z,
@@ -39,7 +51,9 @@ Object {
     "isMo": false,
     "isPm": false,
   },
+  "startDate": 2022-01-22T00:00:00.000Z,
   "status": 0,
+  "statusName": "Live",
   "title": "Allan's Plans",
 }
 `;

@@ -5,7 +5,7 @@ import { ISalesforceProject } from "../../repositories/projectsRepository";
 export const mapToProjectDto = (context: IContext, item: ISalesforceProject, roles: ProjectRole): ProjectDto => {
   const claimFrequency = mapFrequencyToEnum(item.Acc_ClaimFrequency__c);
   // TODO change this to parseRequiredSalesforceDate and update tests to pass
-  const startDate = context.clock.parseOptionalSalesforceDate(item.Acc_StartDate__c) as Date;
+  const startDate = context.clock.parseOptionalSalesforceDate(item.Acc_StartDate__c);
   const endDate = context.clock.parseOptionalSalesforceDate(item.Acc_EndDate__c) as Date;
 
   return {

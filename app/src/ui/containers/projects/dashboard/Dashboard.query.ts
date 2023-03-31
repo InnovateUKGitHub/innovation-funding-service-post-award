@@ -1,10 +1,37 @@
 import { graphql } from "relay-hooks";
 
-const projectDashboardQuery = graphql`
+export const projectDashboardQuery = graphql`
   query DashboardProjectDashboardQuery {
     salesforce {
       uiapi {
         query {
+          #start block
+          # Acc_ProjectParticipant__c(first: 500) {
+          #   edges {
+          #     node {
+          #       Id
+          #       Acc_AccountId__r {
+          #         Id
+          #         Name {
+          #           value
+          #         }
+          #       }
+          #       Acc_TrackingClaims__c {
+          #         value
+          #       }
+          #       Acc_ParticipantStatus__c {
+          #         value
+          #       }
+          #       Acc_NewForecastNeeded__c {
+          #         value
+          #       }
+          #       Acc_OpenClaimStatus__c {
+          #         value
+          #       }
+          #     }
+          #   }
+          # }
+          # end block
           Acc_Project__c(
             first: 2000
             orderBy: {
@@ -25,6 +52,7 @@ const projectDashboardQuery = graphql`
                   partnerRoles {
                     isFc
                     isPm
+                    isMo
                     partnerId
                   }
                 }
@@ -72,6 +100,7 @@ const projectDashboardQuery = graphql`
                 }
                 Acc_ProjectStatus__c {
                   value
+                  label
                 }
                 Acc_CurrentPeriodStartDate__c {
                   value
@@ -79,6 +108,7 @@ const projectDashboardQuery = graphql`
                 Acc_CurrentPeriodEndDate__c {
                   value
                 }
+                # start block
                 Acc_ProjectParticipantsProject__r(first: 500) {
                   edges {
                     node {
@@ -104,6 +134,7 @@ const projectDashboardQuery = graphql`
                     }
                   }
                 }
+                # end block
               }
             }
           }
@@ -119,5 +150,3 @@ const projectDashboardQuery = graphql`
     }
   }
 `;
-
-export { projectDashboardQuery };

@@ -32,3 +32,7 @@ declare const __nominal__type: unique symbol;
 declare type Nominal<Type, Identifier> = Type & {
   readonly [__nominal__type]: Identifier;
 };
+
+declare type Mutable<T extends object> = {
+  -readonly [Key in keyof T]: T[Key];
+};
