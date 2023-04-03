@@ -84,7 +84,7 @@ const clickCheckBox = (label: string, uncheck?: boolean) => {
   }
 };
 
-const navigateToProject = (projectId: ProjectId) => {
+const navigateToProject = (projectId: string) => {
   const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
   cy.log("**navigateToProject**");
   cy.contains("Projects").click({ force: true });
@@ -95,7 +95,7 @@ const selectTile = (label: string) => {
   cy.get(".card-link").contains(label).click();
 };
 
-const deletePcr = (projectId: ProjectId) => {
+const deletePcr = (projectId: string) => {
   visitApp({});
   cy.navigateToProject(projectId);
   cy.selectTile("Project change requests");

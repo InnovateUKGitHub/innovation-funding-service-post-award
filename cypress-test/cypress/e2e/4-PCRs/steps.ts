@@ -36,22 +36,36 @@ export const pcrCheckBoxes = () => {
    * Check each check box can be selected
    */
   cy.clickCheckBox("Reallocate project costs");
+  cy.wait(500);
   cy.clickCheckBox("Remove a partner");
+  cy.wait(500);
   cy.clickCheckBox("Add a partner");
+  cy.wait(500);
   cy.clickCheckBox("Change project scope");
+  cy.wait(500);
   cy.clickCheckBox("Change project duration");
+  cy.wait(500);
   cy.clickCheckBox("Change a partner's name");
+  cy.wait(500);
   cy.clickCheckBox("Put project on hold");
+  cy.wait(500);
   /**
    * Check that each check box can be unselected
    */
   cy.clickCheckBox("Reallocate project costs", true);
+  cy.wait(500);
   cy.clickCheckBox("Remove a partner", true);
+  cy.wait(500);
   cy.clickCheckBox("Add a partner", true);
+  cy.wait(500);
   cy.clickCheckBox("Change project scope", true);
+  cy.wait(500);
   cy.clickCheckBox("Change project duration", true);
+  cy.wait(500);
   cy.clickCheckBox("Change a partner's name", true);
+  cy.wait(500);
   cy.clickCheckBox("Put project on hold", true);
+  cy.wait(500);
 };
 
 export const beforeYouSubmit = () => {
