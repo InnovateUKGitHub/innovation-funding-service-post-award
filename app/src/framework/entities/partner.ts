@@ -1,87 +1,84 @@
 import { PCROrganisationType } from "@framework/constants";
 export interface Partner {
-  id: PartnerId;
+  accountBuilding: string;
   accountId: string;
-  name: string;
-  organisationType: PCROrganisationType;
-  participantType: string;
-  participantSize: string;
-  projectRole: string;
-  projectRoleName: string;
-  projectId: ProjectId;
-  competitionType: string;
-  competitionName?: string;
-  totalParticipantCosts: number;
-  totalApprovedCosts: number;
-  capLimit: number;
-  awardRate: number;
-  totalPaidCosts: number;
-  totalFutureForecastsForParticipant: number;
-  forecastLastModifiedDate: Date | null;
-  claimsForReview: number;
-  overdueProject: boolean;
-  claimsOverdue: number;
-  claimsUnderQuery: number;
-  trackingClaims: string;
-  overheadRate: number;
-  participantStatus: string;
-  participantStatusLabel: string;
-  totalCostsSubmitted: number;
-  totalCostsAwarded: number;
-  auditReportFrequency: string;
-  auditReportFrequencyName: string;
-  totalPrepayment: number;
-  postcode: string | null;
-  postcodeStatusLabel: string | null;
-  postcodeStatus: string;
-  newForecastNeeded: boolean;
-
-  // project setup
-  companyNumber: string;
-  sortCode: string;
+  accountLocality: string;
   accountNumber: string;
-  firstName: string;
-  lastName: string;
   accountPostcode: string;
   accountStreet: string;
-  accountBuilding: string;
-  accountLocality: string;
   accountTownOrCity: string;
-
-  spendProfileStatus: string;
-  spendProfileStatusLabel: string;
+  addressScore: number | null;
+  auditReportFrequency: string;
+  auditReportFrequencyName: string;
+  awardRate: number;
+  bankCheckStatus: string;
   bankDetailsTaskStatus: string;
   bankDetailsTaskStatusLabel: string;
-  bankCheckStatus: string;
-  validationCheckPassed: boolean;
+  capLimit: number;
+  claimsForReview: number;
+  claimsOverdue: number;
+  claimsUnderQuery: number;
+  companyNameScore: number | null;
+  companyNumber: string;
+  competitionName?: string;
+  competitionType: string;
+  firstName: string;
+  forecastLastModifiedDate: Date | null;
   iban: string;
-  validationConditionsSeverity: string;
+  id: PartnerId;
+  isNonFunded: boolean;
+  lastName: string;
+  name: string;
+  newForecastNeeded: boolean;
+  organisationType: PCROrganisationType;
+  overdueProject: boolean;
+  overheadRate: number;
+  participantSize: string;
+  participantStatus: string;
+  participantStatusLabel: string;
+  participantType: string;
+  personalDetailsScore: number | null;
+  postcode: string | null;
+  postcodeStatus: string;
+  postcodeStatusLabel: string | null;
+  projectId: ProjectId;
+  projectRole: string;
+  projectRoleName: string;
+  regNumberScore: string | null;
+  remainingParticipantGrant: number;
+  sortCode: string;
+  spendProfileStatus: string;
+  spendProfileStatusLabel: string;
+  totalApprovedCosts: number;
+  totalCostsAwarded: number;
+  totalCostsSubmitted: number;
+  totalFutureForecastsForParticipant: number;
+  totalGrantApproved: number;
+  totalPaidCosts: number;
+  totalParticipantCosts: number;
+  totalPrepayment: number;
+  trackingClaims: string;
+  validationCheckPassed: boolean;
   validationConditionsCode: string;
   validationConditionsDesc: string;
-  personalDetailsScore: number | null;
-  addressScore: number | null;
-  companyNameScore: number | null;
-  regNumberScore: string | null;
-  verificationConditionsSeverity: string;
+  validationConditionsSeverity: string;
   verificationConditionsCode: string;
   verificationConditionsDesc: string;
-  totalGrantApproved: number;
-  remainingParticipantGrant: number;
-  isNonFunded: boolean;
+  verificationConditionsSeverity: string;
 }
 
 export type PartnerBankDetails = Pick<
   Partner,
-  | "id"
-  | "sortCode"
-  | "accountNumber"
-  | "firstName"
-  | "lastName"
-  | "accountStreet"
   | "accountBuilding"
-  | "accountLocality"
-  | "accountPostcode"
-  | "accountTownOrCity"
   | "accountId"
+  | "accountLocality"
+  | "accountNumber"
+  | "accountPostcode"
+  | "accountStreet"
+  | "accountTownOrCity"
   | "companyNumber"
+  | "firstName"
+  | "id"
+  | "lastName"
+  | "sortCode"
 >;

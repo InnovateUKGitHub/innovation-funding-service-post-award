@@ -1,64 +1,64 @@
 type ICompanyHouseDescriptionIdentifier =
-  | "incorporated-on"
-  | "registered-on"
-  | "formed-on"
-  | "dissolved-on"
-  | "converted-closed-on"
+  | "administration"
   | "closed-on"
   | "closed"
+  | "converted-closed-on"
+  | "dissolved-on"
   | "first-uk-establishment-opened-on"
-  | "opened-on"
-  | "voluntary-arrangement"
-  | "receivership"
+  | "formed-on"
+  | "incorporated-on"
   | "insolvency-proceedings"
   | "liquidation"
-  | "administration";
+  | "opened-on"
+  | "receivership"
+  | "registered-on"
+  | "voluntary-arrangement";
 
 export type ICompanyHouseCompanyType =
-  | "private-unlimited"
-  | "ltd"
-  | "plc"
-  | "old-public-company"
-  | "private-limited-guarant-nsc-limited-exemption"
-  | "limited-partnership"
-  | "private-limited-guarant-nsc"
-  | "converted-or-closed"
-  | "private-unlimited-nsc"
-  | "private-limited-shares-section-30-exemption"
   | "assurance-company"
-  | "oversea-company"
+  | "converted-or-closed"
   | "eeig"
+  | "european-public-limited-liability-company-se"
   | "icvc-securities"
-  | "icvc-warrant"
   | "icvc-umbrella"
+  | "icvc-warrant"
   | "industrial-and-provident-society"
-  | "northern-ireland"
-  | "northern-ireland-other"
-  | "royal-charter"
   | "investment-company-with-variable-capital"
-  | "unregistered-company"
+  | "limited-partnership"
   | "llp"
+  | "ltd"
+  | "northern-ireland-other"
+  | "northern-ireland"
+  | "old-public-company"
   | "other"
-  | "european-public-limited-liability-company-se";
+  | "oversea-company"
+  | "plc"
+  | "private-limited-guarant-nsc-limited-exemption"
+  | "private-limited-guarant-nsc"
+  | "private-limited-shares-section-30-exemption"
+  | "private-unlimited-nsc"
+  | "private-unlimited"
+  | "royal-charter"
+  | "unregistered-company";
 
 export type ICompanyHouseCompanyStatus =
   | "active"
+  | "administration"
+  | "converted-closed"
   | "dissolved"
+  | "insolvency-proceedings"
   | "liquidation"
   | "receivership"
-  | "administration"
-  | "voluntary-arrangement"
-  | "converted-closed"
-  | "insolvency-proceedings";
+  | "voluntary-arrangement";
 
 type ICompanyHouseCountry =
-  | "Wales"
   | "England"
-  | "Scotland"
   | "Great Britain"
+  | "Northern Ireland"
   | "Not specified"
+  | "Scotland"
   | "United Kingdom"
-  | "Northern Ireland";
+  | "Wales";
 
 export interface ICompanyHouse {
   address: {

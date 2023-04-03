@@ -1,15 +1,15 @@
 export interface IContactAddress {
-  street: string;
   city: string;
   county: string;
   postcode: string;
+  street: string;
 }
 
 export interface IContact {
-  id: string;
-  title: string;
-  firstName: string;
-  lastName: string;
-  email: string;
   address: IContactAddress;
+  email: string;
+  firstName: string;
+  id: string;
+  lastName: string;
+  title: string;
 }

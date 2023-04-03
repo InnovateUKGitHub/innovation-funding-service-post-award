@@ -9,8 +9,8 @@ type ClaimNode = Readonly<
   Partial<{
     Id: string;
     Acc_ClaimStatus__c: GQL.Value<string>;
-    Acc_PaidDate__c: GQL.Value<string>;
     Acc_FinalClaim__c: GQL.Value<boolean>;
+    Acc_PaidDate__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
     RecordType: {
       Name: GQL.Value<string>;
@@ -28,14 +28,15 @@ const mapper: GQL.DtoMapper<ClaimDtoMapping, ClaimNode> = {
     const claimStatus = mapToClaimStatus(node?.Acc_ClaimStatus__c?.value ?? "unknown claim status");
     return [ClaimStatus.APPROVED, ClaimStatus.PAID, ClaimStatus.PAYMENT_REQUESTED].indexOf(claimStatus) >= 0;
   },
-  periodId: function (node) {
-    return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
-  },
   isFinalClaim: function (node) {
     return node?.Acc_FinalClaim__c?.value ?? false;
   },
+
   paidDate: function (node) {
     return !!node?.Acc_PaidDate__c?.value ? clock.parse(node?.Acc_PaidDate__c?.value, salesforceDateFormat) : null;
+  },
+  periodId: function (node) {
+    return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
   },
 };
 

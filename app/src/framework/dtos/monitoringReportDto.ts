@@ -1,46 +1,46 @@
 import { MonitoringReportStatus } from "../constants/monitoringReportStatus";
 
 export interface MonitoringReportSummaryDto {
-  projectId: ProjectId;
+  endDate: Date | null;
   headerId: string;
+  lastUpdated: Date | null;
+  periodId: number;
+  projectId: ProjectId;
+  startDate: Date | null;
   status: MonitoringReportStatus;
   statusName: string;
-  startDate: Date | null;
-  endDate: Date | null;
-  periodId: number;
-  lastUpdated: Date | null;
 }
 
 export interface MonitoringReportQuestionDto {
-  responseId: string | null;
-  optionId: string | null;
-  title: string;
   comments: string | null;
   description: string;
-  isScored: boolean;
-  options: MonitoringReportOptionDto[];
   displayOrder: number;
+  isScored: boolean;
+  optionId: string | null;
+  options: MonitoringReportOptionDto[];
+  responseId: string | null;
+  title: string;
 }
 
 export interface MonitoringReportDto extends MonitoringReportSummaryDto {
-  questions: MonitoringReportQuestionDto[];
   addComments: string;
+  questions: MonitoringReportQuestionDto[];
 }
 
 export interface MonitoringReportOptionDto {
   id: string;
-  questionText: string;
   questionScore: number;
+  questionText: string;
 }
 
 export interface MonitoringReportStatusChangeDto {
-  id: string;
-  monitoringReport: string;
-  previousStatus: MonitoringReportStatus;
-  previousStatusLabel: string;
-  newStatus: MonitoringReportStatus;
-  newStatusLabel: string;
+  comments: string | null;
   createdBy: string;
   createdDate: Date;
-  comments: string | null;
+  id: string;
+  monitoringReport: string;
+  newStatus: MonitoringReportStatus;
+  newStatusLabel: string;
+  previousStatus: MonitoringReportStatus;
+  previousStatusLabel: string;
 }

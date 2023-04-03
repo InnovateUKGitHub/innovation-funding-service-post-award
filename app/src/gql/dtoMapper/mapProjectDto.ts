@@ -12,20 +12,20 @@ type ProjectNode = Readonly<
       partnerRoles?: ReadonlyArray<SfRoles & { partnerId: string }>;
     };
     isActive: boolean;
-    Acc_ProjectNumber__c: GQL.Value<string>;
-    Acc_ProjectTitle__c: GQL.Value<string>;
-    Acc_ProjectStatus__c: GQL.Value<string>;
-    Acc_CurrentPeriodNumber__c: GQL.Value<number>;
-    Acc_NumberofPeriods__c: GQL.Value<number>;
+    Acc_ClaimsForReview__c: GQL.Value<number>;
     Acc_CompetitionType__c: GQL.Value<string>;
-    Acc_CurrentPeriodStartDate__c: GQL.Value<string>;
     Acc_CurrentPeriodEndDate__c: GQL.Value<string>;
+    Acc_CurrentPeriodNumber__c: GQL.Value<number>;
+    Acc_CurrentPeriodStartDate__c: GQL.Value<string>;
     Acc_EndDate__c: GQL.Value<string>;
     Acc_GOLTotalCostAwarded__c: GQL.Value<number>;
-    Acc_TotalProjectCosts__c: GQL.Value<number>;
+    Acc_NumberofPeriods__c: GQL.Value<number>;
     Acc_PCRsForReview__c: GQL.Value<number>;
     Acc_PCRsUnderQuery__c: GQL.Value<number>;
-    Acc_ClaimsForReview__c: GQL.Value<number>;
+    Acc_ProjectNumber__c: GQL.Value<string>;
+    Acc_ProjectStatus__c: GQL.Value<string>;
+    Acc_ProjectTitle__c: GQL.Value<string>;
+    Acc_TotalProjectCosts__c: GQL.Value<number>;
   }>
 > | null;
 

@@ -1,8 +1,8 @@
 export interface ForecastDetailsDTO {
-  id: string;
   costCategoryId: string;
+  id: string;
+  periodEnd: Date | null;
   periodId: number;
   periodStart: Date | null;
-  periodEnd: Date | null;
   value: number;
 }

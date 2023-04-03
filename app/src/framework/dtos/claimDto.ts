@@ -5,37 +5,37 @@ export interface ClaimDto {
   allowIarEdit: boolean;
   approvedDate: Date | null;
   comments: string | null;
+  forecastCost: number;
+  iarStatus: ReceivedStatus;
   id: string;
   isApproved: boolean;
   isFinalClaim: boolean;
   isIarRequired: boolean;
-  forecastCost: number;
   lastModifiedDate: Date;
   overheadRate: number;
   paidDate: Date | null;
   partnerId: PartnerId;
+  pcfStatus: ReceivedStatus;
+  periodCostsToBePaid: number;
   periodEndDate: Date;
   periodId: number;
   periodStartDate: Date;
-  pcfStatus: ReceivedStatus;
-  iarStatus: ReceivedStatus;
   status: ClaimStatus;
   statusLabel: string;
   totalCost: number;
-  totalCostsSubmitted: number;
   totalCostsApproved: number;
+  totalCostsSubmitted: number;
   totalDeferredAmount: number;
-  periodCostsToBePaid: number;
 }
 
 export interface ClaimStatusChangeDto {
-  id: string;
   claimId: string;
-  previousStatus: ClaimStatus;
-  previousStatusLabel: string;
-  newStatus: ClaimStatus;
-  newStatusLabel: string;
-  createdDate: Date;
   comments: string | null;
   createdBy: string;
+  createdDate: Date;
+  id: string;
+  newStatus: ClaimStatus;
+  newStatusLabel: string;
+  previousStatus: ClaimStatus;
+  previousStatusLabel: string;
 }

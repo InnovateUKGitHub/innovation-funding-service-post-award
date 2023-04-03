@@ -1,7 +1,7 @@
 export interface BroadcastDto {
-  id: string;
-  title: string;
-  startDate: Date;
-  endDate: Date;
   content: string[];
+  endDate: Date;
+  id: string;
+  startDate: Date;
+  title: string;
 }

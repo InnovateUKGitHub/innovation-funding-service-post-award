@@ -2,30 +2,30 @@ import { LoanDto } from "@framework/dtos";
 
 export interface LoanFinancialVirement extends Pick<LoanDto, "id" | "status" | "period"> {
   // Note: Derived from loan status
-  isEditable: boolean;
 
   currentDate: Date;
   currentValue: number;
+  isEditable: boolean;
   newDate: Date;
   newValue: number;
 }
 
 export interface PartnerFinancialVirement {
   id: string;
-  pcrItemId: string;
-  partnerId: PartnerId;
-  originalFundingLevel: number;
-  newFundingLevel: number;
   newEligibleCosts?: number;
+  newFundingLevel: number;
   newRemainingGrant?: number;
+  originalFundingLevel: number;
+  partnerId: PartnerId;
+  pcrItemId: string;
   virements: CostCategoryFinancialVirement[];
 }
 
 export interface CostCategoryFinancialVirement {
-  id: string;
-  profileId: string;
   costCategoryId: string;
-  originalEligibleCosts: number;
-  originalCostsClaimedToDate: number;
+  id: string;
   newEligibleCosts: number;
+  originalCostsClaimedToDate: number;
+  originalEligibleCosts: number;
+  profileId: string;
 }

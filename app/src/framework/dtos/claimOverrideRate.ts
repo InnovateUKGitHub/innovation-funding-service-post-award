@@ -16,18 +16,18 @@ interface CostCategoryClaimOverrideRate extends BaseClaimOverrideRate {
 }
 
 interface PeriodClaimOverrideRates {
-  type: AwardRateOverrideType.BY_PERIOD;
   overrides: PeriodClaimOverrideRate[];
+  type: AwardRateOverrideType.BY_PERIOD;
 }
 
 interface CostCategoryClaimOverrideRates {
-  type: AwardRateOverrideType.BY_COST_CATEGORY;
   overrides: CostCategoryClaimOverrideRate[];
+  type: AwardRateOverrideType.BY_COST_CATEGORY;
 }
 
 interface NoClaimOverrideRates {
-  type: AwardRateOverrideType.NONE;
   overrides: never[];
+  type: AwardRateOverrideType.NONE;
 }
 
 export type ClaimOverrideRateDto = PeriodClaimOverrideRates | CostCategoryClaimOverrideRates | NoClaimOverrideRates;
@@ -35,8 +35,8 @@ export type ClaimOverrideRateDto = PeriodClaimOverrideRates | CostCategoryClaimO
 export type {
   BaseClaimOverrideRate,
   CostCategoryClaimOverrideRate,
-  PeriodClaimOverrideRate,
-  PeriodClaimOverrideRates,
   CostCategoryClaimOverrideRates,
   NoClaimOverrideRates,
+  PeriodClaimOverrideRate,
+  PeriodClaimOverrideRates,
 };

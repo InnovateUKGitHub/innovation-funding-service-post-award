@@ -5,12 +5,12 @@ const clock = new Clock();
 
 type ClaimDetailsNode = Readonly<
   Partial<{
+    Acc_ClaimStatus__c: GQL.Value<string>;
     Acc_CostCategory__c: GQL.Value<string>;
-    Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
+    Acc_PeriodCostCategoryTotal__c: GQL.Value<number>;
     Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-    Acc_PeriodCostCategoryTotal__c: GQL.Value<number>;
-    Acc_ClaimStatus__c: GQL.Value<string>;
+    Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
     RecordType: {
       Name: GQL.Value<string>;
     } | null;
@@ -26,14 +26,14 @@ const mapper: GQL.DtoMapper<ClaimDetailsDtoMapping, ClaimDetailsNode> = {
   costCategoryId: function (node) {
     return node?.Acc_CostCategory__c?.value ?? "unknown";
   },
+  periodEnd: function (node) {
+    return clock.parse(node?.Acc_ProjectPeriodEndDate__c?.value ?? null, salesforceDateFormat);
+  },
   periodId: function (node) {
     return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
   },
   periodStart: function (node) {
     return clock.parse(node?.Acc_ProjectPeriodStartDate__c?.value ?? null, salesforceDateFormat);
-  },
-  periodEnd: function (node) {
-    return clock.parse(node?.Acc_ProjectPeriodEndDate__c?.value ?? null, salesforceDateFormat);
   },
   value: function (node) {
     return node?.Acc_PeriodCostCategoryTotal__c?.value ?? 0;

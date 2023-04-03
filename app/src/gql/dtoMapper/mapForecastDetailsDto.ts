@@ -7,10 +7,10 @@ type ForecastDetailsNode = Readonly<
   Partial<{
     Id: string;
     Acc_CostCategory__c: GQL.Value<string>;
+    Acc_LatestForecastCost__c: GQL.Value<number>;
     Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
     Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-    Acc_LatestForecastCost__c: GQL.Value<number>;
     RecordType: {
       Name: GQL.Value<string>;
     } | null;

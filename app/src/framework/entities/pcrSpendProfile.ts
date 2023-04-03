@@ -1,40 +1,28 @@
 import { CostCategoryType, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 
 export interface PcrSpendProfileEntityForCreate {
-  pcrItemId: string;
-  costCategoryId: string;
-  value: number | null;
-  description: string | null;
+  capitalUsageType?: PCRSpendProfileCapitalUsageType;
   costCategory?: CostCategoryType;
-  dateOtherFundingSecured?: string;
-
-  // labour
-  grossCostOfRole?: number;
-  ratePerDay?: number;
-  daysSpentOnProject?: number;
-
-  // Overheads
-  overheadRate?: PCRSpendProfileOverheadRate;
-
-  // materials
+  costCategoryId: string;
+  costOfEach?: number;
   costPerItem?: number;
+  dateOtherFundingSecured?: string;
+  daysSpentOnProject?: number;
+  depreciationPeriod?: number;
+  description: string | null;
+  grossCostOfRole?: number;
+  netPresentValue?: number;
+  numberOfTimes?: number;
+  overheadRate?: PCRSpendProfileOverheadRate;
+  pcrItemId: string;
   quantity?: number;
-
-  // subcontracting
+  ratePerDay?: number;
+  residualValue?: number;
   subcontractorCountry?: string;
   subcontractorRoleAndDescription?: string;
-
-  // capital usage
-  capitalUsageType?: PCRSpendProfileCapitalUsageType;
   typeLabel?: string;
-  depreciationPeriod?: number;
-  netPresentValue?: number;
-  residualValue?: number;
   utilisation?: number;
-
-  // Travel and subsistence
-  numberOfTimes?: number;
-  costOfEach?: number;
+  value: number | null;
 }
 
 export interface PcrSpendProfileEntity extends PcrSpendProfileEntityForCreate {

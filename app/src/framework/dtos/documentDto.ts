@@ -11,14 +11,14 @@ export interface PartnerDocumentSummaryDto extends DocumentSummaryDto {
 }
 
 export interface DocumentSummaryDto {
-  fileName: string;
-  link: string;
-  id: string;
-  description?: DocumentDescription | null;
-  fileSize: number;
   dateCreated: Date;
-  uploadedBy: string;
+  description?: DocumentDescription | null;
+  fileName: string;
+  fileSize: number;
+  id: string;
   isOwner: boolean;
+  link: string;
+  uploadedBy: string;
 }
 
 export interface DocumentDescriptionDto {
@@ -27,8 +27,8 @@ export interface DocumentDescriptionDto {
 }
 
 export interface DocumentDto {
+  contentLength: number;
   fileName: string;
   fileType: string | null;
-  contentLength: number;
   stream: IStream;
 }

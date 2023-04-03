@@ -1,12 +1,12 @@
 interface DeveloperProjectCreateDto {
-  projectName: string;
-  competitionType: string;
   claimFrequency: string;
-  projectDuration: number;
-  participantType: string;
-  participantOrgType: string;
-  projectId: number;
   competitionCode: string;
+  competitionType: string;
+  participantOrgType: string;
+  participantType: string;
+  projectDuration: number;
+  projectId: number;
+  projectName: string;
   startDate: Date;
 }
 

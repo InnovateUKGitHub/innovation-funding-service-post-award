@@ -1,18 +1,18 @@
 import { DocumentDescription } from "@framework/constants";
 
 export interface DocumentEntity {
-  id: string;
-  title: string;
-  fileExtension: string | null;
   contentDocumentId: string;
-  contentSize: number;
-  fileType: string | null;
-  reasonForChange: string;
-  pathOnClient: string;
   contentLocation: string;
-  versionData: string;
-  description: DocumentDescription | null;
+  contentSize: number;
   createdDate: Date;
-  lastModifiedBy: string;
+  description: DocumentDescription | null;
+  fileExtension: string | null;
+  fileType: string | null;
+  id: string;
   isOwner: boolean;
+  lastModifiedBy: string;
+  pathOnClient: string;
+  reasonForChange: string;
+  title: string;
+  versionData: string;
 }

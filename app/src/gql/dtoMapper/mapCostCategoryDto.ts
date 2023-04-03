@@ -9,10 +9,10 @@ import { numberComparator } from "@framework/util";
 type CostCategoryNode = Readonly<
   Partial<{
     Id: string;
-    Acc_CostCategoryName__c: GQL.Value<string>;
-    Acc_OrganisationType__c: GQL.Value<string>;
     Acc_CompetitionType__c: GQL.Value<string>;
+    Acc_CostCategoryName__c: GQL.Value<string>;
     Acc_DisplayOrder__c: GQL.Value<number>;
+    Acc_OrganisationType__c: GQL.Value<string>;
   }>
 > | null;
 
@@ -31,8 +31,20 @@ type CostCategoryDtoMapping = Pick<
 > & { displayOrder: number };
 
 const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
+  competitionType: function (node) {
+    return node?.Acc_CompetitionType__c?.value ?? "unknown";
+  },
+  displayOrder: function (node) {
+    return node?.Acc_DisplayOrder__c?.value ?? 0;
+  },
   id: function (node) {
     return node?.Id ?? "";
+  },
+  isCalculated: function () {
+    return false;
+  },
+  organisationType: function (node) {
+    return (node?.Acc_OrganisationType__c?.value ?? "unknown") as PCROrganisationType;
   },
   name: function (node) {
     return node?.Acc_CostCategoryName__c?.value ?? "";
@@ -42,18 +54,6 @@ const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
       node?.Acc_OrganisationType__c?.value ?? "Unknown",
       node?.Acc_CostCategoryName__c?.value ?? "unknown",
     );
-  },
-  competitionType: function (node) {
-    return node?.Acc_CompetitionType__c?.value ?? "unknown";
-  },
-  organisationType: function (node) {
-    return (node?.Acc_OrganisationType__c?.value ?? "unknown") as PCROrganisationType;
-  },
-  isCalculated: function () {
-    return false;
-  },
-  displayOrder: function (node) {
-    return node?.Acc_DisplayOrder__c?.value ?? 0;
   },
 };
 

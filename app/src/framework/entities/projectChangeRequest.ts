@@ -11,104 +11,98 @@ import {
 } from "@framework/constants";
 
 export interface ProjectChangeRequestForCreateEntity {
-  projectId: ProjectId;
-  status: PCRStatus;
-  reasoningStatus: PCRItemStatus;
   items: ProjectChangeRequestItemForCreateEntity[];
+  projectId: ProjectId;
+  reasoningStatus: PCRItemStatus;
+  status: PCRStatus;
 }
 
 export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreateEntity {
-  id: string;
-  number: number;
-  started: Date;
-  updated: Date;
-  statusName: string;
-  reasoningStatusName: string;
-  reasoning: string;
   comments: string;
+  id: string;
   items: ProjectChangeRequestItemEntity[];
+  number: number;
+  reasoning: string;
+  reasoningStatusName: string;
+  started: Date;
+  statusName: string;
+  updated: Date;
 }
 
 export interface ProjectChangeRequestItemForCreateEntity {
-  recordTypeId: string;
-  status: PCRItemStatus;
-  projectId: ProjectId;
-  projectDuration?: number | null;
-  offsetMonths?: number;
-  publicDescription?: string | null;
   accountName?: string | null;
-  projectSummary?: string | null;
-  suspensionStartDate?: Date | null;
-  suspensionEndDate?: Date | null;
-  partnerId?: PartnerId | null;
-  removalPeriod?: number | null;
-
-  // add partner
-  projectRole?: PCRProjectRole;
-  projectRoleLabel?: string | null;
-  partnerType?: PCRPartnerType;
-  organisationType?: PCROrganisationType;
-  partnerTypeLabel?: string | null;
-  isCommercialWork?: boolean | null;
-  organisationName?: string | null;
-  registeredAddress?: string | null;
-  registrationNumber?: string | null;
-  participantSize?: PCRParticipantSize;
-  participantSizeLabel?: string | null;
-  numberOfEmployees?: number | null;
-  financialYearEndDate?: Date | null;
-  financialYearEndTurnover?: number | null;
-  projectLocation?: PCRProjectLocation;
-  projectLocationLabel?: string | null;
-  projectCity?: string | null;
-  projectPostcode?: string | null;
-  contact1ProjectRole?: PCRContactRole;
-  contact1Forename?: string | null;
-  contact1Surname?: string | null;
-  contact1Phone?: string | null;
-  contact1Email?: string | null;
-  contact2ProjectRole?: PCRContactRole;
-  contact2Forename?: string | null;
-  contact2Surname?: string | null;
-  contact2Phone?: string | null;
-  contact2Email?: string | null;
-  awardRate?: number | null;
-  hasOtherFunding?: boolean | null;
-  tsbReference?: string | null;
-
-  // Partner Virements
-  grantMovingOverFinancialYear?: number | null;
-
-  // Loan change request
-  projectStartDate?: Date | null;
   availabilityPeriod?: number | null;
   availabilityPeriodChange?: number | null;
+  awardRate?: number | null;
+  contact1Email?: string | null;
+  contact1Forename?: string | null;
+  contact1Phone?: string | null;
+  contact1ProjectRole?: PCRContactRole;
+  contact1Surname?: string | null;
+  contact2Email?: string | null;
+  contact2Forename?: string | null;
+  contact2Phone?: string | null;
+  contact2ProjectRole?: PCRContactRole;
+  contact2Surname?: string | null;
   extensionPeriod?: number | null;
   extensionPeriodChange?: number | null;
+  financialYearEndDate?: Date | null;
+  financialYearEndTurnover?: number | null;
+  grantMovingOverFinancialYear?: number | null;
+  hasOtherFunding?: boolean | null;
+  isCommercialWork?: boolean | null;
+  numberOfEmployees?: number | null;
+  offsetMonths?: number;
+  organisationName?: string | null;
+  organisationType?: PCROrganisationType;
+  participantSize?: PCRParticipantSize;
+  participantSizeLabel?: string | null;
+  partnerId?: PartnerId | null;
+  partnerType?: PCRPartnerType;
+  partnerTypeLabel?: string | null;
+  projectCity?: string | null;
+  projectDuration?: number | null;
+  projectId: ProjectId;
+  projectLocation?: PCRProjectLocation;
+  projectLocationLabel?: string | null;
+  projectPostcode?: string | null;
+  projectRole?: PCRProjectRole;
+  projectRoleLabel?: string | null;
+  projectStartDate?: Date | null;
+  projectSummary?: string | null;
+  publicDescription?: string | null;
+  recordTypeId: string;
+  registeredAddress?: string | null;
+  registrationNumber?: string | null;
+  removalPeriod?: number | null;
   repaymentPeriod?: number | null;
   repaymentPeriodChange?: number | null;
+  status: PCRItemStatus;
+  suspensionEndDate?: Date | null;
+  suspensionStartDate?: Date | null;
+  tsbReference?: string | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
   id: string;
-  typeOfAid: TypeOfAid;
-  statusName: string;
-  pcrId: string;
-  shortName: string;
-  publicDescriptionSnapshot?: string | null;
-  projectSummarySnapshot?: string | null;
   partnerNameSnapshot?: string | null;
+  pcrId: string;
   projectDurationSnapshot?: number | null;
+  projectSummarySnapshot?: string | null;
+  publicDescriptionSnapshot?: string | null;
+  shortName: string;
+  statusName: string;
   totalOtherFunding?: number | null;
+  typeOfAid: TypeOfAid;
 }
 
 export interface ProjectChangeRequestStatusChangeEntity {
-  id: string;
-  pcrId: string;
   createdBy: string;
   createdDate: Date;
-  previousStatus: PCRStatus;
-  newStatus: PCRStatus;
   externalComments: string;
+  id: string;
+  newStatus: PCRStatus;
   participantVisibility: boolean;
+  pcrId: string;
+  previousStatus: PCRStatus;
 }

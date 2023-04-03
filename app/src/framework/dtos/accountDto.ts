@@ -1,5 +1,5 @@
 export interface AccountDto {
-  id: string;
   companyName: string;
+  id: string;
   jesEnabled: boolean;
 }

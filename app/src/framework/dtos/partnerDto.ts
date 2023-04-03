@@ -9,104 +9,99 @@ import {
 } from "@framework/constants";
 
 interface ValidationResponse {
-  validationCheckPassed: boolean;
   iban: string | null;
-  validationConditionsSeverity: string | null;
+  validationCheckPassed: boolean;
   validationConditionsCode: string | null;
   validationConditionsDesc: string | null;
+  validationConditionsSeverity: string | null;
 }
 interface VerificationResponse {
-  personalDetailsScore: number | null;
   addressScore: number | null;
   companyNameScore: number | null;
+  personalDetailsScore: number | null;
   regNumberScore: string | null;
-  verificationConditionsSeverity: string | null;
   verificationConditionsCode: string | null;
   verificationConditionsDesc: string | null;
+  verificationConditionsSeverity: string | null;
 }
 
 interface AccountAddress {
-  accountPostcode: string | null;
-  accountStreet: string | null;
   accountBuilding: string | null;
   accountLocality: string | null;
+  accountPostcode: string | null;
+  accountStreet: string | null;
   accountTownOrCity: string | null;
 }
 
 export interface BankDetails {
-  companyNumber: string | null;
-  sortCode: string | null;
   accountNumber: string | null;
+  address: AccountAddress;
+  companyNumber: string | null;
   firstName: string | null;
   lastName: string | null;
-  address: AccountAddress;
+  sortCode: string | null;
 }
 
 export interface PartnerBankDetailsDto {
-  id: string;
   accountId: string;
   bankDetails: BankDetails;
+  id: string;
 }
 
 export interface PartnerDto {
-  id: PartnerId;
-  type: string;
-
-  postcode: string | null;
-  postcodeStatusLabel: string | null;
-  postcodeStatus: PostcodeTaskStatus;
-  isLead: boolean;
-  isWithdrawn: boolean;
-  projectRoleName: string;
-  projectId: ProjectId;
   accountId: string;
-  name: string;
-  organisationType: string;
-  competitionType: string;
-  competitionName?: string;
-  totalParticipantGrant: number | null;
-  totalParticipantCostsClaimed: number | null;
-  totalPaidCosts: number | null;
-  awardRate: number | null;
-  percentageParticipantCostsClaimed: number | null;
-  capLimit: number | null;
-  totalFutureForecastsForParticipants: number | null;
-  totalCostsSubmitted: number | null;
-  roles: ProjectRole | SfRoles;
-  forecastLastModifiedDate: Date | null;
-  overdueProject: boolean;
-  claimsOverdue: number | null;
-  claimsWithParticipant: number | null;
-  claimStatus: PartnerClaimStatus;
-  statusName: string;
-  totalCostsAwarded: number | null;
   auditReportFrequencyName: string;
-  totalPrepayment: number | null;
-  partnerStatus: PartnerStatus;
-  partnerStatusLabel: string;
-  percentageParticipantCostsSubmitted: number | null;
-  totalFundingDueToReceive: number | null;
-  totalGrantApproved: number | null;
-  remainingParticipantGrant: number | null;
-
-  overheadRate: number | null;
-  newForecastNeeded: boolean | null;
-  spendProfileStatus: SpendProfileStatus;
-  spendProfileStatusLabel: string | null;
+  awardRate: number | null;
+  bankCheckRetryAttempts: number;
+  bankCheckStatus: BankCheckStatus;
+  bankDetails: BankDetails;
   bankDetailsTaskStatus: BankDetailsTaskStatus;
   bankDetailsTaskStatusLabel: string | null;
-  bankCheckStatus: BankCheckStatus;
-
-  // Bank details checks
-  bankDetails: BankDetails;
-  bankCheckRetryAttempts: number;
+  capLimit: number | null;
+  claimsOverdue: number | null;
+  claimStatus: PartnerClaimStatus;
+  claimsWithParticipant: number | null;
+  competitionName?: string;
+  competitionType: string;
+  forecastLastModifiedDate: Date | null;
+  id: PartnerId;
+  isLead: boolean;
+  isNonFunded: boolean;
+  isWithdrawn: boolean;
+  name: string;
+  newForecastNeeded: boolean | null;
+  organisationType: string;
+  overdueProject: boolean;
+  overheadRate: number | null;
+  partnerStatus: PartnerStatus;
+  partnerStatusLabel: string;
+  percentageParticipantCostsClaimed: number | null;
+  percentageParticipantCostsSubmitted: number | null;
+  postcode: string | null;
+  postcodeStatus: PostcodeTaskStatus;
+  postcodeStatusLabel: string | null;
+  projectId: ProjectId;
+  projectRoleName: string;
+  remainingParticipantGrant: number | null;
+  roles: ProjectRole | SfRoles;
+  spendProfileStatus: SpendProfileStatus;
+  spendProfileStatusLabel: string | null;
+  statusName: string;
+  totalCostsAwarded: number | null;
+  totalCostsSubmitted: number | null;
+  totalFundingDueToReceive: number | null;
+  totalFutureForecastsForParticipants: number | null;
+  totalGrantApproved: number | null;
+  totalPaidCosts: number | null;
+  totalParticipantCostsClaimed: number | null;
+  totalParticipantGrant: number | null;
+  totalPrepayment: number | null;
+  type: string;
   validationResponse: ValidationResponse;
   verificationResponse: VerificationResponse;
-
-  isNonFunded: boolean;
 }
 
 export interface PartnerDtoGql extends PartnerDto {
-  roles: SfRoles;
   forecastsAndCosts: number;
+  roles: SfRoles;
 }

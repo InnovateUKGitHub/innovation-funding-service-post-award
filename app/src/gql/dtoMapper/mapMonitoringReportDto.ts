@@ -4,22 +4,22 @@ import { mapMonitoringReportStatus } from "@framework/util/monitoringReportStatu
 type MonitoringReportNode = Readonly<
   Partial<{
     Id: string;
+    Acc_FinalMonitoringReport__c: GQL.Value<boolean>;
     Acc_MonitoringReportStatus__c: {
       value: string | null;
       label: string | null;
     } | null;
-    Acc_PeriodStartDate__c: GQL.Value<string>;
     Acc_PeriodEndDate__c: GQL.Value<string>;
-    Acc_FinalMonitoringReport__c: GQL.Value<boolean>;
+    Acc_PeriodStartDate__c: GQL.Value<string>;
+    Acc_Project__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
     LastModifiedDate: GQL.Value<string>;
-    Acc_Project__c: GQL.Value<string>;
   }>
 > | null;
 
 type MonitoringReportDtoMapping = Pick<
   MonitoringReportDto,
-  "headerId" | "periodId" | "startDate" | "endDate" | "statusName" | "status" | "lastUpdated" | "projectId"
+  "endDate" | "headerId" | "endDate" | "lastUpdated" | "periodId" | "projectId" | "startDate" | "status" | "statusName"
 >;
 
 const mapper: GQL.DtoMapper<MonitoringReportDtoMapping, MonitoringReportNode> = {

@@ -1,18 +1,18 @@
 import { LoanStatus } from "@framework/entities";
 
 export interface LoanDto {
+  amount: number;
+  comments: string;
+  forecastAmount: number;
   id: LoanId;
   period: number;
-  status: LoanStatus;
-  amount: number;
-  forecastAmount: number;
   requestDate: Date | null;
-  comments: string;
+  status: LoanStatus;
 
   // Note: Pulled from project table
   totals?: {
+    remainingLoan: number;
     totalLoan: number;
     totalPaidToDate: number;
-    remainingLoan: number;
   };
 }

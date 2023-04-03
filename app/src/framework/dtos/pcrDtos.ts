@@ -14,18 +14,18 @@ import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 
 interface PCRBaseDto {
   id: string;
+  lastUpdated: Date;
+  projectId: ProjectId;
   requestNumber: number;
   started: Date;
-  lastUpdated: Date;
   status: PCRStatus;
   statusName: string;
-  projectId: ProjectId;
 }
 
 export interface PCRItemSummaryDto {
+  shortName: string;
   type: PCRItemType;
   typeName: string;
-  shortName: string;
 }
 
 export interface PCRSummaryDto extends PCRBaseDto {
@@ -33,33 +33,33 @@ export interface PCRSummaryDto extends PCRBaseDto {
 }
 
 export interface PCRDto extends PCRBaseDto {
-  items: PCRItemDto[];
   comments: string;
+  items: PCRItemDto[];
+  reasoningComments: string;
   reasoningStatus: PCRItemStatus;
   reasoningStatusName: string;
-  reasoningComments: string;
 }
 
 interface PCRItemBaseDto extends PCRItemSummaryDto {
-  id: string;
   guidance?: string;
+  id: string;
   status: PCRItemStatus;
   statusName: string;
 }
 
 export type PCRItemDto =
-  | PCRStandardItemDto
-  | PCRItemForTimeExtensionDto
-  | PCRItemForScopeChangeDto
-  | PCRItemForProjectSuspensionDto
   | PCRItemForAccountNameChangeDto
-  | PCRItemForProjectTerminationDto
+  | PCRItemForLoanDrawdownChangeDto
+  | PCRItemForLoanDrawdownExtensionDto
+  | PCRItemForMultiplePartnerFinancialVirementDto
   | PCRItemForPartnerAdditionDto
   | PCRItemForPartnerWithdrawalDto
-  | PCRItemForMultiplePartnerFinancialVirementDto
   | PCRItemForPeriodLengthChangeDto
-  | PCRItemForLoanDrawdownChangeDto
-  | PCRItemForLoanDrawdownExtensionDto;
+  | PCRItemForProjectSuspensionDto
+  | PCRItemForProjectTerminationDto
+  | PCRItemForScopeChangeDto
+  | PCRItemForTimeExtensionDto
+  | PCRStandardItemDto;
 
 export type ProjectChangeRequestStandardItemTypes = PCRItemType.SinglePartnerFinancialVirement;
 
@@ -68,42 +68,42 @@ export interface PCRStandardItemDto extends PCRItemBaseDto {
 }
 
 export interface PCRItemForMultiplePartnerFinancialVirementDto extends PCRItemBaseDto {
-  type: PCRItemType.MultiplePartnerFinancialVirement;
   grantMovingOverFinancialYear: number | null;
+  type: PCRItemType.MultiplePartnerFinancialVirement;
 }
 
 export interface PCRItemForTimeExtensionDto extends PCRItemBaseDto {
-  type: PCRItemType.TimeExtension;
   offsetMonths: number;
   projectDurationSnapshot: number;
+  type: PCRItemType.TimeExtension;
 }
 
 export interface PCRItemForScopeChangeDto extends PCRItemBaseDto {
-  type: PCRItemType.ScopeChange;
-  publicDescription: string | null;
   projectSummary: string | null;
-  publicDescriptionSnapshot: string | null;
   projectSummarySnapshot: string | null;
+  publicDescription: string | null;
+  publicDescriptionSnapshot: string | null;
+  type: PCRItemType.ScopeChange;
 }
 
 export interface PCRItemForProjectSuspensionDto extends PCRItemBaseDto {
-  type: PCRItemType.ProjectSuspension;
-  suspensionStartDate: Date | null;
   suspensionEndDate: Date | null;
+  suspensionStartDate: Date | null;
+  type: PCRItemType.ProjectSuspension;
 }
 
 export interface PCRItemForAccountNameChangeDto extends PCRItemBaseDto {
-  type: PCRItemType.AccountNameChange;
   accountName: string | null;
   partnerId: PartnerId | null;
   partnerNameSnapshot: string | null;
+  type: PCRItemType.AccountNameChange;
 }
 
 export interface PCRItemForPartnerWithdrawalDto extends PCRItemBaseDto {
-  type: PCRItemType.PartnerWithdrawal;
-  partnerNameSnapshot: string | null;
   partnerId: PartnerId | null;
+  partnerNameSnapshot: string | null;
   removalPeriod: number | null;
+  type: PCRItemType.PartnerWithdrawal;
 }
 
 export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
@@ -118,54 +118,54 @@ export interface PCRItemForLoanDrawdownChangeDto extends PCRItemBaseDto {
   type: PCRItemType.LoanDrawdownChange;
 }
 export interface PCRItemForLoanDrawdownExtensionDto extends PCRItemBaseDto {
-  type: PCRItemType.LoanDrawdownExtension;
-  projectStartDate: Date | null;
   availabilityPeriod: number | null;
   availabilityPeriodChange: number | null;
   extensionPeriod: number | null;
   extensionPeriodChange: number | null;
+  projectStartDate: Date | null;
   repaymentPeriod: number | null;
   repaymentPeriodChange: number | null;
+  type: PCRItemType.LoanDrawdownExtension;
 }
 
 export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
-  type: PCRItemType.PartnerAddition;
-  // isProjectRoleAndPartnerTypeRequired is used to determine validation only. It is set by the client and not retrieved or saved to salesforce.
-  isProjectRoleAndPartnerTypeRequired?: boolean;
-  projectRole: PCRProjectRole;
-  partnerType: PCRPartnerType;
-  isCommercialWork: boolean | null;
-  typeOfAid: TypeOfAid;
-  organisationType: PCROrganisationType;
-  spendProfile: PcrSpendProfileDto;
-  projectRoleLabel: string | null;
-  partnerTypeLabel: string | null;
-  organisationName: string | null;
-  registeredAddress: string | null;
-  registrationNumber: string | null;
-  participantSize: PCRParticipantSize;
-  participantSizeLabel: string | null;
-  numberOfEmployees: number | null;
+  awardRate: number | null;
+  contact1Email: string | null;
+  contact1Forename: string | null;
+  contact1Phone: string | null;
+  contact1ProjectRole: PCRContactRole;
+  contact1Surname: string | null;
+  contact2Email: string | null;
+  contact2Forename: string | null;
+  contact2Phone: string | null;
+  contact2ProjectRole: PCRContactRole;
+  contact2Surname: string | null;
   financialYearEndDate: Date | null;
   financialYearEndTurnover: number | null;
+  hasOtherFunding: boolean | null;
+  isCommercialWork: boolean | null;
+  // isProjectRoleAndPartnerTypeRequired is used to determine validation only. It is set by the client and not retrieved or saved to salesforce.
+  isProjectRoleAndPartnerTypeRequired?: boolean;
+  numberOfEmployees: number | null;
+  organisationName: string | null;
+  organisationType: PCROrganisationType;
+  participantSize: PCRParticipantSize;
+  participantSizeLabel: string | null;
+  partnerType: PCRPartnerType;
+  partnerTypeLabel: string | null;
+  projectCity: string | null;
   projectLocation: PCRProjectLocation;
   projectLocationLabel: string | null;
-  projectCity: string | null;
   projectPostcode: string | null;
-  contact1ProjectRole: PCRContactRole;
-  contact1Forename: string | null;
-  contact1Surname: string | null;
-  contact1Phone: string | null;
-  contact1Email: string | null;
-  contact2ProjectRole: PCRContactRole;
-  contact2Forename: string | null;
-  contact2Surname: string | null;
-  contact2Phone: string | null;
-  contact2Email: string | null;
-  awardRate: number | null;
-  hasOtherFunding: boolean | null;
+  projectRole: PCRProjectRole;
+  projectRoleLabel: string | null;
+  registeredAddress: string | null;
+  registrationNumber: string | null;
+  spendProfile: PcrSpendProfileDto;
   totalOtherFunding: number | null;
   tsbReference: string | null;
+  type: PCRItemType.PartnerAddition;
+  typeOfAid: TypeOfAid;
 }
 
 export interface PCRItemTypeDto {
@@ -182,16 +182,16 @@ export interface PCRItemTypeDto {
 }
 
 export interface ProjectChangeRequestStatusChangeDto {
+  comments: string | null;
+  createdBy: string;
+  createdDate: Date;
   id: string;
-  projectChangeRequest: string;
   newStatus: PCRStatus;
   newStatusLabel: string;
+  participantVisibility: boolean;
   previousStatus: PCRStatus;
   previousStatusLabel: string;
-  createdDate: Date;
-  participantVisibility: boolean;
-  createdBy: string;
-  comments: string | null;
+  projectChangeRequest: string;
 }
 
 export interface PCRTimeExtensionOption {

@@ -8,21 +8,21 @@ export interface PcrSpendProfileDto {
 
 export type PCRSpendProfileCostDto =
   | PCRSpendProfileAcademicCostDto
+  | PCRSpendProfileCapitalUsageCostDto
   | PCRSpendProfileLabourCostDto
   | PCRSpendProfileMaterialsCostDto
+  | PCRSpendProfileOtherCostsDto
   | PCRSpendProfileOverheadsCostDto
   | PCRSpendProfileSubcontractingCostDto
-  | PCRSpendProfileCapitalUsageCostDto
-  | PCRSpendProfileTravelAndSubsCostDto
-  | PCRSpendProfileOtherCostsDto;
+  | PCRSpendProfileTravelAndSubsCostDto;
 
 export type PCRSpendProfileFundingDto = PCRSpendProfileOtherFundingDto;
 
 interface PCRSpendProfileBaseCostDto {
-  id: string;
   costCategory: CostCategoryType;
   costCategoryId: string;
   description: string | null;
+  id: string;
   value: number | null;
 }
 
@@ -33,9 +33,9 @@ export interface PCRSpendProfileOtherFundingDto extends PCRSpendProfileBaseCostD
 export type PCRSpendProfileAcademicCostDto = PCRSpendProfileBaseCostDto;
 
 export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto {
+  daysSpentOnProject: number | null;
   grossCostOfRole: number | null;
   ratePerDay: number | null;
-  daysSpentOnProject: number | null;
 }
 
 export interface PCRSpendProfileOverheadsCostDto extends PCRSpendProfileBaseCostDto {
@@ -43,8 +43,8 @@ export interface PCRSpendProfileOverheadsCostDto extends PCRSpendProfileBaseCost
 }
 
 export interface PCRSpendProfileMaterialsCostDto extends PCRSpendProfileBaseCostDto {
-  quantity: number | null;
   costPerItem: number | null;
+  quantity: number | null;
 }
 
 export interface PCRSpendProfileSubcontractingCostDto extends PCRSpendProfileBaseCostDto {
@@ -53,17 +53,17 @@ export interface PCRSpendProfileSubcontractingCostDto extends PCRSpendProfileBas
 }
 
 export interface PCRSpendProfileCapitalUsageCostDto extends PCRSpendProfileBaseCostDto {
-  type: PCRSpendProfileCapitalUsageType;
-  typeLabel: string | null;
   depreciationPeriod: number | null;
   netPresentValue: number | null;
   residualValue: number | null;
+  type: PCRSpendProfileCapitalUsageType;
+  typeLabel: string | null;
   utilisation: number | null;
 }
 
 export interface PCRSpendProfileTravelAndSubsCostDto extends PCRSpendProfileBaseCostDto {
-  numberOfTimes: number | null;
   costOfEach: number | null;
+  numberOfTimes: number | null;
 }
 
 export type PCRSpendProfileOtherCostsDto = PCRSpendProfileBaseCostDto;

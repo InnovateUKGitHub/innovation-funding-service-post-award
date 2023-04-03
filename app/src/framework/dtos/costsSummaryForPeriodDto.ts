@@ -1,9 +1,9 @@
 export interface CostsSummaryForPeriodDto {
   costCategoryId: string;
-  offerTotal: number;
-  forecastThisPeriod: number;
-  costsClaimedToDate: number;
   costsClaimedThisPeriod: number;
-  remainingOfferCosts: number;
+  costsClaimedToDate: number;
+  forecastThisPeriod: number;
+  offerTotal: number;
   overrideAwardRate?: number;
+  remainingOfferCosts: number;
 }

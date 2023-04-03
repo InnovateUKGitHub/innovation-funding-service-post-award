@@ -7,27 +7,27 @@ import { calcPercentage } from "@framework/util";
 type PartnerNode = Readonly<
   Partial<{
     Id: string;
-    Acc_ProjectRole__c: GQL.Value<string>;
-    Acc_ParticipantStatus__c: GQL.Value<string>;
+    Acc_AccountId__c: GQL.Value<string>;
     Acc_AccountId__r: {
       Name: GQL.Value<string>;
     } | null;
-    Acc_AccountId__c: GQL.Value<string>;
-    Acc_TotalParticipantCosts__c: GQL.Value<number>;
-    Acc_TotalApprovedCosts__c: GQL.Value<number>;
-    Acc_NewForecastNeeded__c: GQL.Value<boolean>;
-    Acc_TrackingClaims__c: GQL.Value<string>;
-    Acc_OverheadRate__c: GQL.Value<number>;
-    Acc_OrganisationType__c: GQL.Value<string>;
-    Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
-    Acc_TotalFutureForecastsForParticipant__c: GQL.Value<number>;
-    Acc_TotalCostsSubmitted__c: GQL.Value<number>;
-    Acc_TotalGrantApproved__c: GQL.Value<number>;
-    Acc_Award_Rate__c: GQL.Value<number>;
-    Acc_RemainingParticipantGrant__c: GQL.Value<number>;
-    Acc_TotalPrepayment__c: GQL.Value<number>;
-    Acc_Cap_Limit__c: GQL.Value<number>;
     Acc_AuditReportFrequency__c: GQL.Value<string>;
+    Acc_Award_Rate__c: GQL.Value<number>;
+    Acc_Cap_Limit__c: GQL.Value<number>;
+    Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
+    Acc_NewForecastNeeded__c: GQL.Value<boolean>;
+    Acc_OrganisationType__c: GQL.Value<string>;
+    Acc_OverheadRate__c: GQL.Value<number>;
+    Acc_ProjectRole__c: GQL.Value<string>;
+    Acc_ParticipantStatus__c: GQL.Value<string>;
+    Acc_RemainingParticipantGrant__c: GQL.Value<number>;
+    Acc_TotalApprovedCosts__c: GQL.Value<number>;
+    Acc_TotalCostsSubmitted__c: GQL.Value<number>;
+    Acc_TotalFutureForecastsForParticipant__c: GQL.Value<number>;
+    Acc_TotalGrantApproved__c: GQL.Value<number>;
+    Acc_TotalParticipantCosts__c: GQL.Value<number>;
+    Acc_TotalPrepayment__c: GQL.Value<number>;
+    Acc_TrackingClaims__c: GQL.Value<string>;
   }>
 > | null;
 

@@ -1,53 +1,46 @@
 import { ClaimFrequency, ProjectRole, ProjectStatus } from "@framework/constants";
 
 export interface ProjectDto {
-  id: ProjectId;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  summary: string;
-  description: string;
   applicationUrl?: string | null;
-  grantOfferLetterUrl?: string | null;
-  projectNumber: string;
-  leadPartnerName: string;
-
+  claimedPercentage: number | null;
   claimFrequency: ClaimFrequency;
   claimFrequencyName: string;
-  competitionType: string;
-
-  isPastEndDate: boolean;
-  periodId: number;
-  periodStartDate: Date | null;
-  periodEndDate: Date | null;
-
-  pcrsQueried: number;
-  pcrsToReview: number;
-
-  grantOfferLetterCosts: number;
-  costsClaimedToDate: number;
-  claimedPercentage: number | null;
-
-  roles: ProjectRole | SfRoles;
-  roleTitles: string[];
-
-  status: ProjectStatus;
-  statusName: string;
-  claimsToReview: number;
   claimsOverdue: number;
+  claimsToReview: number;
   claimsWithParticipant: number;
-  numberOfOpenClaims: number;
+  competitionType: string;
+  costsClaimedToDate: number;
+  description: string;
   durationInMonths: number;
-  numberOfPeriods: number;
+  endDate: Date;
+  grantOfferLetterCosts: number;
+  grantOfferLetterUrl?: string | null;
+  id: ProjectId;
   isNonFec: boolean;
-
-  loanEndDate: Date | null;
+  isPastEndDate: boolean;
+  leadPartnerName: string;
   loanAvailabilityPeriodLength: number | null;
+  loanEndDate: Date | null;
   loanExtensionPeriodLength: number | null;
   loanRepaymentPeriodLength: number | null;
+  numberOfOpenClaims: number;
+  numberOfPeriods: number;
+  pcrsQueried: number;
+  pcrsToReview: number;
+  periodEndDate: Date | null;
+  periodId: number;
+  periodStartDate: Date | null;
+  projectNumber: string;
+  roles: ProjectRole | SfRoles;
+  roleTitles: string[];
+  startDate: Date;
+  status: ProjectStatus;
+  statusName: string;
+  summary: string;
+  title: string;
 }
 
 export interface ProjectDtoGql extends ProjectDto {
-  roles: SfRoles;
   isActive: boolean;
+  roles: SfRoles;
 }
