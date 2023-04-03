@@ -10,7 +10,7 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type ViewForecastQuery$variables = {
-  partnerId: PartnerId;
+  partnerId: string;
   projectId: string;
   projectIdStr: string;
 };
@@ -183,7 +183,7 @@ export type ViewForecastQuery$data = {
                   readonly isFc: boolean;
                   readonly isMo: boolean;
                   readonly isPm: boolean;
-                  readonly partnerId: PartnerId;
+                  readonly partnerId: string;
                 }>;
               };
             } | null;

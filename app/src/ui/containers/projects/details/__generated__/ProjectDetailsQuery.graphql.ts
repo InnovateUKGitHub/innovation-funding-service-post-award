@@ -11,7 +11,7 @@
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type ProjectDetailsQuery$variables = {
-  projectId: ProjectId;
+  projectId: string;
 };
 export type ProjectDetailsQuery$data = {
   readonly salesforce: {
