@@ -21,7 +21,20 @@ export const accessControl = () => {
 
 export const learnAboutFiles = () => {
   cy.get("span.govuk-details__summary-text").contains("Learn more about files you can upload").click();
-  cy.get("span.govuk-body.markdown").contains("You can upload");
+  ["You can upload up to 10 documents", "There is no limit", "upload these file types"].forEach(note => {
+    cy.get("p").contains(note);
+  });
+  [
+    "less than 32MB",
+    "unique file name",
+    "PDF (pdf, xps)",
+    "text (doc, docx, rtf, txt, csv, odt)",
+    "presentation (ppt, pptx, odp)",
+    "spreadsheet (xls, xlsx, ods)",
+    "images (jpg, jpeg, png, odg)",
+  ].forEach(fileItem => {
+    cy.get("li").contains(fileItem);
+  });
 };
 
 export const uploadToMO = () => {
