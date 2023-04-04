@@ -32,8 +32,20 @@ const configuration: Readonly<IConfig> = {
     contentRefreshSeconds: floatEnv("CONTENT_REFRESH_TIMEOUT_SECONDS", 0),
   },
   certificates: {
-    salesforce: certEnv("SALESFORCE"),
-    shibboleth: certEnv("SHIBBOLETH", ""),
+    salesforce: certEnv("SALESFORCE_PRIVATE_KEY"),
+    saml: {
+      idp: {
+        public: certEnv("SHIBBOLETH_IDP_PUBLIC_KEY", ""),
+      },
+      spSigning: {
+        public: certEnv("SHIBBOLETH_SP_SIGNING_PUBLIC_KEY", ""),
+        private: certEnv("SHIBBOLETH_SP_SIGNING_PRIVATE_KEY", ""),
+      },
+      spDecryption: {
+        public: certEnv("SHIBBOLETH_SP_DECRYPTION_PUBLIC_KEY", ""),
+        private: certEnv("SHIBBOLETH_SP_DECRYPTION_PRIVATE_KEY", ""),
+      },
+    },
   },
   basicAuth: {
     credentials: psvEnv("BASIC_AUTH", []),
