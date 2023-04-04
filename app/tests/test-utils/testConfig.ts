@@ -20,7 +20,19 @@ export class TestConfig implements IConfig {
 
   public certificates = {
     salesforce: "./salesforce.cert",
-    shibboleth: "./shibboleth.cert",
+    saml: {
+      idp: {
+        public: "idp-public",
+      },
+      spSigning: {
+        public: "sps-public",
+        private: "sps-private",
+      },
+      spDecryption: {
+        public: "spd-public",
+        private: "spd-private",
+      },
+    },
   };
 
   public basicAuth = { credentials: ["bananaman:hello"] };
