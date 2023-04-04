@@ -14,6 +14,7 @@ import { AriaLive } from "../renderers/ariaLive";
 import { ValidationMessage } from "../validationMessage";
 import { Content } from "../content";
 import { UL } from "../layout";
+import { roundCurrency } from "@framework/util";
 
 interface Props {
   project: Pick<ProjectDto, "id">;
@@ -52,6 +53,8 @@ const renderWarningMessage = ({
 
     claimDetails.forEach(x => (total += x.costCategoryId === category.id && x.periodId <= currentPeriod ? x.value : 0));
     forecasts.forEach(x => (total += x.costCategoryId === category.id && x.periodId > currentPeriod ? x.value : 0));
+
+    total = roundCurrency(total);
 
     if (gol && gol.value < total) {
       categories.push(category.name);

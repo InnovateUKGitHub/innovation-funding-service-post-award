@@ -4,6 +4,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { Result } from "../validation/result";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
+import { roundCurrency } from "@framework/util";
 
 export interface IForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> {
   items: NestedResult<IForecastDetailsDtoValidator>;
@@ -45,12 +46,12 @@ export class ForecastDetailsDtosValidator
     // infer period id from all the claim details we have
     const periodId = claims.reduce((prev, item) => (item.periodId > prev ? item.periodId : prev), 0);
     const totalGolCosts = golCosts.reduce((total, current) => total + current.value, 0);
-    const totalClaimCosts = claimDetails
-      .filter(x => x.periodId <= periodId)
-      .reduce((total, current) => total + current.value, 0);
-    const totalForecastCosts = forecasts
-      .filter(x => x.periodId > periodId)
-      .reduce((total, current) => total + current.value, 0);
+    const totalClaimCosts = roundCurrency(
+      claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total + current.value, 0),
+    );
+    const totalForecastCosts = roundCurrency(
+      forecasts.filter(x => x.periodId > periodId).reduce((total, current) => total + current.value, 0),
+    );
     const currentClaim = claims.find(x => x.periodId === periodId) || null;
     const finalClaim = claims.find(x => x.isFinalClaim) || null;
 
