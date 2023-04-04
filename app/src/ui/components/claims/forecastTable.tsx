@@ -588,7 +588,9 @@ export class ForecastTable extends React.Component<Props> {
         {periods.map((p, i) => (
           <th
             key={i}
-            className={cx("govuk-table__header", { "acc-table__cell-right-border": i === claimPeriod - 1 })}
+            className={cx("govuk-table__header", {
+              "acc-table__cell-right-border": i === claimPeriod - 2 || i === claimPeriod - 1,
+            })}
             style={{ textAlign: "right" }}
           >
             {p}
@@ -609,7 +611,9 @@ export class ForecastTable extends React.Component<Props> {
         {periods.map((p, i) => (
           <th
             key={i}
-            className={cx("govuk-table__header", { "acc-table__cell-right-border": i === claimPeriod - 1 })}
+            className={cx("govuk-table__header", {
+              "acc-table__cell-right-border": i === claimPeriod - 2 || i === claimPeriod - 1,
+            })}
             style={{ textAlign: "right" }}
           >
             {periodsWithIARDue?.includes(p) ? "Yes" : "No"}

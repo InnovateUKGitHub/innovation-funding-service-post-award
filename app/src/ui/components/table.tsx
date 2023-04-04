@@ -187,6 +187,7 @@ export const createTypedTable = <T,>() => {
           scope="col"
           className={cx("govuk-table__header", props.colClassName?.(column), {
             [`govuk-table__header--${classSuffix}`]: !!classSuffix,
+            "acc-table__cell-right-border": props.isDivider,
           })}
         >
           {displayForScreenReaders ? (
