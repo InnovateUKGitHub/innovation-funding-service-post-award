@@ -17,6 +17,25 @@
 yay -S git firefox visual-studio-code-bin nvm google-chrome
 ```
 
+## Installation on Mac OS X
+
+Get the following installed:
+
+- Homebrew
+- Node Version Manager
+- Firefox
+- Google Chrome
+- Visual Studio Code
+
+You can then ask for the `.env` file from a co-worker, and then...
+
+```sh
+cd app/
+nvm use
+npm install
+npm run start
+```
+
 ## Installation on UKSBS/UKRI/InnovateUK Windows Laptops
 
 Unfortunately, UKSBS provided Windows laptops are very restrictive in terms of permissions; you
