@@ -70,17 +70,17 @@ declare global {
       /**
        * Clicks checkbox with matching label, scrolls into view and waits before checking
        */
-      clickCheckBox(label: string, uncheck?: boolean): void;
+      clickCheckBox<T extends string = string>(label: T, uncheck?: boolean): void;
 
       /**
        *
        * Finds the defined project name or number and navigates to it from projects main page
        */
-      navigateToProject(projectId: ProjectId): Chainable<Element>;
+      navigateToProject(projectId: string): Chainable<Element>;
 
       selectTile(label: string): Chainable<Element>;
 
-      deletePcr(projectId: ProjectId): Chainable<Element>;
+      deletePcr(projectId: string): Chainable<Element>;
     }
   }
 }

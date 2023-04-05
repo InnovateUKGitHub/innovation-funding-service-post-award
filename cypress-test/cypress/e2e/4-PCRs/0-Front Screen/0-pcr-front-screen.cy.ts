@@ -1,4 +1,5 @@
-import { visitApp } from "../../common/visit";
+import { pcrTidyUp } from "common/pcrtidyup";
+import { visitApp } from "../../../common/visit";
 import {
   beforeYouSubmit,
   createRequestButton,
@@ -6,7 +7,7 @@ import {
   pcrCheckBoxes,
   shouldShowAllAccordion,
   shouldShowProjectTitle,
-} from "./steps";
+} from ".././steps";
 
 describe("PCR > Project Change Request front page", () => {
   before(() => {
@@ -35,7 +36,9 @@ describe("PCR > Project Change Request front page", () => {
     cy.get("p").contains("You have no past requests.");
   });
 
-  it("Should have a Create request button and will allow you to start a PCR", createRequestButton);
+  it("Should check for existing PCRs and start creating a PCR", () => {
+    pcrTidyUp("Reallocate project costs");
+  });
 
   it("Should display the project title", shouldShowProjectTitle);
 

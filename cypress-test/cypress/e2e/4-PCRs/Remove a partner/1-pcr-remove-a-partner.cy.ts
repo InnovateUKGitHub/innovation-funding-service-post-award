@@ -1,3 +1,4 @@
+import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
@@ -18,6 +19,7 @@ describe("PCR > Remove partner > Creating PCR", () => {
      * Note that the pcrTidyUp will not currently work for 'remove partner' as we are keeping two 'remove partner' PCRs open
      * As such, this step will be missed from this particular test
      */
+    pcrTidyUp("Remove a partner");
   });
 
   after(() => {

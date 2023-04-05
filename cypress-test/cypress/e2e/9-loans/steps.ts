@@ -30,15 +30,15 @@ export const learnFiles = () => {
     "have a unique file name",
     "You can upload these file types",
     "PDF",
-    "(pdf,xps)",
-    "(doc,docx,rtf,txt,csv,odt)",
+    "(pdf, xps)",
+    "(doc, docx, rtf, txt, csv, odt)",
     "text",
     "presentation",
-    "(ppt,pptx,odp)",
+    "(ppt, pptx, odp)",
     "spreadsheet",
-    "(xls,xlsx,ods)",
+    "(xls, xlsx, ods)",
     "images",
-    "(jpg,jpeg,png,odg)",
+    "(jpg, jpeg, png, odg)",
   ].forEach(fileInfo => {
     cy.getByQA("loanDocumentsForm").contains(fileInfo);
   });
