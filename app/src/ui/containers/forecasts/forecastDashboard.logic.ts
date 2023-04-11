@@ -20,15 +20,11 @@ export const useForecastDashboardData = (projectId: ProjectId) => {
   return useMemo(() => {
     const project = mapToProjectDto(projectNode, ["id", "title", "projectNumber", "roles", "status"]);
 
-    const partners = mapToPartnerDtoArray(projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [], [
-      "id",
-      "name",
-      "isLead",
-      "isWithdrawn",
-      "forecastLastModifiedDate",
-      "totalParticipantGrant",
-      "forecastsAndCosts",
-    ]);
+    const partners = mapToPartnerDtoArray(
+      projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [],
+      ["id", "name", "isLead", "isWithdrawn", "forecastLastModifiedDate", "totalParticipantGrant", "forecastsAndCosts"],
+      {},
+    );
 
     const lead = partners.filter(x => x.isLead);
     const notLead = partners.filter(x => !x.isLead);

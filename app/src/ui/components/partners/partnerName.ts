@@ -1,6 +1,6 @@
-import { PartnerDto } from "@framework/dtos";
+import { PartnerDtoGql } from "@framework/dtos";
 
-export type PartnerNameValues = Pick<PartnerDto, "name" | "isWithdrawn" | "isLead">;
+export type PartnerNameValues = Pick<PartnerDtoGql, "name" | "isWithdrawn" | "isLead">;
 
 /**
  * getPartnerName

@@ -128,7 +128,7 @@ export const useProjectOverviewData = (projectId: string) => {
       "claimStatus",
       "partnerStatus",
     ],
-    partnerRoles,
+    { partnerRoles },
   );
 
   const leadPartner = partners.filter(x => x.isLead);

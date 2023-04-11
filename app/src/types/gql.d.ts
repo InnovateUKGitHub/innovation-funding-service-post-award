@@ -23,21 +23,11 @@ declare namespace GQL {
     ? NodeValue<T[Field]>
     : never;
 
-  type ObjectEdgeSelector<T, Field extends string> = T extends { readonly salesforce: AnyObject }
-    ? ObjectNodeSelector<T["salesforce"], Field>
-    : T extends { readonly uiapi: AnyObject }
-    ? ObjectNodeSelector<T["uiapi"], Field>
-    : T extends { readonly query: AnyObject }
-    ? ObjectNodeSelector<T["query"], Field>
-    : Field extends keyof T
-    ? T[Field] extends { readonly edges: ReadonlyArray<infer U> }
-      ? U
-      : null
-    : never;
+  type Maybe<T> = T | null;
 
-  type Value<T> = {
-    value: T | null;
-  } | null;
+  type Value<T> = Maybe<{ value: Maybe<T> }>;
+
+  type ValueAndLabel<T> = Maybe<{ value: Maybe<T>; label?: Maybe<string> }>;
 
   type DtoMapper<Dto, Node, AdditionalData = undefined> = AdditionalData extends undefined
     ? {

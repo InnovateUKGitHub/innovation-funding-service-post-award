@@ -36,3 +36,47 @@ declare type Nominal<Type, Identifier> = Type & {
 declare type Mutable<T extends object> = {
   -readonly [Key in keyof T]: T[Key];
 };
+
+/**
+ * will show the intersecting elements of two union types, or never if no intersection
+ *
+ * @see https://github.com/piotrwitek/utility-types#setintersectiona-b-same-as-extract
+ */
+declare type SetIntersection<A, B> = A extends B ? A : never;
+
+/**
+ * Evaluates the expected additional data object as used in the `mapPartnerDto.ts` file., based on the required fields from te dto
+ * 
+ * The TAdditionalData format is an array of tuples  where the first element is the element to look for in the picklist,
+ * the second element is the property key to be used in the additional data object and the third is the type of the additional data.
+ * 
+ * @example
+ 
+  // where TPickList = "roles" | "competitionName" | "id" | "name"
+ 
+  additionalData: AdditionalDataType<
+    TPickList,
+    [["roles", "partnerRoles", SfPartnerRoles[]], ["competitionName", "competitionName", string]]
+  >
+ 
+   // then the expected additionalData object might be
+ 
+  const partners = mapToPartnerDtoArray(
+    partnersGql,
+    [
+      "id",
+      "name"
+      "competitionName",
+      "roles",
+    ],
+    { competitionName: project.competitionName, partnerRoles: project.roles.partnerRoles },
+  );
+ */
+declare type AdditionalDataType<
+  TPickList,
+  TAdditionalData extends [keyNameFromPickList: string, additionalDataObjectKey: string, additionalDataType: unknown][],
+> = SetIntersection<TPickList, TAdditionalData[number][0]> extends never
+  ? EmptyObject
+  : {
+      [P in TAdditionalData[number] as P[0] extends TPickList ? P[1] : never]: P[2];
+    };

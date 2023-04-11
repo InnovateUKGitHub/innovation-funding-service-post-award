@@ -25,6 +25,7 @@
         "Drawdowns",
         "dtos",
         "esbuild",
+        "fieldset",
         "govfrontend",
         "govuk",
         "granttobe",
@@ -36,6 +37,7 @@
         "innovateuk",
         "Insertable",
         "internationalisation",
+        "itemised",
         "jsforce",
         "Leondro",
         "Licence",
@@ -43,11 +45,14 @@
         "LOGLEVEL",
         "luxon",
         "minimis",
+        "minimise",
         "mochawesome",
         "navigations",
         "nocheck",
         "noemail",
         "nogrep",
+        "noopener",
+        "noreferrer",
         "Openshift",
         "organisation",
         "organisations",
@@ -73,6 +78,8 @@
         "Subschema",
         "testfile",
         "Timeoutable",
+        "timesheets",
+        "travelling",
         "typecheck",
         "UEAS",
         "uiapi",
@@ -88,10 +95,6 @@
         "Whitesource",
         "Withinable"
     ],
-    "ignoreWords": ["numberof"],
-    "import": [],
-    "ignoreRegExpList":
-     [
-        "\\/[a-zA-z\\d]{18}"
-    ]
+    "ignoreWords": ["numberof", "nonfunded", "crnd", "paye", "ipms"],
+    "import": []
 }

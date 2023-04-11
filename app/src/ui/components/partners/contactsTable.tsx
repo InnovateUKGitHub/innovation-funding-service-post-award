@@ -3,11 +3,12 @@ import { createTypedTable } from "../table";
 import { SimpleString } from "../renderers";
 import { Content } from "../content";
 
+type Contacts = Pick<ProjectContactDto, "name" | "roleName" | "email">;
 export interface IContactsTable {
-  contacts: ProjectContactDto[];
+  contacts: Contacts[];
 }
 
-const ContactsUI = createTypedTable<ProjectContactDto>();
+const ContactsUI = createTypedTable<Contacts>();
 
 /**
  * ContactsTable component

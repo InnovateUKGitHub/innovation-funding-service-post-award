@@ -1,17 +1,22 @@
 import { getPartnerName } from "@ui/components/partners";
 import { ReactNode } from "react";
-import { IContactRole } from "./partners/getContactRole";
 import { createTypedTable } from "./table";
+import { PartnerDtoGql, ProjectContactDto } from "@framework/dtos";
+
+type PartnersTableType = {
+  contact: ProjectContactDto;
+  partner: Pick<PartnerDtoGql, "name" | "isWithdrawn" | "isLead">;
+};
 
 export interface PartnersAndFinanceContactsProps {
   comment?: ReactNode;
   footnote?: ReactNode;
-  contactRoles: IContactRole[];
+  contactRoles: PartnersTableType[];
   qa: string;
   hidePartnerColumn?: boolean;
 }
 
-const PartnersTable = createTypedTable<IContactRole>();
+const PartnersTable = createTypedTable<PartnersTableType>();
 
 export const PartnerContactRoleTable = ({
   contactRoles,

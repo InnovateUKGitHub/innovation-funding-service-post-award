@@ -68,21 +68,25 @@ export const useFinanceSummaryData = (projectId: ProjectId) => {
     "projectNumber",
   ]);
 
-  const partners: Partner[] = mapToPartnerDtoArray(node?.Acc_ProjectParticipantsProject__r?.edges ?? [], [
-    "id",
-    "name",
-    "isLead",
-    "isWithdrawn",
-    "totalParticipantGrant",
-    "totalCostsSubmitted",
-    "percentageParticipantCostsSubmitted",
-    "awardRate",
-    "totalGrantApproved",
-    "remainingParticipantGrant",
-    "totalPrepayment",
-    "capLimit",
-    "auditReportFrequencyName",
-  ]);
+  const partners: Partner[] = mapToPartnerDtoArray(
+    node?.Acc_ProjectParticipantsProject__r?.edges ?? [],
+    [
+      "id",
+      "name",
+      "isLead",
+      "isWithdrawn",
+      "totalParticipantGrant",
+      "totalCostsSubmitted",
+      "percentageParticipantCostsSubmitted",
+      "awardRate",
+      "totalGrantApproved",
+      "remainingParticipantGrant",
+      "totalPrepayment",
+      "capLimit",
+      "auditReportFrequencyName",
+    ],
+    {},
+  );
 
   const lead = partners.filter(x => x.isLead);
   const notLead = partners.filter(x => !x.isLead);

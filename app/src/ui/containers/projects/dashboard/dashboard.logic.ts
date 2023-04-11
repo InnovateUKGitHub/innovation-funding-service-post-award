@@ -239,16 +239,11 @@ export const useProjectsDashboardData = (search: string | number) => {
       "statusName",
       "title",
     ]),
-    partners: mapToPartnerDtoArray(x?.node?.Acc_ProjectParticipantsProject__r?.edges ?? [], [
-      "id",
-      "claimStatus",
-      "partnerStatus",
-      "newForecastNeeded",
-      "name",
-      "isWithdrawn",
-      "isLead",
-      "projectId",
-    ]),
+    partners: mapToPartnerDtoArray(
+      x?.node?.Acc_ProjectParticipantsProject__r?.edges ?? [],
+      ["id", "claimStatus", "partnerStatus", "newForecastNeeded", "name", "isWithdrawn", "isLead", "projectId"],
+      {},
+    ),
   }));
   const projects = getFilteredProjects(unfilteredObjects, search.toString());
 

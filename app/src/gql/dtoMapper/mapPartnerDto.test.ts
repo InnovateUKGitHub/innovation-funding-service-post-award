@@ -75,6 +75,7 @@ describe("mapPartnerDtoArray", () => {
           "awardRate",
           "capLimit",
           "claimStatus",
+          "competitionName",
           "forecastLastModifiedDate",
           "forecastsAndCosts",
           "isLead",
@@ -94,12 +95,12 @@ describe("mapPartnerDtoArray", () => {
           "totalParticipantGrant",
           "totalPrepayment",
         ],
-        partnerRoles,
+        { partnerRoles, competitionName: "bingo" },
       ),
     ).toMatchSnapshot();
   });
 
   it("should map the gql data only including fields on the picklist", () => {
-    expect(mapToPartnerDtoArray(edges, ["id", "roles", "isLead"], partnerRoles)).toMatchSnapshot();
+    expect(mapToPartnerDtoArray(edges, ["id", "roles", "isLead"], { partnerRoles })).toMatchSnapshot();
   });
 });

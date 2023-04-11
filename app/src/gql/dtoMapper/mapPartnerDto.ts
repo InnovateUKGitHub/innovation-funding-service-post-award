@@ -17,11 +17,14 @@ type PartnerNode = Readonly<
     Acc_Cap_Limit__c: GQL.Value<number>;
     Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
     Acc_NewForecastNeeded__c: GQL.Value<boolean>;
+    Acc_NonfundedParticipant__c: GQL.Value<boolean>;
     Acc_OpenClaimStatus__c: GQL.Value<string>;
     Acc_OrganisationType__c: GQL.Value<string>;
     Acc_OverheadRate__c: GQL.Value<number>;
+    Acc_ParticipantStatus__c: GQL.ValueAndLabel<string>;
+    Acc_ParticipantType__c: GQL.Value<string>;
+    Acc_Postcode__c: GQL.Value<string>;
     Acc_ProjectRole__c: GQL.Value<string>;
-    Acc_ParticipantStatus__c: GQL.Value<string>;
     Acc_RemainingParticipantGrant__c: GQL.Value<number>;
     Acc_TotalApprovedCosts__c: GQL.Value<number>;
     Acc_TotalCostsSubmitted__c: GQL.Value<number>;
@@ -41,17 +44,21 @@ type PartnerDtoMapping = Pick<
   | "awardRate"
   | "capLimit"
   | "claimStatus"
+  | "competitionName"
   | "forecastLastModifiedDate"
   | "forecastsAndCosts"
   | "isLead"
+  | "isNonFunded"
   | "isWithdrawn"
   | "name"
   | "newForecastNeeded"
   | "organisationType"
   | "overheadRate"
   | "partnerStatus"
+  | "partnerStatusLabel"
   | "percentageParticipantCostsClaimed"
   | "percentageParticipantCostsSubmitted"
+  | "postcode"
   | "projectId"
   | "remainingParticipantGrant"
   | "roles"
@@ -60,13 +67,14 @@ type PartnerDtoMapping = Pick<
   | "totalParticipantCostsClaimed"
   | "totalParticipantGrant"
   | "totalPrepayment"
+  | "type"
 >;
 
-const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles: SfRoles }> = {
-  id: function (node) {
+const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; competitionName?: string }> = {
+  id(node) {
     return (node?.Id ?? "") as PartnerId;
   },
-  accountId: function (node) {
+  accountId(node) {
     return node?.Acc_AccountId__c?.value ?? "";
   },
   auditReportFrequencyName(node) {
@@ -78,56 +86,68 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles: SfRoles }> 
   capLimit(node) {
     return node?.Acc_Cap_Limit__c?.value ?? 0;
   },
-  claimStatus: function (node) {
+  claimStatus(node) {
     return getClaimStatus(node?.Acc_TrackingClaims__c?.value ?? "");
   },
-  forecastLastModifiedDate: function (node) {
+  competitionName(node, additionalData) {
+    return additionalData.competitionName;
+  },
+  forecastLastModifiedDate(node) {
     const dateValue = node?.Acc_ForecastLastModifiedDate__c?.value;
     if (dateValue === null) return null;
     if (dateValue === undefined) return null;
     return new Date(dateValue);
   },
-  forecastsAndCosts: function (node) {
+  forecastsAndCosts(node) {
     return (
       (node?.Acc_TotalFutureForecastsForParticipant__c?.value ?? 0) + (node?.Acc_TotalCostsSubmitted__c?.value ?? 0)
     );
   },
-  isLead: function (node) {
+  isLead(node) {
     return node?.Acc_ProjectRole__c?.value === SalesforceProjectRole.ProjectLead;
   },
-  isWithdrawn: function (node) {
+  isNonFunded(node) {
+    return node?.Acc_NonfundedParticipant__c?.value ?? false;
+  },
+  isWithdrawn(node) {
     return ["Voluntary Withdrawal", "Involuntary Withdrawal", "Migrated - Withdrawn"].includes(
       node?.Acc_ParticipantStatus__c?.value ?? "",
     );
   },
-  name: function (node) {
+  name(node) {
     return node?.Acc_AccountId__r?.Name?.value ?? "Unknown name";
   },
-  newForecastNeeded: function (node) {
+  newForecastNeeded(node) {
     return node?.Acc_NewForecastNeeded__c?.value ?? false;
   },
   organisationType(node) {
     return node?.Acc_OrganisationType__c?.value ?? "unknown";
   },
-  overheadRate: function (node) {
+  overheadRate(node) {
     return node?.Acc_OverheadRate__c?.value ?? null;
   },
-  partnerStatus: function (node) {
+  partnerStatus(node) {
     return getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown");
   },
-  percentageParticipantCostsClaimed: function (node) {
+  partnerStatusLabel(node) {
+    return node?.Acc_ParticipantStatus__c?.label ?? "unknown";
+  },
+  percentageParticipantCostsClaimed(node) {
     return calcPercentage(node?.Acc_TotalParticipantCosts__c?.value ?? 0, node?.Acc_TotalApprovedCosts__c?.value ?? 0);
   },
   percentageParticipantCostsSubmitted(node) {
     return calcPercentage(node?.Acc_TotalParticipantCosts__c?.value ?? 0, node?.Acc_TotalCostsSubmitted__c?.value ?? 0);
   },
-  projectId: function (node) {
+  postcode(node) {
+    return node?.Acc_Postcode__c?.value ?? null;
+  },
+  projectId(node) {
     return (node?.Acc_AccountId__r?.Id ?? "") as ProjectId;
   },
   remainingParticipantGrant(node) {
     return node?.Acc_RemainingParticipantGrant__c?.value ?? 0;
   },
-  roles: function (node, additionalData: { roles: SfRoles }) {
+  roles(node, additionalData: { roles?: SfRoles }) {
     return additionalData?.roles ?? { isPm: false, isMo: false, isFc: false };
   },
   totalCostsSubmitted(node) {
@@ -136,30 +156,38 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles: SfRoles }> 
   totalGrantApproved(node) {
     return node?.Acc_TotalGrantApproved__c?.value ?? null;
   },
-  totalParticipantCostsClaimed: function (node) {
+  totalParticipantCostsClaimed(node) {
     return node?.Acc_TotalApprovedCosts__c?.value ?? null;
   },
-  totalParticipantGrant: function (node) {
+  totalParticipantGrant(node) {
     return node?.Acc_TotalParticipantCosts__c?.value ?? null;
   },
   totalPrepayment(node) {
     return node?.Acc_TotalPrepayment__c?.value ?? null;
   },
+  type(node) {
+    return node?.Acc_ParticipantType__c?.value ?? "unknown";
+  },
 };
+
+type PartnerAdditionalData<TPickList extends string> = AdditionalDataType<
+  TPickList,
+  [["roles", "roles", SfRoles], ["competitionName", "competitionName", string]]
+>;
 
 /**
  * Maps a specified Partner Node from a GQL query to a slice of
  * the PartnerDto to ensure consistency and compatibility in the application
  */
-export function mapToPartnerDto<
-  T extends PartnerNode,
-  PickList extends keyof PartnerDtoMapping,
-  AdditionalData extends { roles: SfRoles },
->(projectNode: T, pickList: PickList[], additionalData: AdditionalData): Pick<PartnerDtoMapping, PickList> {
+export function mapToPartnerDto<TNode extends PartnerNode, TPickList extends keyof PartnerDtoMapping>(
+  projectNode: TNode,
+  pickList: TPickList[],
+  additionalData: PartnerAdditionalData<TPickList>,
+): Pick<PartnerDtoMapping, TPickList> {
   return pickList.reduce((dto, field) => {
     dto[field] = mapper[field](projectNode, additionalData);
     return dto;
-  }, {} as Pick<PartnerDtoMapping, PickList>);
+  }, {} as Pick<PartnerDtoMapping, TPickList>);
 }
 
 const defaultRole = { isPm: false, isMo: false, isFc: false };
@@ -170,17 +198,33 @@ const defaultRole = { isPm: false, isMo: false, isFc: false };
  * PartnerRoles object must be supplied as separate argument
  */
 export function mapToPartnerDtoArray<
-  T extends ReadonlyArray<{ node: PartnerNode } | null> | null,
-  PickList extends keyof PartnerDtoMapping,
+  TNode extends ReadonlyArray<{ node: PartnerNode } | null> | null,
+  TPickList extends keyof PartnerDtoMapping,
 >(
-  partnerEdges: T,
-  pickList: PickList[],
-  partnerRoles?: PickList extends "roles" ? SfPartnerRoles[] : never,
-): Pick<PartnerDtoMapping, PickList>[] {
+  partnerEdges: TNode,
+  pickList: TPickList[],
+  additionalData: AdditionalDataType<
+    TPickList,
+    [["roles", "partnerRoles", SfPartnerRoles[]], ["competitionName", "competitionName", string]]
+  >,
+): Pick<PartnerDtoMapping, TPickList>[] {
   return (
     partnerEdges?.map(node => {
-      const partnerRole = partnerRoles?.find(x => x?.partnerId === node?.node?.Acc_AccountId__c?.value) ?? defaultRole;
-      return mapToPartnerDto(node?.node ?? null, pickList, { roles: partnerRole });
+      if (additionalData && "partnerRoles" in additionalData) {
+        const { partnerRoles, ...nextAdditionalData } = additionalData;
+        const roles: SfRoles =
+          (partnerRoles as SfPartnerRoles[]).find(x => x?.partnerId === node?.node?.Acc_AccountId__c?.value) ??
+          defaultRole;
+        return mapToPartnerDto(node?.node ?? null, pickList, {
+          ...nextAdditionalData,
+          roles,
+        } as unknown as PartnerAdditionalData<TPickList>);
+      }
+      return mapToPartnerDto(
+        node?.node ?? null,
+        pickList,
+        additionalData as unknown as PartnerAdditionalData<TPickList>,
+      );
     }) ?? []
   );
 }

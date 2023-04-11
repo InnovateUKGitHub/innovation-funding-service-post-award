@@ -29,22 +29,22 @@ type LoanNode = Readonly<
 type LoanDtoMapping = Pick<LoanDto, "id" | "period" | "status" | "forecastAmount" | "comments" | "requestDate">;
 
 const mapper: GQL.DtoMapper<LoanDtoMapping, LoanNode> = {
-  id: function (node) {
+  id(node) {
     return (node?.Id ?? "") as LoanId;
   },
-  period: function (node) {
+  period(node) {
     return node?.Acc_PeriodNumber__c?.value ?? 0;
   },
-  status: function (node) {
+  status(node) {
     return loanStatusFromSfMap(node?.Loan_DrawdownStatus__c?.value ?? "unknown");
   },
-  forecastAmount: function (node) {
+  forecastAmount(node) {
     return node?.Loan_LatestForecastDrawdown__c?.value ?? 0;
   },
-  comments: function (node) {
+  comments(node) {
     return node?.Loan_UserComments__c?.value ?? "";
   },
-  requestDate: function (node) {
+  requestDate(node) {
     return clock.parseOptionalSalesforceDateTime(node?.Loan_PlannedDateForDrawdown__c?.value ?? "");
   },
 };

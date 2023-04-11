@@ -3,6 +3,7 @@ export * from "./mapPartnerDto";
 export * from "./getPartnerRoles";
 export * from "./mapLoanDto";
 export * from "./mapClaimDto";
+export * from "./mapContactDto";
 export * from "./mapCostCategoryDto";
 export * from "./mapGolCostsDto";
 export * from "./mapForecastDetailsDto";

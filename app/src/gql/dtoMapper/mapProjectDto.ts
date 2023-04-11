@@ -18,6 +18,7 @@ type ProjectNode = Readonly<
     Acc_CurrentPeriodEndDate__c: GQL.Value<string>;
     Acc_CurrentPeriodNumber__c: GQL.Value<number>;
     Acc_CurrentPeriodStartDate__c: GQL.Value<string>;
+    Acc_Duration__c: GQL.Value<number>;
     Acc_EndDate__c: GQL.Value<string>;
     Acc_GOLTotalCostAwarded__c: GQL.Value<number>;
     Acc_LeadParticipantID__c: GQL.Value<string>;
@@ -27,13 +28,15 @@ type ProjectNode = Readonly<
     Acc_PCRsForReview__c: GQL.Value<number>;
     Acc_PCRsUnderQuery__c: GQL.Value<number>;
     Acc_ProjectNumber__c: GQL.Value<string>;
-    Acc_ProjectStatus__c: {
-      value: string | null;
-      label?: string | null;
-    } | null;
+    Acc_ProjectStatus__c: GQL.ValueAndLabel<string>;
+    Acc_ProjectSummary__c: GQL.Value<string>;
     Acc_ProjectTitle__c: GQL.Value<string>;
     Acc_StartDate__c: GQL.Value<string>;
     Acc_TotalProjectCosts__c: GQL.Value<number>;
+    Loan_LoanAvailabilityPeriodLength__c: GQL.Value<number>;
+    Loan_LoanEndDate__c: GQL.Value<string>;
+    Loan_LoanExtensionPeriodLength__c: GQL.Value<number>;
+    Loan_LoanRepaymentPeriodLength__c: GQL.Value<number>;
   }>
 > | null;
 
@@ -45,12 +48,17 @@ type ProjectDtoMapping = Pick<
   | "claimsToReview"
   | "competitionType"
   | "costsClaimedToDate"
+  | "durationInMonths"
   | "endDate"
   | "isActive"
   | "isPastEndDate"
   | "grantOfferLetterCosts"
   | "leadPartnerName"
   | "leadPartnerId"
+  | "loanAvailabilityPeriodLength"
+  | "loanEndDate"
+  | "loanExtensionPeriodLength"
+  | "loanRepaymentPeriodLength"
   | "numberOfOpenClaims"
   | "numberOfPeriods"
   | "pcrsQueried"
@@ -63,6 +71,7 @@ type ProjectDtoMapping = Pick<
   | "startDate"
   | "status"
   | "statusName"
+  | "summary"
   | "title"
   | "partnerRoles"
 >;
@@ -88,6 +97,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   costsClaimedToDate(node) {
     return node?.Acc_TotalProjectCosts__c?.value ?? 0;
   },
+  durationInMonths(node) {
+    return node?.Acc_Duration__c?.value ?? 0;
+  },
   endDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Acc_EndDate__c?.value ?? null) as Date;
   },
@@ -105,6 +117,18 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   leadPartnerName(node) {
     return node?.Acc_LeadParticipantName__c?.value ?? "";
+  },
+  loanAvailabilityPeriodLength(node) {
+    return node?.Loan_LoanAvailabilityPeriodLength__c?.value ?? null;
+  },
+  loanEndDate(node) {
+    return !!node?.Loan_LoanEndDate__c?.value ? new Date(node?.Loan_LoanEndDate__c?.value) : null;
+  },
+  loanExtensionPeriodLength(node) {
+    return node?.Loan_LoanExtensionPeriodLength__c?.value ?? null;
+  },
+  loanRepaymentPeriodLength(node) {
+    return node?.Loan_LoanRepaymentPeriodLength__c?.value ?? null;
   },
   numberOfOpenClaims(node) {
     return node?.Acc_NumberOfOpenClaims__c?.value ?? 0;
@@ -148,6 +172,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   statusName(node) {
     return node?.Acc_ProjectStatus__c?.label ?? "Unknown";
+  },
+  summary(node) {
+    return node?.Acc_ProjectSummary__c?.value ?? "";
   },
   title(node) {
     return node?.Acc_ProjectTitle__c?.value ?? "";
