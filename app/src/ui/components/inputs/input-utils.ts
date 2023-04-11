@@ -49,10 +49,10 @@ export function useDebounce<T extends BasicFn>(
  * Hook will update the state value property when value property from the props does not match the state value
  * Used for externally updating the input field
  */
-export function useUpdateStateValueOnPropsChange<S>(
-  propValue: S,
-  stateValue: S,
-  setState: Dispatch<SetStateAction<{ value: S }>>,
+export function useUpdateStateValueOnPropsChange<T, S extends { value: T } = { value: T }>(
+  propValue: T,
+  stateValue: T,
+  setState: Dispatch<SetStateAction<S>>,
 ) {
   useDidUpdate(() => {
     if (propValue !== stateValue) {
