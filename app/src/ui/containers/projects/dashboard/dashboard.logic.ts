@@ -1,3 +1,4 @@
+import { fuzzySearch } from "@framework/util/fuzzySearch";
 import { getAuthRoles, PartnerClaimStatus, PartnerStatus, ProjectStatus } from "@framework/types";
 import { projectPriorityComparator } from "@framework/util";
 import { mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
@@ -62,40 +63,35 @@ interface ProjectFilterOption {
   label: string;
 }
 
-const projectFilters: Record<"fc" | "mo" | "pm", ProjectFilterOption[]> = {
-  pm: [{ id: "PCRS_QUERIED", label: "PCR's being queried" }],
-  mo: [
-    { id: "CLAIMS_TO_REVIEW", label: "Claims to review" },
-    { id: "PCRS_TO_REVIEW", label: "PCR's to review" },
-  ],
-  fc: [
-    { id: "SETUP_REQUIRED", label: "Not completed setup" },
-    { id: "CLAIMS_TO_SUBMIT", label: "Claims to submit" },
-    { id: "CLAIMS_TO_UPLOAD_REPORT", label: "Claims missing documents" },
-    { id: "CLAIMS_TO_RESPOND", label: "Claims needing responses" },
-  ],
-};
-
 /**
  * gets filter types for projects
  */
 export function getAvailableProjectFilters(projects: Project[]): ProjectFilterOption[] {
   if (!projects.length) return [];
 
-  // Note: If the first role is a super admin then all projects are the same
-  const { isSuperAdmin } = getAuthRoles(projects[0].roles);
+  // Start off with no options
+  const filterOptions: ProjectFilterOption[] = [];
 
-  if (isSuperAdmin) {
-    return [...projectFilters.pm, ...projectFilters.mo, ...projectFilters.fc];
-  }
+  // Check if the user is any of the following roles.
+  const isAnyMo = projects.some(x => getAuthRoles(x.roles).isMo);
+  const isAnyFc = projects.some(x => getAuthRoles(x.roles).isFc);
+  const isAnyPm = projects.some(x => getAuthRoles(x.roles).isPm);
 
-  let filters: ProjectFilterOption[] = [];
+  // PCRS
+  if (isAnyMo) filterOptions.push({ id: "PCRS_TO_REVIEW", label: "PCR's to review" });
+  if (isAnyPm) filterOptions.push({ id: "PCRS_QUERIED", label: "PCR's being queried" });
 
-  if (projects.find(x => getAuthRoles(x.roles).isPm)) filters = [...filters, ...projectFilters.pm];
-  if (projects.find(x => getAuthRoles(x.roles).isMo)) filters = [...filters, ...projectFilters.mo];
-  if (projects.find(x => getAuthRoles(x.roles).isFc)) filters = [...filters, ...projectFilters.fc];
+  // Claims, then Setup Required
+  if (isAnyMo) filterOptions.push({ id: "CLAIMS_TO_REVIEW", label: "Claims to review" });
+  if (isAnyFc)
+    filterOptions.push(
+      { id: "CLAIMS_TO_SUBMIT", label: "Claims to submit" },
+      { id: "CLAIMS_TO_UPLOAD_REPORT", label: "Claims missing documents" },
+      { id: "CLAIMS_TO_RESPOND", label: "Claims needing responses" },
+      { id: "SETUP_REQUIRED", label: "Not completed setup" },
+    );
 
-  return filters;
+  return filterOptions;
 }
 
 /**
@@ -210,20 +206,10 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
   }
 }
 
-const getFilteredProjects = (projects: Project[], searchString?: string | null): Project[] => {
-  if (!searchString) return projects;
-
-  return projects.filter(project => {
-    const localeSearchValue = searchString.toLocaleLowerCase();
-
-    const itemsToSearch = [
-      project.projectNumber?.toString(),
-      project.title?.toLocaleLowerCase(),
-      project.leadPartnerName?.toLocaleLowerCase(),
-    ].filter(Boolean);
-
-    return itemsToSearch.some(searchItem => searchItem.includes(localeSearchValue));
-  });
+const getFilteredProjects = (filteredProjects: Project[], searchQuery?: string | null): Project[] => {
+  return searchQuery
+    ? fuzzySearch(searchQuery.trim(), filteredProjects, ["title", "projectNumber", "leadPartnerName"]).map(x => x.item)
+    : filteredProjects;
 };
 
 export const useProjectsDashboardData = (search: string | number) => {

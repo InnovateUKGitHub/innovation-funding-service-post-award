@@ -5,33 +5,6 @@ export const projectDashboardQuery = graphql`
     salesforce {
       uiapi {
         query {
-          #start block
-          # Acc_ProjectParticipant__c(first: 500) {
-          #   edges {
-          #     node {
-          #       Id
-          #       Acc_AccountId__r {
-          #         Id
-          #         Name {
-          #           value
-          #         }
-          #       }
-          #       Acc_TrackingClaims__c {
-          #         value
-          #       }
-          #       Acc_ParticipantStatus__c {
-          #         value
-          #       }
-          #       Acc_NewForecastNeeded__c {
-          #         value
-          #       }
-          #       Acc_OpenClaimStatus__c {
-          #         value
-          #       }
-          #     }
-          #   }
-          # }
-          # end block
           Acc_Project__c(
             first: 2000
             orderBy: {
