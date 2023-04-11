@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classNames from "classnames";
-import { FormInputWidths, useDebounce } from "./input-utils";
+import { FormInputWidths, useDebounce, useUpdateStateValueOnPropsChange } from "./input-utils";
 import { InputProps, InputState } from "./common";
 
 export interface NumberInputProps extends InputProps<number> {
@@ -34,8 +34,13 @@ const getStateFromProps = (props: NumberInputProps): NumberInputState => {
 
 export const NumberInput = (props: NumberInputProps) => {
   const [state, setState] = useState<NumberInputState>(getStateFromProps(props));
-
   const debouncedOnChange = useDebounce(props.onChange, props.debounce);
+
+  useUpdateStateValueOnPropsChange<NumberInputState["value"], NumberInputState>(
+    getStateFromProps(props).value,
+    state.value,
+    setState,
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, debounce: boolean) => {
     const value = e.currentTarget.value;
