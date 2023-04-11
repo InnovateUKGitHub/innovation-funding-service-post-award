@@ -37,7 +37,7 @@ console.info(`***\ncypress tests configured with specPattern "${specPattern}"\n*
 /**
  * Set global timeout from environment variable
  */
-const defaultCommandTimeout: number = parseInt(process.env.TIMEOUT) ?? 4000;
+const defaultCommandTimeout: number = parseInt(process.env.TIMEOUT ?? "4000");
 
 const isTrue = (s: string = "") => s.toLowerCase() === "true";
 

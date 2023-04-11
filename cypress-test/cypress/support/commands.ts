@@ -31,7 +31,7 @@ const switchUserTo = (email: string, goHome: boolean = false) => {
   cy.log(`**switchUserTo:${email}**`);
   cy.contains("User Switcher").click({ force: true });
   cy.wait(500);
-  cy.get("input#user-switcher-manual-input").scrollIntoView().clear().wait(1000).type(email);
+  cy.get("input#user-switcher-manual-input").click().clear().wait(1000).type(email);
   cy.getByQA(`manual-change-and-${goHome ? "home" : "stay"}`).click({ force: true });
   cy.wait(500);
 };
