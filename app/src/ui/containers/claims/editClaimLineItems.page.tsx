@@ -175,7 +175,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
                   value={x =>
                     y.isClient
                       ? x.claimsMessages.editClaimLineItemConvertGbp
-                      : x.claimsMessages.nonjsEditClaimLineItemConvertGbp
+                      : x.claimsMessages.nonJsEditClaimLineItemConvertGbp
                   }
                 />
               )}

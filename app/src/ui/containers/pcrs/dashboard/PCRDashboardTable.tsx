@@ -60,7 +60,7 @@ const PCRDashboardTable = ({
       case "Partner Addition":
         return getContent(x => x.pcrTypes.partnerAddition);
       case "Partner Withdrawal":
-        return getContent(x => x.pcrTypes.partnerWithdrawl);
+        return getContent(x => x.pcrTypes.partnerWithdrawal);
       case "Project Suspension":
         return getContent(x => x.pcrTypes.projectSuspension);
       case "Project Termination":

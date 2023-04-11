@@ -76,7 +76,7 @@ const renderWarningMessage = ({
     <>
       <Content value={x => x.components.warningContent.amountRequestMessage} />
       {categoriesList}
-      <Content value={x => x.components.warningContent.contactmessage} />
+      <Content value={x => x.components.warningContent.contactMessage} />
     </>
   ) : (
     <>

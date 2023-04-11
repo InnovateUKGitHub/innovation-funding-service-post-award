@@ -94,7 +94,7 @@
     },
     "warningContent": {
       "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
-      "contactmessage": "Your Monitoring Officer will let you know if they have any concerns.",
+      "contactMessage": "Your Monitoring Officer will let you know if they have any concerns.",
       "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:"
     },
     "projectInactiveContent": {
@@ -937,7 +937,7 @@
     "interimClaimMessage": "When adding costs for last month, you must:\n\n* use a new line for every cost each month\n\n* name the month in the description\n\n* not alter any information for previous months' costs",
     "editClaimLineItemGuidance": "You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact your monitoring officer for more information about the level of detail you are required to provide.",
     "editClaimLineItemConvertGbp": "You can enter up to 120 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
-    "nonjsEditClaimLineItemConvertGbp": "You can enter up to 10 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
+    "nonJsEditClaimLineItemConvertGbp": "You can enter up to 10 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
     "editClaimLineItemDocumentGuidance": "Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide.",
     "negativeClaimWarning": "You have entered negative values for the following items:",
     "claimSummaryWarning": "You have entered a negative claim for this period. Click 'Edit costs to be claimed' button if you wish to change this.",
@@ -1007,7 +1007,7 @@
       "netCost": "Net cost:"
     },
     "travelAndSubs": {
-      "description": "Purpose of journey or desription of subsistence cost",
+      "description": "Purpose of journey or description of subsistence cost",
       "numberOfTimes": "Number of times",
       "costOfEach": "Cost each (£)",
       "totalCost": "Total cost"
@@ -1255,7 +1255,7 @@
     "loanDrawdownChange": "Loan Drawdown Change",
     "multiplePartnerFinancialVirement": "Financial Virement",
     "partnerAddition": "Partner Addition",
-    "partnerWithdrawl": "Partner Withdrawal",
+    "partnerWithdrawal": "Partner Withdrawal",
     "projectSuspension": "Project Suspension",
     "projectTermination": "Project Termination",
     "putProjectOnHold": "Put project on hold",

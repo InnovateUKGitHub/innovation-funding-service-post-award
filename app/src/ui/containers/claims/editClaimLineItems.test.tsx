@@ -44,7 +44,7 @@ const stubContent = {
     negativeClaimWarning: "stub-negativeClaimWarning",
     editClaimLineItemGuidance: "stub-editClaimLineItemGuidance",
     editClaimLineItemConvertGbp: "stub-editClaimLineItemCurrencyGbp",
-    nonjsEditClaimLineItemConvertGbp: "stub-nonJsEditClaimLineItemCurrencyGbp",
+    nonJsEditClaimLineItemConvertGbp: "stub-nonJsEditClaimLineItemCurrencyGbp",
     editClaimLineItemOtherCostsTotalCosts: "stub-editClaimLineItemOtherCostsTotal",
   },
   documentLabels: {
@@ -152,7 +152,7 @@ describe("editClaimLineItems", () => {
       });
 
       test("with nonJsEditClaimLineItemCurrencyGbp", () => {
-        const stubMessage = stubContent.claimsMessages.nonjsEditClaimLineItemConvertGbp;
+        const stubMessage = stubContent.claimsMessages.nonJsEditClaimLineItemConvertGbp;
         const { queryByText } = setup(stubProps, true);
 
         expect(queryByText(stubMessage)).toBeInTheDocument();
