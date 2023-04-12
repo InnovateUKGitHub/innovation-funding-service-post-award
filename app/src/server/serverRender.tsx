@@ -90,6 +90,7 @@ const serverRender =
           email: "",
           csrf: req.csrfToken(),
           projectId: req.session?.user.projectId,
+          userSwitcherSearchQuery: req.session?.user.userSwitcherSearchQuery,
         };
       } else {
         auth = await context.runQuery(new GetAllProjectRolesForUser());
@@ -97,6 +98,7 @@ const serverRender =
           roleInfo: auth.permissions,
           email: req.session?.user.email,
           projectId: req.session?.user.projectId,
+          userSwitcherSearchQuery: req.session?.user.userSwitcherSearchQuery,
           csrf: req.csrfToken(),
         };
       }

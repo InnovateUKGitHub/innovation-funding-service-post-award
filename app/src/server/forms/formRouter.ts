@@ -70,6 +70,7 @@ import { ProjectSetupBankStatementHandler } from "./project/setup/ProjectSetupBa
 import { GraphQLSchema } from "graphql";
 import { DeveloperProjectCreatorHandler } from "./developerProjectCreatorHandler";
 import { DeveloperPageCrasherHandler } from "./developerPageCrasherHandler";
+import csurf from "csurf";
 
 export const standardFormHandlers: StandardFormHandlerBase<AnyObject, EditorStateKeys>[] = [
   new ClaimForecastFormHandler(),
@@ -143,18 +144,20 @@ const getRoute = (handler: IFormHandler) => {
 };
 
 const handlePost =
-  ({ schema }: { schema: GraphQLSchema }) =>
+  ({ schema, csrfProtection }: { schema: GraphQLSchema; csrfProtection: ReturnType<typeof csurf> }) =>
   (handler: IFormHandler) =>
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    try {
-      await handler.handle(req, res, next);
-    } catch (err: unknown) {
-      return serverRender({ schema })({ req, res, err, next });
-    }
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    csrfProtection(req, res, async () => {
+      try {
+        handler.handle(req, res, next);
+      } catch (err: unknown) {
+        return serverRender({ schema })({ req, res, err, next });
+      }
+    });
   };
 
 const handleError =
-  ({ schema }: { schema: GraphQLSchema }) =>
+  ({ schema, csrfProtection }: { schema: GraphQLSchema; csrfProtection: ReturnType<typeof csurf> }) =>
   (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     error: any,
@@ -162,11 +165,13 @@ const handleError =
     res: express.Response,
     next: express.NextFunction,
   ) => {
-    if (error) {
-      serverRender({ schema })({ req, res, err: error, next });
-    } else {
-      next(error);
-    }
+    csrfProtection(req, res, () => {
+      if (error) {
+        serverRender({ schema })({ req, res, err: error, next });
+      } else {
+        next(error);
+      }
+    });
   };
 
 export const configureFormRouter = ({
@@ -183,9 +188,8 @@ export const configureFormRouter = ({
     result.post(
       getRoute(x),
       upload.single("attachment"),
-      csrfProtection,
-      handlePost({ schema })(x),
-      handleError({ schema }),
+      handlePost({ schema, csrfProtection })(x),
+      handleError({ schema, csrfProtection }),
     );
   });
 
@@ -193,23 +197,22 @@ export const configureFormRouter = ({
     result.post(
       getRoute(x),
       upload.array("attachment"),
-      csrfProtection,
-      handlePost({ schema })(x),
-      handleError({ schema }),
+      handlePost({ schema, csrfProtection })(x),
+      handleError({ schema, csrfProtection }),
     );
   });
 
   standardFormHandlers.forEach(x => {
-    result.post(getRoute(x), csrfProtection, handlePost({ schema })(x), handleError({ schema }));
+    result.post(getRoute(x), handlePost({ schema, csrfProtection })(x), handleError({ schema, csrfProtection }));
   });
 
   if (!configuration.sso.enabled) {
     for (const x of developerFormhandlers) {
-      result.post(getRoute(x), handlePost({ schema })(x), handleError({ schema }));
+      result.post(getRoute(x), handlePost({ schema, csrfProtection })(x), handleError({ schema, csrfProtection }));
     }
   }
 
-  result.post("*", badRequestHandler.handle, handleError({ schema }));
+  result.post("*", handlePost({ schema, csrfProtection })(badRequestHandler), handleError({ schema, csrfProtection }));
 
   return result;
 };

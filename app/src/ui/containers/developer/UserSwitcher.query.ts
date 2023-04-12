@@ -10,7 +10,7 @@ const userSwitcherCurrentUserQuery = graphql`
 `;
 
 const userSwitcherProjectsQuery = graphql`
-  query UserSwitcherProjectsQuery {
+  query UserSwitcherProjectsQuery($search: String) {
     salesforce(login: "system") {
       uiapi {
         query {
@@ -19,8 +19,17 @@ const userSwitcherProjectsQuery = graphql`
               Acc_CompetitionId__r: { Acc_CompetitionType__c: { order: ASC } }
               Acc_ProjectNumber__c: { order: ASC }
             }
+            where: {
+              or: {
+                Acc_ProjectTitle__c: { like: $search }
+                Acc_ProjectNumber__c: { like: $search }
+                Acc_LeadParticipantName__c: { like: $search }
+                Acc_CompetitionType__c: { like: $search }
+              }
+            }
             first: 2000
           ) {
+            totalCount
             edges {
               node {
                 Id

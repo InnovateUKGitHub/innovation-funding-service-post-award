@@ -8,6 +8,7 @@ export interface ISessionUser {
    * Set to the last-selected project of the User Switcher.
    */
   projectId?: string;
+  userSwitcherSearchQuery?: string;
 }
 
 export interface IClientUser extends ISessionUser {

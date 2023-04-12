@@ -20,6 +20,9 @@ export class DeveloperUserSwitcherHandler implements IFormHandler {
       buttonHome: req.body.button_home === "",
       isSearch: req.body.button_search === "",
       isReset: req.body.reset === "",
+      isResetSearchProjects: req.body.button_reset_search_projects === "",
+      isSearchProjects: req.body.button_search_projects === "",
+      searchQuery: req.body.search_query ?? "",
       currentUrl: req.body.current_url,
     };
 
@@ -38,9 +41,15 @@ export class DeveloperUserSwitcherHandler implements IFormHandler {
       req.session.user.projectId = dto.projectId;
     }
 
+    if (dto.isResetSearchProjects) {
+      req.session.user.userSwitcherSearchQuery = "";
+    } else {
+      req.session.user.userSwitcherSearchQuery = dto.searchQuery;
+    }
+
     if (dto.buttonHome) {
       res.redirect("/");
-    } else if (dto.buttonStay) {
+    } else if (dto.buttonStay || dto.isResetSearchProjects || dto.isSearchProjects || dto.isSearch) {
       res.redirect(dto.currentUrl);
     } else {
       res.redirect(DeveloperHomePage.routePath);

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<881f3ff90ab4162f63433b18334f0f4f>>
+ * @generated SignedSource<<968ddfafb09b918a79b6e7131224bf23>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,7 +9,9 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type UserSwitcherProjectsQuery$variables = {};
+export type UserSwitcherProjectsQuery$variables = {
+  search?: string | null;
+};
 export type UserSwitcherProjectsQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
@@ -31,6 +33,7 @@ export type UserSwitcherProjectsQuery$data = {
               readonly Id: string;
             } | null;
           } | null> | null;
+          readonly totalCount: number;
         } | null;
       };
     };
@@ -42,10 +45,24 @@ export type UserSwitcherProjectsQuery = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = {
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "search"
+  }
+],
+v1 = {
   "order": "ASC"
 },
-v1 = [
+v2 = [
+  {
+    "kind": "Variable",
+    "name": "like",
+    "variableName": "search"
+  }
+],
+v3 = [
   {
     "alias": null,
     "args": null,
@@ -54,7 +71,7 @@ v1 = [
     "storageKey": null
   }
 ],
-v2 = [
+v4 = [
   {
     "alias": null,
     "args": [
@@ -98,10 +115,42 @@ v2 = [
                     "name": "orderBy",
                     "value": {
                       "Acc_CompetitionId__r": {
-                        "Acc_CompetitionType__c": (v0/*: any*/)
+                        "Acc_CompetitionType__c": (v1/*: any*/)
                       },
-                      "Acc_ProjectNumber__c": (v0/*: any*/)
+                      "Acc_ProjectNumber__c": (v1/*: any*/)
                     }
+                  },
+                  {
+                    "fields": [
+                      {
+                        "fields": [
+                          {
+                            "fields": (v2/*: any*/),
+                            "kind": "ObjectValue",
+                            "name": "Acc_CompetitionType__c"
+                          },
+                          {
+                            "fields": (v2/*: any*/),
+                            "kind": "ObjectValue",
+                            "name": "Acc_LeadParticipantName__c"
+                          },
+                          {
+                            "fields": (v2/*: any*/),
+                            "kind": "ObjectValue",
+                            "name": "Acc_ProjectNumber__c"
+                          },
+                          {
+                            "fields": (v2/*: any*/),
+                            "kind": "ObjectValue",
+                            "name": "Acc_ProjectTitle__c"
+                          }
+                        ],
+                        "kind": "ObjectValue",
+                        "name": "or"
+                      }
+                    ],
+                    "kind": "ObjectValue",
+                    "name": "where"
                   }
                 ],
                 "concreteType": "Acc_Project__cConnection",
@@ -109,6 +158,13 @@ v2 = [
                 "name": "Acc_Project__c",
                 "plural": false,
                 "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "totalCount",
+                    "storageKey": null
+                  },
                   {
                     "alias": null,
                     "args": null,
@@ -168,7 +224,7 @@ v2 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectNumber__c",
                             "plural": false,
-                            "selections": (v1/*: any*/),
+                            "selections": (v3/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -178,7 +234,7 @@ v2 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectTitle__c",
                             "plural": false,
-                            "selections": (v1/*: any*/),
+                            "selections": (v3/*: any*/),
                             "storageKey": null
                           }
                         ],
@@ -188,7 +244,7 @@ v2 = [
                     "storageKey": null
                   }
                 ],
-                "storageKey": "Acc_Project__c(first:2000,orderBy:{\"Acc_CompetitionId__r\":{\"Acc_CompetitionType__c\":{\"order\":\"ASC\"}},\"Acc_ProjectNumber__c\":{\"order\":\"ASC\"}})"
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -202,32 +258,32 @@ v2 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "UserSwitcherProjectsQuery",
-    "selections": (v2/*: any*/),
+    "selections": (v4/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "UserSwitcherProjectsQuery",
-    "selections": (v2/*: any*/)
+    "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "c71ed86eb76285c9be1c5f81154cf7f4",
+    "cacheID": "edc7f193fa09fcc102815459e7a37d0b",
     "id": null,
     "metadata": {},
     "name": "UserSwitcherProjectsQuery",
     "operationKind": "query",
-    "text": "query UserSwitcherProjectsQuery {\n  salesforce(login: \"system\") {\n    uiapi {\n      query {\n        Acc_Project__c(orderBy: {Acc_CompetitionId__r: {Acc_CompetitionType__c: {order: ASC}}, Acc_ProjectNumber__c: {order: ASC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_CompetitionType__c {\n                  displayValue\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query UserSwitcherProjectsQuery(\n  $search: String\n) {\n  salesforce(login: \"system\") {\n    uiapi {\n      query {\n        Acc_Project__c(orderBy: {Acc_CompetitionId__r: {Acc_CompetitionType__c: {order: ASC}}, Acc_ProjectNumber__c: {order: ASC}}, where: {or: {Acc_ProjectTitle__c: {like: $search}, Acc_ProjectNumber__c: {like: $search}, Acc_LeadParticipantName__c: {like: $search}, Acc_CompetitionType__c: {like: $search}}}, first: 2000) {\n          totalCount\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_CompetitionType__c {\n                  displayValue\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ba98b493631ff0f65b3afe1a84f4bddd";
+(node as any).hash = "97eacbd3dd737895c3a787eeeabcc965";
 
 export default node;

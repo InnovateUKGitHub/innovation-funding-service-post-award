@@ -1,13 +1,13 @@
 import { DeveloperUser } from "@framework/dtos/developerUser";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
 import { SalesforceRole } from "@server/repositories";
-import { createTypedForm, H3, Info, Section, createTypedTable } from "@ui/components";
+import { createTypedForm, H3, Info, Section, createTypedTable, ValidationMessage } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
 import { useMounted } from "@ui/features";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "relay-hooks";
 import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
@@ -46,9 +46,14 @@ interface UserSwitcherFormInputs extends UserSwitcherEmailFormInput {
   projectId?: string;
 }
 
+interface UserSwitcherSearchProjectFormInputs {
+  search?: string;
+}
+
 const ResetUserForm = createTypedForm<string>();
 const ManuallyEnterUserForm = createTypedForm<UserSwitcherEmailFormInput>();
 const SelectProjectForm = createTypedForm<UserSwitcherFormInputs>();
+const SearchProjectForm = createTypedForm<UserSwitcherSearchProjectFormInputs>();
 const SelectContactForm = createTypedForm<string>();
 const ProjectContactTable = createTypedTable<UserSwitcherTableRow>();
 
@@ -201,14 +206,31 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
 };
 
 const UserSwitcherProjectSelector = () => {
-  const { data } = useQuery<UserSwitcherProjectsQuery>(userSwitcherProjectsQuery);
   const { getContent } = useContent();
   const returnLocation = useReturnLocation();
-  const { email: initialEmailState, projectId: initialProjectIdState } = useStores().users.getCurrentUser();
+  const user = useStores().users.getCurrentUser();
+
+  const {
+    email: initialEmailState,
+    projectId: initialProjectIdState,
+    userSwitcherSearchQuery: initialUserSwitcherSearchQuery,
+  } = user;
 
   const [projectId, setProjectId] = useState<ProjectId | undefined>(initialProjectIdState as ProjectId);
   const [email, setEmail] = useState<string | undefined>(initialEmailState);
+  const [userSearchInput, setUserSearchInput] = useState<string | undefined>(initialUserSwitcherSearchQuery);
+  const [currentSearchInput, setCurrentSearchInput] = useState<string | undefined>(initialUserSwitcherSearchQuery);
+  const [queryIndex, setQueryIndex] = useState<number>(0);
   const isMounted = useMounted();
+
+  const { data, isLoading } = useQuery<UserSwitcherProjectsQuery>(
+    userSwitcherProjectsQuery,
+    { search: `%${currentSearchInput ?? ""}%` },
+    {
+      fetchKey: queryIndex,
+      fetchPolicy: "network-only",
+    },
+  );
 
   // Create options for dropdown to select a project.
   const projectOptions: DropdownListOption[] = getDefinedEdges(data?.salesforce.uiapi.query.Acc_Project__c?.edges).map(
@@ -222,33 +244,86 @@ const UserSwitcherProjectSelector = () => {
     }),
   );
 
-  const userFormProps = {
-    data: { projectId, email },
-    onChange: (e: UserSwitcherFormInputs) => {
-      setProjectId(e.projectId as ProjectId);
-      setEmail(e.email);
-    },
-    action: DeveloperUserSwitcherPage.routePath,
-  };
+  const isSubsetOfProjects = projectOptions.length < (data?.salesforce.uiapi.query.Acc_Project__c?.totalCount ?? 0);
 
   return (
     <>
-      <SelectProjectForm.Form {...userFormProps}>
-        <H3>{getContent(x => x.components.userSwitcher.pickUserSubtitle)}</H3>
-        <SelectProjectForm.DropdownList
-          name="project_id"
-          options={projectOptions}
-          hasEmptyOption
-          placeholder={getContent(x => x.components.userSwitcher.projectDropdownPlaceholder)}
-          value={p => projectOptions.find(x => p.projectId === x.value)}
-          update={(x, value) => (x.projectId = value?.value as string | undefined)}
+      <H3>{getContent(x => x.components.userSwitcher.findFromSalesforce)}</H3>
+      <SearchProjectForm.Form
+        data={{ search: userSearchInput }}
+        onChange={(e: UserSwitcherSearchProjectFormInputs) => {
+          setUserSearchInput(e.search);
+        }}
+        action={DeveloperUserSwitcherPage.routePath}
+      >
+        <SearchProjectForm.String
+          name="search_query"
+          label={getContent(x => x.components.userSwitcher.searchBoxSubtitle)}
+          placeholder={getContent(x => x.components.userSwitcher.searchBoxPlaceholder)}
+          value={p => p.search}
+          update={(x, value) => (x.search = value ?? "")}
         />
-        {isMounted.isServer && <SelectProjectForm.Hidden name="current_url" value={() => returnLocation} />}
-        {isMounted.isServer && (
-          <SelectProjectForm.Button name="search">Search for users in project</SelectProjectForm.Button>
-        )}
-      </SelectProjectForm.Form>
-      {projectId && <UserSwitcherProjectSelectorPartnerSelector projectId={projectId} />}
+        <SearchProjectForm.Button
+          name="search_projects"
+          onClick={() => {
+            setCurrentSearchInput(userSearchInput);
+            setProjectId(undefined);
+            setQueryIndex(queryIndex + 1);
+          }}
+        >
+          {getContent(x => x.components.userSwitcher.searchProjects)}
+        </SearchProjectForm.Button>
+        <SearchProjectForm.Button
+          name="reset_search_projects"
+          onClick={() => {
+            setUserSearchInput("");
+            setCurrentSearchInput("");
+            setProjectId(undefined);
+            setQueryIndex(queryIndex + 1);
+          }}
+        >
+          {getContent(x => x.components.userSwitcher.resetSearchProjects)}
+        </SearchProjectForm.Button>
+        {isMounted.isServer && <SearchProjectForm.Hidden name="current_url" value={() => returnLocation} />}
+      </SearchProjectForm.Form>
+
+      {isSubsetOfProjects && (
+        <ValidationMessage message={x => x.components.userSwitcher.projectSubset} messageType="info" />
+      )}
+
+      {isLoading ? (
+        <SimpleString>{getContent(x => x.components.userSwitcher.projectDropdownLoading)}</SimpleString>
+      ) : projectOptions.length < 1 ? (
+        <SimpleString>{getContent(x => x.components.userSwitcher.projectDropdownEmpty)}</SimpleString>
+      ) : (
+        <Fragment>
+          <SelectProjectForm.Form
+            data={{ projectId, email }}
+            onChange={(e: UserSwitcherFormInputs) => {
+              setProjectId(e.projectId as ProjectId);
+              setEmail(e.email);
+            }}
+            action={DeveloperUserSwitcherPage.routePath}
+          >
+            <SelectProjectForm.DropdownList
+              name="project_id"
+              options={projectOptions}
+              hasEmptyOption
+              placeholder={getContent(x => x.components.userSwitcher.projectDropdownPlaceholder)}
+              value={p => projectOptions.find(x => p.projectId === x.value)}
+              update={(x, value) => (x.projectId = value?.value as string | undefined)}
+            />
+
+            {isMounted.isServer && <SelectProjectForm.Hidden name="current_url" value={() => returnLocation} />}
+            {isMounted.isServer && (
+              <SelectProjectForm.Button name="search">
+                {getContent(x => x.components.userSwitcher.fetchUsers)}
+              </SelectProjectForm.Button>
+            )}
+          </SelectProjectForm.Form>
+          {projectId && <UserSwitcherProjectSelectorPartnerSelector projectId={projectId} />}
+        </Fragment>
+      )}
     </>
   );
 };
