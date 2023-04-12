@@ -8,7 +8,7 @@ import {
   otherDetailsSection,
   partnerDetailsSection,
   pmDetailsSection,
-  projectDetailsSection,
+  projectInfoSection,
   projectPeriodSubHeading,
   shouldShowProjectTitle,
 } from "./steps";
@@ -54,5 +54,5 @@ describe("Projects details", () => {
 
   it("Should present correct guidance messaging", detailsGuidanceMessage);
 
-  it("Should have 'Project information' heading and correct fields", projectDetailsSection);
+  it("Should have 'Project information' heading and correct fields", projectInfoSection);
 });

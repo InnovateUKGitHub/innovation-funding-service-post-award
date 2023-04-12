@@ -12,13 +12,20 @@ export const projectPeriodSubHeading = () => {
 
 export const moDetailsSection = () => {
   cy.get("h3").contains("Monitoring Officer");
-  ["Javier Baez", "testman2@testing.comnoemail"].forEach(moInfo => {
+  ["Javier Baez", "testman2@testing.comnoemail", "Name", "Email"].forEach(moInfo => {
     cy.getByQA("partner-information-monitoring-officer").contains(moInfo);
   });
 };
 
 export const pmDetailsSection = () => {
-  ["James Black", "EUI Small Ent Health (Lead)", "james.black@euimeabs.testnoemail"].forEach(pmInfo => {
+  [
+    "James Black",
+    "EUI Small Ent Health (Lead)",
+    "james.black@euimeabs.testnoemail",
+    "Name",
+    "Partner",
+    "Email",
+  ].forEach(pmInfo => {
     cy.getByQA("partner-information-project-manager").contains(pmInfo);
   });
   cy.get("h3").contains("Project Manager");
@@ -33,6 +40,9 @@ export const financeDetailsSection = () => {
     "Sarah Shuang",
     "ABS EUI Medium Enterprise",
     "s.shuang@irc.trde.org.uk.testnoemail",
+    "Name",
+    "Partner",
+    "Email",
   ].forEach(fcInfo => {
     cy.getByQA("partner-information-finance-contacts").contains(fcInfo);
   });
@@ -74,6 +84,7 @@ export const partnerDetailsSection = () => {
     "Funded",
     "ABS EUI Medium Enterprise",
     "A B Cad Services",
+    "SN5",
   ].forEach(partnerInfo => {
     cy.getByQA("partner-information").contains(partnerInfo);
   });
@@ -92,7 +103,7 @@ export const detailsGuidanceMessage = () => {
  * Start and end date are prone to change to keep a project in the correct state for testing.
  * Therefore these are not included in the test.
  */
-export const projectDetailsSection = () => {
+export const projectInfoSection = () => {
   [
     "Competition name",
     "Competition type",
@@ -104,6 +115,9 @@ export const projectDetailsSection = () => {
     "a002600000C6rp9",
     "CR&D",
     "12 months",
+    "Howdy! I am the public summary for this Cypress project.",
+    "2023",
+    "2024",
   ].forEach(projInfo => {
     cy.getByQA("project-details").contains(projInfo);
   });
