@@ -2,6 +2,7 @@ import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { configuration } from "@server/features/common";
 import { getCachedSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { Logger } from "@shared/developmentLogger";
+import { mapStringInObject } from "@shared/mapStringInObject";
 import { print } from "graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
 import fetch from "isomorphic-fetch";
@@ -92,30 +93,25 @@ export class Api {
       },
     });
 
-    let jsonAsText = await response.text();
-
-    // Decode Salesforce HTML Entities.
-    if (init?.decodeHTMLEntities) {
-      // Ensure quotes are escaped with a "\".
-      jsonAsText = jsonAsText.replaceAll("&quot;", '\\"');
-      jsonAsText = jsonAsText.replaceAll("&#34;", '\\"');
-
-      // Decode all other HTML entities.
-      jsonAsText = decodeHTMLEntities(jsonAsText);
-    }
+    const jsonAsText = await response.text();
 
     if (response.status !== 200) {
       let message = `Failed to fetch "${url.toString()}" (status code ${response.status})`;
-      message += `Body:\n${JSON.stringify(jsonAsText)}`;
+      message += `Body:\n${jsonAsText}`;
       throw new Error(message);
     }
 
     try {
+      let json = JSON.parse(jsonAsText);
+
       // TODO: See if Salesforce decides to not encode their JSON output.
-      const json = JSON.parse(jsonAsText);
+      if (init?.decodeHTMLEntities) {
+        json = mapStringInObject(json, decodeHTMLEntities);
+      }
+
       return json;
-    } catch {
-      this.logger.error("Failed to decode Salesforce GraphQL JSON response", jsonAsText);
+    } catch (e) {
+      this.logger.error("Failed to decode Salesforce GraphQL JSON response", e, jsonAsText);
       throw new Error("Failed to decode JSON");
     }
   }
