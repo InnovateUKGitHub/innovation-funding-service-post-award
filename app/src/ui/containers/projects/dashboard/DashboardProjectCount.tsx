@@ -8,7 +8,7 @@ interface DashboardProjectCountProps {
   totalProjectCount: number;
 }
 
-export function DashboardProjectCount({ curatedTotals, totalProjectCount }: DashboardProjectCountProps) {
+export const DashboardProjectCount = ({ curatedTotals, totalProjectCount }: DashboardProjectCountProps) => {
   const { getContent } = useContent();
   const { open: openTotal, upcoming: upcomingTotal, archived: archivedTotal, pending: pendingTotal } = curatedTotals;
 
@@ -37,4 +37,4 @@ export function DashboardProjectCount({ curatedTotals, totalProjectCount }: Dash
       {prefixMessage} {listOfProjects}
     </SimpleString>
   );
-}
+};

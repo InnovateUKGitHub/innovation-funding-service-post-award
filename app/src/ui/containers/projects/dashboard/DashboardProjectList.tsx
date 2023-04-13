@@ -11,7 +11,7 @@ interface ProjectListProps {
   projects: ProjectData[];
 }
 
-export function DashboardProjectList({ isFiltering, routes, projects, errorType }: ProjectListProps) {
+export const DashboardProjectList = ({ isFiltering, routes, projects, errorType }: ProjectListProps) => {
   const { getContent } = useContent();
 
   if (!projects.length) {
@@ -51,4 +51,4 @@ export function DashboardProjectList({ isFiltering, routes, projects, errorType 
       ))}
     </>
   );
-}
+};
