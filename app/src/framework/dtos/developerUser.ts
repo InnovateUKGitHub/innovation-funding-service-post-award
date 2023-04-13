@@ -1,9 +1,8 @@
 import { SalesforceRole } from "@server/repositories";
 
 export interface DeveloperUser {
-  email: string;
-  externalUsername?: string;
-  internalUsername?: string;
+  externalUsername: string | null;
+  internalUsername: string | null;
   name: string;
   role: SalesforceRole;
 }

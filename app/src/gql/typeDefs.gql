@@ -27,6 +27,10 @@ extend type Acc_Project__c {
   isActive: Boolean!
 }
 
+extend type Contact {
+  username: String
+}
+
 # 
 # The following type definitions fixes non-compliant Salesforce GraphQL types.
 # These would otherwise cause GraphQL/Relay compiler to complain about an invalid schema.

@@ -12,6 +12,7 @@ import { getSalesforceSubschema } from "./schema/salesforceSubschema";
 import { Api } from "./sf/Api";
 import typeDefs from "./typeDefs.gql";
 import { getTypeGraphQLSchema } from "./typegraphql/schema";
+import { usernameResolver } from "./resolvers/Acc_ProjectContactLink__c/username";
 
 export interface ExecutableSchema {
   schema: GraphQLSchema;
@@ -46,6 +47,9 @@ const getGraphQLSchema = async ({ api }: { api?: Api }) => {
           roles: rolesResolver,
           isActive: projectIsActiveResolver,
         },
+        Contact: {
+          username: usernameResolver,
+        }
       },
     });
   }

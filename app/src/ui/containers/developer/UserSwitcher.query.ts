@@ -61,22 +61,24 @@ const userSwitcherProjectQuery = graphql`
           Acc_Project__c(where: { Id: { eq: $projectId } }) {
             edges {
               node {
+                Acc_ProjectTitle__c {
+                  value
+                }
                 Project_Contact_Links__r(orderBy: { Acc_ContactId__r: { Name: { order: ASC } } }, first: 2000) {
                   edges {
                     node {
-                      Acc_EmailOfSFContact__c {
-                        value
-                      }
                       Acc_ContactId__r {
+                        Id
                         Name {
                           value
                         }
-                        Email {
-                          value
-                        }
+                        username
                       }
                       Acc_UserId__r {
                         Name {
+                          value
+                        }
+                        Username {
                           value
                         }
                       }

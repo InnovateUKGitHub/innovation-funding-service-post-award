@@ -1,7 +1,7 @@
 import { DeveloperUser } from "@framework/dtos/developerUser";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
 import { SalesforceRole } from "@server/repositories";
-import { createTypedForm, H3, Info, Section, createTypedTable, ValidationMessage } from "@ui/components";
+import { createTypedForm, H3, Info, Section, createTypedTable, ValidationMessage, H4 } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
 import { useMounted } from "@ui/features";
@@ -96,21 +96,23 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
 
   // For each contact...
   for (const { node: user } of getDefinedEdges(project.Project_Contact_Links__r?.edges)) {
-    if (user.Acc_EmailOfSFContact__c?.value && user.Acc_Role__c?.value) {
-      const email = user.Acc_EmailOfSFContact__c.value;
+    const internalUsername = user?.Acc_UserId__r?.Username?.value ?? null;
+    const externalUsername = user?.Acc_ContactId__r?.username ?? null;
+    const username = internalUsername ?? externalUsername ?? null;
+
+    if (username && user.Acc_Role__c?.value) {
       const role = user.Acc_Role__c.value;
 
       // If the contact has not yet been seen before...
-      if (!contactRoleInfo[email]) {
+      if (!contactRoleInfo[username]) {
         // Initialise the record with default options
-        contactRoleInfo[email] = {
+        contactRoleInfo[username] = {
           isMo: false,
           isFc: false,
           isPm: false,
           user: {
-            externalUsername: user.Acc_ContactId__r?.Email?.value ?? undefined,
-            internalUsername: email,
-            email,
+            externalUsername,
+            internalUsername,
             name: user.Acc_ContactId__r?.Name?.value ?? user.Acc_UserId__r?.Name?.value ?? "Untitled User",
             role: role as SalesforceRole,
           },
@@ -119,11 +121,11 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
 
       // Add the relevant role to the contact's role info.
       if (role === "Monitoring officer") {
-        contactRoleInfo[email].isMo = true;
+        contactRoleInfo[username].isMo = true;
       } else if (role === "Finance contact") {
-        contactRoleInfo[email].isFc = true;
+        contactRoleInfo[username].isFc = true;
       } else if (role === "Project Manager") {
-        contactRoleInfo[email].isPm = true;
+        contactRoleInfo[username].isPm = true;
       }
     }
   }
@@ -135,73 +137,76 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
   }
 
   return (
-    <ProjectContactTable.Table qa="user-switcher-contacts" data={users}>
-      <ProjectContactTable.String
-        qa="partner-name"
-        header={x => x.projectContactLabels.contactName}
-        value={x => x.user.name}
-      />
+    <>
+      <H4>{project.Acc_ProjectTitle__c?.value}</H4>
+      <ProjectContactTable.Table qa="user-switcher-contacts" data={users}>
+        <ProjectContactTable.String
+          qa="partner-name"
+          header={x => x.projectContactLabels.contactName}
+          value={x => x.user.name}
+        />
 
-      <ProjectContactTable.String
-        qa="partner-mo"
-        header={x => x.components.userSwitcher.tableHeaderMonitoringOfficer}
-        value={x => (x.isMo ? getContent(x => x.components.userSwitcher.tableHeaderMonitoringOfficer) : "")}
-      />
+        <ProjectContactTable.String
+          qa="partner-mo"
+          header={x => x.components.userSwitcher.tableHeaderMonitoringOfficer}
+          value={x => (x.isMo ? getContent(x => x.components.userSwitcher.tableHeaderMonitoringOfficer) : "")}
+        />
 
-      <ProjectContactTable.String
-        qa="partner-pm"
-        header={x => x.components.userSwitcher.tableHeaderProjectManager}
-        value={x => (x.isPm ? getContent(x => x.components.userSwitcher.tableHeaderProjectManager) : "")}
-      />
+        <ProjectContactTable.String
+          qa="partner-pm"
+          header={x => x.components.userSwitcher.tableHeaderProjectManager}
+          value={x => (x.isPm ? getContent(x => x.components.userSwitcher.tableHeaderProjectManager) : "")}
+        />
 
-      <ProjectContactTable.String
-        qa="partner-fc"
-        header={x => x.components.userSwitcher.tableHeaderFinancialContact}
-        value={x => (x.isFc ? getContent(x => x.components.userSwitcher.tableHeaderFinancialContact) : "")}
-      />
+        <ProjectContactTable.String
+          qa="partner-fc"
+          header={x => x.components.userSwitcher.tableHeaderFinancialContact}
+          value={x => (x.isFc ? getContent(x => x.components.userSwitcher.tableHeaderFinancialContact) : "")}
+        />
 
-      <ProjectContactTable.Email
-        qa="partner-external-username"
-        header={x => x.projectContactLabels.contactExternalUsername}
-        value={x => x.user.externalUsername ?? null} // Add ZWSP to allow line break
-      />
+        <ProjectContactTable.Email
+          qa="partner-external-username"
+          header={x => x.components.userSwitcher.externalUsername}
+          value={x => x.user.externalUsername ?? null}
+        />
 
-      <ProjectContactTable.Email
-        qa="partner-email"
-        header={x => x.projectContactLabels.contactEmail}
-        value={x => x.user.email ?? null} // Add ZWSP to allow line break
-      />
+        <ProjectContactTable.Email
+          qa="partner-email"
+          header={x => x.components.userSwitcher.internalUsername}
+          value={x => x.user.internalUsername ?? null}
+        />
 
-      <ProjectContactTable.Custom
-        qa="delete"
-        header={x => x.components.userSwitcher.tableHeaderSwitchOptions}
-        value={x => {
-          // If the user has an external username (aka can use IFSPA),
-          // show the switcher buttons.
-          if (x.user.externalUsername) {
-            return (
-              <SelectContactForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
-                <SelectContactForm.Hidden name="project_id" value={() => projectId} />
-                <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
-                <SelectContactForm.Hidden
-                  name="user"
-                  value={() => x.user.externalUsername || x.user.internalUsername || x.user.email}
-                />
-                <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19" qa="btn-home">
-                  {getContent(x => x.components.userSwitcher.switchAndHome)}
-                </SelectContactForm.Button>
-                <SelectContactForm.Button name="stay" styling="Link" className="govuk-!-font-size-19" qa="btn-stay">
-                  {getContent(x => x.components.userSwitcher.switchAndStay)}
-                </SelectContactForm.Button>
-              </SelectContactForm.Form>
-            );
-          } else {
-            // Otherwise, hide the form.
-            return null;
-          }
-        }}
-      />
-    </ProjectContactTable.Table>
+        <ProjectContactTable.Custom
+          qa="delete"
+          header={x => x.components.userSwitcher.tableHeaderSwitchOptions}
+          value={x => {
+            // If the user has an external username (aka can use IFSPA),
+            // show the switcher buttons.
+            if (x.user.externalUsername) {
+              return (
+                <SelectContactForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
+                  <SelectContactForm.Hidden name="project_id" value={() => projectId} />
+                  <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
+                  <SelectContactForm.Hidden
+                    name="user"
+                    value={() => x.user.externalUsername}
+                  />
+                  <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19" qa="btn-home">
+                    {getContent(x => x.components.userSwitcher.switchAndHome)}
+                  </SelectContactForm.Button>
+                  <SelectContactForm.Button name="stay" styling="Link" className="govuk-!-font-size-19" qa="btn-stay">
+                    {getContent(x => x.components.userSwitcher.switchAndStay)}
+                  </SelectContactForm.Button>
+                </SelectContactForm.Form>
+              );
+            } else {
+              // Otherwise, hide the form.
+              return null;
+            }
+          }}
+        />
+      </ProjectContactTable.Table>
+    </>
   );
 };
 
@@ -220,17 +225,11 @@ const UserSwitcherProjectSelector = () => {
   const [email, setEmail] = useState<string | undefined>(initialEmailState);
   const [userSearchInput, setUserSearchInput] = useState<string | undefined>(initialUserSwitcherSearchQuery);
   const [currentSearchInput, setCurrentSearchInput] = useState<string | undefined>(initialUserSwitcherSearchQuery);
-  const [queryIndex, setQueryIndex] = useState<number>(0);
   const isMounted = useMounted();
 
-  const { data, isLoading } = useQuery<UserSwitcherProjectsQuery>(
-    userSwitcherProjectsQuery,
-    { search: `%${currentSearchInput ?? ""}%` },
-    {
-      fetchKey: queryIndex,
-      fetchPolicy: "network-only",
-    },
-  );
+  const { data, isLoading } = useQuery<UserSwitcherProjectsQuery>(userSwitcherProjectsQuery, {
+    search: `%${currentSearchInput ?? ""}%`,
+  });
 
   // Create options for dropdown to select a project.
   const projectOptions: DropdownListOption[] = getDefinedEdges(data?.salesforce.uiapi.query.Acc_Project__c?.edges).map(
@@ -267,8 +266,6 @@ const UserSwitcherProjectSelector = () => {
           name="search_projects"
           onClick={() => {
             setCurrentSearchInput(userSearchInput);
-            setProjectId(undefined);
-            setQueryIndex(queryIndex + 1);
           }}
         >
           {getContent(x => x.components.userSwitcher.searchProjects)}
@@ -278,8 +275,6 @@ const UserSwitcherProjectSelector = () => {
           onClick={() => {
             setUserSearchInput("");
             setCurrentSearchInput("");
-            setProjectId(undefined);
-            setQueryIndex(queryIndex + 1);
           }}
         >
           {getContent(x => x.components.userSwitcher.resetSearchProjects)}
@@ -296,34 +291,33 @@ const UserSwitcherProjectSelector = () => {
       ) : projectOptions.length < 1 ? (
         <SimpleString>{getContent(x => x.components.userSwitcher.projectDropdownEmpty)}</SimpleString>
       ) : (
-        <Fragment>
-          <SelectProjectForm.Form
-            data={{ projectId, email }}
-            onChange={(e: UserSwitcherFormInputs) => {
-              setProjectId(e.projectId as ProjectId);
-              setEmail(e.email);
-            }}
-            action={DeveloperUserSwitcherPage.routePath}
-          >
-            <SelectProjectForm.DropdownList
-              name="project_id"
-              options={projectOptions}
-              hasEmptyOption
-              placeholder={getContent(x => x.components.userSwitcher.projectDropdownPlaceholder)}
-              value={p => projectOptions.find(x => p.projectId === x.value)}
-              update={(x, value) => (x.projectId = value?.value as string | undefined)}
-            />
+        <SelectProjectForm.Form
+          data={{ projectId, email }}
+          onChange={(e: UserSwitcherFormInputs) => {
+            setProjectId(e.projectId as ProjectId);
+            setEmail(e.email);
+          }}
+          action={DeveloperUserSwitcherPage.routePath}
+        >
+          <SelectProjectForm.DropdownList
+            name="project_id"
+            options={projectOptions}
+            hasEmptyOption
+            placeholder={getContent(x => x.components.userSwitcher.projectDropdownPlaceholder)}
+            value={p => projectOptions.find(x => p.projectId === x.value)}
+            update={(x, value) => (x.projectId = value?.value as string | undefined)}
+          />
 
-            {isMounted.isServer && <SelectProjectForm.Hidden name="current_url" value={() => returnLocation} />}
-            {isMounted.isServer && (
-              <SelectProjectForm.Button name="search">
-                {getContent(x => x.components.userSwitcher.fetchUsers)}
-              </SelectProjectForm.Button>
-            )}
-          </SelectProjectForm.Form>
-          {projectId && <UserSwitcherProjectSelectorPartnerSelector projectId={projectId} />}
-        </Fragment>
+          {isMounted.isServer && <SelectProjectForm.Hidden name="current_url" value={() => returnLocation} />}
+          {isMounted.isServer && (
+            <SelectProjectForm.Button name="search">
+              {getContent(x => x.components.userSwitcher.fetchUsers)}
+            </SelectProjectForm.Button>
+          )}
+        </SelectProjectForm.Form>
       )}
+
+      {projectId && <UserSwitcherProjectSelectorPartnerSelector projectId={projectId} />}
     </>
   );
 };

@@ -20,7 +20,7 @@ interface ContactData {
 }
 
 /**
- * Get an instance of the Users dataloader, which batches requests to fetch users,
+ * Get an instance of the Users dataloader, which batches requests to fetch contact ids from usernames,
  * then fetches all data required in one go instead of many separate requests.
  *
  * @param ctx The Salesforce Context

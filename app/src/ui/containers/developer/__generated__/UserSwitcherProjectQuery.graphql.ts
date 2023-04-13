@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<eca27609c48a1c22eb6de3cea0fa629a>>
+ * @generated SignedSource<<b61fc33c7d9a8665400c5c7c4030c6c0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,25 +19,27 @@ export type UserSwitcherProjectQuery$data = {
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly Acc_ProjectTitle__c: {
+                readonly value: string | null;
+              } | null;
               readonly Project_Contact_Links__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_ContactId__r: {
-                      readonly Email: {
-                        readonly value: string | null;
-                      } | null;
+                      readonly Id: string;
                       readonly Name: {
                         readonly value: string | null;
                       } | null;
-                    } | null;
-                    readonly Acc_EmailOfSFContact__c: {
-                      readonly value: string | null;
+                      readonly username: string | null;
                     } | null;
                     readonly Acc_Role__c: {
                       readonly value: string | null;
                     } | null;
                     readonly Acc_UserId__r: {
                       readonly Name: {
+                        readonly value: string | null;
+                      } | null;
+                      readonly Username: {
                         readonly value: string | null;
                       } | null;
                     } | null;
@@ -158,6 +160,16 @@ v3 = [
                         "selections": [
                           {
                             "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectTitle__c",
+                            "plural": false,
+                            "selections": (v1/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
                             "args": [
                               {
                                 "kind": "Literal",
@@ -200,30 +212,24 @@ v3 = [
                                       {
                                         "alias": null,
                                         "args": null,
-                                        "concreteType": "EmailValue",
-                                        "kind": "LinkedField",
-                                        "name": "Acc_EmailOfSFContact__c",
-                                        "plural": false,
-                                        "selections": (v1/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
                                         "concreteType": "Contact",
                                         "kind": "LinkedField",
                                         "name": "Acc_ContactId__r",
                                         "plural": false,
                                         "selections": [
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "kind": "ScalarField",
+                                            "name": "Id",
+                                            "storageKey": null
+                                          },
                                           (v2/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
-                                            "concreteType": "EmailValue",
-                                            "kind": "LinkedField",
-                                            "name": "Email",
-                                            "plural": false,
-                                            "selections": (v1/*: any*/),
+                                            "kind": "ScalarField",
+                                            "name": "username",
                                             "storageKey": null
                                           }
                                         ],
@@ -237,7 +243,17 @@ v3 = [
                                         "name": "Acc_UserId__r",
                                         "plural": false,
                                         "selections": [
-                                          (v2/*: any*/)
+                                          (v2/*: any*/),
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "StringValue",
+                                            "kind": "LinkedField",
+                                            "name": "Username",
+                                            "plural": false,
+                                            "selections": (v1/*: any*/),
+                                            "storageKey": null
+                                          }
                                         ],
                                         "storageKey": null
                                       },
@@ -297,16 +313,16 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "5d8d548842a0f81a425d829e7fd84f26",
+    "cacheID": "d763ec8249a2a2df616519efe50c2ce3",
     "id": null,
     "metadata": {},
     "name": "UserSwitcherProjectQuery",
     "operationKind": "query",
-    "text": "query UserSwitcherProjectQuery(\n  $projectId: ID\n) {\n  salesforce(login: \"system\") {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Project_Contact_Links__r(orderBy: {Acc_ContactId__r: {Name: {order: ASC}}}, first: 2000) {\n                edges {\n                  node {\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Name {\n                        value\n                      }\n                      Email {\n                        value\n                      }\n                    }\n                    Acc_UserId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query UserSwitcherProjectQuery(\n  $projectId: ID\n) {\n  salesforce(login: \"system\") {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Contact_Links__r(orderBy: {Acc_ContactId__r: {Name: {order: ASC}}}, first: 2000) {\n                edges {\n                  node {\n                    Acc_ContactId__r {\n                      Id\n                      Name {\n                        value\n                      }\n                      username\n                    }\n                    Acc_UserId__r {\n                      Name {\n                        value\n                      }\n                      Username {\n                        value\n                      }\n                    }\n                    Acc_Role__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "2173bdc22c4115ba6f1b627aa8ef0d4e";
+(node as any).hash = "e8203377047071afebc623c59389fb0c";
 
 export default node;

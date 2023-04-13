@@ -3,6 +3,7 @@ import { Logger } from "@shared/developmentLogger";
 import { Request } from "express";
 import { getProjectRolesDataLoader } from "./dataloader/projectRolesDataLoader";
 import { getUserContactDataLoader } from "./dataloader/userContactDataLoader";
+import { getUsernameDataLoader } from "./dataloader/usernameDataLoader";
 import { Api } from "./sf/Api";
 
 const logger = new Logger("GraphQLContext");
@@ -15,6 +16,7 @@ export type PartialGraphQLContext = Record<string, unknown> & {
 export type GraphQLContext = PartialGraphQLContext & {
   projectRolesDataLoader: ReturnType<typeof getProjectRolesDataLoader>;
   userContactDataLoader: ReturnType<typeof getUserContactDataLoader>;
+  usernameDataLoader: ReturnType<typeof getUsernameDataLoader>;
 };
 
 export const createContextFromEmail = async ({ email }: { email: string }): Promise<GraphQLContext | EmptyObject> => {
@@ -32,6 +34,7 @@ export const createContextFromEmail = async ({ email }: { email: string }): Prom
       ...partialCtx,
       projectRolesDataLoader: getProjectRolesDataLoader(partialCtx),
       userContactDataLoader: getUserContactDataLoader(partialCtx),
+      usernameDataLoader: getUsernameDataLoader(partialCtx),
     };
 
     return ctx;

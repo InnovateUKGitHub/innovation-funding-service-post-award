@@ -155,7 +155,9 @@
       "tableHeaderProjectManager": "PM",
       "tableHeaderFinancialContact": "FC",
       "tableHeaderSwitchOptions": "After changing...",
-      "loadingUsers": "Loading PCL list..."
+      "loadingUsers": "Loading PCL list...",
+      "externalUsername": "External username",
+      "internalUsername": "Internal username"
     },
     "projectCreator": {
       "sectionTitle": "Project Creator",
