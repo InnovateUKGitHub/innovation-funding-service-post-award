@@ -55,9 +55,6 @@ const clientApi: IApiClient = {
     getAll: () => ajaxJson("/api/cost-categories"),
     getAllFiltered: params => ajaxJson(`/api/cost-categories/filtered/${params.partnerId}`),
   },
-  developerUsers: {
-    getAllByProjectId: params => ajaxJson(`/api/developer-users/${params.projectId}`),
-  },
   documents: {
     getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}/${params.loanId}`),
     uploadLoanDocuments: params =>

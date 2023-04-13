@@ -10,7 +10,6 @@ const getLoanByPeriod = (projectId: ProjectId, periodId: number) =>
 const getAccountKey = () => getKey("accountKey", "account", "all");
 const getBroadcastsKey = () => getKey("broadcastsKey", "broadcast", "all");
 const getBroadcastKey = (broadcastId: string) => getKey("broadcastKey", "broadcast", broadcastId);
-const getDeveloperUsersKey = (projectId: ProjectId) => getKey("developer", "users", projectId);
 const getJesAccountKey = (searchString: string) => getKey("jesAccountKey", "account", searchString);
 const getProjectKey = (projectId: ProjectId) => getKey("projectKey", "project", projectId);
 const getProjectsKey = () => getKey("projectsKey", "project", "all");
@@ -79,7 +78,6 @@ export const storeKeys = {
   getAccountKey,
   getBroadcastsKey,
   getBroadcastKey,
-  getDeveloperUsersKey,
   getJesAccountKey,
   getProjectKey,
   getProjectsKey,

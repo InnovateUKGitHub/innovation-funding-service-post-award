@@ -49,7 +49,7 @@ const getGraphQLSchema = async ({ api }: { api?: Api }) => {
         },
         Contact: {
           username: usernameResolver,
-        }
+        },
       },
     });
   }

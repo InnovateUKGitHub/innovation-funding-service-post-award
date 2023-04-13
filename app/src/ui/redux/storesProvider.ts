@@ -30,7 +30,6 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     claimOverrides,
     companies,
     contacts: new Stores.ContactsStore(getState, dispatch),
-    developerUsers: new Stores.DeveloperUsersStore(getState, dispatch),
     costCategories,
     costsSummaries,
     errorDetails,

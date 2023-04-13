@@ -1,6 +1,5 @@
 import { GraphQLContext } from "@gql/GraphQLContext";
 import type { IFieldResolverOptions } from "@graphql-tools/utils";
-import { configuration } from "@server/features/common";
 
 const usernameResolver: IFieldResolverOptions = {
   selectionSet: `{ Id }`,

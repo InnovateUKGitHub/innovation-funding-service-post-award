@@ -9,7 +9,6 @@ import * as claimDetails from "./claimDetails";
 import * as companiesHouse from "./companies";
 import * as costsSummary from "./costsSummary";
 import * as costCategories from "./costCategories";
-import * as developerUsers from "./developerUsers";
 import * as documents from "./documents";
 import * as financialVirements from "./financialVirements";
 import * as financialLoanVirements from "./financialLoanVirements";
@@ -34,7 +33,6 @@ export interface IApiClient {
   claimOverrides: claimOverrides.IClaimOverridesApi;
   costCategories: costCategories.ICostCategoriesApi;
   documents: documents.IDocumentsApi;
-  developerUsers: developerUsers.IDeveloperUsersApi;
   financialVirements: financialVirements.IFinancialVirement;
   financialLoanVirements: financialLoanVirements.IFinancialLoanVirement;
   forecastDetails: forecastDetails.IForecastDetailsApi;
@@ -59,7 +57,6 @@ export const serverApis = {
   costsSummary: costsSummary.controller,
   costCategories: costCategories.controller,
   documents: documents.controller,
-  developerUsers: developerUsers.controller,
   financialVirements: financialVirements.controller,
   financialLoanVirements: financialLoanVirements.controller,
   forecastDetails: forecastDetails.controller,

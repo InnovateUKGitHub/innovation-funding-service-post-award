@@ -1,13 +1,13 @@
 import { DeveloperUser } from "@framework/dtos/developerUser";
 import { getDefinedEdges, getFirstEdge } from "@gql/selectors/edges";
 import { SalesforceRole } from "@server/repositories";
-import { createTypedForm, H3, Info, Section, createTypedTable, ValidationMessage, H4 } from "@ui/components";
+import { H3, H4, Info, Section, ValidationMessage, createTypedForm, createTypedTable } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
 import { useMounted } from "@ui/features";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "relay-hooks";
 import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
@@ -187,10 +187,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
                 <SelectContactForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
                   <SelectContactForm.Hidden name="project_id" value={() => projectId} />
                   <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
-                  <SelectContactForm.Hidden
-                    name="user"
-                    value={() => x.user.externalUsername}
-                  />
+                  <SelectContactForm.Hidden name="user" value={() => x.user.externalUsername} />
                   <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19" qa="btn-home">
                     {getContent(x => x.components.userSwitcher.switchAndHome)}
                   </SelectContactForm.Button>

@@ -31,7 +31,7 @@ extend type Contact {
   username: String
 }
 
-# 
+#
 # The following type definitions fixes non-compliant Salesforce GraphQL types.
 # These would otherwise cause GraphQL/Relay compiler to complain about an invalid schema.
 #
