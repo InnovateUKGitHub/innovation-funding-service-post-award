@@ -1,5 +1,5 @@
 /**
- * Map over ALL strings within an array, whether they are a property of an object, or an item in an array.
+ * Map over ALL strings within an input, whether they are a property of an object, or an item in an array.
  *
  * @see https://stackoverflow.com/a/61468871
  * @param object
