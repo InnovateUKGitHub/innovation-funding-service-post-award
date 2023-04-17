@@ -67,7 +67,7 @@ export const usePcrItemName = () => {
           description = getContent(x => x.pages.pcrModifyOptions.addPartnerMessage);
           break;
         case "Partner Withdrawal":
-          name = getContent(x => x.pcrTypes.partnerWithdrawl);
+          name = getContent(x => x.pcrTypes.partnerWithdrawal);
           description = getContent(x => x.pages.pcrModifyOptions.removePartnerMessage);
           break;
         case "Project Suspension":

@@ -266,7 +266,7 @@ const GetItemTasks = ({
   index: number;
   item: PCRItemDto;
   routes: IRoutes;
-  projectId: string;
+  projectId: ProjectId;
   pcrId: string;
 }) => {
   const validationErrors = editor.validator.items.results[index].errors;

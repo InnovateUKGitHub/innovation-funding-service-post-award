@@ -19,7 +19,7 @@ import { usePcrItemName } from "../utils/getPcrItemName";
  */
 
 interface PcrCreateParams {
-  projectId: string;
+  projectId: ProjectId;
 }
 
 export interface PcrModifyParams extends PcrCreateParams {
@@ -31,7 +31,7 @@ export interface PcrUpdateParams extends PcrCreateParams {
 }
 
 interface PcrBaseParams {
-  projectId: string;
+  projectId: ProjectId;
   project: ProjectDto;
   itemTypes: PCRItemTypeDto[];
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
