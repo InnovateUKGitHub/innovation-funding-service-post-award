@@ -5,6 +5,7 @@ import { forecastDashboardQuery } from "./ForecastDashboard.query";
 import { ForecastDashboardQuery, ForecastDashboardQuery$data } from "./__generated__/ForecastDashboardQuery.graphql";
 import { mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 import { PartnerDtoGql } from "@framework/dtos";
+import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 
 export type Partner = Pick<
   PartnerDtoGql,
@@ -26,9 +27,6 @@ export const useForecastDashboardData = (projectId: ProjectId) => {
       {},
     );
 
-    const lead = partners.filter(x => x.isLead);
-    const notLead = partners.filter(x => !x.isLead);
-
-    return { project, partners: [...lead, ...notLead] };
+    return { project, partners: sortPartnersLeadFirst(partners) };
   }, []);
 };

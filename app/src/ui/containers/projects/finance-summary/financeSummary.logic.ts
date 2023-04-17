@@ -5,6 +5,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { financeSummaryQuery } from "./FinanceSummary.query";
 import { FinanceSummaryQuery, FinanceSummaryQuery$data } from "./__generated__/FinanceSummaryQuery.graphql";
 import { mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
+import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 
 export const useFinanceSummaryContent = () => {
   const { getContent } = useContent();
@@ -88,13 +89,10 @@ export const useFinanceSummaryData = (projectId: ProjectId) => {
     {},
   );
 
-  const lead = partners.filter(x => x.isLead);
-  const notLead = partners.filter(x => !x.isLead);
-
   const financeSummaryData = useMemo(
     () => ({
       project,
-      partners: [...lead, ...notLead],
+      partners: sortPartnersLeadFirst(partners),
     }),
     [],
   );

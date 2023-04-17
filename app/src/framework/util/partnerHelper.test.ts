@@ -1,5 +1,5 @@
 import { PartnerDto } from "@framework/dtos";
-import { getLeadPartner } from "@framework/util/partnerHelper";
+import { getLeadPartner, sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 
 describe("partnerHelper", () => {
   describe("getLeadPartner()", () => {
@@ -17,6 +17,22 @@ describe("partnerHelper", () => {
       const result = getLeadPartner(inboundPartner);
 
       expect(result).toBe(expectedValue);
+    });
+  });
+
+  describe("sortPartnersLeadFirst", () => {
+    const partners = [
+      { id: 0, isLead: false },
+      { id: 1, isLead: true },
+      { id: 2, isLead: false },
+    ];
+
+    it("should sort partners with lead partners at the head of the array", () => {
+      expect(sortPartnersLeadFirst(partners)).toEqual([
+        { id: 1, isLead: true },
+        { id: 0, isLead: false },
+        { id: 2, isLead: false },
+      ]);
     });
   });
 });

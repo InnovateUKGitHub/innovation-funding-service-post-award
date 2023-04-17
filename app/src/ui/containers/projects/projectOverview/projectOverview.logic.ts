@@ -1,5 +1,5 @@
 import { useLazyLoadQuery } from "react-relay";
-import { getLeadPartner } from "@framework/util/partnerHelper";
+import { getLeadPartner, sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { projectOverviewQuery } from "./ProjectOverview.query";
 import { ProjectOverviewQuery, ProjectOverviewQuery$data } from "./__generated__/ProjectOverviewQuery.graphql";
@@ -131,9 +131,7 @@ export const useProjectOverviewData = (projectId: string) => {
     { partnerRoles },
   );
 
-  const leadPartner = partners.filter(x => x.isLead);
-  const otherPartners = partners.filter(x => !x.isLead);
-  const orderedPartners = [...leadPartner, ...otherPartners];
+  const orderedPartners = sortPartnersLeadFirst(partners);
   const isProjectClosed = project.status === ProjectStatus.Closed || project.status === ProjectStatus.Terminated;
   const highlightedPartner = orderedPartners.filter(x => x?.roles?.isFc || x?.roles?.isPm || x?.roles?.isMo)[0];
 
