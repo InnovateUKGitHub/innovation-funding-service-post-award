@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<968ddfafb09b918a79b6e7131224bf23>>
+ * @generated SignedSource<<07a861d0db8dcc63b725ce2119f8ffb6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -108,7 +108,7 @@ v4 = [
                   {
                     "kind": "Literal",
                     "name": "first",
-                    "value": 2000
+                    "value": 100
                   },
                   {
                     "kind": "Literal",
@@ -274,16 +274,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "edc7f193fa09fcc102815459e7a37d0b",
+    "cacheID": "4f1867df823cabce21d5bf978c679e4b",
     "id": null,
     "metadata": {},
     "name": "UserSwitcherProjectsQuery",
     "operationKind": "query",
-    "text": "query UserSwitcherProjectsQuery(\n  $search: String\n) {\n  salesforce(login: \"system\") {\n    uiapi {\n      query {\n        Acc_Project__c(orderBy: {Acc_CompetitionId__r: {Acc_CompetitionType__c: {order: ASC}}, Acc_ProjectNumber__c: {order: ASC}}, where: {or: {Acc_ProjectTitle__c: {like: $search}, Acc_ProjectNumber__c: {like: $search}, Acc_LeadParticipantName__c: {like: $search}, Acc_CompetitionType__c: {like: $search}}}, first: 2000) {\n          totalCount\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_CompetitionType__c {\n                  displayValue\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query UserSwitcherProjectsQuery(\n  $search: String\n) {\n  salesforce(login: \"system\") {\n    uiapi {\n      query {\n        Acc_Project__c(orderBy: {Acc_CompetitionId__r: {Acc_CompetitionType__c: {order: ASC}}, Acc_ProjectNumber__c: {order: ASC}}, where: {or: {Acc_ProjectTitle__c: {like: $search}, Acc_ProjectNumber__c: {like: $search}, Acc_LeadParticipantName__c: {like: $search}, Acc_CompetitionType__c: {like: $search}}}, first: 100) {\n          totalCount\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_CompetitionType__c {\n                  displayValue\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "97eacbd3dd737895c3a787eeeabcc965";
+(node as any).hash = "d35282c600933b891a18e7a93d69498e";
 
 export default node;

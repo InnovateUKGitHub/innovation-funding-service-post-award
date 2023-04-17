@@ -27,7 +27,7 @@ const userSwitcherProjectsQuery = graphql`
                 Acc_CompetitionType__c: { like: $search }
               }
             }
-            first: 2000
+            first: 100
           ) {
             totalCount
             edges {
