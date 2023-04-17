@@ -11,14 +11,14 @@ declare namespace GQL {
    * Type will extract type of object node from generated gql type files
    *
    * @example
-   * type Project = GQL.ObjectNodeSelector<FinanceSummaryQuery, "Acc_Project__c">
+   * type Project = GQL.NodeSelector<FinanceSummaryQuery, "Acc_Project__c">
    */
-  type ObjectNodeSelector<T, Field extends string> = T extends { readonly salesforce: AnyObject }
-    ? ObjectNodeSelector<T["salesforce"], Field>
+  type NodeSelector<T, Field extends string> = T extends { readonly salesforce: AnyObject }
+    ? NodeSelector<T["salesforce"], Field>
     : T extends { readonly uiapi: AnyObject }
-    ? ObjectNodeSelector<T["uiapi"], Field>
+    ? NodeSelector<T["uiapi"], Field>
     : T extends { readonly query: AnyObject }
-    ? ObjectNodeSelector<T["query"], Field>
+    ? NodeSelector<T["query"], Field>
     : Field extends keyof T
     ? NodeValue<T[Field]>
     : never;

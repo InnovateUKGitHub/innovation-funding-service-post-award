@@ -9,7 +9,7 @@ import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissio
 import { PartnerDtoGql, ProjectDtoGql } from "@framework/dtos";
 import { mapToPartnerDtoArray, mapToProjectDto, getPartnerRoles } from "@gql/dtoMapper";
 
-type ProjectGql = GQL.ObjectNodeSelector<ProjectOverviewQuery$data, "Acc_Project__c">;
+type ProjectGql = GQL.NodeSelector<ProjectOverviewQuery$data, "Acc_Project__c">;
 
 export type Project = Pick<
   ProjectDtoGql,

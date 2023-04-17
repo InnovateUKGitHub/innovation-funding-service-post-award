@@ -16,7 +16,7 @@ const currentStatuses = [
   MonitoringReportStatus.AwaitingApproval,
 ];
 
-type ProjectGql = GQL.ObjectNodeSelector<MonitoringReportDashboardQuery$data, "Acc_Project__c">;
+type ProjectGql = GQL.NodeSelector<MonitoringReportDashboardQuery$data, "Acc_Project__c">;
 
 export type Project = {
   id: ProjectId;

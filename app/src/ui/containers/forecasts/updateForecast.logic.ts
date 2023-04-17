@@ -40,8 +40,8 @@ type CostCategory = Pick<
   "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type"
 >;
 
-type ProjectGQL = GQL.ObjectNodeSelector<UpdateForecastQuery$data, "Acc_Project__c">;
-type PartnerGql = GQL.ObjectNodeSelector<ProjectGQL, "Acc_ProjectParticipantsProject__r">;
+type ProjectGQL = GQL.NodeSelector<UpdateForecastQuery$data, "Acc_Project__c">;
+type PartnerGql = GQL.NodeSelector<ProjectGQL, "Acc_ProjectParticipantsProject__r">;
 
 export type Data = {
   project: Project;

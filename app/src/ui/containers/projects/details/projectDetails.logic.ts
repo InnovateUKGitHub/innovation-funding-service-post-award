@@ -4,7 +4,7 @@ import { ProjectDetailsQuery, ProjectDetailsQuery$data } from "./__generated__/P
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToContactDtoArray, mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 
-type ProjectGql = GQL.ObjectNodeSelector<ProjectDetailsQuery$data, "Acc_Project__c">;
+type ProjectGql = GQL.NodeSelector<ProjectDetailsQuery$data, "Acc_Project__c">;
 
 export const useProjectDetailsQuery = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<ProjectDetailsQuery>(projectDetailsQuery, { projectId });

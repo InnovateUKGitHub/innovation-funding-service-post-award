@@ -11,7 +11,7 @@ export type Partner = Pick<
   "id" | "name" | "isLead" | "isWithdrawn" | "forecastLastModifiedDate" | "forecastsAndCosts" | "totalParticipantGrant"
 >;
 
-type ProjectGQL = GQL.ObjectNodeSelector<ForecastDashboardQuery$data, "Acc_Project__c">;
+type ProjectGQL = GQL.NodeSelector<ForecastDashboardQuery$data, "Acc_Project__c">;
 
 export const useForecastDashboardData = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<ForecastDashboardQuery>(forecastDashboardQuery, { projectId });

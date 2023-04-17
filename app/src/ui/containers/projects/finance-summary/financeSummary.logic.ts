@@ -32,7 +32,7 @@ export const useFinanceSummaryContent = () => {
   return content;
 };
 
-export type Project = GQL.ObjectNodeSelector<FinanceSummaryQuery$data, "Acc_Project__c">;
+export type Project = GQL.NodeSelector<FinanceSummaryQuery$data, "Acc_Project__c">;
 
 export type Partner = {
   id: PartnerId;
