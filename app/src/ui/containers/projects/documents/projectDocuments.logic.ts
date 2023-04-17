@@ -1,4 +1,4 @@
-import { orderPartnersLeadFirst } from "@framework/util/partnerHelper";
+import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import {
   getPartnerRoles,
   mapToPartnerDocumentSummaryDtoArray,
@@ -13,7 +13,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
 import { ProjectDocumentsQuery, ProjectDocumentsQuery$data } from "./__generated__/ProjectDocumentsQuery.graphql";
 
-type ProjectGQL = GQL.ObjectNodeSelector<ProjectDocumentsQuery$data, "Acc_Project__c">;
+type ProjectGQL = GQL.NodeSelector<ProjectDocumentsQuery$data, "Acc_Project__c">;
 
 export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOptions: RefreshedQueryOptions) => {
   const data = useLazyLoadQuery<ProjectDocumentsQuery>(projectDocumentsQuery, { projectId }, refreshedQueryOptions);
@@ -24,11 +24,11 @@ export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOpt
 
   const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status", "roles"]);
 
-  const partners = orderPartnersLeadFirst(
+  const partners = sortPartnersLeadFirst(
     mapToPartnerDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges ?? [],
       ["id", "name", "roles", "isLead"],
-      partnerRoles,
+      { partnerRoles },
     ),
   );
 
