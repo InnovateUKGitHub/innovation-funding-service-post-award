@@ -10,6 +10,7 @@ const i18nInterpolationOptions: InterpolationOptions = {
     if (Array.isArray(value) && format === "arrayJoin") return value.join(", ");
     return value;
   },
+  escapeValue: false,
 };
 
 export { i18nInterpolationOptions };
