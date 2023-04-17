@@ -75,7 +75,7 @@ export const shouldShowProjectTitle = () => {
 
 export const navigateFilter = () => {
   cy.getByQA("projects-dashboard-label").click();
-  cy.get("#search").type("328407");
+  cy.get("#search").type("328407").wait(200);
 };
 
 export const switchUserTestLiveArea = () => {

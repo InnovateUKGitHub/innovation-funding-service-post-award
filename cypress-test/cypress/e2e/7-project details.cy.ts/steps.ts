@@ -13,7 +13,7 @@ export const projectPeriodSubHeading = () => {
 export const moDetailsSection = () => {
   cy.get("h3").contains("Monitoring Officer");
   ["Javier Baez", "testman2@testing.comnoemail", "Name", "Email"].forEach(moInfo => {
-    cy.getByQA("partner-information-monitoring-officer").contains(moInfo);
+    cy.getByQA("monitoring-officer-details").contains(moInfo);
   });
 };
 
@@ -26,7 +26,7 @@ export const pmDetailsSection = () => {
     "Partner",
     "Email",
   ].forEach(pmInfo => {
-    cy.getByQA("partner-information-project-manager").contains(pmInfo);
+    cy.getByQA("project-manager-details").contains(pmInfo);
   });
   cy.get("h3").contains("Project Manager");
   cy.get("p").contains("Only project managers can raise project change requests.");
@@ -44,7 +44,7 @@ export const financeDetailsSection = () => {
     "Partner",
     "Email",
   ].forEach(fcInfo => {
-    cy.getByQA("partner-information-finance-contacts").contains(fcInfo);
+    cy.getByQA("finance-contact-details").contains(fcInfo);
   });
   cy.get("h3").contains("Finance contacts");
   cy.get("p").contains("Only finance contacts can submit claims.");
@@ -52,21 +52,21 @@ export const financeDetailsSection = () => {
 
 export const ilDetailsSection = () => {
   ["Name", "Email", "Nicole Hedges", "nicole.hedges@iuk.ukri.org"].forEach(ilInfo => {
-    cy.getByQA("partner-information-innovation-lead").contains(ilInfo);
+    cy.getByQA("innovation-lead-details").contains(ilInfo);
   });
   cy.get("h3").contains("Innovation lead");
 };
 
 export const ipmDetailsSection = () => {
   ["Name", "Email", "Wednesday Addams", "wed.addams@test.test.co.uk"].forEach(ipmInfo => {
-    cy.getByQA("partner-information-ipm").contains(ipmInfo);
+    cy.getByQA("ipm-details").contains(ipmInfo);
   });
   cy.get("h3").contains("IPM");
 };
 
 export const otherDetailsSection = () => {
   ["Name", "Role", "Relationship Manager", "Email", "allan.haines@iuk.ukri.org"].forEach(otherInfo => {
-    cy.getByQA("partner-information-other-contacts").contains(otherInfo);
+    cy.getByQA("contacts-table-details").contains(otherInfo);
   });
   cy.get("h3").contains("Other contacts");
 };
@@ -75,7 +75,7 @@ export const partnerDetailsSection = () => {
   [
     "Partner",
     "Name",
-    "Email",
+    "Status",
     "Funding status",
     "Location",
     "EUI Small Ent Health",
