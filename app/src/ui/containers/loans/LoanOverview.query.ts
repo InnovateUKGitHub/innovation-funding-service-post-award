@@ -24,7 +24,10 @@ export const loanOverviewQuery = graphql`
               }
             }
           }
-          Acc_Prepayment__c(where: { Acc_ProjectParticipant__r: { Acc_ProjectId__c: { eq: $projectId } } }) {
+          Acc_Prepayment__c(
+            where: { Acc_ProjectParticipant__r: { Acc_ProjectId__c: { eq: $projectId } } }
+            first: 1000
+          ) {
             edges {
               node {
                 Id

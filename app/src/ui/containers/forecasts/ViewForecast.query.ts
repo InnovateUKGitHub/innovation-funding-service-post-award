@@ -159,7 +159,7 @@ export const viewForecastQuery = graphql`
                 Acc_CompetitionType__c {
                   value
                 }
-                Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }) {
+                Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }, first: 500) {
                   edges {
                     node {
                       Id

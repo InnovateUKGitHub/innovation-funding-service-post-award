@@ -8,6 +8,7 @@ export const monitoringReportDashboardQuery = graphql`
           Acc_MonitoringAnswer__c(
             where: { Acc_Project__c: { eq: $projectId } }
             orderBy: { LastModifiedDate: { order: DESC } }
+            first: 1000
           ) {
             edges {
               node {

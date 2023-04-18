@@ -33,7 +33,7 @@ const financeSummaryQuery = graphql`
                 Acc_CurrentPeriodEndDate__c {
                   value
                 }
-                Acc_ProjectParticipantsProject__r(orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }) {
+                Acc_ProjectParticipantsProject__r(orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }, first: 500) {
                   edges {
                     node {
                       Id

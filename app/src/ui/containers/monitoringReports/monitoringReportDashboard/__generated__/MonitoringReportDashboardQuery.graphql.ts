@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<aa5802c4ccba86f43fdc6b0f92df24da>>
+ * @generated SignedSource<<b90f66d23128c944938932f12d7ca6d3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -135,6 +135,11 @@ v5 = [
               {
                 "alias": null,
                 "args": [
+                  {
+                    "kind": "Literal",
+                    "name": "first",
+                    "value": 1000
+                  },
                   {
                     "kind": "Literal",
                     "name": "orderBy",
@@ -402,16 +407,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "f610dbbdad827e75ddffc4b762719015",
+    "cacheID": "643719ae15135da8d4efe83bb76f400d",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportDashboardQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportDashboardQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {Acc_Project__c: {eq: $projectId}}, orderBy: {LastModifiedDate: {order: DESC}}) {\n          edges {\n            node {\n              Id\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportDashboardQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {Acc_Project__c: {eq: $projectId}}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3dd7fa01d35622d31c91506adb531d5c";
+(node as any).hash = "3a3167cbb92a7f9a567fc8ba6b5504ae";
 
 export default node;

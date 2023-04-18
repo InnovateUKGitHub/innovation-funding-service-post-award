@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d607b4d6d942d4539decb19b0ba46f50>>
+ * @generated SignedSource<<1237928c64920c9c611edbca70248926>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -231,6 +231,11 @@ v4 = [
                 "alias": null,
                 "args": [
                   {
+                    "kind": "Literal",
+                    "name": "first",
+                    "value": 1000
+                  },
+                  {
                     "fields": [
                       {
                         "fields": [
@@ -357,16 +362,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "703ee5b37c0c9d32b6ccd1f37647a82f",
+    "cacheID": "43dc88f317442555fb3f59af1a703a83",
     "id": null,
     "metadata": {},
     "name": "LoanOverviewQuery",
     "operationKind": "query",
-    "text": "query LoanOverviewQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Prepayment__c(where: {Acc_ProjectParticipant__r: {Acc_ProjectId__c: {eq: $projectId}}}) {\n          edges {\n            node {\n              Id\n              Acc_PeriodNumber__c {\n                value\n              }\n              Loan_DrawdownStatus__c {\n                value\n              }\n              Loan_LatestForecastDrawdown__c {\n                value\n              }\n              Loan_PlannedDateForDrawdown__c {\n                value\n              }\n              Loan_UserComments__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query LoanOverviewQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Prepayment__c(where: {Acc_ProjectParticipant__r: {Acc_ProjectId__c: {eq: $projectId}}}, first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_PeriodNumber__c {\n                value\n              }\n              Loan_DrawdownStatus__c {\n                value\n              }\n              Loan_LatestForecastDrawdown__c {\n                value\n              }\n              Loan_PlannedDateForDrawdown__c {\n                value\n              }\n              Loan_UserComments__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "301f52ea85d2c860e9851727be8f973e";
+(node as any).hash = "c6d2c5f386f9bd63becb75db6f534b6d";
 
 export default node;
