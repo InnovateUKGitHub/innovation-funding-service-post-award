@@ -111,7 +111,7 @@ export class Api {
 
       return json;
     } catch (e) {
-      this.logger.error("Failed to decode Salesforce GraphQL JSON response", e, jsonAsText);
+      this.logger.error("Failed to decode Salesforce JSON response", e, jsonAsText);
       throw new Error("Failed to decode JSON");
     }
   }
@@ -128,12 +128,28 @@ export class Api {
     decodeHTMLEntities,
   }: ExecutionRequest & ExecuteConfiguration): Promise<T> {
     const query = print(document);
-    this.logger.debug("Query", query, variables);
-    return this.fetch(`/services/data/${this.version}/graphql`, {
+    this.logger.debug("GraphQL Query", query, variables);
+    // TODO: Put the "graphql" double quote string into the template string.
+    return this.fetch(`/services/data/${this.version}/` + "graphql", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
       decodeHTMLEntities,
+    });
+  }
+
+  /**
+   * Execute a SOQL Query via the Salesforce SOQL Query API.
+   *
+   * @returns SOQL Result - Is typed as `any` because the result may vary, including potential errors.
+   */
+  public executeSOQL<T>({ query }: { query: string }): Promise<T> {
+    this.logger.debug("SOQL Query", query);
+    return this.fetch(`/services/data/${this.version}/query`, {
+      method: "GET",
+      searchParams: {
+        q: query,
+      },
     });
   }
 }

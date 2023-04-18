@@ -22,7 +22,7 @@ const rolesResolver: IFieldResolverOptions = {
   async resolve(input, args, ctx: GraphQLContext): Promise<ExternalProjectRoles> {
     const isSalesforceSystemUser = ctx.email === configuration.salesforceServiceUser.serviceUsername;
 
-    const contactData = await ctx.userContactDataLoader.load(ctx.email);
+    const userData = await ctx.userContactDataLoader.load(ctx.email);
     const roleData = await ctx.projectRolesDataLoader.load(input.Id);
 
     // Initialise an empty list of permissions.
@@ -36,12 +36,12 @@ const rolesResolver: IFieldResolverOptions = {
 
     // Make sure our role data and contact data exists first.
     // If it doesn't, return the empty list of permissions.
-    if (!(roleData && contactData)) return permissions;
+    if (!(roleData && userData)) return permissions;
 
     // Grab the Contact ID that is related to the current logged in user.
     // In the event the contactId is undefined, for example, incorrectly setup Salesforce,
     // none of the following checks will set a role properly.
-    const contactId = contactData.node?.ContactId?.value;
+    const contactId = userData?.Contact?.Id;
     const project = roleData.node;
 
     for (const { node: projectContactLink } of project.Project_Contact_Links__r.edges) {
