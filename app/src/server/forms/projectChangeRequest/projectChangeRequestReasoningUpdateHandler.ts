@@ -74,7 +74,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
         recordTypeId: "",
         enabled: false,
         disabled: false,
-        disabledReason: PCRItemDisabledReason.NONE,
+        disabledReason: PCRItemDisabledReason.None,
         files: [],
       },
     ];

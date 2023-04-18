@@ -46,10 +46,10 @@ export enum PCRItemStatus {
 }
 
 export enum PCRItemDisabledReason {
-  NONE = 0,
-  ANOTHER_PCR_ALREADY_HAS_THIS_TYPE = 1,
-  THIS_PCR_ALREADY_HAS_THIS_TYPE = 2,
-  NOT_ENOUGH_PARTNERS_TO_ACTION_THIS_TYPE = 3,
+  None = 0,
+  AnotherPcrAlreadyHasThisType = 1,
+  ThisPcrAlreadyHasThisType = 2,
+  NotEnoughPartnersToActionThisType = 3,
 }
 
 export const enum PCRItemType {

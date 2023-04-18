@@ -61,7 +61,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       displayName: metaInfo.displayName || metaInfo.typeName,
       enabled: this.getEnabledStatus(metaInfo, context.config),
       disabled: false,
-      disabledReason: PCRItemDisabledReason.NONE,
+      disabledReason: PCRItemDisabledReason.None,
       recordTypeId: this.findRecordType(metaInfo.typeName, pcrRecordTypes),
       files: this.getPCRFiles(metaInfo.files),
     }));

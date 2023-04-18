@@ -17,26 +17,26 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
   const { getPcrItemContent } = usePcrItemName();
 
   const disableReasonMessages = {
-    [PCRItemDisabledReason.NONE]: "",
-    [PCRItemDisabledReason.ANOTHER_PCR_ALREADY_HAS_THIS_TYPE]: getContent(
+    [PCRItemDisabledReason.None]: "",
+    [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
       x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeMessage,
     ),
-    [PCRItemDisabledReason.THIS_PCR_ALREADY_HAS_THIS_TYPE]: getContent(
+    [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
       x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeMessage,
     ),
-    [PCRItemDisabledReason.NOT_ENOUGH_PARTNERS_TO_ACTION_THIS_TYPE]: getContent(
+    [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: getContent(
       x => x.pages.pcrModifyOptions.notEnoughPartnersToActionThisTypeMessage,
     ),
   };
   const disableReasonTitles = {
-    [PCRItemDisabledReason.NONE]: "",
-    [PCRItemDisabledReason.ANOTHER_PCR_ALREADY_HAS_THIS_TYPE]: getContent(
+    [PCRItemDisabledReason.None]: "",
+    [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
       x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeTitle,
     ),
-    [PCRItemDisabledReason.THIS_PCR_ALREADY_HAS_THIS_TYPE]: getContent(
+    [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
       x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeTitle,
     ),
-    [PCRItemDisabledReason.NOT_ENOUGH_PARTNERS_TO_ACTION_THIS_TYPE]: getContent(
+    [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: getContent(
       x => x.pages.pcrModifyOptions.notEnoughPartnersToActionThisTypeTitle,
     ),
   };

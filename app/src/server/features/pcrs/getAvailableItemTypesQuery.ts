@@ -69,19 +69,19 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
       // Note: Include items that are only true
       if (!pcrItem.enabled) return validPcrItems;
 
-      let disabledReason = PCRItemDisabledReason.NONE;
+      let disabledReason = PCRItemDisabledReason.None;
 
       if (nonDuplicatableItemTypesInAnyPcr.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.ANOTHER_PCR_ALREADY_HAS_THIS_TYPE;
+        disabledReason = PCRItemDisabledReason.AnotherPcrAlreadyHasThisType;
       } else if (nonDuplicatableItemTypesInThisPcr.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.THIS_PCR_ALREADY_HAS_THIS_TYPE;
+        disabledReason = PCRItemDisabledReason.ThisPcrAlreadyHasThisType;
       } else if (tooManyItemTypes.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.NOT_ENOUGH_PARTNERS_TO_ACTION_THIS_TYPE;
+        disabledReason = PCRItemDisabledReason.NotEnoughPartnersToActionThisType;
       }
 
       return validPcrItems.concat({
         ...pcrItem,
-        disabled: disabledReason !== PCRItemDisabledReason.NONE,
+        disabled: disabledReason !== PCRItemDisabledReason.None,
         disabledReason,
       });
     }, []);
