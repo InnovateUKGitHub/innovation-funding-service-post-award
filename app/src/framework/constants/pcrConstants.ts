@@ -152,7 +152,7 @@ const pcrDisabledMatrix = {
 } as const;
 
 /**
- * A matrix of PCR types that CANNOT have more than one instance of itself in a single PCR.
+ * A map of PCR types that CANNOT have more than one instance of itself in a single PCR.
  * Used to allow duplicate Partner Addition/Removal/Rename in a single PCR.
  */
 export const pcrUnduplicatableMatrix = {
