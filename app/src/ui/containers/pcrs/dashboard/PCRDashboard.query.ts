@@ -43,9 +43,13 @@ const pcrDashboardQuery = graphql`
                       LastModifiedDate {
                         value
                       }
+                      Acc_Project__c {
+                        value
+                      }
                       RecordType {
                         Name {
                           value
+                          label
                         }
                       }
                     }

@@ -29,7 +29,7 @@ import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { isBoolean, isNumber } from "@framework/util";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
-  id: pcr.id,
+  id: pcr.id as PcrId,
   requestNumber: pcr.number,
   started: pcr.started,
   lastUpdated: pcr.updated,
@@ -94,7 +94,7 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRI
 };
 
 const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType) => ({
-  id: pcr.id,
+  id: pcr.id as PcrId,
   guidance: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === type)?.guidance,
   typeName,
   status: pcr.status,

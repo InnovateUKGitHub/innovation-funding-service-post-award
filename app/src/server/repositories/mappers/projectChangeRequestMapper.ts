@@ -246,7 +246,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
     const headers = items.filter(x => x.RecordTypeId === this.headerRecordTypeId);
 
     return headers.map(header => ({
-      id: header.Id,
+      id: header.Id as PcrId,
       number: header.Acc_RequestNumber__c,
       projectId: header.Acc_Project__c as ProjectId,
       started: this.clock.parseRequiredSalesforceDateTime(header.CreatedDate),
@@ -273,8 +273,8 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
     const repaymentPeriodChange = Number(pcrItem.Loan_RepaymentPeriodChange__c);
 
     return {
-      id: pcrItem.Id,
-      pcrId: header.Id,
+      id: pcrItem.Id as PcrItemId,
+      pcrId: header.Id as PcrId,
       projectId: header.Acc_Project__c as ProjectId,
       partnerId: pcrItem.Acc_Project_Participant__c as PartnerId,
       recordTypeId: pcrItem.RecordTypeId,

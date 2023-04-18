@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapPcrDtoArray should map the node to the projectDto structure 1`] = `
+Array [
+  Object {
+    "id": "a0G26000007KUl3EAG",
+    "items": Array [
+      Object {
+        "shortName": "Change a partner's name",
+      },
+      Object {
+        "shortName": "Add a partner",
+      },
+      Object {
+        "shortName": "Reallocate several partners' project cost",
+      },
+    ],
+    "lastUpdated": 2023-04-19T10:17:24.000Z,
+    "projectId": "a0E2600000o75OAEAY",
+    "requestNumber": 3,
+    "started": 2023-04-19T10:17:19.000Z,
+    "status": 1,
+    "statusName": "Draft",
+  },
+  Object {
+    "id": "a0G26000007K4veEAC",
+    "items": Array [
+      Object {
+        "shortName": "Change project scope",
+      },
+    ],
+    "lastUpdated": 2023-04-13T09:39:06.000Z,
+    "projectId": "a0E2600000o75OAEAY",
+    "requestNumber": 2,
+    "started": 2023-04-13T09:36:53.000Z,
+    "status": 2,
+    "statusName": "Submitted to Monitoring Officer",
+  },
+]
+`;

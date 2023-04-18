@@ -31,25 +31,25 @@ type CostCategoryDtoMapping = Pick<
 > & { displayOrder: number };
 
 const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
-  competitionType: function (node) {
+  competitionType(node) {
     return node?.Acc_CompetitionType__c?.value ?? "unknown";
   },
-  displayOrder: function (node) {
+  displayOrder(node) {
     return node?.Acc_DisplayOrder__c?.value ?? 0;
   },
-  id: function (node) {
+  id(node) {
     return node?.Id ?? "";
   },
-  isCalculated: function () {
+  isCalculated() {
     return false;
   },
-  organisationType: function (node) {
+  organisationType(node) {
     return (node?.Acc_OrganisationType__c?.value ?? "unknown") as PCROrganisationType;
   },
-  name: function (node) {
+  name(node) {
     return node?.Acc_CostCategoryName__c?.value ?? "";
   },
-  type: function (node) {
+  type(node) {
     return costCategoryTypeMapper(
       node?.Acc_OrganisationType__c?.value ?? "Unknown",
       node?.Acc_CostCategoryName__c?.value ?? "unknown",

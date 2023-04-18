@@ -9,6 +9,8 @@ build/
 /.env2
 old-version-of*
 
+
+old-version-of-*
 test-report.html
 .idea
 

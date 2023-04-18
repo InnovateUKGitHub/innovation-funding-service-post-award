@@ -14,7 +14,7 @@ import {
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 
 interface PCRBaseDto {
-  id: string;
+  id: PcrId;
   lastUpdated: Date;
   projectId: ProjectId;
   requestNumber: number;

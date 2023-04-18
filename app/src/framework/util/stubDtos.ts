@@ -1232,7 +1232,7 @@ export const createClaim: CreateDTO<ClaimDto> = (objectToMerge?) => {
 
 export const createPCRSummaryDto: CreateDTO<PCRSummaryDto> = (objectToMerge?) => {
   const stubPCRSummaryDto = {
-    id: "a0G0C000004OH0sUAG",
+    id: "a0G0C000004OH0sUAG" as PcrId,
     requestNumber: 12,
     started: new Date(),
     lastUpdated: new Date(),

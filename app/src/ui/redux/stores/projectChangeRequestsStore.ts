@@ -149,7 +149,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId),
       () =>
         Pending.done<PCRDto>({
-          id: "",
+          id: "" as PcrId,
           projectId,
           status: PCRStatus.Draft,
           statusName: "",
