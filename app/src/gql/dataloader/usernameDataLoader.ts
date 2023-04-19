@@ -37,7 +37,7 @@ const getUsernameDataLoader = (ctx: PartialGraphQLContext) => {
         query UsernameQuery($contacts: [ID!]!) {
           uiapi {
             query {
-              User(where: { ContactId: { in: $contacts } }) {
+              User(where: { ContactId: { in: $contacts } }, first: 2000) {
                 edges {
                   node {
                     Username {
