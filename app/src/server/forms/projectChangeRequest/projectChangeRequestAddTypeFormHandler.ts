@@ -22,12 +22,11 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
   ): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.projectChangeRequestId));
 
-    const originalTypes = dto.items.map(x => x.type);
     const formValuesAsArray: string[] = body.types ? (Array.isArray(body.types) ? body.types : [body.types]) : [];
 
-    const formTypes = formValuesAsArray.map(x => parseInt(x, 10));
-    const newItems = formTypes
-      .filter(x => originalTypes.indexOf(x) < 0)
+    const newItems = formValuesAsArray
+      .map(x => parseInt(x, 10))
+      .filter(x => !!x)
       .map(
         x =>
           ({
