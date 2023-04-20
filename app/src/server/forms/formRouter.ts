@@ -149,7 +149,9 @@ const handlePost =
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     csrfProtection(req, res, async () => {
       try {
-        handler.handle(req, res, next);
+        // You must await the handle, to transform promise rejections into regular errors.
+        // This allows the try-catch block to catch any errors that occur instead of crashing the programme.
+        await handler.handle(req, res, next);
       } catch (err: unknown) {
         return serverRender({ schema })({ req, res, err, next });
       }

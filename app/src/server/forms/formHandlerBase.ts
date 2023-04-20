@@ -87,12 +87,14 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
       context.logger.error("Error handling form submission", error);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const key = this.getStoreKey(params, dto as any);
-      throw new FormHandlerError(
-        key,
-        this.store,
-        dto,
-        this.createValidationResult(params, dto, button),
-        error as IAppError,
+      next(
+        new FormHandlerError(
+          key,
+          this.store,
+          dto,
+          this.createValidationResult(params, dto, button),
+          error as IAppError,
+        ),
       );
     }
   }
