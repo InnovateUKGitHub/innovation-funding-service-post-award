@@ -736,17 +736,16 @@
       "addPartnerMessage": "This allows you to add a new partner to a project. When adding a new partner to replace an existing one, also use 'Remove a partner' to remove the existing one.",
       "changeScopeMessage": "Use this to update the public project description and the internal project summary.",
       "changeDurationMessage": "This allows you to request an extension or reduction to your project's duration.",
-      "changePartnersNameMessage": "Use when a partner organisation's name has changed. If a partner is being replaced, use 'Add a partner' and 'Remove a partner'.",
+      "changePartnersNameMessage": "Use when a partner organisation's name has changed. If a partner is being replaced, use ‘Remove a partner’ to delete the old one and ‘Add a partner’ to add the new one.",
       "putProjectOnHoldMessage": "This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold.",
       "endProjectEarlyMessage": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close.",
       "loanDrawdownChangeMessage": "This allows for you to change the date and/or amount of forecasted drawdowns in the case of unforeseen circumstances leading to significant variations between drawn amounts and amounts spent (over or underspent).",
       "loanDrawdownExtensionMessage": "This allows you to extend or reduce the duration of your loan periods (availability, extension and repayment).",
       "anotherPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to another PCR.",
-      "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted - if still in draft - or concluded by Innovate UK, before a new one can be started.",
+      "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
       "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
       "thisPcrAlreadyHasThisTypeMessage": "These types of request are already a part of this current PCR.",
-      "notEnoughPartnersToActionThisTypeTitle": "Some types are unavailable because you have reached the maximum number of this type in a single PCR.",
-      "notEnoughPartnersToActionThisTypeMessage": "You cannot add more than the number of partners on this project."
+      "notEnoughPartnersToActionThisTypeTitle": "Some types are unavailable because you have reached the maximum number of this type in a single PCR."
     },
     "pcrTimeExtensionStep": {
       "existingProjectHeading": "Existing project details",
@@ -872,12 +871,9 @@
       "headingUploadCertificate": "Upload change of name certificate"
     },
     "pcrReasoningPrepareReasoning": {
-      "title": {
-        "html": "Provide reasoning to Innovate UK",
-        "display": "Provide reasoning to Innovate UK"
-      },
+      "title": "Provide reasons to Innovate UK",
       "hint": "You must explain each change. Be brief and write clearly. If you are requesting a reallocation of project costs, you must justify each change to your costs.",
-      "headingReasoning": "Reasoning"
+      "headingReasoning": "Reasons"
     },
     "pcrReasoningSummary": {
       "headingMarkAsComplete": "Mark as complete",
@@ -885,10 +881,7 @@
       "noDocuments": "No documents attached"
     },
     "pcrReasoningWorkflow": {
-      "title": {
-        "html": "Reasoning for Innovate UK",
-        "display": "Reasoning for Innovate UK"
-      },
+      "title": "Reasons for Innovate UK",
       "backLink": "Back to request"
     },
     "pcrPrepareItemFilesForPartnerWithdrawal": {
@@ -1359,7 +1352,8 @@
   },
   "taskList": {
     "giveUsInfoSectionTitle": "Give us information",
-    "explainSectionTitle": "Explain why you want to make the changes"
+    "explainSectionTitle": "Explain why you want to make the changes",
+    "provideReasoning": "Provide reasons to Innovate UK"
   },
   "enums": {
     "competitionTypes": {

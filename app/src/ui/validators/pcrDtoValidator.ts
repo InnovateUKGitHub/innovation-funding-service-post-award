@@ -177,7 +177,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
         Validation.isTrue(
           this,
           this.model.reasoningStatus === PCRItemStatus.Complete || preparePcrStatus.indexOf(this.model.status) >= 0,
-          "Reasoning must be complete",
+          "Reasons entry must be complete",
         ),
     );
   }
@@ -391,14 +391,14 @@ export class PCRDtoValidator extends Results<PCRDto> {
                 }
               }
               return true;
-            }, "You cannot select the same partner to remove and/or rename more than once in a single PCR"),
+            }, "You cannot select the same partner to remove or rename more than once in a single PCR"),
           () =>
             children.isTrue(
               items =>
                 this.partners?.length
                   ? items.filter(x => pcrOverpopulatedList.includes(x.type)).length <= this.partners.length
                   : true,
-              'You cannot add any more "Remove a partner" and/or "Change a partner\'s name" types because you do not have enough partners to action these types upon.',
+              "You cannot select ‘Remove a partner’ or ‘Change a partner’s name’ because you do not have enough partners to action these.",
             ),
           () => {
             if (!this.projectPcrs?.length) return children.valid();

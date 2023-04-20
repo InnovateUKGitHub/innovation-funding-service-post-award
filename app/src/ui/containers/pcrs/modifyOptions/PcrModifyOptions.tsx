@@ -86,7 +86,7 @@ const PcrModifySelectedPage = ({
 
     if (
       editor.data.items
-        .filter(editorItemType => editorItemType.id.length === 0)
+        .filter(editorItemType => editorItemType?.id?.length === 0)
         .some(editorItemType => itemType.type === editorItemType.type)
     ) {
       selectedOptions.push(dtoOption);

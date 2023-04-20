@@ -17,19 +17,17 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
   const { getPcrItemContent } = usePcrItemName();
 
   const disableReasonMessages = {
-    [PCRItemDisabledReason.None]: "",
+    [PCRItemDisabledReason.None]: null,
     [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
       x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeMessage,
     ),
     [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
       x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeMessage,
     ),
-    [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: getContent(
-      x => x.pages.pcrModifyOptions.notEnoughPartnersToActionThisTypeMessage,
-    ),
+    [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: null,
   };
   const disableReasonTitles = {
-    [PCRItemDisabledReason.None]: "",
+    [PCRItemDisabledReason.None]: null,
     [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
       x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeTitle,
     ),
