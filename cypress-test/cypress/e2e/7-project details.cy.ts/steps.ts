@@ -50,6 +50,80 @@ export const financeDetailsSection = () => {
   cy.get("p").contains("Only finance contacts can submit claims.");
 };
 
+export const manyFinanceDetailsSection = () => {
+  [
+    "contact30@test.co.uk",
+    "contact7@test.co.uk",
+    "contact9@test.co.uk",
+    "b.doe@auto-corp.co.uk",
+    "b.potter@test.co.uk",
+    "b.baron@test.co.uk",
+    "contact11@test.co.uk",
+    "contact1c@test.co.uk",
+    "contact1d@test.co.uk",
+    "contact1@test.co.uk",
+    "b.steven@test.co.uk",
+    "c.smith@auto-corp.co.uk",
+    "c.manton@test.co.uk",
+    "c.mcelek@test.co.uk",
+    "c.red@test.co.uk",
+    "abc@test.com",
+    "d.york@monitoring.test",
+    "def@test.com",
+    "elisabeth.evans@dev.yhdhdl.com.test",
+    "emilie_prowsky@natinvestbank.co.uk.test",
+    "ebrennan@limotors.org.uk.test",
+    "contact77@test.co.uk",
+    "m.davies@auto-health.co.uk",
+    "n.mcdermott@auto-health.co.uk",
+    "iukprovarmo5@gmail.com",
+    "q.lewis@auto-monitoring.co.uk",
+    "s.john@auto-research.co.uk",
+    "s.shuang@irc.trde.org.uk.test",
+    "t.williamson@auto-research.co.uk",
+    "u.adams-taylor@auto-research.co.uk",
+    "wed.addams@test.test.co.uk",
+    "Ali Green",
+    "Ali Mohamed",
+    "Anand Bhajji",
+    "B Doe",
+    "Billy Potter",
+    "Brosnan Baron",
+    "Bruce Bradford",
+    "Bruce Green",
+    "Bruce King",
+    "Bruce LEE",
+    "Bunty Steven",
+    "C Smith",
+    "Charlie Manton",
+    "Charlie McElek",
+    "Charlie Red",
+    "David Bob",
+    "Dylan York",
+    "Einstine Mulgrew",
+    "Elisabeth Evans",
+    "Emilie Prowski",
+    "Evelyn Brennan",
+    "ken Charles",
+    "M Davies",
+    "N McDermott",
+    "Provar MO5",
+    "Q Lewis",
+    "S John",
+    "Sarah Shuang",
+    "T Williamson",
+    "U Adams-Taylor",
+    "Wednesday Addams",
+    "Name",
+    "Partner",
+    "Email",
+  ].forEach(fcInfo => {
+    cy.getByQA("finance-contact-details").contains(fcInfo);
+  });
+  cy.get("h3").contains("Finance contacts");
+  cy.get("p").contains("Only finance contacts can submit claims.");
+};
+
 export const ilDetailsSection = () => {
   ["Name", "Email", "Nicole Hedges", "nicole.hedges@iuk.ukri.org"].forEach(ilInfo => {
     cy.getByQA("innovation-lead-details").contains(ilInfo);
@@ -85,6 +159,54 @@ export const partnerDetailsSection = () => {
     "ABS EUI Medium Enterprise",
     "A B Cad Services",
     "SN5",
+  ].forEach(partnerInfo => {
+    cy.getByQA("partner-information").contains(partnerInfo);
+  });
+  cy.get("h2").contains("Partner information");
+};
+
+export const manyPartnerDetailsSection = () => {
+  [
+    "Auto Corporation Ltd",
+    "Auto Monitoring Ltd",
+    "EUI Micro Research Co.",
+    "YHDHDL",
+    "Gorcium Management Services Ltd.",
+    "Intaser",
+    "Auto Healthcare Ltd",
+    "National Investment Bank",
+    "NIB Reasearch Limited",
+    "Red Motor Research Ltd.",
+    "Lutor Systems",
+    "Swindon University",
+    "The Best Manufacturing",
+    "Top Castle Co.",
+    "University of Bristol",
+    "Munce Inc",
+    "Java Coffee Inc",
+    "Hyperion Corporation",
+    "Maliwan",
+    "Jakobs",
+    "Deep Rock Galactic",
+    "/EUI Small Ent Health",
+    "Swindon University",
+    "A B Cad Services",
+    "Auto Research Ltd",
+    "Vitruvius Stonework Limited",
+    "RBA Test Account 1",
+    "UAT37",
+    "Hedges' Hedges Ltd",
+    "ABS EUI Medium Enterprise",
+    "Brown and co",
+    "Swindon Development University",
+    "Partner",
+    "Name",
+    "Status",
+    "Funding status",
+    "Location",
+    "Business",
+    "Active",
+    "Funded",
   ].forEach(partnerInfo => {
     cy.getByQA("partner-information").contains(partnerInfo);
   });
