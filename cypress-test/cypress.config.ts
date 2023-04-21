@@ -68,6 +68,7 @@ export default defineConfig({
     testIsolation: false,
   },
   retries: 1,
+  experimentalWebKitSupport: true,
 });
 
 function getSpecPatternArray(s: string) {

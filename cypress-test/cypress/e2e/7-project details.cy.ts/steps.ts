@@ -18,16 +18,11 @@ export const moDetailsSection = () => {
 };
 
 export const pmDetailsSection = () => {
-  [
-    "James Black",
-    "EUI Small Ent Health (Lead)",
-    "james.black@euimeabs.testnoemail",
-    "Name",
-    "Partner",
-    "Email",
-  ].forEach(pmInfo => {
-    cy.getByQA("project-manager-details").contains(pmInfo);
-  });
+  ["James Black", "EUI Small Ent Health (Lead)", "james.black@euimeabs.test", "Name", "Partner", "Email"].forEach(
+    pmInfo => {
+      cy.getByQA("project-manager-details").contains(pmInfo);
+    },
+  );
   cy.get("h3").contains("Project Manager");
   cy.get("p").contains("Only project managers can raise project change requests.");
 };

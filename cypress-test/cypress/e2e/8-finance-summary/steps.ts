@@ -20,7 +20,7 @@ export const projCostsToDate = () => {
   cy.get("h3").contains("Project costs to date");
 };
 
-export const manyProjCostsToDate = () => {
+export const manyPartnerSummary = () => {
   [
     "EUI Small Ent Health",
     "A B Cad Services",
@@ -54,17 +54,49 @@ export const manyProjCostsToDate = () => {
     "Vitruvius Stonework Limited",
     "YHDHDL",
     "Hedges' Hedges Ltd",
-    "Total eligible costs",
-    "Eligible costs claimed to date",
-    "Percentage of eligible costs claimed to date",
-    "£350,000.00",
-    "£177,500.00",
-    "£1,000,000.00",
-    "50.71%",
-    "Totals",
-    "0.00%",
+  ].forEach(manyPartnerCost => {
+    cy.getByQA("ProjectCostsToDate").contains("td:nth-child(1)", manyPartnerCost);
+  });
+  cy.get("h3").contains("Project costs to date");
+};
+
+export const eligibleCostsSummary = () => {
+  [
+    "£384,000.00",
+    "£386,000.00",
+    "£385,000.00",
+    "£381,000.00",
+    "£387,220.00",
+    "£420,000.00",
+    "£388,000.00",
+    "£35,000.00",
+    "£390,000.00",
+    "£416,000.00",
+    "£389,000.00",
+    "£414,000.00",
+    "£400,000.00",
+    "£267,160.50",
+    "£1,010,000.00",
+    "£372,000.00",
+    "£550,000.00",
+    "£396,000.00",
+    "£355,000.00",
+    "£450,000.00",
+    "£440,000.00",
+    "£385,000.00",
+    "£404,000.00",
+    "£416,000.00",
+    "£420,000.00",
+    "£413,000.00",
+    "£360,000.00",
+    "£470,000.00",
+    "£485,000.00",
+    "£429,000.00",
+    "£389,000.00",
+    "£735,000.00",
+    "£13,521,380.50",
   ].forEach(manyProjCost => {
-    cy.getByQA("ProjectCostsToDate").contains(manyProjCost);
+    cy.getByQA("ProjectCostsToDate").contains("td:nth-child(2)", manyProjCost);
   });
   cy.get("h3").contains("Project costs to date");
 };
@@ -124,21 +156,8 @@ export const manyPartnerFinanceDetails = () => {
     "Vitruvius Stonework Limited",
     "YHDHDL",
     "Hedges' Hedges Ltd",
-    "Total eligible costs",
-    "Funding level",
-    "Total grant approved",
-    "Remaining grant",
-    "Total grant paid in advance",
-    "Claim cap",
-    "£350,000.00",
-    "65.00%",
-    "£0.00",
-    "£227,500.00",
-    "80.00%",
-    "85.00%",
-    "£1,000,000.00",
   ].forEach(manyPartnerCost => {
-    cy.getByQA("PartnerFinanceDetails").contains(manyPartnerCost);
+    cy.getByQA("PartnerFinanceDetails").contains("td:nth-child(1)", manyPartnerCost);
   });
   cy.get("h4").contains("Partner finance details");
 };
@@ -195,4 +214,16 @@ export const manyWhenIarNeeded = () => {
 export const periodSubWithDate = () => {
   cy.get("h2").contains("Project period");
   cy.get("span").contains(thisYear);
+};
+
+export const projCostsHeaders = () => {
+  [
+    "Totals",
+    "Total eligible costs",
+    "Eligible costs claimed to date",
+    "Percentage of eligible costs claimed to date",
+    "Totals",
+  ].forEach(header => {
+    cy.getByQA("ProjectCostsToDate").contains("th", header);
+  });
 };
