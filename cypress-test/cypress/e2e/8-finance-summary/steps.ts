@@ -204,10 +204,16 @@ export const manyWhenIarNeeded = () => {
     "University of Bristol",
     "Vitruvius Stonework Limited",
     "Hedges' Hedges Ltd",
-    "Never, for this project",
   ].forEach(manyIarRequirement => {
-    cy.getByQA("WhenAnIarIsNeeded").contains(manyIarRequirement);
+    cy.getByQA("WhenAnIarIsNeeded").contains("td:nth-child(1)", manyIarRequirement);
   });
+  [
+    "Never, for this project",
+    "With the first and last claim only",
+    "With the last claim only",
+    "With the first claim, last claim and on every anniversary of the project start date",
+    "Quarterly",
+  ];
   cy.get("h4").contains("When an independent accountant's report is needed");
 };
 
@@ -225,5 +231,135 @@ export const projCostsHeaders = () => {
     "Totals",
   ].forEach(header => {
     cy.getByQA("ProjectCostsToDate").contains("th", header);
+  });
+};
+
+export const partnerFinanceHeaders = () => {
+  [
+    "Total eligible costs",
+    "Funding level",
+    "Total grant approved",
+    "Remaining grant",
+    "Total grant paid in advance",
+    "Claim cap",
+  ].forEach(headers => {
+    cy.getByQA("PartnerFinanceDetails").contains("th", headers);
+  });
+};
+
+export const partnerFinanceEligibleCosts = () => {
+  [
+    "£384,000.00",
+    "£386,000.00",
+    "£385,000.00",
+    "£381,000.00",
+    "£387,220.00",
+    "£420,000.00",
+    "£388,000.00",
+    "£35,000.00",
+    "£390,000.00",
+    "£416,000.00",
+    "£389,000.00",
+    "£414,000.00",
+    "£400,000.00",
+    "£267,160.50",
+    "£1,010,000.00",
+    "£372,000.00",
+    "£550,000.00",
+    "£396,000.00",
+    "£355,000.00",
+    "£450,000.00",
+    "£440,000.00",
+    "£385,000.00",
+    "£404,000.00",
+    "£416,000.00",
+    "£420,000.00",
+    "£413,000.00",
+    "£360,000.00",
+    "£470,000.00",
+    "£485,000.00",
+    "£429,000.00",
+    "£389,000.00",
+    "£735,000.00",
+  ].forEach(manyProjCost => {
+    cy.getByQA("PartnerFinanceDetails").contains("td:nth-child(2)", manyProjCost);
+  });
+};
+
+export const partnerFinanceFundingLevel = () => {
+  [
+    "65.00%",
+    "66.00%",
+    "67.00%",
+    "68.00%",
+    "69.00%",
+    "70.00%",
+    "71.00%",
+    "72.00%",
+    "73.00%",
+    "74.00%",
+    "75.00%",
+    "76.00%",
+    "77.00%",
+    "78.00%",
+    "79.00%",
+    "80.00%",
+    "81.00%",
+    "82.00%",
+    "83.00%",
+    "84.00%",
+    "85.00%",
+    "86.00%",
+    "87.00%",
+    "88.00%",
+    "89.00%",
+    "90.00%",
+    "91.00%",
+    "92.00%",
+    "93.00%",
+    "94.00%",
+    "95.00%",
+    "96.11%",
+  ].forEach(fundLevel => {
+    cy.getByQA("PartnerFinanceDetails").contains("td:nth-child(3)", fundLevel);
+  });
+};
+
+export const partnerFinanceRemainingGrant = () => {
+  [
+    "£247,650.00",
+    "£254,760.00",
+    "£257,950.00",
+    "£259,080.00",
+    "£267,181.80",
+    "£294,000.00",
+    "£275,480.00",
+    "£25,200.00",
+    "£284,700.00",
+    "£307,840.00",
+    "£291,750.00",
+    "£314,640.00",
+    "£308,000.00",
+    "£208,385.19",
+    "£797,900.00",
+    "£297,600.00",
+    "£445,500.00",
+    "£324,720.00",
+    "£294,650.00",
+    "£378,000.00",
+    "£374,000.00",
+    "£331,100.00",
+    "£351,480.00",
+    "£366,080.00",
+    "£373,800.00",
+    "£371,700.00",
+    "£327,600.00",
+    "£432,400.00",
+    "£451,050.00",
+    "£403,260.00",
+    "£369,550.00",
+    "£706,408.50",
+  ].forEach(remaining => {
+    cy.getByQA("PartnerFinanceDetails").contains("td:nth-child(5)", remaining);
   });
 };
