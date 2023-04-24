@@ -1,4 +1,4 @@
-import * as ACC from "@ui/components";
+import { createTypedForm, PeriodTitle, Section, Content, Renderers } from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { IEditorStore } from "@ui/redux";
@@ -7,25 +7,23 @@ import { H3 } from "@ui/components";
 interface Props {
   questionNumber: number;
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
+  report: Pick<Dtos.MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">;
   onChange: (dto: Dtos.MonitoringReportDto) => void;
   onSave: (dto: Dtos.MonitoringReportDto, progress: boolean) => void;
 }
 
-const ReportForm = ACC.createTypedForm<Dtos.MonitoringReportDto>();
+const ReportForm =
+  createTypedForm<Pick<Dtos.MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">>();
 
-const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave }: Props) => {
+const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave, report }: Props) => {
   const title = (
-    <ACC.PeriodTitle
-      periodId={editor.data.periodId}
-      periodStartDate={editor.data.startDate}
-      periodEndDate={editor.data.endDate}
-    />
+    <PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
   );
 
-  const { data, validator } = editor;
+  const { validator } = editor;
 
-  const i = data.questions.findIndex(x => x.displayOrder === questionNumber);
-  const q = data.questions[i];
+  const i = editor.data.questions.findIndex(x => x.displayOrder === questionNumber);
+  const q = editor.data.questions[i];
   const radioOptions = q.isScored
     ? (q.options || []).map(y => ({
         id: y.id,
@@ -35,18 +33,24 @@ const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave
     : [];
 
   return (
-    <ACC.Section title={title} qa="period-information">
-      <ACC.Section>
-        <ReportForm.Form editor={editor} onChange={dto => onChange(dto)} qa="monitoringReportQuestionForm">
+    <Section title={title} qa="period-information">
+      <Section>
+        <ReportForm.Form
+          editor={editor}
+          onChange={dto => {
+            return onChange(dto as Dtos.MonitoringReportDto);
+          }}
+          qa="monitoringReportQuestionForm"
+        >
           <H3>
-            <ACC.Content
+            <Content
               value={x =>
-                x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: data.questions.length })
+                x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: report.questions.length })
               }
             />
           </H3>
           <ReportForm.Fieldset heading={q.title}>
-            <ACC.Renderers.SimpleString className="govuk-hint">{q.description}</ACC.Renderers.SimpleString>
+            <Renderers.SimpleString className="govuk-hint">{q.description}</Renderers.SimpleString>
             <ReportForm.Hidden name={"questionDisplayOrder"} value={() => questionNumber} />
 
             {!!radioOptions.length && (
@@ -73,15 +77,15 @@ const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave
           </ReportForm.Fieldset>
           <ReportForm.Fieldset qa="save-buttons">
             <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}>
-              <ACC.Content value={x => x.pages.monitoringReportsQuestionStep.buttonContinue} />
+              <Content value={x => x.pages.monitoringReportsQuestionStep.buttonContinue} />
             </ReportForm.Button>
             <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}>
-              <ACC.Content value={x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn} />
+              <Content value={x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn} />
             </ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
-      </ACC.Section>
-    </ACC.Section>
+      </Section>
+    </Section>
   );
 };
 

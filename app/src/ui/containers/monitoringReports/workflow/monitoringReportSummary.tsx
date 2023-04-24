@@ -14,18 +14,14 @@ const ReportForm = ACC.createTypedForm<Dtos.MonitoringReportDto>();
 
 class MonitoringReportComponent extends React.Component<MonitoringReportReportSummaryProps & InnerProps> {
   public render() {
-    const { mode, editor } = this.props;
+    const { mode, editor, report } = this.props;
     const title = (
-      <ACC.PeriodTitle
-        periodId={editor.data.periodId}
-        periodStartDate={editor.data.startDate}
-        periodEndDate={editor.data.endDate}
-      />
+      <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
     );
     return (
       <ACC.Section title={title} qa="monitoringReportViewSection">
         {this.renderPeriod(editor)}
-        {editor.data.questions.map(q => this.renderResponse(editor, q))}
+        {report.questions.map(q => this.renderResponse(editor, q))}
         {this.renderLog()}
         {mode === "prepare" && this.renderForm(editor)}
       </ACC.Section>
@@ -108,7 +104,7 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
     }
     return (
       <ACC.SummaryListItem
-        validation={validation.score}
+        validation={validation?.score}
         label={x => x.pages.monitoringReportsSummary.scoreLabel}
         content={response && `${response.questionScore} - ${response.questionText}`}
         qa={`question-${question.displayOrder}-score`}

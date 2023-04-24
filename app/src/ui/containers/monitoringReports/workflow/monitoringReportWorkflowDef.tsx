@@ -12,6 +12,7 @@ import { MonitoringReportWorkflowParams, MonitoringReportWorkflowWorkflow } from
 
 export interface MonitoringReportReportStepProps extends IStepProps {
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
+  report: Dtos.MonitoringReportDto;
   onChange: (dto: Dtos.MonitoringReportDto) => void;
   onSave: (dto: Dtos.MonitoringReportDto, progress: boolean) => void;
 }
@@ -20,6 +21,7 @@ export interface MonitoringReportReportSummaryProps extends ISummaryProps {
   projectId: ProjectId;
   id: MonitoringReportId;
   mode: "prepare" | "view";
+  report: Dtos.MonitoringReportDto;
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   onChange: (dto: Dtos.MonitoringReportDto) => void;
   onSave: (dto: Dtos.MonitoringReportDto, submit?: boolean) => void;

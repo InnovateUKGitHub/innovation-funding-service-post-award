@@ -19,7 +19,7 @@ export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringRepo
 
   public async run(context: IContext): Promise<MonitoringReportQuestionDto[]> {
     const questions = await this.getQuestions(context);
-    // if the question is not a scored question the optionId should be prepopulated
+    // if the question is not a scored question the optionId should be pre-populated
     return [...questions].map(([displayOrder, options]) => ({
       title: options[0].Acc_QuestionName__c,
       displayOrder,

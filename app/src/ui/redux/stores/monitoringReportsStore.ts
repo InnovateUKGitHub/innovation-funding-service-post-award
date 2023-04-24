@@ -18,11 +18,11 @@ export class MonitoringReportsStore extends StoreBase {
     super(getState, queue);
   }
 
-  private getKey(projectId: ProjectId, reportId: string | undefined) {
+  private getKey(projectId: ProjectId, reportId: MonitoringReportId | undefined) {
     return storeKeys.getMonitoringReportKey(projectId, reportId);
   }
 
-  getStatusChanges(projectId: ProjectId, reportId: string) {
+  getStatusChanges(projectId: ProjectId, reportId: MonitoringReportId) {
     return this.getData("monitoringReportStatusChanges", this.getKey(projectId, reportId), p =>
       apiClient.monitoringReports.getStatusChanges({ projectId, reportId, ...p }),
     );
@@ -34,7 +34,7 @@ export class MonitoringReportsStore extends StoreBase {
     );
   }
 
-  getById(projectId: ProjectId, reportId: string) {
+  getById(projectId: ProjectId, reportId: MonitoringReportId) {
     return this.getData("monitoringReport", this.getKey(projectId, reportId), p =>
       apiClient.monitoringReports.get({ projectId, reportId, ...p }),
     );
@@ -68,7 +68,11 @@ export class MonitoringReportsStore extends StoreBase {
     );
   }
 
-  getUpdateMonitoringReportEditor(projectId: ProjectId, reportId: string, init?: (dto: MonitoringReportDto) => void) {
+  getUpdateMonitoringReportEditor(
+    projectId: ProjectId,
+    reportId: MonitoringReportId,
+    init?: (dto: MonitoringReportDto) => void,
+  ) {
     return this.getEditor(
       "monitoringReport",
       this.getKey(projectId, reportId),
@@ -127,7 +131,7 @@ export class MonitoringReportsStore extends StoreBase {
 
   deleteReport(
     projectId: ProjectId,
-    reportId: string,
+    reportId: MonitoringReportId,
     dto: MonitoringReportDto,
     message: string,
     onComplete: () => void,

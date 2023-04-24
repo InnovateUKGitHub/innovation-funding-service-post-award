@@ -15,7 +15,7 @@ const MonitoringReportWorkflowView = (
     MonitoringReportWorkflowCallbacks &
     BaseProps,
 ) => {
-  const { workflow, editor, projectId, id, mode, onChange, routes } = props;
+  const { workflow, editor, projectId, id, mode, onChange, routes, report } = props;
   const summary = workflow.getSummary();
   return (
     <>
@@ -25,11 +25,11 @@ const MonitoringReportWorkflowView = (
           id,
           mode,
           editor,
+          report,
           onChange: (dto: MonitoringReportDto) => onChange(false, dto),
           onSave: (dto: MonitoringReportDto, submit?: boolean) =>
             onChange(true, dto, submit, getForwardLink({ ...props, progress: false })),
           routes,
-          // TODO type step name
           getEditLink: (stepName: string) =>
             routes.monitoringReportWorkflow.getLink({
               projectId,

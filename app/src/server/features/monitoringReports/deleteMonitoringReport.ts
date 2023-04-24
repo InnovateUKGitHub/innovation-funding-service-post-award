@@ -2,7 +2,7 @@ import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { BadRequestError, CommandBase } from "@server/features/common";
 
 export class DeleteMonitoringReportCommand extends CommandBase<void> {
-  constructor(private readonly projectId: ProjectId, private readonly reportId: string) {
+  constructor(private readonly projectId: ProjectId, private readonly reportId: MonitoringReportId) {
     super();
   }
 

@@ -396,7 +396,7 @@ export class TestData {
     const format = "yyyy-MM-dd";
 
     const newHeader: Repositories.ISalesforceMonitoringReportHeader = {
-      Id: "Report Header " + seed,
+      Id: ("Report Header " + seed) as MonitoringReportId,
       Acc_MonitoringReportStatus__c: "Draft",
       MonitoringReportStatusName: "Draft",
       Acc_Project__c: project.Id,
@@ -434,7 +434,7 @@ export class TestData {
     const seed = this.repositories.monitoringReportResponse.Items.length + 1;
     const response: Repositories.ISalesforceMonitoringReportResponse = {
       Id: `Response: ${seed}`,
-      Acc_MonitoringHeader__c: header.Id,
+      Acc_MonitoringHeader__c: header.Id as MonitoringReportId,
       Acc_QuestionComments__c: `Comments: ${question.Acc_DisplayOrder__c}`,
       Acc_Question__c: question.Id,
     };
@@ -456,7 +456,7 @@ export class TestData {
     const seed = this.repositories.monitoringReportStatusChange.Items.length + 1;
     const response: Repositories.ISalesforceMonitoringReportStatusChange = {
       Id: `StatusChange: ${seed}`,
-      Acc_MonitoringReport__c: header.Id,
+      Acc_MonitoringReport__c: header.Id as MonitoringReportId,
       Acc_PreviousMonitoringReportStatus__c: "Draft",
       Acc_NewMonitoringReportStatus__c: "Submitted to Monitoring Officer",
       Acc_CreatedByAlias__c: "The Beast from The Chase",

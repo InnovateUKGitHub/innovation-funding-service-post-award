@@ -15,7 +15,7 @@ describe("GetMonitoringReport", () => {
     testData.createMonitoringReportResponse(report, question1Options[0]);
     testData.createMonitoringReportResponse(report, question2Options[0]);
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(2);
@@ -30,7 +30,7 @@ describe("GetMonitoringReport", () => {
 
     const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(2);
@@ -44,7 +44,7 @@ describe("GetMonitoringReport", () => {
 
     const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
 
     const result = await context.runQuery(query);
 
@@ -72,12 +72,12 @@ describe("GetMonitoringReport", () => {
       Acc_MonitoringReportStatus__c: "Awaiting IUK Approval",
     });
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
 
     const result = await context.runQuery(query);
     expect(result.periodId).toBe(expectedPeriodId);
     expect(result.projectId).toBe(project.Id);
-    expect(result.headerId).toBe(report.Id);
+    expect(result.headerId).toBe(report.Id as MonitoringReportId);
     expect(result.status).toBe(MonitoringReportStatus.AwaitingApproval);
   });
 
@@ -94,7 +94,7 @@ describe("GetMonitoringReport", () => {
 
     const question2Answer = testData.createMonitoringReportResponse(report, question2Options[2]);
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
     const result = await context.runQuery(query);
 
     expect(result.questions[0].responseId).toBeNull();
@@ -118,7 +118,7 @@ describe("GetMonitoringReport", () => {
 
     const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
 
     const result = await context.runQuery(query);
     expect(result.questions[0].displayOrder).toBe(3);
@@ -135,7 +135,7 @@ describe("GetMonitoringReport", () => {
     testData.createMonitoringReportQuestionSet(1, 5);
     const report = testData.createMonitoringReportHeader();
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
 
     const result = await context.runQuery(query);
 
@@ -155,7 +155,7 @@ describe("GetMonitoringReport", () => {
       Acc_MonitoringReportStatus__c: "Draft",
     });
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
 
     const result = await context.runQuery(query);
 
@@ -183,7 +183,7 @@ describe("GetMonitoringReport", () => {
     testData.createMonitoringReportResponse(report, question2[2]);
     testData.createMonitoringReportResponse(report, question3[0]);
 
-    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id);
+    const query = new GetMonitoringReportById(report.Acc_Project__c as ProjectId, report.Id as MonitoringReportId);
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(3);

@@ -11,7 +11,7 @@ describe("DeleteMonitoringReportCommand", () => {
     });
     expect(context.repositories.monitoringReportHeader.Items).toHaveLength(1);
 
-    const deleteCommand = new DeleteMonitoringReportCommand(project.Id, report.Id);
+    const deleteCommand = new DeleteMonitoringReportCommand(project.Id, report.Id as MonitoringReportId);
     await context.runCommand(deleteCommand);
     expect(context.repositories.monitoringReportHeader.Items).toHaveLength(0);
   });
@@ -24,7 +24,7 @@ describe("DeleteMonitoringReportCommand", () => {
     const project = context.testData.createProject();
     const report = context.testData.createMonitoringReportHeader(project, 1, { Acc_MonitoringReportStatus__c: status });
 
-    const deleteCommand = new DeleteMonitoringReportCommand(project.Id, report.Id);
+    const deleteCommand = new DeleteMonitoringReportCommand(project.Id, report.Id as MonitoringReportId);
     await expect(context.runCommand(deleteCommand)).rejects.toThrow(BadRequestError);
   });
 });

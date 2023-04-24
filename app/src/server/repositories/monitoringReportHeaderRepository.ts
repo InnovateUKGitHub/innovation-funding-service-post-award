@@ -13,12 +13,12 @@ export interface ISalesforceMonitoringReportHeader {
   Acc_ProjectPeriodNumber__c: number;
   Acc_PeriodStartDate__c: string;
   Acc_PeriodEndDate__c: string;
-  Acc_AddComments__c: string;
+  Acc_AddComments__c: GQL.Maybe<string>;
   LastModifiedDate: string;
 }
 
 export interface IMonitoringReportHeaderRepository {
-  getById(id: string): Promise<ISalesforceMonitoringReportHeader>;
+  getById(id: MonitoringReportId): Promise<ISalesforceMonitoringReportHeader>;
   get(projectId: ProjectId, periodId: number): Promise<ISalesforceMonitoringReportHeader>;
   update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean>;
   create(updateDto: Partial<ISalesforceMonitoringReportHeader>): Promise<string>;
@@ -62,7 +62,7 @@ export class MonitoringReportHeaderRepository
     "LastModifiedDate",
   ];
 
-  async getById(id: string): Promise<ISalesforceMonitoringReportHeader> {
+  async getById(id: MonitoringReportId): Promise<ISalesforceMonitoringReportHeader> {
     return super.loadItem({ Id: id });
   }
 
@@ -87,7 +87,7 @@ export class MonitoringReportHeaderRepository
     return super.where(`Acc_Project__c = '${sss(projectId)}' AND RecordType.Name = '${sss(this.recordType)}'`);
   }
 
-  async delete(reportId: string): Promise<void> {
+  async delete(reportId: MonitoringReportId): Promise<void> {
     return super.deleteItem(reportId);
   }
 

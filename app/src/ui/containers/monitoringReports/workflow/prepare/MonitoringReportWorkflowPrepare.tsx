@@ -15,7 +15,7 @@ const MonitoringReportWorkflowPrepare = (
     MonitoringReportWorkflowCallbacks &
     BaseProps,
 ) => {
-  const { workflow, editor, onChange } = props;
+  const { workflow, editor, onChange, report } = props;
 
   const step = workflow.getCurrentStepInfo();
   return (
@@ -23,6 +23,7 @@ const MonitoringReportWorkflowPrepare = (
       {step &&
         step.stepRender({
           editor,
+          report,
           onChange: dto => onChange(false, dto),
           onSave: (dto, progress) => onChange(true, dto, false, getForwardLink({ ...props, progress })),
         })}

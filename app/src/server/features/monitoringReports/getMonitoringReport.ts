@@ -13,7 +13,7 @@ import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
   private readonly updatableStatuses: ISalesforceMonitoringReportStatus[] = ["New", "Draft", "IUK Queried"];
 
-  constructor(private readonly projectId: ProjectId, private readonly id: string) {
+  constructor(private readonly projectId: ProjectId, private readonly id: MonitoringReportId) {
     super();
   }
 
@@ -28,7 +28,9 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
       throw new BadRequestError("Invalid request");
     }
 
-    const results = await context.repositories.monitoringReportResponse.getAllForHeader(header.Id);
+    const results = await context.repositories.monitoringReportResponse.getAllForHeader(
+      header.Id as MonitoringReportId,
+    );
     const questionArray = await this.getQuestions(context, header, results);
 
     const questions = questionArray.map(q => this.populateAnswer(q, results));

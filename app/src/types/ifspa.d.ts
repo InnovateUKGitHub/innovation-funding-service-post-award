@@ -8,6 +8,7 @@ interface INominalTypes {
   projectId: ProjectId;
   partnerId: PartnerId;
   loanId: LoanId;
+  reportId: MonitoringReportId;
   documentId: DocumentId;
 }
 

@@ -12,8 +12,9 @@ export interface MonitoringReportWorkflowParams {
 }
 
 export interface MonitoringReportWorkflowData {
-  project: ProjectDto;
+  project: Pick<ProjectDto, "title" | "id" | "projectNumber">;
   editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
+  report: MonitoringReportDto;
 }
 
 export interface MonitoringReportWorkflowWorkflow {

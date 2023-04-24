@@ -11,7 +11,7 @@ export interface ISalesforceMonitoringReportResponse {
 }
 
 export interface IMonitoringReportResponseRepository {
-  getAllForHeader(monitoringReportHeaderId: string): Promise<ISalesforceMonitoringReportResponse[]>;
+  getAllForHeader(monitoringReportHeaderId: MonitoringReportId): Promise<ISalesforceMonitoringReportResponse[]>;
   delete(ids: string[]): Promise<void>;
   update(update: Updatable<ISalesforceMonitoringReportResponse>[]): Promise<boolean>;
   insert(insert: Partial<ISalesforceMonitoringReportResponse>[]): Promise<string[]>;

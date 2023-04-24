@@ -13,13 +13,14 @@ import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowVie
 export const MonitoringReportWorkflow = (
   props: MonitoringReportWorkflowData & MonitoringReportWorkflowParams & MonitoringReportWorkflowCallbacks & BaseProps,
 ) => {
-  const { project, editor, step, mode } = props;
-  const workflow = MonitoringReportWorkflowDef.getWorkflow(editor.data, step);
+  const { project, editor, step, mode, report } = props;
+
+  const workflow = MonitoringReportWorkflowDef.getWorkflow(report, step);
 
   return (
     <Page
       backLink={<MonitoringReportWorkflowBackLink {...props} workflow={workflow} />}
-      pageTitle={<Projects.Title {...project} />}
+      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
       validator={workflow.getValidation(editor.validator)}
       error={editor.error}
     >

@@ -1,0 +1,676 @@
+/**
+ * @generated SignedSource<<62bcfa78b51f78570cdf2ce66b62769c>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
+/* tslint:disable */
+/* eslint-disable */
+// @ts-nocheck
+
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type MonitoringReportWorkflowQuery$variables = {
+  monitoringReportId: string;
+  projectId: string;
+};
+export type MonitoringReportWorkflowQuery$data = {
+  readonly salesforce: {
+    readonly uiapi: {
+      readonly query: {
+        readonly Acc_MonitoringAnswer__c: {
+          readonly edges: ReadonlyArray<{
+            readonly node: {
+              readonly Acc_AddComments__c: {
+                readonly value: any | null;
+              } | null;
+              readonly Acc_MonitoringHeader__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_MonitoringReportStatus__c: {
+                readonly label: string | null;
+                readonly value: string | null;
+              } | null;
+              readonly Acc_PeriodEndDate__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_PeriodStartDate__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_ProjectPeriodNumber__c: {
+                readonly value: number | null;
+              } | null;
+              readonly Acc_Project__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_QuestionComments__c: {
+                readonly value: any | null;
+              } | null;
+              readonly Acc_QuestionName__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_Question__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Id: string;
+              readonly LastModifiedDate: {
+                readonly value: string | null;
+              } | null;
+              readonly RecordType: {
+                readonly Name: {
+                  readonly value: string | null;
+                } | null;
+              } | null;
+            } | null;
+          } | null> | null;
+        } | null;
+        readonly Acc_MonitoringQuestion__c: {
+          readonly edges: ReadonlyArray<{
+            readonly node: {
+              readonly Acc_ActiveFlag__c: {
+                readonly value: boolean | null;
+              } | null;
+              readonly Acc_DisplayOrder__c: {
+                readonly value: number | null;
+              } | null;
+              readonly Acc_QuestionDescription__c: {
+                readonly value: any | null;
+              } | null;
+              readonly Acc_QuestionName__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_QuestionScore__c: {
+                readonly value: number | null;
+              } | null;
+              readonly Acc_QuestionText__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_ScoredQuestion__c: {
+                readonly value: boolean | null;
+              } | null;
+              readonly Id: string;
+            } | null;
+          } | null> | null;
+        } | null;
+        readonly Acc_Project__c: {
+          readonly edges: ReadonlyArray<{
+            readonly node: {
+              readonly Acc_ProjectNumber__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_ProjectTitle__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Id: string;
+              readonly roles: {
+                readonly isFc: boolean;
+                readonly isMo: boolean;
+                readonly isPm: boolean;
+              };
+            } | null;
+          } | null> | null;
+        } | null;
+      };
+    };
+  };
+};
+export type MonitoringReportWorkflowQuery = {
+  response: MonitoringReportWorkflowQuery$data;
+  variables: MonitoringReportWorkflowQuery$variables;
+};
+
+const node: ConcreteRequest = (function(){
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "monitoringReportId"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "projectId"
+},
+v2 = {
+  "kind": "Literal",
+  "name": "first",
+  "value": 1000
+},
+v3 = [
+  {
+    "kind": "Variable",
+    "name": "eq",
+    "variableName": "monitoringReportId"
+  }
+],
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "Id",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "value",
+  "storageKey": null
+},
+v6 = [
+  (v5/*: any*/)
+],
+v7 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "StringValue",
+  "kind": "LinkedField",
+  "name": "Acc_QuestionName__c",
+  "plural": false,
+  "selections": (v6/*: any*/),
+  "storageKey": null
+},
+v8 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "SalesforceQuery",
+    "kind": "LinkedField",
+    "name": "salesforce",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "UIAPI",
+        "kind": "LinkedField",
+        "name": "uiapi",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "RecordQuery",
+            "kind": "LinkedField",
+            "name": "query",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": [
+                  (v2/*: any*/),
+                  {
+                    "kind": "Literal",
+                    "name": "orderBy",
+                    "value": {
+                      "LastModifiedDate": {
+                        "order": "DESC"
+                      }
+                    }
+                  },
+                  {
+                    "fields": [
+                      {
+                        "items": [
+                          {
+                            "fields": [
+                              {
+                                "fields": (v3/*: any*/),
+                                "kind": "ObjectValue",
+                                "name": "Id"
+                              }
+                            ],
+                            "kind": "ObjectValue",
+                            "name": "or.0"
+                          },
+                          {
+                            "fields": [
+                              {
+                                "items": [
+                                  {
+                                    "fields": [
+                                      {
+                                        "fields": (v3/*: any*/),
+                                        "kind": "ObjectValue",
+                                        "name": "Acc_MonitoringHeader__c"
+                                      }
+                                    ],
+                                    "kind": "ObjectValue",
+                                    "name": "and.0"
+                                  },
+                                  {
+                                    "kind": "Literal",
+                                    "name": "and.1",
+                                    "value": {
+                                      "RecordType": {
+                                        "Name": {
+                                          "eq": "Monitoring Answer"
+                                        }
+                                      }
+                                    }
+                                  }
+                                ],
+                                "kind": "ListValue",
+                                "name": "and"
+                              }
+                            ],
+                            "kind": "ObjectValue",
+                            "name": "or.1"
+                          }
+                        ],
+                        "kind": "ListValue",
+                        "name": "or"
+                      }
+                    ],
+                    "kind": "ObjectValue",
+                    "name": "where"
+                  }
+                ],
+                "concreteType": "Acc_MonitoringAnswer__cConnection",
+                "kind": "LinkedField",
+                "name": "Acc_MonitoringAnswer__c",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Acc_MonitoringAnswer__cEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Acc_MonitoringAnswer__c",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v4/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "RecordType",
+                            "kind": "LinkedField",
+                            "name": "RecordType",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Name",
+                                "plural": false,
+                                "selections": (v6/*: any*/),
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "IDValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_MonitoringHeader__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "IDValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_Question__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "LongTextAreaValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_QuestionComments__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          (v7/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "PicklistValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_MonitoringReportStatus__c",
+                            "plural": false,
+                            "selections": [
+                              (v5/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "label",
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DateTimeValue",
+                            "kind": "LinkedField",
+                            "name": "LastModifiedDate",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "IDValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_Project__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DoubleValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectPeriodNumber__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "LongTextAreaValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_AddComments__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DateValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_PeriodStartDate__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DateValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_PeriodEndDate__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": [
+                  (v2/*: any*/)
+                ],
+                "concreteType": "Acc_MonitoringQuestion__cConnection",
+                "kind": "LinkedField",
+                "name": "Acc_MonitoringQuestion__c",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Acc_MonitoringQuestion__cEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Acc_MonitoringQuestion__c",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v4/*: any*/),
+                          (v7/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DoubleValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_DisplayOrder__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DoubleValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_QuestionScore__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_QuestionText__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "LongTextAreaValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_QuestionDescription__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "BooleanValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ActiveFlag__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "BooleanValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ScoredQuestion__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": "Acc_MonitoringQuestion__c(first:1000)"
+              },
+              {
+                "alias": null,
+                "args": [
+                  {
+                    "fields": [
+                      {
+                        "fields": [
+                          {
+                            "kind": "Variable",
+                            "name": "eq",
+                            "variableName": "projectId"
+                          }
+                        ],
+                        "kind": "ObjectValue",
+                        "name": "Id"
+                      }
+                    ],
+                    "kind": "ObjectValue",
+                    "name": "where"
+                  }
+                ],
+                "concreteType": "Acc_Project__cConnection",
+                "kind": "LinkedField",
+                "name": "Acc_Project__c",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Acc_Project__cEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Acc_Project__c",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v4/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "Ext_Project_Roles",
+                            "kind": "LinkedField",
+                            "name": "roles",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isMo",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isFc",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isPm",
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectNumber__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectTitle__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
+];
+return {
+  "fragment": {
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "MonitoringReportWorkflowQuery",
+    "selections": (v8/*: any*/),
+    "type": "Query",
+    "abstractKey": null
+  },
+  "kind": "Request",
+  "operation": {
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
+    "kind": "Operation",
+    "name": "MonitoringReportWorkflowQuery",
+    "selections": (v8/*: any*/)
+  },
+  "params": {
+    "cacheID": "efe9262f66574ad02ff63479b1fd3edf",
+    "id": null,
+    "metadata": {},
+    "name": "MonitoringReportWorkflowQuery",
+    "operationKind": "query",
+    "text": "query MonitoringReportWorkflowQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {or: [{Id: {eq: $monitoringReportId}}, {and: [{Acc_MonitoringHeader__c: {eq: $monitoringReportId}}, {RecordType: {Name: {eq: \"Monitoring Answer\"}}}]}]}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_MonitoringHeader__c {\n                value\n              }\n              Acc_Question__c {\n                value\n              }\n              Acc_QuestionComments__c {\n                value\n              }\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringQuestion__c(first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_QuestionScore__c {\n                value\n              }\n              Acc_QuestionText__c {\n                value\n              }\n              Acc_QuestionDescription__c {\n                value\n              }\n              Acc_ActiveFlag__c {\n                value\n              }\n              Acc_ScoredQuestion__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+  }
+};
+})();
+
+(node as any).hash = "f4906696e3a492613e92f8dc8217132f";
+
+export default node;

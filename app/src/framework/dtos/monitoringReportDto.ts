@@ -13,7 +13,7 @@ export interface MonitoringReportSummaryDto {
 
 export interface MonitoringReportQuestionDto {
   comments: string | null;
-  description: string;
+  description: string | null;
   displayOrder: number;
   isScored: boolean;
   optionId: string | null;
@@ -22,8 +22,13 @@ export interface MonitoringReportQuestionDto {
   title: string;
 }
 
+export interface MonitoringReportQuestionGqlDto extends MonitoringReportQuestionDto {
+  isActive: boolean | null | undefined;
+  id: string | null | undefined;
+}
+
 export interface MonitoringReportDto extends MonitoringReportSummaryDto {
-  addComments: string;
+  addComments: string | null;
   questions: MonitoringReportQuestionDto[];
 }
 
