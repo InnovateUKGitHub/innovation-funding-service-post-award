@@ -683,6 +683,12 @@
       "saveAndReturnPartnerDetailsButton": "Save and return to partner information",
       "backToPartnerInfo": "Back to partner information"
     },
+    "pcrOverview": {
+      "backToPcrs": "Back to project change requests",
+      "saveAndReturn": "Save and return to requests",
+      "submitRequest": "Submit request",
+      "addComments": "Add comments"
+    },
     "pcrSpendProfileCostsSummary": {
       "title": "Add partner",
       "sectionTitleCosts": "{{costCategoryName}}",
@@ -1036,6 +1042,10 @@
     "pendingProject": "You need to set up your project",
     "checkForecast": "Check your forecast"
   },
+  "pcrMessages": {
+    "additionalCommentsGuidance": "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
+    "submittingGuidance": "By submitting this request, you confirm that all project partners have approved these changes."
+  },
   "spendProfileMessages": {
     "costGuidanceLabour": "The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.\nThey can include the following labour costs, based on PAYE records:\n\n* gross salary\n* National Insurance\n* company pension contribution\n* life insurance\n* other non-discretionary package costs\n\nYou cannot include:\n\n* discretionary bonuses\n* performance related payments of any kind\n\nYou may include the total number of working days for staff but do not include:\n\n* sick days\n* waiting time\n* training days\n* non-productive time\n\nList the total days worked by all categories of staff on the project. Describe their roles.\n\nWe will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.",
     "costGuidanceOverheads": "You may claim for no overhead costs or 20% of your labour costs without providing any further supporting documentation or calculations. Actual costs can be claimed up to a maximum of the calculated figure.\n\n\nIf you feel your overheads are higher than 20% you may calculate a value using the Innovate UK model in the spreadsheet available below. The model shows you which types of indirect costs associated with your project you may claim. For support with this option, please contact our Customer Support Service on 0300 321 4357. Any value claimed under this model will be subject to a review. This will assess the appropriateness of your claim if your grant application is successful.",
@@ -1332,7 +1342,10 @@
     "review": "Review",
     "view": "View",
     "actions": "Actions",
-    "delete": "Delete"
+    "delete": "Delete",
+    "addTypes": "Add types",
+    "details": "Details",
+    "statusAndCommentsLog": "Status and comments log"
   },
   "pcrReasoningLabels": {
     "comments": "Comments",
