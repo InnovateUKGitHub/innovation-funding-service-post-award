@@ -1,4 +1,3 @@
-import { pcrOverpopulatedList } from "@framework/constants";
 import { PartnerDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";

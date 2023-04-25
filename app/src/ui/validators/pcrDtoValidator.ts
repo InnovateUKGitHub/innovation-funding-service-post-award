@@ -2,7 +2,6 @@ import {
   PCRItemStatus,
   PCRItemType,
   PCROrganisationType,
-  pcrOverpopulatedList,
   PCRProjectRole,
   PCRStatus,
   pcrUnduplicatableMatrix,
@@ -378,11 +377,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
               for (const projectPcr of items) {
                 // Ensure "Remove a partner" request doesn't have the same partner twice (or more!)
-                if (
-                  (projectPcr.type === PCRItemType.PartnerWithdrawal ||
-                    projectPcr.type === PCRItemType.AccountNameChange) &&
-                  projectPcr.partnerId
-                ) {
+                if (projectPcr.type === PCRItemType.PartnerWithdrawal && projectPcr.partnerId) {
                   if (seenPartnerIds.has(projectPcr.partnerId)) {
                     return false;
                   } else {
@@ -391,15 +386,49 @@ export class PCRDtoValidator extends Results<PCRDto> {
                 }
               }
               return true;
-            }, "You cannot select the same partner to remove or rename more than once in a single PCR"),
+            }, "You cannot select the same partner to remove more than once in a single PCR"),
+          () =>
+            children.isTrue(items => {
+              // If we are in a draft, allow the same partner to be selected more than once.
+              if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
+
+              const seenPartnerIds = new Set<string>();
+
+              for (const projectPcr of items) {
+                // Ensure "Rename a partner" request doesn't have the same partner twice (or more!)
+                if (projectPcr.type === PCRItemType.AccountNameChange && projectPcr.partnerId) {
+                  if (seenPartnerIds.has(projectPcr.partnerId)) {
+                    return false;
+                  } else {
+                    seenPartnerIds.add(projectPcr.partnerId);
+                  }
+                }
+              }
+              return true;
+            }, "You cannot select the same partner to rename more than once in a single PCR"),
           () =>
             children.isTrue(
               items =>
                 this.partners?.length
-                  ? items.filter(x => pcrOverpopulatedList.includes(x.type)).length <= this.partners.length
+                  ? items.filter(x => x.type === PCRItemType.AccountNameChange).length <= this.partners.length
                   : true,
-              "You cannot select ‘Remove a partner’ or ‘Change a partner’s name’ because you do not have enough partners to action these.",
+              "You cannot select ‘Change a partner’s name’ because you do not have enough partners to action these.",
             ),
+          () =>
+            children.isTrue(items => {
+              if (!this.partners?.length) return true;
+
+              const hasAnyAdditions = items.some(x => x.type === PCRItemType.PartnerAddition);
+
+              // Maximum number of deletes allowed.
+              // `n`   You can delete all partners if we have any additions
+              // `n-1` You cannot delete all partners if there are no additions
+              const maxDeletes = hasAnyAdditions ? this.partners.length : this.partners.length - 1;
+
+              // Accept validation if we have any "add partner"
+              // Otherwise, fail validation if we have too many partners
+              return items.filter(x => x.type === PCRItemType.PartnerWithdrawal).length <= maxDeletes;
+            }, "You cannot select ‘Remove a partner’ because you do not have enough partners to action these."),
           () => {
             if (!this.projectPcrs?.length) return children.valid();
 

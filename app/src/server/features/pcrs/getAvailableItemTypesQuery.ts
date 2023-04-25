@@ -6,7 +6,6 @@ import {
   IContext,
   PCRItemDisabledReason,
   PCRItemType,
-  pcrOverpopulatedList,
   PCRSummaryDto,
   ProjectRole,
 } from "@framework/types";
@@ -39,10 +38,24 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
   private getPcrItemsLimitedByNumberOfPartners(numberOfPartners: number, currentPcr?: PCRSummaryDto): PCRItemType[] {
     if (!currentPcr) return [];
 
-    if (currentPcr.items.filter(x => pcrOverpopulatedList.includes(x.type)).length >= numberOfPartners)
-      return pcrOverpopulatedList;
+    const { items } = currentPcr;
+    const bannedTypes: PCRItemType[] = [];
 
-    return [];
+    // If we already have `n` renames, disallow adding an `n+1`th rename.
+    if (items.filter(x => x.type === PCRItemType.AccountNameChange).length >= numberOfPartners)
+      bannedTypes.push(PCRItemType.AccountNameChange);
+
+    const hasAnyAdditions = items.some(x => x.type === PCRItemType.PartnerAddition);
+
+    // Maximum number of deletes allowed.
+    // `n`   You can delete all partners if we have any additions
+    // `n-1` You cannot delete all partners if there are no additions
+    const maxDeletes = hasAnyAdditions ? numberOfPartners : numberOfPartners - 1;
+
+    if (items.filter(x => x.type === PCRItemType.PartnerWithdrawal).length >= maxDeletes)
+      bannedTypes.push(PCRItemType.PartnerWithdrawal);
+
+    return bannedTypes;
   }
 
   protected async run(context: IContext): Promise<Dtos.PCRItemTypeDto[]> {
