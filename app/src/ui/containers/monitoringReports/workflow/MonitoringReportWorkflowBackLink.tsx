@@ -11,7 +11,7 @@ const MonitoringReportWorkflowBackLink = ({
 }: MonitoringReportWorkflowParams & MonitoringReportWorkflowWorkflow & BaseProps) => {
   if (mode === "view") {
     return (
-      <BackLink route={routes.monitoringReportDashboard.getLink({ projectId: projectId })}>
+      <BackLink route={routes.monitoringReportDashboard.getLink({ projectId, periodId: undefined })}>
         <Content value={x => x.pages.monitoringReportsWorkflow.backLink} />
       </BackLink>
     );

@@ -4,6 +4,7 @@ import { DeveloperPageCrasherPage } from "@ui/containers/developer/PageCrasher.p
 import { DeveloperPageCrasherForbiddenPage } from "@ui/containers/developer/PageCrasherForbidden.page";
 import { DeveloperProjectCreatorPage } from "@ui/containers/developer/ProjectCreator.page";
 import { DeveloperUserSwitcherPage } from "@ui/containers/developer/UserSwitcher.page";
+import { MonitoringReportCreateRoute } from "@ui/containers/monitoringReports/create/monitoringReportCreate.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -27,7 +28,7 @@ export const routeConfig = {
   developerProjectCreatorPage: DeveloperProjectCreatorPage,
   developerPageCrasherPage: DeveloperPageCrasherPage,
   developerPageCrasherForbiddenPage: DeveloperPageCrasherForbiddenPage,
-  monitoringReportCreate: Containers.MonitoringReportCreateRoute,
+  monitoringReportCreate: MonitoringReportCreateRoute,
   monitoringReportDashboard: Containers.MonitoringReportDashboardRoute,
   monitoringReportDelete: Containers.MonitoringReportDeleteRoute,
   monitoringReportWorkflow: Containers.MonitoringReportWorkflowRoute,

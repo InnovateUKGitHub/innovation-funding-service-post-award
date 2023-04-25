@@ -1,7 +1,6 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { CreateMonitoringReportCommand, GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
 import {
-  MonitoringReportCreateParams,
   MonitoringReportCreateRoute,
   MonitoringReportDashboardRoute,
   MonitoringReportWorkflowRoute,
@@ -11,6 +10,7 @@ import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { MonitoringReportCreateParams } from "@ui/containers/monitoringReports/create/monitoringReportCreateDef";
 
 export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
   MonitoringReportCreateParams,

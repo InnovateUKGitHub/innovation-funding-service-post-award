@@ -163,7 +163,7 @@ const Links = ({ report, routes }: { report: MonitoringReport; routes: IRoutes }
 
 export const MonitoringReportDashboardRoute = defineRoute<{
   projectId: ProjectId;
-  periodId?: number;
+  periodId: number | undefined;
 }>({
   allowRouteInActiveAccess: true,
   routeName: "monitoringReportDashboard",

@@ -80,7 +80,7 @@ export const getForwardLink = ({
     });
   }
   if (workflow.isOnSummary()) {
-    return routes.monitoringReportDashboard.getLink({ projectId });
+    return routes.monitoringReportDashboard.getLink({ projectId, periodId: undefined });
   }
   return routes.monitoringReportWorkflow.getLink({
     projectId,
