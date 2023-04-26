@@ -1,104 +1,82 @@
-import { getAuthRoles, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { useStores } from "@ui/redux";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import * as ACC from "../../components";
-import { Pending } from "../../../shared/pending";
+import { getAuthRoles, ProjectRole } from "@framework/types";
 
-interface Data {
-  project: Pending<ProjectDto>;
-  partner: Pending<PartnerDto>;
-}
+import { BaseProps, defineRoute } from "../containerBase";
+import {
+  Content,
+  Page,
+  BackLink,
+  Projects,
+  Section,
+  SummaryList,
+  SummaryListItem,
+  Renderers,
+  Link,
+} from "../../components";
+import { usePartnerDetailsQuery } from "./partnerDetails.logic";
 
 interface Params {
   projectId: ProjectId;
   partnerId: PartnerId;
 }
 
-interface CombinedData {
-  project: ProjectDto;
-  partner: PartnerDto;
-}
+const PartnerDetailsPage = (props: BaseProps & Params) => {
+  const { project, partner } = usePartnerDetailsQuery(props.projectId, props.partnerId);
+  const { isFc, isPm } = getAuthRoles(partner.roles);
 
-class PartnerDetailsComponent extends ContainerBase<Params, Data> {
-  render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      partner: this.props.partner,
-    });
-
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
-  }
-
-  private renderContents({ partner, project }: CombinedData) {
-    const { isFc, isPm } = getAuthRoles(partner.roles);
-
-    const backToProjectDetailsLink = <ACC.Content value={x => x.pages.partnerDetails.backToProjectDetails} />;
-    const editLink = <ACC.Content value={x => x.pages.partnerDetails.editLink} />;
-
-    return (
-      <ACC.Page
-        backLink={
-          <ACC.BackLink route={this.props.routes.projectDetails.getLink({ projectId: this.props.projectId })}>
-            {backToProjectDetailsLink}
-          </ACC.BackLink>
-        }
-        pageTitle={<ACC.Projects.Title {...project} />}
-        project={project}
-        partner={partner}
-      >
-        <ACC.Section>
-          <ACC.SummaryList qa="partner-details">
-            <ACC.SummaryListItem
-              label={x => x.pages.partnerDetails.projectContactLabels.partnerName}
-              qa="partner-name"
-              content={<ACC.Renderers.SimpleString>{partner.name}</ACC.Renderers.SimpleString>}
-            />
-            <ACC.SummaryListItem
-              label={x => x.pages.partnerDetails.projectContactLabels.partnerType}
-              qa="partner-type"
-              content={<ACC.Renderers.SimpleString>{partner.type}</ACC.Renderers.SimpleString>}
-            />
-            <ACC.SummaryListItem
-              label={x => x.projectContactLabels.partnerPostcode}
-              qa="partner-postcode"
-              content={<ACC.Renderers.SimpleString>{partner.postcode}</ACC.Renderers.SimpleString>}
-              action={
-                isFc || isPm ? (
-                  <ACC.Link
-                    styling={"Link"}
-                    route={this.props.routes.partnerDetailsEdit.getLink({
-                      projectId: this.props.projectId,
-                      partnerId: this.props.partnerId,
-                    })}
-                  >
-                    {editLink}
-                  </ACC.Link>
-                ) : null
-              }
-            />
-          </ACC.SummaryList>
-        </ACC.Section>
-      </ACC.Page>
-    );
-  }
-}
-
-const PartnerDetailsContainer = (props: Params & BaseProps) => {
-  const stores = useStores();
+  const backToProjectDetailsLink = <Content value={x => x.pages.partnerDetails.backToProjectDetails} />;
+  const editLink = <Content value={x => x.pages.partnerDetails.editLink} />;
 
   return (
-    <PartnerDetailsComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      partner={stores.partners.getById(props.partnerId)}
-    />
+    <Page
+      backLink={
+        <BackLink route={props.routes.projectDetails.getLink({ projectId: props.projectId })}>
+          {backToProjectDetailsLink}
+        </BackLink>
+      }
+      pageTitle={<Projects.Title {...project} />}
+      projectStatus={project.status}
+      partnerStatus={partner.partnerStatus}
+    >
+      <Section>
+        <SummaryList qa="partner-details">
+          <SummaryListItem
+            label={x => x.pages.partnerDetails.projectContactLabels.partnerName}
+            qa="partner-name"
+            content={<Renderers.SimpleString>{partner.name}</Renderers.SimpleString>}
+          />
+          <SummaryListItem
+            label={x => x.pages.partnerDetails.projectContactLabels.partnerType}
+            qa="partner-type"
+            content={<Renderers.SimpleString>{partner.type}</Renderers.SimpleString>}
+          />
+          <SummaryListItem
+            label={x => x.projectContactLabels.partnerPostcode}
+            qa="partner-postcode"
+            content={<Renderers.SimpleString>{partner.postcode}</Renderers.SimpleString>}
+            action={
+              isFc || isPm ? (
+                <Link
+                  styling={"Link"}
+                  route={props.routes.partnerDetailsEdit.getLink({
+                    projectId: props.projectId,
+                    partnerId: props.partnerId,
+                  })}
+                >
+                  {editLink}
+                </Link>
+              ) : null
+            }
+          />
+        </SummaryList>
+      </Section>
+    </Page>
   );
 };
 
 export const PartnerDetailsRoute = defineRoute<Params>({
   routeName: "partnerDetails",
   routePath: "/projects/:projectId/details/:partnerId",
-  container: PartnerDetailsContainer,
+  container: PartnerDetailsPage,
   getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.partnerDetails.title),
   accessControl: (auth, { projectId }) =>
