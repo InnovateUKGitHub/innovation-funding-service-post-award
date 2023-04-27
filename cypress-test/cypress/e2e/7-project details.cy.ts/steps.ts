@@ -127,7 +127,7 @@ export const ilDetailsSection = () => {
 };
 
 export const ipmDetailsSection = () => {
-  ["Name", "Email", "Wednesday Addams", "wed.addams@test.test.co.uk"].forEach(ipmInfo => {
+  ["Name", "Email", "Allan Haines", "allan.haines@iuk.ukri.org"].forEach(ipmInfo => {
     cy.getByQA("ipm-details").contains(ipmInfo);
   });
   cy.get("h3").contains("IPM");
@@ -183,7 +183,7 @@ export const manyPartnerDetailsSection = () => {
     "Maliwan",
     "Jakobs",
     "Deep Rock Galactic",
-    "/EUI Small Ent Health",
+    "EUI Small Ent Health",
     "Swindon University",
     "A B Cad Services",
     "Auto Research Ltd",
