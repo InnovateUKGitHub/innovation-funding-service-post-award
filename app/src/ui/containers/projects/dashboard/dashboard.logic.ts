@@ -7,6 +7,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { CuratedSection, CuratedSections, Section, FilterOptions, Project, Partner } from "./Dashboard.interface";
 import { projectDashboardQuery } from "./Dashboard.query";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
+import { mapToBroadcastDtoArray } from "@gql/dtoMapper/mapBroadcastDto";
 
 /**
  * filter function for a reducer.
@@ -247,5 +248,11 @@ export const useProjectsDashboardData = (search: string | number) => {
   }));
   const projects = getFilteredProjects(unfilteredObjects, search.toString());
 
-  return { unfilteredObjects, totalNumberOfProjects: unfilteredObjects?.length ?? 0, projects };
+  const broadcasts = mapToBroadcastDtoArray(data?.salesforce?.uiapi?.query?.Acc_BroadcastMessage__c?.edges ?? [], [
+    "id",
+    "title",
+    "content",
+  ]);
+
+  return { unfilteredObjects, totalNumberOfProjects: unfilteredObjects?.length ?? 0, projects, broadcasts };
 };

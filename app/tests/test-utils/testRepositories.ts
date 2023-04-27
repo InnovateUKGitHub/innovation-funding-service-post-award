@@ -1008,7 +1008,7 @@ class BroadcastsTestRepository {
       const today = DateTime.fromFormat("6 Jun 2022", "d MMM yy").toFormat("yyyy-MM-dd");
       const filteredItems = this.Items.filter(x => x.Acc_EndDate__c > today && x.Acc_StartDate__c <= today);
       const finalValues = filteredItems.map(item => ({
-        id: item.Id,
+        id: item.Id as BroadcastId,
         title: item.Name,
         startDate: new Date(item.Acc_StartDate__c),
         endDate: new Date(item.Acc_EndDate__c),

@@ -15,15 +15,13 @@ function parseLongTextArea(unParsedString: string): string[] {
 
 const clock = new Clock();
 
-type BroadcastNode = Readonly<
-  Partial<{
-    Id: string;
-    DisplayValue: GQL.Maybe<string>;
-    Acc_StartDate__c: GQL.Value<string>;
-    Acc_EndDate__c: GQL.Value<string>;
-    Acc_Message__c: GQL.Value<string>;
-  }>
-> | null;
+type BroadcastNode = Readonly<Partial<{
+  Id: string;
+  DisplayValue: GQL.Maybe<string>;
+  Acc_StartDate__c: GQL.Value<string>;
+  Acc_EndDate__c: GQL.Value<string>;
+  Acc_Message__c: GQL.Value<string>;
+}> | null> | null;
 
 type BroadcastDtoMapping = BroadcastDto;
 
@@ -61,4 +59,18 @@ export function mapToBroadcastDto<T extends BroadcastNode, PickList extends keyo
     dto[field] = mapper[field](node);
     return dto;
   }, {} as Pick<BroadcastDtoMapping, PickList>);
+}
+
+/**
+ * maps from a gql node to an array of broadcast dtos, per picklist
+ */
+export function mapToBroadcastDtoArray<
+  T extends ReadonlyArray<{ node: BroadcastNode } | null> | null,
+  PickList extends keyof BroadcastDtoMapping,
+>(edges: T, pickList: PickList[]): Pick<BroadcastDtoMapping, PickList>[] {
+  return (
+    edges?.map(node => {
+      return mapToBroadcastDto(node?.node ?? null, pickList);
+    }) ?? []
+  );
 }

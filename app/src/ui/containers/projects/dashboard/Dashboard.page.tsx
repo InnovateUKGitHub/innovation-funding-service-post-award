@@ -38,7 +38,9 @@ const Form = createTypedForm<IProjectDashboardForm>();
 const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: ProjectDashboardParams & BaseProps) => {
   const navigate = useNavigate();
 
-  const { projects, unfilteredObjects, totalNumberOfProjects } = useProjectsDashboardData(searchQuery ?? "");
+  const { projects, unfilteredObjects, totalNumberOfProjects, broadcasts } = useProjectsDashboardData(
+    searchQuery ?? "",
+  );
 
   const onSearch = (searchParams: { search?: string | number; arrayFilters: FilterOptions[] }) => {
     const routeInfo = ProjectDashboardRoute.getLink(searchParams);
@@ -83,7 +85,7 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
         )
       }
     >
-      <BroadcastsViewer />
+      <BroadcastsViewer broadcasts={broadcasts} />
 
       <H2>
         <Content value={x => x.pages.projectsDashboard.projectsTitle} />

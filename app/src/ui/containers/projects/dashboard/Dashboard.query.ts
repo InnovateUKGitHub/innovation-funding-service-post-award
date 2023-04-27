@@ -5,6 +5,22 @@ export const projectDashboardQuery = graphql`
     salesforce {
       uiapi {
         query {
+          Acc_BroadcastMessage__c(
+            first: 100
+            where: {
+              and: [{ Acc_StartDate__c: { lte: { literal: TODAY } } }, { Acc_EndDate__c: { gte: { literal: TODAY } } }]
+            }
+          ) {
+            edges {
+              node {
+                Acc_Message__c {
+                  value
+                }
+                Id
+                DisplayValue
+              }
+            }
+          }
           Acc_Project__c(
             first: 2000
             orderBy: {

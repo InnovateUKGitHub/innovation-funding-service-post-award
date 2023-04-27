@@ -1,9 +1,10 @@
 import { BroadcastDto } from "@framework/dtos/BroadcastDto";
 import { BroadcastPageRoute } from "@ui/containers/broadcasts/broadcast.page";
-import * as ACC from "@ui/components";
+import { Link } from "@ui/components";
+import { SimpleString, Bold } from "@ui/components/renderers";
 import { useContent } from "@ui/hooks";
 
-type BroadcastViewProps = BroadcastDto;
+type BroadcastViewProps = Pick<BroadcastDto, "id" | "title" | "content">;
 
 /**
  * ### BroadcastView
@@ -21,12 +22,12 @@ export function BroadcastView({ id, title, content }: BroadcastViewProps) {
 
   return (
     <div className="broadcast-highlight govuk-!-margin-bottom-2">
-      <ACC.Renderers.SimpleString className="govuk-!-margin-bottom-0">
-        <ACC.Renderers.Bold>{title} - </ACC.Renderers.Bold> {sampleMessage}
-        <ACC.Link route={route} className="broadcast-highlight__link">
+      <SimpleString className="govuk-!-margin-bottom-0">
+        <Bold>{title} - </Bold> {sampleMessage}
+        <Link route={route} className="broadcast-highlight__link">
           {getContent(x => x.components.broadcastContent.readBroadcastLinkText)}
-        </ACC.Link>
-      </ACC.Renderers.SimpleString>
+        </Link>
+      </SimpleString>
     </div>
   );
 }

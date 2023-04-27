@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapToBroadcastDtoArray should map the gql data to the dto object 1`] = `
+Array [
+  Object {
+    "content": Array [
+      "Please leave the building",
+    ],
+    "endDate": 2027-03-31T04:00:00.000Z,
+    "id": "a2M2600000FmJAcEAN",
+    "startDate": 2022-02-24T04:00:00.000Z,
+    "title": "Fire!",
+  },
+  Object {
+    "content": Array [
+      "Please move to the nearest shelter.",
+    ],
+    "endDate": 2027-03-31T04:00:00.000Z,
+    "id": "a2M2600000FmJAcEAN",
+    "startDate": 2022-02-24T04:00:00.000Z,
+    "title": "Nuclear alert",
+  },
+]
+`;
