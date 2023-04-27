@@ -16,31 +16,31 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
   const { getContent } = useContent();
   const { getPcrItemContent } = usePcrItemName();
 
-  const disableReasonMessages = {
-    [PCRItemDisabledReason.None]: null,
-    [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
-      x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeMessage,
-    ),
-    [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
-      x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeMessage,
-    ),
-    [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: null,
-  };
-  const disableReasonTitles = {
-    [PCRItemDisabledReason.None]: null,
-    [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
-      x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeTitle,
-    ),
-    [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
-      x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeTitle,
-    ),
-    [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: getContent(
-      x => x.pages.pcrModifyOptions.notEnoughPartnersToActionThisTypeTitle,
-    ),
-  };
-
   const list = useMemo<ReactNode[]>(() => {
     const returnList: ReactNode[] = [];
+
+    const disableReasonMessages = {
+      [PCRItemDisabledReason.None]: null,
+      [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
+        x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeMessage,
+      ),
+      [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
+        x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeMessage,
+      ),
+      [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: null,
+    };
+    const disableReasonTitles = {
+      [PCRItemDisabledReason.None]: null,
+      [PCRItemDisabledReason.AnotherPcrAlreadyHasThisType]: getContent(
+        x => x.pages.pcrModifyOptions.anotherPcrAlreadyHasThisTypeTitle,
+      ),
+      [PCRItemDisabledReason.ThisPcrAlreadyHasThisType]: getContent(
+        x => x.pages.pcrModifyOptions.thisPcrAlreadyHasThisTypeTitle,
+      ),
+      [PCRItemDisabledReason.NotEnoughPartnersToActionThisType]: getContent(
+        x => x.pages.pcrModifyOptions.notEnoughPartnersToActionThisTypeTitle,
+      ),
+    };
 
     const foundDisableReasons = new Set<PCRItemDisabledReason>();
 
@@ -72,7 +72,7 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
     }
 
     return returnList;
-  }, [items]);
+  }, [items, getContent, getPcrItemContent]);
 
   if (list.length === 0) return null;
 
