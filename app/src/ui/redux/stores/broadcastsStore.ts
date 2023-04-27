@@ -13,7 +13,7 @@ export class BroadcastsStore extends StoreBase {
     return this.getData("broadcasts", storeKeys.getBroadcastsKey(), p => apiClient.broadcasts.getAll(p));
   }
 
-  public get(broadcastId: string) {
+  public get(broadcastId: BroadcastId) {
     return this.getData("broadcast", storeKeys.getBroadcastKey(broadcastId), p =>
       apiClient.broadcasts.get({ ...p, broadcastId }),
     );

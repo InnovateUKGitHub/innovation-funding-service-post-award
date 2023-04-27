@@ -1,15 +1,15 @@
-import * as ACC from "@ui/components";
+import { TypedDetails, Section, Renderers } from "@ui/components";
 
 import { BroadcastDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 
 export const BroadcastDetail = (props: BroadcastDto) => {
   const { getContent } = useContent();
-  const Broadcast = ACC.TypedDetails<NonNullable<typeof props>>();
+  const Broadcast = TypedDetails<NonNullable<typeof props>>();
 
   return (
     <>
-      <ACC.Section
+      <Section
         className="broadcast-detail"
         title={getContent(x => x.components.broadcastContent.broadcastDetailsHeading)}
       >
@@ -31,13 +31,13 @@ export const BroadcastDetail = (props: BroadcastDto) => {
             value={x => x.endDate}
           />
         </Broadcast.Details>
-      </ACC.Section>
+      </Section>
 
-      <ACC.Section title={getContent(x => x.components.broadcastContent.broadcastMessageHeading)}>
+      <Section title={getContent(x => x.components.broadcastContent.broadcastMessageHeading)}>
         {props.content.map((paragraph, i) => (
-          <ACC.Renderers.SimpleString key={i}>{paragraph}</ACC.Renderers.SimpleString>
+          <Renderers.SimpleString key={i}>{paragraph}</Renderers.SimpleString>
         ))}
-      </ACC.Section>
+      </Section>
     </>
   );
 };

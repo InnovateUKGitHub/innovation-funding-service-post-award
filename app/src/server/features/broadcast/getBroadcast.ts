@@ -2,7 +2,7 @@ import { QueryBase } from "@server/features/common";
 import { BroadcastDto, IContext } from "@framework/types";
 
 export class GetBroadcast extends QueryBase<BroadcastDto> {
-  constructor(private readonly broadcastId: string) {
+  constructor(private readonly broadcastId: BroadcastId) {
     super();
   }
 

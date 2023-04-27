@@ -12,7 +12,7 @@ class BroadcastApi extends ControllerBase<BroadcastMessage> {
     super("broadcasts");
 
     this.getItems("/", () => ({}), this.getAll);
-    this.getItem("/:broadcastId", p => ({ broadcastId: p.broadcastId }), this.get);
+    this.getItem("/:broadcastId", p => ({ broadcastId: p.broadcastId as BroadcastId }), this.get);
   }
 
   public async getAll(params: ApiParams): Promise<BroadcastDto[]> {
@@ -20,7 +20,7 @@ class BroadcastApi extends ControllerBase<BroadcastMessage> {
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ broadcastId: string }>): Promise<BroadcastDto> {
+  public async get(params: ApiParams<{ broadcastId: BroadcastId }>): Promise<BroadcastDto> {
     const query = new GetBroadcast(params.broadcastId);
     return contextProvider.start(params).runQuery(query);
   }

@@ -3,6 +3,7 @@ declare type PartnerId = Nominal<string, "PartnerId">;
 declare type LoanId = Nominal<string, "LoanId">;
 declare type DocumentId = Nominal<string, "DocumentId">;
 declare type MonitoringReportId = Nominal<string, "MonitoringReportId">;
+declare type BroadcastId = Nominal<string, "BroadcastId">;
 
 interface INominalTypes {
   projectId: ProjectId;

@@ -10,7 +10,7 @@ export class BroadcastMapper extends SalesforceBaseMapper<ISalesforceBroadcast, 
   }
   public map(item: ISalesforceBroadcast): BroadcastDto {
     return {
-      id: item.Id,
+      id: item.Id as BroadcastId,
       title: item.Name,
       startDate: this.clock.parseRequiredSalesforceDateTime(item.Acc_StartDate__c),
       endDate: this.clock.parseRequiredSalesforceDateTime(item.Acc_EndDate__c),
