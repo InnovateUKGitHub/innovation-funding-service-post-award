@@ -3,17 +3,16 @@ import { PartnerDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import { IEditorStore } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import * as ACC from "../../components";
+import { createTypedForm, Renderers } from "../../components";
 
 export interface PostcodeProps {
-  partner: PartnerDto;
   editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
   onUpdate: (saving: boolean, dto: PartnerDto) => void;
   saveButtonContent: string | ContentSelector;
   displayCurrentPostcode: boolean;
 }
 
-const PostcodeForm = ACC.createTypedForm<PartnerDto>();
+const PostcodeForm = createTypedForm<PartnerDto>();
 
 export const PostcodeEdit = ({ editor, onUpdate, saveButtonContent, ...rest }: PostcodeProps) => {
   const { getContent } = useContent();
@@ -25,7 +24,7 @@ export const PostcodeEdit = ({ editor, onUpdate, saveButtonContent, ...rest }: P
           <PostcodeForm.Custom
             name="current-partner-postcode-value"
             label={x => x.pages.partnerDetailsEdit.labelCurrentPostcode}
-            value={({ formData }) => <ACC.Renderers.SimpleString>{formData.postcode}</ACC.Renderers.SimpleString>}
+            value={({ formData }) => <Renderers.SimpleString>{formData.postcode}</Renderers.SimpleString>}
           />
         )}
         <PostcodeForm.String

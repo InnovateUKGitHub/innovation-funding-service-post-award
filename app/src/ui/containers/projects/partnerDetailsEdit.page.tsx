@@ -1,26 +1,27 @@
 import { useNavigate } from "react-router-dom";
-import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { PartnerDto, PartnerDtoGql, ProjectDtoGql, ProjectRole } from "@framework/types";
 import { IEditorStore, useStores } from "@ui/redux";
-import * as ACC from "@ui/components";
+import { PageLoader, Page, Projects, BackLink } from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { PostcodeEdit } from "@ui/containers/features";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
-
-interface PartnerDetailsEditComponentProps extends PartnerDetailsParams {
-  project: Pending<ProjectDto>;
-  partner: Pending<PartnerDto>;
-  editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
-  backLink: React.ReactElement;
-  saveAndReturnLabel: string;
-  displayCurrentPostcode?: boolean;
-  onUpdate: (saving: boolean, dto: PartnerDto) => void;
-}
+import { usePartnerDetailsEditQuery } from "./partnerDetailsEdit.logic";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
+}
+
+interface PartnerDetailsEditComponentProps extends PartnerDetailsParams {
+  project: Pick<ProjectDtoGql, "projectNumber" | "title" | "status">;
+  partner: Pick<PartnerDtoGql, "partnerStatus">;
+  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
+  backLink: React.ReactElement;
+  saveAndReturnLabel: string;
+  displayCurrentPostcode?: boolean;
+  onUpdate: (saving: boolean, dto: PartnerDto) => void;
 }
 
 /**
@@ -28,65 +29,61 @@ export interface PartnerDetailsParams {
  *
  * React component to edit partner details
  */
-export function PartnerDetailsEditComponent(props: PartnerDetailsEditComponentProps) {
-  const combined = Pending.combine({
-    project: props.project,
-    partner: props.partner,
-    editor: props.editor,
-  });
-
+export function PartnerDetailsEditComponent(props: BaseProps & PartnerDetailsEditComponentProps) {
+  const { project, partner, editor, backLink } = props;
   return (
-    <ACC.PageLoader
-      pending={combined}
-      render={({ partner, project, editor }) => (
-        <ACC.Page
-          backLink={props.backLink}
-          pageTitle={<ACC.Projects.Title {...project} />}
-          error={editor.error}
-          validator={editor.validator}
-          project={project}
-          partner={partner}
-        >
-          <PostcodeEdit
-            partner={partner}
-            editor={editor}
-            displayCurrentPostcode={!!props.displayCurrentPostcode}
-            saveButtonContent={props.saveAndReturnLabel}
-            onUpdate={() => props.onUpdate(true, editor.data)}
-          />
-        </ACC.Page>
-      )}
-    />
+    <Page
+      backLink={backLink}
+      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
+      error={editor.error}
+      validator={editor.validator}
+      projectStatus={project.status}
+      partnerStatus={partner.partnerStatus}
+    >
+      <PostcodeEdit
+        editor={editor}
+        displayCurrentPostcode={!!props.displayCurrentPostcode}
+        saveButtonContent={props.saveAndReturnLabel}
+        onUpdate={() => props.onUpdate(true, editor.data)}
+      />
+    </Page>
   );
 }
 
 const PartnerDetailsEditContainer = (props: PartnerDetailsParams & BaseProps) => {
+  const { project, partner } = usePartnerDetailsEditQuery(props.projectId, props.partnerId);
   const stores = useStores();
   const { getContent } = useContent();
+  const combined = Pending.combine({
+    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId),
+  });
 
   const url = props.routes.partnerDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId });
   const saveAndReturnLabel = getContent(x => x.pages.partnerDetailsEdit.saveAndReturnPartnerDetailsButton);
-  const backLink = (
-    <ACC.BackLink route={url}>{getContent(x => x.pages.partnerDetailsEdit.backToPartnerInfo)}</ACC.BackLink>
-  );
+  const backLink = <BackLink route={url}>{getContent(x => x.pages.partnerDetailsEdit.backToPartnerInfo)}</BackLink>;
   const navigate = useNavigate();
 
   return (
-    <PartnerDetailsEditComponent
-      project={stores.projects.getById(props.projectId)}
-      partner={stores.partners.getById(props.partnerId)}
-      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-      backLink={backLink}
-      saveAndReturnLabel={saveAndReturnLabel}
-      displayCurrentPostcode
-      onUpdate={(saving, dto) =>
-        stores.partners.updatePartner(saving, props.partnerId, dto, {
-          onComplete: () => {
-            navigate(url.path);
-          },
-        })
-      }
-      {...props}
+    <PageLoader
+      pending={combined}
+      render={x => (
+        <PartnerDetailsEditComponent
+          project={project}
+          partner={partner}
+          backLink={backLink}
+          saveAndReturnLabel={saveAndReturnLabel}
+          displayCurrentPostcode
+          onUpdate={(saving, dto) =>
+            stores.partners.updatePartner(saving, props.partnerId, dto, {
+              onComplete: () => {
+                navigate(url.path);
+              },
+            })
+          }
+          {...x}
+          {...props}
+        />
+      )}
     />
   );
 };
