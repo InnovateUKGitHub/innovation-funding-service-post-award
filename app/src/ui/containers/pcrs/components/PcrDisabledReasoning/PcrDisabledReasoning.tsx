@@ -74,6 +74,8 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
     return returnList;
   }, [items]);
 
+  if (list.length === 0) return null;
+
   return <Info summary={getContent(x => x.pages.pcrModifyOptions.learnMoreMissingTitle)}>{list}</Info>;
 };
 
