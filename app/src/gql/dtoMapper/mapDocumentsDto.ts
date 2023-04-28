@@ -107,19 +107,37 @@ export function mapToDocumentSummaryDto<
  */
 export function mapToPartnerDocumentSummaryDtoArray<
   T extends ReadonlyArray<PartnerDocumentsArrayNode | null> | null,
-  PickList extends keyof PartnerDocumentSummaryDto,
->(edges: T, pickList: PickList[], additionalData: { projectId: ProjectId; currentUser: { email: string } }) {
-  return (edges ?? [])
-    .map(edge =>
-      (edge?.node?.ContentDocumentLinks?.edges ?? []).map(doc =>
-        mapToDocumentSummaryDto(doc ?? null, pickList, {
-          ...additionalData,
-          partnerName: edge?.node?.Acc_AccountId__r?.Name?.value ?? "",
-          partnerId: (edge?.node?.Id ?? "") as PartnerId,
-        }),
-      ),
-    )
-    .flat();
+  PickList extends ArrayWithRequired<"partnerId", keyof Omit<PartnerDocumentSummaryDto, "partnerId">>,
+>(
+  edges: T,
+  pickList: PickList,
+  additionalData: {
+    projectId: ProjectId;
+    currentUser: { email: string };
+    currentUserRoles: SfRoles;
+    partnerRoles: SfPartnerRoles[];
+  },
+) {
+  return (
+    (edges ?? [])
+      .map(edge =>
+        (edge?.node?.ContentDocumentLinks?.edges ?? []).map(doc =>
+          mapToDocumentSummaryDto(doc ?? null, pickList, {
+            ...additionalData,
+            partnerName: edge?.node?.Acc_AccountId__r?.Name?.value ?? "",
+            partnerId: (edge?.node?.Id ?? "") as PartnerId,
+          }),
+        ),
+      )
+      // if isFc filter out document summaries belonging to other partners
+      .filter(x =>
+        additionalData.currentUserRoles.isFc &&
+        !(additionalData.currentUserRoles.isPm || additionalData.currentUserRoles.isMo)
+          ? (additionalData?.partnerRoles ?? []).find(roles => roles?.partnerId === x[0]?.partnerId)?.isFc
+          : x,
+      )
+      .flat()
+  );
 }
 
 /**

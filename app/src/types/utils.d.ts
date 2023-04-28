@@ -80,3 +80,8 @@ declare type AdditionalDataType<
   : {
       [P in TAdditionalData[number] as P[0] extends TPickList ? P[1] : never]: P[2];
     };
+
+/**
+ * use with picklist where one field is required to be present.
+ */
+declare type ArrayWithRequired<Required, Optional> = [...[Required], ...Optional[]];

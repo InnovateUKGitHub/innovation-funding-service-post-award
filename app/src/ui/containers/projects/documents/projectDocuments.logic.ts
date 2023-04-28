@@ -41,6 +41,7 @@ export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOpt
   const partnerDocuments = mapToPartnerDocumentSummaryDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges ?? [],
     [
+      "partnerId",
       "id",
       "fileName",
       "fileSize",
@@ -49,12 +50,13 @@ export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOpt
       "uploadedBy",
       "link",
       "isOwner",
-      "partnerId",
       "partnerName",
     ],
     {
       projectId,
       currentUser: (data?.currentUser as { email: string }) ?? { email: "unknown user" },
+      currentUserRoles: project.roles,
+      partnerRoles,
     },
   );
 
