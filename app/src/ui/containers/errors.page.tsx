@@ -11,7 +11,7 @@ import { defineRoute } from "./containerBase";
  */
 function ErrorRouteContainer() {
   const stores = useStores();
-  const errorPayload = stores.errorDetails.errors() ?? { errorCode: 418, errorType: "UNKNOWN ERROR" };
+  const errorPayload = stores.errorDetails.errors() ?? { errorCode: 1, errorType: "UNKNOWN ERROR" };
 
   return <ErrorContainer {...errorPayload} />;
 }
