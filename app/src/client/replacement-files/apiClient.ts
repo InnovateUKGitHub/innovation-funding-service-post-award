@@ -9,10 +9,6 @@ const clientApi: IApiClient = {
   accounts: {
     getAllByJesName: params => ajaxJson(`/api/jes-accounts?search=${params.searchString}`),
   },
-  broadcasts: {
-    get: params => ajaxJson(`/api/broadcasts/${params.broadcastId}`),
-    getAll: () => ajaxJson("/api/broadcasts"),
-  },
   claims: {
     getAllByProjectId: params => ajaxJson(`/api/claims/?projectId=${params.projectId}`),
     getAllByPartnerId: params => ajaxJson(`/api/claims/?partnerId=${params.partnerId}`),

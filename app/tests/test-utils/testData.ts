@@ -30,36 +30,6 @@ export class TestData {
     return Array.from({ length: no }, (_, i) => create(i + 1, i));
   }
 
-  public createBroadcasts() {
-    const startDate = DateTime.fromFormat("1 Dec 2014", "d MMM yyyy").toFormat("yyyy-MM-dd");
-    const endDate = DateTime.fromFormat("1 Dec 2044", "d MMM yyyy").toFormat("yyyy-MM-dd");
-    const broadcasts: Repositories.ISalesforceBroadcast[] = [
-      {
-        Id: "1",
-        Name: "Achtung, Achtung",
-        Acc_Message__c: "Würde der Besitzer eines roten Fiat-Pandas bitte die Rezeption kontaktieren",
-        Acc_StartDate__c: startDate,
-        Acc_EndDate__c: endDate,
-      },
-      {
-        Id: "2",
-        Name: "Achtung, Achtung",
-        Acc_Message__c: "Der Verzehr eigener Speisen in der Mensa ist untersagt",
-        Acc_StartDate__c: startDate,
-        Acc_EndDate__c: endDate,
-      },
-      {
-        Id: "3",
-        Name: "Achtung, Achtung",
-        Acc_Message__c: "Bitte halten Sie wegen des Virus die soziale Distanz ein",
-        Acc_StartDate__c: startDate,
-        Acc_EndDate__c: endDate,
-      },
-    ];
-
-    this.repositories.broadcast.setItems(broadcasts);
-  }
-
   public createCostCategory(update?: Partial<Entities.CostCategory>): Entities.CostCategory {
     const seed = this.repositories.costCategories.Items.length + 1;
 

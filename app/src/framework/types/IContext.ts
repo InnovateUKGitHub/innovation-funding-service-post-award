@@ -18,7 +18,6 @@ import { Connection } from "jsforce";
 
 export interface IRepositories {
   readonly accounts: Repositories.IAccountsRepository;
-  readonly broadcast: Repositories.IBroadcastRepository;
   readonly claims: Repositories.IClaimRepository;
   readonly claimStatusChanges: Repositories.IClaimStatusChangeRepository;
   readonly claimDetails: Repositories.IClaimDetailsRepository;

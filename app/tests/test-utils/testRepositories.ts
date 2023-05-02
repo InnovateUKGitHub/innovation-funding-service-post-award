@@ -3,7 +3,6 @@ import * as Repositories from "@server/repositories";
 import { BadSalesforceQuery, FileTypeNotAllowedError } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import {
-  BroadcastDto,
   ClaimDetailKey,
   ClaimStatus,
   DocumentDescription,
@@ -25,8 +24,7 @@ import { ISalesforceDocument } from "@server/repositories/contentVersionReposito
 import { LoanMapper } from "@server/repositories/mappers/loanMapper";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { LoanStatus, PcrSpendProfileEntityForCreate } from "@framework/entities";
-import { BadRequestError, NotFoundError } from "@server/features/common";
-import { BroadcastMapper } from "@server/repositories/mappers/broadcastMapper";
+import { BadRequestError } from "@server/features/common";
 import { pcrStatusesPicklist } from "@server/features/pcrs/pcrStatusesPicklist";
 import { pcrParticipantSizePicklist } from "@server/features/pcrs/pcrParticipantSizePicklist";
 import { pcrPartnerTypesPicklist } from "@server/features/pcrs/pcrPartnerTypesPicklist";
@@ -34,8 +32,6 @@ import { pcrProjectRolesPicklist } from "@server/features/pcrs/pcrProjectRolesPi
 import { pcrProjectLocationPicklist } from "@server/features/pcrs/pcrProjectLocationPicklist";
 import { pcrSpendProfileCapitalUsageTypePicklist } from "@server/features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
 import { pcrSpendProfileOverheadRatePicklist } from "@server/features/pcrs/pcrSpendProfileOverheadsRateOptionsPicklist";
-import { DateTime } from "luxon";
-import { parseSfLongTextArea } from "@server/util/salesforce-string-helpers";
 import { TestRepository } from "./testRepository";
 import { TestFileWrapper } from "./testData";
 
@@ -986,50 +982,8 @@ class AccountsTestRepository
   }
 }
 
-class BroadcastsTestRepository {
-  private Items: Repositories.ISalesforceBroadcast[] = [];
-
-  get(broadcastId: string) {
-    return new Promise<BroadcastDto>(resolve => {
-      const broadcastItem = this.Items.find(x => x.Id === broadcastId);
-
-      if (!broadcastItem) {
-        throw new NotFoundError(`Broadcast '${broadcastId}' does not exist`);
-      }
-
-      const broadcast = new BroadcastMapper().map(broadcastItem);
-
-      resolve(broadcast);
-    });
-  }
-
-  getAll() {
-    return new Promise<BroadcastDto[]>(resolve => {
-      const today = DateTime.fromFormat("6 Jun 2022", "d MMM yy").toFormat("yyyy-MM-dd");
-      const filteredItems = this.Items.filter(x => x.Acc_EndDate__c > today && x.Acc_StartDate__c <= today);
-      const finalValues = filteredItems.map(item => ({
-        id: item.Id as BroadcastId,
-        title: item.Name,
-        startDate: new Date(item.Acc_StartDate__c),
-        endDate: new Date(item.Acc_EndDate__c),
-        content: parseSfLongTextArea(item.Acc_Message__c),
-      }));
-      resolve(finalValues);
-    });
-  }
-
-  public setItems(items: Repositories.ISalesforceBroadcast | Repositories.ISalesforceBroadcast[]) {
-    if (Array.isArray(items)) {
-      this.Items.push(...items);
-    } else {
-      this.Items.push(items);
-    }
-  }
-}
-
 export interface ITestRepositories extends IRepositories {
   accounts: AccountsTestRepository;
-  broadcast: BroadcastsTestRepository;
   claims: ClaimsTestRepository;
   claimDetails: ClaimDetailsTestRepository;
   claimLineItems: ClaimLineItemsTestRepository;
@@ -1065,7 +1019,6 @@ export const createTestRepositories = (): ITestRepositories => {
 
   return {
     accounts: new AccountsTestRepository(),
-    broadcast: new BroadcastsTestRepository(),
     claims: claimsRepository,
     claimStatusChanges: new ClaimStatusChangeTestRepository(claimsRepository),
     claimDetails: new ClaimDetailsTestRepository(),

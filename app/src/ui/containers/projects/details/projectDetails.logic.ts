@@ -7,7 +7,13 @@ import { mapToContactDtoArray, mapToPartnerDtoArray, mapToProjectDto } from "@gq
 type ProjectGql = GQL.NodeSelector<ProjectDetailsQuery$data, "Acc_Project__c">;
 
 export const useProjectDetailsQuery = (projectId: ProjectId) => {
-  const data = useLazyLoadQuery<ProjectDetailsQuery>(projectDetailsQuery, { projectId });
+  const data = useLazyLoadQuery<ProjectDetailsQuery>(
+    projectDetailsQuery,
+    { projectId },
+    {
+      fetchPolicy: "store-and-network",
+    },
+  );
 
   const { node: projectNode } = getFirstEdge<ProjectGql>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
