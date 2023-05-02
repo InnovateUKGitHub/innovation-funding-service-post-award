@@ -34,7 +34,6 @@ const getNormalReplacementParams = fileName => [
  * Generate both the client and server webpack configurations.
  * Can be used directly by Webpack - just export with `module.exports`
  *
- * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  * @param { Environment } env
  * @returns { Configuration[] }
  * @example module.exports = configGenerator;
@@ -53,7 +52,10 @@ const configGenerator = ({ env = "production", devtools = false }) => {
         devtool: "source-map",
         mode: "development",
       }
-    : {};
+    : {
+        devtool: "source-map",
+        mode: "production",
+      };
 
   /**
    * Common Webpack configuration.
