@@ -1,6 +1,8 @@
 var currentYear = new Date();
 var thisYear = currentYear.getFullYear();
 
+const partners = ["EUI Small Ent Health", "ABS EUI Medium Enterprise", "A B Cad Services"] as const;
+
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -238,4 +240,59 @@ export const projectInfoSection = () => {
   ].forEach(projInfo => {
     cy.getByQA("project-details").contains(projInfo);
   });
+};
+
+export const editEachPartner = () => {
+  partners.forEach((partnerName, index) => {
+    cy.getByQA("partner-information").contains(partnerName).click(),
+      cy.getByQA("partner-details").contains(partnerName),
+      cy.get("a").contains("Edit").click(),
+      cy
+        .get("#new-partner-postcode-value")
+        .clear()
+        .type("SN" + index),
+      cy.getByQA("button_default-qa").contains("Save and return to partner information").click(),
+      cy.getByQA("partner-name"),
+      cy.backLink("Back to project details").click();
+  });
+};
+
+export const showUpdatedPostcodes = () => {
+  cy.reload();
+  partners.forEach((partnerName, index) => {
+    const row = cy.getByQA("partner-information").contains("tr", partnerName);
+    row.contains("td:nth-child(5)", "SN" + index);
+  });
+};
+
+export const clearAndRevertPostodes = () => {
+  partners.forEach(partnerName => {
+    cy.getByQA("partner-information").contains(partnerName).click(),
+      cy.getByQA("partner-details").contains(partnerName),
+      cy.get("a").contains("Edit").click(),
+      cy.get("#new-partner-postcode-value").clear().type("SN5"),
+      cy.getByQA("button_default-qa").contains("Save and return to partner information").click(),
+      cy.getByQA("partner-name"),
+      cy.backLink("Back to project details").click();
+  });
+};
+
+export const reflectChangesMade = () => {
+  cy.reload();
+  cy.getByQA("partner-information").contains("td:nth-child(5)", "SN5");
+};
+
+export const navigateToPartnerHeadings = () => {
+  cy.getByQA("partner-information").contains("EUI Small Ent Health").click();
+  cy.backLink("Back to project details");
+  cy.getByQA("page-title").contains("328407");
+  cy.get("h1").contains("Partner information");
+};
+
+export const ensureTableIsPopulated = () => {
+  ["Name", "Type", "Location", "EUI Small Ent Health", "Business", "SN5", "Edit"].forEach(item => {
+    cy.getByQA("section-content").contains(item);
+  });
+  cy.backLink("Back to project details").click();
+  cy.get("h1").contains("Project details");
 };
