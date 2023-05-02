@@ -22,14 +22,13 @@ const NameChangeSummaryContainer = (
 ) => {
   const { pcrItem, validator, documents, projectPartners, getEditLink } = props;
   const multiplePartnerProject = projectPartners.length > 1;
-  const partnerName = projectPartners.find(x => x.id === pcrItem.partnerId)?.name;
 
   return (
     <ACC.Section qa="name-change-summary">
       <ACC.SummaryList qa="name-change-summary-list">
         <ACC.SummaryListItem
           label={x => x.pcrNameChangeLabels.existingName}
-          content={partnerName}
+          content={pcrItem.partnerNameSnapshot}
           validation={validator.partnerId}
           qa="currentPartnerName"
           action={multiplePartnerProject && getEditLink("partnerNameStep", validator.partnerId)}
