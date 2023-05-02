@@ -1208,14 +1208,28 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.original && this.original.projectCity,
         "Project city cannot be changed",
       ),
+    () =>
+      this.model.projectCity
+        ? Validation.isTrue(this, this.model.projectCity.length <= 40, "Project city must 40 characters or less")
+        : Validation.valid(this),
   );
 
-  projectPostcode = Validation.all(this, () =>
-    this.hasPermissionToEdit(
-      this.model.projectPostcode,
-      this.original && this.original.projectPostcode,
-      "Project postcode cannot be changed",
-    ),
+  projectPostcode = Validation.all(
+    this,
+    () =>
+      this.hasPermissionToEdit(
+        this.model.projectPostcode,
+        this.original && this.original.projectPostcode,
+        "Project postcode cannot be changed",
+      ),
+    () =>
+      this.model.projectPostcode
+        ? Validation.isTrue(
+            this,
+            this.model.projectPostcode.length <= 10,
+            "Project postcode must 10 characters or less",
+          )
+        : Validation.valid(this),
   );
 
   participantSize = Validation.all(
