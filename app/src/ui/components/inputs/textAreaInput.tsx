@@ -16,8 +16,7 @@ export const TextAreaInput = (props: TextAreaInputProps) => {
   const [state, setState] = useState<{ value: string }>({ value: props.value ?? "" });
 
   // If our input prop changes, change our controlled value.
-  useResetValueOnNameChange(setState, props.name ?? "");
-
+  useResetValueOnNameChange(setState, props.name, props.value ?? "");
   const debouncedOnChange = useDebounce(props.onChange, props.debounce);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>, debounce: boolean) => {
