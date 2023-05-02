@@ -31,7 +31,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
       .then(profiles => profiles[0]);
 
     if (!profile) {
-      throw new BadRequestError("Invalid profile specified");
+      throw new BadRequestError(`No profiles found for period ${periodId}`);
     }
 
     const createRequest: Partial<ISalesforceMonitoringReportHeader> = {
