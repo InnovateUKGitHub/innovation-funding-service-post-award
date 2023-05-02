@@ -74,9 +74,9 @@ describe("useUpdateStateValueFromProps", () => {
 describe("useResetValueOnNameChange", () => {
   afterEach(jest.clearAllMocks);
 
-  const TestComponent = ({ name }: { name: string }) => {
+  const TestComponent = ({ name, value }: { name: string; value?: string }) => {
     const [state, setState] = useState<{ value: string }>({ value: "test value 1" });
-    useResetValueOnNameChange(setState, name);
+    useResetValueOnNameChange(setState, name, value);
     return <h1 data-qa="hook-test">{state.value}</h1>;
   };
 
@@ -86,5 +86,13 @@ describe("useResetValueOnNameChange", () => {
     expect(screen.getByTestId("hook-test")).toHaveTextContent("test value 1");
     rerender(<TestComponent name="test-name-two" />);
     expect(screen.getByTestId("hook-test")).toHaveTextContent("");
+  });
+
+  it("should reset the state to the initialization value if one is passed in", () => {
+    const { rerender } = render(<TestComponent name="test-name-one" value="test value 1" />);
+
+    expect(screen.getByTestId("hook-test")).toHaveTextContent("test value 1");
+    rerender(<TestComponent name="test-name-two" value="banana" />);
+    expect(screen.getByTestId("hook-test")).toHaveTextContent("banana");
   });
 });
