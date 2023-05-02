@@ -39,7 +39,17 @@ const InnerContainer = (
             options={partnerOptions}
             inline={false}
             value={() => selectedPartnerOption}
-            update={(x, value) => (x.partnerId = value && (value.id as PartnerId))}
+            update={(x, value) => {
+              if (value?.id) {
+                x.partnerId = value.id as PartnerId;
+                // Save a copy of the partner name in our DTO, so our client can show the past name.
+                // Salesforce must never save this value. If it does, that's an accountability problem.
+                x.partnerNameSnapshot = props.partners.find(x => x.id === value.id)?.name ?? "";
+              } else {
+                x.partnerId = null;
+                x.partnerNameSnapshot = "";
+              }
+            }}
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>
