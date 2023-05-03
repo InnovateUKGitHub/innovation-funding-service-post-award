@@ -7,15 +7,18 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { ILinkInfo, ProjectRole } from "@framework/types";
 
-interface Props {
+export interface MonitoringReportPreparePeriodParams {
   projectId: ProjectId;
   id: MonitoringReportId;
+}
+
+interface Props {
   project: Dtos.ProjectDto;
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean, link?: ILinkInfo) => void;
 }
 
-const PeriodStepComponent = (props: Props & BaseProps) => {
+const PeriodStepComponent = (props: Props & BaseProps & MonitoringReportPreparePeriodParams) => {
   const getLink = (progress: boolean) => {
     if (!progress) {
       return props.routes.monitoringReportDashboard.getLink({
@@ -51,7 +54,7 @@ const PeriodStepComponent = (props: Props & BaseProps) => {
   );
 };
 
-const Container = (props: Pick<Props, "projectId" | "id"> & BaseProps) => {
+const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
   const combined = Pending.combine({
