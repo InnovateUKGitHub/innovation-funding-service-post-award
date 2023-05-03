@@ -2,8 +2,7 @@ import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "../../../common/visit";
 import {
   beforeYouSubmit,
-  createRequestButton,
-  explainPCRTypes,
+  pcrCheckboxesWithHint,
   pcrCheckBoxes,
   shouldShowAllAccordion,
   shouldShowProjectTitle,
@@ -52,15 +51,11 @@ describe("PCR > Project Change Request front page", () => {
     cy.get("h2").contains("Select request types");
   });
 
-  it("Should have information on the different types of PCR", () => {
-    cy.get("p.govuk-hint.govuk-body").contains("Project Change Request");
-  });
+  it("Should have guidance with each PCR type", pcrCheckboxesWithHint);
 
-  it("Should have a 'Learn more about request types' section", () => {
-    cy.get("span.govuk-details__summary-text").contains("Learn more about request types").click();
+  it("Should not have a 'Learn about why some PCR types are missing'", () => {
+    cy.get(".govuk-details__summary-text").contains("Learn about why some PCR types are missing").should("not.exist");
   });
-
-  it("Should expand and show details on the different PCR types", explainPCRTypes);
 
   it("Should allow you to check the checkboxes", pcrCheckBoxes);
 

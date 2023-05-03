@@ -1,4 +1,4 @@
-declare type PcrType =
+export type PcrType =
   | "Reallocate project costs"
   | "Add a partner"
   | "Remove a partner"

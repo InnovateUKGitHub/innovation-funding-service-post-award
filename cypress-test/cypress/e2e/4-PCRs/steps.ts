@@ -1,3 +1,5 @@
+import { PcrType } from "typings/pcr";
+
 let date = new Date();
 let year = date.getFullYear();
 
@@ -17,17 +19,18 @@ export const createRequestButton = () => {
   cy.get("a.govuk-link.govuk-button").click();
 };
 
-export const explainPCRTypes = () => {
+export const pcrCheckboxesWithHint = () => {
   [
     "Reallocate project costs",
     "Remove a partner",
     "Add a partner",
     "Change project scope",
     "Change project duration",
-    "Change partner's name",
-    "Put a project on hold",
+    "Change a partner's name",
+    "Put project on hold",
   ].forEach(pcrType => {
-    cy.getByQA("form-guidance-list").contains(pcrType);
+    cy.get(".govuk-label").contains(pcrType);
+    cy.get(".govuk-label").contains(pcrType).get(".govuk-hint");
   });
 };
 
@@ -69,7 +72,7 @@ export const pcrCheckBoxes = () => {
 };
 
 export const beforeYouSubmit = () => {
-  cy.get("p.govuk-body").contains("Before you submit");
+  cy.get("span.govuk-body").contains("Before you submit");
   cy.get("li").contains("ensure");
   cy.get("li").contains("discuss");
 };
