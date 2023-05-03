@@ -81,6 +81,9 @@ const Table = createTypedTable<TableRow>();
 export class ForecastTable extends React.Component<Props> {
   animationFrame?: number;
 
+  // Keep track of how many times we have animated after an event.
+  animationFrameCount = 0;
+
   constructor(props: Props) {
     super(props);
     this.requestAnimate = this.requestAnimate.bind(this);
@@ -88,9 +91,9 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   componentDidMount() {
-    // Keep resizing the columns to fit.
+    // Resize the table when the page loads or when the user clicks/resizes the page.
     this.requestAnimate();
-
+    window.addEventListener("click", this.requestAnimate);
     window.addEventListener("resize", this.requestAnimate);
   }
 
@@ -100,10 +103,12 @@ export class ForecastTable extends React.Component<Props> {
 
   componentWillUnmount() {
     if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+    window.removeEventListener("click", this.requestAnimate);
     window.removeEventListener("resize", this.requestAnimate);
   }
 
   requestAnimate() {
+    this.animationFrameCount = 0;
     this.animationFrame = requestAnimationFrame(this.animate);
   }
 
@@ -181,6 +186,13 @@ export class ForecastTable extends React.Component<Props> {
 
     scrollPane.style.marginLeft = `${accumulator.left}px`;
     scrollPane.style.marginRight = `${accumulator.right}px`;
+
+    // If we have animated less than 30 times after an event, such as a resize/click event,
+    // draw the next frame too, just in case.
+    this.animationFrameCount++;
+    if (this.animationFrameCount < 30) {
+      this.animationFrame = requestAnimationFrame(this.animate);
+    }
   }
 
   private getPeriodId(
