@@ -6,6 +6,7 @@ import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { ILinkInfo, ProjectRole } from "@framework/types";
+import { useMonitoringReportPeriodStepQuery } from "./monitoringReportPeriodStep.logic";
 
 export interface MonitoringReportPreparePeriodParams {
   projectId: ProjectId;
@@ -13,7 +14,7 @@ export interface MonitoringReportPreparePeriodParams {
 }
 
 interface Props {
-  project: Dtos.ProjectDto;
+  project: Pick<Dtos.ProjectDto, "projectNumber" | "title">;
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean, link?: ILinkInfo) => void;
 }
@@ -26,6 +27,12 @@ const PeriodStepComponent = (props: Props & BaseProps & MonitoringReportPrepareP
         periodId: undefined,
       });
     }
+    return props.routes.monitoringReportWorkflow.getLink({
+      projectId: props.projectId,
+      id: props.id,
+      mode: "prepare",
+      step: 1,
+    });
   };
   return (
     <Page
@@ -57,15 +64,16 @@ const PeriodStepComponent = (props: Props & BaseProps & MonitoringReportPrepareP
 const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
+  const { project } = useMonitoringReportPeriodStepQuery(props.projectId);
   const combined = Pending.combine({
     editor: stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id),
-    project: stores.projects.getById(props.projectId),
   });
   return (
     <PageLoader
       pending={combined}
       render={data => (
         <PeriodStepComponent
+          project={project}
           onChange={(save, dto, submit, link) => {
             stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
               if (link) {

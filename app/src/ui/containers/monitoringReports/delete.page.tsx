@@ -7,6 +7,7 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import { ProjectRole } from "@framework/constants";
 import { useContent } from "@ui/hooks";
+import { useMonitoringReportDeleteQuery } from "./monitoringReportDelete.logic";
 
 export interface MonitoringReportDeleteParams {
   projectId: ProjectId;
@@ -14,7 +15,7 @@ export interface MonitoringReportDeleteParams {
 }
 
 interface Props {
-  project: Dtos.ProjectDto;
+  project: Pick<Dtos.ProjectDto, "title" | "projectNumber">;
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   delete: (dto: Dtos.MonitoringReportDto) => void;
 }
@@ -63,9 +64,10 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams & BaseP
   const stores = useStores();
   const { getContent } = useContent();
   const navigate = useNavigate();
+
+  const { project } = useMonitoringReportDeleteQuery(props.projectId);
   const combined = Pending.combine({
     editor: stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id),
-    project: stores.projects.getById(props.projectId),
   });
 
   return (
@@ -73,6 +75,7 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams & BaseP
       pending={combined}
       render={data => (
         <DeleteVerificationComponent
+          project={project}
           delete={dto =>
             stores.monitoringReports.deleteReport(
               props.projectId,
