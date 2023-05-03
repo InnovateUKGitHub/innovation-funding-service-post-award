@@ -1,97 +1,79 @@
 import { useNavigate } from "react-router-dom";
-import * as ACC from "@ui/components";
+import { PageLoader, BackLink, Page, Content, Projects, MonitoringReportPeriodFormComponent } from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { ILinkInfo, ProjectRole } from "@framework/types";
 
-export interface MonitoringReportPreparePeriodParams {
+interface Props {
   projectId: ProjectId;
   id: MonitoringReportId;
-}
-
-interface Data {
-  project: Pending<Dtos.ProjectDto>;
-  editor: Pending<IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>>;
-}
-
-interface Callbacks {
+  project: Dtos.ProjectDto;
+  editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean, link?: ILinkInfo) => void;
 }
 
-class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data, Callbacks> {
-  render() {
-    const combined = Pending.combine({
-      editor: this.props.editor,
-      project: this.props.project,
-    });
-
-    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data.project, data.editor)} />;
-  }
-
-  private renderContents(
-    project: Dtos.ProjectDto,
-    editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>,
-  ) {
-    return (
-      <ACC.Page
-        backLink={
-          <ACC.BackLink
-            route={this.props.routes.monitoringReportWorkflow.getLink({
-              projectId: this.props.projectId,
-              id: this.props.id,
-              mode: "prepare",
-              step: undefined,
-            })}
-          >
-            <ACC.Content value={x => x.pages.monitoringReportsPeriodStep.backLink} />
-          </ACC.BackLink>
-        }
-        pageTitle={<ACC.Projects.Title {...project} />}
-        validator={editor.validator}
-        error={editor.error}
-      >
-        <ACC.MonitoringReportPeriodFormComponent
-          editor={editor}
-          onChange={dto => this.props.onChange(false, dto)}
-          onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, this.getLink(progress))}
-        />
-      </ACC.Page>
-    );
-  }
-  private getLink(progress: boolean) {
+const PeriodStepComponent = (props: Props & BaseProps) => {
+  const getLink = (progress: boolean) => {
     if (!progress) {
-      return this.props.routes.monitoringReportDashboard.getLink({
-        projectId: this.props.projectId,
+      return props.routes.monitoringReportDashboard.getLink({
+        projectId: props.projectId,
         periodId: undefined,
       });
     }
-    return this.props.routes.monitoringReportWorkflow.getLink({
-      projectId: this.props.projectId,
-      id: this.props.id,
-      mode: "prepare",
-      step: 1,
-    });
-  }
-}
+  };
+  return (
+    <Page
+      backLink={
+        <BackLink
+          route={props.routes.monitoringReportWorkflow.getLink({
+            projectId: props.projectId,
+            id: props.id,
+            mode: "prepare",
+            step: undefined,
+          })}
+        >
+          <Content value={x => x.pages.monitoringReportsPeriodStep.backLink} />
+        </BackLink>
+      }
+      pageTitle={<Projects.Title projectNumber={props.project.projectNumber} title={props.project.title} />}
+      validator={props.editor.validator}
+      error={props.editor.error}
+    >
+      <MonitoringReportPeriodFormComponent
+        editor={props.editor}
+        onChange={dto => props.onChange(false, dto)}
+        onSave={(dto, submit, progress) => props.onChange(true, dto, submit, getLink(progress))}
+      />
+    </Page>
+  );
+};
 
-const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => {
+const Container = (props: Pick<Props, "projectId" | "id"> & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
+  const combined = Pending.combine({
+    editor: stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id),
+    project: stores.projects.getById(props.projectId),
+  });
   return (
-    <Component
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-      onChange={(save, dto, submit, link) => {
-        stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-          if (link) {
-            navigate(link.path);
-          }
-        });
-      }}
+    <PageLoader
+      pending={combined}
+      render={data => (
+        <PeriodStepComponent
+          onChange={(save, dto, submit, link) => {
+            stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
+              if (link) {
+                navigate(link.path);
+              }
+            });
+          }}
+          {...data}
+          {...props}
+        />
+      )}
     />
   );
 };
