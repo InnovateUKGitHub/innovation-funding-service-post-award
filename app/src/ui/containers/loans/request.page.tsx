@@ -161,8 +161,8 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
     <ACC.Page
       pageTitle={pageTitleValue}
       backLink={isRejected ? undefined : backLinkElement}
-      error={payload?.loanEditor.error}
-      validator={payload?.loanEditor.validator}
+      error={payload?.loanEditor.error ?? payload?.loanDocsEditor.error}
+      validator={payload?.loanEditor.validator ?? payload?.loanDocsEditor.validator}
     >
       {isRejected && (
         <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.errorDrawdown)}</ACC.Renderers.SimpleString>
