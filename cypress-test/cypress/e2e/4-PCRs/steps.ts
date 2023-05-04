@@ -205,7 +205,7 @@ export const giveUsInfoTodo = () => {
 
 export const explainChangesReasoning = () => {
   cy.get("h2.app-task-list__section").contains("Explain why you want to make the changes");
-  cy.get("span.app-task-list__task-name").contains("Provide reasoning to Innovate UK");
+  cy.get("span.app-task-list__task-name").contains("Provide reasons to Innovate UK");
   cy.get("strong.govuk-tag.govuk-tag--blue").contains("To do");
 };
 
@@ -366,8 +366,11 @@ export const removePartnerGuidanceInfo = () => {
 
 export const removePartnerTable = () => {
   cy.getByQA("partnerToRemove").contains("Partner being removed");
+  cy.getByQA("partnerToRemove").contains("EUI Small Ent Health");
   cy.getByQA("removalPeriod").contains("Last period");
+  cy.getByQA("removalPeriod").contains("3");
   cy.getByQA("supportingDocuments").contains("Documents");
+  cy.getByQA("supportingDocuments").contains("testfile.doc");
 };
 
 export const navigateToPartnerOrgPage = () => {

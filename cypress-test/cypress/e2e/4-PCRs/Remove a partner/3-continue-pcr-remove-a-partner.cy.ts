@@ -56,7 +56,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
 
-  it("should allow you to upload a file", pcrDocUpload);
+  it("Should allow you to upload a file", pcrDocUpload);
 
   it("Should display a document upload validation message", () => {
     cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
