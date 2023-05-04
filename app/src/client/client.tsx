@@ -49,9 +49,9 @@ const Client = () => {
   const [, setState] = useState(0);
 
   useEffect(() => {
-    const jsEnabledAnimationFrame = setTimeout(() => {
+    const jsEnabledAnimationFrame = requestAnimationFrame(() => {
       window.document.body.classList.add("js-enabled");
-    }, 100);
+    });
 
     // Whenever our IFS-PA store changes...
     const unsub = store.subscribe(() => {

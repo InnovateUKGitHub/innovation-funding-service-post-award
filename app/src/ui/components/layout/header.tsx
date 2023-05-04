@@ -4,6 +4,7 @@ import { useContent, useGovFrontend } from "@ui/hooks";
 import { GovWidthContainer } from "./GovWidthContainer";
 import { Logo } from "./Logo";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useMounted } from "@ui/features";
 
 export interface HeaderProps {
   headingLink: string;
@@ -11,6 +12,7 @@ export interface HeaderProps {
 }
 
 export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
+  const { isClient } = useMounted();
   const { getContent } = useContent();
   const { setRef } = useGovFrontend("Header");
 
@@ -55,15 +57,17 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
           </a>
 
           <nav aria-label="Menu" className="govuk-header__navigation">
-            <button
-              type="button"
-              className="govuk-header__menu-button govuk-js-header-toggle"
-              aria-controls="navigation"
-              aria-label="Show or hide Top Level Navigation"
-              data-qa="mobile-nav-toggle"
-            >
-              {getContent(x => x.site.header.mobileNavigationLabel)}
-            </button>
+            {isClient && (
+              <button
+                type="button"
+                className="govuk-header__menu-button govuk-js-header-toggle"
+                aria-controls="navigation"
+                aria-label="Show or hide Top Level Navigation"
+                data-qa="mobile-nav-toggle"
+              >
+                {getContent(x => x.site.header.mobileNavigationLabel)}
+              </button>
+            )}
 
             <ul id="navigation" className="govuk-header__navigation-list">
               {menuItems.map(({ text, qa, ...props }) => (
