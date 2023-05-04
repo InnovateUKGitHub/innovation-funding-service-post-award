@@ -112,7 +112,7 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
               labelHidden
               name="search"
               value={x => x.searchValue}
-              update={(x, v) => (x.searchValue = v ?? "")}
+              update={(x, v) => (x.searchValue = v?.substring(0, 100) ?? "")}
             />
           </Form.Fieldset>
 
