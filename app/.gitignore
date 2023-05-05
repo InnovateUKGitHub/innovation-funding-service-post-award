@@ -19,3 +19,4 @@ test-report.html
 /dashboard/
 sfSchema.gql
 fullSchema.gql
+storybook-static/
