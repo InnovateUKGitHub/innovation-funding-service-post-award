@@ -83,6 +83,9 @@ const configGenerator = ({ env = "production", devtools = false }) => {
               loader: "css-loader",
               options: {
                 url: {
+                  /**
+                   * @param {String} url The import path
+                   */
                   filter: url => {
                     // If the url() references a file, don't resolve it.
                     if (url.includes(".png")) return false;

@@ -72,5 +72,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["./src/**/*", "./tests/**/*", "./scripts/**/*"]
+  "include": ["./src/**/*", "./tests/**/*", "./scripts/**/*", "./.storybook/**/*"]
 }

@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ["plugin:prettier/recommended"],
+  extends: ["plugin:prettier/recommended", "plugin:storybook/recommended"],
   globals: {
     JSX: true,
     React: true,
@@ -15,7 +15,13 @@ module.exports = {
   },
   ignorePatterns: ["*/__generated__/**/*"],
   rules: {
-    "no-unused-vars": ["error", { ignoreRestSiblings: true, argsIgnorePattern: "^_" }],
+    "no-unused-vars": [
+      "error",
+      {
+        ignoreRestSiblings: true,
+        argsIgnorePattern: "^_",
+      },
+    ],
   },
   parser: "@typescript-eslint/parser",
   overrides: [
@@ -24,7 +30,12 @@ module.exports = {
       plugins: ["@typescript-eslint"],
       extends: ["plugin:@typescript-eslint/recommended", "plugin:jsdoc/recommended", "plugin:prettier/recommended"],
       rules: {
-        "jsdoc/require-jsdoc": ["warn", { enableFixer: false }],
+        "jsdoc/require-jsdoc": [
+          "warn",
+          {
+            enableFixer: false,
+          },
+        ],
         "jsdoc/require-param": "off",
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns": "off",
@@ -48,7 +59,12 @@ module.exports = {
         "plugin:prettier/recommended",
       ],
       rules: {
-        "jsdoc/require-jsdoc": ["warn", { enableFixer: false }],
+        "jsdoc/require-jsdoc": [
+          "warn",
+          {
+            enableFixer: false,
+          },
+        ],
         "jsdoc/require-param": "off",
         "jsdoc/require-returns": "off",
         "jsdoc/require-returns-type": "off",
@@ -72,14 +88,24 @@ module.exports = {
         "plugin:prettier/recommended",
       ],
       rules: {
-        "jsdoc/require-jsdoc": ["warn", { enableFixer: false }],
+        "jsdoc/require-jsdoc": [
+          "warn",
+          {
+            enableFixer: false,
+          },
+        ],
         "jsdoc/require-param": "off",
         "jsdoc/require-param-type": "off",
         "jsdoc/require-returns-type": "off",
         "jsdoc/require-returns": "off",
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/ban-types": "warn",
-        "jest/no-standalone-expect": ["warn", { additionalTestBlockFunctions: ["testCases"] }],
+        "jest/no-standalone-expect": [
+          "warn",
+          {
+            additionalTestBlockFunctions: ["testCases"],
+          },
+        ],
         "jest/no-conditional-expect": "warn",
         "jest/valid-expect": "warn",
         "jest/no-identical-title": "warn",

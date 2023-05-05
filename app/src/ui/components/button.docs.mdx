@@ -1,0 +1,59 @@
+import { Meta, Primary, Controls, Canvas, Story } from "@storybook/blocks";
+import * as ButtonStories from "./button.stories";
+
+<Meta of={ButtonStories} />
+
+# Button
+
+> Related links:
+>
+> - [GOV.UK Design System on Button](https://design-system.service.gov.uk/components/button/)
+> - [Take part in the 'Button' discusson on GitHub and share your research](https://github.com/alphagov/govuk-design-system-backlog/issues/34)
+
+<Primary />
+<Controls />
+
+## Scenarios
+
+### Default Buttons
+
+<Canvas>
+  <Story of={ButtonStories.PrimaryButton} />
+</Canvas>
+
+### Start Buttons
+
+Start Buttons have not been implemented by IFSPA.
+
+### Secondary Buttons
+
+<Canvas>
+  <Story of={ButtonStories.SecondaryButton} />
+</Canvas>
+
+### Warning Buttons
+
+<Canvas>
+  <Story of={ButtonStories.WarningButton} />
+</Canvas>
+
+### Disabled Buttons
+
+Disabled buttons have poor contrast and can confuse some users, so avoid them if possible.
+
+<Canvas>
+  <Story of={ButtonStories.DisabledButton} />
+</Canvas>
+
+### Link Buttons
+
+Link buttons are not GOV.UK components;
+They are used in IFSPA in place of a button where buttons would be "too crowded",
+such as within lists of documents, where each row requires a delete button.
+
+Do not use this component in place of a link.
+Use this component when a button would suffice.
+
+<Canvas>
+  <Story of={ButtonStories.LinkButton} />
+</Canvas>
