@@ -82,27 +82,14 @@ const configGenerator = ({ env = "production", devtools = false }) => {
             {
               loader: "css-loader",
               options: {
-                url: {
-                  /**
-                   * @param {String} url The import path
-                   */
-                  filter: url => {
-                    // If the url() references a file, don't resolve it.
-                    if (url.includes(".png")) return false;
-                    if (url.includes(".woff")) return false;
-                    if (url.includes(".woff2")) return false;
-
-                    return true;
-                  },
-                },
                 sourceMap: true,
               },
             },
           ],
         },
         {
-          test: /\.apex$/i,
-          type: "asset/source",
+          test: /\.(png|woff2?)$/i,
+          type: "asset/resource",
         },
       ],
     },
@@ -110,6 +97,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       modules: ["node_modules"],
       extensions: [".tsx", ".ts", ".jsx", ".js", ".css"],
       plugins: [new TsConfigPathsPlugin.TsconfigPathsPlugin()],
+      roots: [__dirname, path.resolve(__dirname, "public")],
     },
     optimization: {
       minimizer: [

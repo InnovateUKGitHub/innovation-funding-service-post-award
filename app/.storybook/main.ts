@@ -30,11 +30,17 @@ const config: StorybookConfig = {
         ],
       },
       resolve: {
+        ...clientWebpackConfig.resolve,
         ...config.resolve,
         extensions: [...(config?.resolve?.extensions ?? []), ...(clientWebpackConfig?.resolve?.extensions ?? [])],
         plugins: [...(config?.resolve?.plugins ?? []), ...(clientWebpackConfig?.resolve?.plugins ?? [])],
+        roots: [...(config?.resolve?.roots ?? []), ...(clientWebpackConfig?.resolve?.roots ?? [])],
       },
       plugins: [...(config?.plugins ?? []), ...(clientWebpackConfig?.plugins ?? [])],
+      output: {
+        ...clientWebpackConfig.output,
+        ...config.output,
+      }
     };
 
     return rule;
