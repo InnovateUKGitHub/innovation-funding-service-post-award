@@ -2,9 +2,7 @@ import { PCRItemDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 
 /**
- * Convert a Salesforce PCR name to an internationalised PCR name.
- *
- * @param value The Salesforce name of the PCR type
+ * Convert a Salesforce PCR name to an internationalized PCR name.
  */
 export const usePcrItemName = () => {
   const { getContent } = useContent();

@@ -2,8 +2,6 @@
  * Map over ALL strings within an input, whether they are a property of an object, or an item in an array.
  *
  * @see https://stackoverflow.com/a/61468871
- * @param object
- * @param replacer
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapStringInObject = (object: unknown, replacer: (original: string) => string): any => {
