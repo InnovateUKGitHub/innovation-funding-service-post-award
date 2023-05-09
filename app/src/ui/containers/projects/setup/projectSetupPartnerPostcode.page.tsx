@@ -4,32 +4,41 @@ import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 import { ProjectRole } from "@framework/constants";
 import { PartnerDetailsEditComponent, PartnerDetailsParams } from "../partnerDetailsEdit.page";
-import * as ACC from "../../../components";
+import { BackLink, PageLoader } from "@ui/components";
+import { usePartnerDetailsEditQuery } from "../partnerDetailsEdit.logic";
+import { Pending } from "@shared/pending";
 
 const ProjectSetupPartnerPostcodeContainer = (props: PartnerDetailsParams & BaseProps) => {
+  const { project, partner } = usePartnerDetailsEditQuery(props.projectId, props.partnerId);
   const stores = useStores();
   const { getContent } = useContent();
   const navigate = useNavigate();
+  const combined = Pending.combine({
+    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId),
+  });
 
   const url = props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId });
   const saveAndReturnLabel = getContent(x => x.pages.projectSetupPostcodeDetails.saveAndReturn);
-  const backLink = (
-    <ACC.BackLink route={url}>{getContent(x => x.pages.projectSetupPostcodeDetails.backLink)}</ACC.BackLink>
-  );
+  const backLink = <BackLink route={url}>{getContent(x => x.pages.projectSetupPostcodeDetails.backLink)}</BackLink>;
 
   return (
-    <PartnerDetailsEditComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      partner={stores.partners.getById(props.partnerId)}
-      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-      backLink={backLink}
-      saveAndReturnLabel={saveAndReturnLabel}
-      onUpdate={(saving, dto) =>
-        stores.partners.updatePartner(saving, props.partnerId, dto, {
-          onComplete: () => navigate(url.path),
-        })
-      }
+    <PageLoader
+      pending={combined}
+      render={x => (
+        <PartnerDetailsEditComponent
+          project={project}
+          partner={partner}
+          backLink={backLink}
+          saveAndReturnLabel={saveAndReturnLabel}
+          onUpdate={(saving, dto) =>
+            stores.partners.updatePartner(saving, props.partnerId, dto, {
+              onComplete: () => navigate(url.path),
+            })
+          }
+          {...x}
+          {...props}
+        />
+      )}
     />
   );
 };
