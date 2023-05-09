@@ -1,4 +1,4 @@
-import type { Preview } from "@storybook/react";
+import type { Decorator, Preview } from "@storybook/react";
 import { MountedProvider } from "@ui/features";
 import { ContentProvider } from "@ui/redux";
 import i18next from "i18next";
@@ -34,6 +34,25 @@ i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.KTP, ktpEnCopy, tr
 i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.LOANS, loansEnCopy, true, true);
 i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.SBRI_IFS, sbriEnCopy, true, true);
 i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.SBRI, sbriIfsEnCopy, true, true);
+
+const decorators: Decorator[] = [
+  (Story, context) => {
+    useEffect(() => {
+      i18next.changeLanguage(context.globals.language);
+    }, [context.globals.language]);
+
+    return <Story />;
+  },
+  (Story, context) => (
+    <div className="govuk-template__body js-enabled" id="root">
+      <ContentProvider value={new Copy(context.globals.namespace)}>
+        <StubMountedProvider mounted={context.globals.mounted ?? true}>
+          <Story />
+        </StubMountedProvider>
+      </ContentProvider>
+    </div>
+  ),
+];
 
 const preview: Preview = {
   parameters: {
@@ -77,24 +96,8 @@ const preview: Preview = {
       },
     },
   },
-  decorators: [
-    (Story, context) => {
-      useEffect(() => {
-        i18next.changeLanguage(context.globals.language);
-      }, [context.globals.language]);
-
-      return <Story />;
-    },
-    (Story, context) => (
-      <div className="govuk-template__body js-enabled" id="root">
-        <ContentProvider value={new Copy(context.globals.namespace)}>
-          <StubMountedProvider mounted={context.globals.mounted ?? true}>
-            <Story />
-          </StubMountedProvider>
-        </ContentProvider>
-      </div>
-    ),
-  ],
+  decorators,
 };
 
 export default preview;
+export { decorators };

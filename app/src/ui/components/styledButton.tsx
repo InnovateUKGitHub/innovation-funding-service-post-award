@@ -28,9 +28,16 @@ export const Button = ({ className, styling, qa, ...props }: StyledButtonProps) 
 
   const buttonStyling = getButtonTypeClass(styling);
 
+  let dataQa: string | undefined = undefined;
+  if (qa) {
+    dataQa = qa;
+  } else if (props.name) {
+    dataQa = `${props.name}-qa`;
+  }
+
   return (
     <button
-      data-qa={qa ? qa : `${props.name}-qa`}
+      data-qa={dataQa}
       data-module="govuk-button"
       ref={setRef}
       className={classNames(buttonStyling, className)}

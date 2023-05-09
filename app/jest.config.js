@@ -27,7 +27,7 @@ module.exports = {
   coverageReporters: ["text", "html", "lcov"],
   transformIgnorePatterns: ["/node_modules/(?!uuid)"],
   testRegex: "/src/.*\\.(test|spec)\\.tsx?$",
-  moduleFileExtensions: ["ts", "tsx", "js"],
+  moduleFileExtensions: ["ts", "tsx", "js", "json"],
   testResultsProcessor: "jest-bamboo-reporter",
   watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
   moduleNameMapper: {
@@ -39,5 +39,8 @@ module.exports = {
     "@copy/(.*)": "<rootDir>/src/copy/$1",
     "@gql/(.*)": "<rootDir>/src/gql/$1",
     "@tests/(.*)": "<rootDir>/tests/$1",
+    "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+      "<rootDir>/tests/__mocks__/fileMock.js",
+    "\\.(css|less|apex)$": "<rootDir>/tests/__mocks__/styleMock.js",
   },
 };

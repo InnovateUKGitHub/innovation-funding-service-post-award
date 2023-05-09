@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots GOV.UK Components/Button Disabled Button 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <button
+    className="govuk-button govuk-!-margin-right-1"
+    data-module="govuk-button"
+    disabled={true}
+  >
+    A disabled button
+  </button>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Button Link Button 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <button
+    className="govuk-link"
+    data-module="govuk-button"
+  >
+    A link button
+  </button>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Button Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <button
+    className="govuk-button govuk-!-margin-right-1"
+    data-module="govuk-button"
+  >
+    Return to Desktop
+  </button>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Button Primary Button 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <button
+    className="govuk-button govuk-!-margin-right-1"
+    data-module="govuk-button"
+  >
+    A primary button
+  </button>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Button Secondary Button 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <button
+    className="govuk-button govuk-!-margin-right-1 govuk-button--secondary"
+    data-module="govuk-button"
+  >
+    A secondary button
+  </button>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Button Warning Button 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <button
+    className="govuk-button govuk-!-margin-right-1 govuk-button--warning"
+    data-module="govuk-button"
+  >
+    A warning button
+  </button>
+</div>
+`;
