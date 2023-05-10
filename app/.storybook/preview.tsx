@@ -1,25 +1,25 @@
 import type { Decorator, Preview } from "@storybook/react";
-import { MountedProvider } from "@ui/features";
 import { ContentProvider } from "@ui/redux";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
+import cx from "classnames";
 
 import { Copy } from "@copy/Copy";
 import {
-  CopyLanguages,
-  CopyNamespaces,
   allLanguages,
   allNamespaces,
+  CopyLanguages,
+  CopyNamespaces,
   enCopy,
   ktpEnCopy,
+  loansEnCopy,
   sbriEnCopy,
   sbriIfsEnCopy,
-  loansEnCopy,
 } from "@copy/data";
 import { i18nInterpolationOptions } from "@copy/interpolation";
 
-import "../src/styles/index.css";
 import { useEffect } from "react";
+import "../src/styles/index.css";
 import { StubMountedProvider } from "./StubMountedProvider";
 
 i18next.use(initReactI18next).init({
@@ -43,15 +43,18 @@ const decorators: Decorator[] = [
 
     return <Story />;
   },
-  (Story, context) => (
-    <div className="govuk-template__body js-enabled" id="root">
-      <ContentProvider value={new Copy(context.globals.namespace)}>
-        <StubMountedProvider mounted={context.globals.mounted ?? true}>
-          <Story />
-        </StubMountedProvider>
-      </ContentProvider>
-    </div>
-  ),
+  (Story, context) => {
+    const mounted = !!context.globals.mounted;
+    return (
+      <div className={cx("govuk-template__body", { "js-enabled": mounted })} id="root">
+        <ContentProvider value={new Copy(context.globals.namespace)}>
+          <StubMountedProvider mounted={mounted}>
+            <Story />
+          </StubMountedProvider>
+        </ContentProvider>
+      </div>
+    );
+  },
 ];
 
 const preview: Preview = {
