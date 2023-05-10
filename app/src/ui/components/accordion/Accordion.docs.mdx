@@ -1,0 +1,30 @@
+import { Meta, Primary, Controls, Canvas, Story } from "@storybook/blocks";
+import * as AccordionStories from "./Accordion.stories";
+
+<Meta of={AccordionStories} />
+
+# Accordion
+
+The accordion component lets users show and hide sections of related content on a page.
+
+> Related links:
+>
+> - [GOV.UK Design System on Accordion](https://design-system.service.gov.uk/components/accordion/)
+> - [Take part in the 'Accordion' discusson on GitHub and share your research](https://github.com/alphagov/govuk-design-system-backlog/issues/1)
+
+<Primary />
+<Controls />
+
+## Scenarios
+
+### Single Accordion Item
+
+<Canvas>
+  <Story of={AccordionStories.SingleAccordion} />
+</Canvas>
+
+### Multiple Accordion Items
+
+<Canvas>
+  <Story of={AccordionStories.MultipleAccordions} />
+</Canvas>
