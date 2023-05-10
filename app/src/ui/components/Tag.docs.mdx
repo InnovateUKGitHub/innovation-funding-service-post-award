@@ -1,0 +1,41 @@
+import { Meta, Primary, Controls, Canvas, Story } from "@storybook/blocks";
+import * as TagStories from "./Tag.stories";
+
+<Meta of={TagStories} />
+
+# Tag
+
+Use the tag component to show users the status of something.
+
+> Related links:
+>
+> - [GOV.UK Design System on Tag](https://design-system.service.gov.uk/components/tag/)
+> - [Take part in the 'Tag' discusson on GitHub and share your research](https://github.com/alphagov/govuk-design-system-backlog/issues/62)
+
+<Primary />
+<Controls />
+
+## Scenarios
+
+You can use coloured tints to help distingiush between different tags.
+
+Avoid mix and matching the following tints with a solid colour, unless you keep yourself to using
+a single solid colour and a single tinted colour.
+
+> [Read more about this guidance](https://design-system.service.gov.uk/components/tag/#using-colour-with-tags)
+
+### Solid Colours
+
+<Canvas><Story of={TagStories.Solid} /></Canvas>
+
+### Tinted Colours
+
+<Canvas><Story of={TagStories.Grey} /></Canvas>
+<Canvas><Story of={TagStories.Green} /></Canvas>
+<Canvas><Story of={TagStories.Turquoise} /></Canvas>
+<Canvas><Story of={TagStories.Blue} /></Canvas>
+<Canvas><Story of={TagStories.Purple} /></Canvas>
+<Canvas><Story of={TagStories.Pink} /></Canvas>
+<Canvas><Story of={TagStories.Red} /></Canvas>
+<Canvas><Story of={TagStories.Orange} /></Canvas>
+<Canvas><Story of={TagStories.Yellow} /></Canvas>
