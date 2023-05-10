@@ -1,5 +1,594 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots GOV.UK Components/Accordion Multiple accordions 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <div
+    className="govuk-accordion"
+    data-qa="accordion-container"
+  >
+    <div
+      className="govuk-accordion__controls"
+    >
+      <button
+        aria-expanded={false}
+        className="govuk-accordion__show-all"
+        data-qa="all-accordion-toggle"
+        onClick={[Function]}
+        type="button"
+      >
+        <span
+          className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+        />
+        <span
+          className="govuk-accordion__show-all-text"
+        >
+          Show all sections
+        </span>
+      </button>
+    </div>
+    <div
+      className="govuk-accordion__section"
+      data-qa="item-1"
+    >
+      <div
+        className="govuk-accordion__section-header"
+      >
+        <h2
+          className="govuk-accordion__section-heading"
+        >
+          <button
+            aria-controls="accordion-default-content-item-1"
+            aria-expanded={false}
+            className="govuk-accordion__section-button"
+            data-qa="accordion-toggle"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="govuk-accordion__section-heading-text"
+              id="accordion-default-heading-item-1"
+            >
+              <span
+                className="govuk-accordion__section-heading-text-focus"
+              >
+                Test item
+              </span>
+            </span>
+            <span
+              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
+            >
+              , 
+            </span>
+            <span
+              className="govuk-accordion__section-toggle"
+            >
+              <span
+                className="govuk-accordion__section-toggle-focus"
+              >
+                <span
+                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+                />
+                <span
+                  className="govuk-accordion__section-toggle-text"
+                >
+                  Show
+                   
+                  <span
+                    className="govuk-visually-hidden"
+                  >
+                    this section
+                  </span>
+                </span>
+              </span>
+            </span>
+          </button>
+        </h2>
+      </div>
+      <div
+        aria-labelledby="accordion-default-heading-item-1"
+        className="govuk-accordion__section-content"
+        id="accordion-default-content-item-1"
+      >
+        <p
+          className="govuk-body"
+        >
+          Hello world!
+        </p>
+      </div>
+    </div>
+    <div
+      className="govuk-accordion__section"
+      data-qa="item-2"
+    >
+      <div
+        className="govuk-accordion__section-header"
+      >
+        <h2
+          className="govuk-accordion__section-heading"
+        >
+          <button
+            aria-controls="accordion-default-content-item-2"
+            aria-expanded={false}
+            className="govuk-accordion__section-button"
+            data-qa="accordion-toggle"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="govuk-accordion__section-heading-text"
+              id="accordion-default-heading-item-2"
+            >
+              <span
+                className="govuk-accordion__section-heading-text-focus"
+              >
+                Test item 2
+              </span>
+            </span>
+            <span
+              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
+            >
+              , 
+            </span>
+            <span
+              className="govuk-accordion__section-toggle"
+            >
+              <span
+                className="govuk-accordion__section-toggle-focus"
+              >
+                <span
+                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+                />
+                <span
+                  className="govuk-accordion__section-toggle-text"
+                >
+                  Show
+                   
+                  <span
+                    className="govuk-visually-hidden"
+                  >
+                    this section
+                  </span>
+                </span>
+              </span>
+            </span>
+          </button>
+        </h2>
+      </div>
+      <div
+        aria-labelledby="accordion-default-heading-item-2"
+        className="govuk-accordion__section-content"
+        id="accordion-default-content-item-2"
+      >
+        <p
+          className="govuk-body"
+        >
+          Hello world!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <div
+    className="govuk-accordion"
+    data-qa="accordion-container"
+  >
+    <div
+      className="govuk-accordion__controls"
+    >
+      <button
+        aria-expanded={false}
+        className="govuk-accordion__show-all"
+        data-qa="all-accordion-toggle"
+        onClick={[Function]}
+        type="button"
+      >
+        <span
+          className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+        />
+        <span
+          className="govuk-accordion__show-all-text"
+        >
+          Show all sections
+        </span>
+      </button>
+    </div>
+    <div
+      className="govuk-accordion__section"
+      data-qa="writing-well-for-web"
+    >
+      <div
+        className="govuk-accordion__section-header"
+      >
+        <h2
+          className="govuk-accordion__section-heading"
+        >
+          <button
+            aria-controls="accordion-default-content-writing-well-for-web"
+            aria-expanded={false}
+            className="govuk-accordion__section-button"
+            data-qa="accordion-toggle"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="govuk-accordion__section-heading-text"
+              id="accordion-default-heading-writing-well-for-web"
+            >
+              <span
+                className="govuk-accordion__section-heading-text-focus"
+              >
+                Writing well for the web
+              </span>
+            </span>
+            <span
+              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
+            >
+              , 
+            </span>
+            <span
+              className="govuk-accordion__section-toggle"
+            >
+              <span
+                className="govuk-accordion__section-toggle-focus"
+              >
+                <span
+                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+                />
+                <span
+                  className="govuk-accordion__section-toggle-text"
+                >
+                  Show
+                   
+                  <span
+                    className="govuk-visually-hidden"
+                  >
+                    this section
+                  </span>
+                </span>
+              </span>
+            </span>
+          </button>
+        </h2>
+      </div>
+      <div
+        aria-labelledby="accordion-default-heading-writing-well-for-web"
+        className="govuk-accordion__section-content"
+        id="accordion-default-content-writing-well-for-web"
+      >
+        <p
+          className="govuk-body"
+        >
+          This is the content for Writing well for the web.
+        </p>
+      </div>
+    </div>
+    <div
+      className="govuk-accordion__section"
+      data-qa="writing-well-for-specialists"
+    >
+      <div
+        className="govuk-accordion__section-header"
+      >
+        <h2
+          className="govuk-accordion__section-heading"
+        >
+          <button
+            aria-controls="accordion-default-content-writing-well-for-specialists"
+            aria-expanded={false}
+            className="govuk-accordion__section-button"
+            data-qa="accordion-toggle"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="govuk-accordion__section-heading-text"
+              id="accordion-default-heading-writing-well-for-specialists"
+            >
+              <span
+                className="govuk-accordion__section-heading-text-focus"
+              >
+                Writing well for specialists
+              </span>
+            </span>
+            <span
+              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
+            >
+              , 
+            </span>
+            <span
+              className="govuk-accordion__section-toggle"
+            >
+              <span
+                className="govuk-accordion__section-toggle-focus"
+              >
+                <span
+                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+                />
+                <span
+                  className="govuk-accordion__section-toggle-text"
+                >
+                  Show
+                   
+                  <span
+                    className="govuk-visually-hidden"
+                  >
+                    this section
+                  </span>
+                </span>
+              </span>
+            </span>
+          </button>
+        </h2>
+      </div>
+      <div
+        aria-labelledby="accordion-default-heading-writing-well-for-specialists"
+        className="govuk-accordion__section-content"
+        id="accordion-default-content-writing-well-for-specialists"
+      >
+        <p
+          className="govuk-body"
+        >
+          This is the content for Writing well for specialists.
+        </p>
+      </div>
+    </div>
+    <div
+      className="govuk-accordion__section"
+      data-qa="know-your-audience"
+    >
+      <div
+        className="govuk-accordion__section-header"
+      >
+        <h2
+          className="govuk-accordion__section-heading"
+        >
+          <button
+            aria-controls="accordion-default-content-know-your-audience"
+            aria-expanded={false}
+            className="govuk-accordion__section-button"
+            data-qa="accordion-toggle"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="govuk-accordion__section-heading-text"
+              id="accordion-default-heading-know-your-audience"
+            >
+              <span
+                className="govuk-accordion__section-heading-text-focus"
+              >
+                Know your audience
+              </span>
+            </span>
+            <span
+              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
+            >
+              , 
+            </span>
+            <span
+              className="govuk-accordion__section-toggle"
+            >
+              <span
+                className="govuk-accordion__section-toggle-focus"
+              >
+                <span
+                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+                />
+                <span
+                  className="govuk-accordion__section-toggle-text"
+                >
+                  Show
+                   
+                  <span
+                    className="govuk-visually-hidden"
+                  >
+                    this section
+                  </span>
+                </span>
+              </span>
+            </span>
+          </button>
+        </h2>
+      </div>
+      <div
+        aria-labelledby="accordion-default-heading-know-your-audience"
+        className="govuk-accordion__section-content"
+        id="accordion-default-content-know-your-audience"
+      >
+        <p
+          className="govuk-body"
+        >
+          This is the content for Know your audience.
+        </p>
+      </div>
+    </div>
+    <div
+      className="govuk-accordion__section"
+      data-qa="how-people-read"
+    >
+      <div
+        className="govuk-accordion__section-header"
+      >
+        <h2
+          className="govuk-accordion__section-heading"
+        >
+          <button
+            aria-controls="accordion-default-content-how-people-read"
+            aria-expanded={false}
+            className="govuk-accordion__section-button"
+            data-qa="accordion-toggle"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="govuk-accordion__section-heading-text"
+              id="accordion-default-heading-how-people-read"
+            >
+              <span
+                className="govuk-accordion__section-heading-text-focus"
+              >
+                How people read
+              </span>
+            </span>
+            <span
+              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
+            >
+              , 
+            </span>
+            <span
+              className="govuk-accordion__section-toggle"
+            >
+              <span
+                className="govuk-accordion__section-toggle-focus"
+              >
+                <span
+                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+                />
+                <span
+                  className="govuk-accordion__section-toggle-text"
+                >
+                  Show
+                   
+                  <span
+                    className="govuk-visually-hidden"
+                  >
+                    this section
+                  </span>
+                </span>
+              </span>
+            </span>
+          </button>
+        </h2>
+      </div>
+      <div
+        aria-labelledby="accordion-default-heading-how-people-read"
+        className="govuk-accordion__section-content"
+        id="accordion-default-content-how-people-read"
+      >
+        <p
+          className="govuk-body"
+        >
+          This is the content for How people read.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Accordion Single accordion 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <div
+    className="govuk-accordion"
+    data-qa="accordion-container"
+  >
+    <div
+      className="govuk-accordion__controls"
+    >
+      <button
+        aria-expanded={false}
+        className="govuk-accordion__show-all"
+        data-qa="all-accordion-toggle"
+        onClick={[Function]}
+        type="button"
+      >
+        <span
+          className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+        />
+        <span
+          className="govuk-accordion__show-all-text"
+        >
+          Show all sections
+        </span>
+      </button>
+    </div>
+    <div
+      className="govuk-accordion__section"
+      data-qa="item-1"
+    >
+      <div
+        className="govuk-accordion__section-header"
+      >
+        <h2
+          className="govuk-accordion__section-heading"
+        >
+          <button
+            aria-controls="accordion-default-content-item-1"
+            aria-expanded={false}
+            className="govuk-accordion__section-button"
+            data-qa="accordion-toggle"
+            onClick={[Function]}
+            type="button"
+          >
+            <span
+              className="govuk-accordion__section-heading-text"
+              id="accordion-default-heading-item-1"
+            >
+              <span
+                className="govuk-accordion__section-heading-text-focus"
+              >
+                Test item
+              </span>
+            </span>
+            <span
+              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
+            >
+              , 
+            </span>
+            <span
+              className="govuk-accordion__section-toggle"
+            >
+              <span
+                className="govuk-accordion__section-toggle-focus"
+              >
+                <span
+                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+                />
+                <span
+                  className="govuk-accordion__section-toggle-text"
+                >
+                  Show
+                   
+                  <span
+                    className="govuk-visually-hidden"
+                  >
+                    this section
+                  </span>
+                </span>
+              </span>
+            </span>
+          </button>
+        </h2>
+      </div>
+      <div
+        aria-labelledby="accordion-default-heading-item-1"
+        className="govuk-accordion__section-content"
+        id="accordion-default-content-item-1"
+      >
+        <p
+          className="govuk-body"
+        >
+          Hello world!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots GOV.UK Components/Button Disabled Button 1`] = `
 <div
   className="govuk-template__body js-enabled"
@@ -82,5 +671,1138 @@ exports[`Storyshots GOV.UK Components/Button Warning Button 1`] = `
   >
     A warning button
   </button>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <footer
+    className="govuk-footer"
+    role="contentinfo"
+  >
+    <div
+      className="govuk-width-container"
+    >
+      <div
+        className="govuk-footer__navigation"
+      >
+        <div
+          className="govuk-footer__section govuk-grid-column-two-thirds"
+        >
+          <h2
+            className="govuk-heading-m govuk-footer__heading"
+          >
+            site.footer.supportLinks
+          </h2>
+          <ul
+            className="govuk-footer__list govuk-footer__list--columns-2"
+          >
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="innovate-uk"
+                href="https://www.gov.uk/government/organisations/innovate-uk"
+                id="innovate-uk"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Innovate UK
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="innovation-funding-advice"
+                href="https://www.gov.uk/guidance/innovation-apply-for-a-funding-award"
+                id="innovation-funding-advice"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Innovation funding advice
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="connect-to-innovation-experts"
+                href="https://www.gov.uk/guidance/innovation-get-support-and-advice"
+                id="connect-to-innovation-experts"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Connect to innovation experts
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="events"
+                href="https://connect.innovateuk.org/events"
+                id="events"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Events
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="innovate-uk-blog"
+                href="https://innovateuk.blog.gov.uk/"
+                id="innovate-uk-blog"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Innovate UK blog
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="gov.uk-accessibility"
+                href="https://www.gov.uk/help/accessibility"
+                id="gov.uk-accessibility"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                GOV.UK accessibility
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="terms-and-conditions"
+                href="https://apply-for-innovation-funding.service.gov.uk/info/terms-and-conditions"
+                id="terms-and-conditions"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Terms and conditions
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="contact-us"
+                href="https://apply-for-innovation-funding.service.gov.uk/info/contact"
+                id="contact-us"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Contact us
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="sign-up-for-competition-updates"
+                href="http://info.innovateuk.org/emailpref"
+                id="sign-up-for-competition-updates"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Sign up for competition updates
+              </a>
+            </li>
+            <li
+              className="govuk-footer__list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                data-qa="latest-funding-opportunities"
+                href="https://apply-for-innovation-funding.service.gov.uk/competition/search"
+                id="latest-funding-opportunities"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                Latest funding opportunities
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <hr
+        className="govuk-footer__section-break"
+      />
+      <div
+        className="govuk-footer__meta"
+      >
+        <div
+          className="govuk-footer__meta-item govuk-footer__meta-item--grow"
+        >
+          <ul
+            className="govuk-list govuk-list--bullet govuk-footer__inline-list"
+          >
+            <li
+              className="govuk-footer__inline-list-item"
+            >
+              site.footer.explainCookies
+            </li>
+            <li
+              className="govuk-footer__inline-list-item"
+            >
+              <a
+                className="govuk-footer__link"
+                href="https://apply-for-innovation-funding.service.gov.uk/info/cookies"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                site.footer.cookieFindOutMore
+              </a>
+              .
+            </li>
+          </ul>
+          <svg
+            aria-hidden="true"
+            className="govuk-footer__licence-logo"
+            focusable="false"
+            height="17"
+            role="presentation"
+            viewBox="0 0 483.2 195.7"
+            width="41"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
+              fill="currentColor"
+            />
+          </svg>
+          <span
+            className="govuk-footer__licence-description"
+            data-qa="licence"
+          >
+            site.footer.externalLinkText
+          </span>
+        </div>
+        <div
+          className="govuk-footer__meta-item"
+        >
+          <a
+            className="govuk-footer__link govuk-footer__copyright-logo"
+            href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            site.footer.crownCopyright
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Blue 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--blue"
+  >
+    Pending
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Green 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--green"
+  >
+    New
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Grey 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--grey"
+  >
+    Inactive
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Orange 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--orange"
+  >
+    Declined
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Pink 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--pink"
+  >
+    Sent
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag"
+  >
+    Active
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Purple 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--purple"
+  >
+    Received
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Red 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--red"
+  >
+    Rejected
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Solid 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag"
+  >
+    Active
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Turquoise 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--turquoise"
+  >
+    Active
+  </strong>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Tag Yellow 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <strong
+    className="govuk-tag govuk-tag--yellow"
+  >
+    Delayed
+  </strong>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Accessibility Text Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <div
+    className="govuk-visually-hidden"
+  >
+    The quick brown fox jumps over the lazy dog.
+  </div>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Currency Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    className="currency"
+    style={
+      Object {
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    £124.00
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Currency Round To Zero Decimal Places 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    className="currency"
+    style={
+      Object {
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    £125
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Currency Whole Number With Commas 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    className="currency"
+    style={
+      Object {
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    £4,815,162,342
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date + Time/Full Date Time Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    25 December 2023, 12:00am
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date + Time/Short Date Time Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    25 Dec 2023, 12:00am
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date/Day + Long Month Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    1 December
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date/Full Date Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    25 December 2023
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date/Full Numberic Date Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    25/12/2023
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date/Long Year Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    2023
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date/Month + Year Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    December 2023
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date/Short Date Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    25 Dec 2023
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Date/Short Month Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    Dec
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Different Years 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    27 months
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    3 months
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Same Year 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    3 months
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Length/Months Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    11 months
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Different Years 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      Jun 1942
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      Aug 1944
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      May
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      Jul 2023
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Same Year 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      Jun
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      Aug 1995
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Different Years 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 June 1942
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      2 August 1944
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 May
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      2 July 2023
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Same Year 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 June
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      2 August 1995
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Different Years 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 Jun 1942
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      2 Aug 1944
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 May
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      2 Jul 2023
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Same Year 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 Jun
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      2 Aug 1995
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Duration Different Years 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 Jun 1942
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      31 Jul 1943
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Duration Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 May
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      30 Jun 2023
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Duration Same Month 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+/>
+`;
+
+exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Duration Same Year 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      1 Jun
+       to 
+    </span>
+    <span
+      style={
+        Object {
+          "whiteSpace": "nowrap",
+        }
+      }
+    >
+      31 Jul 1995
+    </span>
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Email Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <a
+    className="govuk-link govuk-!-font-size-19"
+    href="mailto:nicole.hedges@iuk.ukri.org"
+  >
+    nicole.hedges
+    <wbr />
+    @
+    iuk.ukri.org
+  </a>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Email Very long E-Mail Address 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <a
+    className="govuk-link govuk-!-font-size-19"
+    href="mailto:thequickbrownfoxjumpsoverthelazydogthequickbrownfoxjumpsoverthelazydogthequickbrownfoxjumpsoverthelazydog@iuk.ukri.org"
+  >
+    thequickbrownfoxjumpsoverthelazydogthequickbrownfoxjumpsoverthelazydogthequickbrownfoxjumpsoverthelazydog
+    <wbr />
+    @
+    iuk.ukri.org
+  </a>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Markdown Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    className="govuk-body markdown"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<p>The quick brown fox
+jumps over the lazy dog.</p>
+",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Markdown Trusted 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    className="govuk-body markdown"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<h1 id=\\"markdown\\">Markdown</h1>
+<p>A button should appear because it is trusted.  </p>
+<p><button>This button is trusted!</button>
+    </p>
+",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Markdown Untrusted 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    className="govuk-body markdown"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<h1 id=\\"markdown\\">Markdown</h1>
+<p>A button should not appear because it is not trusted.<br>Instead, the text content of the button should show.</p>
+<p>This button is trusted!</p>
+",
+      }
+    }
+  />
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Percentage Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    style={
+      Object {
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    124.00%
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Percentage Round To Zero Decimal Places 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    style={
+      Object {
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    125%
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Percentage Whole Number With Commas 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <span
+    style={
+      Object {
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    4,815,162,342%
+  </span>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/SimpleString Bold 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <p
+    className="govuk-body govuk-!-font-weight-bold"
+  >
+    Achtung! Das ist nicht numberwang!
+  </p>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/SimpleString Multiline 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <p
+    className="govuk-body govuk-body--multiline"
+  >
+    This is a multiline story.
+This means anytime there is an \\n character,
+the actual text
+is wrapped.
+  </p>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/SimpleString Primary 1`] = `
+<div
+  className="govuk-template__body js-enabled"
+  id="root"
+>
+  <p
+    className="govuk-body"
+  >
+    The quick brown fox
+jumps over the lazy dog.
+  </p>
 </div>
 `;
