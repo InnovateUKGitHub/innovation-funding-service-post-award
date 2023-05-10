@@ -2,33 +2,13 @@
 
 exports[`Storyshots GOV.UK Components/Accordion Multiple accordions 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <div
     className="govuk-accordion"
     data-qa="accordion-container"
   >
-    <div
-      className="govuk-accordion__controls"
-    >
-      <button
-        aria-expanded={false}
-        className="govuk-accordion__show-all"
-        data-qa="all-accordion-toggle"
-        onClick={[Function]}
-        type="button"
-      >
-        <span
-          className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-        />
-        <span
-          className="govuk-accordion__show-all-text"
-        >
-          Show all sections
-        </span>
-      </button>
-    </div>
     <div
       className="govuk-accordion__section"
       data-qa="item-1"
@@ -39,52 +19,12 @@ exports[`Storyshots GOV.UK Components/Accordion Multiple accordions 1`] = `
         <h2
           className="govuk-accordion__section-heading"
         >
-          <button
-            aria-controls="accordion-default-content-item-1"
-            aria-expanded={false}
-            className="govuk-accordion__section-button"
-            data-qa="accordion-toggle"
-            onClick={[Function]}
-            type="button"
+          <span
+            className="govuk-accordion__section-button govuk-heading-m"
+            id="accordion-default-heading-item-1"
           >
-            <span
-              className="govuk-accordion__section-heading-text"
-              id="accordion-default-heading-item-1"
-            >
-              <span
-                className="govuk-accordion__section-heading-text-focus"
-              >
-                Test item
-              </span>
-            </span>
-            <span
-              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
-            >
-              , 
-            </span>
-            <span
-              className="govuk-accordion__section-toggle"
-            >
-              <span
-                className="govuk-accordion__section-toggle-focus"
-              >
-                <span
-                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-                />
-                <span
-                  className="govuk-accordion__section-toggle-text"
-                >
-                  Show
-                   
-                  <span
-                    className="govuk-visually-hidden"
-                  >
-                    this section
-                  </span>
-                </span>
-              </span>
-            </span>
-          </button>
+            Test item
+          </span>
         </h2>
       </div>
       <div
@@ -109,52 +49,12 @@ exports[`Storyshots GOV.UK Components/Accordion Multiple accordions 1`] = `
         <h2
           className="govuk-accordion__section-heading"
         >
-          <button
-            aria-controls="accordion-default-content-item-2"
-            aria-expanded={false}
-            className="govuk-accordion__section-button"
-            data-qa="accordion-toggle"
-            onClick={[Function]}
-            type="button"
+          <span
+            className="govuk-accordion__section-button govuk-heading-m"
+            id="accordion-default-heading-item-2"
           >
-            <span
-              className="govuk-accordion__section-heading-text"
-              id="accordion-default-heading-item-2"
-            >
-              <span
-                className="govuk-accordion__section-heading-text-focus"
-              >
-                Test item 2
-              </span>
-            </span>
-            <span
-              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
-            >
-              , 
-            </span>
-            <span
-              className="govuk-accordion__section-toggle"
-            >
-              <span
-                className="govuk-accordion__section-toggle-focus"
-              >
-                <span
-                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-                />
-                <span
-                  className="govuk-accordion__section-toggle-text"
-                >
-                  Show
-                   
-                  <span
-                    className="govuk-visually-hidden"
-                  >
-                    this section
-                  </span>
-                </span>
-              </span>
-            </span>
-          </button>
+            Test item 2
+          </span>
         </h2>
       </div>
       <div
@@ -175,33 +75,13 @@ exports[`Storyshots GOV.UK Components/Accordion Multiple accordions 1`] = `
 
 exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <div
     className="govuk-accordion"
     data-qa="accordion-container"
   >
-    <div
-      className="govuk-accordion__controls"
-    >
-      <button
-        aria-expanded={false}
-        className="govuk-accordion__show-all"
-        data-qa="all-accordion-toggle"
-        onClick={[Function]}
-        type="button"
-      >
-        <span
-          className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-        />
-        <span
-          className="govuk-accordion__show-all-text"
-        >
-          Show all sections
-        </span>
-      </button>
-    </div>
     <div
       className="govuk-accordion__section"
       data-qa="writing-well-for-web"
@@ -212,52 +92,12 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
         <h2
           className="govuk-accordion__section-heading"
         >
-          <button
-            aria-controls="accordion-default-content-writing-well-for-web"
-            aria-expanded={false}
-            className="govuk-accordion__section-button"
-            data-qa="accordion-toggle"
-            onClick={[Function]}
-            type="button"
+          <span
+            className="govuk-accordion__section-button govuk-heading-m"
+            id="accordion-default-heading-writing-well-for-web"
           >
-            <span
-              className="govuk-accordion__section-heading-text"
-              id="accordion-default-heading-writing-well-for-web"
-            >
-              <span
-                className="govuk-accordion__section-heading-text-focus"
-              >
-                Writing well for the web
-              </span>
-            </span>
-            <span
-              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
-            >
-              , 
-            </span>
-            <span
-              className="govuk-accordion__section-toggle"
-            >
-              <span
-                className="govuk-accordion__section-toggle-focus"
-              >
-                <span
-                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-                />
-                <span
-                  className="govuk-accordion__section-toggle-text"
-                >
-                  Show
-                   
-                  <span
-                    className="govuk-visually-hidden"
-                  >
-                    this section
-                  </span>
-                </span>
-              </span>
-            </span>
-          </button>
+            Writing well for the web
+          </span>
         </h2>
       </div>
       <div
@@ -282,52 +122,12 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
         <h2
           className="govuk-accordion__section-heading"
         >
-          <button
-            aria-controls="accordion-default-content-writing-well-for-specialists"
-            aria-expanded={false}
-            className="govuk-accordion__section-button"
-            data-qa="accordion-toggle"
-            onClick={[Function]}
-            type="button"
+          <span
+            className="govuk-accordion__section-button govuk-heading-m"
+            id="accordion-default-heading-writing-well-for-specialists"
           >
-            <span
-              className="govuk-accordion__section-heading-text"
-              id="accordion-default-heading-writing-well-for-specialists"
-            >
-              <span
-                className="govuk-accordion__section-heading-text-focus"
-              >
-                Writing well for specialists
-              </span>
-            </span>
-            <span
-              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
-            >
-              , 
-            </span>
-            <span
-              className="govuk-accordion__section-toggle"
-            >
-              <span
-                className="govuk-accordion__section-toggle-focus"
-              >
-                <span
-                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-                />
-                <span
-                  className="govuk-accordion__section-toggle-text"
-                >
-                  Show
-                   
-                  <span
-                    className="govuk-visually-hidden"
-                  >
-                    this section
-                  </span>
-                </span>
-              </span>
-            </span>
-          </button>
+            Writing well for specialists
+          </span>
         </h2>
       </div>
       <div
@@ -352,52 +152,12 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
         <h2
           className="govuk-accordion__section-heading"
         >
-          <button
-            aria-controls="accordion-default-content-know-your-audience"
-            aria-expanded={false}
-            className="govuk-accordion__section-button"
-            data-qa="accordion-toggle"
-            onClick={[Function]}
-            type="button"
+          <span
+            className="govuk-accordion__section-button govuk-heading-m"
+            id="accordion-default-heading-know-your-audience"
           >
-            <span
-              className="govuk-accordion__section-heading-text"
-              id="accordion-default-heading-know-your-audience"
-            >
-              <span
-                className="govuk-accordion__section-heading-text-focus"
-              >
-                Know your audience
-              </span>
-            </span>
-            <span
-              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
-            >
-              , 
-            </span>
-            <span
-              className="govuk-accordion__section-toggle"
-            >
-              <span
-                className="govuk-accordion__section-toggle-focus"
-              >
-                <span
-                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-                />
-                <span
-                  className="govuk-accordion__section-toggle-text"
-                >
-                  Show
-                   
-                  <span
-                    className="govuk-visually-hidden"
-                  >
-                    this section
-                  </span>
-                </span>
-              </span>
-            </span>
-          </button>
+            Know your audience
+          </span>
         </h2>
       </div>
       <div
@@ -422,52 +182,12 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
         <h2
           className="govuk-accordion__section-heading"
         >
-          <button
-            aria-controls="accordion-default-content-how-people-read"
-            aria-expanded={false}
-            className="govuk-accordion__section-button"
-            data-qa="accordion-toggle"
-            onClick={[Function]}
-            type="button"
+          <span
+            className="govuk-accordion__section-button govuk-heading-m"
+            id="accordion-default-heading-how-people-read"
           >
-            <span
-              className="govuk-accordion__section-heading-text"
-              id="accordion-default-heading-how-people-read"
-            >
-              <span
-                className="govuk-accordion__section-heading-text-focus"
-              >
-                How people read
-              </span>
-            </span>
-            <span
-              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
-            >
-              , 
-            </span>
-            <span
-              className="govuk-accordion__section-toggle"
-            >
-              <span
-                className="govuk-accordion__section-toggle-focus"
-              >
-                <span
-                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-                />
-                <span
-                  className="govuk-accordion__section-toggle-text"
-                >
-                  Show
-                   
-                  <span
-                    className="govuk-visually-hidden"
-                  >
-                    this section
-                  </span>
-                </span>
-              </span>
-            </span>
-          </button>
+            How people read
+          </span>
         </h2>
       </div>
       <div
@@ -488,33 +208,13 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
 
 exports[`Storyshots GOV.UK Components/Accordion Single accordion 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <div
     className="govuk-accordion"
     data-qa="accordion-container"
   >
-    <div
-      className="govuk-accordion__controls"
-    >
-      <button
-        aria-expanded={false}
-        className="govuk-accordion__show-all"
-        data-qa="all-accordion-toggle"
-        onClick={[Function]}
-        type="button"
-      >
-        <span
-          className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-        />
-        <span
-          className="govuk-accordion__show-all-text"
-        >
-          Show all sections
-        </span>
-      </button>
-    </div>
     <div
       className="govuk-accordion__section"
       data-qa="item-1"
@@ -525,52 +225,12 @@ exports[`Storyshots GOV.UK Components/Accordion Single accordion 1`] = `
         <h2
           className="govuk-accordion__section-heading"
         >
-          <button
-            aria-controls="accordion-default-content-item-1"
-            aria-expanded={false}
-            className="govuk-accordion__section-button"
-            data-qa="accordion-toggle"
-            onClick={[Function]}
-            type="button"
+          <span
+            className="govuk-accordion__section-button govuk-heading-m"
+            id="accordion-default-heading-item-1"
           >
-            <span
-              className="govuk-accordion__section-heading-text"
-              id="accordion-default-heading-item-1"
-            >
-              <span
-                className="govuk-accordion__section-heading-text-focus"
-              >
-                Test item
-              </span>
-            </span>
-            <span
-              className="govuk-visually-hidden govuk-accordion__section-heading-divider"
-            >
-              , 
-            </span>
-            <span
-              className="govuk-accordion__section-toggle"
-            >
-              <span
-                className="govuk-accordion__section-toggle-focus"
-              >
-                <span
-                  className="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
-                />
-                <span
-                  className="govuk-accordion__section-toggle-text"
-                >
-                  Show
-                   
-                  <span
-                    className="govuk-visually-hidden"
-                  >
-                    this section
-                  </span>
-                </span>
-              </span>
-            </span>
-          </button>
+            Test item
+          </span>
         </h2>
       </div>
       <div
@@ -591,7 +251,7 @@ exports[`Storyshots GOV.UK Components/Accordion Single accordion 1`] = `
 
 exports[`Storyshots GOV.UK Components/Button Disabled Button 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <button
@@ -606,7 +266,7 @@ exports[`Storyshots GOV.UK Components/Button Disabled Button 1`] = `
 
 exports[`Storyshots GOV.UK Components/Button Link Button 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <button
@@ -620,7 +280,7 @@ exports[`Storyshots GOV.UK Components/Button Link Button 1`] = `
 
 exports[`Storyshots GOV.UK Components/Button Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <button
@@ -634,7 +294,7 @@ exports[`Storyshots GOV.UK Components/Button Primary 1`] = `
 
 exports[`Storyshots GOV.UK Components/Button Primary Button 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <button
@@ -648,7 +308,7 @@ exports[`Storyshots GOV.UK Components/Button Primary Button 1`] = `
 
 exports[`Storyshots GOV.UK Components/Button Secondary Button 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <button
@@ -662,7 +322,7 @@ exports[`Storyshots GOV.UK Components/Button Secondary Button 1`] = `
 
 exports[`Storyshots GOV.UK Components/Button Warning Button 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <button
@@ -674,9 +334,36 @@ exports[`Storyshots GOV.UK Components/Button Warning Button 1`] = `
 </div>
 `;
 
+exports[`Storyshots GOV.UK Components/Details Primary 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <details
+    className="govuk-details"
+    data-module="govuk-details"
+  >
+    <summary
+      className="govuk-details__summary"
+    >
+      <span
+        className="govuk-details__summary-text"
+      >
+        Help with nationality
+      </span>
+    </summary>
+    <div
+      className="govuk-details__text"
+    >
+      We need to know your nationality so we can work out which elections you’re entitled to vote in. If you cannot provide your nationality, you’ll have to send copies of identity documents through the post.
+    </div>
+  </details>
+</div>
+`;
+
 exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <footer
@@ -916,7 +603,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Blue 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -929,7 +616,7 @@ exports[`Storyshots GOV.UK Components/Tag Blue 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Green 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -942,7 +629,7 @@ exports[`Storyshots GOV.UK Components/Tag Green 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Grey 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -955,7 +642,7 @@ exports[`Storyshots GOV.UK Components/Tag Grey 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Orange 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -968,7 +655,7 @@ exports[`Storyshots GOV.UK Components/Tag Orange 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Pink 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -981,7 +668,7 @@ exports[`Storyshots GOV.UK Components/Tag Pink 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -994,7 +681,7 @@ exports[`Storyshots GOV.UK Components/Tag Primary 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Purple 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -1007,7 +694,7 @@ exports[`Storyshots GOV.UK Components/Tag Purple 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Red 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -1020,7 +707,7 @@ exports[`Storyshots GOV.UK Components/Tag Red 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Solid 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -1033,7 +720,7 @@ exports[`Storyshots GOV.UK Components/Tag Solid 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Turquoise 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -1046,7 +733,7 @@ exports[`Storyshots GOV.UK Components/Tag Turquoise 1`] = `
 
 exports[`Storyshots GOV.UK Components/Tag Yellow 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <strong
@@ -1059,7 +746,7 @@ exports[`Storyshots GOV.UK Components/Tag Yellow 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Accessibility Text Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <div
@@ -1072,7 +759,7 @@ exports[`Storyshots IFSPA Renderer/Accessibility Text Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Currency Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1090,7 +777,7 @@ exports[`Storyshots IFSPA Renderer/Currency Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Currency Round To Zero Decimal Places 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1108,7 +795,7 @@ exports[`Storyshots IFSPA Renderer/Currency Round To Zero Decimal Places 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Currency Whole Number With Commas 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1126,7 +813,7 @@ exports[`Storyshots IFSPA Renderer/Currency Whole Number With Commas 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date + Time/Full Date Time Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1137,7 +824,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date + Time/Full Date Time Primar
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date + Time/Short Date Time Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1148,7 +835,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date + Time/Short Date Time Prima
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date/Day + Long Month Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1159,7 +846,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date/Day + Long Month Primary 1`]
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date/Full Date Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1170,7 +857,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date/Full Date Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date/Full Numberic Date Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1181,7 +868,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date/Full Numberic Date Primary 1
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date/Long Year Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1192,7 +879,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date/Long Year Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date/Month + Year Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1203,7 +890,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date/Month + Year Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date/Short Date Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1214,7 +901,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date/Short Date Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Date/Short Month Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1225,7 +912,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Date/Short Month Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Different Years 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1236,7 +923,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Different Years 1
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1247,7 +934,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Same Year 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1258,7 +945,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Length/Duration Same Year 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Length/Months Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1269,7 +956,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Length/Months Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Different Years 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1298,7 +985,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Differ
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1327,7 +1014,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Primar
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Same Year 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1356,7 +1043,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Same Y
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Different Years 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1385,7 +1072,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Different Y
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1414,7 +1101,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Primary 1`]
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Same Year 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1443,7 +1130,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Same Year 1
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Different Years 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1472,7 +1159,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Different 
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1501,7 +1188,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Primary 1`
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Same Year 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1530,7 +1217,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Same Year 
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Duration Different Years 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1559,7 +1246,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Duration Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1588,14 +1275,14 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Duration Same Month 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 />
 `;
 
 exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Duration Same Year 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span>
@@ -1624,7 +1311,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
 
 exports[`Storyshots IFSPA Renderer/Email Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <a
@@ -1641,7 +1328,7 @@ exports[`Storyshots IFSPA Renderer/Email Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Email Very long E-Mail Address 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <a
@@ -1658,7 +1345,7 @@ exports[`Storyshots IFSPA Renderer/Email Very long E-Mail Address 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Markdown Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1676,7 +1363,7 @@ jumps over the lazy dog.</p>
 
 exports[`Storyshots IFSPA Renderer/Markdown Trusted 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1696,7 +1383,7 @@ exports[`Storyshots IFSPA Renderer/Markdown Trusted 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Markdown Untrusted 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1715,7 +1402,7 @@ exports[`Storyshots IFSPA Renderer/Markdown Untrusted 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Percentage Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1732,7 +1419,7 @@ exports[`Storyshots IFSPA Renderer/Percentage Primary 1`] = `
 
 exports[`Storyshots IFSPA Renderer/Percentage Round To Zero Decimal Places 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1749,7 +1436,7 @@ exports[`Storyshots IFSPA Renderer/Percentage Round To Zero Decimal Places 1`] =
 
 exports[`Storyshots IFSPA Renderer/Percentage Whole Number With Commas 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <span
@@ -1766,7 +1453,7 @@ exports[`Storyshots IFSPA Renderer/Percentage Whole Number With Commas 1`] = `
 
 exports[`Storyshots IFSPA Renderer/SimpleString Bold 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <p
@@ -1779,7 +1466,7 @@ exports[`Storyshots IFSPA Renderer/SimpleString Bold 1`] = `
 
 exports[`Storyshots IFSPA Renderer/SimpleString Multiline 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <p
@@ -1795,7 +1482,7 @@ is wrapped.
 
 exports[`Storyshots IFSPA Renderer/SimpleString Primary 1`] = `
 <div
-  className="govuk-template__body js-enabled"
+  className="govuk-template__body"
   id="root"
 >
   <p
@@ -1804,5 +1491,621 @@ exports[`Storyshots IFSPA Renderer/SimpleString Primary 1`] = `
     The quick brown fox
 jumps over the lazy dog.
   </p>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Table Custom Column 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-table-wrapper"
+    data-qa="primary-table"
+  >
+    <table
+      className="govuk-table"
+    >
+      <colgroup>
+        <col
+          data-qa="col-col-string"
+          style={Object {}}
+        />
+        <col
+          data-qa="col-col-custom"
+          style={Object {}}
+        />
+      </colgroup>
+      <thead
+        className="govuk-table__head"
+      >
+        <tr
+          className="govuk-table__row"
+        >
+          <th
+            className="govuk-table__header"
+            onClick={[Function]}
+            scope="col"
+          >
+            Id
+          </th>
+          <th
+            className="govuk-table__header"
+            onClick={[Function]}
+            scope="col"
+          >
+            The custom column
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="govuk-table__body"
+      >
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 101
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              This is the custom column with tags: 
+              <i>
+                Example 1
+              </i>
+               on 
+              <span>
+                10 May 2023, 12:06pm
+              </span>
+            </span>
+          </td>
+        </tr>
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 102
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              This is the custom column with tags: 
+              <i>
+                Example 2
+              </i>
+               on 
+              <span>
+                11 May 2023, 12:06pm
+              </span>
+            </span>
+          </td>
+        </tr>
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 103
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              This is the custom column with tags: 
+              <i>
+                Example 3
+              </i>
+               on 
+              <span>
+                12 May 2023, 12:06pm
+              </span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-table-wrapper"
+    data-qa="primary-table"
+  >
+    <table
+      className="govuk-table"
+    >
+      <colgroup>
+        <col
+          data-qa="col-col-string"
+          style={Object {}}
+        />
+        <col
+          data-qa="col-col-currency"
+          style={Object {}}
+        />
+      </colgroup>
+      <thead
+        className="govuk-table__head"
+      >
+        <tr
+          className="govuk-table__row"
+        >
+          <th
+            className="govuk-table__header"
+            onClick={[Function]}
+            scope="col"
+          >
+            Id
+          </th>
+          <th
+            className="govuk-table__header govuk-table__header--numeric"
+            onClick={[Function]}
+            scope="col"
+          >
+            Cost
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="govuk-table__body"
+      >
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 101
+          </td>
+          <td
+            className="govuk-table__cell govuk-table__cell--numeric"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span
+              className="currency"
+              style={
+                Object {
+                  "whiteSpace": "nowrap",
+                }
+              }
+            >
+              £10.35
+            </span>
+          </td>
+        </tr>
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 102
+          </td>
+          <td
+            className="govuk-table__cell govuk-table__cell--numeric"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span
+              className="currency"
+              style={
+                Object {
+                  "whiteSpace": "nowrap",
+                }
+              }
+            >
+              £20.70
+            </span>
+          </td>
+        </tr>
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 103
+          </td>
+          <td
+            className="govuk-table__cell govuk-table__cell--numeric"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span
+              className="currency"
+              style={
+                Object {
+                  "whiteSpace": "nowrap",
+                }
+              }
+            >
+              £31.05
+            </span>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__header"
+          >
+            Total costs
+          </td>
+          <td
+            className="govuk-table__header govuk-table__header--numeric"
+          >
+            <span
+              className="currency"
+              style={
+                Object {
+                  "whiteSpace": "nowrap",
+                }
+              }
+            >
+              £62.10
+            </span>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+`;
+
+exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-table-wrapper"
+    data-qa="primary-table"
+  >
+    <table
+      className="govuk-table"
+    >
+      <colgroup>
+        <col
+          data-qa="col-col-number"
+          style={Object {}}
+        />
+        <col
+          data-qa="col-col-string"
+          style={Object {}}
+        />
+        <col
+          data-qa="col-col-currency"
+          style={Object {}}
+        />
+        <col
+          data-qa="col-col-shortdate"
+          style={Object {}}
+        />
+        <col
+          data-qa="col-col-fulldate"
+          style={Object {}}
+        />
+      </colgroup>
+      <thead
+        className="govuk-table__head"
+      >
+        <tr
+          className="govuk-table__row"
+        >
+          <th
+            className="govuk-table__header"
+            onClick={[Function]}
+            scope="col"
+          >
+            Id
+          </th>
+          <th
+            className="govuk-table__header"
+            onClick={[Function]}
+            scope="col"
+          >
+            Name
+          </th>
+          <th
+            className="govuk-table__header govuk-table__header--numeric"
+            onClick={[Function]}
+            scope="col"
+          >
+            Cost
+          </th>
+          <th
+            className="govuk-table__header"
+            onClick={[Function]}
+            scope="col"
+          >
+            Created (Short)
+          </th>
+          <th
+            className="govuk-table__header"
+            onClick={[Function]}
+            scope="col"
+          >
+            Created (Full)
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        className="govuk-table__body"
+      >
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 101
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Example 1
+          </td>
+          <td
+            className="govuk-table__cell govuk-table__cell--numeric"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span
+              className="currency"
+              style={
+                Object {
+                  "whiteSpace": "nowrap",
+                }
+              }
+            >
+              £10.35
+            </span>
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              10 May 2023
+            </span>
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              10 May 2023
+            </span>
+          </td>
+        </tr>
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 102
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Example 2
+          </td>
+          <td
+            className="govuk-table__cell govuk-table__cell--numeric"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span
+              className="currency"
+              style={
+                Object {
+                  "whiteSpace": "nowrap",
+                }
+              }
+            >
+              £20.70
+            </span>
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              11 May 2023
+            </span>
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              11 May 2023
+            </span>
+          </td>
+        </tr>
+        <tr
+          className="govuk-table__row"
+        >
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Record 103
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            Example 3
+          </td>
+          <td
+            className="govuk-table__cell govuk-table__cell--numeric"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span
+              className="currency"
+              style={
+                Object {
+                  "whiteSpace": "nowrap",
+                }
+              }
+            >
+              £31.05
+            </span>
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              12 May 2023
+            </span>
+          </td>
+          <td
+            className="govuk-table__cell"
+            style={
+              Object {
+                "paddingRight": undefined,
+              }
+            }
+          >
+            <span>
+              12 May 2023
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 `;
