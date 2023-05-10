@@ -113,8 +113,8 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   animate() {
-    const table = document.querySelector(".acc-sticky-table") as HTMLTableElement;
-    const scrollPane = document.querySelector(".acc-sticky-table-scrollable") as HTMLDivElement;
+    const table = document.querySelector(".acc-sticky-table") as HTMLTableElement | null;
+    const scrollPane = document.querySelector(".acc-sticky-table-scrollable") as HTMLDivElement | null;
     const classNames = [
       {
         selector: ".sticky-col-left-1",
@@ -134,58 +134,60 @@ export class ForecastTable extends React.Component<Props> {
       },
     ] as const;
 
-    table.style.whiteSpace = "normal";
+    if (table && scrollPane) {
+      table.style.whiteSpace = "normal";
 
-    const accumulator = {
-      left: 0,
-      right: 0,
-    };
+      const accumulator = {
+        left: 0,
+        right: 0,
+      };
 
-    const rowElements = [...scrollPane.querySelectorAll("tr")];
+      const rowElements = [...scrollPane.querySelectorAll("tr")];
 
-    for (const { selector, side } of classNames) {
-      const columnElements = [...scrollPane.querySelectorAll(selector)] as HTMLTableCellElement[];
-      for (const col of columnElements) {
-        col.classList.add("disable-sticky-col-width");
+      for (const { selector, side } of classNames) {
+        const columnElements = [...scrollPane.querySelectorAll(selector)] as HTMLTableCellElement[];
+        for (const col of columnElements) {
+          col.classList.add("disable-sticky-col-width");
+        }
+
+        let maxWidth = 0;
+
+        for (const col of columnElements) {
+          const { width } = col.getBoundingClientRect();
+          if (width > maxWidth) maxWidth = width;
+        }
+
+        for (const col of columnElements) {
+          col.classList.remove("disable-sticky-col-width");
+          col.style[side] = `${accumulator[side]}px`;
+          col.style.width = `${maxWidth}px`;
+        }
+
+        accumulator[side] += maxWidth;
       }
 
-      let maxWidth = 0;
+      for (const row of rowElements) {
+        const cells = [...row.querySelectorAll("th, td")] as HTMLTableCellElement[];
 
-      for (const col of columnElements) {
-        const { width } = col.getBoundingClientRect();
-        if (width > maxWidth) maxWidth = width;
+        for (const cell of cells) {
+          cell.style.height = `unset`;
+        }
+
+        let maxHeight = 0;
+
+        for (const cell of cells) {
+          const { height } = cell.getBoundingClientRect();
+          if (height > maxHeight) maxHeight = height;
+        }
+
+        for (const cell of cells) {
+          cell.style.height = `${maxHeight}px`;
+        }
       }
 
-      for (const col of columnElements) {
-        col.classList.remove("disable-sticky-col-width");
-        col.style[side] = `${accumulator[side]}px`;
-        col.style.width = `${maxWidth}px`;
-      }
-
-      accumulator[side] += maxWidth;
+      scrollPane.style.marginLeft = `${accumulator.left}px`;
+      scrollPane.style.marginRight = `${accumulator.right}px`;
     }
-
-    for (const row of rowElements) {
-      const cells = [...row.querySelectorAll("th, td")] as HTMLTableCellElement[];
-
-      for (const cell of cells) {
-        cell.style.height = `unset`;
-      }
-
-      let maxHeight = 0;
-
-      for (const cell of cells) {
-        const { height } = cell.getBoundingClientRect();
-        if (height > maxHeight) maxHeight = height;
-      }
-
-      for (const cell of cells) {
-        cell.style.height = `${maxHeight}px`;
-      }
-    }
-
-    scrollPane.style.marginLeft = `${accumulator.left}px`;
-    scrollPane.style.marginRight = `${accumulator.right}px`;
 
     // If we have animated less than 30 times after an event, such as a resize/click event,
     // draw the next frame too, just in case.
