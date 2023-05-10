@@ -15,7 +15,7 @@ import {
   ShortDateTime,
 } from "@ui/components/renderers/date";
 
-import { findByTextContent } from "../../../../tests/test-utils/rtl-helpers";
+import { findByTextContent } from "../../../../../tests/test-utils/rtl-helpers";
 
 const date = new Date("1993/01/07 09:02:01");
 const afternoonDate = new Date("1993/01/07 21:02:01");
