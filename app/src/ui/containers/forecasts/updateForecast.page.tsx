@@ -38,27 +38,6 @@ export interface UpdateForecastParams {
 }
 
 interface UpdateForecastProps {
-  data: {
-    project: Pick<
-      ProjectDtoGql,
-      "id" | "title" | "isActive" | "projectNumber" | "periodId" | "numberOfPeriods" | "competitionType"
-    >;
-    partner: Pick<
-      PartnerDtoGql,
-      "id" | "name" | "overheadRate" | "forecastLastModifiedDate" | "roles" | "organisationType" | "partnerStatus"
-    >;
-    claims: Pick<ClaimDto, "isApproved" | "periodId" | "isFinalClaim">[];
-    claim: Pick<ClaimDto, "id" | "isApproved" | "periodId" | "isFinalClaim" | "paidDate"> | null;
-    costCategories: Pick<
-      CostCategoryDto,
-      "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type"
-    >[];
-    claimDetails: Pick<ClaimDetailsSummaryDto, "costCategoryId" | "periodId" | "value" | "periodEnd" | "periodStart">[];
-    forecastDetails: ForecastDetailsDTO[];
-    golCosts: Pick<GOLCostDto, "value" | "costCategoryId">[];
-    IARDueOnClaimPeriods: string[];
-  };
-
   editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
   onChange: (saving: boolean, dto: ForecastDetailsDTO[]) => void;
 }
@@ -66,13 +45,14 @@ interface UpdateForecastProps {
 const Form = createTypedForm<ForecastDetailsDTO[]>();
 
 const UpdateForecastComponent = ({
-  data,
   editor,
   routes,
   partnerId,
   projectId,
   onChange,
 }: UpdateForecastParams & UpdateForecastProps & BaseProps) => {
+  const data = useUpdateForecastData(projectId, partnerId, undefined);
+
   const { isActive } = data.project;
 
   const handleSubmit = () => {
@@ -147,7 +127,6 @@ const UpdateForecastContainer = (props: UpdateForecastParams & BaseProps) => {
 
   const navigate = useNavigate();
   const forecastUpdatedMessage = getContent(x => x.forecastsMessages.forecastUpdated);
-  const data = useUpdateForecastData(props.projectId, props.partnerId, undefined);
 
   const pending = Pending.combine({
     editor: stores.forecastDetails.getForecastEditor(props.partnerId),
@@ -169,7 +148,7 @@ const UpdateForecastContainer = (props: UpdateForecastParams & BaseProps) => {
   return (
     <PageLoader
       pending={pending}
-      render={x => <UpdateForecastComponent data={data} onChange={onChange} {...Object.assign({}, props, x)} />}
+      render={x => <UpdateForecastComponent onChange={onChange} {...Object.assign({}, props, x)} />}
     />
   );
 };
