@@ -17,6 +17,7 @@ import {
   ILinkInfo,
   PartnerDto,
   ProjectDto,
+  ProjectMonitoringLevel,
   ProjectRole,
   TotalCosts,
 } from "@framework/types";
@@ -247,7 +248,11 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
       switch (original.status) {
         case ClaimStatus.DRAFT:
         case ClaimStatus.MO_QUERIED:
-          dto.status = ClaimStatus.SUBMITTED;
+          if (project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
+            dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+          } else {
+            dto.status = ClaimStatus.SUBMITTED;
+          }
           break;
 
         case ClaimStatus.AWAITING_IAR:

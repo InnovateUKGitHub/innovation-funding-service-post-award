@@ -1,4 +1,4 @@
-import { ClaimDto, ClaimStatus, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatus, ProjectMonitoringLevel, ProjectRole } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
@@ -10,7 +10,7 @@ import {
   PrepareClaimParams,
 } from "../../ui/containers";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
-import { GetAllProjectRolesForUser } from "../features/projects";
+import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
@@ -32,10 +32,16 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
     // Note: Not submitted so we only care about comments being updated
     if (button.name !== "default") return claim;
 
+    const project = await context.runQuery(new GetByIdQuery(params.projectId));
+
     switch (claim.status) {
       case ClaimStatus.DRAFT:
       case ClaimStatus.MO_QUERIED:
-        claim.status = ClaimStatus.SUBMITTED;
+        if (project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
+          claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+        } else {
+          claim.status = ClaimStatus.SUBMITTED;
+        }
         break;
 
       case ClaimStatus.AWAITING_IAR:

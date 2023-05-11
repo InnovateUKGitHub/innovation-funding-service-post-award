@@ -975,6 +975,7 @@ Object {
       "Acc_NumberOfOpenClaims__c",
       "Acc_LeadParticipantName__c",
       "Acc_Duration__c",
+      "Acc_MonitoringLevel__c",
       "Acc_NumberofPeriods__c",
       "Acc_CurrentPeriodNumber__c",
       "Acc_CurrentPeriodStartDate__c",

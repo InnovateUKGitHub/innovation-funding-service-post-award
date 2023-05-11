@@ -1,6 +1,6 @@
 import { ProjectStatus } from "@framework/constants";
 
-export const getProjectStatus = (salesforceProjectStatus: string): ProjectStatus => {
+export const getProjectStatus = (salesforceProjectStatus: string | null | undefined): ProjectStatus => {
   switch (salesforceProjectStatus) {
     case "Offer Letter Sent":
       return ProjectStatus.OfferLetterSent;

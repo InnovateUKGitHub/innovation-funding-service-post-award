@@ -23,6 +23,7 @@ export interface ISalesforceProject {
   Acc_ClaimsUnderQuery__c: number;
   Acc_TrackingClaimStatus__c: string;
   ClaimStatusName: string;
+  Acc_MonitoringLevel__c: string;
   Acc_NumberOfOpenClaims__c: number;
   Acc_LeadParticipantName__c: string;
   Acc_Duration__c: number;
@@ -71,6 +72,7 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Acc_NumberOfOpenClaims__c",
     "Acc_LeadParticipantName__c",
     "Acc_Duration__c",
+    "Acc_MonitoringLevel__c",
     "Acc_NumberofPeriods__c",
     "Acc_CurrentPeriodNumber__c",
     "Acc_CurrentPeriodStartDate__c",

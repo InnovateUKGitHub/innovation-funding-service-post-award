@@ -108,6 +108,7 @@ export class TestData {
       Loan_LoanAvailabilityPeriodLength__c: null,
       Loan_LoanExtensionPeriodLength__c: null,
       Loan_LoanRepaymentPeriodLength__c: null,
+      Acc_MonitoringLevel__c: "Platinum",
     };
 
     if (update) update(newItem);

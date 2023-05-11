@@ -1,4 +1,4 @@
-import { ClaimFrequency, ProjectRole, ProjectStatus } from "@framework/constants";
+import { ClaimFrequency, ProjectMonitoringLevel, ProjectRole, ProjectStatus } from "@framework/constants";
 
 export interface ProjectDto {
   applicationUrl?: string | null;
@@ -23,6 +23,7 @@ export interface ProjectDto {
   loanEndDate: Date | null;
   loanExtensionPeriodLength: number | null;
   loanRepaymentPeriodLength: number | null;
+  monitoringLevel: ProjectMonitoringLevel;
   numberOfOpenClaims: number;
   numberOfPeriods: number;
   pcrsQueried: number;

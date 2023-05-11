@@ -1,4 +1,6 @@
-import { ClaimFrequency, getAuthRoles, IContext, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
+import { getProjectStatus } from "@framework/mappers/projectStatus";
+import { ClaimFrequency, getAuthRoles, IContext, ProjectDto, ProjectRole } from "@framework/types";
 import { dayComparator, isNumber, roundCurrency } from "@framework/util";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 
@@ -44,31 +46,13 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     durationInMonths: item.Acc_Duration__c,
     numberOfPeriods: isNumber(item.Acc_NumberofPeriods__c) ? item.Acc_NumberofPeriods__c : 0,
     isNonFec: item.Acc_NonFEC__c,
+    monitoringLevel: getMonitoringLevel(item.Acc_MonitoringLevel__c),
 
     loanEndDate: context.clock.parseOptionalSalesforceDate(item.Loan_LoanEndDate__c),
     loanAvailabilityPeriodLength: item.Loan_LoanAvailabilityPeriodLength__c ?? null,
     loanExtensionPeriodLength: item.Loan_LoanExtensionPeriodLength__c ?? null,
     loanRepaymentPeriodLength: item.Loan_LoanRepaymentPeriodLength__c ?? null,
   };
-};
-
-const getProjectStatus = (salesforceProjectStatus: string): ProjectStatus => {
-  switch (salesforceProjectStatus) {
-    case "Offer Letter Sent":
-      return ProjectStatus.OfferLetterSent;
-    case "Live":
-      return ProjectStatus.Live;
-    case "On Hold":
-      return ProjectStatus.OnHold;
-    case "Final Claim":
-      return ProjectStatus.FinalClaim;
-    case "Closed":
-      return ProjectStatus.Closed;
-    case "Terminated":
-      return ProjectStatus.Terminated;
-    default:
-      return ProjectStatus.Unknown;
-  }
 };
 
 const getRoleTitles = (roles: ProjectRole) => {

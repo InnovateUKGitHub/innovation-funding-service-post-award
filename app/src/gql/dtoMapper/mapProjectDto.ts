@@ -1,4 +1,5 @@
 import type { ProjectDtoGql } from "@framework/dtos";
+import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
 import { getProjectStatus } from "@framework/mappers/projectStatus";
 import { Clock, dayComparator, roundCurrency } from "@framework/util";
 
@@ -33,6 +34,7 @@ type ProjectNode = Readonly<
     Acc_ProjectTitle__c: GQL.Value<string>;
     Acc_StartDate__c: GQL.Value<string>;
     Acc_TotalProjectCosts__c: GQL.Value<number>;
+    Acc_MonitoringLevel__c: GQL.Value<string>;
     Loan_LoanAvailabilityPeriodLength__c: GQL.Value<number>;
     Loan_LoanEndDate__c: GQL.Value<string>;
     Loan_LoanExtensionPeriodLength__c: GQL.Value<number>;
@@ -59,6 +61,7 @@ type ProjectDtoMapping = Pick<
   | "loanEndDate"
   | "loanExtensionPeriodLength"
   | "loanRepaymentPeriodLength"
+  | "monitoringLevel"
   | "numberOfOpenClaims"
   | "numberOfPeriods"
   | "pcrsQueried"
@@ -130,6 +133,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   loanRepaymentPeriodLength(node) {
     return node?.Loan_LoanRepaymentPeriodLength__c?.value ?? null;
   },
+  monitoringLevel(node) {
+    return getMonitoringLevel(node?.Acc_MonitoringLevel__c?.value);
+  },
   numberOfOpenClaims(node) {
     return node?.Acc_NumberOfOpenClaims__c?.value ?? 0;
   },
@@ -168,7 +174,7 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
     return clock.parseOptionalSalesforceDate(node?.Acc_StartDate__c?.value ?? null);
   },
   status(node) {
-    return getProjectStatus(node?.Acc_ProjectStatus__c?.value ?? "Unknown");
+    return getProjectStatus(node?.Acc_ProjectStatus__c?.value);
   },
   statusName(node) {
     return node?.Acc_ProjectStatus__c?.label ?? "Unknown";

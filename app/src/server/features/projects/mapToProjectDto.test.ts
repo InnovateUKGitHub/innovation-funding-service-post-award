@@ -1,4 +1,4 @@
-import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import { ClaimFrequency, ProjectDto, ProjectMonitoringLevel, ProjectRole, ProjectStatus } from "@framework/types";
 import { mapToProjectDto } from "@server/features/projects";
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -46,6 +46,7 @@ describe("mapToProjectDto", () => {
       claimsOverdue: 5,
       claimsWithParticipant: 1,
       leadPartnerName: "Heathcliff",
+      monitoringLevel: ProjectMonitoringLevel.Platinum,
       claimsToReview: 2,
       status: ProjectStatus.Live,
       statusName: "Live",
@@ -86,6 +87,7 @@ describe("mapToProjectDto", () => {
       x.Acc_Duration__c = expected.durationInMonths;
       x.Acc_LeadParticipantName__c = expected.leadPartnerName;
       x.Acc_NonFEC__c = expected.isNonFec;
+      x.Acc_MonitoringLevel__c = expected.monitoringLevel;
       x.Loan_LoanEndDate__c = null;
       x.Loan_LoanAvailabilityPeriodLength__c = null;
       x.Loan_LoanExtensionPeriodLength__c = null;

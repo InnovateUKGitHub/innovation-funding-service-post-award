@@ -8,6 +8,15 @@ export enum ProjectStatus {
   Terminated = 6,
 }
 
+export enum ProjectMonitoringLevel {
+  Unknown = "Unknown",
+  Platinum = "Platinum",
+  Gold = "Gold",
+  Silver = "Silver",
+  Bronze = "Bronze",
+  InternalAssurance = "Internal Assurance",
+}
+
 export enum ProjectRole {
   Unknown = 0,
   MonitoringOfficer = 1 << 0,

@@ -1,5 +1,5 @@
 import _merge from "lodash.merge";
-import { PCROrganisationType } from "@framework/constants";
+import { PCROrganisationType, ProjectMonitoringLevel } from "@framework/constants";
 import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, PCRSummaryDto, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ILinkInfo } from "@framework/types";
@@ -45,6 +45,7 @@ export const createProjectDto: CreateDTO<ProjectDto> = (objectToMerge?) => {
     loanAvailabilityPeriodLength: 0,
     loanExtensionPeriodLength: 0,
     loanRepaymentPeriodLength: 0,
+    monitoringLevel: ProjectMonitoringLevel.Platinum,
   };
 
   return _merge(stubProject, objectToMerge || {});
