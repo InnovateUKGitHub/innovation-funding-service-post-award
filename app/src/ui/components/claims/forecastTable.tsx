@@ -492,6 +492,7 @@ export class ForecastTable extends React.Component<Props> {
           }
           className="govuk-!-font-size-16"
           disabled={editor.status === EditorStatus.Saving}
+          enforceValidInput
         />
       </span>
     );

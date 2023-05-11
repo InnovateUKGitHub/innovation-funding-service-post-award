@@ -7,6 +7,12 @@ export interface NumberInputProps extends InputProps<number> {
   id?: string;
   className?: string;
   width?: FormInputWidths;
+
+  /**
+   * Enforce the input is valid, by disallowing users from entering invalid inputs.
+   * This may be jarring to the end user who feel their keyboard is broken, as there is no response.
+   */
+  enforceValidInput?: boolean;
 }
 
 interface NumberInputState extends InputState {
@@ -45,12 +51,19 @@ export const NumberInput = (props: NumberInputProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, debounce: boolean) => {
     const value = e.currentTarget.value;
     if (state.value !== value) {
-      setState({ value, invalid: !/^-?\d*(\.\d{1,2})?$/.test(value) });
-      const val = value === "" ? null : Number(value);
-      if (debounce) {
-        debouncedOnChange(val);
-      } else if (props.onChange) {
-        props.onChange(val);
+      const invalid = !/^-?£?\d*\.?(\d{1,2})?$/.test(value);
+
+      // If we are in an invalid state AND we are enforcing valid inputs only,
+      // do not set the state of the input (to ignore the user input)
+      if (!(invalid && props.enforceValidInput)) {
+        setState({ value, invalid });
+
+        const val = value === "" ? null : Number(value.replaceAll("£", ""));
+        if (debounce) {
+          debouncedOnChange(val);
+        } else if (props.onChange) {
+          props.onChange(val);
+        }
       }
     }
   };
