@@ -3,6 +3,7 @@ import type { PartnerDtoGql } from "@framework/dtos";
 import { getClaimStatus } from "@framework/mappers/claimStatus";
 import { getPartnerStatus } from "@framework/mappers/partnerStatus";
 import { calcPercentage } from "@framework/util";
+import { PostcodeTaskStatus } from "@framework/constants";
 
 type PartnerNode = Readonly<
   Partial<{
@@ -59,6 +60,7 @@ type PartnerDtoMapping = Pick<
   | "percentageParticipantCostsClaimed"
   | "percentageParticipantCostsSubmitted"
   | "postcode"
+  | "postcodeStatus"
   | "projectId"
   | "remainingParticipantGrant"
   | "roles"
@@ -140,6 +142,9 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   postcode(node) {
     return node?.Acc_Postcode__c?.value ?? null;
+  },
+  postcodeStatus(node) {
+    return node?.Acc_Postcode__c?.value ?? null ? PostcodeTaskStatus.Complete : PostcodeTaskStatus.ToDo; // matches existing logic and not depending on unused Acc_PostcodeStatus__c to limit breaking changes
   },
   projectId(node) {
     return (node?.Acc_AccountId__r?.Id ?? "") as ProjectId;
