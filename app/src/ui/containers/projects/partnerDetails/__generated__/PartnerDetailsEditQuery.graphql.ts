@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<11e3074b0492e0fbe989169c6dd29b4a>>
+ * @generated SignedSource<<e21e9dabc4f5e7468215d31b52f4c963>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -27,6 +27,9 @@ export type PartnerDetailsEditQuery$data = {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_ParticipantStatus__c: {
+                      readonly value: string | null;
+                    } | null;
+                    readonly Acc_PostcodeStatus__c: {
                       readonly value: string | null;
                     } | null;
                     readonly Acc_Postcode__c: {
@@ -250,6 +253,16 @@ v4 = [
                                         "plural": false,
                                         "selections": (v3/*: any*/),
                                         "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "PicklistValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_PostcodeStatus__c",
+                                        "plural": false,
+                                        "selections": (v3/*: any*/),
+                                        "storageKey": null
                                       }
                                     ],
                                     "storageKey": null
@@ -303,16 +316,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "268c1c4bbbea64154ecd1a3f75deb6b0",
+    "cacheID": "cd3f7b87c7d125fd1bf96810d8c37166",
     "id": null,
     "metadata": {},
     "name": "PartnerDetailsEditQuery",
     "operationKind": "query",
-    "text": "query PartnerDetailsEditQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PartnerDetailsEditQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_PostcodeStatus__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "9e852bb195f4c99c30228e588db82e01";
+(node as any).hash = "a18c1f34a9cb93bbd1f80faf7017bc46";
 
 export default node;

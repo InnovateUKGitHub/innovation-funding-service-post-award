@@ -85,3 +85,5 @@ declare type AdditionalDataType<
  * use with picklist where one field is required to be present.
  */
 declare type ArrayWithRequired<Required, Optional> = [...[Required], ...Optional[]];
+
+declare type Values<T extends AnyObject> = T[keyof T];

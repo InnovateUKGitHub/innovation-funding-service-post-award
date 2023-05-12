@@ -1,3 +1,4 @@
+import { Result } from "@ui/validation";
 import { i18n } from "i18next";
 import { SSRCache } from "react-relay-network-modern-ssr/node8/server";
 
@@ -7,5 +8,6 @@ declare global {
     __RELAY_BOOTSTRAP_DATA__: SSRCache;
     i18n: i18n;
     __PAGE_LOAD_STATUS__: boolean;
+    __PRELOADED_FORM_ERRORS__: Result[];
   }
 }

@@ -1,6 +1,6 @@
 import { getAuthRoles, ProjectRole } from "@framework/types";
 
-import { BaseProps, defineRoute } from "../containerBase";
+import { BaseProps, defineRoute } from "../../containerBase";
 import {
   Content,
   Page,
@@ -11,7 +11,7 @@ import {
   SummaryListItem,
   Renderers,
   Link,
-} from "../../components";
+} from "../../../components";
 import { usePartnerDetailsQuery } from "./partnerDetails.logic";
 
 interface Params {

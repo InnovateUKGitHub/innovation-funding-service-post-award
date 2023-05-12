@@ -32,6 +32,7 @@ export class Result {
     public readonly isValid: boolean,
     public readonly errorMessage: string | null,
     public readonly isRequired: boolean,
+    public readonly keyId?: string, // unique key to replace auto-generated pKey value.
   ) {
     const internalResults = results as unknown as ResultsInternal;
 
@@ -40,7 +41,9 @@ export class Result {
     }
 
     // replace static id with incremental id after mounting
-    if (hasMounted) {
+    if (typeof keyId === "string" && keyId.length > 0) {
+      this.pKey = keyId;
+    } else if (hasMounted) {
       this.pKey = getKey();
     } else {
       // For client-side only

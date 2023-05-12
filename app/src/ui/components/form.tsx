@@ -349,25 +349,23 @@ export const createTypedForm = <T,>() => {
   const FieldsetComponent = ({ children, isSubQuestion, qa, heading, headingQa, className }: FieldsetProps) => {
     const Header = isSubQuestion ? "h3" : "h2";
 
-    // TODO: Check for accessibility - can header be omitted
     const headerContent = heading ? typeof heading === "string" ? heading : <Content value={heading} /> : undefined;
 
     return (
       <fieldset className={cx("govuk-fieldset", className)} data-qa={qa}>
-        <legend
-          className={cx({
-            "govuk-fieldset__legend": true,
-            "govuk-fieldset__legend--s": isSubQuestion,
-            "govuk-fieldset__legend--m": !isSubQuestion,
-          })}
-        >
-          {headerContent && (
+        {headerContent && (
+          <legend
+            className={cx({
+              "govuk-fieldset__legend": true,
+              "govuk-fieldset__legend--s": isSubQuestion,
+              "govuk-fieldset__legend--m": !isSubQuestion,
+            })}
+          >
             <Header className="govuk-fieldset__heading" data-qa={headingQa}>
               {headerContent}
             </Header>
-          )}
-        </legend>
-
+          </legend>
+        )}
         {children}
       </fieldset>
     );

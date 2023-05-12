@@ -50,6 +50,7 @@
     "@graphql-tools/load": "^7.8.9",
     "@graphql-tools/stitch": "^8.7.34",
     "@graphql-tools/wrap": "^9.2.23",
+    "@hookform/resolvers": "^3.1.0",
     "bytes": "^3.1.2",
     "caniuse-lite": "^1.0.30001332",
     "class-validator": "^0.13.2",
@@ -90,6 +91,7 @@
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.43.9",
     "react-i18next": "^12.0.0",
     "react-redux": "^8.0.2",
     "react-relay": "^14.1.0",
@@ -105,7 +107,8 @@
     "relay-runtime": "^14.1.0",
     "sanitize-filename": "^1.6.3",
     "type-graphql": "^2.0.0-beta.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
