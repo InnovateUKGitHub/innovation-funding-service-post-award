@@ -65,14 +65,14 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
   public async updatePartner(
     params: ApiParams<{
       partnerId: PartnerId;
-      partnerDto: PartnerDto;
+      partnerDto: Partial<PartnerDto>;
       validateBankDetails?: boolean;
       verifyBankDetails?: boolean;
     }>,
   ) {
     const context = contextProvider.start(params);
     await context.runCommand(
-      new UpdatePartnerCommand(params.partnerDto, params.validateBankDetails, params.verifyBankDetails),
+      new UpdatePartnerCommand(params.partnerDto as PartnerDto, params.validateBankDetails, params.verifyBankDetails),
     );
 
     const query = new GetByIdQuery(params.partnerId);

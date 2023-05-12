@@ -124,15 +124,14 @@ export const multiFileFormHandlers = [
   new LoanRequestDocumentUploadHandler(),
 ] as const;
 
-export const developerFormhandlers = [
+export const developerFormHandlers = [
   new DeveloperUserSwitcherHandler(),
   new DeveloperProjectCreatorHandler(),
   new DeveloperPageCrasherHandler(),
 ] as const;
 
 const getRoute = (handler: IFormHandler) => {
-  // map router 5 to express syntax - remove < & >
-  return handler.routePath.replace(/(<|>)/g, "");
+  return handler.routePath;
 };
 
 const handlePost =
@@ -200,7 +199,7 @@ export const configureFormRouter = ({
   }
 
   if (!configuration.sso.enabled) {
-    for (const x of developerFormhandlers) {
+    for (const x of developerFormHandlers) {
       result.post(
         getRoute(x),
         ((req, res, next) => handlePost({ schema, csrfProtection })(x)(undefined, req, res, next)) as RequestHandler,

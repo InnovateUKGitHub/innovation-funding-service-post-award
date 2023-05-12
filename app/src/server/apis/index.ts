@@ -21,6 +21,7 @@ import * as partners from "./partners";
 import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
 import * as users from "./users";
+import { PartnerDto } from "@framework/dtos";
 
 export interface IApiClient {
   accounts: accounts.IAccountsApi;
@@ -41,7 +42,17 @@ export interface IApiClient {
   pcrs: pcrs.IPCRsApi;
   projects: projects.IProjectsApi;
   projectContacts: projectContacts.IProjectContactsApi;
-  partners: partners.IPartnersApi;
+  partners: {
+    getAll: () => Promise<PartnerDto[]>;
+    getAllByProjectId: (params: { projectId: ProjectId }) => Promise<PartnerDto[]>;
+    get: (params: { partnerId: PartnerId }) => Promise<PartnerDto>;
+    updatePartner: (params: {
+      partnerId: PartnerId;
+      partnerDto: Partial<PartnerDto>;
+      validateBankDetails?: boolean;
+      verifyBankDetails?: boolean;
+    }) => Promise<PartnerDto>;
+  };
   users: users.IUserApi;
 }
 
