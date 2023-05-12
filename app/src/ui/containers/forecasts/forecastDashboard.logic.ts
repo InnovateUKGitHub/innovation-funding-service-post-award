@@ -15,7 +15,11 @@ export type Partner = Pick<
 type ProjectGQL = GQL.NodeSelector<ForecastDashboardQuery$data, "Acc_Project__c">;
 
 export const useForecastDashboardData = (projectId: ProjectId) => {
-  const data = useLazyLoadQuery<ForecastDashboardQuery>(forecastDashboardQuery, { projectId });
+  const data = useLazyLoadQuery<ForecastDashboardQuery>(
+    forecastDashboardQuery,
+    { projectId },
+    { fetchPolicy: "network-only" },
+  );
   const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   return useMemo(() => {

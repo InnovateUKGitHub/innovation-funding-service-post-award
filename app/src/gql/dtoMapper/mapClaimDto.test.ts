@@ -144,10 +144,12 @@ describe("mapToClaimDtoArray", () => {
   ];
 
   it("should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records", () => {
-    expect(mapToClaimDtoArray(edges, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"])).toMatchSnapshot();
+    expect(
+      mapToClaimDtoArray(edges, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"], {}),
+    ).toMatchSnapshot();
   });
 
   it("should map the gql data only including fields on the picklist", () => {
-    expect(mapToClaimDtoArray(edges, ["id", "paidDate"])).toMatchSnapshot();
+    expect(mapToClaimDtoArray(edges, ["id", "paidDate"], {})).toMatchSnapshot();
   });
 });

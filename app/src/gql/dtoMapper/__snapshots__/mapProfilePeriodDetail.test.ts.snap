@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapProfilePeriodDetailDtoArray should map the gql node to the dto array 1`] = `
+Array [
+  Object {
+    "forecastCost": 10,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 20,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 30,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 40,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 50,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 60,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 70,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 80,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 90,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+  Object {
+    "forecastCost": 100,
+    "partnerId": "a0D2600000zXl70EAC",
+  },
+]
+`;

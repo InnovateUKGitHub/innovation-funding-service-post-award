@@ -1,9 +1,31 @@
+import { PartnerStatus } from "@framework/constants";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import type { PartnerDtoGql } from "@framework/dtos";
 import { getClaimStatus } from "@framework/mappers/claimStatus";
 import { getPartnerStatus } from "@framework/mappers/partnerStatus";
 import { calcPercentage } from "@framework/util";
 import { PostcodeTaskStatus } from "@framework/constants";
+
+/**
+ * Note: This field returns a string with an html img element :(
+ *
+ * We have to parse and validate based on 2 types of src values.
+ */
+function parseSalesForceWarningFlagUI(flagAsImageString: string): boolean {
+  const validFlagsRegex = /\w*ACC_Red_Flag|Acc_ClearImage/;
+
+  const selectedFlag = flagAsImageString.match(validFlagsRegex);
+
+  if (!selectedFlag) {
+    throw Error(
+      "Could not parse HTML Img src value! The image does not contain the expected flags in validFlagsRegex.",
+    );
+  }
+
+  const flagImageOptions = new Set(selectedFlag);
+
+  return flagImageOptions.has("ACC_Red_Flag");
+}
 
 type PartnerNode = Readonly<
   Partial<{
@@ -21,6 +43,7 @@ type PartnerNode = Readonly<
     Acc_NonfundedParticipant__c: GQL.Value<boolean>;
     Acc_OpenClaimStatus__c: GQL.Value<string>;
     Acc_OrganisationType__c: GQL.Value<string>;
+    Acc_Overdue_Project__c: GQL.Value<string>;
     Acc_OverheadRate__c: GQL.Value<number>;
     Acc_ParticipantStatus__c: GQL.ValueAndLabel<string>;
     Acc_ParticipantType__c: GQL.Value<string>;
@@ -54,6 +77,7 @@ type PartnerDtoMapping = Pick<
   | "name"
   | "newForecastNeeded"
   | "organisationType"
+  | "overdueProject"
   | "overheadRate"
   | "partnerStatus"
   | "partnerStatusLabel"
@@ -124,6 +148,12 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   organisationType(node) {
     return node?.Acc_OrganisationType__c?.value ?? "unknown";
+  },
+  overdueProject(node) {
+    const isOverdueProject = parseSalesForceWarningFlagUI(node?.Acc_Overdue_Project__c?.value ?? "");
+    return (
+      isOverdueProject && getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown") === PartnerStatus.OnHold
+    );
   },
   overheadRate(node) {
     return node?.Acc_OverheadRate__c?.value ?? null;

@@ -101,7 +101,7 @@ export const useUpdateForecastData = (
   );
 
   // CLAIMS
-  const claims = mapToClaimDtoArray(claimsGql, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"]);
+  const claims = mapToClaimDtoArray(claimsGql, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"], {});
 
   // COST CATEGORIES
   const costCategories = mapToRequiredSortedCostCategoryDtoArray(

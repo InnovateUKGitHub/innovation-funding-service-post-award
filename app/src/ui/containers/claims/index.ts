@@ -1,4 +1,4 @@
-export * from "./allClaimsDashboard.page";
+export * from "./allClaimsDashboard/allClaimsDashboard.page";
 export * from "./claimLineItems.page";
 export * from "./claimDetailDocuments.page";
 export * from "./claimDocuments.page";
