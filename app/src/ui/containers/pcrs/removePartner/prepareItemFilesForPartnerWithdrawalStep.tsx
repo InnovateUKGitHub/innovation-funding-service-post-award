@@ -7,6 +7,7 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { DocumentDescription } from "@framework/constants";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -36,6 +37,8 @@ class Component extends React.Component<
             <UploadForm.Fieldset heading={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidanceHeading}>
               <ACC.Content markdown value={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidance} />
 
+              <UploadForm.Hidden name="description" value={() => DocumentDescription.WithdrawalOfPartnerCertificate} />
+
               <ACC.DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
@@ -43,7 +46,10 @@ class Component extends React.Component<
                 name="attachment"
                 labelHidden
                 value={data => data.files}
-                update={(dto, files) => (dto.files = files || [])}
+                update={(dto, files) => {
+                  dto.files = files || [];
+                  dto.description = DocumentDescription.WithdrawalOfPartnerCertificate;
+                }}
                 validation={documentsEditor.validator.files}
               />
             </UploadForm.Fieldset>

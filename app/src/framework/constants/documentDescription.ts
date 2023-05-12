@@ -6,6 +6,7 @@ export enum DocumentDescription {
   Evidence = 30,
   DeMinimisDeclarationForm = 40,
   CertificateOfNameChange = 250,
+  WithdrawalOfPartnerCertificate = 260,
 
   /**
    * @deprecated - This will be removed. We now favour the new "ProjectCompletionForm" workflow.
@@ -44,6 +45,8 @@ const getDocumentDescriptionContentSelector = (type: DocumentDescription | null 
       return x => x.documentLabels.description.deMinimisDeclarationForm;
     case DocumentDescription.CertificateOfNameChange:
       return x => x.documentLabels.description.certificateOfNameChange;
+    case DocumentDescription.WithdrawalOfPartnerCertificate:
+      return x => x.documentLabels.description.withdrawalOfPartnerCertificate;
     case DocumentDescription.EndOfProjectSurvey:
       return x => x.documentLabels.description.endOfProjectSurvey;
     case DocumentDescription.StatementOfExpenditure:

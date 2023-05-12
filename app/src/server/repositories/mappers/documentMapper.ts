@@ -33,6 +33,7 @@ export class DocumentDescriptionMapper {
     ClaimValidationForm: "ClaimValidationForm",
     DeMinimisDeclartionForm: "DeMinimisDeclartionForm",
     CertificateOfNameChange: "CertificateOfNameChange",
+    WithdrawalOfPartnerCertificate: "WithdrawalOfPartnerCertificate",
     StatementOfExpenditure: "StatementOfExpenditure",
     EndOfProjectSurvey: "EndOfProjectSurvey",
     JeSForm: "JeSForm",
@@ -70,6 +71,8 @@ export class DocumentDescriptionMapper {
         return DocumentDescription.DeMinimisDeclarationForm;
       case this.types.CertificateOfNameChange:
         return DocumentDescription.CertificateOfNameChange;
+      case this.types.WithdrawalOfPartnerCertificate:
+        return DocumentDescription.WithdrawalOfPartnerCertificate;
       case this.types.StatementOfExpenditure:
         return DocumentDescription.StatementOfExpenditure;
       case this.types.JeSForm:
@@ -127,6 +130,8 @@ export class DocumentDescriptionMapper {
         return this.types.DeMinimisDeclartionForm;
       case DocumentDescription.CertificateOfNameChange:
         return this.types.CertificateOfNameChange;
+      case DocumentDescription.WithdrawalOfPartnerCertificate:
+        return this.types.WithdrawalOfPartnerCertificate;
       case DocumentDescription.StatementOfExpenditure:
         return this.types.StatementOfExpenditure;
       case DocumentDescription.JeSForm:
