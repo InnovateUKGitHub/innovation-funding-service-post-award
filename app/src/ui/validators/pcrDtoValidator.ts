@@ -5,6 +5,7 @@ import {
   PCRProjectRole,
   PCRStatus,
   pcrUnduplicatableMatrix,
+  ProjectMonitoringLevel,
   ProjectRole,
 } from "@framework/constants";
 import {
@@ -48,22 +49,50 @@ export class PCRDtoValidator extends Results<PCRDto> {
     super({ model, showValidationErrors });
   }
 
-  private readonly projectManagerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
-    [PCRStatus.Draft, [PCRStatus.Draft, PCRStatus.SubmittedToMonitoringOfficer]],
+  private readonly projectManagerPermittedStatus = new Map<
+    PCRStatus,
+    { standardMonitoring: PCRStatus[]; internalAssurance: PCRStatus[] }
+  >([
+    [
+      PCRStatus.Draft,
+      {
+        standardMonitoring: [PCRStatus.Draft, PCRStatus.SubmittedToMonitoringOfficer],
+        internalAssurance: [PCRStatus.Draft, PCRStatus.SubmittedToInnovateUK],
+      },
+    ],
     [
       PCRStatus.QueriedByMonitoringOfficer,
-      [PCRStatus.QueriedByMonitoringOfficer, PCRStatus.SubmittedToMonitoringOfficer],
+      {
+        standardMonitoring: [PCRStatus.QueriedByMonitoringOfficer, PCRStatus.SubmittedToMonitoringOfficer],
+        internalAssurance: [PCRStatus.QueriedByMonitoringOfficer, PCRStatus.SubmittedToInnovateUK],
+      },
     ],
-    [PCRStatus.QueriedByInnovateUK, [PCRStatus.QueriedByInnovateUK, PCRStatus.SubmittedToInnovateUK]],
+    [
+      PCRStatus.QueriedByInnovateUK,
+      {
+        standardMonitoring: [PCRStatus.QueriedByInnovateUK, PCRStatus.SubmittedToInnovateUK],
+        internalAssurance: [PCRStatus.QueriedByInnovateUK, PCRStatus.SubmittedToInnovateUK],
+      },
+    ],
   ]);
 
   private readonly projectManagerCanEdit =
     !this.original || !!this.projectManagerPermittedStatus.get(this.original.status);
 
-  private readonly monitoringOfficerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
+  private readonly monitoringOfficerPermittedStatus = new Map<
+    PCRStatus,
+    { standardMonitoring: PCRStatus[]; internalAssurance: PCRStatus[] }
+  >([
     [
       PCRStatus.SubmittedToMonitoringOfficer,
-      [PCRStatus.SubmittedToMonitoringOfficer, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.SubmittedToInnovateUK],
+      {
+        standardMonitoring: [
+          PCRStatus.SubmittedToMonitoringOfficer,
+          PCRStatus.QueriedByMonitoringOfficer,
+          PCRStatus.SubmittedToInnovateUK,
+        ],
+        internalAssurance: [],
+      },
     ],
   ]);
 
@@ -176,12 +205,24 @@ export class PCRDtoValidator extends Results<PCRDto> {
       if (!this.original) {
         permittedStatus.push(PCRStatus.Draft);
       } else {
-        permittedStatus.push(...(this.projectManagerPermittedStatus.get(this.original.status) || []));
+        permittedStatus.push(
+          ...(this.projectManagerPermittedStatus.get(this.original.status)?.[
+            this.project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance
+              ? "internalAssurance"
+              : "standardMonitoring"
+          ] ?? []),
+        );
       }
     }
 
     if (isMo && this.original) {
-      permittedStatus.push(...(this.monitoringOfficerPermittedStatus.get(this.original.status) || []));
+      permittedStatus.push(
+        ...(this.monitoringOfficerPermittedStatus.get(this.original.status)?.[
+          this.project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance
+            ? "internalAssurance"
+            : "standardMonitoring"
+        ] ?? []),
+      );
     }
 
     return Validation.all(this, () =>

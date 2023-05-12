@@ -40,7 +40,7 @@ const PCROverviewComponent = ({
         mode={mode}
       />
       <ProjectChangeRequestOverviewLog statusChanges={statusChanges} />
-      {editor && <ProjectChangeRequestPrepareForm editor={editor} onChange={onChange} pcr={pcr} />}
+      {editor && <ProjectChangeRequestPrepareForm editor={editor} onChange={onChange} pcr={pcr} project={project} />}
     </ACC.Page>
   );
 };

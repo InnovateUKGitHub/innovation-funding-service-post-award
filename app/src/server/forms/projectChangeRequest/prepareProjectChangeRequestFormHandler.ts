@@ -9,8 +9,9 @@ import { IContext, ILinkInfo } from "@framework/types";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { PCRStatus, ProjectRole } from "@framework/constants";
+import { PCRStatus, ProjectMonitoringLevel, ProjectRole } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { GetByIdQuery } from "@server/features/projects";
 
 export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareParams,
@@ -26,17 +27,29 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
     button: IFormButton,
     body: IFormBody,
   ): Promise<PCRDto> {
-    const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
-    dto.comments = body.comments;
+    const [pcr, project] = await Promise.all([
+      context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId)),
+      context.runQuery(new GetByIdQuery(params.projectId)),
+    ]);
+    pcr.comments = body.comments;
 
     if (button.name === "default") {
-      dto.status =
-        dto.status === PCRStatus.QueriedByInnovateUK
-          ? PCRStatus.SubmittedToInnovateUK
-          : PCRStatus.SubmittedToMonitoringOfficer;
+      switch (pcr.status) {
+        case PCRStatus.Draft:
+        case PCRStatus.QueriedByMonitoringOfficer:
+          if (project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
+            pcr.status = PCRStatus.SubmittedToInnovateUK;
+          } else {
+            pcr.status = PCRStatus.SubmittedToMonitoringOfficer;
+          }
+          break;
+        case PCRStatus.QueriedByInnovateUK:
+          pcr.status = PCRStatus.SubmittedToInnovateUK;
+          break;
+      }
     }
 
-    return dto;
+    return pcr;
   }
 
   protected async run(

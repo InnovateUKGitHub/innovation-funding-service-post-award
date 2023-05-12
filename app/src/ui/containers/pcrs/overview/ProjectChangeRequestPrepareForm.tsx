@@ -1,5 +1,5 @@
-import { PCRStatus } from "@framework/constants";
-import { PCRDto } from "@framework/dtos";
+import { PCRStatus, ProjectMonitoringLevel } from "@framework/constants";
+import { PCRDto, ProjectDto } from "@framework/dtos";
 import { createTypedForm } from "@ui/components";
 import { SimpleString } from "@ui/components/renderers";
 import { useProjectParticipants } from "@ui/features/project-participants";
@@ -11,10 +11,12 @@ const Form = createTypedForm<PCRDto>();
 
 const ProjectChangeRequestPrepareForm = ({
   pcr,
+  project,
   editor,
   onChange,
 }: {
   pcr: PCRDto;
+  project: ProjectDto;
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   onChange: (save: boolean, dto: PCRDto) => void;
 }) => {
@@ -23,10 +25,23 @@ const ProjectChangeRequestPrepareForm = ({
 
   const onSave = (submit: boolean) => {
     const dto = editor.data;
-    if (submit && pcr.status === PCRStatus.QueriedByInnovateUK) {
-      dto.status = PCRStatus.SubmittedToInnovateUK;
-    } else if (submit) {
-      dto.status = PCRStatus.SubmittedToMonitoringOfficer;
+    if (submit) {
+      switch (pcr.status) {
+        case PCRStatus.Draft:
+        case PCRStatus.QueriedByMonitoringOfficer:
+          if (project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance) {
+            dto.status = PCRStatus.SubmittedToInnovateUK;
+          } else {
+            dto.status = PCRStatus.SubmittedToMonitoringOfficer;
+          }
+          break;
+        case PCRStatus.QueriedByInnovateUK:
+          dto.status = PCRStatus.SubmittedToInnovateUK;
+          break;
+        default:
+          dto.status = pcr.status;
+          break;
+      }
     } else {
       // not submitting so set status to the original status
       dto.status = pcr.status;
