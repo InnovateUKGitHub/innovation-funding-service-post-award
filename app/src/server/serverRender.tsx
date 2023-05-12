@@ -23,7 +23,7 @@ import {
 } from "@ui/redux";
 import { createErrorPayload } from "@shared/create-error-payload";
 import { contextProvider } from "@server/features/common/contextProvider";
-import { Results } from "@ui/validation";
+import { Result, Results } from "@ui/validation";
 import { ForbiddenError, FormHandlerError } from "./features/common/appError";
 
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
@@ -36,6 +36,7 @@ import { loadQuery } from "relay-hooks";
 import { GraphQLSchema } from "graphql";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
 import { Logger } from "@shared/developmentLogger";
+import { FormErrorContextProvider } from "@ui/context/form-error";
 
 interface IServerApp {
   requestUrl: string;
@@ -43,20 +44,23 @@ interface IServerApp {
   stores: IStores;
   modalRegister: ModalRegister;
   relayEnvironment: RelayModernEnvironment;
+  formError?: Result[];
 }
 
 const logger = new Logger("HTML Render");
 
-const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment }: IServerApp) => (
-  <Provider store={store}>
-    <StaticRouter location={requestUrl}>
-      <StoresProvider value={stores}>
-        <ModalProvider value={modalRegister}>
-          <App store={store} relayEnvironment={relayEnvironment} />
-        </ModalProvider>
-      </StoresProvider>
-    </StaticRouter>
-  </Provider>
+const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment, formError }: IServerApp) => (
+  <FormErrorContextProvider value={formError}>
+    <Provider store={store}>
+      <StaticRouter location={requestUrl}>
+        <StoresProvider value={stores}>
+          <ModalProvider value={modalRegister}>
+            <App store={store} relayEnvironment={relayEnvironment} />
+          </ModalProvider>
+        </StoresProvider>
+      </StaticRouter>
+    </Provider>
+  </FormErrorContextProvider>
 );
 
 /**
@@ -113,6 +117,8 @@ const serverRender =
 
       let renderUrl = req.url;
 
+      let formError: Result[] = [];
+
       if (err) {
         if (err instanceof FormHandlerError) {
           // A form handler error is an error that renders the original page.
@@ -121,6 +127,7 @@ const serverRender =
             // We've got some kind of validation error, so let the user know that happened.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             store.dispatch(Actions.updateEditorAction(err.key, err.store, err.dto, err.error.results as Results<any>));
+            formError = formError.concat(err?.error?.results?.errors ?? []);
           } else {
             // Some other validation error occurred, so we need to add it into store as actual error.
             // Need to pair with the submit action to keep count in sync.
@@ -134,6 +141,7 @@ const serverRender =
                 scrollToTop: false,
               }),
             );
+            formError = formError.concat(err?.error?.results?.errors ?? []);
           }
         } else {
           // We cannot handle these beautifully.
@@ -182,6 +190,7 @@ const serverRender =
           modalRegister,
           relayEnvironment: finalRelayEnvironment,
           relayData,
+          formError,
         }),
       );
     } catch (renderError: unknown) {
@@ -229,6 +238,7 @@ function renderApp(props: {
   modalRegister: ModalRegister;
   relayEnvironment: RelayModernEnvironment;
   relayData?: SSRCache;
+  formError?: Result[] | undefined;
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -241,6 +251,7 @@ function renderApp(props: {
     preloadedState: state,
     nonce: props.nonce,
     relayData: props.relayData,
+    formError: props.formError,
   });
 }
 

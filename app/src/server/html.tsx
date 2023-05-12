@@ -6,6 +6,7 @@ import * as pkg from "../../package.json";
 import { execSync } from "child_process";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { PreloadedState } from "redux";
+import { Result } from "@ui/validation";
 
 let versionInformation = "";
 
@@ -64,12 +65,14 @@ export function renderHtml({
   preloadedState = {},
   nonce,
   relayData = [],
+  formError,
 }: {
   HelmetInstance: HelmetData;
   html: string;
   preloadedState: PreloadedState<AnyObject>;
   nonce: string;
   relayData?: SSRCache;
+  formError: Result[] | undefined;
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -113,6 +116,9 @@ export function renderHtml({
             }, 10);
             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
             window.__RELAY_BOOTSTRAP_DATA__ = ${JSON.stringify(relayData).replace(/</g, "\\u003c")}
+            window.__PRELOADED_FORM_ERRORS__ = ${
+              formError ? JSON.stringify(formError).replace(/</g, "\\u003c") : undefined
+            }
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${
