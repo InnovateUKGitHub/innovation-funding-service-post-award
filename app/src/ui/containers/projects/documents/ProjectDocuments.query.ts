@@ -11,6 +11,7 @@ export const projectDocumentsQuery = graphql`
           Acc_ProjectParticipant__c(
             where: { Acc_ProjectId__c: { eq: $projectId } }
             orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
+            first: 200
           ) {
             edges {
               node {
