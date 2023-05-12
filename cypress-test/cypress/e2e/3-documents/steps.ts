@@ -56,6 +56,7 @@ export const deleteDocFromArea = () => {
 
 export const uploadToEUI = () => {
   cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.wait(500);
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and EUI Small Ent Health");
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
@@ -68,6 +69,7 @@ export const displayEUIFile = () => {
 
 export const uploadToAB = () => {
   cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.wait(500);
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and A B Cad Services");
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
@@ -80,6 +82,7 @@ export const displayABFile = () => {
 
 export const uploadToEUIMed = () => {
   cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.wait(500);
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and ABS EUI Medium Enterprise");
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
