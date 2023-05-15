@@ -1,4 +1,11 @@
-import { getAuthRoles, PartnerDtoGql, ProjectContactDto, ProjectDtoGql, ProjectRole } from "@framework/types";
+import {
+  getAuthRoles,
+  PartnerDtoGql,
+  ProjectContactDto,
+  ProjectDtoGql,
+  ProjectMonitoringLevel,
+  ProjectRole,
+} from "@framework/types";
 import {
   PartnerContactRoleTable,
   Section,
@@ -183,13 +190,15 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
       />
 
       <Section title={x => x.projectLabels.projectMembers}>
-        <Section title={x => x.projectLabels.monitoringOfficers({ count: monitoringOfficers.length })}>
-          <PartnerContactRoleTable
-            hidePartnerColumn
-            qa="monitoring-officer-details"
-            contactRoles={monitoringOfficers}
-          />
-        </Section>
+        {project.monitoringLevel !== ProjectMonitoringLevel.InternalAssurance && (
+          <Section title={x => x.projectLabels.monitoringOfficers({ count: monitoringOfficers.length })}>
+            <PartnerContactRoleTable
+              hidePartnerColumn
+              qa="monitoring-officer-details"
+              contactRoles={monitoringOfficers}
+            />
+          </Section>
+        )}
 
         <Section title={x => x.projectLabels.projectManagers({ count: projectManagers.length })}>
           <PartnerContactRoleTable

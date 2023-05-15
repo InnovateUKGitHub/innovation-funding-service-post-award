@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3a831b5452f57d6221f5a639494a5e37>>
+ * @generated SignedSource<<7b9db01096cdc3b497928872409b79c7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -45,6 +45,9 @@ export type ProjectDetailsQuery$data = {
                 readonly value: string | null;
               } | null;
               readonly Acc_LeadParticipantID__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_MonitoringLevel__c: {
                 readonly value: string | null;
               } | null;
               readonly Acc_NumberofPeriods__c: {
@@ -451,6 +454,16 @@ v11 = [
                           {
                             "alias": null,
                             "args": null,
+                            "concreteType": "PicklistValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_MonitoringLevel__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
                             "concreteType": "DoubleValue",
                             "kind": "LinkedField",
                             "name": "Acc_NumberofPeriods__c",
@@ -788,16 +801,16 @@ return {
     "selections": (v11/*: any*/)
   },
   "params": {
-    "cacheID": "de3f7b1590d681d5584d48a9762d5655",
+    "cacheID": "fd1ab24b5c4bcab6674c4622ec08d30d",
     "id": null,
     "metadata": {},
     "name": "ProjectDetailsQuery",
     "operationKind": "query",
-    "text": "query ProjectDetailsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n                displayValue\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n                displayValue\n              }\n              Acc_Duration__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_LeadParticipantID__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectSummary__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Loan_LoanAvailabilityPeriodLength__c {\n                value\n              }\n              Loan_LoanEndDate__c {\n                value\n              }\n              Loan_LoanExtensionPeriodLength__c {\n                value\n              }\n              Loan_LoanRepaymentPeriodLength__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                      label\n                    }\n                    Acc_NonfundedParticipant__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                  }\n                }\n              }\n              Project_Contact_Links__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC, nulls: LAST}}}, first: 2000) {\n                edges {\n                  node {\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_UserId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_Role__c {\n                      value\n                      label\n                    }\n                    Acc_ProjectId__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectDetailsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n                displayValue\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n                displayValue\n              }\n              Acc_Duration__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_LeadParticipantID__c {\n                value\n              }\n              Acc_MonitoringLevel__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectSummary__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Loan_LoanAvailabilityPeriodLength__c {\n                value\n              }\n              Loan_LoanEndDate__c {\n                value\n              }\n              Loan_LoanExtensionPeriodLength__c {\n                value\n              }\n              Loan_LoanRepaymentPeriodLength__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                      label\n                    }\n                    Acc_NonfundedParticipant__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                  }\n                }\n              }\n              Project_Contact_Links__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC, nulls: LAST}}}, first: 2000) {\n                edges {\n                  node {\n                    Acc_EmailOfSFContact__c {\n                      value\n                    }\n                    Acc_ContactId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_UserId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_Role__c {\n                      value\n                      label\n                    }\n                    Acc_ProjectId__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "60a514381a76aff387f10d3ab62a177f";
+(node as any).hash = "daf1a76e1e580b538bebe42d4d236b5b";
 
 export default node;

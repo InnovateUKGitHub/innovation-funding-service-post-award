@@ -39,6 +39,7 @@ export const useProjectDetailsQuery = (projectId: ProjectId) => {
     "status",
     "summary",
     "title",
+    "monitoringLevel",
   ]);
 
   const partners = mapToPartnerDtoArray(

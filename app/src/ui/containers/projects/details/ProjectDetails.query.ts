@@ -50,6 +50,9 @@ const projectDetailsQuery = graphql`
                 Acc_LeadParticipantID__c {
                   value
                 }
+                Acc_MonitoringLevel__c {
+                  value
+                }
                 Acc_NumberofPeriods__c {
                   value
                 }
