@@ -7,7 +7,16 @@ export const shouldShowAllAccordion = () => {
 };
 
 export const selectFileDescription = () => {
-  ["130", "140", "150", "160", "170", "180", "190", "200"].forEach(fileDescription => {
+  [
+    "Review meeting",
+    "Plans",
+    "Collaboration agreement",
+    "Risk register",
+    "Annex 3",
+    "Presentation",
+    "Email",
+    "Meeting agenda",
+  ].forEach(fileDescription => {
     cy.get("select#description.govuk-select").select(fileDescription);
   });
 };
@@ -129,8 +138,9 @@ export const manyPartnerUpload = () => {
     "Innovate UK, MO and Hedges' Hedges Ltd",
   ].forEach(selection => {
     cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+    cy.wait(500);
     cy.get("select#partnerId.govuk-select").select(selection);
-    cy.get("select#description.govuk-select").select("130");
+    cy.get("select#description.govuk-select").select("Plans");
     cy.submitButton("Upload documents").click();
     cy.getByQA("validation-message-content").contains("has been uploaded.");
   });
