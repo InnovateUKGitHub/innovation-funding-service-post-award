@@ -47,7 +47,7 @@ const decorators: Decorator[] = [
     const mounted = !!context.globals.mounted;
     return (
       <div className={cx("govuk-template__body", { "js-enabled": mounted })} id="root">
-        <ContentProvider value={new Copy(context.globals.namespace)}>
+        <ContentProvider value={new Copy({ competitionType: context.globals.namespace })}>
           <StubMountedProvider mounted={mounted}>
             <Story />
           </StubMountedProvider>

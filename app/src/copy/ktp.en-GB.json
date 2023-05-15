@@ -19,7 +19,8 @@
     },
     "claimPrepareSummary": {
       "addCommentsHeading": "Supporting statement",
-      "addCommentsHint": "You must write a supporting statement for your claim. All supporting information for your monitoring officer and Innovate UK must be included here."
+      "addCommentsHint": "You must write a supporting statement for your claim. All supporting information for your monitoring officer and Innovate UK must be included here.",
+      "addCommentsHint_internalAssurance": "You must write a supporting statement for your claim. All supporting information for Innovate UK must be included here."
     },
     "claimsMessages": {
       "iarRequired": "You must attach a schedule 3 to this claim.",

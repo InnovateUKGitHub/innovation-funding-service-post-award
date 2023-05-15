@@ -105,7 +105,7 @@
     "warningContent": {
       "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
       "contactMessage": "Your Monitoring Officer will let you know if they have any concerns.",
-      "contactMessage_internalAssurance": "Your Monitoring Officer will let you know if they have any concerns.",
+      "contactMessage_internalAssurance": "Innovate UK will let you know if they have any concerns.",
       "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:"
     },
     "projectInactiveContent": {
@@ -326,6 +326,7 @@
       "noMatchingDocumentsMessage": "No documents match.",
       "searchDocumentsMessage": "Search documents",
       "projectLevelSubtitle": "Documents shared with Innovate UK and Monitoring Officer",
+      "projectLevelSubtitle_internalAssurance": "Documents shared with Innovate UK",
       "partnerLevelSubtitle": "Documents shared with Innovate UK and partners",
       "partnerSelfLevelSubtitle": "Documents for {{partnerName}}"
     },
@@ -426,7 +427,8 @@
     "claimsComponents": {
       "negativeCategoriesMessage": {
         "before": "You have exceeded the total eligible costs for these categories",
-        "after": "Please check with your monitoring officer before submitting your claim."
+        "after": "Please check with your monitoring officer before submitting your claim.",
+        "after_internalAssurance": "Please check with Innovate UK before submitting your claim."
       },
       "categoryLabel": "Category",
       "totalEligibleCosts": "Total eligible costs",
@@ -519,6 +521,7 @@
       "backToForecast": "Back to update forecast",
       "addCommentsHeading": "Add comments",
       "addCommentsHint": "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
+      "addCommentsHint_internalAssurance": "If you want to explain anything to Innovate UK, add it here.",
       "submitClaimMessage": "Submit claim",
       "saveAndReturnMessage": "Save and return to claims",
       "costsClaimedLabel": "Total costs to be claimed",
@@ -767,6 +770,7 @@
       "createTitle": "Start a new request",
       "updateTitle": "Add types",
       "guidance": "Before you submit, you must:\n- ensure all project partners have approved the change(s)\n- discuss this request with your monitoring officer",
+      "guidance_internalAssurance": "Before you submit, you must:\n- ensure all project partners have approved the change(s)\n- discuss this request with Innovate UK",
       "selectRequestTypesTitle": "Select request types",
       "selectTypesHint": "You can select more than one type of request.",
       "backToPcrs": "Back to project change requests",
@@ -806,7 +810,8 @@
       "validationMessage": "You cannot change this information after you continue.",
       "infoSummary": "What are the different types?",
       "organisationTypeInfo": "**Business** - a business based in the UK or overseas.\n\n **Research** - higher education and organisations registered with Je-S.\n\n **Research and technology organisation (RTO)** - organisations which solely promote and conduct collaborative research and innovation.\n\n **Public sector, charity or non Je-S registered research organisation** - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.",
-      "organisationTypeHint": "If the new partner's organisation type is not listed, contact your monitoring officer."
+      "organisationTypeHint": "If the new partner's organisation type is not listed, contact your monitoring officer.",
+      "organisationTypeHint_internalAssurance": "If the new partner's organisation type is not listed, contact Innovate UK."
     },
     "pcrAddPartnerStateAidEligibility": {
       "formSectionTitleStateAid": "State aid eligibility",
@@ -969,18 +974,22 @@
     "finalClaimStep1": "Complete our survey.",
     "finalClaimStep2": "Download a copy of your completed survey and upload it on this page.",
     "iarRequired": "An Independent Accountant's Report (IAR) must be uploaded to support the claim before it can be submitted to Innovate UK. If your total grant value is £50,000 or under, a Statement of Expenditure (SoE) may be sufficient. Your monitoring officer will be able to confirm which document is needed.",
+    "iarRequired_internalAssurance": "An Independent Accountant's Report (IAR) must be uploaded to support the claim before it can be submitted to Innovate UK. If your total grant value is £50,000 or under, a Statement of Expenditure (SoE) may be sufficient. Innovate UK will be able to confirm which document is needed.",
     "iarRequiredPara2": "Upload your IAR or SoE in the claim documents, selecting the IAR document type (for both) and then proceed to submit your claim.",
     "claimQueried": "You have queried this claim.",
     "claimApproved": "You have approved this claim.",
     "frequencyChangeMessage": "Your project asked us to change the length of the remaining periods. You must make sure your forecast reflects your expected spend or your monitoring officer will not approve your claim.",
+    "frequencyChangeMessage_internalAssurance": "Your project asked us to change the length of the remaining periods. You must make sure your forecast reflects your expected spend or Innovate UK will not approve your claim.",
     "lastChanceToChangeForecast": "This is your last chance to change the forecast for period {{periodId}}",
     "documentDetailGuidance": "Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.",
     "documentDisclaimerMessage": "Do not remove any documents for previous months' costs.",
     "interimClaimMessage": "When adding costs for last month, you must:\n\n* use a new line for every cost each month\n\n* name the month in the description\n\n* not alter any information for previous months' costs",
     "editClaimLineItemGuidance": "You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact your monitoring officer for more information about the level of detail you are required to provide.",
+    "editClaimLineItemGuidance_internalAssurance": "You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact Innovate UK for more information about the level of detail you are required to provide.",
     "editClaimLineItemConvertGbp": "You can enter up to 120 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
     "nonJsEditClaimLineItemConvertGbp": "You can enter up to 10 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
     "editClaimLineItemDocumentGuidance": "Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide.",
+    "editClaimLineItemDocumentGuidance_internalAssurance": "Upload evidence of the costs for Innovate UK to review. If you do not upload documents Innovate UK are unlikely to accept your claim. Contact them for advice on which documents to provide.",
     "negativeClaimWarning": "You have entered negative values for the following items:",
     "claimSummaryWarning": "You have entered a negative claim for this period. Click 'Edit costs to be claimed' button if you wish to change this.",
     "claimSavedMessage": "You have saved your claim.",
@@ -1082,6 +1091,7 @@
   },
   "pcrMessages": {
     "additionalCommentsGuidance": "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
+    "additionalCommentsGuidance_internalAssurance": "If you want to explain anything to Innovate UK, add it here.",
     "submittingGuidance": "By submitting this request, you confirm that all project partners have approved these changes."
   },
   "spendProfileMessages": {
@@ -1192,7 +1202,9 @@
     "descriptionPlaceholder": "-- No type --",
     "participantLabel": "Access Control",
     "participantPlaceholder": "Innovate UK and MO only",
+    "participantPlaceholder_internalAssurance": "Innovate UK only",
     "participantOption": "Innovate UK, MO and {{partnerName}}",
+    "participantOption_internalAssurance": "Innovate UK and {{partnerName}}",
     "description": {
       "invoice": "Invoice",
       "iar": "Independent accountant\u2019s report",
@@ -1238,8 +1250,10 @@
     "uploadTitle": "Upload",
     "uploadDocuments": "Upload documents",
     "uploadInstruction": "You can upload and store any documents for this claim on this page.\n\nYou will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
-    "monitoringOfficerDocumentsIntroMessage": "This page displays documents which are shared with Innovate UK and each project\nparticipant. Documents shared here are only accessible to Innovate UK and the\nmonitoring officer. Documents shared with the finance contact and project\nmanager (for lead applicant), are accessible only by that participant, Innovate\nUK and the monitoring officer. When uploading documents, you can choose whether\nthey are accessible by Innovate UK only, or with a participant.\n\nDo not select a participant if you wish to share the file with Innovate UK only.\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n",
-    "otherRoleDocumentsIntroMessage": "This page is for storing most project related supporting documents, including\nthose uploaded by Innovate UK.\n\nDocuments stored here are only accessible by the Monitoring Officer and\nparticipants representing \"{{partnerName}}\".\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n"
+    "monitoringOfficerDocumentsIntroMessage": "This page displays documents which are shared with Innovate UK and each project\nparticipant. Documents shared here are only accessible by the monitoring officer. Documents shared with the finance contact and project\nmanager (for lead applicant), are accessible only by that participant, Innovate\nUK and the monitoring officer. When uploading documents, you can choose whether\nthey are accessible by Innovate UK only, or with a participant.\n\nDo not select a participant if you wish to share the file with Innovate UK only.\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n",
+    "monitoringOfficerDocumentsIntroMessage_internalAssurance": "This page displays documents which are shared with Innovate UK and each project\nparticipant. Documents shared here are only accessible by Innovate UK. Documents shared with the finance contact and project\nmanager (for lead applicant), are accessible only by that participant and Innovate\nUK. When uploading documents, you can choose whether\nthey are accessible by Innovate UK only, or with a participant.\n\nDo not select a participant if you wish to share the file with Innovate UK only.\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n",
+    "otherRoleDocumentsIntroMessage": "This page is for storing most project related supporting documents, including\nthose uploaded by Innovate UK.\n\nDocuments stored here are only accessible by Innovate UK, the Monitoring Officer and participants representing \"{{partnerName}}\".\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n",
+    "otherRoleDocumentsIntroMessage_internalAssurance": "This page is for storing most project related supporting documents, including\nthose uploaded by Innovate UK.\n\nDocuments stored here are only accessible by Innovate UK and participants representing \"{{partnerName}}\".\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n"
   },
   "financialVirementLabels": {
     "partnerName": "Partner",

@@ -5,8 +5,8 @@ import { PossibleCopyFunctions } from "./type";
 
 describe("Copy", () => {
   const copy = new Copy();
-  const ktpCopy = new Copy("ktp");
-  const invalidNamespaceCopy = new Copy("not-a-valid-namespace");
+  const ktpCopy = new Copy({ competitionType: "ktp" });
+  const invalidNamespaceCopy = new Copy({ competitionType: "not-a-valid-namespace" });
 
   const copyData = {
     stub: {

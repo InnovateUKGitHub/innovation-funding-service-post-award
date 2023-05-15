@@ -63,7 +63,7 @@ export function TestBed({
       <mountedContext.Provider value={testBedMountState}>
         <PageTitleProvider title={pageTitle}>
           <StoresProvider value={storesValue}>
-            <ContentProvider value={new Copy(competitionType)}>{children}</ContentProvider>
+            <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
           </StoresProvider>
         </PageTitleProvider>
       </mountedContext.Provider>

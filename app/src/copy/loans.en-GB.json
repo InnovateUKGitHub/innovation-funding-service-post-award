@@ -49,7 +49,9 @@
   },
   "claimsMessages": {
     "editClaimLineItemDocumentGuidance": "Upload evidence of the costs for your monitoring officer to review. Contact them for advice on which documents to provide.",
+    "editClaimLineItemDocumentGuidance_internalAssurance": "Upload evidence of the costs for Innovate UK to review. Contact them for advice on which documents to provide.",
     "editClaimLineItemGuidance": "You must break down your total costs and upload evidence for each expenditure. Contact your monitoring officer for more information about the level of detail you are required to provide.",
+    "editClaimLineItemGuidance_internalAssurance": "You must break down your total costs and upload evidence for each expenditure. Contact Innovate UK for more information about the level of detail you are required to provide.",
     "editClaimLineItemConvertGbp": "You can enter up to 120 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them.",
     "nonJsEditClaimLineItemConvertGbp": "You can enter up to 10 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them.",
     "submitClaimConfirmation": "I confirm that the information I have provided for this period is correct, complete and contains only eligible costs on an actual basis, which we confirm\u00a0have been\u00a0incurred and defrayed.\u00a0I understand and accept that if I knowingly withhold information, or provide false or misleading information, this may result in funding being withdrawn, termination of the loan, recovery of loan proceeds and outstanding interest, civil action and where there is evidence of fraud, criminal prosecution.",

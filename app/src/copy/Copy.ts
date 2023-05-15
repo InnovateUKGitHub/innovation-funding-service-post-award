@@ -1,3 +1,4 @@
+import { ProjectMonitoringLevel } from "@framework/constants";
 import { Logger } from "@shared/developmentLogger";
 import i18next from "i18next";
 import { ContentSelectorFunctionParser } from "./ContentSelectorFunctionParser";
@@ -11,6 +12,11 @@ import {
 
 export class CopyContentInvalidInputKeyError extends Error {}
 
+interface ICopy {
+  competitionType?: string;
+  monitoringLevel?: ProjectMonitoringLevel;
+}
+
 /**
  * A repository of copy, with automatic competition type switching.
  *
@@ -19,9 +25,11 @@ export class CopyContentInvalidInputKeyError extends Error {}
 class Copy {
   private logger = new Logger("Copy");
   protected competitionType?: string;
+  protected monitoringLevel?: ProjectMonitoringLevel;
 
-  constructor(competitionType?: string) {
+  constructor({ competitionType, monitoringLevel }: ICopy = {}) {
     this.competitionType = competitionType?.replace(/ /g, "-").toLowerCase();
+    this.monitoringLevel = monitoringLevel;
   }
 
   /**
@@ -32,7 +40,13 @@ class Copy {
    */
   public getContentCall(fullKey: ContentSelector | TitleContentSelector | string): ContentSelectorCallInformation {
     let i18nKey: string;
-    let data: DataOption = {};
+    const data: DataOption = {};
+
+    if (this.monitoringLevel) {
+      Object.assign(data, {
+        context: this.monitoringLevel,
+      });
+    }
 
     // If the input key was a string...
     if (typeof fullKey === "string") {
@@ -51,7 +65,7 @@ class Copy {
       const callInfo = contentSelectorFunctionParser.getContentCall();
 
       i18nKey = callInfo.i18nKey;
-      data = callInfo.values;
+      Object.assign(data, callInfo.values);
     } else {
       // Crash when a non-string or non-content selector is passed in.
       this.logger.error(`Cannot translate invalid non-string/function key`, fullKey);
