@@ -40,7 +40,12 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     );
   };
 
-  const renderTable = (project: Pick<ProjectDto, "roles">, pcrs: PCRDashboardType[], qa: string, message: string) => {
+  const renderTable = (
+    project: Pick<ProjectDto, "roles" | "id">,
+    pcrs: PCRDashboardType[],
+    qa: string,
+    message: string,
+  ) => {
     if (!pcrs.length) {
       return <Renderers.SimpleString>{message}</Renderers.SimpleString>;
     }
@@ -61,10 +66,10 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     );
   };
 
-  const renderLinks = (project: Pick<ProjectDto, "roles">, pcr: PCRDashboardType): React.ReactNode => {
+  const renderLinks = (project: Pick<ProjectDto, "roles" | "id">, pcr: PCRDashboardType): React.ReactNode => {
     const { isPm, isMo, isPmOrMo } = getAuthRoles(project.roles);
     const links: { route: ILinkInfo; text: string; qa: string }[] = [];
-    const pcrLinkArgs = { pcrId: pcr.id, projectId: pcr.projectId };
+    const pcrLinkArgs = { pcrId: pcr.id, projectId: project.id };
 
     const prepareStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
 
