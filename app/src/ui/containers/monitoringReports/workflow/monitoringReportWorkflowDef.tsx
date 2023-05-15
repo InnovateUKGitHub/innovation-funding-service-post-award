@@ -15,6 +15,7 @@ export interface MonitoringReportReportStepProps extends IStepProps {
   report: Dtos.MonitoringReportDto;
   onChange: (dto: Dtos.MonitoringReportDto) => void;
   onSave: (dto: Dtos.MonitoringReportDto, progress: boolean) => void;
+  mode: "prepare" | "view";
 }
 
 export interface MonitoringReportReportSummaryProps extends ISummaryProps {
