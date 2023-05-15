@@ -104,7 +104,7 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> imp
     this,
     () => Validation.required(this, this.model.value, "Forecast is required."),
     () => Validation.number(this, this.model.value, "Forecast must be a number."),
-    () => Validation.isCurrency(this, this.model.value, "Forecast must be 2 decimal places or fewer."),
+    () => Validation.isCurrency(this, this.model.value, "Forecast must be no more than 2 decimal places."),
   );
 }
 
