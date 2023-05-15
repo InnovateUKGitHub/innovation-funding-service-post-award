@@ -1,10 +1,8 @@
-// @ts-check
-
 /** @typedef {import('webpack').Configuration} Configuration */
 /** @typedef {{ env: "production" | "development", devtools?: boolean }} Environment */
 
 const path = require("path");
-const TsConfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const { TsconfigPathsPlugin } = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const { NormalModuleReplacementPlugin, ProvidePlugin } = require("webpack");
@@ -96,7 +94,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
     resolve: {
       modules: ["node_modules"],
       extensions: [".tsx", ".ts", ".jsx", ".js", ".css"],
-      plugins: [new TsConfigPathsPlugin.TsconfigPathsPlugin()],
+      plugins: [new TsconfigPathsPlugin()],
       roots: [__dirname, path.resolve(__dirname, "public")],
     },
     optimization: {

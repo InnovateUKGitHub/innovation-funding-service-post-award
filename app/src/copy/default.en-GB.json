@@ -95,6 +95,7 @@
     "warningContent": {
       "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
       "contactMessage": "Your Monitoring Officer will let you know if they have any concerns.",
+      "contactMessage_internalAssurance": "Your Monitoring Officer will let you know if they have any concerns.",
       "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:"
     },
     "projectInactiveContent": {

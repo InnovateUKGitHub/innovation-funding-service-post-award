@@ -145,7 +145,7 @@ describe("GetClaimStatusChangesQuery", () => {
       context.testData.createClaimStatusChange(claim, {
         CreatedDate: DateTime.fromString("2000-01-01", "yyyy-MM-dd")
           .plus({ days: i * 10 })
-          .toISO(),
+          .toISO() as string,
       }),
     );
 

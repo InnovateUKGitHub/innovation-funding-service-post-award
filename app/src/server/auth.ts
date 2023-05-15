@@ -51,7 +51,7 @@ router.get("/logout", noCache, (_req, res) => {
 
 // Note: On success Shibboleth calls SamlConfig["callbackUrl"] (see config)
 router.post(successfulValidationRoute, (req, res) =>
-  passport.authenticate("shibboleth", (authError, payload) => {
+  passport.authenticate("shibboleth", (authError: AnyObject, payload: AnyObject) => {
     if (authError) {
       logger.error("Authentication Error", authError);
 

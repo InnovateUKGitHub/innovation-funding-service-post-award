@@ -46,7 +46,7 @@ describe("getPcrSpendProfile", () => {
       update: {
         value: 50,
         description: "Some other funding",
-        dateOtherFundingSecured: DateTime.local(2020, 2, 1).toISODate(),
+        dateOtherFundingSecured: DateTime.local(2020, 2, 1).toISODate() as string,
       },
     });
     const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));

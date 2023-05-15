@@ -374,7 +374,7 @@ export class TestData {
       Acc_PeriodStartDate__c: DateTime.fromFormat("2020-01-01", format).toFormat(format),
       Acc_PeriodEndDate__c: DateTime.fromFormat("2020-04-01", format).toFormat(format),
       Acc_AddComments__c: "",
-      LastModifiedDate: DateTime.local().toISO(),
+      LastModifiedDate: DateTime.local().toISO() as string,
     };
 
     if (update) {
@@ -430,7 +430,7 @@ export class TestData {
       Acc_PreviousMonitoringReportStatus__c: "Draft",
       Acc_NewMonitoringReportStatus__c: "Submitted to Monitoring Officer",
       Acc_CreatedByAlias__c: "The Beast from The Chase",
-      CreatedDate: DateTime.local().toISO(),
+      CreatedDate: DateTime.local().toISO() as string,
       Acc_ExternalComment__c: "Test comment",
     };
 
