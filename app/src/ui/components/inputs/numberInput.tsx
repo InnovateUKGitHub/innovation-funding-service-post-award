@@ -50,13 +50,17 @@ export const NumberInput = (props: NumberInputProps) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, debounce: boolean) => {
     const value = e.currentTarget.value;
-    if (state.value !== value) {
-      const invalid = !/^-?£?\d*\.?(\d{1,2})?$/.test(value);
+    const event = e.nativeEvent as InputEvent;
 
-      // If we are in an invalid state AND we are enforcing valid inputs only,
-      // do not set the state of the input (to ignore the user input)
-      if (!(invalid && props.enforceValidInput)) {
-        setState({ value, invalid });
+    console.log(event.inputType);
+
+    if (state.value !== value) {
+      const valid = /^-?£?\d*\.?(\d{1,2})?$/.test(value);
+
+      // If we are in an valid state, or if we are pasting, allow.
+      // Otherwise, skip if we are enforcing valid inputs.
+      if (valid || event.inputType === "insertFromPaste" || !props.enforceValidInput) {
+        setState({ value, invalid: !valid });
 
         const val = value === "" ? null : Number(value.replaceAll("£", ""));
         if (debounce) {
