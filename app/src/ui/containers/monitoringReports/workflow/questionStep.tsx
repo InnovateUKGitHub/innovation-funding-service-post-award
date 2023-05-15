@@ -8,6 +8,7 @@ interface Props {
   questionNumber: number;
   editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
   report: Pick<Dtos.MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">;
+  mode: "prepare" | "view";
   onChange: (dto: Dtos.MonitoringReportDto) => void;
   onSave: (dto: Dtos.MonitoringReportDto, progress: boolean) => void;
 }
@@ -15,7 +16,7 @@ interface Props {
 const ReportForm =
   createTypedForm<Pick<Dtos.MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">>();
 
-const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave, report }: Props) => {
+const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave, report, mode }: Props) => {
   const title = (
     <PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
   );
@@ -36,6 +37,7 @@ const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave
     <Section title={title} qa="period-information">
       <Section>
         <ReportForm.Form
+          disabled={mode === "view"}
           editor={editor}
           onChange={dto => {
             return onChange(dto as Dtos.MonitoringReportDto);
@@ -75,14 +77,16 @@ const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave
               validation={validator.responses.results[i].comments}
             />
           </ReportForm.Fieldset>
-          <ReportForm.Fieldset qa="save-buttons">
-            <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}>
-              <Content value={x => x.pages.monitoringReportsQuestionStep.buttonContinue} />
-            </ReportForm.Button>
-            <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}>
-              <Content value={x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn} />
-            </ReportForm.Button>
-          </ReportForm.Fieldset>
+          {mode === "prepare" && (
+            <ReportForm.Fieldset qa="save-buttons">
+              <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}>
+                <Content value={x => x.pages.monitoringReportsQuestionStep.buttonContinue} />
+              </ReportForm.Button>
+              <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}>
+                <Content value={x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn} />
+              </ReportForm.Button>
+            </ReportForm.Fieldset>
+          )}
         </ReportForm.Form>
       </Section>
     </Section>

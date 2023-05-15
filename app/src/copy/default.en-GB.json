@@ -1072,7 +1072,8 @@
     "noArchivedReportsMessage": "There are no archived reports.",
     "onDeleteMonitoringReportMessage": "You have deleted the monitoring report.",
     "deletingMonitoringReportMessage": "All the information in the report will be permanently removed.",
-    "submittingMonitoringReportMessage": "By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project."
+    "submittingMonitoringReportMessage": "By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project.",
+    "readOnlyMessage": "/* COPY PLEASE */ This monitoring report has already been submitted. No changes can be made unless it is queried by Innovate UK."
   },
   "projectLabels": {
     "projectCostsLabel": "Project costs to date",

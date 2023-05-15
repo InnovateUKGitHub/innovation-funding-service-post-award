@@ -1,3 +1,4 @@
+import { MonitoringReportStatus } from "@framework/constants";
 import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
@@ -88,6 +89,19 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
         this.submit,
       ),
     "There are invalid responses.",
+  );
+
+  private readonly editableStates = [
+    MonitoringReportStatus.Draft,
+    MonitoringReportStatus.Queried,
+  ] as MonitoringReportStatus[];
+
+  public readonly editable = Validation.all(this, () =>
+    Validation.isTrue(
+      this,
+      this.editableStates.includes(this.model.status),
+      "This monitoring report has already been submitted. No changes can be made unless it is queried by Innovate UK.",
+    ),
   );
 
   // Limit the monitoring report comment to a max-length of 5000 characters.
