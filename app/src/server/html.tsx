@@ -28,7 +28,7 @@ try {
     }
   };
 
-  const BUILD_DATETIME = new Date().toLocaleDateString(undefined, {
+  const BUILD_DATETIME = new Date().toLocaleDateString("en-GB", {
     weekday: "long",
     year: "numeric",
     month: "numeric",
