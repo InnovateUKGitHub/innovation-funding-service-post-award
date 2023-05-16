@@ -20,17 +20,14 @@ const MonitoringReportWorkflowPrepare = (
   const step = workflow.getCurrentStepInfo();
   return (
     <Fragment>
-      {step && (
-        <step.stepRender
-          {...{
-            editor,
-            report,
-            mode,
-            onChange: dto => onChange(false, dto),
-            onSave: (dto, progress) => onChange(true, dto, false, getForwardLink({ ...props, progress })),
-          }}
-        ></step.stepRender>
-      )}
+      {step &&
+        step.stepRender({
+          editor,
+          report,
+          mode,
+          onChange: dto => onChange(false, dto),
+          onSave: (dto, progress) => onChange(true, dto, false, getForwardLink({ ...props, progress })),
+        })}
     </Fragment>
   );
 };
