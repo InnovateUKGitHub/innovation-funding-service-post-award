@@ -71,7 +71,7 @@ export const projectDocumentsQuery = graphql`
               }
             }
           }
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+          Acc_Project__c(first: 1, where: { Id: { eq: $projectId } }) {
             edges {
               node {
                 Id
