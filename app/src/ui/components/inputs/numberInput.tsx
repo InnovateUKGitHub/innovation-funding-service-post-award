@@ -40,6 +40,7 @@ const getStateFromProps = (props: NumberInputProps): NumberInputState => {
 
 export const NumberInput = (props: NumberInputProps) => {
   const [state, setState] = useState<NumberInputState>(getStateFromProps(props));
+  const [oldStateInvalid, setInvalid] = useState<boolean>(false);
   const debouncedOnChange = useDebounce(props.onChange, props.debounce);
 
   useUpdateStateValueOnPropsChange<NumberInputState["value"], NumberInputState>(
@@ -55,12 +56,13 @@ export const NumberInput = (props: NumberInputProps) => {
     console.log(event.inputType);
 
     if (state.value !== value) {
-      const valid = /^-?£?\d*\.?(\d{1,2})?$/.test(value);
+      const newInputValid = /^-?£?\d*\.?(\d{1,2})?$/.test(value);
 
       // If we are in an valid state, or if we are pasting, allow.
       // Otherwise, skip if we are enforcing valid inputs.
-      if (valid || event.inputType === "insertFromPaste" || !props.enforceValidInput) {
-        setState({ value, invalid: !valid });
+      if (newInputValid || oldStateInvalid || event.inputType === "insertFromPaste" || !props.enforceValidInput) {
+        setState({ value, invalid: !newInputValid });
+        setInvalid(!newInputValid);
 
         const val = value === "" ? null : Number(value.replaceAll("£", ""));
         if (debounce) {
