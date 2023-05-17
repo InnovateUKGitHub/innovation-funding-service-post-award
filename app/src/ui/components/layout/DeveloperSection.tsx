@@ -1,3 +1,4 @@
+import { LanguageChanger } from "@ui/containers/developer/LanguageChanger";
 import { HiddenPageCrasher } from "@ui/containers/developer/PageCrasher";
 import { HiddenProjectCreator } from "@ui/containers/developer/ProjectCreator";
 import { HiddenUserSwitcher } from "@ui/containers/developer/UserSwitcher";
@@ -16,6 +17,7 @@ const DeveloperSection = () => {
         <HiddenUserSwitcher />
         <HiddenProjectCreator />
         <HiddenPageCrasher />
+        <LanguageChanger />
       </GovWidthContainer>
     </div>
   );

@@ -175,6 +175,12 @@
       "sectionTitle": "Page Crasher",
       "throw": "Throw a {{ name }} exception",
       "accessControl": "Fail access control"
+    },
+    "languageChanger": {
+      "sectionTitle": "Language Changer (Currently {{ language }})",
+      "nextRenderDisclaimer": "Language will change after a component re-render (try changing page)",
+      "en-GB": "English (United Kingdom)",
+      "ifspa-TEST": "Test"
     }
   },
 

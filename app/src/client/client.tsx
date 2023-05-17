@@ -1,31 +1,28 @@
-import { useEffect, useState } from "react";
-import { hydrateRoot } from "react-dom/client";
-import i18next from "i18next";
-import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
-import { AnyAction, createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
-import type { PreloadedState } from "redux";
-import * as Actions from "@ui/redux/actions";
+import { CopyLanguages } from "@copy/data";
+import { parseLogLevel } from "@framework/types/logLevel";
+import { ClientGraphQLEnvironment } from "@gql/ClientGraphQLEnvironment";
+import { Logger } from "@shared/developmentLogger";
 import { processDto } from "@shared/processResponse";
 import { App } from "@ui/containers/app";
 import {
   createStores,
-  rootReducer,
-  setupClientMiddleware,
-  StoresProvider,
   ModalProvider,
   ModalRegister,
+  rootReducer,
   RootState,
+  setupClientMiddleware,
+  StoresProvider,
 } from "@ui/redux";
-
+import * as Actions from "@ui/redux/actions";
+import { useEffect, useState } from "react";
+import { hydrateRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import type { PreloadedState } from "redux";
+import { AnyAction, createStore } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
+import { clientInternationalisation } from "./clientInternationalisation";
 import { getPolyfills } from "./polyfill";
-import { Logger } from "@shared/developmentLogger";
-import { allLanguages, allNamespaces, CopyLanguages, CopyNamespaces } from "@copy/data";
-import { initReactI18next } from "react-i18next";
-import { ClientGraphQLEnvironment } from "@gql/ClientGraphQLEnvironment";
-import { parseLogLevel } from "@framework/types/logLevel";
-import { i18nInterpolationOptions } from "@copy/interpolation";
 
 // get servers store to initialise client store
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
@@ -82,31 +79,7 @@ const Client = () => {
 
 (async () => {
   await getPolyfills();
-
-  await i18next.use(initReactI18next).init({
-    lng: CopyLanguages.en_GB,
-    fallbackLng: CopyLanguages.en_GB,
-    defaultNS: CopyNamespaces.DEFAULT,
-    fallbackNS: CopyNamespaces.DEFAULT,
-    interpolation: i18nInterpolationOptions,
-  });
-
-  const promises = [];
-
-  // TODO: Don't fetch ALL languages and namespaces by default.
-  for (const namespace of allNamespaces) {
-    for (const language of allLanguages) {
-      const promise = fetch(`/internationalisation/${language}/${namespace}`)
-        .then(res => res.json())
-        .then(data => {
-          i18next.addResourceBundle("en-GB", namespace, data, true, true);
-        });
-
-      promises.push(promise);
-    }
-  }
-
-  await Promise.all(promises);
+  await clientInternationalisation(CopyLanguages.en_GB);
 
   const rootElement = document.getElementById("root");
   if (!rootElement) {

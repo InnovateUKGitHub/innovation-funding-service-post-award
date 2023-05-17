@@ -15,6 +15,7 @@ enum CopyNamespaces {
 
 enum CopyLanguages {
   en_GB = "en-GB",
+  ifspa_TEST = "ifspa-TEST",
 }
 
 const allNamespaces = [
@@ -25,7 +26,7 @@ const allNamespaces = [
   CopyNamespaces.SBRI,
 ] as const;
 
-const allLanguages = [CopyLanguages.en_GB];
+const allLanguages = [CopyLanguages.en_GB, CopyLanguages.ifspa_TEST];
 
 export {
   enCopy,
