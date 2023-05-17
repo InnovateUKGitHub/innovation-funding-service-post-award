@@ -29,7 +29,9 @@
     "typecheck": "tsc --watch --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test-storybook": "test-storybook"
+    "test-storybook": "test-storybook",
+    "prettier": "prettier --check --ignore-path ../.prettierignore .",
+    "prettier:write": "prettier --write --ignore-path ../.prettierignore ."
   },
   "author": "BJSS Ltd",
   "license": "ISC",
