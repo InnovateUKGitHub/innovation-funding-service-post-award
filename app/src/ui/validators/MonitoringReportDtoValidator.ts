@@ -118,7 +118,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
     Validation.isTrue(
       this,
       this.editableStates.includes(this.model.status),
-      "This monitoring report has already been submitted. No changes can be made unless it is queried by Innovate UK.",
+      this.getContent(x => x.validation.monitoringReportDtoValidator.dtoReadOnly),
     ),
   );
 
