@@ -17,7 +17,7 @@ const ProjectChangeRequestOverviewSummary = ({ pcr, projectId }: { pcr: PCRDto; 
           qa="numberRow"
         />
         <SummaryListItem
-          label="Types"
+          label={getContent(x => x.pcrLabels.types)}
           content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
           action={
             <Link
