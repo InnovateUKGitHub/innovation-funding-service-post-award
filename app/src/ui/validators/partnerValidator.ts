@@ -23,7 +23,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       failBankValidation?: boolean;
     },
   ) {
-    super(model, options.showValidationErrors);
+    super({ model, showValidationErrors: options.showValidationErrors });
   }
 
   private readonly allowedPartnerStatusTransitions: { [key: number]: PartnerStatus[] } = {
@@ -49,7 +49,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     if (this.original.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete) {
       return {
         isValid: this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete,
-        message: "Bank details have already been completed",
+        message: this.getContent(x => x.validation.partnerDtoValidator.bankDetailsStatusInvalidSubmitted),
       };
     }
     // If changing status to complete and the bank checks have not passed then a bank statement must be uploaded
@@ -60,12 +60,12 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       ) {
         return {
           isValid: this.partnerDocuments.some(x => x.description === DocumentDescription.BankStatement),
-          message: "You must provide a bank statement",
+          message: this.getContent(x => x.validation.partnerDtoValidator.bankStatementRequired),
         };
       }
       return {
         isValid: this.model.bankCheckStatus === BankCheckStatus.VerificationPassed,
-        message: "Bank checks must be completed",
+        message: this.getContent(x => x.validation.partnerDtoValidator.bankChecksRequired),
       };
     }
     return { isValid: true };
@@ -84,7 +84,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
   public partnerStatus = Validation.isTrue(
     this,
     this.isPartnerStatusTransitionAllowed(this.original, this.model),
-    "Partner status change not allowed",
+    this.getContent(x => x.validation.partnerDtoValidator.partnerStatusChangeDisallowed),
   );
 
   public spendProfileStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
@@ -92,7 +92,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       this,
       this.model.partnerStatus !== PartnerStatus.Active ||
         this.model.spendProfileStatus === SpendProfileStatus.Complete,
-      "You must complete your spend profile",
+      this.getContent(x => x.validation.partnerDtoValidator.spendProfileRequired),
     ),
   );
 
@@ -104,7 +104,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
           this,
           this.model.partnerStatus !== PartnerStatus.Active ||
             this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete,
-          "You must provide your bank details",
+          this.getContent(x => x.validation.partnerDtoValidator.bankDetailsRequired),
         ),
       () => this.validateBankDetailsTaskStatus(),
     ),
@@ -114,25 +114,43 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     Validation.isTrue(
       this,
       this.model.partnerStatus !== PartnerStatus.Active || !!this.model.postcode?.length,
-      "You must provide your project location postcode",
+      this.getContent(x => x.validation.partnerDtoValidator.projectLocationPostcodeRequired),
     ),
   );
 
   public postcodeEditStatus =
     this.model.postcodeStatus !== PostcodeTaskStatus.ToDo
-      ? Validation.isTrue(this, !!this.model.postcode?.length, "You must provide your project location postcode")
+      ? Validation.isTrue(
+          this,
+          !!this.model.postcode?.length,
+          this.getContent(x => x.validation.partnerDtoValidator.projectLocationPostcodeRequired),
+        )
       : Validation.valid(this);
 
   public bankCheckValidation = this.conditionallyValidateBankDetails(() =>
-    Validation.isFalse(this, !!this.options.failBankValidation, "Check your sort code and account number."),
+    Validation.isFalse(
+      this,
+      !!this.options.failBankValidation,
+      this.getContent(x => x.validation.partnerDtoValidator.bankChecksFailed),
+    ),
   );
 
   public sortCode = this.conditionallyValidateBankDetails(
     () =>
       Validation.all(
         this,
-        () => Validation.required(this, this.model.bankDetails.sortCode, "Sort code cannot be empty"),
-        () => Validation.sortCode(this, this.model.bankDetails.sortCode, "Please enter a valid sort code"),
+        () =>
+          Validation.required(
+            this,
+            this.model.bankDetails.sortCode,
+            this.getContent(x => x.validation.partnerDtoValidator.sortCodeRequired),
+          ),
+        () =>
+          Validation.sortCode(
+            this,
+            this.model.bankDetails.sortCode,
+            this.getContent(x => x.validation.partnerDtoValidator.sortCodeInvalid),
+          ),
       ),
     this.original.bankCheckStatus === BankCheckStatus.NotValidated,
   );
@@ -141,9 +159,18 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     () =>
       Validation.all(
         this,
-        () => Validation.required(this, this.model.bankDetails.accountNumber, "Account number cannot be empty"),
         () =>
-          Validation.accountNumber(this, this.model.bankDetails.accountNumber, "Please enter a valid account number"),
+          Validation.required(
+            this,
+            this.model.bankDetails.accountNumber,
+            this.getContent(x => x.validation.partnerDtoValidator.accountNumberRequired),
+          ),
+        () =>
+          Validation.accountNumber(
+            this,
+            this.model.bankDetails.accountNumber,
+            this.getContent(x => x.validation.partnerDtoValidator.accountNumberInvalid),
+          ),
       ),
     this.original.bankCheckStatus === BankCheckStatus.NotValidated,
   );

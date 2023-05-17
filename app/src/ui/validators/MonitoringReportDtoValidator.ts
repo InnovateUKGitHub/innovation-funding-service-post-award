@@ -10,7 +10,7 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
     readonly show: boolean,
     readonly submit: boolean,
   ) {
-    super(question, show);
+    super({ model: question, showValidationErrors: show });
   }
 
   public readonly comments = Validation.all(
@@ -20,7 +20,9 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
         ? Validation.required(
             this,
             this.answer.optionId,
-            `Enter a score for ${this.question.title.toLocaleLowerCase()}`,
+            this.getContent(x =>
+              x.validation.monitoringReportDtoValidator.scoreRequired({ name: this.question.title }),
+            ),
           )
         : Validation.valid(this),
     () =>
@@ -28,7 +30,9 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
         ? Validation.required(
             this,
             this.answer.comments,
-            `Enter comments for ${this.question.title.toLocaleLowerCase()}`,
+            this.getContent(x =>
+              x.validation.monitoringReportDtoValidator.commentRequired({ name: this.question.title }),
+            ),
           )
         : Validation.valid(this),
   );
@@ -41,14 +45,16 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
             ? Validation.required(
                 this,
                 this.answer.optionId,
-                `Enter a score for ${this.question.title.toLocaleLowerCase()}`,
+                this.getContent(x =>
+                  x.validation.monitoringReportDtoValidator.scoreRequired({ name: this.question.title }),
+                ),
               )
             : Validation.valid(this),
         () =>
           Validation.isTrue(
             this,
             !this.answer.optionId || !!this.question.options.find(x => x.id === this.answer.optionId),
-            "Select a value from the list.",
+            this.getContent(x => x.validation.monitoringReportDtoValidator.scoreInvalidChoice),
           ),
       )
     : Validation.valid(this);
@@ -62,18 +68,30 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
     private readonly questions: MonitoringReportQuestionDto[],
     private readonly totalProjectPeriods: number,
   ) {
-    super(model, show);
+    super({ model, showValidationErrors: show });
   }
 
   public readonly periodId = Validation.all(
     this,
-    () => Validation.required(this, this.model.periodId, "Period is required"),
-    () => Validation.integer(this, this.model.periodId, "Period must be a whole number, like 3"),
+    () =>
+      Validation.required(
+        this,
+        this.model.periodId,
+        this.getContent(x => x.validation.monitoringReportDtoValidator.periodRequired),
+      ),
+    () =>
+      Validation.integer(
+        this,
+        this.model.periodId,
+        this.getContent(x => x.validation.monitoringReportDtoValidator.periodNotNumber),
+      ),
     () =>
       Validation.isTrue(
         this,
         this.model.periodId > 0 && this.model.periodId <= this.totalProjectPeriods,
-        `Period must be ${this.totalProjectPeriods} or fewer`,
+        this.getContent(x =>
+          x.validation.monitoringReportDtoValidator.periodTooLarge({ count: this.totalProjectPeriods }),
+        ),
       ),
   );
 
@@ -88,7 +106,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
         this.showValidationErrors,
         this.submit,
       ),
-    "There are invalid responses.",
+    this.getContent(x => x.validation.monitoringReportDtoValidator.responsesInvalid),
   );
 
   private readonly editableStates = [

@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: ! 1`] = `"Your document 'invalid_file_name!.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: # 1`] = `"Your document 'invalid_file_name#.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: $ 1`] = `"Your document 'invalid_file_name$.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: % 1`] = `"Your document 'invalid_file_name%.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: & 1`] = `"Your document 'invalid_file_name&.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: ' 1`] = `"Your document 'invalid_file_name'.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: ; 1`] = `"Your document 'invalid_file_name;.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: @ 1`] = `"Your document 'invalid_file_name@.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: [ 1`] = `"Your document 'invalid_file_name[.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: ] 1`] = `"Your document 'invalid_file_name].doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: ^ 1`] = `"Your document 'invalid_file_name^.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: \` 1`] = `"Your document 'invalid_file_name\`.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: { 1`] = `"Your document 'invalid_file_name{.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: } 1`] = `"Your document 'invalid_file_name}.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: ~ 1`] = `"Your document 'invalid_file_name~.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n invalid file names containing invalid character: £ 1`] = `"Your document 'invalid_file_name£.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot."`;
+
+exports[`Document upload validator With en-GB i18n test file extension with disallowed file type 1`] = `"You cannot upload 'test.an-invalid-filename-which-does-not-match' because it is the wrong file type."`;
+
+exports[`Document upload validator With en-GB i18n test file size when below minimum 1`] = `"You cannot upload 'test.pdf' because it is empty."`;
+
+exports[`Document upload validator With en-GB i18n test file size when exceeding maximum 1`] = `"You cannot upload 'test.pdf' because it must be smaller than 32MB."`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: ! 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: # 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: $ 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: % 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: & 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: ' 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: ; 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: @ 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: [ 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: ] 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: ^ 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: \` 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: { 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: } 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: ~ 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n invalid file names containing invalid character: £ 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
+
+exports[`Document upload validator With no i18n test file extension with disallowed file type 1`] = `"validation.documentValidator.fileTypeInvalid"`;
+
+exports[`Document upload validator With no i18n test file size when below minimum 1`] = `"validation.documentValidator.fileSizeEmpty"`;
+
+exports[`Document upload validator With no i18n test file size when exceeding maximum 1`] = `"validation.documentValidator.fileSizeTooLarge"`;

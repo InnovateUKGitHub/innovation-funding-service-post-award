@@ -4,7 +4,7 @@ import { ClaimStatus, ProjectRole, PartnerStatus, ProjectStatus } from "@framewo
 import { routeConfig } from "@ui/routing/routeConfig";
 
 import { ClaimDetailsLink, ClaimDetailsLinkRoutes } from "@ui/components/claims/claimDetailsLink";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 // TODO: This test data needs updating there are way too many "as any" overrides here...
 describe("<ClaimDetailsLink />", () => {
@@ -36,7 +36,7 @@ describe("<ClaimDetailsLink />", () => {
   };
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("with edge cases", () => {

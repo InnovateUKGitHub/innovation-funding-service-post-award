@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 
 import { ClaimLastModified, ClaimLastModifiedProps } from "@ui/components/claims";
 import TestBed from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<ClaimLastModified />", () => {
   const stubContent = {
@@ -20,7 +20,7 @@ describe("<ClaimLastModified />", () => {
     );
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   it("should render with content", () => {

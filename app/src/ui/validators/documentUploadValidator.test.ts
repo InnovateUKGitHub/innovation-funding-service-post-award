@@ -1,5 +1,6 @@
 import { IFileWrapper } from "@framework/types";
 import { configuration } from "@server/features/common";
+import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
 import { FileDtoValidator } from "@ui/validators";
 
 describe("Document upload validator", () => {
@@ -8,87 +9,91 @@ describe("Document upload validator", () => {
     size: givenSize,
   });
 
-  describe("test file name", () => {
-    describe("valid file names", () => {
-      test.each`
-        name                      | fileName
-        ${"lowercase characters"} | ${"abc"}
-        ${"uppercase characters"} | ${"ABC"}
-        ${"digits"}               | ${"0123"}
-        ${"whitespace"}           | ${"abc abc"}
-        ${"backslash"}            | ${"abc\\abc"}
-        ${"dot"}                  | ${"abc.abc"}
-        ${"underscore"}           | ${"_"}
-        ${"dash"}                 | ${"-"}
-        ${"parenthesis"}          | ${"()"}
-      `("$name", ({ fileName }) => {
-        const file = createFile("doc", 10000, fileName);
+  describe.each(["en-GB", "no"])("With %s i18n", language => {
+    beforeAll(async () => {
+      if (language === "en-GB") {
+        await initFullTestIntl();
+      } else {
+        await initStubTestIntl();
+      }
+    });
 
-        const validator = new FileDtoValidator(file, configuration.options, false);
-        expect(validator.isValid).toBe(true);
+    describe("test file name", () => {
+      describe("valid file names", () => {
+        test.each`
+          name                      | fileName
+          ${"lowercase characters"} | ${"abc"}
+          ${"uppercase characters"} | ${"ABC"}
+          ${"digits"}               | ${"0123"}
+          ${"whitespace"}           | ${"abc abc"}
+          ${"backslash"}            | ${"abc\\abc"}
+          ${"dot"}                  | ${"abc.abc"}
+          ${"underscore"}           | ${"_"}
+          ${"dash"}                 | ${"-"}
+          ${"parenthesis"}          | ${"()"}
+        `("$name", ({ fileName }) => {
+          const file = createFile("doc", 10000, fileName);
+
+          const validator = new FileDtoValidator(file, configuration.options, false);
+          expect(validator.isValid).toBe(true);
+        });
       });
     });
-  });
 
-  const invalidNameCharacters = "!'@£$%^&{}[]`~;#";
+    const invalidNameCharacters = "!'@£$%^&{}[]`~;#";
 
-  describe("invalid file names", () => {
-    const invalidList = invalidNameCharacters.split("");
-    invalidList.forEach(invalidChar => {
-      test("containing invalid character: " + invalidChar, () => {
-        const file = createFile("doc", 10000, "invalid_file_name" + invalidChar);
-        const validator = new FileDtoValidator(file, configuration.options, false);
-        expect(validator.errors).toHaveLength(1);
-        expect(validator.errors[0].errorMessage).toBe(
-          `Your document '${file.fileName}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`,
-        );
+    describe("invalid file names", () => {
+      const invalidList = invalidNameCharacters.split("");
+      invalidList.forEach(invalidChar => {
+        test("containing invalid character: " + invalidChar, () => {
+          const file = createFile("doc", 10000, "invalid_file_name" + invalidChar);
+          const validator = new FileDtoValidator(file, configuration.options, false);
+          expect(validator.errors).toHaveLength(1);
+          expect(validator.errors[0].errorMessage).toMatchSnapshot();
+        });
       });
     });
-  });
 
-  describe("test file size", () => {
-    test("when exceeding maximum", () => {
-      const invalidFileSize = configuration.options.maxFileSize + 1;
-      const file = createFile("pdf", invalidFileSize);
+    describe("test file size", () => {
+      test("when exceeding maximum", () => {
+        const invalidFileSize = configuration.options.maxFileSize + 1;
+        const file = createFile("pdf", invalidFileSize);
 
-      const validator = new FileDtoValidator(file, configuration.options, false);
-      expect(validator.errors[0].errorMessage).toEqual(
-        "You cannot upload 'test.pdf' because it must be smaller than 32MB.",
-      );
-    });
+        const validator = new FileDtoValidator(file, configuration.options, false);
+        expect(validator.errors[0].errorMessage).toMatchSnapshot();
+      });
 
-    test("within tolerance", () => {
-      const file = createFile("pdf");
+      test("within tolerance", () => {
+        const file = createFile("pdf");
 
-      const validator = new FileDtoValidator(file, configuration.options, false);
-      expect(validator.errors).toHaveLength(0);
-    });
-
-    test("when below minimum", () => {
-      const file = {
-        fileName: "test.pdf",
-        size: 0,
-      };
-
-      const validator = new FileDtoValidator(file, configuration.options, false);
-      expect(validator.errors[0].errorMessage).toEqual("You cannot upload 'test.pdf' because it is empty.");
-    });
-  });
-
-  describe("test file extension", () => {
-    describe("with allowed file", () => {
-      test.each(configuration.options.permittedFileTypes)("with %s", fileType => {
-        const validator = new FileDtoValidator(createFile(fileType), configuration.options, false);
+        const validator = new FileDtoValidator(file, configuration.options, false);
         expect(validator.errors).toHaveLength(0);
       });
+
+      test("when below minimum", () => {
+        const file = {
+          fileName: "test.pdf",
+          size: 0,
+        };
+
+        const validator = new FileDtoValidator(file, configuration.options, false);
+        expect(validator.errors[0].errorMessage).toMatchSnapshot();
+      });
     });
 
-    test("with disallowed file type", () => {
-      const fileExtension = "an-invalid-filename-which-does-not-match";
-      const validator = new FileDtoValidator(createFile(fileExtension), configuration.options, false);
-      expect(validator.errors[0].errorMessage).toEqual(
-        `You cannot upload 'test.${fileExtension}' because it is the wrong file type.`,
-      );
+    describe("test file extension", () => {
+      describe("with allowed file", () => {
+        test.each(configuration.options.permittedFileTypes)("with %s", fileType => {
+          const validator = new FileDtoValidator(createFile(fileType), configuration.options, false);
+          expect(validator.errors).toHaveLength(0);
+        });
+      });
+
+      test("with disallowed file type", () => {
+        const fileExtension = "an-invalid-filename-which-does-not-match";
+        const validator = new FileDtoValidator(createFile(fileExtension), configuration.options, false);
+        expect(validator.errors[0].errorMessage).toMatchSnapshot();
+      });
     });
   });
 });

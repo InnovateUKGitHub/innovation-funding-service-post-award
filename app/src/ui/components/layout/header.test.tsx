@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 
 import { TestBed } from "@shared/TestBed";
 import { Header, HeaderProps } from "@ui/components/layout/header";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("Header", () => {
   const stubContent = {
@@ -29,7 +29,7 @@ describe("Header", () => {
     );
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   describe("@renders", () => {

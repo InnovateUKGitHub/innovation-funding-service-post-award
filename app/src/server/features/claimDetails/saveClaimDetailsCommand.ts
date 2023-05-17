@@ -42,7 +42,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
       throw new BadRequestError("Invalid calculated cost category specified");
     }
 
-    const validationResult = new ClaimDetailsValidator(this.claimDetails, true);
+    const validationResult = new ClaimDetailsValidator({ model: this.claimDetails, showValidationErrors: true });
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }

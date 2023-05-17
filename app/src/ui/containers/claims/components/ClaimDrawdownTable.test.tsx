@@ -7,7 +7,7 @@ import { LoanStatus } from "@framework/entities";
 import { createProjectDto } from "@framework/util/stubDtos";
 import { Pending } from "@shared/pending";
 import { LoadingStatus } from "@framework/constants";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<ClaimDrawdownTable />", () => {
   const stubProject = createProjectDto({ competitionType: "LOANS" });
@@ -59,7 +59,7 @@ describe("<ClaimDrawdownTable />", () => {
   };
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("@returns", () => {

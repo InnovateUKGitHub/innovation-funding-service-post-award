@@ -2,7 +2,7 @@ import { render, fireEvent, act } from "@testing-library/react";
 
 import { TestBed } from "@shared/TestBed";
 import { DocumentFilter, DocumentFilterProps } from "@ui/components/documents/DocumentFilter";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<DocumentFilter />", () => {
   const stubContent = {
@@ -45,7 +45,7 @@ describe("<DocumentFilter />", () => {
   beforeEach(jest.clearAllMocks);
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   describe("@returns", () => {

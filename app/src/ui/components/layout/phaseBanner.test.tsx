@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 
 import { PhaseBanner } from "@ui/components";
 import { TestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<PhaseBanner />", () => {
   const stubContent = {
@@ -22,7 +22,7 @@ describe("<PhaseBanner />", () => {
     );
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   describe("@renders", () => {

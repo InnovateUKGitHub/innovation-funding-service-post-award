@@ -10,7 +10,7 @@ import {
 import { TestBed, TestBedStore } from "@shared/TestBed";
 import { configuration } from "@server/features/common";
 import { BasePcrProps, JesStepUI, JesStepUIProps } from "@ui/containers/pcrs/addPartner/jeSStep";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { EditorStatus } from "@ui/constants/enums";
 import { IRoutes } from "@ui/routing";
 
@@ -111,7 +111,7 @@ describe("<JesStepUI />", () => {
     );
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("@returns", () => {

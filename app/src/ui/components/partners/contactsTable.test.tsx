@@ -6,7 +6,7 @@ import { ProjectContactDto } from "@framework/dtos";
 import { ContactsTable, IContactsTable } from "@ui/components/partners/contactsTable";
 
 import { getColumnValues } from "../../../../tests/test-utils/tableHelpers";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<ContactsTable />", () => {
   const stubStores = {
@@ -37,7 +37,7 @@ describe("<ContactsTable />", () => {
   };
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   describe("@returns", () => {

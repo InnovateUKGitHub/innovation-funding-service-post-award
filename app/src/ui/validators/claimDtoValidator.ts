@@ -18,7 +18,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     private readonly competitionType: PartnerDto["competitionType"],
     private readonly isClaimSummary?: boolean,
   ) {
-    super(dto, showErrors);
+    super({ model: dto, showValidationErrors: showErrors, competitionType });
   }
 
   static permittedStatuses: Readonly<ClaimStatus[]> = [
@@ -52,7 +52,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     return Validation.isTrue(
       this,
       isValidStatus,
-      `The claim status '${this.model.status || "Unknown"}' is not permitted to continue.`,
+      this.getContent(x => x.validation.claimDtoValidator.statusInvalid({ status: this.model.status })),
     );
   }
 
@@ -70,14 +70,18 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
       this,
       () =>
         shouldValidateComments
-          ? Validation.required(this, this.model.comments, "Comments are required if querying a claim")
+          ? Validation.required(
+              this,
+              this.model.comments,
+              this.getContent(x => x.validation.claimDtoValidator.queryingCommentRequired),
+            )
           : Validation.valid(this),
       () =>
         Validation.maxLength(
           this,
           this.model.comments,
           claimCommentsMaxLength,
-          `Comments must be a maximum of ${claimCommentsMaxLength} characters`,
+          this.getContent(x => x.validation.claimDtoValidator.queryingCommentLength({ count: claimCommentsMaxLength })),
         ),
     );
   }
@@ -88,7 +92,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     return Validation.isPositiveFloat(
       this,
       remainingOfferCosts,
-      "You must reduce your claim to ensure the remaining eligible costs are zero or higher.",
+      this.getContent(x => x.validation.claimDtoValidator.totalCostsPositive),
     );
   }
 
@@ -99,11 +103,11 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     // Note: ignore validation when is not required
     if (notIarRequired || ktpAndNotIarRequired) return Validation.valid(this);
 
-    const iarStatusError: string = this.isKtpCompetition
-      ? "You must upload a schedule 3 before you can submit this claim."
-      : "You must upload an independent accountant's report before you can submit this claim.";
-
-    return Validation.isTrue(this, this.isIarStatusWithDocsValid, iarStatusError);
+    return Validation.isTrue(
+      this,
+      this.isIarStatusWithDocsValid,
+      this.getContent(x => x.validation.claimDtoValidator.iarStatusInvalid),
+    );
   }
 
   private validatePcfStatus(): Result {
@@ -113,7 +117,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     return Validation.isTrue(
       this,
       this.isPcfStatusValid,
-      "You must upload a project completion form before you can submit this claim.",
+      this.getContent(x => x.validation.claimDtoValidator.pcfStatusInvalid),
     );
   }
 
@@ -133,7 +137,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     if (this.shouldValidatePcf && this.model.isIarRequired && hasInvalidStatuses) {
       return Validation.inValid(
         this,
-        "You must upload an independent accountant's report and a project completion form before you can submit this claim.",
+        this.getContent(x => x.validation.claimDtoValidator.iarPcfStatusInvalid),
       );
     }
 

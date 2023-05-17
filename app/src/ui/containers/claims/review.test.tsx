@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react";
 
 import { useReviewContent } from "@ui/containers";
 import { hookTestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { CopyNamespaces } from "@copy/data";
 
 const stubContent = {
@@ -64,7 +64,7 @@ const renderPageContent = (competitionType?: string) => {
 
 describe("useReviewContent()", () => {
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent, { [CopyNamespaces.KTP]: ktpContent });
+    await initStubTestIntl(stubContent, { [CopyNamespaces.KTP]: ktpContent });
   });
 
   test.each`

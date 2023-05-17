@@ -60,5 +60,10 @@
     "costGuidanceOtherCosts": "Requests under other costs should be discussed and agreed with your nominated KTA in the first instance, with formal approval granted by the Programme Manager in relation to a request for Mentoring support costs prior to submission.\n\nPlease refer to the current guidance on eligible costs under this category as this may be subject to change\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
     "costPreGuidanceWarningOtherCosts": "Do not complete this section unless your Mentoring Support Costs have been approved by the Programme Manager.",
     "costPreGuidanceWarningSubcontracting": "This cost category is not applicable to KTPs, and should not be completed.\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/)."
+  },
+  "validation": {
+    "claimDtoValidator": {
+      "iarStatusInvalid": "You must upload a schedule 3 before you can submit this claim."
+    }
   }
 }

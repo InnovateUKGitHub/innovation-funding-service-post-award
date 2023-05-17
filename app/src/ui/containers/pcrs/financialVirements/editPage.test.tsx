@@ -1,5 +1,5 @@
 import { hookTestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { renderHook } from "@testing-library/react";
 import { useEditPageContent } from "@ui/containers";
 
@@ -38,7 +38,7 @@ const renderPageContent = () => {
 
 describe("useEditPageContent()", () => {
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   test.each`

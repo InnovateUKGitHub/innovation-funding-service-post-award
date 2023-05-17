@@ -7,7 +7,7 @@ import {
   ClaimDocumentAdviceProps,
 } from "@ui/containers/claims/claimDocuments.page";
 import { hookTestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("useClaimDocumentContent()", () => {
   const stubContent = {
@@ -61,7 +61,7 @@ describe("useClaimDocumentContent()", () => {
   };
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   test.each`

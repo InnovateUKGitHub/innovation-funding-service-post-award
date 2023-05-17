@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import TestBed from "@shared/TestBed";
 import { PostcodeEdit, PostcodeProps } from "./PostcodeEdit";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("PostcodeEdit", () => {
   afterEach(jest.clearAllMocks);
@@ -40,7 +40,7 @@ describe("PostcodeEdit", () => {
     );
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   it("should render as expected", () => {

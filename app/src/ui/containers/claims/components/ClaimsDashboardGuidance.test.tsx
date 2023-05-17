@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { ProjectRole } from "@framework/constants";
 import { ClaimsDashboardGuidance, ClaimsDashboardGuidanceProps } from "@ui/containers/claims/components";
 import { TestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<ClaimsDashboardGuidance />", () => {
   describe("@renders", () => {
@@ -26,7 +26,7 @@ describe("<ClaimsDashboardGuidance />", () => {
     };
 
     beforeAll(async () => {
-      await testInitialiseInternationalisation(stubContent);
+      await initStubTestIntl(stubContent);
     });
 
     test("when overdue claim", () => {

@@ -1,12 +1,12 @@
 import { CopyContentInvalidInputKeyError } from "@copy/Copy";
 import TestBed from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { render } from "@testing-library/react";
 import { EmailContent, EmailContentProps } from "@ui/components/emailContent";
 
 describe("EmailContent", () => {
   beforeAll(async () => {
-    await testInitialiseInternationalisation({
+    await initStubTestIntl({
       pages: {
         projectDetails: {
           changeEmail: "testbed@iuk.ukri.org",

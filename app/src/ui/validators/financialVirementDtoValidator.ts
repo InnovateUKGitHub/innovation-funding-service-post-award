@@ -16,7 +16,7 @@ export class FinancialLoanVirementDtoValidator extends Results<FinancialLoanVire
     public showValidationErrors: boolean,
     private readonly submit: boolean,
   ) {
-    super(model, showValidationErrors);
+    super({ model, showValidationErrors });
   }
 
   private readonly editablePeriods = this.model.loans.filter(x => x.isEditable).map(x => x.period);
@@ -73,13 +73,18 @@ export class FinancialLoanVirementDtoValidator extends Results<FinancialLoanVire
   }
 
   private getErrorMessage(periodsWithErrors: number[]): string {
-    const uniqueId = periodsWithErrors.join(", ");
-
     const absoluteTotalOffset = Math.abs(this.totals.updatedTotal - this.totals.currentTotal);
     const totalLoanAmount = getCurrency(this.totals.currentTotal);
     const offsetAmountFromTotal = getCurrency(absoluteTotalOffset);
 
-    return `You cannot exceed '${totalLoanAmount}' by '${offsetAmountFromTotal}'. Adjust period '${uniqueId}' to proceed.`;
+    return this.getContent(x =>
+      x.validation.financialVirementDtoValidator.loanAmountTooLarge({
+        total: totalLoanAmount,
+        amount: offsetAmountFromTotal,
+        periods: periodsWithErrors,
+        length: periodsWithErrors.length,
+      }),
+    );
   }
 }
 
@@ -92,7 +97,7 @@ class FinancialLoanVirement<T extends FinancialLoanVirementDto["loans"][0]> exte
     public submit: boolean,
     private errorMessage: (errorVirementByPeriod: number) => string,
   ) {
-    super(model, showValidationErrors);
+    super({ model, showValidationErrors });
   }
 
   public period = this.validatePeriod();
@@ -102,7 +107,13 @@ class FinancialLoanVirement<T extends FinancialLoanVirementDto["loans"][0]> exte
   private validatePeriod(): Result {
     if (!this.submit) return Validation.valid(this);
 
-    return Validation.isPositiveInteger(this, this.model.period, "Virement 'period' is not valid.");
+    return Validation.isPositiveInteger(
+      this,
+      this.model.period,
+      this.getContent(x =>
+        x.validation.financialVirementDtoValidator.virementPeriodInvalid({ period: this.model.period }),
+      ),
+    );
   }
 
   private validateNewDate(): Result {
@@ -122,7 +133,12 @@ class FinancialLoanVirement<T extends FinancialLoanVirementDto["loans"][0]> exte
     return Validation.isTrue(
       this,
       hasFutureDate,
-      `Period '${currentVirement.period}' must be dated after period '${previousVirement.period}' drawdown.`,
+      this.getContent(x =>
+        x.validation.financialVirementDtoValidator.periodHasFutureDate({
+          current: currentVirement.period,
+          previous: previousVirement.period,
+        }),
+      ),
     );
   }
 
@@ -140,7 +156,7 @@ class FinancialLoanVirement<T extends FinancialLoanVirementDto["loans"][0]> exte
 
 export class FinancialVirementDtoValidator extends Results<FinancialVirementDto> {
   constructor(model: FinancialVirementDto, showValidationErrors: boolean, private readonly submit: boolean) {
-    super(model, showValidationErrors);
+    super({ model, showValidationErrors });
   }
 
   private filteredPartners = () => {
@@ -148,15 +164,13 @@ export class FinancialVirementDtoValidator extends Results<FinancialVirementDto>
     return currentPartnerVirementsDto ? [currentPartnerVirementsDto] : this.model.partners;
   };
 
-  private readonly virementErrorMessage = this.model.currentPartnerId
-    ? "There was a problem validating your current virement."
-    : "There was a problem validating all virements on partners.";
-
   public readonly partners = Validation.optionalChild(
     this,
     this.filteredPartners(),
-    x => new PartnerVirementsDtoValidator(x, this.showValidationErrors),
-    this.virementErrorMessage,
+    x => new PartnerVirementsDtoValidator({ model: x, showValidationErrors: this.showValidationErrors }),
+    this.model.currentPartnerId
+      ? this.getContent(x => x.validation.financialVirementDtoValidator.generic)
+      : this.getContent(x => x.validation.financialVirementDtoValidator.genericAll),
   );
 
   // TODO: we are validating this on the partner now, but it still needs to be untangled from the UI at a later date
@@ -168,7 +182,7 @@ export class FinancialVirementDtoValidator extends Results<FinancialVirementDto>
         ? Validation.isTrue(
             this,
             this.model.newRemainingGrant <= this.model.originalRemainingGrant,
-            "The total grant cannot exceed the remaining grant",
+            this.getContent(x => x.validation.financialVirementDtoValidator.totalTooLarge),
           )
         : Validation.valid(this),
   );
@@ -178,26 +192,48 @@ export class PartnerVirementsDtoValidator extends Results<PartnerVirementsDto> {
   public readonly virements = Validation.optionalChild(
     this,
     this.model.virements,
-    x => new CostCategoryVirementDtoValidator(x, this.showValidationErrors),
+    x => new CostCategoryVirementDtoValidator({ model: x, showValidationErrors: this.showValidationErrors }),
   );
 
   public readonly newRemainingGrant = Validation.all(
     this,
-    () => Validation.required(this, this.model.newRemainingGrant, "New remaining grant is required"),
-    () => Validation.isTrue(this, this.model.newRemainingGrant >= 0, "Grant cannot be less zero"),
+    () =>
+      Validation.required(
+        this,
+        this.model.newRemainingGrant,
+        this.getContent(x => x.validation.financialVirementDtoValidator.remainingGrantMissing),
+      ),
+    () =>
+      Validation.isTrue(
+        this,
+        this.model.newRemainingGrant >= 0,
+        this.getContent(x => x.validation.financialVirementDtoValidator.remainingGrantTooSmall),
+      ),
   );
 }
 
 export class CostCategoryVirementDtoValidator extends Results<CostCategoryVirementDto> {
   public readonly newPartnerEligibleCosts = Validation.all(
     this,
-    () => Validation.required(this, this.model.newEligibleCosts, "Costs are required"),
+    () =>
+      Validation.required(
+        this,
+        this.model.newEligibleCosts,
+        this.getContent(x => x.validation.financialVirementDtoValidator.costRequired),
+      ),
     () =>
       Validation.isTrue(
         this,
         this.model.newEligibleCosts >= this.model.costsClaimedToDate,
-        `Costs cannot be less than amount already claimed for ${this.model.costCategoryName}`,
+        this.getContent(x =>
+          x.validation.financialVirementDtoValidator.costClaimedTooSmall({ name: this.model.costCategoryName }),
+        ),
       ),
-    () => Validation.isTrue(this, this.model.newEligibleCosts >= 0, "Costs cannot be less zero"),
+    () =>
+      Validation.isTrue(
+        this,
+        this.model.newEligibleCosts >= 0,
+        this.getContent(x => x.validation.financialVirementDtoValidator.costTooSmall),
+      ),
   );
 }

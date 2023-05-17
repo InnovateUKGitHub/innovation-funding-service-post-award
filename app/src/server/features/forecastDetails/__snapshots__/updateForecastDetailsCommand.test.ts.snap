@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateForecastDetailsCommand With en-GB i18n when total forecast exceeds goal costs expect exception 1`] = `
+Array [
+  "Your overall total cannot be higher than your total eligible costs.",
+]
+`;
+
+exports[`UpdateForecastDetailsCommand With no i18n when total forecast exceeds goal costs expect exception 1`] = `
+Array [
+  "validation.forecastDetailsDtoValidator.totalTooLarge",
+]
+`;

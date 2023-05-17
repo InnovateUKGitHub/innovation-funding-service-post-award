@@ -4,7 +4,7 @@ import { DocumentDescription } from "@framework/types";
 
 import { hookTestBed } from "@shared/TestBed";
 import { useEnumDocuments } from "@ui/containers/claims/components/allowed-documents.hook";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("useEnumDocuments()", () => {
   const claimAllowedDocuments: Readonly<DocumentDescription[]> = [
@@ -38,7 +38,7 @@ describe("useEnumDocuments()", () => {
   }
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   test("returns the correct array length", () => {

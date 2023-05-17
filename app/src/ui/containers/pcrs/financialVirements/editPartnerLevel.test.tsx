@@ -1,7 +1,7 @@
 import { useEditPartnerLevelContent } from "@ui/containers";
 import { renderHook } from "@testing-library/react";
 import { hookTestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 const stubContent = {
   pages: {
@@ -34,7 +34,7 @@ const renderPageContent = () => {
 
 describe("useEditPartnerLevelContent()", () => {
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   test.each`

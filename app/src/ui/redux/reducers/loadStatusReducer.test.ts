@@ -23,7 +23,7 @@ const createEditorSubmitAction = (): EditorSubmitAction => {
       id: "Example",
       store: "Example",
       dto: {},
-      validator: new Results({}, false),
+      validator: new Results({ model: {}, showValidationErrors: false }),
     },
   };
 };
@@ -48,7 +48,7 @@ const createEditorErrorAction = (): EditorErrorAction => {
       error: {
         code: ErrorCode.UNKNOWN_ERROR,
         message: "",
-        results: new Results({}, false),
+        results: new Results({ model: {}, showValidationErrors: false }),
       },
     },
   };

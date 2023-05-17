@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import TestBed from "@shared/TestBed";
 import * as hook from "@ui/containers/claims/components/allowed-documents.hook";
 import { EnumDocuments } from "@ui/containers/claims/components/EnumDocuments";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 const stubContent = {
   documentLabels: {
@@ -39,7 +39,7 @@ describe("<EnumDocuments />", () => {
   ];
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   test.each`

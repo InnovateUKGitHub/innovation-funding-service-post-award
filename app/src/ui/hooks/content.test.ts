@@ -1,6 +1,6 @@
 import { PossibleCopyFunctions } from "@copy/type";
 import { hookTestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { renderHook } from "@testing-library/react";
 import { noop } from "@ui/helpers/noop";
 import { useContent } from "@ui/hooks";
@@ -20,7 +20,7 @@ describe("useContent()", () => {
   const render = renderHook(useContent, hookTestBed({}));
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubTestContent);
+    await initStubTestIntl(stubTestContent);
   });
 
   test("should throw error without provider", () => {

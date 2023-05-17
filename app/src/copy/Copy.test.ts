@@ -1,5 +1,5 @@
 import { Copy } from "@copy/Copy";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { CopyNamespaces } from "./data";
 import { PossibleCopyFunctions } from "./type";
 
@@ -60,7 +60,7 @@ describe("Copy", () => {
 
     describe("after importing copy data", () => {
       beforeAll(async () => {
-        await testInitialiseInternationalisation(copyData, {
+        await initStubTestIntl(copyData, {
           [CopyNamespaces.KTP]: ktpCopyData,
         });
       });

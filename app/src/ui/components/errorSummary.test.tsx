@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { ErrorSummary, ErrorSummaryProps } from "@ui/components";
 import { ErrorCode } from "@framework/types";
 import TestBed from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<ErrorSummary />", () => {
   const stubContent = {
@@ -21,7 +21,7 @@ describe("<ErrorSummary />", () => {
   };
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   const setup = (props: ErrorSummaryProps) =>

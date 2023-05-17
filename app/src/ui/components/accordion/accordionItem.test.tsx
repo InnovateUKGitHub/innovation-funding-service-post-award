@@ -3,7 +3,7 @@ import { render, act } from "@testing-library/react";
 
 import { TestBed } from "@shared/TestBed";
 import { AccordionItem, AccordionItemProps } from "..";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 const stubContent = {
   example: {
@@ -55,7 +55,7 @@ const setup = (props?: Partial<AccordionItemProps>, isServer?: boolean) => {
 
 describe("AccordionItem", () => {
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("@renders", () => {

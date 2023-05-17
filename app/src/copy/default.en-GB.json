@@ -1396,5 +1396,321 @@
       "academic": "Academic",
       "industrial": "Industrial"
     }
+  },
+  "validation": {
+    "claimDetailsValidator": {
+      "claimLineItemsInvalid": "There are invalid claim line items."
+    },
+    "claimLineItemDtoValidator": {
+      "descriptionRequired": "Enter a description.",
+      "costRequired": "Enter a cost.",
+      "costMustBeCurrency": "Costs must be a number."
+    },
+    "claimDtoValidator": {
+      "statusInvalid": "The claim status '{{ status }}' is not permitted to continue.",
+      "queryingCommentRequired": "Comments are required if querying a claim.",
+      "queryingCommentLength_one": "Comments must be a maximum of {{ count }} character",
+      "queryingCommentLength_other": "Comments must be a maximum of {{ count }} characters",
+      "totalCostsPositive": "You must reduce your claim to ensure the remaining eligible costs are zero or higher.",
+      "iarStatusInvalid": "You must upload an independent accountant's report before you can submit this claim.",
+      "pcfStatusInvalid": "You must upload a project completion form before you can submit this claim.",
+      "iarPcfStatusInvalid": "You must upload an independent accountant's report and a project completion form before you can submit this claim."
+    },
+    "documentValidator": {
+      "nameInvalidCharacters": "Your document '{{ name }}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.",
+      "fileTypeInvalid": "You cannot upload '{{ name }}' because it is the wrong file type.",
+      "fileSizeTooLarge": "You cannot upload '{{ name }}' because it must be smaller than {{ size }}.",
+      "fileSizeEmpty": "You cannot upload '{{ name }}' because it is empty.",
+      "fileRequired": "Choose a file to upload",
+      "fileDescriptionInvalid": "Not a valid description",
+      "fileCountTooLarge_one": "You can only select one file at a time.",
+      "fileCountTooLarge_other": "You can only select up to {{ count }} files at the same time.",
+      "fileUploadFailure_one": "Your file cannot be uploaded",
+      "fileUploadFailure_other": "One or more of your files cannot be uploaded.",
+      "fileMissing": "File does not exist"
+    },
+    "financialVirementDtoValidator": {
+      "loanAmountTooLarge_one": "You cannot exceed '{{ total }}' by '{{ amount }}'. Adjust period '{{ periods, arrayJoin }}' to proceed.",
+      "loanAmountTooLarge_other": "You cannot exceed '{{ total }}' by '{{ amount }}'. Adjust periods '{{ periods, arrayJoin }}' to proceed.",
+      "virementPeriodInvalid": "Virement period '{{ period }}' is not valid.",
+      "periodHasFutureDate": "Period '{{ current }}' must be dated after period '{{ previous }}' drawdown.",
+      "generic": "There was a problem validating your current virement.",
+      "genericAll": "There was a problem validating all virements on partners.",
+      "totalTooLarge": "The total grant cannot exceed the remaining grant.",
+      "remainingGrantMissing": "New remaining grant is required.",
+      "remainingGrantTooSmall": "Grant cannot be less than zero.",
+      "costRequired": "Costs are required.",
+      "costClaimedTooSmall": "Costs cannot be less than amount already claimed for {{ name }}.",
+      "costTooSmall": "Costs cannot be less than zero."
+    },
+    "forecastDetailsDtoValidator": {
+      "noEditAboutToSubmitFinalClaim": "You cannot change your forecast as you are due to submit your final claim.",
+      "noEditAlreadySubmittedFinalClaim": "You cannot change your forecast as you have submitted your final claim.",
+      "noEditWithdrawn": "You cannot change your forecast after you have withdrawn from the project.",
+      "totalTooLarge": "Your overall total cannot be higher than your total eligible costs.",
+      "idRequired": "Id is required.",
+      "forecastRequired": "Forecast is required.",
+      "forecastNotNumber": "Forecast must be a number.",
+      "forecastNotCurrency": "Forecast must be no more than 2 decimal places."
+    },
+    "initialForecastDetailsDtoValidator": {
+      "costCategoryDoesNotMatchTotalEligibleCosts": "The total forecasts for {{ name, lowercase }} must be the same as the total eligible costs"
+    },
+    "loanDtoValidator": {
+      "statusInvalidSubmitted": "Your loan has already been submitted. You cannot resubmit this again.",
+      "statusInvalid": "Your loan must have a valid status to start a drawdown request.",
+      "documentsInvalidDescription": "All supporting loan documents must contain the description 'Drawdown approval'.",
+      "documentCountTooSmall": "The request is only accepted when at least 1 document has been uploaded.",
+      "forecastAmountDoesNotMatchAmount": "Please contact support, your drawdown amount must match your drawdown forecast.",
+      "commentLengthTooSmall_one": "You must enter at least {{ count }} character as a comment.",
+      "commentLengthTooSmall_other": "You must enter at least {{ count }} characters as a comment."
+    },
+    "monitoringReportDtoValidator": {
+      "scoreRequired": "Enter a score for {{ name, lowercase }}.",
+      "commentRequired": "Enter comments for {{ name, lowercase }}.",
+      "scoreInvalidChoice": "Select a value from the list.",
+      "periodRequired": "Period is required.",
+      "periodNotNumber": "Period must be a whole number, like 3.",
+      "periodTooLarge_one": "Period must be {{ count }}.",
+      "periodTooLarge_other": "Period must be {{ count }} or fewer.",
+      "responsesInvalid": "There are invalid responses."
+    },
+    "partnerDtoValidator": {
+      "bankDetailsStatusInvalidSubmitted": "Bank details have already been completed.",
+      "bankStatementRequired": "You must provide a bank statement.",
+      "bankChecksRequired": "Bank checks must be completed.",
+      "bankChecksFailed": "Check your sort code and account number.",
+      "bankDetailsRequired": "You must provide your bank details",
+      "partnerStatusChangeDisallowed": "Partner status change not allowed.",
+      "spendProfileRequired": "You must complete your spend profile.",
+      "projectLocationPostcodeRequired": "You must provide your project location postcode.",
+      "sortCodeRequired": "Sort code cannot be empty.",
+      "sortCodeInvalid": "Enter a valid sort code.",
+      "accountNumberRequired": "Account number cannot be empty.",
+      "accountNumberInvalid": "Enter a valid account number."
+    },
+    "pcrDtoValidator": {
+      "commentRequired": "Comments are required.",
+      "commentLengthTooLarge_one": "Comments can be a maximum of {{ count }} character.",
+      "commentLengthTooLarge_other": "Comments can be a maximum of {{ count }} characters.",
+      "commentReadOnly": "Cannot update comments.",
+      "reasoningRequired": "Enter reasoning for the request.",
+      "reasoningLengthTooLarge_one": "Reasoning can be a maximum of {{ count }} character.",
+      "reasoningLengthTooLarge_other": "Reasoning can be a maximum of {{ count }} character.",
+      "reasoningReadOnly": "Cannot update reasoning.",
+      "statusInvalid": "Set a valid status.",
+      "reasoningStatusRequired": "Invalid reasoning status.",
+      "reasonsIncomplete": "Reasons entry must be complete.",
+      "typeOverpopulated_one": "You can only have one '{{ types, arrayJoin }}' change in progress at a time.",
+      "typeOverpopulated_other": "You cannot have more than one of each of these types of change in progress at a time: {{ types, arrayJoin }}.",
+      "typeRequired": "You must select at least one of the types.",
+      "duplicateNotAllowed": "A duplicate PCR of this type is not allowed",
+      "samePartnerRemovedTwice": "You cannot select the same partner to remove more than once in a single PCR",
+      "samePartnerRenamedTwice": "You cannot select the same partner to rename more than once in a single PCR",
+      "notEnoughPartnersToRename": "You cannot select ‘Change a partner’s name’ because you do not have enough partners to action these.",
+      "notEnoughPartnersToRemove": "You cannot select ‘Remove a partner’ because you do not have enough partners to action these."
+    },
+    "pcrBaseItemDtoValidator": {
+      "itemInvalid": "Not a valid project change request item.",
+      "itemUnavailable": "Item matching '{{ name }}' is not available.",
+      "cannotAddType": "Cannot add type.",
+      "statusInvalid": "Invalid status.",
+      "itemIncomplete": "{{ name }} must be complete.",
+      "cannotUpdateItemStatus": "Cannot update item status."
+    },
+    "multiplePartnerFinancialVirementDtoValidator": {
+      "grantValueReadOnly": "The value of a grant moving over financial year cannot be changed.",
+      "grantMovingOverFinancialYearRequired": "Grant moving over financial year is required.",
+      "grantMovingOverFinancialYearNotNumber": "The value of a grant moving over financial year must be numerical.",
+      "grantMovingOverFinancialYearTooSmall": "The value can not be lower than 0."
+    },
+    "pcrTimeExtensionItemDtoValidator": {
+      "projectDurationReadOnly": "Project duration cannot be changed.",
+      "offsetMonthsMissing": "Please select the number of months you want to extend your project by",
+      "offsetMonthsTooSmall": "You must either increase or decrease the project duration. You cannot select your current end date.",
+      "offsetMonthsNotInteger": "You need to supply a whole number in months, you have supplied '{{ count }}'."
+    },
+    "pcrLoanExtensionItemDtoValidator": {
+      "phaseChangeRequired": "You must make at least one change to a phase to continue.",
+      "tooCloseToStart_one": "'{{ name }}' cannot be change within {{ count }} month of your start date. This has to be {{ value }} to proceed.",
+      "tooCloseToStart_other": "'{{ name }}' cannot be change within {{ count }} months of your start date. This has to be {{ value }} to proceed.",
+      "notMultipleOf": "'{{ name }}' value must be in increments of '{{ count }}', you have entered '{{ value }}'.",
+      "valueNotInteger": "'{{ name }}' must be a whole number of months, you have entered '{{ value }}'."
+    },
+    "pcrProjectSuspensionItemDtoValidator": {
+      "projectSuspensionStartDateReadOnly": "Project suspension start date cannot be changed.",
+      "projectSuspensionStartDateRequired": "Enter a project suspension start date.",
+      "projectSuspensionStartDateInvalid": "Enter a valid project suspension start date.",
+      "projectSuspensionStartDateDayInvalid": "The date must be at the start of the month.",
+      "projectSuspensionEndDateReadOnly": "Project suspension end date cannot be changed.",
+      "projectSuspensionEndDateRequired": "Enter a project suspension end date.",
+      "projectSuspensionEndDateInvalid": "Enter a valid project suspension end date.",
+      "projectSuspensionEndDateDayInvalid": "The date must be at the start of the month.",
+      "projectSuspensionDateRangeInvalid": "The last day of pause cannot be before the first day of pause."
+    },
+    "pcrScopeChangeItemDtoValidator": {
+      "projectSummaryReadOnly": "Project summary cannot be changed.",
+      "projectSummaryRequired": "Enter a project summary",
+      "projectSummaryLengthTooLarge_one": "Project summary can be a maximum of {{ count }} character",
+      "projectSummaryLengthTooLarge_other": "Project summary can be a maximum of {{ count }} characters",
+      "publicDescriptionReadOnly": "Public description cannot be changed.",
+      "publicDescriptionRequired": "Enter a public description",
+      "publicDescriptionLengthTooLarge_one": "Project summary can be a maximum of {{ count }} character",
+      "publicDescriptionLengthTooLarge_other": "Project summary can be a maximum of {{ count }} characters"
+    },
+    "pcrPartnerAdditionItemDtoValidator": {
+      "projectRoleRequired": "Select a project role.",
+      "partnerTypeRequired": "Select a partner type.",
+      "spendProfileInvalid": "Spend profile is not valid.",
+      "commercialRequired": "State if work is commercial.",
+      "commercialReadOnly": "Commercial cannot be changed.",
+      "projectRoleReadOnly": "Project role cannot be changed.",
+      "partnerTypeReadOnly": "Partner type cannot be changed.",
+      "organisationNameRequired": "Enter an organisation name.",
+      "organisationNameReadOnly": "Organisation name cannot be changed.",
+      "registeredAddressRequired": "Enter a registered address.",
+      "registeredAddressReadOnly": "Registered address cannot be changed.",
+      "registrationNumberRequired": "Enter a registration number.",
+      "registrationNumberReadOnly": "Registration number cannot be changed.",
+      "financialYearEndDateRequired": "Enter a financial year end.",
+      "financialYearEndDateReadOnly": "Turnover year end cannot be changed.",
+      "financialYearEndDateInvalid": "Enter a real financial year end date.",
+      "financialYearEndTurnoverRequired": "Enter a financial year end turnover.",
+      "financialYearEndTurnoverTooSmall": "Enter a financial year end turnover equal to or greater than 0.",
+      "financialYearEndTurnoverReadOnly": "Turnover cannot be changed.",
+      "financeContactProjectRoleRequired": "Select a finance contact project role.",
+      "financeContactProjectRoleReadOnly": "Role cannot be changed.",
+      "financeContactNameRequired": "Enter a finance contact name.",
+      "financeContactNameReadOnly": "Finance contact name cannot be changed.",
+      "financeContactSurnameRequired": "Enter a finance contact surname.",
+      "financeContactSurnameReadOnly": "Finance contact surname cannot be changed.",
+      "financeContactTelephoneNumberRequired": "Enter a finance contact phone number.",
+      "financeContactTelephoneNumberReadOnly": "Phone number cannot be changed.",
+      "financeContactEmailAddressRequired": "Enter a finance contact email address.",
+      "financeContactEmailAddressReadOnly": "Email address cannot be changed.",
+      "projectManagerProjectRoleRequired": "Select a project manager project role.",
+      "projectManagerProjectRoleReadOnly": "Role cannot be changed.",
+      "projectManagerNameRequired": "Enter a project manager name.",
+      "projectManagerNameReadOnly": "Project manager name cannot be changed.",
+      "projectManagerSurnameRequired": "Enter a project manager surname.",
+      "projectManagerSurnameReadOnly": "Project manager surname cannot be changed.",
+      "projectManagerTelephoneNumberRequired": "Enter a project manager phone number.",
+      "projectManagerTelephoneNumberReadOnly": "Project manager number cannot be changed.",
+      "projectManagerEmailAddressRequired": "Enter a project manager email address.",
+      "projectManagerEmailAddressReadOnly": "Project manager email address cannot be changed.",
+      "projectLocationRequired": "Select a project location.",
+      "projectLocationReadOnly": "Project location cannot be changed.",
+      "projectCityRequired": "Enter a project city.",
+      "projectCityReadOnly": "Project city cannot be changed.",
+      "projectCityLengthTooLarge": "Project city must {{ count }} character or less.",
+      "projectPostcodeReadOnly": "Project postcode cannot be changed.",
+      "projectPostcodeLengthTooLarge": "Project postcode must {{ count }} characters or less.",
+      "participantSizeRequired": "Select a participant size.",
+      "participantSizeReadOnly": "Participant size cannot be changed.",
+      "numberOfEmployeesRequired": "Enter the number of employees.",
+      "numberOfEmployeesNotInteger": "Please enter a valid number of employees.",
+      "numberOfEmployeesReadOnly": "Number of employees cannot be changed.",
+      "awardRateRequired": "Enter the funding level.",
+      "awardRateReadOnly": "Funding level cannot be changed.",
+      "awardRateNotPercentage": "Please enter a valid funding level.",
+      "awardRateTooLarge": "Please enter a funding level up to 100%.",
+      "otherFundingOptionRequired": "Select other funding option",
+      "otherFundingOptionReadOnly": "Other funding cannot be changed",
+      "tsbReferenceRequired": "Enter the TSB reference",
+      "tsbReferenceReadOnly": "TSB reference cannot be changed"
+    },
+    "pcrAccountNameChangeItemDtoValidator": {
+      "accountNameRequired": "Enter a new partner name.",
+      "accountNameReadOnly": "Partner name cannot be changed.",
+      "partnerIdReadOnly": "Partner cannot be changed.",
+      "partnerIdRequired": "Select partner to change.",
+      "partnerIdInvalid": "Invalid partner for project."
+    },
+    "pcrPartnerWithdrawalItemDtoValidator": {
+      "periodReadOnly": "Period cannot be changed.",
+      "periodRequired": "Enter a removal period",
+      "periodNotInteger": "Period must be a whole number, like 3",
+      "periodInvalid_one": "Period must be {{ count }}",
+      "periodInvalid_other": "Period must be {{ count }} or fewer",
+      "partnerIdReadOnly": "Partner cannot be changed.",
+      "partnerIdRequired": "Select partner to remove from this project.",
+      "partnerIdInvalid": "Invalid partner for project."
+    },
+    "pcrSpendProfileDtoValidator": {
+      "overheadCostItemTooMany": "Cannot have more than one overhead cost item",
+      "academicCostItemTooMany": "Cannot have more than academic cost item of a given category"
+    },
+    "pcrOtherFundingDtoValidator": {
+      "descriptionRequired": "Source of funding is required.",
+      "dateSecuredRequired": "Date secured is required.",
+      "dateSecuredNotDate": "Date secured must be a date.",
+      "valueRequired": "Funding amount is required",
+      "valueNotNumber": "Funding amount must be a number",
+      "valueNotCurrency": "Funding amount must be 2 decimal places or fewer"
+    },
+    "pcrAcademicCostDtoValidator": {
+      "valueNotNumber": "Value must be a number",
+      "valueNotCurrency": "Value must be 2 decimal places or fewer"
+    },
+    "pcrLabourCostDtoValidator": {
+      "descriptionRequired": "Description of role is required",
+      "grossCostRequired": "Gross cost of role is required",
+      "grossCostNotNumber": "Gross cost of role must be a number",
+      "grossCostNotCurrency": "Gross cost of role must be 2 decimal places or fewer",
+      "daysSpentOnProjectRequired": "Days spent on project is required",
+      "daysSpentOnProjectNotNumber": "Days spent on project must be a number",
+      "ratePerDayRequired": "Rate per day is required",
+      "ratePerDayNotNumber": "Rate per day must be a number",
+      "ratePerDayNotCurrency": "Rate per day must be 2 decimal places or fewer"
+    },
+    "pcrOverheadsCostDtoValidator": {
+      "overheadRateRequired": "Overhead rate is required",
+      "valueRequired": "Total cost is required"
+    },
+    "pcrMaterialsCostDtoValidator": {
+      "descriptionRequired": "Item description is required",
+      "quantityRequired": "Quantity is required.",
+      "quantityNotInteger": "Quantity must be a number.",
+      "costPerItemRequired": "Cost per item is required",
+      "costPerItemNotNumber": "Cost per item must be a number",
+      "costPerItemNotCurrency": "Cost per item must be 2 decimal places or fewer"
+    },
+    "pcrSubcontractingCostDtoValidator": {
+      "descriptionRequired": "Subcontractor name is required.",
+      "countryRequired": "Country is required",
+      "roleRequired": "Role is required",
+      "valueRequired": "Cost is required",
+      "valueNotNumber": "Cost must be a number",
+      "valueNotCurrency": "Cost must be 2 decimal places or fewer"
+    },
+    "pcrCapitalUsageCostDtoValidator": {
+      "descriptionRequired": "Item description is required.",
+      "typeRequired": "Type is required.",
+      "deprecationPeriodRequired": "Deprecation period is required.",
+      "deprecationPeriodNotInteger": "Deprecation period must be a number.",
+      "netPresentValueRequired": "Net present value is required.",
+      "netPresentValueNotNumber": "Net present value must be a number.",
+      "netPresentValueNotCurrency": "Net present value must be 2 decimal places or fewer.",
+      "residualValueRequired": "Residual value is required.",
+      "residualValueNotNumber": "Residual value must be a number.",
+      "residualValueNotCurrency": "Residual value must be 2 decimal places or fewer.",
+      "utilisationRequired": "Utilisation is required.",
+      "utilisationTooLarge": "Utilisation must be a value under 100%.",
+      "utilisationNotPercentage": "You must enter a number with up to 2 decimal places."
+    },
+    "pcrTravelAndSubsistanceCostDtoValidator": {
+      "descriptionRequired": "Description of cost is required",
+      "numberOfTimesRequired": "Number of times is required",
+      "numberOfTimesNotInteger": "Number of times must be a number",
+      "costOfEachRequired": "Cost of each is required",
+      "costOfEachNotNumber": "Cost of each must be a number",
+      "costOfEachNotCurrency": "Cost of each must be 2 decimal places or fewer"
+    },
+    "pcrOtherCostsDtoValidator": {
+      "descriptionRequired": "Description of cost is required",
+      "valueRequired": "Estimated cost is required",
+      "valueNotNumber": "Estimated cost must be a number",
+      "valueNotCurrency": "Estimated cost must be 2 decimal places or fewer"
+    }
   }
 }

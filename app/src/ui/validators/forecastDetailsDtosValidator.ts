@@ -41,7 +41,7 @@ export class ForecastDetailsDtosValidator
     private readonly partner: PartnerDto | undefined,
     private readonly showErrors: boolean,
   ) {
-    super(forecasts, showErrors);
+    super({ model: forecasts, showValidationErrors: showErrors });
 
     // infer period id from all the claim details we have
     const periodId = claims.reduce((prev, item) => (item.periodId > prev ? item.periodId : prev), 0);
@@ -62,25 +62,25 @@ export class ForecastDetailsDtosValidator
           Validation.isFalse(
             this,
             currentClaim && currentClaim.isFinalClaim,
-            "You cannot change your forecast as you are due to submit your final claim.",
+            this.getContent(x => x.validation.forecastDetailsDtoValidator.noEditAboutToSubmitFinalClaim),
           ),
         () =>
           Validation.isFalse(
             this,
             finalClaim && finalClaim.isApproved,
-            "You cannot change your forecast as you have submitted your final claim.",
+            this.getContent(x => x.validation.forecastDetailsDtoValidator.noEditAlreadySubmittedFinalClaim),
           ),
         () =>
           Validation.isTrue(
             this,
             !partner || !partner.isWithdrawn,
-            "You cannot change your forecast after you have withdrawn from the project.",
+            this.getContent(x => x.validation.forecastDetailsDtoValidator.noEditWithdrawn),
           ),
         () =>
           Validation.isTrue(
             this,
             totalForecastCosts + totalClaimCosts <= totalGolCosts,
-            "Your overall total cannot be higher than your total eligible costs.",
+            this.getContent(x => x.validation.forecastDetailsDtoValidator.totalTooLarge),
           ),
       );
     } else {
@@ -96,15 +96,34 @@ export class ForecastDetailsDtosValidator
 
 export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> implements IForecastDetailsDtoValidator {
   constructor(forecast: ForecastDetailsDTO) {
-    super(forecast, true);
+    super({ model: forecast, showValidationErrors: true });
   }
 
-  public id = Validation.required(this, this.model.id, "Id is required");
+  public id = Validation.required(
+    this,
+    this.model.id,
+    this.getContent(x => x.validation.forecastDetailsDtoValidator.idRequired),
+  );
   public value = Validation.all(
     this,
-    () => Validation.required(this, this.model.value, "Forecast is required."),
-    () => Validation.number(this, this.model.value, "Forecast must be a number."),
-    () => Validation.isCurrency(this, this.model.value, "Forecast must be no more than 2 decimal places."),
+    () =>
+      Validation.required(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastNotCurrency),
+      ),
   );
 }
 
@@ -113,7 +132,7 @@ class ValidForecastDetailsDtoCostCategoryValidator
   implements IForecastDetailsDtoCostCategoryValidator
 {
   constructor(forecasts: CostCategoryForecast) {
-    super(forecasts, false);
+    super({ model: forecasts, showValidationErrors: false });
   }
   public value = Validation.valid(this);
 }

@@ -1,5 +1,5 @@
 import { TestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { render } from "@testing-library/react";
 import { DocumentGuidance } from "@ui/components";
 
@@ -14,7 +14,7 @@ describe("<DocumentGuidance />", () => {
   };
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   test("@renders", () => {

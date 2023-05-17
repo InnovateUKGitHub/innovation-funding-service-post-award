@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { TestBed, TestBedStore } from "@shared/TestBed";
 import { UnauthenticatedError } from "@ui/components/errors";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<UnauthenticatedError />", () => {
   describe("@renders", () => {
@@ -42,7 +42,7 @@ describe("<UnauthenticatedError />", () => {
       );
 
     beforeAll(async () => {
-      await testInitialiseInternationalisation(stubContent);
+      await initStubTestIntl(stubContent);
     });
 
     test("with page message containing link text", () => {

@@ -11,7 +11,7 @@ import { ClaimDetailsDto, DocumentSummaryDto, ForecastDetailsDTO, ProjectDto } f
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { TestBed } from "@shared/TestBed";
 import { LoadingStatus } from "@framework/constants";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { CopyNamespaces } from "@copy/data";
 
 const projectId = "test-id";
@@ -136,7 +136,7 @@ describe("editClaimLineItems", () => {
     );
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent, {
+    await initStubTestIntl(stubContent, {
       [CopyNamespaces.SBRI]: stubSbriContent,
       [CopyNamespaces.SBRI_IFS]: stubSbriContent,
     });

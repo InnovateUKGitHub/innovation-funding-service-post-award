@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with items with newDate when invalid date 1`] = `"validation.financialVirementDtoValidator.periodHasFutureDate"`;
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with items with newDate when last 2 dates of 3 are invalid 1`] = `"validation.financialVirementDtoValidator.periodHasFutureDate"`;
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with items with newDate when last 2 dates of 3 are invalid 2`] = `"validation.financialVirementDtoValidator.periodHasFutureDate"`;
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with items with newValue with many entries with valid (parent checks plural items) 1`] = `"validation.financialVirementDtoValidator.loanAmountTooLarge"`;
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with items with newValue with single entry when single value is overdrawn 1`] = `"validation.financialVirementDtoValidator.loanAmountTooLarge"`;
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with items with period when period is a negative value 1`] = `"validation.financialVirementDtoValidator.virementPeriodInvalid"`;
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with totalValue with overdrawn funds in all months 1`] = `"validation.financialVirementDtoValidator.loanAmountTooLarge"`;
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with totalValue with overdrawn funds in earlier months 1`] = `"validation.financialVirementDtoValidator.loanAmountTooLarge"`;
+
+exports[`financialVirementDtoValidator FinancialLoanVirementDtoValidator @validates with totalValue with overdrawn funds in later months 1`] = `"validation.financialVirementDtoValidator.loanAmountTooLarge"`;

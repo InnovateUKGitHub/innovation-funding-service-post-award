@@ -5,7 +5,7 @@ import fireEvent from "@testing-library/user-event";
 import { TestBed } from "@shared/TestBed";
 import { createTypedTable } from "@ui/components/table";
 import { SortOptions } from "@ui/components/documents/table-sorter";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import React from "react";
 
 const headerButtonValues = (cells: Element[]): string[] => Array.from(cells).map(x => x.innerHTML);
@@ -47,7 +47,7 @@ describe("Table", () => {
   };
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   describe("@renders", () => {

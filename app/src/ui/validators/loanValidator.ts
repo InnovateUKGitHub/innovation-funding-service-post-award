@@ -11,7 +11,7 @@ export class LoanDtoValidator extends Results<LoanDto> {
     private readonly loanDocuments: DocumentSummaryDto[],
     public readonly showErrors: boolean,
   ) {
-    super(dto, showErrors);
+    super({ model: dto, showValidationErrors: showErrors });
   }
 
   public status = this.validateStatus();
@@ -27,13 +27,16 @@ export class LoanDtoValidator extends Results<LoanDto> {
     const { status } = this.dto;
 
     if (status === LoanStatus.REQUESTED) {
-      return Validation.inValid(this, "Your loan has already been submitted. You cannot resubmit this again.");
+      return Validation.inValid(
+        this,
+        this.getContent(x => x.validation.loanDtoValidator.statusInvalidSubmitted),
+      );
     }
 
     return Validation.isTrue(
       this,
       status === LoanStatus.PLANNED,
-      "Your loan must have a valid status to start a drawdown request.",
+      this.getContent(x => x.validation.loanDtoValidator.statusInvalid),
     );
   }
 
@@ -46,7 +49,7 @@ export class LoanDtoValidator extends Results<LoanDto> {
     return Validation.isTrue(
       this,
       hasValidDescription,
-      `All supporting loan documents must contain the description '${DocumentDescription.Loan}'.`,
+      this.getContent(x => x.validation.loanDtoValidator.documentsInvalidDescription),
     );
   }
 
@@ -59,7 +62,7 @@ export class LoanDtoValidator extends Results<LoanDto> {
     return Validation.isTrue(
       this,
       hasDocuments,
-      "The request is only accepted when at least 1 document has been uploaded.",
+      this.getContent(x => x.validation.loanDtoValidator.documentCountTooSmall),
     );
   }
 
@@ -72,7 +75,7 @@ export class LoanDtoValidator extends Results<LoanDto> {
     return Validation.isTrue(
       this,
       forecastAmount === amount,
-      "Please contact support, your drawdown amount must match your drawdown forecast.",
+      this.getContent(x => x.validation.loanDtoValidator.forecastAmountDoesNotMatchAmount),
     );
   }
 
@@ -88,7 +91,7 @@ export class LoanDtoValidator extends Results<LoanDto> {
       this,
       parsedComments,
       minCharLimit,
-      `You must enter at least ${minCharLimit} characters as a comment.`,
+      this.getContent(x => x.validation.loanDtoValidator.commentLengthTooSmall({ count: minCharLimit })),
     );
   }
 }

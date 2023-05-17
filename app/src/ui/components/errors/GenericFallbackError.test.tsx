@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
 import { GenericFallbackError, GenericFallbackErrorProps } from "@ui/components/errors";
 import { ErrorCode } from "@framework/types";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<GenericFallbackError />", () => {
   describe("@renders", () => {
@@ -23,7 +23,7 @@ describe("<GenericFallbackError />", () => {
       );
 
     beforeAll(async () => {
-      await testInitialiseInternationalisation(stubContent);
+      await initStubTestIntl(stubContent);
     });
 
     test("with page message containing link text", () => {

@@ -28,7 +28,9 @@ export const validationSummaryGuide: IGuide = {
         </>
       ),
       example: "<ValidationError error={validationError}/>",
-      render: () => <ValidationSummary validation={new ExampleValidator(exampleDto, true)} />,
+      render: () => (
+        <ValidationSummary validation={new ExampleValidator({ model: exampleDto, showValidationErrors: true })} />
+      ),
     },
   ],
 };

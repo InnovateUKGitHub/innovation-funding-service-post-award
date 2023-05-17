@@ -6,7 +6,7 @@ import { ErrorCode, IAppError, PartnerStatus, ProjectStatus } from "@framework/t
 import { Result, Results } from "@ui/validation";
 
 import { Page, PageProps, usePageValidationMessage } from "@ui/components/layout/page";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("usePageValidationMessage()", () => {
   const stubContent = {
@@ -23,7 +23,7 @@ describe("usePageValidationMessage()", () => {
   };
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   it("should return null", () => {
@@ -76,7 +76,7 @@ describe("<Page />", () => {
   };
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   const setup = (props?: Partial<PageProps>) => {
@@ -143,15 +143,19 @@ describe("<Page />", () => {
     const stubError2: Result = new Result(null, true, false, "stub-2-errorMessage", false);
 
     it("with a singular validation", () => {
-      const singleValidation: PageProps["validator"] = new Results({}, false, [stubError1]);
+      const singleValidation: PageProps["validator"] = new Results({
+        model: {},
+        showValidationErrors: false,
+        results: [stubError1],
+      });
       const { queryByText } = setup({ validator: singleValidation });
 
       expect(queryByText(stubContent.components.validationSummary.title)).toBeInTheDocument();
     });
 
     it("with multiple validations", () => {
-      const stubValidationArray1 = new Results({}, false, [stubError1]);
-      const stubValidationArray2 = new Results({}, false, [stubError2]);
+      const stubValidationArray1 = new Results({ model: {}, showValidationErrors: false, results: [stubError1] });
+      const stubValidationArray2 = new Results({ model: {}, showValidationErrors: false, results: [stubError2] });
       const arrayOfValidations: PageProps["validator"] = [stubValidationArray1, stubValidationArray2];
 
       const { queryByText } = setup({ validator: arrayOfValidations });

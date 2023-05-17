@@ -15,7 +15,7 @@ import { ClaimProps } from "@ui/components/claims/utils/costCategoryTableHelper"
 import { getColumnTextValues } from "@tests/test-utils/tableHelpers";
 
 import { ClaimTable } from "@ui/components/claims/claimTable";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<ClaimTable />", () => {
   const defaultStubData: ClaimProps = {
@@ -53,7 +53,7 @@ describe("<ClaimTable />", () => {
   };
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("@renders", () => {

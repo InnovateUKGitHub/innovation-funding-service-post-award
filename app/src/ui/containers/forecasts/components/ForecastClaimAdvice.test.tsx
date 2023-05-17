@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import TestBed from "@shared/TestBed";
 import { ILinkInfo } from "@framework/types";
 import { ForecastClaimAdvice, ForecastClaimAdviceProps } from "./ForecastClaimAdvice";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<ForecastClaimAdvice />", () => {
   const stubContent = {
@@ -35,7 +35,7 @@ describe("<ForecastClaimAdvice />", () => {
   beforeEach(jest.clearAllMocks);
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("@content", () => {

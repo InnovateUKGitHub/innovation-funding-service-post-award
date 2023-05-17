@@ -20,7 +20,7 @@ import * as Validation from "./common";
 
 export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
   constructor(model: PcrSpendProfileDto, showValidationErrors: boolean) {
-    super(model, showValidationErrors);
+    super({ model, showValidationErrors });
   }
 
   private getCostValidator(cost: PCRSpendProfileCostDto) {
@@ -58,7 +58,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
     if (costCategoryType.group === CostCategoryGroupType.Other_Funding) {
       return new PCROtherFundingDtoValidator(fund, this.showValidationErrors);
     }
-    return new Results(fund, this.showValidationErrors);
+    return new Results({ model: fund, showValidationErrors: this.showValidationErrors });
   }
 
   public costs = Validation.child(
@@ -79,13 +79,13 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
         () => {
           return val.isTrue(
             items => items.filter(ofOverheadType).length <= 1,
-            "Cannot have more than one overhead cost item",
+            this.getContent(x => x.validation.pcrSpendProfileDtoValidator.overheadCostItemTooMany),
           );
         },
         () => {
           return val.isTrue(
             items => hasNoDuplicates(items.filter(ofAcademicType).map(x => x.costCategoryId)),
-            "Cannot have more than academic cost item of a given category",
+            this.getContent(x => x.validation.pcrSpendProfileDtoValidator.academicCostItemTooMany),
           );
         },
       );
@@ -97,7 +97,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
 
 export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto | PCRSpendProfileFundingDto> extends Results<T> {
   constructor(model: T, showValidationErrors: boolean) {
-    super(model, showValidationErrors);
+    super({ model, showValidationErrors });
   }
 }
 
@@ -112,144 +112,393 @@ export type PCRSpendProfileCostDtoValidator =
   | PCROtherCostsDtoValidator;
 
 export class PCROtherFundingDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherFundingDto> {
-  public description = Validation.required(this, this.model.description, "Source of funding is required");
+  public description = Validation.required(
+    this,
+    this.model.description,
+    this.getContent(x => x.validation.pcrOtherFundingDtoValidator.descriptionRequired),
+  );
   public dateSecured = Validation.all(
     this,
-    () => Validation.required(this, this.model.dateSecured, "Date secured is required"),
-    () => Validation.isDate(this, this.model.dateSecured, "Date secured must be a date"),
+    () =>
+      Validation.required(
+        this,
+        this.model.dateSecured,
+        this.getContent(x => x.validation.pcrOtherFundingDtoValidator.dateSecuredRequired),
+      ),
+    () =>
+      Validation.isDate(
+        this,
+        this.model.dateSecured,
+        this.getContent(x => x.validation.pcrOtherFundingDtoValidator.dateSecuredNotDate),
+      ),
   );
   public value = Validation.all(
     this,
-    () => Validation.required(this, this.model.value, "Funding amount is required"),
-    () => Validation.number(this, this.model.value, "Funding amount must be a number"),
-    () => Validation.isCurrency(this, this.model.value, "Funding amount must be 2 decimal places or fewer"),
+    () =>
+      Validation.required(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrOtherFundingDtoValidator.valueRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrOtherFundingDtoValidator.valueNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrOtherFundingDtoValidator.valueNotCurrency),
+      ),
   );
 }
 
 export class PCRAcademicCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileAcademicCostDto> {
   public value = Validation.all(
     this,
-    () => Validation.number(this, this.model.value, "Value must be a number"),
-    () => Validation.isCurrency(this, this.model.value, "Value must be 2 decimal places or fewer"),
+    () =>
+      Validation.number(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrAcademicCostDtoValidator.valueNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrAcademicCostDtoValidator.valueNotCurrency),
+      ),
   );
 }
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
-  public description = Validation.required(this, this.model.description, "Description of role is required");
+  public description = Validation.required(
+    this,
+    this.model.description,
+    this.getContent(x => x.validation.pcrLabourCostDtoValidator.descriptionRequired),
+  );
   public grossCostOfRole = Validation.all(
     this,
-    () => Validation.required(this, this.model.grossCostOfRole, "Gross cost of role is required"),
-    () => Validation.number(this, this.model.grossCostOfRole, "Gross cost of role must be a number"),
     () =>
-      Validation.isCurrency(this, this.model.grossCostOfRole, "Gross cost of role must be 2 decimal places or fewer"),
+      Validation.required(
+        this,
+        this.model.grossCostOfRole,
+        this.getContent(x => x.validation.pcrLabourCostDtoValidator.grossCostRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.grossCostOfRole,
+        this.getContent(x => x.validation.pcrLabourCostDtoValidator.grossCostNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.grossCostOfRole,
+        this.getContent(x => x.validation.pcrLabourCostDtoValidator.grossCostNotCurrency),
+      ),
   );
   public daysSpentOnProject = Validation.all(
     this,
-    () => Validation.required(this, this.model.daysSpentOnProject, "Days spent on project is required"),
-    () => Validation.number(this, this.model.daysSpentOnProject, "Days spent on project must be a number"),
+    () =>
+      Validation.required(
+        this,
+        this.model.daysSpentOnProject,
+        this.getContent(x => x.validation.pcrLabourCostDtoValidator.daysSpentOnProjectRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.daysSpentOnProject,
+        this.getContent(x => x.validation.pcrLabourCostDtoValidator.daysSpentOnProjectNotNumber),
+      ),
   );
   public ratePerDay = Validation.all(
     this,
-    () => Validation.required(this, this.model.ratePerDay, "Rate per day is required"),
-    () => Validation.number(this, this.model.ratePerDay, "Rate per day must be a number"),
-    () => Validation.isCurrency(this, this.model.ratePerDay, "Rate per day must be 2 decimal places or fewer"),
+    () =>
+      Validation.required(
+        this,
+        this.model.ratePerDay,
+        this.getContent(x => x.validation.pcrLabourCostDtoValidator.ratePerDayRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.ratePerDay,
+        this.getContent(x => x.validation.pcrLabourCostDtoValidator.ratePerDayNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.ratePerDay,
+        this.getContent(x => x.validation.pcrLabourCostDtoValidator.ratePerDayNotCurrency),
+      ),
   );
 }
 
 export class PCROverheadsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOverheadsCostDto> {
-  public overheadRate = Validation.required(this, this.model.overheadRate || null, "Overhead rate is required");
+  public overheadRate = Validation.required(
+    this,
+    this.model.overheadRate || null,
+    this.getContent(x => x.validation.pcrOverheadsCostDtoValidator.overheadRateRequired),
+  );
   public value =
     this.model.overheadRate === PCRSpendProfileOverheadRate.Calculated
-      ? Validation.required(this, this.model.value, "Total cost is required")
+      ? Validation.required(
+          this,
+          this.model.value,
+          this.getContent(x => x.validation.pcrOverheadsCostDtoValidator.valueRequired),
+        )
       : Validation.valid(this);
 }
 
 export class PCRMaterialsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileMaterialsCostDto> {
-  public description = Validation.required(this, this.model.description, "Item description is required");
+  public description = Validation.required(
+    this,
+    this.model.description,
+    this.getContent(x => x.validation.pcrMaterialsCostDtoValidator.descriptionRequired),
+  );
   public quantity = Validation.all(
     this,
-    () => Validation.required(this, this.model.quantity, "Quantity is required"),
-    () => Validation.integer(this, this.model.quantity, "Quantity must be a number"),
+    () =>
+      Validation.required(
+        this,
+        this.model.quantity,
+        this.getContent(x => x.validation.pcrMaterialsCostDtoValidator.quantityRequired),
+      ),
+    () =>
+      Validation.integer(
+        this,
+        this.model.quantity,
+        this.getContent(x => x.validation.pcrMaterialsCostDtoValidator.quantityNotInteger),
+      ),
   );
   public costPerItem = Validation.all(
     this,
-    () => Validation.required(this, this.model.costPerItem, "Cost per item is required"),
-    () => Validation.number(this, this.model.costPerItem, "Cost per item must be a number"),
-    () => Validation.isCurrency(this, this.model.costPerItem, "Cost per item must be 2 decimal places or fewer"),
+    () =>
+      Validation.required(
+        this,
+        this.model.costPerItem,
+        this.getContent(x => x.validation.pcrMaterialsCostDtoValidator.costPerItemRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.costPerItem,
+        this.getContent(x => x.validation.pcrMaterialsCostDtoValidator.costPerItemNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.costPerItem,
+        this.getContent(x => x.validation.pcrMaterialsCostDtoValidator.costPerItemNotCurrency),
+      ),
   );
 }
 
 export class PCRSubcontractingCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileSubcontractingCostDto> {
-  public description = Validation.required(this, this.model.description, "Subcontractor name is required");
-  public subcontractorCountry = Validation.required(this, this.model.subcontractorCountry, "Country is required");
+  public description = Validation.required(
+    this,
+    this.model.description,
+    this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.descriptionRequired),
+  );
+  public subcontractorCountry = Validation.required(
+    this,
+    this.model.subcontractorCountry,
+    this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.countryRequired),
+  );
   public subcontractorRoleAndDescription = Validation.required(
     this,
     this.model.subcontractorRoleAndDescription,
-    "Role is required",
+    this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.roleRequired),
   );
   public value = Validation.all(
     this,
-    () => Validation.required(this, this.model.value, "Cost is required"),
-    () => Validation.number(this, this.model.value, "Cost must be a number"),
-    () => Validation.isCurrency(this, this.model.value, "Cost must be 2 decimal places or fewer"),
+    () =>
+      Validation.required(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.valueRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.valueNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrSubcontractingCostDtoValidator.valueNotCurrency),
+      ),
   );
 }
 
 export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileCapitalUsageCostDto> {
-  public description = Validation.required(this, this.model.description, "Item description is required");
-  public type = Validation.all(this, () => Validation.required(this, this.model.type || null, "Type is required"));
+  public description = Validation.required(
+    this,
+    this.model.description,
+    this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.descriptionRequired),
+  );
+  public type = Validation.all(this, () =>
+    Validation.required(
+      this,
+      this.model.type || null,
+      this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.typeRequired),
+    ),
+  );
   public depreciationPeriod = Validation.all(
     this,
-    () => Validation.required(this, this.model.depreciationPeriod, "Depreciation period is required"),
-    () => Validation.integer(this, this.model.depreciationPeriod, "Depreciation period must be a number"),
+    () =>
+      Validation.required(
+        this,
+        this.model.depreciationPeriod,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.deprecationPeriodRequired),
+      ),
+    () =>
+      Validation.integer(
+        this,
+        this.model.depreciationPeriod,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.deprecationPeriodNotInteger),
+      ),
   );
   public netPresentValue = Validation.all(
     this,
-    () => Validation.required(this, this.model.netPresentValue, "Net present value is required"),
-    () => Validation.number(this, this.model.netPresentValue, "Net present value must be a number"),
     () =>
-      Validation.isCurrency(this, this.model.netPresentValue, "Net present value must be 2 decimal places or fewer"),
+      Validation.required(
+        this,
+        this.model.netPresentValue,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.netPresentValueRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.netPresentValue,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.netPresentValueNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.netPresentValue,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.netPresentValueNotCurrency),
+      ),
   );
   public residualValue = Validation.all(
     this,
-    () => Validation.required(this, this.model.residualValue, "Residual value is required"),
-    () => Validation.number(this, this.model.residualValue, "Residual value must be a number"),
-    () => Validation.isCurrency(this, this.model.residualValue, "Residual value must be 2 decimal places or fewer"),
+    () =>
+      Validation.required(
+        this,
+        this.model.residualValue,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.residualValueRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.residualValue,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.residualValueNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.residualValue,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.residualValueNotCurrency),
+      ),
   );
   public utilisation = Validation.all(
     this,
-    () => Validation.required(this, this.model.utilisation, "Utilisation is required"),
+    () =>
+      Validation.required(
+        this,
+        this.model.utilisation,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.utilisationRequired),
+      ),
     () =>
       Validation.isTrue(
         this,
         this.model.utilisation === undefined || this.model.utilisation === null || this.model.utilisation < 100,
-        "Utilisation must be a value under 100",
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.utilisationTooLarge),
       ),
-    () => Validation.isPercentage(this, this.model.utilisation, "You must enter a number with up to 2 decimal places"),
+    () =>
+      Validation.isPercentage(
+        this,
+        this.model.utilisation,
+        this.getContent(x => x.validation.pcrCapitalUsageCostDtoValidator.utilisationNotPercentage),
+      ),
   );
 }
 
 export class PCRTravelAndSubsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileTravelAndSubsCostDto> {
-  public description = Validation.required(this, this.model.description, "Description of cost is required");
+  public description = Validation.required(
+    this,
+    this.model.description,
+    this.getContent(x => x.validation.pcrTravelAndSubsistanceCostDtoValidator.descriptionRequired),
+  );
   public numberOfTimes = Validation.all(
     this,
-    () => Validation.required(this, this.model.numberOfTimes, "Number of times is required"),
-    () => Validation.integer(this, this.model.numberOfTimes, "Number of times must be a number"),
+    () =>
+      Validation.required(
+        this,
+        this.model.numberOfTimes,
+        this.getContent(x => x.validation.pcrTravelAndSubsistanceCostDtoValidator.numberOfTimesRequired),
+      ),
+    () =>
+      Validation.integer(
+        this,
+        this.model.numberOfTimes,
+        this.getContent(x => x.validation.pcrTravelAndSubsistanceCostDtoValidator.numberOfTimesNotInteger),
+      ),
   );
   public costOfEach = Validation.all(
     this,
-    () => Validation.required(this, this.model.costOfEach, "Cost of each is required"),
-    () => Validation.number(this, this.model.costOfEach, "Cost of each must be a number"),
-    () => Validation.isCurrency(this, this.model.costOfEach, "Cost of each must be 2 decimal places or fewer"),
+    () =>
+      Validation.required(
+        this,
+        this.model.costOfEach,
+        this.getContent(x => x.validation.pcrTravelAndSubsistanceCostDtoValidator.costOfEachRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.costOfEach,
+        this.getContent(x => x.validation.pcrTravelAndSubsistanceCostDtoValidator.costOfEachNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.costOfEach,
+        this.getContent(x => x.validation.pcrTravelAndSubsistanceCostDtoValidator.costOfEachNotCurrency),
+      ),
   );
 }
 
 export class PCROtherCostsDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherCostsDto> {
-  public description = Validation.required(this, this.model.description, "Description of cost is required");
+  public description = Validation.required(
+    this,
+    this.model.description,
+    this.getContent(x => x.validation.pcrOtherCostsDtoValidator.descriptionRequired),
+  );
   public value = Validation.all(
     this,
-    () => Validation.required(this, this.model.value, "Estimated cost is required"),
-    () => Validation.number(this, this.model.value, "Estimated cost must be a number"),
-    () => Validation.isCurrency(this, this.model.value, "Estimated cost must be 2 decimal places or fewer"),
+    () =>
+      Validation.required(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrOtherCostsDtoValidator.valueRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrOtherCostsDtoValidator.valueNotNumber),
+      ),
+    () =>
+      Validation.isCurrency(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.pcrOtherCostsDtoValidator.valueNotCurrency),
+      ),
   );
 }

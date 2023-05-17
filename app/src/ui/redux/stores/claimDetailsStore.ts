@@ -33,7 +33,7 @@ export class ClaimsDetailsStore extends StoreBase {
       this.getKey(partnerId, periodId, costCategoryId),
       () => this.get(projectId, partnerId, periodId, costCategoryId),
       init,
-      dto => new ClaimDetailsValidator(dto, false),
+      dto => new ClaimDetailsValidator({ model: dto, showValidationErrors: false }),
     );
   }
 
@@ -51,7 +51,7 @@ export class ClaimsDetailsStore extends StoreBase {
       "claimDetail",
       this.getKey(partnerId, periodId, costCategoryId),
       dto,
-      show => new ClaimDetailsValidator(dto, show),
+      show => new ClaimDetailsValidator({ model: dto, showValidationErrors: show }),
       p =>
         apiClient.claimDetails.saveClaimDetails({
           projectId,

@@ -9,23 +9,28 @@ import { getFileExtension, getFileName, getFileSize } from "@framework/util";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import * as Validation from "./common";
-import { Logger } from "@shared/developmentLogger";
 
-const invalidCharacterInFileName = (fileName: string) => {
-  return `Your document '${fileName}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`;
+const invalidCharacterInFileName = <T extends Results<ResultBase>>(results: T, fileName: string) => {
+  return results.getContent(x => x.validation.documentValidator.nameInvalidCharacters({ name: fileName }));
 };
 
-const permittedFileTypeErrorMessage = (file: IFileWrapper | null) => {
-  return `You cannot upload '${file?.fileName}' because it is the wrong file type.`;
+const permittedFileTypeErrorMessage = <T extends Results<ResultBase>>(results: T, file: IFileWrapper | null) => {
+  return results.getContent(x => x.validation.documentValidator.fileTypeInvalid({ name: file?.fileName }));
 };
 
-const fileTooBigErrorMessage = (file: IFileWrapper | null, maxFileSize: number) => {
+const fileTooBigErrorMessage = <T extends Results<ResultBase>>(
+  results: T,
+  file: IFileWrapper | null,
+  maxFileSize: number,
+) => {
   const maxMessage = getFileSize(maxFileSize);
-  return `You cannot upload '${file?.fileName}' because it must be smaller than ${maxMessage}.`;
+  return results.getContent(x =>
+    x.validation.documentValidator.fileSizeTooLarge({ name: file?.fileName, size: maxMessage }),
+  );
 };
 
-const fileEmptyErrorMessage = (file: IFileWrapper | null) => {
-  return `You cannot upload '${file?.fileName}' because it is empty.`;
+const fileEmptyErrorMessage = <T extends Results<ResultBase>>(results: T, file: IFileWrapper | null) => {
+  return results.getContent(x => x.validation.documentValidator.fileSizeEmpty({ name: file?.fileName }));
 };
 
 // TODO: investigate better solution to passing in null to supers, preferably by passing in the model.
@@ -39,20 +44,30 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
     // model is empty object for this reason
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
-    super(null, showValidationErrors);
+    super({ model: null, showValidationErrors });
 
     this.file = Validation.all(
       this,
-      () => Validation.required(this, model && model.file && model.file.fileName, "Choose a file to upload."),
+      () =>
+        Validation.required(
+          this,
+          model && model.file && model.file.fileName,
+          this.getContent(x => x.validation.documentValidator.fileRequired),
+        ),
       () => validateFileName(this, model && model.file),
-      () => Validation.required(this, model && model.file && model.file.fileName, "Choose a file to upload."),
+      () =>
+        Validation.required(
+          this,
+          model && model.file && model.file.fileName,
+          this.getContent(x => x.validation.documentValidator.fileRequired),
+        ),
       () =>
         Validation.isTrue(
           this,
           (model.file?.size ?? 0) <= config.maxFileSize,
-          fileTooBigErrorMessage(model?.file, config.maxFileSize),
+          fileTooBigErrorMessage(this, model?.file, config.maxFileSize),
         ),
-      () => Validation.isFalse(this, model?.file?.size === 0, fileEmptyErrorMessage(model?.file)),
+      () => Validation.isFalse(this, model?.file?.size === 0, fileEmptyErrorMessage(this, model?.file)),
       () => validateFileExtension(this, model.file, config.permittedFileTypes),
     );
     this.description = model.description
@@ -60,15 +75,13 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
           this,
           model.description,
           getAllNumericalEnumValues(DocumentDescription),
-          "Not a valid description",
+          this.getContent(x => x.validation.documentValidator.fileDescriptionInvalid),
         )
       : Validation.valid(this);
   }
 }
 
 export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocumentUploadDto> {
-  private readonly logger: Logger = new Logger("MultipleDocumentUploadDtoValidator");
-
   public readonly description: Result;
   public readonly partnerId: Result;
 
@@ -83,7 +96,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
     // model is empty object for this reason
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
-    super(null, showValidationErrors);
+    super({ model: null, showValidationErrors });
 
     this.files = this.validateFiles(model, config, filesRequired);
     this.description = model.description
@@ -91,7 +104,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
           this,
           model.description,
           getAllNumericalEnumValues(DocumentDescription),
-          "Not a valid description",
+          this.getContent(x => x.validation.documentValidator.fileDescriptionInvalid),
         )
       : Validation.valid(this);
     this.partnerId = Validation.valid(this);
@@ -101,11 +114,6 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
     const filteredFiles = (model.files && model.files.filter(x => x.fileName || x.size)) || [];
     const maxUploadFileCount = config.maxUploadFileCount;
 
-    const maxCountMessage =
-      maxUploadFileCount === 1
-        ? "You can only select one file at a time."
-        : `You can only select up to ${maxUploadFileCount} files at the same time.`;
-
     return Validation.child(
       this,
       model.files,
@@ -114,11 +122,18 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
         children.all(
           () =>
             filesRequired
-              ? children.isTrue(() => !!(filteredFiles && filteredFiles.length), "Select a file to upload.")
+              ? children.isTrue(
+                  () => !!(filteredFiles && filteredFiles.length),
+                  this.getContent(x => x.validation.documentValidator.fileRequired),
+                )
               : children.valid(),
-          () => children.isTrue(x => x.length <= maxUploadFileCount, maxCountMessage),
+          () =>
+            children.isTrue(
+              x => x.length <= maxUploadFileCount,
+              this.getContent(x => x.validation.documentValidator.fileCountTooLarge({ count: maxUploadFileCount })),
+            ),
         ),
-      filteredFiles.length === 1 ? "Your file cannot be uploaded." : "One or more of your files cannot be uploaded.",
+      this.getContent(x => x.validation.documentValidator.fileUploadFailure),
     );
   }
 
@@ -132,14 +147,19 @@ export class FileDtoValidator extends Results<IFileWrapper> {
     // model is empty object for this reason
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore-next-line
-    super(null, showValidationErrors);
+    super({ model: null, showValidationErrors });
 
     this.file = Validation.all(
       this,
-      () => Validation.required(this, file.fileName, "Select a file to upload."),
+      () =>
+        Validation.required(
+          this,
+          file.fileName,
+          this.getContent(x => x.validation.documentValidator.fileRequired),
+        ),
       () => validateFileName(this, file),
-      () => Validation.isTrue(this, file.size <= maxFileSize, fileTooBigErrorMessage(file, maxFileSize)),
-      () => Validation.isFalse(this, file.size === 0, fileEmptyErrorMessage(file)),
+      () => Validation.isTrue(this, file.size <= maxFileSize, fileTooBigErrorMessage(this, file, maxFileSize)),
+      () => Validation.isFalse(this, file.size === 0, fileEmptyErrorMessage(this, file)),
       () => validateFileExtension(this, file, permittedFileTypes),
     );
   }
@@ -159,7 +179,7 @@ function validateFileExtension<T extends Results<ResultBase>>(
     results,
     getFileExtension(fileName),
     permittedFileTypes,
-    permittedFileTypeErrorMessage(file),
+    permittedFileTypeErrorMessage(results, file),
   );
 }
 
@@ -170,12 +190,15 @@ function validateFileName<T extends Results<ResultBase>>(results: T, file: IFile
   const validCharacters = /^[\w\d\s\\.\-()]+$/;
 
   if (!file) {
-    return Validation.inValid(results, "File does not exist");
+    return Validation.inValid(
+      results,
+      results.getContent(x => x.validation.documentValidator.fileMissing),
+    );
   } else {
     const fileName = file.fileName;
     const name = getFileName(fileName);
 
     const hasValidName: boolean = validCharacters.test(name);
-    return Validation.isTrue(results, hasValidName, invalidCharacterInFileName(fileName));
+    return Validation.isTrue(results, hasValidName, invalidCharacterInFileName(results, fileName));
   }
 }

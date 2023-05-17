@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
 import { IValidationMessageProps, ValidationMessage } from "@ui/components";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { PossibleCopyFunctions } from "@copy/type";
 
 describe("<ValidationMessage />", () => {
@@ -22,7 +22,7 @@ describe("<ValidationMessage />", () => {
   const StubComponentContent = () => <div>custom component</div>;
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   type PossibleTestCopyKeys = typeof stubContent;

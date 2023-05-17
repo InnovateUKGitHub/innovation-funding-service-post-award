@@ -45,7 +45,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     private readonly partners?: PartnerDto[],
     private readonly projectPcrs?: PCRSummaryDto[],
   ) {
-    super(model, showValidationErrors);
+    super({ model, showValidationErrors });
   }
 
   private readonly projectManagerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
@@ -94,23 +94,37 @@ export class PCRDtoValidator extends Results<PCRDto> {
         this,
         () =>
           statusRequiringComments.includes(this.model.status)
-            ? Validation.required(this, this.model.comments, "Comments are required")
+            ? Validation.required(
+                this,
+                this.model.comments,
+                this.getContent(x => x.validation.pcrDtoValidator.commentRequired),
+              )
             : Validation.valid(this),
         () =>
           Validation.maxLength(
             this,
             this.model.comments,
             PCRDtoValidator.maxCommentsLength,
-            `Comments can be a maximum of ${PCRDtoValidator.maxCommentsLength} characters`,
+            this.getContent(x =>
+              x.validation.pcrDtoValidator.commentLengthTooLarge({ count: PCRDtoValidator.maxCommentsLength }),
+            ),
           ),
       );
     }
 
     if (!this.original) {
-      return Validation.isTrue(this, !this.model.comments, "Cannot update comments");
+      return Validation.isTrue(
+        this,
+        !this.model.comments,
+        this.getContent(x => x.validation.pcrDtoValidator.commentReadOnly),
+      );
     }
 
-    return Validation.isTrue(this, this.model.comments === this.original.comments, "Cannot update comments");
+    return Validation.isTrue(
+      this,
+      this.model.comments === this.original.comments,
+      this.getContent(x => x.validation.pcrDtoValidator.commentReadOnly),
+    );
   }
 
   private validateReasoningComments() {
@@ -121,26 +135,36 @@ export class PCRDtoValidator extends Results<PCRDto> {
         this,
         () =>
           this.model.reasoningStatus === PCRItemStatus.Complete
-            ? Validation.required(this, this.model.reasoningComments, "Enter reasoning for the request")
+            ? Validation.required(
+                this,
+                this.model.reasoningComments,
+                this.getContent(x => x.validation.pcrDtoValidator.reasoningRequired),
+              )
             : Validation.valid(this),
         () =>
           Validation.maxLength(
             this,
             this.model.reasoningComments,
             PCRDtoValidator.maxCommentsLength,
-            `Reasoning can be a maximum of ${PCRDtoValidator.maxCommentsLength} characters`,
+            this.getContent(x =>
+              x.validation.pcrDtoValidator.reasoningLengthTooLarge({ count: PCRDtoValidator.maxCommentsLength }),
+            ),
           ),
       );
     }
 
     if (!this.original) {
-      return Validation.isTrue(this, !this.model.reasoningComments, "Cannot update reasoning");
+      return Validation.isTrue(
+        this,
+        !this.model.reasoningComments,
+        this.getContent(x => x.validation.pcrDtoValidator.reasoningReadOnly),
+      );
     }
 
     return Validation.isTrue(
       this,
       this.model.reasoningComments === this.original.reasoningComments,
-      "Cannot update reasoning",
+      this.getContent(x => x.validation.pcrDtoValidator.reasoningReadOnly),
     );
   }
 
@@ -161,7 +185,12 @@ export class PCRDtoValidator extends Results<PCRDto> {
     }
 
     return Validation.all(this, () =>
-      Validation.permittedValues(this, this.model.status, permittedStatus, "Set a valid status"),
+      Validation.permittedValues(
+        this,
+        this.model.status,
+        permittedStatus,
+        this.getContent(x => x.validation.pcrDtoValidator.statusInvalid),
+      ),
     );
   }
 
@@ -171,12 +200,18 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const preparePcrStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
     return Validation.all(
       this,
-      () => Validation.permittedValues(this, this.model.reasoningStatus, permittedStatus, "Invalid reasoning status"),
+      () =>
+        Validation.permittedValues(
+          this,
+          this.model.reasoningStatus,
+          permittedStatus,
+          this.getContent(x => x.validation.pcrDtoValidator.reasoningStatusRequired),
+        ),
       () =>
         Validation.isTrue(
           this,
           this.model.reasoningStatus === PCRItemStatus.Complete || preparePcrStatus.indexOf(this.model.status) >= 0,
-          "Reasons entry must be complete",
+          this.getContent(x => x.validation.pcrDtoValidator.reasonsIncomplete),
         ),
     );
   }
@@ -323,13 +358,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       return acc.concat(x.displayName);
     }, []);
 
-    if (errorTypes.length === 1) {
-      return `You can only have one '${errorTypes[0]}' change in progress at a time.`;
-    }
-
-    const errorValues = `'${errorTypes.join("', '")}'`;
-
-    return `You cannot have more than one of each of these types of change in progress at one time: ${errorValues}.`;
+    return this.getContent(x => x.validation.pcrDtoValidator.typeOverpopulated({ types: errorTypes }));
   }
 
   private validateItems() {
@@ -346,7 +375,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       item => this.getItemValidator(item),
       children =>
         children.all(
-          () => children.required("You must select at least one of the types"),
+          () => children.required(this.getContent(x => x.validation.pcrDtoValidator.typeRequired)),
           // TODO: add some validation to secure against deprecated PCR item
           // () =>
           //   children.isTrue(
@@ -354,81 +383,93 @@ export class PCRDtoValidator extends Results<PCRDto> {
           //     "The item type you have requested is not available",
           //   ),
           () => {
-            return children.isTrue(items => {
-              const seenProjectPcrs = new Set<PCRItemType>();
+            return children.isTrue(
+              items => {
+                const seenProjectPcrs = new Set<PCRItemType>();
 
-              for (const projectPcr of items) {
-                // If a PCR type is non-duplicatable, check if it has not already been added to the PCR.
-                if (pcrUnduplicatableMatrix[projectPcr.type] && seenProjectPcrs.has(projectPcr.type)) {
-                  return false;
+                for (const projectPcr of items) {
+                  // If a PCR type is non-duplicatable, check if it has not already been added to the PCR.
+                  if (pcrUnduplicatableMatrix[projectPcr.type] && seenProjectPcrs.has(projectPcr.type)) {
+                    return false;
+                  }
+
+                  seenProjectPcrs.add(projectPcr.type);
                 }
-
-                seenProjectPcrs.add(projectPcr.type);
-              }
-              return true;
-            }, "A duplicate PCR of this type is not allowed");
+                return true;
+              },
+              this.getContent(x => x.validation.pcrDtoValidator.duplicateNotAllowed),
+            );
           },
           () =>
-            children.isTrue(items => {
-              // If we are in a draft, allow the same partner to be selected more than once.
-              if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
+            children.isTrue(
+              items => {
+                // If we are in a draft, allow the same partner to be selected more than once.
+                if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
 
-              const seenPartnerIds = new Set<string>();
+                const seenPartnerIds = new Set<string>();
 
-              for (const projectPcr of items) {
-                // Ensure "Remove a partner" request doesn't have the same partner twice (or more!)
-                if (projectPcr.type === PCRItemType.PartnerWithdrawal && projectPcr.partnerId) {
-                  if (seenPartnerIds.has(projectPcr.partnerId)) {
-                    return false;
-                  } else {
-                    seenPartnerIds.add(projectPcr.partnerId);
+                for (const projectPcr of items) {
+                  // Ensure "Remove a partner" request doesn't have the same partner twice (or more!)
+                  if (projectPcr.type === PCRItemType.PartnerWithdrawal && projectPcr.partnerId) {
+                    if (seenPartnerIds.has(projectPcr.partnerId)) {
+                      return false;
+                    } else {
+                      seenPartnerIds.add(projectPcr.partnerId);
+                    }
                   }
                 }
-              }
-              return true;
-            }, "You cannot select the same partner to remove more than once in a single PCR"),
+                return true;
+              },
+              this.getContent(x => x.validation.pcrDtoValidator.samePartnerRemovedTwice),
+            ),
           () =>
-            children.isTrue(items => {
-              // If we are in a draft, allow the same partner to be selected more than once.
-              if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
+            children.isTrue(
+              items => {
+                // If we are in a draft, allow the same partner to be selected more than once.
+                if (statusWhenNotRequiredToBeComplete.includes(this.model.status)) return true;
 
-              const seenPartnerIds = new Set<string>();
+                const seenPartnerIds = new Set<string>();
 
-              for (const projectPcr of items) {
-                // Ensure "Rename a partner" request doesn't have the same partner twice (or more!)
-                if (projectPcr.type === PCRItemType.AccountNameChange && projectPcr.partnerId) {
-                  if (seenPartnerIds.has(projectPcr.partnerId)) {
-                    return false;
-                  } else {
-                    seenPartnerIds.add(projectPcr.partnerId);
+                for (const projectPcr of items) {
+                  // Ensure "Rename a partner" request doesn't have the same partner twice (or more!)
+                  if (projectPcr.type === PCRItemType.AccountNameChange && projectPcr.partnerId) {
+                    if (seenPartnerIds.has(projectPcr.partnerId)) {
+                      return false;
+                    } else {
+                      seenPartnerIds.add(projectPcr.partnerId);
+                    }
                   }
                 }
-              }
-              return true;
-            }, "You cannot select the same partner to rename more than once in a single PCR"),
+                return true;
+              },
+              this.getContent(x => x.validation.pcrDtoValidator.samePartnerRenamedTwice),
+            ),
           () =>
             children.isTrue(
               items =>
                 this.partners?.length
                   ? items.filter(x => x.type === PCRItemType.AccountNameChange).length <= this.partners.length
                   : true,
-              "You cannot select ‘Change a partner’s name’ because you do not have enough partners to action these.",
+              this.getContent(x => x.validation.pcrDtoValidator.notEnoughPartnersToRename),
             ),
           () =>
-            children.isTrue(items => {
-              if (!this.partners?.length) return true;
+            children.isTrue(
+              items => {
+                if (!this.partners?.length) return true;
 
-              const hasAnyAdditions = items.some(x => x.type === PCRItemType.PartnerAddition);
+                const hasAnyAdditions = items.some(x => x.type === PCRItemType.PartnerAddition);
 
-              // Maximum number of deletes allowed.
-              // `n`   You can delete all partners if we have any additions
-              // `n-1` You cannot delete all partners if there are no additions
-              const maxDeletes = hasAnyAdditions ? this.partners.length : this.partners.length - 1;
+                // Maximum number of deletes allowed.
+                // `n`   You can delete all partners if we have any additions
+                // `n-1` You cannot delete all partners if there are no additions
+                const maxDeletes = hasAnyAdditions ? this.partners.length : this.partners.length - 1;
 
-              // Accept validation if we have any "add partner"
-              // Otherwise, fail validation if we have too many partners
-              return items.filter(x => x.type === PCRItemType.PartnerWithdrawal).length <= maxDeletes;
-            }, "You cannot select ‘Remove a partner’ because you do not have enough partners to action these."),
+                // Accept validation if we have any "add partner"
+                // Otherwise, fail validation if we have too many partners
+                return items.filter(x => x.type === PCRItemType.PartnerWithdrawal).length <= maxDeletes;
+              },
+              this.getContent(x => x.validation.pcrDtoValidator.notEnoughPartnersToRemove),
+            ),
           () => {
             if (!this.projectPcrs?.length) return children.valid();
 
@@ -456,7 +497,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
     showValidationErrors: boolean,
     protected readonly original?: T,
   ) {
-    super(model, showValidationErrors);
+    super({ model, showValidationErrors });
   }
 
   private validateTypes() {
@@ -467,13 +508,13 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
         Validation.isTrue(
           this,
           this.recordTypes.map(x => x.type).indexOf(this.model.type) >= 0,
-          "Not a valid change request item",
+          this.getContent(x => x.validation.pcrBaseItemDtoValidator.itemInvalid),
         ),
       () =>
         Validation.isTrue(
           this,
           !!this.original || (this.recordTypes.find(x => x.type === this.model.type)?.enabled ?? null),
-          "Not a valid change request item",
+          this.getContent(x => x.validation.pcrBaseItemDtoValidator.itemInvalid),
         ),
       () => {
         const inValidRecordIndex = this.recordTypes.findIndex(x => x.recordTypeId === "Unknown");
@@ -483,11 +524,20 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
         // Note: At this point it is likely that SF does not have the recordType to match up against our local item options.
         return Validation.inValid(
           this,
-          `Item matching '${this.recordTypes[inValidRecordIndex]?.displayName}' is not available.`,
+          this.getContent(x =>
+            x.validation.pcrBaseItemDtoValidator.itemUnavailable({
+              name: this.recordTypes[inValidRecordIndex]?.displayName,
+            }),
+          ),
         );
       },
       // If role is not Project Manager then can not add new type
-      () => Validation.isTrue(this, isPm || !!this.original, "Cannot add type"),
+      () =>
+        Validation.isTrue(
+          this,
+          isPm || !!this.original,
+          this.getContent(x => x.validation.pcrBaseItemDtoValidator.cannotAddType),
+        ),
     );
   }
 
@@ -504,19 +554,25 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
 
     return Validation.all(
       this,
-      () => Validation.permittedValues(this, this.model.status, permittedStatus, "Invalid status"),
+      () =>
+        Validation.permittedValues(
+          this,
+          this.model.status,
+          permittedStatus,
+          this.getContent(x => x.validation.pcrBaseItemDtoValidator.statusInvalid),
+        ),
       () =>
         isPm
           ? Validation.isTrue(
               this,
               this.model.status === PCRItemStatus.Complete ||
                 statusWhenNotRequiredToBeComplete.indexOf(this.pcrStatus) >= 0,
-              `${this.model.typeName} must be complete`,
+              this.getContent(x => x.validation.pcrBaseItemDtoValidator.itemIncomplete({ name: this.model.typeName })),
             )
           : Validation.isTrue(
               this,
               !this.original || this.model.status === this.original.status,
-              "Cannot update item status",
+              this.getContent(x => x.validation.pcrBaseItemDtoValidator.cannotUpdateItemStatus),
             ),
     );
   }
@@ -553,7 +609,7 @@ export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDto
         this,
         this.model.grantMovingOverFinancialYear,
         this.original && this.original.grantMovingOverFinancialYear,
-        "The value of a grant moving over financial year cannot be changed.",
+        this.getContent(x => x.validation.multiplePartnerFinancialVirementDtoValidator.grantValueReadOnly),
       );
     }
 
@@ -566,21 +622,27 @@ export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDto
           ? Validation.required(
               this,
               this.model.grantMovingOverFinancialYear,
-              "Grant moving over financial year is required",
+              this.getContent(
+                x => x.validation.multiplePartnerFinancialVirementDtoValidator.grantMovingOverFinancialYearRequired,
+              ),
             )
           : Validation.valid(this),
       () =>
         Validation.number(
           this,
           this.model.grantMovingOverFinancialYear,
-          "The value of a grant moving over financial year must be numerical.",
+          this.getContent(
+            x => x.validation.multiplePartnerFinancialVirementDtoValidator.grantMovingOverFinancialYearNotNumber,
+          ),
         ),
       () =>
         hasValue
           ? Validation.isTrue(
               this,
               (this.model.grantMovingOverFinancialYear ?? 0) >= 0,
-              "The value can not be lower than 0.",
+              this.getContent(
+                x => x.validation.multiplePartnerFinancialVirementDtoValidator.grantMovingOverFinancialYearTooSmall,
+              ),
             )
           : Validation.valid(this),
     );
@@ -598,7 +660,7 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
         this,
         offsetMonths,
         this.original?.offsetMonths,
-        "Project duration cannot be changed.",
+        this.getContent(x => x.validation.pcrTimeExtensionItemDtoValidator.projectDurationReadOnly),
       );
     }
 
@@ -614,13 +676,13 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
                 Validation.required(
                   this,
                   offsetMonths,
-                  "Please select the number of months you want to extend your project by",
+                  this.getContent(x => x.validation.pcrTimeExtensionItemDtoValidator.offsetMonthsMissing),
                 ),
               () =>
                 Validation.isTrue(
                   this,
                   offsetMonths !== 0,
-                  "You must either increase or decrease the project duration. You cannot select your current end date.",
+                  this.getContent(x => x.validation.pcrTimeExtensionItemDtoValidator.offsetMonthsTooSmall),
                 ),
             )
           : Validation.valid(this),
@@ -629,7 +691,9 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
           ? Validation.integer(
               this,
               offsetMonths,
-              `You need to supply a whole number in months, you have supplied '${offsetMonths}'.`,
+              this.getContent(x =>
+                x.validation.pcrTimeExtensionItemDtoValidator.offsetMonthsNotInteger({ count: offsetMonths }),
+              ),
             )
           : Validation.valid(this),
     );
@@ -680,7 +744,11 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
 
     const isInvalid = isAvailabilityInValid && isExtensionInValid && isRepaymentInValid;
 
-    return Validation.isFalse(this, isInvalid, "You must make at least one change to a phase to continue.");
+    return Validation.isFalse(
+      this,
+      isInvalid,
+      this.getContent(x => x.validation.pcrLoanExtensionItemDtoValidator.phaseChangeRequired),
+    );
   }
 
   private validateAvailabilityPeriod(): Result {
@@ -759,7 +827,13 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
         return Validation.isFalse(
           this,
           isMonthsEditable,
-          `'${errorKey}' cannot be change within 3 months of your start date. This has to be '${originalValue}' to proceed.`,
+          this.getContent(x =>
+            x.validation.pcrLoanExtensionItemDtoValidator.tooCloseToStart({
+              name: errorKey,
+              count: this.validationTolerance,
+              value: originalValue,
+            }),
+          ),
         );
       },
       () => {
@@ -768,14 +842,25 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
         return Validation.isTrue(
           this,
           isDivisibleValid,
-          `'${errorKey}' value must be in increments of '${this.validationTolerance}', you have entered '${updatedValue}'.`,
+          this.getContent(x =>
+            x.validation.pcrLoanExtensionItemDtoValidator.notMultipleOf({
+              name: errorKey,
+              count: this.validationTolerance,
+              value: updatedValue,
+            }),
+          ),
         );
       },
       () =>
         Validation.integer(
           this,
           updatedValue,
-          `'${errorKey}' must be a whole number in months, you have entered '${updatedValue}'.`,
+          this.getContent(x =>
+            x.validation.pcrLoanExtensionItemDtoValidator.valueNotInteger({
+              name: errorKey,
+              value: updatedValue,
+            }),
+          ),
         ),
     );
   }
@@ -794,7 +879,7 @@ export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidato
         this,
         this.model.suspensionStartDate,
         this.original && this.original.suspensionStartDate,
-        "Project suspension start date cannot be changed.",
+        this.getContent(x => x.validation.pcrProjectSuspensionItemDtoValidator.projectSuspensionStartDateReadOnly),
       );
     }
 
@@ -802,15 +887,28 @@ export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidato
       this,
       () =>
         this.isComplete
-          ? Validation.required(this, this.model.suspensionStartDate, "Enter a project suspension start date")
+          ? Validation.required(
+              this,
+              this.model.suspensionStartDate,
+              this.getContent(
+                x => x.validation.pcrProjectSuspensionItemDtoValidator.projectSuspensionStartDateRequired,
+              ),
+            )
           : Validation.valid(this),
-      () => Validation.isDate(this, this.model.suspensionStartDate, "Please enter a valid suspension start date"),
+      () =>
+        Validation.isDate(
+          this,
+          this.model.suspensionStartDate,
+          this.getContent(x => x.validation.pcrProjectSuspensionItemDtoValidator.projectSuspensionStartDateInvalid),
+        ),
       () =>
         this.model.suspensionStartDate
           ? Validation.isTrue(
               this,
               DateTime.fromJSDate(this.model.suspensionStartDate).day === 1,
-              "The date must be at the start of the month",
+              this.getContent(
+                x => x.validation.pcrProjectSuspensionItemDtoValidator.projectSuspensionStartDateDayInvalid,
+              ),
             )
           : Validation.valid(this),
     );
@@ -822,18 +920,25 @@ export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidato
         this,
         this.model.suspensionEndDate,
         this.original && this.original.suspensionEndDate,
-        "Project suspension end date cannot be changed.",
+        this.getContent(x => x.validation.pcrProjectSuspensionItemDtoValidator.projectSuspensionEndDateReadOnly),
       );
     }
     return Validation.all(
       this,
-      () => Validation.isDate(this, this.model.suspensionEndDate, "Please enter a valid suspension end date"),
+      () =>
+        Validation.isDate(
+          this,
+          this.model.suspensionEndDate,
+          this.getContent(x => x.validation.pcrProjectSuspensionItemDtoValidator.projectSuspensionEndDateRequired),
+        ),
       () =>
         this.model.suspensionEndDate
           ? Validation.isTrue(
               this,
               DateTime.fromJSDate(this.model.suspensionEndDate).plus({ days: 1 }).day === 1,
-              "The date must be at the end of the month",
+              this.getContent(
+                x => x.validation.pcrProjectSuspensionItemDtoValidator.projectSuspensionEndDateDayInvalid,
+              ),
             )
           : Validation.valid(this),
       () =>
@@ -842,7 +947,7 @@ export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidato
               this,
               this.model.suspensionStartDate,
               this.model.suspensionEndDate,
-              "The last day of pause cannot be before the first day of pause.",
+              this.getContent(x => x.validation.pcrProjectSuspensionItemDtoValidator.projectSuspensionDateRangeInvalid),
             )
           : Validation.valid(this),
     );
@@ -859,7 +964,7 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
         this,
         this.model.projectSummary,
         this.original && this.original.projectSummary,
-        "Project summary cannot be changed.",
+        this.getContent(x => x.validation.pcrScopeChangeItemDtoValidator.projectSummaryReadOnly),
       );
     }
 
@@ -868,14 +973,22 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
       this,
       () =>
         isComplete
-          ? Validation.required(this, this.model.projectSummary, "Enter a project summary")
+          ? Validation.required(
+              this,
+              this.model.projectSummary,
+              this.getContent(x => x.validation.pcrScopeChangeItemDtoValidator.projectSummaryRequired),
+            )
           : Validation.valid(this),
       () =>
         Validation.maxLength(
           this,
           this.model.projectSummary,
           PCRDtoValidator.maxSalesforceFieldLength,
-          `Project summary can be a maximum of ${PCRDtoValidator.maxSalesforceFieldLength} characters`,
+          this.getContent(x =>
+            x.validation.pcrScopeChangeItemDtoValidator.projectSummaryLengthTooLarge({
+              count: PCRDtoValidator.maxSalesforceFieldLength,
+            }),
+          ),
         ),
     );
   }
@@ -886,7 +999,7 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
         this,
         this.model.publicDescription,
         this.original && this.original.publicDescription,
-        "Public description cannot be changed.",
+        this.getContent(x => x.validation.pcrScopeChangeItemDtoValidator.publicDescriptionReadOnly),
       );
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
@@ -895,14 +1008,22 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
       this,
       () =>
         isComplete
-          ? Validation.required(this, this.model.publicDescription, "Enter a public description")
+          ? Validation.required(
+              this,
+              this.model.publicDescription,
+              this.getContent(x => x.validation.pcrScopeChangeItemDtoValidator.publicDescriptionRequired),
+            )
           : Validation.valid(this),
       () =>
         Validation.maxLength(
           this,
           this.model.publicDescription,
           PCRDtoValidator.maxSalesforceFieldLength,
-          `Public description can be a maximum of ${PCRDtoValidator.maxSalesforceFieldLength} characters`,
+          this.getContent(x =>
+            x.validation.pcrScopeChangeItemDtoValidator.publicDescriptionLengthTooLarge({
+              count: PCRDtoValidator.maxSalesforceFieldLength,
+            }),
+          ),
         ),
     );
   }
@@ -914,25 +1035,49 @@ export class PCRScopeChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRI
 export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {
   private validateProjectRoleRequired() {
     if (!this.model.isProjectRoleAndPartnerTypeRequired) {
-      return this.requiredIfComplete(this.model.projectRole || null, "Select a project role");
+      return this.requiredIfComplete(
+        this.model.projectRole || null,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectRoleRequired),
+      );
     }
-    return Validation.required(this, this.model.projectRole || null, "Select a project role");
+    return Validation.required(
+      this,
+      this.model.projectRole || null,
+      this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectRoleRequired),
+    );
   }
   private validatePartnerTypeRequired() {
     if (!this.model.isProjectRoleAndPartnerTypeRequired) {
-      return this.requiredIfComplete(this.model.partnerType || null, "Select a partner type");
+      return this.requiredIfComplete(
+        this.model.partnerType || null,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.partnerTypeRequired),
+      );
     }
-    return Validation.required(this, this.model.partnerType || null, "Select a partner type");
+    return Validation.required(
+      this,
+      this.model.partnerType || null,
+      this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.partnerTypeRequired),
+    );
   }
   private validateIsCommercialWorkRequired() {
     if (!this.model.isProjectRoleAndPartnerTypeRequired) {
-      return this.requiredIfComplete(this.model.isCommercialWork, "State if work is commercial");
+      return this.requiredIfComplete(
+        this.model.isCommercialWork,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.commercialRequired),
+      );
     }
-    return Validation.required(this, this.model.isCommercialWork, "State if work is commercial");
+    return Validation.required(
+      this,
+      this.model.isCommercialWork,
+      this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.commercialRequired),
+    );
   }
   private validateOrganisationNameRequired() {
     if (this.model.organisationType === PCROrganisationType.Industrial) return Validation.valid(this);
-    return this.requiredIfComplete(this.model.organisationName, "Enter an organisation name");
+    return this.requiredIfComplete(
+      this.model.organisationName,
+      this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.organisationNameRequired),
+    );
   }
 
   private validateProjectManagerDetailsRequired(value: Validation.ValidatableValue, message: string) {
@@ -953,7 +1098,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
       pcrItemId: undefined,
     },
     x => new PCRSpendProfileDtoValidator(x, this.showValidationErrors),
-    "Spend profile is not valid",
+    this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.spendProfileInvalid),
   );
 
   projectRole = Validation.all(
@@ -965,7 +1110,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
             this,
             this.model.projectRole,
             this.original && this.original.projectRole,
-            "Project role cannot be changed",
+            this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectRoleReadOnly),
           )
         : Validation.valid(this),
   );
@@ -979,7 +1124,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
             this,
             this.model.partnerType,
             this.original && this.original.partnerType,
-            "Partner type cannot be changed",
+            this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.partnerTypeReadOnly),
           )
         : Validation.valid(this),
   );
@@ -991,7 +1136,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
       this.hasPermissionToEdit(
         this.model.isCommercialWork,
         this.original && this.original.isCommercialWork,
-        "Commercial cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.commercialReadOnly),
       ),
   );
 
@@ -1002,40 +1147,52 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
       this.hasPermissionToEdit(
         this.model.organisationName,
         this.original && this.original.organisationName,
-        "Organisation name cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.organisationNameReadOnly),
       ),
   );
 
   companyHouseOrganisationName = Validation.all(
     this,
-    () => this.validateCompanyHouseDetailsRequired(this.model.organisationName, "Enter an organisation name"),
+    () =>
+      this.validateCompanyHouseDetailsRequired(
+        this.model.organisationName,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.organisationNameRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.organisationName,
         this.original && this.original.organisationName,
-        "Organisation name cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.organisationNameReadOnly),
       ),
   );
 
   registeredAddress = Validation.all(
     this,
-    () => this.validateCompanyHouseDetailsRequired(this.model.registeredAddress, "Enter a registered address"),
+    () =>
+      this.validateCompanyHouseDetailsRequired(
+        this.model.registeredAddress,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.registeredAddressRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.registeredAddress,
         this.original && this.original.registeredAddress,
-        "Registered address cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.registeredAddressReadOnly),
       ),
   );
 
   registrationNumber = Validation.all(
     this,
-    () => this.validateCompanyHouseDetailsRequired(this.model.registrationNumber, "Enter a registration number"),
+    () =>
+      this.validateCompanyHouseDetailsRequired(
+        this.model.registrationNumber,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.registrationNumberRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.registrationNumber,
         this.original && this.original.registrationNumber,
-        "Registration number cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.registrationNumberReadOnly),
       ),
   );
 
@@ -1043,14 +1200,22 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     this,
     () =>
       this.model.organisationType === PCROrganisationType.Industrial
-        ? this.requiredIfComplete(this.model.financialYearEndDate, "Enter a financial year end")
+        ? this.requiredIfComplete(
+            this.model.financialYearEndDate,
+            this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financialYearEndDateRequired),
+          )
         : Validation.valid(this),
-    () => Validation.isDate(this, this.model.financialYearEndDate, "Enter a real financial year end date"),
+    () =>
+      Validation.isDate(
+        this,
+        this.model.financialYearEndDate,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financialYearEndDateReadOnly),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.financialYearEndDate,
         this.original && this.original.financialYearEndDate,
-        "Turnover year end cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financialYearEndDateInvalid),
       ),
   );
 
@@ -1058,74 +1223,97 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     this,
     () =>
       this.model.organisationType === PCROrganisationType.Industrial
-        ? this.requiredIfComplete(this.model.financialYearEndTurnover, "Enter a financial year end turnover")
+        ? this.requiredIfComplete(
+            this.model.financialYearEndTurnover,
+            this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financialYearEndTurnoverRequired),
+          )
         : Validation.valid(this),
     () =>
       Validation.isPositiveFloat(
         this,
         this.model.financialYearEndTurnover,
-        "Enter a financial year end turnover amount equal to or greater than 0",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financialYearEndTurnoverTooSmall),
       ),
     () =>
       this.hasPermissionToEdit(
         this.model.financialYearEndTurnover,
         this.original && this.original.financialYearEndTurnover,
-        "Turnover cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financialYearEndTurnoverReadOnly),
       ),
   );
 
   contact1ProjectRole = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.contact1ProjectRole, "Select a finance contact project role"),
+    () =>
+      this.requiredIfComplete(
+        this.model.contact1ProjectRole,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactProjectRoleRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact1ProjectRole,
         this.original && this.original.contact1ProjectRole,
-        "Role cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactProjectRoleReadOnly),
       ),
   );
 
   contact1Forename = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.contact1Forename, "Enter a finance contact name"),
+    () =>
+      this.requiredIfComplete(
+        this.model.contact1Forename,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactNameRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact1Forename,
         this.original && this.original.contact1Forename,
-        "Name cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactNameReadOnly),
       ),
   );
 
   contact1Surname = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.contact1Surname, "Enter a finance contact surname"),
+    () =>
+      this.requiredIfComplete(
+        this.model.contact1Surname,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactSurnameRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact1Surname,
         this.original && this.original.contact1Surname,
-        "Surname cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactSurnameReadOnly),
       ),
   );
 
   contact1Phone = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.contact1Phone, "Enter a finance contact phone number"),
+    () =>
+      this.requiredIfComplete(
+        this.model.contact1Phone,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactTelephoneNumberRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact1Phone,
         this.original && this.original.contact1Phone,
-        "Phone number cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactTelephoneNumberReadOnly),
       ),
   );
 
   contact1Email = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.contact1Email, "Enter a finance contact email address"),
+    () =>
+      this.requiredIfComplete(
+        this.model.contact1Email,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactEmailAddressRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact1Email,
         this.original && this.original.contact1Email,
-        "Email address cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactEmailAddressReadOnly),
       ),
   );
 
@@ -1134,83 +1322,113 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     () =>
       this.validateProjectManagerDetailsRequired(
         this.model.contact2ProjectRole,
-        "Select a project manager project role",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerProjectRoleRequired),
       ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact2ProjectRole,
         this.original && this.original.contact2ProjectRole,
-        "Role cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerProjectRoleReadOnly),
       ),
   );
 
   contact2Forename = Validation.all(
     this,
-    () => this.validateProjectManagerDetailsRequired(this.model.contact2Forename, "Enter a project manager name"),
+    () =>
+      this.validateProjectManagerDetailsRequired(
+        this.model.contact2Forename,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerNameRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact2Forename,
         this.original && this.original.contact2Forename,
-        "Name cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerNameReadOnly),
       ),
   );
 
   contact2Surname = Validation.all(
     this,
-    () => this.validateProjectManagerDetailsRequired(this.model.contact2Surname, "Enter a project manager surname"),
+    () =>
+      this.validateProjectManagerDetailsRequired(
+        this.model.contact2Surname,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerSurnameRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact2Surname,
         this.original && this.original.contact2Surname,
-        "Surname cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerSurnameReadOnly),
       ),
   );
 
   contact2Phone = Validation.all(
     this,
-    () => this.validateProjectManagerDetailsRequired(this.model.contact2Phone, "Enter a project manager phone number"),
+    () =>
+      this.validateProjectManagerDetailsRequired(
+        this.model.contact2Phone,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerTelephoneNumberRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact2Phone,
         this.original && this.original.contact2Phone,
-        "Phone number cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerTelephoneNumberReadOnly),
       ),
   );
 
   contact2Email = Validation.all(
     this,
-    () => this.validateProjectManagerDetailsRequired(this.model.contact2Email, "Enter a project manager email address"),
+    () =>
+      this.validateProjectManagerDetailsRequired(
+        this.model.contact2Email,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerEmailAddressRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.contact2Email,
         this.original && this.original.contact2Email,
-        "Email address cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerEmailAddressReadOnly),
       ),
   );
 
   projectLocation = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.projectLocation || null, "Select a project location"),
+    () =>
+      this.requiredIfComplete(
+        this.model.projectLocation || null,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectLocationRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.projectLocation,
         this.original && this.original.projectLocation,
-        "Project location cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectLocationReadOnly),
       ),
   );
 
   projectCity = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.projectCity, "Enter a project city"),
+    () =>
+      this.requiredIfComplete(
+        this.model.projectCity,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectCityRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.projectCity,
         this.original && this.original.projectCity,
-        "Project city cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectCityReadOnly),
       ),
     () =>
       this.model.projectCity
-        ? Validation.isTrue(this, this.model.projectCity.length <= 40, "Project city must 40 characters or less")
+        ? Validation.isTrue(
+            this,
+            this.model.projectCity.length <= 40,
+            this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectCityLengthTooLarge, {
+              count: 40,
+            }),
+          )
         : Validation.valid(this),
   );
 
@@ -1220,26 +1438,32 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
       this.hasPermissionToEdit(
         this.model.projectPostcode,
         this.original && this.original.projectPostcode,
-        "Project postcode cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectPostcodeReadOnly),
       ),
     () =>
       this.model.projectPostcode
         ? Validation.isTrue(
             this,
             this.model.projectPostcode.length <= 10,
-            "Project postcode must 10 characters or less",
+            this.getContent(x =>
+              x.validation.pcrPartnerAdditionItemDtoValidator.projectPostcodeLengthTooLarge({ count: 10 }),
+            ),
           )
         : Validation.valid(this),
   );
 
   participantSize = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.participantSize || null, "Select a participant size"),
+    () =>
+      this.requiredIfComplete(
+        this.model.participantSize || null,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.participantSizeRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.participantSize,
         this.original && this.original.participantSize,
-        "Participant size cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.participantSizeReadOnly),
       ),
   );
 
@@ -1247,43 +1471,64 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     this,
     () =>
       this.model.organisationType === PCROrganisationType.Industrial
-        ? this.requiredIfComplete(this.model.numberOfEmployees, "Enter the number of employees")
+        ? this.requiredIfComplete(
+            this.model.numberOfEmployees,
+            this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.numberOfEmployeesRequired),
+          )
         : Validation.valid(this),
-    () => Validation.isPositiveInteger(this, this.model.numberOfEmployees, "Please enter a valid number of employees"),
+    () =>
+      Validation.isPositiveInteger(
+        this,
+        this.model.numberOfEmployees,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.numberOfEmployeesNotInteger),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.numberOfEmployees,
         this.original && this.original.numberOfEmployees,
-        "Number of employees cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.numberOfEmployeesReadOnly),
       ),
   );
 
   awardRate = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.awardRate, "Enter the funding level"),
+    () =>
+      this.requiredIfComplete(
+        this.model.awardRate,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.awardRateRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.awardRate,
         this.original && this.original.awardRate,
-        "Funding level cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.awardRateReadOnly),
       ),
-    () => Validation.isPercentage(this, this.model.awardRate, "Please enter a valid funding level"),
+    () =>
+      Validation.isPercentage(
+        this,
+        this.model.awardRate,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.awardRateNotPercentage),
+      ),
     () =>
       Validation.isTrue(
         this,
         !this.model.awardRate || this.model.awardRate <= 100,
-        "Please enter a funding level up to 100%",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.awardRateTooLarge),
       ),
   );
 
   hasOtherFunding = Validation.all(
     this,
-    () => this.requiredIfComplete(this.model.hasOtherFunding, "Select other funding option"),
+    () =>
+      this.requiredIfComplete(
+        this.model.hasOtherFunding,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.otherFundingOptionRequired),
+      ),
     () =>
       this.hasPermissionToEdit(
         this.model.hasOtherFunding,
         this.original && this.original.hasOtherFunding,
-        "Other funding cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.otherFundingOptionReadOnly),
       ),
   );
 
@@ -1293,13 +1538,16 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     this,
     () =>
       this.model.organisationType === PCROrganisationType.Academic
-        ? this.requiredIfComplete(this.model.tsbReference, "Enter the TSB reference")
+        ? this.requiredIfComplete(
+            this.model.tsbReference,
+            this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.tsbReferenceRequired),
+          )
         : Validation.valid(this),
     () =>
       this.hasPermissionToEdit(
         this.model.tsbReference,
         this.original && this.original.tsbReference,
-        "TSB reference cannot be changed",
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.tsbReferenceReadOnly),
       ),
   );
 }
@@ -1324,12 +1572,16 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
         this,
         this.model.accountName,
         this.original && this.original.accountName,
-        "Partner name cannot be changed.",
+        this.getContent(x => x.validation.pcrAccountNameChangeItemDtoValidator.accountNameReadOnly),
       );
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
     return isComplete
-      ? Validation.required(this, this.model.accountName, "Enter a new partner name")
+      ? Validation.required(
+          this,
+          this.model.accountName,
+          this.getContent(x => x.validation.pcrAccountNameChangeItemDtoValidator.accountNameRequired),
+        )
       : Validation.valid(this);
   }
 
@@ -1339,7 +1591,7 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
         this,
         this.model.partnerId,
         this.original && this.original.partnerId,
-        "Partner cannot be changed.",
+        this.getContent(x => x.validation.pcrAccountNameChangeItemDtoValidator.partnerIdReadOnly),
       );
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
@@ -1347,7 +1599,11 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
       this,
       () =>
         isComplete
-          ? Validation.required(this, this.model.partnerId, "Select partner to change")
+          ? Validation.required(
+              this,
+              this.model.partnerId,
+              this.getContent(x => x.validation.pcrAccountNameChangeItemDtoValidator.partnerIdRequired),
+            )
           : Validation.valid(this),
       () =>
         this.partners && this.model.partnerId
@@ -1355,7 +1611,7 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
               this,
               this.model.partnerId,
               this.partners.filter(x => !x.isWithdrawn).map(x => x.id),
-              "Invalid partner for project",
+              this.getContent(x => x.validation.pcrAccountNameChangeItemDtoValidator.partnerIdInvalid),
             )
           : Validation.valid(this),
     );
@@ -1386,7 +1642,7 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
         this,
         this.model.removalPeriod,
         this.original && this.original.removalPeriod,
-        "Period cannot be changed.",
+        this.getContent(x => x.validation.pcrPartnerWithdrawalItemDtoValidator.periodReadOnly),
       );
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
@@ -1394,15 +1650,28 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
       this,
       () =>
         isComplete
-          ? Validation.required(this, this.model.removalPeriod, "Enter a removal period")
+          ? Validation.required(
+              this,
+              this.model.removalPeriod,
+              this.getContent(x => x.validation.pcrPartnerWithdrawalItemDtoValidator.periodRequired),
+            )
           : Validation.valid(this),
-      () => Validation.integer(this, this.model.removalPeriod, "Period must be a whole number, like 3"),
+      () =>
+        Validation.integer(
+          this,
+          this.model.removalPeriod,
+          this.getContent(x => x.validation.pcrPartnerWithdrawalItemDtoValidator.periodNotInteger),
+        ),
       () =>
         this.model.removalPeriod
           ? Validation.isTrue(
               this,
               this.model.removalPeriod > 0 && this.model.removalPeriod <= this.project.numberOfPeriods,
-              `Period must be ${this.project.numberOfPeriods} or fewer`,
+              this.getContent(x =>
+                x.validation.pcrPartnerWithdrawalItemDtoValidator.periodInvalid({
+                  count: this.project.numberOfPeriods,
+                }),
+              ),
             )
           : Validation.valid(this),
     );
@@ -1414,7 +1683,7 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
         this,
         this.model.partnerId,
         this.original && this.original.partnerId,
-        "Partner cannot be changed.",
+        this.getContent(x => x.validation.pcrPartnerWithdrawalItemDtoValidator.partnerIdReadOnly),
       );
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
@@ -1422,7 +1691,11 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
       this,
       () =>
         isComplete
-          ? Validation.required(this, this.model.partnerId, "Select a partner to remove from the project")
+          ? Validation.required(
+              this,
+              this.model.partnerId,
+              this.getContent(x => x.validation.pcrPartnerWithdrawalItemDtoValidator.partnerIdRequired),
+            )
           : Validation.valid(this),
       () =>
         this.partners && this.model.partnerId
@@ -1430,7 +1703,7 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
               this,
               this.model.partnerId,
               this.partners.filter(x => !x.isWithdrawn).map(x => x.id),
-              "Invalid partner for project",
+              this.getContent(x => x.validation.pcrPartnerWithdrawalItemDtoValidator.partnerIdInvalid),
             )
           : Validation.valid(this),
     );

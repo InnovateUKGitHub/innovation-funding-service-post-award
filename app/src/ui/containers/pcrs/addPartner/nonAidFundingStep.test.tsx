@@ -13,7 +13,7 @@ import { MultipleDocumentUploadDtoValidator, PCRPartnerAdditionItemDtoValidator 
 import { IEditorStore } from "@ui/redux";
 import { EditorStatus } from "@ui/constants/enums";
 import { IRoutes } from "@ui/routing";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<NonAidFundingStep />", () => {
   type TestProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
@@ -59,7 +59,7 @@ describe("<NonAidFundingStep />", () => {
   beforeEach(jest.clearAllMocks);
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("@returns", () => {

@@ -4,7 +4,7 @@ import { DocumentSummaryDto } from "@framework/dtos";
 import * as ACC from "@ui/components";
 import TestBed from "@shared/TestBed";
 import { DocumentViewProps } from "@ui/components";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<DocumentView />", () => {
   const stubContent = {
@@ -31,7 +31,7 @@ describe("<DocumentView />", () => {
   };
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("@renders", () => {

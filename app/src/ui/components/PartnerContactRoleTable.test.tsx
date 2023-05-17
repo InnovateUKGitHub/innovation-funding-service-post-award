@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { TestBed, TestBedStore } from "@shared/TestBed";
 import { PartnerDto, ProjectContactDto } from "@framework/types";
 import { PartnerContactRoleTable, PartnersAndFinanceContactsProps } from "@ui/components/PartnerContactRoleTable";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { getContactRole } from "./partners/getContactRole";
 
 const testPartnerData: PartnerDto[] = [
@@ -96,7 +96,7 @@ describe("<PartnersAndFinanceContacts />", () => {
   };
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation({
+    await initStubTestIntl({
       projectContactLabels: {
         contactEmail: "Email",
         contactName: "Name",

@@ -38,7 +38,7 @@ describe("editorsReducer", () => {
       const error = { code: 1, message: "keep this error", results: null };
       const claimDto = createClaim();
       const originalState = setupInitialState(x => (x.error = error));
-      const validator = new Results(claimDto, true);
+      const validator = new Results({ model: claimDto, showValidationErrors: true });
 
       const action: UpdateEditorAction = {
         type: "EDITOR_UPDATE",
@@ -53,7 +53,7 @@ describe("editorsReducer", () => {
       const claimDto = createClaim();
       const updatedDto = createClaim({ partnerId: "hello world" as PartnerId });
       const originalState = setupInitialState(x => (x.data = claimDto));
-      const validator = new Results(updatedDto, true);
+      const validator = new Results({ model: updatedDto, showValidationErrors: true });
 
       const action: UpdateEditorAction = {
         type: "EDITOR_UPDATE",
@@ -69,7 +69,7 @@ describe("editorsReducer", () => {
     it("should update status to Saving", () => {
       const originalState = setupInitialState(x => (x.status = EditorStatus.Editing));
       const dto = createClaim();
-      const validator = new Results(dto, true);
+      const validator = new Results({ model: dto, showValidationErrors: true });
 
       const action: EditorSubmitAction = {
         type: "EDITOR_SUBMIT",

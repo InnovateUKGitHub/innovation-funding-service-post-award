@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { useClaimLineItemsContent } from "@ui/containers";
 import { hookTestBed } from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("claimLineItems", () => {
   describe("useClaimLineItemsContent()", () => {
@@ -24,7 +24,7 @@ describe("claimLineItems", () => {
     const setup = () => renderHook(useClaimLineItemsContent, hookTestBed({}));
 
     beforeAll(async () => {
-      await testInitialiseInternationalisation(stubContent);
+      await initStubTestIntl(stubContent);
     });
 
     describe("@returns", () => {

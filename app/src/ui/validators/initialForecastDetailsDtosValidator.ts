@@ -22,7 +22,7 @@ export class InitialForecastDetailsDtosValidator
     private readonly submit: boolean,
     private readonly showErrors: boolean,
   ) {
-    super(forecasts, showErrors);
+    super({ model: forecasts, showValidationErrors: showErrors });
   }
 
   public readonly items = this.validateItems();
@@ -69,14 +69,28 @@ export class InitialForecastDetailsDtoValidator
   implements IForecastDetailsDtoValidator
 {
   constructor(forecast: ForecastDetailsDTO, showValidationErrors: boolean) {
-    super(forecast, showValidationErrors);
+    super({ model: forecast, showValidationErrors });
   }
 
-  public id = Validation.required(this, this.model.id, "Id is required");
+  public id = Validation.required(
+    this,
+    this.model.id,
+    this.getContent(x => x.validation.forecastDetailsDtoValidator.idRequired),
+  );
   public value = Validation.all(
     this,
-    () => Validation.required(this, this.model.value, "Forecast is required."),
-    () => Validation.number(this, this.model.value, "Forecast must be a number."),
+    () =>
+      Validation.required(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastRequired),
+      ),
+    () =>
+      Validation.number(
+        this,
+        this.model.value,
+        this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastNotNumber),
+      ),
   );
 }
 
@@ -89,7 +103,7 @@ export class InitialForecastDetailsDtoCostCategoryValidator
     public readonly submit: boolean,
     public readonly showValidationErrors: boolean,
   ) {
-    super(forecast, showValidationErrors);
+    super({ model: forecast, showValidationErrors });
   }
   private validateCostCategory() {
     /**
@@ -107,10 +121,15 @@ export class InitialForecastDetailsDtoCostCategoryValidator
 
     const isValid = totalCategoryForecast === this.model.golCost.value;
 
-    const categoryNameLowerCase = this.model.costCategory.name.toLocaleLowerCase();
-    const costCategoryErrorMessage = `The total forecasts for ${categoryNameLowerCase} must be the same as the total eligible costs`;
-
-    return Validation.isTrue(this, isValid, costCategoryErrorMessage);
+    return Validation.isTrue(
+      this,
+      isValid,
+      this.getContent(x =>
+        x.validation.initialForecastDetailsDtoValidator.costCategoryDoesNotMatchTotalEligibleCosts({
+          name: this.model.costCategory.name,
+        }),
+      ),
+    );
   }
 
   public value = this.validateCostCategory();

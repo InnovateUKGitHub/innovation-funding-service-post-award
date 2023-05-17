@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 
 import { TestBed } from "@shared/TestBed";
 import { DocumentsUnavailable, DocumentsUnavailableProps } from "@ui/components/documents/DocumentsUnavailable";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<DocumentsUnavailable />", () => {
   const stubContent = {
@@ -19,7 +19,7 @@ describe("<DocumentsUnavailable />", () => {
     );
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   describe("@renders", () => {

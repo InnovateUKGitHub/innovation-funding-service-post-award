@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
 import { NotFoundError } from "@ui/components/errors";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<NotFoundErrorPage />", () => {
   describe("@renders", () => {
@@ -14,7 +14,7 @@ describe("<NotFoundErrorPage />", () => {
     };
 
     beforeAll(async () => {
-      await testInitialiseInternationalisation(stubContent);
+      await initStubTestIntl(stubContent);
     });
 
     test("Contains description message", () => {

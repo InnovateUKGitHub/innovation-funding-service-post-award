@@ -11,7 +11,7 @@ import {
 } from "@ui/containers/pcrs/financialVirements/financialVirementsSummary";
 import { ProjectParticipantProvider } from "@ui/features/project-participants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 describe("<FinancialVirementSummary />", () => {
   const context = new TestContext();
@@ -485,7 +485,7 @@ describe("<FinancialVirementSummary />", () => {
   };
 
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   describe("@returns", () => {

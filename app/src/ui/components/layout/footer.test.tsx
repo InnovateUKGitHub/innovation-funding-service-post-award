@@ -1,5 +1,5 @@
 import TestBed from "@shared/TestBed";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { render } from "@testing-library/react";
 import { Footer } from "@ui/components/layout/footer";
 import { crownCopyrightUrl, footerLinks, ifsCookieUrl, ukGovLicence } from "@ui/containers/app/footer.config";
@@ -25,7 +25,7 @@ describe("Footer", () => {
     );
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   test("should render links", () => {

@@ -4,7 +4,7 @@ import TestBed from "@shared/TestBed";
 import { ErrorCode, LoadingStatus } from "@framework/types";
 import { Pending } from "../../shared/pending";
 import { Loader, LoadingProps, PageLoader } from ".";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 
 const stubContent = {
   pages: {
@@ -42,7 +42,7 @@ const stubContent = {
 
 describe("<PageLoader />", () => {
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await initStubTestIntl(stubContent);
   });
 
   const setup = (props: LoadingProps<AnyObject>) =>

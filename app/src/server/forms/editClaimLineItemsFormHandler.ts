@@ -42,7 +42,7 @@ export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditC
   }
 
   protected createValidationResult(params: EditClaimDetailsParams, dto: ClaimDetailsDto) {
-    return new ClaimDetailsValidator(dto, false);
+    return new ClaimDetailsValidator({ model: dto, showValidationErrors: false });
   }
 
   protected getStoreKey(params: EditClaimDetailsParams) {

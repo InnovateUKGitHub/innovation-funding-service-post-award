@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 
 import { TestBed } from "@shared/TestBed";
 import { Section, SectionProps } from "@ui/components/layout/section";
-import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { ContentSelector, PossibleCopyStrings } from "@copy/type";
 
 describe("<Section />", () => {
@@ -20,7 +20,7 @@ describe("<Section />", () => {
     );
 
   beforeAll(async () => {
-    testInitialiseInternationalisation(stubContent);
+    initStubTestIntl(stubContent);
   });
 
   describe("with edge cases", () => {
