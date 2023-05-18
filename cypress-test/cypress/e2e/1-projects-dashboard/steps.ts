@@ -111,3 +111,34 @@ export const backToDashboard = () => {
   cy.backLink("Back to Project").click();
   cy.get("h1").contains("Dashboard");
 };
+
+export const projectDashboardFinancials = () => {
+  cy.getByQA("project-summary-gol-costs").contains("Total eligible costs");
+  cy.getByQA("project-summary-gol-costs").contains("£525,000.00");
+  cy.getByQA("project-summary-claimed-costs").contains("Eligible costs claimed to date");
+  cy.getByQA("project-summary-claimed-costs").contains("£0.00");
+  cy.getByQA("project-summary-claimed-percentage").contains("Percentage of eligible costs claimed to date");
+  cy.getByQA("project-summary-claimed-percentage").contains("0.00%");
+  cy.getByQA("lead-partner-summary-gol-costs").contains("Total eligible costs");
+  cy.getByQA("lead-partner-summary-gol-costs").contains("£350,000.00");
+  cy.getByQA("lead-partner-summary-claimed-costs").contains("Eligible costs claimed to date");
+  cy.getByQA("lead-partner-summary-claimed-costs").contains("£0.00");
+  cy.getByQA("lead-partner-summary-claimed-percentage").contains("Percentage of eligible costs claimed to date");
+  cy.getByQA("lead-partner-summary-claimed-percentage").contains("0.00%");
+  cy.get("h2").contains("Project costs to date");
+  cy.get("h2").contains("EUI Small Ent Health costs to date");
+};
+
+export const collaboratorFinancials = () => {
+  [
+    "A B Cad Services costs to date",
+    "Total eligible costs",
+    "£175,000.00",
+    "Eligible costs claimed to date",
+    "£0.00",
+    "Percentage of eligible costs claimed to date",
+    "0.00%",
+  ].forEach(summary => {
+    cy.getByQA("section-content").contains(summary);
+  });
+};

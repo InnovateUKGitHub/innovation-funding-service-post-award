@@ -1,6 +1,11 @@
 import { visitApp } from "../../common/visit";
 import { testEach } from "../../support/methods";
-import { monitoringReportCardShouldNotExist, shouldFindMatchingProjectCard, navigateFilter } from "./steps";
+import {
+  monitoringReportCardShouldNotExist,
+  shouldFindMatchingProjectCard,
+  navigateFilter,
+  collaboratorFinancials,
+} from "./steps";
 
 const financeContactEmail = "contact77@test.co.uk";
 
@@ -25,13 +30,7 @@ describe("project dashboard as Finance Contact", () => {
     cy.get("h2").contains("A B Cad Services costs to date");
   });
 
-  it("Should display finance information at the top of the page", () => {
-    ["Total eligible costs", "Eligible costs claimed to date", "Percentage of eligible costs claimed to date"].forEach(
-      content => {
-        cy.getByQA("section-content").contains(content);
-      },
-    );
-  });
+  it("Should display finance information at the top of the page", collaboratorFinancials);
 
   testEach(["Claims", "Forecast", "Project change requests", "Documents", "Project details", "Finance summary"])(
     'should show the "$0" Link',

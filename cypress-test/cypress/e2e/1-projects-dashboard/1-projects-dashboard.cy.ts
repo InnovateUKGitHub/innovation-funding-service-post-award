@@ -8,6 +8,7 @@ import {
   shouldNavigateToProjectDashboard,
   shouldNavigateToProjectOverview,
   shouldShowAListOfProjectCards,
+  projectDashboardFinancials,
 } from "./steps";
 
 describe("projects dashboard > general", () => {
@@ -36,6 +37,8 @@ describe("projects dashboard > general", () => {
     "should navigate to the correct project details page when the project card is clicked",
     shouldNavigateToProjectOverview,
   );
+
+  it("Should display finance information at the top of the page", projectDashboardFinancials);
 
   testEach([
     "Claims",
