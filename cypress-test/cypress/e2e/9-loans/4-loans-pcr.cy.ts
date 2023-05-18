@@ -1,12 +1,20 @@
+import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "../../common/visit";
-import { loansPcrCheckBoxes, loansPcrGuidance, loansPcrTypes, submitCancelButtons } from "./steps";
-
+import {
+  loansPcrCheckBoxes,
+  loansPcrCheckboxesWithHint,
+  submitCancelButtons,
+  deletePcr,
+  assertForMissingPcr,
+} from "./steps";
 const fcEmail = "wed.addams@test.test.co.uk";
 
 describe("Loans project > PCR", () => {
   before(() => {
-    visitApp({ asUser: fcEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/create" });
+    visitApp({ asUser: fcEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
+    pcrTidyUp("Change project scope");
   });
+  after(deletePcr);
 
   it("Should have a 'Start new request heading'", () => {
     cy.get("h1").contains("Start a new request");
@@ -20,11 +28,18 @@ describe("Loans project > PCR", () => {
     cy.getByQA("page-title-caption").contains("CYPRESS_LOANS_DO_NOT_USE");
   });
 
-  it("Should have PCR guidance", loansPcrGuidance);
+  it("Should have PCR checkboxes with hints", loansPcrCheckboxesWithHint);
 
-  it("Should have an information section showing the different PCR types available", loansPcrTypes);
+  it("Should not have a 'Learn about why some PCR types are missing'", () => {
+    cy.get(".govuk-details__summary-text").contains("Learn about why some PCR types are missing").should("not.exist");
+  });
 
   it("Should check each checkbox in turn and then uncheck", loansPcrCheckBoxes);
 
   it("Should have a 'Create request' and 'Cancel' button", submitCancelButtons);
+
+  it(
+    "Should assert for 'Learn about why some PCR types are missing' by creating a PCR, saving and then creating another",
+    assertForMissingPcr,
+  );
 });

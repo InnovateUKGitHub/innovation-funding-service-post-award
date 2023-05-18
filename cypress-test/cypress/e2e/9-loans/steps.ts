@@ -146,19 +146,6 @@ export const sendYourRequestSection = () => {
   cy.submitButton("Accept and send");
 };
 
-export const loansPcrTypes = () => {
-  cy.get("span").contains("Learn more about request types").click();
-  [
-    "Reallocate project costs",
-    "Change project scope",
-    "Put a project on hold",
-    "Change loan drawdown",
-    "Change loans duration",
-  ].forEach(pcrType => {
-    cy.getByQA("form-guidance-list").contains(pcrType);
-  });
-};
-
 export const loansPcrCheckBoxes = () => {
   /**
    * Check each check box can be selected
@@ -179,11 +166,17 @@ export const loansPcrCheckBoxes = () => {
   cy.clickCheckBox("Change Loans Duration", true);
 };
 
-export const loansPcrGuidance = () => {
-  cy.get("p").contains("Before you submit, you must:");
-  cy.get("li").contains("discuss this request with your monitoring officer");
-  cy.get("h2").contains("Select request types");
-  cy.get("p").contains("You can select more than one type of request.");
+export const loansPcrCheckboxesWithHint = () => {
+  [
+    "Reallocate project costs",
+    "Change project scope",
+    "Put project on hold",
+    "Loan Drawdown Change",
+    "Change Loans Duration",
+  ].forEach(pcrType => {
+    cy.get(".govuk-label").contains(pcrType);
+    cy.get(".govuk-label").contains(pcrType).get(".govuk-hint");
+  });
 };
 
 export const submitCancelButtons = () => {
@@ -405,4 +398,17 @@ export const loanDurationGuidance = () => {
 export const markAndReturn = () => {
   cy.getByLabel("I agree with this change").click();
   cy.submitButton("Save and return to request").click();
+};
+
+export const assertForMissingPcr = () => {
+  cy.clickCheckBox("Change project scope");
+  cy.getByQA("button_default-qa").contains("Create request").click();
+  cy.get("h1").contains("Request");
+  cy.getByQA("button_return-qa").contains("Save and return to requests").click();
+  cy.get("h1").contains("Project change requests");
+  cy.get("a").contains("Create request").click();
+  cy.get("span").contains("Learn about why some PCR types are missing").click();
+  cy.get("p").contains("Some types are unavailable because they have already been added to another PCR.");
+  cy.get("li").contains("Change project scope");
+  cy.get("a").contains("Cancel").click();
 };
