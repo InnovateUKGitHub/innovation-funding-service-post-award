@@ -20,7 +20,7 @@ const Footer = () => {
             <ul className="govuk-footer__list govuk-footer__list--columns-2">
               {footerLinks.map(({ content, ...linkProps }) => (
                 <li key={linkProps.id} className="govuk-footer__list-item">
-                  <FooterLink {...linkProps}>{content}</FooterLink>
+                  <FooterLink {...linkProps}>{getContent(content)}</FooterLink>
                 </li>
               ))}
             </ul>

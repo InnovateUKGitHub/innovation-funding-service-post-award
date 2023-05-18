@@ -13,6 +13,16 @@ describe("Footer", () => {
         explainCookies: "stub-explainCookies",
         externalLinkText: "IFS PA is not available under the <0>MIT Licence</0>, except where otherwise stated",
         crownCopyright: "stub-crownCopyright",
+        innovateUk: "stub-innovateUk",
+        innovationFundingAdvice: "stub-innovationFundingAdvice",
+        connectToInnovationExperts: "stub-connectToInnovationExperts",
+        events: "stub-events",
+        innovateUkBlog: "stub-innovateUkBlog",
+        govAccessibility: "stub-govAccessibility",
+        termsAndConditions: "stub-termsAndConditions",
+        contactUs: "stub-contactUs",
+        signUpForCompetitionUpdates: "stub-signUpForCompetitionUpdates",
+        latestFundingOpportunities: "stub-latestFundingOpportunities",
       },
     },
   };
@@ -29,10 +39,10 @@ describe("Footer", () => {
   });
 
   test("should render links", () => {
-    const { queryByText } = setup();
+    const { queryByTestId } = setup();
 
     footerLinks.forEach(link => {
-      expect(queryByText(link.content)).toBeInTheDocument();
+      expect(queryByTestId(link.id)).toMatchSnapshot();
     });
   });
 

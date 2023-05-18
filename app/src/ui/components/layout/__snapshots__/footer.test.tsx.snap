@@ -18,3 +18,133 @@ exports[`Footer should render OGLv3 text with link 1`] = `
   , except where otherwise stated
 </span>
 `;
+
+exports[`Footer should render links 1`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="innovate-uk"
+  href="https://www.gov.uk/government/organisations/innovate-uk"
+  id="innovate-uk"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-innovateUk
+</a>
+`;
+
+exports[`Footer should render links 2`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="innovation-funding-advice"
+  href="https://www.gov.uk/guidance/innovation-apply-for-a-funding-award"
+  id="innovation-funding-advice"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-innovationFundingAdvice
+</a>
+`;
+
+exports[`Footer should render links 3`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="connect-to-innovation-experts"
+  href="https://www.gov.uk/guidance/innovation-get-support-and-advice"
+  id="connect-to-innovation-experts"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-connectToInnovationExperts
+</a>
+`;
+
+exports[`Footer should render links 4`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="events"
+  href="https://connect.innovateuk.org/events"
+  id="events"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-events
+</a>
+`;
+
+exports[`Footer should render links 5`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="innovate-uk-blog"
+  href="https://innovateuk.blog.gov.uk/"
+  id="innovate-uk-blog"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-innovateUkBlog
+</a>
+`;
+
+exports[`Footer should render links 6`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="gov.uk-accessibility"
+  href="https://www.gov.uk/help/accessibility"
+  id="gov.uk-accessibility"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-govAccessibility
+</a>
+`;
+
+exports[`Footer should render links 7`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="terms-and-conditions"
+  href="https://apply-for-innovation-funding.service.gov.uk/info/terms-and-conditions"
+  id="terms-and-conditions"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-termsAndConditions
+</a>
+`;
+
+exports[`Footer should render links 8`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="contact-us"
+  href="https://apply-for-innovation-funding.service.gov.uk/info/contact"
+  id="contact-us"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-contactUs
+</a>
+`;
+
+exports[`Footer should render links 9`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="sign-up-for-competition-updates"
+  href="http://info.innovateuk.org/emailpref"
+  id="sign-up-for-competition-updates"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-signUpForCompetitionUpdates
+</a>
+`;
+
+exports[`Footer should render links 10`] = `
+<a
+  class="govuk-footer__link"
+  data-qa="latest-funding-opportunities"
+  href="https://apply-for-innovation-funding.service.gov.uk/competition/search"
+  id="latest-funding-opportunities"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  stub-latestFundingOpportunities
+</a>
+`;

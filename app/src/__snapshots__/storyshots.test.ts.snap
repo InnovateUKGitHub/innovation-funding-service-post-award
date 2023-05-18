@@ -398,7 +398,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Innovate UK
+                site.footer.innovateUk
               </a>
             </li>
             <li
@@ -412,7 +412,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Innovation funding advice
+                site.footer.innovationFundingAdvice
               </a>
             </li>
             <li
@@ -426,7 +426,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Connect to innovation experts
+                site.footer.connectToInnovationExperts
               </a>
             </li>
             <li
@@ -440,7 +440,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Events
+                site.footer.events
               </a>
             </li>
             <li
@@ -454,7 +454,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Innovate UK blog
+                site.footer.innovateUkBlog
               </a>
             </li>
             <li
@@ -468,7 +468,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                GOV.UK accessibility
+                site.footer.govAccessibility
               </a>
             </li>
             <li
@@ -482,7 +482,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Terms and conditions
+                site.footer.termsAndConditions
               </a>
             </li>
             <li
@@ -496,7 +496,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Contact us
+                site.footer.contactUs
               </a>
             </li>
             <li
@@ -510,7 +510,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Sign up for competition updates
+                site.footer.signUpForCompetitionUpdates
               </a>
             </li>
             <li
@@ -524,7 +524,7 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Latest funding opportunities
+                site.footer.latestFundingOpportunities
               </a>
             </li>
           </ul>

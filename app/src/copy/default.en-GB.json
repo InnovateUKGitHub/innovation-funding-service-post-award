@@ -14,7 +14,17 @@
       "cookieFindOutMore": "Find out more about cookies",
       "explainCookies": "GOV.UK uses cookies to make the site simpler.",
       "externalLinkText": "All content is available under the <0>Open Government Licence v3.0</0>, except where otherwise stated",
-      "crownCopyright": "\u00a9 Crown copyright"
+      "crownCopyright": "\u00a9 Crown copyright",
+      "innovateUk": "Innovate UK",
+      "innovationFundingAdvice": "Innovation funding advice",
+      "connectToInnovationExperts": "Connect to innovation experts",
+      "events": "Events",
+      "innovateUkBlog": "Innovate UK blog",
+      "govAccessibility": "GOV.UK accessibility",
+      "termsAndConditions": "Terms and conditions",
+      "contactUs": "Contact us",
+      "signUpForCompetitionUpdates": "Sign up for competition updates",
+      "latestFundingOpportunities": "Latest funding opportunities"
     },
     "developer": {
       "heading": "IFS PA Developer & Testing Tools"
