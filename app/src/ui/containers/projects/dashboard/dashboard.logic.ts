@@ -8,6 +8,7 @@ import { CuratedSection, CuratedSections, Section, FilterOptions, Project, Partn
 import { projectDashboardQuery } from "./Dashboard.query";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
 import { mapToBroadcastDtoArray } from "@gql/dtoMapper/mapBroadcastDto";
+import { useContent } from "@ui/hooks";
 
 /**
  * filter function for a reducer.
@@ -67,7 +68,9 @@ interface ProjectFilterOption {
 /**
  * gets filter types for projects
  */
-export function getAvailableProjectFilters(projects: Project[]): ProjectFilterOption[] {
+export function useAvailableProjectFilters(projects: Project[]): ProjectFilterOption[] {
+  const { getContent } = useContent();
+
   if (!projects.length) return [];
 
   // Start off with no options
@@ -79,17 +82,35 @@ export function getAvailableProjectFilters(projects: Project[]): ProjectFilterOp
   const isAnyPm = projects.some(x => getAuthRoles(x.roles).isPm);
 
   // PCRS
-  if (isAnyMo) filterOptions.push({ id: "PCRS_TO_REVIEW", label: "PCR's to review" });
-  if (isAnyPm) filterOptions.push({ id: "PCRS_QUERIED", label: "PCR's being queried" });
+  if (isAnyMo)
+    filterOptions.push({
+      id: "PCRS_TO_REVIEW",
+      label: getContent(x => x.pages.projectsDashboard.filterOptions.pcrsToReview),
+    });
+  if (isAnyPm)
+    filterOptions.push({
+      id: "PCRS_QUERIED",
+      label: getContent(x => x.pages.projectsDashboard.filterOptions.pcrsBeingQueried),
+    });
 
   // Claims, then Setup Required
-  if (isAnyMo) filterOptions.push({ id: "CLAIMS_TO_REVIEW", label: "Claims to review" });
+  if (isAnyMo)
+    filterOptions.push({
+      id: "CLAIMS_TO_REVIEW",
+      label: getContent(x => x.pages.projectsDashboard.filterOptions.claimsToReview),
+    });
   if (isAnyFc)
     filterOptions.push(
-      { id: "CLAIMS_TO_SUBMIT", label: "Claims to submit" },
-      { id: "CLAIMS_TO_UPLOAD_REPORT", label: "Claims missing documents" },
-      { id: "CLAIMS_TO_RESPOND", label: "Claims needing responses" },
-      { id: "SETUP_REQUIRED", label: "Not completed setup" },
+      { id: "CLAIMS_TO_SUBMIT", label: getContent(x => x.pages.projectsDashboard.filterOptions.claimsToSubmit) },
+      {
+        id: "CLAIMS_TO_UPLOAD_REPORT",
+        label: getContent(x => x.pages.projectsDashboard.filterOptions.claimsMissingDocuments),
+      },
+      {
+        id: "CLAIMS_TO_RESPOND",
+        label: getContent(x => x.pages.projectsDashboard.filterOptions.claimsNeedingResponses),
+      },
+      { id: "SETUP_REQUIRED", label: getContent(x => x.pages.projectsDashboard.filterOptions.notCompletedSetup) },
     );
 
   return filterOptions;

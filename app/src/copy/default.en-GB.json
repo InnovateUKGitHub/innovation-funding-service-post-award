@@ -262,6 +262,18 @@
         "liveMessage": "{{count}} live",
         "upcomingMessage": "{{count}} upcoming",
         "archivedMessage": "{{count}} archived"
+      },
+      "filterOptions": {
+        "title": "Filter options",
+        "hint": "You can select more than one.",
+        "search": "Search projects",
+        "pcrsToReview": "PCR's to review",
+        "pcrsBeingQueried": "PCR's being queried",
+        "claimsToReview": "Claims to review",
+        "claimsToSubmit": "Claims to submit",
+        "claimsMissingDocuments": "Claims missing documents",
+        "claimsNeedingResponses": "Claims needing responses",
+        "notCompletedSetup": "Not completed setup"
       }
     },
     "projectSetup": {

@@ -21,7 +21,8 @@ import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
 import { DashboardProjectList } from "./DashboardProjectList";
 import { DashboardProjectCount } from "./DashboardProjectCount";
 import { FilterOptions } from "./Dashboard.interface";
-import { generateFilteredProjects, getAvailableProjectFilters, useProjectsDashboardData } from "./dashboard.logic";
+import { generateFilteredProjects, useAvailableProjectFilters, useProjectsDashboardData } from "./dashboard.logic";
+import { useContent } from "@ui/hooks";
 
 interface ProjectDashboardParams {
   search?: string | number;
@@ -37,6 +38,7 @@ const Form = createTypedForm<IProjectDashboardForm>();
 
 const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: ProjectDashboardParams & BaseProps) => {
   const navigate = useNavigate();
+  const { getContent } = useContent();
 
   const { projects, unfilteredObjects, totalNumberOfProjects, broadcasts } = useProjectsDashboardData(
     searchQuery ?? "",
@@ -49,7 +51,7 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
 
   // TODO: Ideally this would be an api which would be non-js / js agnostic
   // Note: 'unfilteredObjects' is needed as the filter options are derived from projects, when filtered there could be nothing to search.
-  const [filterOptions] = useState(() => getAvailableProjectFilters(unfilteredObjects));
+  const filterOptions = useAvailableProjectFilters(unfilteredObjects);
   const search = searchQuery === undefined ? "" : "" + searchQuery;
 
   const { isServer } = useMountedState();
@@ -116,9 +118,9 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
             />
           </Form.Fieldset>
 
-          <Form.Fieldset heading="Filter options">
+          <Form.Fieldset heading={getContent(x => x.pages.projectsDashboard.filterOptions.title)}>
             <Form.Checkboxes
-              hint="You can select more than one."
+              hint={getContent(x => x.pages.projectsDashboard.filterOptions.hint)}
               name="arrayFilters"
               options={options}
               value={() =>
@@ -131,7 +133,7 @@ const ProjectDashboardPage = ({ config, search: searchQuery, ...props }: Project
             />
           </Form.Fieldset>
 
-          {isServer && <Form.Submit>Search projects</Form.Submit>}
+          {isServer && <Form.Submit>{getContent(x => x.pages.projectsDashboard.filterOptions.search)}</Form.Submit>}
         </Form.Form>
       )}
 
