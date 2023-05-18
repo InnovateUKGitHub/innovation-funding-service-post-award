@@ -15,35 +15,39 @@ exports[`<SummaryList /> @returns renders markdown content adequately 1`] = `
       >
         Label
       </dt>
-      <span
-        class="govuk-body markdown"
+      <dd
+        class="govuk-summary-list__value"
       >
-        <p>
-          There is a thing to be done 
-          <code>
-            abc.com
-          </code>
-           yes there is.
-        </p>
-        
-
-        <p>
-          I hate to break it to you.
-        </p>
-        
-
-        <blockquote>
-          
-
+        <span
+          class="govuk-body markdown"
+        >
           <p>
-            He said I should do it
+            There is a thing to be done 
+            <code>
+              abc.com
+            </code>
+             yes there is.
           </p>
           
 
-        </blockquote>
-        
+          <p>
+            I hate to break it to you.
+          </p>
+          
 
-      </span>
+          <blockquote>
+            
+
+            <p>
+              He said I should do it
+            </p>
+            
+
+          </blockquote>
+          
+
+        </span>
+      </dd>
       <dd
         class="govuk-summary-list__actions"
       />

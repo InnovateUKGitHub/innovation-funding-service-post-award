@@ -58,11 +58,9 @@ export const SummaryListItem = ({ content, action, qa, validation, label, isMark
       })}
     >
       <dt className="govuk-summary-list__key">{typeof label === "string" ? label : getContent(label)}</dt>
-      {isMarkdown ? (
-        <ACC.Renderers.Markdown value={content as string} />
-      ) : (
-        <dd className="govuk-summary-list__value">{content}</dd>
-      )}
+      <dd className="govuk-summary-list__value">
+        {isMarkdown ? <ACC.Renderers.Markdown value={content as string} /> : content}
+      </dd>
       <dd className="govuk-summary-list__actions">{action}</dd>
     </div>
   );
