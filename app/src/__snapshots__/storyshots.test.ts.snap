@@ -744,6 +744,224 @@ exports[`Storyshots GOV.UK Components/Tag Yellow 1`] = `
 </div>
 `;
 
+exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <ol
+    className="govuk-list govuk-list--number app-task-list"
+  >
+    <li>
+      <h2
+        className="app-task-list__section"
+      >
+        <span
+          className="app-task-list__section-number"
+        >
+          1
+          .
+        </span>
+         
+        Scope Change
+      </h2>
+      <ul
+        className="govuk-list govuk-list--bullet app-task-list__items"
+      >
+        <li
+          className="app-task-list__item"
+        >
+          <span
+            className="app-task-list__task-name"
+          >
+            View files
+          </span>
+          <span
+            className="app-task-list__task-action"
+          >
+            <strong
+              className="govuk-tag govuk-tag--green"
+            >
+              Complete
+            </strong>
+          </span>
+        </li>
+        <li
+          className="app-task-list__item"
+        >
+          <span
+            className="app-task-list__task-name"
+          >
+            View rationale
+          </span>
+          <span
+            className="app-task-list__task-action"
+          >
+            <strong
+              className="govuk-tag govuk-tag--yellow"
+            >
+              Incomplete
+            </strong>
+          </span>
+        </li>
+        <li
+          className="app-task-list__item"
+        >
+          <span
+            className="app-task-list__task-name"
+          >
+            View reasoning
+          </span>
+          <span
+            className="app-task-list__task-action"
+          >
+            <strong
+              className="govuk-tag govuk-tag--blue"
+            >
+              To do
+            </strong>
+          </span>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <h2
+        className="app-task-list__section"
+      >
+        <span
+          className="app-task-list__section-number"
+        >
+          2
+          .
+        </span>
+         
+        Partner Change
+      </h2>
+      <ul
+        className="govuk-list govuk-list--bullet app-task-list__items"
+      >
+        <li
+          className="app-task-list__item"
+        >
+          <span
+            className="app-task-list__task-name"
+          >
+            View files
+          </span>
+          <span
+            className="app-task-list__task-action"
+          >
+            <strong
+              className="govuk-tag govuk-tag--blue"
+            >
+              To do
+            </strong>
+          </span>
+        </li>
+      </ul>
+    </li>
+  </ol>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <ol
+    className="govuk-list govuk-list--number app-task-list"
+  >
+    <li>
+      <h2
+        className="app-task-list__section"
+      >
+        <span
+          className="app-task-list__section-number"
+        >
+          1
+          .
+        </span>
+         
+        Scope Change
+      </h2>
+      <ul
+        className="govuk-list govuk-list--bullet app-task-list__items"
+      >
+        <a
+          aria-hidden="true"
+          id="Val:0"
+        />
+        <p
+          className="govuk-error-message"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          Thanks to you, I am a figure of ridicule within the market community.
+        </p>
+        <li
+          className="app-task-list__item"
+        >
+          <span
+            className="app-task-list__task-name"
+          >
+            View files
+          </span>
+          <span
+            className="app-task-list__task-action"
+          >
+            <strong
+              className="govuk-tag govuk-tag--green"
+            >
+              Complete
+            </strong>
+          </span>
+        </li>
+        <li
+          className="app-task-list__item"
+        >
+          <span
+            className="app-task-list__task-name"
+          >
+            View rationale
+          </span>
+          <span
+            className="app-task-list__task-action"
+          >
+            <strong
+              className="govuk-tag govuk-tag--yellow"
+            >
+              Incomplete
+            </strong>
+          </span>
+        </li>
+        <li
+          className="app-task-list__item"
+        >
+          <span
+            className="app-task-list__task-name"
+          >
+            View reasoning
+          </span>
+          <span
+            className="app-task-list__task-action"
+          >
+            <strong
+              className="govuk-tag govuk-tag--blue"
+            >
+              To do
+            </strong>
+          </span>
+        </li>
+      </ul>
+    </li>
+  </ol>
+</div>
+`;
+
 exports[`Storyshots IFSPA Renderer/Accessibility Text Primary 1`] = `
 <div
   className="govuk-template__body"
