@@ -14,16 +14,8 @@ profiles:
         envTemplate:
           template: "{{.TAG_ID}}"
       artifacts:
-        - image: idp-service
-          context: ifs-idp-service/src/main/docker
-          docker:
-            dockerfile: Dockerfile
-        - image: ldap-service
-          context: ifs-ldap-service/src/main/docker
-          docker:
-            dockerfile: Dockerfile
-        - image: sp-service
-          context: ifs-sp-service/src/main/docker
+        - image: acc-ui
+          context: .
           docker:
             dockerfile: Dockerfile
 
