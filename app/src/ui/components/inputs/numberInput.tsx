@@ -53,8 +53,6 @@ export const NumberInput = (props: NumberInputProps) => {
     const value = e.currentTarget.value;
     const event = e.nativeEvent as InputEvent;
 
-    console.log(event.inputType);
-
     if (state.value !== value) {
       const newInputValid = /^-?£?\d*\.?(\d{1,2})?$/.test(value);
 
