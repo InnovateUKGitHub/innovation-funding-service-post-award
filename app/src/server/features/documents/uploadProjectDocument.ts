@@ -64,11 +64,13 @@ export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<st
       recordId = this.projectId;
     }
 
-    const docsWithNameAndSize = this.documents.files.filter(x => x.fileName && x.size);
-    const promisedDocs: Promise<string>[] = docsWithNameAndSize.map(document =>
-      context.repositories.documents.insertDocument(document, recordId, this.documents.description),
-    );
+    const results: string[] = [];
 
-    return await Promise.all(promisedDocs);
+    for (const document of this.documents.files.filter(x => x.fileName && x.size)) {
+      const id = await context.repositories.documents.insertDocument(document, recordId, this.documents.description);
+      results.push(id);
+    }
+
+    return results;
   }
 }

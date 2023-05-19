@@ -8,12 +8,13 @@ import { configuration } from "@server/features/common";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { upload } from "../forms/memoryStorage";
+import { readFileSync } from "fs";
 
 export class ServerFileWrapper implements IFileWrapper {
   constructor(file: Express.Multer.File) {
     this.fileName = file.originalname;
     this.size = file.size;
-    this.read = () => file.buffer.toString("base64");
+    this.read = () => readFileSync(file.path, { encoding: "base64" });
   }
 
   public readonly fileName: string;

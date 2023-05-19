@@ -43,11 +43,17 @@ export class UploadClaimDetailDocumentCommand extends CommandMultipleDocumentBas
       throw new ValidationError(result);
     }
 
-    const docsWithNameAndSize = this.documents.files.filter(x => x.fileName && x.size);
-    const promisedDocs: Promise<string>[] = docsWithNameAndSize.map(document =>
-      context.repositories.documents.insertDocument(document, claimDetail.Id, this.documents.description),
-    );
+    const results: string[] = [];
 
-    return await Promise.all(promisedDocs);
+    for (const document of this.documents.files.filter(x => x.fileName && x.size)) {
+      const id = await context.repositories.documents.insertDocument(
+        document,
+        claimDetail.Id,
+        this.documents.description,
+      );
+      results.push(id);
+    }
+
+    return results;
   }
 }
