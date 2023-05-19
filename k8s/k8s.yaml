@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acc-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acc-ui
+  template:
+    metadata:
+      labels:
+        app: acc-ui
+    spec:
+      containers:
+        - name: acc-ui
+          image: acc-ui
+          resources:
+            limits:
+              memory: 128Mi
+              cpu: 500m
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: acc-ui-svc
+spec:
+  selector:
+    app: acc-ui
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

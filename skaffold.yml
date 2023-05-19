@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2beta26
+kind: Config
+metadata:
+  name: acc-ui
+build:
+  artifacts:
+    - image: acc-ui
+      docker:
+        dockerfile: Dockerfile
+deploy:
+  kubectl: {}
