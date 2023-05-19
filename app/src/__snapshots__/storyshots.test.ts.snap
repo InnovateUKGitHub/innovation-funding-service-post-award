@@ -780,7 +780,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
             className="app-task-list__task-action"
           >
             <strong
-              className="govuk-tag govuk-tag--green"
+              className="govuk-tag"
             >
               Complete
             </strong>
@@ -798,7 +798,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
             className="app-task-list__task-action"
           >
             <strong
-              className="govuk-tag govuk-tag--yellow"
+              className="govuk-tag govuk-tag--blue"
             >
               Incomplete
             </strong>
@@ -816,7 +816,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
             className="app-task-list__task-action"
           >
             <strong
-              className="govuk-tag govuk-tag--blue"
+              className="govuk-tag govuk-tag--grey"
             >
               To do
             </strong>
@@ -852,7 +852,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
             className="app-task-list__task-action"
           >
             <strong
-              className="govuk-tag govuk-tag--blue"
+              className="govuk-tag govuk-tag--grey"
             >
               To do
             </strong>
@@ -914,7 +914,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
             className="app-task-list__task-action"
           >
             <strong
-              className="govuk-tag govuk-tag--green"
+              className="govuk-tag"
             >
               Complete
             </strong>
@@ -932,7 +932,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
             className="app-task-list__task-action"
           >
             <strong
-              className="govuk-tag govuk-tag--yellow"
+              className="govuk-tag govuk-tag--blue"
             >
               Incomplete
             </strong>
@@ -950,7 +950,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
             className="app-task-list__task-action"
           >
             <strong
-              className="govuk-tag govuk-tag--blue"
+              className="govuk-tag govuk-tag--grey"
             >
               To do
             </strong>

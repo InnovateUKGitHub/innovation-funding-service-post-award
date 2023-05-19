@@ -12,10 +12,10 @@ import { Link } from "./links";
 
 export type TaskStatus = "To do" | "Complete" | "Incomplete";
 
-const statusConfig: Record<TaskStatus, TagTypeOptions> = {
-  "To do": "blue",
-  Incomplete: "yellow",
-  Complete: "green",
+const statusConfig: Record<TaskStatus, TagTypeOptions | undefined> = {
+  "To do": "grey",
+  Incomplete: "blue",
+  Complete: undefined,
 };
 
 interface ITask {
