@@ -7,7 +7,7 @@ import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { configuration } from "@server/features/common";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
-import { upload } from "../forms/memoryStorage";
+import { upload } from "../forms/diskStorage";
 import { readFileSync } from "fs";
 
 export class ServerFileWrapper implements IFileWrapper {

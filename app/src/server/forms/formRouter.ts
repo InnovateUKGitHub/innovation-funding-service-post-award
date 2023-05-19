@@ -48,7 +48,7 @@ import { ProjectDocumentDeleteHandler } from "./ProjectDocumentDeleteHandler";
 import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
 
-import { upload } from "./memoryStorage";
+import { upload } from "./diskStorage";
 import { ProjectSetupPartnerPostcodeFormHandler } from "./projectSetupPartnerPostcodeFormHandler";
 import { ProjectSetupSpendProfileFormHandler } from "./projectSetupSpendProfileFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";

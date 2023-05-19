@@ -6,7 +6,8 @@ const storage = multer.diskStorage({});
 export const upload = multer({
   storage,
   limits: {
-    fileSize: configuration.options.maxFileSize,
+    // Add extra leeway for multer to accept larger files.
+    fileSize: configuration.options.maxFileSize * 1.2,
     files: configuration.options.maxUploadFileCount,
   },
 });
