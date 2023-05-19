@@ -1,0 +1,7 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: perf
+
+bases:
+  - ../aws-base
+

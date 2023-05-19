@@ -1,0 +1,9 @@
+# Common to aws envs
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../env-base
+
+components:
+  - ../../../components/acc-ui

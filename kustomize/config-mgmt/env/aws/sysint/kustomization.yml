@@ -1,0 +1,7 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: sysint
+
+resources:
+  - ../../../base
+
