@@ -1455,7 +1455,8 @@
       "fileCountTooLarge_other": "You can only select up to {{ count }} files at the same time.",
       "fileUploadFailure_one": "Your file cannot be uploaded",
       "fileUploadFailure_other": "One or more of your files cannot be uploaded.",
-      "fileMissing": "File does not exist"
+      "fileMissing": "File does not exist",
+      "multerTooLarge": "The selected files must be smaller than {{ size }}."
     },
     "financialVirementDtoValidator": {
       "loanAmountTooLarge_one": "You cannot exceed '{{ total }}' by '{{ amount }}'. Adjust period '{{ periods, arrayJoin }}' to proceed.",

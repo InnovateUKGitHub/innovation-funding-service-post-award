@@ -8,7 +8,7 @@ export class BadRequestHandler implements IFormHandler {
   public routePath = "*";
   public middleware = [];
 
-  public async handle(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public async handle({ req, res, next }: { req: express.Request; res: express.Response; next: express.NextFunction }) {
     // If the route has been matched but has fallen through to here it means that there was no suitable handler
     if (res.locals.isMatchedRoute) {
       const buttons = Object.keys(req.body).filter(x => x.startsWith("button_"));

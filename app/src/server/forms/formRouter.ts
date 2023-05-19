@@ -1,13 +1,13 @@
 import express, { RequestHandler } from "express";
 
+import { ProjectChangeRequestCreateFormHandler } from "@server/forms/projectChangeRequest/createProjectChangeRequestFormHandler";
+import { ProjectChangeRequestAddTypeFormHandler } from "@server/forms/projectChangeRequest/projectChangeRequestAddTypeFormHandler";
 import { ProjectChangeRequestItemDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentDeleteHandler";
+import { ProjectChangeRequestItemDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandler";
 import { ProjectChangeRequestItemUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemUpdateHandler";
 import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentDeleteHandler";
 import { ProjectChangeRequestReasoningDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentUploadHandler";
 import { ProjectChangeRequestReasoningUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningUpdateHandler";
-import { ProjectChangeRequestCreateFormHandler } from "@server/forms/projectChangeRequest/createProjectChangeRequestFormHandler";
-import { ProjectChangeRequestAddTypeFormHandler } from "@server/forms/projectChangeRequest/projectChangeRequestAddTypeFormHandler";
-import { ProjectChangeRequestItemDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandler";
 
 import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
 import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimDocumentsUploadHandler";
@@ -16,63 +16,57 @@ import { ClaimReviewDocumentsUploadHandler } from "@server/forms/claimDocuments/
 
 import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
 import { MonitoringReportPreparePeriodFormHandler } from "@server/forms/monitoringReport/monitoringReportPreparePeriodFormHandler";
-import { VirementCostsUpdateHandler } from "@server/forms/projectChangeRequest/virements/virementCostsUpdateHandler";
-import { VirementLoanEditHandler } from "@server/forms/projectChangeRequest/virements/virementLoanEditHandler";
-import { EditorStateKeys } from "@ui/redux";
+import { PartnerDetailsEditFormHandler } from "@server/forms/partnerDetailsEditFormHandler";
+import { OverheadDocumentsDeleteHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsDeleteHandler";
+import { OverheadDocumentsUploadHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsUploadHandler";
 import { ProjectChangeRequestSpendProfileAddCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileAddCostHandler";
 import { ProjectChangeRequestSpendProfileCostsSummaryHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileCostsHandler";
 import { ProjectChangeRequestSpendProfileDeleteCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileDeleteCostHandler";
 import { ProjectChangeRequestSpendProfileEditCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileEditCostHandler";
+import { VirementCostsUpdateHandler } from "@server/forms/projectChangeRequest/virements/virementCostsUpdateHandler";
+import { VirementLoanEditHandler } from "@server/forms/projectChangeRequest/virements/virementLoanEditHandler";
 import { ProjectSetupFormHandler } from "@server/forms/projectSetupFormHandler";
-import { PartnerDetailsEditFormHandler } from "@server/forms/partnerDetailsEditFormHandler";
-import { OverheadDocumentsUploadHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsUploadHandler";
-import { OverheadDocumentsDeleteHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsDeleteHandler";
-import { serverRender } from "../serverRender";
 import { configuration } from "../features/common";
-import { ProjectChangeRequestReviewFormHandler } from "./projectChangeRequest/reviewProjectChangeRequestFormHandler";
-import { ProjectChangeRequestPrepareFormHandler } from "./projectChangeRequest/prepareProjectChangeRequestFormHandler";
-import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/deleteProjectChangeRequestFormHandler";
+import { serverRender } from "../serverRender";
 import { BadRequestHandler } from "./badRequestHandler";
-import { ClaimForecastFormHandler } from "./claimForecastFormHandler";
-import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
-import { DeveloperUserSwitcherHandler } from "./developerUserSwitcherHandler";
-import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
-import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
-import {
-  IFormHandler,
-  MultipleFileFormHandlerBase,
-  SingleFileFormHandlerBase,
-  StandardFormHandlerBase,
-} from "./formHandlerBase";
 import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDetailDocumentDeleteHandler";
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
-import { ProjectDocumentDeleteHandler } from "./ProjectDocumentDeleteHandler";
-import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
+import { ClaimForecastFormHandler } from "./claimForecastFormHandler";
+import { DeveloperUserSwitcherHandler } from "./developerUserSwitcherHandler";
+import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
+import { IFormHandler } from "./formHandlerBase";
 import { MonitoringReportCreateFormHandler } from "./monitoringReport/monitoringReportCreateFormHandler";
 import { MonitoringReportDeleteFormHandler } from "./monitoringReport/monitoringReportDeleteFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./monitoringReport/monitoringReportPrepareFormHandler";
 import { MonitoringReportSummaryFormHandler } from "./monitoringReport/monitoringReportSummaryFormHandler";
+import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
+import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/deleteProjectChangeRequestFormHandler";
+import { ProjectChangeRequestPrepareFormHandler } from "./projectChangeRequest/prepareProjectChangeRequestFormHandler";
+import { ProjectChangeRequestReviewFormHandler } from "./projectChangeRequest/reviewProjectChangeRequestFormHandler";
 import { VirementPartnerCostsUpdateHandler } from "./projectChangeRequest/virements/virementPartnerCostsUpdateHandler";
+import { ProjectDocumentDeleteHandler } from "./ProjectDocumentDeleteHandler";
+import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
+import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
 
 import { upload } from "./memoryStorage";
+import { ProjectSetupPartnerPostcodeFormHandler } from "./projectSetupPartnerPostcodeFormHandler";
 import { ProjectSetupSpendProfileFormHandler } from "./projectSetupSpendProfileFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
-import { ProjectSetupPartnerPostcodeFormHandler } from "./projectSetupPartnerPostcodeFormHandler";
 
-import { BankSetupStatementDocumentUploadHandler } from "./project/setup/BankSetupStatementDocumentUploadHandler";
 import { BankSetupStatementDocumentDeleteHandler } from "./project/setup/BankSetupStatementDocumentDeleteHandler";
+import { BankSetupStatementDocumentUploadHandler } from "./project/setup/BankSetupStatementDocumentUploadHandler";
 
+import csurf from "csurf";
+import { GraphQLSchema } from "graphql";
+import { DeveloperPageCrasherHandler } from "./developerPageCrasherHandler";
+import { DeveloperProjectCreatorHandler } from "./developerProjectCreatorHandler";
 import { LoanRequestDocumentDeleteHandler, LoanRequestDocumentUploadHandler } from "./loan";
 import { LoanRequestFormHandler } from "./loan/LoanRequestFormHandler";
 import { ProjectSetupBankDetailsHandler } from "./project/setup/ProjectSetupBankDetailsHandler";
 import { ProjectSetupBankDetailsVerifyHandler } from "./project/setup/ProjectSetupBankDetailsVerifyHandler";
 import { ProjectSetupBankStatementHandler } from "./project/setup/ProjectSetupBankStatementHandler";
-import { GraphQLSchema } from "graphql";
-import { DeveloperProjectCreatorHandler } from "./developerProjectCreatorHandler";
-import { DeveloperPageCrasherHandler } from "./developerPageCrasherHandler";
-import csurf from "csurf";
 
-export const standardFormHandlers: StandardFormHandlerBase<AnyObject, EditorStateKeys>[] = [
+export const standardFormHandlers = [
   new ClaimForecastFormHandler(),
   new EditClaimLineItemsFormHandler(),
   new ClaimSummaryFormHandler(),
@@ -116,11 +110,9 @@ export const standardFormHandlers: StandardFormHandlerBase<AnyObject, EditorStat
   new ProjectSetupBankDetailsVerifyHandler(),
   new ProjectSetupBankStatementHandler(),
   new LoanRequestDocumentDeleteHandler(),
-];
+] as const;
 
-export const singleFileFormHandlers: SingleFileFormHandlerBase<AnyObject, EditorStateKeys>[] = [];
-
-export const multiFileFormHandlers: MultipleFileFormHandlerBase<AnyObject, EditorStateKeys>[] = [
+export const multiFileFormHandlers = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDocumentsUploadHandler(),
   new ClaimReviewDocumentsUploadHandler(),
@@ -130,7 +122,7 @@ export const multiFileFormHandlers: MultipleFileFormHandlerBase<AnyObject, Edito
   new ProjectDocumentUploadHandler(),
   new BankSetupStatementDocumentUploadHandler(),
   new LoanRequestDocumentUploadHandler(),
-];
+] as const;
 
 export const developerFormhandlers = [
   new DeveloperUserSwitcherHandler(),
@@ -146,12 +138,12 @@ const getRoute = (handler: IFormHandler) => {
 const handlePost =
   ({ schema, csrfProtection }: { schema: GraphQLSchema; csrfProtection: ReturnType<typeof csurf> }) =>
   (handler: IFormHandler) =>
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  (err: unknown, req: express.Request, res: express.Response, next: express.NextFunction) => {
     csrfProtection(req, res, async () => {
       try {
         // You must await the handle, to transform promise rejections into regular errors.
         // This allows the try-catch block to catch any errors that occur instead of crashing the programme.
-        await handler.handle(req, res, next);
+        await handler.handle({ err, req, res, next });
       } catch (err: unknown) {
         return serverRender({ schema })({ req, res, err, next });
       }
@@ -162,7 +154,7 @@ const handleError =
   ({ schema, csrfProtection }: { schema: GraphQLSchema; csrfProtection: ReturnType<typeof csurf> }) =>
   (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    error: any,
+    error: unknown,
     req: express.Request,
     res: express.Response,
     next: express.NextFunction,
@@ -186,35 +178,43 @@ export const configureFormRouter = ({
   const result = express.Router();
   const badRequestHandler = new BadRequestHandler();
 
-  singleFileFormHandlers.forEach(x => {
+  for (const x of multiFileFormHandlers) {
     result.post(
       getRoute(x),
-      upload.single("attachment"),
-      handlePost({ schema, csrfProtection })(x),
+      ((req, res, next) => {
+        // Capture any multer errors and pass them into our form handler.
+        upload.array("attachment")(req, res, error => {
+          handlePost({ schema, csrfProtection })(x)(error, req, res, next);
+        });
+      }) as RequestHandler,
       handleError({ schema, csrfProtection }),
     );
-  });
+  }
 
-  multiFileFormHandlers.forEach(x => {
+  for (const x of standardFormHandlers) {
     result.post(
       getRoute(x),
-      upload.array("attachment"),
-      handlePost({ schema, csrfProtection })(x),
+      ((req, res, next) => handlePost({ schema, csrfProtection })(x)(undefined, req, res, next)) as RequestHandler,
       handleError({ schema, csrfProtection }),
     );
-  });
-
-  standardFormHandlers.forEach(x => {
-    result.post(getRoute(x), handlePost({ schema, csrfProtection })(x), handleError({ schema, csrfProtection }));
-  });
+  }
 
   if (!configuration.sso.enabled) {
     for (const x of developerFormhandlers) {
-      result.post(getRoute(x), handlePost({ schema, csrfProtection })(x), handleError({ schema, csrfProtection }));
+      result.post(
+        getRoute(x),
+        ((req, res, next) => handlePost({ schema, csrfProtection })(x)(undefined, req, res, next)) as RequestHandler,
+        handleError({ schema, csrfProtection }),
+      );
     }
   }
 
-  result.post("*", handlePost({ schema, csrfProtection })(badRequestHandler), handleError({ schema, csrfProtection }));
+  result.post(
+    "*",
+    ((req, res, next) =>
+      handlePost({ schema, csrfProtection })(badRequestHandler)(undefined, req, res, next)) as RequestHandler,
+    handleError({ schema, csrfProtection }),
+  );
 
   return result;
 };

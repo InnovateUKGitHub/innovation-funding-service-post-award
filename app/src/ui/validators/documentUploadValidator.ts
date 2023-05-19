@@ -84,6 +84,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
 export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocumentUploadDto> {
   public readonly description: Result;
   public readonly partnerId: Result;
+  public readonly files: NestedResult<FileDtoValidator> | Result;
 
   constructor(
     model: MultipleDocumentUploadDto,
@@ -112,7 +113,30 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
 
   private validateFiles(model: MultipleDocumentUploadDto, config: IAppOptions, filesRequired: boolean) {
     const filteredFiles = (model.files && model.files.filter(x => x.fileName || x.size)) || [];
-    const maxUploadFileCount = config.maxUploadFileCount;
+
+    // If there is a multer error (see `formHandlerBase.ts`)
+    // use those set of errors instead.
+    if (model.multerError) {
+      const maxMessage = getFileSize(config.maxFileSize);
+
+      return Validation.all(
+        this,
+        () =>
+          Validation.isFalse(
+            this,
+            model.multerError === "LIMIT_FILE_COUNT",
+            this.getContent(x =>
+              x.validation.documentValidator.fileCountTooLarge({ count: config.maxUploadFileCount }),
+            ),
+          ),
+        () =>
+          Validation.isFalse(
+            this,
+            model.multerError === "LIMIT_FILE_SIZE",
+            this.getContent(x => x.validation.documentValidator.multerTooLarge({ size: maxMessage })),
+          ),
+      );
+    }
 
     return Validation.child(
       this,
@@ -129,15 +153,15 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
               : children.valid(),
           () =>
             children.isTrue(
-              x => x.length <= maxUploadFileCount,
-              this.getContent(x => x.validation.documentValidator.fileCountTooLarge({ count: maxUploadFileCount })),
+              x => x.length <= config.maxUploadFileCount,
+              this.getContent(x =>
+                x.validation.documentValidator.fileCountTooLarge({ count: config.maxUploadFileCount }),
+              ),
             ),
         ),
       this.getContent(x => x.validation.documentValidator.fileUploadFailure),
     );
   }
-
-  public readonly files: NestedResult<FileDtoValidator>;
 }
 
 export class FileDtoValidator extends Results<IFileWrapper> {

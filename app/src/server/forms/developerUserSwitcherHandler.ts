@@ -8,7 +8,15 @@ export class DeveloperUserSwitcherHandler implements IFormHandler {
   public readonly routePath = DeveloperUserSwitcherPage.routePath;
   public readonly middleware: express.RequestHandler[] = [];
 
-  public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+  public async handle({
+    req,
+    res,
+    next,
+  }: {
+    req: express.Request;
+    res: express.Response;
+    next: express.NextFunction;
+  }): Promise<void> {
     // Pretend this handler does not exist if we happen to run it
     // outside of a development environment.
     if (configuration.sso.enabled) return next();

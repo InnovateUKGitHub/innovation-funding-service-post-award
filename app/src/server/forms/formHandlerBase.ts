@@ -8,6 +8,10 @@ import { IFileWrapper, IAppError } from "@framework/types";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { FormHandlerError } from "@server/features/common/appError";
 import { ISession, ServerFileWrapper } from "../apis/controllerBase";
+import { MulterError } from "multer";
+import { Logger } from "@shared/developmentLogger";
+
+const logger: Logger = new Logger("FormHandlerBase");
 
 // TODO: review types in this file
 
@@ -19,7 +23,19 @@ interface RouteInfo<TParams> {
 
 export interface IFormHandler {
   readonly routePath: string;
-  handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void>;
+
+  // Purposely incompatible with Express to force calling manually.
+  handle: ({
+    err,
+    req,
+    res,
+    next,
+  }: {
+    err?: unknown;
+    req: express.Request;
+    res: express.Response;
+    next: express.NextFunction;
+  }) => Promise<void>;
 }
 
 export interface IFormButton {
@@ -48,9 +64,36 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
   public readonly buttons: string[];
   private readonly getParams: (route: { name: string; path: string; params: Params }) => TParams;
 
-  public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
+  public async handle({
+    err,
+    req,
+    res,
+    next,
+  }: {
+    err?: unknown;
+    req: express.Request;
+    res: express.Response;
+    next: express.NextFunction;
+  }): Promise<void> {
+    let button: IFormButton;
+
     // Used by BadRequestHandler to determine that the route has been matched
     res.locals.isMatchedRoute = true;
+
+    if (err instanceof MulterError && this.store === "multipleDocuments") {
+      // Stub Multer errors with a stub button.
+      // We don't know what the button is because we don't have any body anymore (great!)
+      logger.error("A multer error occured!", err);
+      button = { name: "", value: "" };
+    } else if (err) {
+      // If another error has occured, pass it on to Express.
+      return next(err);
+    } else {
+      // See if our button matches this handler.
+      const buttonName = this.buttons.find(x => `button_${x}` in req.body);
+      if (!buttonName) return next();
+      button = { name: buttonName, value: req.body[`button_${buttonName}`] };
+    }
 
     const params = this.getParams({
       name: this.routeName,
@@ -58,29 +101,32 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
       path: req.path,
     });
 
-    const buttonName = this.buttons.find(x => `button_${x}` in req.body);
-
-    // If the button in the request does not match this handler, call next handler
-    if (!buttonName) return next();
-
-    const button = { name: buttonName, value: req.body[`button_${buttonName}`] };
     const body = { ...req.body };
-    delete body[`button_${buttonName}`];
+    if (button.name) {
+      delete body[`button_${button.name}`];
+    }
 
     const session: ISession = { user: req.session?.user };
     const context = contextProvider.start(session);
 
     let dto: AnyEditor;
 
-    try {
-      dto = (await this.createDto(context, params, button, body, req)) || ({} as AnyEditor);
-    } catch (error) {
-      context.logger.error("Error creating dto in form submission", error);
-      dto = {} as AnyEditor;
+    if (err instanceof MulterError) {
+      dto = {
+        multerError: err.code,
+      };
+    } else {
+      try {
+        dto = (await this.createDto(context, params, button, body, req)) || ({} as AnyEditor);
+      } catch (error) {
+        context.logger.error("Error creating dto in form submission", error);
+        dto = {} as AnyEditor;
+      }
     }
 
     try {
       const { path: newRedirectUrl } = await this.run(context, params, button, dto);
+
       res.redirect(newRedirectUrl);
       return;
     } catch (error: unknown) {
