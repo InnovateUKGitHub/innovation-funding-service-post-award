@@ -4,6 +4,3 @@ kind: Kustomization
 
 bases:
   - ../../env-base
-
-components:
-  - ../../../components/acc-ui
