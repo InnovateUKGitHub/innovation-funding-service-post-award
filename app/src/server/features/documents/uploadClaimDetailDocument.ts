@@ -45,13 +45,19 @@ export class UploadClaimDetailDocumentCommand extends CommandMultipleDocumentBas
 
     const results: string[] = [];
 
-    for (const document of this.documents.files.filter(x => x.fileName && x.size)) {
-      const id = await context.repositories.documents.insertDocument(
-        document,
-        claimDetail.Id,
-        this.documents.description,
-      );
-      results.push(id);
+    // Process documents one at a time
+    // This is because each file is 32mb of base64 encoded text.
+    // Uploading ALL documents simultaneously would be disastrous for memory usage,
+    // as each file needs to be loaded into memory.
+    for (const document of this.documents.files) {
+      if (document.fileName && document.size) {
+        const id = await context.repositories.documents.insertDocument(
+          document,
+          claimDetail.Id,
+          this.documents.description,
+        );
+        results.push(id);
+      }
     }
 
     return results;

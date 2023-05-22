@@ -24,7 +24,9 @@ interface RouteInfo<TParams> {
 export interface IFormHandler {
   readonly routePath: string;
 
-  // Purposely incompatible with Express to force calling manually.
+  // This handler can be used for both error handling and standard routing.
+  // This is therefore a destructured object instead of positional arg based,
+  // to prevent a developer from passing straight into Express.
   handle: ({
     err,
     req,
