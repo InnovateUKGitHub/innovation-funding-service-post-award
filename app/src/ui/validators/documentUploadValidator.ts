@@ -159,7 +159,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
               ),
             ),
         ),
-      this.getContent(x => x.validation.documentValidator.fileUploadFailure),
+      this.getContent(x => x.validation.documentValidator.fileUploadFailure({ count: model.files?.length })),
     );
   }
 }
