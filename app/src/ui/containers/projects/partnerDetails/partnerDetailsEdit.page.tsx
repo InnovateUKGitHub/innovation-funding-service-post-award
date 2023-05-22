@@ -71,7 +71,7 @@ export function PartnerDetailsEditComponent({
     navigate(navigateTo);
   };
 
-  const errors = useValidationErrors(formState.errors);
+  const errors = useValidationErrors<FormValues>(formState.errors);
 
   return (
     <Page

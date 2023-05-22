@@ -1,15 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import {
-  ClaimDetailsSummaryDto,
-  ClaimDto,
-  CostCategoryDto,
-  ForecastDetailsDTO,
-  GOLCostDto,
-  PartnerDtoGql,
-  ProjectDtoGql,
-  ProjectRole,
-} from "@framework/types";
+import { ForecastDetailsDTO, ProjectRole } from "@framework/types";
 import { getArrayExcludingPeriods, isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
 import { IEditorStore, useStores } from "@ui/redux";

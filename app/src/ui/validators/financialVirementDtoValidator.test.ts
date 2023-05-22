@@ -176,7 +176,7 @@ describe("financialVirementDtoValidator", () => {
           ${"with overdrawn funds in all months"}       | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£20.00'. Adjust period '1, 2' to proceed."}
           ${"with overdrawn funds in earlier months"}   | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 10 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£10.00'. Adjust period '1, 2' to proceed."}
           ${"with overdrawn funds in later months"}     | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£10.00'. Adjust period '1, 2' to proceed."}
-        `("$name", ({ payload, expectedResponse, expectedError }) => {
+        `("$name", ({ payload, expectedResponse }) => {
           const validation = new FinancialLoanVirementDtoValidator(payload, true, true);
 
           expect(validation.totalValue.isValid).toBe(expectedResponse);

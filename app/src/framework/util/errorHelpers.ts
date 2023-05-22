@@ -28,6 +28,6 @@ export const useValidationErrors = <TFormValues extends AnyObject>(errors: Field
   const validationErrors = convertErrorsToResultFormat<TFormValues>(errors);
   const serverSideFormErrors = useFormErrorContext();
   const combinedErrors = (validationErrors ?? []).concat(serverSideFormErrors ?? []);
-  const errorResults = new Results(null, true, combinedErrors);
+  const errorResults = new Results({ model: {}, showValidationErrors: true, results: combinedErrors });
   return errorResults;
 };
