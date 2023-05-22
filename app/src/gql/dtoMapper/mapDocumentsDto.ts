@@ -130,12 +130,11 @@ export function mapToPartnerDocumentSummaryDtoArray<
           }),
         ),
       )
-      // if isFc filter out document summaries belonging to other partners
+      // if isFc or Pm, filter out document summaries belonging to other partners
       .filter(x =>
-        additionalData.currentUserRoles.isFc &&
-        !(additionalData.currentUserRoles.isPm || additionalData.currentUserRoles.isMo)
-          ? (additionalData?.partnerRoles ?? []).find(roles => roles?.partnerId === x[0]?.partnerId)?.isFc
-          : x,
+        additionalData.currentUserRoles.isMo
+          ? x
+          : (additionalData?.partnerRoles ?? []).find(roles => roles?.partnerId === x[0]?.partnerId)?.isFc,
       )
       .flat()
   );
