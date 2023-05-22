@@ -25,6 +25,7 @@ type PartnerDocumentsArrayNode = {
     readonly Acc_AccountId__r: {
       readonly Name: GQL.Value<string>;
     } | null;
+    readonly Acc_AccountId__c: GQL.Value<string>;
     readonly ContentDocumentLinks: {
       readonly edges: ReadonlyArray<DocumentSummaryNode | null> | null;
     } | null;
@@ -125,7 +126,7 @@ export function mapToPartnerDocumentSummaryDtoArray<
           mapToDocumentSummaryDto(doc ?? null, pickList, {
             ...additionalData,
             partnerName: edge?.node?.Acc_AccountId__r?.Name?.value ?? "",
-            partnerId: (edge?.node?.Id ?? "") as PartnerId,
+            partnerId: (edge?.node?.Acc_AccountId__c?.value ?? "") as PartnerId,
           }),
         ),
       )
