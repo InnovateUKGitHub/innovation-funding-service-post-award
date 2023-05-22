@@ -2327,3 +2327,191 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
   </div>
 </div>
 `;
+
+exports[`Storyshots React Hook Form/Fieldset Standard Fieldset 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <fieldset
+    className="govuk-fieldset"
+  >
+    <label
+      className="govuk-label"
+      htmlFor="first-name"
+    >
+      First name
+    </label>
+    <div
+      className="govuk-hint"
+      id="hint-for-first-name"
+    >
+      your first name is your current legally registered first name
+    </div>
+    <div
+      className="govuk-input__wrapper"
+    >
+      <input
+        aria-describedby="hint-for-first-name"
+        className="govuk-input govuk-input--width-10"
+        id="first-name"
+        name="first-name"
+        placeholder="first name"
+        type="text"
+      />
+    </div>
+  </fieldset>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/Hint Standard Hint 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-hint"
+    id="hint-for-my-thing"
+  >
+    A Hint
+  </div>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/Label Standard Label 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <label
+    className="govuk-label"
+    htmlFor="fruit-input"
+  >
+    A Label
+  </label>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/P Bold P 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <p
+    className="govuk-body govuk-!-font-weight-bold"
+  >
+    A bold Paragraph
+  </p>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/P Multiline P 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <p
+    className="govuk-body govuk-body--multiline"
+  >
+    Brühl received its town privileges in 1285. From 1567 on, the city
+of Brühl was the official residence of the Prince Bishops of
+Cologne. In the 18th century the Prince Bishop Clemens August
+replaced a former ruined castle and built the Augustusburg and
+Falkenlust palaces near the city center. Today, both are listed as
+UNESCO World Heritage Sites because of their outstanding
+rococo architecture. Until 1990 Augustusburg Palace was used
+by the federal government to receive foreign heads of states
+visiting West Germany.
+  </p>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/P Standard P 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <p
+    className="govuk-body"
+  >
+    A standard Paragraph
+  </p>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/Submit Button Standard Submit Button 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <button
+    className="govuk-button govuk-!-margin-right-1"
+    data-module="govuk-button"
+    name="button_default"
+    type="submit"
+  >
+    Submit and return to summary
+  </button>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/TextInput Prefix Text Input 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-input__wrapper"
+  >
+    <div
+      className="govuk-input__prefix"
+    >
+      £
+    </div>
+    <input
+      className="govuk-input"
+      placeholder="write something"
+      type="text"
+    />
+  </div>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/TextInput Standard Text Input 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-input__wrapper"
+  >
+    <input
+      className="govuk-input"
+      placeholder="write something"
+      type="text"
+    />
+  </div>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/TextInput Suffix Text Input 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-input__wrapper"
+  >
+    <input
+      className="govuk-input"
+      placeholder="write something"
+      type="text"
+    />
+    <div
+      className="govuk-input__suffix"
+    >
+      moonbeams
+    </div>
+  </div>
+</div>
+`;

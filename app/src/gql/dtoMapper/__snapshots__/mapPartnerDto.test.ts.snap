@@ -46,6 +46,8 @@ Array [
     "partnerStatus": 1,
     "percentageParticipantCostsClaimed": 200,
     "percentageParticipantCostsSubmitted": 50,
+    "postcode": "SN2 1HG",
+    "postcodeStatus": 30,
     "remainingParticipantGrant": 3000,
     "roles": Object {
       "isFc": true,
@@ -78,6 +80,8 @@ Array [
     "partnerStatus": 4,
     "percentageParticipantCostsClaimed": 200,
     "percentageParticipantCostsSubmitted": 50,
+    "postcode": null,
+    "postcodeStatus": 10,
     "remainingParticipantGrant": 3000,
     "roles": Object {
       "isFc": true,
