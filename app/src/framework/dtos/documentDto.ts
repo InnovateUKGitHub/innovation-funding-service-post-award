@@ -11,7 +11,7 @@ export interface PartnerDocumentSummaryDto extends DocumentSummaryDto {
 }
 
 export interface PartnerDocumentSummaryDtoGql extends PartnerDocumentSummaryDto {
-  linkedEntityId: string;
+  linkedEntityId: LinkedEntityId;
 }
 
 export interface DocumentSummaryDto {

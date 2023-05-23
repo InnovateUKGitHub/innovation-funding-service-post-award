@@ -62,7 +62,7 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
 
   public deleteProjectPartnerDocumentsEditor(
     projectId: ProjectId,
-    partnerId: PartnerId,
+    partnerId: PartnerId | LinkedEntityId,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto,
     message: string,

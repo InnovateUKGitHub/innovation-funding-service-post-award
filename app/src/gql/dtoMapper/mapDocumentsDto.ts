@@ -93,7 +93,7 @@ const mapper: GQL.DtoMapper<
     return partnerId as PartnerId;
   },
   linkedEntityId(node) {
-    return node?.node?.LinkedEntityId?.value ?? "unknown-linked-entity-id";
+    return (node?.node?.LinkedEntityId?.value ?? "unknown-linked-entity-id") as LinkedEntityId;
   },
   partnerName(node, { partnerName }) {
     return partnerName;

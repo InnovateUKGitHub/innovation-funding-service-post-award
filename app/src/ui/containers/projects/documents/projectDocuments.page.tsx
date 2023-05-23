@@ -288,7 +288,7 @@ const ProjectDocumentsPageContainer = (props: ProjectDocumentPageParams & BasePr
     if ("partnerId" in doc) {
       stores.projectDocuments.deleteProjectPartnerDocumentsEditor(
         props.projectId,
-        doc.linkedEntityId as PartnerId,
+        doc.linkedEntityId,
         dto,
         doc,
         successMessage,

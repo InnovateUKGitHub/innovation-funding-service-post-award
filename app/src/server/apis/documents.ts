@@ -498,7 +498,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   }
 
   public async deletePartnerDocument(
-    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; documentId: string }>,
+    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId | LinkedEntityId; documentId: string }>,
   ): Promise<boolean> {
     const { documentId, projectId, partnerId } = params;
     const command = new DeletePartnerDocumentCommand(projectId, partnerId, documentId);
