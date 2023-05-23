@@ -3,7 +3,4 @@ commonAnnotations:
   environment: custom
 
 resources:
-  - ../../base
-
-patchesStrategicMerge:
-  - spring-profile-env.yml
+  - ../../../base
