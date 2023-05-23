@@ -57,7 +57,7 @@ const mapper: GQL.DtoMapper<
 
     return !!partnerId
       ? `/api/documents/partners/${projectId}/${linkedEntityId}/${fileId}/content`
-      : `/api/documents/partners/${projectId}/${fileId}/content`;
+      : `/api/documents/projects/${projectId}/${fileId}/content`;
   },
   fileName(node) {
     return node?.node?.ContentDocument?.FileExtension?.value
