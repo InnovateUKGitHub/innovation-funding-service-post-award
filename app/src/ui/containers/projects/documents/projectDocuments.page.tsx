@@ -2,6 +2,7 @@ import {
   DocumentSummaryDto,
   MultipleDocumentUploadDto,
   PartnerDocumentSummaryDto,
+  PartnerDocumentSummaryDtoGql,
   PartnerDtoGql,
   ProjectDtoGql,
 } from "@framework/dtos";
@@ -281,13 +282,13 @@ const ProjectDocumentsPageContainer = (props: ProjectDocumentPageParams & BasePr
     );
   };
 
-  const onDelete = (dto: MultipleDocumentUploadDto, doc: DocumentSummaryDto | PartnerDocumentSummaryDto) => {
+  const onDelete = (dto: MultipleDocumentUploadDto, doc: DocumentSummaryDto | PartnerDocumentSummaryDtoGql) => {
     stores.messages.clearMessages();
     const successMessage = getContent(x => x.documentMessages.deletedDocument({ deletedFileName: doc.fileName }));
     if ("partnerId" in doc) {
       stores.projectDocuments.deleteProjectPartnerDocumentsEditor(
         props.projectId,
-        doc.partnerId,
+        doc.linkedEntityId as PartnerId,
         dto,
         doc,
         successMessage,

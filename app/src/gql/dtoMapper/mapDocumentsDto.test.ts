@@ -2034,6 +2034,7 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
           "link",
           "isOwner",
           "partnerName",
+          "linkedEntityId",
         ],
         {
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
@@ -2063,6 +2064,7 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
           "link",
           "isOwner",
           "partnerName",
+          "linkedEntityId",
         ],
         {
           projectId: "a0E2600000kSp3gEAC" as ProjectId,

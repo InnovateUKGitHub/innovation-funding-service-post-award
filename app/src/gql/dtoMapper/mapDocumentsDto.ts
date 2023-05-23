@@ -1,8 +1,9 @@
 import { DocumentDescription } from "@framework/constants";
-import { PartnerDocumentSummaryDto } from "@framework/dtos";
+import { PartnerDocumentSummaryDtoGql } from "@framework/dtos";
 
 type DocumentSummaryNode = {
   readonly node: {
+    readonly LinkedEntityId?: GQL.Value<string>;
     readonly ContentDocument: {
       readonly Id: string | null;
       readonly LastModifiedBy: {
@@ -35,56 +36,66 @@ type PartnerDocumentsArrayNode = {
   } | null;
 } | null;
 
-type DocumentSummaryDtoMapping = PartnerDocumentSummaryDto;
+type DocumentSummaryDtoMapping = PartnerDocumentSummaryDtoGql;
 
 const mapper: GQL.DtoMapper<
   DocumentSummaryDtoMapping,
   DocumentSummaryNode,
-  { projectId: ProjectId; currentUser: { email: string }; partnerName: string; partnerId: PartnerId }
+  {
+    projectId: ProjectId;
+    currentUser: { email: string };
+    partnerName: string;
+    partnerId: PartnerId;
+  }
 > = {
-  id: function (node) {
+  id(node) {
     return node?.node?.ContentDocument?.Id ?? "";
   },
-  link: function (node, { projectId, partnerId }) {
+  link(node, { projectId, partnerId }) {
     const fileId = node?.node?.ContentDocument?.LatestPublishedVersionId?.value ?? "";
+    const linkedEntityId = node?.node?.LinkedEntityId?.value ?? "unknown-linked-entity-id";
+
     return !!partnerId
-      ? `/api/documents/partners/${projectId}/${partnerId}/${fileId}/content`
+      ? `/api/documents/partners/${projectId}/${linkedEntityId}/${fileId}/content`
       : `/api/documents/partners/${projectId}/${fileId}/content`;
   },
-  fileName: function (node) {
+  fileName(node) {
     return node?.node?.ContentDocument?.FileExtension?.value
       ? `${node?.node?.ContentDocument?.Title?.value}.${node?.node?.ContentDocument?.FileExtension?.value ?? ""}`
       : node?.node?.ContentDocument?.Title?.value ?? "";
   },
-  description: function (node) {
+  description(node) {
     return (
       (DocumentDescription[
         (node?.node?.ContentDocument?.Description?.value ?? "unknown") as unknown as DocumentDescription
       ] as unknown as DocumentDescription) ?? null
     );
   },
-  fileSize: function (node) {
+  fileSize(node) {
     return node?.node?.ContentDocument?.ContentSize?.value ?? 0;
   },
-  dateCreated: function (node) {
+  dateCreated(node) {
     return new Date(node?.node?.ContentDocument?.CreatedDate?.value ?? "");
   },
-  uploadedBy: function (node, { partnerName }) {
+  uploadedBy(node, { partnerName }) {
     if (!node?.node?.ContentDocument?.LastModifiedBy?.ContactId?.value) {
       return "Innovate UK";
     }
     return `${node?.node?.ContentDocument?.CreatedBy?.Name?.value ?? ""}${partnerName ? " of " + partnerName : ""}`;
   },
-  isOwner: function (node, { currentUser }) {
+  isOwner(node, { currentUser }) {
     return (
       typeof node?.node?.ContentDocument?.CreatedBy?.Username?.value === "string" &&
       node?.node?.ContentDocument?.CreatedBy?.Username?.value === currentUser?.email
     );
   },
-  partnerId: function (node, { partnerId }) {
-    return partnerId;
+  partnerId(node, { partnerId }) {
+    return partnerId as PartnerId;
   },
-  partnerName: function (node, { partnerName }) {
+  linkedEntityId(node) {
+    return node?.node?.LinkedEntityId?.value ?? "unknown-linked-entity-id";
+  },
+  partnerName(node, { partnerName }) {
     return partnerName;
   },
 };
@@ -95,16 +106,16 @@ const mapper: GQL.DtoMapper<
  */
 export function mapToDocumentSummaryDto<
   T extends DocumentSummaryNode,
-  PickList extends keyof PartnerDocumentSummaryDto,
+  PickList extends keyof PartnerDocumentSummaryDtoGql,
 >(
   node: T,
   pickList: PickList[],
   additionalData: { projectId: ProjectId; currentUser: { email: string }; partnerName: string; partnerId: PartnerId },
-): Pick<PartnerDocumentSummaryDto, PickList> {
+): Pick<PartnerDocumentSummaryDtoGql, PickList> {
   return pickList.reduce((dto, field) => {
     dto[field] = mapper[field](node, additionalData);
     return dto;
-  }, {} as Pick<PartnerDocumentSummaryDto, PickList>);
+  }, {} as Pick<PartnerDocumentSummaryDtoGql, PickList>);
 }
 
 /**
@@ -114,7 +125,7 @@ export function mapToDocumentSummaryDto<
  */
 export function mapToPartnerDocumentSummaryDtoArray<
   T extends ReadonlyArray<PartnerDocumentsArrayNode | null> | null,
-  PickList extends ArrayWithRequired<"partnerId", keyof Omit<PartnerDocumentSummaryDto, "partnerId">>,
+  PickList extends ArrayWithRequired<"partnerId", keyof Omit<PartnerDocumentSummaryDtoGql, "partnerId">>,
 >(
   edges: T,
   pickList: PickList,
@@ -153,9 +164,13 @@ export function mapToPartnerDocumentSummaryDtoArray<
  */
 export function mapToProjectDocumentSummaryDtoArray<
   T extends ReadonlyArray<DocumentSummaryNode | null> | null,
-  PickList extends keyof PartnerDocumentSummaryDto,
+  PickList extends keyof Omit<PartnerDocumentSummaryDtoGql, "linkedEntityId">,
 >(edges: T, pickList: PickList[], additionalData: { projectId: ProjectId; currentUser: { email: string } }) {
   return (edges ?? []).map(x =>
-    mapToDocumentSummaryDto(x ?? null, pickList, { ...additionalData, partnerId: "" as PartnerId, partnerName: "" }),
+    mapToDocumentSummaryDto(x ?? null, pickList, {
+      ...additionalData,
+      partnerId: "" as PartnerId,
+      partnerName: "",
+    }),
   );
 }

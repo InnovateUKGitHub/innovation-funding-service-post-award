@@ -30,6 +30,9 @@ export const projectDocumentsQuery = graphql`
                 ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { LastModifiedDate: { order: DESC } } }) {
                   edges {
                     node {
+                      LinkedEntityId {
+                        value
+                      }
                       ContentDocument {
                         Id
                         LastModifiedBy {

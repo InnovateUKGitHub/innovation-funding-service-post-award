@@ -51,6 +51,7 @@ export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOpt
       "link",
       "isOwner",
       "partnerName",
+      "linkedEntityId",
     ],
     {
       projectId,

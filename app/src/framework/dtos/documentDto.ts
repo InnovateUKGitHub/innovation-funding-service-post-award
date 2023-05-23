@@ -10,6 +10,10 @@ export interface PartnerDocumentSummaryDto extends DocumentSummaryDto {
   partnerName: string;
 }
 
+export interface PartnerDocumentSummaryDtoGql extends PartnerDocumentSummaryDto {
+  linkedEntityId: string;
+}
+
 export interface DocumentSummaryDto {
   dateCreated: Date;
   description?: DocumentDescription | null;
