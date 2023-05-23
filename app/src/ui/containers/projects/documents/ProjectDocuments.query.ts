@@ -32,6 +32,11 @@ export const projectDocumentsQuery = graphql`
                     node {
                       ContentDocument {
                         Id
+                        LastModifiedBy {
+                          ContactId {
+                            value
+                          }
+                        }
                         LatestPublishedVersionId {
                           value
                         }
@@ -100,6 +105,11 @@ export const projectDocumentsQuery = graphql`
                     node {
                       ContentDocument {
                         Id
+                        LastModifiedBy {
+                          ContactId {
+                            value
+                          }
+                        }
                         LatestPublishedVersionId {
                           value
                         }

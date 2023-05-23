@@ -5,6 +5,9 @@ type DocumentSummaryNode = {
   readonly node: {
     readonly ContentDocument: {
       readonly Id: string | null;
+      readonly LastModifiedBy: {
+        ContactId: GQL.Value<string>;
+      } | null;
       readonly ContentSize: GQL.Value<number>;
       readonly CreatedBy: {
         readonly Name: GQL.Value<string>;
@@ -67,7 +70,10 @@ const mapper: GQL.DtoMapper<
     return new Date(node?.node?.ContentDocument?.CreatedDate?.value ?? "");
   },
   uploadedBy: function (node, { partnerName }) {
-    return `${node?.node?.ContentDocument?.CreatedBy?.Name?.value ?? ""} of ${partnerName ?? ""}`;
+    if (!node?.node?.ContentDocument?.LastModifiedBy?.ContactId?.value) {
+      return "Innovate UK";
+    }
+    return `${node?.node?.ContentDocument?.CreatedBy?.Name?.value ?? ""}${partnerName ? " of " + partnerName : ""}`;
   },
   isOwner: function (node, { currentUser }) {
     return (
