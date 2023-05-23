@@ -1,3 +1,5 @@
+import { Tile } from "./tiles";
+
 /* eslint-disable no-unused-vars */
 export {};
 
@@ -78,7 +80,7 @@ declare global {
        */
       navigateToProject(projectId: string): Chainable<Element>;
 
-      selectTile(label: string): Chainable<Element>;
+      selectTile(label: Tile): Chainable<Element>;
 
       deletePcr(projectId: string): Chainable<Element>;
     }

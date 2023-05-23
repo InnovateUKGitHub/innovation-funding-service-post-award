@@ -1,5 +1,6 @@
 import "@testing-library/cypress/add-commands";
 import { visitApp } from "common/visit";
+import { Tile } from "typings/tiles";
 
 type CommandOptions = Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>;
 
@@ -91,7 +92,7 @@ const navigateToProject = (projectId: string) => {
   cy.get(`${projectCardCss} a`).wait(1000).contains(projectId).click({ force: true });
 };
 
-const selectTile = (label: string) => {
+const selectTile = (label: Tile) => {
   cy.get(".card-link").contains(label).click();
 };
 
