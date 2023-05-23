@@ -4,6 +4,3 @@ commonAnnotations:
 
 resources:
   - ../../base
-
-patchesStrategicMerge:
-  - spring-profile-env.yml

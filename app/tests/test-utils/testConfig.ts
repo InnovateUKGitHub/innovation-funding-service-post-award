@@ -73,8 +73,6 @@ export class TestConfig implements IConfig {
     nonJsMaxClaimLineItems: 10,
   };
 
-  public prettyLogs = false;
-
   public salesforceServiceUser = {
     clientId: "",
     connectionUrl: "",

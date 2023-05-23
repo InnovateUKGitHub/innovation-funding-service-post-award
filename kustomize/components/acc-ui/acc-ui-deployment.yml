@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: acc-ui
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: acc-ui
@@ -17,7 +17,12 @@ spec:
           image: acc-ui
           resources:
             limits:
-              memory: 128Mi
-              cpu: 500m
+              memory: 1024Mi
+              cpu: 1000m
           ports:
             - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: spring-profile-env
+            - secretRef:
+                name: funny-secrets

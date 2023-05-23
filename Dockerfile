@@ -1,9 +1,19 @@
-FROM node:19
-WORKDIR /usr/src/app
-COPY ["app", "./"]
+# See https://ukri.atlassian.net/wiki/spaces/ACC/pages/194019456
+FROM node:18.16.0
+
+WORKDIR /app
+
+COPY app/package.json /app/package.json
+COPY app/package-lock.json /app/package-lock.json
+COPY app/patches /app/patches
 RUN npm install
-COPY . .
-EXPOSE 8080
-RUN chown -R node /usr/src/app
+
+COPY app /app
+RUN chown -R node /app
+
 USER node
-CMD ["npm", "start"]
+EXPOSE 8080
+
+RUN npm run build
+
+CMD ["npm", "run", "start:server"]

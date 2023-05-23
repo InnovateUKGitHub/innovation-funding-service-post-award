@@ -4,3 +4,7 @@ commonAnnotations:
 
 bases:
   - ../../../env-base
+
+resources:
+  - ../../../../config-mgmt/env/local
+  - ../../../../secrets-mgmt/env/local

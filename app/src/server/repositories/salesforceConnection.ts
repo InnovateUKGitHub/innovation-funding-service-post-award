@@ -40,7 +40,7 @@ export interface ITokenInfo {
 export const tokenCache = new Cache<ITokenInfo>(configuration.timeouts.token);
 
 export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails): Promise<ITokenInfo> => {
-  const privateKey = readFile(configuration.certificates.salesforce);
+  const privateKey = configuration.certificates.salesforce;
   const jwtPayload = { prn: config.currentUsername };
   const jwtOptions: SignOptions = {
     issuer: config.clientId,

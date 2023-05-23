@@ -4,4 +4,4 @@ commonAnnotations:
   deployedWith: kustomize
 
 resources:
-  - spring-profile-env.yml
+  - funny-secrets.yml
