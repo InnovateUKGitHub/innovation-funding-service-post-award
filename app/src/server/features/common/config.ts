@@ -6,6 +6,14 @@ import { LogLevel } from "@framework/constants/enums";
 
 const defaultCacheTimeout = 720;
 
+const getRequiredEnvValue = (env: string): string => {
+  const value = process.env[env];
+
+  if (!value) throw new Error(`Failed to capture env var value ${env}`);
+
+  return value;
+};
+
 const getFeatureFlagValue = (value: string | undefined, defaultValue: boolean) => {
   return value === "true" ?? defaultValue;
 };
@@ -47,8 +55,6 @@ export interface IConfig {
   readonly logLevel: LogLevel;
 
   readonly options: IAppOptions;
-
-  readonly prettyLogs: boolean;
 
   readonly salesforceServiceUser: SalesforceUserConfig;
   readonly bankDetailsValidationUser: SalesforceUserConfig;
@@ -107,8 +113,8 @@ const timeouts = {
 };
 
 const certificates = {
-  salesforce: process.env.SALESFORCE_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
-  shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
+  salesforce: getRequiredEnvValue("SALESFORCE_PRIVATE_KEY_FILE"),
+  shibboleth: getRequiredEnvValue("SHIBBOLETH_PRIVATE_KEY_FILE"),
 };
 
 const disableCsp = getFeatureFlagValue(process.env.DISABLE_CSP, false);
@@ -121,7 +127,6 @@ const features: IFeatureFlags = {
 };
 
 const logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
-const prettyLogs = process.env.PRETTY_LOGS === "true";
 
 const salesforceServiceUser = {
   clientId: process.env.SALESFORCE_CLIENT_ID ?? "",
@@ -236,7 +241,6 @@ export const configuration: IConfig = {
   features,
   logLevel,
   options,
-  prettyLogs,
   salesforceServiceUser,
   bankDetailsValidationUser,
   serverUrl,
