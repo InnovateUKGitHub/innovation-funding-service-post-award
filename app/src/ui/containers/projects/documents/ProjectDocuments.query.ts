@@ -100,7 +100,7 @@ export const projectDocumentsQuery = graphql`
                 Acc_ProjectStatus__c {
                   value
                 }
-                ContentDocumentLinks(first: 2000) {
+                ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { LastModifiedDate: { order: DESC } } }) {
                   edges {
                     node {
                       ContentDocument {

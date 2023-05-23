@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1277db2c7b9cbc881b84b04ed3b430b2>>
+ * @generated SignedSource<<9384dc34c158e93282b0482a44ac0272>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -207,191 +207,212 @@ v4 = {
   "storageKey": null
 },
 v5 = {
-  "kind": "Literal",
-  "name": "first",
-  "value": 2000
-},
-v6 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "ContentDocumentLinkEdge",
-    "kind": "LinkedField",
-    "name": "edges",
-    "plural": true,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "concreteType": "ContentDocumentLink",
-        "kind": "LinkedField",
-        "name": "node",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "ContentDocument",
-            "kind": "LinkedField",
-            "name": "ContentDocument",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "User",
-                "kind": "LinkedField",
-                "name": "LastModifiedBy",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "IDValue",
-                    "kind": "LinkedField",
-                    "name": "ContactId",
-                    "plural": false,
-                    "selections": (v3/*: any*/),
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "IDValue",
-                "kind": "LinkedField",
-                "name": "LatestPublishedVersionId",
-                "plural": false,
-                "selections": (v3/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "LongTextAreaValue",
-                "kind": "LinkedField",
-                "name": "Description",
-                "plural": false,
-                "selections": (v3/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "IntValue",
-                "kind": "LinkedField",
-                "name": "ContentSize",
-                "plural": false,
-                "selections": (v3/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "DateTimeValue",
-                "kind": "LinkedField",
-                "name": "CreatedDate",
-                "plural": false,
-                "selections": (v3/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "StringValue",
-                "kind": "LinkedField",
-                "name": "FileType",
-                "plural": false,
-                "selections": (v3/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "StringValue",
-                "kind": "LinkedField",
-                "name": "FileExtension",
-                "plural": false,
-                "selections": (v3/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "StringValue",
-                "kind": "LinkedField",
-                "name": "Title",
-                "plural": false,
-                "selections": (v3/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "DateTimeValue",
-                "kind": "LinkedField",
-                "name": "LastModifiedDate",
-                "plural": false,
-                "selections": (v3/*: any*/),
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "User",
-                "kind": "LinkedField",
-                "name": "CreatedBy",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "StringValue",
-                    "kind": "LinkedField",
-                    "name": "Username",
-                    "plural": false,
-                    "selections": (v3/*: any*/),
-                    "storageKey": null
-                  },
-                  (v4/*: any*/)
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
+  "alias": null,
+  "args": [
+    {
+      "kind": "Literal",
+      "name": "first",
+      "value": 2000
+    },
+    {
+      "kind": "Literal",
+      "name": "orderBy",
+      "value": {
+        "ContentDocument": {
+          "LastModifiedDate": {
+            "order": "DESC"
           }
-        ],
-        "storageKey": null
+        }
       }
-    ],
-    "storageKey": null
-  }
-],
-v7 = {
+    }
+  ],
+  "concreteType": "ContentDocumentLinkConnection",
+  "kind": "LinkedField",
+  "name": "ContentDocumentLinks",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "ContentDocumentLinkEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "ContentDocumentLink",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "concreteType": "ContentDocument",
+              "kind": "LinkedField",
+              "name": "ContentDocument",
+              "plural": false,
+              "selections": [
+                (v2/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "LastModifiedBy",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "IDValue",
+                      "kind": "LinkedField",
+                      "name": "ContactId",
+                      "plural": false,
+                      "selections": (v3/*: any*/),
+                      "storageKey": null
+                    }
+                  ],
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "IDValue",
+                  "kind": "LinkedField",
+                  "name": "LatestPublishedVersionId",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "LongTextAreaValue",
+                  "kind": "LinkedField",
+                  "name": "Description",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "IntValue",
+                  "kind": "LinkedField",
+                  "name": "ContentSize",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "DateTimeValue",
+                  "kind": "LinkedField",
+                  "name": "CreatedDate",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "StringValue",
+                  "kind": "LinkedField",
+                  "name": "FileType",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "StringValue",
+                  "kind": "LinkedField",
+                  "name": "FileExtension",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "StringValue",
+                  "kind": "LinkedField",
+                  "name": "Title",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "DateTimeValue",
+                  "kind": "LinkedField",
+                  "name": "LastModifiedDate",
+                  "plural": false,
+                  "selections": (v3/*: any*/),
+                  "storageKey": null
+                },
+                {
+                  "alias": null,
+                  "args": null,
+                  "concreteType": "User",
+                  "kind": "LinkedField",
+                  "name": "CreatedBy",
+                  "plural": false,
+                  "selections": [
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "StringValue",
+                      "kind": "LinkedField",
+                      "name": "Username",
+                      "plural": false,
+                      "selections": (v3/*: any*/),
+                      "storageKey": null
+                    },
+                    (v4/*: any*/)
+                  ],
+                  "storageKey": null
+                }
+              ],
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ],
+  "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"LastModifiedDate\":{\"order\":\"DESC\"}}})"
+},
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isMo",
   "storageKey": null
 },
-v8 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isFc",
   "storageKey": null
 },
-v9 = {
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v10 = [
+v9 = [
   {
     "alias": null,
     "args": null,
@@ -519,29 +540,7 @@ v10 = [
                             "selections": (v3/*: any*/),
                             "storageKey": null
                           },
-                          {
-                            "alias": null,
-                            "args": [
-                              (v5/*: any*/),
-                              {
-                                "kind": "Literal",
-                                "name": "orderBy",
-                                "value": {
-                                  "ContentDocument": {
-                                    "LastModifiedDate": {
-                                      "order": "DESC"
-                                    }
-                                  }
-                                }
-                              }
-                            ],
-                            "concreteType": "ContentDocumentLinkConnection",
-                            "kind": "LinkedField",
-                            "name": "ContentDocumentLinks",
-                            "plural": false,
-                            "selections": (v6/*: any*/),
-                            "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"LastModifiedDate\":{\"order\":\"DESC\"}}})"
-                          }
+                          (v5/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -601,9 +600,9 @@ v10 = [
                             "name": "roles",
                             "plural": false,
                             "selections": [
+                              (v6/*: any*/),
                               (v7/*: any*/),
                               (v8/*: any*/),
-                              (v9/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -612,9 +611,9 @@ v10 = [
                                 "name": "partnerRoles",
                                 "plural": true,
                                 "selections": [
-                                  (v8/*: any*/),
                                   (v7/*: any*/),
-                                  (v9/*: any*/),
+                                  (v6/*: any*/),
+                                  (v8/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -658,18 +657,7 @@ v10 = [
                             "selections": (v3/*: any*/),
                             "storageKey": null
                           },
-                          {
-                            "alias": null,
-                            "args": [
-                              (v5/*: any*/)
-                            ],
-                            "concreteType": "ContentDocumentLinkConnection",
-                            "kind": "LinkedField",
-                            "name": "ContentDocumentLinks",
-                            "plural": false,
-                            "selections": (v6/*: any*/),
-                            "storageKey": "ContentDocumentLinks(first:2000)"
-                          }
+                          (v5/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -695,7 +683,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ProjectDocumentsQuery",
-    "selections": (v10/*: any*/),
+    "selections": (v9/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -704,19 +692,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "ProjectDocumentsQuery",
-    "selections": (v10/*: any*/)
+    "selections": (v9/*: any*/)
   },
   "params": {
-    "cacheID": "83b4e92e66688f83a54d3302b73ba728",
+    "cacheID": "ffe55c36fa3fcb5e8778f34b41bc8327",
     "id": null,
     "metadata": {},
     "name": "ProjectDocumentsQuery",
     "operationKind": "query",
-    "text": "query ProjectDocumentsQuery(\n  $projectId: ID!\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Username {\n                          value\n                        }\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000) {\n                edges {\n                  node {\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Username {\n                          value\n                        }\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectDocumentsQuery(\n  $projectId: ID!\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Username {\n                          value\n                        }\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Username {\n                          value\n                        }\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "9f776e0394bdfc5e570cc5c1891c75f6";
+(node as any).hash = "7cb4b564d1f153e1843d3f6a2724192a";
 
 export default node;
