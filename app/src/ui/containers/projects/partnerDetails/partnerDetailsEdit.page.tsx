@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fieldset, Label, TextInput, SubmitButton, FormGroup, Form, Hint, P } from "@ui/rhf-components";
 import { apiClient } from "@ui/apiClient";
-import { PartnerDto, PartnerStatus, PostcodeTaskStatus, ProjectRole } from "@framework/types";
+import { PartnerStatus, PostcodeTaskStatus, ProjectRole } from "@framework/types";
 import { Page, Projects, BackLink } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
@@ -26,7 +26,7 @@ interface PartnerDetailsEditComponentProps extends PartnerDetailsParams {
 }
 
 type FormValues = {
-  postcode: string;
+  "new-postcode": string;
   partnerStatus: PartnerStatus;
 };
 
@@ -57,16 +57,16 @@ export function PartnerDetailsEditComponent({
 
   const { register, handleSubmit, formState } = useForm<FormValues>({
     defaultValues: {
-      postcode: partner.postcode ?? "",
+      "new-postcode": partner.postcode ?? "",
       partnerStatus: partner.partnerStatus,
     },
     resolver: zodResolver(getZodResolver(isSetup, partner.postcodeStatus)),
   });
 
-  const onUpdate = async (data: Pick<PartnerDto, "postcode">) => {
+  const onUpdate = async (data: FormValues) => {
     await (apiClient as unknown as IApiClient).partners.updatePartner({
       partnerId,
-      partnerDto: { ...partner, ...data, id: partnerId, projectId },
+      partnerDto: { ...partner, ...data, postcode: data["new-postcode"], id: partnerId, projectId },
     });
     navigate(navigateTo);
   };
@@ -81,28 +81,24 @@ export function PartnerDetailsEditComponent({
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
-      <Form
-        onSubmit={handleSubmit(data => {
-          onUpdate({ postcode: data.postcode });
-        })}
-      >
+      <Form onSubmit={handleSubmit(onUpdate)}>
         <Fieldset>
           <FormGroup>
             <Label htmlFor="current-postcode">{getContent(x => x.pages.partnerDetailsEdit.labelCurrentPostcode)}</Label>
             <P id="current-postcode">{partner.postcode}</P>
           </FormGroup>
           <FormGroup>
-            <Label htmlFor="postcode">{getContent(x => x.pages.partnerDetailsEdit.labelNewPostcode)}</Label>
-            <Hint id="hint-for-postcode" className="govuk-hint">
+            <Label htmlFor="new-postcode">{getContent(x => x.pages.partnerDetailsEdit.labelNewPostcode)}</Label>
+            <Hint id="hint-for-new-postcode" className="govuk-hint">
               {getContent(x => x.pages.partnerDetailsEdit.hintNewPostcode)}
             </Hint>
             <TextInput
               defaultValue={partner.postcode ?? ""}
               inputWidth="one-quarter"
-              id="postcode"
-              hasError={!!formState.errors?.postcode}
-              aria-describedby="hint-for-postcode"
-              {...register("postcode")}
+              id="new-postcode"
+              hasError={!!formState.errors?.["new-postcode"]}
+              aria-describedby="hint-for-new-postcode"
+              {...register("new-postcode")}
             ></TextInput>
           </FormGroup>
         </Fieldset>
