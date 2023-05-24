@@ -15,6 +15,7 @@ export const spendTableEdit = () => {
   ].forEach(labourInput => {
     cy.getByAriaLabel(labourInput).clear().type("100");
   });
+  cy.wait(500);
   cy.get("td:nth-child(14)").contains("£1,200.00");
   [
     "Overheads Period 1",
