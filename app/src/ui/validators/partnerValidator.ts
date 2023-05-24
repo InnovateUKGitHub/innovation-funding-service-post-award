@@ -115,6 +115,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       this,
       this.model.partnerStatus !== PartnerStatus.Active || !!this.model.postcode?.length,
       this.getContent(x => x.validation.partnerDtoValidator.projectLocationPostcodeRequired),
+      "new-postcode",
     ),
   );
 
@@ -124,8 +125,9 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
           this,
           !!this.model.postcode?.length,
           this.getContent(x => x.validation.partnerDtoValidator.projectLocationPostcodeRequired),
+          "new-postcode",
         )
-      : Validation.valid(this);
+      : Validation.valid(this, false);
 
   public bankCheckValidation = this.conditionallyValidateBankDetails(() =>
     Validation.isFalse(

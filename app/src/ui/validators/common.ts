@@ -13,9 +13,16 @@ function rule<T>(
   test: (value: T | null) => boolean,
   defaultMessage: string,
   isRequired?: boolean,
-): (results: Results<ResultBase>, value: T | null, message?: string) => Result {
-  return (results: Results<ResultBase>, value: T | null, message?: string) => {
-    return new Result(results, results.showValidationErrors, test(value), message || defaultMessage, !!isRequired);
+): (results: Results<ResultBase>, value: T | null, message?: string, keyId?: string) => Result {
+  return (results: Results<ResultBase>, value: T | null, message?: string, keyId?: string) => {
+    return new Result(
+      results,
+      results.showValidationErrors,
+      test(value),
+      message || defaultMessage,
+      !!isRequired,
+      keyId,
+    );
   };
 }
 
@@ -29,8 +36,8 @@ function isValueWholeNumber(value: number): boolean {
 /**
  * returns a result with validation applied
  */
-export function valid(resultSet: Results<ResultBase>, isRequired?: boolean) {
-  return new Result(resultSet, resultSet.showValidationErrors, true, null, isRequired || false);
+export function valid(resultSet: Results<ResultBase>, isRequired?: boolean, keyId?: string) {
+  return new Result(resultSet, resultSet.showValidationErrors, true, null, isRequired || false, keyId);
 }
 
 /**
@@ -80,7 +87,11 @@ export function isUnchanged(
   return inValid(results, message || "Value can not be changed");
 }
 
-export const isTrue = rule<boolean>(value => value === null || value === undefined || value === true, "Should be true");
+export const isTrue = rule<boolean>(
+  value => value === null || value === undefined || value === true,
+  "Should be true",
+  false,
+);
 export const isFalse = rule<boolean>(
   value => value === null || value === undefined || value === false,
   "Should be false",
