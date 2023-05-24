@@ -5,6 +5,9 @@ import { useFormErrorContext } from "@ui/context/form-error";
 /**
  * This converts from html error format as returned by react-hook-form, zod or yup, into the format used
  * by our error components. Hopefully we should be able to retire the need for this function in the future.
+ *
+ * It uses the key of the errors object to be used as the url link, with the assumption that the `name` and the `id` of the input
+ * match
  */
 export const convertErrorsToResultFormat = <TFormValues extends AnyObject>(errors: FieldErrors<TFormValues>) => {
   if (!errors) return [];
