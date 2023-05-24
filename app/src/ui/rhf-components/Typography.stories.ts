@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { P } from "./P";
+import { P } from "./Typography";
 
 const meta: Meta<typeof P> = {
-  title: "React Hook Form/P",
+  title: "React Hook Form/Typography",
   component: P,
 };
 
