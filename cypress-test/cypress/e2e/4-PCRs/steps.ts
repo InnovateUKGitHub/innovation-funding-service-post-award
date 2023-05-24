@@ -206,7 +206,7 @@ export const giveUsInfoTodo = () => {
 export const explainChangesReasoning = () => {
   cy.get("h2.app-task-list__section").contains("Explain why you want to make the changes");
   cy.get("span.app-task-list__task-name").contains("Provide reasons to Innovate UK");
-  cy.get("strong.govuk-tag.govuk-tag--blue").contains("To do");
+  cy.get("strong.govuk-tag.govuk-tag--grey").contains("To do");
 };
 
 export const projectOutputs = () => {
@@ -298,7 +298,7 @@ export const reallocateCostsPcrType = () => {
 export const reallocateCostsGiveInfoTodo = () => {
   cy.get("span.app-task-list__task-name").contains("Reallocate project costs");
   cy.get("h2.app-task-list__section").contains("Give us information");
-  cy.get("strong.govuk-tag.govuk-tag--blue").contains("To do");
+  cy.get("strong.govuk-tag.govuk-tag--grey").contains("To do");
 };
 
 export const showPartners = () => {
