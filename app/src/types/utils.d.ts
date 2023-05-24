@@ -86,4 +86,7 @@ declare type AdditionalDataType<
  */
 declare type ArrayWithRequired<Required, Optional> = [...[Required], ...Optional[]];
 
+/**
+ * Gets a union of Values of an object
+ */
 declare type Values<T extends AnyObject> = T[keyof T];
