@@ -1,6 +1,6 @@
 commonAnnotations:
   deployedWith: kustomize
-  environment: prod
+  environment: preprod
 
 bases:
   - ../aws-base

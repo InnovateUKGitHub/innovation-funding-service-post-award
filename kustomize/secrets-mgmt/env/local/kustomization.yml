@@ -4,3 +4,4 @@ commonAnnotations:
 
 resources:
   - ../../base
+  - funny-secrets.yml

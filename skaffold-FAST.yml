@@ -104,6 +104,23 @@ profiles:
         paths:
           - kustomize/env/aws/perf
 
+  - name: preprod
+    build:
+      local:
+        useDockerCLI: false
+        useBuildkit: false
+        tryImportMissing: true
+        push: true
+      tagPolicy:
+        envTemplate:
+          template: "{{.TAG_ID}}"
+      artifacts: []
+    deploy:
+      kubeContext: preprod
+      kustomize:
+        paths:
+          - kustomize/env/aws/preprod
+
   - name: prod
     build:
       local:

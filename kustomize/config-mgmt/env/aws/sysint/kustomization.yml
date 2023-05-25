@@ -4,4 +4,6 @@ commonAnnotations:
 
 resources:
   - ../../../base
-
+  
+patchesStrategicMerge:
+  - extui-configmap.yml
