@@ -5,7 +5,7 @@ import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { getPending } from "@ui/helpers/get-pending";
 import { DocumentDescription } from "@framework/constants";
-import { DocumentSummaryDto, LoanDto, MultipleDocumentUploadDto } from "@framework/dtos";
+import { DocumentSummaryDto, LoanDto, MultipleDocumentUploadDto, ProjectDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import { LoanDtoValidator } from "@ui/validators/loanValidator";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -13,6 +13,8 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
 import { LoanRequestTable } from "./components/LoanTable";
 import { Content } from "@ui/components";
+import { getAuthRoles } from "@framework/types";
+import { Fragment } from "react";
 
 export interface LoansRequestParams {
   projectId: ProjectId;
@@ -21,6 +23,7 @@ export interface LoansRequestParams {
 
 interface LoansRequestPageProps extends LoansRequestParams, BaseProps {
   projectId: ProjectId;
+  project: ProjectDto;
   loan: Required<LoanDto>;
   documents: DocumentSummaryDto[];
   loanEditor: IEditorStore<LoanDto, LoanDtoValidator>;
@@ -33,8 +36,16 @@ interface LoansRequestPageProps extends LoansRequestParams, BaseProps {
 const RequestForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
 const CommentsForm = ACC.createTypedForm<LoanDto>();
 
-const LoansRequestPage = ({ loan, loanEditor, loanDocsEditor, documents, ...props }: LoansRequestPageProps) => {
+const LoansRequestPage = ({
+  project,
+  loan,
+  loanEditor,
+  loanDocsEditor,
+  documents,
+  ...props
+}: LoansRequestPageProps) => {
   const { getContent } = useContent();
+  const { isFc } = getAuthRoles(project.roles);
 
   const createPcrLink = <ACC.Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}> </ACC.Link>;
 
@@ -50,75 +61,89 @@ const LoansRequestPage = ({ loan, loanEditor, loanDocsEditor, documents, ...prop
         <LoanRequestTable {...loan} />
       </ACC.Section>
 
-      <ACC.Section title={getContent(x => x.pages.loansRequest.uploadTitle)}>
-        <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.uploadIntro)}</ACC.Renderers.SimpleString>
+      {isFc && (
+        <ACC.Section title={getContent(x => x.pages.loansRequest.uploadTitle)}>
+          <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.uploadIntro)}</ACC.Renderers.SimpleString>
 
-        <RequestForm.Form
-          qa="loanDocumentsForm"
-          enctype="multipart"
-          editor={loanDocsEditor}
-          onChange={dto => props.onDocsChange(false, dto)}
-          onSubmit={() => props.onDocsChange(true, loanDocsEditor.data)}
-        >
-          <RequestForm.Fieldset>
-            <ACC.DocumentGuidance />
-
-            <RequestForm.MultipleFileUpload
-              name="attachment"
-              labelHidden
-              label={getContent(x => x.pages.loansRequest.uploadFormLabel)}
-              validation={loanDocsEditor.validator.files}
-              value={data => data.files}
-              update={(dto, files) => {
-                dto.files = files || [];
-                dto.description = DocumentDescription.Loan;
-              }}
-            />
-          </RequestForm.Fieldset>
-
-          <RequestForm.Button
-            styling="Secondary"
-            name="loan-document-upload"
-            onClick={() => props.onDocsChange(true, loanDocsEditor.data)}
+          <RequestForm.Form
+            qa="loanDocumentsForm"
+            enctype="multipart"
+            editor={loanDocsEditor}
+            onChange={dto => props.onDocsChange(false, dto)}
+            onSubmit={() => props.onDocsChange(true, loanDocsEditor.data)}
           >
-            {getContent(x => x.pages.loansRequest.uploadFormButton)}
-          </RequestForm.Button>
-        </RequestForm.Form>
-      </ACC.Section>
+            <RequestForm.Fieldset>
+              <ACC.DocumentGuidance />
+
+              <RequestForm.MultipleFileUpload
+                name="attachment"
+                labelHidden
+                label={getContent(x => x.pages.loansRequest.uploadFormLabel)}
+                validation={loanDocsEditor.validator.files}
+                value={data => data.files}
+                update={(dto, files) => {
+                  dto.files = files || [];
+                  dto.description = DocumentDescription.Loan;
+                }}
+              />
+            </RequestForm.Fieldset>
+
+            <RequestForm.Button
+              styling="Secondary"
+              name="loan-document-upload"
+              onClick={() => props.onDocsChange(true, loanDocsEditor.data)}
+            >
+              {getContent(x => x.pages.loansRequest.uploadFormButton)}
+            </RequestForm.Button>
+          </RequestForm.Form>
+        </ACC.Section>
+      )}
 
       <ACC.Section>
-        <ACC.DocumentEdit
-          qa="loan-documents"
-          documents={documents}
-          onRemove={document => props.onDocsDelete(loanDocsEditor.data, document)}
-        />
+        {isFc ? (
+          <ACC.DocumentEdit
+            qa="loan-documents-editor"
+            documents={documents}
+            onRemove={document => props.onDocsDelete(loanDocsEditor.data, document)}
+          />
+        ) : (
+          <ACC.DocumentView qa="loan-documents-viewer" documents={documents} />
+        )}
       </ACC.Section>
 
-      <ACC.Section>
-        <CommentsForm.Form qa="summary-form" editor={loanEditor} onSubmit={() => props.onLoanUpdate(loanEditor.data)}>
-          <CommentsForm.Fieldset heading={getContent(x => x.pages.loansRequest.commentTitle)}>
-            <ACC.TextHint>{getContent(x => x.pages.loansRequest.commentHint)}</ACC.TextHint>
+      {isFc && (
+        <>
+          <ACC.Section>
+            <CommentsForm.Form
+              qa="summary-form"
+              editor={loanEditor}
+              onSubmit={() => props.onLoanUpdate(loanEditor.data)}
+            >
+              <CommentsForm.Fieldset heading={getContent(x => x.pages.loansRequest.commentTitle)}>
+                <ACC.TextHint>{getContent(x => x.pages.loansRequest.commentHint)}</ACC.TextHint>
 
-            <CommentsForm.MultilineString
-              qa="info-text-area"
-              name="comments"
-              value={x => x.comments}
-              update={(m, v) => (m.comments = v || "")}
-              validation={loanEditor.validator.comments}
-            />
-          </CommentsForm.Fieldset>
+                <CommentsForm.MultilineString
+                  qa="info-text-area"
+                  name="comments"
+                  value={x => x.comments}
+                  update={(m, v) => (m.comments = v || "")}
+                  validation={loanEditor.validator.comments}
+                />
+              </CommentsForm.Fieldset>
 
-          <CommentsForm.Fieldset heading={getContent(x => x.pages.loansRequest.loanDeclarationTitle)}>
-            <ACC.Renderers.SimpleString>
-              {getContent(x => x.pages.loansRequest.loanDeclaration)}
-            </ACC.Renderers.SimpleString>
-          </CommentsForm.Fieldset>
+              <CommentsForm.Fieldset heading={getContent(x => x.pages.loansRequest.loanDeclarationTitle)}>
+                <ACC.Renderers.SimpleString>
+                  {getContent(x => x.pages.loansRequest.loanDeclaration)}
+                </ACC.Renderers.SimpleString>
+              </CommentsForm.Fieldset>
 
-          <CommentsForm.Fieldset qa="save-buttons">
-            <CommentsForm.Submit>{getContent(x => x.pages.loansRequest.loanSubmitButton)}</CommentsForm.Submit>
-          </CommentsForm.Fieldset>
-        </CommentsForm.Form>
-      </ACC.Section>
+              <CommentsForm.Fieldset qa="save-buttons">
+                <CommentsForm.Submit>{getContent(x => x.pages.loansRequest.loanSubmitButton)}</CommentsForm.Submit>
+              </CommentsForm.Fieldset>
+            </CommentsForm.Form>
+          </ACC.Section>
+        </>
+      )}
     </>
   );
 };
@@ -171,6 +196,7 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
       {payload?.loan.totals && (
         <LoansRequestPage
           {...props}
+          project={payload.project}
           loan={payload.loan as Required<LoanDto>}
           loanEditor={payload.loanEditor}
           loanDocsEditor={payload.loanDocsEditor}
