@@ -1,6 +1,6 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: extui-configmap
+  name: acc-ui-configmap
 data:
   ACC_ENVIRONMENT: custom

@@ -4,4 +4,4 @@ commonAnnotations:
   deployedWith: kustomize
 
 resources:
-  - extui-configmap.yml
+  - acc-ui-configmap.yml
