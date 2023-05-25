@@ -16,12 +16,16 @@ build:
 deploy:
   statusCheckDeadlineSeconds: 600
   kustomize:
+    buildArgs:
+      # Enable KSOPS to add plugins/execute
+      - "--enable-alpha-plugins=true"
+      - "--enable-exec=true"
     paths:
       - kustomize/env/stub/local/dev
 
 portForward:
   - resourceType: Service
-    resourceName: acc-ui
+    resourceName: acc-ui-service
     namespace: default
     port: 8080
     localPort: 8080

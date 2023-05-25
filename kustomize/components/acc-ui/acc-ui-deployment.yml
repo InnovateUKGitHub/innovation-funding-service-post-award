@@ -23,6 +23,6 @@ spec:
             - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: extui-configmap
+                name: acc-ui-configmap
             - secretRef:
-                name: funny-secrets
+                name: acc-ui-secrets

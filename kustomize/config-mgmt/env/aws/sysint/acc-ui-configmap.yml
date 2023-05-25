@@ -1,7 +1,7 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: extui-configmap
+  name: acc-ui-configmap
 data:
   ACC_ENVIRONMENT: sysint
   SERVER_URL: https://www-acc-sysint.apps.org-env-0.org.innovateuk.ukri.org

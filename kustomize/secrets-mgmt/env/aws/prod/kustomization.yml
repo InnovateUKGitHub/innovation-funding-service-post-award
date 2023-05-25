@@ -1,6 +1,0 @@
-commonAnnotations:
-  deployedWith: kustomize
-  environment: prod
-
-resources:
-  - ../../../base
