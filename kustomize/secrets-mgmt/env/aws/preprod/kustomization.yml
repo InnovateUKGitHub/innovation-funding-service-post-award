@@ -1,9 +1,6 @@
 commonAnnotations:
   deployedWith: kustomize
-  environment: uat
+  environment: preprod
 
 resources:
   - ../../../base
-  
-patchesStrategicMerge:
-  - extui-configmap.yml

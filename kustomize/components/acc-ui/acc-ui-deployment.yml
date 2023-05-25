@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: acc-ui
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: acc-ui
@@ -23,6 +23,6 @@ spec:
             - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: spring-profile-env
+                name: extui-configmap
             - secretRef:
                 name: funny-secrets
