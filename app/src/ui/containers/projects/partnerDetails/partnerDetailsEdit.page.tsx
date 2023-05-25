@@ -83,10 +83,14 @@ export function PartnerDetailsEditComponent({
     >
       <Form onSubmit={handleSubmit(onUpdate)}>
         <Fieldset>
-          <FormGroup>
-            <Label htmlFor="current-postcode">{getContent(x => x.pages.partnerDetailsEdit.labelCurrentPostcode)}</Label>
-            <P id="current-postcode">{partner.postcode}</P>
-          </FormGroup>
+          {!isSetup && (
+            <FormGroup>
+              <Label htmlFor="current-postcode">
+                {getContent(x => x.pages.partnerDetailsEdit.labelCurrentPostcode)}
+              </Label>
+              <P id="current-postcode">{partner.postcode}</P>
+            </FormGroup>
+          )}
           <FormGroup>
             <Label htmlFor="new-postcode">{getContent(x => x.pages.partnerDetailsEdit.labelNewPostcode)}</Label>
             <Hint id="hint-for-new-postcode" className="govuk-hint">
