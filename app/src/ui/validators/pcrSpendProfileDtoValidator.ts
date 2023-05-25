@@ -209,7 +209,7 @@ export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendP
         this.getContent(x => x.validation.pcrLabourCostDtoValidator.daysSpentOnProjectRequired),
       ),
     () =>
-      Validation.number(
+      Validation.isPositiveInteger(
         this,
         this.model.daysSpentOnProject,
         this.getContent(x => x.validation.pcrLabourCostDtoValidator.daysSpentOnProjectNotNumber),

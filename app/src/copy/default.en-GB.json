@@ -1688,7 +1688,7 @@
       "grossCostNotNumber": "Gross cost of role must be a number",
       "grossCostNotCurrency": "Gross cost of role must be 2 decimal places or fewer",
       "daysSpentOnProjectRequired": "Days spent on project is required",
-      "daysSpentOnProjectNotNumber": "Days spent on project must be a number",
+      "daysSpentOnProjectNotNumber": "Days spent on project must be a whole number, like 15",
       "ratePerDayRequired": "Rate per day is required",
       "ratePerDayNotNumber": "Rate per day must be a number",
       "ratePerDayNotCurrency": "Rate per day must be 2 decimal places or fewer"
