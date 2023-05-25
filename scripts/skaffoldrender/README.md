@@ -6,6 +6,8 @@ To use...
 2. Call `python3 scripts/skaffoldrender --help`
 3. Adjust arguments and call again.
 
+> Ensure you are logged into Nexus! Do `docker login` to begin.
+
 ## Example
 
 ```bash
