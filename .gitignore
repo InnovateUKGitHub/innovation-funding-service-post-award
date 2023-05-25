@@ -14,6 +14,9 @@ app/security
 .env
 .sfdx
 funny-secrets*
+render-acc-ui-*
+acc-ui-docker-image.json
+__pycache__
 
 # Mac OS X files
 .DS_Store
