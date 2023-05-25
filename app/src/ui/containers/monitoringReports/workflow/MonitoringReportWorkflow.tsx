@@ -1,5 +1,6 @@
 import { MonitoringReportStatus } from "@framework/constants";
-import { Info, Page, Projects, ValidationMessage } from "@ui/components";
+import { Page, Projects, ValidationMessage } from "@ui/components";
+import { scrollToTheTopSmoothly } from "@framework/util";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/workflow/monitoringReportWorkflowDef";
 import { useContent } from "@ui/hooks";
@@ -11,12 +12,17 @@ import {
 } from "./MonitoringReportWorkflowProps";
 import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
 import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
+import { useEffect } from "react";
 
 export const MonitoringReportWorkflow = (
   props: MonitoringReportWorkflowData & MonitoringReportWorkflowParams & MonitoringReportWorkflowCallbacks & BaseProps,
 ) => {
   const { project, editor, step, report } = props;
   const { getContent } = useContent();
+
+  useEffect(() => {
+    scrollToTheTopSmoothly();
+  }, [props.step]);
 
   const workflow = MonitoringReportWorkflowDef.getWorkflow(report, step);
   const urlMode = props.mode;
