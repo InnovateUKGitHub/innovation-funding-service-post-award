@@ -1,3 +1,7 @@
+const moLogin = "testman2@testing.com";
+let date = new Date();
+let comments = JSON.stringify(date);
+
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -474,8 +478,8 @@ export const openSectionClaimData = () => {
     "Draft",
     "View",
     "ABS EUI Medium Enterprise",
-    "£3,300.00",
-    "-£3,300.00",
+    "£17,900.00",
+    "-£17,900.00",
     "Submitted to Monitoring Officer",
   ].forEach(cell => {
     cy.tableCell(cell);
@@ -491,83 +495,81 @@ export const closedSectionAccordions = () => {
   cy.get("p").contains("There are no closed claims for this partner");
 };
 
-export const compNameAndHeadings = () => {
-  ["Competition name:", "Competition type:"].forEach(comp => {
-    cy.get("span").contains(comp);
-  }),
-    shouldShowProjectTitle,
-    cy.get("h1").contains("Claim");
-  cy.get("h2").contains("ABS EUI Medium Enterprise claim");
+export const projTitleandSubheaders = () => {
+  ["Competition name:", "Competition type:", "a002600000CEUmL", "CR&D"].forEach(subHeading => {
+    cy.get("p").contains(subHeading);
+  });
+  shouldShowProjectTitle;
+  cy.get("h2").contains("ABS EUI Medium Enterprise claim for period 1:");
 };
 
-export const costCatWithClaimDetails = () => {
+export const submittedCostCats = () => {
   ["Category", "Forecast for period", "Costs claimed this period", "Difference (£)", "Difference (%)"].forEach(
-    claimHead => {
-      cy.tableHeader(claimHead);
+    tablehead => {
+      cy.tableHeader(tablehead);
     },
-  ),
-    [
-      "Labour",
-      "Overheads",
-      "Materials",
-      "Capital usage",
-      "Subcontracting",
-      "Travel and subsistence",
-      "Other costs",
-      "Other costs 2",
-      "Other costs 3",
-      "Other costs 4",
-      "Other costs 5",
-      "Total",
-    ].forEach(costCat => {
-      cy.get("td:nth-child(1)").contains(costCat);
-    }),
-    ["£2,000.00", "£100.00", "£200.00", "£1,000.00", "£0.00", "£3,300.00"].forEach(claimCost => {
-      cy.get("td:nth-child(3)").contains(claimCost);
-    }),
-    ["-£2,000.00", "-£100.00", "-£200.00", "-£1,000.00", "£0.00", "-£3,300.00"].forEach(currencyDifference => {
-      cy.get("td:nth-child(4)").contains(currencyDifference);
-    });
-  cy.tableCell("0.00%");
+  );
+  ["£0.00", "£2,000.00", "-£2,000.00", "0.00%"].forEach(labourCost => {
+    cy.contains("td", "Labour").siblings().contains(labourCost);
+  });
+  ["£0.00", "£100", "-£100", "0.00%"].forEach(overheadsCost => {
+    cy.contains("td", "Overheads").siblings().contains(overheadsCost);
+  });
+  ["£0.00", "£200", "-£200.00", "0.00%"].forEach(materialsCost => {
+    cy.contains("td", "Materials").siblings().contains(materialsCost);
+  });
+  ["£0.00", "£3,000.00", "-£3,000.00", "0.00%"].forEach(capUseCost => {
+    cy.contains("td", "Capital usage").siblings().contains(capUseCost);
+  });
+  ["£0.00", "£1,500.00", "-£1,500.00", "0.00%"].forEach(subCost => {
+    cy.contains("td", "Subcontracting").siblings().contains(subCost);
+  });
+  ["£0.00", "£1,600.00", "-£1,600.00", "0.00%"].forEach(travelCost => {
+    cy.contains("td", "Travel and subsistence").siblings().contains(travelCost);
+  });
+  ["£0.00", "£1,700.00", "-£1,700.00", "0.00%"].forEach(otherOneCost => {
+    cy.contains("td", "Other costs").siblings().contains(otherOneCost);
+  });
+  ["£0.00", "£1,800.00", "-£1,800.00", "0.00%"].forEach(otherTwoCost => {
+    cy.contains("td", "Other costs 2").siblings().contains(otherTwoCost);
+  });
+  ["£0.00", "£1,900.00", "-£1,900.00", "0.00%"].forEach(otherThreeCost => {
+    cy.contains("td", "Other costs 3").siblings().contains(otherThreeCost);
+  });
+  ["£0.00", "£2,000.00", "-£2,000.00", "0.00%"].forEach(otherFourCost => {
+    cy.contains("td", "Other costs 4").siblings().contains(otherFourCost);
+  });
+  ["£0.00", "£2,100.00", "-£2,100.00", "0.00%"].forEach(otherFiveCost => {
+    cy.contains("td", "Other costs 5").siblings().contains(otherFiveCost);
+  });
 };
 
-export const queryOrSubmitOptions = () => {
-  cy.get("h2").contains("How do you want to proceed with this claim?");
+export const queryTheClaim = () => {
   cy.get(`input[id="status_MO Queried"]`).click({ force: true });
-  cy.get(`input[id="status_Awaiting IUK Approval"]`).click({ force: true });
-};
-
-export const additionalInfoSection = () => {
   cy.get("h2").contains("Additional information");
-  cy.get("p").contains("If you query the claim, you must explain");
-  cy.get("p").contains("I am satisfied that the costs claimed appear to comply with the terms and conditions");
+  cy.getByQA("field-comments").contains(
+    "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
+  );
+  cy.get("textarea").clear().type(comments);
+  cy.get("p").contains("You have");
+  cy.get("p").contains("I am satisfied that the costs claimed appear to comply");
   cy.getByQA("cr&d-reminder").contains("You must submit a monitoring report");
+  cy.getByQA("button_default-qa").contains("Send query").click();
 };
 
-export const queryClaimToFc = () => {
-  cy.get(`input[id="status_MO Queried"]`).click({ force: true });
-  cy.get("textarea").clear().type(standardComments);
-  cy.get("p").contains("You have 926 characters remaining");
-  cy.getByQA("button_default-qa").contains("Send query").click({ force: true });
-};
-
-export const navigateToDashSwitchToFC = () => {
+export const navigateBackToDash = () => {
   cy.backLink("Back to project").click();
   cy.get("h1").contains("Project overview");
   cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
 };
 
-export const navigateToQueriedClaim = () => {
+export const goToQueriedClaim = () => {
   cy.selectTile("Claims");
-  cy.tableCell("Queried by Monitoring Officer");
-  cy.get("a").contains("Edit").click();
-};
-
-export const resubmitClaimAsFc = () => {
-  cy.get("td").contains("This is a standard message for use in a text box.");
+  cy.contains("td", "Queried by Monitoring Officer").siblings().contains("a", "Edit").click();
+  cy.get("h1").contains("Costs to be claimed");
+  cy.get("td").contains(comments);
   cy.getByQA("button_default-qa").contains("Continue to claims documents").click();
   cy.get("a").contains("Continue to update forecast").click();
   cy.getByQA("button_default-qa").contains("Continue to summary").click();
-  cy.get("h1").contains("Claim summary");
   cy.getByQA("button_default-qa").contains("Submit claim").click();
 };

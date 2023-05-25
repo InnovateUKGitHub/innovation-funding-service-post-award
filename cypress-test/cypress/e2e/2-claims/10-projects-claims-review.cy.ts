@@ -1,69 +1,44 @@
+import { moClaimTidyUp } from "common/claimtidyup";
 import { visitApp } from "../../common/visit";
 import {
-  additionalInfoSection,
-  closedSectionAccordions,
-  compNameAndHeadings,
-  costCatWithClaimDetails,
-  navigateToDashSwitchToFC,
-  navigateToQueriedClaim,
+  goToQueriedClaim,
+  navigateBackToDash,
+  projTitleandSubheaders,
+  queryTheClaim,
+  submittedCostCats,
   openSectionClaimData,
-  queryClaimToFc,
-  queryOrSubmitOptions,
-  resubmitClaimAsFc,
+  closedSectionAccordions,
   shouldShowProjectTitle,
 } from "./steps";
-import { claimTidyUp } from "common/claimtidyup";
 
-describe("Claims > Review as MO and review as FC once queried", () => {
+describe("Claims > Review as MO", () => {
   before(() => {
-    /**
-     * cy.clearCookies is included because we utilise the user switcher a lot in this test.
-     * I ran into issues where previous (or no) users persisted in user switcher.
-     * Clearing cookies at the beginning of this test run ensures it begins correctly.
-     */
-    cy.clearCookies();
     visitApp({ path: "projects/a0E2600000kSvOGEA0/claims/dashboard" });
-    claimTidyUp("Queried by Monitoring Officer");
+    moClaimTidyUp("Queried by Monitoring Officer");
   });
 
-  it("Should make sure the MO is logged in", () => {
-    cy.switchUserTo("testman2@testing.com");
-  });
-
-  it("Should have the project name displayed", shouldShowProjectTitle);
-
-  it("Should show the Claim heading", () => {
+  it("Should ensure the Claims dashboard has loaded", () => {
     cy.get("h1").contains("Claims");
   });
 
-  it("Should have a back option", () => {
-    cy.backLink("Back to project");
-  });
+  it("Should have the project name displayed", shouldShowProjectTitle);
 
   it("Should have an Open section with a table of claims visible", openSectionClaimData);
 
   it("Should have a closed section with accordions", closedSectionAccordions);
 
-  it("Should allow the MO to access and review the submitted claim", () => {
-    cy.get("a").contains("Review").click();
+  it("Should click into 'Review claim' as MO and ensure the page loads", () => {
+    cy.get("tr").contains("ABS EUI Medium Enterprise").siblings().contains("a", "Review").click();
+    cy.get("h1").contains("Claim");
   });
 
-  it("Should display competition name and type as well as page headings and project name", compNameAndHeadings);
+  it("Should contain the project title and correct claim headings and information", projTitleandSubheaders);
 
-  it("Should display cost category table with claim costs populated", costCatWithClaimDetails);
+  it("Should show the cost category table with submitted costs", submittedCostCats);
 
-  /**
-   * Note the current code in radiolist will not allow for getbylabel
-   */
-  it("Should allow MO to proceed by Querying or Submitting the claim", queryOrSubmitOptions);
+  it("Should query the claim back to the partner", queryTheClaim);
 
-  it("Should display an 'Additional information' section", additionalInfoSection);
+  it("Should navigate back to the project dashboard and log in as the finance contact", navigateBackToDash);
 
-  it("Should query the claim back to the finance contact", queryClaimToFc);
-
-  it("Should navigate to project dashboard & switch user to Finance Contact", navigateToDashSwitchToFC);
-
-  it("Should navigate to claims and see the queried claim", navigateToQueriedClaim);
-
-  it("Should allow the FC to re-submit the claim", resubmitClaimAsFc);
+  it("Should navigate to the queried claim and check for comments before re-submitting", goToQueriedClaim);
 });
