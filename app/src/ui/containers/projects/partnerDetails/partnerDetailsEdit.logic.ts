@@ -44,7 +44,7 @@ export const useOnUpdatePartnerDetails = (
     req: data =>
       apiClient.partners.updatePartner({
         partnerId,
-        partnerDto: { ...partner, postcode: data["new-postcode"], id: partnerId, projectId },
+        partnerDto: { ...partner, ...data, postcode: data["new-postcode"], id: partnerId, projectId },
       }),
     onSuccess: () => navigate(navigateTo),
   });

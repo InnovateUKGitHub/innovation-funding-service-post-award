@@ -19,7 +19,7 @@ export class ProjectSetupPartnerPostcodeFormHandler extends StandardFormHandlerB
   ): Promise<PartnerDto> {
     const dto = await context.runQuery(new GetByIdQuery(params.partnerId));
 
-    const newPostcode = "postcode";
+    const newPostcode = "new-postcode";
 
     dto.postcode = body[newPostcode];
 
