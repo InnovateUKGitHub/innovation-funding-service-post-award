@@ -1,17 +1,13 @@
-import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fieldset, Label, TextInput, SubmitButton, FormGroup, Form, Hint, P } from "@ui/rhf-components";
-import { apiClient } from "@ui/apiClient";
-import { IAppError, PartnerStatus, PostcodeTaskStatus, ProjectRole } from "@framework/types";
+import { PostcodeTaskStatus, ProjectRole } from "@framework/types";
 import { Page, Projects, BackLink } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
-import { usePartnerDetailsEditQuery } from "./partnerDetailsEdit.logic";
-import { IApiClient } from "@server/apis";
-import { isApiError, useValidationErrors } from "@framework/util/errorHelpers";
+import { usePartnerDetailsEditQuery, FormValues, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
+import { useValidationErrors } from "@framework/util/errorHelpers";
 import { partnerDetailsEditSchema, postcodeSetupSchema, emptySchema } from "./partnerDetailsEdit.zod";
-import { useState } from "react";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
@@ -25,11 +21,6 @@ interface PartnerDetailsEditComponentProps extends PartnerDetailsParams {
   navigateTo: string;
   isSetup?: boolean;
 }
-
-type FormValues = {
-  "new-postcode": string;
-  partnerStatus: PartnerStatus;
-};
 
 const getZodResolver = (isSetupPage: boolean, postcodeStatus: PostcodeTaskStatus) => {
   if (isSetupPage) {
@@ -53,9 +44,7 @@ export function PartnerDetailsEditComponent({
   isSetup = false,
 }: BaseProps & PartnerDetailsEditComponentProps) {
   const { project, partner } = usePartnerDetailsEditQuery(projectId, partnerId);
-  const navigate = useNavigate();
   const { getContent } = useContent();
-  const [apiError, setApiError] = useState<IAppError | null>(null);
 
   const { register, handleSubmit, formState } = useForm<FormValues>({
     defaultValues: {
@@ -65,19 +54,7 @@ export function PartnerDetailsEditComponent({
     resolver: zodResolver(getZodResolver(isSetup, partner.postcodeStatus)),
   });
 
-  const onUpdate = async (data: FormValues) => {
-    try {
-      await (apiClient as unknown as IApiClient).partners.updatePartner({
-        partnerId,
-        partnerDto: { ...partner, ...data, postcode: data["new-postcode"], id: partnerId, projectId },
-      });
-      navigate(navigateTo);
-    } catch (e: unknown) {
-      if (isApiError(e)) {
-        setApiError(e);
-      }
-    }
-  };
+  const { onUpdate, apiError } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
 
   const errors = useValidationErrors<FormValues>(formState.errors);
 
