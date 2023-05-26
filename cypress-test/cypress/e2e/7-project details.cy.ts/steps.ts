@@ -248,10 +248,10 @@ export const editEachPartner = () => {
       cy.getByQA("partner-details").contains(partnerName),
       cy.get("a").contains("Edit").click(),
       cy
-        .get("#new-partner-postcode-value")
+        .get("#new-postcode")
         .clear()
         .type("SN" + index),
-      cy.getByQA("button_default-qa").contains("Save and return to partner information").click(),
+      cy.submitButton("Save and return to partner information").click(),
       cy.getByQA("partner-name"),
       cy.backLink("Back to project details").click();
   });
@@ -270,8 +270,8 @@ export const clearAndRevertPostodes = () => {
     cy.getByQA("partner-information").contains(partnerName).click(),
       cy.getByQA("partner-details").contains(partnerName),
       cy.get("a").contains("Edit").click(),
-      cy.get("#new-partner-postcode-value").clear().type("SN5"),
-      cy.getByQA("button_default-qa").contains("Save and return to partner information").click(),
+      cy.get("#new-postcode").clear().type("SN5"),
+      cy.submitButton("Save and return to partner information").click(),
       cy.getByQA("partner-name"),
       cy.backLink("Back to project details").click();
   });

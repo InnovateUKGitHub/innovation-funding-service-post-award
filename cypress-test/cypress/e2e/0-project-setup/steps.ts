@@ -75,6 +75,6 @@ export const fillAddressInformation = () => {
 
 export const newLocation = () => {
   cy.getByLabel("New location");
-  cy.get("#new-partner-postcode-value-hint").contains("Enter the postcode, postal code or zip code.");
-  cy.get("#new-partner-postcode-value").type("SN2 1FL");
+  cy.get("#hint-for-new-postcode").contains("Enter the postcode, postal code or zip code.");
+  cy.get("#new-postcode").type("SN2 1FL");
 };
