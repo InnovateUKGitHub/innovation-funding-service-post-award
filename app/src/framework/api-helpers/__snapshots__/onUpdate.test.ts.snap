@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useOnUpdate should return an object with on \`onUpdate\` and an \`apiError\` property 1`] = `
+Object {
+  "apiError": null,
+  "onUpdate": [Function],
+}
+`;
