@@ -7,3 +7,7 @@ bases:
 
 patchesStrategicMerge:
   - extui-deployment.yml
+
+resources:
+  - ../../../config-mgmt/env/aws/prod
+  - ../../../secrets-mgmt/env/aws/prod

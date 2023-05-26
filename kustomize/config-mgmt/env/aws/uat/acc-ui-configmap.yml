@@ -5,3 +5,6 @@ metadata:
 data:
   ACC_ENVIRONMENT: uat
   SERVER_URL: https://www-acc-uat.apps.org-env-0.org.innovateuk.ukri.org
+  NEW_RELIC_LOGGING: info
+  NEW_RELIC_APP_NAME: acc-uat
+  NEW_RELIC_ENABLED: "true"

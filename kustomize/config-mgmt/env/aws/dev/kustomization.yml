@@ -1,0 +1,9 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: dev
+
+resources:
+  - ../../../base
+  
+patchesStrategicMerge:
+  - acc-ui-configmap.yml

@@ -1,6 +1,7 @@
 import argparse
 from os import environ
 
+
 # TODO: Update to Python 3.7, uncomment below two lines, un-quote the list[str], and remove __init__ method.
 # from dataclasses import dataclass
 # @dataclass
@@ -10,11 +11,18 @@ class _SkaffoldArguments:
     environments: "list[str]"
     tag: str
 
-    def __init__(self, config_prefix: str, deployment_prefix: str, environments: "list[str]", tag: str):
+    def __init__(
+        self,
+        config_prefix: str,
+        deployment_prefix: str,
+        environments: "list[str]",
+        tag: str,
+    ):
         self.config_prefix = config_prefix
         self.deployment_prefix = deployment_prefix
         self.environments = environments
         self.tag = tag
+
 
 _parser = argparse.ArgumentParser(
     description="A helpful command line tool to automate Skaffold operations",
@@ -36,8 +44,8 @@ _parser.add_argument(
     required=True,
     action="append",
     choices=[
-        "custom",
         "demo",
+        "dev",
         "perf",
         "preprod",
         "prod",
