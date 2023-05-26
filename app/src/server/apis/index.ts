@@ -22,6 +22,7 @@ import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
 import * as users from "./users";
 import { PartnerDto } from "@framework/dtos";
+import { IClientUser } from "@framework/types";
 
 export interface IApiClient {
   accounts: accounts.IAccountsApi;
@@ -43,7 +44,7 @@ export interface IApiClient {
   projects: projects.IProjectsApi;
   projectContacts: projectContacts.IProjectContactsApi;
   partners: {
-    getAll: () => Promise<PartnerDto[]>;
+    getAll: (p: { user: IClientUser } | undefined) => Promise<PartnerDto[]>;
     getAllByProjectId: (params: { projectId: ProjectId }) => Promise<PartnerDto[]>;
     get: (params: { partnerId: PartnerId }) => Promise<PartnerDto>;
     updatePartner: (params: {

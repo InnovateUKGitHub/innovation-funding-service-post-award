@@ -86,7 +86,7 @@ export interface IDocumentsApi {
   ) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string; claimKey: ClaimKey }>) => Promise<boolean>;
   deletePartnerDocument: (
-    params: ApiParams<{ documentId: string; projectId: ProjectId; partnerId: PartnerId }>,
+    params: ApiParams<{ documentId: string; projectId: ProjectId; partnerId: PartnerId | LinkedEntityId }>,
   ) => Promise<boolean>;
   deleteProjectDocument: (params: ApiParams<{ projectId: ProjectId; documentId: string }>) => Promise<boolean>;
   deleteProjectChangeRequestDocumentOrItemDocument: (

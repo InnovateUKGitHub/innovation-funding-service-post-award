@@ -25,7 +25,7 @@ export class PartnersStore extends StoreBase {
   }
 
   public getAll() {
-    return this.getData("partners", storeKeys.getPartnersKey(), p => apiClient.partners.getAll({ ...p }));
+    return this.getData("partners", storeKeys.getPartnersKey(), p => apiClient.partners.getAll(p));
   }
 
   public getPartnersForProject(projectId: ProjectId) {
