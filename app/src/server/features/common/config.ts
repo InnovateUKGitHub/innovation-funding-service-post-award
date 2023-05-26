@@ -6,10 +6,16 @@ import { LogLevel } from "@framework/constants/enums";
 
 const defaultCacheTimeout = 720;
 
-const getRequiredEnvValue = (env: string): string => {
+const getEnvValue = (env: string, { defaultValue }: { defaultValue?: string } = {}): string => {
   const value = process.env[env];
 
-  if (!value) throw new Error(`Failed to capture env var value ${env}`);
+  if (!value) {
+    if (defaultValue) {
+      return defaultValue;
+    } else {
+      throw new Error(`Failed to capture env var value ${env}`);
+    }
+  }
 
   return value;
 };
@@ -113,8 +119,8 @@ const timeouts = {
 };
 
 const certificates = {
-  salesforce: getRequiredEnvValue("SALESFORCE_PRIVATE_KEY_FILE"),
-  shibboleth: getRequiredEnvValue("SHIBBOLETH_PRIVATE_KEY_FILE"),
+  salesforce: getEnvValue("SALESFORCE_PRIVATE_KEY_FILE"),
+  shibboleth: getEnvValue("SHIBBOLETH_PRIVATE_KEY_FILE", { defaultValue: "" }),
 };
 
 const disableCsp = getFeatureFlagValue(process.env.DISABLE_CSP, false);
@@ -126,12 +132,12 @@ const features: IFeatureFlags = {
   futureTimeExtensionInYears: Number(process.env.FUTURE_TIME_EXTENSION_IN_YEARS) || 5,
 };
 
-const logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
+const logLevel = parseLogLevel(process.env.LOG_LEVEL ?? "ERROR");
 
 const salesforceServiceUser = {
   clientId: process.env.SALESFORCE_CLIENT_ID ?? "",
   connectionUrl: process.env.SALESFORCE_CONNECTION_URL ?? "",
-  serviceUsername: (process.env.SALESFORCE_USERNAME || process.env.SALESFORCEUSERNAME) ?? "",
+  serviceUsername: process.env.SALESFORCE_USERNAME ?? "",
 };
 
 const bankDetailsValidationUser = {

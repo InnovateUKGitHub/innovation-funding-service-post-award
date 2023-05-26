@@ -4,3 +4,4 @@ metadata:
   name: acc-ui-configmap
 data:
   ACC_ENVIRONMENT: custom
+  USE_SSO: "false"

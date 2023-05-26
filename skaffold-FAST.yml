@@ -33,6 +33,10 @@ profiles:
     deploy:
       kubeContext: at
       kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
         paths:
           - kustomize/env/stub/custom
 
@@ -50,6 +54,10 @@ profiles:
     deploy:
       kubeContext: sysint
       kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
         paths:
           - kustomize/env/aws/sysint
 
@@ -67,6 +75,10 @@ profiles:
     deploy:
       kubeContext: uat
       kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
         paths:
           - kustomize/env/aws/uat
 
@@ -84,8 +96,33 @@ profiles:
     deploy:
       kubeContext: demo
       kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
         paths:
           - kustomize/env/aws/demo
+
+  - name: dev
+    build:
+      local:
+        useDockerCLI: false
+        useBuildkit: false
+        tryImportMissing: true
+        push: true
+      tagPolicy:
+        envTemplate:
+          template: "{{.TAG_ID}}"
+      artifacts: []
+    deploy:
+      kubeContext: dev
+      kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
+        paths:
+          - kustomize/env/aws/dev
 
   - name: perf
     build:
@@ -101,6 +138,10 @@ profiles:
     deploy:
       kubeContext: perf
       kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
         paths:
           - kustomize/env/aws/perf
 
@@ -118,6 +159,10 @@ profiles:
     deploy:
       kubeContext: preprod
       kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
         paths:
           - kustomize/env/aws/preprod
 
@@ -135,6 +180,10 @@ profiles:
     deploy:
       kubeContext: prod
       kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
         paths:
           - kustomize/env/aws/prod
 
@@ -152,5 +201,9 @@ profiles:
     deploy:
       kubeContext: local
       kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
         paths:
           - kustomize/env/stub/local/dev

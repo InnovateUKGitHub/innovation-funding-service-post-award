@@ -4,6 +4,7 @@ metadata:
   name: acc-ui-configmap
 data:
   USE_SSO: "false"
+  NEW_RELIC_ENABLED: "false"
   NODE_ENV: development
   LOG_LEVEL: VERBOSE
   ACC_ENVIRONMENT: local
