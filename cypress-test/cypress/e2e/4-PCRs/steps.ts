@@ -537,17 +537,31 @@ export const navigateToPartnerCosts = () => {
 };
 
 export const pcrNewCostCatLineItem = () => {
-  cy.wait(500);
-  cy.get("a").contains("Add a cost").click();
+  cy.submitButton("Save and return to labour").click();
+  cy.getByQA("validation-summary").contains("Description of role is required");
+  cy.getByQA("validation-summary").contains("Gross cost of role is required");
+  cy.getByQA("validation-summary").contains("Rate per day is required");
+  cy.getByQA("validation-summary").contains("Days spent on project is required");
   cy.get(`input[id="description"]`).type("Law keeper");
   cy.get("h2").contains("Labour");
   cy.get(`input[id="grossCostOfRole"]`).type("50000");
   cy.get(`input[id="ratePerDay"]`).type("500");
-  cy.get(`input[id="daysSpentOnProject"]`).type("100");
+  cy.get(`input[id="daysSpentOnProject"]`).clear().type("100");
   cy.wait(500);
   cy.get("div").contains("Total cost will update when saved.");
   cy.get("span").contains("£50,000.00");
   cy.submitButton("Save and return to labour").click();
+};
+
+export const addPartnerWholeDaysOnly = () => {
+  cy.wait(500);
+  cy.get("a").contains("Add a cost").click();
+  ["0.5", "-100", "Stuff", "100.32", "$^&&*&)", "100.232321"].forEach(entry => {
+    cy.get(`input[id="daysSpentOnProject"]`).clear().type(entry);
+    cy.submitButton("Save and return to labour").click();
+    cy.getByQA("validation-summary").contains("Days spent on project must be a whole number, like 15");
+    cy.reload();
+  });
 };
 
 export const addPartnerSummaryTable = () => {

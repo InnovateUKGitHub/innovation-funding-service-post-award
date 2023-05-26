@@ -5,6 +5,7 @@ import {
   pcrNewCostCatLineItem,
   addPartnerCostCat,
   addPartnerLabourGuidance,
+  addPartnerWholeDaysOnly,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -48,6 +49,11 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.tableHeader("Cost (£)");
     cy.tableHeader("Total labour");
   });
+
+  it(
+    "Should check that only whole numbers can be entered into the days section of the cost category",
+    addPartnerWholeDaysOnly,
+  );
 
   it("Should enter a new cost category line item by navigating to a new page", pcrNewCostCatLineItem);
 
