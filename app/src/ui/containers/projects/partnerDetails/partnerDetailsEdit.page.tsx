@@ -3,14 +3,15 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Fieldset, Label, TextInput, SubmitButton, FormGroup, Form, Hint, P } from "@ui/rhf-components";
 import { apiClient } from "@ui/apiClient";
-import { PartnerStatus, PostcodeTaskStatus, ProjectRole } from "@framework/types";
+import { IAppError, PartnerStatus, PostcodeTaskStatus, ProjectRole } from "@framework/types";
 import { Page, Projects, BackLink } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
 import { usePartnerDetailsEditQuery } from "./partnerDetailsEdit.logic";
 import { IApiClient } from "@server/apis";
-import { useValidationErrors } from "@framework/util/errorHelpers";
+import { isApiError, useValidationErrors } from "@framework/util/errorHelpers";
 import { partnerDetailsEditSchema, postcodeSetupSchema, emptySchema } from "./partnerDetailsEdit.zod";
+import { useState } from "react";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
@@ -54,6 +55,7 @@ export function PartnerDetailsEditComponent({
   const { project, partner } = usePartnerDetailsEditQuery(projectId, partnerId);
   const navigate = useNavigate();
   const { getContent } = useContent();
+  const [apiError, setApiError] = useState<IAppError | null>(null);
 
   const { register, handleSubmit, formState } = useForm<FormValues>({
     defaultValues: {
@@ -64,11 +66,17 @@ export function PartnerDetailsEditComponent({
   });
 
   const onUpdate = async (data: FormValues) => {
-    await (apiClient as unknown as IApiClient).partners.updatePartner({
-      partnerId,
-      partnerDto: { ...partner, ...data, postcode: data["new-postcode"], id: partnerId, projectId },
-    });
-    navigate(navigateTo);
+    try {
+      await (apiClient as unknown as IApiClient).partners.updatePartner({
+        partnerId,
+        partnerDto: { ...partner, ...data, postcode: data["new-postcode"], id: partnerId, projectId },
+      });
+      navigate(navigateTo);
+    } catch (e: unknown) {
+      if (isApiError(e)) {
+        setApiError(e);
+      }
+    }
   };
 
   const errors = useValidationErrors<FormValues>(formState.errors);
@@ -78,6 +86,7 @@ export function PartnerDetailsEditComponent({
       backLink={backLink}
       pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
       validator={errors}
+      error={apiError}
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >

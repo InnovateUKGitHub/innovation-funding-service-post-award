@@ -1,6 +1,7 @@
 import { FieldErrors } from "react-hook-form";
 import { Result, Results } from "@ui/validation";
 import { useFormErrorContext } from "@ui/context/form-error";
+import { IAppError } from "@framework/types";
 
 /**
  * This converts from html error format as returned by react-hook-form, zod or yup, into the format used
@@ -33,4 +34,11 @@ export const useValidationErrors = <TFormValues extends AnyObject>(errors: Field
   const combinedErrors = (validationErrors ?? []).concat(serverSideFormErrors ?? []);
   const errorResults = new Results({ model: {}, showValidationErrors: true, results: combinedErrors });
   return errorResults;
+};
+
+/**
+ * type guard to help type unknown to IAppError
+ */
+export const isApiError = (err: unknown): err is IAppError => {
+  return typeof err === "object" && err !== null && "code" in err && "message" in err;
 };
