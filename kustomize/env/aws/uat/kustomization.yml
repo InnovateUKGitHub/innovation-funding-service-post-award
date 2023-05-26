@@ -4,3 +4,7 @@ commonAnnotations:
 
 bases:
   - ../aws-base
+
+resources:
+  - ../../../config-mgmt/env/aws/uat
+  - ../../../secrets-mgmt/env/aws/uat

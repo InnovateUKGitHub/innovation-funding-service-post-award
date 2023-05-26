@@ -5,3 +5,7 @@ metadata:
 data:
   ACC_ENVIRONMENT: prod
   SERVER_URL: https://acc.apply-for-innovation-funding.service.gov.uk
+  IFS_ROOT: https://apply-for-innovation-funding.service.gov.uk
+  NEW_RELIC_APP_NAME: acc-prod
+  NEW_RELIC_ENABLED: "true"
+  USE_SSO: false

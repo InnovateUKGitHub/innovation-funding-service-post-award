@@ -12,10 +12,10 @@ To use...
 
 ```bash
 # Build Docker image, and render all environments
-python3.11 scripts/skaffoldrender --env custom --env demo --env perf --env prod --env sysint --env uat
+python3.11 scripts/skaffoldrender --env custom --env demo --env dev --env perf --env preprod --env prod --env sysint --env uat
 
 # Build Docker image with a specific tag, and render all environments
-python3.11 scripts/skaffoldrender --tag ACC-SKAFFOLDDEV0-BUILD-3 --env custom --env demo --env perf --env prod --env sysint --env uat
+python3.11 scripts/skaffoldrender --tag ACC-SKAFFOLDDEV0-BUILD-3 --env custom --env demo --env dev --env perf --env preprod --env prod --env sysint --env uat
 ```
 
 ## Version

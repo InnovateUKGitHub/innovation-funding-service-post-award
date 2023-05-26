@@ -105,6 +105,23 @@ profiles:
         paths:
           - kustomize/config-mgmt/env/aws/demo
 
+  - name: dev
+    build:
+      local:
+        useDockerCLI: false
+        useBuildkit: false
+        tryImportMissing: true
+        push: false
+      tagPolicy:
+        gitCommit:
+          ignoreChanges: true
+      artifacts: [ ]
+    deploy:
+      kubeContext: dev
+      kustomize:
+        paths:
+          - kustomize/config-mgmt/env/aws/dev
+
   - name: preprod
     build:
       local:

@@ -1,0 +1,10 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: dev
+
+bases:
+  - ../aws-base
+
+resources:
+  - ../../../config-mgmt/env/aws/dev
+  - ../../../secrets-mgmt/env/aws/dev

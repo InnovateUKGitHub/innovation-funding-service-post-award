@@ -5,3 +5,5 @@ metadata:
 data:
   ACC_ENVIRONMENT: preprod
   SERVER_URL: https://www-acc-preprod.apps.org-env-0.org.innovateuk.ukri.org/projects/dashboard
+  USE_SSO: "false"
+  NEW_RELIC_ENABLED: "false"
