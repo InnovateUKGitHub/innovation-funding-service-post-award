@@ -1,5 +1,5 @@
-import { IAppError } from "@framework/types";
 import { isApiError } from "@framework/util/errorHelpers";
+import { useApiErrorContext } from "@ui/context/api-error";
 import { noop } from "@ui/helpers/noop";
 import { useState } from "react";
 
@@ -22,7 +22,8 @@ export const useOnUpdate = <TFormValues, TPromise>({
   onSuccess?: () => void;
   onError?: () => void;
 }) => {
-  const [apiError, setApiError] = useState<IAppError | null>(null);
+  const serverRenderedApiError = useApiErrorContext();
+  const [apiError, setApiError] = useState(serverRenderedApiError);
 
   const onUpdate = async (data: TFormValues) => {
     try {

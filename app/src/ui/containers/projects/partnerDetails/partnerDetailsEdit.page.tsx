@@ -56,13 +56,13 @@ export function PartnerDetailsEditComponent({
 
   const { onUpdate, apiError } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
 
-  const errors = useValidationErrors<FormValues>(formState.errors);
+  const validatorErrors = useValidationErrors<FormValues>(formState.errors);
 
   return (
     <Page
       backLink={backLink}
       pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
-      validator={errors}
+      validator={validatorErrors}
       error={apiError}
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}

@@ -6,7 +6,7 @@ import { StaticRouter } from "react-router-dom/server";
 import { NextFunction, Request, Response } from "express";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { matchRoute, routeConfig } from "@ui/routing";
-import { ErrorCode, IClientUser, IContext, Authorisation } from "@framework/types";
+import { ErrorCode, IClientUser, IContext, Authorisation, IAppError } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import * as Actions from "@ui/redux/actions";
 import { App } from "@ui/containers/app";
@@ -37,6 +37,7 @@ import { GraphQLSchema } from "graphql";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
 import { Logger } from "@shared/developmentLogger";
 import { FormErrorContextProvider } from "@ui/context/form-error";
+import { ApiErrorContextProvider } from "@ui/context/api-error";
 
 interface IServerApp {
   requestUrl: string;
@@ -45,22 +46,25 @@ interface IServerApp {
   modalRegister: ModalRegister;
   relayEnvironment: RelayModernEnvironment;
   formError?: Result[];
+  apiError?: IAppError;
 }
 
 const logger = new Logger("HTML Render");
 
-const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment, formError }: IServerApp) => (
-  <FormErrorContextProvider value={formError}>
-    <Provider store={store}>
-      <StaticRouter location={requestUrl}>
-        <StoresProvider value={stores}>
-          <ModalProvider value={modalRegister}>
-            <App store={store} relayEnvironment={relayEnvironment} />
-          </ModalProvider>
-        </StoresProvider>
-      </StaticRouter>
-    </Provider>
-  </FormErrorContextProvider>
+const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment, formError, apiError }: IServerApp) => (
+  <ApiErrorContextProvider value={apiError}>
+    <FormErrorContextProvider value={formError}>
+      <Provider store={store}>
+        <StaticRouter location={requestUrl}>
+          <StoresProvider value={stores}>
+            <ModalProvider value={modalRegister}>
+              <App store={store} relayEnvironment={relayEnvironment} />
+            </ModalProvider>
+          </StoresProvider>
+        </StaticRouter>
+      </Provider>
+    </FormErrorContextProvider>
+  </ApiErrorContextProvider>
 );
 
 /**
@@ -118,7 +122,7 @@ const serverRender =
       let renderUrl = req.url;
 
       let formError: Result[] = [];
-
+      let apiError: IAppError | undefined;
       if (err) {
         if (err instanceof FormHandlerError) {
           // A form handler error is an error that renders the original page.
@@ -141,7 +145,8 @@ const serverRender =
                 scrollToTop: false,
               }),
             );
-            formError = formError.concat(err?.error?.results?.errors ?? []);
+            apiError = err.error;
+            // formError = formError.concat(err?.error?.results?.errors ?? []);
           }
         } else {
           // We cannot handle these beautifully.
@@ -150,6 +155,7 @@ const serverRender =
           store.dispatch(Actions.setError(errorPayload));
           renderUrl = routeConfig.error.getLink({}).path;
           isErrorPage = true;
+          apiError = errorPayload as unknown as IAppError;
         }
       }
 
@@ -191,6 +197,7 @@ const serverRender =
           relayEnvironment: finalRelayEnvironment,
           relayData,
           formError,
+          apiError,
         }),
       );
     } catch (renderError: unknown) {
@@ -239,6 +246,7 @@ function renderApp(props: {
   relayEnvironment: RelayModernEnvironment;
   relayData?: SSRCache;
   formError?: Result[] | undefined;
+  apiError?: IAppError | undefined;
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -252,6 +260,7 @@ function renderApp(props: {
     nonce: props.nonce,
     relayData: props.relayData,
     formError: props.formError,
+    apiError: props.apiError,
   });
 }
 

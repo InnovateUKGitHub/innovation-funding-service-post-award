@@ -7,6 +7,7 @@ import { execSync } from "child_process";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { PreloadedState } from "redux";
 import { Result } from "@ui/validation";
+import { IAppError } from "@framework/types";
 
 let versionInformation = "";
 
@@ -66,6 +67,7 @@ export function renderHtml({
   nonce,
   relayData = [],
   formError,
+  apiError,
 }: {
   HelmetInstance: HelmetData;
   html: string;
@@ -73,6 +75,7 @@ export function renderHtml({
   nonce: string;
   relayData?: SSRCache;
   formError: Result[] | undefined;
+  apiError: IAppError | undefined;
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -118,6 +121,9 @@ export function renderHtml({
             window.__RELAY_BOOTSTRAP_DATA__ = ${JSON.stringify(relayData).replace(/</g, "\\u003c")}
             window.__PRELOADED_FORM_ERRORS__ = ${
               formError ? JSON.stringify(formError).replace(/</g, "\\u003c") : undefined
+            }
+            window.__PRELOADED_API_ERRORS__ = ${
+              apiError ? JSON.stringify(apiError).replace(/</g, "\\u003c") : undefined
             }
           </script>
 

@@ -25,10 +25,13 @@ import { clientInternationalisation } from "./clientInternationalisation";
 import { getPolyfills } from "./polyfill";
 import { FormErrorContextProvider } from "@ui/context/form-error";
 import { Result } from "@ui/validation";
+import { ApiErrorContextProvider } from "@ui/context/api-error";
+import { IAppError } from "@framework/types";
 
 // get servers store to initialise client store
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
 const formErrors = processDto(window.__PRELOADED_FORM_ERRORS__) as unknown as Result[] | undefined;
+const apiErrors = (processDto(window.__PRELOADED_API_ERRORS__) || null) as unknown as IAppError | null;
 Logger.setDefaultOptions({ logLevel: parseLogLevel(serverState.config.logLevel) });
 
 const middleware = composeWithDevTools(setupClientMiddleware());
@@ -69,15 +72,17 @@ const Client = () => {
 
   return (
     <Provider store={store}>
-      <FormErrorContextProvider value={formErrors}>
-        <BrowserRouter>
-          <StoresProvider value={getStores()}>
-            <ModalProvider value={new ModalRegister()}>
-              <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-            </ModalProvider>
-          </StoresProvider>
-        </BrowserRouter>
-      </FormErrorContextProvider>
+      <ApiErrorContextProvider value={apiErrors}>
+        <FormErrorContextProvider value={formErrors}>
+          <BrowserRouter>
+            <StoresProvider value={getStores()}>
+              <ModalProvider value={new ModalRegister()}>
+                <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
+              </ModalProvider>
+            </StoresProvider>
+          </BrowserRouter>
+        </FormErrorContextProvider>
+      </ApiErrorContextProvider>
     </Provider>
   );
 };
