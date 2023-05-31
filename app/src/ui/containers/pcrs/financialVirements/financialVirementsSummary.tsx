@@ -239,13 +239,15 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                     qa="originalFundingLevel"
                     header={x => x.financialVirementLabels.originalFundingLevel}
                     value={x => x.partnerVirement.originalFundingLevel}
-                    footer={<ACC.Renderers.Percentage value={virement.originalFundingLevel} />}
+                    footer={<ACC.Renderers.Percentage value={virement.originalFundingLevel} defaultIfInfinite={0} />}
+                    defaultIfInfinite={0}
                   />
                   <Table.Percentage
                     qa="newFundingLevel"
                     header={x => x.financialVirementLabels.newFundingLevel}
                     value={x => x.partnerVirement.newFundingLevel}
-                    footer={<ACC.Renderers.Percentage value={virement.newFundingLevel} />}
+                    footer={<ACC.Renderers.Percentage value={virement.newFundingLevel} defaultIfInfinite={0} />}
+                    defaultIfInfinite={0}
                     isDivider="normal"
                   />
                   <Table.Currency

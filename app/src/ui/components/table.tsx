@@ -505,12 +505,18 @@ export const createTypedTable = <T,>() => {
     />
   );
 
-  const PercentageColumn = (props: ExternalColumnProps<number | null> & { fractionDigits?: number }) => (
+  const PercentageColumn = (
+    props: ExternalColumnProps<number | null> & { fractionDigits?: number; defaultIfInfinite?: number },
+  ) => (
     <TableColumn
       {...props}
       classSuffix="numeric"
       renderCell={(data, index) => (
-        <Percentage value={props.value(data, index)} fractionDigits={props.fractionDigits} />
+        <Percentage
+          value={props.value(data, index)}
+          fractionDigits={props.fractionDigits}
+          defaultIfInfinite={props.defaultIfInfinite}
+        />
       )}
     />
   );

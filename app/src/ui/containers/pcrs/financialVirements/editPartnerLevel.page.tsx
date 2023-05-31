@@ -165,7 +165,10 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                       qa="fundingLevel"
                       header={props.content.originalFundingLevel}
                       value={x => x.virement.originalFundingLevel}
-                      footer={<ACC.Renderers.Percentage value={editor.data.originalFundingLevel} />}
+                      footer={
+                        <ACC.Renderers.Percentage value={editor.data.originalFundingLevel} defaultIfInfinite={0} />
+                      }
+                      defaultIfInfinite={0}
                       isDivider="normal"
                     />
 
@@ -207,7 +210,8 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                       qa="newLevel"
                       header={props.content.newFundingLevel}
                       value={x => x.virement.newFundingLevel}
-                      footer={<ACC.Renderers.Percentage value={editor.data.newFundingLevel} />}
+                      defaultIfInfinite={0}
+                      footer={<ACC.Renderers.Percentage value={editor.data.newFundingLevel} defaultIfInfinite={0} />}
                     />
                   </VirementTable.Table>
                 </VirementForm.Fieldset>
