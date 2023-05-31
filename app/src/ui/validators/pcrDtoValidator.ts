@@ -1270,6 +1270,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.original && this.original.contact1Forename,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactNameReadOnly),
       ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.contact1Forename,
+        50,
+        this.getContent(x =>
+          x.validation.pcrPartnerAdditionItemDtoValidator.financeContactNameLengthTooLarge({ count: 50 }),
+        ),
+      ),
   );
 
   contact1Surname = Validation.all(
@@ -1284,6 +1293,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.model.contact1Surname,
         this.original && this.original.contact1Surname,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactSurnameReadOnly),
+      ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.contact1Surname,
+        50,
+        this.getContent(x =>
+          x.validation.pcrPartnerAdditionItemDtoValidator.financeContactSurnameLengthTooLarge({ count: 50 }),
+        ),
       ),
   );
 
@@ -1300,6 +1318,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.original && this.original.contact1Phone,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactTelephoneNumberReadOnly),
       ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.contact1Phone,
+        20,
+        this.getContent(x =>
+          x.validation.pcrPartnerAdditionItemDtoValidator.financeContactTelephoneNumberLengthTooLarge({ count: 20 }),
+        ),
+      ),
   );
 
   contact1Email = Validation.all(
@@ -1314,6 +1341,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.model.contact1Email,
         this.original && this.original.contact1Email,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.financeContactEmailAddressReadOnly),
+      ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.contact1Email,
+        255,
+        this.getContent(x =>
+          x.validation.pcrPartnerAdditionItemDtoValidator.financeContactEmailAddressLengthTooLarge({ count: 255 }),
+        ),
       ),
   );
 
@@ -1345,6 +1381,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.original && this.original.contact2Forename,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerNameReadOnly),
       ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.contact2Forename,
+        50,
+        this.getContent(x =>
+          x.validation.pcrPartnerAdditionItemDtoValidator.financeContactNameLengthTooLarge({ count: 50 }),
+        ),
+      ),
   );
 
   contact2Surname = Validation.all(
@@ -1359,6 +1404,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.model.contact2Surname,
         this.original && this.original.contact2Surname,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerSurnameReadOnly),
+      ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.contact2Surname,
+        50,
+        this.getContent(x =>
+          x.validation.pcrPartnerAdditionItemDtoValidator.financeContactSurnameLengthTooLarge({ count: 50 }),
+        ),
       ),
   );
 
@@ -1375,6 +1429,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.original && this.original.contact2Phone,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerTelephoneNumberReadOnly),
       ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.contact2Phone,
+        20,
+        this.getContent(x =>
+          x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerTelephoneNumberLengthTooLarge({ count: 20 }),
+        ),
+      ),
   );
 
   contact2Email = Validation.all(
@@ -1389,6 +1452,15 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.model.contact2Email,
         this.original && this.original.contact2Email,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerEmailAddressReadOnly),
+      ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.contact2Email,
+        255,
+        this.getContent(x =>
+          x.validation.pcrPartnerAdditionItemDtoValidator.projectManagerEmailAddressLengthTooLarge({ count: 255 }),
+        ),
       ),
   );
 
