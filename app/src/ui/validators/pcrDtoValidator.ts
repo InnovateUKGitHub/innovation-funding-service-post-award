@@ -1648,13 +1648,27 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
       );
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
-    return isComplete
-      ? Validation.required(
-          this,
-          this.model.accountName,
-          this.getContent(x => x.validation.pcrAccountNameChangeItemDtoValidator.accountNameRequired),
-        )
-      : Validation.valid(this);
+    return Validation.all(
+      this,
+      () =>
+        isComplete
+          ? Validation.required(
+              this,
+              this.model.accountName,
+              this.getContent(x => x.validation.pcrAccountNameChangeItemDtoValidator.accountNameRequired),
+            )
+          : Validation.valid(this),
+
+      // If a partner is selected, check if old partner name is unequal to new partner name
+      () =>
+        this.model.partnerId
+          ? Validation.isTrue(
+              this,
+              this.model.partnerNameSnapshot !== this.model.accountName,
+              this.getContent(x => x.validation.pcrAccountNameChangeItemDtoValidator.accountNameIdentical),
+            )
+          : Validation.valid(this),
+    );
   }
 
   private validatePartnerId() {

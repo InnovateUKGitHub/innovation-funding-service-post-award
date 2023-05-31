@@ -461,6 +461,8 @@ describe("UpdatePCRCommand", () => {
         context.testData.createPCRItem(pcr, recordTypes[6], {
           status: PCRItemStatus.Incomplete,
           partnerId: partner3.id,
+          partnerNameSnapshot: "Los peces en el rio",
+          accountName: "Los peces en el río",
         });
         context.testData.createCurrentUserAsProjectManager(project);
 
@@ -1191,6 +1193,47 @@ describe("UpdatePCRCommand", () => {
         const updatedItem = updated.items[0] as PCRItemForAccountNameChangeDto;
         await expect(updatedItem.accountName).toEqual("New Name Goes Here");
         await expect(updatedItem.partnerId).toEqual(partner.id);
+      });
+
+      test("Must rename partner instead of keeping existing partner name", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, partner => {
+          partner.name = "A B Cad Services";
+        });
+        const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+
+        context.testData.createCurrentUserAsProjectManager(project);
+
+        const accountNameChangeType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+          x => x.type === PCRItemType.AccountNameChange,
+        );
+        const recordType = context.testData
+          .createPCRRecordTypes()
+          .find(x => x.type === accountNameChangeType?.typeName);
+        context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.ToDo });
+
+        const dto = await context.runQuery(
+          new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
+        );
+        const item = dto.items[0] as PCRItemForAccountNameChangeDto;
+        item.partnerId = partner.id;
+        item.partnerNameSnapshot = "A B Cad Services";
+
+        // Different name allowed...
+        item.accountName = "A B Cad Solutions";
+
+        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
+          true,
+        );
+
+        // Same name disallowed...
+        item.accountName = "A B Cad Services";
+
+        await expect(
+          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+        ).rejects.toThrow(ValidationError);
       });
 
       test("cannot rename withdrawn partner", async () => {

@@ -1660,6 +1660,7 @@
     "pcrAccountNameChangeItemDtoValidator": {
       "accountNameRequired": "Enter a new partner name.",
       "accountNameReadOnly": "Partner name cannot be changed.",
+      "accountNameIdentical": "The proposed name of the partner must be different to the existing one.",
       "partnerIdReadOnly": "Partner cannot be changed.",
       "partnerIdRequired": "Select partner to change.",
       "partnerIdInvalid": "Invalid partner for project."
