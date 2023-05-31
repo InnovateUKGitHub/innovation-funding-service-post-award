@@ -64,8 +64,8 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId });
   }
 
-  protected getStoreKey({ projectId, itemId, pcrId }: VirementCostsParams) {
-    return storeKeys.getFinancialVirementKey(projectId, pcrId, itemId);
+  protected getStoreKey({ projectId, itemId, pcrId, partnerId }: VirementCostsParams) {
+    return storeKeys.getFinancialVirementKey(projectId, pcrId, itemId, partnerId);
   }
 
   protected createValidationResult(params: VirementCostsParams, dto: FinancialVirementDto) {
