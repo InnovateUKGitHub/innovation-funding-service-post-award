@@ -394,7 +394,7 @@
       "loadingDrawdown": "We're loading your drawdown...",
       "errorDrawdown": "There was a problem trying to get your drawdown.",
       "backToLoanOverview": "Back to loans summary page",
-      "financeContactIntroduction": "You can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a <0>change drawdown</0> project change request.",
+      "financeContactIntroduction": "You can request your drawdown here. If the amount of your drawdown needs to be changed, your Project Manager will need to submit a change drawdown project change request.",
       "projectManagerIntroduction": "Your Finance Contact can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a <0>change drawdown</0> project change request.",
       "uploadTitle": "Upload drawdown approval request",
       "uploadFormLabel": "Upload",
