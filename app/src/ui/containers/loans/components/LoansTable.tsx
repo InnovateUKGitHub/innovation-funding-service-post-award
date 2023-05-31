@@ -3,6 +3,8 @@ import { LoanStatus } from "@framework/entities";
 import { ILinkInfo } from "@framework/types";
 import * as ACC from "@ui/components";
 import type { Loan } from "../loanOverview.logic";
+import { useContent } from "@ui/hooks";
+import { ReactNode } from "react";
 
 export interface LoansTableProps {
   items: Loan[];
@@ -12,6 +14,8 @@ export interface LoansTableProps {
 
 const Drawdown = ACC.createTypedTable<Loan>();
 export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
+  const { getContent } = useContent();
+
   const nextLoanIndex = items.findIndex(x => x.status === LoanStatus.PLANNED);
   const isFirstLoanRequest = nextLoanIndex === 0;
   const nextLoan = items[nextLoanIndex];
@@ -36,12 +40,20 @@ export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
 
   return (
     <Drawdown.Table data={items} qa="drawdown-list" className="loan-table" bodyRowClass={getRowClassName}>
-      <Drawdown.String header="Drawdown" qa="drawdown-period" value={x => `${x.period}`} />
+      <Drawdown.String
+        header={getContent(x => x.components.loansTable.drawdown)}
+        qa="drawdown-period"
+        value={x => `${x.period}`}
+      />
 
-      <Drawdown.FullNumericDate header="Due date" qa="drawdown-date" value={x => x.requestDate} />
+      <Drawdown.FullNumericDate
+        header={getContent(x => x.components.loansTable.dueDate)}
+        qa="drawdown-date"
+        value={x => x.requestDate}
+      />
 
       <Drawdown.Custom
-        header="Drawdown Amount"
+        header={getContent(x => x.components.loansTable.drawdownAmount)}
         qa="drawdown-forecast-amount"
         classSuffix="numeric"
         value={x => (
@@ -51,7 +63,11 @@ export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
         )}
       />
 
-      <Drawdown.String header="Status" qa="drawdown-status" value={x => x.status} />
+      <Drawdown.String
+        header={getContent(x => x.components.loansTable.status)}
+        qa="drawdown-status"
+        value={x => x.status}
+      />
 
       <Drawdown.Custom
         qa="drawdown-action"
@@ -60,7 +76,12 @@ export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
 
           return (
             nextPlannedLoan &&
-            !roles.isMo && <LoanRequestButton route={createLink(nextLoan.id)} disabled={!canRequestLoan} />
+            !roles.isMo && (
+              <LoanRequestButton route={createLink(nextLoan.id)} disabled={!canRequestLoan}>
+                {roles.isFc && getContent(x => x.components.loansTable.request)}
+                {roles.isPm && getContent(x => x.components.loansTable.view)}
+              </LoanRequestButton>
+            )
           );
         }}
       />
@@ -71,17 +92,17 @@ export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
 interface LoanRequestButtonProps {
   disabled: boolean;
   route: ILinkInfo;
+  children: ReactNode;
 }
 
-const LoanRequestButton = ({ disabled, route }: LoanRequestButtonProps) => {
-  const sharedProps = {
-    className: "govuk-!-margin-bottom-0",
-    children: "Request",
-  };
-
+const LoanRequestButton = ({ disabled, route, children }: LoanRequestButtonProps) => {
   return disabled ? (
-    <ACC.Button disabled styling="Primary" {...sharedProps} />
+    <ACC.Button disabled styling="Primary" className="govuk-!-margin-bottom-0">
+      {children}
+    </ACC.Button>
   ) : (
-    <ACC.Link route={route} styling="PrimaryButton" {...sharedProps} />
+    <ACC.Link route={route} styling="PrimaryButton" className="govuk-!-margin-bottom-0">
+      {children}
+    </ACC.Link>
   );
 };

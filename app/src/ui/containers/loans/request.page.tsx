@@ -45,7 +45,7 @@ const LoansRequestPage = ({
   ...props
 }: LoansRequestPageProps) => {
   const { getContent } = useContent();
-  const { isFc } = getAuthRoles(project.roles);
+  const { isFc, isPm } = getAuthRoles(project.roles);
 
   const createPcrLink = <ACC.Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}> </ACC.Link>;
 
@@ -55,7 +55,10 @@ const LoansRequestPage = ({
 
       <ACC.Section>
         <ACC.Renderers.SimpleString>
-          <Content value={x => x.pages.loansRequest.introduction} components={[createPcrLink]} />
+          {isFc && <Content value={x => x.pages.loansRequest.financeContactIntroduction} />}
+          {isPm && (
+            <Content value={x => x.pages.loansRequest.projectManagerIntroduction} components={[createPcrLink]} />
+          )}
         </ACC.Renderers.SimpleString>
 
         <LoanRequestTable {...loan} />
