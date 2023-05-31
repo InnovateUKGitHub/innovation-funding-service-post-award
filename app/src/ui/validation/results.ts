@@ -29,7 +29,7 @@ export class Results<T> implements IValidationResult {
     this.model = model;
     this.showValidationErrors = showValidationErrors;
     this.results = results;
-    this.copy = new Copy(competitionType);
+    this.copy = new Copy({ competitionType });
     results.forEach(x => this.add(x));
   }
 

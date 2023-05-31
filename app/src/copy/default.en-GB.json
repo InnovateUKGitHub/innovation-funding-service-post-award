@@ -427,8 +427,7 @@
     "claimsComponents": {
       "negativeCategoriesMessage": {
         "before": "You have exceeded the total eligible costs for these categories",
-        "after": "Please check with your monitoring officer before submitting your claim.",
-        "after_internalAssurance": "Please check with Innovate UK before submitting your claim."
+        "after": "Please check with your monitoring officer before submitting your claim."
       },
       "categoryLabel": "Category",
       "totalEligibleCosts": "Total eligible costs",
@@ -989,7 +988,7 @@
     "editClaimLineItemConvertGbp": "You can enter up to 120 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
     "nonJsEditClaimLineItemConvertGbp": "You can enter up to 10 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
     "editClaimLineItemDocumentGuidance": "Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide.",
-    "editClaimLineItemDocumentGuidance_internalAssurance": "Upload evidence of the costs for Innovate UK to review. If you do not upload documents Innovate UK are unlikely to accept your claim. Contact them for advice on which documents to provide.",
+    "editClaimLineItemDocumentGuidance_internalAssurance": "Upload evidence of the costs for Innovate UK to review. If you do not upload documents Innovate UK are unlikely to accept your claim. Contact us for advice on which documents to provide.",
     "negativeClaimWarning": "You have entered negative values for the following items:",
     "claimSummaryWarning": "You have entered a negative claim for this period. Click 'Edit costs to be claimed' button if you wish to change this.",
     "claimSavedMessage": "You have saved your claim.",
