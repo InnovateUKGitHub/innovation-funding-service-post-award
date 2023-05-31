@@ -30,3 +30,10 @@ export const WholeNumberWithCommas: Story = {
     fractionDigits: 0,
   },
 };
+export const InfinteStory: Story = {
+  args: {
+    value: 1 / 0,
+    fractionDigits: 0,
+    defaultIfInfinite: 0.31,
+  },
+};

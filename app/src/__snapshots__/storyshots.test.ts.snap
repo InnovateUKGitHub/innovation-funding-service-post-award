@@ -1618,6 +1618,23 @@ exports[`Storyshots IFSPA Renderer/Markdown Untrusted 1`] = `
 </div>
 `;
 
+exports[`Storyshots IFSPA Renderer/Percentage Infinte Story 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <span
+    style={
+      Object {
+        "whiteSpace": "nowrap",
+      }
+    }
+  >
+    31%
+  </span>
+</div>
+`;
+
 exports[`Storyshots IFSPA Renderer/Percentage Primary 1`] = `
 <div
   className="govuk-template__body"
