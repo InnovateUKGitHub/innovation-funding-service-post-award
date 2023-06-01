@@ -1,5 +1,5 @@
 kind: Route
-apiVersion: apps/v1
+apiVersion: route.openshift.io/v1
 metadata:
   name: acc-ui-route
 spec:
