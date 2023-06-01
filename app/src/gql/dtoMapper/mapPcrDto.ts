@@ -1,17 +1,37 @@
-import type { PCRDto, PCRItemDto } from "@framework/dtos";
-import { mapToPCRStatus } from "@framework/mappers/pcrStatus";
+import { TypeOfAid } from "@framework/constants";
+import type { PCRDto, FullPCRItemDto } from "@framework/dtos";
+import {
+  getPCROrganisationType,
+  mapToPCRItemStatus,
+  mapFromSalesforcePCRProjectRole,
+  mapTypeOfAidToEnum,
+  mapToPCRStatus,
+  mapFromSalesforcePCRPartnerType,
+  mapToPcrItemType,
+} from "@framework/mappers/pcr";
+
 import { Clock } from "@framework/util";
+
+// on Project_Change_Requests__r
 
 const clock = new Clock();
 
 export type PcrNode = Readonly<
   Partial<{
     Id: string;
+    Acc_ExistingPartnerName__c: GQL.Value<string>;
+    Acc_OtherFunding__c: GQL.Value<boolean>;
+    Acc_CommercialWork__c: GQL.Value<boolean>;
+    Acc_NewOrganisationName__c: GQL.Value<string>;
     Acc_RequestHeader__c: GQL.Value<string>;
     Acc_RequestNumber__c: GQL.Value<number>;
+    Acc_MarkedasComplete__c: GQL.Value<string>;
+    Acc_OrganisationName__c: GQL.Value<string>;
+    Acc_ParticipantType__c: GQL.Value<string>;
     CreatedDate: GQL.Value<string>;
     Acc_Status__c: GQL.Value<string>;
     Acc_Project__c: GQL.Value<string>;
+    Acc_ProjectRole__c: GQL.Value<string>;
     LastModifiedDate: GQL.Value<string>;
     RecordType: {
       Name?: GQL.ValueAndLabel<string>;
@@ -22,17 +42,77 @@ export type PcrNode = Readonly<
 
 type PcrDtoMapping = Pick<
   PCRDto,
-  "id" | "requestNumber" | "projectId" | "started" | "lastUpdated" | "status" | "statusName"
+  "id" | "requestNumber" | "projectId" | "started" | "lastUpdated" | "reasoningStatus" | "status" | "statusName"
 >;
 
-type PcrItemDtoMapping = Pick<PCRItemDto, "shortName">;
+type PcrItemDtoMapping = Pick<
+  FullPCRItemDto,
+  | "accountName"
+  | "hasOtherFunding"
+  | "id"
+  | "isCommercialWork"
+  | "organisationName"
+  | "organisationType"
+  | "partnerNameSnapshot"
+  | "partnerType"
+  | "projectRole"
+  | "shortName"
+  | "status"
+  | "type"
+  | "typeName"
+  | "typeOfAid"
+>;
 
 /**
  * Mapper for PCR Child items
  */
-const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode> = {
+const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string | TypeOfAid }> = {
+  accountName(node) {
+    return node?.Acc_NewOrganisationName__c?.value ?? null;
+  },
+  hasOtherFunding(node) {
+    return node?.Acc_OtherFunding__c?.value ?? null;
+  },
+  id(node) {
+    return node?.Id as PcrItemId;
+  },
+  isCommercialWork(node) {
+    return node?.Acc_CommercialWork__c?.value ?? null;
+  },
+  organisationName(node) {
+    return node?.Acc_OrganisationName__c?.value ?? null;
+  },
+  organisationType(node) {
+    return getPCROrganisationType(mapFromSalesforcePCRPartnerType(node?.Acc_ParticipantType__c?.value ?? ""));
+  },
+  partnerNameSnapshot(node) {
+    return node?.Acc_ExistingPartnerName__c?.value ?? null;
+  },
+  partnerType(node) {
+    return mapFromSalesforcePCRPartnerType(node?.Acc_ParticipantType__c?.value ?? "");
+  },
+  projectRole(node) {
+    return mapFromSalesforcePCRProjectRole(node?.Acc_ProjectRole__c?.value ?? "");
+  },
   shortName(node) {
     return node?.RecordType?.Name?.value ?? "Unknown";
+  },
+  status(node) {
+    return mapToPCRItemStatus(node?.Acc_MarkedasComplete__c?.value ?? "");
+  },
+  type(node) {
+    return mapToPcrItemType(node?.RecordType?.Name?.value ?? "Unknown");
+  },
+  typeName(node) {
+    return node?.RecordType?.Name?.label ?? "Unknown";
+  },
+  typeOfAid(node, additionalData) {
+    /* possible to be passed in as TypeofAid enum from project mapper or as string from salesforce */
+    return additionalData?.typeOfAid === undefined
+      ? TypeOfAid.Unknown
+      : typeof additionalData.typeOfAid === "string"
+      ? mapTypeOfAidToEnum(additionalData?.typeOfAid)
+      : additionalData.typeOfAid;
   },
 };
 
@@ -50,6 +130,9 @@ const headMapper: GQL.DtoMapper<PcrDtoMapping, PcrNode> = {
   },
   projectId(node) {
     return (node?.Acc_Project__c?.value ?? "unknown-project-id") as ProjectId;
+  },
+  reasoningStatus(node) {
+    return mapToPCRItemStatus(node?.Acc_MarkedasComplete__c?.value ?? "");
   },
   requestNumber(node) {
     return node?.Acc_RequestNumber__c?.value ?? 0;
@@ -75,16 +158,24 @@ type PcrDtoWithItems<PickList extends keyof PcrDtoMapping, ItemPickList extends 
   { items: Pick<PcrItemDtoMapping, ItemPickList>[] }
 >;
 
+type PcrAdditionalData<TPickList extends string> = AdditionalDataType<
+  TPickList,
+  [
+    ["typeOfAid", "typeOfAid", string | TypeOfAid], // get from Acc_CompetitionId__r { Acc_TypeofAid__c {value}} or from project.typeOfAid
+  ]
+>;
+
 /**
  * maps the attached child PCR items to the dto pattern
  */
 export function mapPcrItemsDtos<ItemPickList extends keyof PcrItemDtoMapping>(
   items: CollatedPcrNode["children"],
   pickList: ItemPickList[],
+  additionalData: PcrAdditionalData<ItemPickList>,
 ) {
   return items.map(item =>
     pickList.reduce((dto, field) => {
-      dto[field] = itemMapper[field](item);
+      dto[field] = itemMapper[field](item, additionalData);
       return dto;
     }, {} as Pick<PcrItemDtoMapping, ItemPickList>),
   );
@@ -97,7 +188,12 @@ export function mapToPcrDto<
   T extends CollatedPcrNode,
   PickList extends keyof PcrDtoMapping,
   ItemPickList extends keyof PcrItemDtoMapping,
->(pcr: T, pickList: PickList[], itemsPickList: ItemPickList[]): PcrDtoWithItems<PickList, ItemPickList> {
+>(
+  pcr: T,
+  pickList: PickList[],
+  itemsPickList: ItemPickList[],
+  additionalData: PcrAdditionalData<ItemPickList>,
+): PcrDtoWithItems<PickList, ItemPickList> {
   const dtoWithoutItems = pickList.reduce((dto, field) => {
     {
       dto[field] = headMapper[field](pcr.head);
@@ -107,7 +203,7 @@ export function mapToPcrDto<
 
   const dtoWithItems = {
     ...dtoWithoutItems,
-    items: mapPcrItemsDtos(pcr.children, itemsPickList),
+    items: mapPcrItemsDtos(pcr.children, itemsPickList, additionalData),
   } as PcrDtoWithItems<PickList, ItemPickList>;
   return dtoWithItems;
 }
@@ -123,6 +219,7 @@ export function mapToPcrDtoArray<
   pcrs: ReadonlyArray<Readonly<{ node: T | null }> | null>,
   pickList: PickList[],
   itemsPickList: ItemPickList[],
+  additionalData: PcrAdditionalData<ItemPickList>,
 ): PcrDtoWithItems<PickList, ItemPickList>[] {
   if (!pcrs) return [];
 
@@ -146,5 +243,7 @@ export function mapToPcrDtoArray<
     }
   }
 
-  return collatedPcrs.map(pcr => mapToPcrDto<CollatedPcrNode<T>, PickList, ItemPickList>(pcr, pickList, itemsPickList));
+  return collatedPcrs.map(pcr =>
+    mapToPcrDto<CollatedPcrNode<T>, PickList, ItemPickList>(pcr, pickList, itemsPickList, additionalData),
+  );
 }

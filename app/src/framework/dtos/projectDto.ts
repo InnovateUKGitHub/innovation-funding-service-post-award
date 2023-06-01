@@ -1,4 +1,4 @@
-import { ClaimFrequency, ProjectMonitoringLevel, ProjectRole, ProjectStatus } from "@framework/constants";
+import { ClaimFrequency, ProjectMonitoringLevel, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/constants";
 
 export interface ProjectDto {
   applicationUrl?: string | null;
@@ -46,4 +46,5 @@ export interface ProjectDtoGql extends ProjectDto {
   partnerRoles: SfPartnerRoles[];
   roles: SfRoles;
   leadPartnerId: string | null;
+  typeOfAid: TypeOfAid;
 }

@@ -90,3 +90,27 @@ declare type ArrayWithRequired<Required, Optional> = [...[Required], ...Optional
  * Gets a union of Values of an object
  */
 declare type Values<T extends AnyObject> = T[keyof T];
+
+/**
+ * Consolidates an intersection of objects into a single object
+ *
+ * @example
+ * Unify<{ apple: true } & { banana: true }>
+ * -> { apple: true; banana: true }
+ */
+declare type Unify<T> = { [P in keyof T]: T[P] };
+
+/**
+ * Has same API as Pick, but will make the matching keys optional
+ *
+ * @example
+ * PartialByKeys<{ apple: string; banana: string; cherry: string}, "banana">
+ * -> { apple: string; banana?: string; cherry: string }
+ */
+declare type PartialByKeys<T, K = string> = Unify<
+  {
+    [P in keyof T as P extends K ? P : never]?: T[P];
+  } & {
+    [P in keyof T as P extends K ? never : P]: T[P];
+  }
+>;

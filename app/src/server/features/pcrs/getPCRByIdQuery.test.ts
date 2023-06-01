@@ -8,7 +8,15 @@ import {
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
 } from "@framework/dtos";
-import { CostCategoryType, PCRItemType, PCRPartnerType, PCRProjectRole, TypeOfAid } from "@framework/constants";
+import {
+  CostCategoryType,
+  PCRItemStatus,
+  PCRItemType,
+  PCRPartnerType,
+  PCRProjectRole,
+  PCRStatus,
+  TypeOfAid,
+} from "@framework/constants";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { RecordType } from "@framework/entities";
@@ -43,12 +51,12 @@ describe("GetPCRByIdQuery", () => {
     const pcr = context.testData.createPCR(undefined, {
       number: 5,
       reasoning: "Expected reasoning",
-      reasoningStatus: 55,
+      reasoningStatus: PCRItemStatus.Complete,
       reasoningStatusName: "Expected Reasoning Status",
       comments: "Expected comments",
       started: expectedStartDate,
       updated: expectedUpdatedDate,
-      status: 33,
+      status: PCRStatus.Draft,
       statusName: "Expected Status name",
     });
 
@@ -98,7 +106,7 @@ describe("GetPCRByIdQuery", () => {
     const pcr = context.testData.createPCR();
 
     const item = context.testData.createPCRItem(pcr, recordType, {
-      status: 98,
+      status: PCRItemStatus.Complete,
       statusName: "Expected Status",
       shortName: "If a nickname is what people call you for short, then your full name is your nicholas name",
     });

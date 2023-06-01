@@ -1,34 +1,44 @@
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { PCRItemDto, PCRItemStatus } from "@framework/types";
-import * as ACC from "@ui/components";
+import { FullPCRItemDto, PCRItemStatus } from "@framework/types";
+import { Task } from "@ui/components";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { IEditorStore, useRoutes } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { usePcrItemName } from "../utils/getPcrItemName";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 
-const GetItemTasks = ({
-  editor,
-  index,
-  item,
-  projectId,
-  pcrId,
-  mode,
-}: {
+export type GetItemTaskProps = {
   editor?: IEditorStore<PCRDto, PCRDtoValidator>;
   index: number;
-  item: PCRItemDto;
+  item: Pick<
+    FullPCRItemDto,
+    | "accountName"
+    | "hasOtherFunding"
+    | "id"
+    | "isCommercialWork"
+    | "organisationName"
+    | "organisationType"
+    | "partnerNameSnapshot"
+    | "partnerType"
+    | "projectRole"
+    | "status"
+    | "type"
+    | "typeName"
+    | "typeOfAid"
+  >;
   projectId: ProjectId;
   pcrId: PcrId;
   mode: "details" | "prepare";
-}) => {
+};
+
+const GetItemTasks = ({ editor, index, item, projectId, pcrId, mode }: GetItemTaskProps) => {
   const routes = useRoutes();
   const validationErrors = editor?.validator.items.results[index].errors;
   const workflow = PcrWorkflow.getWorkflow(item, 1);
   const { getPcrItemContent } = usePcrItemName();
 
   return (
-    <ACC.Task
+    <Task
       name={getPcrItemContent(item.typeName, item).label}
       status={getPcrItemTaskStatus(item.status)}
       route={(mode === "prepare" ? routes.pcrPrepareItem : routes.pcrViewItem).getLink({

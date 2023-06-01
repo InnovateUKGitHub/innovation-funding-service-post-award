@@ -44,8 +44,13 @@ export type AddPartnerStepNames =
   | "otherFundingSourcesStep"
   | "agreementToPcrStep";
 
+export type AddPartnerWorkflowItem = Pick<
+  PCRItemForPartnerAdditionDto,
+  "projectRole" | "partnerType" | "isCommercialWork" | "typeOfAid" | "organisationType" | "hasOtherFunding"
+>;
+
 export const getAddPartnerWorkflow = (
-  item: PCRItemForPartnerAdditionDto,
+  item: AddPartnerWorkflowItem,
   step: number | undefined,
 ): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {

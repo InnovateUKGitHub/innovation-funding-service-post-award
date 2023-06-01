@@ -5,8 +5,9 @@ import { ProjectChangeRequestOverviewLog } from "./ProjectChangeRequestOverviewL
 import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverviewSummary";
 import { ProjectChangeRequestOverviewTasks } from "./ProjectChangeRequestOverviewTasks";
 import { ProjectChangeRequestPrepareForm } from "./ProjectChangeRequestPrepareForm";
-import { ProjectChangeRequestDetailsProps } from "./projectChangeRequestDetails.page";
 import { ProjectChangeRequestPrepareProps } from "./projectChangeRequestPrepare.page";
+import { PCRDto } from "@framework/dtos";
+import { GetItemTaskProps } from "./GetItemTasks";
 
 const PCROverviewComponent = ({
   project,
@@ -16,7 +17,7 @@ const PCROverviewComponent = ({
   statusChanges,
   editableItemTypes,
   mode,
-}: ProjectChangeRequestDetailsProps | ProjectChangeRequestPrepareProps) => {
+}: ProjectChangeRequestPrepareProps) => {
   const routes = useRoutes();
   const { getContent } = useContent();
   return (
@@ -33,7 +34,7 @@ const PCROverviewComponent = ({
     >
       <ProjectChangeRequestOverviewSummary pcr={pcr} projectId={project.id} />
       <ProjectChangeRequestOverviewTasks
-        pcr={pcr}
+        pcr={pcr as unknown as Pick<PCRDto, "id" | "reasoningStatus"> & { items: GetItemTaskProps["item"][] }}
         projectId={project.id}
         editableItemTypes={editableItemTypes}
         editor={editor}

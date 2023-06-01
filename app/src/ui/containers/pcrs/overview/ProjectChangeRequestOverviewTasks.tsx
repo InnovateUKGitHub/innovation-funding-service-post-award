@@ -5,10 +5,10 @@ import { useContent } from "@ui/hooks";
 import { IEditorStore, useRoutes } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
-import { GetItemTasks } from "./GetItemTasks";
+import { GetItemTasks, GetItemTaskProps } from "./GetItemTasks";
 
 interface ProjectChangeRequestOverviewTasksProps {
-  pcr: PCRDto;
+  pcr: Pick<PCRDto, "id" | "reasoningStatus"> & { items: GetItemTaskProps["item"][] };
   projectId: ProjectId;
   editor?: IEditorStore<PCRDto, PCRDtoValidator>;
   editableItemTypes: PCRItemType[];

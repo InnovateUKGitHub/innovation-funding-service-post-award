@@ -40,7 +40,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     super(getState, queue);
   }
 
-  private getKeyForRequest(projectId: ProjectId, pcrId?: string) {
+  private getKeyForRequest(projectId: ProjectId, pcrId?: PcrId) {
     return storeKeys.getPcrKey(projectId, pcrId);
   }
 
@@ -50,7 +50,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  public getItemById(projectId: ProjectId, pcrId: PcrId, itemId: string) {
+  public getItemById(projectId: ProjectId, pcrId: PcrId, itemId: PcrItemId) {
     return this.getById(projectId, pcrId).chain(pcr => {
       const item = pcr.items.find(x => x.id === itemId);
       const error = !item ? new NotFoundError("Item has not bee found in project change request") : null;
@@ -129,7 +129,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  public getPcrTypeForItem(projectId: ProjectId, pcrId: PcrId, itemId: string) {
+  public getPcrTypeForItem(projectId: ProjectId, pcrId: PcrId, itemId: PcrItemId) {
     const data = Pending.combine({
       itemTypes: this.getAllPcrTypes(projectId),
       pcrItem: this.getItemById(projectId, pcrId, itemId),

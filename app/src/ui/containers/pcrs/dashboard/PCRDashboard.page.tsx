@@ -4,7 +4,8 @@ import { PCRStatus } from "@framework/constants";
 import { Page, Projects, Renderers, Section, Accordion, AccordionItem, Link, createTypedTable } from "@ui/components";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { BaseProps, defineRoute } from "../../containerBase";
-import { usePcrDashboardQuery, useGetPcrTypeName } from "./PCRDashboard.logic";
+import { usePcrDashboardQuery } from "./PCRDashboard.logic";
+import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 
 interface PCRDashboardParams {
   projectId: ProjectId;

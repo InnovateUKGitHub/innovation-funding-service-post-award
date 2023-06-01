@@ -1,12 +1,7 @@
-import { ProjectChangeRequestStatusChangeDto } from "@framework/dtos";
-import { Accordion, AccordionItem, Logs, Section } from "@ui/components";
+import { Accordion, AccordionItem, Logs, LogItem, Section } from "@ui/components";
 import { useContent } from "@ui/hooks";
 
-const ProjectChangeRequestOverviewLog = ({
-  statusChanges,
-}: {
-  statusChanges: ProjectChangeRequestStatusChangeDto[];
-}) => {
+const ProjectChangeRequestOverviewLog = ({ statusChanges }: { statusChanges: LogItem[] }) => {
   const { getContent } = useContent();
 
   return (

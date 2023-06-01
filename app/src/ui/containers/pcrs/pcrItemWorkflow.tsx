@@ -24,7 +24,7 @@ import { IEditorStore, IStores, useStores } from "@ui/redux";
 import { Result } from "@ui/validation/result";
 
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { PcrStepProps, PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { PcrStepProps, PcrWorkflow, WorkflowPcrType } from "@ui/containers/pcrs/pcrWorkflow";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { GrantMovingOverFinancialYearForm } from "@ui/containers/pcrs/financialVirements/financialVirementsSummary";
 
@@ -147,7 +147,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     pcrItemType: PCRItemTypeDto,
     editableItemTypes: PCRItemType[],
   ) {
-    const workflow = PcrWorkflow.getWorkflow(pcrItem, this.props.step);
+    const workflow = PcrWorkflow.getWorkflow(pcrItem as WorkflowPcrType, this.props.step);
     const validation = workflow
       ? workflow.getValidation(new PCRWorkflowValidator(editor.validator, documentsEditor.validator))
       : [editor.validator, documentsEditor.validator];

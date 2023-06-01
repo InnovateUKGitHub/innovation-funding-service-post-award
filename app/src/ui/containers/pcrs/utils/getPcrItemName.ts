@@ -1,4 +1,4 @@
-import { PCRItemDto } from "@framework/dtos";
+import { FullPCRItemDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 
 /**
@@ -8,7 +8,14 @@ export const usePcrItemName = () => {
   const { getContent } = useContent();
 
   return {
-    getPcrItemContent: (value?: string, pcr?: PCRItemDto) => {
+    getPcrItemContent: (
+      value?: string,
+      pcr?: {
+        organisationName?: FullPCRItemDto["organisationName"];
+        accountName?: FullPCRItemDto["accountName"];
+        partnerNameSnapshot?: FullPCRItemDto["partnerNameSnapshot"];
+      },
+    ) => {
       let name: string;
       let description: string | undefined = undefined;
 

@@ -7,7 +7,7 @@ import { GetAllProjectRolesForUser } from "../projects";
 import { GetPcrStatusesQuery } from "./getPcrStatusesQuery";
 
 export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChangeRequestStatusChangeDto[]> {
-  constructor(private readonly projectId: ProjectId, private readonly projectChangeRequestId: string) {
+  constructor(private readonly projectId: ProjectId, private readonly projectChangeRequestId: PcrId) {
     super();
   }
 

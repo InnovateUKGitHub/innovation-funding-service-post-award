@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mapPcrStatusDtoArray should map the node to the projectDto structure 1`] = `
+Array [
+  Object {
+    "comments": "all good",
+    "createdBy": "Innovate UK",
+    "createdDate": 2023-05-24T09:46:09.000Z,
+    "id": "a0F26000009akjeEAA",
+    "newStatus": 12,
+    "newStatusLabel": "Submitted to Innovate UK",
+    "pcrId": "a0G26000007KqPTEA0",
+    "previousStatus": 2,
+    "previousStatusLabel": "Submitted to Monitoring Officer",
+  },
+  Object {
+    "comments": null,
+    "createdBy": "Innovate UK",
+    "createdDate": 2023-05-24T09:45:11.000Z,
+    "id": "a0F26000009akjZEAQ",
+    "newStatus": 2,
+    "newStatusLabel": "Submitted to Monitoring Officer",
+    "pcrId": "a0G26000007KqPTEA0",
+    "previousStatus": 1,
+    "previousStatusLabel": "Draft",
+  },
+  Object {
+    "comments": null,
+    "createdBy": "Innovate UK",
+    "createdDate": 2023-05-24T09:29:49.000Z,
+    "id": "a0F26000009akjFEAQ",
+    "newStatus": 1,
+    "newStatusLabel": "Draft",
+    "pcrId": "a0G26000007KqPTEA0",
+    "previousStatus": 0,
+    "previousStatusLabel": "unknown",
+  },
+]
+`;

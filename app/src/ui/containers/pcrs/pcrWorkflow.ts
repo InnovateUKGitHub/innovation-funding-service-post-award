@@ -9,7 +9,7 @@ import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/tim
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
-import { getAddPartnerWorkflow } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { getAddPartnerWorkflow, AddPartnerWorkflowItem } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IRoutes } from "@ui/routing";
 import { periodLengthChangeWorkflow } from "@ui/containers/pcrs/periodLengthChange/periodLengthChangeWorkflow";
@@ -57,6 +57,8 @@ export type IPCRWorkflow<T, TVal extends Results<AnyObject>> = IWorkflow<
   PCRWorkflowValidator
 >;
 
+export type WorkflowPcrType = AddPartnerWorkflowItem & { type: PCRItemType };
+
 export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends WorkflowBase<
   string,
   PcrStepProps<T, TVal>,
@@ -67,7 +69,7 @@ export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends W
     super(definition, stepNumber);
   }
 
-  private static getWorkflowType(pcrItem: PCRItemDto, step: number | undefined) {
+  private static getWorkflowType(pcrItem: WorkflowPcrType, step: number | undefined) {
     switch (pcrItem.type) {
       case PCRItemType.AccountNameChange:
         return new PcrWorkflow(accountNameChangeWorkflow, step);
@@ -85,10 +87,10 @@ export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends W
         return new PcrWorkflow(financialVirementWorkflow, step);
       case PCRItemType.PartnerWithdrawal:
         return new PcrWorkflow(removePartnerWorkflow, step);
-      case PCRItemType.PeriodLengthChange:
-        return new PcrWorkflow(periodLengthChangeWorkflow, step);
       case PCRItemType.PartnerAddition:
         return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);
+      case PCRItemType.PeriodLengthChange:
+        return new PcrWorkflow(periodLengthChangeWorkflow, step);
       case PCRItemType.SinglePartnerFinancialVirement:
         return new PcrWorkflow(standardItemWorkflow, step);
       default:
@@ -97,7 +99,7 @@ export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends W
   }
 
   public static getWorkflow(
-    pcrItem: PCRItemDto | undefined,
+    pcrItem: WorkflowPcrType | undefined,
     step: number | undefined,
   ): PcrWorkflow<PCRItemDto, Results<PCRItemDto>> | null {
     if (!pcrItem) {

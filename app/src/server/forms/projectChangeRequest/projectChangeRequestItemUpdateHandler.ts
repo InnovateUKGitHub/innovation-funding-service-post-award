@@ -28,7 +28,7 @@ import {
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
 import { SuspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { PcrWorkflow, WorkflowPcrType } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
@@ -62,7 +62,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
 
-    const workflow = PcrWorkflow.getWorkflow(item, params.step);
+    const workflow = PcrWorkflow.getWorkflow(item as WorkflowPcrType, params.step);
     const stepName = workflow?.getCurrentStepName();
 
     switch (item.type) {
@@ -171,7 +171,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     dto: Dtos.PCRDto,
   ): Promise<ILinkInfo> {
     const pcrItem = dto.items.find(x => x.id === params.itemId);
-    const workflow = PcrWorkflow.getWorkflow(pcrItem, params.step);
+    const workflow = PcrWorkflow.getWorkflow(pcrItem as WorkflowPcrType, params.step);
 
     const isPcrSummary: boolean = workflow?.isOnSummary() === true;
 

@@ -21,7 +21,7 @@ export interface IProjectChangeRequestStatusChangeRepository {
   createStatusChange(statusChange: ICreateProjectChangeRequestStatusChange): Promise<string>;
   getStatusChanges(
     projectId: ProjectId,
-    projectChangeRequestId: string,
+    projectChangeRequestId: PcrId,
   ): Promise<ProjectChangeRequestStatusChangeEntity[]>;
 }
 

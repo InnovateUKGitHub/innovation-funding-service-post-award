@@ -1,9 +1,21 @@
 import type { ProjectDtoGql } from "@framework/dtos";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
 import { getProjectStatus } from "@framework/mappers/projectStatus";
+import { TypeOfAid } from "@framework/types";
 import { Clock, dayComparator, roundCurrency } from "@framework/util";
 
 const clock = new Clock();
+
+const mapTypeOfAidToEnum = (typeOfAid: string): TypeOfAid => {
+  switch (typeOfAid) {
+    case "State aid":
+      return TypeOfAid.StateAid;
+    case "De minimis aid":
+      return TypeOfAid.DeMinimisAid;
+    default:
+      return TypeOfAid.Unknown;
+  }
+};
 
 type ProjectNode = Readonly<
   Partial<{
@@ -16,6 +28,10 @@ type ProjectNode = Readonly<
     Acc_ClaimsForReview__c: GQL.Value<number>;
     Acc_ClaimsOverdue__c: GQL.Value<number>;
     Acc_CompetitionType__c: GQL.Value<string>;
+    Acc_CompetitionId__r: {
+      Name?: GQL.Value<string>;
+      Acc_TypeofAid__c?: GQL.Value<string>;
+    } | null;
     Acc_CurrentPeriodEndDate__c: GQL.Value<string>;
     Acc_CurrentPeriodNumber__c: GQL.Value<number>;
     Acc_CurrentPeriodStartDate__c: GQL.Value<string>;
@@ -76,6 +92,7 @@ type ProjectDtoMapping = Pick<
   | "statusName"
   | "summary"
   | "title"
+  | "typeOfAid"
   | "partnerRoles"
 >;
 
@@ -184,6 +201,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   title(node) {
     return node?.Acc_ProjectTitle__c?.value ?? "";
+  },
+  typeOfAid(node) {
+    return mapTypeOfAidToEnum(node?.Acc_CompetitionId__r?.Acc_TypeofAid__c?.value ?? "unknown");
   },
 };
 

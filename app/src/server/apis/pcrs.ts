@@ -66,7 +66,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
     this.getCustom(
       "/status-changes/:projectId/:projectChangeRequestId",
-      p => ({ projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId }),
+      p => ({ projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId as PcrId }),
       this.getStatusChanges,
     );
     this.getCustom("/project-roles", () => ({}), this.getPcrProjectRoles);
@@ -105,9 +105,9 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
   async create(params: ApiParams<{ projectId: ProjectId; projectChangeRequestDto: PCRDto }>): Promise<PCRDto> {
     const context = contextProvider.start(params);
-    const id = await context.runCommand(
+    const id = (await context.runCommand(
       new CreateProjectChangeRequestCommand(params.projectId, params.projectChangeRequestDto),
-    );
+    )) as PcrId;
     return context.runQuery(new GetPCRByIdQuery(params.projectId, id));
   }
 
@@ -137,7 +137,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return contextProvider.start(params).runCommand(command);
   }
 
-  public getStatusChanges(params: ApiParams<{ projectId: ProjectId; projectChangeRequestId: string }>) {
+  public getStatusChanges(params: ApiParams<{ projectId: ProjectId; projectChangeRequestId: PcrId }>) {
     const query = new GetProjectChangeRequestStatusChanges(params.projectId, params.projectChangeRequestId);
     return contextProvider.start(params).runQuery(query);
   }

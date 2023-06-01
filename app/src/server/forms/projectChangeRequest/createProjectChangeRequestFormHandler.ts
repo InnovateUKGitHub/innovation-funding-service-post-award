@@ -54,7 +54,7 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
-    const id = await context.runCommand(new CreateProjectChangeRequestCommand(params.projectId, dto));
+    const id = (await context.runCommand(new CreateProjectChangeRequestCommand(params.projectId, dto))) as PcrId;
     return ProjectChangeRequestPrepareRoute.getLink({ projectId: params.projectId, pcrId: id });
   }
 
