@@ -1,0 +1,6 @@
+kind: Route
+apiVersion: apps/v1
+metadata:
+  name: acc-ui-route
+spec:
+  host: acc.apply-for-innovation-funding.service.gov.uk
