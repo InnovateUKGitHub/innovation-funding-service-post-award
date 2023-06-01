@@ -2,6 +2,7 @@ import { isApiError } from "@framework/util/errorHelpers";
 import { useApiErrorContext } from "@ui/context/api-error";
 import { noop } from "@ui/helpers/noop";
 import { useState } from "react";
+import { Logger } from "@shared/developmentLogger";
 
 /**
  * ### useOnUpdate
@@ -11,6 +12,7 @@ import { useState } from "react";
  * apiError is also initialised with any serverRenderedApiError, mainly
  * to support js disabled
  *
+ * @returns an object with `onUpdate` function and `apiError` response
  */
 
 export const useOnUpdate = <TFormValues, TPromise>({
@@ -30,9 +32,13 @@ export const useOnUpdate = <TFormValues, TPromise>({
       await req(data);
       onSuccess();
     } catch (e: unknown) {
+      const logger = new Logger("onUpdate");
+
       if (isApiError(e)) {
         setApiError(e);
       }
+
+      logger.error("request error", e);
       onError();
     }
   };
