@@ -12,7 +12,9 @@ const WithScrollToTopOnPropChange = ({
   children: React.ReactNode;
   propToScrollOn: boolean | number | string | undefined;
 }) => {
-  useEffect(() => scrollToTheTopSmoothly(), [propToScrollOn]);
+  useEffect(() => {
+    scrollToTheTopSmoothly();
+  }, [propToScrollOn]);
   return <>{children}</>;
 };
 
