@@ -1031,3 +1031,35 @@ export const dateChangeSummary = () => {
     cy.getByQA("projectSuspension").contains(summary);
   });
 };
+
+export const validateAddPerson = () => {
+  ["First name", "Last name"].forEach(field => {
+    cy.getByLabel(field).clear().type("Thisisovertheagreedlimitforvalidationfiftycharacter");
+    cy.getByQA("button_default-qa").contains("Save and continue").click();
+    cy.getByQA("validation-summary").contains("Finance contact name must be 50 characters or less.");
+  }),
+    cy.getByLabel("Phone number").clear().type("012345678910111213141");
+  cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
+  cy.getByQA("button_default-qa").contains("Save and continue").click();
+  cy.getByQA("validation-summary").contains("Finance contact phone number must be 20 characters or less.");
+  cy.getByQA("field-contact1Phone").contains("Finance contact phone number must be 20 characters or less.");
+
+  cy.getByLabel("Email")
+    .clear()
+    .type(
+      "ThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThis",
+    );
+  cy.getByQA("button_default-qa").contains("Save and continue").click();
+  cy.getByQA("validation-summary").contains("Email address must be 255 characters or less.");
+  cy.getByQA("field-contact1Email").contains("Email address must be 255 characters or less.");
+  cy.getByQA("field-contact1Forename").contains("Finance contact name must be 50 characters or less.");
+  cy.getByQA("field-contact1Surname").contains("Finance contact surname must be 50 characters or less.");
+};
+
+export const clearAndEnterValidPersonInfo = () => {
+  cy.getByLabel("First name").clear().type("Joseph");
+  cy.getByLabel("Last name").clear().type("Dredd");
+  cy.getByLabel("Phone number").clear().type("01234567890");
+  cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
+  cy.getByLabel("Email").clear().type("Joseph.dredd@mc1.comtest");
+};

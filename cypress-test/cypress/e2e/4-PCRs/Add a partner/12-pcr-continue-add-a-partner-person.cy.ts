@@ -1,5 +1,10 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, saveContinueSaveSummary, navigateToPartnerPerson } from "../steps";
+import {
+  shouldShowProjectTitle,
+  navigateToPartnerPerson,
+  validateAddPerson,
+  clearAndEnterValidPersonInfo,
+} from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR person details section", () => {
@@ -33,13 +38,15 @@ describe("PCR > Add partner > Continuing editing PCR person details section", ()
     cy.get("h2").contains("Finance contact");
   });
 
-  it("Should have field names for First, Last name, Phone number and Email and complete the input boxes", () => {
-    cy.getByLabel("First name").type("Joseph");
-    cy.getByLabel("Last name").type("Dredd");
-    cy.getByLabel("Phone number").type("01234567890");
-    cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
-    cy.getByLabel("Email").type("Joseph.dredd@mc1.comtest");
-  });
+  it("Should check for validation messaging while entering invalid details", validateAddPerson);
 
-  it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
+  it(
+    "Should clear the previous data and enter a valid First & Last name, Phone number and Email",
+    clearAndEnterValidPersonInfo,
+  );
+
+  it("With valid data, it should now 'Save and continue' and then assert the next page loads correctly", () => {
+    cy.getByQA("button_default-qa").contains("Save and continue").click();
+    cy.get("h2").contains("Project costs for new partner");
+  });
 });
