@@ -119,15 +119,26 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     ),
   );
 
-  public postcodeEditStatus =
-    this.model.postcodeStatus !== PostcodeTaskStatus.ToDo
-      ? Validation.isTrue(
-          this,
-          !!this.model.postcode?.length,
-          this.getContent(x => x.validation.partnerDtoValidator.projectLocationPostcodeRequired),
-          "new-postcode",
-        )
-      : Validation.valid(this, false);
+  public postcodeEditStatus = Validation.all(
+    this,
+    () =>
+      this.model.postcodeStatus !== PostcodeTaskStatus.ToDo
+        ? Validation.isTrue(
+            this,
+            !!this.model.postcode?.length,
+            this.getContent(x => x.validation.partnerDtoValidator.projectLocationPostcodeRequired),
+            "new-postcode",
+          )
+        : Validation.valid(this),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.postcode,
+        10,
+        this.getContent(x => x.validation.partnerDtoValidator.projectLocationPostcodeLengthTooLarge({ count: 10 })),
+        "new-postcode",
+      ),
+  );
 
   public bankCheckValidation = this.conditionallyValidateBankDetails(() =>
     Validation.isFalse(

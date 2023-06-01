@@ -1536,6 +1536,7 @@
       "partnerStatusChangeDisallowed": "Partner status change not allowed.",
       "spendProfileRequired": "You must complete your spend profile.",
       "projectLocationPostcodeRequired": "You must provide your project location postcode.",
+      "projectLocationPostcodeLengthTooLarge": "Your location entry must be no more than {{ count }} characters.",
       "sortCodeRequired": "Sort code cannot be empty.",
       "sortCodeInvalid": "Enter a valid sort code.",
       "accountNumberRequired": "Account number cannot be empty.",

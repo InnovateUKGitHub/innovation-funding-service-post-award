@@ -120,8 +120,14 @@ export function isBeforeOrSameDay(results: Results<ResultBase>, value: Date | nu
 /**
  * validates against max length
  */
-export function maxLength(results: Results<ResultBase>, value: string | null, length: number, message?: string) {
-  return isTrue(results, !value || value.length <= length, message || `Maximum of ${length} characters`);
+export function maxLength(
+  results: Results<ResultBase>,
+  value: string | null,
+  length: number,
+  message?: string,
+  keyId?: string,
+) {
+  return isTrue(results, !value || value.length <= length, message || `Maximum of ${length} characters`, keyId);
 }
 
 /**
