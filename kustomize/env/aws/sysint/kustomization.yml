@@ -7,4 +7,3 @@ bases:
 
 resources:
   - ../../../config-mgmt/env/aws/sysint
-  - ../../../secrets-mgmt/env/aws/sysint

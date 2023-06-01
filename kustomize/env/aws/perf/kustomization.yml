@@ -7,4 +7,3 @@ bases:
 
 resources:
   - ../../../config-mgmt/env/aws/perf
-  - ../../../secrets-mgmt/env/aws/perf

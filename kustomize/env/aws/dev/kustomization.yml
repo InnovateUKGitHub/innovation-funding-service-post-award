@@ -7,4 +7,3 @@ bases:
 
 resources:
   - ../../../config-mgmt/env/aws/dev
-  - ../../../secrets-mgmt/env/aws/dev
