@@ -10,4 +10,3 @@ patchesStrategicMerge:
 
 resources:
   - ../../../config-mgmt/env/aws/prod
-  - ../../../secrets-mgmt/env/aws/prod

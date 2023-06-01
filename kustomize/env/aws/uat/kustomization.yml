@@ -7,4 +7,3 @@ bases:
 
 resources:
   - ../../../config-mgmt/env/aws/uat
-  - ../../../secrets-mgmt/env/aws/uat
