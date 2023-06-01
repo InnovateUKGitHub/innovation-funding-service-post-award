@@ -6,6 +6,10 @@ import { Clock, salesforceDateFormat } from "@framework/util";
 
 const clock = new Clock();
 
+/**
+ * On Acc_Claims__c
+ */
+
 type ClaimNode = Readonly<
   Partial<{
     Id: string;
