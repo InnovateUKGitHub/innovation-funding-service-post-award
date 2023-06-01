@@ -4,6 +4,6 @@ metadata:
   name: acc-ui-configmap
 data:
   ACC_ENVIRONMENT: perf
-  SERVER_URL: https://www-acc-ifspaperf.apps.org-env-0.org.innovateuk.ukri.org
+  SERVER_URL: https://www-acc-perf.apps.ocp4.innovateuk.ukri.org
   USE_SSO: "false"
   NEW_RELIC_ENABLED: "false"

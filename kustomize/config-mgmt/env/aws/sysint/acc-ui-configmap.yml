@@ -4,5 +4,5 @@ metadata:
   name: acc-ui-configmap
 data:
   ACC_ENVIRONMENT: sysint
-  SERVER_URL: https://www-acc-sysint.apps.org-env-0.org.innovateuk.ukri.org
+  SERVER_URL: https://www-acc-sysint.apps.ocp4.innovateuk.ukri.org
   USE_SSO: "false"

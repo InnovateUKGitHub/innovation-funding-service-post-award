@@ -5,8 +5,9 @@ commonAnnotations:
 bases:
   - ../aws-base
 
-patchesStrategicMerge:
-  - extui-deployment.yml
-
 resources:
   - ../../../config-mgmt/env/aws/prod
+
+patchesStrategicMerge:
+  - extui-deployment.yml
+  - acc-ui-route.yml
