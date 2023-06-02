@@ -5,13 +5,15 @@ import argparse
 # from dataclasses import dataclass
 # @dataclass
 class _SkaffoldArguments:
-    environment: str
+    environments: str
     filename: str
     encrypt: bool
     decrypt: bool
 
-    def __init__(self, environment: str, filename: str, encrypt: bool, decrypt: bool):
-        self.environment = environment
+    def __init__(
+        self, environments: "list[str]", filename: str, encrypt: bool, decrypt: bool
+    ):
+        self.environments = environments
         self.filename = filename
         self.encrypt = encrypt
         self.decrypt = decrypt
@@ -23,10 +25,20 @@ _parser = argparse.ArgumentParser(
 )
 _parser.add_argument(
     "--env",
-    help="Environment to target.",
+    help="Environment to process. Use multiple times to process multiple environments.",
     required=True,
-    choices=["demo", "dev", "perf", "preprod", "prod", "sysint", "uat", "local"],
-    dest="environment",
+    action="append",
+    choices=[
+        "demo",
+        "dev",
+        "perf",
+        "preprod",
+        "prod",
+        "sysint",
+        "uat",
+        "local",
+    ],
+    dest="environments",
 )
 _parser.add_argument(
     "--filename",
@@ -35,15 +47,7 @@ _parser.add_argument(
 )
 
 _actionGroup = _parser.add_mutually_exclusive_group(required=True)
-_actionGroup.add_argument(
-    "--encrypt",
-    help="Encrypt file",
-    action="store_true"
-)
-_actionGroup.add_argument(
-    "--decrypt",
-    help="Decrypt file",
-    action="store_true"
-)
+_actionGroup.add_argument("--encrypt", help="Encrypt file", action="store_true")
+_actionGroup.add_argument("--decrypt", help="Decrypt file", action="store_true")
 
 cliargs = _SkaffoldArguments(**vars(_parser.parse_args()))

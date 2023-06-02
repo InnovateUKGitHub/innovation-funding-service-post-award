@@ -6,9 +6,9 @@ from environment import Environment, secrets_folder
 from os.path import join
 
 pgp_map = {
-    "local": "B53767C365EDCD31C3F9C3840D0214D502A89362",
-    "named": "887175989B24BF72F14B12D980EE689D30DF3F30",
-    "prod": "C34A72D77C79E76EAE8F3DF119D34C037E4F8EFE",
+    "local": "68B30A0146AD5875C9C77D079E278C8B3F654B2C",
+    "named": "FD616914094FACB25AF974FD122E1F140DACA0F9",
+    "prod": "2751917B04E90FA76EAA208D774CEFB1E50B7F68",
 }
 
 environment_map = {
@@ -45,10 +45,11 @@ def decrypt(file: str, env: str):
 
 
 def main():
-    if cliargs.encrypt:
-        encrypt(file=cliargs.filename, env=cliargs.environment)
-    if cliargs.decrypt:
-        decrypt(file=cliargs.filename, env=cliargs.environment)
+    for environment in cliargs.environments:
+        if cliargs.encrypt:
+            encrypt(file=cliargs.filename, env=environment)
+        if cliargs.decrypt:
+            decrypt(file=cliargs.filename, env=environment)
 
 if __name__ == "__main__":
     main()
