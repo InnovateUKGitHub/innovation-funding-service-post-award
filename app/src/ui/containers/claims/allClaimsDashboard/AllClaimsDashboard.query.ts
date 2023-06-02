@@ -11,7 +11,7 @@ export const allClaimsDashboardQuery = graphql`
                 { RecordType: { Name: { eq: "Total Project Period" } } }
               ]
             }
-            first: 1000
+            first: 2000
           ) {
             edges {
               node {
@@ -34,7 +34,7 @@ export const allClaimsDashboardQuery = graphql`
               ]
             }
             first: 2000
-            orderBy: { LastModifiedDate: { order: DESC } }
+            orderBy: { Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } } }
           ) {
             edges {
               node {
@@ -42,6 +42,13 @@ export const allClaimsDashboardQuery = graphql`
                 RecordType {
                   Name {
                     value
+                  }
+                }
+                Acc_ProjectParticipant__r {
+                  Acc_AccountId__r {
+                    Name {
+                      value
+                    }
                   }
                 }
                 LastModifiedDate {
@@ -100,7 +107,10 @@ export const allClaimsDashboardQuery = graphql`
                 Acc_ProjectStatus__c {
                   value
                 }
-                Acc_ProjectParticipantsProject__r(orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }, first: 500) {
+                Acc_ProjectParticipantsProject__r(
+                  orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
+                  first: 1000
+                ) {
                   edges {
                     node {
                       Id

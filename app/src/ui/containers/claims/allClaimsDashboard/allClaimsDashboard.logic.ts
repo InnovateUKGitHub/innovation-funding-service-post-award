@@ -33,10 +33,12 @@ export const useAllClaimsDashboardData = (projectId: ProjectId) => {
       "id",
     ]);
 
-    const partners = mapToPartnerDtoArray(
-      projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [],
-      ["isLead", "roles", "isWithdrawn", "partnerStatus", "overdueProject", "name", "accountId", "id"],
-      { partnerRoles: project.partnerRoles },
+    const partners = sortPartnersLeadFirst(
+      mapToPartnerDtoArray(
+        projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [],
+        ["isLead", "roles", "isWithdrawn", "partnerStatus", "overdueProject", "name", "accountId", "id"],
+        { partnerRoles: project.partnerRoles },
+      ),
     );
 
     const periodProfileDetails = mapToProfilePeriodDetailsDtoArray(profileGql, ["partnerId", "forecastCost"]);
@@ -60,6 +62,6 @@ export const useAllClaimsDashboardData = (projectId: ProjectId) => {
       { periodProfileDetails, competitionType: project.competitionType },
     );
 
-    return { project, partners: sortPartnersLeadFirst(partners), claims };
+    return { project, partners, claims };
   }, []);
 };
