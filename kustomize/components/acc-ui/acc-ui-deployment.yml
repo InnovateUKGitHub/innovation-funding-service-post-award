@@ -12,6 +12,8 @@ spec:
       labels:
         app: acc-ui
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: acc-ui
           image: acc-ui
