@@ -14,7 +14,7 @@
     "patch-package": "patch-package",
     "build": "webpack --env env=production",
     "build:dev": "webpack --env env=development --env devtools",
-    "test": "jest",
+    "test": "TZ=europe/london jest",
     "test:light": "TS_JEST_ISOLATED_MODULES=true jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint . --ext .js,.ts,.tsx",
