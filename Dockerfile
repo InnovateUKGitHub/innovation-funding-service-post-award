@@ -16,4 +16,4 @@ EXPOSE 8080
 
 RUN npm run build
 
-CMD ["npm", "run", "start:server"]
+CMD ["node", "--enable-source-maps", "./dist/src/server/index.js"]
