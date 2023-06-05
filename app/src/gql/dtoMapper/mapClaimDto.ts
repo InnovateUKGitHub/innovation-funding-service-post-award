@@ -52,7 +52,10 @@ type ClaimDtoMapping = Pick<
 const mapper: GQL.DtoMapper<
   ClaimDtoMapping,
   ClaimNode,
-  { competitionType?: string; periodProfileDetails?: { forecastCost: number; partnerId: PartnerId }[] }
+  {
+    competitionType?: string;
+    periodProfileDetails?: { forecastCost: number; partnerId: PartnerId; periodId: number }[];
+  }
 > = {
   approvedDate(node) {
     return node?.Acc_ApprovedDate__c?.value === null
@@ -60,9 +63,15 @@ const mapper: GQL.DtoMapper<
       : clock.parse(node?.Acc_ApprovedDate__c?.value, salesforceDateFormat);
   },
   forecastCost(node, additionalData) {
+    /*
+     * need to obtain the forecast cost from periodProfileDetails mapping,
+     * matching the participant id and period id
+     */
     return (
-      additionalData.periodProfileDetails?.find(x => x.partnerId === node?.Acc_ProjectParticipant__r?.Id)
-        ?.forecastCost ?? 0
+      additionalData.periodProfileDetails?.find(
+        x =>
+          x.partnerId === node?.Acc_ProjectParticipant__r?.Id && x.periodId === node?.Acc_ProjectPeriodNumber__c?.value,
+      )?.forecastCost ?? 0
     );
   },
   id(node) {
@@ -115,7 +124,7 @@ const mapper: GQL.DtoMapper<
 type ClaimsAdditionalData<TPickList extends string> = AdditionalDataType<
   TPickList,
   [
-    ["forecastCost", "periodProfileDetails", { forecastCost: number; partnerId: PartnerId }[]],
+    ["forecastCost", "periodProfileDetails", { forecastCost: number; partnerId: PartnerId; periodId: number }[]],
     ["statusLabel", "competitionType", string],
   ]
 >;

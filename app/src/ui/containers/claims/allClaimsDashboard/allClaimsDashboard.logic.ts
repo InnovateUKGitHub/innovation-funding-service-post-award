@@ -41,7 +41,11 @@ export const useAllClaimsDashboardData = (projectId: ProjectId) => {
       ),
     );
 
-    const periodProfileDetails = mapToProfilePeriodDetailsDtoArray(profileGql, ["partnerId", "forecastCost"]);
+    const periodProfileDetails = mapToProfilePeriodDetailsDtoArray(profileGql, [
+      "partnerId",
+      "forecastCost",
+      "periodId",
+    ]);
 
     const claims = mapToClaimDtoArray(
       claimsGql,

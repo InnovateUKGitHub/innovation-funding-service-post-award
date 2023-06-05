@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4d15dbc300a035e6dd073ce1944330bf>>
+ * @generated SignedSource<<22586ff6c91a4e32e399064de2aacccc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -70,6 +70,9 @@ export type AllClaimsDashboardQuery$data = {
               } | null;
               readonly Acc_ProjectParticipant__c: {
                 readonly value: string | null;
+              } | null;
+              readonly Acc_ProjectPeriodNumber__c: {
+                readonly value: number | null;
               } | null;
             } | null;
           } | null> | null;
@@ -207,20 +210,30 @@ v5 = [
   (v4/*: any*/)
 ],
 v6 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "DoubleValue",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectPeriodNumber__c",
+  "plural": false,
+  "selections": (v5/*: any*/),
+  "storageKey": null
+},
+v7 = {
   "Acc_AccountId__r": {
     "Name": {
       "order": "ASC"
     }
   }
 },
-v7 = {
+v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
-v8 = [
+v9 = [
   {
     "alias": null,
     "args": null,
@@ -232,38 +245,38 @@ v8 = [
     "storageKey": null
   }
 ],
-v9 = {
+v10 = {
   "alias": null,
   "args": null,
   "concreteType": "Account",
   "kind": "LinkedField",
   "name": "Acc_AccountId__r",
   "plural": false,
-  "selections": (v8/*: any*/),
-  "storageKey": null
-},
-v10 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "isMo",
+  "selections": (v9/*: any*/),
   "storageKey": null
 },
 v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isFc",
+  "name": "isMo",
   "storageKey": null
 },
 v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "isFc",
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v13 = [
+v14 = [
   {
     "alias": null,
     "args": null,
@@ -347,7 +360,8 @@ v13 = [
                             "plural": false,
                             "selections": (v5/*: any*/),
                             "storageKey": null
-                          }
+                          },
+                          (v6/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -365,7 +379,7 @@ v13 = [
                     "kind": "Literal",
                     "name": "orderBy",
                     "value": {
-                      "Acc_ProjectParticipant__r": (v6/*: any*/)
+                      "Acc_ProjectParticipant__r": (v7/*: any*/)
                     }
                   },
                   {
@@ -422,7 +436,7 @@ v13 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v7/*: any*/),
+                          (v8/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -430,7 +444,7 @@ v13 = [
                             "kind": "LinkedField",
                             "name": "RecordType",
                             "plural": false,
-                            "selections": (v8/*: any*/),
+                            "selections": (v9/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -441,8 +455,8 @@ v13 = [
                             "name": "Acc_ProjectParticipant__r",
                             "plural": false,
                             "selections": [
-                              (v9/*: any*/),
-                              (v7/*: any*/)
+                              (v10/*: any*/),
+                              (v8/*: any*/)
                             ],
                             "storageKey": null
                           },
@@ -515,16 +529,7 @@ v13 = [
                             "selections": (v5/*: any*/),
                             "storageKey": null
                           },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "DoubleValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectPeriodNumber__c",
-                            "plural": false,
-                            "selections": (v5/*: any*/),
-                            "storageKey": null
-                          },
+                          (v6/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -586,7 +591,7 @@ v13 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v7/*: any*/),
+                          (v8/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -602,9 +607,9 @@ v13 = [
                             "name": "roles",
                             "plural": false,
                             "selections": [
-                              (v10/*: any*/),
                               (v11/*: any*/),
                               (v12/*: any*/),
+                              (v13/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -613,9 +618,9 @@ v13 = [
                                 "name": "partnerRoles",
                                 "plural": true,
                                 "selections": [
-                                  (v10/*: any*/),
                                   (v11/*: any*/),
                                   (v12/*: any*/),
+                                  (v13/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -670,7 +675,7 @@ v13 = [
                               {
                                 "kind": "Literal",
                                 "name": "orderBy",
-                                "value": (v6/*: any*/)
+                                "value": (v7/*: any*/)
                               }
                             ],
                             "concreteType": "Acc_ProjectParticipant__cConnection",
@@ -694,8 +699,8 @@ v13 = [
                                     "name": "node",
                                     "plural": false,
                                     "selections": [
-                                      (v7/*: any*/),
-                                      (v9/*: any*/),
+                                      (v8/*: any*/),
+                                      (v10/*: any*/),
                                       {
                                         "alias": null,
                                         "args": null,
@@ -820,7 +825,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "AllClaimsDashboardQuery",
-    "selections": (v13/*: any*/),
+    "selections": (v14/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -829,19 +834,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "AllClaimsDashboardQuery",
-    "selections": (v13/*: any*/)
+    "selections": (v14/*: any*/)
   },
   "params": {
-    "cacheID": "3f1d35707af769450c797b6b3c64fac7",
+    "cacheID": "bb69a041c15f95310724ea5a34a84e05",
     "id": null,
     "metadata": {},
     "name": "AllClaimsDashboardQuery",
     "operationKind": "query",
-    "text": "query AllClaimsDashboardQuery(\n  $projectId: ID!\n  $projectIdStr: String\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Profile__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {RecordType: {Name: {eq: \"Total Project Period\"}}}]}, first: 2000) {\n          edges {\n            node {\n              Acc_PeriodLatestForecastCost__c {\n                value\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {RecordType: {Name: {eq: \"Total Project Period\"}}}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}}) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectParticipant__r {\n                Acc_AccountId__r {\n                  Name {\n                    value\n                  }\n                }\n                Id\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_ApprovedDate__c {\n                value\n              }\n              Acc_ClaimStatus__c {\n                value\n                label\n              }\n              Acc_PaidDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodCost__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isMo\n                  isFc\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 1000) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_TotalParticipantGrant__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ForecastLastModifiedDate__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalFutureForecastsForParticipant__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_TotalCostsSubmitted__c {\n                      value\n                    }\n                    Acc_Overdue_Project__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AllClaimsDashboardQuery(\n  $projectId: ID!\n  $projectIdStr: String\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Profile__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {RecordType: {Name: {eq: \"Total Project Period\"}}}]}, first: 2000) {\n          edges {\n            node {\n              Acc_PeriodLatestForecastCost__c {\n                value\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {RecordType: {Name: {eq: \"Total Project Period\"}}}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}}) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectParticipant__r {\n                Acc_AccountId__r {\n                  Name {\n                    value\n                  }\n                }\n                Id\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_ApprovedDate__c {\n                value\n              }\n              Acc_ClaimStatus__c {\n                value\n                label\n              }\n              Acc_PaidDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodCost__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isMo\n                  isFc\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 1000) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_TotalParticipantGrant__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ForecastLastModifiedDate__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalFutureForecastsForParticipant__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_TotalCostsSubmitted__c {\n                      value\n                    }\n                    Acc_Overdue_Project__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ee4ca131199f88997cab60f721316749";
+(node as any).hash = "73486baae16947e1504c7b8b217e5a46";
 
 export default node;

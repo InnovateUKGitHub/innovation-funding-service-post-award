@@ -21,6 +21,9 @@ export const allClaimsDashboardQuery = graphql`
                 Acc_ProjectParticipant__c {
                   value
                 }
+                Acc_ProjectPeriodNumber__c {
+                  value
+                }
               }
             }
           }

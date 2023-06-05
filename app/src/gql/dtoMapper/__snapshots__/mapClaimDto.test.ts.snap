@@ -69,7 +69,7 @@ exports[`mapToClaimDtoArray should map with additional data if statusLabel or fo
 Array [
   Object {
     "approvedDate": null,
-    "forecastCost": 123456,
+    "forecastCost": 400,
     "id": "a0526000009Mc2aAAC",
     "isApproved": false,
     "isFinalClaim": false,
@@ -101,7 +101,7 @@ Array [
   },
   Object {
     "approvedDate": 2023-05-15T23:00:00.000Z,
-    "forecastCost": 123456,
+    "forecastCost": 300,
     "id": "a0526000009Mc2RAAS",
     "isApproved": true,
     "isFinalClaim": false,
@@ -117,7 +117,7 @@ Array [
   },
   Object {
     "approvedDate": 2023-05-15T23:00:00.000Z,
-    "forecastCost": 123456,
+    "forecastCost": 200,
     "id": "a0526000009Mc2QAAS",
     "isApproved": true,
     "isFinalClaim": false,
@@ -133,7 +133,7 @@ Array [
   },
   Object {
     "approvedDate": 2023-05-15T23:00:00.000Z,
-    "forecastCost": 123456,
+    "forecastCost": 100,
     "id": "a0526000009Mc2PAAS",
     "isApproved": true,
     "isFinalClaim": false,

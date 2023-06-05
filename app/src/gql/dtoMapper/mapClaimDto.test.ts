@@ -224,12 +224,29 @@ describe("mapToClaimDtoArray", () => {
           competitionType: "CR&D",
           periodProfileDetails: [
             {
-              forecastCost: 123456,
+              forecastCost: 100,
               partnerId: "a0D2600000zXl72EAC" as PartnerId,
+              periodId: 1,
+            },
+            {
+              forecastCost: 200,
+              partnerId: "a0D2600000zXl72EAC" as PartnerId,
+              periodId: 2,
+            },
+            {
+              forecastCost: 300,
+              partnerId: "a0D2600000zXl72EAC" as PartnerId,
+              periodId: 3,
+            },
+            {
+              forecastCost: 400,
+              partnerId: "a0D2600000zXl72EAC" as PartnerId,
+              periodId: 12,
             },
             {
               forecastCost: 10000,
               partnerId: "a0D2600000zXl71EAC" as PartnerId,
+              periodId: 1,
             },
           ],
         },
