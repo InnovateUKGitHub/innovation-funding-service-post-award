@@ -7,7 +7,7 @@ export default (context: IContext) =>
     description: item.Acc_LineItemDescription__c,
     value: item.Acc_LineItemCost__c,
     partnerId: item.Acc_ProjectParticipant__c as PartnerId,
-    periodId: item.Acc_ProjectPeriodNumber__c,
+    periodId: item.Acc_ProjectPeriodNumber__c as PeriodId,
     costCategoryId: item.Acc_CostCategory__c,
     lastModifiedDate: context.clock.parseRequiredSalesforceDateTime(item.LastModifiedDate),
     isAuthor:

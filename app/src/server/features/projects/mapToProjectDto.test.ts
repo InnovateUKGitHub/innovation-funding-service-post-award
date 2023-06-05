@@ -33,7 +33,7 @@ describe("mapToProjectDto", () => {
       competitionType: "SBRI",
       claimFrequency: ClaimFrequency.Quarterly,
       claimFrequencyName: ClaimFrequency[ClaimFrequency.Quarterly],
-      periodId: 3,
+      periodId: 3 as PeriodId,
       grantOfferLetterCosts: 2000,
       costsClaimedToDate: 1000,
       claimedPercentage: 50,

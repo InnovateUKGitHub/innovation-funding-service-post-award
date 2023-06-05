@@ -33,7 +33,7 @@ const mapper: GQL.DtoMapper<LoanDtoMapping, LoanNode> = {
     return (node?.Id ?? "") as LoanId;
   },
   period(node) {
-    return node?.Acc_PeriodNumber__c?.value ?? 0;
+    return (node?.Acc_PeriodNumber__c?.value ?? 0) as PeriodId;
   },
   status(node) {
     return loanStatusFromSfMap(node?.Loan_DrawdownStatus__c?.value ?? "unknown");

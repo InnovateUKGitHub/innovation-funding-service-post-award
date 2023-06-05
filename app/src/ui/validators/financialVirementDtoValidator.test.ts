@@ -128,7 +128,7 @@ describe("financialVirementDtoValidator", () => {
       return {
         id: uuid() as LoanId,
         isEditable: true,
-        period: 1,
+        period: 1 as PeriodId as PeriodId,
         status: LoanStatus.PLANNED,
 
         currentDate,
@@ -168,14 +168,14 @@ describe("financialVirementDtoValidator", () => {
         };
 
         test.each`
-          name                                          | payload                                                                                                                                                     | expectedResponse | expectedError
-          ${"with one item to check"}                   | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }])}                                                                  | ${true}          | ${null}
-          ${"when equal in months"}                     | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }, { isEditable: true, period: 2, currentValue: 10, newValue: 10 }])} | ${true}          | ${null}
-          ${"with valid funds moved to earlier months"} | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 0 }])}  | ${true}          | ${null}
-          ${"with valid funds moved to later months"}   | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 0 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])}  | ${true}          | ${null}
-          ${"with overdrawn funds in all months"}       | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£20.00'. Adjust period '1, 2' to proceed."}
-          ${"with overdrawn funds in earlier months"}   | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 10 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£10.00'. Adjust period '1, 2' to proceed."}
-          ${"with overdrawn funds in later months"}     | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£10.00'. Adjust period '1, 2' to proceed."}
+          name                                          | payload                                                                                                                                                                             | expectedResponse | expectedError
+          ${"with one item to check"}                   | ${createTotalValueStub([{ isEditable: true, period: 1 as PeriodId, currentValue: 10, newValue: 10 }])}                                                                              | ${true}          | ${null}
+          ${"when equal in months"}                     | ${createTotalValueStub([{ isEditable: true, period: 1 as PeriodId, currentValue: 10, newValue: 10 }, { isEditable: true, period: 2 as PeriodId, currentValue: 10, newValue: 10 }])} | ${true}          | ${null}
+          ${"with valid funds moved to earlier months"} | ${createTotalValueStub([{ isEditable: true, period: 1 as PeriodId, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2 as PeriodId, currentValue: 10, newValue: 0 }])}  | ${true}          | ${null}
+          ${"with valid funds moved to later months"}   | ${createTotalValueStub([{ isEditable: true, period: 1 as PeriodId, currentValue: 10, newValue: 0 }, { isEditable: true, period: 2 as PeriodId, currentValue: 10, newValue: 20 }])}  | ${true}          | ${null}
+          ${"with overdrawn funds in all months"}       | ${createTotalValueStub([{ isEditable: true, period: 1 as PeriodId, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2 as PeriodId, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£20.00'. Adjust period '1, 2' to proceed."}
+          ${"with overdrawn funds in earlier months"}   | ${createTotalValueStub([{ isEditable: true, period: 1 as PeriodId, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2 as PeriodId, currentValue: 10, newValue: 10 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£10.00'. Adjust period '1, 2' to proceed."}
+          ${"with overdrawn funds in later months"}     | ${createTotalValueStub([{ isEditable: true, period: 1 as PeriodId, currentValue: 10, newValue: 10 }, { isEditable: true, period: 2 as PeriodId, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£10.00'. Adjust period '1, 2' to proceed."}
         `("$name", ({ payload, expectedResponse }) => {
           const validation = new FinancialLoanVirementDtoValidator(payload, true, true);
 
@@ -224,7 +224,7 @@ describe("financialVirementDtoValidator", () => {
           test("when entry has positive id", () => {
             const positivePeriodEntry = {
               isEditable: true,
-              period: 10,
+              period: 1 as PeriodId,
               currentValue: 10,
               currentDate: new Date(Date.UTC(2022, 1)),
               newValue: 10,
@@ -243,7 +243,7 @@ describe("financialVirementDtoValidator", () => {
           test("when period is a negative value", () => {
             const negativePeriodEntry = {
               isEditable: true,
-              period: -1,
+              period: -1 as PeriodId,
               currentValue: 10,
               currentDate: new Date(Date.UTC(2022, 1)),
               newValue: 10,
@@ -265,7 +265,7 @@ describe("financialVirementDtoValidator", () => {
             const stubData = [
               {
                 isEditable: true,
-                period: 1,
+                period: 1 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(2022, 1)),
                 newValue: 10,
@@ -273,7 +273,7 @@ describe("financialVirementDtoValidator", () => {
               },
               {
                 isEditable: true,
-                period: 2,
+                period: 2 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(2022, 2)),
                 newValue: 10,
@@ -293,7 +293,7 @@ describe("financialVirementDtoValidator", () => {
             const stubData = [
               {
                 isEditable: true,
-                period: 1,
+                period: 1 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(2022, 1)),
                 newValue: 10,
@@ -301,7 +301,7 @@ describe("financialVirementDtoValidator", () => {
               },
               {
                 isEditable: true,
-                period: 2,
+                period: 2 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(2022, 2)),
                 newValue: 10,
@@ -324,7 +324,7 @@ describe("financialVirementDtoValidator", () => {
             const stubData = [
               {
                 isEditable: true,
-                period: 1,
+                period: 1 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(stubYear, 1)),
                 newValue: 10,
@@ -332,7 +332,7 @@ describe("financialVirementDtoValidator", () => {
               },
               {
                 isEditable: true,
-                period: 2,
+                period: 2 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(stubYear, 1)),
                 newValue: 10,
@@ -356,7 +356,7 @@ describe("financialVirementDtoValidator", () => {
             const stubData = [
               {
                 isEditable: true,
-                period: 1,
+                period: 1 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(stubYear, stubMonth)),
                 newValue: 10,
@@ -364,7 +364,7 @@ describe("financialVirementDtoValidator", () => {
               },
               {
                 isEditable: true,
-                period: 2,
+                period: 2 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(stubYear, stubMonth)),
                 newValue: 10,
@@ -372,7 +372,7 @@ describe("financialVirementDtoValidator", () => {
               },
               {
                 isEditable: true,
-                period: 3,
+                period: 3 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(stubYear, stubMonth)),
                 newValue: 10,
@@ -398,7 +398,7 @@ describe("financialVirementDtoValidator", () => {
             test("when entry is editable and valid", () => {
               const editableEntry = {
                 isEditable: true,
-                period: 1,
+                period: 1 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(2022, 1)),
                 newValue: 10,
@@ -417,7 +417,7 @@ describe("financialVirementDtoValidator", () => {
             test("when entry is uneditable always returns valid", () => {
               const unEditableEntry = {
                 isEditable: false,
-                period: 1,
+                period: 1 as PeriodId,
                 currentValue: 10,
                 currentDate: new Date(Date.UTC(2022, 1)),
                 newValue: 10,
@@ -447,7 +447,7 @@ describe("financialVirementDtoValidator", () => {
 
               const overdrawnEntry = {
                 isEditable: true,
-                period: 1,
+                period: 1 as PeriodId,
                 currentValue: stubCurrentValue,
                 currentDate: new Date(Date.UTC(2022, 1)),
                 newValue: stubNewValue,
@@ -468,7 +468,7 @@ describe("financialVirementDtoValidator", () => {
 
               const overdrawnEntry = {
                 isEditable: true,
-                period: 1,
+                period: 1 as PeriodId,
                 currentValue: stubCurrentValue,
                 currentDate: new Date(Date.UTC(2022, 1)),
                 newValue: stubCurrentValue,
@@ -502,7 +502,7 @@ describe("financialVirementDtoValidator", () => {
               const stubItemsFirstItemOverdrawn = [
                 {
                   isEditable: true,
-                  period: 1,
+                  period: 1 as PeriodId,
                   currentValue: stubCurrentValue,
                   newValue: stubCurrentValue + 1,
                   currentDate: new Date(Date.UTC(2022, 1)),
@@ -510,7 +510,7 @@ describe("financialVirementDtoValidator", () => {
                 },
                 {
                   isEditable: true,
-                  period: 2,
+                  period: 2 as PeriodId,
                   currentValue: stubCurrentValue,
                   newValue: stubCurrentValue,
                   currentDate: new Date(Date.UTC(2022, 2)),

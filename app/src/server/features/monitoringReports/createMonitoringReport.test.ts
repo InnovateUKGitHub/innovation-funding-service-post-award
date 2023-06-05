@@ -123,7 +123,7 @@ async function getCreateDto(context: TestContext, startDate?: string, endDate?: 
     statusName: "Draft",
     startDate: null,
     endDate: null,
-    periodId: 1,
+    periodId: 1 as PeriodId,
     lastUpdated: null,
     questions,
     addComments: "",

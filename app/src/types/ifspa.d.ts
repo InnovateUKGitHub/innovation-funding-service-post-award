@@ -7,6 +7,7 @@ declare type BroadcastId = Nominal<string, "BroadcastId">;
 declare type PcrId = Nominal<string, "PcrId">;
 declare type PcrItemId = Nominal<string, "PcrItemId">;
 declare type LinkedEntityId = Nominal<string, "LinkedEntityId">;
+declare type PeriodId = Nominal<number, "PeriodId">;
 
 interface INominalTypes {
   projectId: ProjectId;

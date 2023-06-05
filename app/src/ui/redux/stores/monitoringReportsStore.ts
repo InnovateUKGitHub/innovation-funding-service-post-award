@@ -58,7 +58,7 @@ export class MonitoringReportsStore extends StoreBase {
           status: MonitoringReportStatus.Draft,
           statusName: "",
           lastUpdated: new Date(),
-          periodId: NaN,
+          periodId: NaN as PeriodId,
           projectId,
           questions,
           addComments: "",

@@ -29,7 +29,7 @@ export interface ProjectDto {
   pcrsQueried: number;
   pcrsToReview: number;
   periodEndDate: Date | null;
-  periodId: number;
+  periodId: PeriodId;
   periodStartDate: Date | null;
   projectNumber: string;
   roles: ProjectRole | SfRoles;

@@ -99,7 +99,7 @@ const mapper: GQL.DtoMapper<
       : new Date();
   },
   periodId(node) {
-    return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
+    return (node?.Acc_ProjectPeriodNumber__c?.value ?? 0) as PeriodId;
   },
   periodStartDate(node) {
     return !!node?.Acc_ProjectPeriodStartDate__c?.value

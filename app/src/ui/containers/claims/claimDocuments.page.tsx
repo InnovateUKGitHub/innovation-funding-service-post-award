@@ -59,7 +59,7 @@ export function useClaimDocumentContent() {
 
 export interface ClaimDocumentsPageParams {
   projectId: ProjectId;
-  periodId: number;
+  periodId: PeriodId;
   partnerId: PartnerId;
 }
 
@@ -295,7 +295,7 @@ export const ClaimDocumentsRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
-    periodId: parseInt(route.params.periodId ?? "", 10),
+    periodId: parseInt(route.params.periodId ?? "", 10) as PeriodId,
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),

@@ -5,7 +5,7 @@ export interface LoanDto {
   comments: string;
   forecastAmount: number;
   id: LoanId;
-  period: number;
+  period: PeriodId;
   requestDate: Date | null;
   status: LoanStatus;
 

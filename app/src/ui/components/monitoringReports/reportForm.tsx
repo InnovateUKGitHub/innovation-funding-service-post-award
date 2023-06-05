@@ -33,7 +33,7 @@ export const MonitoringReportPeriodFormComponent = ({ editor, onChange, onSave }
             width={3}
             name="period"
             value={x => x.periodId}
-            update={(x, v) => (x.periodId = v as number)}
+            update={(x, v) => (x.periodId = v as PeriodId)}
             validation={editor.validator.periodId}
           />
           <ReportForm.Fieldset qa="save-buttons">

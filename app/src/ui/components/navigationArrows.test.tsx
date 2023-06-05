@@ -28,7 +28,7 @@ describe("<NavigationArrows />", () => {
     route: routes.reviewClaimLineItems.getLink({
       partnerId: "a0B0Q000001e3HdUAI" as PartnerId,
       projectId: "a0C0Q000001tr5yUAA" as ProjectId,
-      periodId: 2,
+      periodId: 2 as PeriodId,
       costCategoryId: "a060Q000000oAYZQA2",
     }),
   };
@@ -38,7 +38,7 @@ describe("<NavigationArrows />", () => {
     route: routes.reviewClaimLineItems.getLink({
       partnerId: "a0B0Q000001e3HdUAI" as PartnerId,
       projectId: "a0C0Q000001tr5yUAA" as ProjectId,
-      periodId: 2,
+      periodId: 2 as PeriodId,
       costCategoryId: "a060Q000000oAYYQA2",
     }),
   };

@@ -22,7 +22,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 export interface ClaimForecastParams {
   projectId: ProjectId;
   partnerId: PartnerId;
-  periodId: number;
+  periodId: PeriodId;
 }
 
 interface Data {
@@ -226,7 +226,7 @@ export const ClaimForecastRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
-    periodId: parseInt(route.params.periodId, 10),
+    periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),

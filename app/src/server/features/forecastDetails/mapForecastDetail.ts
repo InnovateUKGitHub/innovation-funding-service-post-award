@@ -8,7 +8,7 @@ const mapCommon = (
 ): Pick<ForecastDetailsDTO, Exclude<keyof ForecastDetailsDTO, "value">> => ({
   id: forecastDetail.Id,
   costCategoryId: forecastDetail.Acc_CostCategory__c,
-  periodId: forecastDetail.Acc_ProjectPeriodNumber__c,
+  periodId: forecastDetail.Acc_ProjectPeriodNumber__c as PeriodId,
   periodStart: context.clock.parse(forecastDetail.Acc_ProjectPeriodStartDate__c, salesforceDateFormat),
   periodEnd: context.clock.parse(forecastDetail.Acc_ProjectPeriodEndDate__c, salesforceDateFormat),
 });

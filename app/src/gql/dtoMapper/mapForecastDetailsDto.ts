@@ -27,7 +27,7 @@ const mapper: GQL.DtoMapper<ForecastDetailsDtoMapping, ForecastDetailsNode> = {
     return node?.Acc_CostCategory__c?.value ?? "unknown";
   },
   periodId: function (node) {
-    return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
+    return (node?.Acc_ProjectPeriodNumber__c?.value ?? 0) as PeriodId;
   },
   periodStart: function (node) {
     return clock.parse(node?.Acc_ProjectPeriodStartDate__c?.value ?? null, salesforceDateFormat);

@@ -12,7 +12,7 @@ const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): Forec
     id: item.Id,
     periodEnd: new Date(),
     periodStart: new Date(),
-    periodId: item.Acc_ProjectPeriodNumber__c,
+    periodId: item.Acc_ProjectPeriodNumber__c as PeriodId,
     value: value === undefined ? item.Acc_LatestForecastCost__c : value,
   };
 };
@@ -37,7 +37,7 @@ describe("UpdateForecastDetailsCommand", () => {
         {
           id: "123",
           costCategoryId: profileDetail.Acc_CostCategory__c,
-          periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
+          periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
           periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
           periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
           value: 123,
@@ -59,7 +59,7 @@ describe("UpdateForecastDetailsCommand", () => {
           // @ts-expect-error invalid id scenario
           id: null,
           costCategoryId: profileDetail.Acc_CostCategory__c,
-          periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
+          periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
           periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
           periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
           value: 123,
@@ -76,7 +76,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const project = testData.createProject();
       const partner = testData.createPartner();
       const costCat = testData.createCostCategory();
-      const periodId = 2;
+      const periodId = 2 as PeriodId;
       const profileDetail = testData.createProfileDetail(
         costCat,
         partner,
@@ -112,7 +112,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const context = new TestContext();
       const testData = context.testData;
 
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
 
       const project = testData.createProject();
       const partner = testData.createPartner(project);
@@ -154,7 +154,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const project = testData.createProject();
       const partner = testData.createPartner();
       const costCat = testData.createCostCategory();
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
       const profileDetail = testData.createProfileDetail(
         costCat,
         partner,
@@ -195,7 +195,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const project = testData.createProject();
       const partner = testData.createPartner();
       const costCat = testData.createCostCategory();
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
       const profileDetail = testData.createProfileDetail(
         costCat,
         partner,
@@ -227,7 +227,7 @@ describe("UpdateForecastDetailsCommand", () => {
           value: 250,
         },
         {
-          periodId: periodId + 1,
+          periodId: (periodId + 1) as PeriodId,
           id: profileDetail2.Id,
           costCategoryId: costCat.id,
           periodStart: new Date(),
@@ -251,7 +251,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const context = new TestContext();
       const testData = context.testData;
 
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
 
       const project = testData.createProject();
       const partner = testData.createPartner(project);
@@ -294,7 +294,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const context = new TestContext();
       const testData = context.testData;
 
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
 
       const project = testData.createProject();
       const partner = testData.createPartner(project);
@@ -339,7 +339,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const context = new TestContext();
       const testData = context.testData;
 
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
 
       const project = testData.createProject();
       const partner = testData.createPartner(project);
@@ -384,7 +384,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const context = new TestContext();
       const testData = context.testData;
 
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
 
       const project = testData.createProject();
       const partner = testData.createPartner(project);
@@ -491,20 +491,20 @@ describe("UpdateForecastDetailsCommand", () => {
       const profileDetail1 = context.testData.createProfileDetail(
         costCat,
         partner,
-        1,
+        1 as PeriodId,
         x => (x.Acc_LatestForecastCost__c = 10),
       );
       const profileDetail2 = context.testData.createProfileDetail(
         costCat,
         partner,
-        2,
+        2 as PeriodId,
         x => (x.Acc_LatestForecastCost__c = 20),
       );
 
       const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
         id: profileDetail.Id,
         costCategoryId: profileDetail.Acc_CostCategory__c,
-        periodId: profileDetail.Acc_ProjectPeriodNumber__c,
+        periodId: profileDetail.Acc_ProjectPeriodNumber__c as PeriodId,
         periodStart: projectStart.plus({ months: i }).toJSDate(),
         periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
         value: profileDetail.Acc_LatestForecastCost__c,
@@ -549,7 +549,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
         id: profileDetail.Id,
         costCategoryId: profileDetail.Acc_CostCategory__c,
-        periodId: profileDetail.Acc_ProjectPeriodNumber__c,
+        periodId: profileDetail.Acc_ProjectPeriodNumber__c as PeriodId,
         periodStart: projectStart.plus({ months: i }).toJSDate(),
         periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
         value: profileDetail.Acc_LatestForecastCost__c,

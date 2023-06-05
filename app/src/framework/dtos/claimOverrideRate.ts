@@ -7,7 +7,7 @@ interface BaseClaimOverrideRate {
 }
 
 interface PeriodClaimOverrideRate extends BaseClaimOverrideRate {
-  period: number;
+  period: PeriodId;
 }
 
 interface CostCategoryClaimOverrideRate extends BaseClaimOverrideRate {

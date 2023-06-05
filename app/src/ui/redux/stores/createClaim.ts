@@ -14,7 +14,7 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     lastModifiedDate: new Date(),
     paidDate: null,
     periodEndDate: new Date(),
-    periodId: 1,
+    periodId: 1 as PeriodId,
     periodStartDate: new Date(),
     pcfStatus: "Not Received",
     iarStatus: "Not Received",

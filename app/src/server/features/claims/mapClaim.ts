@@ -37,7 +37,7 @@ export const mapClaim =
       statusLabel: claimStatusLabel,
       periodStartDate: context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, salesforceDateFormat) as Date,
       periodEndDate: context.clock.parse(claim.Acc_ProjectPeriodEndDate__c, salesforceDateFormat) as Date,
-      periodId: claim.Acc_ProjectPeriodNumber__c,
+      periodId: claim.Acc_ProjectPeriodNumber__c as PeriodId,
       totalCost: claim.Acc_ProjectPeriodCost__c,
       forecastCost: (forecast && forecast.Acc_PeriodLatestForecastCost__c) || 0,
       approvedDate,

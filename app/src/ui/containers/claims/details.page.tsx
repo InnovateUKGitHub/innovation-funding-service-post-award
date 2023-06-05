@@ -20,7 +20,7 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 interface Params {
   projectId: ProjectId;
   partnerId: PartnerId;
-  periodId: number;
+  periodId: PeriodId;
 }
 
 interface Data {
@@ -292,7 +292,7 @@ export const ClaimsDetailsRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
-    periodId: parseInt(route.params.periodId, 10),
+    periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, params) =>
     auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||

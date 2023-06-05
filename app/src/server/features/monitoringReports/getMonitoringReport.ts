@@ -42,7 +42,7 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
       projectId: header.Acc_Project__c as ProjectId,
       startDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodStartDate__c),
       endDate: context.clock.parseOptionalSalesforceDate(header.Acc_PeriodEndDate__c),
-      periodId: header.Acc_ProjectPeriodNumber__c,
+      periodId: header.Acc_ProjectPeriodNumber__c as PeriodId,
       questions,
       addComments: header.Acc_AddComments__c,
       lastUpdated: context.clock.parseRequiredSalesforceDateTime(header.LastModifiedDate),

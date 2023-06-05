@@ -4,7 +4,7 @@ export interface MonitoringReportSummaryDto {
   endDate: Date | null;
   headerId: MonitoringReportId;
   lastUpdated: Date | null;
-  periodId: number;
+  periodId: PeriodId;
   projectId: ProjectId;
   startDate: Date | null;
   status: MonitoringReportStatus;

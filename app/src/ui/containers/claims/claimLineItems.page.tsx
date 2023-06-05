@@ -24,7 +24,7 @@ interface ClaimLineItemsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
   costCategoryId: string;
-  periodId: number;
+  periodId: PeriodId;
 }
 
 interface Data {
@@ -346,7 +346,7 @@ const getParams = (route: RouteState): ClaimLineItemsParams => ({
   projectId: route.params.projectId as ProjectId,
   partnerId: route.params.partnerId as PartnerId,
   costCategoryId: route.params.costCategoryId,
-  periodId: parseInt(route.params.periodId, 10),
+  periodId: parseInt(route.params.periodId, 10) as PeriodId,
 });
 
 export const ClaimLineItemsRoute = defineRoute({

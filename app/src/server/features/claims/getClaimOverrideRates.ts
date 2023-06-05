@@ -55,7 +55,7 @@ export class GetClaimOverrideRates extends QueryBase<ClaimOverrideRateDto> {
         foundOverride = {
           amount: totalPeriod.Acc_OverrideAwardRate__c,
           target: AwardRateOverrideTarget.ALL_PARTICIPANTS,
-          period: totalPeriod.Acc_ProjectPeriodNumber__c,
+          period: totalPeriod.Acc_ProjectPeriodNumber__c as PeriodId,
         };
       }
 
@@ -63,7 +63,7 @@ export class GetClaimOverrideRates extends QueryBase<ClaimOverrideRateDto> {
         foundOverride = {
           amount: totalPeriod.Acc_ProfileOverrideAwardRate__c,
           target: AwardRateOverrideTarget.THIS_PARTICIPANT,
-          period: totalPeriod.Acc_ProjectPeriodNumber__c,
+          period: totalPeriod.Acc_ProjectPeriodNumber__c as PeriodId,
         };
       }
 

@@ -4,7 +4,7 @@ import { calculateOverheadCell } from "./forecastTable";
 describe("calculateOverheadCell()", () => {
   const stubCell: ForecastDetailsDTO = {
     costCategoryId: "labour_id",
-    periodId: 3,
+    periodId: 3 as PeriodId,
     value: 1000,
     // TODO: Remove this unneeded properties from source
     id: "stub-id",

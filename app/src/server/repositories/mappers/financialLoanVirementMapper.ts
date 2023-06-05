@@ -25,7 +25,7 @@ export class SalesforceFinancialLoanVirementMapper extends SalesforceBaseMapper<
     return {
       id: item.Id as LoanId,
       isEditable,
-      period: item.Loan_PeriodNumber__c,
+      period: item.Loan_PeriodNumber__c as PeriodId,
       status,
       currentDate: this.clock.parseRequiredSalesforceDateTime(item.Loan_CurrentDrawdownDate__c),
       currentValue: item.Loan_CurrentDrawdownValue__c,

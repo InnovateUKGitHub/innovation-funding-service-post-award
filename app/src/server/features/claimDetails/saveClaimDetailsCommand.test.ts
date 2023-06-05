@@ -10,7 +10,7 @@ const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, descripti
   id: "",
   costCategoryId: detail.costCategoryId,
   partnerId: detail.partnerId,
-  periodId: detail.periodId,
+  periodId: detail.periodId as PeriodId,
   value: value || 100,
   description: description || "A description",
   lastModifiedDate: new Date(),
@@ -452,7 +452,7 @@ describe("SaveClaimDetails", () => {
 
       const dto = createDto(context, claimDetail);
       const lineItem = createNewLineItemDto(dto);
-      lineItem.periodId = 2;
+      lineItem.periodId = 2 as PeriodId;
 
       dto.lineItems = [lineItem];
 

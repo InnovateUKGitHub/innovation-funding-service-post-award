@@ -31,7 +31,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
     return {
       headerId: "" as MonitoringReportId,
       projectId: params.projectId,
-      periodId: parseInt(body.period, 10),
+      periodId: parseInt(body.period, 10) as PeriodId,
       questions,
       status: MonitoringReportStatus.Draft,
       statusName: "",

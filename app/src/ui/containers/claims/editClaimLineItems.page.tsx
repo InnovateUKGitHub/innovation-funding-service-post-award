@@ -30,7 +30,7 @@ export interface EditClaimDetailsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
   costCategoryId: string;
-  periodId: number;
+  periodId: PeriodId;
 }
 
 export interface EditClaimLineItemsData {
@@ -736,7 +736,7 @@ export const EditClaimLineItemsRoute = defineRoute({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
     costCategoryId: route.params.costCategoryId,
-    periodId: parseInt(route.params.periodId, 10),
+    periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, params) =>
     auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),

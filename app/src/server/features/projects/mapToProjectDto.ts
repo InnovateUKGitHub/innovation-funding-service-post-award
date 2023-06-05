@@ -30,7 +30,7 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
       : null,
     startDate,
     endDate,
-    periodId: item.Acc_CurrentPeriodNumber__c,
+    periodId: item.Acc_CurrentPeriodNumber__c as PeriodId,
     periodStartDate: context.clock.parseOptionalSalesforceDate(item.Acc_CurrentPeriodStartDate__c),
     periodEndDate: context.clock.parseOptionalSalesforceDate(item.Acc_CurrentPeriodEndDate__c),
     pcrsToReview: item.Acc_PCRsForReview__c || 0,

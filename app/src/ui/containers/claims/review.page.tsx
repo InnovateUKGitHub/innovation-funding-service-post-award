@@ -33,7 +33,7 @@ import { Markdown } from "@ui/components/renderers";
 export interface ReviewClaimParams {
   projectId: ProjectId;
   partnerId: PartnerId;
-  periodId: number;
+  periodId: PeriodId;
 }
 
 interface ReviewData {
@@ -520,7 +520,7 @@ export const ReviewClaimRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
-    periodId: parseInt(route.params.periodId, 10),
+    periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimReview.title),

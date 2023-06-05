@@ -18,7 +18,7 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
     return {
       id: item.Id as LoanId,
       status: LoanMapper.loanStatusFromSfMap(item.Loan_DrawdownStatus__c),
-      period: item.Acc_PeriodNumber__c,
+      period: item.Acc_PeriodNumber__c as PeriodId,
       requestDate,
       amount: item.Acc_GranttobePaid__c,
       forecastAmount: item.Loan_LatestForecastDrawdown__c,

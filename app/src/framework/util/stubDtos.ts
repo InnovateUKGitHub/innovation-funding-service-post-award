@@ -2,7 +2,7 @@ import _merge from "lodash.merge";
 import { PCROrganisationType, ProjectMonitoringLevel } from "@framework/constants";
 import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, PCRSummaryDto, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { ILinkInfo } from "@framework/types";
+import { CostCategoryType, ILinkInfo, ProjectRole } from "@framework/types";
 
 type CreateDTO<DTO> = (objectToMerge?: Partial<DTO>) => DTO;
 
@@ -25,12 +25,12 @@ export const createProjectDto: CreateDTO<ProjectDto> = (objectToMerge?) => {
     claimedPercentage: 33.333333333333336,
     startDate: new Date(),
     endDate: new Date(),
-    periodId: 2,
+    periodId: 2 as PeriodId,
     periodStartDate: new Date(),
     periodEndDate: new Date(),
     pcrsToReview: 0,
     pcrsQueried: 0,
-    roles: 7,
+    roles: 7 as ProjectRole,
     roleTitles: ["Monitoring Officer", "Project Manager", "Finance Contact"],
     status: 2,
     statusName: "Live",
@@ -73,7 +73,7 @@ export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
     totalPaidCosts: null,
     totalFutureForecastsForParticipants: 48820.8,
     totalCostsSubmitted: 37000,
-    roles: 7,
+    roles: 7 as ProjectRole,
     forecastLastModifiedDate: new Date(),
     overdueProject: false,
     claimsOverdue: 0,
@@ -139,7 +139,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxWtQAI",
       name: "Labour",
-      type: 10,
+      type: CostCategoryType.Labour,
       competitionType: "CR&D",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -150,7 +150,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxWuQAI",
       name: "Overheads",
-      type: 20,
+      type: CostCategoryType.Overheads,
       competitionType: "CR&D",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -161,7 +161,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxWvQAI",
       name: "Materials",
-      type: 30,
+      type: CostCategoryType.Materials,
       competitionType: "CR&D",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -172,7 +172,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxWwQAI",
       name: "Capital usage",
-      type: 40,
+      type: CostCategoryType.Capital_Usage,
       competitionType: "CR&D",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -183,7 +183,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxWxQAI",
       name: "Subcontracting",
-      type: 50,
+      type: CostCategoryType.Subcontracting,
       competitionType: "CR&D",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -194,7 +194,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxWyQAI",
       name: "Travel and subsistence",
-      type: 60,
+      type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "CR&D",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -205,7 +205,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxWzQAI",
       name: "Other costs",
-      type: 70,
+      type: CostCategoryType.Other_Costs,
       competitionType: "CR&D",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -348,7 +348,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXCQAY",
       name: "Labour",
-      type: 10,
+      type: CostCategoryType.Labour,
       competitionType: "CONTRACTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -359,7 +359,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXDQAY",
       name: "Overheads",
-      type: 20,
+      type: CostCategoryType.Overheads,
       competitionType: "CONTRACTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -370,7 +370,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXEQAY",
       name: "Materials",
-      type: 30,
+      type: CostCategoryType.Materials,
       competitionType: "CONTRACTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -381,7 +381,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXFQAY",
       name: "Capital usage",
-      type: 40,
+      type: CostCategoryType.Capital_Usage,
       competitionType: "CONTRACTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -392,7 +392,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXGQAY",
       name: "Subcontracting",
-      type: 50,
+      type: CostCategoryType.Subcontracting,
       competitionType: "CONTRACTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -403,7 +403,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXHQAY",
       name: "Travel and subsistence",
-      type: 60,
+      type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "CONTRACTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -414,7 +414,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXIQAY",
       name: "Other costs",
-      type: 70,
+      type: CostCategoryType.Other_Costs,
       competitionType: "CONTRACTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -425,7 +425,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXJQAY",
       name: "VAT",
-      type: 0,
+      type: CostCategoryType.VAT,
       competitionType: "CONTRACTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -579,7 +579,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXXQAY",
       name: "Labour",
-      type: 10,
+      type: CostCategoryType.Labour,
       competitionType: "SBRI",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -590,7 +590,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXYQAY",
       name: "Overheads",
-      type: 20,
+      type: CostCategoryType.Overheads,
       competitionType: "SBRI",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -601,7 +601,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXZQAY",
       name: "Materials",
-      type: 30,
+      type: CostCategoryType.Materials,
       competitionType: "SBRI",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -612,7 +612,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXaQAI",
       name: "Capital usage",
-      type: 40,
+      type: CostCategoryType.Capital_Usage,
       competitionType: "SBRI",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -623,7 +623,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXbQAI",
       name: "Subcontracting",
-      type: 50,
+      type: CostCategoryType.Subcontracting,
       competitionType: "SBRI",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -634,7 +634,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXcQAI",
       name: "Travel and subsistence",
-      type: 60,
+      type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "SBRI",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -645,7 +645,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXdQAI",
       name: "Other costs",
-      type: 70,
+      type: CostCategoryType.Other_Costs,
       competitionType: "SBRI",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -656,7 +656,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXeQAI",
       name: "VAT",
-      type: 0,
+      type: CostCategoryType.VAT,
       competitionType: "SBRI",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -777,7 +777,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXpQAI",
       name: "Associate employment",
-      type: 5,
+      type: CostCategoryType.Associate_Employment,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -788,7 +788,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXqQAI",
       name: "Travel and subsistence",
-      type: 5,
+      type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -799,7 +799,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXrQAI",
       name: "Consumables",
-      type: 5,
+      type: CostCategoryType.Consumables,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -810,7 +810,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXsQAI",
       name: "Associate development",
-      type: 5,
+      type: CostCategoryType.Associate_development,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -821,7 +821,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXtQAI",
       name: "Knowledge base supervisor",
-      type: 5,
+      type: CostCategoryType.Knowledge_base_supervisor,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -832,7 +832,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXuQAI",
       name: "Associate estate costs",
-      type: 5,
+      type: CostCategoryType.Estate,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -843,7 +843,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXvQAI",
       name: "Additional associate support",
-      type: 5,
+      type: CostCategoryType.Additional_associate_support,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -854,7 +854,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXwQAI",
       name: "Other costs",
-      type: 5,
+      type: CostCategoryType.Other_Costs,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -865,7 +865,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXxQAI",
       name: "Labour",
-      type: 10,
+      type: CostCategoryType.Labour,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -876,7 +876,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXyQAI",
       name: "Overheads",
-      type: 20,
+      type: CostCategoryType.Overheads,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -887,7 +887,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxXzQAI",
       name: "Materials",
-      type: 30,
+      type: CostCategoryType.Materials,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -898,7 +898,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY0QAI",
       name: "Subcontracting",
-      type: 50,
+      type: CostCategoryType.Subcontracting,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -909,7 +909,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY1QAI",
       name: "Travel and subsistence",
-      type: 60,
+      type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -920,7 +920,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY2QAI",
       name: "Property Revenue",
-      type: 0,
+      type: CostCategoryType.Property_Revenue,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -931,7 +931,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY3QAI",
       name: "Other Costs - Resource",
-      type: 0,
+      type: CostCategoryType.Other_Costs_Resource,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -942,7 +942,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY4QAI",
       name: "Capital Equipment",
-      type: 0,
+      type: CostCategoryType.Capital_Equipment,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -953,7 +953,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY5QAI",
       name: "Property Capital",
-      type: 0,
+      type: CostCategoryType.Property_Capital,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -964,7 +964,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY6QAI",
       name: "Capitalised Labour",
-      type: 0,
+      type: CostCategoryType.Capitalised_Labour,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -975,7 +975,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY7QAI",
       name: "Other costs- Capital",
-      type: 0,
+      type: CostCategoryType.Other_Costs_Capital,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -986,7 +986,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY8QAI",
       name: "Advance on Grant",
-      type: 0,
+      type: CostCategoryType.Advance_on_Grant,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
       isCalculated: false,
@@ -997,7 +997,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxY9QAI",
       name: "Labour",
-      type: 5,
+      type: CostCategoryType.Labour,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1008,7 +1008,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYAQAY",
       name: "Overheads",
-      type: 5,
+      type: CostCategoryType.Overheads,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1019,7 +1019,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYBQAY",
       name: "Materials",
-      type: 5,
+      type: CostCategoryType.Materials,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1030,7 +1030,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYCQAY",
       name: "Subcontracting",
-      type: 5,
+      type: CostCategoryType.Subcontracting,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1041,7 +1041,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYDQAY",
       name: "Travel and subsistence",
-      type: 5,
+      type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1052,7 +1052,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYEQAY",
       name: "Property Revenue",
-      type: 5,
+      type: CostCategoryType.Property_Revenue,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1063,7 +1063,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYFQAY",
       name: "Other Costs - Resource",
-      type: 5,
+      type: CostCategoryType.Other_Costs_Resource,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1074,7 +1074,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYGQAY",
       name: "Capital Equipment",
-      type: 5,
+      type: CostCategoryType.Capital_Equipment,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1085,7 +1085,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYHQAY",
       name: "Property Capital",
-      type: 5,
+      type: CostCategoryType.Property_Capital,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1096,7 +1096,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYIQAY",
       name: "Capitalised Labour",
-      type: 5,
+      type: CostCategoryType.Capitalised_Labour,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1107,7 +1107,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYJQAY",
       name: "Other costs - Capital",
-      type: 5,
+      type: CostCategoryType.Other_Costs_Capital,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1118,7 +1118,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000dxYKQAY",
       name: "Advance on Grant",
-      type: 5,
+      type: CostCategoryType.Advance_on_Grant,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1129,7 +1129,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
     {
       id: "a060C000000eT2cQAE",
       name: "Indirect costs",
-      type: 5,
+      type: CostCategoryType.Indirect_Costs,
       competitionType: "KTP",
       organisationType: PCROrganisationType.Academic,
       isCalculated: false,
@@ -1210,7 +1210,7 @@ export const createClaim: CreateDTO<ClaimDto> = (objectToMerge?) => {
     statusLabel: "Draft",
     periodStartDate: "2020-08-31T23:00:00.000Z",
     periodEndDate: "2020-11-30T00:00:00.000Z",
-    periodId: 2,
+    periodId: 2 as PeriodId,
     totalCost: 51201,
     forecastCost: 62000,
     approvedDate: null,

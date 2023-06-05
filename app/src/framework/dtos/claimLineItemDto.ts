@@ -5,6 +5,6 @@ export interface ClaimLineItemDto {
   isAuthor: boolean;
   lastModifiedDate: Date;
   partnerId: PartnerId;
-  periodId: number;
+  periodId: PeriodId;
   value: number;
 }

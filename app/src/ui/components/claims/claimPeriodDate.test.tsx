@@ -6,7 +6,7 @@ const endDate = new Date("1993/01/07 09:02:01");
 const claim = {
   periodStartDate: startDate,
   periodEndDate: endDate,
-  periodId: 1,
+  periodId: 1 as PeriodId,
 };
 
 const partner = {

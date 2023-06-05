@@ -15,7 +15,7 @@ describe("<ClaimDrawdownTable />", () => {
   const stubLoan: LoanDto = {
     id: "a0H3M0000002GRYUA2" as LoanId,
     status: LoanStatus.APPROVED,
-    period: 1,
+    period: 1 as PeriodId,
     requestDate: new Date(Date.UTC(1, 10)),
     amount: 10000,
     forecastAmount: 10000,

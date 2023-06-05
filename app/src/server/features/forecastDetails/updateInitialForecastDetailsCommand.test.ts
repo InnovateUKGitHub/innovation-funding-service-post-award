@@ -11,7 +11,7 @@ const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): Forec
   id: item.Id,
   periodEnd: new Date(),
   periodStart: new Date(),
-  periodId: item.Acc_ProjectPeriodNumber__c,
+  periodId: item.Acc_ProjectPeriodNumber__c as PeriodId,
   value: value === undefined ? item.Acc_InitialForecastCost__c : value,
 });
 
@@ -26,7 +26,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
       {
         id: "123",
         costCategoryId: profileDetail.Acc_CostCategory__c,
-        periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
+        periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
         periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
         value: 123,
@@ -48,7 +48,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
         // @ts-expect-error invalid id scenario
         id: null,
         costCategoryId: profileDetail.Acc_CostCategory__c,
-        periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
+        periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
         periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
         value: 123,
@@ -68,7 +68,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => (x.participantStatus = "Pending"));
     const costCat = testData.createCostCategory({ competitionType: partner.competitionType });
-    const periodId = 2;
+    const periodId = 2 as PeriodId;
     const profileDetail = testData.createProfileDetail(
       costCat,
       partner,
@@ -98,7 +98,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => (x.participantStatus = "Active"));
     const costCat = testData.createCostCategory({ competitionType: partner.competitionType });
-    const periodId = 2;
+    const periodId = 2 as PeriodId;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId);
     testData.createProfileTotalCostCategory(costCat, partner, 150);
 
@@ -123,7 +123,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => (x.participantStatus = "Pending"));
     const costCat = testData.createCostCategory({ competitionType: partner.competitionType });
-    const periodId = 2;
+    const periodId = 2 as PeriodId;
     const profileDetail = testData.createProfileDetail(
       costCat,
       partner,
@@ -156,7 +156,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
       x.spendProfileStatus = "To Do";
     });
     const costCat = testData.createCostCategory({ competitionType: partner.competitionType });
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => {
       x.Acc_InitialForecastCost__c = 1400;
       x.Acc_LatestForecastCost__c = 0;
@@ -193,7 +193,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
       x.spendProfileStatus = "To Do";
     });
     const costCat = testData.createCostCategory({ competitionType: partner.competitionType });
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => {
       x.Acc_InitialForecastCost__c = 1400;
       x.Acc_LatestForecastCost__c = 0;
@@ -262,7 +262,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
         x.spendProfileStatus = "To Do";
       });
       const costCat = testData.createCostCategory({ competitionType: partner.competitionType });
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
       const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => {
         x.Acc_InitialForecastCost__c = 1400;
         x.Acc_LatestForecastCost__c = 0;

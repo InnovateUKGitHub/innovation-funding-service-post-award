@@ -18,7 +18,7 @@ export interface ClaimDto {
   pcfStatus: ReceivedStatus;
   periodCostsToBePaid: number;
   periodEndDate: Date;
-  periodId: number;
+  periodId: PeriodId;
   periodStartDate: Date;
   status: ClaimStatus;
   statusLabel: string;

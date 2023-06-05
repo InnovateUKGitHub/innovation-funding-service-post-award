@@ -27,7 +27,7 @@ export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandle
   ): Promise<MonitoringReportDto> {
     const query = new GetMonitoringReportById(params.projectId, params.id);
     const dto = await context.runQuery(query);
-    dto.periodId = parseInt(body.period, 10);
+    dto.periodId = parseInt(body.period, 10) as PeriodId;
     return dto;
   }
 

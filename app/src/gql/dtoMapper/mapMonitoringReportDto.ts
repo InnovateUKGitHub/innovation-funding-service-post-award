@@ -59,7 +59,7 @@ const headerMapper: GQL.DtoMapper<Omit<MonitoringReportDtoMapping, "questions">,
     ) as MonitoringReportId;
   },
   periodId(node) {
-    return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
+    return (node?.Acc_ProjectPeriodNumber__c?.value ?? 0) as PeriodId;
   },
   startDate(node) {
     return !!node?.Acc_PeriodStartDate__c?.value ? new Date(node?.Acc_PeriodStartDate__c?.value) : null;
