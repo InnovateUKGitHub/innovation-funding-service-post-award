@@ -7,6 +7,7 @@ Competition__c competition = new Competition__c();
 competition.Acc_CompetitionCode__c = Acc_CompetitionCode;
 competition.Acc_CompetitionType__c = Acc_CompetitionType;  
 competition.Acc_CompetitionName__c  = Acc_CompetitionName;
+competition.Impact_Management_participation__c = Impact_Management_participation__c;
 insert competition; 
 
 Acc_Project__c project = new Acc_Project__c();

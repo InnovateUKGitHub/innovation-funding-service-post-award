@@ -31,6 +31,7 @@ export class DeveloperProjectCreatorHandler implements IFormHandler {
     projectId,
     projectName,
     startDate,
+    impactManagementParticipation,
   }: DeveloperProjectCreateDto) {
     return (
       apex`
@@ -47,6 +48,7 @@ String Acc_CompetitionCode = ${competitionCode};
 String Acc_CompetitionName = 'SteveTest';
 Double accProjNo = ${projectId};
 Date startDate = ${startDate};
+String Impact_Management_participation__c = ${impactManagementParticipation};
 ` + createProject
     );
   }
@@ -73,6 +75,7 @@ Date startDate = ${startDate};
       participantOrgType: req.body.projectParticipantOrgType,
       projectId: parseInt(req.body.projectCreatorProjectId, 10),
       competitionCode: req.body.projectCreatorCompetitionCode,
+      impactManagementParticipation: req.body.projectCreatorImpactManagementParticipation,
       startDate: new Date(
         Date.UTC(
           parseInt(req.body.projectCreatorStartDate_year, 10),

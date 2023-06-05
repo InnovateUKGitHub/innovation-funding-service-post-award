@@ -40,6 +40,21 @@ const ProjectCreator = () => {
     },
   ];
 
+  const impactManagementParticipationOptions = [
+    {
+      id: "yes",
+      value: "Yes",
+      displayName: "Impact Management Enabled (Yes)",
+      qa: "impact_management_enabled",
+    },
+    {
+      id: "no",
+      value: "No",
+      displayName: "Impact Management Disabled (No)",
+      qa: "impact_management_enabled",
+    },
+  ];
+
   const participantTypeOptions = allProjectParticipantTypes
     .filter(([key]) => key !== "knowledgeBase" && key !== "rto" && key !== "other")
     .map(([key, value]) => ({
@@ -70,6 +85,9 @@ const ProjectCreator = () => {
   );
   const [startDate, setStartDate] = useState<Date | null>(
     new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+  );
+  const [impactManagementEnabled, setImpactManagementEnabled] = useState<DropdownListOption | null>(
+    impactManagementParticipationOptions[0],
   );
 
   return (
@@ -168,6 +186,20 @@ const ProjectCreator = () => {
             value={() => competitionCode}
             placeholder={getContent(x => x.components.projectCreator.placeholderProjectCreatorCompetitionCode)}
             update={(_, value) => setCompetitionCode(value ?? "")}
+          />
+        </ProjectCreatorForm.Fieldset>
+        <ProjectCreatorForm.Fieldset>
+          <SimpleString>
+            <Content value={x => x.components.projectCreator.placeholderProjectCreatorImpactManagementParticipation} />
+          </SimpleString>
+          <ProjectCreatorForm.DropdownList
+            name="projectCreatorImpactManagementParticipation"
+            value={() => impactManagementEnabled}
+            options={impactManagementParticipationOptions}
+            placeholder={getContent(
+              x => x.components.projectCreator.placeholderProjectCreatorImpactManagementParticipation,
+            )}
+            update={(_, value) => setImpactManagementEnabled(value)}
           />
         </ProjectCreatorForm.Fieldset>
         <ProjectCreatorForm.Fieldset>

@@ -179,7 +179,8 @@
       "placeholderProjectParticipantType": "Participant type",
       "placeholderProjectParticipantOrgType": "Participant organisation type",
       "placeholderProjectCreatorProjectId": "Project ID",
-      "placeholderProjectCreatorCompetitionCode": "Competition Code"
+      "placeholderProjectCreatorCompetitionCode": "Competition Code",
+      "placeholderProjectCreatorImpactManagementParticipation": "Impact Management Participation"
     },
     "pageCrasher": {
       "sectionTitle": "Page Crasher",
