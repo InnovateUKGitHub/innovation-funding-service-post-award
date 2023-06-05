@@ -5,6 +5,7 @@ import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetails
 import { ISalesforceClaimDetails } from "@server/repositories";
 import { CostCategory, Partner } from "@framework/entities";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, description?: string): ClaimLineItemDto => ({
   id: "",
@@ -27,6 +28,7 @@ const createNewDto = (partner: Partner, periodId: number, costCategory: CostCate
   isAuthor: true,
   periodStart: new Date(),
   periodEnd: new Date(),
+  impactManagementParticipation: ImpactManagementParticipation.Unknown,
 });
 
 const createDto = (context: TestContext, claimDetails: ISalesforceClaimDetails) => {

@@ -2,6 +2,7 @@ import { ISalesforceClaimDetails, ISalesforceClaimLineItem } from "@server/repos
 import { salesforceDateFormat } from "@framework/util/clock";
 import { ClaimDetailsDto, ClaimDetailsSummaryDto, IContext } from "@framework/types";
 import mapClaimLineItem from "@server/features/claimDetails/mapClaimLineItem";
+import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 
 /**
  * mapper function for `mapClaimDetails`
@@ -21,6 +22,9 @@ export function mapClaimDetailsSummary(
     isAuthor:
       context.user.email === context.config.salesforceServiceUser.serviceUsername ||
       salesforceClaimDetails.Owner.Email === context.user.email,
+    impactManagementParticipation: mapImpactManagementParticipationToEnum(
+      salesforceClaimDetails.Impact_Management_Participation__c,
+    ),
   };
 }
 

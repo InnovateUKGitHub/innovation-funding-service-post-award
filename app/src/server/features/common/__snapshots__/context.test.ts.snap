@@ -165,6 +165,7 @@ Object {
     "recordType": "Total Project Period",
     "salesforceFieldNames": Array [
       "Id",
+      "Impact_Management_Participation__c",
       "Acc_ProjectParticipant__r.Id",
       "Acc_ProjectParticipant__r.Acc_ProjectId__c",
       "Acc_ProjectParticipant__r.Acc_OverheadRate__c",
@@ -985,6 +986,7 @@ Object {
       "Loan_LoanAvailabilityPeriodLength__c",
       "Loan_LoanExtensionPeriodLength__c",
       "Loan_LoanRepaymentPeriodLength__c",
+      "Impact_Management_Participation__c",
     ],
     "salesforceObjectName": "Acc_Project__c",
   },

@@ -10,6 +10,12 @@ enum SalesforceCompetitionTypes {
   horizonEurope = "Horizon Europe Participation",
 }
 
+enum ImpactManagementParticipation {
+  Unknown = "Unknown",
+  Yes = "Yes",
+  No = "No",
+}
+
 const allSalesforceCompetitionTypes = [
   ["crnd", SalesforceCompetitionTypes.crnd],
   ["contracts", SalesforceCompetitionTypes.contracts],
@@ -22,4 +28,4 @@ const allSalesforceCompetitionTypes = [
   ["horizonEurope", SalesforceCompetitionTypes.horizonEurope],
 ] as const;
 
-export { allSalesforceCompetitionTypes, SalesforceCompetitionTypes };
+export { allSalesforceCompetitionTypes, SalesforceCompetitionTypes, ImpactManagementParticipation };

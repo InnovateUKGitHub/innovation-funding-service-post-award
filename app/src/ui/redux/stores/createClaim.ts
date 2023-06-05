@@ -1,5 +1,7 @@
 import { ClaimStatus } from "@framework/constants";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ClaimDto } from "@framework/dtos";
+import { ReceivedStatus } from "@framework/entities";
 
 export default (mod?: Partial<ClaimDto>): ClaimDto => {
   const template: ClaimDto = {
@@ -16,8 +18,8 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     periodEndDate: new Date(),
     periodId: 1 as PeriodId,
     periodStartDate: new Date(),
-    pcfStatus: "Not Received",
-    iarStatus: "Not Received",
+    pcfStatus: ReceivedStatus.NotReceived,
+    iarStatus: ReceivedStatus.NotReceived,
     status: ClaimStatus.DRAFT,
     statusLabel: ClaimStatus.DRAFT,
     totalCost: 0,
@@ -27,6 +29,7 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     totalCostsApproved: 100,
     totalDeferredAmount: 100,
     periodCostsToBePaid: 100,
+    impactManagementParticipation: ImpactManagementParticipation.No,
   };
 
   return { ...template, ...mod };

@@ -1,10 +1,10 @@
 import { ClaimDto, ClaimStatus, CostsSummaryForPeriodDto, PartnerDto } from "@framework/types";
 import { DocumentSummaryDto } from "@framework/dtos";
-
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-
 import { Results, Result } from "@ui/validation";
 import * as Validation from "@ui/validators/common";
+import { ReceivedStatus } from "@framework/entities";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 export const claimCommentsMaxLength = 1000;
 
@@ -32,10 +32,12 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
 
   private readonly isKtpCompetition: boolean = checkProjectCompetition(this.competitionType).isKTP;
   private readonly hasDocuments: boolean = !!this.documents.length;
-  private readonly isPcfStatusValid = this.model.pcfStatus === "Received";
-  private readonly shouldValidatePcf = !this.isKtpCompetition && this.model.isFinalClaim;
+  private readonly isPcfStatusValid = this.model.pcfStatus === ReceivedStatus.Received;
+  private readonly shouldValidatePcf =
+    (!this.isKtpCompetition && this.model.isFinalClaim) ||
+    (this.model.impactManagementParticipation === ImpactManagementParticipation.Yes && this.model.isFinalClaim);
 
-  private readonly isReceivedIarStatus: boolean = this.model.iarStatus === "Received";
+  private readonly isReceivedIarStatus: boolean = this.model.iarStatus === ReceivedStatus.Received;
   private readonly isIarStatusWithDocsValid: boolean = this.hasDocuments && this.isReceivedIarStatus;
 
   public status = this.validateStatus();

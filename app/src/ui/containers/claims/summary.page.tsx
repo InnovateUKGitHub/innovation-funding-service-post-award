@@ -24,6 +24,7 @@ import {
 import { roundCurrency } from "@framework/util";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { AwardRateOverridesMessage } from "@ui/components/claims";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 export interface ClaimSummaryParams {
   projectId: ProjectId;
@@ -69,6 +70,13 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
   const renderContents = ({ totalCosts, ...data }: CombinedData) => {
     const { isLoans } = checkProjectCompetition(data.project.competitionType);
     const linkProps = getClaimLinkProps(data);
+    const { isMo } = getAuthRoles(data.project.roles);
+
+    // Disable completing the form if internal assurance and not received PCF
+    const iaPcfNotSubmittedForFinalClaim =
+      data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
+        ? data.claim.isFinalClaim && data.claim.pcfStatus !== "Received"
+        : false;
 
     return (
       <ACC.Page
@@ -86,7 +94,18 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
         )}
 
         <ACC.Section qa="claimSummaryForm" title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
-          {data.claim.isFinalClaim && (
+          {iaPcfNotSubmittedForFinalClaim && isMo ? (
+            <ACC.ValidationMessage
+              messageType="info"
+              message={<ACC.Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
+            />
+          ) : (
+            <ACC.ValidationMessage
+              messageType="info"
+              message={<ACC.Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
+            />
+          )}
+          {!iaPcfNotSubmittedForFinalClaim && data.claim.isFinalClaim && (
             <ACC.ValidationMessage
               messageType="info"
               message={<ACC.Content value={x => x.claimsMessages.finalClaim} />}
@@ -136,7 +155,7 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
 
           {!data.claim.isFinalClaim && renderForecastSummary(data)}
 
-          {renderClaimForm(data)}
+          <ClaimForm {...data} disabled={iaPcfNotSubmittedForFinalClaim} />
         </ACC.Section>
       </ACC.Page>
     );
@@ -197,7 +216,12 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
     );
   };
 
-  const renderClaimForm = ({ editor, claim, project }: Pick<CombinedData, "editor" | "claim" | "project">) => {
+  const ClaimForm = ({
+    editor,
+    claim,
+    project,
+    disabled,
+  }: Pick<CombinedData, "editor" | "claim" | "project"> & { disabled: boolean }) => {
     return (
       <Form.Form editor={editor} onSubmit={() => onSave(claim, editor, true, project)} qa="summary-form">
         <Form.Fieldset heading={x => x.pages.claimPrepareSummary.addCommentsHeading}>
@@ -217,7 +241,9 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
             <ACC.Content value={x => x.claimsMessages.submitClaimConfirmation} />
           </ACC.Renderers.SimpleString>
 
-          <Form.Submit>{<ACC.Content value={x => x.pages.claimPrepareSummary.submitClaimMessage} />}</Form.Submit>
+          <Form.Submit disabled={disabled}>
+            <ACC.Content value={x => x.pages.claimPrepareSummary.submitClaimMessage} />
+          </Form.Submit>
 
           <Form.Button name="save" onClick={() => onSave(claim, editor, false, project)}>
             <ACC.Content value={x => x.pages.claimPrepareSummary.saveAndReturnMessage} />

@@ -26,9 +26,10 @@ import { useContent } from "@ui/hooks";
 import { useMounted } from "@ui/features";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { DropdownOption } from "@ui/components";
-
 import { EnumDocuments } from "./components";
 import { Markdown } from "@ui/components/renderers";
+import { ReceivedStatus } from "@framework/entities";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -118,6 +119,12 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
     const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
     const { isMo } = getAuthRoles(data.project.roles);
 
+    // Disable completing the form if internal assurance and not received PCF
+    const iaPcfNotSubmittedForFinalClaim =
+      data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
+        ? data.claim.isFinalClaim && data.claim.pcfStatus !== ReceivedStatus.Received
+        : false;
+
     const backLinkElement = (
       <ACC.BackLink route={props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
         {content.backLink}
@@ -132,8 +139,9 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
         <ACC.Renderers.Messages messages={props.messages} />
-
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.finalClaim} />}
+        {!iaPcfNotSubmittedForFinalClaim && data.claim.isFinalClaim && (
+          <ACC.ValidationMessage messageType="info" message={content.finalClaim} />
+        )}
 
         {data.partner.competitionName && (
           <ACC.Renderers.SimpleString className="margin-bottom-none">
@@ -195,7 +203,7 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
           </ACC.Accordion>
         </ACC.Section>
 
-        {renderForm(data)}
+        {renderForm({ ...data, disabled: iaPcfNotSubmittedForFinalClaim })}
       </ACC.Page>
     );
   };
@@ -231,7 +239,7 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
     });
   };
 
-  const renderForm = (data: CombinedData): JSX.Element => {
+  const renderForm = (data: CombinedData & { disabled: boolean }): JSX.Element => {
     const options: ACC.SelectOption[] = [
       { id: ClaimStatus.MO_QUERIED, value: content.optionQueryClaim },
       { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: content.optionSubmitClaim },
@@ -265,7 +273,7 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
             inline
           />
 
-          {displayInteractiveForm && renderFormHiddenSection(data.editor, Form, data.project)}
+          {displayInteractiveForm && renderFormHiddenSection(data.editor, Form, data.project, data.disabled)}
         </Form.Fieldset>
       </Form.Form>
     );
@@ -355,9 +363,14 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
     editor: IEditorStore<ClaimDto, ClaimDtoValidator>,
     Form: ACC.FormBuilder<ClaimDto>,
     project: ProjectDto,
+    disabled: boolean,
   ) => {
     const moReminderElement = getMOReminderMessage(project.competitionType);
-    const submitButtonElement = <Form.Submit key="button">{getSubmitButtonLabel(editor)}</Form.Submit>;
+    const submitButtonElement = (
+      <Form.Submit disabled={disabled} key="button">
+        {getSubmitButtonLabel(editor)}
+      </Form.Submit>
+    );
     const declarationElement = (
       <ACC.Renderers.SimpleString key="declaration">{content.claimReviewDeclaration}</ACC.Renderers.SimpleString>
     );

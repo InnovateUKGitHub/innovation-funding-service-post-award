@@ -3,6 +3,7 @@ import { PCROrganisationType, ProjectMonitoringLevel } from "@framework/constant
 import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, PCRSummaryDto, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostCategoryType, ILinkInfo, ProjectRole } from "@framework/types";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 type CreateDTO<DTO> = (objectToMerge?: Partial<DTO>) => DTO;
 
@@ -46,6 +47,7 @@ export const createProjectDto: CreateDTO<ProjectDto> = (objectToMerge?) => {
     loanExtensionPeriodLength: 0,
     loanRepaymentPeriodLength: 0,
     monitoringLevel: ProjectMonitoringLevel.Platinum,
+    impactManagementParticipation: ImpactManagementParticipation.No,
   };
 
   return _merge(stubProject, objectToMerge || {});

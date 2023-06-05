@@ -1,3 +1,4 @@
+import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
 import { getProjectStatus } from "@framework/mappers/projectStatus";
 import { ClaimFrequency, getAuthRoles, IContext, ProjectDto, ProjectRole } from "@framework/types";
@@ -52,6 +53,9 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     loanAvailabilityPeriodLength: item.Loan_LoanAvailabilityPeriodLength__c ?? null,
     loanExtensionPeriodLength: item.Loan_LoanExtensionPeriodLength__c ?? null,
     loanRepaymentPeriodLength: item.Loan_LoanRepaymentPeriodLength__c ?? null,
+    impactManagementParticipation: mapImpactManagementParticipationToEnum(
+      item.Impact_Management_Participation__c ?? null,
+    ),
   };
 };
 
