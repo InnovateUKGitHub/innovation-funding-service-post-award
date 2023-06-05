@@ -23,7 +23,7 @@ export const accountNameChangeWorkflow: IPCRWorkflow<
       stepName: "filesStep",
       displayName: "Upload change of name certificate",
       stepNumber: 2,
-      validation: val => val.files,
+      validation: val => val,
       stepRender: PCRPrepareItemFilesStep,
     },
   ],
