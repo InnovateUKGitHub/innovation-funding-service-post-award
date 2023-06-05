@@ -109,6 +109,7 @@ export class TestData {
       Loan_LoanExtensionPeriodLength__c: null,
       Loan_LoanRepaymentPeriodLength__c: null,
       Acc_MonitoringLevel__c: "Platinum",
+      Impact_Management_Participation__c: "No",
     };
 
     if (update) update(newItem);
@@ -486,6 +487,7 @@ export class TestData {
       Acc_FinalClaim__c: false,
       Acc_PeriodCoststobePaid__c: 100,
       Acc_TotalDeferredAmount__c: 100,
+      Impact_Management_Participation__c: "No",
     };
 
     if (update) {
@@ -524,6 +526,7 @@ export class TestData {
       Owner: {
         Email: "content.solution@iuk.ukri.org",
       },
+      Impact_Management_Participation__c: "No",
     };
 
     if (update) {

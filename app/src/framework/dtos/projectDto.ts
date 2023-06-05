@@ -1,4 +1,5 @@
-import { ClaimFrequency, ProjectMonitoringLevel, ProjectRole, ProjectStatus } from "@framework/constants";
+import { ClaimFrequency, ProjectMonitoringLevel, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/constants";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 export interface ProjectDto {
   applicationUrl?: string | null;
@@ -39,6 +40,7 @@ export interface ProjectDto {
   statusName: string;
   summary: string;
   title: string;
+  impactManagementParticipation: ImpactManagementParticipation;
 }
 
 export interface ProjectDtoGql extends ProjectDto {

@@ -36,6 +36,7 @@ export interface ISalesforceProject {
   Loan_LoanAvailabilityPeriodLength__c: number | null;
   Loan_LoanExtensionPeriodLength__c: number | null;
   Loan_LoanRepaymentPeriodLength__c: number | null;
+  Impact_Management_Participation__c: string;
 }
 
 export interface IProjectRepository {
@@ -82,6 +83,7 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Loan_LoanAvailabilityPeriodLength__c",
     "Loan_LoanExtensionPeriodLength__c",
     "Loan_LoanRepaymentPeriodLength__c",
+    "Impact_Management_Participation__c",
   ];
 
   getById(id: ProjectId) {

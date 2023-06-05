@@ -7,6 +7,7 @@ import { BadRequestError, configuration } from "@server/features/common";
 import { IPicklistEntry } from "@framework/types";
 import { createBatch } from "@shared/create-batch";
 import { ILogger } from "@shared/developmentLogger";
+import { noop } from "lodash";
 
 export type Updatable<T> = Partial<T> & {
   Id: string;
@@ -37,14 +38,20 @@ export abstract class RepositoryBase {
     FALLBACK_QUERY_ERROR: "FALLBACK_QUERY_ERROR",
   };
 
-  protected constructError(e: unknown | Errors.SalesforceErrorResponse) {
+  protected constructError(e: unknown | Errors.SalesforceErrorResponse, soql = "No SOQL available for this query") {
     if (Errors.isSalesforceErrorResponse(e)) {
       if (e.message.length < 10_000) {
-        this.logger.error("Salesforce Error", e.errorCode, e.message);
+        this.logger.error(
+          "Salesforce Error",
+          `Error code: ${e.errorCode}\n\n`,
+          `Original SOQL:\n${soql}\n\n`,
+          `Error message:\n${e.message}\n\n`,
+        );
       } else {
         this.logger.error(
           "Salesforce Error",
           e.errorCode,
+          soql,
           "This error message was truncated because Salesforce sent a message with more than 10K characters.",
           "This could be because Salesforce is returning a full HTML error page, such as a Salesforce EDGE connection error.",
         );
@@ -65,19 +72,6 @@ export abstract class RepositoryBase {
     }
     return e instanceof Error ? e : new Error(`${e}`);
   }
-
-  protected executeArray<T>(query: Query<AnyObject>): Promise<T[]> {
-    return new Promise<T[]>((res, rej) => {
-      query.execute(undefined, (err, records) => {
-        if (err) {
-          rej(this.constructError(err));
-        } else {
-          // there is an error in the typings of result so need to cast here
-          res(records as unknown as T[]);
-        }
-      });
-    });
-  }
 }
 
 /**
@@ -91,6 +85,12 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   protected abstract readonly salesforceObjectName: string;
   protected abstract readonly salesforceFieldNames: string[];
   protected abstract readonly mapper: ISalesforceMapper<TSalesforce, TEntity>;
+
+  protected async logSoql(query: Query<unknown>): Promise<string> {
+    const soql = await query.toSOQL(noop);
+    this.logger.trace(`Running query on ${this.salesforceObjectName}`, soql);
+    return soql;
+  }
 
   protected async retrieve(id: string): Promise<TEntity | null | undefined> {
     try {
@@ -112,14 +112,17 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async all(): Promise<TEntity[]> {
+    let soql: string | undefined = undefined;
     try {
       const connection = await this.getSalesforceConnection();
       const targetObject = connection.sobject(this.salesforceObjectName);
-      const allItems = (await targetObject.select(this.salesforceFieldNames).execute()) as TSalesforce[];
+      const fullQuery = targetObject.select(this.salesforceFieldNames);
+      soql = await this.logSoql(fullQuery);
+      const allItems = (await fullQuery.execute()) as TSalesforce[];
 
       return this.map(allItems);
     } catch (error) {
-      throw this.constructError(error);
+      throw this.constructError(error, soql);
     }
   }
 
@@ -132,7 +135,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
       return query.records as unknown as T;
     } catch (error) {
-      throw this.constructError(error);
+      throw this.constructError(error, salesforceQuery);
     }
   }
 
@@ -183,16 +186,19 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async where(filter: Partial<TSalesforce> | string): Promise<TEntity[]> {
+    let soql: string | undefined = undefined;
     try {
       const connection = await this.getSalesforceConnection();
       const filteredQuery = connection.sobject(this.salesforceObjectName).select(this.salesforceFieldNames);
-      const filteredResponse = (await filteredQuery.where(filter).execute()) as TSalesforce[];
+      const fullQuery = filteredQuery.where(filter);
+      soql = await this.logSoql(fullQuery);
+      const filteredResponse = (await fullQuery.execute()) as TSalesforce[];
 
       if (!filteredResponse.length) return [];
 
       return this.map(filteredResponse);
     } catch (error) {
-      throw this.constructError(error);
+      throw this.constructError(error, soql);
     }
   }
 
@@ -207,23 +213,25 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async filterOne<Payload extends Partial<TSalesforce> | string>(filter: Payload): Promise<TEntity | null> {
+    let soql: string | undefined = undefined;
     try {
       const connection = await this.getSalesforceConnection();
-      const query = (await connection
+      const fullQuery = connection
         .sobject(this.salesforceObjectName)
         .select(this.salesforceFieldNames)
         .where(filter)
-        .limit(1)
-        .execute()) as TSalesforce[];
+        .limit(1);
+      soql = await this.logSoql(fullQuery);
+      const res = (await fullQuery.execute()) as TSalesforce[];
 
-      if (!query.length) return null;
+      if (!res.length) return null;
 
       // Note: we limit only 1 item above, so we can return this object from the array
-      const [onlyFilteredItem] = this.map(query);
+      const [onlyFilteredItem] = this.map(res);
 
       return onlyFilteredItem;
     } catch (error) {
-      throw this.constructError(error);
+      throw this.constructError(error, soql);
     }
   }
 

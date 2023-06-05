@@ -17,6 +17,7 @@ import { DocumentEdit, DropdownOption } from "@ui/components";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { useContent } from "@ui/hooks";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 type ClaimDocumentContent = ReturnType<typeof useClaimDocumentContent>;
 
@@ -92,6 +93,13 @@ const ClaimDocumentsComponent = ({
     documentDescriptions: DocumentDescriptionDto[],
   ) => {
     const { isLoans } = checkProjectCompetition(project.competitionType);
+    const { isMo } = getAuthRoles(project.roles);
+
+    // Disable completing the form if internal assurance and not received PCF
+    const iaPcfNotSubmittedForFinalClaim =
+      project.impactManagementParticipation === ImpactManagementParticipation.Yes
+        ? claim.isFinalClaim && claim.pcfStatus !== "Received"
+        : false;
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
       .filter(x => {
@@ -117,6 +125,17 @@ const ClaimDocumentsComponent = ({
       >
         <ACC.Renderers.Messages messages={props.messages} />
 
+        {iaPcfNotSubmittedForFinalClaim && isMo ? (
+          <ACC.ValidationMessage
+            messageType="info"
+            message={<ACC.Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
+          />
+        ) : (
+          <ACC.ValidationMessage
+            messageType="info"
+            message={<ACC.Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
+          />
+        )}
         {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.finalClaim} />}
 
         <ACC.Section>
@@ -341,17 +360,8 @@ export function ClaimDocumentAdvice({
     if (isKTP) {
       return (
         <>
-          {isIarRequired ? (
-            <>
-              <ACC.Renderers.SimpleString>{content.iarRequiredAdvice}</ACC.Renderers.SimpleString>
-
-              {isFinalClaim && <ACC.Renderers.SimpleString>{content.finalClaimIarAdvice}</ACC.Renderers.SimpleString>}
-            </>
-          ) : (
-            <>
-              {isFinalClaim && <ACC.Renderers.SimpleString>{content.finalClaimIarAdvice}</ACC.Renderers.SimpleString>}
-            </>
-          )}
+          {isIarRequired && <ACC.Renderers.SimpleString>{content.iarRequiredAdvice}</ACC.Renderers.SimpleString>}
+          {isFinalClaim && <ACC.Renderers.SimpleString>{content.finalClaimIarAdvice}</ACC.Renderers.SimpleString>}
 
           <ACC.Renderers.SimpleString>{content.usefulTip}</ACC.Renderers.SimpleString>
 

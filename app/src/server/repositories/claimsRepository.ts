@@ -33,6 +33,7 @@ export interface ISalesforceClaim {
   Acc_ReasonForDifference__c: string | null;
   Acc_IARRequired__c: boolean;
   Acc_FinalClaim__c: boolean;
+  Impact_Management_Participation__c: string;
 }
 
 export interface IClaimRepository {
@@ -59,6 +60,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
 
   protected readonly salesforceFieldNames = [
     "Id",
+    "Impact_Management_Participation__c",
     "Acc_ProjectParticipant__r.Id",
     "Acc_ProjectParticipant__r.Acc_ProjectId__c",
     "Acc_ProjectParticipant__r.Acc_OverheadRate__c",

@@ -4,6 +4,7 @@ import { salesforceDateFormat } from "@framework/util/clock";
 import { ClaimDto, ClaimStatus, IContext, PartnerDto } from "@framework/types";
 import { ReceivedStatus } from "@framework/entities";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 
 const statusAllowingIarEdit = [
   ClaimStatus.DRAFT,
@@ -53,6 +54,9 @@ export const mapClaim =
       totalCostsApproved: claim.Acc_TotalCostsApproved__c,
       totalDeferredAmount: claim.Acc_TotalDeferredAmount__c, // please see ACC-5639 if changing this
       periodCostsToBePaid: claim.Acc_PeriodCoststobePaid__c, // please see ACC-5639 if changing this
+      impactManagementParticipation: mapImpactManagementParticipationToEnum(
+        claim.Impact_Management_Participation__c ?? null,
+      ),
     };
   };
 
@@ -77,13 +81,13 @@ export const mapToClaimStatusLabel = (
 };
 
 const mapToReceivedStatus = (status: string): ReceivedStatus => {
-  if (!status?.length) return "Unknown";
+  if (!status?.length) return ReceivedStatus.Unknown;
 
-  const allowedStatuses: ReceivedStatus[] = ["Received", "Not Received"];
+  const allowedStatuses: ReceivedStatus[] = [ReceivedStatus.Received, ReceivedStatus.NotReceived];
   // Note: Preform positive check as it "could" finish sooner
   const hasMatchingStatus = allowedStatuses.some(statusToCheck => statusToCheck === status);
 
-  if (!hasMatchingStatus) return "Unknown";
+  if (!hasMatchingStatus) return ReceivedStatus.Unknown;
 
   return status as ReceivedStatus;
 };

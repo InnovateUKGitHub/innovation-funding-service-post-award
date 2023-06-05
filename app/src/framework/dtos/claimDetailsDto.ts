@@ -1,3 +1,4 @@
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ClaimLineItemDto } from "@framework/types";
 
 export interface ClaimDetailsSummaryDto {
@@ -9,6 +10,7 @@ export interface ClaimDetailsSummaryDto {
   periodId: number;
   periodStart: Date | null;
   value: number;
+  impactManagementParticipation: ImpactManagementParticipation;
 }
 
 export interface ClaimDetailsDto extends ClaimDetailsSummaryDto {

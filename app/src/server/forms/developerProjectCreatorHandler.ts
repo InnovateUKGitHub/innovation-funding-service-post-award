@@ -48,7 +48,7 @@ String Acc_CompetitionCode = ${competitionCode};
 String Acc_CompetitionName = 'SteveTest';
 Double accProjNo = ${projectId};
 Date startDate = ${startDate};
-String Impact_Management_participation__c = ${impactManagementParticipation};
+String Impact_Management_Participation__c = ${impactManagementParticipation};
 ` + createProject
     );
   }

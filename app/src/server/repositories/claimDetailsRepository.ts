@@ -16,6 +16,7 @@ export interface ISalesforceClaimDetails {
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_ReasonForDifference__c: string | null;
+  Impact_Management_Participation__c: string;
   Owner: {
     Email: string;
   };

@@ -1,6 +1,7 @@
 import { QueryBase } from "@server/features/common";
 import { Authorisation, ClaimDetailsDto, IContext, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "./mapClaimDetails";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
   constructor(
@@ -46,6 +47,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
         comments: null,
         isAuthor: false,
         lineItems: [], // @TODO move client-side logic here?
+        impactManagementParticipation: ImpactManagementParticipation.Unknown,
       };
     }
     return mapClaimDetails(claimDetail, lineItems, context);

@@ -2,6 +2,7 @@ import { ClaimFrequency, ProjectDto, ProjectMonitoringLevel, ProjectRole, Projec
 import { mapToProjectDto } from "@server/features/projects";
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 describe("mapToProjectDto", () => {
   const midnight = {
@@ -58,6 +59,7 @@ describe("mapToProjectDto", () => {
       loanAvailabilityPeriodLength: null,
       loanExtensionPeriodLength: null,
       loanRepaymentPeriodLength: null,
+      impactManagementParticipation: ImpactManagementParticipation.Unknown,
     };
 
     const project = context.testData.createProject(x => {
@@ -92,6 +94,7 @@ describe("mapToProjectDto", () => {
       x.Loan_LoanAvailabilityPeriodLength__c = null;
       x.Loan_LoanExtensionPeriodLength__c = null;
       x.Loan_LoanRepaymentPeriodLength__c = null;
+      x.Impact_Management_Participation__c = expected.impactManagementParticipation;
     });
 
     const result = mapToProjectDto(context, project, ProjectRole.Unknown);
@@ -306,6 +309,25 @@ describe("mapToProjectDto", () => {
         const { loanRepaymentPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
         expect(loanRepaymentPeriodLength).toBeNull();
+      });
+    });
+
+    describe("with Impact Management Participation", () => {
+      test.each([
+        ["Yes", ImpactManagementParticipation.Yes],
+        ["No", ImpactManagementParticipation.No],
+        ["adskjhdas", ImpactManagementParticipation.Unknown],
+        [null, ImpactManagementParticipation.Unknown],
+      ])("with a $0 value", (input, expected) => {
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Impact_Management_Participation__c = input as string;
+        });
+
+        const { impactManagementParticipation } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(impactManagementParticipation).toBe(expected);
       });
     });
   });

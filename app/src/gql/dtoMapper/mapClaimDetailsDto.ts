@@ -1,4 +1,5 @@
 import type { ClaimDetailsDto } from "@framework/dtos";
+import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { Clock, salesforceDateFormat } from "@framework/util";
 
 const clock = new Clock();
@@ -11,6 +12,7 @@ type ClaimDetailsNode = Readonly<
     Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
     Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
+    Impact_Management_Participation__c: GQL.Value<string>;
     RecordType: {
       Name: GQL.Value<string>;
     } | null;
@@ -19,7 +21,7 @@ type ClaimDetailsNode = Readonly<
 
 type ClaimDetailsDtoMapping = Pick<
   ClaimDetailsDto,
-  "periodId" | "costCategoryId" | "value" | "periodEnd" | "periodStart"
+  "periodId" | "costCategoryId" | "value" | "periodEnd" | "periodStart" | "impactManagementParticipation"
 >;
 
 const mapper: GQL.DtoMapper<ClaimDetailsDtoMapping, ClaimDetailsNode> = {
@@ -37,6 +39,9 @@ const mapper: GQL.DtoMapper<ClaimDetailsDtoMapping, ClaimDetailsNode> = {
   },
   value: function (node) {
     return node?.Acc_PeriodCostCategoryTotal__c?.value ?? 0;
+  },
+  impactManagementParticipation: function (node) {
+    return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
   },
 };
 
