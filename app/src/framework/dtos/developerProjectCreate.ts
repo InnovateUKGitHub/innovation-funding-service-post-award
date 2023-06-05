@@ -7,6 +7,7 @@ interface DeveloperProjectCreateDto {
   projectDuration: number;
   projectId: number;
   projectName: string;
+  impactManagementParticipation: string;
   startDate: Date;
 }
 
