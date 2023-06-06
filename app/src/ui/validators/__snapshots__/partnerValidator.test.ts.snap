@@ -2,4 +2,4 @@
 
 exports[`Partner Validator With en-GB i18n postcode should throw error with empty postcode 1`] = `"You must provide your project location postcode."`;
 
-exports[`Partner Validator With no i18n postcode should throw error with empty postcode 1`] = `"validation.partnerDtoValidator.projectLocationPostcodeRequired"`;
+exports[`Partner Validator With no i18n postcode should throw error with empty postcode 1`] = `"forms.partnerDetailsEdit.new-postcode.errors.too_small"`;

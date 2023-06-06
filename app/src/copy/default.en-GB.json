@@ -1535,8 +1535,6 @@
       "bankDetailsRequired": "You must provide your bank details",
       "partnerStatusChangeDisallowed": "Partner status change not allowed.",
       "spendProfileRequired": "You must complete your spend profile.",
-      "projectLocationPostcodeRequired": "You must provide your project location postcode.",
-      "projectLocationPostcodeLengthTooLarge": "Your location entry must be no more than {{ count }} characters.",
       "sortCodeRequired": "Sort code cannot be empty.",
       "sortCodeInvalid": "Enter a valid sort code.",
       "accountNumberRequired": "Account number cannot be empty.",
@@ -1783,7 +1781,7 @@
       "new-postcode": {
         "errors": {
           "too_small": "You must provide your project location postcode.",
-          "too_big": "Project postcode must be {{ count }} characters or less."
+          "too_big": "Your location entry must be no more than {{ count }} characters."
         }
       }
     }
