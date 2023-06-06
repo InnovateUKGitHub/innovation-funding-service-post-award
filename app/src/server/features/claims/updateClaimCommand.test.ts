@@ -619,6 +619,46 @@ describe("UpdateClaimCommand", () => {
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 
+        await expect(context.runCommand(command)).resolves.toEqual(true);
+      });
+
+      it("should pass validation when PCF status is Not Received and draft", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject(x => {
+          x.Impact_Management_Participation__c = "Yes";
+        });
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 2, x => {
+          x.Acc_FinalClaim__c = true;
+          x.Acc_PCF_Status__c = "Not Received";
+        });
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+        const dto = mapClaim(context)(claim, partner.competitionType);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
+        await expect(context.runCommand(command)).resolves.toEqual(true);
+      });
+
+      it("should not pass validation when PCF status is Not Received and submitted to Monitoring Officer", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject(x => {
+          x.Impact_Management_Participation__c = "Yes";
+        });
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 2, x => {
+          x.Acc_FinalClaim__c = true;
+          x.Acc_PCF_Status__c = "Not Received";
+        });
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+
+        const dto = mapClaim(context)(claim, partner.competitionType);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
         await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       });
     });
