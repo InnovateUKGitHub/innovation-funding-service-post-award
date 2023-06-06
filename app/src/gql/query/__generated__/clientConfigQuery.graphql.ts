@@ -18,6 +18,7 @@ export type clientConfigQuery$data = {
       readonly customContent: boolean;
       readonly futureTimeExtensionInYears: number;
       readonly searchDocsMinThreshold: number;
+      readonly disallowImpactManagementFinalClaimWithoutPcf: boolean;
     };
     readonly ifsRoot: string;
     readonly logLevel: LogLevel;

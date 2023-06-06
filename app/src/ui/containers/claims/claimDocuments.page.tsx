@@ -125,17 +125,18 @@ const ClaimDocumentsComponent = ({
       >
         <ACC.Renderers.Messages messages={props.messages} />
 
-        {iaPcfNotSubmittedForFinalClaim && isMo ? (
-          <ACC.ValidationMessage
-            messageType="info"
-            message={<ACC.Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
-          />
-        ) : (
-          <ACC.ValidationMessage
-            messageType="info"
-            message={<ACC.Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
-          />
-        )}
+        {iaPcfNotSubmittedForFinalClaim &&
+          (isMo ? (
+            <ACC.ValidationMessage
+              messageType="info"
+              message={<ACC.Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
+            />
+          ) : (
+            <ACC.ValidationMessage
+              messageType="info"
+              message={<ACC.Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
+            />
+          ))}
         {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.finalClaim} />}
 
         <ACC.Section>
