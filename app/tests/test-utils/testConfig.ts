@@ -30,6 +30,7 @@ export class TestConfig implements IConfig {
     customContent: true,
     searchDocsMinThreshold: 3,
     futureTimeExtensionInYears: 5,
+    disallowImpactManagementFinalClaimWithoutPcf: false,
   };
 
   public logLevel = LogLevel.DEBUG;

@@ -94,18 +94,19 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
         )}
 
         <ACC.Section qa="claimSummaryForm" title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
-          {iaPcfNotSubmittedForFinalClaim && isMo ? (
-            <ACC.ValidationMessage
-              messageType="info"
-              message={<ACC.Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
-            />
-          ) : (
-            <ACC.ValidationMessage
-              messageType="info"
-              message={<ACC.Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
-            />
-          )}
-          {!iaPcfNotSubmittedForFinalClaim && data.claim.isFinalClaim && (
+          {iaPcfNotSubmittedForFinalClaim &&
+            (isMo ? (
+              <ACC.ValidationMessage
+                messageType="info"
+                message={<ACC.Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
+              />
+            ) : (
+              <ACC.ValidationMessage
+                messageType="info"
+                message={<ACC.Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
+              />
+            ))}
+          {data.claim.isFinalClaim && (
             <ACC.ValidationMessage
               messageType="info"
               message={<ACC.Content value={x => x.claimsMessages.finalClaim} />}

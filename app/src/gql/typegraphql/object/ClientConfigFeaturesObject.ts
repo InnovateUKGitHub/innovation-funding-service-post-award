@@ -14,6 +14,9 @@ class ClientConfigFeaturesObject implements IFeatureFlags {
 
   @Field(() => Int)
   futureTimeExtensionInYears!: number;
+
+  @Field(() => Boolean)
+  disallowImpactManagementFinalClaimWithoutPcf!: boolean;
 }
 
 export { ClientConfigFeaturesObject };
