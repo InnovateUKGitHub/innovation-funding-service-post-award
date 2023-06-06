@@ -116,6 +116,15 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     // Note: For the time being ignore all ktp validation here
     if (this.isKtpCompetition) return Validation.valid(this);
 
+    // Allow not having a PCF if we are in draft, queried by MO, or queried by Innovate UK
+    if (
+      this.model.status === ClaimStatus.DRAFT ||
+      this.model.status === ClaimStatus.MO_QUERIED ||
+      this.model.status === ClaimStatus.INNOVATE_QUERIED
+    ) {
+      return Validation.valid(this);
+    }
+
     return Validation.isTrue(
       this,
       this.isPcfStatusValid,
