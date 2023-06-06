@@ -1,4 +1,4 @@
-import { ClaimFrequency, ProjectMonitoringLevel, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/constants";
+import { ClaimFrequency, ProjectMonitoringLevel, ProjectRole, ProjectStatus } from "@framework/constants";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 export interface ProjectDto {

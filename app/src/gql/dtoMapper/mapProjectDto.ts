@@ -1,4 +1,5 @@
 import type { ProjectDtoGql } from "@framework/dtos";
+import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
 import { getProjectStatus } from "@framework/mappers/projectStatus";
 import { Clock, dayComparator, roundCurrency } from "@framework/util";
@@ -39,6 +40,7 @@ type ProjectNode = Readonly<
     Loan_LoanEndDate__c: GQL.Value<string>;
     Loan_LoanExtensionPeriodLength__c: GQL.Value<number>;
     Loan_LoanRepaymentPeriodLength__c: GQL.Value<number>;
+    Impact_Management_Participation__c: GQL.Value<string>;
   }>
 > | null;
 
@@ -77,6 +79,7 @@ type ProjectDtoMapping = Pick<
   | "summary"
   | "title"
   | "partnerRoles"
+  | "impactManagementParticipation"
 >;
 
 const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
@@ -184,6 +187,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   title(node) {
     return node?.Acc_ProjectTitle__c?.value ?? "";
+  },
+  impactManagementParticipation(node) {
+    return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
   },
 };
 

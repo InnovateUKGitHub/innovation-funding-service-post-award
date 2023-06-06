@@ -27,6 +27,7 @@ Object {
   "endDate": 2024-03-24T00:00:00.000Z,
   "grantOfferLetterCosts": 100000,
   "id": "0",
+  "impactManagementParticipation": "Yes",
   "isActive": true,
   "isPastEndDate": false,
   "leadPartnerName": "",
