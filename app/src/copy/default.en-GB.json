@@ -1774,5 +1774,18 @@
       "valueNotNumber": "Estimated cost must be a number",
       "valueNotCurrency": "Estimated cost must be 2 decimal places or fewer"
     }
+  },
+  "forms": {
+    "errors": {
+      "invalid": "A validation error occurred."
+    },
+    "partnerDetailsEdit": {
+      "new-postcode": {
+        "errors": {
+          "too_small": "You must provide your project location postcode.",
+          "too_big": "Project postcode must be {{ count }} characters or less."
+        }
+      }
+    }
   }
 }

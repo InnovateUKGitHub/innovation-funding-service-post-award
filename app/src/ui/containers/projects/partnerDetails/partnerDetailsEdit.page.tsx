@@ -7,7 +7,12 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
 import { usePartnerDetailsEditQuery, FormValues, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
 import { useValidationErrors } from "@framework/util/errorHelpers";
-import { partnerDetailsEditSchema, postcodeSetupSchema, emptySchema } from "./partnerDetailsEdit.zod";
+import {
+  partnerDetailsEditSchema,
+  postcodeSetupSchema,
+  emptySchema,
+  partnerDetailsEditErrorMap,
+} from "./partnerDetailsEdit.zod";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
@@ -51,7 +56,7 @@ export function PartnerDetailsEditComponent({
       "new-postcode": partner.postcode ?? "",
       partnerStatus: partner.partnerStatus,
     },
-    resolver: zodResolver(getZodResolver(isSetup, partner.postcodeStatus)),
+    resolver: zodResolver(getZodResolver(isSetup, partner.postcodeStatus), { errorMap: partnerDetailsEditErrorMap }),
   });
 
   const { onUpdate, apiError } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
