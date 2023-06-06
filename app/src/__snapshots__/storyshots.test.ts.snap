@@ -2345,6 +2345,269 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
 </div>
 `;
 
+exports[`Storyshots IUK Components/Message Box Alert 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-warning-text acc-message acc-message__alert"
+    data-qa="validation-message"
+    data-qa-type="alert"
+    style={
+      Object {
+        "borderColor": "#d4351c",
+        "color": "#d4351c",
+      }
+    }
+  >
+    <span
+      className="govuk-warning-text__assistive"
+      data-qa="validation-message-assistive"
+    >
+      Alert
+    </span>
+    <span
+      className="govuk-body"
+      data-qa="validation-message-content"
+      style={
+        Object {
+          "color": "#d4351c",
+        }
+      }
+    >
+      The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Storyshots IUK Components/Message Box Error 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-warning-text acc-message acc-message__error"
+    data-qa="validation-message"
+    data-qa-type="error"
+    style={
+      Object {
+        "borderColor": "#d4351c",
+      }
+    }
+  >
+    <span
+      className="govuk-warning-text__assistive"
+      data-qa="validation-message-assistive"
+    >
+      Error
+    </span>
+    <span
+      className="govuk-body"
+      data-qa="validation-message-content"
+      style={
+        Object {
+          "color": undefined,
+        }
+      }
+    >
+      The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Storyshots IUK Components/Message Box Info 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-warning-text acc-message acc-message__info"
+    data-qa="validation-message"
+    data-qa-type="info"
+    style={
+      Object {
+        "borderColor": "#1d70b8",
+      }
+    }
+  >
+    <span
+      className="govuk-warning-text__assistive"
+      data-qa="validation-message-assistive"
+    >
+      Info
+    </span>
+    <span
+      className="govuk-body"
+      data-qa="validation-message-content"
+      style={
+        Object {
+          "color": undefined,
+        }
+      }
+    >
+      The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Storyshots IUK Components/Message Box Markdown 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-warning-text acc-message acc-message__info"
+    data-qa="validation-message"
+    data-qa-type="info"
+    style={
+      Object {
+        "borderColor": "#1d70b8",
+      }
+    }
+  >
+    <span
+      className="govuk-warning-text__assistive"
+      data-qa="validation-message-assistive"
+    >
+      Info
+    </span>
+    <span
+      className="govuk-body"
+      data-qa="validation-message-content"
+      style={
+        Object {
+          "color": undefined,
+        }
+      }
+    >
+      <span
+        className="govuk-body markdown"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "<p>Please <a target=\\"_blank\\" href=\\"https://ktp-uk.org\\">ktp</a> your way to victory</p>
+<p>Please decide now.</p>
+",
+          }
+        }
+      />
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Storyshots IUK Components/Message Box Primary 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-warning-text acc-message acc-message__info"
+    data-qa="validation-message"
+    data-qa-type="info"
+    style={
+      Object {
+        "borderColor": "#1d70b8",
+      }
+    }
+  >
+    <span
+      className="govuk-warning-text__assistive"
+      data-qa="validation-message-assistive"
+    >
+      Info
+    </span>
+    <span
+      className="govuk-body"
+      data-qa="validation-message-content"
+      style={
+        Object {
+          "color": undefined,
+        }
+      }
+    >
+      The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Storyshots IUK Components/Message Box Success 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-warning-text acc-message acc-message__success"
+    data-qa="validation-message"
+    data-qa-type="success"
+    style={
+      Object {
+        "borderColor": "#00703c",
+        "color": "#00703c",
+      }
+    }
+  >
+    <span
+      className="govuk-warning-text__assistive"
+      data-qa="validation-message-assistive"
+    >
+      Success
+    </span>
+    <span
+      className="govuk-body"
+      data-qa="validation-message-content"
+      style={
+        Object {
+          "color": "#00703c",
+        }
+      }
+    >
+      The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Storyshots IUK Components/Message Box Warning 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-warning-text acc-message acc-message__warning"
+    data-qa="validation-message"
+    data-qa-type="warning"
+    style={
+      Object {
+        "borderColor": "var(--govukColourBlack)",
+      }
+    }
+  >
+    <span
+      className="govuk-warning-text__assistive"
+      data-qa="validation-message-assistive"
+    >
+      Warning
+    </span>
+    <span
+      className="govuk-body"
+      data-qa="validation-message-content"
+      style={
+        Object {
+          "color": undefined,
+        }
+      }
+    >
+      The quick brown fox jumps over the lazy dog.
+    </span>
+  </div>
+</div>
+`;
+
 exports[`Storyshots React Hook Form/Fieldset Standard Fieldset 1`] = `
 <div
   className="govuk-template__body"

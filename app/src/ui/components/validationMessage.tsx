@@ -82,7 +82,7 @@ export const ValidationMessage = ({
 
   return (
     <div
-      className={cx("govuk-warning-text-background", "govuk-warning-text", "acc-message", ui.className)}
+      className={cx("govuk-warning-text", "acc-message", ui.className)}
       data-qa={qa}
       data-qa-type={messageType}
       style={ui.styles}
