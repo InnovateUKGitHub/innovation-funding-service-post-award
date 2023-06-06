@@ -9,12 +9,12 @@ export enum ProjectStatus {
 }
 
 export enum ProjectMonitoringLevel {
-  Unknown = "unknown",
-  Platinum = "platinum",
-  Gold = "gold",
-  Silver = "silver",
-  Bronze = "bronze",
-  InternalAssurance = "internalAssurance",
+  Unknown = "Unknown",
+  Platinum = "Platinum",
+  Gold = "Gold",
+  Silver = "Silver",
+  Bronze = "Bronze",
+  InternalAssurance = "InternalAssurance",
 }
 
 export enum ProjectRole {
