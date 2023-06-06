@@ -20,6 +20,7 @@ describe("mapToProjectDto", () => {
     Acc_ProjectStatus__c: { value: "Active", label: "Live" },
     Acc_ProjectTitle__c: { value: "Allan's Plans" },
     Acc_TotalProjectCosts__c: { value: 90000 },
+    Impact_Management_Participation__c: { value: "Yes" },
     isActive: true,
     roles: {
       isFc: true,
@@ -64,6 +65,7 @@ describe("mapToProjectDto", () => {
         "statusName",
         "title",
         "partnerRoles",
+        "impactManagementParticipation",
       ]),
     ).toMatchSnapshot();
   });

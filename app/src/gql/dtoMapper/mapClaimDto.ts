@@ -2,6 +2,7 @@ import { DateTime } from "luxon";
 import { ClaimStatus } from "@framework/constants";
 import type { ClaimDto } from "@framework/dtos";
 import { mapToClaimStatus, mapToClaimStatusLabel } from "@framework/mappers/claimStatus";
+import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { Clock, salesforceDateFormat } from "@framework/util";
 
 const clock = new Clock();
@@ -25,6 +26,7 @@ type ClaimNode = Readonly<
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
     Acc_ProjectPeriodStartDate__c: GQL.Value<string>;
     LastModifiedDate: GQL.Value<string>;
+    Impact_Management_Participation__c: GQL.Value<string>;
     RecordType: {
       Name: GQL.Value<string>;
     } | null;
@@ -47,6 +49,7 @@ type ClaimDtoMapping = Pick<
   | "status"
   | "statusLabel"
   | "totalCost"
+  | "impactManagementParticipation"
 >;
 
 const mapper: GQL.DtoMapper<
@@ -96,7 +99,7 @@ const mapper: GQL.DtoMapper<
   periodEndDate(node) {
     return !!node?.Acc_ProjectPeriodEndDate__c?.value
       ? clock.parseRequiredSalesforceDate(node?.Acc_ProjectPeriodEndDate__c?.value)
-      : new Date();
+      : new Date(NaN);
   },
   periodId(node) {
     return (node?.Acc_ProjectPeriodNumber__c?.value ?? 0) as PeriodId;
@@ -104,7 +107,7 @@ const mapper: GQL.DtoMapper<
   periodStartDate(node) {
     return !!node?.Acc_ProjectPeriodStartDate__c?.value
       ? clock.parseRequiredSalesforceDate(node?.Acc_ProjectPeriodStartDate__c?.value)
-      : new Date();
+      : new Date(NaN);
   },
   status(node) {
     return mapToClaimStatus(node?.Acc_ClaimStatus__c?.value ?? "unknown claim status");
@@ -118,6 +121,9 @@ const mapper: GQL.DtoMapper<
   },
   totalCost(node) {
     return node?.Acc_ProjectPeriodCost__c?.value ?? 0;
+  },
+  impactManagementParticipation(node) {
+    return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
   },
 };
 

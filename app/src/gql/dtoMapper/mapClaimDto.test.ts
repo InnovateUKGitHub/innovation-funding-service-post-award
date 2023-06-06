@@ -152,11 +152,25 @@ describe("mapToClaimDtoArray", () => {
         Acc_ProjectPeriodCost__c: {
           value: 1000,
         },
+        Impact_Management_Participation__c: { value: "Yes" },
       },
     },
     {
       node: {
-        Id: "a0526000009Mc2PAAS",
+        Id: "id-1",
+        Acc_FinalClaim__c: {
+          value: false,
+        },
+        Acc_PaidDate__c: {
+          value: null,
+        },
+        Acc_ProjectPeriodNumber__c: {
+          value: 3,
+        },
+        Acc_ClaimStatus__c: {
+          value: "Payment Requested",
+        },
+        Impact_Management_Participation__c: { value: "Yes" },
         RecordType: {
           Name: {
             value: "Total Project Period",
@@ -168,10 +182,26 @@ describe("mapToClaimDtoArray", () => {
         Acc_ApprovedDate__c: {
           value: "2023-05-16",
         },
-        Acc_ClaimStatus__c: {
-          value: "Approved",
-          label: "Payment being processed",
+      },
+    },
+    {
+      node: {
+        Id: "id-3-defaults",
+        Acc_PaidDate__c: null,
+        Acc_FinalClaim__c: null,
+        Acc_ProjectPeriodNumber__c: null,
+        Acc_ClaimStatus__c: null,
+        Impact_Management_Participation__c: null,
+        RecordType: {
+          Name: {
+            value: "Total Project Period",
+          },
         },
+      },
+    },
+    {
+      node: {
+        Id: "id-4",
         Acc_PaidDate__c: {
           value: null,
         },
@@ -180,6 +210,16 @@ describe("mapToClaimDtoArray", () => {
         },
         Acc_ProjectPeriodEndDate__c: {
           value: "2023-05-31",
+        },
+        Impact_Management_Participation__c: { value: "No" },
+        RecordType: {
+          Name: {
+            value: "Total Project Period",
+          },
+        },
+        Acc_ClaimStatus__c: {
+          value: "Approved",
+          label: "Payment being processed",
         },
         Acc_ProjectPeriodStartDate__c: {
           value: "2023-05-01",
@@ -219,6 +259,7 @@ describe("mapToClaimDtoArray", () => {
           "status",
           "statusLabel",
           "totalCost",
+          "impactManagementParticipation",
         ],
         {
           competitionType: "CR&D",
