@@ -483,7 +483,7 @@ export class ForecastTable extends React.Component<Props> {
     return (
       <span>
         <NumberInput
-          id={error && !error.isValid ? error.key : ""}
+          invalid={!!error && !error?.isValid}
           name={`value_${periodId}_${forecastRow.categoryId}`}
           value={value}
           ariaLabel={`${forecastRow.categoryName} Period ${periodId}`}

@@ -4,6 +4,7 @@ import { FormInputWidths, useDebounce, useUpdateStateValueOnPropsChange } from "
 import { InputProps, InputState } from "./common";
 
 export interface NumberInputProps extends InputProps<number> {
+  invalid?: boolean;
   id?: string;
   className?: string;
   width?: FormInputWidths;
@@ -76,7 +77,7 @@ export const NumberInput = (props: NumberInputProps) => {
     "govuk-input",
     "govuk-table__cell--numeric",
     {
-      "govuk-input--error": state.invalid,
+      "govuk-input--error": state.invalid || props.invalid,
       [`govuk-input--width-${props.width}`]: typeof props.width === "number",
       [`govuk-!-width-${props.width}`]: typeof props.width === "string",
     },
