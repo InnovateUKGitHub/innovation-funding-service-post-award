@@ -573,3 +573,39 @@ export const goToQueriedClaim = () => {
   cy.getByQA("button_default-qa").contains("Continue to summary").click();
   cy.getByQA("button_default-qa").contains("Submit claim").click();
 };
+
+export const beginEditing = () => {
+  cy.get("a").contains("Edit").click();
+  cy.get("h1").contains("Costs to be claimed");
+  cy.get("a").contains("Labour").click();
+};
+
+export const add120Lines = () => {
+  cy.get('input[name="itemCount"]').then($input => {
+    const count = Number($input.val() || 0);
+
+    for (let i = count; i < 120; i++) {
+      cy.get("a").contains("Add a cost").click();
+      cy.get("#description" + i).type("Labour" + i);
+      cy.get("#value" + i).type("100");
+    }
+  });
+  cy.wait(500);
+};
+
+export const saveLineItems = () => {
+  cy.submitButton("Save and return to claims").click();
+  cy.wait(1000);
+  cy.get("h1").contains("Costs to be claimed");
+};
+
+export const removeLineItems = () => {
+  cy.get("a").contains("Labour").click();
+  cy.get("h1").contains("Labour");
+  cy.get('input[name="itemCount"]').then($input => {
+    const count = Number($input.val() || 0);
+    for (let i = count; i > 0; i--) {
+      cy.get("a").contains("Remove").click();
+    }
+  });
+};
