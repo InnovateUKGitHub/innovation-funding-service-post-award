@@ -65,12 +65,12 @@ describe("GetPCRByIdQuery", () => {
 
     expect(result.requestNumber).toBe(5);
     expect(result.reasoningComments).toBe("Expected reasoning");
-    expect(result.reasoningStatus).toBe(55);
+    expect(result.reasoningStatus).toBe(PCRItemStatus.Complete);
     expect(result.reasoningStatusName).toBe("Expected Reasoning Status");
     expect(result.comments).toBe("Expected comments");
     expect(result.started).toBe(expectedStartDate);
     expect(result.lastUpdated).toBe(expectedUpdatedDate);
-    expect(result.status).toBe(33);
+    expect(result.status).toBe(PCRStatus.Draft);
     expect(result.statusName).toBe("Expected Status name");
     expect(result.items).toEqual([]);
   });
@@ -120,7 +120,7 @@ describe("GetPCRByIdQuery", () => {
     );
     expect(result.type).toBe(PCRItemType.ScopeChange);
     expect(result.typeName).toBe(recordType.type);
-    expect(result.status).toBe(98);
+    expect(result.status).toBe(PCRItemStatus.Complete);
     expect(result.statusName).toBe("Expected Status");
     expect(result.shortName).toBe(
       "If a nickname is what people call you for short, then your full name is your nicholas name",
