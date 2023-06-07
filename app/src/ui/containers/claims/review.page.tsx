@@ -119,8 +119,8 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
     const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
     const { isMo } = getAuthRoles(data.project.roles);
 
-    // Disable completing the form if internal assurance and not received PCF
-    const iaPcfNotSubmittedForFinalClaim =
+    // Disable completing the form if internal impact management and not received PCF
+    const impMgmtPcfNotSubmittedForFinalClaim =
       data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
         ? data.claim.isFinalClaim && data.claim.pcfStatus !== ReceivedStatus.Received
         : false;
@@ -139,7 +139,7 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
         <ACC.Renderers.Messages messages={props.messages} />
-        {!iaPcfNotSubmittedForFinalClaim && data.claim.isFinalClaim && (
+        {!impMgmtPcfNotSubmittedForFinalClaim && data.claim.isFinalClaim && (
           <ACC.ValidationMessage messageType="info" message={content.finalClaim} />
         )}
 
@@ -203,7 +203,7 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
           </ACC.Accordion>
         </ACC.Section>
 
-        {renderForm({ ...data, disabled: iaPcfNotSubmittedForFinalClaim })}
+        {renderForm({ ...data, disabled: impMgmtPcfNotSubmittedForFinalClaim })}
       </ACC.Page>
     );
   };

@@ -72,8 +72,8 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
     const linkProps = getClaimLinkProps(data);
     const { isMo } = getAuthRoles(data.project.roles);
 
-    // Disable completing the form if internal assurance and not received PCF
-    const iaPcfNotSubmittedForFinalClaim =
+    // Disable completing the form if impact management and not received PCF
+    const impMgmtPcfNotSubmittedForFinalClaim =
       data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
         ? data.claim.isFinalClaim && data.claim.pcfStatus !== "Received"
         : false;
@@ -94,7 +94,7 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
         )}
 
         <ACC.Section qa="claimSummaryForm" title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
-          {iaPcfNotSubmittedForFinalClaim &&
+          {impMgmtPcfNotSubmittedForFinalClaim &&
             (isMo ? (
               <ACC.ValidationMessage
                 messageType="info"
@@ -156,7 +156,7 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
 
           {!data.claim.isFinalClaim && renderForecastSummary(data)}
 
-          <ClaimForm {...data} disabled={iaPcfNotSubmittedForFinalClaim} />
+          <ClaimForm {...data} disabled={impMgmtPcfNotSubmittedForFinalClaim} />
         </ACC.Section>
       </ACC.Page>
     );
