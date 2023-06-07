@@ -9,6 +9,7 @@ import { getFileExtension, getFileName, getFileSize } from "@framework/util";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import * as Validation from "./common";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 const invalidCharacterInFileName = <T extends Results<ResultBase>>(results: T, fileName: string) => {
   return results.getContent(x => x.validation.documentValidator.nameInvalidCharacters({ name: fileName }));
@@ -92,6 +93,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
     filesRequired: boolean,
     showValidationErrors: boolean,
     private readonly error: FileTypeNotAllowedError | null,
+    private readonly impactManagementParticipation: ImpactManagementParticipation = ImpactManagementParticipation.Unknown,
   ) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
@@ -101,11 +103,25 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
 
     this.files = this.validateFiles(model, config, filesRequired);
     this.description = model.description
-      ? Validation.permittedValues(
+      ? Validation.all(
           this,
-          model.description,
-          getAllNumericalEnumValues(DocumentDescription),
-          this.getContent(x => x.validation.documentValidator.fileDescriptionInvalid),
+          () =>
+            Validation.permittedValues(
+              this,
+              model.description,
+              getAllNumericalEnumValues(DocumentDescription),
+              this.getContent(x => x.validation.documentValidator.fileDescriptionInvalid),
+            ),
+          () =>
+            this.impactManagementParticipation
+              ? Validation.isTrue(
+                  this,
+                  model.description !== DocumentDescription.ProjectCompletionForm,
+                  this.getContent(
+                    x => x.validation.documentValidator.impactManagementParticipationDisallowsProjectCompletionForm,
+                  ),
+                )
+              : Validation.valid(this),
         )
       : Validation.valid(this);
     this.partnerId = Validation.valid(this);

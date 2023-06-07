@@ -103,10 +103,11 @@ const ClaimDocumentsComponent = ({
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
       .filter(x => {
-        const isLoanOption = isLoans && x.id === DocumentDescription.ProofOfSatisfiedConditions;
-        const isAllowedClaimDocument = allowedClaimDocuments.includes(x.id);
+        // Disallow uploading PCF if impact management
+        if (claim.impactManagementParticipation && x.id === DocumentDescription.ProjectCompletionForm) return false;
+        if (isLoans && x.id === DocumentDescription.ProofOfSatisfiedConditions) return true;
 
-        return isLoanOption || isAllowedClaimDocument;
+        return allowedClaimDocuments.includes(x.id);
       })
       .map(x => ({ id: `${x.id}`, value: x.label }));
 

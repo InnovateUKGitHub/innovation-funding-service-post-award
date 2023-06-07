@@ -2,6 +2,8 @@ import { BadRequestError, CommandMultipleDocumentBase, ValidationError } from "@
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, ClaimKey, IContext, ProjectRole } from "@framework/types";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { mapClaim } from "../claims/mapClaim";
+import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 
 export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<string[]> {
   protected filesRequired = true;
@@ -35,6 +37,7 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
       this.filesRequired,
       this.showValidationErrors,
       null,
+      mapImpactManagementParticipationToEnum(claim.Impact_Management_Participation__c),
     );
 
     if (!result.isValid) {
