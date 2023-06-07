@@ -163,11 +163,17 @@ export function alphanumeric(results: Results<ResultBase>, value: string, messag
 /**
  * validates is a number
  */
-export function number(results: Results<ResultBase>, value: number | undefined | null, message?: string) {
+export function number(
+  results: Results<ResultBase>,
+  value: number | undefined | null,
+  message?: string,
+  keyId?: string,
+) {
   return isTrue(
     results,
     value === undefined || value === null || isNumber(value),
     message || "Field must be a number.",
+    keyId,
   );
 }
 
@@ -222,12 +228,12 @@ export function email(results: Results<ResultBase>, value: string, message?: str
 /**
  * validates is a currency type
  */
-export function isCurrency(results: Results<ResultBase>, value: number | null, message?: string) {
+export function isCurrency(results: Results<ResultBase>, value: number | null, message?: string, keyId?: string) {
   const regex = /^-?[0-9]+(\.[0-9]{1,2})?$/i;
   if (value === null || value === undefined || value === 0) {
     return valid(results);
   }
-  return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount");
+  return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount", keyId);
 }
 
 /**

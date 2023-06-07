@@ -111,20 +111,27 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> imp
         this,
         this.model.value,
         this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastRequired),
+        ForecastDetailsDtoValidator.getKey(this.model.costCategoryId, this.model.periodId),
       ),
     () =>
       Validation.number(
         this,
         this.model.value,
         this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastNotNumber),
+        ForecastDetailsDtoValidator.getKey(this.model.costCategoryId, this.model.periodId),
       ),
     () =>
       Validation.isCurrency(
         this,
         this.model.value,
         this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastNotCurrency),
+        ForecastDetailsDtoValidator.getKey(this.model.costCategoryId, this.model.periodId),
       ),
   );
+
+  static getKey(costCategoryId: string, periodId: number) {
+    return `value_${periodId}_${costCategoryId}`;
+  }
 }
 
 class ValidForecastDetailsDtoCostCategoryValidator
