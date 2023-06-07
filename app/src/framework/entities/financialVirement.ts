@@ -17,7 +17,7 @@ export interface PartnerFinancialVirement {
   newRemainingGrant?: number;
   originalFundingLevel: number;
   partnerId: PartnerId;
-  pcrItemId: string;
+  pcrItemId: PcrItemId;
   virements: CostCategoryFinancialVirement[];
 }
 

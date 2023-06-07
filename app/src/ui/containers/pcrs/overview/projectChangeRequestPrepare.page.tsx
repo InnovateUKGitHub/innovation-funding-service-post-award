@@ -9,7 +9,7 @@ import { PCROverviewComponent } from "./ProjectChangeRequestOverview";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
-  pcrId: string;
+  pcrId: PcrId;
 }
 
 export interface ProjectChangeRequestPrepareProps {
@@ -61,7 +61,7 @@ export const ProjectChangeRequestPrepareRoute = defineRoute<ProjectChangeRequest
   container: PCRPrepareContainer,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
+    pcrId: route.params.pcrId as PcrId,
   }),
   getTitle: () => ({
     htmlTitle: "Request",

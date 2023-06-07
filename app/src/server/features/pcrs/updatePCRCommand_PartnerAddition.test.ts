@@ -307,7 +307,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const dummyDate = DateTime.local().toJSDate();
     item.spendProfile.funds = [
       {
-        id: "",
+        id: "" as PcrId,
         costCategory: CostCategoryType.Other_Funding,
         costCategoryId: costCategoryOtherFunding.id,
         value: 101.02,
@@ -315,7 +315,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
         dateSecured: dummyDate,
       },
       {
-        id: "",
+        id: "" as PcrId,
         costCategory: CostCategoryType.Other_Funding,
         costCategoryId: costCategoryOtherFunding.id,
         value: 120.99,
@@ -370,7 +370,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.spendProfile.costs.push({
-        id: "",
+        id: "" as PcrId,
         value: 60,
         costCategoryId: costCategoryLabour.id,
         costCategory: CostCategoryType.Labour,

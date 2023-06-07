@@ -23,7 +23,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     context: IContext,
     projectChangeRequestDto: PCRDto,
     itemTypes: PCRItemTypeDto[],
-  ): Promise<string> {
+  ): Promise<PcrId> {
     const newPCR = {
       projectId: projectChangeRequestDto.projectId,
       reasoningStatus: projectChangeRequestDto.reasoningStatus,

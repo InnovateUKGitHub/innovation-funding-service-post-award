@@ -15,6 +15,9 @@ interface INominalTypes {
   loanId: LoanId;
   reportId: MonitoringReportId;
   documentId: DocumentId;
+  pcrId: PcrId;
+  projectChangeRequestId: PcrId;
+  pcrItemId: PcrItemId;
 }
 
 declare type NominalTypes = ProjectId | PartnerId | LoanId | DocumentId | MonitoringReportId | PcrId | PcrItemId;

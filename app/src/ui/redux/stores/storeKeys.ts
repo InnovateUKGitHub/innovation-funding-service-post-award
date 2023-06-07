@@ -32,9 +32,9 @@ const getForecastDetailKey = (partnerId: PartnerId, periodId: number, costCatego
 const getMonitoringReportKey = (projectId: ProjectId, id?: string) =>
   getKey("monitoringReportKey", "project", projectId, "report", id || "new");
 const getPcrKey = (projectId: ProjectId, id?: string) => getKey("pcrKey", "project", projectId, "request", id || "new");
-const getFinancialLoanVirementKey = (projectId: ProjectId, pcrId: string, itemId: string) =>
+const getFinancialLoanVirementKey = (projectId: ProjectId, pcrId: PcrId, itemId: string) =>
   getKey("financialLoanVirement", "project", projectId, "request", pcrId, "itemId", itemId);
-const getFinancialVirementKey = (projectId: ProjectId, pcrId: string, itemId: string, partnerId?: string) => {
+const getFinancialVirementKey = (projectId: ProjectId, pcrId: PcrId, itemId: string, partnerId?: string) => {
   if (partnerId) {
     return getKey(
       "financialVirementKey",

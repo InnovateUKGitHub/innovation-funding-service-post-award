@@ -6,8 +6,8 @@ import { IPicklistEntry } from "@framework/types";
 import SalesforceRepositoryBase, { Insertable } from "./salesforceRepositoryBase";
 
 export interface ISalesforcePcrSpendProfile {
-  Id: string;
-  Acc_ProjectChangeRequest__c: string;
+  Id: PcrId;
+  Acc_ProjectChangeRequest__c: PcrItemId;
   Acc_CostCategoryID__c: string;
   RecordTypeId: string;
 
@@ -52,7 +52,7 @@ export interface ISalesforcePcrSpendProfile {
 }
 
 export interface IPcrSpendProfileRepository {
-  getAllForPcr(pcrItemId: string): Promise<PcrSpendProfileEntity[]>;
+  getAllForPcr(pcrItemId: PcrItemId): Promise<PcrSpendProfileEntity[]>;
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]): Promise<string[]>;
   updateSpendProfiles(items: PcrSpendProfileEntity[]): Promise<boolean>;
   deleteSpendProfiles(items: string[]): Promise<void>;
@@ -108,7 +108,7 @@ export class PcrSpendProfileRepository
 
   private readonly recordType = "PCR Spend Profile";
 
-  public async getAllForPcr(pcrItemId: string): Promise<PcrSpendProfileEntity[]> {
+  public async getAllForPcr(pcrItemId: PcrItemId): Promise<PcrSpendProfileEntity[]> {
     const pcrRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     const records = await super.where({
       Acc_ProjectChangeRequest__c: pcrItemId,

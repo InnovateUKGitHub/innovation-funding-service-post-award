@@ -24,8 +24,8 @@ import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 
 export interface PcrSpendProfileCostSummaryParams {
   projectId: ProjectId;
-  pcrId: string;
-  itemId: string;
+  pcrId: PcrId;
+  itemId: PcrItemId;
   costCategoryId: string;
 }
 
@@ -198,7 +198,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     );
   }
 
-  private renderLinks(itemId: string, costId: string, costCategoryId: string, projectId: ProjectId, pcrId: string) {
+  private renderLinks(itemId: PcrItemId, costId: string, costCategoryId: string, projectId: ProjectId, pcrId: PcrId) {
     const links: { route: ILinkInfo; text: React.ReactNode; qa: string }[] = [];
     links.push({
       route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({
@@ -274,8 +274,8 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
   container: SpendProfileCostsSummaryContainer,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileCostsSummary.title),

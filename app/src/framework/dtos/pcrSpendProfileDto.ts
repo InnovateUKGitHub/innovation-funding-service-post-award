@@ -3,7 +3,7 @@ import { CostCategoryType, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverh
 export interface PcrSpendProfileDto {
   costs: PCRSpendProfileCostDto[];
   funds: PCRSpendProfileFundingDto[];
-  pcrItemId: string;
+  pcrItemId: PcrItemId;
 }
 
 export type PCRSpendProfileCostDto =
@@ -22,7 +22,7 @@ interface PCRSpendProfileBaseCostDto {
   costCategory: CostCategoryType;
   costCategoryId: string;
   description: string | null;
-  id: string;
+  id: PcrId;
   value: number | null;
 }
 

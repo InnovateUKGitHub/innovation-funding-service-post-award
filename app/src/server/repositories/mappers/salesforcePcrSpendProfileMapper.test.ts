@@ -10,9 +10,9 @@ const pcrSpendProfileType = "PCR_SPEND_PROFILE_TYPE";
 describe("SalesforcePcrSpendProfileMapper", () => {
   it("Maps spend profile correctly to entity", () => {
     const expectedEntity: PcrSpendProfileEntity = {
-      id: "id1",
+      id: "id1" as PcrId,
       costCategoryId: "costCatId1",
-      pcrItemId: "pcrItemId1",
+      pcrItemId: "pcrItemId1" as PcrItemId,
       value: 50,
       description: "A description",
       dateOtherFundingSecured: DateTime.local(2010, 10, 28).toFormat(salesforceDateFormat),
@@ -64,9 +64,9 @@ describe("SalesforcePcrSpendProfileMapper", () => {
   });
   it("Maps spend profile entity correctly to sf record", () => {
     const entity: PcrSpendProfileEntity = {
-      id: "id1",
+      id: "id1" as PcrId,
       costCategoryId: "costCatId1",
-      pcrItemId: "pcrItemId1",
+      pcrItemId: "pcrItemId1" as PcrItemId,
       value: 50,
       description: "A description",
       dateOtherFundingSecured: DateTime.local(2010, 10, 28).toFormat(salesforceDateFormat),

@@ -47,7 +47,7 @@ const OtherSourcesOfFunding = ({
       costCategoryId: otherFundingCostCategory.id,
       costCategory: CostCategoryType.Other_Public_Sector_Funding,
       description: null,
-      id: "",
+      id: "" as PcrId,
       value: null,
       dateSecured: null,
     });

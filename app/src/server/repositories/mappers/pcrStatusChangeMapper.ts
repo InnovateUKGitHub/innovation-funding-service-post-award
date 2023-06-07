@@ -10,8 +10,8 @@ export class PCRStatusChangeMapper extends SalesforceBaseMapper<
 > {
   public map(item: ISalesforceProjectChangeRequestStatusChange): ProjectChangeRequestStatusChangeEntity {
     return {
-      id: item.Id,
-      pcrId: item.Acc_ProjectChangeRequest__c,
+      id: item.Id as PcrItemId,
+      pcrId: item.Acc_ProjectChangeRequest__c as PcrId,
       createdBy: item.Acc_CreatedByAlias__c,
       createdDate: this.clock.parseRequiredSalesforceDateTime(item.CreatedDate),
       previousStatus: this.mapStatus(item.Acc_PreviousProjectChangeRequestStatus__c),

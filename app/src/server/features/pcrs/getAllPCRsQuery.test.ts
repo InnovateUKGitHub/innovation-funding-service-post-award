@@ -48,7 +48,7 @@ describe("GetAllPCRsQuery", () => {
     const context = new TestContext();
 
     const expected = context.testData.createPCR(undefined, {
-      id: "Expected Id",
+      id: "Expected Id" as PcrId,
       started: DateTime.fromFormat("1 april 2013", "d MMM yyyy").toJSDate(),
       updated: DateTime.fromFormat("1 october 2013", "d MMM yyyy").toJSDate(),
       number: 531,

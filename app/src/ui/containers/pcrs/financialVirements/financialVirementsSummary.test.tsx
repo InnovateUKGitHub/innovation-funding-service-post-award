@@ -22,7 +22,7 @@ describe("<FinancialVirementSummary />", () => {
   const stubPcrItem = context.testData.createPCRItem();
 
   const stubValidVirement = {
-    pcrItemId: "a0G0C000005M8yTUAS",
+    pcrItemId: "a0G0C000005M8yTUAS" as PcrItemId,
     costsClaimedToDate: 74000,
     originalEligibleCosts: 496000,
     originalRemainingCosts: 422000,
@@ -496,7 +496,7 @@ describe("<FinancialVirementSummary />", () => {
 
       test("with valid grant content", () => {
         const validGrantVirement = {
-          pcrItemId: "a0G0C000005M8yTUAS",
+          pcrItemId: "a0G0C000005M8yTUAS" as PcrItemId,
           costsClaimedToDate: 74000,
           originalEligibleCosts: 496000,
           originalRemainingCosts: 422000,
@@ -707,7 +707,7 @@ describe("<FinancialVirementSummary />", () => {
 
       test("with unavailable grant content", () => {
         const unavailableGrantVirement = {
-          pcrItemId: "a0G0C000005M8yTUAS",
+          pcrItemId: "a0G0C000005M8yTUAS" as PcrItemId,
           costsClaimedToDate: 74000,
           originalEligibleCosts: 496000,
           originalRemainingCosts: 422000,
@@ -916,7 +916,7 @@ describe("<FinancialVirementSummary />", () => {
 
       test("with available grant content", () => {
         const availableGrantVirement = {
-          pcrItemId: "a0G0C000005M8yTUAS",
+          pcrItemId: "a0G0C000005M8yTUAS" as PcrItemId,
           costsClaimedToDate: 74000,
           originalEligibleCosts: 496000,
           originalRemainingCosts: 422000,

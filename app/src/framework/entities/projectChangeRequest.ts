@@ -19,7 +19,7 @@ export interface ProjectChangeRequestForCreateEntity {
 
 export interface ProjectChangeRequestEntity extends ProjectChangeRequestForCreateEntity {
   comments: string;
-  id: string;
+  id: PcrId;
   items: ProjectChangeRequestItemEntity[];
   number: number;
   reasoning: string;
@@ -84,9 +84,9 @@ export interface ProjectChangeRequestItemForCreateEntity {
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
-  id: string;
+  id: PcrItemId;
   partnerNameSnapshot?: string | null;
-  pcrId: string;
+  pcrId: PcrId;
   projectDurationSnapshot?: number | null;
   projectSummarySnapshot?: string | null;
   publicDescriptionSnapshot?: string | null;
@@ -100,9 +100,9 @@ export interface ProjectChangeRequestStatusChangeEntity {
   createdBy: string;
   createdDate: Date;
   externalComments: string;
-  id: string;
+  id: PcrItemId;
   newStatus: PCRStatus;
   participantVisibility: boolean;
-  pcrId: string;
+  pcrId: PcrId;
   previousStatus: PCRStatus;
 }

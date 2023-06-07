@@ -32,8 +32,8 @@ import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } f
 import { GetProjectStatusQuery } from "../projects";
 
 interface BaseEntityFields {
-  id: string;
-  pcrItemId: string;
+  id: PcrId;
+  pcrItemId: PcrItemId;
   costCategoryId: string;
   costCategory: CostCategoryType;
   description: string | null;
@@ -42,7 +42,7 @@ interface BaseEntityFields {
 export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: ProjectId,
-    private readonly pcrItemId: string,
+    private readonly pcrItemId: PcrItemId,
     private readonly spendProfileDto: PcrSpendProfileDto,
   ) {
     super();

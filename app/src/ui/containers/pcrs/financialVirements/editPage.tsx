@@ -59,8 +59,8 @@ export function useEditPageContent() {
 export interface VirementCostsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
-  pcrId: string;
-  itemId: string;
+  pcrId: PcrId;
+  itemId: PcrItemId;
 }
 
 interface EditPageBaseProps extends VirementCostsParams {
@@ -347,6 +347,13 @@ const EditPage = ({
                   qa="difference"
                   header={content.costCategoryDifferenceCosts}
                   value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
+                  footer={
+                    <ACC.Renderers.Currency
+                      value={roundCurrency(
+                        currentPartnerVirement.newEligibleCosts - currentPartnerVirement.originalEligibleCosts,
+                      )}
+                    />
+                  }
                 />,
                 ...(project.isNonFec
                   ? [
@@ -497,8 +504,8 @@ export const FinancialVirementEditRoute = defineRoute({
   container: Container,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
     partnerId: route.params.partnerId as PartnerId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementEdit.title),

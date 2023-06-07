@@ -12,7 +12,7 @@ import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: ProjectId;
-  pcrId: string;
+  pcrId: PcrId;
   step?: number;
 }
 
@@ -240,7 +240,7 @@ export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReas
   routePath: "/projects/:projectId/pcrs/:pcrId/details/reasoning",
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
+    pcrId: route.params.pcrId as PcrId,
   }),
   container: function PCRViewReasoningWorkflowContainer(props) {
     return <PCRReasoningWorkflowContainer mode="view" {...props} />;
@@ -258,7 +258,7 @@ export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareRe
   },
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
+    pcrId: route.params.pcrId as PcrId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningWorkflow.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
@@ -273,7 +273,7 @@ export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareR
   },
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
+    pcrId: route.params.pcrId as PcrId,
     step: parseInt(route.params.step, 10),
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningPrepareReasoning.title),

@@ -8,7 +8,7 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export interface ReasoningStepProps extends BaseProps {
   projectId: ProjectId;
-  pcrId: string;
+  pcrId: PcrId;
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   onChange: (dto: PCRDto) => void;

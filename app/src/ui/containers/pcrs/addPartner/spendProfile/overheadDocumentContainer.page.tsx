@@ -11,9 +11,9 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 
 export interface OverheadDocumentsPageParams {
   projectId: ProjectId;
-  pcrId: string;
+  pcrId: PcrId;
+  itemId: PcrItemId;
   costCategoryId: string;
-  itemId: string;
 }
 
 interface Data {
@@ -214,8 +214,8 @@ export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocument
   container: OverheadDocumentContainer,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileOverheadDocuments.title),

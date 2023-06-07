@@ -766,7 +766,7 @@ export class TestData {
     project = project || this.createProject();
 
     const newItem: Entities.ProjectChangeRequestEntity = {
-      id: `PCR_${seed}`,
+      id: `PCR_${seed}` as PcrId,
       projectId: project.Id,
       comments: "",
       number: seed,
@@ -806,7 +806,7 @@ export class TestData {
     }
 
     const newItem: Entities.ProjectChangeRequestItemEntity = {
-      id: `PCR_Item_${seed}`,
+      id: `PCR_Item_${seed}` as PcrItemId,
       pcrId: pcr.id,
       accountName: "",
       recordTypeId: recordType.id,
@@ -866,7 +866,7 @@ export class TestData {
     const seed = this.repositories.projectChangeRequestStatusChange.Items.length + 1;
 
     const response: ProjectChangeRequestStatusChangeEntity = {
-      id: `StatusChange: ${seed}`,
+      id: `StatusChange: ${seed}` as PcrItemId,
       pcrId: projectChangeRequest.id,
       previousStatus: PCRStatus.Draft,
       newStatus: PCRStatus.SubmittedToMonitoringOfficer,

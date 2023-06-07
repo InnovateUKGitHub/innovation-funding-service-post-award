@@ -19,7 +19,7 @@ describe("GetPCRByIdQuery", () => {
 
     const pcr = context.testData.createPCR();
 
-    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id + "_");
+    const query = new GetPCRByIdQuery(pcr.projectId, (pcr.id + "_") as PcrId);
     await expect(context.runQuery(query)).rejects.toThrowError();
   });
 

@@ -45,7 +45,7 @@ export class FinancialLoanVirementRepository extends SalesforceRepositoryBase<IS
     "Loan_DrawdownStatus__c",
   ];
 
-  public async getForPcr(pcrItemId: string): Promise<LoanFinancialVirement[]> {
+  public async getForPcr(pcrItemId: PcrItemId): Promise<LoanFinancialVirement[]> {
     const loanVirementRecordType = await this.getRecordTypeId(
       this.salesforceObjectName,
       "Period Virement for Loan Drawdown",

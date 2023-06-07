@@ -46,8 +46,8 @@ export function useEditPartnerLevelContent() {
 
 export interface FinancialVirementParams {
   projectId: ProjectId;
-  pcrId: string;
-  itemId: string;
+  pcrId: PcrId;
+  itemId: PcrItemId;
 }
 
 interface EditPartnerLevelProps {
@@ -266,8 +266,8 @@ export const FinancialVirementEditPartnerLevelRoute = defineRoute({
   container: Container,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementEditPartnerLevel.title),
 });

@@ -12,7 +12,7 @@ import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
 
 export interface PCRReviewParams {
   projectId: ProjectId;
-  pcrId: string;
+  pcrId: PcrId;
 }
 
 interface Data {
@@ -242,7 +242,7 @@ export const PCRReviewRoute = defineRoute({
   container: PCRReviewContainer,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
+    pcrId: route.params.pcrId as PcrId,
   }),
   getTitle: () => ({
     htmlTitle: "Request",

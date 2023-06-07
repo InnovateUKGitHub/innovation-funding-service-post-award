@@ -58,8 +58,8 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
 
     return PCRPrepareItemRoute.getLink({
       projectId: params.projectId,
-      pcrId: params.pcrId,
-      itemId: params.itemId,
+      pcrId: params.pcrId as PcrId,
+      itemId: params.itemId as PcrItemId,
       step: (spendProfileStep && spendProfileStep.stepNumber) || undefined,
     });
   }

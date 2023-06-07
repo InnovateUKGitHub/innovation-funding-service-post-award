@@ -23,11 +23,11 @@ interface PcrCreateParams {
 }
 
 export interface PcrModifyParams extends PcrCreateParams {
-  projectChangeRequestId?: string;
+  projectChangeRequestId?: PcrId;
 }
 
 export interface PcrUpdateParams extends PcrCreateParams {
-  projectChangeRequestId: string;
+  projectChangeRequestId: PcrId;
 }
 
 interface PcrBaseParams {

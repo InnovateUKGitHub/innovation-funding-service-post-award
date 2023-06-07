@@ -211,8 +211,8 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
   container: SpendProfileDeleteCostContainer,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
     costCategoryId: route.params.costCategoryId,
     costId: route.params.costId,
   }),

@@ -10,7 +10,7 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface PCRDeleteParams {
   projectId: ProjectId;
-  pcrId: string;
+  pcrId: PcrId;
 }
 
 interface Data {
@@ -20,7 +20,7 @@ interface Data {
 }
 
 interface Callbacks {
-  onDelete: (projectId: ProjectId, pcrId: string, dto: PCRDto) => void;
+  onDelete: (projectId: ProjectId, pcrId: PcrId, dto: PCRDto) => void;
 }
 
 const DeleteForm = ACC.createTypedForm<PCRDto>();
@@ -116,7 +116,7 @@ export const PCRDeleteRoute = defineRoute({
   container: PCRDeleteContainer,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
+    pcrId: route.params.pcrId as PcrId,
   }),
   getTitle: () => ({
     htmlTitle: "Delete draft request",

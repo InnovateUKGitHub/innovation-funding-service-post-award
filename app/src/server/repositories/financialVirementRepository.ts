@@ -58,7 +58,7 @@ export class FinancialVirementRepository extends SalesforceRepositoryBase<ISales
     "RecordTypeId",
   ];
 
-  public async getAllForPcr(pcrItemId: string): Promise<PartnerFinancialVirement[]> {
+  public async getAllForPcr(pcrItemId: PcrItemId): Promise<PartnerFinancialVirement[]> {
     const partnerVirementRecordType = await this.getRecordTypeId(
       this.salesforceObjectName,
       "Virements for Participant",

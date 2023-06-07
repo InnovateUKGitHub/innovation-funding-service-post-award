@@ -9,14 +9,14 @@ import { IEditorStore } from "..";
 import { StoreBase } from "./storeBase";
 
 export class FinancialVirementsStore extends StoreBase {
-  private getKey(projectId: ProjectId, pcrId: string, pcrItemId: string, partnerId?: PartnerId): string {
+  private getKey(projectId: ProjectId, pcrId: PcrId, pcrItemId: PcrItemId, partnerId?: PartnerId): string {
     return storeKeys.getFinancialVirementKey(projectId, pcrId, pcrItemId, partnerId);
   }
 
   public get(
     projectId: ProjectId,
-    pcrId: string,
-    pcrItemId: string,
+    pcrId: PcrId,
+    pcrItemId: PcrItemId,
     partnerId?: PartnerId,
   ): Pending<FinancialVirementDto> {
     return this.getData("financialVirement", this.getKey(projectId, pcrId, pcrItemId, partnerId), p =>
@@ -27,8 +27,8 @@ export class FinancialVirementsStore extends StoreBase {
   public getPartnerVirements(
     projectId: ProjectId,
     partnerId: PartnerId,
-    pcrId: string,
-    pcrItemId: string,
+    pcrId: PcrId,
+    pcrItemId: PcrItemId,
   ): Pending<PartnerVirementsDto> {
     return this.get(projectId, pcrId, pcrItemId, partnerId).chain((data, state) => {
       const partner = data.partners.find(x => x.partnerId === partnerId);
@@ -42,8 +42,8 @@ export class FinancialVirementsStore extends StoreBase {
 
   public getFinancialVirementEditor(
     projectId: ProjectId,
-    pcrId: string,
-    pcrItemId: string,
+    pcrId: PcrId,
+    pcrItemId: PcrItemId,
     partnerId?: PartnerId,
   ): Pending<IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>> {
     return super.getEditor(
@@ -58,8 +58,8 @@ export class FinancialVirementsStore extends StoreBase {
   public updateFinancialVirementEditor(
     saving: boolean,
     projectId: ProjectId,
-    pcrId: string,
-    pcrItemId: string,
+    pcrId: PcrId,
+    pcrItemId: PcrItemId,
     dto: FinancialVirementDto,
     submit: boolean,
     onComplete: () => void,

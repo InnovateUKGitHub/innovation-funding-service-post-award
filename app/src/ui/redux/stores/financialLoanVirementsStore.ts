@@ -7,11 +7,11 @@ import { IEditorStore } from "..";
 import { StoreBase } from "./storeBase";
 
 export class FinancialLoanVirementsStore extends StoreBase {
-  private getKey(projectId: ProjectId, pcrId: string, pcrItemId: string): string {
+  private getKey(projectId: ProjectId, pcrId: PcrId, pcrItemId: PcrItemId): string {
     return storeKeys.getFinancialLoanVirementKey(projectId, pcrId, pcrItemId);
   }
 
-  public get(projectId: ProjectId, pcrId: string, pcrItemId: string): Pending<FinancialLoanVirementDto> {
+  public get(projectId: ProjectId, pcrId: PcrId, pcrItemId: PcrItemId): Pending<FinancialLoanVirementDto> {
     return this.getData("financialLoanVirement", this.getKey(projectId, pcrId, pcrItemId), p =>
       apiClient.financialLoanVirements.get({ ...p, projectId, pcrItemId }),
     );
@@ -19,8 +19,8 @@ export class FinancialLoanVirementsStore extends StoreBase {
 
   public getFinancialVirementEditor(
     projectId: ProjectId,
-    pcrId: string,
-    pcrItemId: string,
+    pcrId: PcrId,
+    pcrItemId: PcrItemId,
     displayValidations: boolean,
     forceRefreshEditor?: boolean,
   ): Pending<IEditorStore<FinancialLoanVirementDto, FinancialLoanVirementDtoValidator>> {
@@ -37,8 +37,8 @@ export class FinancialLoanVirementsStore extends StoreBase {
   public updateFinancialVirementEditor(
     saving: boolean,
     projectId: ProjectId,
-    pcrId: string,
-    pcrItemId: string,
+    pcrId: PcrId,
+    pcrItemId: PcrItemId,
     dto: FinancialLoanVirementDto,
     submit: boolean,
   ): void {

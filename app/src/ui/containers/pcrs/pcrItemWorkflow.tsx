@@ -35,8 +35,8 @@ import { PcrSummaryProvider, PcrSummaryConsumer } from "./components/PcrSummary"
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: ProjectId;
-  pcrId: string;
-  itemId: string;
+  pcrId: PcrId;
+  itemId: PcrItemId;
   step?: number;
 }
 
@@ -525,8 +525,8 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
   routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    itemId: route.params.itemId,
-    pcrId: route.params.pcrId,
+    itemId: route.params.itemId as PcrItemId,
+    pcrId: route.params.pcrId as PcrId,
   }),
   container: function PCRViewItemContainer(props) {
     return <PCRItemContainer {...props} mode="view" />;
@@ -545,8 +545,8 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
   },
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    itemId: route.params.itemId,
-    pcrId: route.params.pcrId,
+    itemId: route.params.itemId as PcrItemId,
+    pcrId: route.params.pcrId as PcrId,
     step: parseInt(route.params.step, 10),
   }),
   getTitle: ({ params, stores }) => getTitle("Review project change request item", params, stores),
@@ -562,8 +562,8 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
   },
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
     step: parseInt(route.params.step, 10),
   }),
   getTitle: ({ params, stores, content }) =>

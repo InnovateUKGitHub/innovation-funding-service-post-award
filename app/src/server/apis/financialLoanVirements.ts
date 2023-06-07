@@ -30,7 +30,7 @@ class Controller extends ControllerBase<FinancialLoanVirementDto> {
     );
   }
 
-  async get(params: ApiParams<{ projectId: ProjectId; pcrItemId: string }>): Promise<FinancialLoanVirementDto> {
+  async get(params: ApiParams<{ projectId: ProjectId; pcrItemId: PcrItemId }>): Promise<FinancialLoanVirementDto> {
     const virementQuery = new GetFinancialLoanVirementQuery(params.projectId, params.pcrItemId);
 
     return contextProvider.start(params).runQuery(virementQuery);
@@ -39,7 +39,7 @@ class Controller extends ControllerBase<FinancialLoanVirementDto> {
   async update(
     params: ApiParams<{
       projectId: ProjectId;
-      pcrItemId: string;
+      pcrItemId: PcrItemId;
       financialVirement: FinancialLoanVirementDto;
       submit: boolean;
     }>,

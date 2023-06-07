@@ -307,7 +307,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
           cost.value = value;
         } else {
           item.spendProfile.costs.push({
-            id: "",
+            id: "" as PcrId,
             costCategory: CostCategoryType.Academic,
             costCategoryId: costCategory.id,
             description: costCategory.description,
@@ -334,7 +334,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
           );
           if (description || month || year || value) {
             item.spendProfile.funds.push({
-              id: id || "",
+              id: (id || "") as PcrId,
               costCategory: CostCategoryType.Other_Public_Sector_Funding,
               costCategoryId: otherFundingCostCategory.id,
               description: description || "",

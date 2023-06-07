@@ -22,7 +22,7 @@ import {
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface IProjectChangeRequestRepository {
-  createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<string>;
+  createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<PcrId>;
   updateProjectChangeRequest(pcr: ProjectChangeRequestEntity): Promise<void>;
   updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]): Promise<void>;
   getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]>;
@@ -375,7 +375,7 @@ export class ProjectChangeRequestRepository
     });
     // Insert sub-items
     await this.insertItems(id, projectChangeRequest.items);
-    return id;
+    return id as PcrId;
   }
 
   async insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]) {

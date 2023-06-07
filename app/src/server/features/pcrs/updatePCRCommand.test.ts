@@ -46,7 +46,7 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const auth = new Authorisation({ [project.Id]: { projectRoles: role, partnerRoles: {} } });
-      const command = new UpdatePCRCommand(project.Id, "", {} as PCRDto);
+      const command = new UpdatePCRCommand(project.Id, "" as PcrId, {} as PCRDto);
 
       return context.runAccessControl(auth, command);
     };

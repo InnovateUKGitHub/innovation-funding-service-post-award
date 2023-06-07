@@ -47,7 +47,7 @@ export interface IFormButton {
 
 export type IFormBody = {
   [key: string]: string;
-} & { partnerId: PartnerId; projectId: ProjectId };
+} & { partnerId: PartnerId; projectId: ProjectId; pcrId: PcrId; itemId: PcrItemId };
 type StoreKey<TStore extends EditorStateKeys> = keyof EditorState[TStore];
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -174,7 +174,7 @@ export const AcademicCostsStep = (
     academicCostCategories.forEach(costCategory => {
       if (props.pcrItem.spendProfile.costs.every(x => x.costCategoryId !== costCategory.id)) {
         const cost: PCRSpendProfileAcademicCostDto = {
-          id: "",
+          id: "" as PcrId,
           costCategoryId: costCategory.id,
           costCategory: CostCategoryType.Academic,
           description: costCategory.name,

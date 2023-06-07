@@ -49,7 +49,7 @@ describe("DeleteProjectChangeRequestCommand", () => {
 
     const project = context.testData.createProject();
 
-    const command = new DeleteProjectChangeRequestCommand(project.Id, "----");
+    const command = new DeleteProjectChangeRequestCommand(project.Id, "----" as PcrId);
 
     await expect(context.runCommand(command)).rejects.toThrow(NotFoundError);
   });

@@ -34,7 +34,7 @@ const getLinkForReviewingItem = (
   routes: IRoutes,
   pcrItem: PCRItemDto,
   projectId: ProjectId,
-  pcrId: string,
+  pcrId: PcrId,
   allowReasoningLink: boolean,
 ) => {
   if (!pcrItem && !allowReasoningLink) {
@@ -55,7 +55,7 @@ const getLinkForViewingItem = (
   routes: IRoutes,
   pcrItem: PCRItemDto,
   projectId: ProjectId,
-  pcrId: string,
+  pcrId: PcrId,
   allowReasoning: boolean,
 ) => {
   if (!pcrItem && !allowReasoning) {

@@ -8,7 +8,7 @@ export const ProjectChangeRequestAddTypeRoute = defineRoute({
   container: PcrUpdateSelectedContainer,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    projectChangeRequestId: route.params.projectChangeRequestId,
+    projectChangeRequestId: route.params.projectChangeRequestId as PcrId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrModifyOptions.updateTitle),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),

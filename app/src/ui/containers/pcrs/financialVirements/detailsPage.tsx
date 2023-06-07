@@ -13,8 +13,8 @@ type Mode = "review" | "view";
 interface Params {
   projectId: ProjectId;
   partnerId: PartnerId;
-  pcrId: string;
-  itemId: string;
+  pcrId: PcrId;
+  itemId: PcrItemId;
   mode: Mode;
 }
 
@@ -166,8 +166,8 @@ export const FinancialVirementDetailsRoute = defineRoute({
   container: Container,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
     partnerId: route.params.partnerId as PartnerId,
     mode: route.params.mode as Mode,
   }),

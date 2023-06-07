@@ -94,7 +94,7 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRI
 };
 
 const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType) => ({
-  id: pcr.id as PcrId,
+  id: pcr.id as PcrItemId,
   guidance: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === type)?.guidance,
   typeName,
   status: pcr.status,

@@ -44,13 +44,13 @@ export class ProjectChangeRequestStore extends StoreBase {
     return storeKeys.getPcrKey(projectId, pcrId);
   }
 
-  public getById(projectId: ProjectId, pcrId: string) {
+  public getById(projectId: ProjectId, pcrId: PcrId) {
     return this.getData("pcr", this.getKeyForRequest(projectId, pcrId), p =>
       apiClient.pcrs.get({ projectId, id: pcrId, ...p }),
     );
   }
 
-  public getItemById(projectId: ProjectId, pcrId: string, itemId: string) {
+  public getItemById(projectId: ProjectId, pcrId: PcrId, itemId: string) {
     return this.getById(projectId, pcrId).chain(pcr => {
       const item = pcr.items.find(x => x.id === itemId);
       const error = !item ? new NotFoundError("Item has not bee found in project change request") : null;
@@ -58,7 +58,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     });
   }
 
-  public getEditableItemTypes(projectId: ProjectId, projectChangeRequestId: string | null) {
+  public getEditableItemTypes(projectId: ProjectId, projectChangeRequestId: PcrId | null) {
     const nonEditableTypes: PCRItemType[] = [PCRItemType.ProjectTermination];
 
     if (!projectChangeRequestId) {
@@ -81,7 +81,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getData("pcrTypes", storeKeys.getPcrTypesKey(), p => apiClient.pcrs.getTypes({ ...p, projectId }));
   }
 
-  public getAllAvailablePcrTypes(projectId: ProjectId, pcrId?: string) {
+  public getAllAvailablePcrTypes(projectId: ProjectId, pcrId?: PcrId) {
     return this.getData("pcrAvailableTypes", storeKeys.pcrAvailableTypesKey(projectId), p =>
       apiClient.pcrs.getAvailableTypes({ ...p, projectId, pcrId }),
     );
@@ -129,7 +129,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  public getPcrTypeForItem(projectId: ProjectId, pcrId: string, itemId: string) {
+  public getPcrTypeForItem(projectId: ProjectId, pcrId: PcrId, itemId: string) {
     const data = Pending.combine({
       itemTypes: this.getAllPcrTypes(projectId),
       pcrItem: this.getItemById(projectId, pcrId, itemId),
@@ -167,7 +167,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  public getPcrUpdateEditor(projectId: ProjectId, pcrId: string, init?: (dto: PCRDto) => void) {
+  public getPcrUpdateEditor(projectId: ProjectId, pcrId: PcrId, init?: (dto: PCRDto) => void) {
     return this.getEditor(
       "pcr",
       this.getKeyForRequest(projectId, pcrId),
@@ -179,7 +179,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   public getNewSpendProfileCostValidator(
     editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>,
-    pcrItemId: string,
+    pcrItemId: PcrItemId,
     costCategoryPending: Pending<CostCategoryDto>,
   ): Pending<PCRSpendProfileCostDtoValidator | undefined> {
     const data = Pending.combine({ editor: editorPending, costCategory: costCategoryPending });
@@ -195,7 +195,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   public getSpendProfileCostValidator(
     editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>,
-    pcrItemId: string,
+    pcrItemId: PcrItemId,
     costId: string,
   ) {
     return editorPending.then(editor => {
@@ -208,7 +208,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   public getInitialSpendProfileCost(costCategory: CostCategoryDto): PCRSpendProfileCostDto {
     return {
-      id: "",
+      id: "" as PcrId,
       description: "",
       value: null,
       costCategory: costCategory.type as CostCategoryType.Other_Costs,
@@ -247,7 +247,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   public createNewChangeRequestItem(itemType: Dtos.PCRItemTypeDto): Dtos.PCRItemDto {
     const baseFields = {
-      id: "",
+      id: "" as PcrItemId,
       guidance: "",
       typeName: itemType.displayName,
       status: PCRItemStatus.ToDo,
@@ -403,7 +403,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     }
   }
 
-  public deletePcr(projectId: ProjectId, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void) {
+  public deletePcr(projectId: ProjectId, pcrId: PcrId, dto: PCRDto, message?: string, onComplete?: () => void) {
     this.deleteEditor(
       "pcr",
       this.getKeyForRequest(projectId, pcrId),
@@ -421,7 +421,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  public getStatusChanges(projectId: ProjectId, projectChangeRequestId: string) {
+  public getStatusChanges(projectId: ProjectId, projectChangeRequestId: PcrId) {
     return this.getData(
       "projectChangeRequestStatusChanges",
       this.getKeyForRequest(projectId, projectChangeRequestId),

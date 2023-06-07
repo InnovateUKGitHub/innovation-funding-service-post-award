@@ -43,7 +43,7 @@ export interface PCRDto extends PCRBaseDto {
 
 interface PCRItemBaseDto extends PCRItemSummaryDto {
   guidance?: string;
-  id: string;
+  id: PcrItemId;
   status: PCRItemStatus;
   statusName: string;
 }

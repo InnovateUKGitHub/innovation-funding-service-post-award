@@ -27,7 +27,7 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
-  constructor(private readonly pcrItemId: string) {
+  constructor(private readonly pcrItemId: PcrItemId) {
     super();
   }
 

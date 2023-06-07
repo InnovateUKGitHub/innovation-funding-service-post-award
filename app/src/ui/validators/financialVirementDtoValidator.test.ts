@@ -118,7 +118,7 @@ describe("financialVirementDtoValidator", () => {
 
   describe("FinancialLoanVirementDtoValidator", () => {
     const stubLoanVirementDto: FinancialLoanVirementDto = {
-      pcrItemId: "stub-pcrItemId",
+      pcrItemId: "stub-pcrItemId" as PcrItemId,
       loans: [],
     };
 

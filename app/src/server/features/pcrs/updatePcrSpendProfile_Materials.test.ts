@@ -18,7 +18,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const costCategory = context.testData.createCostCategory({ name: "Materials", type: CostCategoryType.Materials });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const cost: PCRSpendProfileMaterialsCostDto = {
-        id: "",
+        id: "" as PcrId,
         value: 200,
         costCategoryId: costCategory.id,
         costCategory: CostCategoryType.Materials,

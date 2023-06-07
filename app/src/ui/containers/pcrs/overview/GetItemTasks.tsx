@@ -19,7 +19,7 @@ const GetItemTasks = ({
   index: number;
   item: PCRItemDto;
   projectId: ProjectId;
-  pcrId: string;
+  pcrId: PcrId;
   mode: "details" | "prepare";
 }) => {
   const routes = useRoutes();

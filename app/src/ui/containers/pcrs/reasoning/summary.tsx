@@ -11,7 +11,7 @@ import { BaseProps, ContainerBase } from "../../containerBase";
 
 export interface Props {
   projectId: ProjectId;
-  pcrId: string;
+  pcrId: PcrId;
   pcr: PCRDto;
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   mode: "review" | "view" | "prepare";

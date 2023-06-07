@@ -14,7 +14,7 @@ export interface PcrSpendProfileEntityForCreate {
   netPresentValue?: number;
   numberOfTimes?: number;
   overheadRate?: PCRSpendProfileOverheadRate;
-  pcrItemId: string;
+  pcrItemId: PcrItemId;
   quantity?: number;
   ratePerDay?: number;
   residualValue?: number;
@@ -26,5 +26,5 @@ export interface PcrSpendProfileEntityForCreate {
 }
 
 export interface PcrSpendProfileEntity extends PcrSpendProfileEntityForCreate {
-  id: string;
+  id: PcrId;
 }

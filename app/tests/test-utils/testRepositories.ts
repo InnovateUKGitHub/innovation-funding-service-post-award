@@ -684,7 +684,7 @@ class PCRTestRepository
     return super.getWhere(x => x.projectId === projectId);
   }
 
-  getById(projectId: ProjectId, id: string): Promise<Entities.ProjectChangeRequestEntity> {
+  getById(projectId: ProjectId, id: PcrId): Promise<Entities.ProjectChangeRequestEntity> {
     return super
       .getOne(x => x.projectId === projectId && x.id === id)
       .then(x => {
@@ -714,8 +714,8 @@ class PCRTestRepository
     return items.map((x, i) => {
       const itemId = `ProjectChangeRequest-${headerId}-Item-${itemLength + i}`;
       return {
-        id: itemId,
-        pcrId: headerId,
+        id: itemId as PcrItemId,
+        pcrId: headerId as PcrId,
         partnerId: "" as PartnerId,
         typeOfAid: TypeOfAid.Unknown,
         accountName: "",
@@ -741,10 +741,8 @@ class PCRTestRepository
     pcr.items.push(...insert);
   }
 
-  async createProjectChangeRequest(
-    projectChangeRequest: Entities.ProjectChangeRequestForCreateEntity,
-  ): Promise<string> {
-    const id = `ProjectChangeRequest${this.Items.length}`;
+  async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreateEntity): Promise<PcrId> {
+    const id = `ProjectChangeRequest${this.Items.length}` as PcrId;
     const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
 
     await super.insertOne({
@@ -807,13 +805,13 @@ class PcrSpendProfileTestRepository
   extends TestRepository<PcrSpendProfileEntity>
   implements Repositories.IPcrSpendProfileRepository
 {
-  getAllForPcr(pcrItemId: string): Promise<Entities.PcrSpendProfileEntity[]> {
+  getAllForPcr(pcrItemId: PcrItemId): Promise<Entities.PcrSpendProfileEntity[]> {
     return super.getWhere(x => x.pcrItemId === pcrItemId);
   }
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]) {
     const newIds: string[] = [];
     items.forEach(x => {
-      const id = `PcrSpendProfile-${this.Items.length}`;
+      const id = `PcrSpendProfile-${this.Items.length}` as PcrId;
       newIds.push(id);
       this.Items.push({ ...x, id });
     });
@@ -857,8 +855,8 @@ class ProjectChangeRequestStatusChangeTestRepository
     const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)
       ?.status as PCRStatus;
     return super.insertOne({
-      id: (this.Items.length + 1).toString(),
-      pcrId: statusChange.Acc_ProjectChangeRequest__c,
+      id: (this.Items.length + 1).toString() as PcrItemId,
+      pcrId: statusChange.Acc_ProjectChangeRequest__c as PcrId,
       createdBy: "Sentient being Alpha B-25",
       createdDate: new Date(),
       previousStatus,
@@ -904,7 +902,7 @@ class FinancialVirementsTestRepository
   extends TestRepository<Entities.PartnerFinancialVirement>
   implements Repositories.IFinancialVirementRepository
 {
-  getAllForPcr(pcrItemId: string): Promise<Entities.PartnerFinancialVirement[]> {
+  getAllForPcr(pcrItemId: PcrItemId): Promise<Entities.PartnerFinancialVirement[]> {
     return super.getWhere(x => x.pcrItemId === pcrItemId);
   }
 

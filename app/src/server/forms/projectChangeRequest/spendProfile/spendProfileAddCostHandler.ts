@@ -40,7 +40,7 @@ import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 
 interface IBaseCost {
-  id: string;
+  id: PcrId;
   costCategoryId: string;
   description: string;
   value: number | null;
@@ -90,7 +90,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     button: IFormButton,
   ) {
     const baseCostDto = {
-      id: "",
+      id: "" as PcrId,
       costCategoryId: params.costCategoryId,
       description: body.description,
       value: parseNumber(body.value),

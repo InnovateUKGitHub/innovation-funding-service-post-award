@@ -2,7 +2,7 @@ import { LoanFinancialVirement } from "@framework/entities";
 
 export interface FinancialLoanVirementDto {
   loans: LoanFinancialVirement[];
-  pcrItemId: string;
+  pcrItemId: PcrItemId;
 }
 
 export interface FinancialVirementDto {
@@ -17,7 +17,7 @@ export interface FinancialVirementDto {
   originalRemainingCosts: number;
   originalRemainingGrant: number;
   partners: PartnerVirementsDto[];
-  pcrItemId: string;
+  pcrItemId: PcrItemId;
 }
 
 export interface PartnerVirementsDto {

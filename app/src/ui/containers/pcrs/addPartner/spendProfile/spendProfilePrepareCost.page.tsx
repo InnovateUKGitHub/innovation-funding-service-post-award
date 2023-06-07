@@ -54,8 +54,8 @@ import { IRoutes } from "@ui/routing";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: ProjectId;
-  pcrId: string;
-  itemId: string;
+  pcrId: PcrId;
+  itemId: PcrItemId;
   costCategoryId: string;
 }
 
@@ -362,8 +362,8 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
   container: ContainerAdd,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfilePrepareCost.title),
@@ -376,8 +376,8 @@ export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostP
   container: ContainerEdit,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
+    pcrId: route.params.pcrId as PcrId,
+    itemId: route.params.itemId as PcrItemId,
     costCategoryId: route.params.costCategoryId,
     costId: route.params.costId,
   }),
