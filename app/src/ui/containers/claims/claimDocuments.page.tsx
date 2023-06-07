@@ -95,8 +95,8 @@ const ClaimDocumentsComponent = ({
     const { isLoans } = checkProjectCompetition(project.competitionType);
     const { isMo } = getAuthRoles(project.roles);
 
-    // Disable completing the form if internal assurance and not received PCF
-    const iaPcfNotSubmittedForFinalClaim =
+    // Disable completing the form if impact management and not received PCF
+    const impMgmtPcfNotSubmittedForFinalClaim =
       project.impactManagementParticipation === ImpactManagementParticipation.Yes
         ? claim.isFinalClaim && claim.pcfStatus !== "Received"
         : false;
@@ -125,7 +125,7 @@ const ClaimDocumentsComponent = ({
       >
         <ACC.Renderers.Messages messages={props.messages} />
 
-        {iaPcfNotSubmittedForFinalClaim &&
+        {impMgmtPcfNotSubmittedForFinalClaim &&
           (isMo ? (
             <ACC.ValidationMessage
               messageType="info"
