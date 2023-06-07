@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { FullDateInput, MonthYearInput } from "@ui/components/inputs/dateInput";
@@ -16,7 +16,9 @@ describe("FullDateInput", () => {
 
     const dateInput = getByLabelText("Day") as HTMLInputElement;
     expect(dateInput.value).toBe("");
-    await userEvent.type(dateInput, "25");
+    await act(async () => {
+      await userEvent.type(dateInput, "25");
+    });
     expect(dateInput.value).toEqual("25");
   });
 
@@ -25,7 +27,9 @@ describe("FullDateInput", () => {
 
     const dateInput = getByLabelText("Month") as HTMLInputElement;
     expect(dateInput.value).toBe("");
-    await userEvent.type(dateInput, "05");
+    await act(async () => {
+      await userEvent.type(dateInput, "05");
+    });
     expect(dateInput.value).toEqual("05");
   });
 
@@ -34,7 +38,9 @@ describe("FullDateInput", () => {
 
     const dateInput = getByLabelText("Year") as HTMLInputElement;
     expect(dateInput.value).toBe("");
-    await userEvent.type(dateInput, "2020");
+    await act(async () => {
+      await userEvent.type(dateInput, "2020");
+    });
     expect(dateInput.value).toEqual("2020");
   });
 
@@ -46,7 +52,9 @@ describe("FullDateInput", () => {
 
     const dateInput = getByLabelText("Year") as HTMLInputElement;
     expect(dateInput.value).toBe("");
-    await userEvent.type(dateInput, "Blah blah");
+    await act(async () => {
+      await userEvent.type(dateInput, "Blah blah");
+    });
     expect(lastUpdate).not.toBeNull();
     expect((lastUpdate as unknown as Date).getTime()).toBeNaN();
   });
@@ -57,9 +65,11 @@ describe("FullDateInput", () => {
       <FullDateInput name="testName" onChange={jest.fn(v => (lastUpdate = v))} debounce={false} />,
     );
 
-    await userEvent.type(getByLabelText("Day"), "25");
-    await userEvent.type(getByLabelText("Month"), "10");
-    await userEvent.type(getByLabelText("Year"), "2020 ");
+    await act(async () => {
+      await userEvent.type(getByLabelText("Day"), "25");
+      await userEvent.type(getByLabelText("Month"), "10");
+      await userEvent.type(getByLabelText("Year"), "2020 ");
+    });
 
     expect(lastUpdate).toEqual(new Date("2020-10-25T12:00:00"));
   });
@@ -77,7 +87,9 @@ describe("MonthYearInput", () => {
 
     const dateInput = getByLabelText("Month") as HTMLInputElement;
     expect(dateInput.value).toBe("");
-    await userEvent.type(dateInput, "05");
+    await act(async () => {
+      await userEvent.type(dateInput, "05");
+    });
     expect(dateInput.value).toEqual("05");
   });
 
@@ -86,7 +98,9 @@ describe("MonthYearInput", () => {
 
     const dateInput = getByLabelText("Month") as HTMLInputElement;
     expect(dateInput.value).toBe("");
-    await userEvent.type(dateInput, "2020");
+    await act(async () => {
+      await userEvent.type(dateInput, "2020");
+    });
     expect(dateInput.value).toEqual("2020");
   });
 
@@ -97,8 +111,10 @@ describe("MonthYearInput", () => {
       <MonthYearInput name="testName" startOrEnd="start" onChange={jest.fn(v => (lastUpdate = v))} debounce={false} />,
     );
 
-    await userEvent.type(getByLabelText("Month"), "11");
-    await userEvent.type(getByLabelText("Year"), "2019 ");
+    await act(async () => {
+      await userEvent.type(getByLabelText("Month"), "11");
+      await userEvent.type(getByLabelText("Year"), "2019 ");
+    });
     expect(lastUpdate).toEqual(new Date("2019-11-01T12:00:00"));
   });
 
@@ -109,8 +125,10 @@ describe("MonthYearInput", () => {
       <MonthYearInput name="testName" startOrEnd="end" onChange={jest.fn(v => (lastUpdate = v))} debounce={false} />,
     );
 
-    await userEvent.type(getByLabelText("Month"), "11");
-    await userEvent.type(getByLabelText("Year"), "2019 ");
+    await act(async () => {
+      await userEvent.type(getByLabelText("Month"), "11");
+      await userEvent.type(getByLabelText("Year"), "2019 ");
+    });
 
     expect(lastUpdate).toEqual(new Date("2019-11-30T12:00:00"));
   });

@@ -1,4 +1,4 @@
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { TextInput, TextInputProps } from "@ui/components/inputs/textInput";
@@ -57,8 +57,10 @@ describe("TextInput", () => {
   it("Should call onChange on key up", async () => {
     const onChange = jest.fn();
     const { container } = setup({ maxLength: 20, value: "", onChange, handleKeyTyped: true });
-    await userEvent.type(container.firstChild as HTMLInputElement, "1");
-    await fireEvent.keyUp(container.firstChild as HTMLInputElement, { key: "1", code: "Digit1", keyCode: 49 });
+    await act(async () => {
+      await userEvent.type(container.firstChild as HTMLInputElement, "1");
+      await fireEvent.keyUp(container.firstChild as HTMLInputElement, { key: "1", code: "Digit1", keyCode: 49 });
+    });
     expect(onChange).toHaveBeenCalledWith("1");
   });
 
@@ -66,8 +68,10 @@ describe("TextInput", () => {
     const onChange = jest.fn();
     const { container } = setup({ maxLength: 20, value: "", onChange });
 
-    await userEvent.type(container.firstChild as HTMLInputElement, "1");
-    await fireEvent.blur(container.firstChild as HTMLInputElement);
+    await act(async () => {
+      await userEvent.type(container.firstChild as HTMLInputElement, "1");
+      await fireEvent.blur(container.firstChild as HTMLInputElement);
+    });
 
     expect(onChange).toHaveBeenCalledWith("1");
   });

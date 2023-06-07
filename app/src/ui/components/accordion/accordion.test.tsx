@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import TestBed from "@shared/TestBed";
@@ -104,7 +104,9 @@ describe("<Accordion />", () => {
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Open all nodes
-        await userEvent.click(toggleBtn);
+        await act(async () => {
+          await userEvent.click(toggleBtn);
+        });
 
         expect(queryByText("Hide all sections")).toBeInTheDocument();
         expect(queryByText("Show all sections")).not.toBeInTheDocument();
@@ -112,7 +114,9 @@ describe("<Accordion />", () => {
         expect(queryAccordionIsOpen(stubSecondContent)).toBeTruthy();
 
         // Close all nodes
-        await userEvent.click(toggleBtn);
+        await act(async () => {
+          await userEvent.click(toggleBtn);
+        });
 
         expect(queryByText("Hide all sections")).not.toBeInTheDocument();
         expect(queryByText("Show all sections")).toBeInTheDocument();
@@ -136,13 +140,17 @@ describe("<Accordion />", () => {
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Open
-        await userEvent.click(firstToggle);
+        await act(async () => {
+          await userEvent.click(firstToggle);
+        });
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeTruthy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Close
-        await userEvent.click(firstToggle);
+        await act(async () => {
+          await userEvent.click(firstToggle);
+        });
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
@@ -162,25 +170,33 @@ describe("<Accordion />", () => {
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Open - first
-        await userEvent.click(firstToggle);
+        await act(async () => {
+          await userEvent.click(firstToggle);
+        });
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeTruthy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Close - first
-        await userEvent.click(firstToggle);
+        await act(async () => {
+          await userEvent.click(firstToggle);
+        });
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Open - second
-        await userEvent.click(secondToggle);
+        await act(async () => {
+          await userEvent.click(secondToggle);
+        });
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeTruthy();
 
         // Close - second
-        await userEvent.click(secondToggle);
+        await act(async () => {
+          await userEvent.click(secondToggle);
+        });
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();

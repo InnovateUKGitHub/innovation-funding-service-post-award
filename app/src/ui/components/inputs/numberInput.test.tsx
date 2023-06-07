@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { NumberInput, NumberInputProps } from "@ui/components/inputs/numberInput";
@@ -46,7 +46,9 @@ describe("NumberInput", () => {
   it("Renders with error class when invalid", async () => {
     const input = getInput({ value: 78 });
     expect(input).not.toHaveClass("govuk-input--error");
-    await userEvent.type(input, "ha");
+    await act(async () => {
+      await userEvent.type(input, "ha");
+    });
     expect(input).toHaveClass("govuk-input--error");
   });
 
@@ -66,10 +68,12 @@ describe("NumberInput", () => {
     const onChange = jest.fn();
     const input = getInput({ value: 12, onChange, debounce: true });
 
-    await user.type(input, "1");
-    await user.clear(input);
-    await user.type(input, "2");
-    await user.type(input, "3");
+    await act(async () => {
+      await user.type(input, "1");
+      await user.clear(input);
+      await user.type(input, "2");
+      await user.type(input, "3");
+    });
 
     jest.runAllTimers();
     expect(onChange).toBeCalledTimes(1);
@@ -79,29 +83,37 @@ describe("NumberInput", () => {
 
   it("Updates component state with value", async () => {
     const input = getInput({ value: null });
-    await userEvent.type(input, "1");
+    await act(async () => {
+      await userEvent.type(input, "1");
+    });
     expect(input.value).toBe("1");
   });
 
   it("Calls a passed in onchange when value changed", async () => {
     const onChange = jest.fn();
     const input = getInput({ value: 1, onChange });
-    await userEvent.type(input, "2");
+    await act(async () => {
+      await userEvent.type(input, "2");
+    });
     expect(onChange).toHaveBeenCalledWith(12);
   });
 
   it("Calls onChange with null if value is empty string", async () => {
     const onChange = jest.fn();
     const input = getInput({ value: 1, onChange });
-    await userEvent.clear(input);
-    await userEvent.type(input, "{backspace}");
+    await act(async () => {
+      await userEvent.clear(input);
+      await userEvent.type(input, "{backspace}");
+    });
     expect(onChange).toHaveBeenCalledWith(null);
   });
 
   it("Calls onChange with Nan if value is not a number", async () => {
     const onChange = jest.fn();
     const input = getInput({ value: 1, onChange });
-    await userEvent.type(input, "abc");
+    await act(async () => {
+      await userEvent.type(input, "abc");
+    });
     expect(onChange).toHaveBeenCalledWith(NaN);
   });
 

@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { range } from "../../../../src/shared/range";
@@ -30,7 +30,9 @@ describe("RadioList", () => {
     const onChange = jest.fn();
     const { getByLabelText } = render(<RadioList options={options} name="testName" onChange={onChange} inline />);
     const input = getByLabelText("Option 3");
-    await userEvent.click(input);
+    await act(async () => {
+      await userEvent.click(input);
+    });
     expect(onChange).toHaveBeenCalledWith({ value: "Option 3", id: "3" });
   });
 });

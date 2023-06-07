@@ -114,7 +114,9 @@ describe("AccordionItem", () => {
 
       expect(stubToggleFn).toHaveBeenCalledTimes(0);
 
-      await act(() => userEvent.click(toggleBtn));
+      await act(async () => {
+        await userEvent.click(toggleBtn);
+      });
 
       expect(stubToggleFn).toHaveBeenCalledTimes(1);
     });
