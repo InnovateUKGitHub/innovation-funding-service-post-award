@@ -566,6 +566,11 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
     itemId: route.params.itemId,
     step: parseInt(route.params.step, 10),
   }),
-  getTitle: ({ params, stores }) => getTitle("Prepare project change request item", params, stores),
+  getTitle: ({ params, stores, content }) =>
+    getTitle(
+      content.getCopyString(x => x.pages.pcrPrepareItem.title),
+      params,
+      stores,
+    ),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });
