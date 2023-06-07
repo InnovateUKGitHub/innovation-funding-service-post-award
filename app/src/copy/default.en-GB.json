@@ -1484,6 +1484,7 @@
       "fileUploadFailure_one": "Your file cannot be uploaded",
       "fileUploadFailure_other": "One or more of your files cannot be uploaded.",
       "fileMissing": "File does not exist",
+      "impactManagementParticipationDisallowsProjectCompletionForm": "You are not required to upload a Project Completion Form. These questions are handled by the Project Impact survey link sent to the Finance Contact.",
       "multerTooLarge": "The selected files must be smaller than {{ size }}."
     },
     "financialVirementDtoValidator": {
