@@ -139,8 +139,8 @@ describe("<Page />", () => {
   });
 
   describe("with a <ValidationSummary />", () => {
-    const stubError1: Result = new Result(null, true, false, "stub-1-errorMessage", false);
-    const stubError2: Result = new Result(null, true, false, "stub-2-errorMessage", false);
+    const stubError1: Result = new Result(null, true, false, "stub-1-errorMessage", false, "stub1");
+    const stubError2: Result = new Result(null, true, false, "stub-2-errorMessage", false, "stub2");
 
     it("with a singular validation", () => {
       const singleValidation: PageProps["validator"] = new Results({
