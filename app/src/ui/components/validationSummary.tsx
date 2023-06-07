@@ -1,5 +1,7 @@
+import { scrollToTheTagSmoothly } from "@framework/util";
 import { flatten } from "@framework/util/arrayHelpers";
 import { useContent } from "@ui/hooks";
+import { useNavigate } from "react-router-dom";
 import { IValidationResult, NestedResult, Result, Results } from "../validation";
 import { List } from "./layout";
 
@@ -29,6 +31,32 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
 export const ValidationSummary = ({ validation, compressed }: Props) => {
   const { getContent } = useContent();
 
+  /**
+   * creates links for the results
+   */
+  const ResultsLinks = ({ results }: { results: Result[] }) => {
+    const navigate = useNavigate();
+
+    return (
+      <>
+        {results.map(x => (
+          <li key={x.key}>
+            <a
+              onClick={e => {
+                e.preventDefault();
+                scrollToTheTagSmoothly(x.key);
+                navigate(`#${x.key}`, { replace: true });
+              }}
+              href={`#${x.key}`}
+            >
+              {prepareMessage(x.errorMessage)}
+            </a>
+          </li>
+        ))}
+      </>
+    );
+  };
+
   const results: Result[] = [];
   populateResults();
   if (!results.length) {
@@ -48,7 +76,9 @@ export const ValidationSummary = ({ validation, compressed }: Props) => {
         {getContent(x => x.components.validationSummary.title)}
       </h2>
       <div className="govuk-error-summary__body">
-        <List className="govuk-error-summary__list">{createResultsLinks(results)}</List>
+        <List className="govuk-error-summary__list">
+          <ResultsLinks results={results} />
+        </List>
       </div>
     </div>
   );
@@ -78,16 +108,5 @@ export const ValidationSummary = ({ validation, compressed }: Props) => {
           }
         });
     }
-  }
-
-  /**
-   * creates links for the results
-   */
-  function createResultsLinks(res: Result[]): JSX.Element[] {
-    return res.map(x => (
-      <li key={x.key}>
-        <a href={`#${x.key}`}>{prepareMessage(x.errorMessage)}</a>
-      </li>
-    ));
   }
 };
