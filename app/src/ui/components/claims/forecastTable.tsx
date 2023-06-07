@@ -467,7 +467,7 @@ export class ForecastTable extends React.Component<Props> {
   ) {
     const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
-    const validator = forecastRow.validators[index.column - 1];
+    const validator = forecastRow.validators.find(x => x.model.periodId === periodId);
     const error = validator && validator.value;
     const isPending = data.partner.partnerStatus === PartnerStatus.Pending;
 
