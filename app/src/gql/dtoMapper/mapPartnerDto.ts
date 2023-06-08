@@ -1,6 +1,13 @@
-import { PartnerStatus, PostcodeTaskStatus } from "@framework/constants/partner";
+import {
+  BankCheckStatus,
+  BankDetailsTaskStatus,
+  PartnerStatus,
+  PostcodeTaskStatus,
+} from "@framework/constants/partner";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { BankCheckStatusMapper } from "@framework/mappers/bankCheckStatus";
+import { BankDetailsTaskStatusMapper } from "@framework/mappers/bankTaskStatus";
 import { getClaimStatus } from "@framework/mappers/claimStatus";
 import { getPartnerStatus } from "@framework/mappers/partnerStatus";
 import { calcPercentage } from "@framework/util/numberHelper";
@@ -36,6 +43,8 @@ type PartnerNode = Readonly<
     } | null;
     Acc_AuditReportFrequency__c: GQL.Value<string>;
     Acc_Award_Rate__c: GQL.Value<number>;
+    Acc_BankCheckCompleted__c: GQL.ValueAndLabel<string>;
+    Acc_BankCheckState__c: GQL.ValueAndLabel<string>;
     Acc_Cap_Limit__c: GQL.Value<number>;
     Acc_CapLimitDeferredAmount__c: GQL.Value<number>;
     Acc_CapLimitDeferredGrant__c: GQL.Value<number>;
@@ -53,6 +62,7 @@ type PartnerNode = Readonly<
     Acc_ProjectId__c: GQL.Value<string>;
     Acc_ProjectRole__c: GQL.Value<string>;
     Acc_RemainingParticipantGrant__c: GQL.Value<number>;
+    Acc_SpendProfileCompleted__c: GQL.ValueAndLabel<string>;
     Acc_TotalApprovedCosts__c: GQL.Value<number>;
     Acc_TotalCostsSubmitted__c: GQL.Value<number>;
     Acc_TotalFutureForecastsForParticipant__c: GQL.Value<number>;
@@ -69,6 +79,9 @@ type PartnerDtoMapping = Pick<
   | "accountId"
   | "auditReportFrequencyName"
   | "awardRate"
+  | "bankCheckStatus"
+  | "bankDetailsTaskStatus"
+  | "bankDetailsTaskStatusLabel"
   | "capLimit"
   | "capLimitDeferredAmount"
   | "capLimitDeferredGrant"
@@ -94,6 +107,7 @@ type PartnerDtoMapping = Pick<
   | "projectId"
   | "remainingParticipantGrant"
   | "roles"
+  | "spendProfileStatusLabel"
   | "totalCostsSubmitted"
   | "totalGrantApproved"
   | "totalParticipantCostsClaimed"
@@ -114,6 +128,21 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   awardRate(node) {
     return node?.Acc_Award_Rate__c?.value ?? null;
+  },
+  bankCheckStatus(node) {
+    const partnerStatus = getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown"); // requires Acc_ParticipantStatus__c
+    return partnerStatus === PartnerStatus.Active
+      ? BankCheckStatus.VerificationPassed
+      : new BankCheckStatusMapper().mapFromSalesforce(node?.Acc_BankCheckState__c?.value ?? "unknown");
+  },
+  bankDetailsTaskStatus(node) {
+    const partnerStatus = getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown"); // requires Acc_ParticipantStatus__c
+    return partnerStatus === PartnerStatus.Active
+      ? BankDetailsTaskStatus.Complete
+      : new BankDetailsTaskStatusMapper().mapFromSalesforce(node?.Acc_BankCheckCompleted__c?.value ?? "unknown");
+  },
+  bankDetailsTaskStatusLabel(node) {
+    return node?.Acc_BankCheckCompleted__c?.label ?? "unknown";
   },
   capLimit(node) {
     return node?.Acc_Cap_Limit__c?.value ?? 0;
@@ -199,6 +228,9 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   roles(node, additionalData: { roles?: SfRoles }) {
     return additionalData?.roles ?? { isPm: false, isMo: false, isFc: false };
+  },
+  spendProfileStatusLabel(node) {
+    return node?.Acc_SpendProfileCompleted__c?.label ?? "unknown";
   },
   totalCostsSubmitted(node) {
     return node?.Acc_TotalCostsSubmitted__c?.value ?? null;

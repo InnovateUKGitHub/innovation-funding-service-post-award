@@ -27,7 +27,7 @@ declare namespace GQL {
 
   type Value<T> = Maybe<{ value: Maybe<T> }>;
 
-  type ValueAndLabel<T> = Maybe<{ value: Maybe<T>; label?: Maybe<string> }>;
+  type ValueAndLabel<T> = Maybe<{ value?: Maybe<T>; label?: Maybe<string> }>;
 
   type DtoMapper<Dto, Node, AdditionalData = undefined> = AdditionalData extends undefined
     ? {

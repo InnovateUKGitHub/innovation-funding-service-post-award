@@ -18,30 +18,39 @@ import { useStores } from "@ui/redux/storesProvider";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { useProjectSetupQuery } from "./projectSetup.logic";
 
 export interface ProjectSetupParams {
   projectId: ProjectId;
   partnerId: PartnerId;
 }
 
-interface Data {
-  project: ProjectDto;
-  partner: PartnerDto;
-  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
-}
+type ProjectSetupPartnerDto = Pick<
+  PartnerDto,
+  | "id"
+  | "partnerStatus"
+  | "bankDetailsTaskStatus"
+  | "bankCheckStatus"
+  | "spendProfileStatusLabel"
+  | "bankDetailsTaskStatusLabel"
+  | "postcode"
+>;
 
-interface Callbacks {
+interface ProjectSetupProps {
+  project: Pick<ProjectDto, "title" | "projectNumber" | "status" | "id">;
+  partner: ProjectSetupPartnerDto;
+  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
   onUpdate: (saving: boolean, dto: PartnerDto) => void;
 }
 
-const Form = createTypedForm<PartnerDto>();
+const Form = createTypedForm<ProjectSetupPartnerDto>();
 
 const isPostcodeComplete = (postcode: string | null): TaskStatus => (postcode ? "Complete" : "To do");
 
-const ProjectSetupComponent = (props: ProjectSetupParams & Data & Callbacks & BaseProps) => {
+const ProjectSetupComponent = (props: ProjectSetupParams & ProjectSetupProps & BaseProps) => {
   const { project, partner, editor } = props;
 
-  const getBankDetailsLink = (partner: PartnerDto) => {
+  const getBankDetailsLink = (partner: ProjectSetupPartnerDto) => {
     if (partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete) {
       return null;
     }
@@ -145,10 +154,8 @@ const ProjectSetupComponent = (props: ProjectSetupParams & Data & Callbacks & Ba
 const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
   const navigate = useNavigate();
   const stores = useStores();
-
+  const { project, partner } = useProjectSetupQuery(props.projectId, props.partnerId);
   const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partner: stores.partners.getById(props.partnerId),
     editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId),
   });
 
@@ -158,7 +165,10 @@ const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
     });
 
   return (
-    <PageLoader pending={combined} render={x => <ProjectSetupComponent {...props} onUpdate={onUpdate} {...x} />} />
+    <PageLoader
+      pending={combined}
+      render={x => <ProjectSetupComponent {...props} project={project} partner={partner} onUpdate={onUpdate} {...x} />}
+    />
   );
 };
 
