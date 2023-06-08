@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Pending } from "@shared/pending";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
@@ -34,112 +34,35 @@ interface Callbacks {
   onUpdate: (saving: boolean, dto: PartnerDto) => void;
 }
 
-interface CombinedData {
-  project: ProjectDto;
-  partner: PartnerDto;
-  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
-}
-
 const Form = createTypedForm<PartnerDto>();
-class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Callbacks> {
-  render() {
-    const { project, partner, editor }: CombinedData = this.props;
-    return (
-      <Page
-        backLink={
-          <BackLink route={this.props.routes.projectDashboard.getLink({})}>
-            <Content value={x => x.pages.projectSetup.backLink} />
-          </BackLink>
-        }
-        pageTitle={<Title {...project} />}
-        error={editor.error}
-        validator={editor.validator}
-        project={project}
-        partner={partner}
-      >
-        <Section qa="guidance">
-          <SimpleString>
-            <Content value={x => x.projectMessages.setupGuidance} />
-          </SimpleString>
-        </Section>
 
-        <UL qa="taskList">
-          <TaskListSection title={x => x.taskList.giveUsInfoSectionTitle} qa="WhatDoYouWantToDo">
-            <Task
-              name={x => x.pages.projectSetup.setSpendProfile}
-              status={partner.spendProfileStatusLabel as TaskStatus}
-              route={this.props.routes.projectSetupSpendProfile.getLink({
-                partnerId: partner.id,
-                projectId: project.id,
-              })}
-              validation={[editor.validator.spendProfileStatus]}
-            />
+const isPostcodeComplete = (postcode: string | null): TaskStatus => (postcode ? "Complete" : "To do");
 
-            <Task
-              name={x => x.pages.projectSetup.provideBankDetails}
-              status={partner.bankDetailsTaskStatusLabel as TaskStatus}
-              route={this.getBankDetailsLink(partner)}
-              validation={[editor.validator.bankDetailsTaskStatus]}
-            />
+const ProjectSetupComponent = (props: ProjectSetupParams & Data & Callbacks & BaseProps) => {
+  const { project, partner, editor } = props;
 
-            <Task
-              name={x => x.pages.projectSetup.provideProjectLocation}
-              status={this.isPostcodeComplete(partner.postcode)}
-              route={this.props.routes.projectSetupPostcode.getLink({
-                projectId: this.props.projectId,
-                partnerId: this.props.partnerId,
-              })}
-              validation={[editor.validator.postcodeSetupStatus]}
-            />
-          </TaskListSection>
-        </UL>
-
-        <Form.Form
-          data={partner}
-          editor={editor}
-          onSubmit={() => {
-            editor.data.partnerStatus = PartnerStatus.Active;
-            this.props.onUpdate(true, editor.data);
-          }}
-          qa="projectSetupForm"
-        >
-          <Form.Fieldset>
-            <Form.Submit>
-              <Content value={x => x.pages.projectSetup.complete} />
-            </Form.Submit>
-          </Form.Fieldset>
-        </Form.Form>
-      </Page>
-    );
-  }
-
-  // TODO: remove this temporary solution when we have added the postcodeStatusLabel in SF
-  private isPostcodeComplete(postcode: string | null): TaskStatus {
-    return postcode ? "Complete" : "To do";
-  }
-
-  private getBankDetailsLink(partner: PartnerDto) {
+  const getBankDetailsLink = (partner: PartnerDto) => {
     if (partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete) {
       return null;
     }
     switch (partner.bankCheckStatus) {
       case BankCheckStatus.NotValidated: {
-        return this.props.routes.projectSetupBankDetails.getLink({
-          partnerId: this.props.partnerId,
-          projectId: this.props.projectId,
+        return props.routes.projectSetupBankDetails.getLink({
+          partnerId: props.partnerId,
+          projectId: props.projectId,
         });
       }
       case BankCheckStatus.ValidationFailed:
       case BankCheckStatus.VerificationFailed: {
-        return this.props.routes.projectSetupBankStatement.getLink({
-          partnerId: this.props.partnerId,
-          projectId: this.props.projectId,
+        return props.routes.projectSetupBankStatement.getLink({
+          partnerId: props.partnerId,
+          projectId: props.projectId,
         });
       }
       case BankCheckStatus.ValidationPassed: {
-        return this.props.routes.projectSetupBankDetailsVerify.getLink({
-          partnerId: this.props.partnerId,
-          projectId: this.props.projectId,
+        return props.routes.projectSetupBankDetailsVerify.getLink({
+          partnerId: props.partnerId,
+          projectId: props.projectId,
         });
       }
       case BankCheckStatus.VerificationPassed: {
@@ -148,8 +71,76 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
       default:
         return null;
     }
-  }
-}
+  };
+
+  return (
+    <Page
+      backLink={
+        <BackLink route={props.routes.projectDashboard.getLink({})}>
+          <Content value={x => x.pages.projectSetup.backLink} />
+        </BackLink>
+      }
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
+      error={editor.error}
+      validator={editor.validator}
+      projectStatus={project.status}
+      partnerStatus={partner.partnerStatus}
+    >
+      <Section qa="guidance">
+        <SimpleString>
+          <Content value={x => x.projectMessages.setupGuidance} />
+        </SimpleString>
+      </Section>
+
+      <UL qa="taskList">
+        <TaskListSection title={x => x.taskList.giveUsInfoSectionTitle} qa="WhatDoYouWantToDo">
+          <Task
+            name={x => x.pages.projectSetup.setSpendProfile}
+            status={partner.spendProfileStatusLabel as TaskStatus}
+            route={props.routes.projectSetupSpendProfile.getLink({
+              partnerId: partner.id,
+              projectId: project.id,
+            })}
+            validation={[editor.validator.spendProfileStatus]}
+          />
+
+          <Task
+            name={x => x.pages.projectSetup.provideBankDetails}
+            status={partner.bankDetailsTaskStatusLabel as TaskStatus}
+            route={getBankDetailsLink(partner)}
+            validation={[editor.validator.bankDetailsTaskStatus]}
+          />
+
+          <Task
+            name={x => x.pages.projectSetup.provideProjectLocation}
+            status={isPostcodeComplete(partner.postcode)}
+            route={props.routes.projectSetupPostcode.getLink({
+              projectId: props.projectId,
+              partnerId: props.partnerId,
+            })}
+            validation={[editor.validator.postcodeSetupStatus]}
+          />
+        </TaskListSection>
+      </UL>
+
+      <Form.Form
+        data={partner}
+        editor={editor}
+        onSubmit={() => {
+          editor.data.partnerStatus = PartnerStatus.Active;
+          props.onUpdate(true, editor.data);
+        }}
+        qa="projectSetupForm"
+      >
+        <Form.Fieldset>
+          <Form.Submit>
+            <Content value={x => x.pages.projectSetup.complete} />
+          </Form.Submit>
+        </Form.Fieldset>
+      </Form.Form>
+    </Page>
+  );
+};
 
 const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
   const navigate = useNavigate();
