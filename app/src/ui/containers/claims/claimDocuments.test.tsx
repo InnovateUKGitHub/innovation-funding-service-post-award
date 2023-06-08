@@ -8,6 +8,7 @@ import {
 } from "@ui/containers/claims/claimDocuments.page";
 import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 describe("useClaimDocumentContent()", () => {
   const stubContent = {
@@ -148,6 +149,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: false,
           isFinalClaim: false,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(container.firstChild).toBe(null);
@@ -159,6 +161,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: true,
           isFinalClaim: false,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(queryByText(stubContent.iarRequired)).toBeInTheDocument();
@@ -170,6 +173,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: true,
           isFinalClaim: true,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(queryByText(stubContent.finalClaimGuidanceContent1)).toBeInTheDocument();
@@ -184,6 +188,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: false,
           isFinalClaim: true,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(queryByText(stubContent.finalClaimGuidanceContent1)).toBeInTheDocument();
@@ -199,6 +204,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: true,
           isFinalClaim: false,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(queryByText(stubContent.iarRequiredAdvice)).toBeInTheDocument();
@@ -216,6 +222,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: true,
           isFinalClaim: true,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(queryByText(stubContent.iarRequiredAdvice)).toBeInTheDocument();
@@ -233,6 +240,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: false,
           isFinalClaim: false,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(queryByText(stubContent.iarRequiredAdvice)).not.toBeInTheDocument();
@@ -250,6 +258,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: false,
           isFinalClaim: true,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(queryByText(stubContent.iarRequiredAdvice)).not.toBeInTheDocument();
@@ -269,6 +278,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: true,
           isFinalClaim: true,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
 
         expect(queryByText(stubContent.finalClaimGuidanceContent1)).toBeInTheDocument();
@@ -290,6 +300,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: true,
           isFinalClaim: false,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
         expect(queryByText(stubContent.iarRequired)).toBeInTheDocument();
 
@@ -306,6 +317,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: false,
           isFinalClaim: false,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
         expect(queryByText(stubContent.sbriDocumentAdvice)).toBeInTheDocument();
         expect(queryByText(stubContent.sbriInvoiceBullet1)).toBeInTheDocument();
@@ -320,10 +332,30 @@ describe("<ClaimDocumentAdvice />", () => {
           isIarRequired: false,
           isFinalClaim: true,
           content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.No,
         });
         expect(queryByText(stubContent.finalClaimGuidanceContent1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
+
+        expect(queryByText(stubContent.sbriDocumentAdvice)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet1)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet2)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet3)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriMoAdvice)).toBeInTheDocument();
+      });
+
+      test("when impact management is enabled", () => {
+        const { queryByText } = setup({
+          competitionType: "SBRI",
+          isIarRequired: false,
+          isFinalClaim: true,
+          content: stubContent,
+          impactManagementParticipation: ImpactManagementParticipation.Yes,
+        });
+        expect(queryByText(stubContent.finalClaimGuidanceContent1)).not.toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimStep1)).not.toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimStep2)).not.toBeInTheDocument();
 
         expect(queryByText(stubContent.sbriDocumentAdvice)).toBeInTheDocument();
         expect(queryByText(stubContent.sbriInvoiceBullet1)).toBeInTheDocument();

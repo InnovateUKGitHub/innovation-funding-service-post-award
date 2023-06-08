@@ -323,7 +323,8 @@ export const ClaimDocumentsRoute = defineRoute({
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimDocuments.title),
 });
 
-export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired" | "isFinalClaim"> {
+export interface ClaimDocumentAdviceProps
+  extends Pick<ClaimDto, "isIarRequired" | "isFinalClaim" | "impactManagementParticipation"> {
   content: Pick<
     ClaimDocumentContent,
     | "iarRequiredAdvice"
@@ -354,6 +355,7 @@ export function ClaimDocumentAdvice({
   content,
   isFinalClaim,
   isIarRequired,
+  impactManagementParticipation,
   competitionType,
 }: ClaimDocumentAdviceProps) {
   const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(competitionType);
@@ -382,14 +384,13 @@ export function ClaimDocumentAdvice({
 
       return (
         <>
-          {isFinalClaim && (
+          {impactManagementParticipation !== ImpactManagementParticipation.Yes && (
             <>
               <ACC.Renderers.SimpleString>{content.finalClaimGuidanceContent1}</ACC.Renderers.SimpleString>
-
-              <ACC.UL>
+              <ACC.OL>
                 <li>{content.finalClaimStep1}</li>
                 <li>{content.finalClaimStep2}</li>
-              </ACC.UL>
+              </ACC.OL>
             </>
           )}
 
@@ -419,12 +420,15 @@ export function ClaimDocumentAdvice({
       <>
         {isFinalClaim ? (
           <>
-            <ACC.Renderers.SimpleString>{content.finalClaimGuidanceContent1}</ACC.Renderers.SimpleString>
-
-            <ACC.OL>
-              <li>{content.finalClaimStep1}</li>
-              <li>{content.finalClaimStep2}</li>
-            </ACC.OL>
+            {impactManagementParticipation !== ImpactManagementParticipation.Yes && (
+              <>
+                <ACC.Renderers.SimpleString>{content.finalClaimGuidanceContent1}</ACC.Renderers.SimpleString>
+                <ACC.OL>
+                  <li>{content.finalClaimStep1}</li>
+                  <li>{content.finalClaimStep2}</li>
+                </ACC.OL>
+              </>
+            )}
 
             {isIarRequired && (
               <>
