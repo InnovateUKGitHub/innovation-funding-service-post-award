@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6d53d4fca7f4aa4cca073e534764ca99>>
+ * @generated SignedSource<<c647cefa0ece35eade389a3cb92f1a64>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -41,6 +41,7 @@ export type ProjectSetupQuery$data = {
                     } | null;
                     readonly Acc_SpendProfileCompleted__c: {
                       readonly label: string | null;
+                      readonly value: string | null;
                     } | null;
                     readonly Id: string;
                   } | null;
@@ -292,7 +293,8 @@ v6 = [
                                         "name": "Acc_SpendProfileCompleted__c",
                                         "plural": false,
                                         "selections": [
-                                          (v5/*: any*/)
+                                          (v5/*: any*/),
+                                          (v3/*: any*/)
                                         ],
                                         "storageKey": null
                                       }
@@ -348,16 +350,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "4460c4b144345b0c91d6e74285ef3247",
+    "cacheID": "31de39094c18dd73c29bf9cd7eba614c",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                    }\n                    Acc_SpendProfileCompleted__c {\n                      label\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                    }\n                    Acc_SpendProfileCompleted__c {\n                      label\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "78a93aba2e7ffe3111acb9e9e0922bb2";
+(node as any).hash = "5cb6f66b4f5d0ec16beae69e37ccb27f";
 
 export default node;

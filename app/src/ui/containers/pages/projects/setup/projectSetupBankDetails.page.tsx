@@ -5,9 +5,8 @@ import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator"
 import { BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm, FormBuilder } from "@ui/components/bjss/form/form";
+import { createTypedForm } from "@ui/components/bjss/form/form";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
@@ -16,6 +15,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useStores } from "@ui/redux/storesProvider";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { useProjectSetupBankDetailsQuery } from "./projectSetupBankDetails.logic";
 
 type BankCheckValidationError = {
   results: {
@@ -35,7 +35,6 @@ export interface ProjectSetupBankDetailsParams {
 }
 
 interface Data {
-  project: ProjectDto;
   editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
@@ -46,7 +45,8 @@ interface Callbacks {
 const Form = createTypedForm<PartnerDto>();
 
 const ProjectSetupBankDetailsComponent = (props: BaseProps & ProjectSetupBankDetailsParams & Data & Callbacks) => {
-  const { project, editor }: { project: ProjectDto; editor: IEditorStore<PartnerDto, PartnerDtoValidator> } = props;
+  const { editor }: { editor: IEditorStore<PartnerDto, PartnerDtoValidator> } = props;
+  const { project } = useProjectSetupBankDetailsQuery(props.projectId);
   return (
     <Page
       backLink={
@@ -61,9 +61,9 @@ const ProjectSetupBankDetailsComponent = (props: BaseProps & ProjectSetupBankDet
       }
       error={editor.error}
       validator={editor.validator}
-      pageTitle={<Title {...project} />}
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
     >
-      {renderGuidance()}
+      <Guidance />
       <Section qa="bank-details-section">
         <Form.Form
           editor={editor}
@@ -84,8 +84,9 @@ const ProjectSetupBankDetailsComponent = (props: BaseProps & ProjectSetupBankDet
           </Form.Fieldset>
 
           <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleAccountDetails}>
-            {renderSortCode(editor, Form)}
-            {renderAccountNumber(editor, Form)}
+            <SortCode editor={editor} />
+
+            <AccountNumber editor={editor} />
           </Form.Fieldset>
 
           <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleBillingAddress}>
@@ -139,7 +140,7 @@ const ProjectSetupBankDetailsComponent = (props: BaseProps & ProjectSetupBankDet
   );
 };
 
-const renderGuidance = () => {
+const Guidance = () => {
   return (
     <Section qa={"guidance"}>
       <Content markdown value={x => x.pages.projectSetupBankDetails.guidanceMessage} />
@@ -147,7 +148,7 @@ const renderGuidance = () => {
   );
 };
 
-const renderSortCode = (editor: IEditorStore<PartnerDto, PartnerDtoValidator>, Form: FormBuilder<PartnerDto>) => {
+const SortCode = ({ editor }: { editor: IEditorStore<PartnerDto, PartnerDtoValidator> }) => {
   if (editor.data.bankCheckStatus === BankCheckStatus.NotValidated) {
     return (
       <Form.String
@@ -172,7 +173,7 @@ const renderSortCode = (editor: IEditorStore<PartnerDto, PartnerDtoValidator>, F
   );
 };
 
-const renderAccountNumber = (editor: IEditorStore<PartnerDto, PartnerDtoValidator>, Form: FormBuilder<PartnerDto>) => {
+const AccountNumber = ({ editor }: { editor: IEditorStore<PartnerDto, PartnerDtoValidator> }) => {
   if (editor.data.bankCheckStatus === BankCheckStatus.NotValidated) {
     return (
       <Form.String
@@ -201,8 +202,8 @@ const renderAccountNumber = (editor: IEditorStore<PartnerDto, PartnerDtoValidato
 const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
+
   const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
     editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
       dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Incomplete;
     }),
