@@ -1906,6 +1906,24 @@
           "too_big": "You can only select up to {{ count }} files at the same time."
         }
       }
+    },
+    "projectSetup": {
+      "postcode": {
+        "errors": {
+          "invalid_type": "You must provide your project location postcode.",
+          "too_small": "You must provide your project location postcode."
+        }
+      },
+      "bankDetailsTaskStatus": {
+        "errors": {
+          "invalid_enum_value": "You must provide your bank details."
+        }
+      },
+      "spendProfileStatus": {
+        "errors": {
+          "invalid_enum_value": "You must complete your spend profile."
+        }
+      }
     }
   }
 }

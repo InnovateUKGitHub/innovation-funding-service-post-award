@@ -3,6 +3,7 @@ import {
   BankDetailsTaskStatus,
   PartnerStatus,
   PostcodeTaskStatus,
+  SpendProfileStatus,
 } from "@framework/constants/partner";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
@@ -10,6 +11,7 @@ import { BankCheckStatusMapper } from "@framework/mappers/bankCheckStatus";
 import { BankDetailsTaskStatusMapper } from "@framework/mappers/bankTaskStatus";
 import { getClaimStatus } from "@framework/mappers/claimStatus";
 import { getPartnerStatus } from "@framework/mappers/partnerStatus";
+import { PartnerSpendProfileStatusMapper } from "@framework/mappers/spendProfileStatusMapper";
 import { calcPercentage } from "@framework/util/numberHelper";
 
 /**
@@ -107,6 +109,7 @@ type PartnerDtoMapping = Pick<
   | "projectId"
   | "remainingParticipantGrant"
   | "roles"
+  | "spendProfileStatus"
   | "spendProfileStatusLabel"
   | "totalCostsSubmitted"
   | "totalGrantApproved"
@@ -228,6 +231,12 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   roles(node, additionalData: { roles?: SfRoles }) {
     return additionalData?.roles ?? { isPm: false, isMo: false, isFc: false };
+  },
+  spendProfileStatus(node) {
+    const partnerStatus = getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown"); // requires Acc_ParticipantStatus__c
+    return partnerStatus === PartnerStatus.Active
+      ? SpendProfileStatus.Complete
+      : new PartnerSpendProfileStatusMapper().mapFromSalesforce(node?.Acc_SpendProfileCompleted__c?.value ?? "unknown");
   },
   spendProfileStatusLabel(node) {
     return node?.Acc_SpendProfileCompleted__c?.label ?? "unknown";

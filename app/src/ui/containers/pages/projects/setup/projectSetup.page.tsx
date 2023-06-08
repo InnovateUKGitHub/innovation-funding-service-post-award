@@ -1,7 +1,4 @@
-import { useNavigate } from "react-router-dom";
-import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
@@ -10,15 +7,15 @@ import { UL } from "@ui/components/atomicDesign/atoms/List/list";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { TaskListSection, Task, TaskStatus } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { useProjectSetupQuery } from "./projectSetup.logic";
+import { useOnUpdateProjectSetup, useProjectSetupQuery } from "./projectSetup.logic";
+import { useZodFormatValidationErrors } from "@framework/util/errorHelpers";
+import { Result } from "@ui/validation/result";
+import { useMemo } from "react";
+import { projectSetupSchema } from "./projectSetup.zod";
 
 export interface ProjectSetupParams {
   projectId: ProjectId;
@@ -36,19 +33,21 @@ type ProjectSetupPartnerDto = Pick<
   | "postcode"
 >;
 
-interface ProjectSetupProps {
-  project: Pick<ProjectDto, "title" | "projectNumber" | "status" | "id">;
-  partner: ProjectSetupPartnerDto;
-  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
-  onUpdate: (saving: boolean, dto: PartnerDto) => void;
-}
-
 const Form = createTypedForm<ProjectSetupPartnerDto>();
 
 const isPostcodeComplete = (postcode: string | null): TaskStatus => (postcode ? "Complete" : "To do");
 
-const ProjectSetupComponent = (props: ProjectSetupParams & ProjectSetupProps & BaseProps) => {
-  const { project, partner, editor } = props;
+const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
+  const { project, partner } = useProjectSetupQuery(props.projectId, props.partnerId);
+
+  const [validatorErrors, setValidatorZodErrors] = useZodFormatValidationErrors();
+
+  const { onUpdate, apiError } = useOnUpdateProjectSetup(
+    props.projectId,
+    props.partnerId,
+    partner,
+    props.routes.projectDashboard.getLink({}).path,
+  );
 
   const getBankDetailsLink = (partner: ProjectSetupPartnerDto) => {
     if (partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete) {
@@ -82,6 +81,18 @@ const ProjectSetupComponent = (props: ProjectSetupParams & ProjectSetupProps & B
     }
   };
 
+  // this mapping is just for making it easier to pass into the Task items
+  const mappedErrors: {
+    postcode?: Result[] | undefined;
+    spendProfileStatus?: Result[] | undefined;
+    bankDetailsTaskStatus?: Result[] | undefined;
+  } = useMemo(() => {
+    if (validatorErrors && !validatorErrors?.isValid && validatorErrors?.results?.length) {
+      return validatorErrors?.results.reduce((acc, cur) => ({ ...acc, [String(cur.keyId)]: [cur] }), {});
+    }
+    return { postcode: undefined, spendProfileStatus: undefined, bankDetailsTaskStatus: undefined };
+  }, [validatorErrors]);
+
   return (
     <Page
       backLink={
@@ -90,15 +101,15 @@ const ProjectSetupComponent = (props: ProjectSetupParams & ProjectSetupProps & B
         </BackLink>
       }
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      error={editor.error}
-      validator={editor.validator}
+      error={apiError}
+      validator={validatorErrors}
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
       <Section qa="guidance">
-        <SimpleString>
+        <P>
           <Content value={x => x.projectMessages.setupGuidance} />
-        </SimpleString>
+        </P>
       </Section>
 
       <UL qa="taskList">
@@ -110,14 +121,14 @@ const ProjectSetupComponent = (props: ProjectSetupParams & ProjectSetupProps & B
               partnerId: partner.id,
               projectId: project.id,
             })}
-            validation={[editor.validator.spendProfileStatus]}
+            validation={mappedErrors?.spendProfileStatus}
           />
 
           <Task
             name={x => x.pages.projectSetup.provideBankDetails}
             status={partner.bankDetailsTaskStatusLabel as TaskStatus}
             route={getBankDetailsLink(partner)}
-            validation={[editor.validator.bankDetailsTaskStatus]}
+            validation={mappedErrors?.bankDetailsTaskStatus}
           />
 
           <Task
@@ -127,17 +138,34 @@ const ProjectSetupComponent = (props: ProjectSetupParams & ProjectSetupProps & B
               projectId: props.projectId,
               partnerId: props.partnerId,
             })}
-            validation={[editor.validator.postcodeSetupStatus]}
+            validation={mappedErrors?.postcode}
           />
         </TaskListSection>
       </UL>
 
       <Form.Form
         data={partner}
-        editor={editor}
         onSubmit={() => {
-          editor.data.partnerStatus = PartnerStatus.Active;
-          props.onUpdate(true, editor.data);
+          /*
+           * First validate the partial partner dto to see if the necessary work has been completed
+           */
+          const result = projectSetupSchema.safeParse({
+            postcode: partner.postcode,
+            bankDetailsTaskStatus: String(partner.bankDetailsTaskStatus),
+            spendProfileStatus: String(partner.spendProfileStatus),
+          });
+
+          /*
+           * if validation is failed then convert from zod format to Results format and set in the state
+           */
+          if (!result?.success) {
+            setValidatorZodErrors(result.error);
+          } else {
+            /*
+             * if validation passed, proceed to update and move on
+             */
+            onUpdate({ partnerStatus: PartnerStatus.Active });
+          }
         }}
         qa="projectSetupForm"
       >
@@ -151,32 +179,11 @@ const ProjectSetupComponent = (props: ProjectSetupParams & ProjectSetupProps & B
   );
 };
 
-const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
-  const navigate = useNavigate();
-  const stores = useStores();
-  const { project, partner } = useProjectSetupQuery(props.projectId, props.partnerId);
-  const combined = Pending.combine({
-    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId),
-  });
-
-  const onUpdate = (saving: boolean, dto: PartnerDto) =>
-    stores.partners.updatePartner(saving, props.partnerId, dto, {
-      onComplete: () => navigate(props.routes.projectDashboard.getLink({}).path),
-    });
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={x => <ProjectSetupComponent {...props} project={project} partner={partner} onUpdate={onUpdate} {...x} />}
-    />
-  );
-};
-
 export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routeName: "projectSetup",
   routePath: "/projects/:projectId/setup/:partnerId",
   getParams: r => ({ projectId: r.params.projectId as ProjectId, partnerId: r.params.partnerId as PartnerId }),
-  container: ProjectSetupContainer,
+  container: ProjectSetupPage,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetup.title),
 });

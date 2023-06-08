@@ -37,6 +37,7 @@ export const projectSetupQuery = graphql`
                       }
                       Acc_SpendProfileCompleted__c {
                         label
+                        value
                       }
                     }
                   }
