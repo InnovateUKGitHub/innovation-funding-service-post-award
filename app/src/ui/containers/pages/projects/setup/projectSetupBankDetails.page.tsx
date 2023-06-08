@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { Pending } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
