@@ -3,4 +3,4 @@ apiVersion: route.openshift.io/v1
 metadata:
   name: acc-ui-route
 spec:
-  host: www-acc-custom-openshiftEnvKey.openshiftEnvUrl
+  host: www-openshiftEnvKey.openshiftEnvUrl
