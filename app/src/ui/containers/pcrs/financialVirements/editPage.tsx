@@ -448,6 +448,7 @@ const EditPageInput = ({ costCategory, validation, virement, disabled, updateVal
           width="full"
           ariaLabel={virement.costCategoryName}
           disabled={disabled}
+          enforceValidInput
         />
       )}
     </>

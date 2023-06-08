@@ -195,6 +195,7 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                             width="full"
                             ariaLabel={x.partner.name}
                             disabled={editor.status === EditorStatus.Saving}
+                            enforceValidInput
                           />
                         </>
                       )}
