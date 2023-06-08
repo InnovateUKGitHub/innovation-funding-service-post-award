@@ -15,7 +15,7 @@ profiles:
           ignoreChanges: true
       artifacts: [ ]
     deploy:
-      kubeContext: custom
+      kubeContext: local
       kustomize:
         paths:
           - kustomize/config-mgmt/env/local
