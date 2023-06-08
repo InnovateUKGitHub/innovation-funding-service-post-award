@@ -51,6 +51,7 @@ _parser.add_argument(
         "prod",
         "sysint",
         "uat",
+        "custom",
     ],
     dest="environments",
 )

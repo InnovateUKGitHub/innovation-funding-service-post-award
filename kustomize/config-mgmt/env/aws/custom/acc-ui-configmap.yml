@@ -4,4 +4,6 @@ metadata:
   name: acc-ui-configmap
 data:
   ACC_ENVIRONMENT: custom
+  SERVER_URL: https://www-acc-custom-openshiftEnvKey.openshiftEnvUrl
   USE_SSO: "false"
+  NEW_RELIC_ENABLED: "false"

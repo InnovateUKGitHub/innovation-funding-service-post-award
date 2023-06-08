@@ -37,6 +37,7 @@ _parser.add_argument(
         "sysint",
         "uat",
         "local",
+        "custom",
     ],
     dest="environments",
 )

@@ -17,6 +17,7 @@ environment_map = {
     # Named Environments
     "demo": Environment(pgp=pgp_map["named"], folder="env/aws/demo/"),
     "dev": Environment(pgp=pgp_map["named"], folder="env/aws/dev/"),
+    "custom": Environment(pgp=pgp_map["named"], folder="env/aws/custom/"),
     "perf": Environment(pgp=pgp_map["named"], folder="env/aws/perf/"),
     "preprod": Environment(pgp=pgp_map["named"], folder="env/aws/preprod/"),
     "sysint": Environment(pgp=pgp_map["named"], folder="env/aws/sysint/"),
