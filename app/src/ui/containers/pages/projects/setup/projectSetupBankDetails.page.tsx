@@ -35,8 +35,8 @@ export interface ProjectSetupBankDetailsParams {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
+  project: ProjectDto;
+  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
 interface Callbacks {
@@ -45,11 +45,9 @@ interface Callbacks {
 
 const Form = createTypedForm<PartnerDto>();
 class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDetailsParams, Data, Callbacks> {
-  public render() {
-    const combined = Pending.combine({ project: this.props.project, editor: this.props.editor });
-    return <PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
-  }
-  public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
+  render() {
+    const { project, editor }: { project: ProjectDto; editor: IEditorStore<PartnerDto, PartnerDtoValidator> } =
+      this.props;
     return (
       <Page
         backLink={
@@ -222,40 +220,45 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
 const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
+      dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Incomplete;
+    }),
+  });
+
+  const onChange = (submit: boolean, dto: PartnerDto) => {
+    stores.partners.updatePartner(submit, props.partnerId, dto, {
+      validateBankDetails: submit,
+      onComplete: resp => {
+        if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
+          navigate(
+            props.routes.failedBankCheckConfirmation.getLink({
+              projectId: props.projectId,
+              partnerId: props.partnerId,
+            }).path,
+          );
+        } else {
+          navigate(
+            props.routes.projectSetupBankDetailsVerify.getLink({
+              projectId: props.projectId,
+              partnerId: props.partnerId,
+            }).path,
+          );
+        }
+      },
+      onError: e => {
+        if (isBankCheckValidationError(e)) {
+          dto.bankCheckRetryAttempts += 1;
+        }
+      },
+    });
+  };
+
   return (
-    <ProjectSetupBankDetailsComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
-        dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Incomplete;
-      })}
-      onChange={(submit, dto) => {
-        stores.partners.updatePartner(submit, props.partnerId, dto, {
-          validateBankDetails: submit,
-          onComplete: resp => {
-            if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
-              navigate(
-                props.routes.failedBankCheckConfirmation.getLink({
-                  projectId: props.projectId,
-                  partnerId: props.partnerId,
-                }).path,
-              );
-            } else {
-              navigate(
-                props.routes.projectSetupBankDetailsVerify.getLink({
-                  projectId: props.projectId,
-                  partnerId: props.partnerId,
-                }).path,
-              );
-            }
-          },
-          onError: e => {
-            if (isBankCheckValidationError(e)) {
-              dto.bankCheckRetryAttempts += 1;
-            }
-          },
-        });
-      }}
+    <PageLoader
+      pending={combined}
+      render={x => <ProjectSetupBankDetailsComponent {...props} onChange={onChange} {...x} />}
     />
   );
 };
