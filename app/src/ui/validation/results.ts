@@ -61,8 +61,14 @@ export class Results<T> implements IValidationResult {
 }
 
 export class CombinedResultsValidator extends Results<ResultBase> {
-  constructor(...vals: Results<ResultBase>[]) {
-    const errors = vals.reduce<Result[]>((a, b) => a.concat(b.errors), []);
+  constructor(...vals: (Results<ResultBase> | undefined | null)[]) {
+    const errors = vals.reduce<Result[]>((array, result) => {
+      const error = result?.errors;
+
+      if (error) return [...array, ...error];
+      return array;
+    }, []);
+
     super({ model: {}, showValidationErrors: errors.some(x => x.showValidationErrors) });
     // add the items using the internal method
     errors.forEach(x => this.add(x));

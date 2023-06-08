@@ -36,7 +36,7 @@ export interface PageProps {
   backLink?: React.ReactElement<AnyObject>;
   error?: IAppError | null;
 
-  validator?: Results<ResultBase> | Results<ResultBase>[] | null;
+  validator?: Results<ResultBase> | (null | undefined | Results<ResultBase>)[] | null | undefined;
   /**
    * should just pass in the `project.status` to the `projectStatus` prop.
    *
@@ -75,7 +75,7 @@ export function Page({
   projectStatus,
   partnerStatus,
 }: PageProps) {
-  const validation = validator && Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
+  const validation = Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;
 
   const pageErrorMessage = usePageValidationMessage(

@@ -14,7 +14,6 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { LoanRequestTable } from "./components/LoanTable";
 import { Content } from "@ui/components";
 import { getAuthRoles } from "@framework/types";
-import { Fragment } from "react";
 
 export interface LoansRequestParams {
   projectId: ProjectId;
@@ -190,7 +189,7 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
       pageTitle={pageTitleValue}
       backLink={isRejected ? undefined : backLinkElement}
       error={payload?.loanEditor.error ?? payload?.loanDocsEditor.error}
-      validator={payload?.loanEditor.validator ?? payload?.loanDocsEditor.validator}
+      validator={[payload?.loanEditor.validator, payload?.loanDocsEditor.validator]}
     >
       {isRejected && (
         <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.errorDrawdown)}</ACC.Renderers.SimpleString>
