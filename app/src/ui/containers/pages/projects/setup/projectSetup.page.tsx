@@ -25,9 +25,9 @@ export interface ProjectSetupParams {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  partner: Pending<PartnerDto>;
-  editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
+  project: ProjectDto;
+  partner: PartnerDto;
+  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
 interface Callbacks {
@@ -43,16 +43,7 @@ interface CombinedData {
 const Form = createTypedForm<PartnerDto>();
 class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      partner: this.props.partner,
-      editor: this.props.editor,
-    });
-
-    return <PageLoader pending={combined} render={x => this.renderContents(x)} />;
-  }
-
-  private renderContents({ project, partner, editor }: CombinedData) {
+    const { project, partner, editor }: CombinedData = this.props;
     return (
       <Page
         backLink={
@@ -164,18 +155,19 @@ const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
   const navigate = useNavigate();
   const stores = useStores();
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    partner: stores.partners.getById(props.partnerId),
+    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId),
+  });
+
+  const onUpdate = (saving: boolean, dto: PartnerDto) =>
+    stores.partners.updatePartner(saving, props.partnerId, dto, {
+      onComplete: () => navigate(props.routes.projectDashboard.getLink({}).path),
+    });
+
   return (
-    <ProjectSetupComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      partner={stores.partners.getById(props.partnerId)}
-      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-      onUpdate={(saving, dto) =>
-        stores.partners.updatePartner(saving, props.partnerId, dto, {
-          onComplete: () => navigate(props.routes.projectDashboard.getLink({}).path),
-        })
-      }
-    />
+    <PageLoader pending={combined} render={x => <ProjectSetupComponent {...props} onUpdate={onUpdate} {...x} />} />
   );
 };
 
