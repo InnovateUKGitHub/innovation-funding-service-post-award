@@ -26,7 +26,7 @@ const PCRDetailsPage = (props: BaseProps & ProjectChangeRequestDetailsParams) =>
       pageTitle={<Projects.Title title={project.title} projectNumber={project.projectNumber} />}
       projectStatus={project.status}
     >
-      <ProjectChangeRequestOverviewSummary pcr={pcr} projectId={project.id} hideLink isGqlData />
+      <ProjectChangeRequestOverviewSummary pcr={pcr} projectId={project.id} hideAddTypesLink isGqlData />
       <ProjectChangeRequestOverviewTasks
         pcr={pcr}
         projectId={project.id}
