@@ -78,9 +78,11 @@ export const standardFormHandlers = [
   new ClaimReviewDocumentsDeleteHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
-  new MonitoringReportPrepareFormHandler(),
   new MonitoringReportPreparePeriodFormHandler(),
   new MonitoringReportSummaryFormHandler(),
+  // MonitoringReportPrepareFormHandler must be after other MonitoringReport handlers
+  // This is because the handler uses `:mode` to capture "view"/"prepare" state, but may miscatch "prepare-period" as well.
+  new MonitoringReportPrepareFormHandler(),
   new OverheadDocumentsDeleteHandler(),
   new LoanRequestFormHandler(),
   new ProjectDocumentDeleteHandler(),
