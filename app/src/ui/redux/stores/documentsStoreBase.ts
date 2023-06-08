@@ -2,7 +2,7 @@ import { scrollToTheTopSmoothly } from "@framework/util";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { IClientUser } from "@framework/types";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { messageSuccess } from "../actions";
+import { messageSuccess, removeMessages } from "../actions";
 import { StoreBase } from "./storeBase";
 
 export abstract class DocumentsStoreBase extends StoreBase {
@@ -28,6 +28,7 @@ export abstract class DocumentsStoreBase extends StoreBase {
     this.markStale("partnerDocuments", key, undefined);
 
     if (message) {
+      this.queue(removeMessages());
       this.queue(messageSuccess(message));
       scrollToTheTopSmoothly();
     }
