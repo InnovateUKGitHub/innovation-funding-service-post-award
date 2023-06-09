@@ -28,6 +28,14 @@ spec:
                 name: acc-ui-configmap
             - secretRef:
                 name: acc-ui-secrets
+          readinessProbe:
+            httpGet:
+              path: /api/health/version
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
           startupProbe:
             httpGet:
               path: /api/health/version
