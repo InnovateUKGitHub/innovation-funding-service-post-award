@@ -104,7 +104,11 @@ const ClaimDocumentsComponent = ({
     const documentTypeOptions: DropdownOption[] = documentDescriptions
       .filter(x => {
         // Disallow uploading PCF if impact management
-        if (claim.impactManagementParticipation && x.id === DocumentDescription.ProjectCompletionForm) return false;
+        if (
+          claim.impactManagementParticipation === ImpactManagementParticipation.Yes &&
+          x.id === DocumentDescription.ProjectCompletionForm
+        )
+          return false;
         if (isLoans && x.id === DocumentDescription.ProofOfSatisfiedConditions) return true;
 
         return allowedClaimDocuments.includes(x.id);

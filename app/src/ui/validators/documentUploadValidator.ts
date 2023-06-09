@@ -113,7 +113,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
               this.getContent(x => x.validation.documentValidator.fileDescriptionInvalid),
             ),
           () =>
-            this.impactManagementParticipation
+            this.impactManagementParticipation === ImpactManagementParticipation.Yes
               ? Validation.isTrue(
                   this,
                   model.description !== DocumentDescription.ProjectCompletionForm,
