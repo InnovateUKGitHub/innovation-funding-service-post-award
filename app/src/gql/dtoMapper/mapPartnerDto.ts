@@ -43,6 +43,12 @@ type PartnerNode = Readonly<
       Name: GQL.Value<string>;
       Id?: string | null;
     } | null;
+    Acc_AddressBuildingName__c: GQL.Value<string>;
+    Acc_AddressLocality__c: GQL.Value<string>;
+    Acc_AccountNumber__c: GQL.Value<string>;
+    Acc_AddressPostcode__c: GQL.Value<string>;
+    Acc_AddressStreet__c: GQL.Value<string>;
+    Acc_AddressTown__c: GQL.Value<string>;
     Acc_AuditReportFrequency__c: GQL.Value<string>;
     Acc_Award_Rate__c: GQL.Value<number>;
     Acc_BankCheckCompleted__c: GQL.ValueAndLabel<string>;
@@ -51,7 +57,9 @@ type PartnerNode = Readonly<
     Acc_CapLimitDeferredAmount__c: GQL.Value<number>;
     Acc_CapLimitDeferredGrant__c: GQL.Value<number>;
     Acc_StaticCapLimitGrant__c: GQL.Value<number>;
+    Acc_FirstName__c: GQL.Value<string>;
     Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
+    Acc_LastName__c: GQL.Value<string>;
     Acc_NewForecastNeeded__c: GQL.Value<boolean>;
     Acc_NonfundedParticipant__c: GQL.Value<boolean>;
     Acc_OpenClaimStatus__c: GQL.Value<string>;
@@ -63,7 +71,9 @@ type PartnerNode = Readonly<
     Acc_Postcode__c: GQL.Value<string>;
     Acc_ProjectId__c: GQL.Value<string>;
     Acc_ProjectRole__c: GQL.Value<string>;
+    Acc_RegistrationNumber__c: GQL.Value<string>;
     Acc_RemainingParticipantGrant__c: GQL.Value<number>;
+    Acc_SortCode__c: GQL.Value<string>;
     Acc_SpendProfileCompleted__c: GQL.ValueAndLabel<string>;
     Acc_TotalApprovedCosts__c: GQL.Value<number>;
     Acc_TotalCostsSubmitted__c: GQL.Value<number>;
@@ -82,6 +92,8 @@ type PartnerDtoMapping = Pick<
   | "auditReportFrequencyName"
   | "awardRate"
   | "bankCheckStatus"
+  | "bankCheckRetryAttempts"
+  | "bankDetails"
   | "bankDetailsTaskStatus"
   | "bankDetailsTaskStatusLabel"
   | "capLimit"
@@ -132,11 +144,30 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   awardRate(node) {
     return node?.Acc_Award_Rate__c?.value ?? null;
   },
+  bankCheckRetryAttempts() {
+    return 0;
+  },
   bankCheckStatus(node) {
     const partnerStatus = getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown"); // requires Acc_ParticipantStatus__c
     return partnerStatus === PartnerStatus.Active
       ? BankCheckStatus.VerificationPassed
       : new BankCheckStatusMapper().mapFromSalesforce(node?.Acc_BankCheckState__c?.value ?? "unknown");
+  },
+  bankDetails(node) {
+    return {
+      accountNumber: node?.Acc_AccountNumber__c?.value ?? null,
+      address: {
+        accountBuilding: node?.Acc_AddressBuildingName__c?.value ?? null,
+        accountLocality: node?.Acc_AddressLocality__c?.value ?? null,
+        accountPostcode: node?.Acc_AddressPostcode__c?.value ?? null,
+        accountStreet: node?.Acc_AddressStreet__c?.value ?? null,
+        accountTownOrCity: node?.Acc_AddressTown__c?.value ?? null,
+      },
+      companyNumber: node?.Acc_RegistrationNumber__c?.value ?? null,
+      firstName: node?.Acc_FirstName__c?.value ?? null,
+      lastName: node?.Acc_LastName__c?.value ?? null,
+      sortCode: node?.Acc_SortCode__c?.value ?? null,
+    };
   },
   bankDetailsTaskStatus(node) {
     const partnerStatus = getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown"); // requires Acc_ParticipantStatus__c

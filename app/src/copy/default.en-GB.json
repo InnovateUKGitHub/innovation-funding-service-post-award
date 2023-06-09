@@ -1924,6 +1924,20 @@
           "invalid_enum_value": "You must complete your spend profile."
         }
       }
+    },
+    "projectSetupBankDetails": {
+      "accountNumber": {
+        "errors": {
+          "invalid": "Enter a valid account number.",
+          "required_error": "Account number cannot be empty."
+        }
+      },
+      "sortCode": {
+        "errors": {
+          "invalid": "Enter a valid sort code.",
+          "required_error": "Sort code cannot be empty."
+        }
+      }
     }
   }
 }

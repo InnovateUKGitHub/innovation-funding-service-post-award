@@ -1,52 +1,61 @@
-import { useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UseFormRegister, useForm, FieldError } from "react-hook-form";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { Pending } from "@shared/pending";
-import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
-import { BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
+import { BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { useProjectSetupBankDetailsQuery } from "./projectSetupBankDetails.logic";
-
-type BankCheckValidationError = {
-  results: {
-    bankCheckValidation: {
-      isValid: boolean;
-    };
-  };
-};
-
-const isBankCheckValidationError = (e: unknown): e is BankCheckValidationError => {
-  return (e as BankCheckValidationError)?.results?.bankCheckValidation?.isValid;
-};
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { projectSetupBankDetailsSchema, projectSetupBankDetailsErrorMap } from "./projectSetupBankDetails.zod";
+import {
+  useOnUpdateProjectSetupBankDetails,
+  useProjectSetupBankDetailsQuery,
+  FormValues,
+} from "./projectSetupBankDetails.logic";
+import { useValidationErrors } from "@framework/util/errorHelpers";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface ProjectSetupBankDetailsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
 }
 
-interface Data {
-  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
-}
+const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsParams) => {
+  const { getContent: c } = useContent();
+  const { project, partner } = useProjectSetupBankDetailsQuery(props.projectId, props.partnerId);
 
-interface Callbacks {
-  onChange: (submit: boolean, dto: PartnerDto) => void;
-}
+  const { register, handleSubmit, formState } = useForm<FormValues>({
+    defaultValues: {
+      companyNumber: partner.bankDetails.companyNumber ?? "",
+      sortCode: partner.bankDetails.sortCode ?? "",
+      accountNumber: partner.bankDetails.accountNumber ?? "",
+      accountBuilding: partner.bankDetails.address.accountBuilding ?? "",
+      accountStreet: partner.bankDetails.address.accountStreet ?? "",
+      accountLocality: partner.bankDetails.address.accountLocality ?? "",
+      accountTownOrCity: partner.bankDetails.address.accountTownOrCity ?? "",
+      accountPostcode: partner.bankDetails.address.accountPostcode ?? "",
+    },
+    resolver: zodResolver(projectSetupBankDetailsSchema, { errorMap: projectSetupBankDetailsErrorMap }),
+  });
 
-const Form = createTypedForm<PartnerDto>();
+  const { onUpdate, apiError } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, partner);
 
-const ProjectSetupBankDetailsComponent = (props: BaseProps & ProjectSetupBankDetailsParams & Data & Callbacks) => {
-  const { editor }: { editor: IEditorStore<PartnerDto, PartnerDtoValidator> } = props;
-  const { project } = useProjectSetupBankDetailsQuery(props.projectId);
+  const validatorErrors = useValidationErrors<FormValues>(formState.errors);
+
   return (
     <Page
       backLink={
@@ -59,82 +68,68 @@ const ProjectSetupBankDetailsComponent = (props: BaseProps & ProjectSetupBankDet
           <Content value={x => x.pages.projectSetupBankDetails.backLink} />
         </BackLink>
       }
-      error={editor.error}
-      validator={editor.validator}
+      apiError={apiError}
+      validationErrors={validatorErrors}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
     >
       <Guidance />
+
       <Section qa="bank-details-section">
-        <Form.Form
-          editor={editor}
-          onChange={() => props.onChange(false, editor.data)}
-          onSubmit={() => props.onChange(true, editor.data)}
-          qa="bank-details-form"
-        >
-          <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleOrganisationInfo}>
-            <SimpleString bold>{editor.data.name}</SimpleString>
-            <Form.String
-              name="companyNumber"
-              width={"one-third"}
-              value={x => x.bankDetails.companyNumber}
-              label={x => x.partnerLabels.companyNumber}
-              hint={x => x.partnerLabels.companyNumberHint}
-              update={(dto, val) => (dto.bankDetails.companyNumber = val)}
-            />
-          </Form.Fieldset>
+        <Form onSubmit={handleSubmit(onUpdate)} data-qa="bank-details-form">
+          <Fieldset>
+            <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleOrganisationInfo)}</Legend>
+            <P bold>{partner.name}</P>
 
-          <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleAccountDetails}>
-            <SortCode editor={editor} />
+            <FormGroup>
+              <Label htmlFor="companyNumber">{c(x => x.partnerLabels.companyNumber)}</Label>
+              <Hint id="hint-for-companyNumber">{c(x => x.partnerLabels.companyNumberHint)}</Hint>
+              <TextInput inputWidth="one-third" {...register("companyNumber")} />
+            </FormGroup>
+          </Fieldset>
 
-            <AccountNumber editor={editor} />
-          </Form.Fieldset>
+          <Fieldset>
+            <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleAccountDetails)}</Legend>
 
-          <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleBillingAddress}>
-            <SimpleString qa={"billingAddressFieldsetGuidance"}>
-              <Content value={x => x.pages.projectSetupBankDetails.fieldsetGuidanceBillingAddress} />
-            </SimpleString>
-            <Form.String
-              name="accountBuilding"
-              width={"one-third"}
-              value={x => x.bankDetails.address.accountBuilding}
-              label={x => x.partnerLabels.accountBuilding}
-              update={(dto, val) => (dto.bankDetails.address.accountBuilding = val)}
-            />
-            <Form.String
-              name="accountStreet"
-              width={"one-third"}
-              value={x => x.bankDetails.address.accountStreet}
-              label={x => x.partnerLabels.accountStreet}
-              update={(dto, val) => (dto.bankDetails.address.accountStreet = val)}
-            />
-            <Form.String
-              name="accountLocality"
-              width={"one-third"}
-              value={x => x.bankDetails.address.accountLocality}
-              label={x => x.partnerLabels.accountLocality}
-              update={(dto, val) => (dto.bankDetails.address.accountLocality = val)}
-            />
-            <Form.String
-              name="accountTownOrCity"
-              width={"one-third"}
-              value={x => x.bankDetails.address.accountTownOrCity}
-              label={x => x.partnerLabels.accountTownOrCity}
-              update={(dto, val) => (dto.bankDetails.address.accountTownOrCity = val)}
-            />
-            <Form.String
-              name="accountPostcode"
-              width={"one-third"}
-              value={x => x.bankDetails.address.accountPostcode}
-              label={x => x.partnerLabels.accountPostcode}
-              update={(dto, val) => (dto.bankDetails.address.accountPostcode = val)}
-            />
-          </Form.Fieldset>
-          <Form.Fieldset>
-            <Form.Submit>
-              <Content value={x => x.pages.projectSetupBankDetails.submitButton} />
-            </Form.Submit>
-          </Form.Fieldset>
-        </Form.Form>
+            <SortCode partner={partner} register={register} error={formState.errors?.sortCode} />
+
+            <AccountNumber partner={partner} register={register} error={formState.errors?.accountNumber} />
+          </Fieldset>
+
+          <Fieldset>
+            <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleBillingAddress)}</Legend>
+
+            <P>{c(x => x.pages.projectSetupBankDetails.fieldsetGuidanceBillingAddress)}</P>
+
+            <FormGroup>
+              <Label htmlFor="accountBuilding">{c(x => x.partnerLabels.accountBuilding)}</Label>
+              <TextInput inputWidth="one-third" {...register("accountBuilding")}></TextInput>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="accountStreet">{c(x => x.partnerLabels.accountStreet)}</Label>
+              <TextInput inputWidth="one-third" {...register("accountStreet")}></TextInput>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="accountLocality">{c(x => x.partnerLabels.accountLocality)}</Label>
+              <TextInput inputWidth="one-third" {...register("accountLocality")}></TextInput>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="accountTownOrCity">{c(x => x.partnerLabels.accountTownOrCity)}</Label>
+              <TextInput inputWidth="one-third" {...register("accountTownOrCity")}></TextInput>
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="accountPostcode">{c(x => x.partnerLabels.accountPostcode)}</Label>
+              <TextInput inputWidth="one-third" {...register("accountPostcode")}></TextInput>
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <Button type="submit">{c(x => x.pages.projectSetupBankDetails.submitButton)}</Button>
+          </Fieldset>
+        </Form>
       </Section>
     </Page>
   );
@@ -142,113 +137,77 @@ const ProjectSetupBankDetailsComponent = (props: BaseProps & ProjectSetupBankDet
 
 const Guidance = () => {
   return (
-    <Section qa={"guidance"}>
+    <Section qa="guidance">
       <Content markdown value={x => x.pages.projectSetupBankDetails.guidanceMessage} />
     </Section>
   );
 };
 
-const SortCode = ({ editor }: { editor: IEditorStore<PartnerDto, PartnerDtoValidator> }) => {
-  if (editor.data.bankCheckStatus === BankCheckStatus.NotValidated) {
+const SortCode = ({
+  partner,
+  register,
+  error,
+}: {
+  partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
+  register: UseFormRegister<FormValues>;
+  error?: FieldError;
+}) => {
+  const { getContent: c } = useContent();
+  if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
     return (
-      <Form.String
-        name="sortCode"
-        width={"one-third"}
-        value={x => x.bankDetails.sortCode}
-        label={x => x.partnerLabels.sortCode}
-        hint={x => x.partnerLabels.sortCodeHint}
-        update={(dto, val) => (dto.bankDetails.sortCode = val)}
-        validation={
-          editor.validator.sortCode.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode
-        }
-      />
+      <FormGroup hasError={!!error}>
+        <Label htmlFor="sortCode">{c(x => x.partnerLabels.sortCode)}</Label>
+        <Hint id="hint-for-sortCode">{c(x => x.partnerLabels.sortCodeHint)}</Hint>
+        {error && <ValidationError error={error} />}
+        <TextInput hasError={!!error} inputWidth="one-third" {...register("sortCode", { required: true })}></TextInput>
+      </FormGroup>
     );
   }
+
   return (
-    <Form.Custom
-      name="sortCode"
-      value={({ formData }) => <SimpleString>{formData.bankDetails.sortCode}</SimpleString>}
-      label={x => x.partnerLabels.sortCode}
-    />
+    <FormGroup>
+      <Label htmlFor="sortCode">{c(x => x.partnerLabels.sortCode)}</Label>
+      <P>{partner.bankDetails.sortCode ?? ""}</P>
+      <TextInput id="sortCode" name="sortCode" inputWidth="one-third"></TextInput>
+    </FormGroup>
   );
 };
 
-const AccountNumber = ({ editor }: { editor: IEditorStore<PartnerDto, PartnerDtoValidator> }) => {
-  if (editor.data.bankCheckStatus === BankCheckStatus.NotValidated) {
+const AccountNumber = ({
+  partner,
+  register,
+  error,
+}: {
+  partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
+  register: UseFormRegister<FormValues>;
+  error?: FieldError;
+}) => {
+  const { getContent: c } = useContent();
+  if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
     return (
-      <Form.String
-        name="accountNumber"
-        width={"one-third"}
-        value={x => x.bankDetails.accountNumber}
-        label={x => x.partnerLabels.accountNumber}
-        hint={x => x.partnerLabels.accountNumberHint}
-        update={(dto, val) => (dto.bankDetails.accountNumber = val)}
-        validation={
-          editor.validator.accountNumber.isValid ? editor.validator.bankCheckValidation : editor.validator.accountNumber
-        }
-      />
+      <Field
+        id="accountNumber"
+        hint={c(x => x.partnerLabels.accountNumberHint)}
+        label={c(x => x.partnerLabels.accountNumber)}
+        error={error}
+      >
+        <TextInput {...register("accountNumber", { required: true })} inputWidth="one-third" />
+      </Field>
     );
   }
   return (
-    <Form.Custom
-      name="accountNumber"
-      value={({ formData }) => <SimpleString>{formData.bankDetails.accountNumber}</SimpleString>}
-      label={x => x.partnerLabels.accountNumber}
-      update={() => null}
-    />
-  );
-};
-
-const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams & BaseProps) => {
-  const stores = useStores();
-  const navigate = useNavigate();
-
-  const combined = Pending.combine({
-    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
-      dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Incomplete;
-    }),
-  });
-
-  const onChange = (submit: boolean, dto: PartnerDto) => {
-    stores.partners.updatePartner(submit, props.partnerId, dto, {
-      validateBankDetails: submit,
-      onComplete: resp => {
-        if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
-          navigate(
-            props.routes.failedBankCheckConfirmation.getLink({
-              projectId: props.projectId,
-              partnerId: props.partnerId,
-            }).path,
-          );
-        } else {
-          navigate(
-            props.routes.projectSetupBankDetailsVerify.getLink({
-              projectId: props.projectId,
-              partnerId: props.partnerId,
-            }).path,
-          );
-        }
-      },
-      onError: e => {
-        if (isBankCheckValidationError(e)) {
-          dto.bankCheckRetryAttempts += 1;
-        }
-      },
-    });
-  };
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={x => <ProjectSetupBankDetailsComponent {...props} onChange={onChange} {...x} />}
-    />
+    <FormGroup>
+      <Label htmlFor="accountNumber">{c(x => x.partnerLabels.accountNumber)}</Label>
+      <P>{partner.bankDetails.accountNumber ?? ""}</P>
+      <TextInput id="accountNumber" name="accountNumber" inputWidth="one-third"></TextInput>
+    </FormGroup>
   );
 };
 
 export const ProjectSetupBankDetailsRoute = defineRoute({
   routeName: "projectSetupBankDetails",
   routePath: "/projects/:projectId/setup/:partnerId/bank-details",
-  container: ProjectSetupBankDetailsContainer,
+  container: ProjectSetupBankDetailsPage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,

@@ -45,7 +45,7 @@ export const useOnUpdateProjectSetup = (
   navigateTo: string,
 ) => {
   const navigate = useNavigate();
-  return useOnUpdate<Pick<PartnerDto, "partnerStatus">, Promise<Pick<PartnerDto, "postcode">>>({
+  return useOnUpdate<Pick<PartnerDto, "partnerStatus">, Pick<PartnerDto, "postcode">>({
     req: data =>
       apiClient.partners.updatePartner({
         partnerId,
