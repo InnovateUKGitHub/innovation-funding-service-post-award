@@ -28,3 +28,9 @@ spec:
                 name: acc-ui-configmap
             - secretRef:
                 name: acc-ui-secrets
+          startupProbe:
+            httpGet:
+              path: /api/health/version
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 10
