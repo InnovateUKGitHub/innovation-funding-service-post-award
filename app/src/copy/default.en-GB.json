@@ -1928,14 +1928,15 @@
     "projectSetupBankDetails": {
       "accountNumber": {
         "errors": {
-          "invalid": "Enter a valid account number.",
-          "required_error": "Account number cannot be empty."
+          "too_small": "Account number cannot be empty.",
+          "invalid_string": "Enter a valid account number."
         }
       },
       "sortCode": {
         "errors": {
-          "invalid": "Enter a valid sort code.",
-          "required_error": "Sort code cannot be empty."
+          "too_small": "Sort code cannot be empty.",
+          "invalid_string": "Enter a valid sort code."
+     
         }
       }
     }
