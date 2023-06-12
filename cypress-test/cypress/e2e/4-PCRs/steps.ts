@@ -734,7 +734,7 @@ export const addPartnerTurnover = () => {
 
 export const addPartnerLocation = () => {
   cy.get("h2").contains("Name of town or city");
-  cy.get("h2").contains("Postcode, postal code or zip code");
+  cy.get("h2").contains("Postcode");
   cy.getByQA("field-projectPostcode").contains("If this is not available,");
 };
 

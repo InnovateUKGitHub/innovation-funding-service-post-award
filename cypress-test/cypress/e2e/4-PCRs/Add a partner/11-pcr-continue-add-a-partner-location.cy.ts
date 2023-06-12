@@ -35,7 +35,7 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
     cy.getByLabel("Inside the United Kingdom").click();
   });
 
-  it("Should show the 'Name of town or city' heading and 'Postcode, Postal code or zip code' heading and guidance message", () => {
+  it("Should show the 'Name of town or city' heading and 'Postcode' heading and guidance message", () => {
     cy.get("h2").contains("Name of town or city");
     cy.get("h2").contains("Postcode");
     cy.getByQA("field-projectPostcode").contains("If this is not available,");
