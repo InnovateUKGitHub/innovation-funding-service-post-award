@@ -204,17 +204,17 @@ export function isPositiveInteger(results: Results<ResultBase>, value: number | 
 /**
  * validates is a valid sort code
  */
-export function sortCode(results: Results<ResultBase>, value: string | null, message?: string) {
+export function sortCode(results: Results<ResultBase>, value: string | null, message?: string, keyId?: string) {
   const regex = new RegExp(/^\d{6}$/);
-  return isTrue(results, !value || regex.test(value), message || "Invalid sort code");
+  return isTrue(results, !value || regex.test(value), message || "Invalid sort code", keyId);
 }
 
 /**
  * validates is a valid account number
  */
-export function accountNumber(results: Results<ResultBase>, value: string | null, message?: string) {
+export function accountNumber(results: Results<ResultBase>, value: string | null, message?: string, keyId?: string) {
   const regex = new RegExp(/^\d{6,8}$/);
-  return isTrue(results, !value || regex.test(value), message || "Invalid account number");
+  return isTrue(results, !value || regex.test(value), message || "Invalid account number", keyId);
 }
 
 /**

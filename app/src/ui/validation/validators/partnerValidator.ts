@@ -157,12 +157,14 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
             this,
             this.model.bankDetails.sortCode,
             this.getContent(x => x.validation.partnerDtoValidator.sortCodeRequired),
+            "sortCode",
           ),
         () =>
           Validation.sortCode(
             this,
             this.model.bankDetails.sortCode,
             this.getContent(x => x.validation.partnerDtoValidator.sortCodeInvalid),
+            "sortCode",
           ),
       ),
     this.original.bankCheckStatus === BankCheckStatus.NotValidated,
@@ -177,12 +179,14 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
             this,
             this.model.bankDetails.accountNumber,
             this.getContent(x => x.validation.partnerDtoValidator.accountNumberRequired),
+            "accountNumber",
           ),
         () =>
           Validation.accountNumber(
             this,
             this.model.bankDetails.accountNumber,
             this.getContent(x => x.validation.partnerDtoValidator.accountNumberInvalid),
+            "accountNumber",
           ),
       ),
     this.original.bankCheckStatus === BankCheckStatus.NotValidated,

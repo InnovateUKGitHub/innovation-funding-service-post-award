@@ -167,7 +167,6 @@ const serverRender =
               }),
             );
             apiError = err.error;
-            // formError = formError.concat(err?.error?.results?.errors ?? []);
           }
         } else {
           // We cannot handle these beautifully.
