@@ -24,14 +24,15 @@ interface Params {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  partner: Pending<PartnerDto>;
-  costCategories: Pending<CostCategoryDto[]>;
-  claim: Pending<ClaimDto>;
-  documents: Pending<DocumentSummaryDto[]>;
-  costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
+  project: ProjectDto;
+  partner: PartnerDto;
+  costCategories: CostCategoryDto[];
+  claim: ClaimDto;
+  documents: DocumentSummaryDto[];
   forecastData: Pending<ACC.Claims.ForecastData> | null;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
+
+  claimDetails: CostsSummaryForPeriodDto[];
 }
 
 interface CombinedData {
@@ -44,24 +45,14 @@ interface CombinedData {
 }
 
 export class ClaimsDetailsComponent extends ContainerBase<Params, Data> {
-  public render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      partner: this.props.partner,
-      costCategories: this.props.costCategories,
-      claim: this.props.claim,
-      documents: this.props.documents,
-      claimDetails: this.props.costsSummaryForPeriod,
-    });
+  render() {
+    const { project, partner, claim } = this.props;
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
-  }
-
-  private renderContents(data: CombinedData) {
-    const { isPmOrMo } = getAuthRoles(data.project.roles);
+    const data = this.props;
+    const { isPmOrMo } = getAuthRoles(project.roles);
     const backLink = isPmOrMo
-      ? this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })
-      : this.props.routes.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id });
+      ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id })
+      : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: partner.id });
 
     return (
       <ACC.Page
@@ -70,11 +61,11 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data> {
             <ACC.Content value={x => x.pages.claimDetails.backLink} />
           </ACC.BackLink>
         }
-        pageTitle={<ACC.Projects.Title {...data.project} />}
-        partner={data.partner}
+        pageTitle={<ACC.Projects.Title title={project.title} projectNumber={project.projectNumber} />}
+        partnerStatus={partner.partnerStatus}
       >
         {/* If the partner is not withdrawn, and it's the final claim, show message. */}
-        {!data.partner.isWithdrawn && data.claim.isFinalClaim && (
+        {!partner.isWithdrawn && claim.isFinalClaim && (
           <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
         )}
         {this.renderPageSubtitle(data)}
@@ -269,17 +260,22 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => {
         })
       : null;
 
+  const combined = Pending.combine({
+    project,
+    partner,
+    costCategories,
+    claim,
+    documents: stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId),
+    claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
+  });
+
+  const statusChanges = stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId);
   return (
-    <ClaimsDetailsComponent
-      project={project}
-      partner={partner}
-      costCategories={costCategories}
-      claim={claim}
-      documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
-      forecastData={forecastData}
-      statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
-      costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
-      {...props}
+    <ACC.PageLoader
+      pending={combined}
+      render={data => (
+        <ClaimsDetailsComponent statusChanges={statusChanges} forecastData={forecastData} {...data} {...props} />
+      )}
     />
   );
 };
