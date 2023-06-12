@@ -720,7 +720,7 @@
       "sectionTitlePostcode": "Edit location",
       "labelCurrentPostcode": "Current location",
       "labelNewPostcode": "New location",
-      "hintNewPostcode": "Enter the postcode, postal code or zip code. If the location does not have one of these, enter the town or city.",
+      "hintNewPostcode": "Enter the postcode.",
       "saveAndReturnPartnerDetailsButton": "Save and return to partner information",
       "backToPartnerInfo": "Back to partner information"
     },
