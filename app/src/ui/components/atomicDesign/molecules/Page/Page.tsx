@@ -74,6 +74,10 @@ export function Page({
     }
   }, [apiError, validationErrorSize]);
 
+  useEffect(() => {
+    scrollToTheTopSmoothly();
+  }, [apiError]);
+
   return (
     <GovWidthContainer qa={qa} className={className}>
       {backLink && (
