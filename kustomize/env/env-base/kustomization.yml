@@ -9,6 +9,3 @@ bases:
 
 components:
   - ../../components/acc-ui
-
-resources:
-  - ocp-acc-devs-rolebinding.yml
