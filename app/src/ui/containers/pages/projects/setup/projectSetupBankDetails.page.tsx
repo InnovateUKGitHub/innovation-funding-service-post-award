@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UseFormRegister, useForm, FieldError } from "react-hook-form";
+import { UseFormRegister, useForm } from "react-hook-form";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
@@ -26,7 +26,7 @@ import {
   useProjectSetupBankDetailsQuery,
   FormValues,
 } from "./projectSetupBankDetails.logic";
-import { useValidationErrors } from "@framework/util/errorHelpers";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useContent } from "@ui/hooks/content.hook";
 
 export interface ProjectSetupBankDetailsParams {
@@ -54,7 +54,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
 
   const { onUpdate, apiError } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, partner);
 
-  const validatorErrors = useValidationErrors<FormValues>(formState.errors);
+  const validationErrors = useRhfErrors<FormValues>(formState.errors);
 
   return (
     <Page
@@ -69,7 +69,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
         </BackLink>
       }
       apiError={apiError}
-      validationErrors={validatorErrors}
+      validationErrors={validationErrors}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
     >
       <Guidance />
@@ -90,9 +90,13 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
           <Fieldset>
             <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleAccountDetails)}</Legend>
 
-            <SortCode partner={partner} register={register} error={formState.errors?.sortCode} />
+            <SortCode partner={partner} register={register} error={formState.errors?.sortCode as RhfFieldError} />
 
-            <AccountNumber partner={partner} register={register} error={formState.errors?.accountNumber} />
+            <AccountNumber
+              partner={partner}
+              register={register}
+              error={formState.errors?.accountNumber as RhfFieldError}
+            />
           </Fieldset>
 
           <Fieldset>
@@ -150,7 +154,7 @@ const SortCode = ({
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
   register: UseFormRegister<FormValues>;
-  error?: FieldError;
+  error?: { message: string };
 }) => {
   const { getContent: c } = useContent();
   if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
@@ -158,7 +162,7 @@ const SortCode = ({
       <FormGroup hasError={!!error}>
         <Label htmlFor="sortCode">{c(x => x.partnerLabels.sortCode)}</Label>
         <Hint id="hint-for-sortCode">{c(x => x.partnerLabels.sortCodeHint)}</Hint>
-        {error && <ValidationError error={error} />}
+        <ValidationError error={error} />
         <TextInput hasError={!!error} inputWidth="one-third" {...register("sortCode", { required: true })}></TextInput>
       </FormGroup>
     );
@@ -180,7 +184,7 @@ const AccountNumber = ({
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
   register: UseFormRegister<FormValues>;
-  error?: FieldError;
+  error?: RhfFieldError;
 }) => {
   const { getContent: c } = useContent();
   if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
@@ -191,7 +195,7 @@ const AccountNumber = ({
         label={c(x => x.partnerLabels.accountNumber)}
         error={error}
       >
-        <TextInput {...register("accountNumber", { required: true })} inputWidth="one-third" />
+        <TextInput hasError={!!error} {...register("accountNumber", { required: true })} inputWidth="one-third" />
       </Field>
     );
   }
