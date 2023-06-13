@@ -181,7 +181,6 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
         <ACC.Section title={<ACC.Claims.ClaimPeriodDate {...data} />}>
           <ACC.Claims.ClaimReviewTable
             {...data}
-            standardOverheadRate={props.config.options.standardOverheadRate}
             validation={data.editor.validator.totalCosts}
             getLink={costCategoryId => getClaimLineItemLink(costCategoryId)}
           />

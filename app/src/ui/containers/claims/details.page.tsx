@@ -19,7 +19,6 @@ import {
   Content,
   Projects,
   ValidationMessage,
-  Claims,
   TypedDetails,
   SectionPanel,
   DualDetails,
@@ -31,9 +30,15 @@ import {
   Loader,
   Logs,
 } from "@ui/components";
-import { ForecastData } from "@ui/components/claims";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, defineRoute } from "../containerBase";
+import {
+  ClaimPeriodDate,
+  ClaimTable,
+  ClaimReviewTable,
+  ForecastTable,
+  ForecastDataForTableLayout,
+} from "@ui/components/claims";
 
 interface Params {
   projectId: ProjectId;
@@ -41,28 +46,44 @@ interface Params {
   periodId: PeriodId;
 }
 
-interface Data {
-  project: ProjectDto;
-  partner: PartnerDto;
-  costCategories: CostCategoryDto[];
-  claim: ClaimDto;
-  documents: DocumentSummaryDto[];
-  forecastData: Pending<Claims.ForecastData> | null;
-  statusChanges: Pending<ClaimStatusChangeDto[]>;
+interface ClaimData {
+  project: Pick<ProjectDto, "roles" | "id" | "projectNumber" | "title" | "competitionType">;
+  partner: Pick<PartnerDto, "id" | "partnerStatus" | "isWithdrawn" | "isLead" | "name" | "roles" | "organisationType">;
+  costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
+  claim: Pick<
+    ClaimDto,
+    | "comments"
+    | "isApproved"
+    | "isFinalClaim"
+    | "periodCostsToBePaid"
+    | "periodEndDate"
+    | "periodId"
+    | "periodStartDate"
+    | "status"
+    | "totalCostsApproved"
+    | "totalCostsSubmitted"
+    | "totalDeferredAmount"
+  >;
+  documents: Pick<
+    DocumentSummaryDto,
+    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner"
+  >[];
 
-  claimDetails: CostsSummaryForPeriodDto[];
+  forecastData: Pending<ForecastDataForTableLayout> | null;
+  statusChanges: Pending<Pick<ClaimStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[]>;
+
+  claimDetails: Pick<
+    CostsSummaryForPeriodDto,
+    | "costsClaimedToDate"
+    | "costCategoryId"
+    | "costsClaimedThisPeriod"
+    | "forecastThisPeriod"
+    | "offerTotal"
+    | "remainingOfferCosts"
+  >[];
 }
 
-interface CombinedData {
-  project: ProjectDto;
-  partner: PartnerDto;
-  costCategories: CostCategoryDto[];
-  claim: ClaimDto;
-  documents: DocumentSummaryDto[];
-  claimDetails: CostsSummaryForPeriodDto[];
-}
-
-export const ClaimsDetailsComponent = (props: Params & BaseProps & CombinedData & Data) => {
+export const ClaimsDetailsComponent = (props: Params & BaseProps & ClaimData) => {
   const { project, partner, claim, forecastData, statusChanges } = props;
 
   const data = props;
@@ -85,75 +106,95 @@ export const ClaimsDetailsComponent = (props: Params & BaseProps & CombinedData 
       {!partner.isWithdrawn && claim.isFinalClaim && (
         <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
       )}
-      {renderPageSubtitle(data)}
-      {renderCostsAndGrantSummary(data)}
-      {renderTableSection(data, props.periodId)}
-      {renderAccordionSection(data, forecastData, statusChanges)}
-      {renderCommentsFromFC(project, claim)}
+      <Section title={<ClaimPeriodDate claim={claim} partner={partner} />} />
+
+      <Section>
+        <CostsAndGrantSummary claim={claim} project={project} />
+      </Section>
+
+      <Section>
+        <ClaimDetailsTable periodId={props.periodId} data={data} />
+      </Section>
+
+      <Section>
+        <AccordionSection data={data} forecastData={forecastData} statusChanges={statusChanges} />
+      </Section>
+
+      <CommentsFromFC project={project} claim={claim} />
     </Page>
   );
 };
 
-const renderCostsAndGrantSummary = (data: CombinedData) => {
-  const { isFc } = getAuthRoles(data.project.roles);
-  if (!isFc || !data.claim || !data.claim.isApproved) {
+const ClaimSummaryDetails =
+  TypedDetails<
+    Pick<ClaimDto, "totalCostsSubmitted" | "totalCostsApproved" | "totalDeferredAmount" | "periodCostsToBePaid">
+  >();
+
+const CostsAndGrantSummary = ({
+  claim,
+  project,
+}: {
+  claim: Pick<
+    ClaimDto,
+    "isApproved" | "totalCostsSubmitted" | "totalCostsApproved" | "totalDeferredAmount" | "periodCostsToBePaid"
+  >;
+  project: Pick<ProjectDto, "roles">;
+}) => {
+  const { isFc } = getAuthRoles(project.roles);
+  if (!isFc || !claim || !claim?.isApproved) {
     return null;
   }
 
-  const ClaimSummaryDetails = TypedDetails<ClaimDto>();
-
   return (
-    <Section>
-      <SectionPanel qa="claims-summary">
-        <DualDetails>
-          <ClaimSummaryDetails.Details
-            title={<Content value={x => x.pages.claimDetails.costsAndGrantSummaryTitle} />}
-            data={data.claim}
-            qa="claim-costs-summary"
-          >
-            <ClaimSummaryDetails.Currency
-              label={<Content value={x => x.claimsLabels.costsClaimed} />}
-              qa="costs-claimed"
-              value={x => x.totalCostsSubmitted}
-            />
-            <ClaimSummaryDetails.Currency
-              label={<Content value={x => x.claimsLabels.costsApproved} />}
-              qa="costs-approved"
-              value={x => x.totalCostsApproved}
-            />
-            <ClaimSummaryDetails.Currency
-              label={<Content value={x => x.claimsLabels.costsDeferred} />}
-              qa="costs-deferred"
-              value={x => x.totalDeferredAmount}
-            />
-          </ClaimSummaryDetails.Details>
+    <SectionPanel qa="claims-summary">
+      <DualDetails>
+        <ClaimSummaryDetails.Details
+          title={<Content value={x => x.pages.claimDetails.costsAndGrantSummaryTitle} />}
+          data={claim}
+          qa="claim-costs-summary"
+        >
+          <ClaimSummaryDetails.Currency
+            label={<Content value={x => x.claimsLabels.costsClaimed} />}
+            qa="costs-claimed"
+            value={x => x.totalCostsSubmitted}
+          />
+          <ClaimSummaryDetails.Currency
+            label={<Content value={x => x.claimsLabels.costsApproved} />}
+            qa="costs-approved"
+            value={x => x.totalCostsApproved}
+          />
+          <ClaimSummaryDetails.Currency
+            label={<Content value={x => x.claimsLabels.costsDeferred} />}
+            qa="costs-deferred"
+            value={x => x.totalDeferredAmount}
+          />
+        </ClaimSummaryDetails.Details>
 
-          <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
-            <ClaimSummaryDetails.Currency
-              label={<Content value={x => x.claimsLabels.totalGrantPaid} />}
-              qa="total-grant-paid"
-              value={x => x.periodCostsToBePaid}
-            />
-          </ClaimSummaryDetails.Details>
-        </DualDetails>
-      </SectionPanel>
-    </Section>
+        <ClaimSummaryDetails.Details data={claim} qa="claim-grant-summary">
+          <ClaimSummaryDetails.Currency
+            label={<Content value={x => x.claimsLabels.totalGrantPaid} />}
+            qa="total-grant-paid"
+            value={x => x.periodCostsToBePaid}
+          />
+        </ClaimSummaryDetails.Details>
+      </DualDetails>
+    </SectionPanel>
   );
 };
 
-const renderPageSubtitle = (data: CombinedData) => {
-  return <Section title={getClaimPeriodTitle(data)} />;
-};
-
-const renderTableSection = (data: CombinedData & BaseProps, periodId: PeriodId) => {
-  return <Section>{renderTable(data, periodId)}</Section>;
-};
-
-const renderAccordionSection = (
-  data: CombinedData,
-  forecastData: Data["forecastData"],
-  statusChanges: Data["statusChanges"],
-) => {
+const AccordionSection = ({
+  data,
+  forecastData,
+  statusChanges,
+}: {
+  data: {
+    claim: Pick<ClaimData["claim"], "status">;
+    project: Pick<ClaimData["project"], "roles">;
+    documents: ClaimData["documents"];
+  };
+  forecastData: ClaimData["forecastData"];
+  statusChanges: ClaimData["statusChanges"];
+}) => {
   const isArchived =
     data.claim.status === ClaimStatus.PAID ||
     data.claim.status === ClaimStatus.APPROVED ||
@@ -161,23 +202,27 @@ const renderAccordionSection = (
   const { isMo } = getAuthRoles(data.project.roles);
   const showForecast = forecastData && !(isArchived && isMo);
   return (
-    <Section>
-      <Accordion>
-        {showForecast && renderForecastItem(forecastData as Pending<ForecastData>)}
+    <Accordion>
+      {showForecast && <ForecastItem pendingForecastData={forecastData} />}
 
-        {renderLogsItem(statusChanges)}
+      <LogsItem statusChanges={statusChanges} />
 
-        {isMo && (
-          <AccordionItem qa="documents-list-accordion" title={x => x.claimsLabels.documentListTitle}>
-            <DocumentView hideHeader qa="claim-detail-documents" documents={data.documents} />
-          </AccordionItem>
-        )}
-      </Accordion>
-    </Section>
+      {isMo && (
+        <AccordionItem qa="documents-list-accordion" title={x => x.claimsLabels.documentListTitle}>
+          <DocumentView hideHeader qa="claim-detail-documents" documents={data.documents} />
+        </AccordionItem>
+      )}
+    </Accordion>
   );
 };
 
-const renderCommentsFromFC = (project: ProjectDto, claim: ClaimDto) => {
+const CommentsFromFC = ({
+  project,
+  claim,
+}: {
+  project: Pick<ProjectDto, "roles">;
+  claim: Pick<ClaimDto, "comments" | "status">;
+}) => {
   const { isMo } = getAuthRoles(project.roles);
   if (isMo && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
     return (
@@ -190,28 +235,20 @@ const renderCommentsFromFC = (project: ProjectDto, claim: ClaimDto) => {
   return null;
 };
 
-const renderTable = (data: CombinedData & BaseProps, periodId: PeriodId) => {
+const ClaimDetailsTable = ({ data, periodId }: { data: ClaimData & BaseProps; periodId: PeriodId }) => {
   const { isFc } = getAuthRoles(data.partner.roles);
 
   return isFc ? (
-    <Claims.ClaimTable
-      getLink={x => getLink(x, data.project, data.partner, periodId, data.routes)}
-      standardOverheadRate={data.config.options.standardOverheadRate}
-      {...data}
-    />
+    <ClaimTable getLink={x => getLink(x, data.project, data.partner, periodId, data.routes)} {...data} />
   ) : (
-    <Claims.ClaimReviewTable
-      getLink={x => getLink(x, data.project, data.partner, periodId, data.routes)}
-      standardOverheadRate={data.config.options.standardOverheadRate}
-      {...data}
-    />
+    <ClaimReviewTable getLink={x => getLink(x, data.project, data.partner, periodId, data.routes)} {...data} />
   );
 };
 
 const getLink = (
   costCategoryId: string,
-  project: ProjectDto,
-  partner: PartnerDto,
+  project: Pick<ProjectDto, "id" | "roles">,
+  partner: Pick<PartnerDto, "id" | "roles">,
   periodId: PeriodId,
   routes: BaseProps["routes"],
 ): ILinkInfo | null => {
@@ -231,22 +268,19 @@ const getLink = (
   });
 };
 
-const getClaimPeriodTitle = (data: CombinedData) => {
-  return <Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
-};
-
-const renderForecastItem = (pendingForecastData: Pending<Claims.ForecastData>) => {
+const ForecastItem = ({ pendingForecastData }: { pendingForecastData: ClaimData["forecastData"] }) => {
+  if (!pendingForecastData) return null;
   return (
     <AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
       <Loader
         pending={pendingForecastData}
-        render={forecastData => <Claims.ForecastTable data={forecastData} hideValidation />}
+        render={forecastData => <ForecastTable data={forecastData} hideValidation />}
       />
     </AccordionItem>
   );
 };
 
-const renderLogsItem = (statusChanges: Data["statusChanges"]) => {
+const LogsItem = ({ statusChanges }: { statusChanges: ClaimData["statusChanges"] }) => {
   return (
     <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
       {/* Keeping logs inside loader because accordion defaults to closed*/}
@@ -272,7 +306,7 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => {
   const costCategories = stores.costCategories.getAllFiltered(props.partnerId);
   const claim = stores.claims.get(props.partnerId, props.periodId);
 
-  const forecastData: Pending<Claims.ForecastData> | null =
+  const forecastData: ClaimData["forecastData"] | null =
     isMoOrPM && !isFC
       ? Pending.combine({
           project,
@@ -295,7 +329,11 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => {
     claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
   });
 
-  const statusChanges = stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId);
+  const statusChanges: ClaimData["statusChanges"] = stores.claims.getStatusChanges(
+    props.projectId,
+    props.partnerId,
+    props.periodId,
+  );
   return (
     <PageLoader
       pending={combined}
