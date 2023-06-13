@@ -1,10 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { ValidationMessage } from "./ValidationMessage";
+import { BrowserRouter } from "react-router-dom";
 
 const meta: Meta<typeof ValidationMessage> = {
   title: "IUK Components/Message Box",
   component: ValidationMessage,
+  decorators: [
+    Story => {
+      return (
+        <BrowserRouter>
+          <Story />
+        </BrowserRouter>
+      );
+    },
+  ],
 };
 
 export default meta;

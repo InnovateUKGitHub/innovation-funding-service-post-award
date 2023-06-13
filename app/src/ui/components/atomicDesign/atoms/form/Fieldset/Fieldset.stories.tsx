@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { BrowserRouter } from "react-router-dom";
 import { Fieldset } from "./Fieldset";
 import { Hint } from "../Hint/Hint";
 import { Label } from "../Label/Label";
