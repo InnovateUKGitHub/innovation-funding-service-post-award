@@ -39,19 +39,21 @@ export interface ReviewClaimParams {
 
 interface ReviewData {
   content: ReturnType<typeof useReviewContent>;
-  project: Pending<ProjectDto>;
-  partner: Pending<PartnerDto>;
-  costCategories: Pending<CostCategoryDto[]>;
-  claim: Pending<ClaimDto>;
-  claims: Pending<ClaimDto[]>;
-  claimDetails: Pending<ClaimDetailsSummaryDto[]>;
-  costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
+  // costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
+  claimDetails: CostsSummaryForPeriodDto[];
   forecastDetails: Pending<ForecastDetailsDTO[]>;
   golCosts: Pending<GOLCostDto[]>;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
-  editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
-  documents: Pending<DocumentSummaryDto[]>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
+
+  project: ProjectDto;
+  partner: PartnerDto;
+  costCategories: CostCategoryDto[];
+  claims: Pending<ClaimDto[]>;
+  claim: ClaimDto;
+  pendingClaimDetailsSummary: Pending<ClaimDetailsSummaryDto[]>;
+  editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
+  documents: DocumentSummaryDto[];
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
 
 const Form = ACC.createTypedForm<ClaimDto>();
@@ -114,6 +116,7 @@ interface CombinedData {
 
 const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData & ReviewCallbacks & BaseProps) => {
   const { isClient } = useMounted();
+  const data = props;
 
   const renderContents = (data: CombinedData) => {
     const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
@@ -208,22 +211,29 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
   };
 
   const renderForecastItem = () => {
-    const pendingForecastData: Pending<ACC.Claims.ForecastData> = Pending.combine({
-      project: props.project,
-      partner: props.partner,
-      claim: props.claim,
+    const pendingForecastData = Pending.combine({
       claims: props.claims,
-      claimDetails: props.claimDetails,
+      claimDetails: props.pendingClaimDetailsSummary,
       forecastDetails: props.forecastDetails,
       golCosts: props.golCosts,
-      costCategories: props.costCategories,
     });
 
     return (
       <ACC.AccordionItem qa="forecast-accordion" title={content.accordionTitleForecast}>
         <ACC.Loader
           pending={pendingForecastData}
-          render={forecastData => <ACC.Claims.ForecastTable hideValidation data={forecastData} />}
+          render={forecastData => (
+            <ACC.Claims.ForecastTable
+              hideValidation
+              data={{
+                ...forecastData,
+                project: props.project,
+                partner: props.partner,
+                claim: props.claim,
+                costCategories: props.costCategories,
+              }}
+            />
+          )}
         />
       </ACC.AccordionItem>
     );
@@ -435,18 +445,7 @@ const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData &
     props.onUpdate(true, claimToUpdate);
   };
 
-  const combined = Pending.combine({
-    project: props.project,
-    partner: props.partner,
-    costCategories: props.costCategories,
-    claim: props.claim,
-    claimDetails: props.costsSummaryForPeriod,
-    editor: props.editor,
-    documents: props.documents,
-    documentsEditor: props.documentsEditor,
-  });
-
-  return <ACC.PageLoader pending={combined} render={data => renderContents(data)} />;
+  return renderContents(data);
 };
 
 const initEditor = (dto: ClaimDto) => {
@@ -462,65 +461,84 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
   const reviewContent = useReviewContent();
   const navigate = useNavigate();
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    partner: stores.partners.getById(props.partnerId),
+    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+    claim: stores.claims.get(props.partnerId, props.periodId),
+    claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
+    editor: stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId, initEditor),
+    documents: stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId),
+    documentsEditor: stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId),
+  });
+
+  const pendingData = {
+    claims: stores.claims.getAllClaimsForPartner(props.partnerId),
+    statusChanges: stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId),
+    forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
+    golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
+    pendingClaimDetailsSummary: stores.claimDetails.getAllByPartner(props.partnerId),
+  };
+
+  const onUpdate = (saving: boolean, dto: ClaimDto) => {
+    stores.messages.clearMessages();
+
+    stores.claims.updateClaimEditor(
+      false,
+      saving,
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      dto,
+      getContent(x =>
+        dto.status === ClaimStatus.MO_QUERIED ? x.claimsMessages.claimQueried : x.claimsMessages.claimApproved,
+      ),
+      () => navigate(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId }).path),
+    );
+  };
+
+  const onUpload = (saving: boolean, dto: MultipleDocumentUploadDto) => {
+    stores.messages.clearMessages();
+
+    stores.claimDocuments.updateClaimDocumentsEditor(
+      saving,
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      dto,
+      getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length })),
+      () => stores.claims.markClaimAsStale(props.partnerId, props.periodId),
+    );
+  };
+
+  const onDelete = (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => {
+    stores.messages.clearMessages();
+
+    stores.claimDocuments.deleteClaimDocument(
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      dto,
+      document,
+      getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
+      () => stores.claims.markClaimAsStale(props.partnerId, props.periodId),
+    );
+  };
+
   return (
-    <ReviewComponent
-      {...props}
-      content={reviewContent}
-      project={stores.projects.getById(props.projectId)}
-      partner={stores.partners.getById(props.partnerId)}
-      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
-      claim={stores.claims.get(props.partnerId, props.periodId)}
-      claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
-      costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
-      claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
-      forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
-      golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
-      statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
-      editor={stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId, initEditor)}
-      documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
-      documentsEditor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
-      onUpdate={(saving, dto) => {
-        stores.messages.clearMessages();
-
-        stores.claims.updateClaimEditor(
-          false,
-          saving,
-          props.projectId,
-          props.partnerId,
-          props.periodId,
-          dto,
-          getContent(x =>
-            dto.status === ClaimStatus.MO_QUERIED ? x.claimsMessages.claimQueried : x.claimsMessages.claimApproved,
-          ),
-          () => navigate(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId }).path),
-        );
-      }}
-      onUpload={(saving, dto) => {
-        stores.messages.clearMessages();
-
-        stores.claimDocuments.updateClaimDocumentsEditor(
-          saving,
-          props.projectId,
-          props.partnerId,
-          props.periodId,
-          dto,
-          getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length })),
-          () => stores.claims.markClaimAsStale(props.partnerId, props.periodId),
-        );
-      }}
-      onDelete={(dto, document) => {
-        stores.messages.clearMessages();
-
-        stores.claimDocuments.deleteClaimDocument(
-          props.projectId,
-          props.partnerId,
-          props.periodId,
-          dto,
-          document,
-          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
-          () => stores.claims.markClaimAsStale(props.partnerId, props.periodId),
-        );
-      }}
+    <ACC.PageLoader
+      pending={combined}
+      render={data => (
+        <ReviewComponent
+          onUpdate={onUpdate}
+          onUpload={onUpload}
+          onDelete={onDelete}
+          content={reviewContent}
+          {...pendingData}
+          {...props}
+          {...data}
+        />
+      )}
     />
   );
 };
