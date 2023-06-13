@@ -12,10 +12,28 @@ import {
 } from "@framework/types";
 import { useStores } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import * as ACC from "@ui/components";
+import {
+  Page,
+  BackLink,
+  Section,
+  Content,
+  Projects,
+  ValidationMessage,
+  Claims,
+  TypedDetails,
+  SectionPanel,
+  DualDetails,
+  Accordion,
+  AccordionItem,
+  DocumentView,
+  Renderers,
+  PageLoader,
+  Loader,
+  Logs,
+} from "@ui/components";
 import { ForecastData } from "@ui/components/claims";
 import { Pending } from "../../../shared/pending";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { BaseProps, defineRoute } from "../containerBase";
 
 interface Params {
   projectId: ProjectId;
@@ -29,7 +47,7 @@ interface Data {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   documents: DocumentSummaryDto[];
-  forecastData: Pending<ACC.Claims.ForecastData> | null;
+  forecastData: Pending<Claims.ForecastData> | null;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
 
   claimDetails: CostsSummaryForPeriodDto[];
@@ -44,193 +62,201 @@ interface CombinedData {
   claimDetails: CostsSummaryForPeriodDto[];
 }
 
-export class ClaimsDetailsComponent extends ContainerBase<Params, Data> {
-  render() {
-    const { project, partner, claim } = this.props;
+export const ClaimsDetailsComponent = (props: Params & BaseProps & CombinedData & Data) => {
+  const { project, partner, claim, forecastData, statusChanges } = props;
 
-    const data = this.props;
-    const { isPmOrMo } = getAuthRoles(project.roles);
-    const backLink = isPmOrMo
-      ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id })
-      : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: partner.id });
+  const data = props;
+  const { isPmOrMo } = getAuthRoles(project.roles);
+  const backLink = isPmOrMo
+    ? props.routes.allClaimsDashboard.getLink({ projectId: project.id })
+    : props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: partner.id });
 
-    return (
-      <ACC.Page
-        backLink={
-          <ACC.BackLink route={backLink}>
-            <ACC.Content value={x => x.pages.claimDetails.backLink} />
-          </ACC.BackLink>
-        }
-        pageTitle={<ACC.Projects.Title title={project.title} projectNumber={project.projectNumber} />}
-        partnerStatus={partner.partnerStatus}
-      >
-        {/* If the partner is not withdrawn, and it's the final claim, show message. */}
-        {!partner.isWithdrawn && claim.isFinalClaim && (
-          <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
-        )}
-        {this.renderPageSubtitle(data)}
-        {this.renderCostsAndGrantSummary(data)}
-        {this.renderTableSection(data)}
-        {this.renderAccordionSection(data)}
-        {this.renderCommentsFromFC(data.project, data.claim)}
-      </ACC.Page>
-    );
-  }
+  return (
+    <Page
+      backLink={
+        <BackLink route={backLink}>
+          <Content value={x => x.pages.claimDetails.backLink} />
+        </BackLink>
+      }
+      pageTitle={<Projects.Title title={project.title} projectNumber={project.projectNumber} />}
+      partnerStatus={partner.partnerStatus}
+    >
+      {/* If the partner is not withdrawn, and it's the final claim, show message. */}
+      {!partner.isWithdrawn && claim.isFinalClaim && (
+        <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
+      )}
+      {renderPageSubtitle(data)}
+      {renderCostsAndGrantSummary(data)}
+      {renderTableSection(data, props.periodId)}
+      {renderAccordionSection(data, forecastData, statusChanges)}
+      {renderCommentsFromFC(project, claim)}
+    </Page>
+  );
+};
 
-  private renderCostsAndGrantSummary(data: CombinedData) {
-    const { isFc } = getAuthRoles(data.project.roles);
-    if (!isFc || !data.claim || !data.claim.isApproved) {
-      return null;
-    }
-
-    const ClaimSummaryDetails = ACC.TypedDetails<ClaimDto>();
-
-    return (
-      <ACC.Section>
-        <ACC.SectionPanel qa="claims-summary">
-          <ACC.DualDetails>
-            <ClaimSummaryDetails.Details
-              title={<ACC.Content value={x => x.pages.claimDetails.costsAndGrantSummaryTitle} />}
-              data={data.claim}
-              qa="claim-costs-summary"
-            >
-              <ClaimSummaryDetails.Currency
-                label={<ACC.Content value={x => x.claimsLabels.costsClaimed} />}
-                qa="costs-claimed"
-                value={x => x.totalCostsSubmitted}
-              />
-              <ClaimSummaryDetails.Currency
-                label={<ACC.Content value={x => x.claimsLabels.costsApproved} />}
-                qa="costs-approved"
-                value={x => x.totalCostsApproved}
-              />
-              <ClaimSummaryDetails.Currency
-                label={<ACC.Content value={x => x.claimsLabels.costsDeferred} />}
-                qa="costs-deferred"
-                value={x => x.totalDeferredAmount}
-              />
-            </ClaimSummaryDetails.Details>
-
-            <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
-              <ClaimSummaryDetails.Currency
-                label={<ACC.Content value={x => x.claimsLabels.totalGrantPaid} />}
-                qa="total-grant-paid"
-                value={x => x.periodCostsToBePaid}
-              />
-            </ClaimSummaryDetails.Details>
-          </ACC.DualDetails>
-        </ACC.SectionPanel>
-      </ACC.Section>
-    );
-  }
-
-  private renderPageSubtitle(data: CombinedData) {
-    return <ACC.Section title={this.getClaimPeriodTitle(data)} />;
-  }
-
-  private renderTableSection(data: CombinedData) {
-    return <ACC.Section>{this.renderTable(data)}</ACC.Section>;
-  }
-
-  private renderAccordionSection(data: CombinedData) {
-    const isArchived =
-      data.claim.status === ClaimStatus.PAID ||
-      data.claim.status === ClaimStatus.APPROVED ||
-      ClaimStatus.PAYMENT_REQUESTED;
-    const { isMo } = getAuthRoles(data.project.roles);
-    const showForecast = this.props.forecastData && !(isArchived && isMo);
-    return (
-      <ACC.Section>
-        <ACC.Accordion>
-          {showForecast && this.renderForecastItem(this.props.forecastData as Pending<ForecastData>)}
-
-          {this.renderLogsItem()}
-
-          {isMo && (
-            <ACC.AccordionItem qa="documents-list-accordion" title={x => x.claimsLabels.documentListTitle}>
-              <ACC.DocumentView hideHeader qa="claim-detail-documents" documents={data.documents} />
-            </ACC.AccordionItem>
-          )}
-        </ACC.Accordion>
-      </ACC.Section>
-    );
-  }
-
-  private renderCommentsFromFC(project: ProjectDto, claim: ClaimDto) {
-    const { isMo } = getAuthRoles(project.roles);
-    if (isMo && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
-      return (
-        <ACC.Section title={x => x.pages.claimDetails.sectionTitleComments} qa="additionalComments">
-          <ACC.Renderers.SimpleString multiline>{claim.comments}</ACC.Renderers.SimpleString>
-        </ACC.Section>
-      );
-    }
-
+const renderCostsAndGrantSummary = (data: CombinedData) => {
+  const { isFc } = getAuthRoles(data.project.roles);
+  if (!isFc || !data.claim || !data.claim.isApproved) {
     return null;
   }
 
-  private renderTable(data: CombinedData) {
-    const { isFc } = getAuthRoles(data.partner.roles);
+  const ClaimSummaryDetails = TypedDetails<ClaimDto>();
 
-    return isFc ? (
-      <ACC.Claims.ClaimTable
-        getLink={x => this.getLink(x, data.project, data.partner)}
-        standardOverheadRate={this.props.config.options.standardOverheadRate}
-        {...data}
-      />
-    ) : (
-      <ACC.Claims.ClaimReviewTable
-        getLink={x => this.getLink(x, data.project, data.partner)}
-        standardOverheadRate={this.props.config.options.standardOverheadRate}
-        {...data}
-      />
-    );
-  }
+  return (
+    <Section>
+      <SectionPanel qa="claims-summary">
+        <DualDetails>
+          <ClaimSummaryDetails.Details
+            title={<Content value={x => x.pages.claimDetails.costsAndGrantSummaryTitle} />}
+            data={data.claim}
+            qa="claim-costs-summary"
+          >
+            <ClaimSummaryDetails.Currency
+              label={<Content value={x => x.claimsLabels.costsClaimed} />}
+              qa="costs-claimed"
+              value={x => x.totalCostsSubmitted}
+            />
+            <ClaimSummaryDetails.Currency
+              label={<Content value={x => x.claimsLabels.costsApproved} />}
+              qa="costs-approved"
+              value={x => x.totalCostsApproved}
+            />
+            <ClaimSummaryDetails.Currency
+              label={<Content value={x => x.claimsLabels.costsDeferred} />}
+              qa="costs-deferred"
+              value={x => x.totalDeferredAmount}
+            />
+          </ClaimSummaryDetails.Details>
 
-  private getLink(costCategoryId: string, project: ProjectDto, partner: PartnerDto): ILinkInfo | null {
-    // can only link if monitoring officer for project or, pm or fc at partner level
-    // ie pm can not see other partners line items but can see own
-    const { isMo: isProjectMo } = getAuthRoles(project.roles);
-    const { isPm: isPartnerPm, isFc: isPartnerFc } = getAuthRoles(partner.roles);
-    const partnerHasCorrectRole = isProjectMo || isPartnerPm || isPartnerFc;
+          <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
+            <ClaimSummaryDetails.Currency
+              label={<Content value={x => x.claimsLabels.totalGrantPaid} />}
+              qa="total-grant-paid"
+              value={x => x.periodCostsToBePaid}
+            />
+          </ClaimSummaryDetails.Details>
+        </DualDetails>
+      </SectionPanel>
+    </Section>
+  );
+};
 
-    if (!partnerHasCorrectRole) return null;
+const renderPageSubtitle = (data: CombinedData) => {
+  return <Section title={getClaimPeriodTitle(data)} />;
+};
 
-    return this.props.routes.claimLineItems.getLink({
-      partnerId: this.props.partnerId,
-      projectId: this.props.projectId,
-      periodId: this.props.periodId,
-      costCategoryId,
-    });
-  }
+const renderTableSection = (data: CombinedData & BaseProps, periodId: PeriodId) => {
+  return <Section>{renderTable(data, periodId)}</Section>;
+};
 
-  private getClaimPeriodTitle(data: CombinedData) {
-    return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
-  }
+const renderAccordionSection = (
+  data: CombinedData,
+  forecastData: Data["forecastData"],
+  statusChanges: Data["statusChanges"],
+) => {
+  const isArchived =
+    data.claim.status === ClaimStatus.PAID ||
+    data.claim.status === ClaimStatus.APPROVED ||
+    ClaimStatus.PAYMENT_REQUESTED;
+  const { isMo } = getAuthRoles(data.project.roles);
+  const showForecast = forecastData && !(isArchived && isMo);
+  return (
+    <Section>
+      <Accordion>
+        {showForecast && renderForecastItem(forecastData as Pending<ForecastData>)}
 
-  private renderForecastItem(pendingForecastData: Pending<ACC.Claims.ForecastData>) {
+        {renderLogsItem(statusChanges)}
+
+        {isMo && (
+          <AccordionItem qa="documents-list-accordion" title={x => x.claimsLabels.documentListTitle}>
+            <DocumentView hideHeader qa="claim-detail-documents" documents={data.documents} />
+          </AccordionItem>
+        )}
+      </Accordion>
+    </Section>
+  );
+};
+
+const renderCommentsFromFC = (project: ProjectDto, claim: ClaimDto) => {
+  const { isMo } = getAuthRoles(project.roles);
+  if (isMo && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
     return (
-      <ACC.AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
-        <ACC.Loader
-          pending={pendingForecastData}
-          render={forecastData => <ACC.Claims.ForecastTable data={forecastData} hideValidation />}
-        />
-      </ACC.AccordionItem>
+      <Section title={x => x.pages.claimDetails.sectionTitleComments} qa="additionalComments">
+        <Renderers.SimpleString multiline>{claim.comments}</Renderers.SimpleString>
+      </Section>
     );
   }
 
-  private renderLogsItem() {
-    return (
-      <ACC.AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
-        {/* Keeping logs inside loader because accordion defaults to closed*/}
-        <ACC.Loader
-          pending={this.props.statusChanges}
-          render={statusChanges => <ACC.Logs qa="claim-status-change-table" data={statusChanges} />}
-        />
-      </ACC.AccordionItem>
-    );
-  }
-}
+  return null;
+};
+
+const renderTable = (data: CombinedData & BaseProps, periodId: PeriodId) => {
+  const { isFc } = getAuthRoles(data.partner.roles);
+
+  return isFc ? (
+    <Claims.ClaimTable
+      getLink={x => getLink(x, data.project, data.partner, periodId, data.routes)}
+      standardOverheadRate={data.config.options.standardOverheadRate}
+      {...data}
+    />
+  ) : (
+    <Claims.ClaimReviewTable
+      getLink={x => getLink(x, data.project, data.partner, periodId, data.routes)}
+      standardOverheadRate={data.config.options.standardOverheadRate}
+      {...data}
+    />
+  );
+};
+
+const getLink = (
+  costCategoryId: string,
+  project: ProjectDto,
+  partner: PartnerDto,
+  periodId: PeriodId,
+  routes: BaseProps["routes"],
+): ILinkInfo | null => {
+  // can only link if monitoring officer for project or, pm or fc at partner level
+  // ie pm can not see other partners line items but can see own
+  const { isMo: isProjectMo } = getAuthRoles(project.roles);
+  const { isPm: isPartnerPm, isFc: isPartnerFc } = getAuthRoles(partner.roles);
+  const partnerHasCorrectRole = isProjectMo || isPartnerPm || isPartnerFc;
+
+  if (!partnerHasCorrectRole) return null;
+
+  return routes.claimLineItems.getLink({
+    partnerId: partner.id,
+    projectId: project.id,
+    periodId: periodId,
+    costCategoryId,
+  });
+};
+
+const getClaimPeriodTitle = (data: CombinedData) => {
+  return <Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
+};
+
+const renderForecastItem = (pendingForecastData: Pending<Claims.ForecastData>) => {
+  return (
+    <AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
+      <Loader
+        pending={pendingForecastData}
+        render={forecastData => <Claims.ForecastTable data={forecastData} hideValidation />}
+      />
+    </AccordionItem>
+  );
+};
+
+const renderLogsItem = (statusChanges: Data["statusChanges"]) => {
+  return (
+    <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
+      {/* Keeping logs inside loader because accordion defaults to closed*/}
+      <Loader
+        pending={statusChanges}
+        render={statusChanges => <Logs qa="claim-status-change-table" data={statusChanges} />}
+      />
+    </AccordionItem>
+  );
+};
 
 const ClaimsDetailsContainer = (props: Params & BaseProps) => {
   const stores = useStores();
@@ -246,7 +272,7 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => {
   const costCategories = stores.costCategories.getAllFiltered(props.partnerId);
   const claim = stores.claims.get(props.partnerId, props.periodId);
 
-  const forecastData: Pending<ACC.Claims.ForecastData> | null =
+  const forecastData: Pending<Claims.ForecastData> | null =
     isMoOrPM && !isFC
       ? Pending.combine({
           project,
@@ -271,7 +297,7 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => {
 
   const statusChanges = stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId);
   return (
-    <ACC.PageLoader
+    <PageLoader
       pending={combined}
       render={data => (
         <ClaimsDetailsComponent statusChanges={statusChanges} forecastData={forecastData} {...data} {...props} />
