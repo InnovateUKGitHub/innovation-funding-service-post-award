@@ -1,10 +1,10 @@
 import { useContent } from "@ui/hooks";
 import { createTypedTable } from "../table";
-import { ClaimProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
+import { ClaimTableProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
 
 const CostCategoriesTable = createTypedTable<ClaimTableRow>();
 
-export const ClaimReviewTable = (props: ClaimProps) => {
+export const ClaimReviewTable = (props: ClaimTableProps) => {
   const { getContent } = useContent();
 
   const { costCategories } = createTableData(props);

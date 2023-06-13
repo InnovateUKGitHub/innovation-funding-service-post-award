@@ -4,11 +4,11 @@ import { useContent } from "@ui/hooks";
 import { createTypedTable } from "../table";
 import { ValidationListMessage } from "../ValidationListMessage";
 
-import { ClaimProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
+import { ClaimTableRow, createTableData, ClaimTableProps } from "./utils/costCategoryTableHelper";
 
 const CostCategoriesTable = createTypedTable<ClaimTableRow>();
 
-export const ClaimTable = (props: ClaimProps) => {
+export const ClaimTable = (props: ClaimTableProps) => {
   const { getContent } = useContent();
 
   const { costCategories, totalNegativeCategories } = createTableData(props);

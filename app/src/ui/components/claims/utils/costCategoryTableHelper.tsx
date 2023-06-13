@@ -26,8 +26,16 @@ export interface ClaimProps {
 
 export interface ClaimTableRow {
   isTotal: boolean;
-  category: CostCategoryDto;
-  cost: CostsSummaryForPeriodDto;
+  category: Pick<CostCategoryDto, "id" | "name">;
+  cost: Pick<
+    CostsSummaryForPeriodDto,
+    | "costCategoryId"
+    | "remainingOfferCosts"
+    | "forecastThisPeriod"
+    | "costsClaimedThisPeriod"
+    | "offerTotal"
+    | "costsClaimedToDate"
+  >;
   label: string | JSX.Element;
   differenceInPounds: number;
   diffPercentage: number;
@@ -38,10 +46,26 @@ interface ClaimTableResponse {
   costCategories: ClaimTableRow[];
 }
 
+export interface ClaimTableProps {
+  costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
+  project: Pick<ProjectDto, "competitionType">;
+  partner: Pick<PartnerDto, "organisationType">;
+  claimDetails: Pick<
+    CostsSummaryForPeriodDto,
+    | "costCategoryId"
+    | "remainingOfferCosts"
+    | "forecastThisPeriod"
+    | "costsClaimedThisPeriod"
+    | "offerTotal"
+    | "costsClaimedToDate"
+  >[];
+  getLink: (costCategoryId: string) => ILinkInfo | null;
+  validation?: Result;
+}
 /**
  * creates the table data
  */
-export function createTableData(props: ClaimProps): ClaimTableResponse {
+export function createTableData(props: ClaimTableProps): ClaimTableResponse {
   const costCategories: ClaimTableRow[] = [];
   const totalNegativeCategories: ClaimTableRow[] = [];
 
@@ -84,7 +108,7 @@ const emptyCostsSummaryForPeriodDto: CostsSummaryForPeriodDto = {
 /**
  * calculates total for the row
  */
-function calculateTotalRow(claimDetails: ClaimProps["claimDetails"]): ClaimTableRow {
+function calculateTotalRow(claimDetails: ClaimTableProps["claimDetails"]): ClaimTableRow {
   let totalRowCosts: CostsSummaryForPeriodDto = {
     costCategoryId: "",
     offerTotal: 0,
@@ -133,8 +157,23 @@ function calculateTotalRow(claimDetails: ClaimProps["claimDetails"]): ClaimTable
 /**
  * creates a row
  */
-function createRow(category: CostCategoryDto, claimItem: ClaimProps) {
-  const { claimDetails, ...restClaimProps } = claimItem;
+function createRow(
+  category: Pick<CostCategoryDto, "id" | "name">,
+  claimItem: {
+    claimDetails: Pick<
+      CostsSummaryForPeriodDto,
+      | "costCategoryId"
+      | "remainingOfferCosts"
+      | "forecastThisPeriod"
+      | "costsClaimedThisPeriod"
+      | "offerTotal"
+      | "costsClaimedToDate"
+    >[];
+    getLink: ClaimTableProps["getLink"];
+    validation?: ClaimTableProps["validation"];
+  },
+) {
+  const { claimDetails, getLink, validation } = claimItem;
 
   // TODO: ID will always be present... 🤷🏻‍♂️
   // Note: This function may not have context of any claim details, so we provide a default
@@ -143,7 +182,7 @@ function createRow(category: CostCategoryDto, claimItem: ClaimProps) {
   const hasNegativeCost: boolean = !!item && item.remainingOfferCosts < 0;
 
   const costCategory = {
-    label: renderCostCategory(restClaimProps, category),
+    label: renderCostCategory({ getLink, validation }, category),
     isTotal: false,
     category,
     cost: item || emptyCostsSummaryForPeriodDto,
