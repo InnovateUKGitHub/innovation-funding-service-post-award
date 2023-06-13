@@ -28,13 +28,13 @@ export interface PrepareClaimParams {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  partner: Pending<PartnerDto>;
-  costCategories: Pending<CostCategoryDto[]>;
-  claim: Pending<ClaimDto>;
-  claimOverrides: Pending<ClaimOverrideRateDto>;
-  costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
-  editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
+  project: ProjectDto;
+  partner: PartnerDto;
+  costCategories: CostCategoryDto[];
+  claim: ClaimDto;
+  claimOverrides: ClaimOverrideRateDto;
+  claimDetails: CostsSummaryForPeriodDto[];
+  editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
 }
 
@@ -55,21 +55,8 @@ interface CombinedData {
 const Form = ACC.createTypedForm<ClaimDto>();
 
 class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks> {
-  public render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      partner: this.props.partner,
-      costCategories: this.props.costCategories,
-      claim: this.props.claim,
-      claimOverrides: this.props.claimOverrides,
-      claimDetails: this.props.costsSummaryForPeriod,
-      editor: this.props.editor,
-    });
-
-    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
-  }
-
-  private renderContents(data: CombinedData) {
+  render() {
+    const data = this.props;
     return (
       <ACC.Page
         backLink={
@@ -168,29 +155,35 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    partner: stores.partners.getById(props.partnerId),
+    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+    claim: stores.claims.get(props.partnerId, props.periodId),
+    claimOverrides: stores.claimOverrides.getAllByPartner(props.partnerId),
+    claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
+    editor: stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId),
+  });
+
+  const onUpdate = (saving: boolean, dto: Partial<ClaimDto>, link?: { path: string }) => {
+    stores.claims.updateClaimEditor(
+      false,
+      saving,
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      dto as ClaimDto,
+      undefined,
+      () => link && navigate(link.path),
+    );
+  };
+
+  const statusChanges = stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId);
+
   return (
-    <PrepareComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      partner={stores.partners.getById(props.partnerId)}
-      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
-      claim={stores.claims.get(props.partnerId, props.periodId)}
-      claimOverrides={stores.claimOverrides.getAllByPartner(props.partnerId)}
-      costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
-      statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
-      editor={stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId)}
-      onUpdate={(saving, dto, link) =>
-        stores.claims.updateClaimEditor(
-          false,
-          saving,
-          props.projectId,
-          props.partnerId,
-          props.periodId,
-          dto,
-          undefined,
-          () => link && navigate(link.path),
-        )
-      }
+    <ACC.PageLoader
+      pending={combined}
+      render={data => <PrepareComponent statusChanges={statusChanges} onUpdate={onUpdate} {...props} {...data} />}
     />
   );
 };
