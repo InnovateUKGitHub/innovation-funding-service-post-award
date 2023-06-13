@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c647cefa0ece35eade389a3cb92f1a64>>
+ * @generated SignedSource<<1f891395e2a1b0e2ddcb81eba8d4db12>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -129,6 +129,11 @@ v6 = [
               {
                 "alias": null,
                 "args": [
+                  {
+                    "kind": "Literal",
+                    "name": "first",
+                    "value": 1
+                  },
                   {
                     "fields": [
                       {
@@ -350,16 +355,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "31de39094c18dd73c29bf9cd7eba614c",
+    "cacheID": "a8b5b0eaf7cbef001c0da811882446b5",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                    }\n                    Acc_SpendProfileCompleted__c {\n                      label\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                    }\n                    Acc_SpendProfileCompleted__c {\n                      label\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5cb6f66b4f5d0ec16beae69e37ccb27f";
+(node as any).hash = "7d6b7eec312d23b8382ec5b396826b71";
 
 export default node;
