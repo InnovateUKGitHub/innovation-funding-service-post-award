@@ -25,7 +25,6 @@ describe("<ClaimTable />", () => {
     claim: createClaim(),
     claimDetails: createClaimDetails(),
     getLink: createClaimLink(),
-    standardOverheadRate: 20,
   };
 
   const stubContent = {

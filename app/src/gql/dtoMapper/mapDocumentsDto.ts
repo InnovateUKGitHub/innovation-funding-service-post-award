@@ -1,7 +1,7 @@
 import { DocumentDescription } from "@framework/constants";
 import { PartnerDocumentSummaryDtoGql } from "@framework/dtos";
 
-type DocumentSummaryNode = {
+export type DocumentSummaryNode = {
   readonly node: {
     readonly LinkedEntityId?: GQL.Value<string>;
     readonly ContentDocument: {
@@ -75,7 +75,9 @@ const mapper: GQL.DtoMapper<
     return node?.node?.ContentDocument?.ContentSize?.value ?? 0;
   },
   dateCreated(node) {
-    return new Date(node?.node?.ContentDocument?.CreatedDate?.value ?? "");
+    return node?.node?.ContentDocument?.CreatedDate?.value
+      ? new Date(node?.node?.ContentDocument?.CreatedDate?.value)
+      : new Date(NaN);
   },
   uploadedBy(node, { partnerName }) {
     if (!node?.node?.ContentDocument?.LastModifiedBy?.ContactId?.value) {

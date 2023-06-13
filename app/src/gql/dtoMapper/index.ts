@@ -11,3 +11,4 @@ export * from "./mapClaimDetailsDto";
 export * from "./mapIarDue";
 export * from "./mapMonitoringReportDto";
 export * from "./mapDocumentsDto";
+export * from "./mapClaimStatusChange";

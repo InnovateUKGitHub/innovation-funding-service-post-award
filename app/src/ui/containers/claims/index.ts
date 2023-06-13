@@ -4,7 +4,7 @@ export * from "./claimDetailDocuments.page";
 export * from "./claimDocuments.page";
 export * from "./claimForecast.page";
 export * from "./dashboard.page";
-export * from "./details.page";
+export * from "./claimDetails.page";
 export * from "./editClaimLineItems.page";
 export * from "./prepare.page";
 export * from "./review.page";

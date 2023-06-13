@@ -18,6 +18,7 @@ type ClaimNode = Readonly<
     Acc_ClaimStatus__c: GQL.ValueAndLabel<string>;
     Acc_FinalClaim__c: GQL.Value<boolean>;
     Acc_PaidDate__c: GQL.Value<string>;
+    Acc_PeriodCoststobePaid__c: GQL.Value<number>;
     Acc_ProjectParticipant__r: {
       Id: GQL.Maybe<string>;
     } | null;
@@ -25,6 +26,10 @@ type ClaimNode = Readonly<
     Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
     Acc_ProjectPeriodStartDate__c: GQL.Value<string>;
+    Acc_ReasonForDifference__c: GQL.Value<string>;
+    Acc_TotalDeferredAmount__c: GQL.Value<number>;
+    Acc_TotalCostsApproved__c: GQL.Value<number>;
+    Acc_TotalCostsSubmitted__c: GQL.Value<number>;
     LastModifiedDate: GQL.Value<string>;
     Impact_Management_Participation__c: GQL.Value<string>;
     RecordType: {
@@ -36,6 +41,7 @@ type ClaimNode = Readonly<
 type ClaimDtoMapping = Pick<
   ClaimDto,
   | "approvedDate"
+  | "comments"
   | "forecastCost"
   | "id"
   | "isApproved"
@@ -43,6 +49,7 @@ type ClaimDtoMapping = Pick<
   | "lastModifiedDate"
   | "paidDate"
   | "partnerId"
+  | "periodCostsToBePaid"
   | "periodEndDate"
   | "periodId"
   | "periodStartDate"
@@ -50,6 +57,9 @@ type ClaimDtoMapping = Pick<
   | "statusLabel"
   | "totalCost"
   | "impactManagementParticipation"
+  | "totalCostsSubmitted"
+  | "totalCostsApproved"
+  | "totalDeferredAmount"
 >;
 
 const mapper: GQL.DtoMapper<
@@ -65,6 +75,10 @@ const mapper: GQL.DtoMapper<
       ? null
       : clock.parse(node?.Acc_ApprovedDate__c?.value, salesforceDateFormat);
   },
+  comments(node) {
+    return node?.Acc_ReasonForDifference__c?.value ?? "";
+  },
+
   forecastCost(node, additionalData) {
     /*
      * need to obtain the forecast cost from periodProfileDetails mapping,
@@ -96,6 +110,9 @@ const mapper: GQL.DtoMapper<
   partnerId(node) {
     return (node?.Acc_ProjectParticipant__r?.Id ?? "") as PartnerId;
   },
+  periodCostsToBePaid(node) {
+    return node?.Acc_PeriodCoststobePaid__c?.value ?? 0;
+  },
   periodEndDate(node) {
     return !!node?.Acc_ProjectPeriodEndDate__c?.value
       ? clock.parseRequiredSalesforceDate(node?.Acc_ProjectPeriodEndDate__c?.value)
@@ -124,6 +141,15 @@ const mapper: GQL.DtoMapper<
   },
   impactManagementParticipation(node) {
     return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
+  },
+  totalCostsSubmitted(node) {
+    return node?.Acc_TotalCostsSubmitted__c?.value ?? 0;
+  },
+  totalCostsApproved(node) {
+    return node?.Acc_TotalCostsApproved__c?.value ?? 0;
+  },
+  totalDeferredAmount(node) {
+    return node?.Acc_TotalDeferredAmount__c?.value ?? 0;
   },
 };
 

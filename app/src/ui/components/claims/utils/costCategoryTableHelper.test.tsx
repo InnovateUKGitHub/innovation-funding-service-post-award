@@ -14,7 +14,7 @@ import {
   createProjectDto,
 } from "@framework/util/stubDtos";
 import { Link } from "@ui/components";
-import { ILinkInfo } from "@framework/types";
+import { CostCategoryType, ILinkInfo } from "@framework/types";
 import { Result } from "@ui/validation";
 import { PCROrganisationType } from "@framework/constants";
 
@@ -41,7 +41,6 @@ describe("createTableData()", () => {
     costCategories: stubCostCategories,
     claim: stubClaim,
     claimDetails: stubClaimDetails,
-    standardOverheadRate: 20,
     getLink: stubLink,
   };
 
@@ -445,7 +444,7 @@ describe("createTableData()", () => {
             {
               id: "a060C000000dxWwQAI",
               name: "Capital usage",
-              type: 40,
+              type: CostCategoryType.Capital_Usage,
               competitionType: "CR&D",
               organisationType: PCROrganisationType.Industrial,
               isCalculated: false,
@@ -531,7 +530,7 @@ describe("createTableData()", () => {
           {
             id: "a060C000000dxWwQAI",
             name: "Capital usage",
-            type: 40,
+            type: CostCategoryType.Capital_Usage,
             competitionType: "CR&D",
             organisationType: PCROrganisationType.Industrial,
             isCalculated: false,

@@ -19,7 +19,6 @@ export interface ClaimProps {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
-  standardOverheadRate: number; // TODO - doesn't look like we're using this anywhere for calculations/display purposes
   getLink: (costCategoryId: string) => ILinkInfo | null;
   validation?: Result;
 }
@@ -69,7 +68,6 @@ export function createTableData(props: ClaimTableProps): ClaimTableResponse {
   const costCategories: ClaimTableRow[] = [];
   const totalNegativeCategories: ClaimTableRow[] = [];
 
-  // TODO: Filter cost categories on current partner, this needs to be done before the UI loads ideally
   const filteredCategories = props.costCategories.filter(x => {
     const isMatchingCompetition = x.competitionType === props.project.competitionType;
     const isMatchingOrg = x.organisationType === props.partner.organisationType;

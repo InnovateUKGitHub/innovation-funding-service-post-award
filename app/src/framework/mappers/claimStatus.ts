@@ -32,6 +32,27 @@ export const mapToClaimStatus = (status: string): ClaimStatus => {
   return ClaimStatus.UNKNOWN;
 };
 
+export const mapClaimStatusValueToLabel = (value: string) => {
+  switch (value) {
+    case "Submitted":
+      return "Submitted to Monitoring Officer";
+    case "MO Queried":
+      return "Queried by Monitoring Officer";
+    case "Awaiting IAR":
+      return "Independent accountant's report required";
+    case "Awaiting IUK Approval":
+      return "Submitted to Innovate UK";
+    case "Innovate Queried":
+      return "Queried by Innovate UK";
+    case "Payment Requested":
+      return "Payment requested from external funder";
+    case "Approved":
+      return "Payment being processed";
+    default:
+      return value;
+  }
+};
+
 export const mapToClaimStatusLabel = (
   claimStatus: ClaimStatus,
   originalStatusLabel: string,

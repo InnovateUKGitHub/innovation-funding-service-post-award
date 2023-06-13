@@ -2,7 +2,7 @@ import type { ProjectDtoGql } from "@framework/dtos";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
 import { getProjectStatus } from "@framework/mappers/projectStatus";
-import { TypeOfAid } from "@framework/types";
+import { ClaimFrequency, TypeOfAid } from "@framework/types";
 import { Clock, dayComparator, roundCurrency } from "@framework/util";
 
 const clock = new Clock();
@@ -18,6 +18,17 @@ const mapTypeOfAidToEnum = (typeOfAid: string): TypeOfAid => {
   }
 };
 
+const mapClaimFrequencyToEnum = (freq: string): ClaimFrequency => {
+  switch (freq) {
+    case "Quarterly":
+      return ClaimFrequency.Quarterly;
+    case "Monthly":
+      return ClaimFrequency.Monthly;
+    default:
+      return ClaimFrequency.Unknown;
+  }
+};
+
 type ProjectNode = Readonly<
   Partial<{
     Id: string;
@@ -26,8 +37,10 @@ type ProjectNode = Readonly<
       partnerRoles?: ReadonlyArray<SfRoles & { partnerId: string }>;
     };
     isActive: boolean;
+    Acc_ClaimFrequency__c: GQL.Value<string>;
     Acc_ClaimsForReview__c: GQL.Value<number>;
     Acc_ClaimsOverdue__c: GQL.Value<number>;
+    Acc_ClaimsUnderQuery__c: GQL.Value<number>;
     Acc_CompetitionType__c: GQL.Value<string>;
     Acc_CompetitionId__r: {
       Name?: GQL.Value<string>;
@@ -63,9 +76,12 @@ type ProjectNode = Readonly<
 type ProjectDtoMapping = Pick<
   ProjectDtoGql,
   | "id"
+  | "claimFrequency"
+  | "claimFrequencyName"
   | "claimedPercentage"
   | "claimsOverdue"
   | "claimsToReview"
+  | "claimsWithParticipant"
   | "competitionType"
   | "costsClaimedToDate"
   | "durationInMonths"
@@ -103,6 +119,12 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   id(node) {
     return (node?.Id ?? "") as ProjectId;
   },
+  claimFrequency(node) {
+    return mapClaimFrequencyToEnum(node?.Acc_ClaimFrequency__c?.value ?? "unknown");
+  },
+  claimFrequencyName(node) {
+    return node?.Acc_ClaimFrequency__c?.value ?? "Unknown";
+  },
   claimedPercentage(node) {
     return !!node?.Acc_GOLTotalCostAwarded__c?.value
       ? roundCurrency((100 * (node?.Acc_TotalProjectCosts__c?.value ?? 0)) / node?.Acc_GOLTotalCostAwarded__c?.value)
@@ -113,6 +135,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   claimsToReview(node) {
     return node?.Acc_ClaimsForReview__c?.value ?? 0;
+  },
+  claimsWithParticipant(node) {
+    return node?.Acc_ClaimsUnderQuery__c?.value ?? 0;
   },
   competitionType(node) {
     return node?.Acc_CompetitionType__c?.value ?? "Unknown";

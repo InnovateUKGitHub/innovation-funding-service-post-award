@@ -247,9 +247,13 @@ export function mapToPartnerDtoArray<
     partnerEdges?.map(node => {
       if (additionalData && "partnerRoles" in additionalData) {
         const { partnerRoles, ...nextAdditionalData } = additionalData;
+        /*
+         * find the matching partner roles from the array of passed in roles
+         */
         const roles: SfRoles =
           (partnerRoles as SfPartnerRoles[]).find(x => x?.partnerId === node?.node?.Acc_AccountId__c?.value) ??
           defaultRole;
+
         return mapToPartnerDto(node?.node ?? null, pickList, {
           ...nextAdditionalData,
           roles,

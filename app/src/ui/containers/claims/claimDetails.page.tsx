@@ -10,7 +10,6 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { useStores } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   Page,
@@ -26,11 +25,8 @@ import {
   AccordionItem,
   DocumentView,
   Renderers,
-  PageLoader,
-  Loader,
   Logs,
 } from "@ui/components";
-import { Pending } from "../../../shared/pending";
 import { BaseProps, defineRoute } from "../containerBase";
 import {
   ClaimPeriodDate,
@@ -39,6 +35,7 @@ import {
   ForecastTable,
   ForecastDataForTableLayout,
 } from "@ui/components/claims";
+import { useClaimDetailsPageData } from "./claimDetails.logic";
 
 interface Params {
   projectId: ProjectId;
@@ -47,8 +44,26 @@ interface Params {
 }
 
 interface ClaimData {
-  project: Pick<ProjectDto, "roles" | "id" | "projectNumber" | "title" | "competitionType">;
-  partner: Pick<PartnerDto, "id" | "partnerStatus" | "isWithdrawn" | "isLead" | "name" | "roles" | "organisationType">;
+  project: Pick<
+    ProjectDto,
+    | "claimedPercentage"
+    | "claimFrequency"
+    | "claimFrequencyName"
+    | "claimsToReview"
+    | "claimsWithParticipant"
+    | "competitionType"
+    | "costsClaimedToDate"
+    | "id"
+    | "numberOfPeriods"
+    | "periodId"
+    | "projectNumber"
+    | "roles"
+    | "title"
+  >;
+  partner: Pick<
+    PartnerDto,
+    "id" | "partnerStatus" | "isWithdrawn" | "isLead" | "name" | "roles" | "organisationType" | "overheadRate"
+  >;
   costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
   claim: Pick<
     ClaimDto,
@@ -69,9 +84,10 @@ interface ClaimData {
     "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner"
   >[];
 
-  forecastData: Pending<ForecastDataForTableLayout> | null;
-  statusChanges: Pending<Pick<ClaimStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[]>;
+  forecastData: ForecastDataForTableLayout | null;
+  statusChanges: Pick<ClaimStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[];
 
+  // strangely misnamed dto field that the claims table expects
   claimDetails: Pick<
     CostsSummaryForPeriodDto,
     | "costsClaimedToDate"
@@ -83,14 +99,12 @@ interface ClaimData {
   >[];
 }
 
-export const ClaimsDetailsComponent = (props: Params & BaseProps & ClaimData) => {
-  const { project, partner, claim, forecastData, statusChanges } = props;
-
-  const data = props;
-  const { isPmOrMo } = getAuthRoles(project.roles);
+export const ClaimsDetailsPage = (props: Params & BaseProps) => {
+  const data = useClaimDetailsPageData(props.projectId, props.partnerId, props.periodId);
+  const { isPmOrMo, isFc } = getAuthRoles(data.project.roles);
   const backLink = isPmOrMo
-    ? props.routes.allClaimsDashboard.getLink({ projectId: project.id })
-    : props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: partner.id });
+    ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
+    : props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId });
 
   return (
     <Page
@@ -99,28 +113,35 @@ export const ClaimsDetailsComponent = (props: Params & BaseProps & ClaimData) =>
           <Content value={x => x.pages.claimDetails.backLink} />
         </BackLink>
       }
-      pageTitle={<Projects.Title title={project.title} projectNumber={project.projectNumber} />}
-      partnerStatus={partner.partnerStatus}
+      pageTitle={<Projects.Title title={data.project.title} projectNumber={data.project.projectNumber} />}
+      partnerStatus={data.partner.partnerStatus}
     >
       {/* If the partner is not withdrawn, and it's the final claim, show message. */}
-      {!partner.isWithdrawn && claim.isFinalClaim && (
+      {!data.partner.isWithdrawn && data.claim?.isFinalClaim && (
         <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
       )}
-      <Section title={<ClaimPeriodDate claim={claim} partner={partner} />} />
+      <Section title={<ClaimPeriodDate claim={data.claim} partner={data.partner} />} />
 
       <Section>
-        <CostsAndGrantSummary claim={claim} project={project} />
+        <CostsAndGrantSummary claim={data.claim} project={data.project} />
       </Section>
 
       <Section>
-        <ClaimDetailsTable periodId={props.periodId} data={data} />
+        {isFc ? (
+          <ClaimTable getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)} {...data} />
+        ) : (
+          <ClaimReviewTable
+            getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
+            {...data}
+          />
+        )}
       </Section>
 
       <Section>
-        <AccordionSection data={data} forecastData={forecastData} statusChanges={statusChanges} />
+        <AccordionSection data={data} forecastData={data.forecastData} statusChanges={data.statusChanges} />
       </Section>
 
-      <CommentsFromFC project={project} claim={claim} />
+      <CommentsFromFC project={data.project} claim={data.claim} />
     </Page>
   );
 };
@@ -203,9 +224,15 @@ const AccordionSection = ({
   const showForecast = forecastData && !(isArchived && isMo);
   return (
     <Accordion>
-      {showForecast && <ForecastItem pendingForecastData={forecastData} />}
+      {showForecast && (
+        <AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
+          <ForecastTable data={forecastData} hideValidation />
+        </AccordionItem>
+      )}
 
-      <LogsItem statusChanges={statusChanges} />
+      <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
+        <Logs qa="claim-status-change-table" data={statusChanges} />
+      </AccordionItem>
 
       {isMo && (
         <AccordionItem qa="documents-list-accordion" title={x => x.claimsLabels.documentListTitle}>
@@ -235,16 +262,6 @@ const CommentsFromFC = ({
   return null;
 };
 
-const ClaimDetailsTable = ({ data, periodId }: { data: ClaimData & BaseProps; periodId: PeriodId }) => {
-  const { isFc } = getAuthRoles(data.partner.roles);
-
-  return isFc ? (
-    <ClaimTable getLink={x => getLink(x, data.project, data.partner, periodId, data.routes)} {...data} />
-  ) : (
-    <ClaimReviewTable getLink={x => getLink(x, data.project, data.partner, periodId, data.routes)} {...data} />
-  );
-};
-
 const getLink = (
   costCategoryId: string,
   project: Pick<ProjectDto, "id" | "roles">,
@@ -268,87 +285,11 @@ const getLink = (
   });
 };
 
-const ForecastItem = ({ pendingForecastData }: { pendingForecastData: ClaimData["forecastData"] }) => {
-  if (!pendingForecastData) return null;
-  return (
-    <AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
-      <Loader
-        pending={pendingForecastData}
-        render={forecastData => <ForecastTable data={forecastData} hideValidation />}
-      />
-    </AccordionItem>
-  );
-};
-
-const LogsItem = ({ statusChanges }: { statusChanges: ClaimData["statusChanges"] }) => {
-  return (
-    <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
-      {/* Keeping logs inside loader because accordion defaults to closed*/}
-      <Loader
-        pending={statusChanges}
-        render={statusChanges => <Logs qa="claim-status-change-table" data={statusChanges} />}
-      />
-    </AccordionItem>
-  );
-};
-
-const ClaimsDetailsContainer = (props: Params & BaseProps) => {
-  const stores = useStores();
-
-  const auth = stores.users.getCurrentUserAuthorisation();
-  const isMoOrPM = auth
-    .forProject(props.projectId)
-    .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
-  const isFC = auth.forPartner(props.projectId, props.partnerId).hasRole(ProjectRole.FinancialContact);
-
-  const project = stores.projects.getById(props.projectId);
-  const partner = stores.partners.getById(props.partnerId);
-  const costCategories = stores.costCategories.getAllFiltered(props.partnerId);
-  const claim = stores.claims.get(props.partnerId, props.periodId);
-
-  const forecastData: ClaimData["forecastData"] | null =
-    isMoOrPM && !isFC
-      ? Pending.combine({
-          project,
-          partner,
-          claim,
-          claims: stores.claims.getAllClaimsForPartner(props.partnerId),
-          claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
-          forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
-          golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-          costCategories,
-        })
-      : null;
-
-  const combined = Pending.combine({
-    project,
-    partner,
-    costCategories,
-    claim,
-    documents: stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId),
-    claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
-  });
-
-  const statusChanges: ClaimData["statusChanges"] = stores.claims.getStatusChanges(
-    props.projectId,
-    props.partnerId,
-    props.periodId,
-  );
-  return (
-    <PageLoader
-      pending={combined}
-      render={data => (
-        <ClaimsDetailsComponent statusChanges={statusChanges} forecastData={forecastData} {...data} {...props} />
-      )}
-    />
-  );
-};
-
 export const ClaimsDetailsRoute = defineRoute({
   allowRouteInActiveAccess: true,
   routeName: "claimDetails",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId",
-  container: ClaimsDetailsContainer,
+  container: ClaimsDetailsPage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
