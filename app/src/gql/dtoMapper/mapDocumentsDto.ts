@@ -148,11 +148,14 @@ export function mapToPartnerDocumentSummaryDtoArray<
         ),
       )
       // if isFc or Pm, filter out document summaries belonging to other partners
-      .filter(x =>
-        additionalData.currentUserRoles.isMo
-          ? x
-          : (additionalData?.partnerRoles ?? []).find(roles => roles?.partnerId === x[0]?.partnerId)?.isFc,
-      )
+      .filter(x => {
+        if (additionalData.currentUserRoles.isMo) return true;
+
+        const partnerRoles = additionalData?.partnerRoles ?? [];
+        const partnerRole = partnerRoles.find(roles => roles?.partnerId === x[0]?.partnerId);
+
+        return !!partnerRole?.isPm || !!partnerRole?.isFc;
+      })
       .flat()
   );
 }
