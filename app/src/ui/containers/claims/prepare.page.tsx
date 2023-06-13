@@ -42,12 +42,20 @@ export interface PrepareClaimParams {
 }
 
 interface Data {
-  project: ProjectDto;
-  partner: PartnerDto;
-  costCategories: CostCategoryDto[];
-  claim: ClaimDto;
+  project: Pick<ProjectDto, "roles" | "id" | "projectNumber" | "title" | "isNonFec" | "competitionType">;
+  partner: Pick<PartnerDto, "id" | "organisationType">;
+  costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
+  claim: Pick<ClaimDto, "isFinalClaim" | "periodId" | "periodEndDate" | "periodStartDate">;
   claimOverrides: ClaimOverrideRateDto;
-  claimDetails: CostsSummaryForPeriodDto[];
+  claimDetails: Pick<
+    CostsSummaryForPeriodDto,
+    | "costCategoryId"
+    | "remainingOfferCosts"
+    | "forecastThisPeriod"
+    | "costsClaimedThisPeriod"
+    | "costsClaimedToDate"
+    | "offerTotal"
+  >[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
 }
@@ -59,97 +67,78 @@ interface Callbacks {
 const Form = createTypedForm<ClaimDto>();
 
 const PrepareComponent = (props: BaseProps & Callbacks & Data & PrepareClaimParams) => {
-  const data = props;
+  const { isPm } = getAuthRoles(props.project.roles);
+
+  const backLink = isPm
+    ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
+    : props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId });
+
   return (
     <Page
       backLink={
-        <BackLink route={getBackLink(data.project, data.partner, props.routes)}>
+        <BackLink route={backLink}>
           <Content value={x => x.pages.claimPrepare.backLink} />
         </BackLink>
       }
-      error={data.editor.error}
-      validator={data.editor.validator}
-      pageTitle={<Projects.Title {...data.project} />}
+      error={props.editor.error}
+      validator={props.editor.validator}
+      pageTitle={<Projects.Title projectNumber={props.project.projectNumber} title={props.project.title} />}
     >
-      <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
-      {data.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
-      {renderDetailsSection(props)}
-    </Page>
-  );
-};
+      <AwardRateOverridesMessage claimOverrides={props.claimOverrides} isNonFec={props.project.isNonFec} />
+      {props.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
 
-const renderDetailsSection = (props: Data & BaseProps & PrepareClaimParams & Callbacks) => {
-  return (
-    <Section title={<Claims.ClaimPeriodDate claim={props.claim} />}>
-      <Claims.ClaimTable
-        {...props}
-        validation={props.editor.validator.totalCosts}
-        getLink={costCategoryId =>
-          props.routes.prepareClaimLineItems.getLink({
-            partnerId: props.partnerId,
-            projectId: props.projectId,
-            periodId: props.periodId,
-            costCategoryId,
-          })
-        }
-      />
-      <Form.Form
-        qa="prepareClaimForm"
-        editor={props.editor}
-        onChange={dto => props.onUpdate(false, dto)}
-        onSubmit={() =>
-          props.onUpdate(
-            true,
-            props.editor.data,
-            props.routes.claimDocuments.getLink({
-              projectId: props.projectId,
+      <Section title={<Claims.ClaimPeriodDate claim={props.claim} />}>
+        <Claims.ClaimTable
+          {...props}
+          validation={props.editor.validator.totalCosts}
+          getLink={costCategoryId =>
+            props.routes.prepareClaimLineItems.getLink({
               partnerId: props.partnerId,
+              projectId: props.projectId,
               periodId: props.periodId,
-            }),
-          )
-        }
-      >
-        <ClaimDrawdownTable {...props.project} requiredPeriod={props.periodId} />
-
-        {renderLogsSection(props.statusChanges)}
-
-        <Form.Fieldset qa="save-and-continue">
-          <Form.Submit>
-            <Content value={x => x.pages.claimPrepare.buttonSaveAndContinue} />
-          </Form.Submit>
-          <Form.Button
-            name="save"
-            onClick={() =>
-              props.onUpdate(true, props.editor.data, getBackLink(props.project, props.partner, props.routes))
-            }
-          >
-            <Content value={x => x.pages.claimPrepare.buttonSaveAndReturn} />
-          </Form.Button>
-        </Form.Fieldset>
-      </Form.Form>
-    </Section>
-  );
-};
-
-const getBackLink = (project: ProjectDto, partner: PartnerDto, routes: BaseProps["routes"]) => {
-  const { isPm } = getAuthRoles(project.roles);
-
-  return isPm
-    ? routes.allClaimsDashboard.getLink({ projectId: project.id })
-    : routes.claimsDashboard.getLink({ projectId: project.id, partnerId: partner.id });
-};
-
-const renderLogsSection = (pendingStatusChanges: Data["statusChanges"]) => {
-  return (
-    <Accordion>
-      <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="status-and-comments-log">
-        {/* Keeping logs inside loader because accordion defaults to closed*/}
-        <Loader
-          pending={pendingStatusChanges}
-          render={statusChanges => <Logs qa="claim-status-change-table" data={statusChanges} />}
+              costCategoryId,
+            })
+          }
         />
-      </AccordionItem>
-    </Accordion>
+        <Form.Form
+          qa="prepareClaimForm"
+          editor={props.editor}
+          onChange={dto => props.onUpdate(false, dto)}
+          onSubmit={() =>
+            props.onUpdate(
+              true,
+              props.editor.data,
+              props.routes.claimDocuments.getLink({
+                projectId: props.projectId,
+                partnerId: props.partnerId,
+                periodId: props.periodId,
+              }),
+            )
+          }
+        >
+          <ClaimDrawdownTable {...props.project} requiredPeriod={props.periodId} />
+
+          <Accordion>
+            <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="status-and-comments-log">
+              {/* Keeping logs inside loader because accordion defaults to closed*/}
+              <Loader
+                pending={props.statusChanges}
+                render={statusChanges => <Logs qa="claim-status-change-table" data={statusChanges} />}
+              />
+            </AccordionItem>
+          </Accordion>
+
+          <Form.Fieldset qa="save-and-continue">
+            <Form.Submit>
+              <Content value={x => x.pages.claimPrepare.buttonSaveAndContinue} />
+            </Form.Submit>
+            <Form.Button name="save" onClick={() => props.onUpdate(true, props.editor.data, backLink)}>
+              <Content value={x => x.pages.claimPrepare.buttonSaveAndReturn} />
+            </Form.Button>
+          </Form.Fieldset>
+        </Form.Form>
+      </Section>
+    </Page>
   );
 };
 
