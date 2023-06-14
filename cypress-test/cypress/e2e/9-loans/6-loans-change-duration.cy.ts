@@ -9,11 +9,11 @@ import {
   updatedLoansTable,
 } from "./steps";
 
-const fcEmail = "wed.addams@test.test.co.uk";
+const pmEmail = "james.black@euimeabs.test";
 
 describe("Loans project > Change Loans Duration", () => {
   before(() => {
-    visitApp({ asUser: fcEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
     pcrTidyUp("Change Loans Duration");
   });
 

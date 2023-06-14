@@ -3,9 +3,9 @@ import {
   additionalInfo,
   deleteFile,
   drawdownFileUpload,
-  drawdownGuidance,
+  fcDrawdownGuidance,
   drawdownRequestTable,
-  fileUploadedSection,
+  fcFileUploadedSection,
   learnFiles,
   requestDrawdown,
   sendYourRequestSection,
@@ -29,7 +29,7 @@ describe("Loans project > Drawdown request", () => {
     cy.getByQA("page-title-caption").contains("CYPRESS_LOANS_DO_NOT_USE");
   });
 
-  it("Should have drawdown guidance including link to drawdown pcrs", drawdownGuidance);
+  it("Should have drawdown guidance including link to drawdown pcrs", fcDrawdownGuidance);
 
   it("Should have the drawdown request table", drawdownRequestTable);
 
@@ -41,7 +41,7 @@ describe("Loans project > Drawdown request", () => {
 
   it(
     "Should show the 'File uploaded' header and file table with the file that's just been uploaded",
-    fileUploadedSection,
+    fcFileUploadedSection,
   );
 
   it("Should delete the file just uploaded", deleteFile);

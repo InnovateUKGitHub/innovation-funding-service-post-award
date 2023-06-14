@@ -1,3 +1,7 @@
+const pmEmail = "james.black@euimeabs.test";
+const fcEmail = "wed.addams@test.test.co.uk";
+const hybridEmail = "s.shuang@irc.trde.org.uk.test";
+
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 import { visitApp } from "common/visit";
 
@@ -85,9 +89,22 @@ export const requestDrawdown = () => {
   cy.get("h1").contains("Drawdown");
 };
 
-export const drawdownGuidance = () => {
-  cy.get("p").contains("You can request your drawdown here.");
-  cy.get("a").contains("Change drawdown");
+export const viewDrawdown = () => {
+  cy.get("a").contains("View").click();
+  cy.get("h1").contains("Drawdown");
+};
+
+export const fcDrawdownGuidance = () => {
+  cy.get("p").contains(
+    "You can request your drawdown here. If the amount of your drawdown needs to be changed, your Project Manager will need to submit a change drawdown project change request.",
+  );
+};
+
+export const pmDrawdownGuidance = () => {
+  cy.get("p").contains(
+    "Your Finance Contact can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a change drawdown project change request.",
+  );
+  cy.get("a").contains("change drawdown");
 };
 
 export const drawdownRequestTable = () => {
@@ -118,12 +135,22 @@ export const drawdownFileUpload = () => {
   cy.getByQA("validation-message-content").contains("file has been uploaded");
 };
 
-export const fileUploadedSection = () => {
+export const fcFileUploadedSection = () => {
   cy.get("h2").contains("Files uploaded");
   cy.get("p").contains("All documents uploaded will be shown here.");
   ["File name", "Type", "Date uploaded", "Size", "Uploaded by", "Remove", "testfile.doc", "Drawdown approval"].forEach(
     docTableItem => {
-      cy.getByQA("loan-documents-container").contains(docTableItem);
+      cy.getByQA("loan-documents-editor-container").contains(docTableItem);
+    },
+  );
+};
+
+export const pmFileUploadedSection = () => {
+  cy.get("h2").contains("Files uploaded");
+  cy.get("p").contains("All documents uploaded will be shown here.");
+  ["File name", "Type", "Date uploaded", "Size", "Uploaded by", "Remove", "testfile.doc", "Drawdown approval"].forEach(
+    docTableItem => {
+      cy.getByQA("loan-documents-viewer-container").contains(docTableItem);
     },
   );
 };
@@ -411,4 +438,20 @@ export const assertForMissingPcr = () => {
   cy.get("p").contains("Some types are unavailable because they have already been added to another PCR.");
   cy.get("li").contains("Change project scope");
   cy.get("a").contains("Cancel").click();
+};
+
+export const fcAndPmFileAssertion = () => {
+  cy.switchUserTo(fcEmail);
+  drawdownFileUpload;
+  cy.switchUserTo(pmEmail);
+  pmFileUploadedSection;
+};
+
+export const hybridButtonAssertion = () => {
+  cy.switchUserTo(hybridEmail);
+  cy.backLink("Back to loans summary page").click();
+  cy.get("a")
+    .contains(/^Request$/)
+    .click();
+  cy.get("h1").contains("Drawdown");
 };

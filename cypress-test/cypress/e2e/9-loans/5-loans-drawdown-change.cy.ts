@@ -9,11 +9,11 @@ import {
   markAndContinue,
 } from "./steps";
 
-const fcEmail = "wed.addams@test.test.co.uk";
+const pmEmail = "james.black@euimeabs.test";
 
 describe("Loans project > Loan Drawdown Change", () => {
   before(() => {
-    visitApp({ asUser: fcEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
     pcrTidyUp("Loan Drawdown Change");
   });
 
