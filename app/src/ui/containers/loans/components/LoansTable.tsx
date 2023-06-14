@@ -78,8 +78,10 @@ export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
             nextPlannedLoan &&
             !roles.isMo && (
               <LoanRequestButton route={createLink(nextLoan.id)} disabled={!canRequestLoan}>
+                {/* FC can request */}
                 {roles.isFc && getContent(x => x.components.loansTable.request)}
-                {roles.isPm && getContent(x => x.components.loansTable.view)}
+                {/* PM can view, Hybrid FC/PM cannot view (they can request) */}
+                {roles.isPm && !roles.isFc && getContent(x => x.components.loansTable.view)}
               </LoanRequestButton>
             )
           );
