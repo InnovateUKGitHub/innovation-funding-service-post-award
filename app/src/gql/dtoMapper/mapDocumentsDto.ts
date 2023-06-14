@@ -86,7 +86,7 @@ const mapper: GQL.DtoMapper<
   isOwner(node, { currentUser }) {
     return (
       typeof node?.node?.ContentDocument?.CreatedBy?.Username?.value === "string" &&
-      node?.node?.ContentDocument?.CreatedBy?.Username?.value === currentUser?.email
+      node?.node?.ContentDocument?.CreatedBy?.Username?.value?.toLowerCase() === currentUser?.email?.toLowerCase()
     );
   },
   partnerId(node, { partnerId }) {
