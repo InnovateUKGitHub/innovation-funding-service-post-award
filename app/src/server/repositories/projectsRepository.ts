@@ -1,4 +1,3 @@
-import { configuration } from "@server/features/common";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceProject {

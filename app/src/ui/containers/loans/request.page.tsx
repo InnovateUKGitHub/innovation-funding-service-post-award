@@ -14,7 +14,6 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { LoanRequestTable } from "./components/LoanTable";
 import { Content } from "@ui/components";
 import { getAuthRoles } from "@framework/types";
-import { Fragment } from "react";
 
 export interface LoansRequestParams {
   projectId: ProjectId;
