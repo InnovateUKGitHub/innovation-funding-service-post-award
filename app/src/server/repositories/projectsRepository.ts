@@ -84,9 +84,7 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Loan_LoanAvailabilityPeriodLength__c",
     "Loan_LoanExtensionPeriodLength__c",
     "Loan_LoanRepaymentPeriodLength__c",
-    ...(configuration.features.disallowImpactManagementFinalClaimWithoutPcf
-      ? ["Impact_Management_Participation__c"]
-      : []),
+    "Impact_Management_Participation__c",
   ];
 
   getById(id: ProjectId) {

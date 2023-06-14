@@ -84,9 +84,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_TotalCostsApproved__c",
     "Acc_TotalDeferredAmount__c",
     "Acc_PeriodCoststobePaid__c",
-    ...(configuration.features.disallowImpactManagementFinalClaimWithoutPcf
-      ? ["Impact_Management_Participation__c"]
-      : []),
+    "Impact_Management_Participation__c",
   ];
 
   private getStandardFilter() {
