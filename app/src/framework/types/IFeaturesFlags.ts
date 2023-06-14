@@ -3,6 +3,4 @@ export interface IFeatureFlags {
   readonly customContent: boolean;
   readonly searchDocsMinThreshold: number;
   readonly futureTimeExtensionInYears: number;
-
-  readonly disallowImpactManagementFinalClaimWithoutPcf: boolean;
 }

@@ -1,5 +1,4 @@
 import { IPicklistEntry } from "@framework/types";
-import { configuration } from "@server/features/common";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "../features/common/appError";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
@@ -84,9 +83,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_TotalCostsApproved__c",
     "Acc_TotalDeferredAmount__c",
     "Acc_PeriodCoststobePaid__c",
-    ...(configuration.features.disallowImpactManagementFinalClaimWithoutPcf
-      ? ["Impact_Management_Participation__c"]
-      : []),
+    "Impact_Management_Participation__c",
   ];
 
   private getStandardFilter() {
