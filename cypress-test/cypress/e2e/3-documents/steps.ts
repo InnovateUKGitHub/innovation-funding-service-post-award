@@ -72,6 +72,20 @@ export const uploadToEUI = () => {
   cy.submitButton("Upload documents").click();
 };
 
+export const fcUploadToEUI = () => {
+  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfilefc.doc");
+  cy.wait(500);
+  cy.get("select#description.govuk-select").select("Plans");
+  cy.submitButton("Upload documents").click();
+};
+
+export const pmUploadToEUI = () => {
+  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfilepm.doc");
+  cy.wait(500);
+  cy.get("select#description.govuk-select").select("Plans");
+  cy.submitButton("Upload documents").click();
+};
+
 export const displayEUIFile = () => {
   cy.get("h3").contains("Documents shared with Innovate UK and partners");
   cy.tableCell("testfile.doc");
@@ -189,4 +203,40 @@ export const manyPartnerDocDelete = () => {
     cy.getByQA("validation-message-content").contains("has been deleted.");
     cy.wait(800);
   });
+};
+
+export const fcLoginDelete = () => {
+  const fc = "wed.addams@test.test.co.uk";
+  cy.switchUserTo(fc);
+  cy.get("td").contains("Wednesday Addams of EUI Small Ent Health").siblings().contains("Remove").click();
+  cy.getByQA("validation-message-content").contains("has been deleted.");
+};
+
+export const pmLoginViewFile = () => {
+  const pm = "james.black@euimeabs.test";
+  cy.switchUserTo(pm);
+  cy.get("h3").contains("Documents for EUI Small Ent Health");
+  cy.getByQA("partner-documents-container").contains("td", "testfilefc.doc");
+};
+
+export const fcLoginViewFile = () => {
+  const pm = "james.black@euimeabs.test";
+  cy.switchUserTo(pm);
+  cy.get("h3").contains("Documents for EUI Small Ent Health");
+  cy.getByQA("partner-documents-container").contains("td", "testfilepm.doc");
+};
+
+export const pmLoginDelete = () => {
+  const pm = "james.black@euimeabs.test";
+  cy.switchUserTo(pm);
+  cy.get("td").contains("James Black of EUI Small Ent Health").siblings().contains("Remove").click();
+  cy.getByQA("validation-message-content").contains("has been deleted.");
+};
+
+export const moLoginViewFile = () => {
+  const mo = "testman2@testing.com";
+  cy.switchUserTo(mo);
+  cy.get("h3").contains("Documents shared with Innovate UK and partners");
+  cy.getByQA("partner-documents-container").contains("td", "testfilepm.doc");
+  cy.getByQA("partner-documents-container").contains("td", "testfilefc.doc");
 };
