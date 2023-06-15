@@ -1,4 +1,5 @@
-import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, ProjectDto, ProjectRole } from "@framework/types";
+import { PCRItemStatus } from "@framework/constants";
+import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, PCRStepId } from "@framework/types";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -8,10 +9,9 @@ import {
   PCRSpendProfileCostsSummaryRoute,
   PcrSpendProfileCostSummaryParams,
 } from "@ui/containers";
-import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemStatus } from "@framework/constants";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PCRDtoValidator } from "@ui/validators";
 
 export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends StandardFormHandlerBase<
   PcrSpendProfileCostSummaryParams,
@@ -46,13 +46,20 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
-    await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
+    await context.runCommand(
+      new UpdatePCRCommand({
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
+        pcr: dto,
+        pcrStepId: PCRStepId.spendProfileStep,
+      }),
+    );
 
     const addPartnerItem = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
 
     const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!summaryWorkflow) throw new Error("summary workflow is null");
-    const spendProfileS = summaryWorkflow.findStepNumberByName("spendProfileStep");
+    const spendProfileS = summaryWorkflow.findStepNumberByName(PCRStepId.spendProfileStep);
     const addPartnerWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, spendProfileS);
     const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
 
@@ -69,6 +76,10 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
   }
 
   protected createValidationResult(params: PcrSpendProfileCostSummaryParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
+    return new PCRDtoValidator({
+      model: dto,
+      original: dto,
+      pcrStepId: PCRStepId.spendProfileStep,
+    });
   }
 }

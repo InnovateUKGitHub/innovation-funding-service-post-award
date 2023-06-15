@@ -8,6 +8,7 @@ import {
   PartnerDto,
   ProjectRole,
   FinancialVirementDto,
+  PCRStepId,
 } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 
@@ -54,8 +55,8 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (dto: PCRDto) => void;
-  onSave: (dto: PCRDto, link: ILinkInfo) => void;
+  onChange: (props: { dto: PCRDto; pcrStepId?: PCRStepId }) => void;
+  onSave: (props: { dto: PCRDto; pcrStepId?: PCRStepId; link: ILinkInfo }) => void;
 }
 
 const PCRForm = ACC.createTypedForm<PCRItemDto>();
@@ -272,7 +273,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       status,
       routes: this.props.routes,
       mode,
-      onChange: itemDto => this.onChange(editor.data, itemDto),
+      onChange: itemDto => this.onChange(workflow, editor.data, itemDto),
       onSave: skipToSummary => this.onSave(workflow, editor.data, skipToSummary),
       getRequiredToCompleteMessage: function RequiredToCompleteMessage(message) {
         const standardMessage = "This is required to complete this request.";
@@ -355,7 +356,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       <PCRForm.Form
         qa="pcr_complete_item_form"
         data={pcrItem}
-        onChange={dto => this.onChange(editor.data, dto)}
+        onChange={dto => this.onChange(workflow, editor.data, dto)}
         onSubmit={() => this.onSave(workflow, editor.data)}
         isSaving={editor.status === EditorStatus.Saving}
       >
@@ -422,10 +423,10 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     );
   }
 
-  private onChange(dto: PCRDto, itemDto: PCRItemDto): void {
+  private onChange(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, itemDto: PCRItemDto): void {
     const index = dto.items.findIndex(x => x.id === this.props.itemId);
     dto.items[index] = itemDto;
-    this.props.onChange(dto);
+    this.props.onChange({ dto, pcrStepId: workflow.getCurrentStepName() });
   }
 
   private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, skipToSummary = false) {
@@ -436,40 +437,43 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       // If submitting from the summary set the status to "Incomplete" only if it's in "To do" (i.e. if it's set to "Complete" then leave it as it is)
       if (item?.status === PCRItemStatus.ToDo) item.status = PCRItemStatus.Incomplete;
       // submit and go back to the prepare page
-      return this.props.onSave(
+      return this.props.onSave({
         dto,
-        this.props.routes.pcrPrepare.getLink({
+        pcrStepId: workflow.getCurrentStepName(),
+        link: this.props.routes.pcrPrepare.getLink({
           projectId: this.props.projectId,
           pcrId: this.props.pcrId,
         }),
-      );
+      });
     }
 
     // If submitting from a step set the status to incomplete
     item.status = PCRItemStatus.Incomplete;
 
     if (skipToSummary) {
-      return this.props.onSave(
+      return this.props.onSave({
         dto,
-        this.props.routes.pcrPrepareItem.getLink({
+        pcrStepId: workflow.getCurrentStepName(),
+        link: this.props.routes.pcrPrepareItem.getLink({
           projectId: this.props.projectId,
           pcrId: this.props.pcrId,
           itemId: this.props.itemId,
         }),
-      );
+      });
     }
 
     const nextStep = workflow.getNextStepInfo();
 
-    return this.props.onSave(
+    return this.props.onSave({
       dto,
-      this.props.routes.pcrPrepareItem.getLink({
+      pcrStepId: workflow.getCurrentStepName(),
+      link: this.props.routes.pcrPrepareItem.getLink({
         projectId: this.props.projectId,
         pcrId: this.props.pcrId,
         itemId: this.props.itemId,
         step: nextStep?.stepNumber,
       }),
-    );
+    });
   }
 }
 
@@ -494,15 +498,21 @@ const PCRItemContainer = (
         props.projectId,
         props.itemId,
       )}
-      onSave={(dto, link) => {
+      onSave={({ dto, pcrStepId = PCRStepId.none, link }) => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () => {
-          navigate(link.path);
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: true,
+          projectId: props.projectId,
+          pcrStepId,
+          dto,
+          onComplete: () => {
+            navigate(link.path);
+          },
         });
       }}
-      onChange={dto => {
+      onChange={({ dto, pcrStepId = PCRStepId.none }) => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+        stores.projectChangeRequests.updatePcrEditor({ saving: false, projectId: props.projectId, pcrStepId, dto });
       }}
     />
   );

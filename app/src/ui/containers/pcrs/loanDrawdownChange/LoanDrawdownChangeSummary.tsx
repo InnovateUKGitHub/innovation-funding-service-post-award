@@ -4,7 +4,7 @@ import { FinancialLoanVirementDto, PCRItemForLoanDrawdownChangeDto } from "@fram
 import { FinancialLoanVirementDtoValidator, PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validators";
 import * as ACC from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
-import { PCRItemStatus } from "@framework/constants";
+import { PCRItemStatus, PCRStepId } from "@framework/constants";
 import { useMounted } from "@ui/features";
 
 import { usePcrSummaryContext } from "../components/PcrSummary";
@@ -37,7 +37,7 @@ export const LoanDrawdownChangeUI = ({
     <>
       {isClient && <ACC.ValidationSummary validation={editor.validator} compressed={false} />}
 
-      <LoanEditTable {...editor} mode="view" onEditLink={props.getEditLink("loanDrawdownChange", null)} />
+      <LoanEditTable {...editor} mode="view" onEditLink={props.getEditLink(PCRStepId.loanDrawdownChange, null)} />
     </>
   );
 };

@@ -3,8 +3,9 @@ import { PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { LoanDrawdownChangeStepContainer } from "./LoanDrawdownChangeStep";
 import { LoanDrawdownChangeSummary } from "./LoanDrawdownChangeSummary";
+import { PCRStepId } from "@framework/types";
 
-export type LoanDrawdownChangeStepName = "loanDrawdownChange";
+export type LoanDrawdownChangeStepName = PCRStepId.loanDrawdownChange;
 
 export const LoanDrawdownChangeWorkflow: IPCRWorkflow<
   PCRItemForLoanDrawdownChangeDto,
@@ -12,7 +13,7 @@ export const LoanDrawdownChangeWorkflow: IPCRWorkflow<
 > = {
   steps: [
     {
-      stepName: "loanDrawdownChange",
+      stepName: PCRStepId.loanDrawdownChange,
       displayName: "Change Loan Duration",
       stepNumber: 1,
       validation: val => val.pcr,

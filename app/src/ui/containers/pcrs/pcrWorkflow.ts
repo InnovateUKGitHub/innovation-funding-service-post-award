@@ -3,7 +3,7 @@ import { Result, Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
 import { IEditorStore } from "@ui/redux";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { ILinkInfo, PCRItemType } from "@framework/types";
+import { ILinkInfo, PCRItemType, PCRStepId } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
@@ -51,18 +51,18 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
 }
 
 export type IPCRWorkflow<T, TVal extends Results<AnyObject>> = IWorkflow<
-  string,
+  PCRStepId,
   PcrStepProps<T, TVal>,
-  PcrSummaryProps<T, TVal, string>,
+  PcrSummaryProps<T, TVal, PCRStepId>,
   PCRWorkflowValidator
 >;
 
 export type WorkflowPcrType = AddPartnerWorkflowItem & { type: PCRItemType };
 
 export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends WorkflowBase<
-  string,
+  PCRStepId,
   PcrStepProps<T, TVal>,
-  PcrSummaryProps<T, TVal, string>,
+  PcrSummaryProps<T, TVal, PCRStepId>,
   PCRWorkflowValidator
 > {
   public constructor(definition: IPCRWorkflow<T, TVal>, stepNumber: number | undefined) {

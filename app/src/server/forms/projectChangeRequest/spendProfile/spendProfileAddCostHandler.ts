@@ -1,3 +1,14 @@
+import { CostCategoryGroupType, CostCategoryType, PCRItemStatus } from "@framework/constants";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import {
+  PCRSpendProfileCapitalUsageCostDto,
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOverheadsCostDto,
+  PCRSpendProfileSubcontractingCostDto,
+  PCRSpendProfileTravelAndSubsCostDto,
+} from "@framework/dtos/pcrSpendProfileDto";
 import {
   CostCategoryList,
   IContext,
@@ -7,9 +18,10 @@ import {
   PCRItemType,
   PCRSpendProfileCapitalUsageType,
   PCRSpendProfileOverheadRate,
-  ProjectDto,
-  ProjectRole,
+  PCRStepId,
 } from "@framework/types";
+import { parseNumber } from "@framework/util";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -21,23 +33,10 @@ import {
   PCRSpendProfileCostsSummaryRoute,
   PCRSpendProfileOverheadDocumentRoute,
 } from "@ui/containers";
-import { PCRDtoValidator } from "@ui/validators";
-import { CostCategoryGroupType, CostCategoryType, PCRItemStatus } from "@framework/constants";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
-import {
-  PCRSpendProfileCapitalUsageCostDto,
-  PCRSpendProfileLabourCostDto,
-  PCRSpendProfileMaterialsCostDto,
-  PCRSpendProfileOtherCostsDto,
-  PCRSpendProfileOverheadsCostDto,
-  PCRSpendProfileSubcontractingCostDto,
-  PCRSpendProfileTravelAndSubsCostDto,
-} from "@framework/dtos/pcrSpendProfileDto";
-import { parseNumber } from "@framework/util";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PCRDtoValidator } from "@ui/validators";
 
 interface IBaseCost {
   id: PcrId;
@@ -209,7 +208,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
   private getSpendProfileStep(context: IContext, pcrItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined);
     if (!workflow) return null;
-    const stepName: AddPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
     return workflow.findStepNumberByName(stepName);
   }
 
@@ -219,7 +218,14 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
-    await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
+    await context.runCommand(
+      new UpdatePCRCommand({
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
+        pcr: dto,
+        pcrStepId: PCRStepId.spendProfileStep,
+      }),
+    );
 
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId);
@@ -257,6 +263,10 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
   }
 
   protected createValidationResult(params: PcrAddSpendProfileCostParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
+    return new PCRDtoValidator({
+      model: dto,
+      original: dto,
+      pcrStepId: PCRStepId.spendProfileStep,
+    });
   }
 }

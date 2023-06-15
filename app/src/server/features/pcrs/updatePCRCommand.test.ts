@@ -35,7 +35,9 @@ describe("UpdatePCRCommand", () => {
     const pcrDtoQuery = new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id);
     const dto = await context.runQuery(pcrDtoQuery);
 
-    const command = context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto));
+    const command = context.runCommand(
+      new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+    );
 
     await expect(command).rejects.toThrow(InActiveProjectError);
   });
@@ -46,7 +48,11 @@ describe("UpdatePCRCommand", () => {
 
       const project = context.testData.createProject();
       const auth = new Authorisation({ [project.Id]: { projectRoles: role, partnerRoles: {} } });
-      const command = new UpdatePCRCommand(project.Id, "" as PcrId, {} as PCRDto);
+      const command = new UpdatePCRCommand({
+        projectId: project.Id,
+        projectChangeRequestId: "" as PcrId,
+        pcr: {} as PCRDto,
+      });
 
       return context.runAccessControl(auth, command);
     };
@@ -148,7 +154,11 @@ describe("UpdatePCRCommand", () => {
           items: pcrItems,
         } as PCRDto;
 
-        const command = new UpdatePCRCommand(project.Id, pcr.id, pcrPayload);
+        const command = new UpdatePCRCommand({
+          projectId: project.Id,
+          projectChangeRequestId: pcr.id,
+          pcr: pcrPayload,
+        });
 
         await expect(context.runCommand(command)).rejects.toThrowError(ValidationError);
       });
@@ -168,7 +178,11 @@ describe("UpdatePCRCommand", () => {
           items: pcrItems,
         } as PCRDto;
 
-        const command = new UpdatePCRCommand(project.Id, pcr.id, pcrPayload);
+        const command = new UpdatePCRCommand({
+          projectId: project.Id,
+          projectChangeRequestId: pcr.id,
+          pcr: pcrPayload,
+        });
 
         await expect(context.runCommand(command)).rejects.toThrowError(ValidationError);
       });
@@ -208,7 +222,7 @@ describe("UpdatePCRCommand", () => {
         const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
         dto.status = to;
 
-        const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+        const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 
         await context.runCommand(command);
 
@@ -245,7 +259,7 @@ describe("UpdatePCRCommand", () => {
           dto.reasoningComments = "New reasoning comments";
           dto.comments = "New comments";
 
-          const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+          const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 
           await context.runCommand(command);
 
@@ -285,7 +299,7 @@ describe("UpdatePCRCommand", () => {
           dto.reasoningComments = "New reasoning comments";
           dto.comments = "New comments";
 
-          const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+          const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 
           await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
         },
@@ -305,13 +319,15 @@ describe("UpdatePCRCommand", () => {
         dto.reasoningComments = "";
         dto.reasoningStatus = PCRItemStatus.Complete;
 
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, dto))).rejects.toThrow(
-          ValidationError,
-        );
+        await expect(
+          context.runCommand(new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto })),
+        ).rejects.toThrow(ValidationError);
 
         dto.reasoningComments = "Test Comments";
 
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, dto))).resolves.toBe(true);
+        await expect(
+          context.runCommand(new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto })),
+        ).resolves.toBe(true);
       });
 
       test("adds items", async () => {
@@ -350,7 +366,7 @@ describe("UpdatePCRCommand", () => {
 
         dto.items.push(additionalItem as PCRStandardItemDto);
 
-        const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+        const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 
         await context.runCommand(command);
 
@@ -380,7 +396,7 @@ describe("UpdatePCRCommand", () => {
           ...dto.items[1],
         });
 
-        const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+        const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 
         await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       });
@@ -425,9 +441,11 @@ describe("UpdatePCRCommand", () => {
         );
 
         // And make sure it DOES NOT THROW
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, initialDto))).rejects.toThrow(
-          ValidationError,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: initialDto }),
+          ),
+        ).rejects.toThrow(ValidationError);
       });
 
       it("allows duplicate Remove/Add/Rename partner if enough partners available", async () => {
@@ -486,7 +504,11 @@ describe("UpdatePCRCommand", () => {
         );
 
         // And make sure it DOES NOT THROW
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, initialDto))).resolves.toBe(true);
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: initialDto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       it("adds status change record if status is changing", async () => {
@@ -511,7 +533,9 @@ describe("UpdatePCRCommand", () => {
         dto.status = PCRStatus.SubmittedToMonitoringOfficer;
         dto.comments = "Expected Comments";
 
-        await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
+        await context.runCommand(
+          new UpdatePCRCommand({ projectId: pcr.projectId, projectChangeRequestId: pcr.id, pcr: dto }),
+        );
 
         expect(context.repositories.projectChangeRequestStatusChange.Items.length).toBe(1);
 
@@ -544,7 +568,9 @@ describe("UpdatePCRCommand", () => {
         dto.status = PCRStatus.SubmittedToInnovateUK;
         dto.comments = "Expected Comments";
 
-        await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
+        await context.runCommand(
+          new UpdatePCRCommand({ projectId: pcr.projectId, projectChangeRequestId: pcr.id, pcr: dto }),
+        );
 
         expect(context.repositories.projectChangeRequestStatusChange.Items.length).toBe(1);
 
@@ -573,7 +599,9 @@ describe("UpdatePCRCommand", () => {
         dto.reasoningComments = "Updated Reasoning";
         dto.reasoningStatus = PCRItemStatus.Complete;
 
-        await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
+        await context.runCommand(
+          new UpdatePCRCommand({ projectId: pcr.projectId, projectChangeRequestId: pcr.id, pcr: dto }),
+        );
 
         expect(pcr.comments).toBe(dto.comments);
         expect(pcr.reasoning).toBe(dto.reasoningComments);
@@ -600,7 +628,9 @@ describe("UpdatePCRCommand", () => {
 
         dto.status = PCRStatus.SubmittedToMonitoringOfficer;
 
-        await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
+        await context.runCommand(
+          new UpdatePCRCommand({ projectId: pcr.projectId, projectChangeRequestId: pcr.id, pcr: dto }),
+        );
 
         expect(pcr.status).toBe(PCRStatus.SubmittedToMonitoringOfficer);
       });
@@ -625,7 +655,9 @@ describe("UpdatePCRCommand", () => {
 
         dto.status = PCRStatus.SubmittedToInnovateUK;
 
-        await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
+        await context.runCommand(
+          new UpdatePCRCommand({ projectId: pcr.projectId, projectChangeRequestId: pcr.id, pcr: dto }),
+        );
 
         expect(pcr.status).toBe(PCRStatus.SubmittedToInnovateUK);
       });
@@ -642,9 +674,11 @@ describe("UpdatePCRCommand", () => {
 
         dto.status = PCRStatus.Draft;
 
-        await expect(context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto))).rejects.toThrow(
-          ValidationError,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: pcr.projectId, projectChangeRequestId: pcr.id, pcr: dto }),
+          ),
+        ).rejects.toThrow(ValidationError);
       });
     });
 
@@ -674,7 +708,7 @@ describe("UpdatePCRCommand", () => {
         dto.status = to;
         dto.comments = "Some comments";
 
-        const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+        const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 
         await context.runCommand(command);
 
@@ -702,7 +736,7 @@ describe("UpdatePCRCommand", () => {
           const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
           dto.comments = "New comments";
 
-          const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+          const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 
           await context.runCommand(command);
 
@@ -731,7 +765,7 @@ describe("UpdatePCRCommand", () => {
           const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
           dto.comments = "New comments";
 
-          const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+          const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 
           await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
         },
@@ -751,7 +785,9 @@ describe("UpdatePCRCommand", () => {
         dto.status = PCRStatus.QueriedByMonitoringOfficer;
         dto.comments = "Test Comments";
 
-        await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
+        await context.runCommand(
+          new UpdatePCRCommand({ projectId: pcr.projectId, projectChangeRequestId: pcr.id, pcr: dto }),
+        );
 
         expect(pcr.status).toBe(PCRStatus.QueriedByMonitoringOfficer);
       });
@@ -785,13 +821,17 @@ describe("UpdatePCRCommand", () => {
         item.publicDescription = null;
         item.projectSummary = null;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.status = PCRItemStatus.Incomplete;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       test("saves the public description and project summary", async () => {
@@ -816,7 +856,9 @@ describe("UpdatePCRCommand", () => {
 
         item.publicDescription = "A marvelous description";
         item.projectSummary = "An inspirational summary";
-        await context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto));
+        await context.runCommand(
+          new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+        );
 
         const updatedDto = await context.runQuery(
           new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
@@ -845,7 +887,9 @@ describe("UpdatePCRCommand", () => {
 
         item.offsetMonths = 1.5;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
 
@@ -865,9 +909,11 @@ describe("UpdatePCRCommand", () => {
         const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
         item.offsetMonths = 5;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
 
         const updated = await context.runQuery(
           new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
@@ -893,7 +939,9 @@ describe("UpdatePCRCommand", () => {
 
         item.offsetMonths = 0;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
 
@@ -913,9 +961,11 @@ describe("UpdatePCRCommand", () => {
         const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
         item.offsetMonths = -5;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       test("correctly updates the project duration when given additional months", async () => {
@@ -934,9 +984,11 @@ describe("UpdatePCRCommand", () => {
         const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
         item.offsetMonths = 5;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
 
         const updatedItem = context.repositories.projectChangeRequests.Items.find(
           x => x.id === projectChangeRequest.id,
@@ -968,7 +1020,9 @@ describe("UpdatePCRCommand", () => {
 
         item.suspensionStartDate = null;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
 
@@ -993,7 +1047,9 @@ describe("UpdatePCRCommand", () => {
         const item = dto.items[0] as PCRItemForProjectSuspensionDto;
         item.suspensionStartDate = new Date("bad, bad date");
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
 
@@ -1018,7 +1074,9 @@ describe("UpdatePCRCommand", () => {
         const item = dto.items[0] as PCRItemForProjectSuspensionDto;
         item.suspensionStartDate = DateTime.local().plus({ years: 1 }).startOf("month").plus({ days: 1 }).toJSDate();
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
 
@@ -1043,7 +1101,9 @@ describe("UpdatePCRCommand", () => {
         const item = dto.items[0] as PCRItemForProjectSuspensionDto;
         item.suspensionEndDate = DateTime.local().plus({ years: 1 }).endOf("month").minus({ days: 1 }).toJSDate();
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
 
@@ -1071,9 +1131,11 @@ describe("UpdatePCRCommand", () => {
         item.suspensionStartDate = startDate;
         item.suspensionEndDate = endDate;
 
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
 
         const updated = await context.runQuery(
           new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
@@ -1109,20 +1171,26 @@ describe("UpdatePCRCommand", () => {
         item.accountName = null;
         item.partnerId = partner.id;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.accountName = "New Name Goes Here";
         item.partnerId = null;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.accountName = "New Name Goes Here";
         item.partnerId = partner.id;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       test("returns bad request if partner does not belong to project", async () => {
@@ -1150,14 +1218,18 @@ describe("UpdatePCRCommand", () => {
         item.accountName = "New Name Goes Here";
         item.partnerId = otherPartner.id;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.accountName = "New Name Goes Here";
         item.partnerId = projectPartner.id;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       test("updates account name and partner", async () => {
@@ -1183,9 +1255,11 @@ describe("UpdatePCRCommand", () => {
 
         item.accountName = "New Name Goes Here";
         item.partnerId = partner.id;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
 
         const updated = await context.runQuery(
           new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
@@ -1224,15 +1298,19 @@ describe("UpdatePCRCommand", () => {
         // Different name allowed...
         item.accountName = "A B Cad Solutions";
 
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
 
         // Same name disallowed...
         item.accountName = "A B Cad Services";
 
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
 
@@ -1260,14 +1338,18 @@ describe("UpdatePCRCommand", () => {
         item.partnerId = partner.id;
         item.accountName = "New account name";
 
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
 
         partner.participantStatus = "Involuntary Withdrawal";
 
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
     });
@@ -1297,20 +1379,26 @@ describe("UpdatePCRCommand", () => {
         item.removalPeriod = null;
         item.partnerId = partner.id;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.removalPeriod = 1;
         item.partnerId = null;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.removalPeriod = 1;
         item.partnerId = partner.id;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       test("returns a bad request if partner does not belong to project", async () => {
@@ -1338,14 +1426,18 @@ describe("UpdatePCRCommand", () => {
         item.removalPeriod = 1;
         item.partnerId = otherPartner.id;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.removalPeriod = 1;
         item.partnerId = projectPartner.id;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       test("returns a bad request if an invalid removal period is sent", async () => {
@@ -1372,14 +1464,18 @@ describe("UpdatePCRCommand", () => {
         item.removalPeriod = 1.5;
         item.partnerId = partner.id;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.removalPeriod = 1;
         item.partnerId = partner.id;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       test("returns a bad request if removal period greater than project periods", async () => {
@@ -1409,14 +1505,18 @@ describe("UpdatePCRCommand", () => {
         item.removalPeriod = 6;
         item.partnerId = partner.id;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.removalPeriod = 1;
         item.partnerId = partner.id;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
 
       test("updates removal period and partner", async () => {
@@ -1442,9 +1542,11 @@ describe("UpdatePCRCommand", () => {
 
         item.removalPeriod = 1;
         item.partnerId = partner.id;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
 
         const update = await context.runQuery(
           new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
@@ -1479,14 +1581,18 @@ describe("UpdatePCRCommand", () => {
         item.partnerId = partner.id;
         item.status = PCRItemStatus.Complete;
 
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
 
         partner.participantStatus = "Involuntary Withdrawal";
 
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
       });
     });
@@ -1514,13 +1620,17 @@ describe("UpdatePCRCommand", () => {
 
         item.grantMovingOverFinancialYear = -1;
         await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
         ).rejects.toThrow(ValidationError);
 
         item.grantMovingOverFinancialYear = 100;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+          ),
+        ).resolves.toBe(true);
       });
     });
 
@@ -1589,7 +1699,9 @@ describe("UpdatePCRCommand", () => {
             ]);
 
             await expect(
-              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+              context.runCommand(
+                new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: stubPayload }),
+              ),
             ).resolves.toBeTruthy();
           });
 
@@ -1610,7 +1722,9 @@ describe("UpdatePCRCommand", () => {
             ]);
 
             await expect(
-              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+              context.runCommand(
+                new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: stubPayload }),
+              ),
             ).resolves.toBeTruthy();
           });
         });
@@ -1633,7 +1747,9 @@ describe("UpdatePCRCommand", () => {
             ]);
 
             await expect(
-              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+              context.runCommand(
+                new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: stubPayload }),
+              ),
             ).resolves.toBeTruthy();
           });
 
@@ -1654,7 +1770,9 @@ describe("UpdatePCRCommand", () => {
             ]);
 
             await expect(
-              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+              context.runCommand(
+                new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: stubPayload }),
+              ),
             ).resolves.toBeTruthy();
           });
         });
@@ -1677,7 +1795,9 @@ describe("UpdatePCRCommand", () => {
             ]);
 
             await expect(
-              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+              context.runCommand(
+                new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: stubPayload }),
+              ),
             ).resolves.toBeTruthy();
           });
 
@@ -1698,7 +1818,9 @@ describe("UpdatePCRCommand", () => {
             ]);
 
             await expect(
-              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+              context.runCommand(
+                new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: stubPayload }),
+              ),
             ).resolves.toBeTruthy();
           });
         });
@@ -1720,9 +1842,11 @@ describe("UpdatePCRCommand", () => {
           },
         ]);
 
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload))).rejects.toThrow(
-          ValidationError,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: stubPayload }),
+          ),
+        ).rejects.toThrow(ValidationError);
       });
 
       test("when changed value is not divisible in quarters", async () => {
@@ -1743,9 +1867,11 @@ describe("UpdatePCRCommand", () => {
           },
         ]);
 
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload))).rejects.toThrow(
-          ValidationError,
-        );
+        await expect(
+          context.runCommand(
+            new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: stubPayload }),
+          ),
+        ).rejects.toThrow(ValidationError);
       });
     });
   });

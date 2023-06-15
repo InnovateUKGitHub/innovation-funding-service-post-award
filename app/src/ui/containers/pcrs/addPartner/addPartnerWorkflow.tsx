@@ -1,7 +1,7 @@
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemType, PCROrganisationType, PCRProjectRole, TypeOfAid } from "@framework/constants";
+import { PCRItemType, PCROrganisationType, PCRProjectRole, PCRStepId, TypeOfAid } from "@framework/constants";
 import {
   AcademicCostsStep,
   AcademicOrganisationStep,
@@ -27,22 +27,22 @@ import { AcademicCostsReviewStep } from "@ui/containers/pcrs/addPartner/academic
 import { AgreementToPCRStep } from "./agreementToPcrStep";
 
 export type AddPartnerStepNames =
-  | "roleAndOrganisationStep"
-  | "aidEligibilityStep"
-  | "academicCostsStep"
-  | "academicOrganisationStep"
-  | "companiesHouseStep"
-  | "organisationDetailsStep"
-  | "financeDetailsStep"
-  | "projectLocationStep"
-  | "financeContactStep"
-  | "projectManagerDetailsStep"
-  | "spendProfileStep"
-  | "jeSStep"
-  | "awardRateStep"
-  | "otherFundingStep"
-  | "otherFundingSourcesStep"
-  | "agreementToPcrStep";
+  | PCRStepId.roleAndOrganisationStep
+  | PCRStepId.aidEligibilityStep
+  | PCRStepId.academicCostsStep
+  | PCRStepId.academicOrganisationStep
+  | PCRStepId.companiesHouseStep
+  | PCRStepId.organisationDetailsStep
+  | PCRStepId.financeDetailsStep
+  | PCRStepId.projectLocationStep
+  | PCRStepId.financeContactStep
+  | PCRStepId.projectManagerDetailsStep
+  | PCRStepId.spendProfileStep
+  | PCRStepId.jeSStep
+  | PCRStepId.awardRateStep
+  | PCRStepId.otherFundingStep
+  | PCRStepId.otherFundingSourcesStep
+  | PCRStepId.agreementToPcrStep;
 
 export type AddPartnerWorkflowItem = Pick<
   PCRItemForPartnerAdditionDto,
@@ -56,35 +56,35 @@ export const getAddPartnerWorkflow = (
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
     steps: [
       {
-        stepName: "projectLocationStep",
+        stepName: PCRStepId.projectLocationStep,
         displayName: "Project location",
         stepNumber: 6,
         validation: val => val.pcr,
         stepRender: ProjectLocationStep,
       },
       {
-        stepName: "financeContactStep",
+        stepName: PCRStepId.financeContactStep,
         displayName: "Finance contact",
         stepNumber: 7,
         validation: val => val.pcr,
         stepRender: FinanceContactStep,
       },
       {
-        stepName: "otherFundingStep",
+        stepName: PCRStepId.otherFundingStep,
         displayName: "Other public sector funding",
         stepNumber: 11,
         validation: val => val.pcr,
         stepRender: OtherFundingStep,
       },
       {
-        stepName: "awardRateStep",
+        stepName: PCRStepId.awardRateStep,
         displayName: "Funding level",
         stepNumber: 13,
         validation: val => val.pcr,
         stepRender: AwardRateStep,
       },
       {
-        stepName: "agreementToPcrStep",
+        stepName: PCRStepId.agreementToPcrStep,
         displayName: "Upload partner agreement",
         stepNumber: 14,
         validation: val => val.files,
@@ -99,7 +99,7 @@ export const getAddPartnerWorkflow = (
 
   if (step === 1 || !item.projectRole || !item.partnerType) {
     workflow.steps.push({
-      stepName: "roleAndOrganisationStep",
+      stepName: PCRStepId.roleAndOrganisationStep,
       displayName: "New partner information",
       stepNumber: 1,
       validation: val => val.pcr,
@@ -109,7 +109,7 @@ export const getAddPartnerWorkflow = (
 
   if (!item.isCommercialWork) {
     workflow.steps.push({
-      stepName: "aidEligibilityStep",
+      stepName: PCRStepId.aidEligibilityStep,
       displayName: "Non aid eligibility",
       stepNumber: 2,
       validation: val => val.pcr,
@@ -117,7 +117,7 @@ export const getAddPartnerWorkflow = (
     });
   } else if (item.typeOfAid === TypeOfAid.DeMinimisAid) {
     workflow.steps.push({
-      stepName: "aidEligibilityStep",
+      stepName: PCRStepId.aidEligibilityStep,
       displayName: "De minimis funding",
       stepNumber: 2,
       validation: val => val,
@@ -125,7 +125,7 @@ export const getAddPartnerWorkflow = (
     });
   } else {
     workflow.steps.push({
-      stepName: "aidEligibilityStep",
+      stepName: PCRStepId.aidEligibilityStep,
       displayName: "State aid funding",
       stepNumber: 2,
       validation: val => val.pcr,
@@ -135,21 +135,21 @@ export const getAddPartnerWorkflow = (
 
   if (item.organisationType === PCROrganisationType.Academic) {
     workflow.steps.push({
-      stepName: "academicOrganisationStep",
+      stepName: PCRStepId.academicOrganisationStep,
       displayName: "Organisation name",
       stepNumber: 3,
       validation: val => val.pcr,
       stepRender: AcademicOrganisationStep,
     });
     workflow.steps.push({
-      stepName: "jeSStep",
+      stepName: PCRStepId.jeSStep,
       displayName: "Je-S form",
       stepNumber: 9,
       validation: val => val.files,
       stepRender: JeSStep,
     });
     workflow.steps.push({
-      stepName: "academicCostsStep",
+      stepName: PCRStepId.academicCostsStep,
       displayName: "Academic costs",
       stepNumber: 10,
       validation: val => {
@@ -167,28 +167,28 @@ export const getAddPartnerWorkflow = (
     });
   } else {
     workflow.steps.push({
-      stepName: "companiesHouseStep",
+      stepName: PCRStepId.companiesHouseStep,
       displayName: "Companies house",
       stepNumber: 3,
       validation: val => val.pcr,
       stepRender: CompaniesHouseStep,
     });
     workflow.steps.push({
-      stepName: "organisationDetailsStep",
+      stepName: PCRStepId.organisationDetailsStep,
       displayName: "Organisation details",
       stepNumber: 4,
       validation: val => val.pcr,
       stepRender: OrganisationDetailsStep,
     });
     workflow.steps.push({
-      stepName: "financeDetailsStep",
+      stepName: PCRStepId.financeDetailsStep,
       displayName: "Financial details",
       stepNumber: 5,
       validation: val => val.pcr,
       stepRender: FinanceDetailsStep,
     });
     workflow.steps.push({
-      stepName: "spendProfileStep",
+      stepName: PCRStepId.spendProfileStep,
       displayName: "Project costs for new partner",
       stepNumber: 9,
       validation: val => val.pcr,
@@ -199,7 +199,7 @@ export const getAddPartnerWorkflow = (
 
   if (item.projectRole === PCRProjectRole.ProjectLead) {
     workflow.steps.push({
-      stepName: "projectManagerDetailsStep",
+      stepName: PCRStepId.projectManagerDetailsStep,
       displayName: "Project manager",
       stepNumber: 8,
       validation: val => val.pcr,
@@ -209,7 +209,7 @@ export const getAddPartnerWorkflow = (
 
   if (item.hasOtherFunding) {
     workflow.steps.push({
-      stepName: "otherFundingSourcesStep",
+      stepName: PCRStepId.otherFundingSourcesStep,
       displayName: "Other public sector funding",
       stepNumber: 12,
       validation: val => {

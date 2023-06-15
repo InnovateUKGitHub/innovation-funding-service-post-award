@@ -5,7 +5,6 @@ type AvailableAuthRoles = "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc" | "Unknown" 
 
 /**
  * Gets object with auth roles as series of booleans
- *
  */
 export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${AvailableAuthRoles}`, boolean> {
   let isFc: boolean;

@@ -1,17 +1,17 @@
+import { PCRStatus, ProjectMonitoringLevel } from "@framework/constants";
+import { PCRDto } from "@framework/dtos";
+import { IContext, ILinkInfo } from "@framework/types";
+import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
+import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
+import { GetByIdQuery } from "@server/features/projects";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
   PCRsDashboardRoute,
   ProjectChangeRequestPrepareParams,
   ProjectChangeRequestPrepareRoute,
 } from "@ui/containers";
-import { PCRDto, ProjectDto } from "@framework/dtos";
-import { IContext, ILinkInfo } from "@framework/types";
-import { PCRDtoValidator } from "@ui/validators";
-import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { PCRStatus, ProjectMonitoringLevel, ProjectRole } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { GetByIdQuery } from "@server/features/projects";
+import { PCRDtoValidator } from "@ui/validators";
 
 export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareParams,
@@ -58,7 +58,9 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
-    await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
+    await context.runCommand(
+      new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.pcrId, pcr: dto }),
+    );
     return PCRsDashboardRoute.getLink({ projectId: params.projectId });
   }
 
@@ -67,6 +69,9 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
+    return new PCRDtoValidator({
+      model: dto,
+      original: dto,
+    });
   }
 }

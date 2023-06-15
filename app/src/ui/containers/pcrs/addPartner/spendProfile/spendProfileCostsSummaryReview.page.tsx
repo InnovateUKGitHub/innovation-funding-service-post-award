@@ -16,6 +16,7 @@ import {
   PCRItemType,
   ProjectDto,
   ProjectRole,
+  PCRStepId,
 } from "@framework/types";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
@@ -366,7 +367,7 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     // allowing me to find the step name and get the workflow with the correct step
     const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!summaryWorkflow) return null;
-    const stepName: AddPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
     const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
     return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep);
   }

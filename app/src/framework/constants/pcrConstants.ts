@@ -84,6 +84,53 @@ export const enum PCRItemTypeName {
   LoanDrawdownExtension = "LoanDrawdownExtension",
 }
 
+export const enum PCRStepId {
+  // Base PCR Steps
+  none = "",
+  reasoningStep = "reasoningStep",
+  filesStep = "filesStep",
+
+  // Partner Addition Workflow IDs
+  projectLocationStep = "projectLocationStep",
+  financeContactStep = "financeContactStep",
+  otherFundingStep = "otherFundingStep",
+  awardRateStep = "awardRateStep",
+  agreementToPcrStep = "agreementToPcrStep",
+  roleAndOrganisationStep = "roleAndOrganisationStep",
+  aidEligibilityStep = "aidEligibilityStep",
+  academicOrganisationStep = "academicOrganisationStep",
+  jeSStep = "jeSStep",
+  academicCostsStep = "academicCostsStep",
+  companiesHouseStep = "companiesHouseStep",
+  organisationDetailsStep = "organisationDetailsStep",
+  financeDetailsStep = "financeDetailsStep",
+  spendProfileStep = "spendProfileStep",
+  projectManagerDetailsStep = "projectManagerDetailsStep",
+  otherFundingSourcesStep = "otherFundingSourcesStep",
+
+  // Loan Drawdown Change IDs
+  loanDrawdownChange = "loanDrawdownChange",
+
+  // Loan Extension IDs
+  loanExtension = "loanExtension",
+
+  // Parther Withdrawal Workflow IDs
+  removalPeriodStep = "removalPeriodStep",
+
+  // Scope Change Workflow IDs
+  publicDescriptionStep = "publicDescriptionStep",
+  projectSummaryStep = "projectSummaryStep",
+
+  // Suspend Project Workflow IDs
+  details = "details",
+
+  // Time extension workflow IDs
+  timeExtension = "timeExtension",
+
+  // Account Name Change IDs
+  partnerNameStep = "partnerNameStep",
+}
+
 export enum PCRParticipantSize {
   Unknown = 0,
   Academic = 10,

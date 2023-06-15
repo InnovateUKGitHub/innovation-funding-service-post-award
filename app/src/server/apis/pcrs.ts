@@ -128,7 +128,9 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
   async update(params: ApiParams<{ projectId: ProjectId; id: PcrId; pcr: PCRDto }>): Promise<PCRDto> {
     const context = contextProvider.start(params);
-    await context.runCommand(new UpdatePCRCommand(params.projectId, params.id, params.pcr));
+    await context.runCommand(
+      new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
+    );
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
   }
 

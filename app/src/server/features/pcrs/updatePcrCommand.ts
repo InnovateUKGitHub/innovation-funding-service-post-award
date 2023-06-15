@@ -1,6 +1,6 @@
 import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { Authorisation, IContext, PCRItemType } from "@framework/types";
+import { Authorisation, IContext, PCRItemType, PCRStepId } from "@framework/types";
 import { ProjectChangeRequestItemEntity, ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { CostCategoryType, PCRItemTypeName, PCRStatus, ProjectRole } from "@framework/constants";
@@ -13,12 +13,27 @@ import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { mapToPcrDto } from "./mapToPCRDto";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
-  constructor(
-    private readonly projectId: ProjectId,
-    private readonly projectChangeRequestId: PcrId,
-    private readonly pcr: PCRDto,
-  ) {
+  private readonly projectId: ProjectId;
+  private readonly projectChangeRequestId: PcrId;
+  private readonly pcr: PCRDto;
+  private readonly pcrStepId: PCRStepId;
+
+  constructor({
+    projectId,
+    projectChangeRequestId,
+    pcr,
+    pcrStepId = PCRStepId.none,
+  }: {
+    projectId: ProjectId;
+    projectChangeRequestId: PcrId;
+    pcr: PCRDto;
+    pcrStepId?: PCRStepId;
+  }) {
     super();
+    this.projectId = projectId;
+    this.projectChangeRequestId = projectChangeRequestId;
+    this.pcr = pcr;
+    this.pcrStepId = pcrStepId;
   }
 
   protected async accessControl(auth: Authorisation) {
@@ -67,16 +82,17 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
-    const validationResult = new PCRDtoValidator(
-      this.pcr,
-      projectRoles,
-      itemTypes,
-      true,
-      project,
-      originalDto,
-      partners,
-      allPcrs,
-    );
+    const validationResult = new PCRDtoValidator({
+      model: this.pcr,
+      role: projectRoles,
+      recordTypes: itemTypes,
+      showValidationErrors: true,
+      project: project,
+      original: originalDto,
+      partners: partners,
+      projectPcrs: allPcrs,
+      pcrStepId: this.pcrStepId,
+    });
 
     if (!validationResult.isValid) throw new ValidationError(validationResult);
 

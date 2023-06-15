@@ -1,12 +1,12 @@
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { PCRCreateRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
-import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, PCRStandardItemDto, ProjectDto } from "@framework/dtos";
+import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, PCRStandardItemDto } from "@framework/dtos";
 import { IContext, ILinkInfo, PCRItemType } from "@framework/types";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
-import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemStatus, PCRStatus, ProjectRole } from "@framework/constants";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import { PCRCreateRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PcrModifyParams } from "@ui/containers/pcrs/modifyOptions/PcrModifyOptions";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PCRDtoValidator } from "@ui/validators";
 
 export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<PcrModifyParams, "pcr"> {
   constructor() {
@@ -63,6 +63,9 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: PcrModifyParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
+    return new PCRDtoValidator({
+      model: dto,
+      original: dto,
+    });
   }
 }

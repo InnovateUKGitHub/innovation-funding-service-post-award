@@ -8,6 +8,7 @@ import {
   PCRItemType,
   ProjectDto,
   ProjectRole,
+  PCRStepId,
 } from "@framework/types";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
@@ -190,16 +191,22 @@ const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams 
         // If submitting from a step set the status to incomplete
         item.status = PCRItemStatus.Incomplete;
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, "You have deleted a cost", () =>
-          navigate(
-            props.routes.pcrSpendProfileCostsSummary.getLink({
-              projectId: props.projectId,
-              pcrId: props.pcrId,
-              itemId: props.itemId,
-              costCategoryId: props.costCategoryId,
-            }).path,
-          ),
-        );
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: true,
+          projectId,
+          pcrStepId: PCRStepId.spendProfileStep,
+          dto,
+          message: "You have deleted a cost",
+          onComplete: () =>
+            navigate(
+              props.routes.pcrSpendProfileCostsSummary.getLink({
+                projectId: props.projectId,
+                pcrId: props.pcrId,
+                itemId: props.itemId,
+                costCategoryId: props.costCategoryId,
+              }).path,
+            ),
+        });
       }}
     />
   );

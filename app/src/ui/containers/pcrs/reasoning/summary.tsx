@@ -1,4 +1,4 @@
-import { ILinkInfo, PCRItemStatus, PCRItemType } from "@framework/types";
+import { ILinkInfo, PCRItemStatus, PCRItemType, PCRStepId } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, useStores } from "@ui/redux";
@@ -56,7 +56,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
               validation={editor.validator.reasoningComments}
               action={
                 mode === "prepare" && (
-                  <ACC.Link id={editor.validator.reasoningComments.key} route={getStepLink("reasoningStep")}>
+                  <ACC.Link id={editor.validator.reasoningComments.key} route={getStepLink(PCRStepId.reasoningStep)}>
                     <ACC.Content value={x => x.pages.pcrReasoningSummary.edit} />
                   </ACC.Link>
                 )
@@ -74,7 +74,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
               qa="files"
               action={
                 mode === "prepare" && (
-                  <ACC.Link route={getStepLink("filesStep")}>
+                  <ACC.Link route={getStepLink(PCRStepId.filesStep)}>
                     <ACC.Content value={x => x.pages.pcrReasoningSummary.edit} />
                   </ACC.Link>
                 )

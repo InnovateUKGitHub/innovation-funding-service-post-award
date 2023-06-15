@@ -1,9 +1,3 @@
-import * as Dtos from "@framework/dtos";
-import { PCRDto } from "@framework/dtos";
-import { PCRDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { apiClient } from "@ui/apiClient";
-import { Pending } from "@shared/pending";
-import { NotFoundError } from "@shared/appError";
 import {
   CostCategoryType,
   LoadingStatus,
@@ -16,19 +10,26 @@ import {
   PCRProjectLocation,
   PCRProjectRole,
   PCRStatus,
+  PCRStepId,
   ProjectRole,
   TypeOfAid,
 } from "@framework/constants";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import * as Dtos from "@framework/dtos";
+import { PCRDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissions";
+import { NotFoundError } from "@shared/appError";
+import { Pending } from "@shared/pending";
+import { apiClient } from "@ui/apiClient";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PCRDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PCRSpendProfileCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { dataLoadAction, messageSuccess, RootActionsOrThunk } from "../actions";
 import { IEditorStore, RootState } from "../reducers";
+import { PartnersStore } from "./partnersStore";
 import { ProjectsStore } from "./projectsStore";
 import { StoreBase } from "./storeBase";
-import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissions";
-import { PartnersStore } from "./partnersStore";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(
@@ -163,7 +164,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           items: [],
         }),
       init,
-      dto => this.getValidator(projectId, dto, false),
+      dto => this.getValidator({ projectId, dto, pcrStepId: PCRStepId.none, showErrors: false }),
     );
   }
 
@@ -173,7 +174,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId, pcrId),
       () => this.getById(projectId, pcrId),
       init,
-      dto => this.getValidator(projectId, dto, false),
+      dto => this.getValidator({ projectId, dto, pcrStepId: PCRStepId.none, showErrors: false }),
     );
   }
 
@@ -216,19 +217,27 @@ export class ProjectChangeRequestStore extends StoreBase {
     };
   }
 
-  public updatePcrEditor(
-    saving: boolean,
-    projectId: ProjectId,
-    dto: PCRDto,
-    message?: string,
-    onComplete?: (result: PCRDto) => void,
-  ) {
+  public updatePcrEditor({
+    saving,
+    projectId,
+    pcrStepId,
+    dto,
+    message,
+    onComplete,
+  }: {
+    saving: boolean;
+    projectId: ProjectId;
+    pcrStepId?: PCRStepId;
+    dto: PCRDto;
+    message?: string;
+    onComplete?: (result: PCRDto) => void;
+  }) {
     this.updateEditor(
       saving,
       "pcr",
       this.getKeyForRequest(projectId, dto.id),
       dto,
-      showErrors => this.getValidator(projectId, dto, showErrors),
+      showErrors => this.getValidator({ projectId, dto, pcrStepId, showErrors }),
       p =>
         dto.id
           ? apiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p })
@@ -374,7 +383,17 @@ export class ProjectChangeRequestStore extends StoreBase {
     }
   }
 
-  private getValidator(projectId: ProjectId, dto: PCRDto, showErrors: boolean) {
+  private getValidator({
+    projectId,
+    dto,
+    pcrStepId,
+    showErrors,
+  }: {
+    projectId: ProjectId;
+    dto: PCRDto;
+    pcrStepId?: PCRStepId;
+    showErrors: boolean;
+  }) {
     return Pending.combine({
       projectRoles: this.projectStore.getById(projectId).then(x => x.roles),
       original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
@@ -383,15 +402,16 @@ export class ProjectChangeRequestStore extends StoreBase {
       partners: this.partnersStore.getPartnersForProject(projectId),
     }).then(
       x =>
-        new PCRDtoValidator(
-          dto,
-          this.convertRolesToEnumType(x.projectRoles),
-          x.itemTypes,
-          showErrors,
-          x.project,
-          x.original,
-          x.partners,
-        ),
+        new PCRDtoValidator({
+          model: dto,
+          role: this.convertRolesToEnumType(x.projectRoles),
+          recordTypes: x.itemTypes,
+          showValidationErrors: showErrors,
+          project: x.project,
+          original: x.original,
+          partners: x.partners,
+          pcrStepId: pcrStepId,
+        }),
     );
   }
 
@@ -408,7 +428,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       "pcr",
       this.getKeyForRequest(projectId, pcrId),
       dto,
-      () => this.getValidator(projectId, dto, false),
+      () => this.getValidator({ projectId, dto, pcrStepId: PCRStepId.none, showErrors: false }),
       p => apiClient.pcrs.delete({ projectId, id: pcrId, ...p }),
       () => {
         if (message) {

@@ -3,8 +3,9 @@ import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { SuspendProjectDetails } from "./suspendProjectDetails";
 import { SuspendProjectSummary } from "./suspendProjectSummary";
+import { PCRStepId } from "@framework/types";
 
-export type SuspendProjectSteps = "details";
+export type SuspendProjectSteps = PCRStepId.details;
 
 export const suspendProjectWorkflow: IPCRWorkflow<
   PCRItemForProjectSuspensionDto,
@@ -12,7 +13,7 @@ export const suspendProjectWorkflow: IPCRWorkflow<
 > = {
   steps: [
     {
-      stepName: "details",
+      stepName: PCRStepId.details,
       displayName: "Suspension details",
       stepNumber: 1,
       validation: val => val.pcr,

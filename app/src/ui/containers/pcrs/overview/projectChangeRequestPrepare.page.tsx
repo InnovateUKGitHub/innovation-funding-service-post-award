@@ -45,9 +45,13 @@ const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProp
           mode="prepare"
           editor={editor}
           onChange={(saving: boolean, dto: PCRDto) =>
-            stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () =>
-              navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path),
-            )
+            stores.projectChangeRequests.updatePcrEditor({
+              saving,
+              projectId: props.projectId,
+              dto,
+              message: undefined,
+              onComplete: () => navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path),
+            })
           }
         />
       )}

@@ -180,14 +180,19 @@ const PcrModifySelectedContainer = (props: PcrModifyParams & BaseProps) => {
           editor={editor}
           createNewChangeRequestItem={itemType => stores.projectChangeRequests.createNewChangeRequestItem(itemType)}
           onChange={(saving, dto) =>
-            stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, created =>
-              navigate(
-                props.routes.pcrPrepare.getLink({
-                  projectId: dto.projectId,
-                  pcrId: props.projectChangeRequestId ?? created.id,
-                }).path,
-              ),
-            )
+            stores.projectChangeRequests.updatePcrEditor({
+              saving,
+              projectId: props.projectId,
+              dto,
+              message: undefined,
+              onComplete: created =>
+                navigate(
+                  props.routes.pcrPrepare.getLink({
+                    projectId: dto.projectId,
+                    pcrId: props.projectChangeRequestId ?? created.id,
+                  }).path,
+                ),
+            })
           }
         />
       )}

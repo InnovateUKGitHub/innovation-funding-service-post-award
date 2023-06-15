@@ -1,44 +1,44 @@
 import {
-  IContext,
-  ILinkInfo,
-  PCRItemForPartnerAdditionDto,
-  PCRParticipantSize,
-  ProjectDto,
-  ProjectRole,
-} from "@framework/types";
-import { BadRequestError } from "@server/features/common";
-import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-  ProjectChangeRequestPrepareRoute,
-} from "@ui/containers";
-import { PCRDtoValidator } from "@ui/validators";
-import { DateTime } from "luxon";
-import * as Dtos from "@framework/dtos";
-import {
   CostCategoryType,
   getPCROrganisationType,
   PCRItemStatus,
   PCRItemType,
   PCROrganisationType,
 } from "@framework/constants";
+import * as Dtos from "@framework/dtos";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  IContext,
+  ILinkInfo,
+  PCRItemForPartnerAdditionDto,
+  PCRParticipantSize,
+  PCRStepId,
+  ProjectDto,
+} from "@framework/types";
+import { parseNumber } from "@framework/util";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
+import { BadRequestError } from "@server/features/common";
+import { GetFinancialLoanVirementQuery } from "@server/features/financialVirements/getFinancialLoanVirementQuery";
+import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
+import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
+import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
+import { GetByIdQuery } from "@server/features/projects";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import {
+  PCRPrepareItemRoute,
+  ProjectChangeRequestPrepareItemParams,
+  ProjectChangeRequestPrepareRoute,
+} from "@ui/containers";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
-import { SuspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow, WorkflowPcrType } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
-import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import { parseNumber } from "@framework/util";
-import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
-import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { GetByIdQuery } from "@server/features/projects";
-import { GetFinancialLoanVirementQuery } from "@server/features/financialVirements/getFinancialLoanVirementQuery";
-import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
+import { SuspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PCRDtoValidator } from "@ui/validators";
+import { DateTime } from "luxon";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareItemParams,
@@ -107,7 +107,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: SuspendProjectSteps,
   ) {
-    if (stepName === "details") {
+    if (stepName === PCRStepId.details) {
       if (body.suspensionStartDate_month || body.suspensionStartDate_year) {
         const suspensionStartDate = DateTime.fromFormat(
           `${body.suspensionStartDate_month}/${body.suspensionStartDate_year}`,
@@ -134,11 +134,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateScopeChange(item: Dtos.PCRItemForScopeChangeDto, body: IFormBody, stepName: scopeChangeStepNames) {
-    if (stepName === "publicDescriptionStep") {
+    if (stepName === PCRStepId.publicDescriptionStep) {
       item.publicDescription = body.description;
     }
 
-    if (stepName === "projectSummaryStep") {
+    if (stepName === PCRStepId.projectSummaryStep) {
       item.projectSummary = body.summary;
     }
   }
@@ -177,7 +177,14 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
 
     if (isPcrSummary) await this.validateSummary(context, params, pcrItem);
 
-    await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
+    await context.runCommand(
+      new UpdatePCRCommand({
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
+        pcrStepId: workflow?.getCurrentStepName(),
+        pcr: dto,
+      }),
+    );
 
     if (!workflow || isPcrSummary) {
       return ProjectChangeRequestPrepareRoute.getLink(params);
@@ -206,7 +213,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: accountNameChangeStepNames | null,
   ) {
-    if (stepName === "partnerNameStep") {
+    if (stepName === PCRStepId.partnerNameStep) {
       item.partnerId = body.partnerId;
       item.accountName = body.accountName;
     }
@@ -228,7 +235,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: removePartnerStepNames | null,
   ) {
-    if (stepName === "removalPeriodStep") {
+    if (stepName === PCRStepId.removalPeriodStep) {
       item.removalPeriod = Number(body.removalPeriod);
       item.partnerId = body.partnerId;
     }
@@ -241,7 +248,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: AddPartnerStepNames | null,
   ) {
-    if (stepName === "roleAndOrganisationStep") {
+    if (stepName === PCRStepId.roleAndOrganisationStep) {
       item.projectRole = parseInt(body.projectRole, 10);
       item.partnerType = parseInt(body.partnerType, 10);
       const organisationType = getPCROrganisationType(item.partnerType);
@@ -252,14 +259,14 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.isCommercialWork =
         body.isCommercialWork === "true" ? true : body.isCommercialWork === "false" ? false : null;
     }
-    if (stepName === "academicOrganisationStep") {
+    if (stepName === PCRStepId.academicOrganisationStep) {
       item.organisationName = body.organisationName;
     }
-    if (stepName === "organisationDetailsStep") {
+    if (stepName === PCRStepId.organisationDetailsStep) {
       item.participantSize = parseInt(body.participantSize, 10);
       item.numberOfEmployees = parseInt(body.numberOfEmployees, 10);
     }
-    if (stepName === "financeDetailsStep") {
+    if (stepName === PCRStepId.financeDetailsStep) {
       item.financialYearEndDate =
         body.financialYearEndDate_month && body.financialYearEndDate_year
           ? DateTime.fromFormat(`${body.financialYearEndDate_month}/${body.financialYearEndDate_year}`, "M/yyyy")
@@ -269,29 +276,29 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
           : null;
       item.financialYearEndTurnover = Number(body.financialYearEndTurnover);
     }
-    if (stepName === "projectLocationStep") {
+    if (stepName === PCRStepId.projectLocationStep) {
       item.projectLocation = parseInt(body.projectLocation, 10);
       item.projectCity = body.projectCity;
       item.projectPostcode = body.projectPostcode;
     }
-    if (stepName === "financeContactStep") {
+    if (stepName === PCRStepId.financeContactStep) {
       item.contact1ProjectRole = parseInt(body.contact1ProjectRole, 10);
       item.contact1Forename = body.contact1Forename;
       item.contact1Surname = body.contact1Surname;
       item.contact1Phone = body.contact1Phone;
       item.contact1Email = body.contact1Email;
     }
-    if (stepName === "projectManagerDetailsStep") {
+    if (stepName === PCRStepId.projectManagerDetailsStep) {
       item.contact2ProjectRole = parseInt(body.contact2ProjectRole, 10);
       item.contact2Forename = body.contact2Forename;
       item.contact2Surname = body.contact2Surname;
       item.contact2Phone = body.contact2Phone;
       item.contact2Email = body.contact2Email;
     }
-    if (stepName === "awardRateStep") {
+    if (stepName === PCRStepId.awardRateStep) {
       item.awardRate = parseNumber(body.awardRate);
     }
-    if (stepName === "academicCostsStep") {
+    if (stepName === PCRStepId.academicCostsStep) {
       item.tsbReference = body.tsbReference;
 
       const relevantCostCategories = costCategories.filter(
@@ -316,10 +323,10 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         }
       });
     }
-    if (stepName === "otherFundingStep") {
+    if (stepName === PCRStepId.otherFundingStep) {
       item.hasOtherFunding = body.hasOtherFunding === "true" ? true : body.hasOtherFunding === "false" ? false : null;
     }
-    if (stepName === "otherFundingSourcesStep") {
+    if (stepName === PCRStepId.otherFundingSourcesStep) {
       const otherFundingCostCategory = costCategories.find(
         x => x.type === CostCategoryType.Other_Public_Sector_Funding,
       );
@@ -352,7 +359,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: string | undefined,
   ) {
-    if (stepName === "loanExtension") {
+    if (stepName === PCRStepId.loanExtension) {
       item.availabilityPeriodChange = Number(body.availabilityPeriodChange);
       item.extensionPeriodChange = Number(body.extensionPeriodChange);
       item.repaymentPeriodChange = Number(body.repaymentPeriodChange);
@@ -364,6 +371,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
+    return new PCRDtoValidator({
+      model: dto,
+      original: dto,
+    });
   }
 }

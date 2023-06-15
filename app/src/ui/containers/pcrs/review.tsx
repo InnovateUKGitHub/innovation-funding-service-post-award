@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ProjectDto, ProjectRole } from "@framework/types";
+import { PCRStepId, ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
@@ -227,8 +227,14 @@ const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => {
         x => (x.status = PCRStatus.Unknown),
       )}
       onChange={(save, dto) =>
-        stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () => {
-          navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path);
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: save,
+          projectId: props.projectId,
+          pcrStepId: PCRStepId.spendProfileStep,
+          dto,
+          onComplete: () => {
+            navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path);
+          },
         })
       }
       editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}

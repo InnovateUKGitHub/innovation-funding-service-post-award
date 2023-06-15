@@ -6,6 +6,7 @@ import { PCRStandardItemDto } from "@framework/dtos";
 import { PCRStandardItemDtoValidator } from "@ui/validators";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { StandardItemStepNames } from "./workflow";
+import { PCRStepId } from "@framework/types";
 
 interface Props {
   documents: DocumentSummaryDto[];
@@ -22,7 +23,7 @@ class SummaryComponent extends React.Component<
             label="Documents"
             content={this.renderDocuments(this.props.documents)}
             qa="supportingDocuments"
-            action={this.props.getEditLink("filesStep", null)}
+            action={this.props.getEditLink(PCRStepId.filesStep, null)}
           />
         </ACC.SummaryList>
       </ACC.Section>

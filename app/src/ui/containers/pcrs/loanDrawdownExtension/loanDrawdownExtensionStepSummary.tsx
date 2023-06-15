@@ -4,6 +4,7 @@ import { PCRLoanExtensionItemDtoValidator } from "@ui/validators";
 
 import { LoanExtensionStepNames } from "./loanDrawdownExtensionWorkflow";
 import { LoanChangeDurationTable } from "./LoanChangeDurationTable";
+import { PCRStepId } from "@framework/types";
 
 type BaseProps = PcrSummaryProps<
   PCRItemForLoanDrawdownExtensionDto,
@@ -21,7 +22,7 @@ export const loanDrawdownExtensionStepSummary = (props: BaseProps) => {
     <LoanChangeDurationTable
       formData={props.pcrItem}
       validator={props.validator}
-      editLink={props.getEditLink("loanExtension", null)}
+      editLink={props.getEditLink(PCRStepId.loanExtension, null)}
     />
   );
 };

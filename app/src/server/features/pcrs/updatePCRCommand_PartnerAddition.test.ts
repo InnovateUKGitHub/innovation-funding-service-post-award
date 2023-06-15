@@ -9,6 +9,7 @@ import {
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
+  PCRStepId,
 } from "@framework/types";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { CostCategoryType, PCRItemStatus, PCROrganisationType, PCRStatus } from "@framework/constants";
@@ -87,7 +88,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.projectRole = PCRProjectRole.Unknown;
     item.partnerType = PCRPartnerType.Unknown;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+    const command = new UpdatePCRCommand({
+      projectId: project.Id,
+      projectChangeRequestId: projectChangeRequest.id,
+      pcr: dto,
+    });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
   it("should require project role and partner type to be set if the flag is set to required", async () => {
@@ -98,7 +103,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.projectRole = PCRProjectRole.Unknown;
     item.partnerType = PCRPartnerType.Unknown;
     item.isProjectRoleAndPartnerTypeRequired = true;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+    const command = new UpdatePCRCommand({
+      projectId: project.Id,
+      projectChangeRequestId: projectChangeRequest.id,
+      pcr: dto,
+    });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
 
     // get fresh dto to test commercial work
@@ -106,9 +115,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.isProjectRoleAndPartnerTypeRequired = true;
     item.isCommercialWork = null;
-    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(
-      ValidationError,
-    );
+    await expect(
+      context.runCommand(
+        new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+      ),
+    ).rejects.toThrow(ValidationError);
   });
   it("should require fields to be set when the organisation type is Academic", async () => {
     const { context, projectChangeRequest, recordType, project } = setup();
@@ -117,7 +128,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as Partial<PCRItemForPartnerAdditionDto>;
     item.status = PCRItemStatus.Complete;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+    const command = new UpdatePCRCommand({
+      projectId: project.Id,
+      projectChangeRequestId: projectChangeRequest.id,
+      pcr: dto,
+    });
 
     delete item.organisationName;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -136,7 +151,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as Partial<PCRItemForPartnerAdditionDto>;
     item.status = PCRItemStatus.Complete;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+    const command = new UpdatePCRCommand({
+      projectId: project.Id,
+      projectChangeRequestId: projectChangeRequest.id,
+      pcr: dto,
+    });
 
     delete item.organisationName;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -244,14 +263,18 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.projectRole = PCRProjectRole.ProjectLead;
-    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(
-      ValidationError,
-    );
+    await expect(
+      context.runCommand(
+        new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+      ),
+    ).rejects.toThrow(ValidationError);
     item.projectRole = PCRProjectRole.Collaborator;
     item.partnerType = PCRPartnerType.ResearchAndTechnology;
-    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(
-      ValidationError,
-    );
+    await expect(
+      context.runCommand(
+        new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+      ),
+    ).rejects.toThrow(ValidationError);
   });
   it("should update item status", async () => {
     const { context, projectChangeRequest, recordType, project } = setup();
@@ -259,7 +282,9 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.status = PCRItemStatus.Complete;
-    await context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto));
+    await context.runCommand(
+      new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: projectChangeRequest.id, pcr: dto }),
+    );
     const updated = await context.runQuery(
       new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
     );
@@ -324,7 +349,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
       },
     ];
 
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+    const command = new UpdatePCRCommand({
+      projectId: project.Id,
+      projectChangeRequestId: projectChangeRequest.id,
+      pcr: dto,
+    });
     await context.runCommand(command);
     const updated = await context.runQuery(
       new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
@@ -358,6 +387,54 @@ describe("UpdatePCRCommand - Partner addition", () => {
     expect(updatedItem.isCommercialWork).toEqual(true);
     expect(updatedItem.tsbReference).toEqual("54321EDCBA");
   });
+
+  test("Project Location is mandatory on relevant step, but not editable on other steps", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject();
+    context.testData.createCurrentUserAsProjectManager(project);
+    const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+    const recordTypes = context.testData.createPCRRecordTypes();
+
+    const partnerAddditionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+      x => x.type === PCRItemType.PartnerAddition,
+    );
+
+    const recordType = recordTypes.find(x => x.type === partnerAddditionType?.typeName);
+    context.testData.createPCRItem(projectChangeRequest, recordType, {
+      status: PCRItemStatus.ToDo,
+      projectLocation: undefined,
+    });
+
+    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+
+    // Ensure that the project location fails if we pass in nothing
+    item.projectLocation = PCRProjectLocation.Unknown;
+    await expect(
+      context.runCommand(
+        new UpdatePCRCommand({
+          projectId: project.Id,
+          projectChangeRequestId: projectChangeRequest.id,
+          pcrStepId: PCRStepId.projectLocationStep,
+          pcr: dto,
+        }),
+      ),
+    ).rejects.toThrow(ValidationError);
+
+    // Ensure that the project location succeeds if we are on the correct page.
+    item.projectLocation = PCRProjectLocation.InsideTheUnitedKingdom;
+    await expect(
+      context.runCommand(
+        new UpdatePCRCommand({
+          projectId: project.Id,
+          projectChangeRequestId: projectChangeRequest.id,
+          pcrStepId: PCRStepId.projectLocationStep,
+          pcr: dto,
+        }),
+      ),
+    ).resolves.toBe(true);
+  });
   describe("Spend Profile", () => {
     it("should update pcr spend profiles", async () => {
       const { context, projectChangeRequest, recordType, project } = setup();
@@ -379,7 +456,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
         description: "Queen",
         grossCostOfRole: 200,
       });
-      const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+      const command = new UpdatePCRCommand({
+        projectId: project.Id,
+        projectChangeRequestId: projectChangeRequest.id,
+        pcr: dto,
+      });
       await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();

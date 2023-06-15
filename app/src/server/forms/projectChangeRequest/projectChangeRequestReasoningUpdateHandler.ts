@@ -1,4 +1,5 @@
-import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto, ProjectDto, ProjectRole } from "@framework/types";
+import { PCRItemDisabledReason, PCRItemStatus, PCRItemType } from "@framework/constants";
+import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto } from "@framework/types";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
@@ -7,10 +8,9 @@ import {
   ProjectChangeRequestPrepareReasoningParams,
   ProjectChangeRequestPrepareRoute,
 } from "@ui/containers";
-import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemDisabledReason, PCRItemStatus, PCRItemType } from "@framework/constants";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { PCRDtoValidator } from "@ui/validators";
 
 export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareReasoningParams,
@@ -43,7 +43,9 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
-    await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
+    await context.runCommand(
+      new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.pcrId, pcr: dto }),
+    );
 
     // If on the summary
     if (!params.step) {
@@ -78,6 +80,10 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
         files: [],
       },
     ];
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, projectChangeRequestItemTypes, false, {} as ProjectDto, dto);
+    return new PCRDtoValidator({
+      model: dto,
+      original: dto,
+      recordTypes: projectChangeRequestItemTypes,
+    });
   }
 }

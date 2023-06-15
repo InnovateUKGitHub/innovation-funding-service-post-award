@@ -1,4 +1,6 @@
-import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, ProjectDto, ProjectRole } from "@framework/types";
+import { PCRItemStatus } from "@framework/constants";
+import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, PCRStepId } from "@framework/types";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -8,10 +10,8 @@ import {
   PCRSpendProfileCostsSummaryRoute,
   PCRSpendProfileDeleteCostRoute,
 } from "@ui/containers";
-import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
+import { PCRDtoValidator } from "@ui/validators";
 
 export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardFormHandlerBase<
   PcrDeleteSpendProfileCostParams,
@@ -70,7 +70,14 @@ export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardF
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
-    await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
+    await context.runCommand(
+      new UpdatePCRCommand({
+        projectId: params.projectId,
+        projectChangeRequestId: params.pcrId,
+        pcr: dto,
+        pcrStepId: PCRStepId.spendProfileStep,
+      }),
+    );
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,
@@ -85,6 +92,10 @@ export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardF
   }
 
   protected createValidationResult(params: PcrDeleteSpendProfileCostParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
+    return new PCRDtoValidator({
+      model: dto,
+      original: dto,
+      pcrStepId: PCRStepId.spendProfileStep,
+    });
   }
 }

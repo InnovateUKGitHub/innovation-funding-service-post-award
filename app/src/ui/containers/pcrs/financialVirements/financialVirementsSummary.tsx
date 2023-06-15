@@ -12,7 +12,7 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
 import { MultiplePartnerFinancialVirementDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemType } from "@framework/types";
+import { PCRItemType, PCRStepId } from "@framework/types";
 import { roundCurrency } from "@framework/util";
 import { useProjectParticipants } from "@ui/features/project-participants";
 import * as ACC from "@ui/components";
@@ -25,7 +25,7 @@ export interface FinancialVirementSummaryProps
   extends PcrSummaryProps<
     PCRItemForMultiplePartnerFinancialVirementDto,
     MultiplePartnerFinancialVirementDtoValidator,
-    ""
+    PCRStepId.none
   > {
   virement: Pending<FinancialVirementDto>;
 }
@@ -333,7 +333,7 @@ export const GrantMovingOverFinancialYearForm = ({ form: Form, editor }: GrantMo
 export type FinancialVirementSummaryContainerProps = PcrSummaryProps<
   PCRItemForMultiplePartnerFinancialVirementDto,
   MultiplePartnerFinancialVirementDtoValidator,
-  ""
+  PCRStepId.none
 >;
 
 export const FinancialVirementSummary = (props: FinancialVirementSummaryContainerProps) => {

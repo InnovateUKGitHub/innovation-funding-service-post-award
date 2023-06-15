@@ -1,5 +1,5 @@
 import React from "react";
-import { PCRItemForPartnerWithdrawalDto } from "@framework/types";
+import { PCRItemForPartnerWithdrawalDto, PCRStepId } from "@framework/types";
 import { useStores } from "@ui/redux";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
@@ -25,20 +25,20 @@ class Component extends React.Component<
             content={pcrItem.partnerNameSnapshot}
             validation={validator.partnerId}
             qa="partnerToRemove"
-            action={this.props.getEditLink("removalPeriodStep", validator.partnerId)}
+            action={this.props.getEditLink(PCRStepId.removalPeriodStep, validator.partnerId)}
           />
           <ACC.SummaryListItem
             label={x => x.pcrRemovePartnerLabels.lastPeriod}
             content={pcrItem.removalPeriod}
             validation={validator.removalPeriod}
             qa="removalPeriod"
-            action={this.props.getEditLink("removalPeriodStep", validator.removalPeriod)}
+            action={this.props.getEditLink(PCRStepId.removalPeriodStep, validator.removalPeriod)}
           />
           <ACC.SummaryListItem
             label={x => x.pcrRemovePartnerLabels.documents}
             content={this.renderDocuments(documents)}
             qa="supportingDocuments"
-            action={this.props.getEditLink("filesStep", null)}
+            action={this.props.getEditLink(PCRStepId.filesStep, null)}
           />
         </ACC.SummaryList>
       </ACC.Section>

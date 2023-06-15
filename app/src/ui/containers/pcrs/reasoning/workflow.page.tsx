@@ -1,12 +1,12 @@
-import { useNavigate } from "react-router-dom";
-import { ILinkInfo, PCRItemStatus, ProjectDto, ProjectRole } from "@framework/types";
-import { Pending } from "@shared/pending";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, useStores } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { ILinkInfo, PCRItemStatus, PCRStepId, ProjectDto, ProjectRole } from "@framework/types";
+import { Pending } from "@shared/pending";
 import { PCRReasoningSummary } from "@ui/containers/pcrs/reasoning/summary";
 import { IReasoningWorkflowMetadata, reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { IEditorStore, useStores } from "@ui/redux";
+import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { useNavigate } from "react-router-dom";
 import * as ACC from "../../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 
@@ -224,11 +224,23 @@ const PCRReasoningWorkflowContainer = (
       )}
       onSave={(dto, link) => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () => navigate(link.path));
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: true,
+          projectId: props.projectId,
+          pcrStepId: PCRStepId.reasoningStep,
+          dto,
+          message: undefined,
+          onComplete: () => navigate(link.path),
+        });
       }}
       onChange={dto => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: false,
+          projectId: props.projectId,
+          pcrStepId: PCRStepId.reasoningStep,
+          dto,
+        });
       }}
     />
   );

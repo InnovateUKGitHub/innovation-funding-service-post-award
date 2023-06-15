@@ -3,13 +3,14 @@ import { TimeExtensionSummary } from "@ui/containers/pcrs/timeExtension/timeExte
 import { TimeExtensionStepContainer } from "@ui/containers/pcrs/timeExtension/timeExtensionStep";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRStepId } from "@framework/types";
 
-export type TimeExtensionStepNames = "timeExtension";
+export type TimeExtensionStepNames = PCRStepId.timeExtension;
 
 export const timeExtensionItemWorkflow: IPCRWorkflow<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator> = {
   steps: [
     {
-      stepName: "timeExtension",
+      stepName: PCRStepId.timeExtension,
       displayName: "Time extension",
       stepNumber: 1,
       validation: val => val.pcr,

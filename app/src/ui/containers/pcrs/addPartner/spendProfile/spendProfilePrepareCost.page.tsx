@@ -1,22 +1,5 @@
-import { useNavigate, NavigateFunction } from "react-router-dom";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import {
-  CostCategoryItem,
-  CostCategoryList,
-  CostCategoryType,
-  ILinkInfo,
-  PCRItemForPartnerAdditionDto,
-  PCRItemStatus,
-  PCRItemType,
-  ProjectDto,
-  ProjectRole,
-  CostCategoryGroupType,
-} from "@framework/types";
-import * as ACC from "@ui/components";
-import { Pending } from "@shared/pending";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, IStores, useStores } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
 import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
@@ -27,7 +10,36 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import {
+  CostCategoryGroupType,
+  CostCategoryItem,
+  CostCategoryList,
+  CostCategoryType,
+  ILinkInfo,
+  PCRItemForPartnerAdditionDto,
+  PCRItemStatus,
+  PCRItemType,
+  PCRStepId,
+  ProjectDto,
+  ProjectRole,
+} from "@framework/types";
+import { Pending } from "@shared/pending";
+import * as ACC from "@ui/components";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import {
+  CapitalUsageFormComponent,
+  LabourFormComponent,
+  MaterialsFormComponent,
+  OtherCostsFormComponent,
+  OverheadsFormComponent,
+  SubcontractingFormComponent,
+  TravelAndSubsFormComponent,
+} from "@ui/containers/pcrs/addPartner/spendProfile";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { IEditorStore, IStores, useStores } from "@ui/redux";
+import { IRoutes } from "@ui/routing";
+import { PCRDtoValidator } from "@ui/validators";
 import {
   PCRBaseCostDtoValidator,
   PCRCapitalUsageCostDtoValidator,
@@ -39,18 +51,7 @@ import {
   PCRSubcontractingCostDtoValidator,
   PCRTravelAndSubsCostDtoValidator,
 } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import {
-  CapitalUsageFormComponent,
-  LabourFormComponent,
-  MaterialsFormComponent,
-  OtherCostsFormComponent,
-  OverheadsFormComponent,
-  SubcontractingFormComponent,
-  TravelAndSubsFormComponent,
-} from "@ui/containers/pcrs/addPartner/spendProfile";
-import { IRoutes } from "@ui/routing";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: ProjectId;
@@ -188,7 +189,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private getSpendProfileStep(addPartnerItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!workflow) return null;
-    const stepName: AddPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
     return workflow.findStepNumberByName(stepName);
   }
 
@@ -283,7 +284,14 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
 
 const onSave = (stores: IStores, dto: PCRDto, projectId: ProjectId, link: ILinkInfo, navigate: NavigateFunction) => {
   stores.messages.clearMessages();
-  stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, undefined, () => navigate(link.path));
+  stores.projectChangeRequests.updatePcrEditor({
+    saving: true,
+    projectId,
+    pcrStepId: PCRStepId.spendProfileStep,
+    dto,
+    message: undefined,
+    onComplete: () => navigate(link.path),
+  });
 };
 
 const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
@@ -321,7 +329,12 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
       onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}
       onChange={dto => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: false,
+          projectId: props.projectId,
+          pcrStepId: PCRStepId.spendProfileStep,
+          dto,
+        });
       }}
     />
   );
@@ -350,7 +363,12 @@ const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => {
       onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}
       onChange={dto => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: false,
+          projectId: props.projectId,
+          pcrStepId: PCRStepId.spendProfileStep,
+          dto,
+        });
       }}
     />
   );

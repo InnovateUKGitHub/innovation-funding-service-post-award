@@ -7,6 +7,7 @@ import {
   PCRItemForPartnerAdditionDto,
   PCRItemStatus,
   PCRItemType,
+  PCRStepId,
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
@@ -236,7 +237,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     // allowing me to find the step name and get the workflow with the correct step
     const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!summaryWorkflow) return null;
-    const stepName: AddPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
     const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
     return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep);
   }
@@ -258,11 +259,23 @@ const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryPara
       })}
       onSave={(dto, link) => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () => navigate(link.path));
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: true,
+          projectId: props.projectId,
+          pcrStepId: PCRStepId.spendProfileStep,
+          dto,
+          message: undefined,
+          onComplete: () => navigate(link.path),
+        });
       }}
       onChange={dto => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+        stores.projectChangeRequests.updatePcrEditor({
+          saving: false,
+          projectId: props.projectId,
+          pcrStepId: PCRStepId.spendProfileStep,
+          dto,
+        });
       }}
     />
   );

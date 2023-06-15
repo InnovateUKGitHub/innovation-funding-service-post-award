@@ -4,6 +4,7 @@ import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForTimeExtensionDto } from "@framework/dtos";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { TimeExtensionStepNames } from "./timeExtensionWorkflow";
+import { PCRStepId } from "@framework/types";
 
 export const TimeExtensionSummary = (
   props: PcrSummaryProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator, TimeExtensionStepNames>,
@@ -43,7 +44,7 @@ export const TimeExtensionSummary = (
               />
             }
             qa="newStartToEndDate"
-            action={props.getEditLink("timeExtension", props.validator.offsetMonthsResult)}
+            action={props.getEditLink(PCRStepId.timeExtension, props.validator.offsetMonthsResult)}
           />
           <ACC.SummaryListItem
             label="Duration"

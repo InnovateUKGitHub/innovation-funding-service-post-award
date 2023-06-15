@@ -28,25 +28,94 @@ import {
   PCRSummaryDto,
   ProjectDto,
 } from "@framework/dtos";
-import { getAuthRoles, getUnavailablePcrItemsMatrix } from "@framework/types";
+import { getAuthRoles, getUnavailablePcrItemsMatrix, PCRStepId } from "@framework/types";
 import isNull from "@ui/helpers/is-null";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { DateTime } from "luxon";
-import { Result, Results } from "../validation";
+import { NestedResult, Result, Results } from "../validation";
 import * as Validation from "./common";
 
+interface PCRBaseDtoValidationProps<T> {
+  model: T;
+  original?: T;
+  role?: ProjectRole;
+  recordTypes?: PCRItemTypeDto[];
+  showValidationErrors?: boolean;
+  project?: ProjectDto;
+  partners?: PartnerDto[];
+  pcrStepId?: PCRStepId;
+}
+
+interface PCRBaseDtoHeaderValidatorProps extends PCRBaseDtoValidationProps<PCRDto> {
+  projectPcrs?: PCRSummaryDto[];
+}
+
+interface PCRBaseItemDtoValidatorProps<T extends PCRItemDto> extends PCRBaseDtoValidationProps<T> {
+  canEdit: boolean;
+  pcrStatus: PCRStatus;
+}
+
 export class PCRDtoValidator extends Results<PCRDto> {
-  constructor(
-    model: PCRDto,
-    private readonly role: ProjectRole,
-    private readonly recordTypes: PCRItemTypeDto[],
-    showValidationErrors: boolean,
-    private readonly project: ProjectDto,
-    private readonly original?: PCRDto,
-    private readonly partners?: PartnerDto[],
-    private readonly projectPcrs?: PCRSummaryDto[],
-  ) {
+  private readonly role: ProjectRole = ProjectRole.Unknown;
+  private readonly recordTypes: PCRItemTypeDto[] = [];
+  private readonly project?: ProjectDto;
+  private readonly original?: PCRDto;
+  private readonly partners?: PartnerDto[];
+  private readonly projectPcrs?: PCRSummaryDto[];
+  private readonly pcrStepId: PCRStepId;
+
+  private readonly projectManagerCanEdit: boolean;
+  private readonly monitoringOfficerCanEdit: boolean;
+
+  public comments: Result;
+  public status: Result;
+  public reasoningComments: Result;
+  public reasoningStatus: Result;
+  public items: NestedResult<
+    | PCRTimeExtensionItemDtoValidator
+    | PCRScopeChangeItemDtoValidator
+    | PCRProjectSuspensionItemDtoValidator
+    | PCRProjectTerminationItemDtoValidator
+    | PCRAccountNameChangeItemDtoValidator
+    | PCRPartnerWithdrawalItemDtoValidator
+    | PCRPartnerAdditionItemDtoValidator
+    | MultiplePartnerFinancialVirementDtoValidator
+    | PCRPeriodLengthChangeItemDtoValidator
+    | PCRStandardItemDtoValidator
+    | PCRLoanDrawdownChangeItemDtoValidator
+    | PCRLoanExtensionItemDtoValidator
+  >;
+
+  constructor({
+    model,
+    role = ProjectRole.Unknown,
+    recordTypes = [],
+    showValidationErrors = false,
+    project,
+    original,
+    partners,
+    projectPcrs,
+    pcrStepId = PCRStepId.none,
+  }: PCRBaseDtoHeaderValidatorProps) {
     super({ model, showValidationErrors });
+    this.role = role;
+    this.recordTypes = recordTypes;
+    this.project = project;
+    this.original = original;
+    this.partners = partners;
+    this.projectPcrs = projectPcrs;
+    this.pcrStepId = pcrStepId;
+
+    this.projectManagerCanEdit = !this.original || !!this.projectManagerPermittedStatus.get(this.original.status);
+    this.monitoringOfficerCanEdit =
+      (this.original && !!this.monitoringOfficerPermittedStatus.get(this.original.status)) ?? false;
+
+    // Validating these fields requires above values to be computed
+    this.comments = this.validateComments();
+    this.reasoningComments = this.validateReasoningComments();
+    this.reasoningStatus = this.validateReasonStatus();
+    this.items = this.validateItems();
+    this.status = this.validateStatus();
   }
 
   private readonly projectManagerPermittedStatus = new Map<
@@ -76,9 +145,6 @@ export class PCRDtoValidator extends Results<PCRDto> {
     ],
   ]);
 
-  private readonly projectManagerCanEdit =
-    !this.original || !!this.projectManagerPermittedStatus.get(this.original.status);
-
   private readonly monitoringOfficerPermittedStatus = new Map<
     PCRStatus,
     { standardMonitoring: PCRStatus[]; internalAssurance: PCRStatus[] }
@@ -96,17 +162,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
     ],
   ]);
 
-  private readonly monitoringOfficerCanEdit =
-    this.original && !!this.monitoringOfficerPermittedStatus.get(this.original.status);
-
   static readonly maxCommentsLength = 1000;
   static readonly maxSalesforceFieldLength = 32000;
-
-  public comments = this.validateComments();
-  public status = this.validateStatus();
-  public reasoningComments = this.validateReasoningComments();
-  public reasoningStatus = this.validateReasonStatus();
-  public items = this.validateItems();
 
   private validateComments(): Result {
     const { isPm, isMo } = getAuthRoles(this.role);
@@ -207,7 +264,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       } else {
         permittedStatus.push(
           ...(this.projectManagerPermittedStatus.get(this.original.status)?.[
-            this.project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance
+            this.project?.monitoringLevel === ProjectMonitoringLevel.InternalAssurance
               ? "internalAssurance"
               : "standardMonitoring"
           ] ?? []),
@@ -218,7 +275,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     if (isMo && this.original) {
       permittedStatus.push(
         ...(this.monitoringOfficerPermittedStatus.get(this.original.status)?.[
-          this.project.monitoringLevel === ProjectMonitoringLevel.InternalAssurance
+          this.project?.monitoringLevel === ProjectMonitoringLevel.InternalAssurance
             ? "internalAssurance"
             : "standardMonitoring"
         ] ?? []),
@@ -261,130 +318,63 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const { isPm } = getAuthRoles(this.role);
     const canEdit = isPm ? this.projectManagerCanEdit : false;
     const originalItem = this.original && this.original.items.find(x => x.id === item.id);
+
+    const params: PCRBaseItemDtoValidatorProps<typeof item> = {
+      model: item,
+      canEdit,
+      role: this.role,
+      pcrStatus: this.model.status,
+      recordTypes: this.recordTypes,
+      showValidationErrors: this.showValidationErrors,
+      original: originalItem,
+      partners: this.partners,
+      project: this.project,
+      pcrStepId: this.pcrStepId,
+    };
+
     switch (item.type) {
       case PCRItemType.TimeExtension:
-        return new PCRTimeExtensionItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForTimeExtensionDto,
-        );
+        return new PCRTimeExtensionItemDtoValidator(params as PCRBaseItemDtoValidatorProps<PCRItemForTimeExtensionDto>);
       case PCRItemType.ScopeChange:
-        return new PCRScopeChangeItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForScopeChangeDto,
-        );
+        return new PCRScopeChangeItemDtoValidator(params as PCRBaseItemDtoValidatorProps<PCRItemForScopeChangeDto>);
       case PCRItemType.ProjectSuspension:
         return new PCRProjectSuspensionItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForProjectSuspensionDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForProjectSuspensionDto>,
         );
       case PCRItemType.ProjectTermination:
         return new PCRProjectTerminationItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForProjectTerminationDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForProjectTerminationDto>,
         );
       case PCRItemType.AccountNameChange:
         return new PCRAccountNameChangeItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          this.partners,
-          originalItem as PCRItemForAccountNameChangeDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForAccountNameChangeDto>,
         );
       case PCRItemType.PartnerWithdrawal:
         return new PCRPartnerWithdrawalItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          this.project,
-          this.partners,
-          originalItem as PCRItemForPartnerWithdrawalDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForPartnerWithdrawalDto>,
         );
       case PCRItemType.PartnerAddition: {
         return new PCRPartnerAdditionItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForPartnerAdditionDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForPartnerAdditionDto>,
         );
       }
       case PCRItemType.MultiplePartnerFinancialVirement:
         return new MultiplePartnerFinancialVirementDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForMultiplePartnerFinancialVirementDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForMultiplePartnerFinancialVirementDto>,
         );
       case PCRItemType.PeriodLengthChange:
         return new PCRPeriodLengthChangeItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForPeriodLengthChangeDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForPeriodLengthChangeDto>,
         );
       case PCRItemType.SinglePartnerFinancialVirement:
-        return new PCRStandardItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRStandardItemDto,
-        );
+        return new PCRStandardItemDtoValidator(params as PCRBaseItemDtoValidatorProps<PCRStandardItemDto>);
       case PCRItemType.LoanDrawdownChange:
         return new PCRLoanDrawdownChangeItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForLoanDrawdownChangeDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForLoanDrawdownChangeDto>,
         );
       case PCRItemType.LoanDrawdownExtension:
         return new PCRLoanExtensionItemDtoValidator(
-          item,
-          canEdit,
-          this.role,
-          this.model.status,
-          this.recordTypes,
-          this.showValidationErrors,
-          originalItem as PCRItemForLoanDrawdownExtensionDto,
+          params as PCRBaseItemDtoValidatorProps<PCRItemForLoanDrawdownExtensionDto>,
         );
       default:
         throw new Error("PCR Type not implemented");
@@ -529,16 +519,46 @@ export class PCRDtoValidator extends Results<PCRDto> {
 }
 
 export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
-  constructor(
-    model: T,
-    protected readonly canEdit: boolean,
-    protected readonly role: ProjectRole,
-    protected readonly pcrStatus: PCRStatus,
-    protected readonly recordTypes: PCRItemTypeDto[],
-    showValidationErrors: boolean,
-    protected readonly original?: T,
-  ) {
+  protected readonly canEdit: boolean;
+  protected readonly role: ProjectRole = ProjectRole.Unknown;
+  protected readonly pcrStatus: PCRStatus;
+  protected readonly recordTypes: PCRItemTypeDto[] = [];
+  protected readonly original?: T;
+  protected readonly project?: ProjectDto;
+  protected readonly partners?: PartnerDto[];
+  protected readonly pcrStepId?: PCRStepId;
+  public status: Result;
+  public type: Result;
+
+  constructor({
+    model,
+    canEdit,
+    role = ProjectRole.Unknown,
+    pcrStatus,
+    recordTypes = [],
+    original,
+    showValidationErrors = false,
+    project,
+    partners,
+    pcrStepId,
+  }: PCRBaseItemDtoValidatorProps<T>) {
     super({ model, showValidationErrors });
+
+    // Assign data to the Validator
+    this.canEdit = canEdit;
+    this.role = role;
+    this.pcrStatus = pcrStatus;
+    this.recordTypes = recordTypes;
+    this.original = original;
+    this.project = project;
+    this.partners = partners;
+    this.pcrStepId = pcrStepId;
+
+    // Use above assigned data to validate dto
+    // Do not place outside of constructor like `public status = this.validateStatus();`,
+    // as the above data will not have yet been assigned yet.
+    this.status = this.validateStatus();
+    this.type = this.validateTypes();
   }
 
   private validateTypes() {
@@ -618,9 +638,12 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
     );
   }
 
-  public status = this.validateStatus();
-
-  public type = this.validateTypes();
+  protected requiredIfStep(state: PCRStepId, value: Validation.ValidatableValue, message?: string) {
+    if (this.pcrStepId !== state) {
+      return Validation.valid(this);
+    }
+    return Validation.required(this, value, message);
+  }
 
   protected requiredIfComplete(value: Validation.ValidatableValue, message?: string) {
     if (this.model.status !== PCRItemStatus.Complete) {
@@ -744,6 +767,19 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
 }
 
 export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForLoanDrawdownExtensionDto> {
+  public allPeriods: Result;
+  public availabilityPeriodChange: Result;
+  public extensionPeriodChange: Result;
+  public repaymentPeriodChange: Result;
+
+  constructor(data: PCRBaseItemDtoValidatorProps<PCRItemForLoanDrawdownExtensionDto>) {
+    super(data);
+    this.allPeriods = this.validateAllPeriods();
+    this.availabilityPeriodChange = this.validateAvailabilityPeriod();
+    this.extensionPeriodChange = this.validateExtensionPeriod();
+    this.repaymentPeriodChange = this.validateRepaymentPeriod();
+  }
+
   private isComplete = this.model.status === PCRItemStatus.Complete;
   private validationTolerance = 3;
 
@@ -769,12 +805,6 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
 
     return offsetDate.toJSDate();
   }
-
-  public allPeriods = this.validateAllPeriods();
-
-  public availabilityPeriodChange = this.validateAvailabilityPeriod();
-  public extensionPeriodChange = this.validateExtensionPeriod();
-  public repaymentPeriodChange = this.validateRepaymentPeriod();
 
   private validateAllPeriods(): Result {
     if (!this.isComplete) return Validation.valid(this);
@@ -1508,6 +1538,12 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   projectLocation = Validation.all(
     this,
     () =>
+      this.requiredIfStep(
+        PCRStepId.projectLocationStep,
+        this.model.projectLocation || null,
+        this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectLocationRequired),
+      ),
+    () =>
       this.requiredIfComplete(
         this.model.projectLocation || null,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectLocationRequired),
@@ -1666,19 +1702,6 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
 }
 
 export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForAccountNameChangeDto> {
-  constructor(
-    model: PCRItemForAccountNameChangeDto,
-    protected readonly canEdit: boolean,
-    protected readonly role: ProjectRole,
-    protected readonly pcrStatus: PCRStatus,
-    protected readonly recordTypes: PCRItemTypeDto[],
-    showValidationErrors: boolean,
-    protected readonly partners?: PartnerDto[],
-    protected readonly original?: PCRItemForAccountNameChangeDto,
-  ) {
-    super(model, canEdit, role, pcrStatus, recordTypes, showValidationErrors, original);
-  }
-
   private validateAccountName() {
     if (!this.canEdit) {
       return Validation.isUnchanged(
@@ -1749,20 +1772,6 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
 }
 
 export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerWithdrawalDto> {
-  constructor(
-    model: PCRItemForPartnerWithdrawalDto,
-    protected readonly canEdit: boolean,
-    protected readonly role: ProjectRole,
-    protected readonly pcrStatus: PCRStatus,
-    protected readonly recordTypes: PCRItemTypeDto[],
-    showValidationErrors: boolean,
-    protected readonly project: ProjectDto,
-    protected readonly partners?: PartnerDto[],
-    protected readonly original?: PCRItemForPartnerWithdrawalDto,
-  ) {
-    super(model, canEdit, role, pcrStatus, recordTypes, showValidationErrors, original);
-  }
-
   private validateRemovalPeriod() {
     if (!this.canEdit) {
       return Validation.isUnchanged(
@@ -1790,13 +1799,13 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
           this.getContent(x => x.validation.pcrPartnerWithdrawalItemDtoValidator.periodNotInteger),
         ),
       () =>
-        this.model.removalPeriod
+        this.project && this.model.removalPeriod
           ? Validation.isTrue(
               this,
               this.model.removalPeriod > 0 && this.model.removalPeriod <= this.project.numberOfPeriods,
               this.getContent(x =>
                 x.validation.pcrPartnerWithdrawalItemDtoValidator.periodInvalid({
-                  count: this.project.numberOfPeriods,
+                  count: this.project?.numberOfPeriods,
                 }),
               ),
             )

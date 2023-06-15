@@ -3,13 +3,14 @@ import { PCRStandardItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { FilesStep } from "./filesStep";
 import { Summary } from "./summary";
+import { PCRStepId } from "@framework/types";
 
-export type StandardItemStepNames = "filesStep";
+export type StandardItemStepNames = PCRStepId.filesStep;
 
 export const standardItemWorkflow: IPCRWorkflow<PCRStandardItemDto, PCRStandardItemDtoValidator> = {
   steps: [
     {
-      stepName: "filesStep",
+      stepName: PCRStepId.filesStep,
       displayName: "Upload files",
       stepNumber: 1,
       validation: val => val.files,
