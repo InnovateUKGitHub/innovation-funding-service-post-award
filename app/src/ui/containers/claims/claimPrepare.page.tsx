@@ -13,7 +13,6 @@ import {
   Claims,
   Accordion,
   AccordionItem,
-  Loader,
   Logs,
 } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -34,6 +33,7 @@ import {
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
 import { AwardRateOverridesMessage } from "@ui/components/claims";
+import { useClaimPreparePageData } from "./claimPrepare.logic";
 
 export interface PrepareClaimParams {
   projectId: ProjectId;
@@ -57,7 +57,7 @@ interface Data {
     | "offerTotal"
   >[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
-  statusChanges: Pending<ClaimStatusChangeDto[]>;
+  statusChanges: Pick<ClaimStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[];
 }
 
 interface Callbacks {
@@ -120,11 +120,7 @@ const PrepareComponent = (props: BaseProps & Callbacks & Data & PrepareClaimPara
 
           <Accordion>
             <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="status-and-comments-log">
-              {/* Keeping logs inside loader because accordion defaults to closed*/}
-              <Loader
-                pending={props.statusChanges}
-                render={statusChanges => <Logs qa="claim-status-change-table" data={statusChanges} />}
-              />
+              <Logs qa="claim-status-change-table" data={props.statusChanges} />
             </AccordionItem>
           </Accordion>
 
@@ -147,14 +143,16 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => {
   const navigate = useNavigate();
 
   const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partner: stores.partners.getById(props.partnerId),
-    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-    claim: stores.claims.get(props.partnerId, props.periodId),
-    claimOverrides: stores.claimOverrides.getAllByPartner(props.partnerId),
-    claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
+    // project: stores.projects.getById(props.projectId),
+    // partner: stores.partners.getById(props.partnerId),
+    // costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+    // claim: stores.claims.get(props.partnerId, props.periodId),
+    // claimOverrides: stores.claimOverrides.getAllByPartner(props.partnerId),
+    // claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
     editor: stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId),
   });
+
+  const gqlData = useClaimPreparePageData(props.projectId, props.partnerId, props.periodId);
 
   const onUpdate = (saving: boolean, dto: Partial<ClaimDto>, link?: { path: string }) => {
     stores.claims.updateClaimEditor(
@@ -169,12 +167,10 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => {
     );
   };
 
-  const statusChanges = stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId);
-
   return (
     <PageLoader
       pending={combined}
-      render={data => <PrepareComponent statusChanges={statusChanges} onUpdate={onUpdate} {...props} {...data} />}
+      render={data => <PrepareComponent onUpdate={onUpdate} {...props} {...data} {...gqlData} />}
     />
   );
 };

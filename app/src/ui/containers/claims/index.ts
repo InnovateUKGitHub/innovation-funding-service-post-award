@@ -6,6 +6,6 @@ export * from "./claimForecast.page";
 export * from "./dashboard.page";
 export * from "./claimDetails.page";
 export * from "./editClaimLineItems.page";
-export * from "./prepare.page";
+export * from "./claimPrepare.page";
 export * from "./claimReview.page";
 export * from "./summary.page";

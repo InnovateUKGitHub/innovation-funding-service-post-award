@@ -54,6 +54,7 @@ type ProjectNode = Readonly<
     Acc_GOLTotalCostAwarded__c: GQL.Value<number>;
     Acc_LeadParticipantID__c: GQL.Value<string>;
     Acc_LeadParticipantName__c: GQL.Value<string>;
+    Acc_NonFEC__c: GQL.Value<boolean>;
     Acc_NumberOfOpenClaims__c: GQL.Value<number>;
     Acc_NumberofPeriods__c: GQL.Value<number>;
     Acc_PCRsForReview__c: GQL.Value<number>;
@@ -88,6 +89,7 @@ type ProjectDtoMapping = Pick<
   | "durationInMonths"
   | "endDate"
   | "isActive"
+  | "isNonFec"
   | "isPastEndDate"
   | "grantOfferLetterCosts"
   | "leadPartnerName"
@@ -157,6 +159,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   isActive(node) {
     return !!node?.isActive;
+  },
+  isNonFec(node) {
+    return !!node?.Acc_NonFEC__c?.value;
   },
   isPastEndDate(node) {
     return dayComparator(clock.parseOptionalSalesforceDate(node?.Acc_EndDate__c?.value ?? "") as Date, new Date()) < 0;
