@@ -240,7 +240,10 @@ export function mapToPartnerDtoArray<
   pickList: TPickList[],
   additionalData: AdditionalDataType<
     TPickList,
-    [["roles", "partnerRoles", SfPartnerRoles[]], ["competitionName", "competitionName", string]]
+    [
+      ["roles", "partnerRoles", SfPartnerRoles[]],
+      ["competitionName", "competitionName", string], // get from Acc_Project__c.Acc_CompetitionId__r?.Name
+    ]
   >,
 ): Pick<PartnerDtoMapping, TPickList>[] {
   return (

@@ -49,4 +49,5 @@ export interface ProjectDtoGql extends ProjectDto {
   roles: SfRoles;
   leadPartnerId: string | null;
   typeOfAid: TypeOfAid;
+  competitionName: string;
 }

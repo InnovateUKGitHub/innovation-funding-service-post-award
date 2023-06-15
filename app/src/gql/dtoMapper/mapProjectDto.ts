@@ -82,6 +82,7 @@ type ProjectDtoMapping = Pick<
   | "claimsOverdue"
   | "claimsToReview"
   | "claimsWithParticipant"
+  | "competitionName"
   | "competitionType"
   | "costsClaimedToDate"
   | "durationInMonths"
@@ -138,6 +139,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   claimsWithParticipant(node) {
     return node?.Acc_ClaimsUnderQuery__c?.value ?? 0;
+  },
+  competitionName(node) {
+    return node?.Acc_CompetitionId__r?.Name?.value ?? "unknown competition name";
   },
   competitionType(node) {
     return node?.Acc_CompetitionType__c?.value ?? "Unknown";

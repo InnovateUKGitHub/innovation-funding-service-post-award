@@ -13,7 +13,6 @@ import {
   Claims,
   Accordion,
   AccordionItem,
-  Loader,
   Logs,
   SelectOption,
   DocumentGuidance,
@@ -35,7 +34,7 @@ import {
   getAuthRoles,
   GOLCostDto,
   PartnerDto,
-  ProjectDto,
+  ProjectDtoGql,
   ProjectRole,
 } from "@framework/types";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
@@ -50,6 +49,7 @@ import { EnumDocuments } from "./components";
 import { Markdown } from "@ui/components/renderers";
 import { ReceivedStatus } from "@framework/entities";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { useClaimReviewPageData } from "./claimReview.logic";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -68,35 +68,28 @@ interface ReviewProps {
     | "offerTotal"
     | "remainingOfferCosts"
   >[];
-  forecastDetails: Pending<
-    Pick<ForecastDetailsDTO, "id" | "costCategoryId" | "periodEnd" | "periodStart" | "value" | "periodId">[]
-  >;
-  golCosts: Pending<Pick<GOLCostDto, "costCategoryId" | "value">[]>;
-  statusChanges: Pending<Pick<ClaimStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[]>;
+  forecastData: {
+    forecastDetails: Pick<
+      ForecastDetailsDTO,
+      "id" | "costCategoryId" | "periodEnd" | "periodStart" | "value" | "periodId"
+    >[];
+    golCosts: Pick<GOLCostDto, "costCategoryId" | "value">[];
+    claims: Pick<ClaimDto, "periodId" | "isApproved">[];
+    claimDetails: Pick<ClaimDetailsSummaryDto, "periodStart" | "periodEnd" | "periodId" | "value" | "costCategoryId">[];
+  };
+  statusChanges: Pick<ClaimStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[];
   project: Pick<
-    ProjectDto,
-    "projectNumber" | "title" | "id" | "roles" | "competitionType" | "numberOfPeriods" | "periodId"
+    ProjectDtoGql,
+    "projectNumber" | "title" | "id" | "roles" | "competitionType" | "numberOfPeriods" | "periodId" | "competitionName"
   >;
-  partner: Pick<
-    PartnerDto,
-    | "competitionName"
-    | "competitionType"
-    | "isLead"
-    | "isWithdrawn"
-    | "name"
-    | "organisationType"
-    | "partnerStatus"
-    | "overheadRate"
-  >;
+  partner: Pick<PartnerDto, "isLead" | "isWithdrawn" | "name" | "organisationType" | "partnerStatus" | "overheadRate">;
   costCategories: Pick<
     CostCategoryDto,
     "id" | "competitionType" | "name" | "organisationType" | "isCalculated" | "type"
   >[];
-  claims: Pending<Pick<ClaimDto, "periodId" | "isApproved">[]>;
+
   claim: Pick<ClaimDto, "isFinalClaim" | "periodId" | "periodEndDate" | "periodStartDate" | "isApproved">;
-  pendingClaimDetailsSummary: Pending<
-    Pick<ClaimDetailsSummaryDto, "periodStart" | "periodEnd" | "periodId" | "value" | "costCategoryId">[]
-  >;
+
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
   documents: Pick<
     DocumentSummaryDto,
@@ -149,15 +142,15 @@ export function useReviewContent() {
   return defaultContent;
 }
 
-const ReviewComponent = (props: ReviewClaimParams & ReviewProps & BaseProps) => {
+const ReviewPage = (props: ReviewClaimParams & ReviewProps & BaseProps) => {
   const { isCombinationOfSBRI } = checkProjectCompetition(props.project.competitionType);
   const { isMo } = getAuthRoles(props.project.roles);
 
-      // Disable completing the form if internal impact management and not received PCF
-      const impMgmtPcfNotSubmittedForFinalClaim =
-      data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
-        ? data.claim.isFinalClaim && data.claim.pcfStatus !== ReceivedStatus.Received
-        : false;
+  // Disable completing the form if internal impact management and not received PCF
+  const impMgmtPcfNotSubmittedForFinalClaim =
+    props.project.impactManagementParticipation === ImpactManagementParticipation.Yes
+      ? props.claim.isFinalClaim && props.claim.pcfStatus !== ReceivedStatus.Received
+      : false;
 
   const backLinkElement = (
     <BackLink route={props.routes.allClaimsDashboard.getLink({ projectId: props.project.id })}>
@@ -176,16 +169,16 @@ const ReviewComponent = (props: ReviewClaimParams & ReviewProps & BaseProps) => 
 
       {props.claim.isFinalClaim && <ValidationMessage messageType="info" message={props.content.finalClaim} />}
 
-      {props.partner.competitionName && (
+      {props.project.competitionName && (
         <Renderers.SimpleString className="margin-bottom-none">
           <span className="govuk-!-font-weight-bold">{props.content.competitionName}:</span>{" "}
-          {props.partner.competitionName}
+          {props.project.competitionName}
         </Renderers.SimpleString>
       )}
 
       <Renderers.SimpleString>
         <span className="govuk-!-font-weight-bold">{props.content.competitionType}:</span>{" "}
-        {props.partner.competitionType}
+        {props.project.competitionType}
       </Renderers.SimpleString>
 
       {isMo && isCombinationOfSBRI && (
@@ -223,51 +216,85 @@ const ReviewComponent = (props: ReviewClaimParams & ReviewProps & BaseProps) => 
 
       <Section>
         <Accordion>
-          {renderForecastItem(props)}
-
-          <AccordionItem title={props.content.accordionTitleClaimLog} qa="log-accordion">
-            {/* Keeping logs inside loader because accordion defaults to closed*/}
-            <Loader
-              pending={props.statusChanges}
-              render={statusChanges => <Logs qa="claim-status-change-table" data={statusChanges} />}
+          <AccordionItem qa="forecast-accordion" title={props.content.accordionTitleForecast}>
+            <Claims.ForecastTable
+              hideValidation
+              data={{
+                ...props.forecastData,
+                project: props.project,
+                partner: props.partner,
+                claim: props.claim,
+                costCategories: props.costCategories,
+              }}
             />
           </AccordionItem>
 
-          <SupportingDocumentsItem {...props} />
+          <AccordionItem title={props.content.accordionTitleClaimLog} qa="log-accordion">
+            <Logs qa="claim-status-change-table" data={props.statusChanges} />
+          </AccordionItem>
+
+          <AccordionItem
+            title={props.content.accordionTitleSupportingDocumentsForm}
+            qa="upload-supporting-documents-form-accordion"
+          >
+            <EnumDocuments documentsToCheck={allowedClaimDocuments}>
+              {docs => (
+                <>
+                  <UploadForm.Form
+                    enctype="multipart"
+                    editor={props.documentsEditor}
+                    onChange={dto => props.onUpload(false, dto)}
+                    onSubmit={() => props.onUpload(true, props.documentsEditor.data)}
+                    qa="projectDocumentUpload"
+                  >
+                    <UploadForm.Fieldset>
+                      <Renderers.Markdown value={props.content.uploadInstruction} />
+
+                      <DocumentGuidance />
+
+                      <UploadForm.MultipleFileUpload
+                        label={props.content.labelInputUpload}
+                        name="attachment"
+                        labelHidden
+                        value={x => x.files}
+                        update={(dto, files) => (dto.files = files || [])}
+                        validation={props.documentsEditor.validator.files}
+                      />
+
+                      <UploadForm.DropdownList
+                        label={props.content.descriptionLabel}
+                        labelHidden={false}
+                        hasEmptyOption
+                        placeholder="-- No description --"
+                        name="description"
+                        validation={props.documentsEditor.validator.files}
+                        options={docs}
+                        value={selectedOption => filterDropdownList(selectedOption, docs)}
+                        update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
+                      />
+                    </UploadForm.Fieldset>
+
+                    <UploadForm.Submit name="reviewDocuments" styling="Secondary">
+                      {props.content.buttonUpload}
+                    </UploadForm.Submit>
+                  </UploadForm.Form>
+
+                  <Section>
+                    <DocumentEdit
+                      qa="claim-supporting-documents"
+                      onRemove={document => props.onDelete(props.documentsEditor.data, document)}
+                      documents={props.documents}
+                    />
+                  </Section>
+                </>
+              )}
+            </EnumDocuments>
+          </AccordionItem>
         </Accordion>
       </Section>
 
-      <ReviewClaimsForm disabled={impMgmtPcfNotSubmittedForFinalClaim} {...props}  />
+      <ReviewClaimsForm disabled={impMgmtPcfNotSubmittedForFinalClaim} {...props} />
     </Page>
-  );
-};
-
-const renderForecastItem = (props: ReviewProps) => {
-  const pendingForecastData = Pending.combine({
-    claims: props.claims,
-    claimDetails: props.pendingClaimDetailsSummary,
-    forecastDetails: props.forecastDetails,
-    golCosts: props.golCosts,
-  });
-
-  return (
-    <AccordionItem qa="forecast-accordion" title={props.content.accordionTitleForecast}>
-      <Loader
-        pending={pendingForecastData}
-        render={forecastData => (
-          <Claims.ForecastTable
-            hideValidation
-            data={{
-              ...forecastData,
-              project: props.project,
-              partner: props.partner,
-              claim: props.claim,
-              costCategories: props.costCategories,
-            }}
-          />
-        )}
-      />
-    </AccordionItem>
   );
 };
 
@@ -280,7 +307,7 @@ const getClaimLineItemLink = (props: ReviewProps & BaseProps & ReviewClaimParams
   });
 };
 
-const ReviewClaimsForm = (props: ReviewProps & {disabled?: boolean}): JSX.Element => {
+const ReviewClaimsForm = (props: ReviewProps & { disabled?: boolean }): JSX.Element => {
   const { isClient } = useMounted();
   const options: SelectOption[] = [
     { id: ClaimStatus.MO_QUERIED, value: props.content.optionQueryClaim },
@@ -315,7 +342,8 @@ const ReviewClaimsForm = (props: ReviewProps & {disabled?: boolean}): JSX.Elemen
           inline
         />
 
-        {displayInteractiveForm && renderFormHiddenSection(props.editor, Form, props.project, props.content, props.disabled)}
+        {displayInteractiveForm &&
+          renderFormHiddenSection(props.editor, Form, props.project, props.content, props.disabled)}
       </Form.Fieldset>
     </Form.Form>
   );
@@ -329,73 +357,11 @@ const filterDropdownList = (selectedDocument: MultipleDocumentUploadDto, documen
   return documents.find(x => x.id === targetId);
 };
 
-const SupportingDocumentsItem = (props: ReviewProps) => {
-  return (
-    <AccordionItem
-      title={props.content.accordionTitleSupportingDocumentsForm}
-      qa="upload-supporting-documents-form-accordion"
-    >
-      <EnumDocuments documentsToCheck={allowedClaimDocuments}>
-        {docs => (
-          <>
-            <UploadForm.Form
-              enctype="multipart"
-              editor={props.documentsEditor}
-              onChange={dto => props.onUpload(false, dto)}
-              onSubmit={() => props.onUpload(true, props.documentsEditor.data)}
-              qa="projectDocumentUpload"
-            >
-              <UploadForm.Fieldset>
-                <Renderers.Markdown value={props.content.uploadInstruction} />
-
-                <DocumentGuidance />
-
-                <UploadForm.MultipleFileUpload
-                  label={props.content.labelInputUpload}
-                  name="attachment"
-                  labelHidden
-                  value={x => x.files}
-                  update={(dto, files) => (dto.files = files || [])}
-                  validation={props.documentsEditor.validator.files}
-                />
-
-                <UploadForm.DropdownList
-                  label={props.content.descriptionLabel}
-                  labelHidden={false}
-                  hasEmptyOption
-                  placeholder="-- No description --"
-                  name="description"
-                  validation={props.documentsEditor.validator.files}
-                  options={docs}
-                  value={selectedOption => filterDropdownList(selectedOption, docs)}
-                  update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
-                />
-              </UploadForm.Fieldset>
-
-              <UploadForm.Submit name="reviewDocuments" styling="Secondary">
-                {props.content.buttonUpload}
-              </UploadForm.Submit>
-            </UploadForm.Form>
-
-            <Section>
-              <DocumentEdit
-                qa="claim-supporting-documents"
-                onRemove={document => props.onDelete(props.documentsEditor.data, document)}
-                documents={props.documents}
-              />
-            </Section>
-          </>
-        )}
-      </EnumDocuments>
-    </AccordionItem>
-  );
-};
-
 const getMOReminderMessage = (competitionType: string, content: ReviewProps["content"]) => {
-  const reminderByCompetion = `${competitionType.toLowerCase()}-reminder`;
+  const reminderByCompetition = `${competitionType.toLowerCase()}-reminder`;
 
   return (
-    <Renderers.SimpleString key={reminderByCompetion} qa={reminderByCompetion}>
+    <Renderers.SimpleString key={reminderByCompetition} qa={reminderByCompetition}>
       {content.monitoringReportReminder}
     </Renderers.SimpleString>
   );
@@ -409,7 +375,11 @@ const renderFormHiddenSection = (
   disabled: boolean,
 ) => {
   const moReminderElement = getMOReminderMessage(project.competitionType, content);
-  const submitButtonElement = <Form.Submit disabled={disabled} key="button">{getSubmitButtonLabel(editor, content)}</Form.Submit>;
+  const submitButtonElement = (
+    <Form.Submit disabled={disabled} key="button">
+      {getSubmitButtonLabel(editor, content)}
+    </Form.Submit>
+  );
   const declarationElement = (
     <Renderers.SimpleString key="declaration">{content.claimReviewDeclaration}</Renderers.SimpleString>
   );
@@ -488,24 +458,12 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
   const reviewContent = useReviewContent();
   const navigate = useNavigate();
 
+  const dataFromGql = useClaimReviewPageData(props.projectId, props.partnerId, props.periodId);
+
   const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partner: stores.partners.getById(props.partnerId),
-    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-    claim: stores.claims.get(props.partnerId, props.periodId),
-    claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
     editor: stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId, initEditor),
-    documents: stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId),
     documentsEditor: stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId),
   });
-
-  const pendingData = {
-    claims: stores.claims.getAllClaimsForPartner(props.partnerId),
-    statusChanges: stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId),
-    forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
-    golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-    pendingClaimDetailsSummary: stores.claimDetails.getAllByPartner(props.partnerId),
-  };
 
   const onUpdate = (saving: boolean, dto: ClaimDto) => {
     stores.messages.clearMessages();
@@ -551,19 +509,18 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
       () => stores.claims.markClaimAsStale(props.partnerId, props.periodId),
     );
   };
-
   return (
     <PageLoader
       pending={combined}
       render={data => (
-        <ReviewComponent
+        <ReviewPage
           onUpdate={onUpdate}
           onUpload={onUpload}
           onDelete={onDelete}
           content={reviewContent}
-          {...pendingData}
           {...props}
           {...data}
+          {...dataFromGql}
         />
       )}
     />
