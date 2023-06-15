@@ -44,26 +44,26 @@ export const displayForecastTable = () => {
 };
 
 export const fillOrgInformation = () => {
-  cy.get("h2").contains("Organisation information");
+  cy.get("legend").contains("Organisation information");
   cy.get("p").contains("EUI Small Ent Health");
   cy.getByLabel("Company number");
-  cy.get("#companyNumber-hint").contains("This is the registered organisation number.");
+  cy.get("#hint-for-companyNumber").contains("This is the registered organisation number.");
   cy.get("#companyNumber").type("12345678910");
 };
 
 export const fillAccountInformation = () => {
-  cy.get("h2").contains("Account details");
+  cy.get("legend").contains("Account details");
   cy.getByLabel("Sort code");
-  cy.get("#sortCode-hint").contains("Must be 6 digits long, for example: 311212.");
+  cy.get("#hint-for-sortCode").contains("Must be 6 digits long, for example: 311212.");
   cy.get("#sortCode").type("654321");
   cy.getByLabel("Account number");
-  cy.get("#accountNumber-hint").contains("Must be between 6 and 8 digits long, for example: 15481965.");
+  cy.get("#hint-for-accountNumber").contains("Must be between 6 and 8 digits long, for example: 15481965.");
   cy.get("#accountNumber").type("12345678");
 };
 
 export const fillAddressInformation = () => {
-  cy.get("h2").contains("Billing address");
-  cy.getByQA("billingAddressFieldsetGuidance").contains(
+  cy.get("legend").contains("Billing address");
+  cy.get("p").contains(
     "This is the billing address connected to this bank account. This is not the address of the bank.",
   );
   cy.getByLabel("Building").type("Polaris House");
@@ -77,4 +77,13 @@ export const newLocation = () => {
   cy.getByLabel("New location");
   cy.get("#hint-for-new-postcode").contains("Enter the postcode, postal code or zip code.");
   cy.get("#new-postcode").type("SN2 1FL");
+};
+
+export const bankDetailsValidation = () => {
+  cy.submitButton("Submit bank details").click();
+  cy.getByQA("validation-summary").contains("Sort code cannot be empty.");
+  cy.getByQA("validation-summary").contains("Account number cannot be empty.");
+  cy.get("p").contains("Sort code cannot be empty.");
+  cy.get("p").contains("Account number cannot be empty");
+  cy.reload();
 };
