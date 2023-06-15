@@ -2,18 +2,18 @@ import { BankDetailsTaskStatus } from "@framework/types";
 
 export class BankDetailsTaskStatusMapper {
   private readonly options = {
-    toDo: "To Do",
+    toDo: "To do",
     incomplete: "In progress",
     complete: "Complete",
   };
 
   public mapFromSalesforce = (option: string | undefined): BankDetailsTaskStatus => {
-    switch (option) {
-      case this.options.toDo:
+    switch (option?.toLowerCase()) {
+      case this.options.toDo.toLowerCase():
         return BankDetailsTaskStatus.ToDo;
-      case this.options.incomplete:
+      case this.options.incomplete.toLowerCase():
         return BankDetailsTaskStatus.Incomplete;
-      case this.options.complete:
+      case this.options.complete.toLowerCase():
         return BankDetailsTaskStatus.Complete;
       default:
         return BankDetailsTaskStatus.Unknown;

@@ -148,7 +148,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     return 0;
   },
   bankCheckStatus(node) {
-    const partnerStatus = getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown"); // requires Acc_ParticipantStatus__c
+    const partnerStatus = this["partnerStatus"](node, {}); // requires Acc_ParticipantStatus__c
     return partnerStatus === PartnerStatus.Active
       ? BankCheckStatus.VerificationPassed
       : new BankCheckStatusMapper().mapFromSalesforce(node?.Acc_BankCheckState__c?.value ?? "unknown");
@@ -170,7 +170,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     };
   },
   bankDetailsTaskStatus(node) {
-    const partnerStatus = getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown"); // requires Acc_ParticipantStatus__c
+    const partnerStatus = this["partnerStatus"](node, {}); // requires Acc_ParticipantStatus__c
     return partnerStatus === PartnerStatus.Active
       ? BankDetailsTaskStatus.Complete
       : new BankDetailsTaskStatusMapper().mapFromSalesforce(node?.Acc_BankCheckCompleted__c?.value ?? "unknown");
@@ -264,7 +264,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     return additionalData?.roles ?? { isPm: false, isMo: false, isFc: false };
   },
   spendProfileStatus(node) {
-    const partnerStatus = getPartnerStatus(node?.Acc_ParticipantStatus__c?.value ?? "unknown"); // requires Acc_ParticipantStatus__c
+    const partnerStatus = this["partnerStatus"](node, {}); // requires Acc_ParticipantStatus__c
     return partnerStatus === PartnerStatus.Active
       ? SpendProfileStatus.Complete
       : new PartnerSpendProfileStatusMapper().mapFromSalesforce(node?.Acc_SpendProfileCompleted__c?.value ?? "unknown");

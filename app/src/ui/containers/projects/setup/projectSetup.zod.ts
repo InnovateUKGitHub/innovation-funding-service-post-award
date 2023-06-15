@@ -7,6 +7,6 @@ export const errorMap = makeZodI18nMap({ keyPrefix: ["projectSetup"] });
 z.setErrorMap(errorMap);
 export const projectSetupSchema = z.object({
   postcode: z.string().min(1),
-  spendProfileStatus: z.enum([String(BankDetailsTaskStatus.Complete)]),
-  bankDetailsTaskStatus: z.enum([String(SpendProfileStatus.Complete)]),
+  bankDetailsTaskStatus: z.enum([String(BankDetailsTaskStatus.Complete)]),
+  spendProfileStatus: z.enum([String(SpendProfileStatus.Complete)]),
 });

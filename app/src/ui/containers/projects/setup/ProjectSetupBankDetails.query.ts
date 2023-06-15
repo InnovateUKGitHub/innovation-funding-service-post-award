@@ -29,9 +29,11 @@ export const projectSetupBankDetailsQuery = graphql`
                       }
                       Acc_BankCheckState__c {
                         value
+                        label
                       }
                       Acc_BankCheckCompleted__c {
                         value
+                        label
                       }
                       Acc_RegistrationNumber__c {
                         value

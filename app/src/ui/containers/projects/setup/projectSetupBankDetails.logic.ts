@@ -34,7 +34,14 @@ export const useProjectSetupBankDetailsQuery = (projectId: ProjectId, partnerId:
 
   const partner = mapToPartnerDto(
     getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? []).node,
-    ["name", "bankDetails", "bankCheckStatus", "bankCheckRetryAttempts", "bankDetailsTaskStatus"],
+    [
+      "name",
+      "bankDetails",
+      "bankCheckStatus",
+      "bankCheckRetryAttempts",
+      "bankDetailsTaskStatus",
+      "bankDetailsTaskStatusLabel",
+    ],
     {},
   );
   return { project, partner };
@@ -59,6 +66,7 @@ export const useOnUpdateProjectSetupBankDetails = (
 ) => {
   const navigate = useNavigate();
   const routes = useRoutes();
+
   return useOnUpdate<FormValues, { bankCheckStatus: BankCheckStatus }>({
     req: data =>
       apiClient.partners.updatePartner({
