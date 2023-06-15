@@ -1,3 +1,7 @@
+const pm = "james.black@euimeabs.test";
+const fc = "wed.addams@test.test.co.uk";
+const mo = "testman2@testing.com";
+
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -206,35 +210,32 @@ export const manyPartnerDocDelete = () => {
 };
 
 export const fcLoginDelete = () => {
-  const fc = "wed.addams@test.test.co.uk";
   cy.switchUserTo(fc);
+  cy.get("td").contains("testfilefc.doc");
   cy.get("td").contains("Wednesday Addams of EUI Small Ent Health").siblings().contains("Remove").click();
   cy.getByQA("validation-message-content").contains("has been deleted.");
 };
 
 export const pmLoginViewFile = () => {
-  const pm = "james.black@euimeabs.test";
   cy.switchUserTo(pm);
   cy.get("h3").contains("Documents for EUI Small Ent Health");
   cy.getByQA("partner-documents-container").contains("td", "testfilefc.doc");
 };
 
 export const fcLoginViewFile = () => {
-  const pm = "james.black@euimeabs.test";
   cy.switchUserTo(pm);
   cy.get("h3").contains("Documents for EUI Small Ent Health");
   cy.getByQA("partner-documents-container").contains("td", "testfilepm.doc");
 };
 
 export const pmLoginDelete = () => {
-  const pm = "james.black@euimeabs.test";
   cy.switchUserTo(pm);
+  cy.get("td").contains("testfilepm.doc");
   cy.get("td").contains("James Black of EUI Small Ent Health").siblings().contains("Remove").click();
   cy.getByQA("validation-message-content").contains("has been deleted.");
 };
 
 export const moLoginViewFile = () => {
-  const mo = "testman2@testing.com";
   cy.switchUserTo(mo);
   cy.get("h3").contains("Documents shared with Innovate UK and partners");
   cy.getByQA("partner-documents-container").contains("td", "testfilepm.doc");
