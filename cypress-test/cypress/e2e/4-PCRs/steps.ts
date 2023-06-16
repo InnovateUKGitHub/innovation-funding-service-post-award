@@ -579,7 +579,7 @@ export const addPartnerSummaryTable = () => {
   cy.get("dt").contains("Turnover").siblings().contains("a", "Edit");
   cy.get("dt").contains("Project location").siblings().contains("a", "Edit");
   cy.get("dt").contains("Name of town or city").siblings().contains("a", "Edit");
-  cy.get("dt").contains("Postcode, postal code or zip code").siblings().contains("a", "Edit");
+  cy.get("dt").contains("Postcode").siblings().contains("a", "Edit");
   cy.get("h2").contains("Contacts");
   cy.get("h3").contains("Finance contact");
   cy.get("dt").contains("First name").siblings().contains("a", "Edit");

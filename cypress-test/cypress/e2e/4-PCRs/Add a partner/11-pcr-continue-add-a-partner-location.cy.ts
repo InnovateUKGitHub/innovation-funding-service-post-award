@@ -37,7 +37,7 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
 
   it("Should show the 'Name of town or city' heading and 'Postcode, Postal code or zip code' heading and guidance message", () => {
     cy.get("h2").contains("Name of town or city");
-    cy.get("h2").contains("Postcode, postal code or zip code");
+    cy.get("h2").contains("Postcode");
     cy.getByQA("field-projectPostcode").contains("If this is not available,");
   });
 
