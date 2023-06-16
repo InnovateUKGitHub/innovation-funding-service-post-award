@@ -2,6 +2,8 @@ import "@testing-library/cypress/add-commands";
 import { visitApp } from "common/visit";
 import { Tile } from "typings/tiles";
 
+const [username, password] = Cypress.env("BASIC_AUTH").split(":");
+
 type CommandOptions = Partial<Cypress.Loggable & Cypress.Timeoutable & Cypress.Withinable & Cypress.Shadow>;
 
 const getByLabel = (label: string) => {
@@ -28,23 +30,38 @@ const getByAriaLabel = (label: string) => {
   cy.get(`[aria-label="${label}"]`);
 };
 
+
+const userSwitcher = (payload: Record<string, string>, goHome: boolean = false) => {
+  if (goHome) {
+    payload.button_home = "";
+  } else {
+    payload.button_stay = "";
+  }
+
+  cy.request({
+    method: "POST",
+    url: "/developer/userSwitcher",
+    form: true,
+    body: payload,
+    auth: {
+      username, password
+    },
+  }).then((res) => {
+    //
+    res.redirectedToUrl ?
+      cy.visit(res.redirectedToUrl, { auth: { username, password } }) :
+      cy.reload()
+  });
+}
+
 const switchUserTo = (email: string, goHome: boolean = false) => {
   cy.log(`**switchUserTo:${email}**`);
-  cy.contains("User Switcher").click({ force: true });
-  cy.wait(500);
-  cy.get("input#user-switcher-manual-input").click().clear().wait(1000).type(email);
-  cy.getByQA(`manual-change-and-${goHome ? "home" : "stay"}`).click({ force: true });
-  cy.wait(500);
+  userSwitcher({ user: email }, goHome);
 };
 
 const resetUser = (goHome: boolean = false) => {
   cy.log("**resetUser**");
-  cy.contains("User Switcher").click().wait(1000);
-  cy.getByQA(`reset-and-${goHome ? "home" : "stay"}`)
-    .scrollIntoView()
-    .wait(1000)
-    .click()
-    .wait(1000);
+  userSwitcher({ reset: "" }, goHome);
 };
 
 const backLink = (name: string) => {
