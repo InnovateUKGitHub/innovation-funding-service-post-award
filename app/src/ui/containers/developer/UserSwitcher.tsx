@@ -298,6 +298,7 @@ const UserSwitcherProjectSelector = () => {
           action={DeveloperUserSwitcherPage.routePath}
         >
           <SelectProjectForm.DropdownList
+            className="ifspa-developer-section-select"
             name="project_id"
             options={projectOptions}
             hasEmptyOption

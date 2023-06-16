@@ -188,6 +188,7 @@ export const createTypedForm = <T,>() => {
 
   interface DropdownFieldProps<T extends DropdownOption = DropdownOption> extends ExternalFieldProps<T> {
     options: T[];
+    className?: string;
     hasEmptyOption?: boolean;
   }
 
@@ -583,6 +584,7 @@ export const createTypedForm = <T,>() => {
               options={props.options}
               name={props.name}
               hasEmptyOption={props.hasEmptyOption}
+              className={props.className}
               value={props.value(formData, disabled)}
               onChange={handleChange}
               disabled={disabled}
