@@ -8,6 +8,7 @@ import {
   shouldShowProjectTitle,
   showUpdatedPostcodes,
 } from "./steps";
+import { partnerValidation } from "e2e/0-project-setup/steps";
 
 describe("Project details > Edit partner information", () => {
   before(() => {
@@ -33,6 +34,8 @@ describe("Project details > Edit partner information", () => {
     "Should now show the updated information from Partner information on the Project details page",
     showUpdatedPostcodes,
   );
+
+  it("Should click into a partner and check for validation", partnerValidation);
 
   it("Should clear the post codes entered back to 'SN5'", clearAndRevertPostodes);
 

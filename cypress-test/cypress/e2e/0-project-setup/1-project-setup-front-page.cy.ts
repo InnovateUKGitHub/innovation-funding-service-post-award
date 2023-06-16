@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { shouldShowProjectTitle } from "./steps";
+import { giveUsInformation, shouldShowProjectTitle } from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -20,14 +20,7 @@ describe("Project setup > general", () => {
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should have a 'Give us information' subheading and list of requirements", () => {
-    ["Set spend profile", "Provide your bank details", "Provide your project location postcode", "To do"].forEach(
-      toDo => {
-        cy.getByQA("taskList").contains(toDo);
-      },
-    );
-    cy.get("h2").contains("Give us information");
-  });
+  it("Should have a 'Give us information' subheading and list of requirements", giveUsInformation);
 
   it("Should have a 'Complete project setup' button", () => {
     cy.submitButton("Complete project setup");

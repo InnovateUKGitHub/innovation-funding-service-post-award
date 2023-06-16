@@ -20,9 +20,9 @@ describe("Project setup > Provide your project location postcode", () => {
 
   it("Should show the project title", shouldShowProjectTitle);
 
-  it("Should show 'New location' with guidance information", newLocation);
+  it("Should show 'New location' with guidance information and complete form while validating.", newLocation);
 
   it("Should have a 'Save and return to project setup' button", () => {
-    cy.submitButton("Save and return to project setup");
+    cy.submitButton("Save and return to project setup").click();
   });
 });

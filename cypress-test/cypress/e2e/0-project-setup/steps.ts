@@ -1,3 +1,5 @@
+const partners = ["EUI Small Ent Health", "ABS EUI Medium Enterprise", "A B Cad Services"] as const;
+
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -75,8 +77,37 @@ export const fillAddressInformation = () => {
 
 export const newLocation = () => {
   cy.getByLabel("New location");
-  cy.get("#hint-for-new-postcode").contains("Enter the postcode, postal code or zip code.");
-  cy.get("#new-postcode").type("SN2 1FL");
+  cy.get("#hint-for-new-postcode").contains("Enter the postcode.");
+  cy.get("#new-postcode").type("SN123456788");
+  cy.submitButton("Save and return to project setup").click();
+  cy.getByQA("validation-summary").contains("Your location entry must be no more than 10 characters.");
+  cy.get("#new-postcode").clear().type("SN2 1FL");
+  cy.submitButton("Save and return to project setup").click();
+};
+
+export const giveUsInformation = () => {
+  [
+    "Set spend profile",
+    "Provide your bank details",
+    "Provide your project location postcode",
+    "To do",
+    "Incomplete",
+    "Complete",
+  ].forEach(toDo => {
+    cy.getByQA("taskList").contains(toDo);
+  });
+  cy.get("h2").contains("Give us information");
+};
+
+export const partnerValidation = () => {
+  cy.getByQA("partner-information").contains(partners[0]).click();
+  cy.get("a").contains("Edit").click();
+  cy.get("#new-postcode").clear().type("SN123456789");
+  cy.submitButton("Save and return to partner information").click();
+  cy.getByQA("validation-summary").contains("Your location entry must be no more than 10 characters.");
+  cy.get("#new-postcode").clear().type("SN2");
+  cy.submitButton("Save and return to partner information").click();
+  cy.backLink("Back to project details").click();
 };
 
 export const bankDetailsValidation = () => {
