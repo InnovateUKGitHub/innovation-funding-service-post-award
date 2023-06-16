@@ -19,6 +19,7 @@ import {
 import { UserSwitcherCurrentUserQuery } from "./__generated__/UserSwitcherCurrentUserQuery.graphql";
 import { UserSwitcherProjectQuery } from "./__generated__/UserSwitcherProjectQuery.graphql";
 import { UserSwitcherProjectsQuery } from "./__generated__/UserSwitcherProjectsQuery.graphql";
+import { decode as decodeHTMLEntities } from "html-entities";
 
 /**
  * Get the link to the current page
@@ -97,7 +98,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
   // For each contact...
   for (const { node: user } of getDefinedEdges(project.Project_Contact_Links__r?.edges)) {
     const internalUsername = user?.Acc_UserId__r?.Username?.value ?? null;
-    const externalUsername = user?.Acc_ContactId__r?.username ?? null;
+    const externalUsername = decodeHTMLEntities(user?.Acc_ContactId__r?.username);
     const username = internalUsername ?? externalUsername ?? null;
 
     if (username && user.Acc_Role__c?.value) {
