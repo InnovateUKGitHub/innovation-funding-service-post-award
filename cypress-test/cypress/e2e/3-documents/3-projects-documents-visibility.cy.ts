@@ -2,14 +2,15 @@ import { visitApp } from "../../common/visit";
 import {
   fcLoginDelete,
   fcLoginViewFile,
+  fcShouldNotDelete,
   fcUploadToEUI,
   moLoginViewFile,
   pmLoginDelete,
   pmLoginViewFile,
+  pmShouldNotDelete,
   pmUploadToEUI,
 } from "./steps";
 const fcEmail = "wed.addams@test.test.co.uk";
-const pmEmail = "james.black@euimeabs.test";
 
 describe("Documents visibility between roles", () => {
   before(() => {
@@ -23,14 +24,22 @@ describe("Documents visibility between roles", () => {
     pmLoginViewFile,
   );
 
+  it("Should not allow the PM to delete an FC file", pmShouldNotDelete);
+
   it("Should upload a document against EUI Small Ent Health from the PM", () => {
-    cy.switchUserTo(pmEmail);
     pmUploadToEUI();
   });
 
-  it("Should log back in as FC and check they can view the file", fcLoginViewFile);
+  it(
+    "Should log back in as FC and check they can view the file and is unable to delete the PM's file",
+    fcLoginViewFile,
+  );
+
+  it("Should not allow the FC to delete a PM file", fcShouldNotDelete);
 
   it("Should log in as MO and ensure they can see both test files", moLoginViewFile);
+
+  it("Should not allow the MO to delete a file", fcShouldNotDelete);
 
   it("Should log back in as FC and delete the documents uploaded", fcLoginDelete);
 

@@ -223,7 +223,7 @@ export const pmLoginViewFile = () => {
 };
 
 export const fcLoginViewFile = () => {
-  cy.switchUserTo(pm);
+  cy.switchUserTo(fc);
   cy.get("h3").contains("Documents for EUI Small Ent Health");
   cy.getByQA("partner-documents-container").contains("td", "testfilepm.doc");
 };
@@ -240,4 +240,12 @@ export const moLoginViewFile = () => {
   cy.get("h3").contains("Documents shared with Innovate UK and partners");
   cy.getByQA("partner-documents-container").contains("td", "testfilepm.doc");
   cy.getByQA("partner-documents-container").contains("td", "testfilefc.doc");
+};
+
+export const pmShouldNotDelete = () => {
+  cy.get("td").contains("Wednesday Addams of EUI Small Ent Health").siblings().contains("Remove").should("be.disabled");
+};
+
+export const fcShouldNotDelete = () => {
+  cy.get("td").contains("James Black of EUI Small Ent Health").siblings().contains("Remove").should("be.disabled");
 };
