@@ -1929,14 +1929,17 @@
       "accountNumber": {
         "errors": {
           "too_small": "Account number cannot be empty.",
-          "invalid_string": "Enter a valid account number."
+          "invalid_string": {
+            "regex": "Enter a valid account number."
+          }
         }
       },
       "sortCode": {
         "errors": {
           "too_small": "Sort code cannot be empty.",
-          "invalid_string": "Enter a valid sort code."
-     
+          "invalid_string": {
+            "regex": "Enter a valid sort code."
+          }
         }
       }
     }
