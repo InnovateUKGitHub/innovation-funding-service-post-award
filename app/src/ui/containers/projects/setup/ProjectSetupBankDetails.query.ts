@@ -24,6 +24,9 @@ export const projectSetupBankDetailsQuery = graphql`
                           value
                         }
                       }
+                      Acc_ProjectId__c {
+                        value
+                      }
                       Acc_ParticipantStatus__c {
                         value
                       }

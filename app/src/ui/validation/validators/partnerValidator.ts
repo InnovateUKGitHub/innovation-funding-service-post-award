@@ -125,7 +125,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       this.model.postcodeStatus !== PostcodeTaskStatus.ToDo
         ? Validation.isTrue(
             this,
-            !!this.model.postcode?.length,
+            this.model.partnerStatus !== PartnerStatus.Active || !!this.model.postcode?.length,
             this.getContent(x => x.forms.partnerDetailsEdit["new-postcode"].errors.too_small),
             "new-postcode",
           )

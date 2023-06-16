@@ -35,12 +35,15 @@ export const useProjectSetupBankDetailsQuery = (projectId: ProjectId, partnerId:
   const partner = mapToPartnerDto(
     getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? []).node,
     [
+      "id",
+      "projectId",
       "name",
       "bankDetails",
       "bankCheckStatus",
       "bankCheckRetryAttempts",
       "bankDetailsTaskStatus",
       "bankDetailsTaskStatusLabel",
+      "partnerStatus",
     ],
     {},
   );
@@ -62,7 +65,7 @@ const isBankCheckValidationError = (e: unknown): e is BankCheckValidationError =
 export const useOnUpdateProjectSetupBankDetails = (
   projectId: ProjectId,
   partnerId: PartnerId,
-  partner: Pick<PartnerDto, "bankDetails" | "bankCheckRetryAttempts">,
+  partner: Pick<PartnerDto, "bankDetails" | "bankCheckRetryAttempts" | "id" | "projectId">,
 ) => {
   const navigate = useNavigate();
   const routes = useRoutes();
