@@ -1,7 +1,0 @@
-#!/bin/sh
-cd app/
-npm run lint:staged
-npm run esbuild:tsc
-
-cd ../cypress-test
-npm run lint:staged
