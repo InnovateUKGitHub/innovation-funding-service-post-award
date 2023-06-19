@@ -1,5 +1,6 @@
 import { visitApp } from "common/visit";
 import {
+  pcfClaimsDocUpload,
   navigateToEUIClaims,
   proceedToDocuments,
   selectFileDescription,
@@ -31,6 +32,8 @@ describe("Impact Management > Claim - PCF not received", () => {
     "Should ensure document upload descriptions contain everything except 'project completion form'",
     selectFileDescription,
   );
+
+  it("Should upload a file but the messaging still persist for PCF not received", pcfClaimsDocUpload);
 
   it("Should proceed to the Summary page", () => {
     cy.get("a").contains("Continue to summary").click();

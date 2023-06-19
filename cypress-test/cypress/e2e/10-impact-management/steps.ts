@@ -97,3 +97,13 @@ export const drgSummaryPageValidation = () => {
   cy.getByQA("validation-message-content").contains(finalClaimMessage);
   cy.getByQA("validation-message-content").should("not.have.text", pcfNotReceivedMessage);
 };
+
+export const pcfClaimsDocUpload = () => {
+  cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
+  cy.uploadButton("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+  cy.reload();
+  cy.getByQA("validation-message-content").contains(pcfNotReceivedMessage);
+  cy.getByQA("button_delete-qa").contains("Remove").click();
+  cy.getByQA("validation-message-content").contains("has been deleted.");
+};
