@@ -62,14 +62,12 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
 
     const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
 
-    // COST CATEGORIES
     const costCategories = mapToRequiredSortedCostCategoryDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
       ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
       profileGql,
     );
 
-    // CLAIMS
     const claims = mapToClaimDtoArray(
       claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
       [
@@ -92,7 +90,6 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
       { competitionType: project.competitionType },
     );
 
-    // GOL COSTS
     const costCategoriesOrder = costCategories.map(y => y.id);
 
     const golCosts = mapToGolCostDtoArray(
@@ -101,10 +98,10 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
       costCategories,
     ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
 
-    const documentsGql =
-      (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? []).find(
-        x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId,
-      )?.node?.ContentDocumentLinks?.edges ?? [];
+    const documentsGql = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [])
+      .filter(x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId)
+      .map(x => x?.node?.ContentDocumentLinks?.edges ?? [])
+      .flat();
 
     const documents = mapToProjectDocumentSummaryDtoArray(
       documentsGql as DocumentSummaryNode[],
@@ -114,7 +111,6 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
 
     const claim = claims.find(claim => claim.periodId === periodId);
 
-    // CLAIM DETAILS
     const claimDetails = mapToClaimDetailsDtoArray(
       claimsGql?.filter(
         x =>

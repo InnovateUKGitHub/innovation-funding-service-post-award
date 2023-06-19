@@ -143,12 +143,6 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => {
   const navigate = useNavigate();
 
   const combined = Pending.combine({
-    // project: stores.projects.getById(props.projectId),
-    // partner: stores.partners.getById(props.partnerId),
-    // costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-    // claim: stores.claims.get(props.partnerId, props.periodId),
-    // claimOverrides: stores.claimOverrides.getAllByPartner(props.partnerId),
-    // claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId),
     editor: stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId),
   });
 
@@ -170,7 +164,7 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => {
   return (
     <PageLoader
       pending={combined}
-      render={data => <PrepareComponent onUpdate={onUpdate} {...props} {...data} {...gqlData} />}
+      render={data => <PrepareComponent onUpdate={onUpdate} {...gqlData} {...data} {...props} />}
     />
   );
 };

@@ -96,6 +96,7 @@ export const claimPrepareQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectID__c: { eq: $projectIdStr } }
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
                 {
                   or: [
                     { RecordType: { Name: { eq: "Total Project Period" } } }
@@ -150,6 +151,9 @@ export const claimPrepareQuery = graphql`
                   value
                 }
                 Acc_ProjectPeriodCost__c {
+                  value
+                }
+                Acc_PeriodCostCategoryTotal__c {
                   value
                 }
                 Acc_TotalCostsApproved__c {

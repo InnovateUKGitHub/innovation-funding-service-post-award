@@ -40,21 +40,18 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
 
     const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
 
-    // COST CATEGORIES
     const costCategories = mapToRequiredSortedCostCategoryDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
       ["id", "name", "displayOrder", "competitionType", "organisationType"],
       profileGql,
     );
 
-    // CLAIMS
     const claims = mapToClaimDtoArray(
       claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
       ["id", "periodId", "isFinalClaim", "periodEndDate", "periodStartDate"],
       {},
     );
 
-    // GOL COSTS
     const costCategoriesOrder = costCategories.map(y => y.id);
 
     const golCosts = mapToGolCostDtoArray(profileGql, ["costCategoryId", "value"], costCategories).sort(
@@ -63,8 +60,14 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
 
     const claim = claims.find(claim => claim.periodId === periodId);
 
-    // CLAIM DETAILS
-    const claimDetails = mapToClaimDetailsDtoArray(claimsGql, ["costCategoryId", "periodId", "value"]);
+    const claimDetails = mapToClaimDetailsDtoArray(
+      claimsGql?.filter(
+        x =>
+          x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId &&
+          x?.node?.RecordType?.Name?.value === "Claims Detail",
+      ),
+      ["costCategoryId", "periodId", "value"],
+    );
 
     if (!claim) throw new Error(" there is no matching claim");
     const forecastDetails = mapToForecastDetailsDtoArray(profileGql, ["costCategoryId", "value"]);
