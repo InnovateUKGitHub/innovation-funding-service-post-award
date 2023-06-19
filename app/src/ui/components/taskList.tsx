@@ -9,6 +9,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { Result } from "@ui/validation/result";
 import { UL } from "./layout/list";
 import { TagTypeOptions, Tag } from "./Tag";
+import { H2 } from "./typography/Heading.variants";
 
 export type TaskStatus = "To do" | "Complete" | "Incomplete";
 
@@ -65,9 +66,9 @@ export const TaskListSection = ({ step, title, validation, children, qa }: ITask
 
   return (
     <li data-qa={qa}>
-      <h2 className="app-task-list__section">
+      <H2 className="app-task-list__section">
         {step && <span className="app-task-list__section-number">{step}.</span>} {titleValue}
-      </h2>
+      </H2>
 
       <UL className="app-task-list__items">
         {validationErrors}

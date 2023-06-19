@@ -6,6 +6,7 @@ import { removeSpaces } from "@shared/string-helpers";
 import { AccordionToggle } from "./AccordionToggle";
 import { useMounted } from "@ui/features/has-mounted/Mounted";
 import { AccessibilityText } from "../renderers/accessibilityText";
+import { H2 } from "../typography/Heading.variants";
 
 // TODO: Merge props.titleContent into props.title
 export interface AccordionItemProps {
@@ -40,7 +41,7 @@ export const AccordionItem = ({ qa, children, isOpen = false, onClick, ...props 
       })}
     >
       <div className="govuk-accordion__section-header">
-        <h2 className="govuk-accordion__section-heading">
+        <H2 className="govuk-accordion__section-heading">
           {isClient ? (
             <button
               type="button"
@@ -72,7 +73,7 @@ export const AccordionItem = ({ qa, children, isOpen = false, onClick, ...props 
               {title}
             </span>
           )}
-        </h2>
+        </H2>
       </div>
 
       <div id={accordionContentId} className="govuk-accordion__section-content" aria-labelledby={accordionHeadingId}>

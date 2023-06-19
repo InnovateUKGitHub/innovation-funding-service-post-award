@@ -6,6 +6,7 @@ import { Result } from "@ui/validation/result";
 import { IValidationResult, Results } from "@ui/validation/results";
 import { useNavigate } from "react-router-dom";
 import { List } from "./layout/list";
+import { H2 } from "./typography/Heading.variants";
 
 interface Props {
   validation?: IValidationResult | null;
@@ -74,9 +75,9 @@ export const ValidationSummary = ({ validation, compressed }: Props) => {
       data-module="govuk-error-summary"
       data-qa="validation-summary"
     >
-      <h2 className="govuk-error-summary__title" id="error-summary-title">
+      <H2 className="govuk-error-summary__title" id="error-summary-title">
         {getContent(x => x.components.validationSummary.title)}
-      </h2>
+      </H2>
       <div className="govuk-error-summary__body">
         <List className="govuk-error-summary__list">
           <ResultsLinks results={results} />

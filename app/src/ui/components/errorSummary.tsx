@@ -1,6 +1,7 @@
 import { ErrorCode } from "@framework/constants/enums";
 import { IAppError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks/content.hook";
+import { H2 } from "./typography/Heading.variants";
 
 export interface ErrorSummaryProps {
   code: IAppError["code"];
@@ -35,9 +36,9 @@ export const ErrorSummary = ({ code, message }: ErrorSummaryProps) => {
       data-module="govuk-error-summary"
       data-qa="error-summary"
     >
-      <h2 className="govuk-error-summary__title" id="error-summary-title" data-qa="error-summary-title">
+      <H2 className="govuk-error-summary__title" id="error-summary-title" data-qa="error-summary-title">
         {title}
-      </h2>
+      </H2>
 
       <div className="govuk-error-summary__body">
         {isUnauthenticated ? (

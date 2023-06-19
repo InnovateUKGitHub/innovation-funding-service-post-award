@@ -1,3 +1,4 @@
+import { H1 } from "@ui/components/typography/Heading.variants";
 import { createContext, useContext } from "react";
 
 export interface PageTitleContext {
@@ -58,7 +59,7 @@ export function PageTitle({ caption, title }: PageTitleProps) {
         </span>
       )}
 
-      <h1 className="govuk-heading-xl clearFix">{titleValue}</h1>
+      <H1 className="clearFix">{titleValue}</H1>
     </div>
   );
 }

@@ -32,12 +32,12 @@ import { percentageGuide } from "@ui/componentsGuide/percentageGuide";
 import { modalGuide } from "@ui/componentsGuide/modalGuide";
 import { listGuide } from "@ui/componentsGuide/listGuide";
 import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
-import { IGuide } from "@framework/types/IGuide";
-
 import { textareaInputGuide } from "./textareaInputGuide";
 import { SimpleString } from "@ui/components/renderers/simpleString";
 import { GovWidthContainer } from "@ui/components/layout/GovWidthContainer";
 import { UL } from "@ui/components/layout/list";
+import { IGuide } from "@framework/types/IGuide";
+import { H1, H2, H3 } from "@ui/components/typography/Heading.variants";
 
 const guides: IGuide[] = [
   accordionGuide,
@@ -97,8 +97,8 @@ export const Guide: React.FunctionComponent<GuideProps> = props => {
           role="main"
           style={{ paddingLeft: "20px", paddingRight: "20px" }}
         >
-          <h1 className="govuk-heading-l">Components guide</h1>
-          <h2 className="govuk-heading-m">Rendered by the {props.source}</h2>
+          <H1 className="govuk-heading-l">Components guide</H1>
+          <H2 className="govuk-heading-m">Rendered by the {props.source}</H2>
 
           <div className="govuk-grid-row">
             <div className="govuk-grid-column-one-quarter">
@@ -120,11 +120,11 @@ export const Guide: React.FunctionComponent<GuideProps> = props => {
             <div className="govuk-grid-column-three-quarters">
               {guidesToRender.map(({ guide, originalIndex }) => (
                 <div key={`component-${originalIndex}`}>
-                  <h2 className="govuk-heading-m">{guide.name}</h2>
+                  <H2 className="govuk-heading-m">{guide.name}</H2>
 
                   {guide.options.map((option, optionIndex) => (
                     <div className="govuk-!-margin-bottom-9" key={`component-option-${originalIndex}-${optionIndex}`}>
-                      <h3 className="govuk-heading-s">{option.name}</h3>
+                      <H3 className="govuk-heading-s">{option.name}</H3>
                       <div style={{ padding: "5px", border: "dashed grey 1px" }}>
                         <SimpleString>
                           <i>{option.comments}</i>

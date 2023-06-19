@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import type { ContentSelector } from "@copy/type";
 import { Content } from "../content";
+import { H3 } from "../typography/Heading.variants";
 
 interface Props {
   label?: string;
@@ -13,9 +14,9 @@ export const ReadonlyLabel: React.FunctionComponent<Props> = ({ qa, label, label
   if (!label && !labelContent) return null;
   return (
     <span>
-      <h3 className="govuk-heading-m" data-qa={`label-${qa}`}>
+      <H3 className="govuk-heading-m" data-qa={`label-${qa}`}>
         {labelContent ? <Content value={labelContent} /> : label}
-      </h3>
+      </H3>
       {children}
     </span>
   );
