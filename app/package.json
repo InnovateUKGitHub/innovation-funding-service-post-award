@@ -23,7 +23,6 @@
     "nuke": "npm run clean && rimraf node_modules",
     "update-govfrontend": "node ./scripts/update-govfrontend",
     "update": "npm-check -u",
-    "prepare": "cd .. && husky install",
     "cy": "cd ../cypress-test && npm start",
     "relay": "relay-compiler",
     "typecheck": "tsc --watch --noEmit",
