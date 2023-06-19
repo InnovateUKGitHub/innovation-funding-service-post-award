@@ -16,6 +16,19 @@ const MonitoringReportWorkflowBackLink = ({
       </BackLink>
     );
   }
+  if (workflow.isOnSummary()) {
+    return (
+      <BackLink
+        route={routes.monitoringReportDashboard.getLink({
+          projectId,
+          periodId: undefined,
+        })}
+      >
+        <Content value={x => x.pages.monitoringReportsWorkflow.backLink} />
+      </BackLink>
+    );
+  }
+
   const prevStep = workflow.getPrevStepInfo();
   if (!prevStep) {
     return (
