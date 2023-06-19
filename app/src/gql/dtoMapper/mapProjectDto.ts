@@ -157,6 +157,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   endDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Acc_EndDate__c?.value ?? null) as Date;
   },
+  impactManagementParticipation(node) {
+    return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
+  },
   isActive(node) {
     return !!node?.isActive;
   },
@@ -241,9 +244,6 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   typeOfAid(node) {
     return mapTypeOfAidToEnum(node?.Acc_CompetitionId__r?.Acc_TypeofAid__c?.value ?? "unknown");
-  },
-  impactManagementParticipation(node) {
-    return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
   },
 };
 

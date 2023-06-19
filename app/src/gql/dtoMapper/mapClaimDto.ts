@@ -4,8 +4,21 @@ import type { ClaimDto } from "@framework/dtos";
 import { mapToClaimStatus, mapToClaimStatusLabel } from "@framework/mappers/claimStatus";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { Clock, salesforceDateFormat } from "@framework/util";
+import { ReceivedStatus } from "@framework/entities";
 
 const clock = new Clock();
+
+const mapToReceivedStatus = (status: string): ReceivedStatus => {
+  if (!status?.length) return ReceivedStatus.Unknown;
+
+  const allowedStatuses: ReceivedStatus[] = [ReceivedStatus.Received, ReceivedStatus.NotReceived];
+  // Note: Preform positive check as it "could" finish sooner
+  const hasMatchingStatus = allowedStatuses.some(statusToCheck => statusToCheck === status);
+
+  if (!hasMatchingStatus) return ReceivedStatus.Unknown;
+
+  return status as ReceivedStatus;
+};
 
 /**
  * On Acc_Claims__c
@@ -18,6 +31,7 @@ type ClaimNode = Readonly<
     Acc_ClaimStatus__c: GQL.ValueAndLabel<string>;
     Acc_FinalClaim__c: GQL.Value<boolean>;
     Acc_PaidDate__c: GQL.Value<string>;
+    Acc_PCF_Status__c: GQL.Value<string>;
     Acc_PeriodCoststobePaid__c: GQL.Value<number>;
     Acc_ProjectParticipant__r: {
       Id: GQL.Maybe<string>;
@@ -49,6 +63,7 @@ type ClaimDtoMapping = Pick<
   | "lastModifiedDate"
   | "paidDate"
   | "partnerId"
+  | "pcfStatus"
   | "periodCostsToBePaid"
   | "periodEndDate"
   | "periodId"
@@ -94,6 +109,9 @@ const mapper: GQL.DtoMapper<
   id(node) {
     return node?.Id ?? "";
   },
+  impactManagementParticipation(node) {
+    return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
+  },
   isApproved(node) {
     const claimStatus = mapToClaimStatus(node?.Acc_ClaimStatus__c?.value ?? "unknown claim status");
     return [ClaimStatus.APPROVED, ClaimStatus.PAID, ClaimStatus.PAYMENT_REQUESTED].indexOf(claimStatus) >= 0;
@@ -109,6 +127,9 @@ const mapper: GQL.DtoMapper<
   },
   partnerId(node) {
     return (node?.Acc_ProjectParticipant__r?.Id ?? "") as PartnerId;
+  },
+  pcfStatus(node) {
+    return mapToReceivedStatus(node?.Acc_PCF_Status__c?.value ?? "");
   },
   periodCostsToBePaid(node) {
     return node?.Acc_PeriodCoststobePaid__c?.value ?? 0;
@@ -138,9 +159,6 @@ const mapper: GQL.DtoMapper<
   },
   totalCost(node) {
     return node?.Acc_ProjectPeriodCost__c?.value ?? 0;
-  },
-  impactManagementParticipation(node) {
-    return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
   },
   totalCostsSubmitted(node) {
     return node?.Acc_TotalCostsSubmitted__c?.value ?? 0;

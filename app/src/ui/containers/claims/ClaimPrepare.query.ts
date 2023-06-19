@@ -25,13 +25,29 @@ export const claimPrepareQuery = graphql`
             edges {
               node {
                 Id
+                RecordType {
+                  Name {
+                    value
+                  }
+                }
                 Acc_CostCategory__c {
                   value
+                }
+                Acc_CostCategory__r {
+                  Acc_CostCategoryName__c {
+                    value
+                  }
                 }
                 Acc_CostCategoryGOLCost__c {
                   value
                 }
+                Acc_OverrideAwardRate__c {
+                  value
+                }
                 Acc_ProjectPeriodNumber__c {
+                  value
+                }
+                Acc_ProfileOverrideAwardRate__c {
                   value
                 }
                 Acc_ProjectPeriodStartDate__c {
@@ -80,7 +96,12 @@ export const claimPrepareQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectID__c: { eq: $projectIdStr } }
-                { RecordType: { Name: { eq: "Total Project Period" } } }
+                {
+                  or: [
+                    { RecordType: { Name: { eq: "Total Project Period" } } }
+                    { RecordType: { Name: { eq: "Claims Detail" } } }
+                  ]
+                }
                 { Acc_ClaimStatus__c: { ne: "New" } }
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
               ]
@@ -141,6 +162,9 @@ export const claimPrepareQuery = graphql`
                   value
                 }
                 Acc_FinalClaim__c {
+                  value
+                }
+                Acc_CostCategory__c {
                   value
                 }
                 ContentDocumentLinks {

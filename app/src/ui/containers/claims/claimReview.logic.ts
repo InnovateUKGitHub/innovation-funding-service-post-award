@@ -20,7 +20,7 @@ import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummary
 export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
   const data = useLazyLoadQuery<ClaimReviewQuery>(
     claimReviewQuery,
-    { projectId, projectIdStr: projectId, partnerId },
+    { projectId, projectIdStr: projectId, partnerId, periodId },
     { fetchPolicy: "network-only" },
   );
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
@@ -71,7 +71,7 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
 
     // CLAIMS
     const claims = mapToClaimDtoArray(
-      claimsGql,
+      claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
       [
         "comments",
         "id",
@@ -108,20 +108,21 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
 
     const documents = mapToProjectDocumentSummaryDtoArray(
       documentsGql as DocumentSummaryNode[],
-      ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner"],
+      ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
       { projectId, currentUser: { email: data?.currentUser?.email ?? "unknown email" } },
     );
 
     const claim = claims.find(claim => claim.periodId === periodId);
 
     // CLAIM DETAILS
-    const claimDetails = mapToClaimDetailsDtoArray(claimsGql, [
-      "costCategoryId",
-      "periodEnd",
-      "periodStart",
-      "periodId",
-      "value",
-    ]);
+    const claimDetails = mapToClaimDetailsDtoArray(
+      claimsGql?.filter(
+        x =>
+          x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId &&
+          x?.node?.RecordType?.Name?.value === "Claims Detail",
+      ),
+      ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
+    );
 
     if (!claim) throw new Error(" there is no matching claim");
     const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [

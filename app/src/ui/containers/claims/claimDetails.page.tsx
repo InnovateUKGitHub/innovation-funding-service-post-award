@@ -35,7 +35,7 @@ import {
   ForecastTable,
   ForecastDataForTableLayout,
 } from "@ui/components/claims";
-import { useClaimDetailsPageData } from "./claimDetails.logic";
+import { useClaimReviewPageData } from "./claimReview.logic";
 
 interface Params {
   projectId: ProjectId;
@@ -100,7 +100,7 @@ interface ClaimData {
 }
 
 export const ClaimsDetailsPage = (props: Params & BaseProps) => {
-  const data = useClaimDetailsPageData(props.projectId, props.partnerId, props.periodId);
+  const data = useClaimReviewPageData(props.projectId, props.partnerId, props.periodId);
   const { isPmOrMo, isFc } = getAuthRoles(data.project.roles);
   const backLink = isPmOrMo
     ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })

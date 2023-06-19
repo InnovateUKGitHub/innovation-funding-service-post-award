@@ -1,23 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import {
-  createTypedForm,
-  Page,
-  PageLoader,
-  Content,
-  BackLink,
-  Renderers,
-  Projects,
-  UL,
-  ValidationMessage,
-  Section,
-  Claims,
   Accordion,
   AccordionItem,
-  Logs,
-  SelectOption,
-  DocumentGuidance,
+  BackLink,
+  Claims,
+  Content,
+  createTypedForm,
   DocumentEdit,
+  DocumentGuidance,
   FormBuilder,
+  Logs,
+  Page,
+  PageLoader,
+  Projects,
+  Renderers,
+  Section,
+  SelectOption,
+  UL,
+  ValidationMessage,
 } from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -80,7 +80,15 @@ interface ReviewProps {
   statusChanges: Pick<ClaimStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[];
   project: Pick<
     ProjectDtoGql,
-    "projectNumber" | "title" | "id" | "roles" | "competitionType" | "numberOfPeriods" | "periodId" | "competitionName"
+    | "competitionName"
+    | "competitionType"
+    | "id"
+    | "impactManagementParticipation"
+    | "numberOfPeriods"
+    | "periodId"
+    | "projectNumber"
+    | "roles"
+    | "title"
   >;
   partner: Pick<PartnerDto, "isLead" | "isWithdrawn" | "name" | "organisationType" | "partnerStatus" | "overheadRate">;
   costCategories: Pick<
@@ -88,12 +96,12 @@ interface ReviewProps {
     "id" | "competitionType" | "name" | "organisationType" | "isCalculated" | "type"
   >[];
 
-  claim: Pick<ClaimDto, "isFinalClaim" | "periodId" | "periodEndDate" | "periodStartDate" | "isApproved">;
+  claim: Pick<ClaimDto, "isFinalClaim" | "periodId" | "periodEndDate" | "periodStartDate" | "isApproved" | "pcfStatus">;
 
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
   documents: Pick<
     DocumentSummaryDto,
-    "dateCreated" | "fileName" | "fileSize" | "id" | "link" | "isOwner" | "uploadedBy"
+    "dateCreated" | "fileName" | "fileSize" | "id" | "link" | "isOwner" | "uploadedBy" | "description"
   >[];
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   onUpdate: (saving: boolean, dto: ClaimDto) => void;
@@ -343,7 +351,7 @@ const ReviewClaimsForm = (props: ReviewProps & { disabled?: boolean }): JSX.Elem
         />
 
         {displayInteractiveForm &&
-          renderFormHiddenSection(props.editor, Form, props.project, props.content, props.disabled)}
+          renderFormHiddenSection(props.editor, Form, props.project, props.content, !!props.disabled)}
       </Form.Fieldset>
     </Form.Form>
   );

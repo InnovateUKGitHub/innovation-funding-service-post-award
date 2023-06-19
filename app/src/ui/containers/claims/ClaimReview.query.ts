@@ -1,6 +1,6 @@
 import { graphql } from "react-relay";
 export const claimReviewQuery = graphql`
-  query ClaimReviewQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!) {
+  query ClaimReviewQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     currentUser {
       email
     }
@@ -52,7 +52,14 @@ export const claimReviewQuery = graphql`
             }
           }
           Acc_StatusChange__c(
-            where: { Acc_Claim__r: { Acc_ProjectParticipant__c: { eq: $partnerId } } }
+            where: {
+              Acc_Claim__r: {
+                and: [
+                  { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                  { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
+                ]
+              }
+            }
             orderBy: { CreatedDate: { order: DESC } }
           ) {
             edges {
@@ -80,7 +87,13 @@ export const claimReviewQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectID__c: { eq: $projectIdStr } }
-                { RecordType: { Name: { eq: "Total Project Period" } } }
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                {
+                  or: [
+                    { RecordType: { Name: { eq: "Total Project Period" } } }
+                    { RecordType: { Name: { eq: "Claims Detail" } } }
+                  ]
+                }
                 { Acc_ClaimStatus__c: { ne: "New" } }
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
               ]
@@ -116,6 +129,9 @@ export const claimReviewQuery = graphql`
                 Acc_PaidDate__c {
                   value
                 }
+                Acc_PeriodCostCategoryTotal__c {
+                  value
+                }
                 Acc_ProjectParticipant__r {
                   Id
                 }
@@ -143,6 +159,12 @@ export const claimReviewQuery = graphql`
                 Acc_FinalClaim__c {
                   value
                 }
+                Acc_PCF_Status__c {
+                  value
+                }
+                Acc_CostCategory__c {
+                  value
+                }
                 ContentDocumentLinks {
                   edges {
                     node {
@@ -155,6 +177,9 @@ export const claimReviewQuery = graphql`
                           ContactId {
                             value
                           }
+                        }
+                        Description {
+                          value
                         }
                         CreatedDate {
                           value
@@ -272,6 +297,9 @@ export const claimReviewQuery = graphql`
                   Name {
                     value
                   }
+                }
+                Impact_Management_Participation__c {
+                  value
                 }
                 Acc_CompetitionType__c {
                   value

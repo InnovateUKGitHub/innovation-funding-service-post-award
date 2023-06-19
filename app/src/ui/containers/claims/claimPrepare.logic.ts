@@ -6,6 +6,7 @@ import { ClaimPrepareQuery } from "./__generated__/ClaimPrepareQuery.graphql";
 import {
   mapToClaimDetailsDtoArray,
   mapToClaimDtoArray,
+  mapToClaimOverrides,
   mapToClaimStatusChangeDtoArray,
   mapToForecastDetailsDtoArray,
   mapToGolCostDtoArray,
@@ -48,7 +49,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
 
     // CLAIMS
     const claims = mapToClaimDtoArray(
-      claimsGql,
+      claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
       ["id", "periodId", "isFinalClaim", "periodEndDate", "periodStartDate"],
       {},
     );
@@ -92,6 +93,8 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       { roles: project.roles, competitionType: project.competitionType },
     );
 
+    const claimOverrides = mapToClaimOverrides(data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? []);
+
     return {
       project,
       partner,
@@ -99,6 +102,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       claim,
       claimDetails: costsSummaryForPeriod,
       statusChanges,
+      claimOverrides,
     };
   }, []);
 };

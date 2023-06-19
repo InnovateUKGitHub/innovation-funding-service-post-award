@@ -33,7 +33,7 @@ interface DocumentDisplayProps<T extends DocumentSummaryDto>
 function DocumentDisplay<
   T extends Pick<
     DocumentSummaryDto,
-    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner"
+    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner" | "description"
   >,
 >({
   hideHeader,

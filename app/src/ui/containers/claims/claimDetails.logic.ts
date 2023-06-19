@@ -69,7 +69,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
 
     // CLAIMS
     const claims = mapToClaimDtoArray(
-      claimsGql,
+      claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
       [
         "comments",
         "id",

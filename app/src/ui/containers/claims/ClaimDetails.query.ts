@@ -80,7 +80,12 @@ export const claimDetailsQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectID__c: { eq: $projectIdStr } }
-                { RecordType: { Name: { eq: "Total Project Period" } } }
+                {
+                  or: [
+                    { RecordType: { Name: { eq: "Total Project Period" } } }
+                    { RecordType: { Name: { eq: "Claims Detail" } } }
+                  ]
+                }
                 { Acc_ClaimStatus__c: { ne: "New" } }
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
               ]
@@ -141,6 +146,9 @@ export const claimDetailsQuery = graphql`
                   value
                 }
                 Acc_FinalClaim__c {
+                  value
+                }
+                Acc_CostCategory__c {
                   value
                 }
                 ContentDocumentLinks {
