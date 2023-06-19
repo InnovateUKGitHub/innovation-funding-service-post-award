@@ -18,11 +18,6 @@ import { useAppMount } from "./app/app-mount.hook";
 import { ErrorPayload } from "@shared/create-error-payload";
 import { DeveloperSection } from "@ui/components/layout/DeveloperSection";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
-import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
-import { useModal } from "@ui/redux/modalProvider";
-import { RoutesProvider } from "@ui/redux/routesProvider";
-import { useStores } from "@ui/redux/storesProvider";
-import { MountedProvider } from "@ui/features/has-mounted/Mounted";
 import { ErrorContainer, ErrorBoundaryFallback } from "@ui/components/errors/ErrorContainer";
 import { FullHeight } from "@ui/components/FullHeight";
 import { Footer } from "@ui/components/layout/footer";
@@ -31,7 +26,11 @@ import { Header } from "@ui/components/layout/header";
 import { PhaseBanner } from "@ui/components/layout/phaseBanner";
 import { SuspensePageLoader } from "@ui/components/loading";
 import { PrivateModal } from "@ui/components/modal";
+import { MountedProvider } from "@ui/features/has-mounted/Mounted";
 import { routeTransition } from "@ui/redux/actions/common/transitionActions";
+import { useModal } from "@ui/redux/modalProvider";
+import { RoutesProvider } from "@ui/redux/routesProvider";
+import { useStores } from "@ui/redux/storesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 
 interface IAppProps {
@@ -59,11 +58,11 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const content = useInitContent(params);
   const modalRegister = useModal();
   const auth = stores.users.getCurrentUserAuthorisation();
-  const { data } = useClientOptionsQuery();
+  const config = stores.config.getConfig();
   const messages = stores.messages.messages();
 
   // Note: We treat no invocation as valid
-  const hasAccess = currentRoute.accessControl ? currentRoute.accessControl(auth, params, data.clientConfig) : true;
+  const hasAccess = currentRoute.accessControl ? currentRoute.accessControl(auth, params, config) : true;
   const titlePayload = currentRoute.getTitle({ params, stores, content });
 
   const navigationType = useNavigationType();
@@ -78,7 +77,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   // TODO: Deprecating 'routes' and create a typed solution to fetch route with required url params
   const baseProps: BaseProps = {
     messages,
-    config: data.clientConfig,
+    config,
     routes: routeConfig,
     currentRoute,
     ...params,
@@ -109,7 +108,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               Skip to main content
             </a>
 
-            <Header headingLink={`${data.clientConfig.ifsRoot}/competition/search`} />
+            <Header headingLink={`${config.ifsRoot}/competition/search`} />
 
             <FullHeight.Content>
               <GovWidthContainer>
@@ -132,7 +131,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               </SuspensePageLoader>
             </FullHeight.Content>
 
-            {!data.clientConfig.ssoEnabled && <DeveloperSection />}
+            {!config.ssoEnabled && <DeveloperSection />}
             <Footer />
 
             {modalRegister.getModals().map(modal => (

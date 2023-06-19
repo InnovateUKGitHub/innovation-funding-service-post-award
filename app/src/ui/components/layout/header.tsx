@@ -1,10 +1,10 @@
-import { useMemo } from "react";
-import { GovWidthContainer } from "./GovWidthContainer";
-import { Logo } from "./Logo";
-import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { useMounted } from "@ui/features/has-mounted/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
 import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
+import { useStores } from "@ui/redux/storesProvider";
+import { useMemo } from "react";
+import { GovWidthContainer } from "./GovWidthContainer";
+import { Logo } from "./Logo";
 
 export interface HeaderProps {
   headingLink: string;
@@ -16,7 +16,8 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
   const { getContent } = useContent();
   const { setRef } = useGovFrontend("Header");
 
-  const { data } = useClientOptionsQuery();
+  const stores = useStores();
+  const config = stores.config.getConfig();
 
   const menuItems = useMemo(
     () =>
@@ -24,12 +25,12 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
         ? [
             {
               qa: "nav-dashboard",
-              href: `${data.clientConfig.ifsRoot}/dashboard-selection`,
+              href: `${config.ifsRoot}/dashboard-selection`,
               text: getContent(x => x.site.header.navigation.dashboard),
             },
             {
               qa: "nav-profile",
-              href: `${data.clientConfig.ifsRoot}/profile/view`,
+              href: `${config.ifsRoot}/profile/view`,
               text: getContent(x => x.site.header.navigation.profile),
             },
             {
@@ -39,7 +40,7 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
             },
           ]
         : [],
-    [showMenu, data, getContent],
+    [showMenu, config, getContent],
   );
 
   return (

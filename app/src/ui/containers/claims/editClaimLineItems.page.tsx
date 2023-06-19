@@ -1,27 +1,22 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */ // TODO: ACC-7889
 import type { ContentSelector } from "@copy/type";
-import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
-import { Pending } from "@shared/pending";
-import { range } from "@shared/range";
-import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
-import { EditorStatus } from "@ui/constants/enums";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
-import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
-import { useNavigate } from "react-router-dom";
-import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { CostCategoryType } from "@framework/constants/enums";
 import { ProjectRole } from "@framework/constants/project";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
+import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
+import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
+import { Pending } from "@shared/pending";
+import { range } from "@shared/range";
+import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
 import { Content } from "@ui/components/content";
 import { DocumentView } from "@ui/components/documents/DocumentView";
 import { createTypedForm } from "@ui/components/form";
+import { NumberInput } from "@ui/components/inputs/numberInput";
 import { UL } from "@ui/components/layout/list";
 import { Page } from "@ui/components/layout/page";
 import { Section } from "@ui/components/layout/section";
@@ -34,13 +29,17 @@ import { Currency } from "@ui/components/renderers/currency";
 import { Percentage } from "@ui/components/renderers/percentage";
 import { SimpleString } from "@ui/components/renderers/simpleString";
 import { createTypedTable } from "@ui/components/table";
+import { ValidationError } from "@ui/components/validationError";
 import { ValidationMessage } from "@ui/components/validationMessage";
+import { EditorStatus } from "@ui/constants/enums";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MountedHoc, useMounted } from "@ui/features/has-mounted/Mounted";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useStores } from "@ui/redux/storesProvider";
-import { ValidationError } from "@ui/components/validationError";
-import { NumberInput } from "@ui/components/inputs/numberInput";
 import { TextInput } from "@ui/components/inputs/textInput";
+import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
+import { useNavigate } from "react-router-dom";
 
 export interface EditClaimDetailsParams {
   projectId: ProjectId;
@@ -682,7 +681,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
   const stores = useStores();
   const { isClient } = useMounted();
   const navigate = useNavigate();
-  const { data } = useClientOptionsQuery();
+  const config = stores.config.getConfig();
 
   return (
     <EditClaimLineItemsComponent
@@ -706,7 +705,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
         (dto: ClaimDetailsDto) => {
           if (isClient) return;
           const currentItemsLength = dto.lineItems.length;
-          const maximumItemsLength = data.clientConfig.options.nonJsMaxClaimLineItems;
+          const maximumItemsLength = config.options.nonJsMaxClaimLineItems;
           const extraRows = maximumItemsLength - currentItemsLength;
 
           const extraLineItems: ClaimLineItemDto[] = range(extraRows).map(() => ({
@@ -733,7 +732,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
           () => navigate(getDestination(props, goToUpload).path),
         )
       }
-      maxClaimLineItems={data.clientConfig.options.maxClaimLineItems} // TODO when this is refactored to a function component, we can replace this param with useStores inside the component
+      maxClaimLineItems={config.options.maxClaimLineItems} // TODO when this is refactored to a function component, we can replace this param with useStores inside the component
     />
   );
 };

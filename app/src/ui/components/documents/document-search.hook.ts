@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { DateFormat } from "@framework/constants/enums";
-import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { fuzzySearch } from "@framework/util/fuzzySearch";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { formatDate } from "@framework/util/dateHelpers";
 import { getFileSize } from "@framework/util/files";
 import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useStores } from "@ui/redux/storesProvider";
 
 const filterItems = <T extends Pick<DocumentSummaryDto, "id" | "dateCreated" | "fileSize">>(
   valueToSearch: string,
@@ -38,13 +38,14 @@ export function useDocumentSearch<T extends Pick<DocumentSummaryDto, "id" | "dat
   disableSearch: boolean,
   originalDocuments: T[],
 ) {
-  const { data } = useClientOptionsQuery();
+  const stores = useStores();
+  const config = stores.config.getConfig();
   const { isClient } = useMounted();
 
   const [filterValue, setFilterValue] = useState<string>("");
   const [documents, setDocuments] = useState<T[]>(originalDocuments);
 
-  const minDocsForSearch = originalDocuments.length >= data.clientConfig.features.searchDocsMinThreshold;
+  const minDocsForSearch = originalDocuments.length >= config.features.searchDocsMinThreshold;
   const enableFilter = isClient && !disableSearch;
 
   const hasDocuments = documents.length > 0;

@@ -8,6 +8,7 @@ import { ClaimDocumentsStore } from "./stores/claimDocumentsStore";
 import { ClaimOverridesStore } from "./stores/claimOverridesStore";
 import { ClaimsStore } from "./stores/claimsStore";
 import { CompaniesStore } from "./stores/companiesStore";
+import { ConfigStore } from "./stores/configStore";
 import { ContactsStore } from "./stores/contactsStore";
 import { CostCategoriesStore } from "./stores/costCategoriesStore";
 import { CostSummariesStore } from "./stores/costsSummariesStore";
@@ -39,6 +40,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const claims = new ClaimsStore(costsSummaries, claimDocuments, partners, getState, dispatch);
   const claimOverrides = new ClaimOverridesStore(getState, dispatch);
   const claimDetails = new ClaimsDetailsStore(getState, dispatch);
+  const config = new ConfigStore(getState, dispatch);
   const forecastGolCosts = new ForecastGolCostsStore(getState, dispatch);
   const companies = new CompaniesStore(getState, dispatch);
 
@@ -54,6 +56,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     claimOverrides,
     companies,
     contacts: new ContactsStore(getState, dispatch),
+    config,
     costCategories,
     costsSummaries,
     errorDetails,

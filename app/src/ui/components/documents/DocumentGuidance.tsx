@@ -1,5 +1,5 @@
-import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { useContent } from "@ui/hooks/content.hook";
+import { useStores } from "@ui/redux/storesProvider";
 import bytes from "bytes";
 import { Content } from "../content";
 import { Info } from "../layout/info";
@@ -11,7 +11,8 @@ import { Info } from "../layout/info";
  */
 const DocumentGuidance = () => {
   const { getContent } = useContent();
-  const { data } = useClientOptionsQuery();
+  const stores = useStores();
+  const config = stores.config.getConfig();
 
   return (
     <Info summary={getContent(x => x.components.documentGuidance.header)}>
@@ -19,13 +20,13 @@ const DocumentGuidance = () => {
         markdown
         value={x =>
           x.components.documentGuidance.message({
-            documentCount: data.clientConfig.options.maxUploadFileCount,
-            maxFileSize: bytes(data.clientConfig.options.maxFileSize),
-            documentFormats: data.clientConfig.options.permittedTypes.pdfTypes,
-            textFormats: data.clientConfig.options.permittedTypes.textTypes,
-            presentationFormats: data.clientConfig.options.permittedTypes.presentationTypes,
-            spreadsheetFormats: data.clientConfig.options.permittedTypes.spreadsheetTypes,
-            imageFormats: data.clientConfig.options.permittedTypes.imageTypes,
+            documentCount: config.options.maxUploadFileCount,
+            maxFileSize: bytes(config.options.maxFileSize),
+            documentFormats: config.options.permittedTypes.pdfTypes,
+            textFormats: config.options.permittedTypes.textTypes,
+            presentationFormats: config.options.permittedTypes.presentationTypes,
+            spreadsheetFormats: config.options.permittedTypes.spreadsheetTypes,
+            imageFormats: config.options.permittedTypes.imageTypes,
           })
         }
       />

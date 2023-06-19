@@ -26,6 +26,13 @@ class ESBuildConfiguration {
   clientBuild;
 
   /**
+   * Build for the "updateSchema" script.
+   *
+   * @type {BuildOptions}
+   */
+  updateSchemaBuild;
+
+  /**
    * @type {Restarter}
    */
   restarter = new Restarter(process.env.SERVER_URL);
@@ -74,6 +81,23 @@ class ESBuildConfiguration {
       logLevel: "info",
       loader: {
         ".gql": "text",
+      },
+    };
+
+    this.updateSchemaBuild = {
+      entryPoints: [path.join(dirname, "scripts/updateSchema/src/index.ts")],
+      platform: "node",
+      format: "cjs",
+      bundle: true,
+      outdir: path.join(dirname, "scripts/updateSchema/dist/"),
+      minify: false,
+      tsconfig: path.join(dirname, "tsconfig.json"),
+      logLevel: "info",
+      plugins: [nodeExternalsPlugin()],
+      loader: {
+        ".apex": "text",
+        ".gql": "text",
+        ".html": "text",
       },
     };
   }
@@ -160,6 +184,10 @@ class ESBuildConfiguration {
    */
   getClientConfig() {
     return this.clientBuild;
+  }
+
+  getUpdateSchemaBuild() {
+    return this.updateSchemaBuild;
   }
 
   /**

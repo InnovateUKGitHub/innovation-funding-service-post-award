@@ -5,9 +5,9 @@
   "scripts": {
     "script:check-node": "node ./scripts/validate-node-version.js",
     "clean": "rimraf ./dist ./public/build",
-    "esbuild": "node --enable-source-maps esbuild.js",
-    "esbuild:tsc": "node --enable-source-maps esbuild.js --tsc",
-    "start": "node -r dotenv/config esbuild.js --watch --tsc --devtools",
+    "esbuild": "node --enable-source-maps esbuild.js --target acc",
+    "esbuild:tsc": "node --enable-source-maps esbuild.js --tsc --target acc",
+    "start": "node -r dotenv/config esbuild.js --watch --tsc --devtools --target acc",
     "start:server": "node --enable-source-maps ./dist/src/server/index.js",
     "serve": "node --inspect --enable-source-maps -r dotenv/config ./dist/src/server/index.js",
     "postinstall": "npm run patch-package",
@@ -30,7 +30,9 @@
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
     "prettier": "prettier --check --ignore-path ../.prettierignore .",
-    "prettier:write": "prettier --write --ignore-path ../.prettierignore ."
+    "prettier:write": "prettier --write --ignore-path ../.prettierignore .",
+    "updateSchema": "node --inspect -r dotenv/config ./scripts/updateSchema/dist/index.js",
+    "updateSchema:build": "node --enable-source-maps esbuild.js --tsc --target updateSchema"
   },
   "author": "BJSS Ltd",
   "license": "ISC",

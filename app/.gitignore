@@ -19,6 +19,5 @@ test-report.html
 
 # Generated files
 /dashboard/
-sfSchema.gql
 fullSchema.gql
 storybook-static/

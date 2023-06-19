@@ -5,18 +5,19 @@ import { Page } from "../layout/page";
 import { Section } from "../layout/section";
 import { SimpleString } from "@ui/components/renderers/simpleString";
 import { Content } from "../content";
-import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useStores } from "@ui/redux/storesProvider";
 import { ExternalLink } from "../renderers/externalLink";
 import { H2 } from "../typography/Heading.variants";
 
 export type GenericFallbackErrorProps = ErrorPayload["params"];
 
 export const GenericFallbackError = ({ errorStack, errorMessage }: GenericFallbackErrorProps) => {
-  const { data } = useClientOptionsQuery();
+  const stores = useStores();
+  const config = stores.config.getConfig();
 
   const goToDashboardLink = <ExternalLink href="/projects/dashboard"> </ExternalLink>;
 
-  const internalError = !data.clientConfig.ssoEnabled && (errorStack || errorMessage);
+  const internalError = !config.ssoEnabled && (errorStack || errorMessage);
 
   return (
     <Page qa="fallback-error" pageTitle={<PageTitle />}>

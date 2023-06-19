@@ -8,7 +8,7 @@ import { GraphQLSchema, printSchema } from "graphql";
 import path from "path";
 import { projectIsActiveResolver } from "./resolvers/Acc_Project__c/isActive";
 import { rolesResolver } from "./resolvers/Acc_Project__c/roles";
-import { getSalesforceSubschema } from "./schema/salesforceSubschema";
+import { salesforceSubschema } from "./schema/salesforceSubschema";
 import { Api } from "./sf/Api";
 import typeDefs from "./typeDefs.gql";
 import { getTypeGraphQLSchema } from "./typegraphql/schema";
@@ -39,7 +39,7 @@ const getGraphQLSchema = async ({ api }: { api?: Api }) => {
   };
 
   if (api) {
-    stitchConfig.subschemas?.push(await getSalesforceSubschema({ api }));
+    stitchConfig.subschemas?.push(salesforceSubschema);
     Object.assign(stitchConfig, {
       typeDefs,
       resolvers: {
