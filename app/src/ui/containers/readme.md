@@ -1,4 +1,4 @@
-# Containers #
+# Containers
 
 Containers are effectively pages
 
@@ -10,7 +10,7 @@ These are the parameters that are defined in the route, either in the url or que
 
 ### 2. Data Props
 
-This is the data required to render the container defined as an interface 
+This is the data required to render the container defined as an interface
 
 ### 3. Component
 
@@ -20,7 +20,7 @@ This is a standard react component and needs to implement the render method.
 
 Generally the container will render a `<PageLoader/>` as the initial child component which will then call on to a `renderContents` method once data is loaded.
 
-*The `TCallbacks` is a hangover from writing components for `react-redux` connect approach which is no longer used. It can be nice, however, to separate out the callbacks interface from the data interface if preferred. so has been left in for now.*
+_The `TCallbacks` is a hangover from writing components for `react-redux` connect approach which is no longer used. It can be nice, however, to separate out the callbacks interface from the data interface if preferred. so has been left in for now._
 
 ### 4. Container
 
@@ -44,16 +44,16 @@ This is defined by calling `defineRoute` and exported from the file. `defineRout
 
 eg
 
-    export const ProjectDetailsRoute = defineRoute({    
-	    routeName: "projectDetails",
-	    routePath: "/projects/:id/details",
-	    container: ProjectDetailsContainer,
-	    getParams: (r) => ({ id: r.params.id }),
-	    getTitle: () => ({
-	        htmlTitle: "Project details",
-	        displayTitle: "Project details"
-	    }),
-	    accessControl: (auth, { id }) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+    export const ProjectDetailsRoute = defineRoute({
+        routeName: "projectDetails",
+        routePath: "/projects/:id/details",
+        container: ProjectDetailsContainer,
+        getParams: (r) => ({ id: r.params.id }),
+        getTitle: () => ({
+            htmlTitle: "Project details",
+            displayTitle: "Project details"
+        }),
+        accessControl: (auth, { id }) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
     });
 
 `routeName` must be unique and identifies the route in router5.
@@ -66,6 +66,4 @@ eg
 
 `accessControl` allows the route to be restricted
 
-
 `getTitle` is a method defining the `htmlTitle `that is in the html metadata and the `displayTitle` that is displayed on the page.
-

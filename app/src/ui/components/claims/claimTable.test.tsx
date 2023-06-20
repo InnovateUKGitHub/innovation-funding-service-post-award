@@ -1,6 +1,5 @@
 import { render } from "@testing-library/react";
 
-
 import {
   createClaim,
   createClaimDetails,

@@ -10,4 +10,4 @@ const StubMountedProvider = ({ mounted, children }: IStubMountedProvider) => (
   <mountedContext.Provider value={{ isClient: mounted, isServer: !mounted }}>{children}</mountedContext.Provider>
 );
 
-export { StubMountedProvider }
+export { StubMountedProvider };

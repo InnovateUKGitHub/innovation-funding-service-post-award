@@ -7,11 +7,7 @@
       "request": "launch",
       "command": "npm run start:dev",
       "cwd": "${workspaceFolder}",
-      "skipFiles": [
-        "<node_internals>/**",
-        "${workspaceFolder}/node_modules/**/*.js",
-        "${workspaceFolder}/**/*.js"
-      ]
+      "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js", "${workspaceFolder}/**/*.js"]
     }
   ]
 }

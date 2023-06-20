@@ -1,4 +1,4 @@
-# Form Handlers #
+# Form Handlers
 
 Form handlers process form POSTs (sent from the client when JS is not enabled).
 On success they will return a redirect response.
@@ -12,7 +12,7 @@ New form handlers should be added to formRouter.ts and extend `FormHandlerBase` 
 
 `MultipleFileFormHandlerBase` is the base class for handling forms containing multipart form data with multiple documents.
 
-## StandardFormHandlerBase ##
+## StandardFormHandlerBase
 
 ###Constructor
 

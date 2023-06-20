@@ -43,7 +43,8 @@
     white-space: normal !important;
   }
 
-  td, th {
+  td,
+  th {
     width: unset !important;
     height: unset !important;
   }

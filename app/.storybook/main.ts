@@ -40,7 +40,7 @@ const config: StorybookConfig = {
       output: {
         ...clientWebpackConfig.output,
         ...config.output,
-      }
+      },
     };
 
     return rule;
