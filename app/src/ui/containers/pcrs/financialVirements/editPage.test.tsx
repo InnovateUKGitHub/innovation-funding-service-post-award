@@ -1,7 +1,7 @@
 import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { renderHook } from "@testing-library/react";
-import { useEditPageContent } from "@ui/containers";
+import { useEditPageContent } from "./editPage";
 
 const stubContent = {
   pages: {

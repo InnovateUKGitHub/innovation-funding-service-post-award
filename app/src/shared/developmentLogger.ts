@@ -1,4 +1,4 @@
-import { LogLevel } from "@framework/constants";
+import { LogLevel } from "@framework/constants/enums";
 import { getLogLevelNumber, parseLogLevel } from "@framework/types/logLevel";
 
 enum LogMethod {

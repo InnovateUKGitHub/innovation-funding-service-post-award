@@ -1,8 +1,8 @@
 import { projectStatusFragment } from "@gql/fragment/ProjectStatusFragment";
 import { ProjectStatusFragment$key } from "@gql/fragment/__generated__/ProjectStatusFragment.graphql";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { useFragment } from "relay-hooks";
-import { Section } from "../layout";
+import { Section } from "../layout/section";
 import { ValidationMessage } from "../validationMessage";
 
 interface Props {

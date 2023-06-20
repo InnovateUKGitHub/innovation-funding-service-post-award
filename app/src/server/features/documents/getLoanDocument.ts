@@ -1,4 +1,6 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetLoanDocumentQuery extends DocumentQueryBase {

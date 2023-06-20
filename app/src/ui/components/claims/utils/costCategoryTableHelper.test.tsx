@@ -13,10 +13,11 @@ import {
   createPartnerDto,
   createProjectDto,
 } from "@framework/util/stubDtos";
-import { Link } from "@ui/components";
-import { CostCategoryType, ILinkInfo } from "@framework/types";
-import { Result } from "@ui/validation";
-import { PCROrganisationType } from "@framework/constants";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Result } from "@ui/validation/result";
+import { Link } from "@ui/components/links";
+import { CostCategoryType } from "@framework/constants/enums";
 
 const stubProject = createProjectDto();
 const stubPartner = createPartnerDto();

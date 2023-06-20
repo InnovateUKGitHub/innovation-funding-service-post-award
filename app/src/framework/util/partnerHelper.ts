@@ -1,4 +1,4 @@
-import { PartnerDto } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 
 export const getLeadPartner = <T extends Pick<PartnerDto, "isLead">>(partners: T[]): T | undefined =>
   partners.find(x => x.isLead);

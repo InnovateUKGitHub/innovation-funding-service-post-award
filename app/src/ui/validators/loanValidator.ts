@@ -1,8 +1,9 @@
-import { DocumentDescription } from "@framework/constants";
-import { DocumentSummaryDto, LoanDto } from "@framework/dtos";
-import { LoanStatus } from "@framework/entities";
-
-import { Result, Results } from "@ui/validation";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { LoanStatus } from "@framework/entities/loan-status";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
 import * as Validation from "@ui/validators/common";
 
 export class LoanDtoValidator extends Results<LoanDto> {

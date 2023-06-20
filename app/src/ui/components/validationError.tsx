@@ -2,9 +2,10 @@
 // TODO: This should be a button since we supply no href
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
+import { NestedResult } from "@ui/validation/nestedResult";
+import { Results } from "@ui/validation/results";
 import React from "react";
 import { v4 as uuid } from "uuid";
-import { NestedResult, Results } from "@ui/validation";
 import { Result } from "../validation/result";
 
 interface Props {

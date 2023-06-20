@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
+import { SimpleString } from "../renderers/simpleString";
 import { Accordion } from "./Accordion";
 import { AccordionItem } from "./AccordionItem";
-import { SimpleString } from "../renderers";
 
 const meta: Meta<typeof Accordion> = {
   title: "GOV.UK Components/Accordion",

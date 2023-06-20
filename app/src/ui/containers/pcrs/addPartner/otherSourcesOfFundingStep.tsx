@@ -1,27 +1,32 @@
 import React from "react";
-
-import * as ACC from "@ui/components";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { useStores } from "@ui/redux";
-import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { range } from "@shared/range";
-import { PCRSpendProfileOtherFundingDto } from "@framework/dtos/pcrSpendProfileDto";
+import { CostCategoryType } from "@framework/constants/enums";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { PCRSpendProfileOtherFundingDto } from "@framework/dtos/pcrSpendProfileDto";
 import { Pending } from "@shared/pending";
-import { PCROtherFundingDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { CostCategoryType } from "@framework/constants";
+import { range } from "@shared/range";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { AccessibilityText } from "@ui/components/renderers/accessibilityText";
+import { Currency } from "@ui/components/renderers/currency";
+import { createTypedTable } from "@ui/components/table";
 import { EditorStatus } from "@ui/constants/enums";
-import { useMounted } from "@ui/features";
-import { Result } from "@ui/validation";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useStores } from "@ui/redux/storesProvider";
+import { Result } from "@ui/validation/result";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCROtherFundingDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import { PcrStepProps } from "../pcrWorkflow";
+import { Loader } from "@ui/components/loading";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];
   funds: PCRSpendProfileOtherFundingDto[];
 }
 
-const Form = ACC.createTypedForm<null>();
-const Table = ACC.createTypedTable<PCRSpendProfileOtherFundingDto>();
+const Form = createTypedForm<null>();
+const Table = createTypedTable<PCRSpendProfileOtherFundingDto>();
 
 const OtherSourcesOfFunding = ({
   pcrItem,
@@ -94,7 +99,7 @@ const OtherSourcesOfFunding = ({
               className="govuk-link govuk-!-font-size-19"
               onClick={e => addItem(e, pcrItemDto)}
             >
-              <ACC.Content value={x => x.pages.pcrAddPartnerOtherFundingSources.buttonAdd} />
+              <Content value={x => x.pages.pcrAddPartnerOtherFundingSources.buttonAdd} />
             </button>
           </td>
         </tr>,
@@ -104,20 +109,20 @@ const OtherSourcesOfFunding = ({
     footers.push(
       <tr key={2} className="govuk-table__row">
         <td className="govuk-table__cell">
-          <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
+          <AccessibilityText>No data</AccessibilityText>
         </td>
 
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-          <ACC.Content value={x => x.pages.pcrAddPartnerOtherFundingSources.footerLabelTotal} />
+          <Content value={x => x.pages.pcrAddPartnerOtherFundingSources.footerLabelTotal} />
         </td>
 
         <td className="govuk-table__cell govuk-table__cell--numeric">
-          <ACC.Renderers.Currency value={total} />
+          <Currency value={total} />
         </td>
 
         {isClient ? (
           <td className="govuk-table__cell">
-            <ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText>
+            <AccessibilityText>No data</AccessibilityText>
           </td>
         ) : null}
       </tr>,
@@ -127,8 +132,8 @@ const OtherSourcesOfFunding = ({
   };
 
   return (
-    <ACC.Section title={x => x.pages.pcrAddPartnerOtherFundingSources.formSectionTitle}>
-      <ACC.Content markdown value={x => x.pages.pcrAddPartnerOtherFundingSources.guidance} />
+    <Section title={x => x.pages.pcrAddPartnerOtherFundingSources.formSectionTitle}>
+      <Content markdown value={x => x.pages.pcrAddPartnerOtherFundingSources.guidance} />
 
       <Form.Form
         qa="addPartnerForm"
@@ -205,7 +210,7 @@ const OtherSourcesOfFunding = ({
                     className="govuk-link govuk-!-font-size-19"
                     onClick={e => removeItem(e, pcrItem, dto)}
                   >
-                    <ACC.Content value={x => x.pages.pcrAddPartnerOtherFundingSources.buttonRemove} />
+                    <Content value={x => x.pages.pcrAddPartnerOtherFundingSources.buttonRemove} />
                   </button>
                 )}
                 width={1}
@@ -216,15 +221,15 @@ const OtherSourcesOfFunding = ({
 
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrItem.submitButton} />
+            <Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
 
           <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
+            <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };
 
@@ -262,7 +267,7 @@ export const OtherSourcesOfFundingStep = (
   });
 
   return (
-    <ACC.Loader
+    <Loader
       pending={Pending.combine({ costCategoriesPending, fundsPending })}
       render={x => <OtherSourcesOfFunding {...props} funds={x.fundsPending} costCategories={x.costCategoriesPending} />}
     />

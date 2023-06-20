@@ -1,12 +1,13 @@
-import { Results } from "@ui/validation";
 import {
   SalesforceTokenError,
   SalesforceInvalidFilterError,
   FileTypeNotAllowedError,
 } from "@server/repositories/errors";
-import * as Common from "@server/features/common";
+import { Results } from "@ui/validation/results";
 import { NotFoundError, ForbiddenError, ValidationError, BadRequestError, AppError } from "./appError";
+import { CommandBase, SyncCommandBase } from "./commandBase";
 import { constructErrorResponse, Context } from "./context";
+import { QueryBase, SyncQueryBase } from "./queryBase";
 
 describe("constructErrorResponse", () => {
   test.each`
@@ -60,7 +61,7 @@ describe("Context", () => {
           logMessage: () => ["Query log message"],
         };
 
-        const res = await context.runQuery(query as unknown as Common.QueryBase<{ name: "mock result object" }>);
+        const res = await context.runQuery(query as unknown as QueryBase<{ name: "mock result object" }>);
 
         expect(res).toEqual(response);
       });
@@ -74,7 +75,7 @@ describe("Context", () => {
           logMessage: () => ["Query log message"],
         };
 
-        const res = context.runSyncQuery(query as unknown as Common.SyncQueryBase<{ name: "mock result object" }>);
+        const res = context.runSyncQuery(query as unknown as SyncQueryBase<{ name: "mock result object" }>);
 
         expect(res).toEqual(response);
       });
@@ -88,7 +89,7 @@ describe("Context", () => {
           logMessage: () => ["Query log message"],
         };
 
-        const res = await context.runCommand(command as unknown as Common.CommandBase<{ name: "mock result object" }>);
+        const res = await context.runCommand(command as unknown as CommandBase<{ name: "mock result object" }>);
 
         expect(res).toEqual(response);
       });
@@ -102,9 +103,7 @@ describe("Context", () => {
           logMessage: () => ["Query log message"],
         };
 
-        const res = context.runSyncCommand(
-          command as unknown as Common.SyncCommandBase<{ name: "mock result object" }>,
-        );
+        const res = context.runSyncCommand(command as unknown as SyncCommandBase<{ name: "mock result object" }>);
 
         expect(res).toEqual(response);
       });

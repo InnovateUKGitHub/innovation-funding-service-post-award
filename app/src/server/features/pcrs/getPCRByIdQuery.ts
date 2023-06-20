@@ -1,7 +1,10 @@
+import { PCRItemType } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
 import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
-import { Authorisation, IContext, PCRItemType, ProjectRole } from "@framework/types";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
-import { QueryBase } from "../common";
+import { QueryBase } from "../common/queryBase";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { mapToPcrDto } from "./mapToPCRDto";
 

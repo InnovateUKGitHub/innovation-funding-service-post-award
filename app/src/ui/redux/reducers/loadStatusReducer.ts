@@ -1,5 +1,6 @@
-import { LoadingStatus } from "@framework/constants";
-import { DataLoadAction, EditorErrorAction, EditorSubmitAction, EditorSuccessAction } from "../actions/common";
+import { LoadingStatus } from "@framework/constants/enums";
+import { DataLoadAction } from "../actions/common/dataLoad";
+import { EditorSubmitAction, EditorSuccessAction, EditorErrorAction } from "../actions/common/editorActions";
 
 const increment = (state: number) => (state > 0 ? state + 1 : 1);
 const decrement = (state: number) => (state > 0 ? state - 1 : 0);

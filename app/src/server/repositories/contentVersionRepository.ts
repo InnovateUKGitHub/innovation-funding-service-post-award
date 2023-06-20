@@ -1,9 +1,10 @@
 import { Stream } from "stream";
-import { IFileWrapper } from "@framework/types";
+
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
+import { IFileWrapper } from "@framework/types/fileWapper";
 
 export interface ISalesforceDocument {
   Id: string;

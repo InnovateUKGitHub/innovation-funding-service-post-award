@@ -1,7 +1,7 @@
-import { useEditPartnerLevelContent } from "@ui/containers";
 import { renderHook } from "@testing-library/react";
 import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { useEditPartnerLevelContent } from "./editPartnerLevel.page";
 
 const stubContent = {
   pages: {

@@ -1,4 +1,4 @@
-import { PCROrganisationType } from "@framework/constants";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
 import { Partner } from "@framework/entities/partner";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { SalesforcePartnerMapper } from "./mappers/partnerMapper";

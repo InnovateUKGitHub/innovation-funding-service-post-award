@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { FullHeight } from "@ui/components";
+import { FullHeight } from "./FullHeight";
 
 describe("FullHeight Components", () => {
   const requiredProps = {

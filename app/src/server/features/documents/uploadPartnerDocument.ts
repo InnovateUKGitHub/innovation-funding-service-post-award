@@ -1,7 +1,10 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { CommandMultipleDocumentBase } from "../common/commandBase";
+import { ValidationError } from "../common/appError";
 
 export class UploadPartnerDocumentCommand extends CommandMultipleDocumentBase<string[]> {
   protected filesRequired = true;

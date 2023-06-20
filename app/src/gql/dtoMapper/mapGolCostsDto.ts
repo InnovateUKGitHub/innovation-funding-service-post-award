@@ -1,4 +1,4 @@
-import type { GOLCostDto } from "@framework/dtos";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
 
 type GolCostNode = Readonly<
   Partial<{

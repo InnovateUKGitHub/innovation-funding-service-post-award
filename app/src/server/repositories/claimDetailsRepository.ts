@@ -1,8 +1,8 @@
-import { ClaimDetailKey } from "@framework/types";
 import { ILogger } from "@shared/developmentLogger";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
 
 export interface ISalesforceClaimDetails {
   Id: string;

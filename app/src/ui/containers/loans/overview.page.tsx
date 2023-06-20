@@ -1,7 +1,11 @@
-import { Section, Page, Projects, BackLink, Renderers } from "@ui/components";
-import { LoanStatus } from "@framework/entities";
+import { LoanStatus } from "@framework/entities/loan-status";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { Title } from "@ui/components/projects/title";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { LoansTable } from "./components/LoansTable";
 import { useLoanOverviewData } from "./loanOverview.logic";
 
@@ -25,15 +29,15 @@ const LoansOverviewPage = (props: BaseProps & LoanOverviewParams) => {
           {getContent(x => x.pages.projectOverview.backToProjects)}
         </BackLink>
       }
-      pageTitle={<Projects.Title title={project.title} projectNumber={project.projectNumber} />}
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
     >
       <Section>
         {pendingLoan && (
-          <Renderers.SimpleString>
+          <SimpleString>
             {isLastItem
               ? "Your last drawdown request has been received. It is currently being reviewed."
               : `You can request your next drawdown once drawdown ${pendingLoan.period} is approved.`}
-          </Renderers.SimpleString>
+          </SimpleString>
         )}
         <LoansTable
           items={loans}

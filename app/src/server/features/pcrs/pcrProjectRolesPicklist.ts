@@ -1,5 +1,5 @@
+import { PCRProjectRole } from "@framework/constants/pcrConstants";
 import { PicklistEntry } from "jsforce";
-import { PCRProjectRole } from "@framework/types";
 
 export const pcrProjectRolesPicklist: Map<PCRProjectRole, PicklistEntry> = new Map();
 

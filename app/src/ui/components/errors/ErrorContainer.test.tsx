@@ -1,9 +1,8 @@
 import { render } from "@testing-library/react";
-
 import { TestBed, TestBedStore } from "@shared/TestBed";
-import { ErrorContainer, ErrorContainerProps } from "@ui/components/errors";
-import { ErrorCode } from "@framework/constants";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ErrorCode } from "@framework/constants/enums";
+import { ErrorContainerProps, ErrorContainer } from "./ErrorContainer";
 
 describe("<ErrorContainer />", () => {
   describe("@renders", () => {

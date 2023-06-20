@@ -1,6 +1,8 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { DocumentsSummaryQueryBase } from "@server/features/documents/documentsSummaryQueryBase";
 import { DocumentEntity } from "@framework/entities/document";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
 export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends DocumentsSummaryQueryBase {

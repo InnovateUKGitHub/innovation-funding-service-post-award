@@ -1,9 +1,11 @@
-import { scrollToTheTagSmoothly } from "@framework/util";
 import { flatten } from "@framework/util/arrayHelpers";
-import { useContent } from "@ui/hooks";
+import { scrollToTheTagSmoothly } from "@framework/util/windowHelpers";
+import { useContent } from "@ui/hooks/content.hook";
+import { NestedResult } from "@ui/validation/nestedResult";
+import { Result } from "@ui/validation/result";
+import { IValidationResult, Results } from "@ui/validation/results";
 import { useNavigate } from "react-router-dom";
-import { IValidationResult, NestedResult, Result, Results } from "../validation";
-import { List } from "./layout";
+import { List } from "./layout/list";
 
 interface Props {
   validation?: IValidationResult | null;

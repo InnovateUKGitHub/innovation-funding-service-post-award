@@ -1,13 +1,16 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { configuration } from "@server/features/common";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { IFileWrapper } from "@framework/types";
 import { UploadClaimDetailDocumentCommand } from "../../features/documents/uploadClaimDetailDocument";
-import { ClaimDetailDocumentsPageParams, ClaimDetailDocumentsRoute } from "../../../ui/containers";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "../formHandlerBase";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { configuration } from "@server/features/common/config";
+import {
+  ClaimDetailDocumentsPageParams,
+  ClaimDetailDocumentsRoute,
+} from "@ui/containers/claims/claimDetailDocuments.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class ClaimDetailDocumentUploadHandler extends MultipleFileFormHandlerBase<
   ClaimDetailDocumentsPageParams,

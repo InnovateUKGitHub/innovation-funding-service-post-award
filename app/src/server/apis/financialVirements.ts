@@ -1,9 +1,9 @@
+import { FinancialVirementDto } from "@framework/dtos/financialVirementDto";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { processDto } from "@shared/processResponse";
-import { FinancialVirementDto } from "@framework/dtos";
-import { ApiParams, ControllerBase } from "./controllerBase";
+import { ControllerBase, ApiParams } from "./controllerBase";
 
 class Controller extends ControllerBase<FinancialVirementDto> {
   constructor() {

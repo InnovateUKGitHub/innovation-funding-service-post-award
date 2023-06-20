@@ -1,8 +1,9 @@
-import { Authorisation, ProjectRole } from "@framework/types";
+import { PCRStatus } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { BadRequestError, NotFoundError } from "@shared/appError";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { PCRStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("DeleteProjectChangeRequestCommand", () => {

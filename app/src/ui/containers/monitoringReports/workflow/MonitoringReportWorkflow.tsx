@@ -1,9 +1,6 @@
-import { MonitoringReportStatus } from "@framework/constants";
-import { Page, Projects, ValidationMessage } from "@ui/components";
-import { scrollToTheTopSmoothly } from "@framework/util";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/workflow/monitoringReportWorkflowDef";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { MonitoringReportWorkflowBackLink } from "./MonitoringReportWorkflowBackLink";
 import {
   MonitoringReportWorkflowCallbacks,
@@ -13,6 +10,11 @@ import {
 import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
 import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
 import { useEffect } from "react";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
+import { Page } from "@ui/components/layout/page";
+import { Title } from "@ui/components/projects/title";
+import { ValidationMessage } from "@ui/components/validationMessage";
 
 export const MonitoringReportWorkflow = (
   props: MonitoringReportWorkflowData & MonitoringReportWorkflowParams & MonitoringReportWorkflowCallbacks & BaseProps,
@@ -39,7 +41,7 @@ export const MonitoringReportWorkflow = (
   return (
     <Page
       backLink={<MonitoringReportWorkflowBackLink {...props} workflow={workflow} />}
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validator={editor.validator}
       error={editor.error}
     >

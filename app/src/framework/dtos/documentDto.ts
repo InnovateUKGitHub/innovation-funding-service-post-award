@@ -1,4 +1,4 @@
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 
 interface IStream {
   pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean }): T;

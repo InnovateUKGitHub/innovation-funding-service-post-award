@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
-import { GetClaim } from "@server/features/claims";
 import { salesforceDateFormat } from "@framework/util/clock";
-import { ClaimStatus } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { GetClaim } from "./getClaim";
+
 describe("GetClaim", () => {
   it("returns correct claim values", async () => {
     const context = new TestContext();

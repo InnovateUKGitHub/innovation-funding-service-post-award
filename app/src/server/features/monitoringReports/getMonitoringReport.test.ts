@@ -1,5 +1,5 @@
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
-import { MonitoringReportStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetMonitoringReport", () => {

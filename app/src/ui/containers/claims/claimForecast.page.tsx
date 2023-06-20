@@ -1,23 +1,36 @@
 import { useNavigate } from "react-router-dom";
-import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { getArrayExcludingPeriods, isNumber } from "@framework/util";
-import {
-  ClaimDetailsSummaryDto,
-  ClaimDto,
-  ForecastDetailsDTO,
-  getAuthRoles,
-  GOLCostDto,
-  ILinkInfo,
-  PartnerDto,
-  ProjectDto,
-  ProjectRole,
-} from "@framework/types";
 import { Pending } from "@shared/pending";
-import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { IEditorStore, useStores } from "@ui/redux";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { getArrayExcludingPeriods } from "@framework/util/arrayHelpers";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { AriaLive } from "@ui/components/renderers/ariaLive";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { Warning } from "@ui/components/forecasts/warning";
+import { ForecastData, ForecastTable } from "@ui/components/claims/forecastTable";
+import { ClaimLastModified } from "@ui/components/claims/claimLastModified";
+import { isNumber } from "@framework/util/numberHelper";
 
 export interface ClaimForecastParams {
   projectId: ProjectId;
@@ -42,7 +55,7 @@ interface Callbacks {
   onUpdate: (saving: boolean, dto: ForecastDetailsDTO[], link?: ILinkInfo) => void;
 }
 
-const Form = ACC.createTypedForm<ForecastDetailsDTO[]>();
+const Form = createTypedForm<ForecastDetailsDTO[]>();
 
 class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Callbacks> {
   render() {
@@ -59,24 +72,21 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
     });
 
     const combined = Pending.combine({ data: combinedForecastData, editor: this.props.editor });
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
+    return <PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
   }
 
   renderOverheadsRate(overheadRate: number | null) {
     if (!isNumber(overheadRate)) return null;
 
     return (
-      <ACC.Renderers.SimpleString qa="overhead-costs">
-        <ACC.Content value={x => x.pages.claimForecast.overheadsCosts} />
-        <ACC.Renderers.Percentage value={overheadRate} />
-      </ACC.Renderers.SimpleString>
+      <SimpleString qa="overhead-costs">
+        <Content value={x => x.pages.claimForecast.overheadsCosts} />
+        <Percentage value={overheadRate} />
+      </SimpleString>
     );
   }
 
-  renderContents(
-    combined: ACC.Claims.ForecastData,
-    editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>,
-  ) {
+  renderContents(combined: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
     // Get a set of periods that we have ALREADY claimed.
     const periodsClaimed = new Set(this.props.claims?.data?.map(x => x.periodId));
 
@@ -104,37 +114,37 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
     };
 
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink
+          <BackLink
             route={this.props.routes.claimDocuments.getLink({
               projectId: this.props.projectId,
               partnerId: this.props.partnerId,
               periodId: this.props.periodId,
             })}
           >
-            <ACC.Content value={x => x.pages.claimForecast.backLink} />
-          </ACC.BackLink>
+            <Content value={x => x.pages.claimForecast.backLink} />
+          </BackLink>
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...combined.project} />}
+        pageTitle={<Title {...combined.project} />}
       >
-        <ACC.Section qa="partner-name">
-          <ACC.Renderers.AriaLive>
+        <Section qa="partner-name">
+          <AriaLive>
             {combined.partner.newForecastNeeded && (
-              <ACC.ValidationMessage
+              <ValidationMessage
                 messageType="info"
                 message={x => x.claimsMessages.frequencyChangeMessage}
                 qa="period-change-warning"
               />
             )}
-            <ACC.ValidationMessage
+            <ValidationMessage
               messageType="info"
               message={x => x.claimsMessages.lastChanceToChangeForecast({ periodId: lastChanceToEditPeriod })}
             />
-          </ACC.Renderers.AriaLive>
-          <ACC.Forecasts.Warning {...combined} editor={editor} />
+          </AriaLive>
+          <Warning {...combined} editor={editor} />
           {this.renderOverheadsRate(combined.partner.overheadRate)}
           <Form.Form
             editor={editor}
@@ -145,7 +155,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
             <Form.Custom
               name="claimForecastTable"
               value={({ onChange }) => (
-                <ACC.Claims.ForecastTable
+                <ForecastTable
                   onChange={onChange}
                   data={combined}
                   editor={editor}
@@ -156,20 +166,20 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
             />
             <Form.Fieldset qa="last-saved">
               {combined.partner.forecastLastModifiedDate && (
-                <ACC.Claims.ClaimLastModified modifiedDate={combined.partner.forecastLastModifiedDate} />
+                <ClaimLastModified modifiedDate={combined.partner.forecastLastModifiedDate} />
               )}
             </Form.Fieldset>
             <Form.Fieldset qa="save-and-continue">
               <Form.Submit>
-                <ACC.Content value={x => x.pages.claimForecast.buttonContinueToSummary} />
+                <Content value={x => x.pages.claimForecast.buttonContinueToSummary} />
               </Form.Submit>
               <Form.Button name="save" onClick={onFormSave}>
-                <ACC.Content value={x => x.pages.claimForecast.buttonSaveAndReturn} />
+                <Content value={x => x.pages.claimForecast.buttonSaveAndReturn} />
               </Form.Button>
             </Form.Fieldset>
           </Form.Form>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 

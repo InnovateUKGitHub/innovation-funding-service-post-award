@@ -1,7 +1,9 @@
-import { QueryBase } from "@server/features/common";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { MonitoringReportSummaryDto } from "@framework/dtos";
+import { ProjectRole } from "@framework/constants/project";
+import { MonitoringReportSummaryDto } from "@framework/dtos/monitoringReportDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 import { dateComparator } from "@framework/util/comparator";
+import { QueryBase } from "../common/queryBase";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 
 export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSummaryDto[]> {

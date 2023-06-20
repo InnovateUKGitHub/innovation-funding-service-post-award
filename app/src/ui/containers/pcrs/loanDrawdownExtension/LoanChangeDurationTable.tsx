@@ -1,10 +1,13 @@
+import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos/pcrDtos";
+import { DropdownOption } from "@ui/components/form";
+import { DropdownList } from "@ui/components/inputs/dropdownList";
+import { FullNumericDate } from "@ui/components/renderers/date";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { Result } from "@ui/validation/result";
+import { PCRLoanExtensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 import cx from "classnames";
-
-import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos";
-import { PCRLoanExtensionItemDtoValidator } from "@ui/validators";
-import * as ACC from "@ui/components";
-import { useMounted } from "@ui/features";
-import { Result } from "@ui/validation";
 
 type BaseChangeDurationTable =
   | {
@@ -35,7 +38,7 @@ interface LoanEditTableData {
   validator: Result;
 }
 
-const LoanEditTable = ACC.createTypedTable<LoanEditTableData>();
+const LoanEditTable = createTypedTable<LoanEditTableData>();
 
 export const LoanChangeDurationTable = ({
   editMode = false,
@@ -142,7 +145,7 @@ export const LoanChangeDurationTable = ({
           const phaseOptions = allPhaseOptions[phaseKey];
 
           return (
-            <ACC.Inputs.DropdownList
+            <DropdownList
               id={hasAllPeriodsError ? validator.allPeriods.key : x.validator.key}
               name={x.phaseId}
               options={phaseOptions}
@@ -161,11 +164,9 @@ export const LoanChangeDurationTable = ({
           header="New end date"
           value={x =>
             x.currentEndDate.getTime() === x.newEndDate.getTime() ? (
-              <ACC.Renderers.SimpleString className="govuk-!-margin-0 govuk-!-text-align-centre">
-                -
-              </ACC.Renderers.SimpleString>
+              <SimpleString className="govuk-!-margin-0 govuk-!-text-align-centre">-</SimpleString>
             ) : (
-              <ACC.Renderers.FullNumericDate value={x.newEndDate} />
+              <FullNumericDate value={x.newEndDate} />
             )
           }
         />
@@ -191,7 +192,7 @@ const getOptions = (data: NoUndefinedField<PCRItemForLoanDrawdownExtensionDto>) 
 /**
  * Creates a list of options
  */
-function createOptions(currentOffset: number, totalMonths: number): ACC.DropdownOption[] {
+function createOptions(currentOffset: number, totalMonths: number): DropdownOption[] {
   const quarterlyOffset = 3;
   // Note: Capture any current options which are less than "quarterlyOffset" or not modulo of 3
   const shouldAddStartOption = currentOffset < quarterlyOffset;

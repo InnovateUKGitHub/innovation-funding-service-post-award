@@ -1,5 +1,5 @@
 import { getPending } from "@ui/helpers/get-pending";
-import { useStores } from "@ui/redux";
+import { useStores } from "@ui/redux/storesProvider";
 import { createContext, useContext } from "react";
 
 interface IProjectParticipants {

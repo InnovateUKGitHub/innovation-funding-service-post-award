@@ -1,5 +1,8 @@
-import { Accordion, AccordionItem, Logs, LogItem, Section } from "@ui/components";
-import { useContent } from "@ui/hooks";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { Section } from "@ui/components/layout/section";
+import { LogItem, Logs } from "@ui/components/logs";
+import { useContent } from "@ui/hooks/content.hook";
 
 const ProjectChangeRequestOverviewLog = ({ statusChanges }: { statusChanges: LogItem[] }) => {
   const { getContent } = useContent();

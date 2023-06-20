@@ -1,4 +1,4 @@
-import { RecordType } from "@framework/entities";
+import { RecordType } from "@framework/entities/recordType";
 import { ISalesforceRecordType } from "../recordTypeRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 

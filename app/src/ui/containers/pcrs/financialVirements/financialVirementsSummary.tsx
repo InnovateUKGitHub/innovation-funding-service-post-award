@@ -1,25 +1,31 @@
-import {
-  FinancialVirementDto,
-  PartnerDto,
-  PartnerVirementsDto,
-  PCRDto,
-  PCRItemDto,
-  PCRItemForMultiplePartnerFinancialVirementDto,
-} from "@framework/dtos";
-
 import { Pending } from "@shared/pending";
-import { IEditorStore, useStores } from "@ui/redux";
-import { useContent } from "@ui/hooks";
-import { MultiplePartnerFinancialVirementDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { useContent } from "@ui/hooks/content.hook";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemType, PCRStepId } from "@framework/types";
-import { roundCurrency } from "@framework/util";
 import { useProjectParticipants } from "@ui/features/project-participants";
-import * as ACC from "@ui/components";
-
-import { PcrSummaryConsumer } from "../components/PcrSummary";
-import { EmailContent } from "@ui/components";
 import { ProjectReallocationCosts } from "../components/PcrSummary/pcr-summary.interface";
+import { PCRStepId, PCRItemType } from "@framework/constants/pcrConstants";
+import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos/financialVirementDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { PCRItemForMultiplePartnerFinancialVirementDto, PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { Content } from "@ui/components/content";
+import { EmailContent } from "@ui/components/emailContent";
+import { FormBuilder } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { TextHint } from "@ui/components/layout/textHint";
+import { getPartnerName } from "@ui/components/partners/partnerName";
+import { Currency, getCurrency } from "@ui/components/renderers/currency";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { createTypedTable } from "@ui/components/table";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MultiplePartnerFinancialVirementDtoValidator, PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PcrSummaryConsumer } from "../components/PcrSummary/PcrSummary";
+import { Link } from "@ui/components/links";
+import { Loader } from "@ui/components/loading";
 
 export interface FinancialVirementSummaryProps
   extends PcrSummaryProps<
@@ -29,7 +35,7 @@ export interface FinancialVirementSummaryProps
   > {
   virement: Pending<FinancialVirementDto>;
 }
-const Table = ACC.createTypedTable<ProjectReallocationCosts>();
+const Table = createTypedTable<ProjectReallocationCosts>();
 
 export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialVirementSummaryProps) => {
   const { getContent } = useContent();
@@ -49,7 +55,7 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
         ? props.routes.pcrFinancialVirementEditCostCategoryLevel.getLink(params)
         : props.routes.pcrFinancialVirementDetails.getLink({ ...params, mode });
 
-    return <ACC.Link route={route}>{ACC.getPartnerName(partner, true)}</ACC.Link>;
+    return <Link route={route}>{getPartnerName(partner, true)}</Link>;
   };
 
   const getGrantMessage = (
@@ -61,13 +67,13 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
     // Note: bail out if there is no difference
     if (hasMatchingGrant) return undefined;
 
-    const grantDifference = ACC.Renderers.getCurrency(Math.abs(newGrantDifference));
+    const grantDifference = getCurrency(Math.abs(newGrantDifference));
 
     if (hasAvailableGrant) {
       return getContent(x => x.pages.financialVirementSummary.availableGrantMessage({ grantDifference }));
     }
 
-    const totalOriginalGrant = ACC.Renderers.getCurrency(Math.abs(originalGrant));
+    const totalOriginalGrant = getCurrency(Math.abs(originalGrant));
 
     return getContent(x =>
       x.pages.financialVirementSummary.unavailableGrantMessage({ grantDifference, totalOriginalGrant }),
@@ -93,7 +99,7 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
         return (
           <>
             {grantMessage && (
-              <ACC.ValidationMessage
+              <ValidationMessage
                 markdown
                 message={grantMessage}
                 messageType={data.hasAvailableGrant ? "info" : "error"}
@@ -107,27 +113,27 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                     qa="partner"
                     header={x => x.financialVirementLabels.partnerName}
                     value={x => getPartnerLink(x.partnerVirement, x.partner)}
-                    footer={<ACC.Content value={x => x.financialVirementLabels.projectTotals} />}
+                    footer={<Content value={x => x.financialVirementLabels.projectTotals} />}
                     isDivider="normal"
                   />
                   <Table.Currency
                     qa="originalEligibleCosts"
                     header={x => x.financialVirementLabels.partnerOriginalEligibleCosts}
                     value={x => x.partnerVirement.originalEligibleCosts}
-                    footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />}
+                    footer={<Currency value={virement.originalEligibleCosts} />}
                   />
                   <Table.Currency
                     qa="originalRemaining"
                     header={x => x.financialVirementLabels.partnerOriginalRemainingCosts}
                     value={x => x.partnerVirement.originalRemainingCosts}
-                    footer={<ACC.Renderers.Currency value={virement.originalRemainingCosts} />}
+                    footer={<Currency value={virement.originalRemainingCosts} />}
                   />
                   <Table.Currency
                     qa="originalRemainingGrant"
                     header={x => x.financialVirementLabels.partnerOriginalRemainingGrant}
                     value={x => x.partnerVirement.originalRemainingGrant}
                     footer={
-                      <ACC.Renderers.Currency
+                      <Currency
                         value={virement.originalRemainingGrant}
                         className={displayHighlight === "positive-hightlight" && "highlight--info"}
                       />
@@ -138,20 +144,20 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                     qa="newEligibleCosts"
                     header={x => x.financialVirementLabels.partnerNewEligibleCosts}
                     value={x => x.partnerVirement.newEligibleCosts}
-                    footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />}
+                    footer={<Currency value={virement.newEligibleCosts} />}
                   />
                   <Table.Currency
                     qa="newRemainingCosts"
                     header={x => x.financialVirementLabels.partnerNewRemainingCosts}
                     value={x => x.partnerVirement.newRemainingCosts}
-                    footer={<ACC.Renderers.Currency value={virement.newRemainingCosts} />}
+                    footer={<Currency value={virement.newRemainingCosts} />}
                   />
                   <Table.Currency
                     qa="newRemainingGrant"
                     header={x => x.financialVirementLabels.partnerNewRemainingGrant}
                     value={x => x.partnerVirement.newRemainingGrant}
                     footer={
-                      <ACC.Renderers.Currency
+                      <Currency
                         value={virement.newRemainingGrant}
                         className={displayHighlight === "negative-hightlight" && "highlight--error"}
                       />
@@ -161,8 +167,8 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
 
                 {isMultipleParticipants && isNonFec ? (
                   <>
-                    <ACC.Renderers.SimpleString>
-                      <ACC.Content
+                    <SimpleString>
+                      <Content
                         components={[
                           <EmailContent
                             key="email"
@@ -171,16 +177,16 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                         ]}
                         value={x => x.pages.financialVirementSummary.nonFecGrantAdvice}
                       />
-                    </ACC.Renderers.SimpleString>
+                    </SimpleString>
                   </>
                 ) : (
                   <>
-                    <ACC.Renderers.SimpleString>
-                      <ACC.Content value={x => x.pages.financialVirementSummary.grantAdvice} />
-                    </ACC.Renderers.SimpleString>
+                    <SimpleString>
+                      <Content value={x => x.pages.financialVirementSummary.grantAdvice} />
+                    </SimpleString>
 
-                    <ACC.Section qa="edit-partner-level">
-                      <ACC.Link
+                    <Section qa="edit-partner-level">
+                      <Link
                         styling="SecondaryButton"
                         route={props.routes.pcrFinancialVirementEditPartnerLevel.getLink({
                           itemId: props.pcrItem.id,
@@ -188,9 +194,9 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                           projectId: props.projectId,
                         })}
                       >
-                        <ACC.Content value={x => x.pages.financialVirementSummary.linkChangeGrant} />
-                      </ACC.Link>
-                    </ACC.Section>
+                        <Content value={x => x.pages.financialVirementSummary.linkChangeGrant} />
+                      </Link>
+                    </Section>
                   </>
                 )}
               </>
@@ -207,20 +213,20 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                     qa="partner"
                     header={x => x.financialVirementLabels.partnerName}
                     value={x => getPartnerLink(x.partnerVirement, x.partner)}
-                    footer={<ACC.Content value={x => x.financialVirementLabels.projectTotals} />}
+                    footer={<Content value={x => x.financialVirementLabels.projectTotals} />}
                     isDivider="normal"
                   />
                   <Table.Currency
                     qa="originalEligibleCosts"
                     header={x => x.financialVirementLabels.partnerOriginalEligibleCosts}
                     value={x => x.partnerVirement.originalEligibleCosts}
-                    footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />}
+                    footer={<Currency value={virement.originalEligibleCosts} />}
                   />
                   <Table.Currency
                     qa="newEligibleCosts"
                     header={x => x.financialVirementLabels.partnerNewEligibleCosts}
                     value={x => x.partnerVirement.newEligibleCosts}
-                    footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />}
+                    footer={<Currency value={virement.newEligibleCosts} />}
                   />
                   <Table.Currency
                     qa="differenceEligibleCosts"
@@ -229,9 +235,7 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                       roundCurrency(x.partnerVirement.newEligibleCosts - x.partnerVirement.originalEligibleCosts)
                     }
                     footer={
-                      <ACC.Renderers.Currency
-                        value={roundCurrency(virement.newEligibleCosts - virement.originalEligibleCosts)}
-                      />
+                      <Currency value={roundCurrency(virement.newEligibleCosts - virement.originalEligibleCosts)} />
                     }
                     isDivider="normal"
                   />
@@ -239,14 +243,14 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                     qa="originalFundingLevel"
                     header={x => x.financialVirementLabels.originalFundingLevel}
                     value={x => x.partnerVirement.originalFundingLevel}
-                    footer={<ACC.Renderers.Percentage value={virement.originalFundingLevel} defaultIfInfinite={0} />}
+                    footer={<Percentage value={virement.originalFundingLevel} defaultIfInfinite={0} />}
                     defaultIfInfinite={0}
                   />
                   <Table.Percentage
                     qa="newFundingLevel"
                     header={x => x.financialVirementLabels.newFundingLevel}
                     value={x => x.partnerVirement.newFundingLevel}
-                    footer={<ACC.Renderers.Percentage value={virement.newFundingLevel} defaultIfInfinite={0} />}
+                    footer={<Percentage value={virement.newFundingLevel} defaultIfInfinite={0} />}
                     defaultIfInfinite={0}
                     isDivider="normal"
                   />
@@ -254,13 +258,13 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                     qa="originalRemainingGrant"
                     header={x => x.financialVirementLabels.partnerOriginalRemainingGrant}
                     value={x => x.partnerVirement.originalRemainingGrant}
-                    footer={<ACC.Renderers.Currency value={virement.originalRemainingGrant} />}
+                    footer={<Currency value={virement.originalRemainingGrant} />}
                   />
                   <Table.Currency
                     qa="newRemainingGrant"
                     header={x => x.financialVirementLabels.partnerNewRemainingGrant}
                     value={x => x.partnerVirement.newRemainingGrant}
-                    footer={<ACC.Renderers.Currency value={virement.newRemainingGrant} />}
+                    footer={<Currency value={virement.newRemainingGrant} />}
                   />
                   <Table.Currency
                     qa="differenceRemainingGrant"
@@ -269,22 +273,20 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                       roundCurrency(x.partnerVirement.newRemainingGrant - x.partnerVirement.originalRemainingGrant)
                     }
                     footer={
-                      <ACC.Renderers.Currency
-                        value={roundCurrency(virement.newRemainingGrant - virement.originalRemainingGrant)}
-                      />
+                      <Currency value={roundCurrency(virement.newRemainingGrant - virement.originalRemainingGrant)} />
                     }
                   />
                 </Table.Table>
 
-                <ACC.Section>
-                  <ACC.SummaryList qa="pcr_financial-virement">
-                    <ACC.SummaryListItem
+                <Section>
+                  <SummaryList qa="pcr_financial-virement">
+                    <SummaryListItem
                       qa="grantValueYearEnd"
                       label={x => x.pages.financialVirementSummary.headingYearEndGrantValue}
-                      content={<ACC.Renderers.Currency value={props.pcrItem.grantMovingOverFinancialYear} />}
+                      content={<Currency value={props.pcrItem.grantMovingOverFinancialYear} />}
                     />
-                  </ACC.SummaryList>
-                </ACC.Section>
+                  </SummaryList>
+                </Section>
               </>
             )}
           </>
@@ -294,12 +296,12 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
   );
 
   const pendingPayload = Pending.combine({ virement: props.virement });
-  return <ACC.Loader pending={pendingPayload} render={x => renderContent(x.virement)} />;
+  return <Loader pending={pendingPayload} render={x => renderContent(x.virement)} />;
 };
 
 interface GrantMovingOverFinancialYearFormProps {
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
-  form: ACC.FormBuilder<PCRItemDto>;
+  form: FormBuilder<PCRItemDto>;
 }
 
 export const GrantMovingOverFinancialYearForm = ({ form: Form, editor }: GrantMovingOverFinancialYearFormProps) => {
@@ -317,7 +319,7 @@ export const GrantMovingOverFinancialYearForm = ({ form: Form, editor }: GrantMo
       qa="fieldset-grantMovingOverFinancialYear"
       heading={x => x.financialVirementLabels.grantMovingOverYear}
     >
-      <ACC.TextHint>The financial year ends on 31 March.</ACC.TextHint>
+      <TextHint>The financial year ends on 31 March.</TextHint>
 
       <Form.Numeric
         name="grantMovingOverFinancialYear"

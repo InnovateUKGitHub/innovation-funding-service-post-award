@@ -1,26 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { ForecastDetailsDTO, ProjectRole } from "@framework/types";
-import { getArrayExcludingPeriods, isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
-import { IEditorStore, useStores } from "@ui/redux";
-import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 import { useUpdateForecastData } from "./updateForecast.logic";
-import {
-  PageLoader,
-  Page,
-  BackLink,
-  Content,
-  Projects,
-  createTypedForm,
-  Renderers,
-  ValidationMessage,
-  Section,
-  Forecasts,
-  Claims,
-} from "@ui/components";
+import { ProjectRole } from "@framework/constants/project";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { getArrayExcludingPeriods } from "@framework/util/arrayHelpers";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { isNumber } from "@framework/util/numberHelper";
+import { ClaimLastModified } from "@ui/components/claims/claimLastModified";
+import { ForecastTable } from "@ui/components/claims/forecastTable";
+import { Warning } from "@ui/components/forecasts/warning";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -58,10 +61,10 @@ const UpdateForecastComponent = ({
   const renderOverheadsRate = (overheadRate: number | null) => {
     if (!isNumber(overheadRate)) return null;
     return (
-      <Renderers.SimpleString qa="overhead-costs">
+      <SimpleString qa="overhead-costs">
         <Content value={x => x.forecastsLabels.overheadCosts} />
-        <Renderers.Percentage value={overheadRate} />
-      </Renderers.SimpleString>
+        <Percentage value={overheadRate} />
+      </SimpleString>
     );
   };
 
@@ -76,14 +79,14 @@ const UpdateForecastComponent = ({
       }
       error={editor.error}
       validator={editor.validator}
-      pageTitle={<Projects.Title projectNumber={data.project.projectNumber} title={data.project.title} />}
+      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
     >
       <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
       {data.claim && data.claim.isFinalClaim && (
         <ValidationMessage messageType="info" message={x => x.forecastsMessages.finalClaim} />
       )}
       <Section title="" qa="partner-forecast">
-        <Forecasts.Warning {...data} editor={editor} />
+        <Warning {...data} editor={editor} />
         {renderOverheadsRate(data.partner.overheadRate)}
         <Form.Form
           editor={editor}
@@ -95,12 +98,12 @@ const UpdateForecastComponent = ({
             name="forecastTable"
             update={() => null}
             value={({ onChange }) => (
-              <Claims.ForecastTable onChange={onChange} data={data} editor={editor} allowRetroactiveForecastEdit />
+              <ForecastTable onChange={onChange} data={data} editor={editor} allowRetroactiveForecastEdit />
             )}
           />
           <Form.Fieldset>
             {data.partner.forecastLastModifiedDate && (
-              <Claims.ClaimLastModified modifiedDate={data.partner.forecastLastModifiedDate} />
+              <ClaimLastModified modifiedDate={data.partner.forecastLastModifiedDate} />
             )}
             <Form.Submit>
               <Content value={x => x.pages.forecastsUpdate.buttonSubmit} />

@@ -1,4 +1,4 @@
-import { isNumber } from "@framework/util";
+import { isNumber } from "@framework/util/numberHelper";
 
 export interface Props {
   value: number | null;

@@ -1,5 +1,5 @@
-import { DocumentDescription } from "@framework/constants";
-import { PartnerDocumentSummaryDtoGql } from "@framework/dtos";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 
 export type DocumentSummaryNode = {
   readonly node: {

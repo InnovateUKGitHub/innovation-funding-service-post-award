@@ -1,14 +1,18 @@
 import React, { Component } from "react";
-
-import * as ACC from "@ui/components";
-
-import { useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import { ReasoningStepProps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { useStores } from "@ui/redux/storesProvider";
+import { Loader } from "@ui/components/loading";
+import { Link } from "@ui/components/links";
 
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 interface InnerProps {
   documents: Pending<DocumentSummaryDto[]>;
@@ -26,11 +30,11 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
     });
 
     return (
-      <ACC.Loader
+      <Loader
         pending={this.props.documents}
         render={documents => (
           <>
-            <ACC.Section qa="uploadFileSection">
+            <Section qa="uploadFileSection">
               <UploadForm.Form
                 enctype="multipart"
                 editor={documentsEditor}
@@ -39,7 +43,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
                 qa="projectChangeRequestItemUpload"
               >
                 <UploadForm.Fieldset heading={x => x.documentMessages.uploadDocuments}>
-                  <ACC.DocumentGuidance />
+                  <DocumentGuidance />
 
                   <UploadForm.MultipleFileUpload
                     label={x => x.documentLabels.uploadInputLabel}
@@ -55,22 +59,22 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
                     styling="Secondary"
                     onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
                   >
-                    <ACC.Content value={x => x.documentMessages.uploadDocuments} />
+                    <Content value={x => x.documentMessages.uploadDocuments} />
                   </UploadForm.Button>
                 </UploadForm.Fieldset>
               </UploadForm.Form>
-              <ACC.Section>
-                <ACC.DocumentEdit
+              <Section>
+                <DocumentEdit
                   qa="prepare-files-documents"
                   onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
                   documents={documents}
                 />
-              </ACC.Section>
+              </Section>
 
-              <ACC.Link styling="PrimaryButton" route={back}>
-                <ACC.Content value={x => x.pcrItem.submitButton} />
-              </ACC.Link>
-            </ACC.Section>
+              <Link styling="PrimaryButton" route={back}>
+                <Content value={x => x.pcrItem.submitButton} />
+              </Link>
+            </Section>
           </>
         )}
       />

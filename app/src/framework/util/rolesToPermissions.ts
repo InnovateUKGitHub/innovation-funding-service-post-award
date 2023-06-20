@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants";
+import { ProjectRole } from "@framework/constants/project";
 
 export const convertRolesToPermissionsValue = (role: SfRoles | ProjectRole) => {
   if (typeof role === "number") return role as ProjectRole;

@@ -1,8 +1,8 @@
-import { IGuide } from "@framework/types";
 import { range } from "../../shared/range";
 import { createTypedTable } from "../components/table";
-import { FullDateTime } from "../components/renderers";
 import { Currency } from "../components/renderers/currency";
+import { IGuide } from "@framework/types/IGuide";
+import { FullDateTime } from "@ui/components/renderers/date";
 
 const exampleDataItem = (seed: number) => {
   const date = new Date();

@@ -1,17 +1,18 @@
 import { apiClient } from "@ui/apiClient";
-import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
-import { RootState } from "@ui/redux";
-import { messageSuccess, RootActionsOrThunk } from "@ui/redux/actions";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnersStore } from "@ui/redux/stores/partnersStore";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 import { CostCategoriesStore } from "@ui/redux/stores/costCategoriesStore";
-import { ForecastDetailsDTO } from "@framework/dtos";
 import { ForecastGolCostsStore } from "./forecastGolCostsStore";
 import { ClaimsDetailsStore } from "./claimDetailsStore";
 import { ClaimsStore } from "./claimsStore";
 import { StoreBase } from "./storeBase";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { messageSuccess } from "../actions/common/messageActions";
+import { RootActionsOrThunk } from "../actions/root";
+import { RootState } from "../reducers/rootReducer";
 
 export class ForecastDetailsStore extends StoreBase {
   constructor(

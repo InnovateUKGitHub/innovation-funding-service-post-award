@@ -1,20 +1,21 @@
-import { editorsReducer, IEditorStore } from "@ui/redux/reducers";
-import { ClaimDtoValidator } from "@ui/validators";
-import { ClaimDto, IAppError, ErrorCode } from "@framework/types";
-import { routeTransition } from "@ui/redux/actions";
+import { ErrorCode } from "@framework/constants/enums";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { IAppError } from "@framework/types/IAppError";
+import { createPartnerDto } from "@framework/util/stubDtos";
 import { EditorStatus } from "@ui/constants/enums";
 import {
+  EditorErrorAction,
   EditorResetAction,
-  UpdateEditorAction,
   EditorSubmitAction,
   EditorSuccessAction,
-  EditorErrorAction,
+  UpdateEditorAction,
 } from "@ui/redux/actions/common/editorActions";
-import { createPartnerDto } from "@framework/util/stubDtos";
-import { Results } from "@ui/validation";
-
-import getRootState from "../stores/getRootState";
+import { Results } from "@ui/validation/results";
+import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { routeTransition } from "../actions/common/transitionActions";
 import createClaim from "../stores/createClaim";
+import getRootState from "../stores/getRootState";
+import { editorsReducer, IEditorStore } from "./editorsReducer";
 
 const setupInitialState = (update?: (data: IEditorStore<ClaimDto, ClaimDtoValidator>) => void) => {
   const state = getRootState();

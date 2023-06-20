@@ -1,12 +1,15 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { configuration } from "@server/features/common";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { ClaimDetailDocumentsPageParams, ClaimDetailDocumentsRoute } from "../../../ui/containers";
 import { IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
+import { configuration } from "@server/features/common/config";
+import {
+  ClaimDetailDocumentsPageParams,
+  ClaimDetailDocumentsRoute,
+} from "@ui/containers/claims/claimDetailDocuments.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;

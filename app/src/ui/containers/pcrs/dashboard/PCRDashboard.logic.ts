@@ -3,8 +3,8 @@ import { PCRDashboardQuery, PCRDashboardQuery$data } from "./__generated__/PCRDa
 import { useLazyLoadQuery } from "react-relay";
 import { pcrDashboardQuery } from "./PCRDashboard.query";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { mapToProjectDto } from "@gql/dtoMapper";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 type Project = ProjectTypeSelector<PCRDashboardQuery$data>;
 type ProjectChangeRequest = ProjectChangeRequestTypeSelector<Project>;

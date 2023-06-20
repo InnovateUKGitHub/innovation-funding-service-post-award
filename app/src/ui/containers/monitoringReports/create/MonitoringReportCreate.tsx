@@ -1,4 +1,8 @@
-import { BackLink, Content, MonitoringReportPeriodFormComponent, Page, Projects } from "@ui/components";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { BackLink } from "@ui/components/links";
+import { MonitoringReportPeriodFormComponent } from "@ui/components/monitoringReports/reportForm";
+import { Title } from "@ui/components/projects/title";
 import { BaseProps } from "@ui/containers/containerBase";
 import {
   MonitoringReportCreateCallbacks,
@@ -34,7 +38,7 @@ const MonitoringReportCreate = ({
           <Content value={x => x.pages.monitoringReportsCreate.backLink} />
         </BackLink>
       }
-      pageTitle={<Projects.Title {...project} />}
+      pageTitle={<Title {...project} />}
       validator={editor.validator}
       error={editor.error}
     >

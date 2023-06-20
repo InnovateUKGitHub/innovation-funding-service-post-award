@@ -1,14 +1,14 @@
-import { PartnerDto } from "@framework/dtos";
-import { Result } from "@ui/validation";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 import {
-  BankCheckStatus,
-  BankDetailsTaskStatus,
-  DocumentDescription,
   PartnerStatus,
-  PostcodeTaskStatus,
+  BankDetailsTaskStatus,
+  BankCheckStatus,
   SpendProfileStatus,
-} from "@framework/constants";
+  PostcodeTaskStatus,
+} from "@framework/constants/partner";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Result } from "@ui/validation/result";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
 

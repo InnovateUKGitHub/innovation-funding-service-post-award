@@ -1,27 +1,20 @@
 import React, { createContext, isValidElement, useContext, useMemo, ReactElement, Fragment } from "react";
 import cx from "classnames";
 import _isPlainObject from "lodash.isplainobject";
-
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { Result, Results } from "@ui/validation";
 import { Link } from "@ui/components/links";
-import {
-  FullDate,
-  FullNumericDate,
-  ShortDate,
-  ShortDateTime,
-  Email,
-  Currency,
-  Percentage,
-  AccessibilityText,
-  BaseDateProps,
-} from "@ui/components/renderers";
 import * as colour from "@ui/styles/colours";
 import type { ContentSelector } from "@copy/type";
-import { useContent } from "@ui/hooks";
-
 import { useTableSorter } from "./documents/table-sorter";
-import { DateConvertible } from "@framework/util";
+import { DateConvertible } from "@framework/util/dateHelpers";
+import { useContent } from "@ui/hooks/content.hook";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
+import { AccessibilityText } from "./renderers/accessibilityText";
+import { Currency } from "./renderers/currency";
+import { BaseDateProps, FullDate, FullNumericDate, ShortDate, ShortDateTime } from "./renderers/date";
+import { Email } from "./renderers/email";
+import { Percentage } from "./renderers/percentage";
 
 const rowClassesStates: Record<"warning" | "error" | "info" | "edit", string> = {
   warning: "table__row--warning",

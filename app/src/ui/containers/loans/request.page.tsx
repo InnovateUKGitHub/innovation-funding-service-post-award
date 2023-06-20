@@ -1,19 +1,30 @@
 import { useNavigate } from "react-router-dom";
-import { IEditorStore, useStores } from "@ui/redux";
-import * as ACC from "@ui/components";
-
 import { Pending } from "@shared/pending";
 import { getPending } from "@ui/helpers/get-pending";
-import { DocumentDescription } from "@framework/constants";
-import { DocumentSummaryDto, LoanDto, MultipleDocumentUploadDto, ProjectDto } from "@framework/dtos";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { LoanDtoValidator } from "@ui/validators/loanValidator";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-
 import { LoanRequestTable } from "./components/LoanTable";
-import { Content } from "@ui/components";
-import { getAuthRoles } from "@framework/types";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit, DocumentView } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { TextHint } from "@ui/components/layout/textHint";
+import { BackLink, Link } from "@ui/components/links";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export interface LoansRequestParams {
   projectId: ProjectId;
@@ -32,8 +43,8 @@ interface LoansRequestPageProps extends LoansRequestParams, BaseProps {
   onLoanUpdate: (dto: LoanDto) => void;
 }
 
-const RequestForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
-const CommentsForm = ACC.createTypedForm<LoanDto>();
+const RequestForm = createTypedForm<MultipleDocumentUploadDto>();
+const CommentsForm = createTypedForm<LoanDto>();
 
 const LoansRequestPage = ({
   project,
@@ -46,26 +57,26 @@ const LoansRequestPage = ({
   const { getContent } = useContent();
   const { isFc, isPm } = getAuthRoles(project.roles);
 
-  const createPcrLink = <ACC.Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}> </ACC.Link>;
+  const createPcrLink = <Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}> </Link>;
 
   return (
     <>
-      <ACC.Renderers.Messages messages={props.messages} />
+      <Messages messages={props.messages} />
 
-      <ACC.Section>
-        <ACC.Renderers.SimpleString>
+      <Section>
+        <SimpleString>
           {isFc && <Content value={x => x.pages.loansRequest.financeContactIntroduction} />}
           {isPm && (
             <Content value={x => x.pages.loansRequest.projectManagerIntroduction} components={[createPcrLink]} />
           )}
-        </ACC.Renderers.SimpleString>
+        </SimpleString>
 
         <LoanRequestTable {...loan} />
-      </ACC.Section>
+      </Section>
 
       {isFc && (
-        <ACC.Section title={getContent(x => x.pages.loansRequest.uploadTitle)}>
-          <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.uploadIntro)}</ACC.Renderers.SimpleString>
+        <Section title={getContent(x => x.pages.loansRequest.uploadTitle)}>
+          <SimpleString>{getContent(x => x.pages.loansRequest.uploadIntro)}</SimpleString>
 
           <RequestForm.Form
             qa="loanDocumentsForm"
@@ -75,7 +86,7 @@ const LoansRequestPage = ({
             onSubmit={() => props.onDocsChange(true, loanDocsEditor.data)}
           >
             <RequestForm.Fieldset>
-              <ACC.DocumentGuidance />
+              <DocumentGuidance />
 
               <RequestForm.MultipleFileUpload
                 name="attachment"
@@ -98,31 +109,31 @@ const LoansRequestPage = ({
               {getContent(x => x.pages.loansRequest.uploadFormButton)}
             </RequestForm.Button>
           </RequestForm.Form>
-        </ACC.Section>
+        </Section>
       )}
 
-      <ACC.Section>
+      <Section>
         {isFc ? (
-          <ACC.DocumentEdit
+          <DocumentEdit
             qa="loan-documents-editor"
             documents={documents}
             onRemove={document => props.onDocsDelete(loanDocsEditor.data, document)}
           />
         ) : (
-          <ACC.DocumentView qa="loan-documents-viewer" documents={documents} />
+          <DocumentView qa="loan-documents-viewer" documents={documents} />
         )}
-      </ACC.Section>
+      </Section>
 
       {isFc && (
         <>
-          <ACC.Section>
+          <Section>
             <CommentsForm.Form
               qa="summary-form"
               editor={loanEditor}
               onSubmit={() => props.onLoanUpdate(loanEditor.data)}
             >
               <CommentsForm.Fieldset heading={getContent(x => x.pages.loansRequest.commentTitle)}>
-                <ACC.TextHint>{getContent(x => x.pages.loansRequest.commentHint)}</ACC.TextHint>
+                <TextHint>{getContent(x => x.pages.loansRequest.commentHint)}</TextHint>
 
                 <CommentsForm.MultilineString
                   qa="info-text-area"
@@ -134,16 +145,14 @@ const LoansRequestPage = ({
               </CommentsForm.Fieldset>
 
               <CommentsForm.Fieldset heading={getContent(x => x.pages.loansRequest.loanDeclarationTitle)}>
-                <ACC.Renderers.SimpleString>
-                  {getContent(x => x.pages.loansRequest.loanDeclaration)}
-                </ACC.Renderers.SimpleString>
+                <SimpleString>{getContent(x => x.pages.loansRequest.loanDeclaration)}</SimpleString>
               </CommentsForm.Fieldset>
 
               <CommentsForm.Fieldset qa="save-buttons">
                 <CommentsForm.Submit>{getContent(x => x.pages.loansRequest.loanSubmitButton)}</CommentsForm.Submit>
               </CommentsForm.Fieldset>
             </CommentsForm.Form>
-          </ACC.Section>
+          </Section>
         </>
       )}
     </>
@@ -172,28 +181,26 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
   const navigate = useNavigate();
 
   const backLinkElement = (
-    <ACC.BackLink route={props.routes.loansSummary.getLink({ projectId: props.projectId })}>
+    <BackLink route={props.routes.loansSummary.getLink({ projectId: props.projectId })}>
       {getContent(x => x.pages.loansRequest.backToLoanOverview)}
-    </ACC.BackLink>
+    </BackLink>
   );
 
   const pageTitleValue =
     !isLoading && payload ? (
-      <ACC.Projects.Title {...payload.project} />
+      <Title {...payload.project} />
     ) : (
-      <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.loadingDrawdown)}</ACC.Renderers.SimpleString>
+      <SimpleString>{getContent(x => x.pages.loansRequest.loadingDrawdown)}</SimpleString>
     );
 
   return (
-    <ACC.Page
+    <Page
       pageTitle={pageTitleValue}
       backLink={isRejected ? undefined : backLinkElement}
       error={payload?.loanEditor.error ?? payload?.loanDocsEditor.error}
       validator={[payload?.loanEditor.validator, payload?.loanDocsEditor.validator]}
     >
-      {isRejected && (
-        <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.errorDrawdown)}</ACC.Renderers.SimpleString>
-      )}
+      {isRejected && <SimpleString>{getContent(x => x.pages.loansRequest.errorDrawdown)}</SimpleString>}
 
       {payload?.loan.totals && (
         <LoansRequestPage
@@ -230,7 +237,7 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
           }}
         />
       )}
-    </ACC.Page>
+    </Page>
   );
 };
 

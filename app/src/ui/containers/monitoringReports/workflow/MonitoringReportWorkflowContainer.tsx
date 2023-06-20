@@ -1,12 +1,12 @@
 import { Pending } from "@shared/pending";
-import { PageLoader } from "@ui/components";
 import { BaseProps } from "@ui/containers/containerBase";
-import { useStores } from "@ui/redux";
 import { useNavigate } from "react-router-dom";
 import { MonitoringReportWorkflow } from "./MonitoringReportWorkflow";
 import { MonitoringReportWorkflowParams } from "./MonitoringReportWorkflowProps";
 import { useMonitoringReportWorkflowQuery } from "./monitoringReportWorkflow.logic";
 import { useState } from "react";
+import { PageLoader } from "@ui/components/loading";
+import { useStores } from "@ui/redux/storesProvider";
 
 export const MonitoringReportWorkflowContainer = (props: MonitoringReportWorkflowParams & BaseProps) => {
   const stores = useStores();

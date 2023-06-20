@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { noop } from "@ui/helpers/noop";
-import { useDidUpdate } from "@ui/hooks";
+import { useDidUpdate } from "@ui/hooks/generic.hook";
 
 export type FormInputWidths =
   | "full"

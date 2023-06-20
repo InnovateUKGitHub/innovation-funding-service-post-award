@@ -1,10 +1,11 @@
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
-import { PCRDto, PCRItemDto } from "@framework/dtos";
-import { ValidationError } from "@server/features/common";
-import { Authorisation } from "@framework/types";
+import { Authorisation } from "@framework/types/authorisation";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemStatus, PCRItemType, PCRStatus, ProjectRole } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { PCRItemType, PCRStatus, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { PCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
+import { ValidationError } from "@shared/appError";
 
 describe("Create PCR Command", () => {
   describe("with PCR Items based from existing PCR's", () => {

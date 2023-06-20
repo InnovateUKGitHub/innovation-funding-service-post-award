@@ -1,4 +1,5 @@
-import { IContext, ISessionUser } from "@framework/types";
+import { IContext } from "@framework/types/IContext";
+import { ISessionUser } from "@framework/types/IUser";
 import { Context } from "./context";
 
 class ContextProvider {

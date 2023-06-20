@@ -1,4 +1,5 @@
-import { CostCategoryType, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 
 export interface PcrSpendProfileEntityForCreate {
   capitalUsageType?: PCRSpendProfileCapitalUsageType;

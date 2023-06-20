@@ -1,11 +1,13 @@
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { IContext, IFileWrapper, ILinkInfo } from "@framework/types";
-import { configuration } from "@server/features/common";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { configuration } from "@server/features/common/config";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
-import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/containers";
+import { ProjectChangeRequestPrepareItemParams, PCRPrepareItemRoute } from "@ui/containers/pcrs/pcrItemWorkflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<
   ProjectChangeRequestPrepareItemParams,

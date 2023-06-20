@@ -1,8 +1,11 @@
+import { ProjectRole } from "@framework/constants/project";
+import { AllPartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentEntity } from "@framework/entities/document";
-import { AllPartnerDocumentSummaryDto, Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 import { Logger } from "@shared/developmentLogger";
-import { QueryBase } from "../common";
-import { GetAllProjectRolesForUser } from "../projects";
+import { QueryBase } from "../common/queryBase";
+import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { mapToPartnerDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 
 export class GetAllPartnerDocumentsQuery extends QueryBase<AllPartnerDocumentSummaryDto> {

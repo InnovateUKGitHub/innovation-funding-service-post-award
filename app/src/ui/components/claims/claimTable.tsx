@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 
 import { createTypedTable } from "../table";
 import { ValidationListMessage } from "../ValidationListMessage";

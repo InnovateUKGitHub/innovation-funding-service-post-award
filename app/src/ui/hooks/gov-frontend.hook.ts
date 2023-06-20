@@ -1,6 +1,5 @@
+import { useMounted } from "@ui/features/has-mounted/Mounted";
 import { useCallback } from "react";
-
-import { useMounted } from "@ui/features";
 
 // Note: There is no available interface for this module, this is an interim type
 type GDSModule = new (node: HTMLElement) => {

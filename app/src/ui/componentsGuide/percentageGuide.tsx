@@ -1,5 +1,5 @@
-import { Percentage } from "@ui/components/renderers";
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
+import { Percentage } from "@ui/components/renderers/percentage";
 
 export const percentageGuide: IGuide = {
   name: "Percentage",

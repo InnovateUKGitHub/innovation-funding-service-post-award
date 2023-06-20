@@ -1,9 +1,8 @@
 import { render } from "@testing-library/react";
-
 import { TestBed } from "@shared/TestBed";
-import { GenericFallbackError, GenericFallbackErrorProps } from "@ui/components/errors";
-import { ErrorCode } from "@framework/types";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ErrorCode } from "@framework/constants/enums";
+import { GenericFallbackErrorProps, GenericFallbackError } from "./GenericFallbackError";
 
 describe("<GenericFallbackError />", () => {
   describe("@renders", () => {

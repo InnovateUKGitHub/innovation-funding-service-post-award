@@ -1,30 +1,35 @@
-import { PartnerDto, PCRItemForAccountNameChangeDto } from "@framework/dtos";
-import * as ACC from "@ui/components";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { Loader } from "@ui/components/loading";
+import { getPartnerName } from "@ui/components/partners/partnerName";
 import { EditorStatus } from "@ui/constants/enums";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { useStores } from "@ui/redux";
-import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 interface InnerProps {
   partners: PartnerDto[];
 }
 
-const Form = ACC.createTypedForm<PCRItemForAccountNameChangeDto>();
+const Form = createTypedForm<PCRItemForAccountNameChangeDto>();
 
 const InnerContainer = (
   props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps,
 ) => {
-  const partnerOptions: ACC.SelectOption[] = props.partners
+  const partnerOptions: SelectOption[] = props.partners
     .filter(x => !x.isWithdrawn)
     .map(x => ({
       id: x.id,
-      value: ACC.getPartnerName(x),
+      value: getPartnerName(x),
     }));
 
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
 
   return (
-    <ACC.Section>
+    <Section>
       <Form.Form
         qa="changePartnerNameForm"
         data={props.pcrItem}
@@ -65,10 +70,10 @@ const InnerContainer = (
           />
         </Form.Fieldset>
         <Form.Submit>
-          <ACC.Content value={x => x.pcrItem.submitButton} />
+          <Content value={x => x.pcrItem.submitButton} />
         </Form.Submit>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };
 
@@ -78,7 +83,7 @@ export const NameChangeStep = (
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.partners.getPartnersForProject(props.project.id)}
       render={x => <InnerContainer {...props} partners={x} />}
     />

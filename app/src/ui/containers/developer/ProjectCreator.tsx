@@ -1,17 +1,20 @@
 import { allSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 import { allProjectParticipantOrganisationTypes } from "@framework/constants/projectParticipantOrganisationType";
 import { allProjectParticipantTypes } from "@framework/constants/projectParticipantTypes";
-import { Content, createTypedForm, Info, Section } from "@ui/components";
-import { DropdownListOption } from "@ui/components/inputs";
-import { SimpleString } from "@ui/components/renderers";
-import { useContent } from "@ui/hooks";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { DropdownListOption } from "@ui/components/inputs/dropdownList";
+import { Info } from "@ui/components/layout/info";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useContent } from "@ui/hooks/content.hook";
 import { useState } from "react";
 import { DeveloperProjectCreatorPage } from "./ProjectCreator.page";
 
 const ProjectCreatorForm = createTypedForm();
 
 /**
- * A development user switching interface to help select a valid contact for projects.
+ * A project creation interface for creating projects in Salesforce.
  */
 const ProjectCreator = () => {
   const { getContent } = useContent();

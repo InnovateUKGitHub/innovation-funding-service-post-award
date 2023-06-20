@@ -4,7 +4,7 @@ import React from "react";
 
 import { SvgCrown } from "@ui/components/svg/crownSvg";
 import { govukColourWhite } from "@ui/styles/colours";
-import { ModalConsumer, ModalRegister } from "@ui/redux";
+import { ModalRegister, ModalConsumer } from "@ui/redux/modalProvider";
 
 interface Props {
   id: string;

@@ -2,12 +2,12 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
-
-import { Result } from "@ui/validation";
-import { Task, TaskListSection, OL } from "@ui/components";
-import { rootReducer } from "@ui/redux";
-import { IGuide } from "@framework/types";
 import { DeveloperHomePage } from "@ui/containers/developer/home.page";
+import { IGuide } from "@framework/types/IGuide";
+import { OL } from "@ui/components/layout/list";
+import { TaskListSection, Task } from "@ui/components/taskList";
+import { rootReducer } from "@ui/redux/reducers/rootReducer";
+import { Result } from "@ui/validation/result";
 
 const history = createMemoryHistory();
 

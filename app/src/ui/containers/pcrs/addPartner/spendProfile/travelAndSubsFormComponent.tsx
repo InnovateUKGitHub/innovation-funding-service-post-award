@@ -1,12 +1,14 @@
-import * as ACC from "@ui/components";
 import { PCRSpendProfileTravelAndSubsCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRTravelAndSubsCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-
-import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
-import { useMounted } from "@ui/features";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Currency } from "@ui/components/renderers/currency";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
 
-const Form = ACC.createTypedForm<PCRSpendProfileTravelAndSubsCostDto>();
+const Form = createTypedForm<PCRSpendProfileTravelAndSubsCostDto>();
 
 export const TravelAndSubsFormComponent = ({
   onSave,
@@ -69,9 +71,9 @@ export const TravelAndSubsFormComponent = ({
             labelBold
             name="totalCost"
             value={({ formData }) => (
-              <ACC.Renderers.SimpleString>
-                <ACC.Renderers.Currency value={formData.value} />
-              </ACC.Renderers.SimpleString>
+              <SimpleString>
+                <Currency value={formData.value} />
+              </SimpleString>
             )}
             update={() => null}
           />
@@ -80,7 +82,7 @@ export const TravelAndSubsFormComponent = ({
 
       <Form.Fieldset qa="save">
         <Form.Submit>
-          <ACC.Content
+          <Content
             value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
           />
         </Form.Submit>

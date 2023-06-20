@@ -1,5 +1,7 @@
-import { TypedDetails, getPartnerName, SectionPanel, Content, DualDetails } from "@ui/components";
-
+import { Content } from "@ui/components/content";
+import { TypedDetails, DualDetails } from "@ui/components/details";
+import { SectionPanel } from "@ui/components/layout/sectionPanel";
+import { getPartnerName } from "@ui/components/partners/partnerName";
 import type { Partner } from "./projectOverview.logic";
 
 const FCProjectOverviewDetails = ({ partner }: { partner: Partner }) => {

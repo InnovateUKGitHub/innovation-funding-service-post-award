@@ -1,9 +1,13 @@
+import { PartnerClaimStatus } from "@framework/constants/partner";
+import { ProjectStatus } from "@framework/constants/project";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { Content } from "@ui/components/content";
+import { ListItem } from "@ui/components/layout/listItem";
+import { Link } from "@ui/components/links";
+import { ShortDateRange } from "@ui/components/renderers/date";
+import { H4 } from "@ui/components/typography/Heading.variants";
+import { useContent } from "@ui/hooks/content.hook";
 import { memo } from "react";
-
-import { getAuthRoles, PartnerClaimStatus, ProjectStatus } from "@framework/types";
-import * as ACC from "@ui/components";
-import { useContent } from "@ui/hooks";
-
 import { DashboardProjectProps, ProjectProps } from "./Dashboard.interface";
 
 const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Element[] => {
@@ -18,7 +22,7 @@ const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Eleme
   messages.push(<>{project.leadPartnerName}</>);
 
   if (section === "upcoming") {
-    const upcomingMessage = <ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />;
+    const upcomingMessage = <ShortDateRange start={project.startDate} end={project.endDate} />;
 
     messages.push(upcomingMessage);
   }
@@ -27,9 +31,9 @@ const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Eleme
   if (isNotAvailable) return messages;
 
   if (project.isPastEndDate || isPartnerWithdrawn) {
-    messages.push(<ACC.Content value={x => x.projectMessages.projectEndedMessage} />);
+    messages.push(<Content value={x => x.projectMessages.projectEndedMessage} />);
   } else {
-    const projectDate = <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
+    const projectDate = <ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
 
     messages.push(
       <>
@@ -118,7 +122,7 @@ const generateTitle = ({ project, partner, section, routes }: DashboardProjectPr
     ? routes.projectSetup.getLink({ projectId: project.id, partnerId: partner.id })
     : routes.projectOverview.getLink({ projectId: project.id });
 
-  return <ACC.Link route={route}>{titleContent}</ACC.Link>;
+  return <Link route={route}>{titleContent}</Link>;
 };
 
 const DashboardProject = (props: DashboardProjectProps) => {
@@ -129,12 +133,12 @@ const DashboardProject = (props: DashboardProjectProps) => {
 
   const displayAction = projectActions.length > 0 && !doesNotRequireAction(props);
   return (
-    <ACC.ListItem key={props.project.id} actionRequired={displayAction} qa={`project-${props.project.projectNumber}`}>
+    <ListItem key={props.project.id} actionRequired={displayAction} qa={`project-${props.project.projectNumber}`}>
       <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
         <div>
-          <ACC.H4 as="h3" className="govuk-!-margin-bottom-2">
+          <H4 as="h3" className="govuk-!-margin-bottom-2">
             {titleValue}
-          </ACC.H4>
+          </H4>
 
           {projectNotes.map((note, i) => (
             <div key={i} className="govuk-body-s govuk-!-margin-bottom-0">
@@ -151,7 +155,7 @@ const DashboardProject = (props: DashboardProjectProps) => {
           </div>
         ))}
       </div>
-    </ACC.ListItem>
+    </ListItem>
   );
 };
 

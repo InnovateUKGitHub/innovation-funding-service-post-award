@@ -1,18 +1,19 @@
-import { ClaimDto, ClaimStatus, ProjectMonitoringLevel, ProjectRole } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { GetClaim } from "../features/claims";
-import {
-  AllClaimsDashboardRoute,
-  ClaimsDashboardRoute,
-  ClaimSummaryRoute,
-  PrepareClaimParams,
-} from "../../ui/containers";
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
-import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectMonitoringLevel, ProjectRole } from "@framework/constants/project";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { GetClaim } from "@server/features/claims/getClaim";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
+import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
+import { AllClaimsDashboardRoute } from "@ui/containers/claims/allClaimsDashboard/allClaimsDashboard.page";
+import { ClaimsDashboardRoute } from "@ui/containers/claims/dashboard.page";
+import { PrepareClaimParams } from "@ui/containers/claims/prepare.page";
+import { ClaimSummaryRoute } from "@ui/containers/claims/summary.page";
 
 export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {

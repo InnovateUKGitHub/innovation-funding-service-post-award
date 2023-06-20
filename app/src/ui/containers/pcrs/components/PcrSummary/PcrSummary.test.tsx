@@ -1,17 +1,12 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react";
-import { FinancialVirementDto, PartnerDto, PCRItemType } from "@framework/types";
-
 import { PcrSummaryProps } from "@ui/containers/pcrs/components/PcrSummary/pcr-summary.interface";
-import {
-  PcrSummaryConsumer,
-  PcrSummaryProvider,
-  usePcrSummaryContext,
-  PcrSummaryProviderProps,
-} from "@ui/containers/pcrs/components/PcrSummary";
-
 import { createDto } from "@tests/test-utils/dtoHelpers";
+import { PCRItemType } from "@framework/constants/pcrConstants";
+import { FinancialVirementDto } from "@framework/dtos/financialVirementDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { usePcrSummaryContext, PcrSummaryProviderProps, PcrSummaryProvider, PcrSummaryConsumer } from "./PcrSummary";
 
 describe("PcrSummary", () => {
   const firstPartner = createDto<PartnerDto>({ id: "1-partner" as PartnerId });

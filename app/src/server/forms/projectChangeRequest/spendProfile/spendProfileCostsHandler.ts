@@ -1,17 +1,19 @@
-import { PCRItemStatus } from "@framework/constants";
-import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, PCRStepId } from "@framework/types";
-import { BadRequestError } from "@server/features/common";
+import { PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import { BadRequestError } from "@shared/appError";
 import {
-  PCRPrepareItemRoute,
-  PCRSpendProfileCostsSummaryRoute,
   PcrSpendProfileCostSummaryParams,
-} from "@ui/containers";
+  PCRSpendProfileCostsSummaryRoute,
+} from "@ui/containers/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
+import { PCRPrepareItemRoute } from "@ui/containers/pcrs/pcrItemWorkflow";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends StandardFormHandlerBase<
   PcrSpendProfileCostSummaryParams,

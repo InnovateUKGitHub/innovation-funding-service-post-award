@@ -1,21 +1,25 @@
-import * as ACC from "@ui/components";
-import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { useStores } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { PCRProjectLocation } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
+import { PCRProjectLocation } from "@framework/constants/pcrConstants";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Option } from "@framework/dtos/option";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   pcrProjectLocation: Option<PCRProjectLocation>[];
 }
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
 
 const InnerContainer = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps,
 ) => {
-  const projectLocationOptions: ACC.SelectOption[] = props.pcrProjectLocation
+  const projectLocationOptions: SelectOption[] = props.pcrProjectLocation
     .filter(x => x.active)
     .map(x => ({ id: x.value.toString(), value: x.label }));
 
@@ -24,7 +28,7 @@ const InnerContainer = (
     projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
 
   return (
-    <ACC.Section title={x => x.pcrAddPartnerLabels.projectLocationHeading}>
+    <Section title={x => x.pcrAddPartnerLabels.projectLocationHeading}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -69,14 +73,14 @@ const InnerContainer = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrItem.submitButton} />
+            <Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
+            <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };
 
@@ -86,7 +90,7 @@ export const ProjectLocationStep = (
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequests.getPcrProjectLocations()}
       render={x => <InnerContainer pcrProjectLocation={x} {...props} />}
     />

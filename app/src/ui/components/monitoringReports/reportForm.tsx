@@ -1,18 +1,18 @@
-import { IEditorStore } from "@ui/redux";
-import * as Dtos from "@framework/dtos";
-import { MonitoringReportDtoValidator } from "@ui/validators";
-import { SimpleString } from "@ui/components/renderers";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { createTypedForm } from "@ui/components/form";
 import { Section } from "../layout/section";
 import { Content } from "../content";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 
 interface PeriodProps {
-  editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
-  onChange: (dto: Dtos.MonitoringReportDto) => void;
-  onSave: (dto: Dtos.MonitoringReportDto, submit: boolean, progress: boolean) => void;
+  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
+  onChange: (dto: MonitoringReportDto) => void;
+  onSave: (dto: MonitoringReportDto, submit: boolean, progress: boolean) => void;
 }
 
-const ReportForm = createTypedForm<Dtos.MonitoringReportDto>();
+const ReportForm = createTypedForm<MonitoringReportDto>();
 
 export const MonitoringReportPeriodFormComponent = ({ editor, onChange, onSave }: PeriodProps) => {
   return (

@@ -1,13 +1,26 @@
+import { PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { ILinkInfo, PCRItemStatus, PCRStepId, ProjectDto, ProjectRole } from "@framework/types";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Pending } from "@shared/pending";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { LineBreakList } from "@ui/components/renderers/lineBreakList";
+import { Messages } from "@ui/components/renderers/messages";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { PCRReasoningSummary } from "@ui/containers/pcrs/reasoning/summary";
 import { IReasoningWorkflowMetadata, reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
-import { IEditorStore, useStores } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { useNavigate } from "react-router-dom";
-import * as ACC from "../../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
@@ -39,10 +52,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     });
 
     return (
-      <ACC.PageLoader
-        pending={combined}
-        render={x => this.renderContents(x.project, x.pcr, x.editor, x.documentsEditor)}
-      />
+      <PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.documentsEditor)} />
     );
   }
 
@@ -77,48 +87,48 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ) {
     return (
-      <ACC.Page
+      <Page
         backLink={this.getBackLink()}
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
         project={project}
         error={editor.error || documentsEditor.error}
         // If we are on the final summary step, remove all the validators.
         validator={!this.props.step ? [] : [editor.validator, documentsEditor.validator]}
       >
-        {!!this.props.step && <ACC.Renderers.Messages messages={this.props.messages} />}
+        {!!this.props.step && <Messages messages={this.props.messages} />}
         {this.props.mode === "prepare" &&
           !!this.props.step &&
           this.renderStep(this.props.step, pcr, editor, documentsEditor)}
         {!this.props.step && this.renderSummary(pcr, editor)}
-      </ACC.Page>
+      </Page>
     );
   }
 
   private getBackLink() {
     if (this.props.mode === "review") {
       return (
-        <ACC.BackLink
+        <BackLink
           route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         >
-          <ACC.Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
-        </ACC.BackLink>
+          <Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
+        </BackLink>
       );
     }
     if (this.props.mode === "prepare") {
       return (
-        <ACC.BackLink
+        <BackLink
           route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         >
-          <ACC.Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
-        </ACC.BackLink>
+          <Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
+        </BackLink>
       );
     }
     return (
-      <ACC.BackLink
+      <BackLink
         route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
       >
-        <ACC.Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
-      </ACC.BackLink>
+        <Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
+      </BackLink>
     );
   }
 
@@ -131,16 +141,16 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     const step = this.findStepByNumber(stepNumber);
     return (
       <>
-        <ACC.Section>
-          <ACC.SummaryList qa="pcr-prepareReasoning">
-            <ACC.SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem
+        <Section>
+          <SummaryList qa="pcr-prepareReasoning">
+            <SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
+            <SummaryListItem
               label={x => x.pcrLabels.types}
-              content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />}
+              content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
               qa="typesRow"
             />
-          </ACC.SummaryList>
-        </ACC.Section>
+          </SummaryList>
+        </Section>
         {stepNumber === 1 && this.renderGuidanceSection()}
         {step.stepRender({
           ...this.props,
@@ -171,9 +181,9 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     // TODO clarify what guidance on a reasoning page should be.
     // if (!pcr.guidance) return null;
     // return (
-    //   <ACC.Section qa="guidance">
-    //     <ACC.Renderers.SimpleString>{pcr.guidance}</ACC.Renderers.SimpleString>
-    //   </ACC.Section>
+    //   <Section qa="guidance">
+    //     <SimpleString>{pcr.guidance}</SimpleString>
+    //   </Section>
     // );
   }
 

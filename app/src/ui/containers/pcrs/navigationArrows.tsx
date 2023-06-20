@@ -1,7 +1,7 @@
-import * as ACC from "@ui/components";
-import { PCRDto, PCRItemDto } from "@framework/dtos";
-import { IRoutes } from "@ui/routing";
-import { PCRItemType } from "@framework/constants";
+import { PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
+import { NavigationArrows } from "@ui/components/navigationArrows";
+import { IRoutes } from "@ui/routing/routeConfig";
 
 interface Props {
   currentItem: PCRItemDto | null;
@@ -27,7 +27,7 @@ export const NavigationArrowsForPCRs = (props: Props) => {
     ? getLinkForReviewingItem(routes, pcrItems[currentIndex + 1], pcr.projectId, pcr.id, !!currentItem)
     : getLinkForViewingItem(routes, pcrItems[currentIndex + 1], pcr.projectId, pcr.id, !!currentItem);
 
-  return <ACC.NavigationArrows previousLink={prev} nextLink={next} />;
+  return <NavigationArrows previousLink={prev} nextLink={next} />;
 };
 
 const getLinkForReviewingItem = (

@@ -1,19 +1,16 @@
-import { ClaimDto, ClaimStatusChangeDto, TotalCosts } from "@framework/types";
-
 import { processDto } from "@shared/processResponse";
-import { BadRequestError } from "@server/features/common";
 import { contextProvider } from "@server/features/common/contextProvider";
-
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
-import {
-  GetClaimStatusChangesQuery,
-  GetClaimsTotalCosts,
-  GetAllClaimsForProjectQuery,
-  GetAllForPartnerQuery,
-  GetAllIncludingNewForPartnerQuery,
-  GetClaim,
-  UpdateClaimCommand,
-} from "@server/features/claims";
+import { TotalCosts } from "@framework/constants/claims";
+import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { GetAllClaimsForProjectQuery } from "@server/features/claims/getAllClaimsForProjectQuery";
+import { GetAllForPartnerQuery } from "@server/features/claims/getAllForPartnerQuery";
+import { GetAllIncludingNewForPartnerQuery } from "@server/features/claims/getAllIncludingNewForPartnerQuery";
+import { GetClaim } from "@server/features/claims/getClaim";
+import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
+import { GetClaimsTotalCosts } from "@server/features/claims/getClaimsTotalCosts";
+import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
+import { BadRequestError } from "@shared/appError";
 
 class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
   constructor() {

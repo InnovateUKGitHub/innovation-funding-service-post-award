@@ -1,12 +1,15 @@
-import { LoanDto } from "@framework/dtos";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { GetLoan } from "@server/features/loans/getLoan";
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { LoanDtoValidator } from "@ui/validators/loanValidator";
-import { GetLoanDocumentsQuery } from "@server/features/documents/getLoanDocuments";
-import { ISalesforceLoan } from "@server/repositories";
+import { ProjectRole } from "@framework/constants/project";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { LoanStatus } from "@framework/entities/loan-status";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceLoan } from "@server/repositories/loanRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { LoanStatus } from "@framework/entities";
+import { LoanDtoValidator } from "@ui/validators/loanValidator";
+import { BadRequestError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetLoanDocumentsQuery } from "../documents/getLoanDocuments";
+import { GetLoan } from "./getLoan";
 
 export class UpdateLoanCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: ProjectId, private readonly loanId: string, private readonly loan: LoanDto) {

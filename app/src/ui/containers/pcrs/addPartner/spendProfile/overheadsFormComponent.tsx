@@ -1,22 +1,30 @@
-import * as ACC from "@ui/components";
-import { useStores } from "@ui/redux";
-import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRSpendProfileCostDto, PCRSpendProfileOverheadsCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCROverheadsCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { SpendProfileCostFormProps } from "@ui/containers";
-import { CostCategoryType, PCRItemType, PCRSpendProfileOverheadRate } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
-import { roundCurrency } from "@framework/util";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { Pending } from "@shared/pending";
-import { useMounted } from "@ui/features";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCRSpendProfileOverheadRate, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { Content } from "@ui/components/content";
+import { DocumentView } from "@ui/components/documents/DocumentView";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { Currency } from "@ui/components/renderers/currency";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useStores } from "@ui/redux/storesProvider";
+import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
+import { Option } from "@framework/dtos/option";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   rateOptions: Option<PCRSpendProfileOverheadRate>[];
   documents: DocumentSummaryDto[];
 }
 
-const Form = ACC.createTypedForm<PCRSpendProfileOverheadsCostDto>();
+const Form = createTypedForm<PCRSpendProfileOverheadsCostDto>();
 
 const SpendProfileCostForm = ({
   editor,
@@ -29,7 +37,7 @@ const SpendProfileCostForm = ({
   const { isClient } = useMounted();
 
   const getOptions = <T extends number>(selected: T, options: Option<T>[]) => {
-    const filteredOptions: ACC.SelectOption[] = options
+    const filteredOptions: SelectOption[] = options
       .filter(x => x.active)
       .map(x => ({ id: x.value.toString(), value: x.label }));
 
@@ -114,19 +122,19 @@ const SpendProfileCostForm = ({
 
         {displayHiddenForm && (
           <Form.Fieldset>
-            <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.spendProfileMessages.calculatedGuidanceOverheads} />
-            </ACC.Renderers.SimpleString>
+            <SimpleString>
+              <Content value={x => x.spendProfileMessages.calculatedGuidanceOverheads} />
+            </SimpleString>
             <Form.Button
               name="calculateOverheadsDocuments"
               onClick={() => props.onSave(editor.data, getUploadDocumentsLink())}
             >
-              <ACC.Content value={x => x.pcrSpendProfileLabels.overheads.linkDocumentsUpload} />
+              <Content value={x => x.pcrSpendProfileLabels.overheads.linkDocumentsUpload} />
             </Form.Button>
 
-            <ACC.Section qa="overheads-form-section">
-              <ACC.DocumentView hideHeader qa="overheads-documents" documents={documents} />
-            </ACC.Section>
+            <Section qa="overheads-form-section">
+              <DocumentView hideHeader qa="overheads-documents" documents={documents} />
+            </Section>
 
             <Form.Numeric
               label={x => x.pcrSpendProfileLabels.overheads.calculatedCost}
@@ -145,9 +153,9 @@ const SpendProfileCostForm = ({
             labelBold
             name="totalCost"
             value={({ formData }) => (
-              <ACC.Renderers.SimpleString>
-                <ACC.Renderers.Currency value={formData.value} />
-              </ACC.Renderers.SimpleString>
+              <SimpleString>
+                <Currency value={formData.value} />
+              </SimpleString>
             )}
             update={() => null}
           />
@@ -155,7 +163,7 @@ const SpendProfileCostForm = ({
       </Form.Fieldset>
       <Form.Fieldset qa="save">
         <Form.Submit>
-          <ACC.Content value={x => x.pages.pcrSpendProfilePrepareCost.overheads.buttonSubmit} />
+          <Content value={x => x.pages.pcrSpendProfilePrepareCost.overheads.buttonSubmit} />
         </Form.Submit>
       </Form.Fieldset>
     </Form.Form>
@@ -171,7 +179,7 @@ export const OverheadsFormComponent = (
   const documents = projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.params.projectId, props.params.itemId);
 
   return (
-    <ACC.Loader
+    <Loader
       pending={Pending.combine({ rateOptions, documents })}
       render={x => <SpendProfileCostForm {...props} rateOptions={x.rateOptions} documents={x.documents} />}
     />

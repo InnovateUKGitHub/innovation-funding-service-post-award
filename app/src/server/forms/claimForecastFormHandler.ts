@@ -1,21 +1,21 @@
-import { getArrayFromPeriod } from "@framework/util";
-import { ForecastDetailsDTO, IContext, ILinkInfo, ProjectRole } from "@framework/types";
-
-import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
-import { GetAllProjectRolesForUser, GetByIdQuery } from "@server/features/projects";
-import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-
-import {
-  AllClaimsDashboardRoute,
-  ClaimForecastParams,
-  ClaimForecastRoute,
-  ClaimsDashboardRoute,
-  ClaimSummaryRoute,
-} from "@ui/containers";
-import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { ProjectRole } from "@framework/constants/project";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { getArrayFromPeriod } from "@framework/util/arrayHelpers";
+import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { GetAllForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllForecastsForPartnerQuery";
+import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails/updateForecastDetailsCommand";
+import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
+import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
+import { AllClaimsDashboardRoute } from "@ui/containers/claims/allClaimsDashboard/allClaimsDashboard.page";
+import { ClaimForecastParams, ClaimForecastRoute } from "@ui/containers/claims/claimForecast.page";
+import { ClaimsDashboardRoute } from "@ui/containers/claims/dashboard.page";
+import { ClaimSummaryRoute } from "@ui/containers/claims/summary.page";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 
 export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForecastParams, "forecastDetails"> {
   constructor() {

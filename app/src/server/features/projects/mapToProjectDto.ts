@@ -1,8 +1,13 @@
+import { ClaimFrequency } from "@framework/constants/enums";
+import { ProjectRole } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
 import { getProjectStatus } from "@framework/mappers/projectStatus";
-import { ClaimFrequency, getAuthRoles, IContext, ProjectDto, ProjectRole } from "@framework/types";
-import { dayComparator, isNumber, roundCurrency } from "@framework/util";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { dayComparator } from "@framework/util/comparator";
+import { isNumber, roundCurrency } from "@framework/util/numberHelper";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 
 export const mapToProjectDto = (context: IContext, item: ISalesforceProject, roles: ProjectRole): ProjectDto => {

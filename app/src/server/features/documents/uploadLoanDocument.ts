@@ -1,7 +1,11 @@
-import { BadRequestError, CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { BadRequestError, ValidationError } from "../common/appError";
+import { CommandMultipleDocumentBase } from "../common/commandBase";
 
 export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<string[]> {
   protected filesRequired = true;

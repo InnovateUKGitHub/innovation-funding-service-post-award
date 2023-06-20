@@ -1,23 +1,37 @@
-import * as ACC from "@ui/components";
-import { ClaimDto, ProjectDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, useStores } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import {
-  allowedClaimDocuments,
-  DocumentDescription,
-  getDocumentDescriptionContentSelector,
-  ProjectRole,
-} from "@framework/constants";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { getAuthRoles } from "@framework/types";
-import { DocumentEdit, DropdownOption } from "@ui/components";
+import { getAuthRoles } from "@framework/types/authorisation";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import {
+  DocumentDescription,
+  allowedClaimDocuments,
+  getDocumentDescriptionContentSelector,
+} from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm, DropdownOption } from "@ui/components/form";
+import { UL, OL } from "@ui/components/layout/list";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { Link } from "@ui/components/links";
 
 type ClaimDocumentContent = ReturnType<typeof useClaimDocumentContent>;
 
@@ -76,7 +90,7 @@ interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BasePro
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 const ClaimDocumentsComponent = ({
   content,
@@ -118,37 +132,37 @@ const ClaimDocumentsComponent = ({
     const claimLinkParams = { projectId, partnerId, periodId };
 
     const prepareClaimLink = (
-      <ACC.BackLink route={props.routes.prepareClaim.getLink(claimLinkParams)}>{content.backLink}</ACC.BackLink>
+      <BackLink route={props.routes.prepareClaim.getLink(claimLinkParams)}>{content.backLink}</BackLink>
     );
 
     return (
-      <ACC.Page
-        pageTitle={<ACC.Projects.Title {...project} />}
+      <Page
+        pageTitle={<Title {...project} />}
         error={editor.error}
         validator={editor.validator}
         backLink={prepareClaimLink}
       >
-        <ACC.Renderers.Messages messages={props.messages} />
+        <Messages messages={props.messages} />
 
         {impMgmtPcfNotSubmittedForFinalClaim &&
           (isMo ? (
-            <ACC.ValidationMessage
+            <ValidationMessage
               messageType="info"
-              message={<ACC.Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
+              message={<Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
             />
           ) : (
-            <ACC.ValidationMessage
+            <ValidationMessage
               messageType="info"
-              message={<ACC.Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
+              message={<Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
             />
           ))}
-        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.finalClaim} />}
+        {claim.isFinalClaim && <ValidationMessage messageType="info" message={content.finalClaim} />}
 
-        <ACC.Section>
+        <Section>
           <ClaimDocumentAdvice {...claim} content={content} competitionType={project.competitionType} />
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section title={content.uploadTitle}>
+        <Section title={content.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -156,7 +170,7 @@ const ClaimDocumentsComponent = ({
             onChange={dto => props.onChange(false, dto)}
           >
             <UploadForm.Fieldset>
-              <ACC.DocumentGuidance />
+              <DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
                 label={content.uploadDocuments}
@@ -187,41 +201,41 @@ const ClaimDocumentsComponent = ({
               {content.uploadDocuments}
             </UploadForm.Button>
           </UploadForm.Form>
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section title={content.documentsListSectionTitle}>
+        <Section title={content.documentsListSectionTitle}>
           <DocumentEdit
             hideHeader
             qa="claim-supporting-documents"
             documents={documents}
             onRemove={document => props.onDelete(editor.data, document)}
           />
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section qa="buttons">
+        <Section qa="buttons">
           {claim.isFinalClaim ? (
-            <ACC.Link
+            <Link
               styling="PrimaryButton"
               id="continue-claim"
               route={props.routes.claimSummary.getLink(claimLinkParams)}
             >
               {content.buttonSaveAndContinueToSummary}
-            </ACC.Link>
+            </Link>
           ) : (
-            <ACC.Link
+            <Link
               styling="PrimaryButton"
               id="continue-claim"
               route={props.routes.claimForecast.getLink(claimLinkParams)}
             >
               {content.buttonSaveAndContinueToForecast}
-            </ACC.Link>
+            </Link>
           )}
 
-          <ACC.Link styling="SecondaryButton" id="save-claim" route={getDashboardLink(project)}>
+          <Link styling="SecondaryButton" id="save-claim" route={getDashboardLink(project)}>
             {content.buttonSaveAndReturn}
-          </ACC.Link>
-        </ACC.Section>
-      </ACC.Page>
+          </Link>
+        </Section>
+      </Page>
     );
   };
 
@@ -242,7 +256,7 @@ const ClaimDocumentsComponent = ({
   });
 
   return (
-    <ACC.PageLoader
+    <PageLoader
       pending={combined}
       render={x => renderContents(x.project, x.editor, x.documents, x.claim, x.documentDescriptions)}
     />
@@ -368,17 +382,17 @@ export function ClaimDocumentAdvice({
     if (isKTP) {
       return (
         <>
-          {isIarRequired && <ACC.Renderers.SimpleString>{content.iarRequiredAdvice}</ACC.Renderers.SimpleString>}
-          {isFinalClaim && <ACC.Renderers.SimpleString>{content.finalClaimIarAdvice}</ACC.Renderers.SimpleString>}
+          {isIarRequired && <SimpleString>{content.iarRequiredAdvice}</SimpleString>}
+          {isFinalClaim && <SimpleString>{content.finalClaimIarAdvice}</SimpleString>}
 
-          <ACC.Renderers.SimpleString>{content.usefulTip}</ACC.Renderers.SimpleString>
+          <SimpleString>{content.usefulTip}</SimpleString>
 
-          <ACC.Renderers.SimpleString>{content.requiredUploadAdvice}</ACC.Renderers.SimpleString>
+          <SimpleString>{content.requiredUploadAdvice}</SimpleString>
 
-          <ACC.UL>
+          <UL>
             <li>{content.requiredUploadStep1}</li>
             <li>{content.requiredUploadStep2}</li>
-          </ACC.UL>
+          </UL>
         </>
       );
     }
@@ -390,29 +404,25 @@ export function ClaimDocumentAdvice({
         <>
           {impactManagementParticipation !== ImpactManagementParticipation.Yes && (
             <>
-              <ACC.Renderers.SimpleString>{content.finalClaimGuidanceContent1}</ACC.Renderers.SimpleString>
-              <ACC.OL>
+              <SimpleString>{content.finalClaimGuidanceContent1}</SimpleString>
+              <OL>
                 <li>{content.finalClaimStep1}</li>
                 <li>{content.finalClaimStep2}</li>
-              </ACC.OL>
+              </OL>
             </>
           )}
 
-          {isIarRequired && <ACC.Renderers.SimpleString>{content.iarRequired}</ACC.Renderers.SimpleString>}
+          {isIarRequired && <SimpleString>{content.iarRequired}</SimpleString>}
 
-          <ACC.Renderers.SimpleString qa={`${competition}-document-advice`}>
-            {content.sbriDocumentAdvice}
-          </ACC.Renderers.SimpleString>
+          <SimpleString qa={`${competition}-document-advice`}>{content.sbriDocumentAdvice}</SimpleString>
 
-          <ACC.UL>
+          <UL>
             <li>{content.sbriInvoiceBullet1}</li>
             <li>{content.sbriInvoiceBullet2}</li>
             <li>{content.sbriInvoiceBullet3}</li>
-          </ACC.UL>
+          </UL>
 
-          <ACC.Renderers.SimpleString qa={`${competition}-mo-advice`}>
-            {content.sbriMoAdvice}
-          </ACC.Renderers.SimpleString>
+          <SimpleString qa={`${competition}-mo-advice`}>{content.sbriMoAdvice}</SimpleString>
         </>
       );
     }
@@ -426,25 +436,25 @@ export function ClaimDocumentAdvice({
           <>
             {impactManagementParticipation !== ImpactManagementParticipation.Yes && (
               <>
-                <ACC.Renderers.SimpleString>{content.finalClaimGuidanceContent1}</ACC.Renderers.SimpleString>
-                <ACC.OL>
+                <SimpleString>{content.finalClaimGuidanceContent1}</SimpleString>
+                <OL>
                   <li>{content.finalClaimStep1}</li>
                   <li>{content.finalClaimStep2}</li>
-                </ACC.OL>
+                </OL>
               </>
             )}
 
             {isIarRequired && (
               <>
-                <ACC.Renderers.SimpleString>{content.iarRequired}</ACC.Renderers.SimpleString>
-                <ACC.Renderers.SimpleString>{content.iarRequiredPara2}</ACC.Renderers.SimpleString>
+                <SimpleString>{content.iarRequired}</SimpleString>
+                <SimpleString>{content.iarRequiredPara2}</SimpleString>
               </>
             )}
           </>
         ) : (
           <>
-            <ACC.Renderers.SimpleString qa="iarText">{content.iarRequired}</ACC.Renderers.SimpleString>
-            <ACC.Renderers.SimpleString>{content.iarRequiredPara2}</ACC.Renderers.SimpleString>
+            <SimpleString qa="iarText">{content.iarRequired}</SimpleString>
+            <SimpleString>{content.iarRequiredPara2}</SimpleString>
           </>
         )}
       </>

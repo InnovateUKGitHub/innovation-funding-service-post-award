@@ -1,5 +1,5 @@
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
-import { ClaimLineItemDto } from "@framework/types";
+import { ClaimLineItemDto } from "./claimLineItemDto";
 
 export interface ClaimDetailsSummaryDto {
   comments: string | null;

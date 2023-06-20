@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRLoanExtensionItemDtoValidator } from "@ui/validators";
-import { formatDate } from "@framework/util";
-import { DateFormat } from "@framework/constants";
 import { EditorStatus } from "@ui/constants/enums";
-
-import * as ACC from "@ui/components";
-
 import { LoanChangeDurationTable } from "./LoanChangeDurationTable";
+import { DateFormat } from "@framework/constants/enums";
+import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos/pcrDtos";
+import { formatDate } from "@framework/util/dateHelpers";
+import { createTypedForm } from "@ui/components/form";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { PCRLoanExtensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 type LoanDrawdownExtensionStepProps = PcrStepProps<
   PCRItemForLoanDrawdownExtensionDto,
   PCRLoanExtensionItemDtoValidator
 >;
 
-const LoanForm = ACC.createTypedForm<PCRItemForLoanDrawdownExtensionDto>();
+const LoanForm = createTypedForm<PCRItemForLoanDrawdownExtensionDto>();
 
 export const LoanDrawdownExtensionStepContainer = (props: LoanDrawdownExtensionStepProps) => {
   const [state, setState] = useState<PCRItemForLoanDrawdownExtensionDto>(props.pcrItem);
@@ -36,11 +35,9 @@ export const LoanDrawdownExtensionStepContainer = (props: LoanDrawdownExtensionS
 
   return (
     <>
-      <ACC.Renderers.SimpleString>
-        You can request a change to the duration of the phases of your loans project.
-      </ACC.Renderers.SimpleString>
+      <SimpleString>You can request a change to the duration of the phases of your loans project.</SimpleString>
 
-      <ACC.Renderers.SimpleString>Project start date: {formattedStartDate}</ACC.Renderers.SimpleString>
+      <SimpleString>Project start date: {formattedStartDate}</SimpleString>
 
       <LoanForm.Form qa="loanEditForm" data={state} onSubmit={() => props.onSave(false)}>
         <LoanForm.Custom

@@ -1,5 +1,8 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { BadRequestError, CommandBase } from "@server/features/common";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { BadRequestError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
 
 export class DeleteMonitoringReportCommand extends CommandBase<void> {
   constructor(private readonly projectId: ProjectId, private readonly reportId: MonitoringReportId) {

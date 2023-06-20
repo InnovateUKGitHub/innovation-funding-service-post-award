@@ -1,21 +1,24 @@
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { ValidationError } from "@server/features/common";
-import {
-  PCRContactRole,
-  PCRItemForPartnerAdditionDto,
-  PCRItemType,
-  PCRParticipantSize,
-  PCRPartnerType,
-  PCRProjectLocation,
-  PCRProjectRole,
-  PCRStepId,
-} from "@framework/types";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import { CostCategoryType, PCRItemStatus, PCROrganisationType, PCRStatus } from "@framework/constants";
-import { ProjectChangeRequestItemEntity } from "@framework/entities";
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { CostCategoryType } from "@framework/constants/enums";
+import {
+  PCRItemStatus,
+  PCRPartnerType,
+  PCRProjectRole,
+  PCROrganisationType,
+  PCRProjectLocation,
+  PCRContactRole,
+  PCRParticipantSize,
+  PCRStatus,
+  PCRItemType,
+  PCRStepId,
+} from "@framework/constants/pcrConstants";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
+import { ValidationError } from "@shared/appError";
 
 const createCompleteIndustrialPcrItem: () => Partial<ProjectChangeRequestItemEntity> = () => ({
   status: PCRItemStatus.Incomplete,

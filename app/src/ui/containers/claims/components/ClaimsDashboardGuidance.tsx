@@ -1,10 +1,13 @@
-import { PartnerDto } from "@framework/dtos";
-import { getAuthRoles, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { Content } from "@ui/components/content";
+import { EmailContent } from "@ui/components/emailContent";
+import { Markdown } from "@ui/components/renderers/markdown";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationMessage } from "@ui/components/validationMessage";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { useContent } from "@ui/hooks";
-
-import * as Acc from "@ui/components";
-import { Content, EmailContent } from "@ui/components";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface ClaimsDashboardGuidanceProps {
   overdueProject: PartnerDto["overdueProject"];
@@ -37,11 +40,11 @@ export const ClaimsDashboardGuidance = ({
     const displaySbriGuidance = isPartnerFc && isCombinationOfSBRI;
 
     if (displaySbriGuidance) {
-      return <Acc.Renderers.SimpleString>{defaultGuidanceMessage}</Acc.Renderers.SimpleString>;
+      return <SimpleString>{defaultGuidanceMessage}</SimpleString>;
     }
 
-    guidanceMessage = <Acc.Renderers.Markdown trusted value={defaultGuidanceMessage} />;
+    guidanceMessage = <Markdown trusted value={defaultGuidanceMessage} />;
   }
 
-  return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={guidanceMessage} />;
+  return <ValidationMessage qa="guidance-message" messageType="info" message={guidanceMessage} />;
 };

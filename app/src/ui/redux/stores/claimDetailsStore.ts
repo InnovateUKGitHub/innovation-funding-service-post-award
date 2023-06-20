@@ -1,7 +1,7 @@
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { apiClient } from "@ui/apiClient";
-import { ClaimDetailsValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ClaimDetailsDto } from "@framework/dtos";
+import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
 import { StoreBase } from "./storeBase";
 
 export class ClaimsDetailsStore extends StoreBase {

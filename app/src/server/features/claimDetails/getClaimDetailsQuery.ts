@@ -1,7 +1,10 @@
-import { QueryBase } from "@server/features/common";
-import { Authorisation, ClaimDetailsDto, IContext, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "./mapClaimDetails";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 
 export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
   constructor(

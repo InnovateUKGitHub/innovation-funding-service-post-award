@@ -1,8 +1,9 @@
 import { Connection } from "jsforce";
 import { ILogger } from "@shared/developmentLogger";
-import { RecordType } from "@framework/entities";
+
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { SalesforceRecordTypeMapper } from "./mappers/recordTypeMapper";
+import { RecordType } from "@framework/entities/recordType";
 
 export interface ISalesforceRecordType {
   Id: string;

@@ -1,6 +1,6 @@
 import { MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
-import { IContext } from "@framework/types";
-import { QueryBase } from "../common";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 
 export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
   constructor(private readonly questionIds: string[]) {

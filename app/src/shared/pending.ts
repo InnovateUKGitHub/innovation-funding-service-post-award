@@ -1,4 +1,4 @@
-import { LoadingStatus } from "@framework/constants";
+import { LoadingStatus } from "@framework/constants/enums";
 
 type MapPendings<T> = {
   [P in keyof T]: T[P] extends Pending<infer U> ? U : never;

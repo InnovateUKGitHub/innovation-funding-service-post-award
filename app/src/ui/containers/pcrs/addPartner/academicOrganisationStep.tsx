@@ -1,19 +1,24 @@
-import * as ACC from "@ui/components";
-import { AccountDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
-import { useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import { useCallback, useState } from "react";
 import { noop } from "@ui/helpers/noop";
-import { useContent } from "@ui/hooks";
-import { useMounted } from "@ui/features";
-import { Section, ValidationMessage } from "@ui/components";
+import { useContent } from "@ui/hooks/content.hook";
 import { JesSearchResults } from "./jesSearchResults";
+import { AccountDto } from "@framework/dtos/accountDto";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
-const AddForm = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
-const PartnerForm = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const AddForm = createTypedForm<PCRItemForPartnerAdditionDto>();
+const PartnerForm = createTypedForm<PCRItemForPartnerAdditionDto>();
 
 export const AcademicOrganisationStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
@@ -42,13 +47,11 @@ export const AcademicOrganisationStep = (
   };
 
   const renderLoading = () => (
-    <ACC.Renderers.SimpleString>
-      {getContent(x => x.pages.pcrAddPartnerAcademicOrganisation.loading)}
-    </ACC.Renderers.SimpleString>
+    <SimpleString>{getContent(x => x.pages.pcrAddPartnerAcademicOrganisation.loading)}</SimpleString>
   );
 
   return (
-    <ACC.Section>
+    <Section>
       <AddForm.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -86,7 +89,7 @@ export const AcademicOrganisationStep = (
         onSubmit={() => props.onSave(false)}
         onChange={props.onChange}
       >
-        <ACC.Loader
+        <Loader
           pending={getJesAccounts()}
           renderLoading={() => renderLoading()}
           render={(jesAccounts, loading) => {
@@ -107,26 +110,26 @@ export const AcademicOrganisationStep = (
               />
             ) : (
               <>
-                <ACC.Renderers.SimpleString qa="no-jes-results-found">
+                <SimpleString qa="no-jes-results-found">
                   {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}
-                </ACC.Renderers.SimpleString>
+                </SimpleString>
               </>
             );
           }}
         />
         <PartnerForm.Fieldset qa="save-and-continue">
           <PartnerForm.Submit>
-            <ACC.Content value={x => x.pcrItem.submitButton} />
+            <Content value={x => x.pcrItem.submitButton} />
           </PartnerForm.Submit>
           <PartnerForm.Button
             qa="save-and-return-to-summary"
             name="saveAndReturnToSummary"
             onClick={() => props.onSave(true)}
           >
-            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
+            <Content value={x => x.pcrItem.returnToSummaryButton} />
           </PartnerForm.Button>
         </PartnerForm.Fieldset>
       </PartnerForm.Form>
-    </ACC.Section>
+    </Section>
   );
 };

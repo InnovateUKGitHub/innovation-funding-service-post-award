@@ -1,13 +1,16 @@
 import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
-import { MonitoringReportDto, MonitoringReportSummaryDto } from "@framework/dtos";
-import { LoadingStatus, MonitoringReportStatus } from "@framework/types";
-import { MonitoringReportDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { dataLoadAction, messageSuccess, RootActionsOrThunk } from "../actions";
-import { RootState } from "../reducers";
 import { ProjectsStore } from "./projectsStore";
 import { StoreBase } from "./storeBase";
+import { LoadingStatus } from "@framework/constants/enums";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { MonitoringReportSummaryDto, MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { dataLoadAction } from "../actions/common/dataLoad";
+import { messageSuccess } from "../actions/common/messageActions";
+import { RootActionsOrThunk } from "../actions/root";
+import { RootState } from "../reducers/rootReducer";
 
 export class MonitoringReportsStore extends StoreBase {
   constructor(

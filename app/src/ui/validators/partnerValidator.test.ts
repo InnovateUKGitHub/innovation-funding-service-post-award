@@ -1,22 +1,22 @@
-import { GetByIdQuery } from "@server/features/partners";
-import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import {
-  BankCheckStatusMapper,
-  BankDetailsTaskStatusMapper,
-  PartnerSpendProfileStatusMapper,
-  PartnerStatusMapper,
-} from "@server/features/partners/mapToPartnerDto";
-import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import {
-  BankCheckStatus,
-  BankDetailsTaskStatus,
-  DocumentDescription,
-  PartnerStatus,
-  SpendProfileStatus,
-} from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import {
+  PartnerStatus,
+  SpendProfileStatus,
+  BankDetailsTaskStatus,
+  BankCheckStatus,
+} from "@framework/constants/partner";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
+import {
+  PartnerStatusMapper,
+  PartnerSpendProfileStatusMapper,
+  BankDetailsTaskStatusMapper,
+  BankCheckStatusMapper,
+} from "@server/features/partners/mapToPartnerDto";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
+import { PartnerDtoValidator } from "./partnerValidator";
 
 describe("Partner Validator", () => {
   describe.each(["en-GB", "no"])("With %s i18n", language => {

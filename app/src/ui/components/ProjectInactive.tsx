@@ -1,6 +1,6 @@
-import { useContent } from "@ui/hooks";
-import { SimpleString } from "./renderers";
-import { Section } from "./layout";
+import { useContent } from "@ui/hooks/content.hook";
+import { Section } from "./layout/section";
+import { SimpleString } from "./renderers/simpleString";
 
 export const ProjectInactive = () => {
   const { getContent } = useContent();

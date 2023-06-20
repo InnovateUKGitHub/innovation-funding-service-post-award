@@ -1,11 +1,24 @@
-import { getAuthRoles, ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
 import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
-import { PCRStatus } from "@framework/constants";
-import { Page, Projects, Renderers, Section, Accordion, AccordionItem, Link, createTypedTable } from "@ui/components";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { BaseProps, defineRoute } from "../../containerBase";
 import { usePcrDashboardQuery } from "./PCRDashboard.logic";
 import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
+import { PCRStatus } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { Title } from "@ui/components/projects/title";
+import { LineBreakList } from "@ui/components/renderers/lineBreakList";
+import { Messages } from "@ui/components/renderers/messages";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { Link } from "@ui/components/links";
+import { ProjectBackLink } from "@ui/components/projects/projectBackLink";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -48,7 +61,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
     message: string,
   ) => {
     if (!pcrs.length) {
-      return <Renderers.SimpleString>{message}</Renderers.SimpleString>;
+      return <SimpleString>{message}</SimpleString>;
     }
 
     return (
@@ -57,7 +70,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         <PCRTable.Custom
           qa="types"
           header="Types"
-          value={x => <Renderers.LineBreakList items={x.items.map(y => getPcRTypeName(y.shortName))} />}
+          value={x => <LineBreakList items={x.items.map(y => getPcRTypeName(y.shortName))} />}
         />
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
         <PCRTable.String qa="status" header="Status" value={x => x.statusName} />
@@ -115,11 +128,11 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
 
   return (
     <Page
-      backLink={<Projects.ProjectBackLink projectId={project.id} routes={props.routes} />}
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
+      backLink={<ProjectBackLink projectId={project.id} routes={props.routes} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       projectStatus={project.status}
     >
-      <Renderers.Messages messages={props.messages} />
+      <Messages messages={props.messages} />
 
       <Section qa="pcr-table">
         {renderTable(project, active, "pcrs-active", "You have no ongoing requests.")}

@@ -1,27 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import {
-  CostCategoryItem,
-  CostCategoryList,
-  ILinkInfo,
-  PCRItemForPartnerAdditionDto,
-  PCRItemStatus,
-  PCRItemType,
-  PCRStepId,
-  ProjectDto,
-  ProjectRole,
-} from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
-import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, useStores } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import classNames from "classnames";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { PCRItemType, PCRStepId, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { CostCategoryList, CostCategoryItem } from "@framework/types/CostCategory";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Currency } from "@ui/components/renderers/currency";
+import { Messages } from "@ui/components/renderers/messages";
+import { createTypedTable } from "@ui/components/table";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Info } from "@ui/components/layout/info";
 
 export interface PcrSpendProfileCostSummaryParams {
   projectId: ProjectId;
@@ -41,8 +47,8 @@ interface Callbacks {
   onSave: (dto: PCRDto, link: ILinkInfo) => void;
 }
 
-const Form = ACC.createTypedForm<PCRDto>();
-const Table = ACC.createTypedTable<PCRSpendProfileCostDto>();
+const Form = createTypedForm<PCRDto>();
+const Table = createTypedTable<PCRSpendProfileCostDto>();
 
 class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Callbacks> {
   render() {
@@ -52,7 +58,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
       costCategory: this.props.costCategory,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory)} />;
+    return <PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory)} />;
   }
 
   private renderContents(
@@ -74,19 +80,19 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === this.props.costCategoryId);
     const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={stepRoute}>
-            <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
-          </ACC.BackLink>
+          <BackLink route={stepRoute}>
+            <Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
+          </BackLink>
         }
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section
+        <Messages messages={this.props.messages} />
+        <Section
           title={x => x.pages.pcrSpendProfileCostsSummary.sectionTitleCosts({ costCategoryName: costCategory.name })}
         >
           {this.renderPreGuidanceWarning(costCategoryType)}
@@ -101,18 +107,18 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
           >
             <Form.Fieldset>
               <Form.Submit>
-                <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonSubmit} />
+                <Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonSubmit} />
               </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 
   private renderPreGuidanceWarning(costCategory: CostCategoryItem) {
     if (costCategory.showPreGuidanceWarning) {
-      return <ACC.ValidationMessage markdown messageType="info" message={costCategory.preGuidanceWarningMessageKey} />;
+      return <ValidationMessage markdown messageType="info" message={costCategory.preGuidanceWarningMessageKey} />;
     }
 
     return null;
@@ -121,15 +127,15 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
   private renderGuidance(costCategory: CostCategoryItem) {
     if (costCategory.showGuidance) {
       return (
-        <ACC.Info
+        <Info
           summary={
-            <ACC.Content
+            <Content
               value={x => x.pages.pcrSpendProfileCostsSummary.guidanceTitle({ costCategoryName: costCategory.name })}
             />
           }
         >
-          <ACC.Content markdown value={costCategory.guidanceMessageKey} />
-        </ACC.Info>
+          <Content markdown value={costCategory.guidanceMessageKey} />
+        </Info>
       );
     }
 
@@ -163,7 +169,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     const footers = [
       <tr key={1} className="govuk-table__row">
         <td className="govuk-table__cell" colSpan={3}>
-          <ACC.Link
+          <Link
             route={this.props.routes.pcrPrepareSpendProfileAddCost.getLink({
               itemId: this.props.itemId,
               pcrId: this.props.pcrId,
@@ -171,16 +177,16 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
               costCategoryId: this.props.costCategoryId,
             })}
           >
-            <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonAddCost} />
-          </ACC.Link>
+            <Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonAddCost} />
+          </Link>
         </td>
       </tr>,
       this.renderFooterRow({
         key: "2",
-        title: <ACC.Content value={x => x.pcrSpendProfileLabels.totalCosts({ costCategoryName: costCategory.name })} />,
+        title: <Content value={x => x.pcrSpendProfileLabels.totalCosts({ costCategoryName: costCategory.name })} />,
         qa: "total-costs",
         isBold: false,
-        value: <ACC.Renderers.Currency value={total} />,
+        value: <Currency value={total} />,
       }),
     ];
     return (
@@ -209,7 +215,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
         projectId,
         pcrId,
       }),
-      text: <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonEditCost} />,
+      text: <Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonEditCost} />,
       qa: "edit",
     });
     links.push({
@@ -220,13 +226,13 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
         projectId,
         pcrId,
       }),
-      text: <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonRemoveCost} />,
+      text: <Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonRemoveCost} />,
       qa: "remove",
     });
 
     return links.map((x, i) => (
       <div key={i} data-qa={x.qa}>
-        <ACC.Link route={x.route}>{x.text}</ACC.Link>
+        <Link route={x.route}>{x.text}</Link>
       </div>
     ));
   }

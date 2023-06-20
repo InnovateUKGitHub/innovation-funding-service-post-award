@@ -1,10 +1,18 @@
-import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
+import { PCRItemTypeDto, PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
 import { Pending } from "@shared/pending";
-import { BackLink, Content, createTypedForm, Link, Page, PageLoader, Projects, Section } from "@ui/components";
-import { CheckboxOptionProps } from "@ui/components/inputs";
-import { useContent } from "@ui/hooks";
-import { IEditorStore, useStores } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { CheckboxOptionProps } from "@ui/components/inputs/checkboxList";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { useNavigate } from "react-router-dom";
 import { BaseProps } from "../../containerBase";
 import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisabledReasoning";
@@ -102,7 +110,7 @@ const PcrModifySelectedPage = ({
             : getContent(x => x.pages.pcrModifyOptions.backToPcrs)}
         </BackLink>
       }
-      pageTitle={<Projects.Title {...project} />}
+      pageTitle={<Title {...project} />}
       project={project}
       validator={editor.validator}
       error={editor.error}

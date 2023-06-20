@@ -1,4 +1,4 @@
-import { createAction } from ".";
+import { createAction } from "./createAction";
 
 describe("createAction", () => {
   it("should create action with only type param", () => {

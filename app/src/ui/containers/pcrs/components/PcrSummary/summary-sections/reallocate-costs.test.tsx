@@ -1,6 +1,6 @@
-import { FinancialVirementDto, PartnerDto, PartnerVirementsDto } from "@framework/dtos";
-import { createDto } from "@framework/util";
-
+import { PartnerVirementsDto, FinancialVirementDto } from "@framework/dtos/financialVirementDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { createDto } from "@framework/util/dtoHelpers";
 import { partnerSummaryData } from "@ui/containers/pcrs/components/PcrSummary/summary-sections/reallocate-costs";
 
 describe("partnerSummaryData()", () => {

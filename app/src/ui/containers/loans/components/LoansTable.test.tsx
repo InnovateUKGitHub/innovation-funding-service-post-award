@@ -1,10 +1,10 @@
-import { LoanStatus } from "@framework/entities";
-import { ILinkInfo } from "@framework/types";
 import { TestBed } from "@shared/TestBed";
 import { render } from "@testing-library/react";
 import { Loan } from "../loanOverview.logic";
 import { LoansTable, LoansTableProps } from "@ui/containers/loans/components/LoansTable";
 import { v4 as uuid } from "uuid";
+import { LoanStatus } from "@framework/entities/loan-status";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 describe("<LoansTable />", () => {
   const stubLink: ILinkInfo = {

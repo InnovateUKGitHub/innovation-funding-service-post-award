@@ -1,9 +1,9 @@
-import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
-import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
-import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForProjectSuspensionDto } from "@framework/dtos/pcrDtos";
+import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { IPCRWorkflow } from "../pcrWorkflow";
 import { SuspendProjectDetails } from "./suspendProjectDetails";
 import { SuspendProjectSummary } from "./suspendProjectSummary";
-import { PCRStepId } from "@framework/types";
 
 export type SuspendProjectSteps = PCRStepId.details;
 

@@ -1,6 +1,6 @@
-import { dateComparator, numberComparator, stringComparator } from "@framework/util";
+import { stringComparator, numberComparator, dateComparator } from "@framework/util/comparator";
 import { Logger } from "@shared/developmentLogger";
-import { useMounted } from "@ui/features";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
 import { useMemo, useState } from "react";
 
 export type SortOptions = "none" | "ascending" | "descending";

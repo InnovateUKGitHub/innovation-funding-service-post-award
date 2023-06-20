@@ -32,10 +32,12 @@ import { percentageGuide } from "@ui/componentsGuide/percentageGuide";
 import { modalGuide } from "@ui/componentsGuide/modalGuide";
 import { listGuide } from "@ui/componentsGuide/listGuide";
 import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
-import { IGuide } from "@framework/types";
-import { GovWidthContainer, UL } from "@ui/components";
+import { IGuide } from "@framework/types/IGuide";
+
 import { textareaInputGuide } from "./textareaInputGuide";
-import { SimpleString } from "@ui/components/renderers";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { GovWidthContainer } from "@ui/components/layout/GovWidthContainer";
+import { UL } from "@ui/components/layout/list";
 
 const guides: IGuide[] = [
   accordionGuide,

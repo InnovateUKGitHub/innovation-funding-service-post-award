@@ -1,7 +1,6 @@
 import React, { CSSProperties } from "react";
 import classNames from "classnames";
-
-import { useGovFrontend } from "@ui/hooks";
+import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 
 export interface StyledButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   styling: "Link" | "Secondary" | "Primary" | "Warning";

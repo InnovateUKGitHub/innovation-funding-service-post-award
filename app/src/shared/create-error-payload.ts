@@ -1,4 +1,4 @@
-import { IAppError } from "@framework/types";
+import { IAppError } from "@framework/types/IAppError";
 import { ErrorTypes } from "@ui/components/errors/error.config";
 import { ErrorNotFoundRoute, ErrorRoute } from "@ui/containers/errors.page";
 

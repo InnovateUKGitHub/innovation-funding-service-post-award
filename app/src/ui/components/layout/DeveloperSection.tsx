@@ -2,8 +2,8 @@ import { LanguageChanger } from "@ui/containers/developer/LanguageChanger";
 import { HiddenPageCrasher } from "@ui/containers/developer/PageCrasher";
 import { HiddenProjectCreator } from "@ui/containers/developer/ProjectCreator";
 import { HiddenUserSwitcher } from "@ui/containers/developer/UserSwitcher";
-import { useContent } from "@ui/hooks";
-import { H3 } from "../typography";
+import { useContent } from "@ui/hooks/content.hook";
+import { H3 } from "../typography/Heading.variants";
 import { GovWidthContainer } from "./GovWidthContainer";
 
 const DeveloperSection = () => {

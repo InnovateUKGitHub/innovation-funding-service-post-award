@@ -1,6 +1,6 @@
 import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
-import { Partner } from "@framework/entities";
 import { DocumentEntity } from "@framework/entities/document";
+import { Partner } from "@framework/entities/partner";
 
 export const mapToPartnerDocumentSummaryDto = (
   doc: DocumentEntity,

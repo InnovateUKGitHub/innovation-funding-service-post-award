@@ -1,6 +1,6 @@
-import { CostCategoryType } from "@framework/constants";
-import { CostCategory } from "@framework/entities";
-import { CostCategoryList } from "@framework/types";
+import { CostCategoryType } from "@framework/constants/enums";
+import { CostCategory } from "@framework/entities/costCategory";
+import { CostCategoryList } from "@framework/types/CostCategory";
 import { ISalesforceCostCategory } from "../costCategoriesRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 

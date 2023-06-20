@@ -1,8 +1,11 @@
-import { Authorisation } from "@framework/types";
+import { Authorisation } from "@framework/types/authorisation";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
-import { Content, H1, NavigationCard, NavigationCardsGrid, Page } from "@ui/components";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { NavigationCardsGrid, NavigationCard } from "@ui/components/navigationCard";
+import { H1 } from "@ui/components/typography/Heading.variants";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 
 const DeveloperHomePageContainer = (props: BaseProps) => {
   const { getContent } = useContent();

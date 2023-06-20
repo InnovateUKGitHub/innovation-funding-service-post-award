@@ -1,28 +1,29 @@
-import React from "react";
-import {
-  ClaimDetailsSummaryDto,
-  ClaimDto,
-  ForecastDetailsDTO,
-  GOLCostDto,
-  PartnerDto,
-  ProjectDto,
-} from "@framework/dtos";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PartnerStatus } from "@framework/constants/partner";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { roundCurrency, numberComparator } from "@framework/util";
-import { IEditorStore } from "@ui/redux";
-import { IForecastDetailsDtosValidator, IForecastDetailsDtoValidator } from "@ui/validators";
-import classNames from "classnames";
-import { diffAsPercentage } from "@framework/util/numberHelper";
-import { CostCategoryType, PartnerStatus } from "@framework/constants";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { numberComparator } from "@framework/util/comparator";
+import { diffAsPercentage, roundCurrency } from "@framework/util/numberHelper";
 import { EditorStatus } from "@ui/constants/enums";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import {
+  IForecastDetailsDtosValidator,
+  IForecastDetailsDtoValidator,
+} from "@ui/validators/forecastDetailsDtosValidator";
+import { default as classNames, default as cx } from "classnames";
+import React from "react";
+import { Content } from "../content";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
 import { Currency } from "../renderers/currency";
 import { CondensedDateRange } from "../renderers/date";
 import { Percentage } from "../renderers/percentage";
 import { createTypedTable } from "../table";
-import { Content } from "../content";
-import cx from "classnames";
 
 export interface ForecastData {
   project: ProjectDto;

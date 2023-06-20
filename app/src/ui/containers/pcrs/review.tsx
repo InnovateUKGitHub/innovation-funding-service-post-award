@@ -1,14 +1,27 @@
 import { useNavigate } from "react-router-dom";
-import { PCRStepId, ProjectDto, ProjectRole } from "@framework/types";
-
-import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { PCRItemType, PCRStatus } from "@framework/constants";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
+import { PCRItemType, PCRStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { List } from "@ui/components/layout/list";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { Loader, PageLoader } from "@ui/components/loading";
+import { Logs } from "@ui/components/logs";
+import { Title } from "@ui/components/projects/title";
+import { LineBreakList } from "@ui/components/renderers/lineBreakList";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { TaskListSection, Task } from "@ui/components/taskList";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
 
 export interface PCRReviewParams {
   projectId: ProjectId;
@@ -27,7 +40,7 @@ interface Callbacks {
   onChange: (save: boolean, dto: PCRDto) => void;
 }
 
-const Form = ACC.createTypedForm<PCRDto>();
+const Form = createTypedForm<PCRDto>();
 
 class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks> {
   render() {
@@ -39,7 +52,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     });
 
     return (
-      <ACC.PageLoader
+      <PageLoader
         pending={combined}
         render={x => this.renderContents(x.project, x.pcr, x.editor, x.editableItemTypes)}
       />
@@ -53,13 +66,13 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     editableItemTypes: PCRItemType[],
   ) {
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
+          <BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
             Back to project change requests
-          </ACC.BackLink>
+          </BackLink>
         }
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}
@@ -68,22 +81,22 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}
         {this.renderLog()}
         {this.renderForm(editor)}
-      </ACC.Page>
+      </Page>
     );
   }
 
   private renderSummary(projectChangeRequest: PCRDto) {
     return (
-      <ACC.Section title="Details">
-        <ACC.SummaryList qa="pcrDetails">
-          <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-          <ACC.SummaryListItem
+      <Section title="Details">
+        <SummaryList qa="pcrDetails">
+          <SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
+          <SummaryListItem
             label="Types"
-            content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />}
+            content={<LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />}
             qa="typesRow"
           />
-        </ACC.SummaryList>
-      </ACC.Section>
+        </SummaryList>
+      </Section>
     );
   }
 
@@ -93,15 +106,15 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     editableItemTypes: PCRItemType[],
   ) {
     return (
-      <ACC.List qa="taskList">
+      <List qa="taskList">
         {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
         {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
-      </ACC.List>
+      </List>
     );
   }
 
   private renderForm(editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const options: ACC.SelectOption[] = [
+    const options: SelectOption[] = [
       { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query the request" },
       { id: PCRStatus.SubmittedToInnovateUK.toString(), value: "Send for approval" },
     ];
@@ -152,9 +165,9 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
 
     return (
-      <ACC.TaskListSection step={1} title="Give us information" qa="WhatDoYouWantToDo">
+      <TaskListSection step={1} title="Give us information" qa="WhatDoYouWantToDo">
         {editableItems.map((x, i) => this.getItemTasks(x, editor, i))}
-      </ACC.TaskListSection>
+      </TaskListSection>
     );
   }
 
@@ -163,8 +176,8 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     const stepCount = editableItems.length ? 2 : 1;
 
     return (
-      <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
-        <ACC.Task
+      <TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
+        <Task
           name="Reasoning for Innovate UK"
           status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}
           route={this.props.routes.pcrReviewReasoning.getLink({
@@ -172,14 +185,14 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             pcrId: this.props.pcrId,
           })}
         />
-      </ACC.TaskListSection>
+      </TaskListSection>
     );
   }
   private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
     const validationErrors = editor.validator.items.results[index].errors;
 
     return (
-      <ACC.Task
+      <Task
         key={item.typeName}
         name={item.typeName}
         status={getPcrItemTaskStatus(item.status)}
@@ -195,17 +208,17 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 
   private renderLog() {
     return (
-      <ACC.Section>
-        <ACC.Accordion>
-          <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
+      <Section>
+        <Accordion>
+          <AccordionItem title="Status and comments log" qa="status-and-comments-log">
             {/* Keeping logs inside loader because accordion defaults to closed*/}
-            <ACC.Loader
+            <Loader
               pending={this.props.statusChanges}
-              render={statusChanges => <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />}
+              render={statusChanges => <Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />}
             />
-          </ACC.AccordionItem>
-        </ACC.Accordion>
-      </ACC.Section>
+          </AccordionItem>
+        </Accordion>
+      </Section>
     );
   }
 }

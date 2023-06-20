@@ -1,38 +1,36 @@
-import { useNavigate } from "react-router-dom";
-import {
-  ILinkInfo,
-  PCRItemDto,
-  PCRItemStatus,
-  PCRItemType,
-  ProjectDto,
-  PartnerDto,
-  ProjectRole,
-  FinancialVirementDto,
-  PCRStepId,
-} from "@framework/types";
-import { EditorStatus } from "@ui/constants/enums";
-
-import { ForbiddenError } from "@shared/appError";
-
-import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { PCRItemStatus, PCRItemType, PCRStepId } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
-
-import { Results } from "@ui/validation";
-import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
-import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
-import { IEditorStore, IStores, useStores } from "@ui/redux";
-import { Result } from "@ui/validation/result";
-
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { PcrStepProps, PcrWorkflow, WorkflowPcrType } from "@ui/containers/pcrs/pcrWorkflow";
-import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
-import { GrantMovingOverFinancialYearForm } from "@ui/containers/pcrs/financialVirements/financialVirementsSummary";
-
-import * as ACC from "@ui/components";
+import { FinancialVirementDto } from "@framework/dtos/financialVirementDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { ForbiddenError } from "@shared/appError";
 import { Pending } from "@shared/pending";
-
-import { PcrSummaryProvider, PcrSummaryConsumer } from "./components/PcrSummary";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Markdown } from "@ui/components/renderers/markdown";
+import { Messages } from "@ui/components/renderers/messages";
+import { EditorStatus } from "@ui/constants/enums";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { GrantMovingOverFinancialYearForm } from "@ui/containers/pcrs/financialVirements/financialVirementsSummary";
+import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
+import { PcrStepProps, PcrWorkflow, WorkflowPcrType } from "@ui/containers/pcrs/pcrWorkflow";
+import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { IStores, useStores } from "@ui/redux/storesProvider";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
+import { useNavigate } from "react-router-dom";
+import { PcrSummaryConsumer, PcrSummaryProvider } from "./components/PcrSummary/PcrSummary";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: ProjectId;
@@ -59,7 +57,7 @@ interface Callbacks {
   onSave: (props: { dto: PCRDto; pcrStepId?: PCRStepId; link: ILinkInfo }) => void;
 }
 
-const PCRForm = ACC.createTypedForm<PCRItemDto>();
+const PCRForm = createTypedForm<PCRItemDto>();
 
 class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParams, Data, Callbacks> {
   render() {
@@ -76,7 +74,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     });
 
     return (
-      <ACC.PageLoader
+      <PageLoader
         pending={combined}
         render={x =>
           this.renderContents(
@@ -121,9 +119,9 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     if (this.props.mode !== "prepare") return null;
 
     return (
-      <ACC.Link id={validation ? validation.key : undefined} replace route={this.getStepLink(workflow, stepName)}>
+      <Link id={validation ? validation.key : undefined} replace route={this.getStepLink(workflow, stepName)}>
         Edit
-      </ACC.Link>
+      </Link>
     );
   }
 
@@ -131,9 +129,9 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     if (this.props.mode !== "review") return null;
 
     return (
-      <ACC.Link replace route={this.getStepReviewLink(workflow, stepName)}>
+      <Link replace route={this.getStepReviewLink(workflow, stepName)}>
         View
-      </ACC.Link>
+      </Link>
     );
   }
 
@@ -156,14 +154,14 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     return (
       // TODO: Raise ticket to move this provider closer to 'financialVirementsSummary.tsx'
       <PcrSummaryProvider type={pcrItem.type} partners={partners} virement={virement}>
-        <ACC.Page
+        <Page
           backLink={this.getBackLink()}
-          pageTitle={<ACC.Projects.Title {...project} />}
+          pageTitle={<Title {...project} />}
           project={project}
           validator={validation}
           error={editor.error || documentsEditor.error}
         >
-          <ACC.Renderers.Messages messages={this.props.messages} />
+          <Messages messages={this.props.messages} />
 
           {workflow &&
             this.renderWorkflow(
@@ -176,7 +174,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
               documentsEditor,
               editableItemTypes,
             )}
-        </ACC.Page>
+        </Page>
       </PcrSummaryProvider>
     );
   }
@@ -184,28 +182,28 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
   private getBackLink() {
     if (this.props.mode === "review") {
       return (
-        <ACC.BackLink
+        <BackLink
           route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         >
           Back to request
-        </ACC.BackLink>
+        </BackLink>
       );
     }
     if (this.props.mode === "prepare") {
       return (
-        <ACC.BackLink
+        <BackLink
           route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         >
           Back to request
-        </ACC.BackLink>
+        </BackLink>
       );
     }
     return (
-      <ACC.BackLink
+      <BackLink
         route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
       >
         Back to request
-      </ACC.BackLink>
+      </BackLink>
     );
   }
 
@@ -239,9 +237,9 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     if (!pcrItem.guidance) return null;
 
     return (
-      <ACC.Section qa="guidance">
-        <ACC.Renderers.Markdown trusted value={pcrItem.guidance} />
-      </ACC.Section>
+      <Section qa="guidance">
+        <Markdown trusted value={pcrItem.guidance} />
+      </Section>
     );
   }
 
@@ -350,7 +348,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${this.props.itemId}`);
     const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
 
-    const options: ACC.SelectOption[] = [{ id: "true", value: "I agree with this change." }];
+    const options: SelectOption[] = [{ id: "true", value: "I agree with this change." }];
 
     return (
       <PCRForm.Form
@@ -398,7 +396,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
             const displayCompleteForm = isPrepareMode && summaryContext.isSummaryValid;
 
             return (
-              <ACC.Section qa="item-save-and-return">
+              <Section qa="item-save-and-return">
                 {this.renderSummary(workflow, project, pcr, editor)}
 
                 {displayCompleteForm &&
@@ -415,7 +413,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
                     routes={this.props.routes}
                   />
                 )}
-              </ACC.Section>
+              </Section>
             );
           }}
         </PcrSummaryConsumer>

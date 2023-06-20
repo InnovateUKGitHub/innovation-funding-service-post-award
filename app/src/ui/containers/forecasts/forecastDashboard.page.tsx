@@ -1,10 +1,16 @@
-import { roundCurrency } from "@framework/util";
-import { ProjectRole } from "@framework/constants";
-import { Page, Projects, Section, createTypedTable, getPartnerName, Content } from "../../components";
+import { ProjectRole } from "@framework/constants/project";
 import { BaseProps, defineRoute } from "../containerBase";
 import { useForecastDashboardData, Partner } from "./forecastDashboard.logic";
-import { useContent } from "@ui/hooks";
-import { AccessibilityText } from "@ui/components/renderers";
+import { useContent } from "@ui/hooks/content.hook";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { getPartnerName } from "@ui/components/partners/partnerName";
+import { Title } from "@ui/components/projects/title";
+import { AccessibilityText } from "@ui/components/renderers/accessibilityText";
+import { createTypedTable } from "@ui/components/table";
+import { ProjectBackLink } from "@ui/components/projects/projectBackLink";
 
 interface Params {
   projectId: ProjectId;
@@ -17,8 +23,8 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
 
   return (
     <Page
-      pageTitle={<Projects.Title {...project} />}
-      backLink={<Projects.ProjectBackLink routes={props.routes} projectId={project.id} />}
+      pageTitle={<Title {...project} />}
+      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
       projectStatus={project.status}
     >
       <Section qa="project-forecasts">

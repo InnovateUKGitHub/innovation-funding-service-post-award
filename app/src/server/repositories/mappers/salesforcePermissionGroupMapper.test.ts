@@ -1,4 +1,4 @@
-import { PermissionGroupIdentifier } from "@framework/constants";
+import { PermissionGroupIdentifier } from "@framework/constants/enums";
 import { SalesforcePermissionGroupMapper } from "@server/repositories/mappers/permissionGroupMapper";
 
 describe("SalesforcePermissionGroupMapper", () => {

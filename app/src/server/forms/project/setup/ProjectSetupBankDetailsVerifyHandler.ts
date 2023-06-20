@@ -1,14 +1,17 @@
-import { BankCheckStatus, IContext, ILinkInfo, PartnerDto } from "@framework/types";
-import { GetByIdQuery } from "@server/features/partners";
+import { BankCheckStatus } from "@framework/constants/partner";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { BankCheckStatusMapper } from "@server/features/partners/mapToPartnerDto";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
+import { FailedBankCheckConfirmationRoute } from "@ui/containers/projects/failedBankCheckConfirmation.page";
+import { PartnerDetailsParams } from "@ui/containers/projects/partnerDetails/partnerDetailsEdit.page";
+import { ProjectSetupRoute } from "@ui/containers/projects/setup/projectSetup.page";
 import {
-  FailedBankCheckConfirmationRoute,
-  PartnerDetailsParams,
   ProjectSetupBankDetailsVerifyParams,
   ProjectSetupBankDetailsVerifyRoute,
-  ProjectSetupRoute,
-} from "@ui/containers";
+} from "@ui/containers/projects/setup/projectSetupBankDetailsVerify.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { IFormButton, StandardFormHandlerBase } from "../../formHandlerBase";

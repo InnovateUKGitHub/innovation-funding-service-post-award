@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { TestBed, TestBedStore } from "@shared/TestBed";
-import { UnauthenticatedError } from "@ui/components/errors";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { UnauthenticatedError } from "./UnauthenticatedError";
 
 describe("<UnauthenticatedError />", () => {
   describe("@renders", () => {

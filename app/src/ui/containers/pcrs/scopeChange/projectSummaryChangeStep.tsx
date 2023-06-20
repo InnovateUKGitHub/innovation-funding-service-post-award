@@ -1,16 +1,20 @@
-import * as ACC from "@ui/components";
-import { PCRItemForScopeChangeDto } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
+import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { PCRScopeChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Info } from "@ui/components/layout/info";
 
-const Form = ACC.createTypedForm<PCRItemForScopeChangeDto>();
+const Form = createTypedForm<PCRItemForScopeChangeDto>();
 
 export const ProjectSummaryChangeStep = (
   props: PcrStepProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator>,
 ) => {
   return (
-    <ACC.Section qa="newSummarySection">
+    <Section qa="newSummarySection">
       <Form.Form
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
@@ -18,13 +22,13 @@ export const ProjectSummaryChangeStep = (
         onSubmit={() => props.onSave(false)}
       >
         <Form.Fieldset heading={x => x.pages.pcrScopeChangeProjectSummaryChange.headingProjectSummary}>
-          <ACC.Info summary={<ACC.Content value={x => x.pages.pcrScopeChangeProjectSummaryChange.publishedSummary} />}>
-            <ACC.Renderers.SimpleString multiline>
+          <Info summary={<Content value={x => x.pages.pcrScopeChangeProjectSummaryChange.publishedSummary} />}>
+            <SimpleString multiline>
               {props.pcrItem.projectSummarySnapshot || (
-                <ACC.Content value={x => x.pages.pcrScopeChangeProjectSummaryChange.noAvailableSummary} />
+                <Content value={x => x.pages.pcrScopeChangeProjectSummaryChange.noAvailableSummary} />
               )}
-            </ACC.Renderers.SimpleString>
-          </ACC.Info>
+            </SimpleString>
+          </Info>
           <Form.MultilineString
             name="summary"
             hint={props.getRequiredToCompleteMessage()}
@@ -41,9 +45,9 @@ export const ProjectSummaryChangeStep = (
           />
         </Form.Fieldset>
         <Form.Submit>
-          <ACC.Content value={x => x.pcrItem.submitButton} />
+          <Content value={x => x.pcrItem.submitButton} />
         </Form.Submit>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };

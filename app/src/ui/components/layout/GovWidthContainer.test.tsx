@@ -1,5 +1,5 @@
-import { GovWidthContainer, GovWidthContainerProps } from "@ui/components";
 import { render } from "@testing-library/react";
+import { GovWidthContainerProps, GovWidthContainer } from "./GovWidthContainer";
 
 describe("<GovWidthContainer />", () => {
   const stubChildrenText = "stub content";

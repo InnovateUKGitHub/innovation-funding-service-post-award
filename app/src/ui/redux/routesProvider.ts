@@ -1,6 +1,5 @@
+import { IRoutes } from "@ui/routing/routeConfig";
 import { createContext, useContext } from "react";
-
-import { IRoutes } from "@ui/routing";
 
 const routesContext = createContext<IRoutes | undefined>(undefined);
 

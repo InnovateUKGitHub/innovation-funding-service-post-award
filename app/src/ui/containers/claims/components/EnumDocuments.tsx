@@ -1,7 +1,6 @@
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { DropdownOption } from "@ui/components/form";
 import React from "react";
-
-import { DocumentDescription } from "@framework/types";
-import { DropdownOption } from "@ui/components";
 import { useEnumDocuments } from "./allowed-documents.hook";
 
 interface EnumDocumentsProps {

@@ -1,8 +1,10 @@
-import { PCRDto, PCRItemDto } from "@framework/dtos";
-import { Link, Section, SummaryList, SummaryListItem } from "@ui/components";
-import { LineBreakList } from "@ui/components/renderers";
-import { useContent } from "@ui/hooks";
-import { useRoutes } from "@ui/redux";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { Section } from "@ui/components/layout/section";
+import { Link } from "@ui/components/links";
+import { LineBreakList } from "@ui/components/renderers/lineBreakList";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { useContent } from "@ui/hooks/content.hook";
+import { useRoutes } from "@ui/redux/routesProvider";
 import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 
 const ProjectChangeRequestOverviewSummary = ({

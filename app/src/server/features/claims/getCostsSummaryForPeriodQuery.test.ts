@@ -1,6 +1,8 @@
-import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails";
-import { Authorisation, PCROrganisationType, ProjectRole } from "@framework/types";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { GetCostsSummaryForPeriodQuery } from "../claimDetails/getCostsSummaryForPeriodQuery";
 
 describe("GetCostSummaryForPeriodQuery", () => {
   test("when valid then returns all cost categories", async () => {

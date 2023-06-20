@@ -1,9 +1,8 @@
-import { useContent } from "@ui/hooks";
-import { H2 } from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
-
+import { BroadcastDto } from "@framework/dtos/BroadcastDto";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { H2 } from "@ui/components/typography/Heading.variants";
+import { useContent } from "@ui/hooks/content.hook";
 import { BroadcastView } from "./BroadcastView";
-import { BroadcastDto } from "@framework/dtos";
 
 /**
  * ### BroadcastsViewer

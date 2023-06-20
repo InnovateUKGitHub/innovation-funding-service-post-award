@@ -1,16 +1,33 @@
 import { useNavigate } from "react-router-dom";
-import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, useStores } from "@ui/redux";
-import { FinancialVirementDtoValidator, PartnerVirementsDtoValidator } from "@ui/validators";
-import { FinancialVirementDto, PartnerDto, PartnerVirementsDto, ProjectDto } from "@framework/dtos";
-import { useContent } from "@ui/hooks";
-import { IRoutes } from "@ui/routing";
+import { useContent } from "@ui/hooks/content.hook";
+import { IRoutes } from "@ui/routing/routeConfig";
 import { EditorStatus } from "@ui/constants/enums";
-import { AwardRateOverridesMessage } from "@ui/components/claims";
+import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos/financialVirementDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Currency } from "@ui/components/renderers/currency";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import {
+  FinancialVirementDtoValidator,
+  PartnerVirementsDtoValidator,
+} from "@ui/validators/financialVirementDtoValidator";
+import { ValidationError } from "@ui/components/validationError";
+import { NumberInput } from "@ui/components/inputs/numberInput";
 
-const VirementForm = ACC.createTypedForm<FinancialVirementDto>();
+const VirementForm = createTypedForm<FinancialVirementDto>();
 
 /**
  * Hook returns content for edit partner view
@@ -64,7 +81,7 @@ interface VirementTableData {
   virement: PartnerVirementsDto;
   validator: PartnerVirementsDtoValidator | undefined;
 }
-const VirementTable = ACC.createTypedTable<VirementTableData>();
+const VirementTable = createTypedTable<VirementTableData>();
 
 const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirementParams) => {
   const combined = Pending.combine({
@@ -92,7 +109,7 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
   };
 
   return (
-    <ACC.PageLoader
+    <PageLoader
       pending={combined}
       render={({ project, partners, editor }) => {
         const data = partners
@@ -108,7 +125,7 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
           .filter(x => !!x.virement);
 
         const backLink = (
-          <ACC.BackLink
+          <BackLink
             route={props.routes.pcrPrepareItem.getLink({
               projectId: props.projectId,
               pcrId: props.pcrId,
@@ -116,21 +133,21 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
             })}
           >
             {props.content.backToSummary}
-          </ACC.BackLink>
+          </BackLink>
         );
         return (
-          <ACC.Page
+          <Page
             backLink={backLink}
-            pageTitle={<ACC.Projects.Title {...project} />}
+            pageTitle={<Title {...project} />}
             error={editor.error}
             validator={editor.validator}
           >
-            <ACC.Section>
+            <Section>
               <AwardRateOverridesMessage isNonFec={project.isNonFec} />
-              <ACC.Renderers.SimpleString>{props.content.remainingGrantInfoIntro}</ACC.Renderers.SimpleString>
-              <ACC.Renderers.SimpleString>{props.content.remainingGrantInfoCheckRules}</ACC.Renderers.SimpleString>
-              <ACC.Renderers.SimpleString>{props.content.remainingGrantInfoRemainingGrant}</ACC.Renderers.SimpleString>
-              <ACC.Renderers.SimpleString>{props.content.remainingGrantInfoFundingLevel}</ACC.Renderers.SimpleString>
+              <SimpleString>{props.content.remainingGrantInfoIntro}</SimpleString>
+              <SimpleString>{props.content.remainingGrantInfoCheckRules}</SimpleString>
+              <SimpleString>{props.content.remainingGrantInfoRemainingGrant}</SimpleString>
+              <SimpleString>{props.content.remainingGrantInfoFundingLevel}</SimpleString>
               <VirementForm.Form
                 editor={editor}
                 onChange={dto => props.onChange(false, dto)}
@@ -151,23 +168,21 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                       qa="remainingCosts"
                       header={props.content.partnerOriginalRemainingCosts}
                       value={x => x.virement.originalRemainingCosts}
-                      footer={<ACC.Renderers.Currency value={editor.data.originalRemainingCosts} />}
+                      footer={<Currency value={editor.data.originalRemainingCosts} />}
                     />
 
                     <VirementTable.Currency
                       qa="remainingGrant"
                       header={props.content.partnerOriginalRemainingGrant}
                       value={x => x.virement.originalRemainingGrant}
-                      footer={<ACC.Renderers.Currency value={editor.data.originalRemainingGrant} />}
+                      footer={<Currency value={editor.data.originalRemainingGrant} />}
                     />
 
                     <VirementTable.Percentage
                       qa="fundingLevel"
                       header={props.content.originalFundingLevel}
                       value={x => x.virement.originalFundingLevel}
-                      footer={
-                        <ACC.Renderers.Percentage value={editor.data.originalFundingLevel} defaultIfInfinite={0} />
-                      }
+                      footer={<Percentage value={editor.data.originalFundingLevel} defaultIfInfinite={0} />}
                       defaultIfInfinite={0}
                       isDivider="normal"
                     />
@@ -176,7 +191,7 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                       qa="newCosts"
                       header={props.content.partnerNewRemainingCosts}
                       value={x => x.virement.newRemainingCosts}
-                      footer={<ACC.Renderers.Currency value={editor.data.newRemainingCosts} />}
+                      footer={<Currency value={editor.data.newRemainingCosts} />}
                     />
 
                     <VirementTable.Custom
@@ -184,11 +199,11 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                       header={props.content.partnerNewRemainingGrant}
                       value={x => (
                         <>
-                          <ACC.ValidationError
+                          <ValidationError
                             overrideMessage={`Invalid grant for ${x.partner.name}`}
                             error={x.validator && x.validator.newRemainingGrant}
                           />
-                          <ACC.Inputs.NumberInput
+                          <NumberInput
                             name={x.virement.partnerId}
                             value={x.virement.newRemainingGrant}
                             onChange={val => updateValue(x.partner, val)}
@@ -201,8 +216,8 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                       )}
                       footer={
                         <>
-                          <ACC.ValidationError error={editor.validator.newRemainingGrant} />
-                          <ACC.Renderers.Currency value={editor.data.newRemainingGrant} />
+                          <ValidationError error={editor.validator.newRemainingGrant} />
+                          <Currency value={editor.data.newRemainingGrant} />
                         </>
                       }
                       classSuffix="numeric"
@@ -212,7 +227,7 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                       header={props.content.newFundingLevel}
                       value={x => x.virement.newFundingLevel}
                       defaultIfInfinite={0}
-                      footer={<ACC.Renderers.Percentage value={editor.data.newFundingLevel} defaultIfInfinite={0} />}
+                      footer={<Percentage value={editor.data.newFundingLevel} defaultIfInfinite={0} />}
                     />
                   </VirementTable.Table>
                 </VirementForm.Fieldset>
@@ -220,8 +235,8 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
                   <VirementForm.Submit>{props.content.saveButton}</VirementForm.Submit>
                 </VirementForm.Fieldset>
               </VirementForm.Form>
-            </ACC.Section>
-          </ACC.Page>
+            </Section>
+          </Page>
         );
       }}
     />

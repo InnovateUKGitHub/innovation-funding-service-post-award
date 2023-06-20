@@ -1,4 +1,5 @@
-import { CostCategoryType, PCROrganisationType } from "@framework/constants";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export default (mod?: Partial<CostCategoryDto>): CostCategoryDto => {

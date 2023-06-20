@@ -3,7 +3,7 @@ import { Api } from "@gql/sf/Api";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { loadSchema } from "@graphql-tools/load";
 import { FilterTypes, introspectSchema, RenameTypes, TransformRootFields, WrapFields } from "@graphql-tools/wrap";
-import { configuration } from "@server/features/common";
+import { configuration } from "@server/features/common/config";
 import { Logger } from "@shared/developmentLogger";
 import { isLocalDevelopment } from "@shared/isEnv";
 import { existsSync, writeFileSync } from "fs";

@@ -1,8 +1,12 @@
-import { PCRDto, PCRItemType, ProjectChangeRequestStatusChangeDto, ProjectDto, ProjectRole } from "@framework/types";
+import { PCRItemType } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
 import { Pending } from "@shared/pending";
-import { PageLoader } from "@ui/components";
-import { IEditorStore, useStores } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { PageLoader } from "@ui/components/loading";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "../../containerBase";
 import { PCROverviewComponent } from "./ProjectChangeRequestOverview";

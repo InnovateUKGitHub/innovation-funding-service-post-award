@@ -1,43 +1,44 @@
-import { Helmet } from "react-helmet";
-import { renderToString } from "react-dom/server";
-import { AnyAction, createStore, Store } from "redux";
-import { Provider } from "react-redux";
-import { StaticRouter } from "react-router-dom/server";
-import { NextFunction, Request, Response } from "express";
-import { getParamsFromUrl } from "@ui/helpers/make-url";
-import { matchRoute, routeConfig } from "@ui/routing";
-import { ErrorCode, IClientUser, IContext, Authorisation, IAppError } from "@framework/types";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import * as Actions from "@ui/redux/actions";
-import { App } from "@ui/containers/app";
-import {
-  createStores,
-  IStores,
-  ModalProvider,
-  ModalRegister,
-  rootReducer,
-  RootState,
-  setupInitialState,
-  setupServerMiddleware,
-  StoresProvider,
-} from "@ui/redux";
-import { createErrorPayload } from "@shared/create-error-payload";
-import { contextProvider } from "@server/features/common/contextProvider";
-import { Result, Results } from "@ui/validation";
-import { ForbiddenError, FormHandlerError } from "./features/common/appError";
-
-import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
-import { getErrorStatus } from "./errorHandlers";
-import { renderHtml } from "./html";
-import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
-import { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment } from "@gql/ServerGraphQLEnvironment";
-import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
-import { loadQuery } from "relay-hooks";
-import { GraphQLSchema } from "graphql";
+import { ErrorCode } from "@framework/constants/enums";
+import { Authorisation } from "@framework/types/authorisation";
+import { IAppError } from "@framework/types/IAppError";
+import { IContext } from "@framework/types/IContext";
+import { IClientUser } from "@framework/types/IUser";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
+import { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment } from "@gql/ServerGraphQLEnvironment";
+import { contextProvider } from "@server/features/common/contextProvider";
+import { createErrorPayload } from "@shared/create-error-payload";
 import { Logger } from "@shared/developmentLogger";
-import { FormErrorContextProvider } from "@ui/context/form-error";
+import { App } from "@ui/containers/app";
 import { ApiErrorContextProvider } from "@ui/context/api-error";
+import { FormErrorContextProvider } from "@ui/context/form-error";
+import { getParamsFromUrl } from "@ui/helpers/make-url";
+import { updateEditorAction, handleEditorSubmit, handleEditorError } from "@ui/redux/actions/common/editorActions";
+import { setError } from "@ui/redux/actions/common/errorActions";
+import { initaliseAction } from "@ui/redux/actions/initalise";
+import { setupInitialState } from "@ui/redux/initialState";
+import { setupServerMiddleware } from "@ui/redux/middleware";
+import { ModalProvider, ModalRegister } from "@ui/redux/modalProvider";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { rootReducer, RootState } from "@ui/redux/reducers/rootReducer";
+import { createStores, IStores, StoresProvider } from "@ui/redux/storesProvider";
+import { matchRoute } from "@ui/routing/matchRoute";
+import { routeConfig } from "@ui/routing/routeConfig";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
+import { NextFunction, Request, Response } from "express";
+import { GraphQLSchema } from "graphql";
+import { renderToString } from "react-dom/server";
+import { Helmet } from "react-helmet";
+import { Provider } from "react-redux";
+import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
+import { StaticRouter } from "react-router-dom/server";
+import { AnyAction, createStore, Store } from "redux";
+import { loadQuery } from "relay-hooks";
+import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
+import { getErrorStatus } from "./errorHandlers";
+import { ForbiddenError, FormHandlerError } from "./features/common/appError";
+import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
+import { renderHtml } from "./html";
 
 interface IServerApp {
   requestUrl: string;
@@ -130,14 +131,14 @@ const serverRender =
           if (err?.code === ErrorCode.VALIDATION_ERROR) {
             // We've got some kind of validation error, so let the user know that happened.
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            store.dispatch(Actions.updateEditorAction(err.key, err.store, err.dto, err.error.results as Results<any>));
+            store.dispatch(updateEditorAction(err.key, err.store, err.dto, err.error.results as Results<any>));
             formError = formError.concat(err?.error?.results?.errors ?? []);
           } else {
             // Some other validation error occurred, so we need to add it into store as actual error.
             // Need to pair with the submit action to keep count in sync.
-            store.dispatch(Actions.handleEditorSubmit(err.key, err.store, err.dto, err.result));
+            store.dispatch(handleEditorSubmit(err.key, err.store, err.dto, err.result));
             store.dispatch(
-              Actions.handleEditorError({
+              handleEditorError({
                 id: err.key,
                 dto: err.dto,
                 error: err.error,
@@ -152,7 +153,7 @@ const serverRender =
           // We cannot handle these beautifully.
           statusCode = getErrorStatus(err);
           const errorPayload = createErrorPayload(err, false).params;
-          store.dispatch(Actions.setError(errorPayload));
+          store.dispatch(setError(errorPayload));
           renderUrl = routeConfig.error.getLink({}).path;
           isErrorPage = true;
           apiError = errorPayload as unknown as IAppError;
@@ -230,7 +231,7 @@ const loadAllData = (store: Store, render: () => void): Promise<void> => {
     });
 
     // initial action to kick of callbacks
-    store.dispatch(Actions.initaliseAction());
+    store.dispatch(initaliseAction());
   });
 };
 

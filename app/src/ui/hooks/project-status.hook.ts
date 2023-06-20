@@ -1,9 +1,8 @@
-import { useContext } from "react";
-
-import { useStores } from "@ui/redux";
+import { ProjectStatus } from "@framework/constants/project";
+import { ProjectStatusContext, ProjectActiveContext } from "@ui/context/project-status";
 import { getPending } from "@ui/helpers/get-pending";
-import { ProjectActiveContext, ProjectStatusContext } from "@ui/context/project-status";
-import { ProjectStatus } from "@framework/constants";
+import { useStores } from "@ui/redux/storesProvider";
+import { useContext } from "react";
 
 const initialProjectStatusState: ProjectStatusContext = {
   overrideAccess: false,

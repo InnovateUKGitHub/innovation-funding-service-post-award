@@ -1,4 +1,5 @@
-import { IContext, PCRParticipantSize } from "@framework/types";
+import { PCRParticipantSize } from "@framework/constants/pcrConstants";
+import { IContext } from "@framework/types/IContext";
 import { PcrParticipantSizeMapper } from "@server/repositories/mappers/projectChangeRequestMapper";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 

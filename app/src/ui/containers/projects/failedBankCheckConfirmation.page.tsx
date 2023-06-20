@@ -1,11 +1,15 @@
-import { ProjectDto } from "@framework/dtos";
+import { ProjectRole } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
 import { Pending } from "@shared/pending";
-import { ProjectRole } from "@framework/constants";
-
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useStores } from "@ui/redux";
-import * as ACC from "@ui/components";
-import { useContent } from "@ui/hooks";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { Loader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { useContent } from "@ui/hooks/content.hook";
+import { useStores } from "@ui/redux/storesProvider";
+import { BaseProps, defineRoute } from "../containerBase";
 
 export interface FailedBankCheckConfirmationParams {
   projectId: ProjectId;
@@ -29,25 +33,25 @@ function FailedBankCheckConfirmation({ projectId, partnerId, routes, ...props }:
     const projectSetupRoute = routes.projectSetup.getLink({ projectId, partnerId });
 
     const failedConfirmationBackLink = getContent(x => x.pages.failedBankCheckConfirmation.backLink);
-    const backLink = <ACC.BackLink route={projectSetupRoute}>{failedConfirmationBackLink}</ACC.BackLink>;
-    const pageTitle = <ACC.Projects.Title {...project} />;
+    const backLink = <BackLink route={projectSetupRoute}>{failedConfirmationBackLink}</BackLink>;
+    const pageTitle = <Title {...project} />;
 
     return (
-      <ACC.Page backLink={backLink} pageTitle={pageTitle} project={project}>
-        <ACC.Section qa="guidance">
-          <ACC.Content markdown value={x => x.pages.failedBankCheckConfirmation.guidance} />
-        </ACC.Section>
+      <Page backLink={backLink} pageTitle={pageTitle} project={project}>
+        <Section qa="guidance">
+          <Content markdown value={x => x.pages.failedBankCheckConfirmation.guidance} />
+        </Section>
 
-        <ACC.Section qa="return-to-setup-button">
-          <ACC.Link styling="PrimaryButton" route={projectSetupRoute}>
+        <Section qa="return-to-setup-button">
+          <Link styling="PrimaryButton" route={projectSetupRoute}>
             {getContent(x => x.pages.failedBankCheckConfirmation.returnToSetup)}
-          </ACC.Link>
-        </ACC.Section>
-      </ACC.Page>
+          </Link>
+        </Section>
+      </Page>
     );
   };
 
-  return <ACC.Loader pending={props.project} render={x => renderContents(x)} />;
+  return <Loader pending={props.project} render={x => renderContents(x)} />;
 }
 
 /**

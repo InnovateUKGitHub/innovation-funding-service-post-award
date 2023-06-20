@@ -1,4 +1,3 @@
-import { MonitoringReportStatus, ProjectStatus } from "@framework/constants";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { monitoringReportDashboardQuery } from "./MonitoringReportDashboard.query";
@@ -7,7 +6,10 @@ import {
   MonitoringReportDashboardQuery$data,
 } from "./__generated__/MonitoringReportDashboardQuery.graphql";
 import { useMemo } from "react";
-import { mapToMonitoringReportDtoArray, mapToProjectDto } from "@gql/dtoMapper";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { ProjectStatus } from "@framework/constants/project";
+import { mapToMonitoringReportDtoArray } from "@gql/dtoMapper/mapMonitoringReportDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 const currentStatuses = [
   MonitoringReportStatus.New,

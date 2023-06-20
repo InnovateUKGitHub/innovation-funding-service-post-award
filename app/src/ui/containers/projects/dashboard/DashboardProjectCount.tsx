@@ -1,6 +1,5 @@
-import { useContent } from "@ui/hooks";
-import { SimpleString } from "@ui/components/renderers";
-
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useContent } from "@ui/hooks/content.hook";
 import { CuratedSection } from "./Dashboard.interface";
 
 interface DashboardProjectCountProps {

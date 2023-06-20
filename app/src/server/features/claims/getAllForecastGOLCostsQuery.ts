@@ -1,5 +1,6 @@
-import { GOLCostDto, IContext } from "@framework/types";
-import { QueryBase } from "../common";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 import { GetUnfilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
 
 export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {

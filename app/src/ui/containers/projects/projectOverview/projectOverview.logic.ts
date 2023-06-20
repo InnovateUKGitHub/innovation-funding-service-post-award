@@ -3,11 +3,14 @@ import { getLeadPartner, sortPartnersLeadFirst } from "@framework/util/partnerHe
 import { getFirstEdge } from "@gql/selectors/edges";
 import { projectOverviewQuery } from "./ProjectOverview.query";
 import { ProjectOverviewQuery, ProjectOverviewQuery$data } from "./__generated__/ProjectOverviewQuery.graphql";
-import { ProjectStatus } from "@framework/constants";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissions";
-import { PartnerDtoGql, ProjectDtoGql } from "@framework/dtos";
-import { mapToPartnerDtoArray, mapToProjectDto, getPartnerRoles } from "@gql/dtoMapper";
+import { ProjectStatus } from "@framework/constants/project";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
+import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
+import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 type ProjectGql = GQL.NodeSelector<ProjectOverviewQuery$data, "Acc_Project__c">;
 

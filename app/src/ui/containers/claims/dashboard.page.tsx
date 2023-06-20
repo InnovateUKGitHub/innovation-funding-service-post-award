@@ -1,15 +1,28 @@
-import { ClaimDto, DateFormat, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
-import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
-import { useStores } from "@ui/redux";
-import { formatDate, roundCurrency } from "@framework/util";
+import { ClaimDetailsLink, getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import * as Acc from "../../components";
-
 import { GetProjectStatus } from "../app/project-active";
-import { ClaimsDashboardGuidance } from "./components";
+import { ClaimsDashboardGuidance } from "./components/ClaimsDashboardGuidance";
+import { DateFormat } from "@framework/constants/enums";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { formatDate } from "@framework/util/dateHelpers";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { useStores } from "@ui/redux/storesProvider";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { createTypedTable } from "@ui/components/table";
+import { ClaimPeriodDate } from "@ui/components/claims/claimPeriodDate";
+import { ProjectBackLink } from "@ui/components/projects/projectBackLink";
+import { Messages } from "@ui/components/renderers/messages";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 
 export interface ClaimDashboardPageParams {
   projectId: ProjectId;
@@ -23,7 +36,7 @@ interface Data {
   currentClaim: Pending<ClaimDto | null>;
 }
 
-const ClaimTable = Acc.createTypedTable<ClaimDto>();
+const ClaimTable = createTypedTable<ClaimDto>();
 
 class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
   public render() {
@@ -35,7 +48,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
     });
 
     return (
-      <Acc.PageLoader
+      <PageLoader
         pending={combined}
         render={x => this.renderContents(x.project, x.partner, x.currentClaim, x.previousClaims)}
       />
@@ -49,9 +62,9 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
     previousClaims: ClaimDto[],
   ) {
     return (
-      <Acc.Page
-        pageTitle={<Acc.Projects.Title {...project} />}
-        backLink={<Acc.Projects.ProjectBackLink routes={this.props.routes} projectId={project.id} />}
+      <Page
+        pageTitle={<Title {...project} />}
+        backLink={<ProjectBackLink routes={this.props.routes} projectId={project.id} />}
         project={project}
         partner={partner}
       >
@@ -59,8 +72,8 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
           {state => state.isMultipleParticipants && <ClaimsDashboardGuidance {...partner} />}
         </ProjectParticipantsHoc>
 
-        <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" title={x => x.claimsLabels.openSectionTitle}>
+        <Messages messages={this.props.messages} />
+        <Section qa="current-claims-section" title={x => x.claimsLabels.openSectionTitle}>
           {this.renderCurrentClaims(
             currentClaim ? [currentClaim] : [],
             "current-claims-table",
@@ -68,11 +81,11 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
             partner,
             previousClaims,
           )}
-        </Acc.Section>
-        <Acc.Section qa="previous-claims-section" title={x => x.claimsLabels.closedSectionTitle}>
+        </Section>
+        <Section qa="previous-claims-section" title={x => x.claimsLabels.closedSectionTitle}>
           {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
-        </Acc.Section>
-      </Acc.Page>
+        </Section>
+      </Page>
     );
   }
 
@@ -81,17 +94,17 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
     // If the final claim has been approved
     if (previousClaims && previousClaims.find(x => x.isFinalClaim)) {
       return (
-        <Acc.Renderers.SimpleString qa="yourFinalClaimApprovedNotificationMessage">
-          <Acc.Content value={x => x.claimsMessages.noRemainingClaims} />
-        </Acc.Renderers.SimpleString>
+        <SimpleString qa="yourFinalClaimApprovedNotificationMessage">
+          <Content value={x => x.claimsMessages.noRemainingClaims} />
+        </SimpleString>
       );
     }
     return (
-      <Acc.Renderers.SimpleString>
-        <Acc.Content
+      <SimpleString>
+        <Content
           value={x => x.claimsMessages.noOpenClaims({ nextClaimStartDate: formatDate(date, DateFormat.FULL_DATE) })}
         />
-      </Acc.Renderers.SimpleString>
+      </SimpleString>
     );
   }
 
@@ -119,9 +132,9 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
     }
 
     return (
-      <Acc.Renderers.SimpleString>
-        <Acc.Content value={x => x.claimsMessages.noClosedClaims} />
-      </Acc.Renderers.SimpleString>
+      <SimpleString>
+        <Content value={x => x.claimsMessages.noClosedClaims} />
+      </SimpleString>
     );
   }
 
@@ -144,7 +157,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
             <ClaimTable.Custom
               header={x => x.claimsLabels.period}
               qa="period"
-              value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
+              value={x => <ClaimPeriodDate claim={x} />}
             />
             <ClaimTable.Currency
               header={x => x.claimsLabels.forecastCosts}
@@ -167,9 +180,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
               header={x => x.claimsLabels.actionHeader}
               hideHeader
               qa="link"
-              value={x => (
-                <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />
-              )}
+              value={x => <ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />}
             />
           </ClaimTable.Table>
         )}

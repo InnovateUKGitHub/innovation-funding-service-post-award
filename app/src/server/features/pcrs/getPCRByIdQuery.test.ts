@@ -1,25 +1,25 @@
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import {
-  PCRItemForAccountNameChangeDto,
-  PCRItemForPartnerAdditionDto,
-  PCRItemForProjectSuspensionDto,
-  PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto,
-} from "@framework/dtos";
-import {
-  CostCategoryType,
-  PCRItemStatus,
-  PCRItemType,
-  PCRPartnerType,
-  PCRProjectRole,
-  PCRStatus,
-  TypeOfAid,
-} from "@framework/constants";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { RecordType } from "@framework/entities";
+import { CostCategoryType } from "@framework/constants/enums";
+import {
+  PCRItemStatus,
+  PCRStatus,
+  PCRItemType,
+  PCRProjectRole,
+  PCRPartnerType,
+} from "@framework/constants/pcrConstants";
+import { TypeOfAid } from "@framework/constants/project";
+import {
+  PCRItemForTimeExtensionDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForAccountNameChangeDto,
+  PCRItemForProjectSuspensionDto,
+  PCRItemForPartnerAdditionDto,
+} from "@framework/dtos/pcrDtos";
+import { RecordType } from "@framework/entities/recordType";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {

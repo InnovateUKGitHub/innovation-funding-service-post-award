@@ -1,5 +1,7 @@
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 import { GetClaimDetailDocumentsQuery } from "@server/features/documents/getClaimDetailDocumentsSummary";
-import { Authorisation, ProjectRole } from "@framework/types";
+
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetClaimDetailDocumentsQuery", () => {

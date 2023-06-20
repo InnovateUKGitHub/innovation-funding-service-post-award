@@ -1,11 +1,11 @@
-import { IContext } from "@framework/types";
-import { dateComparator } from "@framework/util";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
-import { QueryBase } from "../common";
 import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 import { Logger } from "@shared/developmentLogger";
+import { IContext } from "@framework/types/IContext";
+import { dateComparator } from "@framework/util/comparator";
+import { QueryBase } from "../common/queryBase";
 
 export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummaryDto[]> {
   public logger: Logger = new Logger("DocumentsSummaryQueryBase");

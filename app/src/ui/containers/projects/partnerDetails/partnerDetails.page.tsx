@@ -1,18 +1,14 @@
-import { getAuthRoles, ProjectRole } from "@framework/types";
-
 import { BaseProps, defineRoute } from "../../containerBase";
-import {
-  Content,
-  Page,
-  BackLink,
-  Projects,
-  Section,
-  SummaryList,
-  SummaryListItem,
-  Renderers,
-  Link,
-} from "../../../components";
 import { usePartnerDetailsQuery } from "./partnerDetails.logic";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ProjectRole } from "@framework/constants/project";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { Title } from "@ui/components/projects/title";
 
 interface Params {
   projectId: ProjectId;
@@ -33,7 +29,7 @@ const PartnerDetailsPage = (props: BaseProps & Params) => {
           {backToProjectDetailsLink}
         </BackLink>
       }
-      pageTitle={<Projects.Title {...project} />}
+      pageTitle={<Title {...project} />}
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
@@ -42,17 +38,17 @@ const PartnerDetailsPage = (props: BaseProps & Params) => {
           <SummaryListItem
             label={x => x.pages.partnerDetails.projectContactLabels.partnerName}
             qa="partner-name"
-            content={<Renderers.SimpleString>{partner.name}</Renderers.SimpleString>}
+            content={<SimpleString>{partner.name}</SimpleString>}
           />
           <SummaryListItem
             label={x => x.pages.partnerDetails.projectContactLabels.partnerType}
             qa="partner-type"
-            content={<Renderers.SimpleString>{partner.type}</Renderers.SimpleString>}
+            content={<SimpleString>{partner.type}</SimpleString>}
           />
           <SummaryListItem
             label={x => x.projectContactLabels.partnerPostcode}
             qa="partner-postcode"
-            content={<Renderers.SimpleString>{partner.postcode}</Renderers.SimpleString>}
+            content={<SimpleString>{partner.postcode}</SimpleString>}
             action={
               isFc || isPm ? (
                 <Link

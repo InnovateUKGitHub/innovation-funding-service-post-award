@@ -1,11 +1,15 @@
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { PCRPrepareItemRoute, FinancialVirementParams, VirementCostsParams } from "@ui/containers";
-import { FinancialLoanVirementDto, IContext, ILinkInfo } from "@framework/types";
-import { BadRequestError } from "@server/features/common";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { FinancialLoanVirementDtoValidator } from "@ui/validators";
+import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetFinancialLoanVirementQuery } from "@server/features/financialVirements/getFinancialLoanVirementQuery";
 import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
+import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/forms/formHandlerBase";
+import { BadRequestError } from "@shared/appError";
+import { VirementCostsParams } from "@ui/containers/pcrs/financialVirements/editPage";
+import { FinancialVirementParams } from "@ui/containers/pcrs/financialVirements/editPartnerLevel.page";
+import { PCRPrepareItemRoute } from "@ui/containers/pcrs/pcrItemWorkflow";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { FinancialLoanVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
 
 export class VirementLoanEditHandler extends StandardFormHandlerBase<FinancialVirementParams, "financialLoanVirement"> {
   constructor() {

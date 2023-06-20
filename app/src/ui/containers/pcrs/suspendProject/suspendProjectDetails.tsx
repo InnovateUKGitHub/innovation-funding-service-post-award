@@ -1,12 +1,14 @@
-import { getAuthRoles } from "@framework/types";
+import { PCRItemForProjectSuspensionDto } from "@framework/dtos/pcrDtos";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { EditorStatus } from "@ui/constants/enums";
-import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
-import * as ACC from "@ui/components";
-import { useContent } from "@ui/hooks";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
+import { useContent } from "@ui/hooks/content.hook";
+import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
-const Form = ACC.createTypedForm<PCRItemForProjectSuspensionDto>();
+const Form = createTypedForm<PCRItemForProjectSuspensionDto>();
 
 export const SuspendProjectDetails = (
   props: PcrStepProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator>,
@@ -22,12 +24,12 @@ export const SuspendProjectDetails = (
   return (
     <>
       {isPm && (
-        <ACC.Section>
-          <ACC.Renderers.SimpleString>{suspendProjectIntro}</ACC.Renderers.SimpleString>
-        </ACC.Section>
+        <Section>
+          <SimpleString>{suspendProjectIntro}</SimpleString>
+        </Section>
       )}
 
-      <ACC.Section>
+      <Section>
         <Form.Form
           data={props.pcrItem}
           isSaving={props.status === EditorStatus.Saving}
@@ -59,7 +61,7 @@ export const SuspendProjectDetails = (
 
           <Form.SubmitAndContinue />
         </Form.Form>
-      </ACC.Section>
+      </Section>
     </>
   );
 };

@@ -1,16 +1,17 @@
-import * as Entites from "@framework/entities";
-import { Authorisation, ProjectRole } from "@framework/types";
-import { DocumentDescription } from "@framework/constants";
-import { ValidationError } from "@server/features/common";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { RecordType } from "@framework/entities/recordType";
+import { Authorisation } from "@framework/types/authorisation";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ValidationError } from "@shared/appError";
 
 describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
   it("should upload a project change request item document", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -65,7 +66,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -93,7 +94,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -117,7 +118,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     context.config.options.maxFileSize = 10;
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -142,7 +143,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -167,7 +168,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -190,7 +191,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -211,7 +212,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -235,7 +236,7 @@ describe("Access control", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",
@@ -264,7 +265,7 @@ describe("Access control", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
       type: "Scope change",

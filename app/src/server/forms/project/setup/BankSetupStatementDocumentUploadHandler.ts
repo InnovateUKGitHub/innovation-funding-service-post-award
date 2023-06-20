@@ -1,11 +1,17 @@
-import { configuration } from "@server/features/common";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { DocumentDescription, IContext, IFileWrapper, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { ProjectSetupBankStatementParams, ProjectSetupBankStatementRoute } from "@ui/containers";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
 import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { configuration } from "@server/features/common/config";
+import {
+  ProjectSetupBankStatementParams,
+  ProjectSetupBankStatementRoute,
+} from "@ui/containers/projects/setup/projectSetupBankStatement.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class BankSetupStatementDocumentUploadHandler extends MultipleFileFormHandlerBase<
   ProjectSetupBankStatementParams,

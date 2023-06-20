@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import cx from "classnames";
-
-import { isNumber } from "@framework/util";
+import { isNumber } from "@framework/util/numberHelper";
 
 interface CurrentArgs {
   value: number | null;

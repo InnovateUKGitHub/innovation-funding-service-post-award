@@ -1,33 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Pending } from "@shared/pending";
-import { IClientUser, LoadingStatus } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
-import { scrollToTheTopSmoothly } from "@framework/util";
 import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
+import { LoadingStatus } from "@framework/constants/enums";
+import { IClientUser } from "@framework/types/IUser";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
+import { DataLoadAction, dataLoadAction } from "../actions/common/dataLoad";
 import {
-  DataLoadAction,
-  dataLoadAction,
-  EditorErrorAction,
+  UpdateEditorAction,
   EditorSubmitAction,
   EditorSuccessAction,
-  handleEditorError,
+  EditorErrorAction,
+  updateEditorAction,
   handleEditorSubmit,
   handleEditorSuccess,
+  handleEditorError,
   resetEditor,
-  RootActionsOrThunk,
-  UpdateEditorAction,
-  updateEditorAction,
-} from "../actions";
-import {
-  DataState,
-  DataStateKeys,
-  EditorState,
-  EditorStateKeys,
-  IDataStore,
-  IEditorStore,
-  RootState,
-} from "../reducers";
+} from "../actions/common/editorActions";
+import { RootActionsOrThunk } from "../actions/root";
+import { IDataStore, DataStateKeys } from "../reducers/dataReducer";
+import { IEditorStore, EditorStateKeys } from "../reducers/editorsReducer";
+import { DataState, RootState, EditorState } from "../reducers/rootReducer";
 
 type InferDataStore<T> = T extends IDataStore<infer U> ? U : never;
 export type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;

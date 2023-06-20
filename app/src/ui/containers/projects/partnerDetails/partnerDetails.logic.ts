@@ -2,7 +2,8 @@ import { useLazyLoadQuery } from "react-relay";
 import { partnerDetailsQuery } from "./PartnerDetails.query";
 import { PartnerDetailsQuery, PartnerDetailsQuery$data } from "./__generated__/PartnerDetailsQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { mapToPartnerDto, mapToProjectDto } from "@gql/dtoMapper";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 
 type ProjectGql = GQL.NodeSelector<PartnerDetailsQuery$data, "Acc_Project__c">;
 

@@ -1,4 +1,4 @@
-import { IPicklistEntry } from "@framework/types";
+import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "../features/common/appError";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";

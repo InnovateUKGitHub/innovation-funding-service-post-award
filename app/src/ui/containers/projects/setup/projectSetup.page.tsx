@@ -1,11 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, useStores } from "@ui/redux";
-import * as Dtos from "@framework/dtos";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import * as ACC from "@ui/components";
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus, ProjectRole } from "@framework/constants";
+import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { UL } from "@ui/components/layout/list";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { TaskListSection, Task, TaskStatus } from "@ui/components/taskList";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Title } from "@ui/components/projects/title";
 
 export interface ProjectSetupParams {
   projectId: ProjectId;
@@ -13,22 +25,22 @@ export interface ProjectSetupParams {
 }
 
 interface Data {
-  project: Pending<Dtos.ProjectDto>;
-  partner: Pending<Dtos.PartnerDto>;
-  editor: Pending<IEditorStore<Dtos.PartnerDto, PartnerDtoValidator>>;
+  project: Pending<ProjectDto>;
+  partner: Pending<PartnerDto>;
+  editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
 }
 
 interface Callbacks {
-  onUpdate: (saving: boolean, dto: Dtos.PartnerDto) => void;
+  onUpdate: (saving: boolean, dto: PartnerDto) => void;
 }
 
 interface CombinedData {
-  project: Dtos.ProjectDto;
-  partner: Dtos.PartnerDto;
-  editor: IEditorStore<Dtos.PartnerDto, PartnerDtoValidator>;
+  project: ProjectDto;
+  partner: PartnerDto;
+  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
-const Form = ACC.createTypedForm<Dtos.PartnerDto>();
+const Form = createTypedForm<PartnerDto>();
 class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -37,34 +49,34 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
+    return <PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
   private renderContents({ project, partner, editor }: CombinedData) {
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>
-            <ACC.Content value={x => x.pages.projectSetup.backLink} />
-          </ACC.BackLink>
+          <BackLink route={this.props.routes.projectDashboard.getLink({})}>
+            <Content value={x => x.pages.projectSetup.backLink} />
+          </BackLink>
         }
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
         error={editor.error}
         validator={editor.validator}
         project={project}
         partner={partner}
       >
-        <ACC.Section qa="guidance">
-          <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.projectMessages.setupGuidance} />
-          </ACC.Renderers.SimpleString>
-        </ACC.Section>
+        <Section qa="guidance">
+          <SimpleString>
+            <Content value={x => x.projectMessages.setupGuidance} />
+          </SimpleString>
+        </Section>
 
-        <ACC.UL qa="taskList">
-          <ACC.TaskListSection title={x => x.taskList.giveUsInfoSectionTitle} qa="WhatDoYouWantToDo">
-            <ACC.Task
+        <UL qa="taskList">
+          <TaskListSection title={x => x.taskList.giveUsInfoSectionTitle} qa="WhatDoYouWantToDo">
+            <Task
               name={x => x.pages.projectSetup.setSpendProfile}
-              status={partner.spendProfileStatusLabel as ACC.TaskStatus}
+              status={partner.spendProfileStatusLabel as TaskStatus}
               route={this.props.routes.projectSetupSpendProfile.getLink({
                 partnerId: partner.id,
                 projectId: project.id,
@@ -72,14 +84,14 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
               validation={[editor.validator.spendProfileStatus]}
             />
 
-            <ACC.Task
+            <Task
               name={x => x.pages.projectSetup.provideBankDetails}
-              status={partner.bankDetailsTaskStatusLabel as ACC.TaskStatus}
+              status={partner.bankDetailsTaskStatusLabel as TaskStatus}
               route={this.getBankDetailsLink(partner)}
               validation={[editor.validator.bankDetailsTaskStatus]}
             />
 
-            <ACC.Task
+            <Task
               name={x => x.pages.projectSetup.provideProjectLocation}
               status={this.isPostcodeComplete(partner.postcode)}
               route={this.props.routes.projectSetupPostcode.getLink({
@@ -88,8 +100,8 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
               })}
               validation={[editor.validator.postcodeSetupStatus]}
             />
-          </ACC.TaskListSection>
-        </ACC.UL>
+          </TaskListSection>
+        </UL>
 
         <Form.Form
           data={partner}
@@ -102,20 +114,20 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
         >
           <Form.Fieldset>
             <Form.Submit>
-              <ACC.Content value={x => x.pages.projectSetup.complete} />
+              <Content value={x => x.pages.projectSetup.complete} />
             </Form.Submit>
           </Form.Fieldset>
         </Form.Form>
-      </ACC.Page>
+      </Page>
     );
   }
 
   // TODO: remove this temporary solution when we have added the postcodeStatusLabel in SF
-  private isPostcodeComplete(postcode: string | null): ACC.TaskStatus {
+  private isPostcodeComplete(postcode: string | null): TaskStatus {
     return postcode ? "Complete" : "To do";
   }
 
-  private getBankDetailsLink(partner: Dtos.PartnerDto) {
+  private getBankDetailsLink(partner: PartnerDto) {
     if (partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete) {
       return null;
     }

@@ -1,12 +1,9 @@
 import { render } from "@testing-library/react";
-
 import { TestBed, TestBedStore } from "@shared/TestBed";
-import { ProjectContactDto } from "@framework/dtos";
-
 import { ContactsTable, IContactsTable } from "@ui/components/partners/contactsTable";
-
 import { getColumnValues } from "../../../../tests/test-utils/tableHelpers";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 
 describe("<ContactsTable />", () => {
   const stubStores = {

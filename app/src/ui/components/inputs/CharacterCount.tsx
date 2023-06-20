@@ -1,7 +1,6 @@
 import React, { cloneElement, useEffect, useState } from "react";
 import cx from "classnames";
-
-import { SimpleString } from "../renderers";
+import { SimpleString } from "../renderers/simpleString";
 
 export type CharacterTypes =
   | {

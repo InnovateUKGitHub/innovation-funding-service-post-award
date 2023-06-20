@@ -1,4 +1,7 @@
-import { TypedDetails, SectionPanel, Content, DualDetails, getPartnerName } from "@ui/components";
+import { Content } from "@ui/components/content";
+import { TypedDetails, DualDetails } from "@ui/components/details";
+import { SectionPanel } from "@ui/components/layout/sectionPanel";
+import { getPartnerName } from "@ui/components/partners/partnerName";
 import { useProjectParticipants } from "@ui/features/project-participants";
 import type { Partner, Project } from "./projectOverview.logic";
 

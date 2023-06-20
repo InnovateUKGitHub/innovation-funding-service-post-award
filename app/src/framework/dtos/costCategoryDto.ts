@@ -1,5 +1,5 @@
-import { CostCategoryType } from "@framework/constants";
-import { PCROrganisationType } from "@framework/constants";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
 
 export interface CostCategoryDto {
   competitionType: string;

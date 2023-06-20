@@ -1,10 +1,12 @@
 import { DateTime } from "luxon";
-import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
 import { BadRequestError, InActiveProjectError, ValidationError } from "@server/features/common/appError";
-import { ClaimFrequency, ClaimStatus, ForecastDetailsDTO } from "@framework/types";
-import { ISalesforceProfileDetails } from "@server/repositories";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ClaimFrequency } from "@framework/constants/enums";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
+import { UpdateForecastDetailsCommand } from "./updateForecastDetailsCommand";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {
   return {

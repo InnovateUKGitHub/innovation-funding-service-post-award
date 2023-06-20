@@ -1,6 +1,6 @@
 import { SalesforceCostCategoryMapper } from "@server/repositories/mappers/costCategoryMapper";
-import { ISalesforceCostCategory } from "@server/repositories";
-import { PCROrganisationType } from "@framework/constants";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { ISalesforceCostCategory } from "../costCategoriesRepository";
 
 const CostCategoryName = {
   Other_Costs: "Other costs",

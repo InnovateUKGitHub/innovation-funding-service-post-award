@@ -1,5 +1,5 @@
-import { IContext } from "@framework/types";
 import { enCopy, ktpEnCopy, loansEnCopy, sbriEnCopy, sbriIfsEnCopy } from "@copy/data";
+import { IContext } from "@framework/types/IContext";
 import { NonAuthorisedCommandBase } from "../common/commandBase";
 
 const defaultContentMarker = new Date("1970/01/01");

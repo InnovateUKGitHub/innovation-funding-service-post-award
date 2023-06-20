@@ -1,7 +1,8 @@
-import { getPartnerName } from "@ui/components/partners";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { ReactNode } from "react";
+import { getPartnerName } from "./partners/partnerName";
 import { createTypedTable } from "./table";
-import { PartnerDtoGql, ProjectContactDto } from "@framework/dtos";
 
 type PartnersTableType = {
   contact: ProjectContactDto;

@@ -1,8 +1,7 @@
 import { render } from "@testing-library/react";
-
 import { LinksList, LinksListProps } from "@ui/components/linksList";
 import { TestBed } from "@shared/TestBed";
-import { Link } from "./links";
+import { Link } from "@ui/components/links";
 
 describe("<LinksList />", () => {
   describe("@returns", () => {

@@ -1,23 +1,34 @@
-import * as ACC from "@ui/components";
-import * as Dtos from "@framework/dtos";
-import { DocumentDescription } from "@framework/constants";
-import { useContent } from "@ui/hooks";
-import { useStores } from "@ui/redux";
+import { useContent } from "@ui/hooks/content.hook";
 import { EditorStatus } from "@ui/constants/enums";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { UL } from "@ui/components/layout/list";
+import { Section } from "@ui/components/layout/section";
+import { ExternalLink } from "@ui/components/renderers/externalLink";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { H2 } from "@ui/components/typography/Heading.variants";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
-export type BasePcrProps = PcrStepProps<Dtos.PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
+export type BasePcrProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
 
 export interface JesStepUIProps extends BasePcrProps {
-  documents: Dtos.DocumentSummaryDto[];
-  onSubmit: (dto: Dtos.MultipleDocumentUploadDto) => void;
-  onFileChange: (isSaving: boolean, dto: Dtos.MultipleDocumentUploadDto) => void;
-  onFileDelete: (dto: Dtos.MultipleDocumentUploadDto, document: Dtos.DocumentSummaryDto) => void;
+  documents: DocumentSummaryDto[];
+  onSubmit: (dto: MultipleDocumentUploadDto) => void;
+  onFileChange: (isSaving: boolean, dto: MultipleDocumentUploadDto) => void;
+  onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const UploadForm = ACC.createTypedForm<Dtos.MultipleDocumentUploadDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 export const JesStepUI = ({ documents, documentsEditor, project, ...props }: JesStepUIProps) => {
   const { getContent } = useContent();
@@ -38,25 +49,23 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
     const applicationUrl =
       "https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system";
     const academicsApplicationLink = (
-      <ACC.Renderers.ExternalLink href={applicationUrl}>{jesApplyingViaSystemLinkContent}</ACC.Renderers.ExternalLink>
+      <ExternalLink href={applicationUrl}>{jesApplyingViaSystemLinkContent}</ExternalLink>
     );
 
-    const externalJesLink = (
-      <ACC.Renderers.ExternalLink href="https://je-s.rcuk.ac.uk">{jesWebsiteLinkContent}</ACC.Renderers.ExternalLink>
-    );
+    const externalJesLink = <ExternalLink href="https://je-s.rcuk.ac.uk">{jesWebsiteLinkContent}</ExternalLink>;
 
     return (
       <>
-        <ACC.Renderers.SimpleString>{jesIntroduction}</ACC.Renderers.SimpleString>
+        <SimpleString>{jesIntroduction}</SimpleString>
 
-        <ACC.UL>
+        <UL>
           <li>{academicsApplicationLink}</li>
           <li>
             {jesListProcessItem2} {externalJesLink}
           </li>
-        </ACC.UL>
+        </UL>
 
-        <ACC.Renderers.SimpleString>{jesUploadSupport}</ACC.Renderers.SimpleString>
+        <SimpleString>{jesUploadSupport}</SimpleString>
 
         <UploadForm.Form
           enctype="multipart"
@@ -68,7 +77,7 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
           <UploadForm.Fieldset qa="documentUpload">
             <UploadForm.Hidden name="description" value={() => DocumentDescription.JeSForm} />
 
-            <ACC.DocumentGuidance />
+            <DocumentGuidance />
 
             <UploadForm.MultipleFileUpload
               labelHidden
@@ -97,13 +106,13 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
     );
   };
 
-  const Form = ACC.createTypedForm<Dtos.PCRItemForPartnerAdditionDto>();
+  const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
 
   return (
-    <ACC.Section>
-      <ACC.H2>{jesHeading}</ACC.H2>
+    <Section>
+      <H2>{jesHeading}</H2>
       {isKTP ? (
-        <ACC.ValidationMessage
+        <ValidationMessage
           messageType="info"
           message={x => x.pages.pcrAddPartnerJes.jesIntroduction}
           qa="jes-form-ktp-not-needed-info-message"
@@ -112,13 +121,13 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
         <>
           {renderForm()}
 
-          <ACC.Section>
-            <ACC.DocumentEdit
+          <Section>
+            <DocumentEdit
               qa="je-s-document"
               onRemove={document => props.onFileDelete(documentsEditor.data, document)}
               documents={documents}
             />
-          </ACC.Section>
+          </Section>
         </>
       )}
 
@@ -136,7 +145,7 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };
 
@@ -145,7 +154,7 @@ export const JeSStep = (props: BasePcrProps) => {
   const pendingPayload = stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id);
 
   return (
-    <ACC.Loader
+    <Loader
       pending={pendingPayload}
       render={documents => (
         <JesStepUI

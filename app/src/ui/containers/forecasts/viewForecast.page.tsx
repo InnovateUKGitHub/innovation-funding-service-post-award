@@ -1,21 +1,23 @@
+import { PartnerStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { ClaimLastModified } from "@ui/components/claims/claimLastModified";
+import { ForecastTable } from "@ui/components/claims/forecastTable";
+import { Content } from "@ui/components/content";
+import { Warning } from "@ui/components/forecasts/warning";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { getPartnerName } from "@ui/components/partners/partnerName";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { PrepareClaimRoute } from "../claims/prepare.page";
 import { BaseProps, defineRoute } from "../containerBase";
-import { getAuthRoles, PartnerStatus, ProjectRole } from "@framework/types";
-import {
-  Page,
-  Projects,
-  BackLink,
-  Content,
-  Claims,
-  Link,
-  ValidationMessage,
-  Section,
-  Renderers,
-  Forecasts,
-  getPartnerName,
-} from "@ui/components";
-import { PrepareClaimRoute } from "@ui/containers";
-import { useViewForecastData, Data } from "./viewForecast.logic";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
+import { Data, useViewForecastData } from "./viewForecast.logic";
 
 interface ViewForecastParams {
   projectId: ProjectId;
@@ -61,7 +63,7 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
 
   return (
     <Page
-      pageTitle={<Projects.Title title={data.project.title} projectNumber={data.project.projectNumber} />}
+      pageTitle={<Title title={data.project.title} projectNumber={data.project.projectNumber} />}
       projectStatus={data.project.status}
       partnerStatus={data.partner.partnerStatus}
       backLink={<BackLink route={backLink}>{backText}</BackLink>}
@@ -74,9 +76,9 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
       )}
 
       <Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
-        <Renderers.Messages messages={props.messages} />
+        <Messages messages={props.messages} />
 
-        <Forecasts.Warning {...data} />
+        <Warning {...data} />
 
         {isPartnerFc && data.partner.newForecastNeeded && (
           <ValidationMessage
@@ -87,18 +89,18 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
         )}
 
         {data.partner.overheadRate !== null && (
-          <Renderers.SimpleString qa="overhead-costs">
+          <SimpleString qa="overhead-costs">
             <Content value={x => x.forecastsLabels.overheadCosts} />
-            <Renderers.Percentage value={data.partner.overheadRate} />
-          </Renderers.SimpleString>
+            <Percentage value={data.partner.overheadRate} />
+          </SimpleString>
         )}
 
-        <Claims.ForecastTable data={data} hideValidation={isProjectPmOrMo} />
+        <ForecastTable data={data} hideValidation={isProjectPmOrMo} />
       </Section>
 
       <Section qa="viewForecastUpdate">
         {data.partner.forecastLastModifiedDate && (
-          <Claims.ClaimLastModified modifiedDate={data.partner.forecastLastModifiedDate} />
+          <ClaimLastModified modifiedDate={data.partner.forecastLastModifiedDate} />
         )}
 
         {showUpdateSection && (

@@ -1,16 +1,15 @@
-import { GetClaimDetailsQuery } from "@server/features/claimDetails";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import {
-  ClaimDetailDocumentsRoute,
-  EditClaimDetailsParams,
-  EditClaimLineItemsRoute,
-  PrepareClaimRoute,
-} from "@ui/containers";
-import { ClaimDetailsDto, IContext, ILinkInfo } from "@framework/types";
 import { range } from "@shared/range";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { GetClaimDetailsQuery } from "@server/features/claimDetails/getClaimDetailsQuery";
+import { ClaimDetailDocumentsRoute } from "@ui/containers/claims/claimDetailDocuments.page";
+import { EditClaimDetailsParams, EditClaimLineItemsRoute } from "@ui/containers/claims/editClaimLineItems.page";
+import { PrepareClaimRoute } from "@ui/containers/claims/prepare.page";
+import { StandardFormHandlerBase, IFormButton, IFormBody } from "./formHandlerBase";
 
 export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditClaimDetailsParams, "claimDetail"> {
   constructor() {

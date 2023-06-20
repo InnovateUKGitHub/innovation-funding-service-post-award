@@ -1,14 +1,15 @@
 import mimeTypes from "mime-types";
 import express, { Request, Response } from "express";
-
-import { IAppError, IFileWrapper, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@shared/appError";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
-import { configuration } from "@server/features/common";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { upload } from "../forms/diskStorage";
 import { readFileSync } from "fs";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { IAppError } from "@framework/types/IAppError";
+import { ISessionUser } from "@framework/types/IUser";
+import { configuration } from "@server/features/common/config";
 
 export class ServerFileWrapper implements IFileWrapper {
   constructor(file: Express.Multer.File) {

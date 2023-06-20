@@ -1,5 +1,6 @@
-import { useStores } from "@ui/redux";
-import { ErrorContainer, NotFoundError } from "../components/errors";
+import { ErrorContainer } from "@ui/components/errors/ErrorContainer";
+import { NotFoundError } from "@ui/components/errors/NotFoundError";
+import { useStores } from "@ui/redux/storesProvider";
 import { defineRoute } from "./containerBase";
 
 /**

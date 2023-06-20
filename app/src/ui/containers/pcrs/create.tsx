@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants";
+import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "../containerBase";
 import { PcrCreateSelectedContainer } from "./modifyOptions/PcrModifyOptions";
 

@@ -1,8 +1,8 @@
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { contextProvider } from "@server/features/common/contextProvider";
-import { processDto } from "@shared/processResponse";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
-import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails";
-import { ForecastDetailsDTO } from "@framework/dtos";
+import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails/updateInitialForecastDetailsCommand";
+import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IInitialForecastDetailsApi {

@@ -1,8 +1,5 @@
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import {
-  GetFilteredCostCategoriesQuery,
-  GetUnfilteredCostCategoriesQuery,
-} from "../../../../src/server/features/claims";
+import { GetUnfilteredCostCategoriesQuery, GetFilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
 
 describe("GetUnfilteredCostCategoriesQuery", () => {
   test("returns all categories", async () => {

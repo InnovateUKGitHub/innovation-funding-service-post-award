@@ -1,6 +1,7 @@
-import { PCROrganisationType } from "@framework/constants";
-import { PartnerDto } from "@framework/dtos";
-import { CostCategory, Partner } from "@framework/entities";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { CostCategory } from "@framework/entities/costCategory";
+import { Partner } from "@framework/entities/partner";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 
 import { TestContext } from "@tests/test-utils/testContextProvider";

@@ -1,11 +1,12 @@
 import { createStore } from "redux";
 import { render } from "@testing-library/react";
-import { IClientUser, ProjectRole } from "@framework/types";
-import { routeConfig } from "@ui/routing";
 import { IStores } from "@ui/redux/storesProvider";
-import { rootReducer } from "@ui/redux/reducers";
-import { NavigationArrows } from "@ui/components";
 import { TestBed } from "@shared/TestBed";
+import { ProjectRole } from "@framework/constants/project";
+import { IClientUser } from "@framework/types/IUser";
+import { NavigationArrows } from "./navigationArrows";
+import { rootReducer } from "@ui/redux/reducers/rootReducer";
+import { routeConfig } from "@ui/routing/routeConfig";
 
 describe("<NavigationArrows />", () => {
   const routes = routeConfig;

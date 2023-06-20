@@ -1,7 +1,6 @@
 import { renderHook } from "@testing-library/react";
-
-import { GDSModules, useGovFrontend } from "@ui/hooks";
 import { hookTestBed } from "@shared/TestBed";
+import { GDSModules, useGovFrontend } from "./gov-frontend.hook";
 
 describe("useGovFrontend()", () => {
   const stubGdsInit = jest.fn();

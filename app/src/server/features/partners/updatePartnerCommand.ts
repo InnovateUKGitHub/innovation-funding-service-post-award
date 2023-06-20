@@ -1,29 +1,27 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
-  Authorisation,
-  BankCheckStatus,
-  BankDetailsTaskStatus,
-  IContext,
-  PartnerDto,
-  PartnerStatus,
-  ProjectRole,
-} from "@framework/types";
-import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import {
   BankCheckStatusMapper,
   BankDetailsTaskStatusMapper,
   PartnerStatusMapper,
 } from "@server/features/partners/mapToPartnerDto";
-import { ISalesforcePartner } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { isBoolean, isNumber } from "@framework/util";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummaryQuery";
 import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";
-import { GetProjectStatusQuery } from "../projects";
 import { GetBankVerificationDetailsByIdQuery } from "./getBankVerificationDetailsByIdQuery";
+import { PartnerStatus, BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforcePartner } from "@server/repositories/partnersRepository";
+import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
+import { isBoolean } from "@framework/util/booleanHelper";
+import { isNumber } from "@framework/util/numberHelper";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
 export class UpdatePartnerCommand extends CommandBase<boolean> {

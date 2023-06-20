@@ -1,9 +1,9 @@
 import { Results } from "@ui/validation/results";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { IAppError } from "@framework/types/IAppError";
-import { ErrorCode } from "@framework/constants";
 import { InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
 import { createAction } from "./createAction";
+import { ErrorCode } from "@framework/constants/enums";
 
 export type UpdateEditorAction = ReturnType<typeof updateEditorAction>;
 export type EditorSubmitAction = ReturnType<typeof handleEditorSubmit>;

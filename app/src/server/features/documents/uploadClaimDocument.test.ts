@@ -1,9 +1,11 @@
 import { UploadClaimDocumentCommand } from "@server/features/documents/uploadClaimDocument";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
-import { ClaimStatus, DocumentDescription } from "@framework/constants";
-import { Authorisation, ProjectRole } from "@framework/types";
 import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 
 const validStatus = [
   ClaimStatus.DRAFT,

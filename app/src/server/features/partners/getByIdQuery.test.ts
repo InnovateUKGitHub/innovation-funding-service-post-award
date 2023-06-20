@@ -1,16 +1,16 @@
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
-import {
-  BankCheckStatus,
-  BankDetailsTaskStatus,
-  PartnerClaimStatus,
-  PartnerDto,
-  PartnerStatus,
-  PostcodeTaskStatus,
-  ProjectRole,
-  SpendProfileStatus,
-} from "@framework/types";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import {
+  PostcodeTaskStatus,
+  PartnerClaimStatus,
+  PartnerStatus,
+  SpendProfileStatus,
+  BankDetailsTaskStatus,
+  BankCheckStatus,
+} from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {

@@ -1,12 +1,11 @@
 import { TestBed, TestBedStore } from "@shared/TestBed";
-
 import { createPartnerDto } from "@framework/util/stubDtos";
-import { PartnerDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { renderHook } from "@testing-library/react";
 import { ProjectParticipantProvider, useProjectParticipants } from "@ui/features/project-participants";
-import { LoadingStatus } from "@framework/constants";
 import { noop } from "@ui/helpers/noop";
+import { LoadingStatus } from "@framework/constants/enums";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 
 describe("useProjectParticipants", () => {
   const setup = (stubProjectId: ProjectId | undefined, stubPartnerQuery: Pending<PartnerDto[] | undefined>) => {

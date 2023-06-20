@@ -1,22 +1,24 @@
 import { useState, useCallback } from "react";
-
 import { Pending } from "@shared/pending";
-import { CompanyDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { useStores } from "@ui/redux";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
-import { useContent } from "@ui/hooks";
-import { useMounted } from "@ui/features";
+import { useContent } from "@ui/hooks/content.hook";
 import { noop } from "@ui/helpers/noop";
-import * as ACC from "@ui/components";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-
 import { CompaniesHouseResults } from "./CompaniesHouseResults";
+import { CompanyDto } from "@framework/dtos/companyDto";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
 type CompaniesHouseStepProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
 
-const SearchForm = ACC.createTypedForm<null>();
-const CompanyForm = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const SearchForm = createTypedForm<null>();
+const CompanyForm = createTypedForm<PCRItemForPartnerAdditionDto>();
 
 export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: CompaniesHouseStepProps) => {
   const { companies } = useStores();
@@ -44,7 +46,7 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
   };
 
   return (
-    <ACC.Section qa="company-house" title={getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}>
+    <Section qa="company-house" title={getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}>
       <SearchForm.Form qa="addPartnerForm" data={null} isSaving={props.status === EditorStatus.Saving} onSubmit={noop}>
         <SearchForm.Fieldset
           qa="search-companies-house"
@@ -66,12 +68,10 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
           )}
         </SearchForm.Fieldset>
 
-        <ACC.Loader
+        <Loader
           pending={getCompanies()}
           renderLoading={() => (
-            <ACC.Renderers.SimpleString>
-              {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}
-            </ACC.Renderers.SimpleString>
+            <SimpleString>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}</SimpleString>
           )}
           render={(companyResults, isLoading) => {
             const hasCompaniesResults = companyResults.length > 0;
@@ -80,11 +80,7 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
             const hasNoCompanies = !isLoading && (hasEmptySearchValue || !hasCompaniesResults);
 
             if (isLoadingCompanies) {
-              return (
-                <ACC.Renderers.SimpleString>
-                  {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}
-                </ACC.Renderers.SimpleString>
-              );
+              return <SimpleString>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}</SimpleString>;
             }
 
             return (
@@ -99,9 +95,7 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
                 )}
 
                 {hasNoCompanies && (
-                  <ACC.Renderers.SimpleString>
-                    {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}
-                  </ACC.Renderers.SimpleString>
+                  <SimpleString>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}</SimpleString>
                 )}
               </>
             );
@@ -153,6 +147,6 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
           </CompanyForm.Button>
         </CompanyForm.Fieldset>
       </CompanyForm.Form>
-    </ACC.Section>
+    </Section>
   );
 };

@@ -1,16 +1,17 @@
-import * as ACC from "@ui/components";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { Content } from "@ui/components";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
 import { EditorStatus } from "@ui/constants/enums";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PcrStepProps } from "../pcrWorkflow";
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
 
 export const OtherFundingStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
-  const options: ACC.SelectOption[] = [
+  const options: SelectOption[] = [
     {
       id: "true",
       value: <Content value={x => x.pcrAddPartnerLabels.otherFundsYes} />,
@@ -22,7 +23,7 @@ export const OtherFundingStep = (
   ];
 
   return (
-    <ACC.Section title={x => x.pages.pcrAddPartnerOtherFunding.formSectionTitle}>
+    <Section title={x => x.pages.pcrAddPartnerOtherFunding.formSectionTitle}>
       <Content markdown value={x => x.pages.pcrAddPartnerOtherFunding.guidance} />
       <Form.Form
         qa="addPartnerForm"
@@ -51,13 +52,13 @@ export const OtherFundingStep = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrItem.submitButton} />
+            <Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
             <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };

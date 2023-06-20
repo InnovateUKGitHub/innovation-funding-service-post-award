@@ -1,10 +1,16 @@
-import { PartnerDto, PCRItemForAccountNameChangeDto, PCRStepId } from "@framework/types";
-import { useStores } from "@ui/redux";
-import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { Pending } from "@shared/pending";
-import * as ACC from "../../../components";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { DocumentList } from "@ui/components/documents/DocumentList";
+import { Section } from "@ui/components/layout/section";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -23,36 +29,36 @@ const NameChangeSummaryContainer = (
   const multiplePartnerProject = projectPartners.length > 1;
 
   return (
-    <ACC.Section qa="name-change-summary">
-      <ACC.SummaryList qa="name-change-summary-list">
-        <ACC.SummaryListItem
+    <Section qa="name-change-summary">
+      <SummaryList qa="name-change-summary-list">
+        <SummaryListItem
           label={x => x.pcrNameChangeLabels.existingName}
           content={pcrItem.partnerNameSnapshot}
           validation={validator.partnerId}
           qa="currentPartnerName"
           action={multiplePartnerProject && getEditLink(PCRStepId.partnerNameStep, validator.partnerId)}
         />
-        <ACC.SummaryListItem
+        <SummaryListItem
           label={x => x.pcrNameChangeLabels.proposedName}
           content={pcrItem.accountName}
           validation={validator.accountName}
           qa="newPartnerName"
           action={getEditLink(PCRStepId.partnerNameStep, validator.accountName)}
         />
-        <ACC.SummaryListItem
+        <SummaryListItem
           label={x => x.pcrNameChangeLabels.certificate}
           content={
             documents.length > 0 ? (
-              <ACC.DocumentList documents={documents} qa="documentsList" />
+              <DocumentList documents={documents} qa="documentsList" />
             ) : (
-              <ACC.Content value={x => x.documentMessages.noDocumentsUploaded} />
+              <Content value={x => x.documentMessages.noDocumentsUploaded} />
             )
           }
           qa="supportingDocuments"
           action={getEditLink(PCRStepId.filesStep, null)}
         />
-      </ACC.SummaryList>
-    </ACC.Section>
+      </SummaryList>
+    </Section>
   );
 };
 
@@ -71,5 +77,5 @@ export const NameChangeSummary = (
     documents,
     projectPartners,
   });
-  return <ACC.Loader pending={combined} render={pending => <NameChangeSummaryContainer {...props} {...pending} />} />;
+  return <Loader pending={combined} render={pending => <NameChangeSummaryContainer {...props} {...pending} />} />;
 };

@@ -1,14 +1,14 @@
 import {
-  PCRContactRole,
   PCRItemStatus,
+  PCRStatus,
+  PCRContactRole,
   PCROrganisationType,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRStatus,
-  TypeOfAid,
-} from "@framework/constants";
+} from "@framework/constants/pcrConstants";
+import { TypeOfAid } from "@framework/constants/project";
 
 export interface ProjectChangeRequestForCreateEntity {
   items: ProjectChangeRequestItemForCreateEntity[];

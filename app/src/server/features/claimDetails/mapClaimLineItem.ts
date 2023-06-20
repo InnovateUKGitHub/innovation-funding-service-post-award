@@ -1,5 +1,6 @@
-import { ISalesforceClaimLineItem } from "@server/repositories";
-import { ClaimLineItemDto, IContext } from "@framework/types";
+import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceClaimLineItem } from "@server/repositories/claimLineItemRepository";
 
 export default (context: IContext) =>
   (item: ISalesforceClaimLineItem): ClaimLineItemDto => ({

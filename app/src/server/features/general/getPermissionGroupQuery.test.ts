@@ -1,7 +1,7 @@
+import { PermissionGroupIdentifier } from "@framework/constants/enums";
 import { GetPermissionGroupQuery } from "@server/features/general/getPermissionGroupsQuery";
-import { BadRequestError } from "@server/features/common";
-import { PermissionGroupIdentifier } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { BadRequestError } from "../common/appError";
 
 describe("GetPermissionGroupQuery", () => {
   it("returns error if asking for unknown group", async () => {

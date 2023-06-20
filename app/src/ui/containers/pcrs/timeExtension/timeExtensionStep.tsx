@@ -1,18 +1,23 @@
-import * as ACC from "@ui/components";
-import { PCRItemForTimeExtensionDto, PCRTimeExtensionOption } from "@framework/dtos";
-import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
-import { useContent } from "@ui/hooks";
-import { useMounted } from "@ui/features";
+import { PCRTimeExtensionOption, PCRItemForTimeExtensionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { Loader } from "@ui/components/loading";
+import { ShortDateRangeFromDuration, Months } from "@ui/components/renderers/date";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { EditorStatus } from "@ui/constants/enums";
-import { useStores } from "@ui/redux";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useContent } from "@ui/hooks/content.hook";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRTimeExtensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 import React from "react";
+import { PcrStepProps } from "../pcrWorkflow";
 
 interface TimeExtensionProps {
   timeExtensionOptions: PCRTimeExtensionOption[];
 }
 
-const Form = ACC.createTypedForm<PCRItemForTimeExtensionDto>();
+const Form = createTypedForm<PCRItemForTimeExtensionDto>();
 
 const TimeExtensionStep = (
   props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator> & TimeExtensionProps,
@@ -55,11 +60,11 @@ const TimeExtensionStep = (
 
   return (
     <>
-      <ACC.Section>
-        <ACC.Content markdown value={x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint} />
-      </ACC.Section>
+      <Section>
+        <Content markdown value={x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint} />
+      </Section>
 
-      <ACC.Section>
+      <Section>
         <Form.Form
           data={props.pcrItem}
           isSaving={props.status === EditorStatus.Saving}
@@ -72,21 +77,21 @@ const TimeExtensionStep = (
               label={dateLabel}
               name="currentDates"
               value={({ formData }) => (
-                <ACC.Renderers.SimpleString>
-                  <ACC.Renderers.ShortDateRangeFromDuration
+                <SimpleString>
+                  <ShortDateRangeFromDuration
                     startDate={props.project.startDate}
                     months={formData.projectDurationSnapshot}
                   />
-                </ACC.Renderers.SimpleString>
+                </SimpleString>
               )}
             />
             <Form.Custom
               label={durationLabel}
               name="currentDuration"
               value={({ formData }) => (
-                <ACC.Renderers.SimpleString>
-                  <ACC.Renderers.Months months={formData.projectDurationSnapshot} />
-                </ACC.Renderers.SimpleString>
+                <SimpleString>
+                  <Months months={formData.projectDurationSnapshot} />
+                </SimpleString>
               )}
             />
           </Form.Fieldset>
@@ -109,12 +114,9 @@ const TimeExtensionStep = (
                 label={dateLabel}
                 name="proposedDates"
                 value={() => (
-                  <ACC.Renderers.SimpleString>
-                    <ACC.Renderers.ShortDateRangeFromDuration
-                      startDate={props.project.startDate}
-                      months={newProjectDuration}
-                    />
-                  </ACC.Renderers.SimpleString>
+                  <SimpleString>
+                    <ShortDateRangeFromDuration startDate={props.project.startDate} months={newProjectDuration} />
+                  </SimpleString>
                 )}
                 update={() => {
                   return;
@@ -127,9 +129,9 @@ const TimeExtensionStep = (
                 label={durationLabel}
                 name="proposedDuration"
                 value={() => (
-                  <ACC.Renderers.SimpleString>
-                    <ACC.Renderers.Months months={newProjectDuration} />
-                  </ACC.Renderers.SimpleString>
+                  <SimpleString>
+                    <Months months={newProjectDuration} />
+                  </SimpleString>
                 )}
                 update={() => {
                   return;
@@ -142,7 +144,7 @@ const TimeExtensionStep = (
             <Form.Submit>{saveAndContinue}</Form.Submit>
           </Form.Fieldset>
         </Form.Form>
-      </ACC.Section>
+      </Section>
     </>
   );
 };
@@ -154,13 +156,13 @@ export const TimeExtensionStepContainer = (
   const pending = projectChangeRequests.getTimeExtensionOptions(props.pcr.projectId);
 
   return (
-    <ACC.Loader
+    <Loader
       pending={pending}
       render={(timeExtensionOptions, isLoading) =>
         isLoading ? (
-          <ACC.Renderers.SimpleString qa="claimsLoadingMessage">
-            <ACC.Content value={x => x.pages.pcrTimeExtensionStep.loadingTimeExtensionOptions} />
-          </ACC.Renderers.SimpleString>
+          <SimpleString qa="claimsLoadingMessage">
+            <Content value={x => x.pages.pcrTimeExtensionStep.loadingTimeExtensionOptions} />
+          </SimpleString>
         ) : (
           <TimeExtensionStep timeExtensionOptions={timeExtensionOptions} {...props} />
         )

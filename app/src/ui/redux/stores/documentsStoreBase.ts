@@ -1,8 +1,8 @@
-import { scrollToTheTopSmoothly } from "@framework/util";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { IClientUser } from "@framework/types";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { messageSuccess, removeMessages } from "../actions";
+import { IClientUser } from "@framework/types/IUser";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { removeMessages, messageSuccess } from "../actions/common/messageActions";
 import { StoreBase } from "./storeBase";
 
 export abstract class DocumentsStoreBase extends StoreBase {

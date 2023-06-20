@@ -1,4 +1,4 @@
-import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
+import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities/projectChangeRequest";
 import { SalesforceRepositoryBaseWithMapping } from "@server/repositories/salesforceRepositoryBase";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { PCRStatusChangeMapper } from "./mappers/pcrStatusChangeMapper";

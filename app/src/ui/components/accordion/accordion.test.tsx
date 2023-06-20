@@ -1,8 +1,8 @@
 import { act, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-
 import TestBed from "@shared/TestBed";
-import { Accordion, AccordionItem, AccordionProps } from "..";
+import { AccordionProps, Accordion } from "./Accordion";
+import { AccordionItem } from "./AccordionItem";
 
 describe("<Accordion />", () => {
   const createAccordionItem = (uid: string | number, content?: string) => (

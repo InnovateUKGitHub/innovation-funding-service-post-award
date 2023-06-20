@@ -1,8 +1,7 @@
-import { LoadingStatus } from "@framework/constants";
-import { DataLoadAction, routeTransition } from "@ui/redux/actions";
-import { dataReducer } from ".";
-
-const navigate = routeTransition;
+import { LoadingStatus } from "@framework/constants/enums";
+import { DataLoadAction } from "../actions/common/dataLoad";
+import { routeTransition } from "../actions/common/transitionActions";
+import { dataReducer } from "./dataReducer";
 
 const claimDataAction = (id: number, data: unknown, status = 1, error: unknown = {}) =>
   ({
@@ -63,7 +62,7 @@ describe("DataReducer", () => {
     const state2 = dataReducer(state, action);
     expect(state2.claim[id].status).toBe(LoadingStatus.Done);
 
-    const result = dataReducer(state2, navigate());
+    const result = dataReducer(state2, routeTransition());
     expect(result.claim[id].status).toBe(LoadingStatus.Stale);
   });
 
@@ -74,7 +73,7 @@ describe("DataReducer", () => {
     const state2 = dataReducer(state, action);
     expect(state2.claim[id].status).toBe(LoadingStatus.Failed);
 
-    const result = dataReducer(state2, navigate());
+    const result = dataReducer(state2, routeTransition());
     expect(result.claim[id].status).toBe(LoadingStatus.Stale);
   });
 
@@ -85,7 +84,7 @@ describe("DataReducer", () => {
     const state2 = dataReducer(state, action);
     expect(state2.claim[id].status).toBe(LoadingStatus.Done);
 
-    const result = dataReducer(state2, navigate("REPLACE"));
+    const result = dataReducer(state2, routeTransition("REPLACE"));
     expect(result.claim[id].status).toBe(LoadingStatus.Done);
   });
 
@@ -96,7 +95,7 @@ describe("DataReducer", () => {
     const state2 = dataReducer(state, action);
     expect(state2.claim[id].status).toBe(LoadingStatus.Loading);
 
-    const result = dataReducer(state2, navigate());
+    const result = dataReducer(state2, routeTransition());
     expect(result.claim[id].status).toBe(LoadingStatus.Loading);
   });
 });

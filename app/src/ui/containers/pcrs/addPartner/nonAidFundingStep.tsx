@@ -1,12 +1,15 @@
-import * as ACC from "@ui/components";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
 
 export const NonAidFundingStep = ({
   project,
@@ -20,16 +23,16 @@ export const NonAidFundingStep = ({
 
   return (
     <>
-      <ACC.Section qa="non-aid" title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleNonAidFunding}>
+      <Section qa="non-aid" title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleNonAidFunding}>
         {isKTP ? (
-          <ACC.ValidationMessage
+          <ValidationMessage
             messageType="info"
             message={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceNonAidFunding}
           />
         ) : (
-          <ACC.Content markdown value={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceNonAidFunding} />
+          <Content markdown value={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceNonAidFunding} />
         )}
-      </ACC.Section>
+      </Section>
 
       <Form.Form
         qa="saveAndContinue"

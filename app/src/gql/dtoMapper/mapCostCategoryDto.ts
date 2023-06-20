@@ -1,7 +1,7 @@
-import { PCROrganisationType } from "@framework/constants";
-import type { CostCategoryDto } from "@framework/dtos";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { costCategoryTypeMapper } from "@framework/mappers/costCategory";
-import { numberComparator } from "@framework/util";
+import { numberComparator } from "@framework/util/comparator";
 
 /**
  * from the root `Acc_CostCategory__c` node

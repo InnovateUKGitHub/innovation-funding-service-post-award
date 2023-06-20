@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { DateTime } from "luxon";
 import classNames from "classnames";
-import { useDidUpdate } from "@ui/hooks";
 import { useDebounce } from "./input-utils";
 import { InputProps } from "./common";
+import { useDidUpdate } from "@ui/hooks/generic.hook";
 
 interface FullDateInputProps extends InputProps<Date> {
   id?: string;

@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
 import { MonitoringReportWorkflowContainer } from "./MonitoringReportWorkflowContainer";
 

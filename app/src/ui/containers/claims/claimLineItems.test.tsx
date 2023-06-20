@@ -1,7 +1,8 @@
 import { renderHook } from "@testing-library/react";
-import { useClaimLineItemsContent } from "@ui/containers";
+
 import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { useClaimLineItemsContent } from "./claimLineItems.page";
 
 describe("claimLineItems", () => {
   describe("useClaimLineItemsContent()", () => {

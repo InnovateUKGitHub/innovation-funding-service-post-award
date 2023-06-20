@@ -1,9 +1,9 @@
 import { PageTitle } from "@ui/features/page-title";
-
-import { Page, Section } from "../layout";
-import { SimpleString } from "../renderers/simpleString";
-import { ExternalLink } from "../renderers";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { Content } from "../content";
+import { Page } from "../layout/page";
+import { Section } from "../layout/section";
+import { ExternalLink } from "../renderers/externalLink";
 
 const innovateUKLink = "https://www.gov.uk/government/organisations/innovate-uk";
 

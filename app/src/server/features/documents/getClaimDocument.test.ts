@@ -1,4 +1,6 @@
-import { Authorisation, DocumentDto, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { DocumentDto } from "@framework/dtos/documentDto";
+import { Authorisation } from "@framework/types/authorisation";
 import { GetClaimDocumentQuery } from "@server/features/documents/getClaimDocument";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 

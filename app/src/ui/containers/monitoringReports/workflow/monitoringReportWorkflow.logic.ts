@@ -4,9 +4,10 @@ import {
   MonitoringReportWorkflowQuery$data,
 } from "./__generated__/MonitoringReportWorkflowQuery.graphql";
 import { monitoringReportWorkflowQuery } from "./MonitoringReportWorkflow.query";
-import { mapToFullMonitoringReport, mapToProjectDto } from "@gql/dtoMapper";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToMonitoringReportQuestionDtoArray } from "@gql/dtoMapper/mapMonitoringReportQuestions";
+import { mapToFullMonitoringReport } from "@gql/dtoMapper/mapMonitoringReportDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 type ProjectGql = GQL.NodeSelector<MonitoringReportWorkflowQuery$data, "Acc_Project__c">;
 

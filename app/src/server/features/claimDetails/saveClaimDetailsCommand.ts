@@ -1,18 +1,17 @@
-import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import {
-  Authorisation,
-  ClaimDetailKey,
-  ClaimDetailsDto,
-  ClaimLineItemDto,
-  IContext,
-  ProjectRole,
-} from "@framework/types";
-import { ClaimDetailsValidator } from "@ui/validators";
-import { isNumber } from "@framework/util";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
+import { IContext } from "@framework/types/IContext";
+import { isNumber } from "@framework/util/numberHelper";
+import { ISalesforceClaimLineItem } from "@server/repositories/claimLineItemRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { ISalesforceClaimLineItem } from "@server/repositories";
-import { GetUnfilteredCostCategoriesQuery } from "../claims";
-import { GetProjectStatusQuery } from "../projects";
+import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
+import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
+import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 export class SaveClaimDetails extends CommandBase<boolean> {
   constructor(

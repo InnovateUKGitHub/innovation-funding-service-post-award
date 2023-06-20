@@ -1,6 +1,6 @@
-import { PartnerClaimStatus } from "@framework/constants";
-import { ClaimStatus } from "@framework/constants";
-import { PartnerDto } from "@framework/dtos";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { PartnerClaimStatus } from "@framework/constants/partner";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
 /**

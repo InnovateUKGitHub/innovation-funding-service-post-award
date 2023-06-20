@@ -1,7 +1,9 @@
-import { Modal, ModalLink, PrivateModal, Section } from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
-import { ModalConsumer, ModalProvider, ModalRegister } from "@ui/redux";
-import { IGuide } from "@framework/types";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { IGuide } from "@framework/types/IGuide";
+import { ModalProvider, ModalRegister, ModalConsumer } from "@ui/redux/modalProvider";
+import { Section } from "@ui/components/layout/section";
+import { ModalLink } from "@ui/components/links";
+import { Modal, PrivateModal } from "@ui/components/modal";
 
 export const modalGuide: IGuide = {
   name: "Modal",

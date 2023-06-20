@@ -1,5 +1,6 @@
-import { QueryBase } from "@server/features/common";
-import { ClaimDetailsSummaryDto, IContext } from "@framework/types";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 import { mapClaimDetailsSummary } from "./mapClaimDetails";
 
 export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsSummaryDto[]> {

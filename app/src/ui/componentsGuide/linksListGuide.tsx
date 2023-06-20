@@ -1,5 +1,5 @@
-import { IGuide } from "@framework/types";
-import { LinksList } from "../components";
+import { IGuide } from "@framework/types/IGuide";
+import { LinksList } from "@ui/components/linksList";
 
 const links = [
   { url: "test1", text: "Innovate UK" },

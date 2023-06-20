@@ -1,10 +1,10 @@
 import { fireEvent, render, act } from "@testing-library/react";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import TestBed, { TestBedStore } from "@shared/TestBed";
-import { AcademicOrganisationStep } from "@ui/containers/pcrs/addPartner";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { AcademicOrganisationStep } from "./academicOrganisationStep";
 
 describe("<AcademicOrganisationStep />", () => {
   const stubProps = {

@@ -1,4 +1,4 @@
-import { LoanDto } from "@framework/dtos";
+import { LoanDto } from "@framework/dtos/loanDto";
 
 export interface LoanFinancialVirement extends Pick<LoanDto, "id" | "status" | "period"> {
   // Note: Derived from loan status

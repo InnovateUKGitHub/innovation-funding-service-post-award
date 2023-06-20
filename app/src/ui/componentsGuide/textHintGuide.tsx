@@ -1,4 +1,4 @@
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
 import { TextHint } from "../components/layout/textHint";
 
 const sampleText =

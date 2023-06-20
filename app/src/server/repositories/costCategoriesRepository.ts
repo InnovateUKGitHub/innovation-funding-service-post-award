@@ -1,7 +1,7 @@
-import { CostCategory } from "@framework/entities";
-import { PCROrganisationType } from "@framework/constants";
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { SalesforceCostCategoryMapper } from "./mappers/costCategoryMapper";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { CostCategory } from "@framework/entities/costCategory";
 
 export interface ISalesforceCostCategory {
   Id: string;

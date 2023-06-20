@@ -1,4 +1,5 @@
-import { ClaimStatus, IContext } from "@framework/types";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { IContext } from "@framework/types/IContext";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { mapToClaimStatus } from "./mapClaim";
 

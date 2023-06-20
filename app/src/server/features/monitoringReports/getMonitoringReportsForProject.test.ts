@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { GetMonitoringReportsForProject } from "@server/features/monitoringReports/getMonitoringReportsForProject";
-import { MonitoringReportStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 
 describe("GetMonitoringReportsForProject", () => {
   it("returns an object of the right shape", async () => {

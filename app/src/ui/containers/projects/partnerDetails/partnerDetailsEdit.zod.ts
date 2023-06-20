@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { PartnerStatus } from "@framework/constants";
 import { makeZodI18nMap } from "@shared/zodi18n";
+import { PartnerStatus } from "@framework/constants/partner";
 
 export const partnerDetailsEditErrorMap = makeZodI18nMap({ keyPrefix: ["partnerDetailsEdit"] });
 

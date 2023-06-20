@@ -1,15 +1,15 @@
-import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities";
 import {
-  getPCROrganisationType,
-  PCRContactRole,
-  PCRItemStatus,
-  PCRParticipantSize,
-  PCRPartnerType,
-  PCRProjectLocation,
-  PCRProjectRole,
   PCRStatus,
-  TypeOfAid,
-} from "@framework/constants";
+  PCRItemStatus,
+  PCRProjectRole,
+  PCRContactRole,
+  PCRPartnerType,
+  PCRParticipantSize,
+  PCRProjectLocation,
+  getPCROrganisationType,
+} from "@framework/constants/pcrConstants";
+import { TypeOfAid } from "@framework/constants/project";
+import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 

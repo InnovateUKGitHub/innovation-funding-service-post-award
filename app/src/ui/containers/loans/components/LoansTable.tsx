@@ -1,10 +1,14 @@
 import cx from "classnames";
-import { LoanStatus } from "@framework/entities";
-import { ILinkInfo } from "@framework/types";
-import * as ACC from "@ui/components";
 import type { Loan } from "../loanOverview.logic";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { ReactNode } from "react";
+import { LoanStatus } from "@framework/entities/loan-status";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Bold } from "@ui/components/renderers/bold";
+import { Currency } from "@ui/components/renderers/currency";
+import { Button } from "@ui/components/styledButton";
+import { createTypedTable } from "@ui/components/table";
+import { Link } from "@ui/components/links";
 
 export interface LoansTableProps {
   items: Loan[];
@@ -12,7 +16,7 @@ export interface LoansTableProps {
   roles: { readonly isMo: boolean; readonly isFc: boolean; readonly isPm: boolean };
 }
 
-const Drawdown = ACC.createTypedTable<Loan>();
+const Drawdown = createTypedTable<Loan>();
 export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
   const { getContent } = useContent();
 
@@ -57,9 +61,9 @@ export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
         qa="drawdown-forecast-amount"
         classSuffix="numeric"
         value={x => (
-          <ACC.Renderers.Bold>
-            <ACC.Renderers.Currency fractionDigits={0} value={x.forecastAmount} />
-          </ACC.Renderers.Bold>
+          <Bold>
+            <Currency fractionDigits={0} value={x.forecastAmount} />
+          </Bold>
         )}
       />
 
@@ -99,12 +103,12 @@ interface LoanRequestButtonProps {
 
 const LoanRequestButton = ({ disabled, route, children }: LoanRequestButtonProps) => {
   return disabled ? (
-    <ACC.Button disabled styling="Primary" className="govuk-!-margin-bottom-0">
+    <Button disabled styling="Primary" className="govuk-!-margin-bottom-0">
       {children}
-    </ACC.Button>
+    </Button>
   ) : (
-    <ACC.Link route={route} styling="PrimaryButton" className="govuk-!-margin-bottom-0">
+    <Link route={route} styling="PrimaryButton" className="govuk-!-margin-bottom-0">
       {children}
-    </ACC.Link>
+    </Link>
   );
 };

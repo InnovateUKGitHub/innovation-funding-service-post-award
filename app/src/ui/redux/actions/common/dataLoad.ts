@@ -1,5 +1,7 @@
-import { IAppError, IClientUser, LoadingStatus } from "@framework/types";
-import { IDataSelector } from "../../selectors/common";
+import { LoadingStatus } from "@framework/constants/enums";
+import { IAppError } from "@framework/types/IAppError";
+import { IClientUser } from "@framework/types/IUser";
+import { IDataSelector } from "@ui/redux/selectors/common/data";
 import { AsyncThunk, createAction } from "./createAction";
 
 type DataLoadThunk = typeof dataLoadAction;

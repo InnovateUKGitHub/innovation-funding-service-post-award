@@ -1,5 +1,5 @@
+import { ProjectRole } from "@framework/constants/project";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
-import { ProjectRole } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("ProjectsGetDetailsByIdQuery", () => {

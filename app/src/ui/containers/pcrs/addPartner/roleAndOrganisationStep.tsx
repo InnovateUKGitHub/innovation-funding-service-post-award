@@ -1,25 +1,31 @@
 import React from "react";
-import * as ACC from "@ui/components";
-import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { useStores } from "@ui/redux";
-import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { Pending } from "@shared/pending";
 import {
+  PCRProjectRole,
+  PCRPartnerType,
+  PCRParticipantSize,
   getPCROrganisationType,
   PCROrganisationType,
-  PCRParticipantSize,
-  PCRPartnerType,
-  PCRProjectRole,
-} from "@framework/constants";
+} from "@framework/constants/pcrConstants";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Pending } from "@shared/pending";
+import { Content } from "@ui/components/content";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { ValidationMessage } from "@ui/components/validationMessage";
 import { EditorStatus } from "@ui/constants/enums";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PcrStepProps } from "../pcrWorkflow";
+import { Info } from "@ui/components/layout/info";
+import { Option } from "@framework/dtos/option";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   pcrProjectRoles: Option<PCRProjectRole>[];
   pcrPartnerTypes: Option<PCRPartnerType>[];
 }
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
 
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps
@@ -27,18 +33,18 @@ class Component extends React.Component<
   render() {
     const roleOptions = this.getOptions(this.props.pcrItem.projectRole, this.props.pcrProjectRoles);
     const typeOptions = this.getOptions(this.props.pcrItem.partnerType, this.props.pcrPartnerTypes);
-    const commercialWorkOptions: ACC.SelectOption[] = [
+    const commercialWorkOptions: SelectOption[] = [
       {
         id: "true",
-        value: <ACC.Content value={x => x.pcrAddPartnerLabels.commercialWorkYes} />,
+        value: <Content value={x => x.pcrAddPartnerLabels.commercialWorkYes} />,
       },
       {
         id: "false",
-        value: <ACC.Content value={x => x.pcrAddPartnerLabels.commercialWorkNo} />,
+        value: <Content value={x => x.pcrAddPartnerLabels.commercialWorkNo} />,
       },
     ];
     return (
-      <ACC.Section qa="role-and-partner-type" title={x => x.pages.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
+      <Section qa="role-and-partner-type" title={x => x.pages.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}
@@ -46,7 +52,7 @@ class Component extends React.Component<
           onSubmit={() => this.onSave(this.props.pcrItem)}
           onChange={dto => this.onChange(dto)}
         >
-          <ACC.ValidationMessage
+          <ValidationMessage
             messageType="info"
             message={x => x.pages.pcrAddPartnerRoleAndOrganisation.validationMessage}
           />
@@ -82,9 +88,9 @@ class Component extends React.Component<
             />
           </Form.Fieldset>
           <Form.Fieldset heading={x => x.pcrAddPartnerLabels.organisationHeading}>
-            <ACC.Info summary={<ACC.Content value={x => x.pages.pcrAddPartnerRoleAndOrganisation.infoSummary} />}>
-              <ACC.Content markdown value={x => x.pages.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo} />
-            </ACC.Info>
+            <Info summary={<Content value={x => x.pages.pcrAddPartnerRoleAndOrganisation.infoSummary} />}>
+              <Content markdown value={x => x.pages.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo} />
+            </Info>
             <Form.Radio
               name="partnerType"
               hint={x => x.pages.pcrAddPartnerRoleAndOrganisation.organisationTypeHint}
@@ -113,14 +119,14 @@ class Component extends React.Component<
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-continue">
             <Form.Submit>
-              <ACC.Content value={x => x.pcrItem.submitButton} />
+              <Content value={x => x.pcrItem.submitButton} />
             </Form.Submit>
             <Form.Button name="saveAndReturnToSummary" onClick={() => this.onSave(this.props.pcrItem, true)}>
-              <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
+              <Content value={x => x.pcrItem.returnToSummaryButton} />
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>
-      </ACC.Section>
+      </Section>
     );
   }
 
@@ -135,7 +141,7 @@ class Component extends React.Component<
   }
 
   private getOptions<T extends number>(selected: T, options: Option<T>[]) {
-    const filteredOptions: ACC.SelectOption[] = options
+    const filteredOptions: SelectOption[] = options
       .filter(x => x.active)
       .map(x => ({ id: x.value.toString(), value: x.label }));
 
@@ -154,7 +160,7 @@ export const RoleAndOrganisationStep = (
   const pcrPartnerTypes = stores.projectChangeRequests.getPcrPartnerTypes();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={Pending.combine({ pcrProjectRoles, pcrPartnerTypes })}
       render={x => <Component pcrProjectRoles={x.pcrProjectRoles} pcrPartnerTypes={x.pcrPartnerTypes} {...props} />}
     />

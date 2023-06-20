@@ -1,16 +1,17 @@
-import * as ACC from "@ui/components";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { Content } from "@ui/components";
 import { EditorStatus } from "@ui/constants/enums";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
 export const AwardRateStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
   return (
-    <ACC.Section title={x => x.pages.pcrAddPartnerAwardRate.formSectionTitle}>
+    <Section title={x => x.pages.pcrAddPartnerAwardRate.formSectionTitle}>
       <Content markdown value={x => x.pages.pcrAddPartnerAwardRate.guidance} />
       <Form.Form
         qa="addPartnerForm"
@@ -32,13 +33,13 @@ export const AwardRateStep = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrItem.submitButton} />
+            <Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
             <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };

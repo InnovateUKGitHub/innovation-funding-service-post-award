@@ -1,7 +1,8 @@
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
-import { Content, Info } from "@ui/components";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import bytes from "bytes";
+import { Content } from "../content";
+import { Info } from "../layout/info";
 
 /**
  * A "Document Guidance" details pane, which describes what a user can/is allowed to upload.

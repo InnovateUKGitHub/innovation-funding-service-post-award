@@ -1,6 +1,9 @@
-import { RootState } from "../reducers";
-import { DataLoadAction, EditorAction, MessageActions, TransitionActions, ErrorActions } from "./common";
-
+import { RootState } from "../reducers/rootReducer";
+import { DataLoadAction } from "./common/dataLoad";
+import { EditorAction } from "./common/editorActions";
+import { ErrorActions } from "./common/errorActions";
+import { MessageActions } from "./common/messageActions";
+import { TransitionActions } from "./common/transitionActions";
 import { InitaliseAction } from "./initalise";
 
 export type RootActions =

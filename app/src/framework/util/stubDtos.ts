@@ -1,9 +1,15 @@
 import _merge from "lodash.merge";
-import { PCROrganisationType, ProjectMonitoringLevel } from "@framework/constants";
-import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, PCRSummaryDto, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostCategoryType, ILinkInfo, ProjectRole } from "@framework/types";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { ProjectRole, ProjectMonitoringLevel } from "@framework/constants/project";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 type CreateDTO<DTO> = (objectToMerge?: Partial<DTO>) => DTO;
 

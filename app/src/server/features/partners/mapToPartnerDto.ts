@@ -1,16 +1,17 @@
 import {
+  PartnerStatus,
+  SpendProfileStatus,
   BankCheckStatus,
   BankDetailsTaskStatus,
-  getAuthRoles,
   PartnerClaimStatus,
-  PartnerDto,
-  PartnerStatus,
   PostcodeTaskStatus,
-  ProjectRole,
-  SpendProfileStatus,
-} from "@framework/types";
+} from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
-import { Partner } from "@framework/entities";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Partner } from "@framework/entities/partner";
+import { getAuthRoles } from "@framework/types/authorisation";
+
 import { SyncCommandBase } from "../common/commandBase";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {

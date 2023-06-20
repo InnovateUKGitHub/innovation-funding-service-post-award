@@ -1,8 +1,10 @@
-import { Authorisation, getAuthRoles, IContext, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
-import { Partner } from "@framework/entities";
+import { Partner } from "@framework/entities/partner";
+import { Authorisation, getAuthRoles } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceProjectContact, SalesforceRole } from "@server/repositories/projectContactsRepository";
 import { QueryBase } from "../common/queryBase";
-import { ISalesforceProjectContact, SalesforceRole } from "../../repositories";
 
 export interface IRoleInfo {
   projectRoles: ProjectRole;

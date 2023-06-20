@@ -1,28 +1,29 @@
 import { DateTime } from "luxon";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import * as Repositories from "@server/repositories";
-import { InActiveProjectError, ValidationError } from "@server/features/common";
-import {
-  Authorisation,
-  PCRDto,
-  PCRItemDto,
-  PCRItemForAccountNameChangeDto,
-  PCRItemForLoanDrawdownExtensionDto,
-  PCRItemForMultiplePartnerFinancialVirementDto,
-  PCRItemForPartnerWithdrawalDto,
-  PCRItemForProjectSuspensionDto,
-  PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto,
-  PCRStandardItemDto,
-  ProjectRole,
-} from "@framework/types";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ProjectRole } from "@framework/constants/project";
+import {
+  PCRDto,
+  PCRItemDto,
+  PCRStandardItemDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRItemForProjectSuspensionDto,
+  PCRItemForAccountNameChangeDto,
+  PCRItemForPartnerWithdrawalDto,
+  PCRItemForMultiplePartnerFinancialVirementDto,
+  PCRItemForLoanDrawdownExtensionDto,
+} from "@framework/dtos/pcrDtos";
+import { Authorisation } from "@framework/types/authorisation";
+import { PCRStatus, PCRItemType, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { ValidationError } from "@shared/appError";
+import { InActiveProjectError } from "../common/appError";
+import { ISalesforceProject } from "@server/repositories/projectsRepository";
 
-const setCompetitionTypeAsLoans = (x: Repositories.ISalesforceProject) => (x.Acc_CompetitionType__c = "LOANS");
+const setCompetitionTypeAsLoans = (x: ISalesforceProject) => (x.Acc_CompetitionType__c = "LOANS");
 
 describe("UpdatePCRCommand", () => {
   test("throws an error when the project is inactive", async () => {

@@ -1,4 +1,5 @@
-import { BackLink, Content } from "@ui/components";
+import { Content } from "@ui/components/content";
+import { BackLink } from "@ui/components/links";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MonitoringReportWorkflowParams, MonitoringReportWorkflowWorkflow } from "./MonitoringReportWorkflowProps";
 

@@ -1,4 +1,4 @@
-import { ForecastDetailsDTO } from "@framework/dtos";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 

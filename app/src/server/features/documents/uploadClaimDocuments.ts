@@ -1,8 +1,12 @@
-import { BadRequestError, CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
-import { Authorisation, ClaimKey, IContext, ProjectRole } from "@framework/types";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { ClaimKey } from "@framework/types/ClaimKey";
+import { IContext } from "@framework/types/IContext";
+import { BadRequestError, ValidationError } from "../common/appError";
+import { CommandMultipleDocumentBase } from "../common/commandBase";
 
 export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<string[]> {
   protected filesRequired = true;

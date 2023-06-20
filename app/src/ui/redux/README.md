@@ -47,7 +47,7 @@ To make use of these methods by extending on them, both DataStateKeys and Editor
         .
         .
         .
-        fooBars: dataStoreReducer<Dtos.FooBarDto[]>("fooBars")
+        fooBars: dataStoreReducer<FooBarDto[]>("fooBars")
     }
 
 `/src/ui/redux/stores/fooBars.ts`

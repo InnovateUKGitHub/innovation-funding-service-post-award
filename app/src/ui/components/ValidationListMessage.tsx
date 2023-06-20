@@ -1,5 +1,5 @@
-import { UL } from "./layout";
-import { SimpleString } from "./renderers";
+import { UL } from "./layout/list";
+import { SimpleString } from "./renderers/simpleString";
 import { ValidationMessage } from "./validationMessage";
 
 export interface ValidationListMessageProps<MessageContent = JSX.Element | string> {

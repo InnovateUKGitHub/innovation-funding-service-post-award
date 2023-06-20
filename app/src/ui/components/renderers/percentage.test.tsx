@@ -1,6 +1,5 @@
 import { render } from "@testing-library/react";
-
-import { Percentage, Props } from "@ui/components/renderers";
+import { Percentage, Props } from "./percentage";
 
 describe("<Percentage />", () => {
   describe("@renders", () => {

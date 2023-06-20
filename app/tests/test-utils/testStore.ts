@@ -1,16 +1,21 @@
 import { applyMiddleware, createStore } from "redux";
-import { rootReducer, RootState } from "@ui/redux";
-import { dataLoadAction, RootActionsOrThunk } from "@ui/redux/actions";
-import * as Repositories from "@server/repositories";
-import { GetAllQuery as GetAllProjects, GetByIdQuery as GetProjectById } from "@server/features/projects";
-import { GetAllQuery as GetAllPartners, GetByIdQuery as GetPartnerById } from "@server/features/partners";
-import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery as GetAllClaimsForPartner } from "@server/features/claims";
 import thunk from "redux-thunk";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import * as Entities from "@framework/entities";
-import { LoadingStatus } from "@framework/constants";
 import getRootState from "@ui/redux/stores/getRootState";
 import { TestContext } from "./testContextProvider";
+import { LoadingStatus } from "@framework/constants/enums";
+import { Partner } from "@framework/entities/partner";
+import { GetAllClaimsForProjectQuery } from "@server/features/claims/getAllClaimsForProjectQuery";
+import { ISalesforceClaim } from "@server/repositories/claimsRepository";
+import { ISalesforceProject } from "@server/repositories/projectsRepository";
+import { dataLoadAction } from "@ui/redux/actions/common/dataLoad";
+import { RootActionsOrThunk } from "@ui/redux/actions/root";
+import { RootState, rootReducer } from "@ui/redux/reducers/rootReducer";
+import { GetAllQuery as GetAllProjects } from "@server/features/projects/getAllQuery";
+import { GetByIdQuery as GetProjectById } from "@server/features/projects/getDetailsByIdQuery";
+import { GetAllQuery as GetAllPartners } from "@server/features/partners/getAllQuery";
+import { GetByIdQuery as GetPartnerById } from "@server/features/partners/getByIdQuery";
+import { GetAllForPartnerQuery as GetAllClaimsForPartner } from "@server/features/claims/getAllForPartnerQuery";
 
 export class TestStore {
   public getState: () => RootState;
@@ -24,7 +29,7 @@ export class TestStore {
     this.getState = store.getState;
   }
 
-  public async createProject(update?: (item: Repositories.ISalesforceProject) => void) {
+  public async createProject(update?: (item: ISalesforceProject) => void) {
     const project = this.context.testData.createProject(update);
     const projectDto = await this.context.runQuery(new GetProjectById(project.Id));
     const projectDtos = await this.context.runQuery(new GetAllProjects());
@@ -33,7 +38,7 @@ export class TestStore {
     return project;
   }
 
-  public async createPartner(project?: Repositories.ISalesforceProject, update?: (item: Entities.Partner) => void) {
+  public async createPartner(project?: ISalesforceProject, update?: (item: Partner) => void) {
     const partner = this.context.testData.createPartner(project, update);
     const partnerDto = await this.context.runQuery(new GetPartnerById(partner.id));
     const partnerDtos = await this.context.runQuery(new GetAllPartners());
@@ -42,11 +47,7 @@ export class TestStore {
     return partner;
   }
 
-  public async createClaim(
-    partner: Entities.Partner,
-    periodId?: number,
-    update?: (item: Repositories.ISalesforceClaim) => void,
-  ) {
+  public async createClaim(partner: Partner, periodId?: number, update?: (item: ISalesforceClaim) => void) {
     const claim = this.context.testData.createClaim(partner, periodId, update);
     const partnerClaims = await this.context.runQuery(new GetAllClaimsForPartner(partner.id));
     const projectClaims = await this.context.runQuery(new GetAllClaimsForProjectQuery(partner.projectId));

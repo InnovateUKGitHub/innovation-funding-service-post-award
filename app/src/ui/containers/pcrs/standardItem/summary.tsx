@@ -1,12 +1,15 @@
 import React from "react";
-import * as ACC from "@ui/components";
-import { useStores } from "@ui/redux";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRStandardItemDto } from "@framework/dtos";
-import { PCRStandardItemDtoValidator } from "@ui/validators";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { StandardItemStepNames } from "./workflow";
-import { PCRStepId } from "@framework/types";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStandardItemDto } from "@framework/dtos/pcrDtos";
+import { DocumentList } from "@ui/components/documents/DocumentList";
+import { Section } from "@ui/components/layout/section";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRStandardItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
 interface Props {
   documents: DocumentSummaryDto[];
@@ -17,25 +20,21 @@ class SummaryComponent extends React.Component<
 > {
   public render() {
     return (
-      <ACC.Section qa="standard-item-summary">
-        <ACC.SummaryList qa="standard-item-summary-list">
-          <ACC.SummaryListItem
+      <Section qa="standard-item-summary">
+        <SummaryList qa="standard-item-summary-list">
+          <SummaryListItem
             label="Documents"
             content={this.renderDocuments(this.props.documents)}
             qa="supportingDocuments"
             action={this.props.getEditLink(PCRStepId.filesStep, null)}
           />
-        </ACC.SummaryList>
-      </ACC.Section>
+        </SummaryList>
+      </Section>
     );
   }
 
   private renderDocuments(documents: DocumentSummaryDto[]) {
-    return documents.length > 0 ? (
-      <ACC.DocumentList documents={documents} qa="documentsList" />
-    ) : (
-      "No documents uploaded."
-    );
+    return documents.length > 0 ? <DocumentList documents={documents} qa="documentsList" /> : "No documents uploaded.";
   }
 }
 
@@ -45,7 +44,7 @@ export const Summary = (
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
       render={documents => <SummaryComponent {...props} documents={documents} />}
     />

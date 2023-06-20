@@ -1,7 +1,6 @@
 import { fireEvent, render } from "@testing-library/react";
-
 import TestBed from "@shared/TestBed";
-import { DropdownList, DropdownListProps } from "@ui/components/inputs";
+import { DropdownListProps, DropdownList } from "./dropdownList";
 
 const stubOptions = [
   { id: "0", value: "stub value 1", qa: "stub-option-0-qa" },

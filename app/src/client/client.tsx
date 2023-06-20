@@ -4,16 +4,10 @@ import { ClientGraphQLEnvironment } from "@gql/ClientGraphQLEnvironment";
 import { Logger } from "@shared/developmentLogger";
 import { processDto } from "@shared/processResponse";
 import { App } from "@ui/containers/app";
-import {
-  createStores,
-  ModalProvider,
-  ModalRegister,
-  rootReducer,
-  RootState,
-  setupClientMiddleware,
-  StoresProvider,
-} from "@ui/redux";
-import * as Actions from "@ui/redux/actions";
+import { ApiErrorContextProvider } from "@ui/context/api-error";
+import { FormErrorContextProvider } from "@ui/context/form-error";
+import { ModalProvider, ModalRegister } from "@ui/redux/modalProvider";
+import { createStores, StoresProvider } from "@ui/redux/storesProvider";
 import { useEffect, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -23,10 +17,11 @@ import { AnyAction, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 import { clientInternationalisation } from "./clientInternationalisation";
 import { getPolyfills } from "./polyfill";
-import { FormErrorContextProvider } from "@ui/context/form-error";
-import { Result } from "@ui/validation";
-import { ApiErrorContextProvider } from "@ui/context/api-error";
-import { IAppError } from "@framework/types";
+import { setupClientMiddleware } from "@ui/redux/middleware";
+import { IAppError } from "@framework/types/IAppError";
+import { RootState, rootReducer } from "@ui/redux/reducers/rootReducer";
+import { Result } from "@ui/validation/result";
+import { initaliseAction } from "@ui/redux/actions/initalise";
 
 // get servers store to initialise client store
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
@@ -46,7 +41,7 @@ const getStores = () => {
 };
 
 // make sure middleware and reducers have run
-store.dispatch(Actions.initaliseAction());
+store.dispatch(initaliseAction());
 
 const Client = () => {
   const [, setState] = useState(0);

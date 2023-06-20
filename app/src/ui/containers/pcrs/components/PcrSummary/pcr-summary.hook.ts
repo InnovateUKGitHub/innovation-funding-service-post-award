@@ -1,6 +1,5 @@
-import { PCRItemType } from "@framework/types";
+import { PCRItemType } from "@framework/constants/pcrConstants";
 import { useState } from "react";
-
 import { PcrSummaryProps, PcrSummaryResponse } from "./pcr-summary.interface";
 import { partnerSummaryData } from "./summary-sections/reallocate-costs";
 

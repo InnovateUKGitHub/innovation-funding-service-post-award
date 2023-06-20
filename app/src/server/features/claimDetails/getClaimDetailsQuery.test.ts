@@ -1,7 +1,8 @@
 import { DateTime } from "luxon";
-import { Authorisation, ProjectRole } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { GetClaimDetailsQuery } from ".";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { GetClaimDetailsQuery } from "./getClaimDetailsQuery";
 
 describe("GetClaimDetailsQuery", () => {
   it("returns single result", async () => {

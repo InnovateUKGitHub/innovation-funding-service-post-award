@@ -1,5 +1,11 @@
-import express, { RequestHandler } from "express";
-
+import { configuration } from "@server/features/common/config";
+import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
+import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimDocumentsUploadHandler";
+import { ClaimReviewDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimReviewDocumentsDeleteHandler";
+import { ClaimReviewDocumentsUploadHandler } from "@server/forms/claimDocuments/claimReviewDocumentsUploadHandler";
+import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
+import { MonitoringReportPreparePeriodFormHandler } from "@server/forms/monitoringReport/monitoringReportPreparePeriodFormHandler";
+import { PartnerDetailsEditFormHandler } from "@server/forms/partnerDetailsEditFormHandler";
 import { ProjectChangeRequestCreateFormHandler } from "@server/forms/projectChangeRequest/createProjectChangeRequestFormHandler";
 import { ProjectChangeRequestAddTypeFormHandler } from "@server/forms/projectChangeRequest/projectChangeRequestAddTypeFormHandler";
 import { ProjectChangeRequestItemDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentDeleteHandler";
@@ -8,15 +14,6 @@ import { ProjectChangeRequestItemUpdateHandler } from "@server/forms/projectChan
 import { ProjectChangeRequestReasoningDocumentDeleteHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentDeleteHandler";
 import { ProjectChangeRequestReasoningDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningDocumentUploadHandler";
 import { ProjectChangeRequestReasoningUpdateHandler } from "@server/forms/projectChangeRequest/projectChangeRequestReasoningUpdateHandler";
-
-import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
-import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimDocumentsUploadHandler";
-import { ClaimReviewDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimReviewDocumentsDeleteHandler";
-import { ClaimReviewDocumentsUploadHandler } from "@server/forms/claimDocuments/claimReviewDocumentsUploadHandler";
-
-import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
-import { MonitoringReportPreparePeriodFormHandler } from "@server/forms/monitoringReport/monitoringReportPreparePeriodFormHandler";
-import { PartnerDetailsEditFormHandler } from "@server/forms/partnerDetailsEditFormHandler";
 import { OverheadDocumentsDeleteHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsDeleteHandler";
 import { OverheadDocumentsUploadHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsUploadHandler";
 import { ProjectChangeRequestSpendProfileAddCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileAddCostHandler";
@@ -26,45 +23,43 @@ import { ProjectChangeRequestSpendProfileEditCostHandler } from "@server/forms/p
 import { VirementCostsUpdateHandler } from "@server/forms/projectChangeRequest/virements/virementCostsUpdateHandler";
 import { VirementLoanEditHandler } from "@server/forms/projectChangeRequest/virements/virementLoanEditHandler";
 import { ProjectSetupFormHandler } from "@server/forms/projectSetupFormHandler";
-import { configuration } from "../features/common";
+import csurf from "csurf";
+import express, { RequestHandler } from "express";
+import { GraphQLSchema } from "graphql";
 import { serverRender } from "../serverRender";
 import { BadRequestHandler } from "./badRequestHandler";
 import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDetailDocumentDeleteHandler";
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
 import { ClaimForecastFormHandler } from "./claimForecastFormHandler";
+import { DeveloperPageCrasherHandler } from "./developerPageCrasherHandler";
+import { DeveloperProjectCreatorHandler } from "./developerProjectCreatorHandler";
 import { DeveloperUserSwitcherHandler } from "./developerUserSwitcherHandler";
+import { upload } from "./diskStorage";
 import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
 import { IFormHandler } from "./formHandlerBase";
+import { LoanRequestDocumentDeleteHandler } from "./loan/LoanRequestDocumentDeleteHandler";
+import { LoanRequestDocumentUploadHandler } from "./loan/LoanRequestDocumentUploadHandler";
+import { LoanRequestFormHandler } from "./loan/LoanRequestFormHandler";
 import { MonitoringReportCreateFormHandler } from "./monitoringReport/monitoringReportCreateFormHandler";
 import { MonitoringReportDeleteFormHandler } from "./monitoringReport/monitoringReportDeleteFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./monitoringReport/monitoringReportPrepareFormHandler";
 import { MonitoringReportSummaryFormHandler } from "./monitoringReport/monitoringReportSummaryFormHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
+import { BankSetupStatementDocumentDeleteHandler } from "./project/setup/BankSetupStatementDocumentDeleteHandler";
+import { BankSetupStatementDocumentUploadHandler } from "./project/setup/BankSetupStatementDocumentUploadHandler";
+import { ProjectSetupBankDetailsHandler } from "./project/setup/ProjectSetupBankDetailsHandler";
+import { ProjectSetupBankDetailsVerifyHandler } from "./project/setup/ProjectSetupBankDetailsVerifyHandler";
+import { ProjectSetupBankStatementHandler } from "./project/setup/ProjectSetupBankStatementHandler";
 import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/deleteProjectChangeRequestFormHandler";
 import { ProjectChangeRequestPrepareFormHandler } from "./projectChangeRequest/prepareProjectChangeRequestFormHandler";
 import { ProjectChangeRequestReviewFormHandler } from "./projectChangeRequest/reviewProjectChangeRequestFormHandler";
 import { VirementPartnerCostsUpdateHandler } from "./projectChangeRequest/virements/virementPartnerCostsUpdateHandler";
 import { ProjectDocumentDeleteHandler } from "./ProjectDocumentDeleteHandler";
 import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
-import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
-
-import { upload } from "./diskStorage";
 import { ProjectSetupPartnerPostcodeFormHandler } from "./projectSetupPartnerPostcodeFormHandler";
 import { ProjectSetupSpendProfileFormHandler } from "./projectSetupSpendProfileFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
-
-import { BankSetupStatementDocumentDeleteHandler } from "./project/setup/BankSetupStatementDocumentDeleteHandler";
-import { BankSetupStatementDocumentUploadHandler } from "./project/setup/BankSetupStatementDocumentUploadHandler";
-
-import csurf from "csurf";
-import { GraphQLSchema } from "graphql";
-import { DeveloperPageCrasherHandler } from "./developerPageCrasherHandler";
-import { DeveloperProjectCreatorHandler } from "./developerProjectCreatorHandler";
-import { LoanRequestDocumentDeleteHandler, LoanRequestDocumentUploadHandler } from "./loan";
-import { LoanRequestFormHandler } from "./loan/LoanRequestFormHandler";
-import { ProjectSetupBankDetailsHandler } from "./project/setup/ProjectSetupBankDetailsHandler";
-import { ProjectSetupBankDetailsVerifyHandler } from "./project/setup/ProjectSetupBankDetailsVerifyHandler";
-import { ProjectSetupBankStatementHandler } from "./project/setup/ProjectSetupBankStatementHandler";
+import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
 
 export const standardFormHandlers = [
   new ClaimForecastFormHandler(),

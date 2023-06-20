@@ -1,5 +1,5 @@
-import { PartnerBankDetails } from "@framework/entities";
-import { PartnerBankDetailsDto } from "@framework/types";
+import { PartnerBankDetailsDto } from "@framework/dtos/partnerDto";
+import { PartnerBankDetails } from "@framework/entities/partner";
 import { SyncCommandBase } from "../common/commandBase";
 
 /**

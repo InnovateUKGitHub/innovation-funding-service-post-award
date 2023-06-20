@@ -1,7 +1,6 @@
 import React from "react";
-
-import { H3 } from "@ui/components";
 import { govukBorderColour } from "@ui/styles/colours";
+import { H3 } from "../typography/Heading.variants";
 
 export interface SectionPanelProps {
   children: React.ReactElement;

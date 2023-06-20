@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Result } from "@ui/validation";
-
+import { Result } from "@ui/validation/result";
 import { OL } from "./layout/list";
 import { TaskListSection, Task } from "./taskList";
 

@@ -1,20 +1,24 @@
 import React from "react";
-import * as ACC from "@ui/components";
-import { useStores } from "@ui/redux";
-import { Option } from "@framework/dtos";
 import { PCRSpendProfileCapitalUsageCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRCapitalUsageCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { SpendProfileCostFormProps } from "@ui/containers";
-import { PCRSpendProfileCapitalUsageType } from "@framework/types";
+import { PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { Content } from "@ui/components/content";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Currency } from "@ui/components/renderers/currency";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { EditorStatus } from "@ui/constants/enums";
-import { roundCurrency } from "@framework/util";
-import { MountedHoc } from "@ui/features";
+import { MountedHoc } from "@ui/features/has-mounted/Mounted";
+import { useStores } from "@ui/redux/storesProvider";
+import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
+import { Option } from "@framework/dtos/option";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   types: Option<PCRSpendProfileCapitalUsageType>[];
 }
 
-const Form = ACC.createTypedForm<PCRSpendProfileCapitalUsageCostDto>();
+const Form = createTypedForm<PCRSpendProfileCapitalUsageCostDto>();
 
 class Component extends React.Component<
   SpendProfileCostFormProps<PCRSpendProfileCapitalUsageCostDto, PCRCapitalUsageCostDtoValidator> & InnerProps
@@ -93,16 +97,16 @@ class Component extends React.Component<
                   labelBold
                   name="netCost"
                   value={({ formData }) => (
-                    <ACC.Renderers.SimpleString>
-                      <ACC.Renderers.Currency value={formData.value} />
-                    </ACC.Renderers.SimpleString>
+                    <SimpleString>
+                      <Currency value={formData.value} />
+                    </SimpleString>
                   )}
                 />
               )}
             </Form.Fieldset>
             <Form.Fieldset qa="save">
               <Form.Submit>
-                <ACC.Content
+                <Content
                   value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
                 />
               </Form.Submit>
@@ -114,7 +118,7 @@ class Component extends React.Component<
   }
 
   private getOptions<T extends number>(selected: T, options: Option<T>[]) {
-    const filteredOptions: ACC.SelectOption[] = options
+    const filteredOptions: SelectOption[] = options
       .filter(x => x.active)
       .map(x => ({ id: x.value.toString(), value: x.label }));
 
@@ -138,7 +142,7 @@ export const CapitalUsageFormComponent = (
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequests.getPcrSpendProfileCapitalUsageType()}
       render={x => <Component types={x} {...props} />}
     />

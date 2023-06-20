@@ -1,8 +1,5 @@
-import { IContext, PermissionGroupIdentifier } from "@framework/types";
-
-import { QueryBase } from "@server/features/common";
-
-import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
+import { PermissionGroupIdentifier } from "@framework/constants/enums";
+import { IContext } from "@framework/types/IContext";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { GetAllRecordTypesQuery } from "@server/features/general/getAllRecordTypesQuery";
 import { GetPermissionGroupQuery } from "@server/features/general/getPermissionGroupsQuery";
@@ -14,6 +11,8 @@ import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRole
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "@server/features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 import { GetPcrStatusesQuery } from "@server/features/pcrs/getPcrStatusesQuery";
+import { GetUnfilteredCostCategoriesQuery } from "./claims/getCostCategoriesQuery";
+import { QueryBase } from "./common/queryBase";
 
 type ICacheQuery = [string, QueryBase<unknown>];
 

@@ -1,10 +1,10 @@
-import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
-import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { RemovePartnerStep } from "@ui/containers/pcrs/removePartner/removePartnerStep";
 import { PCRPrepareItemFilesForPartnerWithdrawalStep } from "@ui/containers/pcrs/removePartner/prepareItemFilesForPartnerWithdrawalStep";
 import { RemovePartnerSummary } from "@ui/containers/pcrs/removePartner/removePartnerSummary";
-import { PCRStepId } from "@framework/types";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos/pcrDtos";
+import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export type removePartnerStepNames = PCRStepId.removalPeriodStep | PCRStepId.filesStep;
 

@@ -1,5 +1,5 @@
 import { SalesforceRecordTypeMapper } from "@server/repositories/mappers/recordTypeMapper";
-import { ISalesforceRecordType } from "@server/repositories";
+import { ISalesforceRecordType } from "../recordTypeRepository";
 describe("SalesforceRecordTypeMapper", () => {
   const createSalesforceItem = (item: Partial<ISalesforceRecordType>): ISalesforceRecordType => {
     const defaultItem: ISalesforceRecordType = {

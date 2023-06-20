@@ -1,6 +1,6 @@
+import { ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { mapToPCRStatus } from "@framework/mappers/pcr";
-import { ProjectChangeRequestStatusChangeDto } from "@framework/types";
-import { Clock } from "@framework/util";
+import { Clock } from "@framework/util/clock";
 
 const clock = new Clock();
 

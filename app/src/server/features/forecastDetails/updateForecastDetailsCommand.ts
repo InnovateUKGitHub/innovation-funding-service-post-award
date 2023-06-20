@@ -1,28 +1,25 @@
-import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import { ISalesforceProfileDetails } from "@server/repositories";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import {
-  GetAllForecastsGOLCostsQuery,
-  GetAllForPartnerQuery,
-  GetUnfilteredCostCategoriesQuery,
-  UpdateClaimCommand,
-} from "@server/features/claims";
-import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails";
-import { GetProjectStatusQuery } from "@server/features/projects";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
-import {
-  Authorisation,
-  ClaimDetailsSummaryDto,
-  ClaimDto,
-  ClaimStatus,
-  ForecastDetailsDTO,
-  GOLCostDto,
-  IContext,
-  PartnerDto,
-  ProjectRole,
-} from "@framework/types";
-import { GetByIdQuery } from "@server/features/partners";
+import { GetAllClaimDetailsByPartner } from "../claimDetails/getAllByPartnerQuery";
+import { GetAllForecastsGOLCostsQuery } from "../claims/getAllForecastGOLCostsQuery";
+import { GetAllForPartnerQuery } from "../claims/getAllForPartnerQuery";
+import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
+import { UpdateClaimCommand } from "../claims/updateClaim";
+import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetByIdQuery } from "../partners/getByIdQuery";
 import { UpdatePartnerCommand } from "../partners/updatePartnerCommand";
+import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {

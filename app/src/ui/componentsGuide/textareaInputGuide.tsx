@@ -1,5 +1,5 @@
-import { createTypedForm } from "@ui/components";
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
+import { createTypedForm } from "@ui/components/form";
 import { noop } from "@ui/helpers/noop";
 
 const Form = createTypedForm<string>();

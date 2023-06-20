@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
-import { MountedProvider } from "@ui/features";
+import { MountedProvider } from "@ui/features/has-mounted/Mounted";
+
 import { Info } from "./info";
 
 describe("<Info />", () => {

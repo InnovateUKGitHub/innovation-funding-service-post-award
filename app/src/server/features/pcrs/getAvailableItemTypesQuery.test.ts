@@ -1,5 +1,6 @@
-import { PCRItemType, ProjectRole } from "@framework/constants";
-import { Authorisation } from "@framework/types";
+import { PCRItemType } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 import { GetAvailableItemTypesQuery } from "@server/features/pcrs/getAvailableItemTypesQuery";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";

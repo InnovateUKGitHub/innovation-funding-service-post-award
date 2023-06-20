@@ -1,30 +1,29 @@
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemType, PCROrganisationType, PCRProjectRole, PCRStepId, TypeOfAid } from "@framework/constants";
-import {
-  AcademicCostsStep,
-  AcademicOrganisationStep,
-  AddPartnerSummary,
-  CompaniesHouseStep,
-  FinanceContactStep,
-  FinanceDetailsStep,
-  JeSStep,
-  OrganisationDetailsStep,
-  ProjectLocationStep,
-  ProjectManagerDetailsStep,
-  RoleAndOrganisationStep,
-  StateAidEligibilityStep,
-} from "@ui/containers/pcrs/addPartner";
 import { SpendProfileStep } from "@ui/containers/pcrs/addPartner/spendProfileStep";
 import { AwardRateStep } from "@ui/containers/pcrs/addPartner/awardRateStep";
 import { OtherFundingStep } from "@ui/containers/pcrs/addPartner/otherFundingStep";
 import { NonAidFundingStep } from "@ui/containers/pcrs/addPartner/nonAidFundingStep";
 import { DeMinimisStep } from "@ui/containers/pcrs/addPartner/deMinimisStep";
-import { CombinedResultValidator } from "@ui/validation";
 import { OtherSourcesOfFundingStep } from "@ui/containers/pcrs/addPartner/otherSourcesOfFundingStep";
 import { AcademicCostsReviewStep } from "@ui/containers/pcrs/addPartner/academicCostsReviewStep";
 import { AgreementToPCRStep } from "./agreementToPcrStep";
+import { PCRStepId, PCROrganisationType, PCRItemType, PCRProjectRole } from "@framework/constants/pcrConstants";
+import { TypeOfAid } from "@framework/constants/project";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { CombinedResultValidator } from "@ui/validation/results";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { IPCRWorkflow } from "../pcrWorkflow";
+import { AcademicCostsStep } from "./academicCostsStep";
+import { AcademicOrganisationStep } from "./academicOrganisationStep";
+import { AddPartnerSummary } from "./addPartnerSummary";
+import { StateAidEligibilityStep } from "./aidEligibilityStep";
+import { CompaniesHouseStep } from "./CompaniesHouse/CompaniesHouseStep";
+import { FinanceContactStep } from "./financeContactStep";
+import { FinanceDetailsStep } from "./financeDetailsStep";
+import { JeSStep } from "./jeSStep";
+import { OrganisationDetailsStep } from "./organisationDetailsSteps";
+import { ProjectLocationStep } from "./projectLocationStep";
+import { ProjectManagerDetailsStep } from "./projectManagerDetailsStep";
+import { RoleAndOrganisationStep } from "./roleAndOrganisationStep";
 
 export type AddPartnerStepNames =
   | PCRStepId.roleAndOrganisationStep

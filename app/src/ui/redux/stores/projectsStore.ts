@@ -1,10 +1,11 @@
-import { ProjectDto, ProjectStatusDto } from "@framework/dtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ProjectStatusDto } from "@framework/dtos/projectStatusDto";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 import { apiClient } from "../../apiClient";
-import { RootState } from "../reducers";
-import { RootActionsOrThunk } from "../actions";
+import { RootActionsOrThunk } from "../actions/root";
+import { RootState } from "../reducers/rootReducer";
 import { StoreBase } from "./storeBase";
 
 export class ProjectsStore extends StoreBase {

@@ -1,5 +1,5 @@
+import { PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
 import { PicklistEntry } from "jsforce";
-import { PCRSpendProfileCapitalUsageType } from "@framework/types";
 
 export const pcrSpendProfileCapitalUsageTypePicklist: Map<PCRSpendProfileCapitalUsageType, PicklistEntry> = new Map();
 

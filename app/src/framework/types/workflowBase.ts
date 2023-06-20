@@ -1,6 +1,6 @@
+import { numberComparator } from "@framework/util/comparator";
+import { Results } from "@ui/validation/results";
 import React from "react";
-import { numberComparator } from "@framework/util";
-import { Results } from "@ui/validation";
 
 export type IStepProps = AnyObject;
 export type ISummaryProps = AnyObject;

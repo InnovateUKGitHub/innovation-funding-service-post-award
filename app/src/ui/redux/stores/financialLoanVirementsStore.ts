@@ -1,10 +1,10 @@
 import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { FinancialLoanVirementDtoValidator } from "@ui/validators";
-import { FinancialLoanVirementDto } from "@framework/dtos";
-import { IEditorStore } from "..";
 import { StoreBase } from "./storeBase";
+import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
+import { FinancialLoanVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { IEditorStore } from "../reducers/editorsReducer";
 
 export class FinancialLoanVirementsStore extends StoreBase {
   private getKey(projectId: ProjectId, pcrId: PcrId, pcrItemId: PcrItemId): string {

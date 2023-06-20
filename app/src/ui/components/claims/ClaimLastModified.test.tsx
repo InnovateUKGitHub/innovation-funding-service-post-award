@@ -1,8 +1,7 @@
 import { render } from "@testing-library/react";
-
-import { ClaimLastModified, ClaimLastModifiedProps } from "@ui/components/claims";
 import TestBed from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ClaimLastModifiedProps, ClaimLastModified } from "./claimLastModified";
 
 describe("<ClaimLastModified />", () => {
   const stubContent = {

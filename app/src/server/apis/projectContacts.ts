@@ -1,4 +1,4 @@
-import { ProjectContactDto } from "@framework/dtos";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { contextProvider } from "../features/common/contextProvider";
 import { GetAllForProjectQuery } from "../features/projectContacts/getAllForProjectQuery";
 import { ApiParams, ControllerBase } from "./controllerBase";

@@ -1,13 +1,13 @@
-import { LoanDto } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-
-import { LoansRequestParams, LoansRequestRoute, LoansSummaryRoute } from "@ui/containers";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { GetLoan } from "@server/features/loans/getLoan";
 import { LoanDtoValidator } from "@ui/validators/loanValidator";
 import { UpdateLoanCommand } from "@server/features/loans/updateLoanCommand";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { LoansSummaryRoute } from "@ui/containers/loans/overview.page";
+import { LoansRequestParams, LoansRequestRoute } from "@ui/containers/loans/request.page";
 
 export class LoanRequestFormHandler extends StandardFormHandlerBase<LoansRequestParams, "loan"> {
   constructor() {

@@ -1,5 +1,5 @@
 import { AwardRateOverrideTarget, AwardRateOverrideType } from "@framework/constants/awardRateOverride";
-import * as Entities from "@framework/entities";
+import { CostCategory } from "@framework/entities/costCategory";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { GetClaimOverrideRates } from "./getClaimOverrideRates";
 
@@ -37,7 +37,7 @@ describe("GetClaimOverrideRates", () => {
         return costCategoryCreationFunctions;
       },
 
-      costCategoryWithOverride: (update?: Partial<Entities.CostCategory>, profileOverrideAwardRate?: number) => {
+      costCategoryWithOverride: (update?: Partial<CostCategory>, profileOverrideAwardRate?: number) => {
         const overrideAwardRateCostCategory = testData.createCostCategory({
           competitionType: project.Acc_CompetitionType__c,
           organisationType: partner.organisationType,

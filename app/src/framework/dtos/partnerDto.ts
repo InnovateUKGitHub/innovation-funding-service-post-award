@@ -4,9 +4,9 @@ import {
   PartnerClaimStatus,
   PartnerStatus,
   PostcodeTaskStatus,
-  ProjectRole,
   SpendProfileStatus,
-} from "@framework/constants";
+} from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
 
 interface ValidationResponse {
   iban: string | null;

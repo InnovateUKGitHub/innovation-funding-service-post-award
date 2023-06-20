@@ -1,7 +1,6 @@
 import { DateTime } from "luxon";
-
 import { ProjectSortableFragment$data } from "@gql/fragment/__generated__/ProjectSortableFragment.graphql";
-import { ProjectDto } from "@framework/dtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
 
 export type IComparer<T> = (x: T, y: T) => number;
 

@@ -1,6 +1,8 @@
-import { IContext, PermissionGroupIdentifier } from "@framework/types";
+import { PermissionGroupIdentifier } from "@framework/constants/enums";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
-import { BadRequestError, QueryBase } from "../common";
+import { IContext } from "@framework/types/IContext";
+import { BadRequestError } from "../common/appError";
+import { QueryBase } from "../common/queryBase";
 
 export class GetPermissionGroupQuery extends QueryBase<PermissionGroup> {
   constructor(private readonly identifier: PermissionGroupIdentifier) {

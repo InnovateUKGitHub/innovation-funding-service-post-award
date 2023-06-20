@@ -1,20 +1,20 @@
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
-import * as Dtos from "@framework/dtos";
-import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
-import { numberComparator } from "@framework/util";
 import { MonitoringReportQuestionStep } from "@ui/containers/monitoringReports/workflow/questionStep";
-import { IEditorStore } from "@ui/redux";
 import { MonitoringReportSummary } from "@ui/containers/monitoringReports/workflow/monitoringReportSummary";
-import { IRoutes } from "@ui/routing";
-import { ILinkInfo } from "@framework/types";
+import { IRoutes } from "@ui/routing/routeConfig";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MonitoringReportWorkflowParams, MonitoringReportWorkflowWorkflow } from "./MonitoringReportWorkflowProps";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { numberComparator } from "@framework/util/comparator";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators/MonitoringReportDtoValidator";
 
 export interface MonitoringReportReportStepProps extends IStepProps {
-  editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
-  report: Dtos.MonitoringReportDto;
-  onChange: (dto: Dtos.MonitoringReportDto) => void;
-  onSave: (dto: Dtos.MonitoringReportDto, progress: boolean) => void;
+  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
+  report: MonitoringReportDto;
+  onChange: (dto: MonitoringReportDto) => void;
+  onSave: (dto: MonitoringReportDto, progress: boolean) => void;
   mode: "prepare" | "view";
 }
 
@@ -22,10 +22,10 @@ export interface MonitoringReportReportSummaryProps extends ISummaryProps {
   projectId: ProjectId;
   id: MonitoringReportId;
   mode: "prepare" | "view";
-  report: Dtos.MonitoringReportDto;
-  editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
-  onChange: (dto: Dtos.MonitoringReportDto) => void;
-  onSave: (dto: Dtos.MonitoringReportDto, submit?: boolean) => void;
+  report: MonitoringReportDto;
+  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
+  onChange: (dto: MonitoringReportDto) => void;
+  onSave: (dto: MonitoringReportDto, submit?: boolean) => void;
   routes: IRoutes;
   // TODO type step name
   getEditLink: (stepName: string) => ILinkInfo;
@@ -38,7 +38,7 @@ export type IMonitoringReportWorkflow = IWorkflow<
   MonitoringReportDtoValidator
 >;
 
-const getQuestionSteps = (dto: Dtos.MonitoringReportDto, startingStepNumber: number) => {
+const getQuestionSteps = (dto: MonitoringReportDto, startingStepNumber: number) => {
   return dto.questions
     .sort((a, b) => numberComparator(a.displayOrder, b.displayOrder))
     .map((x, i) => ({
@@ -53,7 +53,7 @@ const getQuestionSteps = (dto: Dtos.MonitoringReportDto, startingStepNumber: num
     }));
 };
 
-const monitoringReportWorkflowDef = (dto: Dtos.MonitoringReportDto): IMonitoringReportWorkflow => {
+const monitoringReportWorkflowDef = (dto: MonitoringReportDto): IMonitoringReportWorkflow => {
   const questions = dto.questions;
   questions.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
   return {
@@ -103,7 +103,7 @@ export class MonitoringReportWorkflowDef extends WorkflowBase<
     super(definition, stepNumber);
   }
 
-  public static getWorkflow(dto: Dtos.MonitoringReportDto, step: number | undefined): MonitoringReportWorkflowDef {
+  public static getWorkflow(dto: MonitoringReportDto, step: number | undefined): MonitoringReportWorkflowDef {
     return new MonitoringReportWorkflowDef(monitoringReportWorkflowDef(dto), step);
   }
 }

@@ -1,5 +1,5 @@
-import { Info } from "@ui/components";
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
+import { Info } from "@ui/components/layout/info";
 
 export const info: IGuide = {
   name: "Info",

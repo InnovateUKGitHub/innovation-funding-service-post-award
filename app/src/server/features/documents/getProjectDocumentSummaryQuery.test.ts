@@ -1,7 +1,9 @@
 import { GetProjectDocumentSummaryQuery } from "@server/features/documents/getProjectDocumentSummaryQuery";
-import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 
 describe("GetProjectDocumentSummaryQuery", () => {
   it("should return all documents associated with the project", async () => {

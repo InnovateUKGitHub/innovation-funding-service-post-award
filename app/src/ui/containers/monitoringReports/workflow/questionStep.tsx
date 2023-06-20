@@ -1,20 +1,23 @@
-import { createTypedForm, PeriodTitle, Section, Content, Renderers } from "@ui/components";
-import * as Dtos from "@framework/dtos";
-import { MonitoringReportDtoValidator } from "@ui/validators";
-import { IEditorStore } from "@ui/redux";
-import { H3 } from "@ui/components";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { PeriodTitle } from "@ui/components/periodTitle";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { H3 } from "@ui/components/typography/Heading.variants";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 
 interface Props {
   questionNumber: number;
-  editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
-  report: Pick<Dtos.MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">;
+  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
+  report: Pick<MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">;
   mode: "prepare" | "view";
-  onChange: (dto: Dtos.MonitoringReportDto) => void;
-  onSave: (dto: Dtos.MonitoringReportDto, progress: boolean) => void;
+  onChange: (dto: MonitoringReportDto) => void;
+  onSave: (dto: MonitoringReportDto, progress: boolean) => void;
 }
 
-const ReportForm =
-  createTypedForm<Pick<Dtos.MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">>();
+const ReportForm = createTypedForm<Pick<MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">>();
 
 const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave, report, mode }: Props) => {
   const title = (
@@ -40,7 +43,7 @@ const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave
           disabled={mode === "view"}
           editor={editor}
           onChange={dto => {
-            return onChange(dto as Dtos.MonitoringReportDto);
+            return onChange(dto as MonitoringReportDto);
           }}
           qa="monitoringReportQuestionForm"
         >
@@ -52,7 +55,7 @@ const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave
             />
           </H3>
           <ReportForm.Fieldset heading={q.title}>
-            <Renderers.SimpleString className="govuk-hint">{q.description}</Renderers.SimpleString>
+            <SimpleString className="govuk-hint">{q.description}</SimpleString>
             <ReportForm.Hidden name={"questionDisplayOrder"} value={() => questionNumber} />
 
             {!!radioOptions.length && (

@@ -1,16 +1,18 @@
-import { PCRItemDisabledReason, PCRItemStatus, PCRItemType } from "@framework/constants";
-import { IContext, ILinkInfo, PCRDto, PCRItemTypeDto } from "@framework/types";
+import { PCRItemStatus, PCRItemType, PCRItemDisabledReason } from "@framework/constants/pcrConstants";
+import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pcrs/overview/projectChangeRequestPrepare.page";
 import {
-  PCRPrepareReasoningRoute,
   ProjectChangeRequestPrepareReasoningParams,
-  ProjectChangeRequestPrepareRoute,
-} from "@ui/containers";
+  PCRPrepareReasoningRoute,
+} from "@ui/containers/pcrs/reasoning/workflow.page";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareReasoningParams,

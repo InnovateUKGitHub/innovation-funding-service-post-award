@@ -1,6 +1,7 @@
-import { ForecastDetailsDTO, IContext } from "@framework/types";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { IContext } from "@framework/types/IContext";
 import { mapLatestForecastDetail } from "@server/features/forecastDetails/mapForecastDetail";
-import { QueryBase } from "../common";
+import { QueryBase } from "../common/queryBase";
 
 export class GetAllForecastsForPartnerQuery extends QueryBase<ForecastDetailsDTO[]> {
   constructor(private readonly partnerId: PartnerId) {

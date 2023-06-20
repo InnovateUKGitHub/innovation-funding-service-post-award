@@ -1,8 +1,8 @@
-import { IRoutes } from "@ui/routing";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useContent } from "@ui/hooks/content.hook";
+import { IRoutes } from "@ui/routing/routeConfig";
 import { ProjectData } from "./Dashboard.interface";
-import { useContent } from "@ui/hooks";
 import { MemoizedDashboardProject as DashboardProject } from "./DashboardProject";
-import { SimpleString } from "@ui/components/renderers";
 
 interface ProjectListProps {
   errorType: "live" | "upcoming" | "archived";

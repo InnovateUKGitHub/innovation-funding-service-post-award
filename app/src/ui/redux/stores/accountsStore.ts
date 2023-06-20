@@ -1,10 +1,10 @@
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { Pending } from "@shared/pending";
-import { AccountDto } from "@framework/dtos";
 import { apiClient } from "../../apiClient";
-import { RootState } from "../reducers";
-import { RootActionsOrThunk } from "../actions";
 import { StoreBase } from "./storeBase";
+import { AccountDto } from "@framework/dtos/accountDto";
+import { RootActionsOrThunk } from "../actions/root";
+import { RootState } from "../reducers/rootReducer";
 
 export class AccountsStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: RootActionsOrThunk) => void) {

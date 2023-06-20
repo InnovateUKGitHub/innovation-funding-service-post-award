@@ -3,10 +3,10 @@ import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { RootActionsOrThunk } from "../actions";
-import { RootState } from "../reducers";
 import { PartnersStore } from "./partnersStore";
 import { DocumentsStoreBase } from "./documentsStoreBase";
+import { RootActionsOrThunk } from "../actions/root";
+import { RootState } from "../reducers/rootReducer";
 
 export class ClaimDocumentsStore extends DocumentsStoreBase {
   constructor(

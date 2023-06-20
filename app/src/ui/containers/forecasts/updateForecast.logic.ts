@@ -1,27 +1,23 @@
-import {
-  ClaimDetailsSummaryDto,
-  ClaimDto,
-  CostCategoryDto,
-  ForecastDetailsDTO,
-  GOLCostDto,
-  PartnerDtoGql,
-  ProjectDtoGql,
-} from "@framework/dtos";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
+import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
+import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
+import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
+import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
+import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
+import { getIARDueOnClaimPeriods } from "@gql/dtoMapper/mapIarDue";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { updateForecastQuery } from "./UpdateForecast.query";
 import { UpdateForecastQuery, UpdateForecastQuery$data } from "./__generated__/UpdateForecastQuery.graphql";
-import {
-  mapToProjectDto,
-  getPartnerRoles,
-  mapToPartnerDto,
-  mapToRequiredSortedCostCategoryDtoArray,
-  getIARDueOnClaimPeriods,
-  mapToForecastDetailsDtoArray,
-  mapToClaimDetailsDtoArray,
-  mapToClaimDtoArray,
-  mapToGolCostDtoArray,
-} from "@gql/dtoMapper";
 
 export type Project = Pick<
   ProjectDtoGql,

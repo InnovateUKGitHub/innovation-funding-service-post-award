@@ -12,7 +12,7 @@ import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
 import csrf from "csurf";
 import { ErrorRequestHandler, Router } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
-import { configuration } from "./features/common";
+import { configuration } from "./features/common/config";
 import staticHtmlError from "./staticError.html";
 
 export const noAuthRouter = Router();

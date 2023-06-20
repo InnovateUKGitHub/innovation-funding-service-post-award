@@ -3,16 +3,16 @@ import {
   MonitoringReportQuestionDto,
   MonitoringReportStatusChangeDto,
   MonitoringReportSummaryDto,
-} from "@framework/types";
+} from "@framework/dtos/monitoringReportDto";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
+import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { GetMonitoringReportStatusChanges } from "@server/features/monitoringReports/getMonitoringReportStatusChanges";
-import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
-import { GetMonitoringReportById } from "../features/monitoringReports/getMonitoringReport";
-import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { processDto } from "../../shared/processResponse";
+import { GetMonitoringReportById } from "../features/monitoringReports/getMonitoringReport";
 import { GetMonitoringReportsForProject } from "../features/monitoringReports/getMonitoringReportsForProject";
+import { SaveMonitoringReport } from "../features/monitoringReports/saveMonitoringReport";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 
 export interface IMonitoringReportsApi {

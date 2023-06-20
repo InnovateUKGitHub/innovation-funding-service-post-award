@@ -1,12 +1,17 @@
-import { IContext, IFileWrapper, ILinkInfo } from "@framework/types";
-import { configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
-import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { configuration } from "@server/features/common/config";
+import {
+  ProjectChangeRequestPrepareReasoningParams,
+  PCRPrepareReasoningRoute,
+} from "@ui/containers/pcrs/reasoning/workflow.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<
   ProjectChangeRequestPrepareReasoningParams,

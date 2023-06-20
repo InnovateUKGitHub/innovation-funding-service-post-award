@@ -1,6 +1,6 @@
-import { IContext } from "@framework/types";
 import { DocumentDto } from "@framework/dtos/documentDto";
-import { QueryBase } from "../common";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 
 export abstract class DocumentQueryBase extends QueryBase<DocumentDto | null> {
   protected constructor(protected readonly documentId: string) {

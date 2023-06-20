@@ -1,10 +1,10 @@
 import cx from "classnames";
-import { isContentSolution } from "@ui/hooks";
 import type { ContentSelector } from "@copy/type";
 import { Content } from "@ui/components/content";
-
 import * as colours from "../styles/colours";
-import { Markdown, SimpleString } from "./renderers";
+import { isContentSolution } from "@ui/hooks/content.hook";
+import { SimpleString } from "./renderers/simpleString";
+import { Markdown } from "./renderers/markdown";
 
 type MessageType = "info" | "error" | "success" | "warning" | "alert";
 

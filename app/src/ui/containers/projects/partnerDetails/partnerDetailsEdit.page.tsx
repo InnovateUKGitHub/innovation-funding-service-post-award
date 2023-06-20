@@ -1,10 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Fieldset, Label, TextInput, SubmitButton, FormGroup, Form, Hint, P } from "@ui/rhf-components";
-import { PostcodeTaskStatus, ProjectRole } from "@framework/types";
-import { Page, Projects, BackLink } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useContent } from "@ui/hooks";
 import { usePartnerDetailsEditQuery, FormValues, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
 import { useValidationErrors } from "@framework/util/errorHelpers";
 import {
@@ -13,6 +9,20 @@ import {
   emptySchema,
   partnerDetailsEditErrorMap,
 } from "./partnerDetailsEdit.zod";
+import { PostcodeTaskStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { Page } from "@ui/components/layout/page";
+import { BackLink } from "@ui/components/links";
+import { useContent } from "@ui/hooks/content.hook";
+import { Fieldset } from "@ui/rhf-components/Fieldset";
+import { FormGroup } from "@ui/rhf-components/FormGroup";
+import { Hint } from "@ui/rhf-components/Hint";
+import { Label } from "@ui/rhf-components/Label";
+import { SubmitButton } from "@ui/rhf-components/SubmitButton";
+import { TextInput } from "@ui/rhf-components/TextInput";
+import { P } from "@ui/rhf-components/Typography";
+import { Title } from "@ui/components/projects/title";
+import { Form } from "@ui/rhf-components/Form";
 
 export interface PartnerDetailsParams {
   projectId: ProjectId;
@@ -66,7 +76,7 @@ export function PartnerDetailsEditComponent({
   return (
     <Page
       backLink={backLink}
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validator={validatorErrors}
       error={apiError}
       projectStatus={project.status}

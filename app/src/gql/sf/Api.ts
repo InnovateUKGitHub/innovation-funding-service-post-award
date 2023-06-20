@@ -1,5 +1,5 @@
 import type { ExecutionRequest } from "@graphql-tools/utils/typings";
-import { configuration } from "@server/features/common";
+import { configuration } from "@server/features/common/config";
 import { getCachedSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { Logger } from "@shared/developmentLogger";
 import { mapStringInObject } from "@shared/mapStringInObject";

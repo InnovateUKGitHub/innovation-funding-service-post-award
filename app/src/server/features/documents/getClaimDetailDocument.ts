@@ -1,4 +1,7 @@
-import { Authorisation, ClaimDetailKey, IContext, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
+import { IContext } from "@framework/types/IContext";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetClaimDetailDocumentQuery extends DocumentQueryBase {

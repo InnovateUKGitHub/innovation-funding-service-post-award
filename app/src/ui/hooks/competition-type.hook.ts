@@ -1,5 +1,5 @@
 import { getPending } from "@ui/helpers/get-pending";
-import { useStores } from "@ui/redux";
+import { useStores } from "@ui/redux/storesProvider";
 
 /**
  * hook returns competition type from project id

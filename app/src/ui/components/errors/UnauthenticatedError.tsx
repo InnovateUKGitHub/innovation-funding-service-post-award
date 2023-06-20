@@ -1,6 +1,9 @@
 import { PageTitle } from "@ui/features/page-title";
-import { Page, Section, Content } from "@ui/components";
-import { ExternalLink, SimpleString } from "@ui/components/renderers";
+import { Content } from "../content";
+import { Page } from "../layout/page";
+import { Section } from "../layout/section";
+import { ExternalLink } from "../renderers/externalLink";
+import { SimpleString } from "../renderers/simpleString";
 
 export const UnauthenticatedError = () => {
   const contactLink = "https://apply-for-innovation-funding.service.gov.uk/info/contact";

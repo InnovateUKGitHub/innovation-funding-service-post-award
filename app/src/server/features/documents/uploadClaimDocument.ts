@@ -1,20 +1,19 @@
-import { BadRequestError, CommandDocumentBase, ValidationError } from "@server/features/common";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
-import {
-  Authorisation,
-  ClaimDto,
-  ClaimKey,
-  ClaimStatus,
-  DocumentDescription,
-  IContext,
-  IFileWrapper,
-  ProjectRole,
-} from "@framework/types";
 import { mapClaim } from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { UpdateClaimCommand } from "../claims";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { ClaimKey } from "@framework/types/ClaimKey";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { IContext } from "@framework/types/IContext";
+import { UpdateClaimCommand } from "../claims/updateClaim";
+import { BadRequestError, ValidationError } from "../common/appError";
+import { CommandDocumentBase } from "../common/commandBase";
 
 export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
   protected showValidationErrors = true;

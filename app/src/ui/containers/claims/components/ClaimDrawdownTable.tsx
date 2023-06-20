@@ -1,9 +1,10 @@
-import { LoanDto, ProjectDto } from "@framework/dtos";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { LoadingMessage } from "@ui/components/loading";
+import { createTypedTable } from "@ui/components/table";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { getPending } from "@ui/helpers/get-pending";
-import { useStores } from "@ui/redux";
-
-import * as ACC from "@ui/components";
+import { useStores } from "@ui/redux/storesProvider";
 
 type ProjectOptions = Pick<ProjectDto, "id" | "competitionType">;
 
@@ -12,7 +13,7 @@ export interface ClaimDrawdownTableProps extends ProjectOptions {
   requiredPeriod: number;
 }
 
-const PeriodDrawdownTable = ACC.createTypedTable<Required<LoanDto>>();
+const PeriodDrawdownTable = createTypedTable<Required<LoanDto>>();
 
 const useClaimDrawdown = (props: ClaimDrawdownTableProps) => {
   const { isLoans } = checkProjectCompetition(props.competitionType);
@@ -44,7 +45,7 @@ export const ClaimDrawdownTable = (props: ClaimDrawdownTableProps) => {
 
   if (!claimDrawdown) return null;
 
-  if (claimDrawdown.isLoading) return <ACC.LoadingMessage />;
+  if (claimDrawdown.isLoading) return <LoadingMessage />;
 
   return (
     <PeriodDrawdownTable.Table qa="period-loan-table" data={[claimDrawdown.payload as Required<LoanDto>]}>

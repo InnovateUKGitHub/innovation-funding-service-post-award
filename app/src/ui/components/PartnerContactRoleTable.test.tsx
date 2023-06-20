@@ -1,10 +1,12 @@
 import { render } from "@testing-library/react";
 
 import { TestBed, TestBedStore } from "@shared/TestBed";
-import { PartnerDto, ProjectContactDto } from "@framework/types";
+
 import { PartnerContactRoleTable, PartnersAndFinanceContactsProps } from "@ui/components/PartnerContactRoleTable";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { getContactRole } from "./partners/getContactRole";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 
 const testPartnerData: PartnerDto[] = [
   {

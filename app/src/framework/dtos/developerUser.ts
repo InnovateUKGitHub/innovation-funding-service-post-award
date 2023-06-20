@@ -1,4 +1,4 @@
-import { SalesforceRole } from "@server/repositories";
+import { SalesforceRole } from "@server/repositories/projectContactsRepository";
 
 export interface DeveloperUser {
   externalUsername: string | null;

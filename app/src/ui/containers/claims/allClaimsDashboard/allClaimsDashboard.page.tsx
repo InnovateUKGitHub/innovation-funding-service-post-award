@@ -1,21 +1,33 @@
-import { DateFormat, ProjectRole, ProjectStatus } from "@framework/constants";
-import { ClaimDto, PartnerDto, ProjectDtoGql } from "@framework/dtos";
-import { getAuthRoles } from "@framework/types";
-import { formatDate, roundCurrency } from "@framework/util";
+import { getAuthRoles } from "@framework/types/authorisation";
 import { getLeadPartner } from "@framework/util/partnerHelper";
-import { getPartnerName, Page, Projects, Section, ValidationMessage } from "@ui/components";
 import { Content } from "@ui/components/content";
 import { createTypedTable } from "@ui/components/table";
-import { Accordion, AccordionItem } from "@ui/components/accordion";
-import { ClaimPeriodDate } from "@ui/components/claims";
 import { ClaimDetailsLink, getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
-import { Messages, ShortDateRange, SimpleString } from "@ui/components/renderers";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { IRoutes } from "@ui/routing";
 import { DateTime } from "luxon";
-import { ClaimsDashboardGuidance } from "../components";
+import { ClaimsDashboardGuidance } from "../components/ClaimsDashboardGuidance";
 import { useAllClaimsDashboardData } from "./allClaimsDashboard.logic";
+import { IRoutes } from "@ui/routing/routeConfig";
+import { DateFormat } from "@framework/constants/enums";
+import { ProjectStatus, ProjectRole } from "@framework/constants/project";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
+import { formatDate } from "@framework/util/dateHelpers";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { ClaimPeriodDate } from "@ui/components/claims/claimPeriodDate";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { getPartnerName } from "@ui/components/partners/partnerName";
+import { Title } from "@ui/components/projects/title";
+import { ShortDateRange } from "@ui/components/renderers/date";
+import { Messages } from "@ui/components/renderers/messages";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { ProjectBackLink } from "@ui/components/projects/projectBackLink";
 
 export interface AllClaimsDashboardParams {
   projectId: ProjectId;
@@ -63,8 +75,8 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
 
   return (
     <Page
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
-      backLink={<Projects.ProjectBackLink routes={props.routes} projectId={project.id} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
+      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
       projectStatus={project.status}
       partnerStatus={isLeadPartnerFc ? leadPartner.partnerStatus : undefined}
     >

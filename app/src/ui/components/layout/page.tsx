@@ -1,7 +1,5 @@
 import React from "react";
-import { IAppError, PartnerStatus, ProjectStatus } from "@framework/types";
-import { CombinedResultsValidator, Results } from "@ui/validation";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { AriaLive } from "../renderers/ariaLive";
 import { ErrorSummary } from "../errorSummary";
@@ -9,7 +7,11 @@ import { ValidationSummary } from "../validationSummary";
 import { ValidationMessage } from "../validationMessage";
 import { ProjectInactive } from "../ProjectInactive";
 import { Section } from "./section";
-import { GovWidthContainer } from ".";
+import { PartnerStatus } from "@framework/constants/partner";
+import { ProjectStatus } from "@framework/constants/project";
+import { IAppError } from "@framework/types/IAppError";
+import { Results, CombinedResultsValidator } from "@ui/validation/results";
+import { GovWidthContainer } from "./GovWidthContainer";
 
 export const usePageValidationMessage = (projectStatus?: ProjectStatus, partnerStatus?: PartnerStatus) => {
   const { getContent } = useContent();

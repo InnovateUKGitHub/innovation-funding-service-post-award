@@ -1,6 +1,7 @@
-import { Results } from "@ui/validation";
-import { ErrorCode, LoadingStatus } from "@framework/types";
-import { DataLoadAction, EditorErrorAction, EditorSubmitAction, EditorSuccessAction } from "../actions/common";
+import { LoadingStatus, ErrorCode } from "@framework/constants/enums";
+import { Results } from "@ui/validation/results";
+import { DataLoadAction } from "../actions/common/dataLoad";
+import { EditorSubmitAction, EditorSuccessAction, EditorErrorAction } from "../actions/common/editorActions";
 import { loadStatusReducer } from "./loadStatusReducer";
 
 const createLoadDataAction = (status: LoadingStatus): DataLoadAction => {

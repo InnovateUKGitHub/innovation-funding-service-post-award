@@ -1,38 +1,41 @@
 import {
+  PCRStepId,
+  PCRStatus,
   PCRItemStatus,
   PCRItemType,
+  pcrUnduplicatableMatrix,
+  getUnavailablePcrItemsMatrix,
   PCROrganisationType,
   PCRProjectRole,
-  PCRStatus,
-  pcrUnduplicatableMatrix,
-  ProjectMonitoringLevel,
-  ProjectRole,
-} from "@framework/constants";
+} from "@framework/constants/pcrConstants";
+import { ProjectRole, ProjectMonitoringLevel } from "@framework/constants/project";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 import {
-  PartnerDto,
+  PCRItemTypeDto,
   PCRDto,
+  PCRSummaryDto,
   PCRItemDto,
-  PCRItemForAccountNameChangeDto,
-  PCRItemForLoanDrawdownChangeDto,
-  PCRItemForLoanDrawdownExtensionDto,
-  PCRItemForMultiplePartnerFinancialVirementDto,
-  PCRItemForPartnerAdditionDto,
-  PCRItemForPartnerWithdrawalDto,
-  PCRItemForPeriodLengthChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRItemForScopeChangeDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForProjectTerminationDto,
-  PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto,
-  PCRItemTypeDto,
+  PCRItemForAccountNameChangeDto,
+  PCRItemForPartnerWithdrawalDto,
+  PCRItemForPartnerAdditionDto,
+  PCRItemForMultiplePartnerFinancialVirementDto,
+  PCRItemForPeriodLengthChangeDto,
   PCRStandardItemDto,
-  PCRSummaryDto,
-  ProjectDto,
-} from "@framework/dtos";
-import { getAuthRoles, getUnavailablePcrItemsMatrix, PCRStepId } from "@framework/types";
+  PCRItemForLoanDrawdownChangeDto,
+  PCRItemForLoanDrawdownExtensionDto,
+} from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
 import isNull from "@ui/helpers/is-null";
+import { NestedResult } from "@ui/validation/nestedResult";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { DateTime } from "luxon";
-import { NestedResult, Result, Results } from "../validation";
 import * as Validation from "./common";
 
 interface PCRBaseDtoValidationProps<T> {

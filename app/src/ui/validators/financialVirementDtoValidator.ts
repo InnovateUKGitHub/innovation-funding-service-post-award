@@ -1,12 +1,13 @@
 import {
-  CostCategoryVirementDto,
-  FinancialVirementDto,
   FinancialLoanVirementDto,
+  FinancialVirementDto,
   PartnerVirementsDto,
-} from "@framework/dtos";
-import { roundCurrency } from "@framework/util";
-import { Results, Result } from "@ui/validation";
+  CostCategoryVirementDto,
+} from "@framework/dtos/financialVirementDto";
+import { roundCurrency } from "@framework/util/numberHelper";
 import { getCurrency } from "@ui/components/renderers/currency";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
 
 import * as Validation from "./common";
 

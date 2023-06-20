@@ -1,4 +1,5 @@
-import { CostCategoryType, CostCategoryList } from ".";
+import { CostCategoryType } from "@framework/constants/enums";
+import { CostCategoryList } from "./CostCategory";
 
 describe("CostCategory", () => {
   describe("with default competition type", () => {

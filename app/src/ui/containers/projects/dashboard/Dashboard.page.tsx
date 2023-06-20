@@ -2,19 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { noop } from "@ui/helpers/noop";
-
-import {
-  Page,
-  SelectOption,
-  Content,
-  BackLink,
-  H2,
-  createTypedForm,
-  Section,
-  Accordion,
-  AccordionItem,
-} from "@ui/components";
-
 import { useMountedState } from "@ui/features/has-mounted/Mounted";
 import { PageTitle } from "@ui/features/page-title";
 import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
@@ -22,7 +9,15 @@ import { DashboardProjectList } from "./DashboardProjectList";
 import { DashboardProjectCount } from "./DashboardProjectCount";
 import { FilterOptions } from "./Dashboard.interface";
 import { generateFilteredProjects, useAvailableProjectFilters, useProjectsDashboardData } from "./dashboard.logic";
-import { useContent } from "@ui/hooks";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { Content } from "@ui/components/content";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { H2 } from "@ui/components/typography/Heading.variants";
+import { useContent } from "@ui/hooks/content.hook";
 
 interface ProjectDashboardParams {
   search?: string | number;

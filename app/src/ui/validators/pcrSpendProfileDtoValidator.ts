@@ -1,4 +1,5 @@
-import { CostCategoryGroupType, CostCategoryType, PCRSpendProfileOverheadRate } from "@framework/constants";
+import { CostCategoryType, CostCategoryGroupType } from "@framework/constants/enums";
+import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
 import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
@@ -13,9 +14,9 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryList } from "@framework/types";
+import { CostCategoryList } from "@framework/types/CostCategory";
 import { hasNoDuplicates } from "@framework/util/arrayHelpers";
-import { Results } from "../validation";
+import { Results } from "@ui/validation/results";
 import * as Validation from "./common";
 
 export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {

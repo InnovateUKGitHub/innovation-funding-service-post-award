@@ -1,10 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { BankCheckStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { BankCheckStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { Title } from "@ui/components/projects/title";
 
 export interface ProjectSetupBankDetailsVerifyParams {
   projectId: ProjectId;
@@ -20,7 +31,7 @@ interface Callbacks {
   onChange: (submit: boolean, dto: PartnerDto) => void;
 }
 
-const Form = ACC.createTypedForm<PartnerDto>();
+const Form = createTypedForm<PartnerDto>();
 class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<
   ProjectSetupBankDetailsVerifyParams,
   Data,
@@ -28,77 +39,77 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<
 > {
   public render() {
     const combined = Pending.combine({ project: this.props.project, editor: this.props.editor });
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
+    return <PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
   }
   public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
     const { bankDetails } = editor.data;
 
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink
+          <BackLink
             route={this.props.routes.projectSetup.getLink({
               projectId: this.props.projectId,
               partnerId: this.props.partnerId,
             })}
           >
-            <ACC.Content value={x => x.pages.projectSetupBankDetailsVerify.backLink} />
-          </ACC.BackLink>
+            <Content value={x => x.pages.projectSetupBankDetailsVerify.backLink} />
+          </BackLink>
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
       >
         {this.renderGuidance()}
-        <ACC.Section>
-          <ACC.SummaryList qa="bank-details-summary">
-            <ACC.SummaryListItem
+        <Section>
+          <SummaryList qa="bank-details-summary">
+            <SummaryListItem
               label={x => x.partnerLabels.organisationName}
               content={editor.data.name}
               qa={"organisationName"}
             />
-            <ACC.SummaryListItem
+            <SummaryListItem
               label={x => x.partnerLabels.companyNumber}
               content={bankDetails.companyNumber}
               qa={"companyNumber"}
             />
-            <ACC.SummaryListItem label={x => x.partnerLabels.sortCode} content={bankDetails.sortCode} qa={"sortCode"} />
-            <ACC.SummaryListItem
+            <SummaryListItem label={x => x.partnerLabels.sortCode} content={bankDetails.sortCode} qa={"sortCode"} />
+            <SummaryListItem
               label={x => x.partnerLabels.accountNumber}
               content={bankDetails.accountNumber}
               qa={"accountNumber"}
             />
             {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
-            {/* <ACC.SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
-            <ACC.SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/> */}
-            <ACC.SummaryListItem
+            {/* <SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
+            <SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/> */}
+            <SummaryListItem
               label={x => x.partnerLabels.accountBuilding}
               content={bankDetails.address.accountBuilding}
               qa={"accountBuilding"}
             />
-            <ACC.SummaryListItem
+            <SummaryListItem
               label={x => x.partnerLabels.accountStreet}
               content={bankDetails.address.accountStreet}
               qa={"accountStreet"}
             />
-            <ACC.SummaryListItem
+            <SummaryListItem
               label={x => x.partnerLabels.accountLocality}
               content={bankDetails.address.accountLocality}
               qa={"accountLocality"}
             />
-            <ACC.SummaryListItem
+            <SummaryListItem
               label={x => x.partnerLabels.accountTownOrCity}
               content={bankDetails.address.accountTownOrCity}
               qa={"accountTownOrCity"}
             />
-            <ACC.SummaryListItem
+            <SummaryListItem
               label={x => x.partnerLabels.accountPostcode}
               content={bankDetails.address.accountPostcode}
               qa={"accountPostcode"}
             />
-          </ACC.SummaryList>
-        </ACC.Section>
-        <ACC.Section qa="bank-details-verify-section">
+          </SummaryList>
+        </Section>
+        <Section qa="bank-details-verify-section">
           <Form.Form
             editor={editor}
             onChange={() => this.props.onChange(false, editor.data)}
@@ -107,29 +118,29 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<
           >
             <Form.Fieldset>
               <Form.Submit>
-                <ACC.Content value={x => x.pages.projectSetupBankDetailsVerify.submitButton} />
+                <Content value={x => x.pages.projectSetupBankDetailsVerify.submitButton} />
               </Form.Submit>
-              <ACC.Link
+              <Link
                 styling="SecondaryButton"
                 route={this.props.routes.projectSetupBankDetails.getLink({
                   projectId: this.props.projectId,
                   partnerId: this.props.partnerId,
                 })}
               >
-                <ACC.Content value={x => x.pages.projectSetupBankDetailsVerify.changeButton} />
-              </ACC.Link>
+                <Content value={x => x.pages.projectSetupBankDetailsVerify.changeButton} />
+              </Link>
             </Form.Fieldset>
           </Form.Form>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 
   private renderGuidance() {
     return (
-      <ACC.Section qa={"guidance"}>
-        <ACC.Content markdown value={x => x.pages.projectSetupBankDetailsVerify.guidanceMessage} />
-      </ACC.Section>
+      <Section qa={"guidance"}>
+        <Content markdown value={x => x.pages.projectSetupBankDetailsVerify.guidanceMessage} />
+      </Section>
     );
   }
 }

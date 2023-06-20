@@ -1,4 +1,4 @@
-import { ProjectStatus } from "@framework/constants";
+import { ProjectStatus } from "@framework/constants/project";
 import { getProjectStatus } from "./projectStatus";
 
 describe("getProjectStatus", () => {

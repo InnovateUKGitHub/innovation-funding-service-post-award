@@ -1,31 +1,27 @@
-import {
-  getAuthRoles,
-  PartnerDtoGql,
-  ProjectContactDto,
-  ProjectDtoGql,
-  ProjectMonitoringLevel,
-  ProjectRole,
-} from "@framework/types";
-import {
-  PartnerContactRoleTable,
-  Section,
-  Projects,
-  getPartnerName,
-  Partners,
-  createTypedTable,
-  Link,
-  Content,
-  Page,
-  SummaryListItem,
-  SummaryList,
-  EmailContent,
-} from "@ui/components";
+import { ProjectMonitoringLevel, ProjectRole } from "@framework/constants/project";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { Content } from "@ui/components/content";
+import { EmailContent } from "@ui/components/emailContent";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { Link } from "@ui/components/links";
+import { PartnerContactRoleTable } from "@ui/components/PartnerContactRoleTable";
+import { ContactsTable } from "@ui/components/partners/contactsTable";
 import { getContactRole } from "@ui/components/partners/getContactRole";
-import { FullDate, ShortDateRange, SimpleString } from "@ui/components/renderers";
+import { getPartnerName } from "@ui/components/partners/partnerName";
+import { ProjectBackLink } from "@ui/components/projects/projectBackLink";
+import { Title } from "@ui/components/projects/title";
+import { ShortDateRange, FullDate } from "@ui/components/renderers/date";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { createTypedTable } from "@ui/components/table";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { getPlural } from "@ui/helpers/plurals";
-import { useProjectStatus } from "@ui/hooks";
-import { useRoutes } from "@ui/redux";
+import { useProjectStatus } from "@ui/hooks/project-status.hook";
+import { useRoutes } from "@ui/redux/routesProvider";
 import { BaseProps, defineRoute } from "../../containerBase";
 import { useProjectDetailsQuery } from "./projectDetails.logic";
 
@@ -58,7 +54,7 @@ const OtherContactProjectDetailsComponent = ({
 
   return (
     <Section title={x => x.projectLabels.otherContacts} qa="other-contacts-table">
-      <Partners.ContactsTable contacts={otherContacts} />
+      <ContactsTable contacts={otherContacts} />
     </Section>
   );
 };
@@ -174,8 +170,8 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
 
   return (
     <Page
-      backLink={<Projects.ProjectBackLink projectId={project.id} routes={routes} />}
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
+      backLink={<ProjectBackLink projectId={project.id} routes={routes} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       projectStatus={project.status}
     >
       <Section

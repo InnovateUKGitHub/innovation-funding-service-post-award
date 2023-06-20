@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */ // Note: due to this file being extended, it's okay for there to be unused params as they're required for children
-import { Authorisation, IContext, IFileWrapper } from "@framework/types";
 import { ValidationError } from "@server/features/common/appError";
-import { DocumentUploadDtoValidator, MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { FileTypeNotAllowedError } from "@server/repositories";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { IContext } from "@framework/types/IContext";
+import { FileTypeNotAllowedError } from "@server/repositories/errors";
+import { MultipleDocumentUploadDtoValidator, DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 // TODO this should become AuthorisedCommandBase and extend CommandBase
 export abstract class NonAuthorisedCommandBase<T> {

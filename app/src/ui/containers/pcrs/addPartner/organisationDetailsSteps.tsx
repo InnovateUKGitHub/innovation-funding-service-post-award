@@ -1,21 +1,25 @@
-import * as ACC from "@ui/components";
-import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { useStores } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { PCRParticipantSize } from "@framework/constants";
 import { EditorStatus } from "@ui/constants/enums";
+import { PCRParticipantSize } from "@framework/constants/pcrConstants";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Option } from "@framework/dtos/option";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   pcrParticipantSize: Option<PCRParticipantSize>[];
 }
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
 
 const InnerContainer = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps,
 ) => {
-  const sizeOptions: ACC.SelectOption[] = props.pcrParticipantSize
+  const sizeOptions: SelectOption[] = props.pcrParticipantSize
     .filter(x => x.active && x.value !== PCRParticipantSize.Academic)
     .map(x => ({ id: x.value.toString(), value: x.label }));
 
@@ -23,7 +27,7 @@ const InnerContainer = (
     props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
 
   return (
-    <ACC.Section title={x => x.pages.pcrAddPartnerOrganisationDetails.sectionTitle}>
+    <Section title={x => x.pages.pcrAddPartnerOrganisationDetails.sectionTitle}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -32,7 +36,7 @@ const InnerContainer = (
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset heading={x => x.pcrAddPartnerLabels.organisationSizeHeading}>
-          <ACC.Content markdown value={x => x.pages.pcrAddPartnerOrganisationDetails.guidance} />
+          <Content markdown value={x => x.pages.pcrAddPartnerOrganisationDetails.guidance} />
           <Form.Radio
             name="participantSize"
             options={sizeOptions}
@@ -56,14 +60,14 @@ const InnerContainer = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrItem.submitButton} />
+            <Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
+            <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };
 
@@ -73,7 +77,7 @@ export const OrganisationDetailsStep = (
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequests.getPcrParticipantSizes()}
       render={x => <InnerContainer {...props} pcrParticipantSize={x} />}
     />

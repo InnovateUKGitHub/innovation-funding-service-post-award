@@ -1,5 +1,5 @@
-import { IAppError } from "@framework/types";
-import { Result } from "@ui/validation";
+import { IAppError } from "@framework/types/IAppError";
+import { Result } from "@ui/validation/result";
 import { i18n } from "i18next";
 import { SSRCache } from "react-relay-network-modern-ssr/node8/server";
 

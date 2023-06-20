@@ -1,16 +1,16 @@
 import {
-  PCRContactRole,
-  PCRItemDisabledReason,
-  PCRItemStatus,
+  PCRStatus,
   PCRItemType,
+  PCRItemStatus,
+  PCRContactRole,
   PCROrganisationType,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRStatus,
-  TypeOfAid,
-} from "@framework/constants";
+  PCRItemDisabledReason,
+} from "@framework/constants/pcrConstants";
+import { TypeOfAid } from "@framework/constants/project";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 
 interface PCRBaseDto {

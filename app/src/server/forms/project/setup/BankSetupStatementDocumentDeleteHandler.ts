@@ -1,14 +1,15 @@
-import { IContext, ILinkInfo } from "@framework/types";
-import { MultipleDocumentUploadDto } from "@framework/dtos";
-
-import { configuration } from "@server/features/common";
 import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-
-import { ProjectSetupBankStatementParams, ProjectSetupBankStatementRoute } from "@ui/containers";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { configuration } from "@server/features/common/config";
+import {
+  ProjectSetupBankStatementParams,
+  ProjectSetupBankStatementRoute,
+} from "@ui/containers/projects/setup/projectSetupBankStatement.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;

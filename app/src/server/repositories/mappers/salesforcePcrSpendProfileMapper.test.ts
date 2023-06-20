@@ -1,9 +1,9 @@
-import { ISalesforcePcrSpendProfile } from "@server/repositories";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
-import { PcrSpendProfileEntity } from "@framework/entities";
-import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 import { DateTime } from "luxon";
 import { salesforceDateFormat } from "@framework/util/clock";
+import { PCRSpendProfileOverheadRate, PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
+import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
+import { ISalesforcePcrSpendProfile } from "../pcrSpendProfileRepository";
 
 const pcrSpendProfileType = "PCR_SPEND_PROFILE_TYPE";
 

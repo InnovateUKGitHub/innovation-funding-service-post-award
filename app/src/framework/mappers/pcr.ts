@@ -1,12 +1,12 @@
 import {
-  PCRItemStatus,
-  PCRItemType,
-  PCROrganisationType,
   PCRPartnerType,
-  PCRProjectRole,
+  PCROrganisationType,
+  PCRItemStatus,
   PCRStatus,
-  TypeOfAid,
-} from "@framework/types";
+  PCRProjectRole,
+  PCRItemType,
+} from "@framework/constants/pcrConstants";
+import { TypeOfAid } from "@framework/constants/project";
 
 export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisationType => {
   if (partnerType === PCRPartnerType.Research) {

@@ -1,4 +1,4 @@
-import { getPartnerName, PartnerNameValues } from "@ui/components";
+import { PartnerNameValues, getPartnerName } from "./partnerName";
 
 describe("getPartnerName()", () => {
   const stubBasePartner: PartnerNameValues = {

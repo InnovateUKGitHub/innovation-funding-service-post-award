@@ -1,5 +1,5 @@
-import { IGuide } from "@framework/types";
-import { SectionPanel } from "../components";
+import { IGuide } from "@framework/types/IGuide";
+import { SectionPanel } from "@ui/components/layout/sectionPanel";
 
 export const sectionPanelGuide: IGuide = {
   name: "Section Panel",

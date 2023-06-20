@@ -1,10 +1,11 @@
+import { PCRItemType, PCRItemDisabledReason } from "@framework/constants/pcrConstants";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
-import { IContext } from "@framework/types";
-import { PCRItemDisabledReason, PCRItemType } from "@framework/constants";
-import { RecordType } from "@framework/entities";
+import { RecordType } from "@framework/entities/recordType";
+import { IContext } from "@framework/types/IContext";
+import { IConfig } from "../common/config";
+import { QueryBase } from "../common/queryBase";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
-import { IConfig, QueryBase } from "../common";
-import { GetByIdQuery } from "../projects";
+import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 
 interface IMetaValue {
   ignoredCompetitions: string[];

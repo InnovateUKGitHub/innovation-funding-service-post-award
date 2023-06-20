@@ -1,5 +1,6 @@
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { BaseProps } from "@ui/containers/containerBase";
-import { PartnerDtoGql, ProjectDtoGql } from "@framework/dtos";
 
 export type Section = "archived" | "open" | "awaiting" | "upcoming" | "pending";
 

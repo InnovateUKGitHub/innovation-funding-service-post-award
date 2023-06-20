@@ -1,11 +1,15 @@
 import { BadRequestError, InActiveProjectError, ValidationError } from "@server/features/common/appError";
-import { Authorisation, ClaimDetailsDto, ClaimLineItemDto, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
-import { ISalesforceClaimDetails } from "@server/repositories";
-import { CostCategory, Partner } from "@framework/entities";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
+import { CostCategory } from "@framework/entities/costCategory";
+import { Partner } from "@framework/entities/partner";
+import { Authorisation } from "@framework/types/authorisation";
+import { ISalesforceClaimDetails } from "@server/repositories/claimDetailsRepository";
 
 const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, description?: string): ClaimLineItemDto => ({
   id: "",

@@ -1,15 +1,13 @@
-import { QueryBase } from "@server/features/common";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { ProjectRole } from "@framework/constants/project";
+import { MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
+import { Option } from "@framework/dtos/option";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { dateComparator } from "@framework/util/comparator";
 import { mapMonitoringReportStatus } from "@server/features/monitoringReports/mapMonitoringReportStatus";
-import {
-  Authorisation,
-  IContext,
-  MonitoringReportStatus,
-  MonitoringReportStatusChangeDto,
-  ProjectRole,
-} from "@framework/types";
-import { dateComparator } from "@framework/util";
 import { ISalesforceMonitoringReportStatusChange } from "@server/repositories/monitoringReportStatusChangeRepository";
-import { Option } from "@framework/types";
+import { QueryBase } from "../common/queryBase";
 import { GetMonitoringReportStatusesQuery } from "./getMonitoringReportStatusesQuery";
 
 export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportStatusChangeDto[]> {

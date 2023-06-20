@@ -1,15 +1,16 @@
-import { IContext, ILinkInfo } from "@framework/types";
-
-import { configuration } from "@server/features/common";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
-
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-
-import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "@ui/containers";
 import { DocumentDeleteDto } from "@framework/dtos/documentDeleteDto";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { configuration } from "@server/features/common/config";
+import {
+  ProjectDocumentPageParams,
+  ProjectDocumentsRoute,
+} from "@ui/containers/projects/documents/projectDocuments.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class ProjectDocumentDeleteHandler extends StandardFormHandlerBase<
   ProjectDocumentPageParams,

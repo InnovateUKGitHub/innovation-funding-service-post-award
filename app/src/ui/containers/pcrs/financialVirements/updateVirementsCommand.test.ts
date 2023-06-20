@@ -1,6 +1,6 @@
-import { ValidationError, InActiveProjectError } from "@server/features/common";
 import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
+import { InActiveProjectError, ValidationError } from "@shared/appError";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("UpdateFinancialVirementCommand", () => {

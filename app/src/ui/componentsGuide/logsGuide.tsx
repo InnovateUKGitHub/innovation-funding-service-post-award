@@ -1,6 +1,6 @@
 import { LogItem, Logs } from "@ui/components/logs";
 import { DateTime } from "luxon";
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
 
 const data: LogItem[] = [
   {

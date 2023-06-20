@@ -1,10 +1,14 @@
-import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, PartnerDto } from "@framework/types";
-import { NestedResult } from "@ui/validation";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { NestedResult } from "@ui/validation/nestedResult";
 import { Result } from "../validation/result";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
-import { roundCurrency } from "@framework/util";
 
 export interface IForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> {
   items: NestedResult<IForecastDetailsDtoValidator>;

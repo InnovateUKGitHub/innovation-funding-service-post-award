@@ -1,5 +1,5 @@
-import { UL, OL, PlainList } from "@ui/components";
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
+import { UL, OL, PlainList } from "@ui/components/layout/list";
 
 export const listGuide: IGuide = {
   name: "List",
@@ -8,7 +8,7 @@ export const listGuide: IGuide = {
       name: "Unordered list",
       comments: "Renders an unordered list with the required govuk styles",
       example: `
-      import { UL } from "@ui/components";
+      
 
       <UL>
         <li>First item</li>
@@ -26,7 +26,7 @@ export const listGuide: IGuide = {
       name: "Ordered list",
       comments: "Renders an ordered list with the required govuk styles",
       example: `
-      import { OL } from "@ui/components";
+      
 
       <OL>
         <li>First todo</li>
@@ -44,7 +44,7 @@ export const listGuide: IGuide = {
       name: "Plain list",
       comments: "Renders an plain list with the required govuk styles",
       example: `
-      import { PlainList } from "@ui/components";
+      
 
       <PlainList>
         <li>First item</li>

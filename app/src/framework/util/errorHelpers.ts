@@ -1,7 +1,8 @@
 import { FieldErrors } from "react-hook-form";
-import { Result, Results } from "@ui/validation";
 import { useFormErrorContext } from "@ui/context/form-error";
-import { IAppError } from "@framework/types";
+import { IAppError } from "@framework/types/IAppError";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
 
 /**
  * This converts from html error format as returned by react-hook-form, zod or yup, into the format used

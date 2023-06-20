@@ -1,11 +1,9 @@
-import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos";
-import { PCRLoanExtensionItemDtoValidator } from "@ui/validators";
-
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos/pcrDtos";
 import { LoanDrawdownExtensionStepContainer } from "@ui/containers/pcrs/loanDrawdownExtension/loanDrawdownExtensionStep";
-
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRLoanExtensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { loanDrawdownExtensionStepSummary } from "./loanDrawdownExtensionStepSummary";
-import { PCRStepId } from "@framework/types";
 
 export type LoanExtensionStepNames = PCRStepId.loanExtension;
 

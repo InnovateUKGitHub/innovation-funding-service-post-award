@@ -1,4 +1,4 @@
-import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
+import { PartnerFinancialVirement, CostCategoryFinancialVirement } from "@framework/entities/financialVirement";
 import { ISalesforceFinancialVirement } from "../financialVirementRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 

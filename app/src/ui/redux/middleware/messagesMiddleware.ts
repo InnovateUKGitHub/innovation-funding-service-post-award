@@ -1,8 +1,7 @@
 import { Dispatch, MiddlewareAPI } from "redux";
-
 import { RootState } from "@ui/redux/reducers/rootReducer";
 import { RootActions } from "@ui/redux/actions/root";
-import { scrollToTheTopInstantly } from "@framework/util";
+import { scrollToTheTopInstantly } from "@framework/util/windowHelpers";
 
 export const messagesMiddleware =
   (store: MiddlewareAPI<Dispatch, RootState>) => (next: Dispatch) => (action: RootActions) => {

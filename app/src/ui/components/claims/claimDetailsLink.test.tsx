@@ -1,10 +1,13 @@
 import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
-import { ClaimStatus, ProjectRole, PartnerStatus, ProjectStatus } from "@framework/constants";
+
 import { routeConfig } from "@ui/routing/routeConfig";
 
 import { ClaimDetailsLink, ClaimDetailsLinkRoutes } from "@ui/components/claims/claimDetailsLink";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { PartnerStatus } from "@framework/constants/partner";
+import { ProjectStatus, ProjectRole } from "@framework/constants/project";
 
 // TODO: This test data needs updating there are way too many "as any" overrides here...
 describe("<ClaimDetailsLink />", () => {

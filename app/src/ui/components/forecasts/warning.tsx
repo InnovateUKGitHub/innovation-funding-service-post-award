@@ -1,20 +1,18 @@
-import {
-  ClaimDetailsSummaryDto,
-  ClaimDto,
-  ForecastDetailsDTO,
-  GOLCostDto,
-  PartnerDto,
-  ProjectDto,
-} from "@framework/dtos";
-import { getAuthRoles } from "@framework/types";
-import { IEditorStore } from "@ui/redux";
-import { ForecastDetailsDtosValidator } from "@ui/validators";
+import { getAuthRoles } from "@framework/types/authorisation";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { AriaLive } from "../renderers/ariaLive";
 import { ValidationMessage } from "../validationMessage";
 import { Content } from "../content";
-import { UL } from "../layout";
-import { roundCurrency } from "@framework/util";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { UL } from "../layout/list";
 
 interface Props {
   project: Pick<ProjectDto, "id">;

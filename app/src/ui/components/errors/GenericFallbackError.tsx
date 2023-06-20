@@ -3,11 +3,11 @@ import { PageTitle } from "@ui/features/page-title";
 
 import { Page } from "../layout/page";
 import { Section } from "../layout/section";
-import { H2 } from "../typography";
-import { ExternalLink } from "../renderers";
-import { SimpleString } from "../renderers/simpleString";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { Content } from "../content";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { ExternalLink } from "../renderers/externalLink";
+import { H2 } from "../typography/Heading.variants";
 
 export type GenericFallbackErrorProps = ErrorPayload["params"];
 

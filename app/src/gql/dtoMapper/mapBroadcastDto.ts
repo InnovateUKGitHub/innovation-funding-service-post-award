@@ -1,5 +1,5 @@
-import { BroadcastDto } from "@framework/dtos";
-import { Clock } from "@framework/util";
+import { BroadcastDto } from "@framework/dtos/BroadcastDto";
+import { Clock } from "@framework/util/clock";
 
 /**
  * splits a long string response into an array around new lines

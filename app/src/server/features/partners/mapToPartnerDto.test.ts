@@ -1,6 +1,6 @@
-import { ProjectRole } from "@framework/constants";
-import { BankDetails, PartnerDto } from "@framework/dtos";
-import { Partner } from "@framework/entities";
+import { ProjectRole } from "@framework/constants/project";
+import { BankDetails, PartnerDto } from "@framework/dtos/partnerDto";
+import { Partner } from "@framework/entities/partner";
 import { createPartnerDto } from "@framework/util/stubDtos";
 import { MapToPartnerDtoCommand } from "@server/features/partners/mapToPartnerDto";
 

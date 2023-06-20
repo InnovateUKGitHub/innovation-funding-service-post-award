@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { Authorisation, IContext, MonitoringReportDto, ProjectRole } from "@framework/types";
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
-import { GetByIdQuery } from "@server/features/projects";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { ProjectRole } from "@framework/constants/project";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitoringReportHeaderRepository";
+import { ISalesforceMonitoringReportResponse } from "@server/repositories/monitoringReportResponseRepository";
+import { BadRequestError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 
 export class SaveMonitoringReport extends CommandBase<boolean> {
   constructor(private readonly monitoringReportDto: MonitoringReportDto, private readonly submit: boolean) {

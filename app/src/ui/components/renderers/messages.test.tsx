@@ -1,6 +1,5 @@
 import { render } from "@testing-library/react";
-
-import { IMessagesProps, Messages } from "@ui/components/renderers";
+import { IMessagesProps, Messages } from "./messages";
 
 describe("<Messages />", () => {
   const setup = (props: IMessagesProps) => render(<Messages {...props} />);

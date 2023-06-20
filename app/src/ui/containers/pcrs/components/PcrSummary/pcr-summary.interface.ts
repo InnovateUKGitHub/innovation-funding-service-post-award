@@ -1,4 +1,6 @@
-import { FinancialVirementDto, PartnerDto, PartnerVirementsDto, PCRItemDto } from "@framework/dtos";
+import { PartnerVirementsDto, FinancialVirementDto } from "@framework/dtos/financialVirementDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { PCRItemDto } from "@framework/dtos/pcrDtos";
 
 /**
  * Available PCR Summary Payloads - Consumable via context (due to split workflow UI's)

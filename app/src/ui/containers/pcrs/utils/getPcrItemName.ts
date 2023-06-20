@@ -1,5 +1,5 @@
-import { FullPCRItemDto } from "@framework/dtos";
-import { useContent } from "@ui/hooks";
+import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
+import { useContent } from "@ui/hooks/content.hook";
 
 /**
  * Convert a Salesforce PCR name to an internationalized PCR name.

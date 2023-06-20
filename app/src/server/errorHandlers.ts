@@ -1,6 +1,7 @@
-import { ErrorCode, IAppError } from "@framework/types";
+import { ErrorCode } from "@framework/constants/enums";
+import { IAppError } from "@framework/types/IAppError";
 import { Logger } from "@shared/developmentLogger";
-import { ValidationError } from "./features/common";
+import { ValidationError } from "./features/common/appError";
 
 const log = new Logger("Error Status");
 

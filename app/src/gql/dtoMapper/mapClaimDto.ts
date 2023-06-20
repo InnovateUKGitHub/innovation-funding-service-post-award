@@ -1,10 +1,10 @@
 import { DateTime } from "luxon";
-import { ClaimStatus } from "@framework/constants";
-import type { ClaimDto } from "@framework/dtos";
 import { mapToClaimStatus, mapToClaimStatusLabel } from "@framework/mappers/claimStatus";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
-import { Clock, salesforceDateFormat } from "@framework/util";
-import { ReceivedStatus } from "@framework/entities";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ReceivedStatus } from "@framework/entities/received-status";
+import { Clock, salesforceDateFormat } from "@framework/util/clock";
 
 const clock = new Clock();
 

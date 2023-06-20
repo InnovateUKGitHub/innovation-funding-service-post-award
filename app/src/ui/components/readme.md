@@ -13,7 +13,7 @@ New components should also be added to and documented in the components guide.
 More documentation can be found at `componentsGuide/readme.md`.
 
 ## Using a component
-The components layer should be imported as `import * as ACC from "@ui/components"`.  
-When being used, the component required should be obtained by navigating to the relevant directory and then the necessary component.  
-e.g. `<ACC.Renderers.ShortDate />`, `<ACC.Projects.Title />` or `<ACC.DocumentList />`
+The components layer should NOT be imported as `import * as ACC from "@ui/components"`.  
+When being used, the component required should be obtained by automatically importing the relevant component with Intellisense.
+e.g. `<ShortDate />`, `<ProjectTitle />` or `<DocumentList />`
 

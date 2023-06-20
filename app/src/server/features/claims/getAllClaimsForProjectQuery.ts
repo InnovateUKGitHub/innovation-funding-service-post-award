@@ -1,8 +1,9 @@
-import { QueryBase } from "@server/features/common";
-import { ISalesforceClaim } from "@server/repositories";
-import { IComparer } from "@framework/util/comparator";
-import { ClaimDto, IContext } from "@framework/types";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { IContext } from "@framework/types/IContext";
+import { IComparer } from "@framework/util/comparator";
+import { ISalesforceClaim } from "@server/repositories/claimsRepository";
+import { QueryBase } from "../common/queryBase";
 import { mapClaim } from "./mapClaim";
 
 export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {

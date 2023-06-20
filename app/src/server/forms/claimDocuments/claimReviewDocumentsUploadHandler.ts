@@ -1,13 +1,13 @@
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { configuration } from "@server/features/common";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { IFileWrapper } from "@framework/types";
-import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "../formHandlerBase";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { configuration } from "@server/features/common/config";
+import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/claims/review.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class ClaimReviewDocumentsUploadHandler extends MultipleFileFormHandlerBase<
   ReviewClaimParams,

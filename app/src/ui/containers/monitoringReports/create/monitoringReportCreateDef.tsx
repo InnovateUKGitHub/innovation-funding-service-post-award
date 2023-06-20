@@ -1,7 +1,8 @@
-import { MonitoringReportDto, ProjectDto } from "@framework/dtos";
-import { ILinkInfo } from "@framework/types";
-import { IEditorStore } from "@ui/redux";
-import { MonitoringReportDtoValidator } from "@ui/validators";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 
 export interface MonitoringReportCreateParams {
   projectId: ProjectId;

@@ -2,7 +2,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { broadcastDetailsQuery } from "./BroadcastDetails.query";
 import { BroadcastDetailsQuery } from "./__generated__/BroadcastDetailsQuery.graphql";
 import { mapToBroadcastDto } from "@gql/dtoMapper/mapBroadcastDto";
-import { BroadcastDto } from "@framework/dtos";
+import { BroadcastDto } from "@framework/dtos/BroadcastDto";
 
 type BroadcastQueryResponse =
   | {

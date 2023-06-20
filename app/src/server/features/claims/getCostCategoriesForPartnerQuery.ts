@@ -1,5 +1,6 @@
-import { IContext, PartnerDto } from "@framework/types";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { IContext } from "@framework/types/IContext";
 import { QueryBase } from "../common/queryBase";
 import { GetFilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
 

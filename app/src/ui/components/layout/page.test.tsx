@@ -1,12 +1,14 @@
 import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react";
-
 import TestBed, { hookTestBed } from "@shared/TestBed";
-import { ErrorCode, IAppError, PartnerStatus, ProjectStatus } from "@framework/types";
-import { Result, Results } from "@ui/validation";
-
 import { Page, PageProps, usePageValidationMessage } from "@ui/components/layout/page";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ErrorCode } from "@framework/constants/enums";
+import { PartnerStatus } from "@framework/constants/partner";
+import { ProjectStatus } from "@framework/constants/project";
+import { IAppError } from "@framework/types/IAppError";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
 
 describe("usePageValidationMessage()", () => {
   const stubContent = {

@@ -1,9 +1,8 @@
 import { render } from "@testing-library/react";
-
-import { ErrorSummary, ErrorSummaryProps } from "@ui/components";
-import { ErrorCode } from "@framework/types";
 import TestBed from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ErrorCode } from "@framework/constants/enums";
+import { ErrorSummaryProps, ErrorSummary } from "./errorSummary";
 
 describe("<ErrorSummary />", () => {
   const stubContent = {

@@ -1,4 +1,4 @@
-import { messageSuccess, removeMessages } from "@ui/redux/actions";
+import { messageSuccess, removeMessages } from "./messageActions";
 
 describe("messageSuccess", () => {
   it("should create message with type success", () => {

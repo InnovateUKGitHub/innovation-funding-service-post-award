@@ -1,7 +1,7 @@
 import { TestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { render } from "@testing-library/react";
-import { DocumentGuidance } from "@ui/components";
+import { DocumentGuidance } from "./DocumentGuidance";
 
 describe("<DocumentGuidance />", () => {
   const stubContent = {

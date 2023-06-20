@@ -1,6 +1,9 @@
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import {
+  GetUnfilteredCostCategoriesQuery,
+  GetFilteredCostCategoriesQuery,
+} from "@server/features/claims/getCostCategoriesQuery";
 import { contextProvider } from "../features/common/contextProvider";
-import { GetUnfilteredCostCategoriesQuery, GetFilteredCostCategoriesQuery } from "../features/claims";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface ICostCategoriesApi {

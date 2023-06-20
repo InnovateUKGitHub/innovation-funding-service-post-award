@@ -1,5 +1,5 @@
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { useEffect } from "react";
-import { scrollToTheTopSmoothly } from "@framework/util";
 
 /**
  * Wrapper SFC to add scrolling behaviour. Using this approach, rather than a hook allows

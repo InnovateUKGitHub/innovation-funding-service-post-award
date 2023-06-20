@@ -1,6 +1,6 @@
-import { getDocumentDescriptionContentSelector } from "@framework/constants";
+import { getDocumentDescriptionContentSelector } from "@framework/constants/documentDescription";
 import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
-import { getAuthRoles } from "@framework/types";
+import { getAuthRoles } from "@framework/types/authorisation";
 import { getFileSize } from "@framework/util/files";
 import { Content } from "@ui/components/content";
 import { createTypedTable } from "@ui/components/table";

@@ -1,18 +1,15 @@
 import { render } from "@testing-library/react";
-import { MultipleDocumentUploadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import {
-  MultipleDocumentUploadDto,
-  PCRDto,
-  PCRItemForPartnerAdditionDto,
-  PCRItemTypeDto,
-  ProjectDto,
-} from "@framework/dtos";
 import { TestBed, TestBedStore } from "@shared/TestBed";
-import { configuration } from "@server/features/common";
 import { BasePcrProps, JesStepUI, JesStepUIProps } from "@ui/containers/pcrs/addPartner/jeSStep";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { EditorStatus } from "@ui/constants/enums";
-import { IRoutes } from "@ui/routing";
+import { IRoutes } from "@ui/routing/routeConfig";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { PCRDto, PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { configuration } from "@server/features/common/config";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 describe("<JesStepUI />", () => {
   const stubContent = {

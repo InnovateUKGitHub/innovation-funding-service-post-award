@@ -1,4 +1,5 @@
-import { Authorisation, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetProjectDocumentQuery extends DocumentQueryBase {

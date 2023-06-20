@@ -1,9 +1,9 @@
-import { PCRItemForTimeExtensionDto } from "@framework/dtos";
-import { TimeExtensionSummary } from "@ui/containers/pcrs/timeExtension/timeExtensionSummary";
-import { TimeExtensionStepContainer } from "@ui/containers/pcrs/timeExtension/timeExtensionStep";
-import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
-import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRStepId } from "@framework/types";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForTimeExtensionDto } from "@framework/dtos/pcrDtos";
+import { PCRTimeExtensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { IPCRWorkflow } from "../pcrWorkflow";
+import { TimeExtensionStepContainer } from "./timeExtensionStep";
+import { TimeExtensionSummary } from "./timeExtensionSummary";
 
 export type TimeExtensionStepNames = PCRStepId.timeExtension;
 

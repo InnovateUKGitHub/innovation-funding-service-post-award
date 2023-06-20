@@ -1,5 +1,7 @@
-import { CommandBase } from "@server/features/common";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { CommandBase } from "../common/commandBase";
 
 export class DeleteProjectDocumentCommand extends CommandBase<void> {
   constructor(private readonly projectId: ProjectId, private readonly documentId: string) {

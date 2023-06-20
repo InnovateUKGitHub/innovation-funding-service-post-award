@@ -1,7 +1,8 @@
-import { TypedDetails, Section, Renderers } from "@ui/components";
-
-import { BroadcastDto } from "@framework/dtos";
-import { useContent } from "@ui/hooks";
+import { BroadcastDto } from "@framework/dtos/BroadcastDto";
+import { TypedDetails } from "@ui/components/details";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useContent } from "@ui/hooks/content.hook";
 
 export const BroadcastDetail = (props: BroadcastDto) => {
   const { getContent } = useContent();
@@ -35,7 +36,7 @@ export const BroadcastDetail = (props: BroadcastDto) => {
 
       <Section title={getContent(x => x.components.broadcastContent.broadcastMessageHeading)}>
         {props.content.map((paragraph, i) => (
-          <Renderers.SimpleString key={i}>{paragraph}</Renderers.SimpleString>
+          <SimpleString key={i}>{paragraph}</SimpleString>
         ))}
       </Section>
     </>

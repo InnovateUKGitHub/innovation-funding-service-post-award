@@ -1,4 +1,4 @@
-import { useStores } from "@ui/redux";
+import { useStores } from "@ui/redux/storesProvider";
 
 /**
  * @description This ensures all POST requests are authentic and to prevents Cross-Site Request Forgery (CSRF) attacks.

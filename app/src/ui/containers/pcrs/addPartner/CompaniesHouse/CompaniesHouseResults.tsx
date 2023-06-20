@@ -1,9 +1,8 @@
 import { useCallback, useMemo } from "react";
-
-import { CompanyDto } from "@framework/dtos";
-import { useContent } from "@ui/hooks";
-import * as ACC from "@ui/components";
-import { FormBuilder } from "@ui/components";
+import { useContent } from "@ui/hooks/content.hook";
+import { CompanyDto } from "@framework/dtos/companyDto";
+import { FormBuilder, SelectOption } from "@ui/components/form";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 
 interface CompaniesHouseResultsProps {
   selectedRegistrationNumber: string | undefined;
@@ -28,24 +27,22 @@ export const CompaniesHouseResults = ({
     if (newSelectedCompany) onSelect(newSelectedCompany);
   };
 
-  const companyOptions: ACC.SelectOption[] = useMemo(() => {
+  const companyOptions: SelectOption[] = useMemo(() => {
     return options.map(x => ({
       id: x.registrationNumber,
       value: (
         <>
-          <ACC.Renderers.SimpleString className="govuk-!-margin-bottom-0">{x.title}</ACC.Renderers.SimpleString>
+          <SimpleString className="govuk-!-margin-bottom-0">{x.title}</SimpleString>
 
-          <ACC.Renderers.SimpleString className="govuk-!-margin-bottom-0">
-            {x.registrationNumber}
-          </ACC.Renderers.SimpleString>
+          <SimpleString className="govuk-!-margin-bottom-0">{x.registrationNumber}</SimpleString>
 
-          <ACC.Renderers.SimpleString className="govuk-!-margin-bottom-0">{x.addressFull}</ACC.Renderers.SimpleString>
+          <SimpleString className="govuk-!-margin-bottom-0">{x.addressFull}</SimpleString>
         </>
       ),
     }));
   }, [options]);
 
-  const getSelectedOption: ACC.SelectOption | undefined = selectedRegistrationNumber
+  const getSelectedOption: SelectOption | undefined = selectedRegistrationNumber
     ? companyOptions.find(x => x.id === selectedRegistrationNumber)
     : undefined;
 

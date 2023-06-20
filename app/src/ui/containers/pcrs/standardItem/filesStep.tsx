@@ -1,11 +1,18 @@
 import React from "react";
-import { IEditorStore, useStores } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
-import * as ACC from "@ui/components";
-import { PCRItemTypeDto, PCRStandardItemDto } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { PCRStandardItemDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { LinksList } from "@ui/components/linksList";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { PCRStandardItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
 interface FileStepsProps {
   documents: DocumentSummaryDto[];
@@ -13,7 +20,7 @@ interface FileStepsProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 class FilesStepComponent extends React.Component<
   PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator> & FileStepsProps
@@ -23,13 +30,13 @@ class FilesStepComponent extends React.Component<
       <>
         {this.renderTemplateLinks(this.props.pcrItemType)}
 
-        <ACC.Section>
-          <ACC.DocumentEdit
+        <Section>
+          <DocumentEdit
             qa="pcr-files-step-documents"
             onRemove={document => this.props.onFileDelete(this.props.documentsEditor.data, document)}
             documents={this.props.documents}
           />
-        </ACC.Section>
+        </Section>
 
         {this.renderForm(this.props.documentsEditor)}
       </>
@@ -41,15 +48,15 @@ class FilesStepComponent extends React.Component<
       return null;
     }
     return (
-      <ACC.Section title={itemType.files.length === 1 ? "Template" : "Templates"} qa="templates">
-        <ACC.LinksList links={itemType.files.map(x => ({ text: x.name, url: x.relativeUrl }))} />
-      </ACC.Section>
+      <Section title={itemType.files.length === 1 ? "Template" : "Templates"} qa="templates">
+        <LinksList links={itemType.files.map(x => ({ text: x.name, url: x.relativeUrl }))} />
+      </Section>
     );
   }
 
   private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>) {
     return (
-      <ACC.Section>
+      <Section>
         <UploadForm.Form
           enctype="multipart"
           editor={documentsEditor}
@@ -58,7 +65,7 @@ class FilesStepComponent extends React.Component<
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset heading="Upload">
-            <ACC.DocumentGuidance />
+            <DocumentGuidance />
             <UploadForm.MultipleFileUpload
               label="Upload files"
               name="attachment"
@@ -81,7 +88,7 @@ class FilesStepComponent extends React.Component<
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
-      </ACC.Section>
+      </Section>
     );
   }
 }
@@ -90,7 +97,7 @@ export const FilesStep = (props: PcrStepProps<PCRStandardItemDto, PCRStandardIte
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
       render={documents => (
         <FilesStepComponent

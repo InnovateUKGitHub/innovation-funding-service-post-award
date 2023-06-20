@@ -1,11 +1,16 @@
-import { QueryBase } from "@server/features/common";
-import { GetAllProjectRolesForUser } from "@server/features/projects";
-import { ISalesforceClaimStatusChange } from "@server/repositories";
-import { ClaimStatusChangeDto, PartnerDto } from "@framework/dtos";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { Option } from "@framework/dtos/option";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 import { dateComparator, stringComparator } from "@framework/util/comparator";
-import { Authorisation, ClaimStatus, IContext, Option, ProjectRole } from "@framework/types";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { mapToClaimStatus, mapToClaimStatusLabel } from "@server/features/claims/mapClaim";
+import { ISalesforceClaimStatusChange } from "@server/repositories/claimStatusChangeRepository";
+import { QueryBase } from "../common/queryBase";
+import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 
 export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]> {
   constructor(

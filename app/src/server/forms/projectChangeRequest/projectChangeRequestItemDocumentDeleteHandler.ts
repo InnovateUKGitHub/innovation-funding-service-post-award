@@ -1,11 +1,12 @@
-import { IContext, ILinkInfo } from "@framework/types";
-import { configuration } from "@server/features/common";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
 import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/containers";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { configuration } from "@server/features/common/config";
+import { ProjectChangeRequestPrepareItemParams, PCRPrepareItemRoute } from "@ui/containers/pcrs/pcrItemWorkflow";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;

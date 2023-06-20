@@ -1,30 +1,34 @@
-import * as ACC from "@ui/components";
-import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPeriodLengthChangeDto } from "@framework/dtos";
-import { PCRPeriodLengthChangeItemDtoValidator } from "@ui/validators";
-import { ClaimFrequency, PCRStepId } from "@framework/constants";
+import { ClaimFrequency } from "@framework/constants/enums";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForPeriodLengthChangeDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { ReadonlyLabel } from "@ui/components/layout/readonlyLabel";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { PCRPeriodLengthChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PcrSummaryProps } from "../pcrWorkflow";
 
 export const PeriodLengthChangeSummary = (
   props: PcrSummaryProps<PCRItemForPeriodLengthChangeDto, PCRPeriodLengthChangeItemDtoValidator, PCRStepId.none>,
 ) => {
-  const monthlyContent = <ACC.Content value={x => x.pages.pcrPeriodLengthChange.periodLengthMonthly} />;
-  const quarterlyContent = <ACC.Content value={x => x.pages.pcrPeriodLengthChange.periodLengthQuarterly} />;
+  const monthlyContent = <Content value={x => x.pages.pcrPeriodLengthChange.periodLengthMonthly} />;
+  const quarterlyContent = <Content value={x => x.pages.pcrPeriodLengthChange.periodLengthQuarterly} />;
   return (
     /* TODO: look at title sizing*/
-    <ACC.Section title="">
-      <ACC.Section qa="guidance">
-        <ACC.Content markdown value={x => x.pages.pcrPeriodLengthChange.guidance} />
-      </ACC.Section>
-      <ACC.ReadonlyLabel qa="current-length" labelContent={x => x.pcrPeriodLengthChangeLabels.currentPeriodLength}>
-        <ACC.Renderers.SimpleString qa="current-length">
+    <Section title="">
+      <Section qa="guidance">
+        <Content markdown value={x => x.pages.pcrPeriodLengthChange.guidance} />
+      </Section>
+      <ReadonlyLabel qa="current-length" labelContent={x => x.pcrPeriodLengthChangeLabels.currentPeriodLength}>
+        <SimpleString qa="current-length">
           {props.project.claimFrequency === ClaimFrequency.Monthly ? monthlyContent : quarterlyContent}
-        </ACC.Renderers.SimpleString>
-      </ACC.ReadonlyLabel>
-      <ACC.ReadonlyLabel qa="new-length" labelContent={x => x.pcrPeriodLengthChangeLabels.newPeriodLength}>
-        <ACC.Renderers.SimpleString qa="new-length">
+        </SimpleString>
+      </ReadonlyLabel>
+      <ReadonlyLabel qa="new-length" labelContent={x => x.pcrPeriodLengthChangeLabels.newPeriodLength}>
+        <SimpleString qa="new-length">
           {props.project.claimFrequency === ClaimFrequency.Monthly ? quarterlyContent : monthlyContent}
-        </ACC.Renderers.SimpleString>
-      </ACC.ReadonlyLabel>
-    </ACC.Section>
+        </SimpleString>
+      </ReadonlyLabel>
+    </Section>
   );
 };

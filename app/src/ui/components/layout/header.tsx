@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { useContent, useGovFrontend } from "@ui/hooks";
-
 import { GovWidthContainer } from "./GovWidthContainer";
 import { Logo } from "./Logo";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
-import { useMounted } from "@ui/features";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useContent } from "@ui/hooks/content.hook";
+import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 
 export interface HeaderProps {
   headingLink: string;

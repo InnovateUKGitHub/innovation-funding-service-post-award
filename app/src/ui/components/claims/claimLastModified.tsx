@@ -1,5 +1,6 @@
-import { useContent } from "@ui/hooks";
-import { FullDateTime, SimpleString } from "../renderers";
+import { useContent } from "@ui/hooks/content.hook";
+import { FullDateTime } from "../renderers/date";
+import { SimpleString } from "../renderers/simpleString";
 
 export interface ClaimLastModifiedProps {
   modifiedDate: Date;

@@ -1,9 +1,10 @@
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { FullPCRItemDto, PCRItemStatus } from "@framework/types";
-import { Task } from "@ui/components";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
+import { Task } from "@ui/components/taskList";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { IEditorStore, useRoutes } from "@ui/redux";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { useRoutes } from "@ui/redux/routesProvider";
 import { usePcrItemName } from "../utils/getPcrItemName";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 

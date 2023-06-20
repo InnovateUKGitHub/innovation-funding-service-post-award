@@ -1,4 +1,4 @@
-import { PCRItemType, PCRStatus } from "@framework/constants";
+import { PCRStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { TestContext } from "./testContextProvider";
 

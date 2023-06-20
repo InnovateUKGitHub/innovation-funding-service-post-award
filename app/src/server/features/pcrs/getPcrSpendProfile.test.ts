@@ -1,7 +1,8 @@
-import { CostCategoryType, PCRItemStatus, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { DateTime } from "luxon";
 import { setup as commonSetup } from "@tests/test-utils/pcr-spend-profile-helpers";
 import { GetPcrSpendProfilesQuery } from "./getPcrSpendProfiles";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCRItemStatus, PCRProjectRole, PCRPartnerType } from "@framework/constants/pcrConstants";
 
 const setup = async () => {
   const { context, projectChangeRequest, recordType, project } = commonSetup();

@@ -1,5 +1,5 @@
+import { PartnerClaimStatus } from "@framework/constants/partner";
 import { getClaimStatus } from "./claimStatus";
-import { PartnerClaimStatus } from "@framework/constants";
 
 describe("getClaimStatus", () => {
   test.each`

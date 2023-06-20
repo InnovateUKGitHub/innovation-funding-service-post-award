@@ -1,5 +1,6 @@
-import { IContext, PartnerDto } from "@framework/types";
-import { QueryBase } from "../common";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { sortPartners } from "./sortPartners";

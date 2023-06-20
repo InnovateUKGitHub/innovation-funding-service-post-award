@@ -1,13 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import { PageLoader, Page, Content, BackLink, Projects, createTypedForm, Section, Renderers } from "@ui/components";
-import * as Dtos from "@framework/dtos";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
-import { IEditorStore, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
-import { ProjectRole } from "@framework/constants";
-import { useContent } from "@ui/hooks";
+import { ProjectRole } from "@framework/constants/project";
+import { useContent } from "@ui/hooks/content.hook";
 import { useMonitoringReportDeleteQuery } from "./monitoringReportDelete.logic";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
 
 export interface MonitoringReportDeleteParams {
   projectId: ProjectId;
@@ -15,17 +24,17 @@ export interface MonitoringReportDeleteParams {
 }
 
 interface Props {
-  project: Pick<Dtos.ProjectDto, "title" | "projectNumber">;
-  editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
-  delete: (dto: Dtos.MonitoringReportDto) => void;
+  project: Pick<ProjectDto, "title" | "projectNumber">;
+  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
+  delete: (dto: MonitoringReportDto) => void;
 }
 
-const DeleteForm = createTypedForm<Dtos.MonitoringReportDto>();
+const DeleteForm = createTypedForm<MonitoringReportDto>();
 
 const DeleteVerificationComponent = (props: BaseProps & Props & MonitoringReportDeleteParams) => {
   return (
     <Page
-      pageTitle={<Projects.Title projectNumber={props.project.projectNumber} title={props.project.title} />}
+      pageTitle={<Title projectNumber={props.project.projectNumber} title={props.project.title} />}
       backLink={
         <BackLink
           route={props.routes.monitoringReportDashboard.getLink({
@@ -39,9 +48,9 @@ const DeleteVerificationComponent = (props: BaseProps & Props & MonitoringReport
       error={props.editor.error}
     >
       <Section>
-        <Renderers.SimpleString>
+        <SimpleString>
           <Content value={x => x.monitoringReportsMessages.deletingMonitoringReportMessage} />
-        </Renderers.SimpleString>
+        </SimpleString>
         <DeleteForm.Form editor={props.editor} qa="monitoringReportDelete">
           <DeleteForm.Fieldset>
             <DeleteForm.Button

@@ -1,6 +1,6 @@
-import { ReceivedStatus } from "@framework/entities";
-import { ClaimStatus } from "@framework/constants";
+import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ReceivedStatus } from "@framework/entities/received-status";
 
 export interface ClaimDto {
   allowIarEdit: boolean;

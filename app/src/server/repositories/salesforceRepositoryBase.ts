@@ -1,13 +1,13 @@
 import { Stream } from "stream";
 import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessResult, Error as JError } from "jsforce";
-
 import * as Errors from "@server/repositories/errors";
 import { ISalesforceMapper } from "@server/repositories/mappers/salesforceMapperBase";
-import { BadRequestError, configuration } from "@server/features/common";
-import { IPicklistEntry } from "@framework/types";
 import { createBatch } from "@shared/create-batch";
 import { ILogger } from "@shared/developmentLogger";
 import { noop } from "lodash";
+import { IPicklistEntry } from "@framework/types/IPicklistEntry";
+import { configuration } from "@server/features/common/config";
+import { BadRequestError } from "@shared/appError";
 
 export type Updatable<T> = Partial<T> & {
   Id: string;

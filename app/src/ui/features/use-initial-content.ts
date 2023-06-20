@@ -1,7 +1,7 @@
 import { Copy } from "@copy/Copy";
 import { getPending } from "@ui/helpers/get-pending";
 import { Params } from "@ui/helpers/make-url";
-import { useStores } from "@ui/redux";
+import { useStores } from "@ui/redux/storesProvider";
 
 /**
  * @description Returns the content solution based on the availability of the projectId (used based on condition competitionType rendering)

@@ -1,14 +1,16 @@
+import { PartnerClaimStatus, PartnerStatus } from "@framework/constants/partner";
+import { ProjectStatus } from "@framework/constants/project";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { projectPriorityComparator } from "@framework/util/comparator";
 import { fuzzySearch } from "@framework/util/fuzzySearch";
-import { getAuthRoles, PartnerClaimStatus, PartnerStatus, ProjectStatus } from "@framework/types";
-import { projectPriorityComparator } from "@framework/util";
-import { mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
+import { mapToBroadcastDtoArray } from "@gql/dtoMapper/mapBroadcastDto";
+import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { useContent } from "@ui/hooks/content.hook";
 import { useLazyLoadQuery } from "react-relay";
-
-import { CuratedSection, CuratedSections, Section, FilterOptions, Project, Partner } from "./Dashboard.interface";
+import { CuratedSection, CuratedSections, FilterOptions, Partner, Project, Section } from "./Dashboard.interface";
 import { projectDashboardQuery } from "./Dashboard.query";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
-import { mapToBroadcastDtoArray } from "@gql/dtoMapper/mapBroadcastDto";
-import { useContent } from "@ui/hooks";
 
 /**
  * filter function for a reducer.

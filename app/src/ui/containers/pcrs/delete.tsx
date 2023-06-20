@@ -1,12 +1,22 @@
 import { useNavigate } from "react-router-dom";
-import { ProjectDto, ProjectRole } from "@framework/types";
-
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, useStores } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
-import * as ACC from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { ProjectRole } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { ShortDate } from "@ui/components/renderers/date";
+import { LineBreakList } from "@ui/components/renderers/lineBreakList";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Title } from "@ui/components/projects/title";
+import { createTypedForm } from "@ui/components/form";
 
 export interface PCRDeleteParams {
   projectId: ProjectId;
@@ -23,7 +33,7 @@ interface Callbacks {
   onDelete: (projectId: ProjectId, pcrId: PcrId, dto: PCRDto) => void;
 }
 
-const DeleteForm = ACC.createTypedForm<PCRDto>();
+const DeleteForm = createTypedForm<PCRDto>();
 
 class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks> {
   render() {
@@ -33,45 +43,37 @@ class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks>
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor)} />;
+    return <PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor)} />;
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
+          <BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
             Back to project change requests
-          </ACC.BackLink>
+          </BackLink>
         }
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
         project={project}
         error={editor.error}
         validator={editor.validator}
       >
-        <ACC.Section>
-          <ACC.ValidationMessage messageType="alert" message="All the information will be permanently deleted." />
-          <ACC.SummaryList qa="pcr_viewItem">
-            <ACC.SummaryListItem label="Request number" content={pcr.requestNumber} qa="requestNumber" />
-            <ACC.SummaryListItem
+        <Section>
+          <ValidationMessage messageType="alert" message="All the information will be permanently deleted." />
+          <SummaryList qa="pcr_viewItem">
+            <SummaryListItem label="Request number" content={pcr.requestNumber} qa="requestNumber" />
+            <SummaryListItem
               label="Types"
-              content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />}
+              content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
               qa="types"
             />
-            <ACC.SummaryListItem
-              label="Started"
-              content={<ACC.Renderers.ShortDate value={pcr.started} />}
-              qa="started"
-            />
-            <ACC.SummaryListItem
-              label="Last updated"
-              content={<ACC.Renderers.ShortDate value={pcr.lastUpdated} />}
-              qa="lastUpdaed"
-            />
-          </ACC.SummaryList>
-        </ACC.Section>
+            <SummaryListItem label="Started" content={<ShortDate value={pcr.started} />} qa="started" />
+            <SummaryListItem label="Last updated" content={<ShortDate value={pcr.lastUpdated} />} qa="lastUpdaed" />
+          </SummaryList>
+        </Section>
 
-        <ACC.Section>
+        <Section>
           <DeleteForm.Form editor={editor} qa="pcrDelete">
             <DeleteForm.Button
               name="delete"
@@ -81,8 +83,8 @@ class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks>
               Delete request
             </DeleteForm.Button>
           </DeleteForm.Form>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 }

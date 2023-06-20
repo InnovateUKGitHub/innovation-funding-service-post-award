@@ -1,7 +1,11 @@
 import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
-import { Authorisation, ClaimStatus, ClaimStatusChangeDto, PartnerDto, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Authorisation } from "@framework/types/authorisation";
 
 describe("GetClaimStatusChangesQuery", () => {
   describe("with access control", () => {

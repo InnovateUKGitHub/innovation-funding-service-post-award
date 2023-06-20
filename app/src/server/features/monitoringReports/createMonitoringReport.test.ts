@@ -1,7 +1,7 @@
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
-import { MonitoringReportDto } from "@framework/types";
-import { MonitoringReportStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("createMonitoringReports", () => {

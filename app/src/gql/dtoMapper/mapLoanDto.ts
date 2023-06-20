@@ -1,6 +1,6 @@
-import type { LoanDto } from "@framework/dtos";
-import { LoanStatus } from "@framework/entities";
-import { Clock } from "@framework/util";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { LoanStatus } from "@framework/entities/loan-status";
+import { Clock } from "@framework/util/clock";
 
 const clock = new Clock();
 

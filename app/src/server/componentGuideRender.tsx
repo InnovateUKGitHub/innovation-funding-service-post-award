@@ -2,12 +2,11 @@ import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
 import { Provider } from "react-redux";
 import { combineReducers, createStore } from "redux";
-
 import { TestBed } from "@shared/TestBed";
 import { Guide } from "@ui/componentsGuide/guide";
 import * as colour from "@ui/styles/colours";
 import { devDependencies } from "../../package.json";
-import { configuration } from "./features/common";
+import { configuration } from "./features/common/config";
 
 /**
  * renders the component guide

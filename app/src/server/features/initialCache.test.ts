@@ -1,4 +1,4 @@
-import { IContext } from "@framework/types";
+import { IContext } from "@framework/types/IContext";
 import { fetchCaches } from "./initialCache";
 
 const logger = {

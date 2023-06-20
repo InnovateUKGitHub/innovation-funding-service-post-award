@@ -1,13 +1,12 @@
 import { render } from "@testing-library/react";
-
 import { TestBed, TestBedStore } from "@shared/TestBed";
 import { ClaimDrawdownTable, ClaimDrawdownTableProps } from "@ui/containers/claims/components/ClaimDrawdownTable";
-import { LoanDto } from "@framework/dtos";
-import { LoanStatus } from "@framework/entities";
 import { createProjectDto } from "@framework/util/stubDtos";
 import { Pending } from "@shared/pending";
-import { LoadingStatus } from "@framework/constants";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { LoadingStatus } from "@framework/constants/enums";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { LoanStatus } from "@framework/entities/loan-status";
 
 describe("<ClaimDrawdownTable />", () => {
   const stubProject = createProjectDto({ competitionType: "LOANS" });

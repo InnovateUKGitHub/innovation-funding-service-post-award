@@ -1,8 +1,8 @@
-import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
-import { PCRStatus } from "@framework/types";
-import { ISalesforceProjectChangeRequestStatusChange } from "..";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 import { mapToPCRStatus } from "./projectChangeRequestMapper";
+import { PCRStatus } from "@framework/constants/pcrConstants";
+import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities/projectChangeRequest";
+import { ISalesforceProjectChangeRequestStatusChange } from "../projectChangeRequestStatusChangeRepository";
 
 export class PCRStatusChangeMapper extends SalesforceBaseMapper<
   ISalesforceProjectChangeRequestStatusChange,

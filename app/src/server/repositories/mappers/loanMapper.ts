@@ -1,8 +1,7 @@
 import { LoanDto } from "@framework/dtos/loanDto";
-import { LoanStatus } from "@framework/entities";
-import { roundCurrency } from "@framework/util";
-
-import { BadRequestError } from "@server/features/common";
+import { LoanStatus } from "@framework/entities/loan-status";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { BadRequestError } from "@shared/appError";
 import { ISalesforceLoan } from "../loanRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 

@@ -1,11 +1,14 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { IContext, ILinkInfo } from "@framework/types";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
-import { MonitoringReportDashboardRoute, MonitoringReportWorkflowRoute } from "@ui/containers";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
-import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/workflow/monitoringReportWorkflowDef";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { MonitoringReportDashboardRoute } from "@ui/containers/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { MonitoringReportWorkflowRoute } from "@ui/containers/monitoringReports/workflow/monitoringReportWorkflow.page";
+import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
+import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
 import { MonitoringReportWorkflowParams } from "@ui/containers/monitoringReports/workflow/MonitoringReportWorkflowProps";
 
 export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<

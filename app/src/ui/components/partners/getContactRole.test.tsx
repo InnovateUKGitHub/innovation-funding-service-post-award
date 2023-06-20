@@ -1,4 +1,5 @@
-import { PartnerDto, ProjectContactDto } from "@framework/types";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 import { getContactRole } from "./getContactRole";
 
 const steelManufacturingPartner = {

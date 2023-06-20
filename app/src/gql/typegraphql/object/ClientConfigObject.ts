@@ -1,4 +1,4 @@
-import { LogLevel } from "@framework/types";
+import { LogLevel } from "@framework/constants/enums";
 import type { IAppOptions } from "@framework/types/IAppOptions";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { Field, ObjectType } from "type-graphql";

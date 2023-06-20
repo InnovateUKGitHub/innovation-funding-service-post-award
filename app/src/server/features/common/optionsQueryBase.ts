@@ -1,5 +1,6 @@
-import { IContext, IPicklistEntry } from "@framework/types";
 import { Option } from "@framework/dtos/option";
+import { IContext } from "@framework/types/IContext";
+import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 import { QueryBase } from "./queryBase";
 
 export abstract class OptionsQueryBase<T extends string | number> extends QueryBase<Option<T>[]> {

@@ -1,14 +1,14 @@
 import React from "react";
 import cx from "classnames";
 import { v4 as uuid } from "uuid";
-import { ILinkInfo } from "@framework/types";
-import { Result } from "@ui/validation";
-import { UL, Tag, TagTypeOptions } from "@ui/components";
 import type { ContentSelector } from "@copy/type";
-import { useContent } from "@ui/hooks";
-
 import { ValidationError } from "./validationError";
-import { Link } from "./links";
+import { Link } from "@ui/components/links";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { useContent } from "@ui/hooks/content.hook";
+import { Result } from "@ui/validation/result";
+import { UL } from "./layout/list";
+import { TagTypeOptions, Tag } from "./Tag";
 
 export type TaskStatus = "To do" | "Complete" | "Incomplete";
 

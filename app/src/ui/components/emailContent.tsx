@@ -1,6 +1,6 @@
 import type { ContentSelector } from "@copy/type";
-import { useContent } from "@ui/hooks";
-import { Email, EmailProps } from "./renderers";
+import { useContent } from "@ui/hooks/content.hook";
+import { EmailProps, Email } from "./renderers/email";
 
 export interface EmailContentProps extends Omit<EmailProps, "value" | "children"> {
   value: ContentSelector;

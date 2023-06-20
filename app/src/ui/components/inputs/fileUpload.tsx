@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import classNames from "classnames";
-import { IFileWrapper } from "@framework/types";
+import { IFileWrapper } from "@framework/types/fileWapper";
 import { ClientFileWrapper } from "../../../client/clientFileWrapper";
 
 type InputAttr = Omit<React.HTMLAttributes<HTMLInputElement>, "onChange">;

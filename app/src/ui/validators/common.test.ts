@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import * as Validators from "@ui/validators/common";
-import { Results } from "@ui/validation";
+import { Results } from "@ui/validation/results";
 
 describe("common validators", () => {
   describe("date", () => {

@@ -1,7 +1,7 @@
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import React from "react";
-import { ILinkInfo } from "@framework/types";
-import { Link } from "./links";
-import { SimpleString } from "./renderers";
+import { Link } from "@ui/components/links";
+import { SimpleString } from "./renderers/simpleString";
 
 export interface NavigationCardMessage {
   message: React.ReactNode;

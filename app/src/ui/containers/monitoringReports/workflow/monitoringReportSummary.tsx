@@ -1,52 +1,68 @@
-import React from "react";
-import * as Dtos from "@framework/types";
-import { IEditorStore, useStores } from "@ui/redux";
-import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
+import {
+  MonitoringReportDto,
+  MonitoringReportOptionDto,
+  MonitoringReportQuestionDto,
+  MonitoringReportStatusChangeDto,
+} from "@framework/dtos/monitoringReportDto";
 import { Pending } from "@shared/pending";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { Link } from "@ui/components/links";
+import { Loader } from "@ui/components/loading";
+import { Logs } from "@ui/components/logs";
+import { PeriodTitle } from "@ui/components/periodTitle";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { MonitoringReportReportSummaryProps } from "@ui/containers/monitoringReports/workflow/monitoringReportWorkflowDef";
-import * as ACC from "../../../components";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import React from "react";
 
 interface InnerProps {
-  statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
+  statusChanges: Pending<MonitoringReportStatusChangeDto[]>;
 }
 
-const ReportForm = ACC.createTypedForm<Dtos.MonitoringReportDto>();
+const ReportForm = createTypedForm<MonitoringReportDto>();
 
 class MonitoringReportComponent extends React.Component<MonitoringReportReportSummaryProps & InnerProps> {
   public render() {
     const { mode, editor, report } = this.props;
     const title = (
-      <ACC.PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
+      <PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
     );
     return (
-      <ACC.Section title={title} qa="monitoringReportViewSection">
+      <Section title={title} qa="monitoringReportViewSection">
         {this.renderPeriod(editor)}
         {report.questions.map(q => this.renderResponse(editor, q))}
         {this.renderLog()}
         {mode === "prepare" && this.renderForm(editor)}
-      </ACC.Section>
+      </Section>
     );
   }
 
   private renderLog() {
     return (
-      <ACC.Section>
-        <ACC.Accordion>
-          <ACC.AccordionItem title={x => x.monitoringReportsLabels.statusAndCommentsLog} qa="status-and-comments-log">
+      <Section>
+        <Accordion>
+          <AccordionItem title={x => x.monitoringReportsLabels.statusAndCommentsLog} qa="status-and-comments-log">
             {/* Keeping logs inside loader because accordion defaults to closed*/}
-            <ACC.Loader
+            <Loader
               pending={this.props.statusChanges}
-              render={statusChanges => <ACC.Logs data={statusChanges} qa="monitoring-report-status-change-table" />}
+              render={statusChanges => <Logs data={statusChanges} qa="monitoring-report-status-change-table" />}
             />
-          </ACC.AccordionItem>
-        </ACC.Accordion>
-      </ACC.Section>
+          </AccordionItem>
+        </Accordion>
+      </Section>
     );
   }
 
-  private renderForm(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+  private renderForm(editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>) {
     return (
-      <ACC.Section>
+      <Section>
         <ReportForm.Form editor={editor} onChange={dto => this.props.onChange(dto)} qa="monitoringReportCreateForm">
           <ReportForm.Fieldset
             qa="additional-comments-section"
@@ -61,49 +77,45 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
               characterCountOptions={{ type: "descending", maxValue: 5000 }}
             />
           </ReportForm.Fieldset>
-          <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.monitoringReportsMessages.submittingMonitoringReportMessage} />
-          </ACC.Renderers.SimpleString>
+          <SimpleString>
+            <Content value={x => x.monitoringReportsMessages.submittingMonitoringReportMessage} />
+          </SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
             <ReportForm.Button name="submit" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>
-              <ACC.Content value={x => x.pages.monitoringReportsSummary.buttonSubmit} />
+              <Content value={x => x.pages.monitoringReportsSummary.buttonSubmit} />
             </ReportForm.Button>
             <ReportForm.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(editor.data, false)}>
-              <ACC.Content value={x => x.pages.monitoringReportsSummary.buttonSaveAndReturn} />
+              <Content value={x => x.pages.monitoringReportsSummary.buttonSaveAndReturn} />
             </ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
-      </ACC.Section>
+      </Section>
     );
   }
 
-  private getAction(validation: QuestionValidator, question: Dtos.MonitoringReportQuestionDto) {
+  private getAction(validation: QuestionValidator, question: MonitoringReportQuestionDto) {
     if (this.props.mode !== "prepare") {
       return null;
     }
     return (
       <span id={validation.score.key}>
-        <ACC.Link
-          id={validation.comments.key}
-          replace
-          route={this.props.getEditLink(`question-${question.displayOrder}`)}
-        >
-          <ACC.Content value={x => x.pages.monitoringReportsSummary.buttonEditItem} />
-        </ACC.Link>
+        <Link id={validation.comments.key} replace route={this.props.getEditLink(`question-${question.displayOrder}`)}>
+          <Content value={x => x.pages.monitoringReportsSummary.buttonEditItem} />
+        </Link>
       </span>
     );
   }
 
   private renderScore(
-    response: Dtos.MonitoringReportOptionDto | undefined,
+    response: MonitoringReportOptionDto | undefined,
     validation: QuestionValidator,
-    question: Dtos.MonitoringReportQuestionDto,
+    question: MonitoringReportQuestionDto,
   ) {
     if (!question.isScored) {
       return null;
     }
     return (
-      <ACC.SummaryListItem
+      <SummaryListItem
         validation={validation?.score}
         label={x => x.pages.monitoringReportsSummary.scoreLabel}
         content={response && `${response.questionScore} - ${response.questionText}`}
@@ -113,9 +125,9 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
     );
   }
 
-  private renderComments(validation: QuestionValidator, question: Dtos.MonitoringReportQuestionDto) {
+  private renderComments(validation: QuestionValidator, question: MonitoringReportQuestionDto) {
     return (
-      <ACC.SummaryListItem
+      <SummaryListItem
         validation={validation.comments}
         label="Comments"
         content={question.comments || ""}
@@ -127,12 +139,12 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
     );
   }
 
-  private renderPeriod(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+  private renderPeriod(editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>) {
     const validation = editor && editor.validator.periodId;
     return (
-      <ACC.Section>
-        <ACC.SummaryList qa={"summary-period"}>
-          <ACC.SummaryListItem
+      <Section>
+        <SummaryList qa={"summary-period"}>
+          <SummaryListItem
             validation={validation}
             label={x => x.pages.monitoringReportsSummary.periodLabel}
             content={editor.data.periodId}
@@ -140,7 +152,7 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
             /* Put the action on the second item if not showing the first*/
             action={
               this.props.mode === "prepare" && (
-                <ACC.Link
+                <Link
                   id={validation.key}
                   replace
                   route={this.props.routes.monitoringReportPreparePeriod.getLink({
@@ -148,19 +160,19 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
                     id: this.props.id,
                   })}
                 >
-                  <ACC.Content value={x => x.pages.monitoringReportsSummary.buttonEditItem} />
-                </ACC.Link>
+                  <Content value={x => x.pages.monitoringReportsSummary.buttonEditItem} />
+                </Link>
               )
             }
           />
-        </ACC.SummaryList>
-      </ACC.Section>
+        </SummaryList>
+      </Section>
     );
   }
 
   private renderResponse(
-    editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>,
-    question: Dtos.MonitoringReportQuestionDto,
+    editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>,
+    question: MonitoringReportQuestionDto,
   ) {
     const response = question.options.find(x => x.id === question.optionId);
     const validation =
@@ -169,12 +181,12 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
         x => x.model.displayOrder === question.displayOrder,
       ) as QuestionValidator);
     return (
-      <ACC.Section title={question.title} key={question.title}>
-        <ACC.SummaryList qa={`summary-question-${question.displayOrder}`}>
+      <Section title={question.title} key={question.title}>
+        <SummaryList qa={`summary-question-${question.displayOrder}`}>
           {this.renderScore(response, validation, question)}
           {this.renderComments(validation, question)}
-        </ACC.SummaryList>
-      </ACC.Section>
+        </SummaryList>
+      </Section>
     );
   }
 }

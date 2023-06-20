@@ -1,4 +1,4 @@
-import { ICache } from "@framework/types";
+import { ICache } from "@framework/types/ICache";
 
 export class Cache<T> implements ICache<T> {
   private readonly store: Record<string, T> = {};

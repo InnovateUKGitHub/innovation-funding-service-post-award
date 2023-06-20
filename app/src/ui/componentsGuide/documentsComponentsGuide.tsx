@@ -1,8 +1,9 @@
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { IGuide } from "@framework/types/IGuide";
+import { DocumentEdit, DocumentView } from "@ui/components/documents/DocumentView";
+import { Button } from "@ui/components/styledButton";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
-import { DocumentSummaryDto, IGuide } from "@framework/types";
-import { Button, DocumentEdit, DocumentView } from "@ui/components";
 
 const initialDocs: DocumentSummaryDto[] = [
   {

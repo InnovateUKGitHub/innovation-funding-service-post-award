@@ -1,4 +1,4 @@
-import { LoadingStatus } from "@framework/constants";
+import { LoadingStatus } from "@framework/constants/enums";
 import { Pending } from "@shared/pending";
 import { getPending } from "@ui/helpers/get-pending";
 

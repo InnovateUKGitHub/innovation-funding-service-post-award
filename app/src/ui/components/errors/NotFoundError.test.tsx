@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
-import { NotFoundError } from "@ui/components/errors";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { NotFoundError } from "./NotFoundError";
 
 describe("<NotFoundErrorPage />", () => {
   describe("@renders", () => {

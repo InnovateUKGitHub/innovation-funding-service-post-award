@@ -1,17 +1,19 @@
-import { PCRStatus, ProjectMonitoringLevel } from "@framework/constants";
-import { PCRDto } from "@framework/dtos";
-import { IContext, ILinkInfo } from "@framework/types";
+import { PCRStatus } from "@framework/constants/pcrConstants";
+import { ProjectMonitoringLevel } from "@framework/constants/project";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { GetByIdQuery } from "@server/features/projects";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import { PCRsDashboardRoute } from "@ui/containers/pcrs/dashboard/PCRDashboard.page";
 import {
-  PCRsDashboardRoute,
   ProjectChangeRequestPrepareParams,
   ProjectChangeRequestPrepareRoute,
-} from "@ui/containers";
+} from "@ui/containers/pcrs/overview/projectChangeRequestPrepare.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareParams,

@@ -1,14 +1,16 @@
 import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { MonitoringReportDto } from "@framework/dtos";
-import { IContext, ILinkInfo } from "@framework/types";
-import { MonitoringReportDtoValidator } from "@ui/validators";
-import { DeleteMonitoringReportCommand, GetMonitoringReportById } from "@server/features/monitoringReports";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
+import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 import {
-  MonitoringReportDashboardRoute,
   MonitoringReportDeleteParams,
   MonitoringReportDeleteRoute,
-} from "@ui/containers";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+} from "@ui/containers/monitoringReports/delete.page";
+import { MonitoringReportDashboardRoute } from "@ui/containers/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
 
 export class MonitoringReportDeleteFormHandler extends StandardFormHandlerBase<
   MonitoringReportDeleteParams,

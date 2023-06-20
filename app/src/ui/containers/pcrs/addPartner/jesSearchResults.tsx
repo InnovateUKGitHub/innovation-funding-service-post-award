@@ -1,7 +1,9 @@
-import * as ACC from "@ui/components";
-import { AccountDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { createTypedForm, H2 } from "@ui/components";
-import { useContent } from "@ui/hooks";
+import { AccountDto } from "@framework/dtos/accountDto";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { H2 } from "@ui/components/typography/Heading.variants";
+import { useContent } from "@ui/hooks/content.hook";
 
 interface JesSearchResultsProps {
   selected: AccountDto | undefined;
@@ -13,9 +15,9 @@ interface JesSearchResultsProps {
 export const JesSearchResults = ({ selected, jesAccounts, update, Form }: JesSearchResultsProps) => {
   const { getContent } = useContent();
 
-  const jesAccountsOptions: ACC.SelectOption[] = jesAccounts.map(x => ({
+  const jesAccountsOptions: SelectOption[] = jesAccounts.map(x => ({
     id: x.id,
-    value: <ACC.Renderers.SimpleString className="govuk-!-margin-bottom-0">{x.companyName}</ACC.Renderers.SimpleString>,
+    value: <SimpleString className="govuk-!-margin-bottom-0">{x.companyName}</SimpleString>,
   }));
   const value = jesAccountsOptions.find(y => y.id === selected?.id);
 

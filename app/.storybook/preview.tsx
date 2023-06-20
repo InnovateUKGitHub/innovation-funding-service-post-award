@@ -1,5 +1,5 @@
 import type { Decorator, Preview } from "@storybook/react";
-import { ContentProvider } from "@ui/redux";
+import { ContentProvider } from "@ui/redux/contentProvider";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import cx from "classnames";

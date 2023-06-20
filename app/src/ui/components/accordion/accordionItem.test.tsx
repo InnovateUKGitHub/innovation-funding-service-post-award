@@ -1,9 +1,8 @@
 import userEvent from "@testing-library/user-event";
 import { render, act } from "@testing-library/react";
-
 import { TestBed } from "@shared/TestBed";
-import { AccordionItem, AccordionItemProps } from "..";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { AccordionItemProps, AccordionItem } from "./AccordionItem";
 
 const stubContent = {
   example: {

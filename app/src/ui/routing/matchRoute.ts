@@ -1,4 +1,4 @@
-import { ErrorNotFoundRoute } from "@ui/containers";
+import { ErrorNotFoundRoute } from "@ui/containers/errors.page";
 import { routeConfig } from "./routeConfig";
 
 const toRegexpMatcher = (routePath: string) => {

@@ -1,7 +1,8 @@
-import { ClaimStatus } from "@framework/constants";
-import { ClaimDto, DocumentSummaryDto } from "@framework/dtos";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
-import { ClaimDtoValidator } from "@ui/validators";
+import { ClaimDtoValidator } from "./claimDtoValidator";
 
 describe("claimDtoValidator()", () => {
   describe.each(["en-GB", "no"])("With %s i18n", language => {

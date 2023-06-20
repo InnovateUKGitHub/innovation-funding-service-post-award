@@ -1,16 +1,21 @@
 import React from "react";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import * as ACC from "@ui/components";
-import { sumBy } from "@framework/util";
-import { useStores } from "@ui/redux";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { PCROrganisationType } from "@framework/constants";
+import { sumBy } from "@framework/util/numberHelper";
 import { Pending } from "@shared/pending";
-import { SimpleString } from "@ui/components/renderers";
-import { MountedHoc } from "@ui/features";
+import { Content } from "@ui/components/content";
+import { Section } from "@ui/components/layout/section";
+import { Currency } from "@ui/components/renderers/currency";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { MountedHoc } from "@ui/features/has-mounted/Mounted";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Loader } from "@ui/components/loading";
+import { Link } from "@ui/components/links";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];
@@ -21,7 +26,7 @@ interface Data {
   costDto: PCRSpendProfileAcademicCostDto;
 }
 
-const Table = ACC.createTypedTable<Data>();
+const Table = createTypedTable<Data>();
 
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
@@ -44,12 +49,12 @@ class Component extends React.Component<
     return (
       <MountedHoc>
         {state => (
-          <ACC.Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
-            <ACC.Section title={x => x.pcrAddPartnerLabels.tsbReferenceHeading}>
+          <Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
+            <Section title={x => x.pcrAddPartnerLabels.tsbReferenceHeading}>
               <SimpleString qa="tsbReference">{pcrItem.tsbReference}</SimpleString>
-            </ACC.Section>
+            </Section>
 
-            <ACC.Section title={x => x.pages.pcrAddPartnerAcademicCosts.costsSectionTitle}>
+            <Section title={x => x.pages.pcrAddPartnerAcademicCosts.costsSectionTitle}>
               <Table.Table qa="costsTable" data={data}>
                 <Table.String
                   header={x => x.pages.pcrAddPartnerAcademicCosts.categoryHeading}
@@ -57,9 +62,9 @@ class Component extends React.Component<
                   value={x => x.costCategory.name}
                   footer={
                     state.isClient && (
-                      <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
-                        <ACC.Content value={x => x.pages.pcrAddPartnerAcademicCosts.totalCosts} />
-                      </ACC.Renderers.SimpleString>
+                      <SimpleString className={"govuk-!-font-weight-bold"}>
+                        <Content value={x => x.pages.pcrAddPartnerAcademicCosts.totalCosts} />
+                      </SimpleString>
                     )
                   }
                 />
@@ -69,12 +74,12 @@ class Component extends React.Component<
                   qa="cost"
                   value={x => (x.costDto ? x.costDto.value : 0)}
                   width={30}
-                  footer={state.isClient && <ACC.Renderers.Currency value={total} />}
+                  footer={state.isClient && <Currency value={total} />}
                 />
               </Table.Table>
-            </ACC.Section>
+            </Section>
 
-            <ACC.Link
+            <Link
               styling="SecondaryButton"
               route={this.props.routes.pcrReviewItem.getLink({
                 itemId: this.props.pcrItem.id,
@@ -83,8 +88,8 @@ class Component extends React.Component<
               })}
             >
               Return to summary
-            </ACC.Link>
-          </ACC.Section>
+            </Link>
+          </Section>
         )}
       </MountedHoc>
     );
@@ -106,5 +111,5 @@ export const AcademicCostsReviewStep = (
       ),
     );
 
-  return <ACC.Loader pending={Pending.combine({ costCategories })} render={x => <Component {...props} {...x} />} />;
+  return <Loader pending={Pending.combine({ costCategories })} render={x => <Component {...props} {...x} />} />;
 };

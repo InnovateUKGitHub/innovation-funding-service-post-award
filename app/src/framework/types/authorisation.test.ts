@@ -1,4 +1,5 @@
-import { Authorisation, ProjectRole, getAuthRoles } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation, getAuthRoles } from "./authorisation";
 
 describe("authorisation", () => {
   const roles = {

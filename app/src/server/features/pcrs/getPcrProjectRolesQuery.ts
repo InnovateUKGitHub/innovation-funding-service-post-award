@@ -1,4 +1,5 @@
-import { IContext, PCRProjectRole } from "@framework/types";
+import { PCRProjectRole } from "@framework/constants/pcrConstants";
+import { IContext } from "@framework/types/IContext";
 import { PcrProjectRoleMapper } from "@server/repositories/mappers/projectChangeRequestMapper";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 

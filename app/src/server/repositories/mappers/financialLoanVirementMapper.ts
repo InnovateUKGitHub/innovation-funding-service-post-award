@@ -1,5 +1,5 @@
-import { LoanFinancialVirement } from "@framework/entities";
-import { LoanStatus } from "@framework/entities";
+import { LoanFinancialVirement } from "@framework/entities/financialVirement";
+import { LoanStatus } from "@framework/entities/loan-status";
 import { ISalesforceFinancialLoanVirement } from "../financialLoanVirementRepository";
 import { LoanMapper } from "./loanMapper";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";

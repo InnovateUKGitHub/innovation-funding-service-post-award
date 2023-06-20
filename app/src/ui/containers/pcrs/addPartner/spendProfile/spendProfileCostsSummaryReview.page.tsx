@@ -1,5 +1,8 @@
+import { CostCategoryGroupType } from "@framework/constants/enums";
+import { PCRItemType, PCRStepId } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { PCRDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
@@ -9,23 +12,24 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
-import {
-  CostCategoryList,
-  CostCategoryGroupType,
-  PCRItemForPartnerAdditionDto,
-  PCRItemType,
-  ProjectDto,
-  ProjectRole,
-  PCRStepId,
-} from "@framework/types";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { CostCategoryList } from "@framework/types/CostCategory";
 import { Pending } from "@shared/pending";
-import * as ACC from "@ui/components";
-import { PcrSpendProfileCostSummaryParams } from "@ui/containers";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Currency } from "@ui/components/renderers/currency";
+import { Messages } from "@ui/components/renderers/messages";
+import { createTypedTable } from "@ui/components/table";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { useStores } from "@ui/redux";
+import { useStores } from "@ui/redux/storesProvider";
 import classNames from "classnames";
+import { PcrSpendProfileCostSummaryParams } from "./spendProfileCostsSummary.page";
 
 interface Data {
   project: Pending<ProjectDto>;
@@ -33,13 +37,13 @@ interface Data {
   pcr: Pending<PCRDto>;
 }
 
-const PCRSpendProfileCostTable = ACC.createTypedTable<PCRSpendProfileCostDto>();
-const PCRSpendProfileLabourCostTable = ACC.createTypedTable<PCRSpendProfileLabourCostDto>();
-const PCRSpendProfileMaterialsCostTable = ACC.createTypedTable<PCRSpendProfileMaterialsCostDto>();
-const PCRSpendProfileSubcontractingCostTable = ACC.createTypedTable<PCRSpendProfileSubcontractingCostDto>();
-const PCRSpendProfileCapitalUsageCostTable = ACC.createTypedTable<PCRSpendProfileCapitalUsageCostDto>();
-const PCRSpendProfileTravelAndSubsCostTable = ACC.createTypedTable<PCRSpendProfileTravelAndSubsCostDto>();
-const PCRSpendProfileOtherCosts = ACC.createTypedTable<PCRSpendProfileOtherCostsDto>();
+const PCRSpendProfileCostTable = createTypedTable<PCRSpendProfileCostDto>();
+const PCRSpendProfileLabourCostTable = createTypedTable<PCRSpendProfileLabourCostDto>();
+const PCRSpendProfileMaterialsCostTable = createTypedTable<PCRSpendProfileMaterialsCostDto>();
+const PCRSpendProfileSubcontractingCostTable = createTypedTable<PCRSpendProfileSubcontractingCostDto>();
+const PCRSpendProfileCapitalUsageCostTable = createTypedTable<PCRSpendProfileCapitalUsageCostDto>();
+const PCRSpendProfileTravelAndSubsCostTable = createTypedTable<PCRSpendProfileTravelAndSubsCostDto>();
+const PCRSpendProfileOtherCosts = createTypedTable<PCRSpendProfileOtherCostsDto>();
 
 class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
   render() {
@@ -49,7 +53,7 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
       costCategory: this.props.costCategory,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.costCategory)} />;
+    return <PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.costCategory)} />;
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, costCategory: CostCategoryDto) {
@@ -66,22 +70,22 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     });
     const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === this.props.costCategoryId);
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={stepRoute}>
-            <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
-          </ACC.BackLink>
+          <BackLink route={stepRoute}>
+            <Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
+          </BackLink>
         }
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
         project={project}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section
+        <Messages messages={this.props.messages} />
+        <Section
           title={x => x.pages.pcrSpendProfileCostsSummary.sectionTitleCosts({ costCategoryName: costCategory.name })}
         >
           {this.renderViewTable(costs, costCategory)}
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 
@@ -117,11 +121,11 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     return [
       this.renderFooterRow({
         key: "1",
-        title: <ACC.Content value={x => x.pcrSpendProfileLabels.totalCosts({ costCategoryName: costCategory.name })} />,
+        title: <Content value={x => x.pcrSpendProfileLabels.totalCosts({ costCategoryName: costCategory.name })} />,
         qa: "total-costs",
         isBold: false,
         numberOfColumns,
-        value: <ACC.Renderers.Currency value={total} />,
+        value: <Currency value={total} />,
       }),
     ];
   }

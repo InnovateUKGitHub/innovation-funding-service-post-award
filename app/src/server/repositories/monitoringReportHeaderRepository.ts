@@ -1,8 +1,8 @@
-import { IPicklistEntry } from "@framework/types";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
 import { ILogger } from "@shared/developmentLogger";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 
 export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
 export interface ISalesforceMonitoringReportHeader {

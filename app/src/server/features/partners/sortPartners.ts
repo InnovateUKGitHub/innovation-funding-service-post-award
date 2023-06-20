@@ -1,4 +1,4 @@
-import { PartnerDto } from "@framework/types";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 import { stringComparator } from "@framework/util/comparator";
 
 export const sortPartners = (x: PartnerDto, y: PartnerDto) => {

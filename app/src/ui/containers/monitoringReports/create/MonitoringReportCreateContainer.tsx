@@ -1,7 +1,7 @@
 import { Pending } from "@shared/pending";
-import { PageLoader } from "@ui/components/index";
+import { PageLoader } from "@ui/components/loading";
 import { BaseProps } from "@ui/containers/containerBase";
-import { useStores } from "@ui/redux";
+import { useStores } from "@ui/redux/storesProvider";
 import { useNavigate } from "react-router-dom";
 import { MonitoringReportCreate } from "./MonitoringReportCreate";
 import { MonitoringReportCreateParams } from "./monitoringReportCreateDef";

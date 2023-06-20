@@ -1,9 +1,13 @@
-import { CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import { Authorisation, FinancialLoanVirementDto, IContext, ProjectRole } from "@framework/types";
-import { ISalesforceFinancialLoanVirement } from "@server/repositories";
-import { FinancialLoanVirementDtoValidator } from "@ui/validators";
+import { ProjectRole } from "@framework/constants/project";
+import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceFinancialLoanVirement } from "@server/repositories/financialLoanVirementRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { GetProjectStatusQuery } from "../projects";
+import { FinancialLoanVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { InActiveProjectError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 export class UpdateFinancialLoanVirementCommand extends CommandBase<boolean> {
   constructor(

@@ -1,5 +1,4 @@
 import { GetTimeExtensionOptionsQuery } from "@server/features/pcrs/getTimeExtensionOptionsQuery";
-
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetTimeExtensionOptionsQuery", () => {

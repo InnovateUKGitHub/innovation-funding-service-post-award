@@ -1,4 +1,4 @@
-import { ProjectContactDto, ProjectRoleName } from "@framework/dtos";
+import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
 
 type ContactNode = Readonly<Partial<{
   Id: string;

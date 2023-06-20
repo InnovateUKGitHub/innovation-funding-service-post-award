@@ -1,9 +1,12 @@
-import { CostCategoryType, PCRItemStatus, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
-import { InActiveProjectError, ValidationError } from "@server/features/common";
+
 import { setup as commonSetup } from "@tests/test-utils/pcr-spend-profile-helpers";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCRItemStatus, PCRProjectRole, PCRPartnerType } from "@framework/constants/pcrConstants";
+import { ValidationError } from "@shared/appError";
+import { InActiveProjectError } from "../common/appError";
 
 describe("UpdatePCRSpendProfileCommand", () => {
   const setup = async () => {

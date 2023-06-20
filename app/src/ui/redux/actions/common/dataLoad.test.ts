@@ -1,9 +1,10 @@
-import { LoadingStatus } from "@framework/constants";
-import { IAppError } from "@framework/types";
+import { LoadingStatus } from "@framework/constants/enums";
+import { IAppError } from "@framework/types/IAppError";
 import { Pending } from "@shared/pending";
-import { IDataStore, RootState } from "@ui/redux";
-import { conditionalLoad, dataLoadAction } from "@ui/redux/actions";
-import { IDataSelector } from "@ui/redux/selectors/common";
+import { IDataStore } from "@ui/redux/reducers/dataReducer";
+import { RootState } from "@ui/redux/reducers/rootReducer";
+import { IDataSelector } from "@ui/redux/selectors/common/data";
+import { dataLoadAction, conditionalLoad } from "./dataLoad";
 
 describe("dataLoadAction", () => {
   test("action type is DATA_LOAD", () => {

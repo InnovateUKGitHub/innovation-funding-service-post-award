@@ -1,7 +1,7 @@
-import { DocumentDescription } from "@framework/constants";
 import { SalesforceBaseMapper } from "@server/repositories/mappers/salesforceMapperBase";
-import { ISalesforceDocument } from "@server/repositories";
 import { DocumentEntity } from "@framework/entities/document";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ISalesforceDocument } from "../contentVersionRepository";
 
 export class SalesforceDocumentMapper extends SalesforceBaseMapper<ISalesforceDocument, DocumentEntity> {
   public map(x: ISalesforceDocument): DocumentEntity {

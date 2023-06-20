@@ -1,18 +1,16 @@
 import React, { Fragment, ReactNode, Suspense } from "react";
-
 import { AppError } from "@shared/appError";
 import { createErrorPayload } from "@shared/create-error-payload";
 import { Pending } from "@shared/pending";
 import { IAppError } from "@framework/types/IAppError";
-import { ErrorCode, LoadingStatus } from "@framework/constants";
-
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { ErrorSummary } from "@ui/components/errorSummary";
-import { ErrorContainer } from "@ui/components/errors";
-import { SimpleString } from "@ui/components/renderers";
-import { GovWidthContainer } from "@ui/components/layout";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { useQuery } from "relay-hooks";
 import { OperationType } from "relay-runtime";
+import { ErrorCode, LoadingStatus } from "@framework/constants/enums";
+import { ErrorContainer } from "./errors/ErrorContainer";
+import { GovWidthContainer } from "./layout/GovWidthContainer";
 
 export interface LoadingProps<T> {
   pending: Pending<T>;

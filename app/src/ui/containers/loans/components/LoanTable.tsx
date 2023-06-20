@@ -1,11 +1,12 @@
-import { LoanDto } from "@framework/dtos";
-
-import * as ACC from "@ui/components";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { Bold } from "@ui/components/renderers/bold";
+import { Currency } from "@ui/components/renderers/currency";
+import { createTypedTable } from "@ui/components/table";
 
 // Note: The totals property has to be required to render the table
 type LoanTableProps = Required<LoanDto>;
 
-const Request = ACC.createTypedTable<LoanTableProps>();
+const Request = createTypedTable<LoanTableProps>();
 export const LoanRequestTable = (props: LoanTableProps) => {
   return (
     <Request.Table data={[props]} qa="drawdown-request" className="loan-table">
@@ -39,9 +40,9 @@ export const LoanRequestTable = (props: LoanTableProps) => {
         qa="drawdown-request-paid-to-date"
         classSuffix="numeric"
         value={x => (
-          <ACC.Renderers.Bold>
-            <ACC.Renderers.Currency fractionDigits={0} value={x.amount} />
-          </ACC.Renderers.Bold>
+          <Bold>
+            <Currency fractionDigits={0} value={x.amount} />
+          </Bold>
         )}
       />
 

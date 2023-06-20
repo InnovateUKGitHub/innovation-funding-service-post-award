@@ -1,10 +1,8 @@
 import { renderHook } from "@testing-library/react";
-
-import { DocumentDescription } from "@framework/types";
-
 import { hookTestBed } from "@shared/TestBed";
 import { useEnumDocuments } from "@ui/containers/claims/components/allowed-documents.hook";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 
 describe("useEnumDocuments()", () => {
   const claimAllowedDocuments: Readonly<DocumentDescription[]> = [

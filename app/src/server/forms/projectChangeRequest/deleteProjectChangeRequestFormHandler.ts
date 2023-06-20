@@ -1,11 +1,13 @@
-import { PCRDto } from "@framework/dtos";
-import { IContext, ILinkInfo } from "@framework/types";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { PCRDeleteParams, PCRDeleteRoute, PCRsDashboardRoute } from "@ui/containers";
+import { PCRsDashboardRoute } from "@ui/containers/pcrs/dashboard/PCRDashboard.page";
+import { PCRDeleteParams, PCRDeleteRoute } from "@ui/containers/pcrs/delete";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBase<PCRDeleteParams, "pcr"> {
   constructor() {

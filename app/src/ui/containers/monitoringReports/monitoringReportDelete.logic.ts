@@ -5,7 +5,7 @@ import {
 } from "./__generated__/MonitoringReportDeleteQuery.graphql";
 import { monitoringReportDeleteQuery } from "./MonitoringReportDelete.query";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { mapToProjectDto } from "@gql/dtoMapper";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 type ProjectGql = GQL.NodeSelector<MonitoringReportDeleteQuery$data, "Acc_Project__c">;
 

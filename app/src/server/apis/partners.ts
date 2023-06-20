@@ -1,9 +1,11 @@
-import { PartnerDto } from "@framework/types";
 import { processDto } from "@shared/processResponse";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
-import { GetAllForProjectQuery, GetAllQuery, GetByIdQuery } from "../features/partners";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { GetAllQuery } from "@server/features/partners/getAllQuery";
+import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
+import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
 
 export interface IPartnersApi {
   getAll: (params: ApiParams) => Promise<PartnerDto[]>;

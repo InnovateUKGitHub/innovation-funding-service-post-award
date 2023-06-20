@@ -1,13 +1,14 @@
-import cx from "classnames";
-
-import * as ACC from "@ui/components";
-import { IEditorStore } from "@ui/redux";
-import { FinancialLoanVirementDtoValidator } from "@ui/validators";
-import { FinancialLoanVirementDto } from "@framework/dtos";
+import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
+import { LoanFinancialVirement } from "@framework/entities/financialVirement";
+import { FullDateInput } from "@ui/components/inputs/dateInput";
+import { NumberInput } from "@ui/components/inputs/numberInput";
+import { getCurrency, Currency } from "@ui/components/renderers/currency";
+import { FullNumericDate } from "@ui/components/renderers/date";
+import { createTypedTable } from "@ui/components/table";
 import { EditorStatus } from "@ui/constants/enums";
-import { Currency, FullNumericDate, getCurrency } from "@ui/components/renderers";
-import { NumberInput, FullDateInput } from "@ui/components/inputs";
-import { LoanFinancialVirement } from "@framework/entities";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { FinancialLoanVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import cx from "classnames";
 
 type LoanEditStore = IEditorStore<FinancialLoanVirementDto, FinancialLoanVirementDtoValidator>;
 
@@ -25,7 +26,7 @@ interface LoanEditTableViewProps {
 
 type LoanEditTableProps = LoanEditStore & (LoanEditTableEditProps | LoanEditTableViewProps);
 
-const LoanEdit = ACC.createTypedTable<LoanFinancialVirement>();
+const LoanEdit = createTypedTable<LoanFinancialVirement>();
 
 export const LoanEditTable = ({ data, validator, status, mode, onEdit, onEditLink }: LoanEditTableProps) => {
   const isEditMode = mode === "edit";

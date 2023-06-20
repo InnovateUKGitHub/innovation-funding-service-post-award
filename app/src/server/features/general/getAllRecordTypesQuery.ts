@@ -1,5 +1,5 @@
-import { IContext } from "@framework/types";
 import { RecordType } from "@framework/entities/recordType";
+import { IContext } from "@framework/types/IContext";
 import { QueryBase } from "../common/queryBase";
 
 export class GetAllRecordTypesQuery extends QueryBase<RecordType[]> {

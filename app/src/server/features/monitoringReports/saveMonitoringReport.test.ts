@@ -1,14 +1,15 @@
 import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
-import { BadRequestError, ValidationError } from "@server/features/common";
-import * as Repositories from "@server/repositories";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitoringReportHeaderRepository";
+import { ValidationError } from "@shared/appError";
+import { BadRequestError } from "../common/appError";
 
 const createMonitoringReportTestData = (
   context: TestContext,
   periodId: number,
-  update?: Partial<Repositories.ISalesforceMonitoringReportHeader>,
-): Repositories.ISalesforceMonitoringReportHeader => {
+  update?: Partial<ISalesforceMonitoringReportHeader>,
+): ISalesforceMonitoringReportHeader => {
   const project = context.testData.createProject(x => (x.Acc_CurrentPeriodNumber__c = 10));
   const partner = context.testData.createPartner(project);
   context.testData.createProfileTotalPeriod(partner, periodId);

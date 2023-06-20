@@ -1,6 +1,5 @@
+import { useMounted } from "@ui/features/has-mounted/Mounted";
 import React, { useState } from "react";
-
-import { useMounted } from "@ui/features";
 import { AccordionControls } from "./AccordionControls";
 import { AccordionItem, AccordionItemProps } from "./AccordionItem";
 

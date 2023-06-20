@@ -2,11 +2,12 @@ import {
   InitialForecastDetailsDtosValidator,
   InitialForecastDetailsDtoCostCategoryValidator,
 } from "@ui/validators/initialForecastDetailsDtosValidator";
-import { GetAllForecastsGOLCostsQuery, GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
-import { CostCategoryForecast } from "@ui/validators";
-import { CostCategoryType } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { CostCategoryType } from "@framework/constants/enums";
+import { GetAllForecastsGOLCostsQuery } from "@server/features/claims/getAllForecastGOLCostsQuery";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
+import { CostCategoryForecast } from "./forecastDetailsDtosValidator";
 
 describe("InitialForecastDetailsDtoCostCategoryValidator()", () => {
   describe("should successfully fail", () => {

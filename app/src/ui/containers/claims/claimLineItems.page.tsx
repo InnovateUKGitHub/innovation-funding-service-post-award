@@ -1,24 +1,32 @@
-import * as ACC from "@ui/components";
-import {
-  ClaimDetailsDto,
-  ClaimDto,
-  ClaimLineItemDto,
-  ForecastDetailsDTO,
-  ILinkInfo,
-  PartnerDto,
-  ProjectDto,
-  ProjectRole,
-} from "@framework/types";
 import classNames from "classnames";
-import { useStores } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
-
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute, RouteState } from "../containerBase";
+import { DocumentView } from "@ui/components/documents/DocumentView";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { NavigationArrows } from "@ui/components/navigationArrows";
+import { Title } from "@ui/components/projects/title";
+import { AccessibilityText } from "@ui/components/renderers/accessibilityText";
+import { Currency } from "@ui/components/renderers/currency";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { useStores } from "@ui/redux/storesProvider";
 
 interface ClaimLineItemsParams {
   projectId: ProjectId;
@@ -48,7 +56,7 @@ interface CombinedData {
   claim: ClaimDto;
 }
 
-const LineItemTable = ACC.createTypedTable<ClaimLineItemDto>();
+const LineItemTable = createTypedTable<ClaimLineItemDto>();
 
 export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams, Data> {
   public render() {
@@ -62,7 +70,7 @@ export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams,
       claim: this.props.claim,
     });
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
+    return <PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private renderContents({
@@ -90,20 +98,20 @@ export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams,
     const currentCostCategory = costCategories.find(x => x.id === this.props.costCategoryId);
 
     return (
-      <ACC.Page
-        backLink={<ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title {...project} heading={currentCostCategory?.name} />}
+      <Page
+        backLink={<BackLink route={backLink}>Back to claim</BackLink>}
+        pageTitle={<Title {...project} heading={currentCostCategory?.name} />}
       >
-        <ACC.Section>
+        <Section>
           <ClaimLineItemsTable
             lineItems={claimDetails.lineItems}
             forecastDetail={forecastDetail}
             content={this.props.content}
           />
-        </ACC.Section>
+        </Section>
         {this.getSupportingDocumentsSection(project.competitionType, documents, claimDetails)}
         {this.renderNavigationArrows(costCategories, project, partner, claim)}
-      </ACC.Page>
+      </Page>
     );
   }
 
@@ -121,9 +129,9 @@ export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams,
     return (
       displaySupportingDocs && (
         <>
-          <ACC.Section qa="supporting-documents-section" title={content.supportingDocumentsTitle}>
-            <ACC.DocumentView hideHeader qa="claim-line-item-documents" documents={documents} />
-          </ACC.Section>
+          <Section qa="supporting-documents-section" title={content.supportingDocumentsTitle}>
+            <DocumentView hideHeader qa="claim-line-item-documents" documents={documents} />
+          </Section>
 
           {this.renderAdditionalInformation(claimDetails)}
         </>
@@ -199,16 +207,16 @@ export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams,
 
     if (navigationLinks === null) return null;
 
-    return navigationLinks ? <ACC.NavigationArrows {...navigationLinks} /> : null;
+    return navigationLinks ? <NavigationArrows {...navigationLinks} /> : null;
   };
 
   private readonly renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
     if (!claimDetail.comments) return null;
 
     return (
-      <ACC.Section title={this.props.content.additionalInfoTitle} qa="additional-information">
-        <ACC.Renderers.SimpleString>{claimDetail.comments}</ACC.Renderers.SimpleString>
-      </ACC.Section>
+      <Section title={this.props.content.additionalInfoTitle} qa="additional-information">
+        <SimpleString>{claimDetail.comments}</SimpleString>
+      </Section>
     );
   };
 }
@@ -239,7 +247,7 @@ const ClaimLineItemsTable = ({
         {row.value}
       </td>
       <th className="govuk-table__cell">
-        <ACC.Renderers.AccessibilityText>{content.noDataMessage}</ACC.Renderers.AccessibilityText>
+        <AccessibilityText>{content.noDataMessage}</AccessibilityText>
       </th>
     </tr>
   );
@@ -259,19 +267,19 @@ const ClaimLineItemsTable = ({
           title: content.totalCostTitle,
           qa: "footer-total-costs",
           isBold: true,
-          value: <ACC.Renderers.Currency value={total} />,
+          value: <Currency value={total} />,
         }),
         renderFooterRow({
           key: "2",
           title: content.forecastCostTitle,
           qa: "footer-forecast-costs",
-          value: <ACC.Renderers.Currency value={forecast} />,
+          value: <Currency value={forecast} />,
         }),
         renderFooterRow({
           key: "3",
           title: content.differenceTitle,
           qa: "footer-difference",
-          value: <ACC.Renderers.Percentage value={diff} />,
+          value: <Percentage value={diff} />,
         }),
       ]}
     >

@@ -1,5 +1,6 @@
-import { isNumber } from "@framework/util";
-import { ClaimDetailsDto, ClaimLineItemDto } from "@framework/dtos";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
+import { isNumber } from "@framework/util/numberHelper";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
 

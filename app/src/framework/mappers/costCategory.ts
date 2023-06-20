@@ -1,5 +1,5 @@
-import { CostCategoryType } from "@framework/constants";
-import { CostCategoryList } from "@framework/types";
+import { CostCategoryType } from "@framework/constants/enums";
+import { CostCategoryList } from "@framework/types/CostCategory";
 
 export const costCategoryTypeMapper = (organisationType: string, costCategoryType: string): CostCategoryType => {
   // Academic cost categories are always Academic.

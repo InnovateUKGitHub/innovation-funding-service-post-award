@@ -1,8 +1,7 @@
 import { render } from "@testing-library/react";
-
-import { PhaseBanner } from "@ui/components";
 import { TestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { PhaseBanner } from "./phaseBanner";
 
 describe("<PhaseBanner />", () => {
   const stubContent = {

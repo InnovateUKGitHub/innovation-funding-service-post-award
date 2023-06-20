@@ -1,19 +1,27 @@
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { BackLink, Page, PageLoader, Projects, Section } from "@ui/components";
 import { createTypedForm } from "@ui/components/form";
 import { Content } from "@ui/components/content";
-import { DocumentEdit, DocumentGuidance } from "@ui/components/documents";
-import { Messages, SimpleString } from "@ui/components/renderers";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { useContent } from "@ui/hooks";
-import { useStores } from "@ui/redux";
-import { IEditorStore } from "@ui/redux/reducers";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { useStores } from "@ui/redux/storesProvider";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: ProjectId;
@@ -74,7 +82,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
       >
         {isCombinationOfSBRI ? (
           <>

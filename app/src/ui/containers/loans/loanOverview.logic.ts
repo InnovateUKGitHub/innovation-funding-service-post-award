@@ -3,7 +3,8 @@ import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { loanOverviewQuery } from "./LoanOverview.query";
 import { LoanOverviewQuery } from "./__generated__/LoanOverviewQuery.graphql";
-import { mapToLoanDtoArray, mapToProjectDto } from "@gql/dtoMapper";
+import { mapToLoanDtoArray } from "@gql/dtoMapper/mapLoanDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 export type Loan = {
   id: LoanId;

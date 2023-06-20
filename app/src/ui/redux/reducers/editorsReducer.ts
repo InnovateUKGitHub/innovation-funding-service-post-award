@@ -1,23 +1,28 @@
 import { combineReducers } from "redux";
-import * as Validators from "@ui/validators";
-import { RootActions } from "@ui/redux/actions";
-import { Results } from "@ui/validation/results";
-import {
-  ClaimDetailsDto,
-  ClaimDto,
-  ErrorCode,
-  FinancialVirementDto,
-  FinancialLoanVirementDto,
-  ForecastDetailsDTO,
-  IAppError,
-  LoanDto,
-  MonitoringReportDto,
-  PartnerDto,
-} from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { ErrorCode } from "@framework/constants/enums";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { FinancialVirementDto, FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { IAppError } from "@framework/types/IAppError";
+import { Results } from "@ui/validation/results";
+import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
+import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { DocumentUploadDtoValidator, MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import {
+  FinancialVirementDtoValidator,
+  FinancialLoanVirementDtoValidator,
+} from "@ui/validators/financialVirementDtoValidator";
+import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { RootActions } from "../actions/root";
 
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;
@@ -129,22 +134,18 @@ export const editorsReducer =
   };
 
 const reducers = {
-  claim: editorsReducer<ClaimDto, Validators.ClaimDtoValidator>("claim"),
-  claimDetail: editorsReducer<ClaimDetailsDto, Validators.ClaimDetailsValidator>("claimDetail"),
-  forecastDetails: editorsReducer<ForecastDetailsDTO[], Validators.ForecastDetailsDtosValidator>("forecastDetails"),
+  claim: editorsReducer<ClaimDto, ClaimDtoValidator>("claim"),
+  claimDetail: editorsReducer<ClaimDetailsDto, ClaimDetailsValidator>("claimDetail"),
+  forecastDetails: editorsReducer<ForecastDetailsDTO[], ForecastDetailsDtosValidator>("forecastDetails"),
   initialForecastDetails: editorsReducer<ForecastDetailsDTO[], Results<ForecastDetailsDTO[]>>("initialForecastDetails"),
-  financialVirement: editorsReducer<FinancialVirementDto, Validators.FinancialVirementDtoValidator>(
-    "financialVirement",
-  ),
-  financialLoanVirement: editorsReducer<FinancialLoanVirementDto, Validators.FinancialLoanVirementDtoValidator>(
+  financialVirement: editorsReducer<FinancialVirementDto, FinancialVirementDtoValidator>("financialVirement"),
+  financialLoanVirement: editorsReducer<FinancialLoanVirementDto, FinancialLoanVirementDtoValidator>(
     "financialLoanVirement",
   ),
-  documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadDtoValidator>("documents"),
-  multipleDocuments: editorsReducer<MultipleDocumentUploadDto, Validators.MultipleDocumentUploadDtoValidator>(
-    "multipleDocuments",
-  ),
+  documents: editorsReducer<DocumentUploadDto, DocumentUploadDtoValidator>("documents"),
+  multipleDocuments: editorsReducer<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>("multipleDocuments"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
-  monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport"),
+  monitoringReport: editorsReducer<MonitoringReportDto, MonitoringReportDtoValidator>("monitoringReport"),
   pcr: editorsReducer<PCRDto, Results<PCRDto>>("pcr"),
   partner: editorsReducer<PartnerDto, Results<PartnerDto>>("partner"),
   loan: editorsReducer<LoanDto, Results<LoanDto>>("loan"),

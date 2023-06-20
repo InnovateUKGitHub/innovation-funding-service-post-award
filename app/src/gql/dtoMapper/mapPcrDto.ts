@@ -1,5 +1,5 @@
-import { TypeOfAid } from "@framework/constants";
-import type { PCRDto, FullPCRItemDto } from "@framework/dtos";
+import { TypeOfAid } from "@framework/constants/project";
+import { PCRDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import {
   getPCROrganisationType,
   mapToPCRItemStatus,
@@ -9,8 +9,7 @@ import {
   mapFromSalesforcePCRPartnerType,
   mapToPcrItemType,
 } from "@framework/mappers/pcr";
-
-import { Clock } from "@framework/util";
+import { Clock } from "@framework/util/clock";
 
 // on Project_Change_Requests__r
 

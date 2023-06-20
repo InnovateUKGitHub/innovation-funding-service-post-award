@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-
-import { useMounted } from "@ui/features";
-import { formatDate, getFileSize } from "@framework/util";
 import { DateFormat } from "@framework/constants/enums";
-
-import { DocumentSummaryDto } from "@framework/dtos";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { fuzzySearch } from "@framework/util/fuzzySearch";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { formatDate } from "@framework/util/dateHelpers";
+import { getFileSize } from "@framework/util/files";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
 
 const filterItems = <T extends Pick<DocumentSummaryDto, "id" | "dateCreated" | "fileSize">>(
   valueToSearch: string,

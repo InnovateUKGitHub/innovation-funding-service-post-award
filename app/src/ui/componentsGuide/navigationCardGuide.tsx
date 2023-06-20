@@ -3,8 +3,9 @@ import { createMemoryHistory } from "history";
 import { NavigationCard, NavigationCardsGrid } from "@ui/components/navigationCard";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import { rootReducer } from "@ui/redux";
-import { IGuide, ILinkInfo } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { rootReducer } from "@ui/redux/reducers/rootReducer";
 
 const dummyLink: ILinkInfo = {
   path: "stub-path",

@@ -1,5 +1,5 @@
 import type { ContentSelector } from "@copy/type";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { Trans } from "react-i18next";
 import { Markdown } from "./renderers/markdown";
 

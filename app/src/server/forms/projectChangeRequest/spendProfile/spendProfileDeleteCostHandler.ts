@@ -1,17 +1,19 @@
-import { PCRItemStatus } from "@framework/constants";
-import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, PCRStepId } from "@framework/types";
-import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
-import { BadRequestError } from "@server/features/common";
+import { PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import { BadRequestError } from "@shared/appError";
+import { PCRSpendProfileCostsSummaryRoute } from "@ui/containers/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";
 import {
   PcrDeleteSpendProfileCostParams,
-  PCRSpendProfileCostsSummaryRoute,
   PCRSpendProfileDeleteCostRoute,
-} from "@ui/containers";
+} from "@ui/containers/pcrs/addPartner/spendProfile/spendProfileDeleteCost.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardFormHandlerBase<
   PcrDeleteSpendProfileCostParams,

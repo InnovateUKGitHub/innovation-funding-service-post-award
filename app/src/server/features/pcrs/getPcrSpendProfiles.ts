@@ -1,16 +1,6 @@
-import { QueryBase } from "@server/features/common";
-import {
-  CostCategoryGroupType,
-  CostCategoryList,
-  CostCategoryType,
-  IContext,
-  PCRSpendProfileCapitalUsageType,
-  PCRSpendProfileOverheadRate,
-} from "@framework/types";
-import { PcrSpendProfileEntity } from "@framework/entities";
-import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
+import { CostCategoryGroupType, CostCategoryType } from "@framework/constants/enums";
+import { PCRSpendProfileOverheadRate, PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { isNumber } from "@framework/util";
 import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
@@ -25,6 +15,12 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
+import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
+import { CostCategoryList } from "@framework/types/CostCategory";
+import { IContext } from "@framework/types/IContext";
+import { isNumber } from "@framework/util/numberHelper";
+import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
+import { QueryBase } from "../common/queryBase";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
   constructor(private readonly pcrItemId: PcrItemId) {

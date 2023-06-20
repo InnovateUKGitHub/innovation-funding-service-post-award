@@ -1,4 +1,4 @@
-import { LogLevel } from "@framework/constants";
+import { LogLevel } from "@framework/constants/enums";
 
 /**
  * Parse an incoming log level.

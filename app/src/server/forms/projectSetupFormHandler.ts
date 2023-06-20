@@ -1,13 +1,13 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ProjectDashboardRoute, ProjectSetupParams, ProjectSetupRoute } from "@ui/containers";
-import { PartnerDto } from "@framework/dtos";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDashboardRoute } from "@ui/containers/projects/dashboard/Dashboard.page";
+import { ProjectSetupParams, ProjectSetupRoute } from "@ui/containers/projects/setup/projectSetup.page";
+import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
 
 export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetupParams, "partner"> {
   constructor() {

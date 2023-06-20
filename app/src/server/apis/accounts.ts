@@ -1,4 +1,4 @@
-import { AccountDto } from "@framework/dtos";
+import { AccountDto } from "@framework/dtos/accountDto";
 import { GetJesAccountsByNameQuery } from "@server/features/accounts/getJesAccountsByName";
 import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";

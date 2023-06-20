@@ -1,10 +1,9 @@
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos";
-import { PCRLoanExtensionItemDtoValidator } from "@ui/validators";
-
 import { LoanExtensionStepNames } from "./loanDrawdownExtensionWorkflow";
 import { LoanChangeDurationTable } from "./LoanChangeDurationTable";
-import { PCRStepId } from "@framework/types";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos/pcrDtos";
+import { PCRLoanExtensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 type BaseProps = PcrSummaryProps<
   PCRItemForLoanDrawdownExtensionDto,

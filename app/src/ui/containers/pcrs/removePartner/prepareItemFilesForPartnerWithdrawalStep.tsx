@@ -1,13 +1,17 @@
 import React from "react";
-
-import * as ACC from "@ui/components";
-import { useStores } from "@ui/redux";
-import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -15,8 +19,8 @@ interface InnerProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const Form = ACC.createTypedForm<PCRItemForPartnerWithdrawalDto>();
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const Form = createTypedForm<PCRItemForPartnerWithdrawalDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> & InnerProps
@@ -26,7 +30,7 @@ class Component extends React.Component<
 
     return (
       <>
-        <ACC.Section>
+        <Section>
           <UploadForm.Form
             enctype="multipart"
             editor={documentsEditor}
@@ -35,11 +39,11 @@ class Component extends React.Component<
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset heading={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidanceHeading}>
-              <ACC.Content markdown value={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidance} />
+              <Content markdown value={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidance} />
 
               <UploadForm.Hidden name="description" value={() => DocumentDescription.WithdrawalOfPartnerCertificate} />
 
-              <ACC.DocumentGuidance />
+              <DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
                 label="Upload files"
@@ -60,24 +64,24 @@ class Component extends React.Component<
                 styling="Secondary"
                 onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
               >
-                <ACC.Content value={x => x.pcrItem.uploadDocumentsButton} />
+                <Content value={x => x.pcrItem.uploadDocumentsButton} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section>
-          <ACC.DocumentEdit
+        <Section>
+          <DocumentEdit
             qa="prepare-item-file-for-partner-documents"
             onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
             documents={documents}
           />
-        </ACC.Section>
+        </Section>
 
         <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave(false)}>
           <Form.Fieldset>
             <Form.Button name="default" styling="Primary">
-              <ACC.Content value={x => x.pcrItem.submitButton} />
+              <Content value={x => x.pcrItem.submitButton} />
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>
@@ -92,7 +96,7 @@ export const PCRPrepareItemFilesForPartnerWithdrawalStep = (
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
       render={documents => (
         <Component

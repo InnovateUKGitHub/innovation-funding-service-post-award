@@ -1,22 +1,20 @@
-import * as Dtos from "@framework/dtos";
 import {
-  Authorisation,
+  PCRItemType,
   getUnavailablePcrItemsMatrix,
   getUnduplicatablePcrItemsMatrix,
-  IContext,
   PCRItemDisabledReason,
-  PCRItemType,
-  PCRSummaryDto,
-  ProjectRole,
-} from "@framework/types";
-
-import { QueryBase } from "@server/features/common";
+} from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import { GetAllForProjectQuery } from "../partners";
+import { QueryBase } from "../common/queryBase";
+import { GetAllForProjectQuery } from "../projectContacts/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "./getPCRByIdQuery";
 
-export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]> {
+export class GetAvailableItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
   constructor(private readonly projectId: ProjectId, private readonly pcrId?: PcrId) {
     super();
   }
@@ -58,7 +56,7 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
     return bannedTypes;
   }
 
-  protected async run(context: IContext): Promise<Dtos.PCRItemTypeDto[]> {
+  protected async run(context: IContext): Promise<PCRItemTypeDto[]> {
     const itemTypeDtosPromise = context.runQuery(new GetPCRItemTypesQuery(this.projectId));
     const projectPcrsPromise = context.runQuery(new GetAllPCRsQuery(this.projectId));
     const partnersPromise = context.runQuery(new GetAllForProjectQuery(this.projectId));
@@ -78,7 +76,7 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
     const nonDuplicatableItemTypesInThisPcr = getUnduplicatablePcrItemsMatrix(currentPcr);
     const tooManyItemTypes = this.getPcrItemsLimitedByNumberOfPartners(partners.length, currentPcr);
 
-    return itemTypeDtos.reduce<Dtos.PCRItemTypeDto[]>((validPcrItems, pcrItem) => {
+    return itemTypeDtos.reduce<PCRItemTypeDto[]>((validPcrItems, pcrItem) => {
       // Note: Include items that are only true
       if (!pcrItem.enabled) return validPcrItems;
 

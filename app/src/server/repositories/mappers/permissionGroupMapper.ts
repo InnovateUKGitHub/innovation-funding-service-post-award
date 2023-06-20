@@ -1,4 +1,4 @@
-import { PermissionGroupIdentifier as PermissionGroupIdentifier } from "@framework/constants";
+import { PermissionGroupIdentifier } from "@framework/constants/enums";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { ISalesforcePermissionGroup } from "../permissionGroupsRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";

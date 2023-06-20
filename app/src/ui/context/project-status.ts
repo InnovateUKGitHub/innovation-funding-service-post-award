@@ -1,4 +1,4 @@
-import { ProjectStatusDto } from "@framework/dtos";
+import { ProjectStatusDto } from "@framework/dtos/projectStatusDto";
 import { createContext } from "react";
 
 export interface ProjectStatusContext extends ProjectStatusDto {

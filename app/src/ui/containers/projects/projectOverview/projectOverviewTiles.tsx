@@ -1,10 +1,13 @@
 import type { Project, Partner } from "./projectOverview.logic";
-import { NavigationCard, Content, NavigationCardsGrid, NavigationCardMessage } from "@ui/components";
-import type { IRoutes } from "@ui/routing";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import type { ContentSelector } from "@copy/type";
-import { IClientUser, ILinkInfo, PartnerClaimStatus } from "@framework/types";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
+import { PartnerClaimStatus } from "@framework/constants/partner";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IClientUser } from "@framework/types/IUser";
+import { Content } from "@ui/components/content";
+import { NavigationCardMessage, NavigationCardsGrid, NavigationCard } from "@ui/components/navigationCard";
+import { IRoutes } from "@ui/routing/routeConfig";
 
 interface ILinks {
   textContent: ContentSelector;

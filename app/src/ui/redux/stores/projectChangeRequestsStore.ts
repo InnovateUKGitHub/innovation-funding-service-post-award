@@ -1,32 +1,32 @@
+import { LoadingStatus, CostCategoryType } from "@framework/constants/enums";
 import {
-  CostCategoryType,
-  LoadingStatus,
-  PCRContactRole,
-  PCRItemStatus,
   PCRItemType,
-  PCROrganisationType,
-  PCRParticipantSize,
-  PCRPartnerType,
-  PCRProjectLocation,
-  PCRProjectRole,
   PCRStatus,
+  PCRItemStatus,
   PCRStepId,
-  ProjectRole,
-  TypeOfAid,
-} from "@framework/constants";
-import * as Dtos from "@framework/dtos";
-import { PCRDto } from "@framework/dtos";
+  PCRContactRole,
+  PCRProjectRole,
+  PCRPartnerType,
+  PCROrganisationType,
+  PCRProjectLocation,
+  PCRParticipantSize,
+} from "@framework/constants/pcrConstants";
+import { TypeOfAid, ProjectRole } from "@framework/constants/project";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PCRDto, PCRItemTypeDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissions";
 import { NotFoundError } from "@shared/appError";
 import { Pending } from "@shared/pending";
 import { apiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
+import { PCRDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PCRSpendProfileCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { dataLoadAction, messageSuccess, RootActionsOrThunk } from "../actions";
-import { IEditorStore, RootState } from "../reducers";
+import { dataLoadAction } from "../actions/common/dataLoad";
+import { messageSuccess } from "../actions/common/messageActions";
+import { RootActionsOrThunk } from "../actions/root";
+import { IEditorStore } from "../reducers/editorsReducer";
+import { RootState } from "../reducers/rootReducer";
 import { PartnersStore } from "./partnersStore";
 import { ProjectsStore } from "./projectsStore";
 import { StoreBase } from "./storeBase";
@@ -254,7 +254,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  public createNewChangeRequestItem(itemType: Dtos.PCRItemTypeDto): Dtos.PCRItemDto {
+  public createNewChangeRequestItem(itemType: PCRItemTypeDto): PCRItemDto {
     const baseFields = {
       id: "" as PcrItemId,
       guidance: "",

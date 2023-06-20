@@ -1,5 +1,6 @@
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { IContext } from "@framework/types/IContext";
 import { dateComparator } from "@framework/util/comparator";
-import { ClaimDto, IContext } from "@framework/types";
 import { QueryBase } from "../common/queryBase";
 import { mapClaim } from "./mapClaim";
 

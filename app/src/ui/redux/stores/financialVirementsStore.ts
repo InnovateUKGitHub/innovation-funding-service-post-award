@@ -2,11 +2,11 @@ import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { NotFoundError } from "@shared/appError";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { FinancialVirementDtoValidator } from "@ui/validators";
-import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos";
-import { LoadingStatus } from "@framework/constants";
-import { IEditorStore } from "..";
 import { StoreBase } from "./storeBase";
+import { LoadingStatus } from "@framework/constants/enums";
+import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos/financialVirementDto";
+import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { IEditorStore } from "../reducers/editorsReducer";
 
 export class FinancialVirementsStore extends StoreBase {
   private getKey(projectId: ProjectId, pcrId: PcrId, pcrItemId: PcrItemId, partnerId?: PartnerId): string {

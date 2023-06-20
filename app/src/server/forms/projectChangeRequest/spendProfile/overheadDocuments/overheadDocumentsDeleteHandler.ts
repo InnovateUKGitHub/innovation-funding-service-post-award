@@ -1,12 +1,15 @@
 import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { OverheadDocumentsPageParams, PCRSpendProfileOverheadDocumentRoute } from "@ui/containers";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { configuration } from "@server/features/common";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
+import { configuration } from "@server/features/common/config";
+import {
+  OverheadDocumentsPageParams,
+  PCRSpendProfileOverheadDocumentRoute,
+} from "@ui/containers/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 type Dto = MultipleDocumentUploadDto & { id: string };
 

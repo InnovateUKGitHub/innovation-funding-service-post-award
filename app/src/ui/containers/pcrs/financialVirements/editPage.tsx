@@ -1,27 +1,39 @@
-import { useNavigate } from "react-router-dom";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, useStores } from "@ui/redux";
-import { Pending } from "@shared/pending";
-import * as ACC from "@ui/components";
-import {
-  ClaimOverrideRateDto,
-  CostCategoryVirementDto,
-  FinancialVirementDto,
-  PartnerDto,
-  ProjectDto,
-} from "@framework/dtos";
-import { CostCategoryVirementDtoValidator, FinancialVirementDtoValidator } from "@ui/validators";
-import { createDto } from "@framework/util/dtoHelpers";
-import { roundCurrency, sumBy } from "@framework/util";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { capitalizeFirstWord } from "@shared/string-helpers";
-import { useContent } from "@ui/hooks";
-import { getAuthRoles } from "@framework/types";
-import { EditorStatus } from "@ui/constants/enums";
-import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
-import { AwardRateOverrideLabel, AwardRateOverridesMessage } from "@ui/components/claims";
 import { AwardRateOverrideType } from "@framework/constants/awardRateOverride";
+import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryVirementDto, FinancialVirementDto } from "@framework/dtos/financialVirementDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { createDto } from "@framework/util/dtoHelpers";
+import { roundCurrency, sumBy } from "@framework/util/numberHelper";
+import { Pending } from "@shared/pending";
+import { capitalizeFirstWord } from "@shared/string-helpers";
+import { AwardRateOverrideLabel, AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { NumberInput } from "@ui/components/inputs/numberInput";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Currency } from "@ui/components/renderers/currency";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { ValidationError } from "@ui/components/validationError";
+import { EditorStatus } from "@ui/constants/enums";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import {
+  CostCategoryVirementDtoValidator,
+  FinancialVirementDtoValidator,
+} from "@ui/validators/financialVirementDtoValidator";
+import { useNavigate } from "react-router-dom";
+import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
 
 /**
  * hook to return edit page content
@@ -118,12 +130,12 @@ const EditPageLoader = ({
     claimOverrides,
   });
 
-  return <ACC.PageLoader pending={combined} render={data => <EditPage {...props} {...data} />} />;
+  return <PageLoader pending={combined} render={data => <EditPage {...props} {...data} />} />;
 };
 
-const VirementForm = ACC.createTypedForm<FinancialVirementDto>();
-const SummaryTable = ACC.createTypedTable<FinancialVirementDto>();
-const VirementTable = ACC.createTypedTable<VirementData>();
+const VirementForm = createTypedForm<FinancialVirementDto>();
+const SummaryTable = createTypedTable<FinancialVirementDto>();
+const VirementTable = createTypedTable<VirementData>();
 
 /**
  * A page for editing Loans virements for a PCR.
@@ -265,19 +277,19 @@ const EditPage = ({
   };
 
   return (
-    <ACC.Page
+    <Page
       backLink={
-        <ACC.BackLink
+        <BackLink
           route={PCRPrepareItemRoute.getLink({
             projectId: projectId,
             pcrId: pcrId,
             itemId: itemId,
           })}
         >
-          <ACC.Content value={x => x.financialVirementLabels.backToSummary} />
-        </ACC.BackLink>
+          <Content value={x => x.financialVirementLabels.backToSummary} />
+        </BackLink>
       }
-      pageTitle={<ACC.Projects.Title {...project} />}
+      pageTitle={<Title {...project} />}
       error={editor.error}
       validator={partnerVirementsValidator}
     >
@@ -288,13 +300,13 @@ const EditPage = ({
       />
       {displayIntroMessage && (
         <>
-          <ACC.Renderers.SimpleString>{content.introMessage}</ACC.Renderers.SimpleString>
-          <ACC.Renderers.SimpleString>{content.virementsMessage}</ACC.Renderers.SimpleString>
-          <ACC.Renderers.SimpleString>{content.requestsMessage}</ACC.Renderers.SimpleString>
+          <SimpleString>{content.introMessage}</SimpleString>
+          <SimpleString>{content.virementsMessage}</SimpleString>
+          <SimpleString>{content.requestsMessage}</SimpleString>
         </>
       )}
 
-      <ACC.Section title={partner.name}>
+      <Section title={partner.name}>
         <VirementForm.Form
           editor={editor}
           onChange={dto => onChange(false, dto)}
@@ -316,14 +328,14 @@ const EditPage = ({
                   qa="originalEligibleCosts"
                   header={content.costCategoryOriginalEligibleCosts}
                   value={x => x.virement.originalEligibleCosts}
-                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.originalEligibleCosts} />}
+                  footer={<Currency value={currentPartnerVirement.originalEligibleCosts} />}
                 />,
                 <VirementTable.Currency
                   key="originalCostsClaimed"
                   qa="originalCostsClaimed"
                   header={content.costCategoryCostsClaimed}
                   value={x => x.virement.costsClaimedToDate}
-                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.costsClaimedToDate} />}
+                  footer={<Currency value={currentPartnerVirement.costsClaimedToDate} />}
                 />,
                 <VirementTable.Custom
                   key="newEligibleCosts"
@@ -339,7 +351,7 @@ const EditPage = ({
                       updateValue={updateValue}
                     />
                   )}
-                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.newEligibleCosts} />}
+                  footer={<Currency value={currentPartnerVirement.newEligibleCosts} />}
                   classSuffix={"numeric"}
                 />,
                 <VirementTable.Currency
@@ -348,7 +360,7 @@ const EditPage = ({
                   header={content.costCategoryDifferenceCosts}
                   value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
                   footer={
-                    <ACC.Renderers.Currency
+                    <Currency
                       value={roundCurrency(
                         currentPartnerVirement.newEligibleCosts - currentPartnerVirement.originalEligibleCosts,
                       )}
@@ -362,7 +374,7 @@ const EditPage = ({
                         qa="original-remaining-grant"
                         header={content.costCategoryOriginalRemainingGrant}
                         value={x => x.originalRemainingGrant}
-                        footer={<ACC.Renderers.Currency value={currentPartnerVirement.originalRemainingGrant} />}
+                        footer={<Currency value={currentPartnerVirement.originalRemainingGrant} />}
                       />,
 
                       <VirementTable.Percentage
@@ -377,7 +389,7 @@ const EditPage = ({
                         qa="new-remaining-grant"
                         header={content.costCategoryNewRemainingGrant}
                         value={x => x.newRemainingGrant}
-                        footer={<ACC.Renderers.Currency value={currentPartnerVirement.newRemainingGrant} />}
+                        footer={<Currency value={currentPartnerVirement.newRemainingGrant} />}
                       />,
                     ]
                   : []),
@@ -422,8 +434,8 @@ const EditPage = ({
             <VirementForm.Submit>{content.saveButton}</VirementForm.Submit>
           </VirementForm.Fieldset>
         </VirementForm.Form>
-      </ACC.Section>
-    </ACC.Page>
+      </Section>
+    </Page>
   );
 };
 
@@ -434,14 +446,14 @@ const EditPage = ({
 const EditPageInput = ({ costCategory, validation, virement, disabled, updateValue }: EditPageInputRowProps) => {
   return (
     <>
-      <ACC.ValidationError
+      <ValidationError
         overrideMessage={`Invalid cost for ${costCategory.name}`}
         error={validation && validation.newPartnerEligibleCosts}
       />
       {costCategory.isCalculated ? (
-        <ACC.Renderers.Currency value={virement.newEligibleCosts} />
+        <Currency value={virement.newEligibleCosts} />
       ) : (
-        <ACC.Inputs.NumberInput
+        <NumberInput
           name={virement.costCategoryId}
           value={virement.newEligibleCosts}
           onChange={val => updateValue(costCategory, val)}

@@ -1,26 +1,29 @@
 import React from "react";
-import { Result, Results } from "@ui/validation";
-import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
-import { IEditorStore } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { ILinkInfo, PCRItemType, PCRStepId } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
-import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 import { getAddPartnerWorkflow, AddPartnerWorkflowItem } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { IRoutes } from "@ui/routing";
 import { periodLengthChangeWorkflow } from "@ui/containers/pcrs/periodLengthChange/periodLengthChangeWorkflow";
 import { BaseProps } from "../containerBase";
 import { financialVirementWorkflow } from "./financialVirements/workflow";
 import { suspendProjectWorkflow } from "./suspendProject/workflow";
 import { standardItemWorkflow } from "./standardItem/workflow";
 import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
-import { accountNameChangeWorkflow } from "./nameChange";
 import { LoanDrawdownChangeWorkflow } from "./loanDrawdownChange/LoanDrawdownChangeWorkflow";
 import { loanExtensionItemWorkflow } from "./loanDrawdownExtension/loanDrawdownExtensionWorkflow";
+import { PCRStepId, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRDto, PCRItemTypeDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { IRoutes } from "@ui/routing/routeConfig";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { accountNameChangeWorkflow } from "./nameChange/accountNameChangeWorkflow";
+import { removePartnerWorkflow } from "./removePartner/removePartnerWorkflow";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;

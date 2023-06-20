@@ -1,4 +1,4 @@
-import { ProjectRole } from "@framework/constants";
+import { ProjectRole } from "@framework/constants/project";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 
 type AvailableAuthRoles = "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc" | "Unknown" | "SuperAdmin";

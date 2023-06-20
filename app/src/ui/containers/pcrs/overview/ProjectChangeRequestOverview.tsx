@@ -1,13 +1,15 @@
-import * as ACC from "@ui/components";
-import { useRoutes } from "@ui/redux";
-import { useContent } from "@ui/hooks";
 import { ProjectChangeRequestOverviewLog } from "./ProjectChangeRequestOverviewLog";
 import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverviewSummary";
 import { ProjectChangeRequestOverviewTasks } from "./ProjectChangeRequestOverviewTasks";
 import { ProjectChangeRequestPrepareForm } from "./ProjectChangeRequestPrepareForm";
 import { ProjectChangeRequestPrepareProps } from "./projectChangeRequestPrepare.page";
-import { PCRDto } from "@framework/dtos";
 import { GetItemTaskProps } from "./GetItemTasks";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { Page } from "@ui/components/layout/page";
+import { BackLink } from "@ui/components/links";
+import { Title } from "@ui/components/projects/title";
+import { useContent } from "@ui/hooks/content.hook";
+import { useRoutes } from "@ui/redux/routesProvider";
 
 const PCROverviewComponent = ({
   project,
@@ -21,13 +23,13 @@ const PCROverviewComponent = ({
   const routes = useRoutes();
   const { getContent } = useContent();
   return (
-    <ACC.Page
+    <Page
       backLink={
-        <ACC.BackLink route={routes.pcrsDashboard.getLink({ projectId: project.id })}>
+        <BackLink route={routes.pcrsDashboard.getLink({ projectId: project.id })}>
           {getContent(x => x.pages.pcrOverview.backToPcrs)}
-        </ACC.BackLink>
+        </BackLink>
       }
-      pageTitle={<ACC.Projects.Title {...project} />}
+      pageTitle={<Title {...project} />}
       project={project}
       validator={editor?.validator}
       error={editor?.error}
@@ -42,7 +44,7 @@ const PCROverviewComponent = ({
       />
       <ProjectChangeRequestOverviewLog statusChanges={statusChanges} />
       {editor && <ProjectChangeRequestPrepareForm editor={editor} onChange={onChange} pcr={pcr} project={project} />}
-    </ACC.Page>
+    </Page>
   );
 };
 

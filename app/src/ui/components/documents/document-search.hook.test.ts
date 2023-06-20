@@ -1,10 +1,9 @@
 import { renderHook, act } from "@testing-library/react";
 import { v4 as uuid } from "uuid";
-
 import { hookTestBed, HookTestBedProps } from "@shared/TestBed";
 import { useDocumentSearch } from "@ui/components/documents/document-search.hook";
 import { DocumentsBase } from "@ui/components/documents/documents.interface";
-import { DocumentSummaryDto } from "@framework/dtos";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 describe("useDocumentSearch()", () => {
   const setup = (disableSearch: boolean, originalDocuments: DocumentsBase["documents"], options?: HookTestBedProps) =>

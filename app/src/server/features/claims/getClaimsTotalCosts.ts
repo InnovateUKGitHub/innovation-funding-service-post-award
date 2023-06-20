@@ -1,18 +1,18 @@
-import { QueryBase } from "@server/features/common";
-import {
-  ClaimOverrideRateDto,
-  CostCategoryClaimOverrideRate,
-  CostCategoryClaimOverrideRates,
-  CostsSummaryForPeriodDto,
-  IContext,
-  PeriodClaimOverrideRates,
-  PeriodClaimOverrideRate,
-  TotalCosts,
-} from "@framework/types";
-import { roundCurrency, sumBy } from "@framework/util";
-import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
 import { GetClaimOverrideRates } from "./getClaimOverrideRates";
 import { AwardRateOverrideType } from "@framework/constants/awardRateOverride";
+import { TotalCosts } from "@framework/constants/claims";
+import {
+  ClaimOverrideRateDto,
+  CostCategoryClaimOverrideRates,
+  PeriodClaimOverrideRates,
+  CostCategoryClaimOverrideRate,
+  PeriodClaimOverrideRate,
+} from "@framework/dtos/claimOverrideRate";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { IContext } from "@framework/types/IContext";
+import { sumBy, roundCurrency } from "@framework/util/numberHelper";
+import { GetCostsSummaryForPeriodQuery } from "../claimDetails/getCostsSummaryForPeriodQuery";
+import { QueryBase } from "../common/queryBase";
 
 export class GetClaimsTotalCosts extends QueryBase<TotalCosts> {
   constructor(

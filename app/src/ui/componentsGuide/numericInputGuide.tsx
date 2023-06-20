@@ -1,5 +1,5 @@
-import { createTypedForm } from "@ui/components";
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
+import { createTypedForm } from "@ui/components/form";
 
 const ReportForm = createTypedForm<number>();
 

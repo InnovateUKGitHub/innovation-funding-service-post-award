@@ -1,7 +1,8 @@
-import { Authorisation, IAsyncRunnable, IContext, ISyncRunnable } from "@framework/types";
-import { ValidationError } from "@server/features/common";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext, IAsyncRunnable, ISyncRunnable } from "@framework/types/IContext";
 import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
 import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
+import { ValidationError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { Connection } from "jsforce";
 import { TestCaches } from "./testCaches";

@@ -1,12 +1,15 @@
-import * as ACC from "@ui/components";
 import { PCRSpendProfileMaterialsCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { Component } from "react";
 import { PCRMaterialsCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
-import { MountedHoc } from "@ui/features";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Currency } from "@ui/components/renderers/currency";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { MountedHoc } from "@ui/features/has-mounted/Mounted";
+import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
 
-const Form = ACC.createTypedForm<PCRSpendProfileMaterialsCostDto>();
+const Form = createTypedForm<PCRSpendProfileMaterialsCostDto>();
 
 export class MaterialsFormComponent extends Component<
   SpendProfileCostFormProps<PCRSpendProfileMaterialsCostDto, PCRMaterialsCostDtoValidator>
@@ -57,9 +60,9 @@ export class MaterialsFormComponent extends Component<
                   labelBold
                   name="totalCost"
                   value={({ formData }) => (
-                    <ACC.Renderers.SimpleString>
-                      <ACC.Renderers.Currency value={formData.value} />
-                    </ACC.Renderers.SimpleString>
+                    <SimpleString>
+                      <Currency value={formData.value} />
+                    </SimpleString>
                   )}
                   update={() => null}
                 />
@@ -67,7 +70,7 @@ export class MaterialsFormComponent extends Component<
             </Form.Fieldset>
             <Form.Fieldset qa="save">
               <Form.Submit>
-                <ACC.Content
+                <Content
                   value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
                 />
               </Form.Submit>

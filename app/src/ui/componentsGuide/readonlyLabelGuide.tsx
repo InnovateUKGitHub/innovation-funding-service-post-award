@@ -1,6 +1,6 @@
-import { ReadonlyLabel } from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
-import { IGuide } from "@framework/types";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { IGuide } from "@framework/types/IGuide";
+import { ReadonlyLabel } from "@ui/components/layout/readonlyLabel";
 
 export const readonlyLabel: IGuide = {
   name: "Readonly Label",

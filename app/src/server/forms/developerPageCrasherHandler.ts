@@ -1,4 +1,4 @@
-import { ErrorCode } from "@framework/constants";
+import { ErrorCode } from "@framework/constants/enums";
 import {
   BadRequestError,
   ConfigurationError,

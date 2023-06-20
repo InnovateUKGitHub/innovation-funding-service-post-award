@@ -1,11 +1,12 @@
 import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
-import { useContent } from "@ui/hooks";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { financeSummaryQuery } from "./FinanceSummary.query";
 import { FinanceSummaryQuery, FinanceSummaryQuery$data } from "./__generated__/FinanceSummaryQuery.graphql";
-import { mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
+import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { useContent } from "@ui/hooks/content.hook";
 
 export const useFinanceSummaryContent = () => {
   const { getContent } = useContent();

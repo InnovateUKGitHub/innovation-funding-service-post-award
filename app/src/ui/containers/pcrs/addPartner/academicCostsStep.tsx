@@ -1,18 +1,26 @@
 import React from "react";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import * as ACC from "@ui/components";
-import { sumBy } from "@framework/util";
-import { useStores } from "@ui/redux";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType, PCROrganisationType } from "@framework/constants";
 import { EditorStatus } from "@ui/constants/enums";
 import { Pending } from "@shared/pending";
 import { PCRAcademicCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { Content, FormBuilder } from "@ui/components";
-import { MountedHoc } from "@ui/features";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { sumBy } from "@framework/util/numberHelper";
+import { Content } from "@ui/components/content";
+import { createTypedForm, FormBuilder } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { Currency } from "@ui/components/renderers/currency";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { MountedHoc } from "@ui/features/has-mounted/Mounted";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { ValidationError } from "@ui/components/validationError";
+import { NumberInput } from "@ui/components/inputs/numberInput";
+import { Loader } from "@ui/components/loading";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];
@@ -23,8 +31,8 @@ interface Data {
   costDto: PCRSpendProfileAcademicCostDto;
 }
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
-const Table = ACC.createTypedTable<Data>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
+const Table = createTypedTable<Data>();
 
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
@@ -33,10 +41,10 @@ class Component extends React.Component<
   render() {
     const { costCategories } = this.props;
     return (
-      <ACC.Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
-        <ACC.Renderers.SimpleString>
-          <ACC.Content value={x => x.pages.pcrAddPartnerAcademicCosts.stepGuidance} />
-        </ACC.Renderers.SimpleString>
+      <Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
+        <SimpleString>
+          <Content value={x => x.pages.pcrAddPartnerAcademicCosts.stepGuidance} />
+        </SimpleString>
         <Form.Form
           data={this.props.pcrItem}
           isSaving={this.props.status === EditorStatus.Saving}
@@ -48,7 +56,7 @@ class Component extends React.Component<
           {this.renderCosts(Form, costCategories)}
           {this.renderSaveButtons(Form)}
         </Form.Form>
-      </ACC.Section>
+      </Section>
     );
   }
 
@@ -82,9 +90,9 @@ class Component extends React.Component<
 
     return (
       <form.Fieldset heading={x => x.pages.pcrAddPartnerAcademicCosts.costsSectionTitle}>
-        <ACC.Renderers.SimpleString>
-          <ACC.Content value={x => x.pages.pcrAddPartnerAcademicCosts.costsGuidance} />
-        </ACC.Renderers.SimpleString>
+        <SimpleString>
+          <Content value={x => x.pages.pcrAddPartnerAcademicCosts.costsGuidance} />
+        </SimpleString>
 
         <MountedHoc>
           {state => (
@@ -95,9 +103,9 @@ class Component extends React.Component<
                 value={x => x.costCategory.name}
                 footer={
                   state.isClient && (
-                    <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
-                      <ACC.Content value={x => x.pages.pcrAddPartnerAcademicCosts.totalCosts} />
-                    </ACC.Renderers.SimpleString>
+                    <SimpleString className={"govuk-!-font-weight-bold"}>
+                      <Content value={x => x.pages.pcrAddPartnerAcademicCosts.totalCosts} />
+                    </SimpleString>
                   )
                 }
               />
@@ -107,7 +115,7 @@ class Component extends React.Component<
                 classSuffix="numeric"
                 value={x => this.renderCost(x)}
                 width={30}
-                footer={state.isClient && <ACC.Renderers.Currency value={total} />}
+                footer={state.isClient && <Currency value={total} />}
               />
             </Table.Table>
           )}
@@ -120,7 +128,7 @@ class Component extends React.Component<
     return (
       <form.Fieldset qa="save-and-continue">
         <form.Submit>
-          <ACC.Content value={x => x.pcrItem.submitButton} />
+          <Content value={x => x.pcrItem.submitButton} />
         </form.Submit>
         <form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>
           <Content value={x => x.pcrItem.returnToSummaryButton} />
@@ -133,8 +141,8 @@ class Component extends React.Component<
     const error = this.getCostValidationResult(item);
     return (
       <span>
-        <ACC.ValidationError error={error} />
-        <ACC.Inputs.NumberInput
+        <ValidationError error={error} />
+        <NumberInput
           name={`value_${item.costCategory.id}`}
           value={item.costDto.value}
           onChange={val => this.updateCostValue(item, val)}
@@ -187,5 +195,5 @@ export const AcademicCostsStep = (
     return academicCostCategories;
   });
 
-  return <ACC.Loader pending={Pending.combine({ costCategories })} render={x => <Component {...props} {...x} />} />;
+  return <Loader pending={Pending.combine({ costCategories })} render={x => <Component {...props} {...x} />} />;
 };

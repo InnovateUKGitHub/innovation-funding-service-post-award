@@ -1,12 +1,16 @@
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
-import { OverheadDocumentsPageParams, PCRSpendProfileOverheadDocumentRoute } from "@ui/containers";
 import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { configuration } from "@server/features/common";
-import { IFileWrapper, ILinkInfo } from "@framework/types";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { configuration } from "@server/features/common/config";
+import {
+  OverheadDocumentsPageParams,
+  PCRSpendProfileOverheadDocumentRoute,
+} from "@ui/containers/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<
   OverheadDocumentsPageParams,

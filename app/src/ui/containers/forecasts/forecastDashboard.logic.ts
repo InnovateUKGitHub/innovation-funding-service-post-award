@@ -3,9 +3,10 @@ import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { forecastDashboardQuery } from "./ForecastDashboard.query";
 import { ForecastDashboardQuery, ForecastDashboardQuery$data } from "./__generated__/ForecastDashboardQuery.graphql";
-import { mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
-import { PartnerDtoGql } from "@framework/dtos";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 export type Partner = Pick<
   PartnerDtoGql,

@@ -1,38 +1,36 @@
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { DocumentSummaryDto, AllPartnerDocumentSummaryDto, DocumentDto } from "@framework/dtos/documentDto";
+import { MultipleDocumentUploadDto, DocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
+import { ClaimKey } from "@framework/types/ClaimKey";
 import { contextProvider } from "@server/features/common/contextProvider";
-import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
-
-import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
-import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocumentsSummary";
-import { GetProjectChangeRequestDocumentOrItemDocumentQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocument";
-import { DocumentDescription } from "@framework/constants";
 import { DeleteClaimDetailDocumentCommand } from "@server/features/documents/deleteClaimDetailDocument";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
-import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
-import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
-import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { AllPartnerDocumentSummaryDto, DocumentDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { DeleteLoanDocument } from "@server/features/documents/deleteLoanDocument";
+import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
+import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
+import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
+import { GetAllPartnerDocumentsQuery } from "@server/features/documents/getAllPartnerDocumentsSummaryQuery";
+import { GetClaimDetailDocumentQuery } from "@server/features/documents/getClaimDetailDocument";
+import { GetClaimDetailDocumentsQuery } from "@server/features/documents/getClaimDetailDocumentsSummary";
+import { GetClaimDocumentQuery } from "@server/features/documents/getClaimDocument";
+import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
+import { GetLoanDocumentQuery } from "@server/features/documents/getLoanDocument";
+import { GetLoanDocumentsQuery } from "@server/features/documents/getLoanDocuments";
 import { GetPartnerDocumentQuery } from "@server/features/documents/getPartnerDocument";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummaryQuery";
-import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
-import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
-
-import { GetLoanDocumentsQuery } from "@server/features/documents/getLoanDocuments";
+import { GetProjectChangeRequestDocumentOrItemDocumentQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocument";
+import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocumentsSummary";
+import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
+import { GetProjectDocumentSummaryQuery } from "@server/features/documents/getProjectDocumentSummaryQuery";
+import { UploadClaimDetailDocumentCommand } from "@server/features/documents/uploadClaimDetailDocument";
+import { UploadClaimDocumentCommand } from "@server/features/documents/uploadClaimDocument";
+import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { UploadLoanDocumentsCommand } from "@server/features/documents/uploadLoanDocument";
-import { GetLoanDocumentQuery } from "@server/features/documents/getLoanDocument";
-import { DeleteLoanDocument } from "@server/features/documents/deleteLoanDocument";
-
-import { ClaimDetailKey, ClaimKey } from "@framework/types";
-import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
-import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
-import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDocument";
-import { GetClaimDocumentQuery } from "../features/documents/getClaimDocument";
-import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocumentsSummary";
-import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
-import { GetProjectDocumentSummaryQuery } from "../features/documents/getProjectDocumentSummaryQuery";
-import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocumentsSummary";
-import { GetClaimDetailDocumentQuery } from "../features/documents/getClaimDetailDocument";
-import { GetAllPartnerDocumentsQuery } from "@server/features/documents/getAllPartnerDocumentsSummaryQuery";
+import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
+import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
+import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IDocumentsApi {
   getClaimDocuments: (

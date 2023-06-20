@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import type { ContentSelector } from "@copy/type";
-import { Content } from "@ui/components";
+import { Content } from "../content";
 
 interface Props {
   label?: string;

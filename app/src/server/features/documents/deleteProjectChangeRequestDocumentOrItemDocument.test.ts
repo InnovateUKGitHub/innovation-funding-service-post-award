@@ -1,5 +1,6 @@
-import * as Entites from "@framework/entities";
-import { Authorisation, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { RecordType } from "@framework/entities/recordType";
+import { Authorisation } from "@framework/types/authorisation";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
@@ -17,7 +18,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
     );
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
-    const recordType: Entites.RecordType = {
+    const recordType: RecordType = {
       id: "id_1",
       parent: projectChangeRequest.id,
       type: "Scope Change",
@@ -61,7 +62,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const projectChangeRequest = context.testData.createPCR(project);
-      const recordType: Entites.RecordType = {
+      const recordType: RecordType = {
         id: "recordType_1",
         parent: projectChangeRequest.id,
         type: "Scope change",
@@ -92,7 +93,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const projectChangeRequest = context.testData.createPCR(project);
-      const recordType: Entites.RecordType = {
+      const recordType: RecordType = {
         id: "recordType_1",
         parent: projectChangeRequest.id,
         type: "Scope change",

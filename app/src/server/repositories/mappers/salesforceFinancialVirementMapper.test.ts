@@ -1,6 +1,6 @@
 import { SalesforceFinancialVirementMapper } from "@server/repositories/mappers/financialVirementMapper";
-import { ISalesforceFinancialVirement } from "@server/repositories";
 import { createDto } from "@framework/util/dtoHelpers";
+import { ISalesforceFinancialVirement } from "../financialVirementRepository";
 
 const partnerRecordType = "PARTNER_RECORD_TYPE";
 const costCategoryRecordType = "COST_CATEGORY_RECORD_TYPE";

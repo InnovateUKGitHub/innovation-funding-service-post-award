@@ -1,5 +1,5 @@
+import { mountedContext } from "@ui/features/has-mounted/Mounted";
 import { ReactNode } from "react";
-import { mountedContext } from "@ui/features";
 
 interface IStubMountedProvider {
   mounted: boolean;

@@ -1,5 +1,8 @@
+import { CostCategoryGroupType, CostCategoryType } from "@framework/constants/enums";
+import { PCRItemStatus, PCRItemType, PCRStepId } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { PCRDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
@@ -10,36 +13,25 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
-import {
-  CostCategoryGroupType,
-  CostCategoryItem,
-  CostCategoryList,
-  CostCategoryType,
-  ILinkInfo,
-  PCRItemForPartnerAdditionDto,
-  PCRItemStatus,
-  PCRItemType,
-  PCRStepId,
-  ProjectDto,
-  ProjectRole,
-} from "@framework/types";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { CostCategoryItem, CostCategoryList } from "@framework/types/CostCategory";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Pending } from "@shared/pending";
-import * as ACC from "@ui/components";
+import { Content } from "@ui/components/content";
+import { Info } from "@ui/components/layout/info";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import {
-  CapitalUsageFormComponent,
-  LabourFormComponent,
-  MaterialsFormComponent,
-  OtherCostsFormComponent,
-  OverheadsFormComponent,
-  SubcontractingFormComponent,
-  TravelAndSubsFormComponent,
-} from "@ui/containers/pcrs/addPartner/spendProfile";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { IEditorStore, IStores, useStores } from "@ui/redux";
-import { IRoutes } from "@ui/routing";
-import { PCRDtoValidator } from "@ui/validators";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { IStores, useStores } from "@ui/redux/storesProvider";
+import { IRoutes } from "@ui/routing/routeConfig";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import {
   PCRBaseCostDtoValidator,
   PCRCapitalUsageCostDtoValidator,
@@ -52,6 +44,13 @@ import {
   PCRTravelAndSubsCostDtoValidator,
 } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import { CapitalUsageFormComponent } from "./capitalUsageFormComponent";
+import { LabourFormComponent } from "./labourFormComponent";
+import { MaterialsFormComponent } from "./materialsFormComponent";
+import { OtherCostsFormComponent } from "./otherCostsFormComponent";
+import { OverheadsFormComponent } from "./overheadsFormComponent";
+import { SubcontractingFormComponent } from "./subcontractingFormComponent";
+import { TravelAndSubsFormComponent } from "./travelAndSubsFormComponent";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: ProjectId;
@@ -99,7 +98,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     });
 
     return (
-      <ACC.PageLoader
+      <PageLoader
         pending={combined}
         render={x =>
           this.renderContents(x.project, x.editor, x.costCategory, x.validator, x.cost, this.props.routes, {
@@ -124,42 +123,42 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   ) {
     const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={this.getBackLink(cost, editor.data)}>
-            <ACC.Content
+          <BackLink route={this.getBackLink(cost, editor.data)}>
+            <Content
               value={x => x.pages.pcrSpendProfilePrepareCost.backLink({ costCategoryName: costCategory.name })}
             />
-          </ACC.BackLink>
+          </BackLink>
         }
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
         project={project}
         validator={validator}
         error={editor.error}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section
+        <Messages messages={this.props.messages} />
+        <Section
           title={x => x.pages.pcrSpendProfilePrepareCost.sectionTitleCost({ costCategoryName: costCategory.name })}
         >
           {this.renderGuidance(costCategoryType)}
           {this.renderForm(costCategory, costCategoryType, editor, validator, cost, routes, params)}
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 
   private renderGuidance(costCategory: CostCategoryItem) {
     if (costCategory.id === CostCategoryType.Overheads) {
       return (
-        <ACC.Info
+        <Info
           summary={
-            <ACC.Content
+            <Content
               value={x => x.pages.pcrSpendProfilePrepareCost.guidanceTitle({ costCategoryName: costCategory.name })}
             />
           }
         >
-          <ACC.Content markdown value={costCategory.guidanceMessageKey} />
-        </ACC.Info>
+          <Content markdown value={costCategory.guidanceMessageKey} />
+        </Info>
       );
     }
     return null;

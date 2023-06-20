@@ -1,10 +1,14 @@
 import { DateTime } from "luxon";
-import { ISalesforceClaim, ISalesforceProfileTotalPeriod } from "@server/repositories";
-import { salesforceDateFormat } from "@framework/util/clock";
-import { ClaimDto, ClaimStatus, IContext, PartnerDto } from "@framework/types";
-import { ReceivedStatus } from "@framework/entities";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ReceivedStatus } from "@framework/entities/received-status";
+import { IContext } from "@framework/types/IContext";
+import { salesforceDateFormat } from "@framework/util/clock";
+import { ISalesforceClaim } from "@server/repositories/claimsRepository";
+import { ISalesforceProfileTotalPeriod } from "@server/repositories/profilePeriodTotalRepository";
 
 const statusAllowingIarEdit = [
   ClaimStatus.DRAFT,

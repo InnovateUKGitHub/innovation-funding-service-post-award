@@ -1,11 +1,14 @@
-import { ClaimDto, ClaimStatus } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ClaimDtoValidator } from "@ui/validators";
-import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute } from "@ui/containers";
-import { GetClaim, UpdateClaimCommand } from "@server/features/claims";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { GetClaim } from "@server/features/claims/getClaim";
+import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
+import { AllClaimsDashboardRoute } from "@ui/containers/claims/allClaimsDashboard/allClaimsDashboard.page";
+import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/claims/review.page";
+import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 
 export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, "claim"> {
   constructor() {

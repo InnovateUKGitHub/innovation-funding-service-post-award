@@ -18,7 +18,7 @@ This is a class that inherits from `ContainerBase<TParameters, TData, TCallbacks
 
 This is a standard react component and needs to implement the render method.
 
-Generally the container will render a `<ACC.PageLoader/>` as the initial child component which will then call on to a `renderContents` method once data is loaded.
+Generally the container will render a `<PageLoader/>` as the initial child component which will then call on to a `renderContents` method once data is loaded.
 
 *The `TCallbacks` is a hangover from writing components for `react-redux` connect approach which is no longer used. It can be nice, however, to separate out the callbacks interface from the data interface if preferred. so has been left in for now.*
 

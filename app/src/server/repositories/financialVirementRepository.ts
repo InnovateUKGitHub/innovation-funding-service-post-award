@@ -1,9 +1,9 @@
-import { PartnerFinancialVirement } from "@framework/entities";
 import { ILogger } from "@shared/developmentLogger";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
 import { SalesforceFinancialVirementMapper } from "./mappers/financialVirementMapper";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { PartnerFinancialVirement } from "@framework/entities/financialVirement";
 
 export interface ISalesforceFinancialVirement {
   Id: string;

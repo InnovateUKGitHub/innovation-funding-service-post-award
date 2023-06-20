@@ -1,38 +1,39 @@
-import * as ACC from "@ui/components";
 import { PCRSpendProfileTravelAndSubsCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { SpendProfileDeleteFormProps } from "@ui/containers";
+import { Section } from "@ui/components/layout/section";
+import { Currency } from "@ui/components/renderers/currency";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { SpendProfileDeleteFormProps } from "./spendProfileDeleteCost.page";
 
 export const DeleteTravelAndSubsCostFormComponent = (
   props: SpendProfileDeleteFormProps<PCRSpendProfileTravelAndSubsCostDto>,
 ) => {
   const { data, costCategory } = props;
   return (
-    <ACC.Section
-      title={x => x.pages.pcrSpendProfileDeleteCost.sectionTitleCost({ costCategoryName: costCategory.name })}
-    >
-      <ACC.ValidationMessage messageType="alert" message={x => x.pages.pcrSpendProfileDeleteCost.guidanceDelete} />
-      <ACC.SummaryList qa="deleteTravelAndSubsCost">
-        <ACC.SummaryListItem
+    <Section title={x => x.pages.pcrSpendProfileDeleteCost.sectionTitleCost({ costCategoryName: costCategory.name })}>
+      <ValidationMessage messageType="alert" message={x => x.pages.pcrSpendProfileDeleteCost.guidanceDelete} />
+      <SummaryList qa="deleteTravelAndSubsCost">
+        <SummaryListItem
           label={x => x.pcrSpendProfileLabels.travelAndSubs.description}
           content={data.description}
           qa="description"
         />
-        <ACC.SummaryListItem
+        <SummaryListItem
           label={x => x.pcrSpendProfileLabels.travelAndSubs.numberOfTimes}
           content={data.numberOfTimes}
           qa="numberOfTimes"
         />
-        <ACC.SummaryListItem
+        <SummaryListItem
           label={x => x.pcrSpendProfileLabels.travelAndSubs.costOfEach}
-          content={<ACC.Renderers.Currency value={data.costOfEach} />}
+          content={<Currency value={data.costOfEach} />}
           qa="costOfEach"
         />
-        <ACC.SummaryListItem
+        <SummaryListItem
           label={x => x.pcrSpendProfileLabels.travelAndSubs.totalCost}
-          content={<ACC.Renderers.Currency value={data.value} />}
+          content={<Currency value={data.value} />}
           qa="totalCost"
         />
-      </ACC.SummaryList>
-    </ACC.Section>
+      </SummaryList>
+    </Section>
   );
 };

@@ -1,14 +1,28 @@
-import { useNavigate } from "react-router-dom";
-import * as ACC from "@ui/components";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { BankDetailsTaskStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { Pending } from "@shared/pending";
-import { IEditorStore, useStores } from "@ui/redux";
-import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { BankDetailsTaskStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { useContent } from "@ui/hooks";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Pending } from "@shared/pending";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { ContainerBase, BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { useNavigate } from "react-router-dom";
 
 export interface ProjectSetupBankStatementParams {
   projectId: ProjectId;
@@ -28,8 +42,8 @@ interface Callbacks {
   onChange: (submit: boolean, dto: PartnerDto) => void;
 }
 
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
-const BankStatementForm = ACC.createTypedForm<PartnerDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
+const BankStatementForm = createTypedForm<PartnerDto>();
 class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankStatementParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({
@@ -40,7 +54,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     });
 
     return (
-      <ACC.PageLoader
+      <PageLoader
         pending={combined}
         render={x => this.renderContents(x.project, x.documents, x.editor, x.documentsEditor)}
       />
@@ -57,24 +71,24 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     const projectSetupRoute = this.props.routes.projectSetup.getLink(projectSetupParams);
 
     const backLinkElement = (
-      <ACC.BackLink route={projectSetupRoute}>
-        <ACC.Content value={x => x.pages.projectSetupBankStatement.backLink} />
-      </ACC.BackLink>
+      <BackLink route={projectSetupRoute}>
+        <Content value={x => x.pages.projectSetupBankStatement.backLink} />
+      </BackLink>
     );
     return (
-      <ACC.Page
+      <Page
         backLink={backLinkElement}
         error={editor.error}
         validator={[editor.validator, documentsEditor.validator]}
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
+        <Messages messages={this.props.messages} />
 
-        <ACC.Section qa="guidance">
-          <ACC.Content markdown value={x => x.pages.projectSetupBankStatement.guidanceMessage} />
-        </ACC.Section>
+        <Section qa="guidance">
+          <Content markdown value={x => x.pages.projectSetupBankStatement.guidanceMessage} />
+        </Section>
 
-        <ACC.Section>
+        <Section>
           <UploadForm.Form
             enctype="multipart"
             editor={documentsEditor}
@@ -85,7 +99,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
             <UploadForm.Fieldset qa="documentGuidance">
               <UploadForm.Hidden name="description" value={() => DocumentDescription.BankStatement} />
 
-              <ACC.DocumentGuidance />
+              <DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
                 label={x => x.documentLabels.uploadInputLabel}
@@ -106,21 +120,21 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
                 styling="Secondary"
                 onClick={() => this.props.onFileChange(true, documentsEditor.data)}
               >
-                <ACC.Content value={x => x.documentMessages.uploadTitle} />
+                <Content value={x => x.documentMessages.uploadTitle} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section>
-          <ACC.DocumentEdit
+        <Section>
+          <DocumentEdit
             qa="setup-bank-statement-documents"
             onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
             documents={documents}
           />
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section qa="submit-bank-statement">
+        <Section qa="submit-bank-statement">
           <BankStatementForm.Form
             editor={editor}
             onChange={() => this.props.onChange(false, editor.data)}
@@ -129,22 +143,22 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
           >
             <BankStatementForm.Fieldset>
               <BankStatementForm.Submit>
-                <ACC.Content value={x => x.pages.projectSetupBankStatement.buttonSubmit} />
+                <Content value={x => x.pages.projectSetupBankStatement.buttonSubmit} />
               </BankStatementForm.Submit>
 
-              <ACC.Link
+              <Link
                 styling="SecondaryButton"
                 route={this.props.routes.projectSetup.getLink({
                   projectId: this.props.projectId,
                   partnerId: this.props.partnerId,
                 })}
               >
-                <ACC.Content value={x => x.pages.projectSetupBankStatement.buttonReturn} />
-              </ACC.Link>
+                <Content value={x => x.pages.projectSetupBankStatement.buttonReturn} />
+              </Link>
             </BankStatementForm.Fieldset>
           </BankStatementForm.Form>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 }

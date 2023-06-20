@@ -1,12 +1,14 @@
-import { PCRItemStatus, PCRStatus } from "@framework/constants";
-import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, PCRStandardItemDto } from "@framework/dtos";
-import { IContext, ILinkInfo, PCRItemType } from "@framework/types";
+import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
+import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, PCRStandardItemDto } from "@framework/dtos/pcrDtos";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { PCRCreateRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
+import { PCRCreateRoute } from "@ui/containers/pcrs/create";
 import { PcrModifyParams } from "@ui/containers/pcrs/modifyOptions/PcrModifyOptions";
+import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pcrs/overview/projectChangeRequestPrepare.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<PcrModifyParams, "pcr"> {
   constructor() {

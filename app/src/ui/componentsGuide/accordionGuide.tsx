@@ -1,6 +1,8 @@
-import { IGuide } from "@framework/types";
-
-import { Accordion, AccordionItem, DocumentList, Content } from "../components";
+import { IGuide } from "@framework/types/IGuide";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { Content } from "@ui/components/content";
+import { DocumentList } from "@ui/components/documents/DocumentList";
 
 const documents = [
   {

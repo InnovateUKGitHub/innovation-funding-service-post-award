@@ -1,4 +1,4 @@
-import { PartnerStatus } from "@framework/constants";
+import { PartnerStatus } from "@framework/constants/partner";
 
 export const options = {
   active: "Active",

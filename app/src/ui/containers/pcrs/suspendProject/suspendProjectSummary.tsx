@@ -1,39 +1,40 @@
-import * as ACC from "@ui/components";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForProjectSuspensionDto } from "@framework/dtos/pcrDtos";
+import { Section } from "@ui/components/layout/section";
+import { ShortDate } from "@ui/components/renderers/date";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
-import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
-
+import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { SuspendProjectSteps } from "./workflow";
-import { PCRStepId } from "@framework/types";
 
 export const SuspendProjectSummary = (
   props: PcrSummaryProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator, SuspendProjectSteps>,
 ) => {
   const lastDayContent = props.pcrItem.suspensionEndDate ? (
-    <ACC.Renderers.ShortDate value={props.pcrItem.suspensionEndDate} />
+    <ShortDate value={props.pcrItem.suspensionEndDate} />
   ) : (
     "Not set"
   );
 
   return (
-    <ACC.Section>
-      <ACC.SummaryList qa="projectSuspension">
-        <ACC.SummaryListItem
+    <Section>
+      <SummaryList qa="projectSuspension">
+        <SummaryListItem
           qa="startDate"
           label={x => x.pages.pcrSuspendProjectDetails.firstDayOfPauseTitle}
           validation={props.validator.suspensionStartDate}
-          content={<ACC.Renderers.ShortDate value={props.pcrItem.suspensionStartDate} />}
+          content={<ShortDate value={props.pcrItem.suspensionStartDate} />}
           action={props.getEditLink(PCRStepId.details, props.validator.suspensionStartDate)}
         />
 
-        <ACC.SummaryListItem
+        <SummaryListItem
           qa="endDate"
           label={x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseTitle}
           validation={props.validator.suspensionEndDate}
           content={lastDayContent}
           action={props.getEditLink(PCRStepId.details, props.validator.suspensionEndDate)}
         />
-      </ACC.SummaryList>
-    </ACC.Section>
+      </SummaryList>
+    </Section>
   );
 };

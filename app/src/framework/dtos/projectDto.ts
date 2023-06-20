@@ -1,5 +1,6 @@
-import { ClaimFrequency, ProjectMonitoringLevel, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/constants";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ClaimFrequency } from "@framework/constants/enums";
+import { ProjectMonitoringLevel, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/constants/project";
 
 export interface ProjectDto {
   applicationUrl?: string | null;

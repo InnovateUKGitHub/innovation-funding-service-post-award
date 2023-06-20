@@ -1,9 +1,9 @@
-import { PCRItemForLoanDrawdownChangeDto } from "@framework/dtos";
-import { PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validators";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForLoanDrawdownChangeDto } from "@framework/dtos/pcrDtos";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { LoanDrawdownChangeStepContainer } from "./LoanDrawdownChangeStep";
 import { LoanDrawdownChangeSummary } from "./LoanDrawdownChangeSummary";
-import { PCRStepId } from "@framework/types";
 
 export type LoanDrawdownChangeStepName = PCRStepId.loanDrawdownChange;
 

@@ -1,5 +1,6 @@
+import { PCRItemType } from "@framework/constants/pcrConstants";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemType } from "@framework/constants";
+
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 // TODO: Add test to capture conditional competition types - snapshot?

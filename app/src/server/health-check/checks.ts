@@ -1,10 +1,10 @@
-import { ErrorCode } from "@framework/types";
-import { CompaniesHouse } from "@server/repositories";
-
-import { configuration, AppError } from "@server/features/common";
 import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { HealthCheckResult } from "@server/health-check/health-check.interface";
 import { ILogger } from "@shared/developmentLogger";
+import { ErrorCode } from "@framework/constants/enums";
+import { configuration } from "@server/features/common/config";
+import { CompaniesHouse } from "@server/repositories/companiesRepository";
+import { AppError } from "@shared/appError";
 
 /**
  * Checks the health of the salesforce connection

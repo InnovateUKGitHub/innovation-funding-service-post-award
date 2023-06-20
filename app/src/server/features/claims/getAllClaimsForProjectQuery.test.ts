@@ -1,6 +1,6 @@
-import { GetAllClaimsForProjectQuery } from "@server/features/claims";
-import { ClaimStatus } from "@framework/types";
+import { ClaimStatus } from "@framework/constants/claimStatus";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { GetAllClaimsForProjectQuery } from "./getAllClaimsForProjectQuery";
 
 describe("getAllClaimsForProjectQuery", () => {
   it("returns the full claim details", async () => {

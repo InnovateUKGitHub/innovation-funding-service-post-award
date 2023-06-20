@@ -1,8 +1,10 @@
 import React, { cloneElement } from "react";
 import cx from "classnames";
-
-import { H3, H4 } from "@ui/components";
-import { Currency, FullDate, FullDateTime, Percentage, SimpleString } from "@ui/components/renderers";
+import { Currency } from "./renderers/currency";
+import { FullDate, FullDateTime } from "./renderers/date";
+import { Percentage } from "./renderers/percentage";
+import { SimpleString } from "./renderers/simpleString";
+import { H3, H4 } from "./typography/Heading.variants";
 
 interface InternalFieldProps<T> {
   label: React.ReactNode;

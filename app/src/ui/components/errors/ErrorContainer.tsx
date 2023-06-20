@@ -1,12 +1,14 @@
-import { IAppError } from "@framework/types";
 import { ErrorPayload, createErrorPayload } from "@shared/create-error-payload";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { useInitContent } from "@ui/features/use-initial-content";
-import { FullHeight, GovWidthContainer, Header } from "@ui/components";
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./error.config";
 import { FallbackProps } from "react-error-boundary";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { IAppError } from "@framework/types/IAppError";
+import { FullHeight } from "../FullHeight";
+import { GovWidthContainer } from "../layout/GovWidthContainer";
+import { Header } from "../layout/header";
 
 export type ErrorContainerProps = ErrorPayload["params"] & { from?: string };
 

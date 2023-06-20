@@ -2,8 +2,8 @@ import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentSummaryDto } from "@framework/dtos";
 import { DocumentsStoreBase } from "./documentsStoreBase";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export class LoanDocumentsStore extends DocumentsStoreBase {
   private getKey(projectId: ProjectId, loanId: LoanId) {

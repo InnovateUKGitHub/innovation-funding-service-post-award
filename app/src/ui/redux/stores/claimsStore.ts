@@ -1,14 +1,15 @@
+import { ClaimDto } from "@framework/dtos/claimDto";
 import { Pending } from "@shared/pending";
-import { ClaimDto } from "@framework/dtos";
 import { apiClient } from "@ui/apiClient";
-import { ClaimDtoValidator } from "@ui/validators";
-
 import { StoreBase } from "@ui/redux/stores/storeBase";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { messageSuccess, RootActionsOrThunk } from "@ui/redux/actions";
-import { RootState } from "@ui/redux/reducers";
-
-import { ClaimDocumentsStore, CostSummariesStore, PartnersStore } from "@ui/redux/stores";
+import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { messageSuccess } from "../actions/common/messageActions";
+import { RootActionsOrThunk } from "../actions/root";
+import { RootState } from "../reducers/rootReducer";
+import { ClaimDocumentsStore } from "./claimDocumentsStore";
+import { CostSummariesStore } from "./costsSummariesStore";
+import { PartnersStore } from "./partnersStore";
 
 const periodsWithIARDue = (data: ClaimDto[]) =>
   data.reduce((acc: string[], cur: ClaimDto) => {

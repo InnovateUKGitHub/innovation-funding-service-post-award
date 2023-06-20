@@ -1,4 +1,4 @@
-import { PartnerDto } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 import { getLeadPartner, sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 
 describe("partnerHelper", () => {

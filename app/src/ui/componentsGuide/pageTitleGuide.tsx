@@ -1,4 +1,4 @@
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
 import { PageTitle, PageTitleProvider } from "@ui/features/page-title";
 
 export const pageTitleGuide: IGuide = {

@@ -1,5 +1,5 @@
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { GetAllIncludingNewForPartnerQuery } from ".";
+import { GetAllIncludingNewForPartnerQuery } from "./getAllIncludingNewForPartnerQuery";
 
 describe("GetAllIncludingNewForPartnerQuery", () => {
   it("returns objects of correct shape", async () => {

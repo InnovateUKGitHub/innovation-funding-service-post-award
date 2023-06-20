@@ -1,10 +1,13 @@
+import { PCRStatus } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
 import { PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
-import { Authorisation, IContext, PCRStatus, ProjectRole } from "@framework/types";
-import { numberComparator } from "@framework/util";
-import { ProjectChangeRequestEntity } from "@framework/entities";
-import { QueryBase } from "../common";
+import { ProjectChangeRequestEntity } from "@framework/entities/projectChangeRequest";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { numberComparator } from "@framework/util/comparator";
+import { QueryBase } from "../common/queryBase";
+import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
-import { GetAllProjectRolesForUser } from "../projects";
 
 export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
   constructor(private readonly projectId: ProjectId) {

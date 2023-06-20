@@ -1,12 +1,13 @@
-import { BackLink, Page } from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { PageTitle } from "@ui/features/page-title";
 
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 
 import { BroadcastDetail } from "./BroadcastDetail";
 import { useBroadcastDetailsQuery } from "./broadcastDetails.logic";
+import { Page } from "@ui/components/layout/page";
+import { BackLink } from "@ui/components/links";
 
 interface BroadcastPageParams {
   broadcastId: BroadcastId;

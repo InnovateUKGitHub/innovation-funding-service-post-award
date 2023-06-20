@@ -1,5 +1,6 @@
 import Express from "express";
-import { configuration, getContentSecurityPolicy } from "./features/common";
+import { configuration } from "./features/common/config";
+import { getContentSecurityPolicy } from "./features/common/get-content-security-policy";
 
 export const allowCache = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
   const tenYears = 10 * 31536000;

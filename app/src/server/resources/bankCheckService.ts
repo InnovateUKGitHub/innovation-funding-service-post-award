@@ -1,4 +1,3 @@
-import { BadRequestError, configuration, ConfigurationError } from "@server/features/common";
 import {
   AccountDetails,
   BankCheckResult,
@@ -6,6 +5,8 @@ import {
   BankCheckVerificationResult,
   BankDetails,
 } from "@framework/types/bankCheck";
+import { configuration } from "@server/features/common/config";
+import { BadRequestError, ConfigurationError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 
 export interface IVerifyBankCheckInputs {

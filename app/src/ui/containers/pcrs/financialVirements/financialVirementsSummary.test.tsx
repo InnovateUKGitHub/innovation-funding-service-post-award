@@ -1,4 +1,3 @@
-import { PCRItemType } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { TestBed, TestBedStore } from "@shared/TestBed";
 import { render } from "@testing-library/react";
@@ -12,6 +11,7 @@ import {
 import { ProjectParticipantProvider } from "@ui/features/project-participants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { PCRItemType } from "@framework/constants/pcrConstants";
 
 describe("<FinancialVirementSummary />", () => {
   const context = new TestContext();

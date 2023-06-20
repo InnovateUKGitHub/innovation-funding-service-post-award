@@ -1,5 +1,8 @@
-import { QueryBase } from "@server/features/common";
-import { LoanDto, Authorisation, IContext, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 
 export class GetAllLoans extends QueryBase<LoanDto[]> {
   constructor(private readonly projectId: ProjectId) {

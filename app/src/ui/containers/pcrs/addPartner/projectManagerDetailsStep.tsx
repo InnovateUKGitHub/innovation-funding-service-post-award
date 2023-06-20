@@ -1,10 +1,13 @@
-import * as ACC from "@ui/components";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { PCRContactRole } from "@framework/constants";
+import { PCRContactRole } from "@framework/constants/pcrConstants";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { EditorStatus } from "@ui/constants/enums";
-import { useMounted } from "@ui/features";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PcrStepProps } from "../pcrWorkflow";
 
 const getFinanceContactDetails = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
@@ -17,7 +20,7 @@ const getFinanceContactDetails = (
   props.onChange(dto);
 };
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
 
 export const ProjectManagerDetailsStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
@@ -25,10 +28,10 @@ export const ProjectManagerDetailsStep = (
   const { isClient } = useMounted();
 
   return (
-    <ACC.Section title={x => x.pages.pcrAddPartnerProjectContacts.sectionTitle}>
-      <ACC.Renderers.SimpleString>
-        <ACC.Content value={x => x.pages.pcrAddPartnerProjectContacts.guidance} />
-      </ACC.Renderers.SimpleString>
+    <Section title={x => x.pages.pcrAddPartnerProjectContacts.sectionTitle}>
+      <SimpleString>
+        <Content value={x => x.pages.pcrAddPartnerProjectContacts.guidance} />
+      </SimpleString>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -39,7 +42,7 @@ export const ProjectManagerDetailsStep = (
         <Form.Fieldset heading={x => x.pcrAddPartnerLabels.projectLeadContactHeading}>
           {isClient && (
             <Form.Button name="useFinanceContactDetails" onClick={() => getFinanceContactDetails(props)}>
-              <ACC.Content value={x => x.pages.pcrAddPartnerProjectContacts.useFinanceDetails} />
+              <Content value={x => x.pages.pcrAddPartnerProjectContacts.useFinanceDetails} />
             </Form.Button>
           )}
 
@@ -91,13 +94,13 @@ export const ProjectManagerDetailsStep = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrItem.submitButton} />
+            <Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
+            <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };

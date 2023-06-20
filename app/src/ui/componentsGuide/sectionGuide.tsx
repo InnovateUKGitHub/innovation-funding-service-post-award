@@ -1,4 +1,4 @@
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
 import { Section } from "../components/layout/section";
 import { SimpleString } from "../components/renderers/simpleString";
 

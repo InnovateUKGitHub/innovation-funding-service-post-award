@@ -1,4 +1,5 @@
-import { IContext, PCRStatus } from "@framework/types";
+import { PCRStatus } from "@framework/constants/pcrConstants";
+import { IContext } from "@framework/types/IContext";
 import { mapToPCRStatus } from "@server/repositories/mappers/projectChangeRequestMapper";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 

@@ -1,4 +1,4 @@
-import { useGovFrontend } from "@ui/hooks";
+import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 
 interface InfoProps {
   summary: React.ReactNode;

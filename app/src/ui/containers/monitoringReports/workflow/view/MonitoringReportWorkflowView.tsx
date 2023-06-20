@@ -1,4 +1,4 @@
-import { MonitoringReportDto } from "@framework/dtos";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { BaseProps } from "@ui/containers/containerBase";
 import { getForwardLink } from "../monitoringReportWorkflowDef";
 import {

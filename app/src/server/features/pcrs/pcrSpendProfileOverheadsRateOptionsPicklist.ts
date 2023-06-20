@@ -1,4 +1,5 @@
-import { IPicklistEntry, PCRSpendProfileOverheadRate } from "@framework/types";
+import { PCRSpendProfileOverheadRate } from "@framework/constants/pcrConstants";
+import { IPicklistEntry } from "@framework/types/IPicklistEntry";
 
 export const pcrSpendProfileOverheadRatePicklist: Map<PCRSpendProfileOverheadRate, IPicklistEntry> = new Map();
 

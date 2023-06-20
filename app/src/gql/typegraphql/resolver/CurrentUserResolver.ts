@@ -1,5 +1,5 @@
 import type { GraphQLContext } from "@gql/GraphQLContext";
-import { configuration } from "@server/features/common";
+import { configuration } from "@server/features/common/config";
 import { Ctx, Query, Resolver } from "type-graphql";
 import { CurrentUserObject } from "../object/CurrentUserObject";
 

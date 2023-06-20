@@ -1,9 +1,12 @@
-import { CrownCopyrightLogo, GovWidthContainer, H3, UL } from "@ui/components";
-import { ExternalLink, ExternalLinkProps } from "@ui/components/renderers";
 import { crownCopyrightUrl, footerLinks, ifsCookieUrl, ukGovLicence } from "@ui/containers/app/footer.config";
-import { useContent } from "@ui/hooks";
-import { Content } from "@ui/components";
+import { useContent } from "@ui/hooks/content.hook";
 import cx from "classnames";
+import { Content } from "../content";
+import { ExternalLinkProps, ExternalLink } from "../renderers/externalLink";
+import { H3 } from "../typography/Heading.variants";
+import { CrownCopyrightLogo } from "./crownCopyrightLogo";
+import { GovWidthContainer } from "./GovWidthContainer";
+import { UL } from "./list";
 
 const Footer = () => {
   const { getContent } = useContent();

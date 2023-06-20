@@ -1,7 +1,9 @@
 import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ValidationError } from "@server/features/common/appError";
-import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 
 describe("UploadProjectDocumentCommand", () => {
   it("should upload a project document", async () => {

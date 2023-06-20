@@ -1,10 +1,7 @@
-import { IContext } from "@framework/types";
-
 import { CompanyDto } from "@framework/dtos/companyDto";
-
-import { QueryBase } from "@server/features/common";
+import { IContext } from "@framework/types/IContext";
 import { ICompaniesHouseParams } from "@server/resources/companiesHouse";
-
+import { QueryBase } from "../common/queryBase";
 import { mapCompaniesHouse } from "./mapCompaniesHouse";
 
 export class SearchCompaniesQuery extends QueryBase<CompanyDto[]> {

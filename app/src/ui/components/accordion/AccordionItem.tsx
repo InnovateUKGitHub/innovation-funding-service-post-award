@@ -1,13 +1,11 @@
 import React from "react";
 import cx from "classnames";
-
-import { useContent } from "@ui/hooks";
-import { useMounted } from "@ui/features";
+import { useContent } from "@ui/hooks/content.hook";
 import type { ContentSelector } from "@copy/type";
 import { removeSpaces } from "@shared/string-helpers";
-
-import { AccessibilityText } from "../renderers";
 import { AccordionToggle } from "./AccordionToggle";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { AccessibilityText } from "../renderers/accessibilityText";
 
 // TODO: Merge props.titleContent into props.title
 export interface AccordionItemProps {

@@ -1,6 +1,5 @@
 import { render } from "@testing-library/react";
-
-import { Email, EmailProps } from "@ui/components/renderers";
+import { EmailProps, Email } from "./email";
 
 describe("Email", () => {
   const defaultProps: EmailProps = {

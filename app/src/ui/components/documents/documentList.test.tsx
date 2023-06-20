@@ -1,10 +1,8 @@
 import { render } from "@testing-library/react";
-
-import { DocumentSummaryDto } from "@framework/dtos";
-import * as ACC from "@ui/components";
 import TestBed from "@shared/TestBed";
-import { DocumentViewProps } from "@ui/components";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { DocumentViewProps, DocumentView } from "./DocumentView";
 
 describe("<DocumentView />", () => {
   const stubContent = {
@@ -25,7 +23,7 @@ describe("<DocumentView />", () => {
   const setup = (props?: Partial<DocumentViewProps<DocumentSummaryDto>>) => {
     return render(
       <TestBed>
-        <ACC.DocumentView {...defaultProps} {...props} />
+        <DocumentView {...defaultProps} {...props} />
       </TestBed>,
     );
   };

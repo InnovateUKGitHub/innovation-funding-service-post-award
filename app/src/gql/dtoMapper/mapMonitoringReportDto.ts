@@ -1,5 +1,9 @@
+import {
+  MonitoringReportDto,
+  MonitoringReportQuestionGqlDto,
+  MonitoringReportQuestionDto,
+} from "@framework/dtos/monitoringReportDto";
 import { groupBy } from "lodash";
-import type { MonitoringReportDto, MonitoringReportQuestionDto, MonitoringReportQuestionGqlDto } from "@framework/dtos";
 import { mapMonitoringReportStatus } from "@framework/util/monitoringReportStatus";
 
 type MonitoringReportNode = Readonly<

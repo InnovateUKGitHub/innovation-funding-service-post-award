@@ -1,10 +1,10 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { PCRTimeExtensionOption } from "@framework/dtos";
-
-import { QueryBase } from "@server/features/common";
-import { GetByIdQuery } from "@server/features/projects";
-
+import { ProjectRole } from "@framework/constants/project";
+import { PCRTimeExtensionOption } from "@framework/dtos/pcrDtos";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 import { monthDifference, totalCalendarMonths } from "@shared/date-helpers";
+import { QueryBase } from "../common/queryBase";
+import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 
 export class GetTimeExtensionOptionsQuery extends QueryBase<PCRTimeExtensionOption[]> {
   constructor(private readonly projectId: ProjectId) {

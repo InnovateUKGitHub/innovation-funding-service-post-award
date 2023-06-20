@@ -1,12 +1,13 @@
-import _merge from "lodash.merge";
 import { createMemoryHistory } from "history";
+import _merge from "lodash.merge";
 import { Router } from "react-router-dom";
-import { mountedContext } from "@ui/features";
-import { PageTitleProvider } from "@ui/features/page-title";
 import { Copy } from "@copy/Copy";
-import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
-import { RelayEnvironmentProvider } from "relay-hooks";
 import { getStubGraphQLEnvironment, stubGraphQLGraph } from "@gql/StubGraphQLEnvironment";
+import { mountedContext } from "@ui/features/has-mounted/Mounted";
+import { PageTitleProvider } from "@ui/features/page-title";
+import { ContentProvider } from "@ui/redux/contentProvider";
+import { IStores, StoresProvider } from "@ui/redux/storesProvider";
+import { RelayEnvironmentProvider } from "relay-hooks";
 
 export type TestBedStore = Partial<IStores>;
 

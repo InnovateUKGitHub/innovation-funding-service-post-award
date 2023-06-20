@@ -1,10 +1,15 @@
-import { ProjectRole } from "@framework/types";
-import { Page, BackLink, Content, Projects, Section, Renderers } from "@ui/components";
 import { BaseProps, defineRoute } from "../../containerBase";
 import FCProjectOverviewDetails from "./projectOverviewFC";
 import PMProjectOverviewDetails from "./projectOverviewPM";
 import ProjectOverviewTiles from "./projectOverviewTiles";
 import { useProjectOverviewData, isPartnerWithdrawn } from "./projectOverview.logic";
+import { ProjectRole } from "@framework/constants/project";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { ShortDateRange } from "@ui/components/renderers/date";
+import { Title } from "@ui/components/projects/title";
 
 type Props = {
   projectId: ProjectId;
@@ -33,7 +38,7 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
     isPartnerWithdrawn(project.roles, partners) ? (
     <Content value={x => x.projectMessages.finalClaimPeriodMessage} />
   ) : (
-    <Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />
+    <ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />
   );
 
   return (
@@ -43,7 +48,7 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
           {<Content value={x => x.pages.projectOverview.backToProjects} />}
         </BackLink>
       }
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       projectStatus={project.status}
       partnerStatus={highlightedPartner?.partnerStatus}
     >

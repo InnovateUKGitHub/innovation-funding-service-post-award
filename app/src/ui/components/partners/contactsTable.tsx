@@ -1,7 +1,7 @@
-import { ProjectContactDto } from "@framework/dtos";
 import { createTypedTable } from "../table";
-import { SimpleString } from "../renderers";
 import { Content } from "../content";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { SimpleString } from "../renderers/simpleString";
 
 type Contacts = Pick<ProjectContactDto, "name" | "roleName" | "email">;
 export interface IContactsTable {

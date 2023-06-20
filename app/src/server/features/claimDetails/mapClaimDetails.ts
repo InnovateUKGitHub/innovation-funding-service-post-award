@@ -1,8 +1,10 @@
-import { ISalesforceClaimDetails, ISalesforceClaimLineItem } from "@server/repositories";
 import { salesforceDateFormat } from "@framework/util/clock";
-import { ClaimDetailsDto, ClaimDetailsSummaryDto, IContext } from "@framework/types";
 import mapClaimLineItem from "@server/features/claimDetails/mapClaimLineItem";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
+import { ClaimDetailsSummaryDto, ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceClaimDetails } from "@server/repositories/claimDetailsRepository";
+import { ISalesforceClaimLineItem } from "@server/repositories/claimLineItemRepository";
 
 /**
  * mapper function for `mapClaimDetails`

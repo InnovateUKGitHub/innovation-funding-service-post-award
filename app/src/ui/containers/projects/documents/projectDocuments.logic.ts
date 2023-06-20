@@ -1,14 +1,13 @@
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
+import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
 import {
-  getPartnerRoles,
-  mapToPartnerDocumentSummaryDtoArray,
   mapToProjectDocumentSummaryDtoArray,
-  mapToPartnerDtoArray,
-  mapToProjectDto,
-} from "@gql/dtoMapper";
+  mapToPartnerDocumentSummaryDtoArray,
+} from "@gql/dtoMapper/mapDocumentsDto";
+import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { getFirstEdge } from "@gql/selectors/edges";
-
 import { useLazyLoadQuery } from "react-relay";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
 import { ProjectDocumentsQuery, ProjectDocumentsQuery$data } from "./__generated__/ProjectDocumentsQuery.graphql";

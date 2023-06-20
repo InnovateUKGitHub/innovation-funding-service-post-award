@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
-import { dayComparator, isNumber } from "@framework/util";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import { Nested, NestedResult } from "../validation/nestedResult";
+import { dayComparator } from "@framework/util/comparator";
+import { isNumber } from "@framework/util/numberHelper";
 
 export type ValidatableValue = number | string | Date | null | boolean | undefined;
 

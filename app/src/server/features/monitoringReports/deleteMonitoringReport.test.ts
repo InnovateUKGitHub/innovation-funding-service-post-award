@@ -1,6 +1,6 @@
 import { DeleteMonitoringReportCommand } from "@server/features/monitoringReports/deleteMonitoringReport";
-import { BadRequestError } from "@server/features/common";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { BadRequestError } from "../common/appError";
 
 describe("DeleteMonitoringReportCommand", () => {
   it("should delete a monitoring report in draft status", async () => {

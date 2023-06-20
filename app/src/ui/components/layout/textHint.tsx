@@ -1,5 +1,5 @@
-import * as colour from "../../styles/colours";
-import { SimpleString } from "../renderers";
+import { govukSecondaryTextColour } from "@ui/styles/colours";
+import { SimpleString } from "../renderers/simpleString";
 
 export interface TextHintReactProps {
   children: string;
@@ -7,7 +7,7 @@ export interface TextHintReactProps {
   className?: never;
 }
 
-const textHintStyles = { color: colour.govukSecondaryTextColour };
+const textHintStyles = { color: govukSecondaryTextColour };
 
 /**
  * TextHint component

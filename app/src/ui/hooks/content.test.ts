@@ -3,7 +3,7 @@ import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { renderHook } from "@testing-library/react";
 import { noop } from "@ui/helpers/noop";
-import { useContent } from "@ui/hooks";
+import { useContent } from "./content.hook";
 
 describe("useContent()", () => {
   const stubTestContent = {

@@ -1,6 +1,8 @@
-import { IContext, ProjectStatus, ProjectStatusDto } from "@framework/types";
-import { QueryBase } from "../common";
-import { GetByIdQuery } from ".";
+import { ProjectStatus } from "@framework/constants/project";
+import { ProjectStatusDto } from "@framework/dtos/projectStatusDto";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
+import { GetByIdQuery } from "./getDetailsByIdQuery";
 
 export class GetProjectStatusQuery extends QueryBase<ProjectStatusDto> {
   constructor(private readonly projectId: ProjectId) {

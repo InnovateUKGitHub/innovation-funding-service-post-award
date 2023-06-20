@@ -1,9 +1,11 @@
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { mapClaim } from "@server/features/claims/mapClaim";
-import { ClaimStatus } from "@framework/constants";
 import { InActiveProjectError, ValidationError } from "@server/features/common/appError";
-import { Authorisation, ClaimDto, ProjectRole } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { Authorisation } from "@framework/types/authorisation";
 
 describe("UpdateClaimCommand", () => {
   describe("with accessControl", () => {

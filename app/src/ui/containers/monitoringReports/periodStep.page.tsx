@@ -1,12 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { PageLoader, BackLink, Page, Content, Projects, MonitoringReportPeriodFormComponent } from "@ui/components";
-import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, useStores } from "@ui/redux";
-import { ILinkInfo, ProjectRole } from "@framework/types";
 import { useMonitoringReportPeriodStepQuery } from "./monitoringReportPeriodStep.logic";
+import { ProjectRole } from "@framework/constants/project";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { MonitoringReportPeriodFormComponent } from "@ui/components/monitoringReports/reportForm";
+import { Title } from "@ui/components/projects/title";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 
 export interface MonitoringReportPreparePeriodParams {
   projectId: ProjectId;
@@ -14,9 +22,9 @@ export interface MonitoringReportPreparePeriodParams {
 }
 
 interface Props {
-  project: Pick<Dtos.ProjectDto, "projectNumber" | "title">;
-  editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>;
-  onChange: (save: boolean, dto: Dtos.MonitoringReportDto, submit?: boolean, link?: ILinkInfo) => void;
+  project: Pick<ProjectDto, "projectNumber" | "title">;
+  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
+  onChange: (save: boolean, dto: MonitoringReportDto, submit?: boolean, link?: ILinkInfo) => void;
 }
 
 const PeriodStepComponent = (props: Props & BaseProps & MonitoringReportPreparePeriodParams) => {
@@ -48,7 +56,7 @@ const PeriodStepComponent = (props: Props & BaseProps & MonitoringReportPrepareP
           <Content value={x => x.pages.monitoringReportsPeriodStep.backLink} />
         </BackLink>
       }
-      pageTitle={<Projects.Title projectNumber={props.project.projectNumber} title={props.project.title} />}
+      pageTitle={<Title projectNumber={props.project.projectNumber} title={props.project.title} />}
       validator={props.editor.validator}
       error={props.editor.error}
     >

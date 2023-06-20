@@ -1,4 +1,4 @@
-import { Partner } from "@framework/entities";
+import { Partner } from "@framework/entities/partner";
 import { ISalesforcePartner } from "../partnersRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 

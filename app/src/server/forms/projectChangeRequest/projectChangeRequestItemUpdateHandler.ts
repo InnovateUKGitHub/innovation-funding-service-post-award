@@ -1,43 +1,48 @@
+import { CostCategoryType } from "@framework/constants/enums";
 import {
-  CostCategoryType,
-  getPCROrganisationType,
   PCRItemStatus,
   PCRItemType,
-  PCROrganisationType,
-} from "@framework/constants";
-import * as Dtos from "@framework/dtos";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import {
-  IContext,
-  ILinkInfo,
-  PCRItemForPartnerAdditionDto,
-  PCRParticipantSize,
   PCRStepId,
-  ProjectDto,
-} from "@framework/types";
-import { parseNumber } from "@framework/util";
-import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
-import { BadRequestError } from "@server/features/common";
+  getPCROrganisationType,
+  PCROrganisationType,
+  PCRParticipantSize,
+} from "@framework/constants/pcrConstants";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import {
+  PCRDto,
+  PCRItemForProjectSuspensionDto,
+  PCRItemForScopeChangeDto,
+  PCRItemForTimeExtensionDto,
+  PCRItemDto,
+  PCRItemForAccountNameChangeDto,
+  PCRItemForMultiplePartnerFinancialVirementDto,
+  PCRItemForPartnerWithdrawalDto,
+  PCRItemForPartnerAdditionDto,
+  PCRItemForLoanDrawdownExtensionDto,
+} from "@framework/dtos/pcrDtos";
+import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { parseNumber } from "@framework/util/numberHelper";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 import { GetFinancialLoanVirementQuery } from "@server/features/financialVirements/getFinancialLoanVirementQuery";
 import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
-import { GetByIdQuery } from "@server/features/projects";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-  ProjectChangeRequestPrepareRoute,
-} from "@ui/containers";
+import { BadRequestError } from "@shared/appError";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
+import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pcrs/overview/projectChangeRequestPrepare.page";
+import { ProjectChangeRequestPrepareItemParams, PCRPrepareItemRoute } from "@ui/containers/pcrs/pcrItemWorkflow";
 import { PcrWorkflow, WorkflowPcrType } from "@ui/containers/pcrs/pcrWorkflow";
-import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
+import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner/removePartnerWorkflow";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
 import { SuspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { DateTime } from "luxon";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<
@@ -53,7 +58,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     params: ProjectChangeRequestPrepareItemParams,
     button: IFormButton,
     body: IFormBody,
-  ): Promise<Dtos.PCRDto> {
+  ): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const item = dto.items.find(x => x.id === params.itemId);
@@ -103,7 +108,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateProjectSuspension(
-    item: Dtos.PCRItemForProjectSuspensionDto,
+    item: PCRItemForProjectSuspensionDto,
     body: IFormBody,
     stepName: SuspendProjectSteps,
   ) {
@@ -133,7 +138,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  private updateScopeChange(item: Dtos.PCRItemForScopeChangeDto, body: IFormBody, stepName: scopeChangeStepNames) {
+  private updateScopeChange(item: PCRItemForScopeChangeDto, body: IFormBody, stepName: scopeChangeStepNames) {
     if (stepName === PCRStepId.publicDescriptionStep) {
       item.publicDescription = body.description;
     }
@@ -143,7 +148,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
+  private updateTimeExtension(item: PCRItemForTimeExtensionDto, body: IFormBody) {
     item.offsetMonths = Number(body.timeExtension) ?? 0;
   }
 
@@ -153,7 +158,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   private async validateSummary(
     context: IContext,
     params: ProjectChangeRequestPrepareItemParams,
-    dto: Dtos.PCRItemDto | undefined,
+    dto: PCRItemDto | undefined,
   ): Promise<void> {
     // Note: Bail if no payload or not ready for submission
     if (!dto || dto.status === PCRItemStatus.Incomplete) return;
@@ -168,7 +173,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     context: IContext,
     params: ProjectChangeRequestPrepareItemParams,
     button: IFormButton,
-    dto: Dtos.PCRDto,
+    dto: PCRDto,
   ): Promise<ILinkInfo> {
     const pcrItem = dto.items.find(x => x.id === params.itemId);
     const workflow = PcrWorkflow.getWorkflow(pcrItem as WorkflowPcrType, params.step);
@@ -209,7 +214,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateNameChange(
-    item: Dtos.PCRItemForAccountNameChangeDto,
+    item: PCRItemForAccountNameChangeDto,
     body: IFormBody,
     stepName: accountNameChangeStepNames | null,
   ) {
@@ -220,7 +225,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateMultiplePartnerFinancialVirement(
-    item: Dtos.PCRItemForMultiplePartnerFinancialVirementDto,
+    item: PCRItemForMultiplePartnerFinancialVirementDto,
     body: IFormBody,
     stepName: string | null | undefined,
   ) {
@@ -231,7 +236,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updatePartnerWithdrawal(
-    item: Dtos.PCRItemForPartnerWithdrawalDto,
+    item: PCRItemForPartnerWithdrawalDto,
     body: IFormBody,
     stepName: removePartnerStepNames | null,
   ) {
@@ -354,11 +359,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  private updateLoanExtension(
-    item: Dtos.PCRItemForLoanDrawdownExtensionDto,
-    body: IFormBody,
-    stepName: string | undefined,
-  ) {
+  private updateLoanExtension(item: PCRItemForLoanDrawdownExtensionDto, body: IFormBody, stepName: string | undefined) {
     if (stepName === PCRStepId.loanExtension) {
       item.availabilityPeriodChange = Number(body.availabilityPeriodChange);
       item.extensionPeriodChange = Number(body.extensionPeriodChange);
@@ -370,7 +371,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
-  protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto) {
+  protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: PCRDto) {
     return new PCRDtoValidator({
       model: dto,
       original: dto,

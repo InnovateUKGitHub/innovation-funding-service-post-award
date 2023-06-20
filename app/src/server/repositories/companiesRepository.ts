@@ -1,8 +1,8 @@
-import { withinRange } from "@framework/util";
 import { ICompanyHouse, ICompanyHouseCompanyStatus } from "@framework/entities/CompanyHouse";
+import { withinRange } from "@framework/util/numberHelper";
 
-import { BadRequestError } from "@server/features/common";
 import { CompaniesHouseBase } from "@server/resources/companiesHouse";
+import { BadRequestError } from "@shared/appError";
 
 export interface ICompaniesHouseParams {
   searchString: string;

@@ -1,6 +1,7 @@
-import { ILinkInfo } from "@framework/types";
-import { SimpleString } from "@ui/components/renderers";
-import { Content, Link } from "@ui/components";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Content } from "@ui/components/content";
+import { Link } from "@ui/components/links";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 
 export interface ForecastClaimAdviceProps {
   claimLink: ILinkInfo;

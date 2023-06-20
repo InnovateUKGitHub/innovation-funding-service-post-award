@@ -1,13 +1,19 @@
 import React from "react";
-import * as ACC from "@ui/components";
-import { useStores } from "@ui/redux";
 import { EditorStatus } from "@ui/constants/enums";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -16,8 +22,8 @@ interface InnerProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps
@@ -27,7 +33,7 @@ class Component extends React.Component<
 
     return (
       <>
-        <ACC.Section>
+        <Section>
           <UploadForm.Form
             enctype="multipart"
             editor={documentsEditor}
@@ -36,15 +42,15 @@ class Component extends React.Component<
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset heading={x => x.pages.pcrAddPartnerAgreementToPcr.heading}>
-              <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.pages.pcrAddPartnerAgreementToPcr.guidance} />
-              </ACC.Renderers.SimpleString>
+              <SimpleString>
+                <Content value={x => x.pages.pcrAddPartnerAgreementToPcr.guidance} />
+              </SimpleString>
             </UploadForm.Fieldset>
 
             <UploadForm.Fieldset qa="documentUpload">
               <UploadForm.Hidden name="description" value={() => DocumentDescription.AgreementToPCR} />
 
-              <ACC.DocumentGuidance />
+              <DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
                 label={x => x.documentLabels.uploadInputLabel}
@@ -65,19 +71,19 @@ class Component extends React.Component<
                 styling="Secondary"
                 onClick={() => this.props.onFileChange(true, documentsEditor.data)}
               >
-                <ACC.Content value={x => x.documentMessages.uploadTitle} />
+                <Content value={x => x.documentMessages.uploadTitle} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section>
-          <ACC.DocumentEdit
+        <Section>
+          <DocumentEdit
             qa="agreement-to-pcr-document"
             onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
             documents={documents}
           />
-        </ACC.Section>
+        </Section>
 
         <Form.Form
           qa="saveAndContinue"
@@ -87,10 +93,10 @@ class Component extends React.Component<
         >
           <Form.Fieldset>
             <Form.Submit>
-              <ACC.Content value={x => x.pcrItem.submitButton} />
+              <Content value={x => x.pcrItem.submitButton} />
             </Form.Submit>
             <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-              <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
+              <Content value={x => x.pcrItem.returnToSummaryButton} />
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>
@@ -105,7 +111,7 @@ export const AgreementToPCRStep = (
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
       render={documents => (
         <Component

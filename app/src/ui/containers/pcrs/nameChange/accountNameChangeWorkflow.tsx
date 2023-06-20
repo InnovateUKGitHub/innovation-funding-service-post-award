@@ -1,10 +1,10 @@
-import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
 import { NameChangeStep } from "@ui/containers/pcrs/nameChange/nameChangeStep";
-import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { PCRPrepareItemFilesStep } from "@ui/containers/pcrs/nameChange/prepareItemFilesStep";
 import { NameChangeSummary } from "@ui/containers/pcrs/nameChange/summary";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRStepId } from "@framework/types";
+import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export type accountNameChangeStepNames = PCRStepId.partnerNameStep | PCRStepId.filesStep;
 

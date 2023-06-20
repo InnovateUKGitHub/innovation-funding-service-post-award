@@ -2,12 +2,13 @@ import { useLazyLoadQuery } from "react-relay";
 import { partnerDetailsEditQuery } from "./PartnerDetailsEdit.query";
 import { PartnerDetailsEditQuery, PartnerDetailsEditQuery$data } from "./__generated__/PartnerDetailsEditQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { mapToPartnerDto, mapToProjectDto } from "@gql/dtoMapper";
-import { PartnerDto } from "@framework/dtos";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { apiClient } from "@ui/apiClient";
-import { PartnerStatus } from "@framework/types";
 import { useNavigate } from "react-router-dom";
+import { PartnerStatus } from "@framework/constants/partner";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 type ProjectGql = GQL.NodeSelector<PartnerDetailsEditQuery$data, "Acc_Project__c">;
 

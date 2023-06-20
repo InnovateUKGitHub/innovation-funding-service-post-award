@@ -1,6 +1,6 @@
-import type { ClaimDetailsDto } from "@framework/dtos";
+import type { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
-import { Clock, salesforceDateFormat } from "@framework/util";
+import { Clock, salesforceDateFormat } from "@framework/util/clock";
 
 const clock = new Clock();
 

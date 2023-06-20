@@ -1,6 +1,7 @@
 import React from "react";
-import { IGuide } from "@framework/types";
-import { Markdown, SimpleString } from "../components/renderers";
+import { IGuide } from "@framework/types/IGuide";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { Markdown } from "@ui/components/renderers/markdown";
 
 export const renderersGuide: IGuide = {
   name: "Renderers",

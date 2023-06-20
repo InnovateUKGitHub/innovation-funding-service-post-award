@@ -1,4 +1,4 @@
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import { createTypedTable } from "../table";
 import { ClaimTableProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
 

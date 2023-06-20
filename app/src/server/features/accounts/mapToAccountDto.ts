@@ -1,4 +1,4 @@
-import { AccountDto } from "@framework/types";
+import { AccountDto } from "@framework/dtos/accountDto";
 import { ISalesforceAccount } from "@server/repositories/accountsRepository";
 
 export const mapToAccountDto = (item: ISalesforceAccount): AccountDto => ({

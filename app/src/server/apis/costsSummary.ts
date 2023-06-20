@@ -1,5 +1,5 @@
-import { CostsSummaryForPeriodDto } from "@framework/dtos";
-import { GetCostsSummaryForPeriodQuery } from "../features/claimDetails";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails/getCostsSummaryForPeriodQuery";
 import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 

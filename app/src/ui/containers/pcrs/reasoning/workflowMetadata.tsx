@@ -1,11 +1,12 @@
 import { PCRPrepareReasoningStep } from "@ui/containers/pcrs/reasoning/prepareReasoningStep";
-import { PCRDto } from "@framework/dtos";
 import { PCRPrepareReasoningFilesStep } from "@ui/containers/pcrs/reasoning/prepareFilesStep";
-import { IEditorStore } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { PCRStepId } from "@framework/types";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 export interface ReasoningStepProps extends BaseProps {
   projectId: ProjectId;

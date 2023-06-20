@@ -1,11 +1,11 @@
 import { DateTime } from "luxon";
 import {
+  stringComparator,
   dayComparator,
   nullableNumberComparator,
-  projectPriorityComparatorGql,
   projectPriorityComparator,
-  stringComparator,
-} from "@framework/util";
+  projectPriorityComparatorGql,
+} from "./comparator";
 import { createProjectDto } from "./stubDtos";
 
 describe("stringComparator", () => {

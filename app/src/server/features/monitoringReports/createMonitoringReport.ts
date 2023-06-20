@@ -1,10 +1,14 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { GetByIdQuery } from "@server/features/projects";
-import { MonitoringReportDtoValidator } from "@ui/validators";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { MonitoringReportDto } from "@framework/dtos";
+import { ProjectRole } from "@framework/constants/project";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitoringReportHeaderRepository";
+import { ISalesforceMonitoringReportResponse } from "@server/repositories/monitoringReportResponseRepository";
+import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { BadRequestError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 
 export class CreateMonitoringReportCommand extends CommandBase<string> {

@@ -1,4 +1,5 @@
-import { IContext, MonitoringReportStatus } from "@framework/types";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { IContext } from "@framework/types/IContext";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 

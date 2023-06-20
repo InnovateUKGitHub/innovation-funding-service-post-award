@@ -4,30 +4,12 @@ import { Store, Dispatch } from "redux";
 import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 import { RelayEnvironmentProvider } from "relay-hooks";
-
 import { IRouteDefinition } from "@ui/containers/containerBase";
-import { RoutesProvider, useModal, useStores } from "@ui/redux";
-import { routeTransition } from "@ui/redux/actions";
 import { ContentProvider } from "@ui/redux/contentProvider";
-import { getRoutes, routeConfig } from "@ui/routing";
-
 import { BaseProps } from "@ui/containers/containerBase";
-
 import { PageTitleProvider } from "@ui/features/page-title";
 import { ProjectParticipantProvider } from "@ui/features/project-participants";
 import { useInitContent } from "@ui/features/use-initial-content";
-
-import {
-  Footer,
-  FullHeight,
-  GovWidthContainer,
-  Header,
-  PhaseBanner,
-  PrivateModal,
-  SuspensePageLoader,
-} from "@ui/components";
-import { ErrorBoundaryFallback, ErrorContainer } from "@ui/components/errors";
-import { MountedProvider } from "@ui/features";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { noop } from "@ui/helpers/noop";
 import { ProjectStatusCheck } from "./app/project-active";
@@ -37,6 +19,20 @@ import { ErrorPayload } from "@shared/create-error-payload";
 import { DeveloperSection } from "@ui/components/layout/DeveloperSection";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useModal } from "@ui/redux/modalProvider";
+import { RoutesProvider } from "@ui/redux/routesProvider";
+import { useStores } from "@ui/redux/storesProvider";
+import { MountedProvider } from "@ui/features/has-mounted/Mounted";
+import { ErrorContainer, ErrorBoundaryFallback } from "@ui/components/errors/ErrorContainer";
+import { FullHeight } from "@ui/components/FullHeight";
+import { Footer } from "@ui/components/layout/footer";
+import { GovWidthContainer } from "@ui/components/layout/GovWidthContainer";
+import { Header } from "@ui/components/layout/header";
+import { PhaseBanner } from "@ui/components/layout/phaseBanner";
+import { SuspensePageLoader } from "@ui/components/loading";
+import { PrivateModal } from "@ui/components/modal";
+import { routeTransition } from "@ui/redux/actions/common/transitionActions";
+import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
 
 interface IAppProps {
   dispatch: Dispatch;

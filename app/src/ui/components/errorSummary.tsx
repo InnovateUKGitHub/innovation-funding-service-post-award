@@ -1,6 +1,6 @@
-import { ErrorCode } from "@framework/constants";
+import { ErrorCode } from "@framework/constants/enums";
 import { IAppError } from "@framework/types/IAppError";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface ErrorSummaryProps {
   code: IAppError["code"];

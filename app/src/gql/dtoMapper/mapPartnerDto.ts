@@ -1,10 +1,9 @@
-import { PartnerStatus } from "@framework/constants";
+import { PartnerStatus, PostcodeTaskStatus } from "@framework/constants/partner";
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
-import type { PartnerDtoGql } from "@framework/dtos";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { getClaimStatus } from "@framework/mappers/claimStatus";
 import { getPartnerStatus } from "@framework/mappers/partnerStatus";
-import { calcPercentage } from "@framework/util";
-import { PostcodeTaskStatus } from "@framework/constants";
+import { calcPercentage } from "@framework/util/numberHelper";
 
 /**
  * Note: This field returns a string with an html img element :(

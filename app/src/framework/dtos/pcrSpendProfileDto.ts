@@ -1,4 +1,5 @@
-import { CostCategoryType, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCRSpendProfileOverheadRate, PCRSpendProfileCapitalUsageType } from "@framework/constants/pcrConstants";
 
 export interface PcrSpendProfileDto {
   costs: PCRSpendProfileCostDto[];

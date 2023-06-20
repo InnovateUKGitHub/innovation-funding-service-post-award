@@ -1,16 +1,20 @@
-import * as ACC from "@ui/components";
-import { PCRItemForScopeChangeDto } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
+import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { PCRScopeChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Info } from "@ui/components/layout/info";
 
-const Form = ACC.createTypedForm<PCRItemForScopeChangeDto>();
+const Form = createTypedForm<PCRItemForScopeChangeDto>();
 
 export const PublicDescriptionChangeStep = (
   props: PcrStepProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator>,
 ) => {
   return (
-    <ACC.Section qa="newDescriptionSection">
+    <Section qa="newDescriptionSection">
       <Form.Form
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
@@ -18,15 +22,13 @@ export const PublicDescriptionChangeStep = (
         onSubmit={() => props.onSave(false)}
       >
         <Form.Fieldset heading={x => x.pages.pcrScopeChangePublicDescriptionChange.headingPublicDescription}>
-          <ACC.Info
-            summary={<ACC.Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.publishedDescription} />}
-          >
-            <ACC.Renderers.SimpleString multiline>
+          <Info summary={<Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.publishedDescription} />}>
+            <SimpleString multiline>
               {props.pcrItem.publicDescriptionSnapshot || (
-                <ACC.Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.noAvailableDescription} />
+                <Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.noAvailableDescription} />
               )}
-            </ACC.Renderers.SimpleString>
-          </ACC.Info>
+            </SimpleString>
+          </Info>
           <Form.MultilineString
             name="description"
             hint={props.getRequiredToCompleteMessage()}
@@ -43,9 +45,9 @@ export const PublicDescriptionChangeStep = (
           />
         </Form.Fieldset>
         <Form.Submit>
-          <ACC.Content value={x => x.pcrItem.submitButton} />
+          <Content value={x => x.pcrItem.submitButton} />
         </Form.Submit>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };

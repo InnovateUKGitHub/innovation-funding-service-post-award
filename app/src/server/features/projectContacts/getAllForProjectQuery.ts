@@ -1,6 +1,7 @@
-import { IContext, ProjectContactDto } from "@framework/types";
-import { QueryBase } from "../common";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { IContext } from "@framework/types/IContext";
 import { ISalesforceProjectContact } from "../../repositories/projectContactsRepository";
+import { QueryBase } from "../common/queryBase";
 
 export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
   constructor(private readonly projectId: ProjectId) {

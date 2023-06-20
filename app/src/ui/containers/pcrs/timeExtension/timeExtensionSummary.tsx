@@ -1,44 +1,45 @@
-import * as Dtos from "@framework/dtos";
-import * as ACC from "@ui/components";
+import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemForTimeExtensionDto } from "@framework/dtos/pcrDtos";
+import { Section } from "@ui/components/layout/section";
+import { ShortDateRangeFromDuration, Months } from "@ui/components/renderers/date";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForTimeExtensionDto } from "@framework/dtos";
-import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
+import { PCRTimeExtensionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { TimeExtensionStepNames } from "./timeExtensionWorkflow";
-import { PCRStepId } from "@framework/types";
 
 export const TimeExtensionSummary = (
   props: PcrSummaryProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator, TimeExtensionStepNames>,
 ) => {
-  const newProjectDuration = (x: Dtos.PCRItemForTimeExtensionDto) =>
+  const newProjectDuration = (x: PCRItemForTimeExtensionDto) =>
     !!x.offsetMonths || x.offsetMonths === 0 ? x.offsetMonths + x.projectDurationSnapshot : null;
 
   return (
     <>
-      <ACC.Section title="Existing project details">
-        <ACC.SummaryList qa="existingProjectDetails">
-          <ACC.SummaryListItem
+      <Section title="Existing project details">
+        <SummaryList qa="existingProjectDetails">
+          <SummaryListItem
             label="Start and end date"
             content={
-              <ACC.Renderers.ShortDateRangeFromDuration
+              <ShortDateRangeFromDuration
                 startDate={props.project.startDate}
                 months={props.pcrItem.projectDurationSnapshot}
               />
             }
             qa="currentStartToEndDate"
           />
-          <ACC.SummaryListItem
+          <SummaryListItem
             label="Duration"
-            content={<ACC.Renderers.Months months={props.pcrItem.projectDurationSnapshot} />}
+            content={<Months months={props.pcrItem.projectDurationSnapshot} />}
             qa="currentDuration"
           />
-        </ACC.SummaryList>
-      </ACC.Section>
-      <ACC.Section title="Proposed project details">
-        <ACC.SummaryList qa="proposedProjectDetails">
-          <ACC.SummaryListItem
+        </SummaryList>
+      </Section>
+      <Section title="Proposed project details">
+        <SummaryList qa="proposedProjectDetails">
+          <SummaryListItem
             label="Start and end date"
             content={
-              <ACC.Renderers.ShortDateRangeFromDuration
+              <ShortDateRangeFromDuration
                 startDate={props.project.startDate}
                 months={newProjectDuration(props.pcrItem)}
               />
@@ -46,13 +47,13 @@ export const TimeExtensionSummary = (
             qa="newStartToEndDate"
             action={props.getEditLink(PCRStepId.timeExtension, props.validator.offsetMonthsResult)}
           />
-          <ACC.SummaryListItem
+          <SummaryListItem
             label="Duration"
-            content={<ACC.Renderers.Months months={newProjectDuration(props.pcrItem)} />}
+            content={<Months months={newProjectDuration(props.pcrItem)} />}
             qa="newDuration"
           />
-        </ACC.SummaryList>
-      </ACC.Section>
+        </SummaryList>
+      </Section>
     </>
   );
 };

@@ -1,8 +1,8 @@
-import { PCRPartnerType, PCRProjectRole } from "@framework/types";
-import { CostCategoryType, PCRItemStatus } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { setup } from "@tests/test-utils/pcr-spend-profile-helpers";
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCRItemStatus, PCRProjectRole, PCRPartnerType } from "@framework/constants/pcrConstants";
 
 describe("UpdatePCRSpendProfileCommand", () => {
   it("should delete spend profile costs", async () => {

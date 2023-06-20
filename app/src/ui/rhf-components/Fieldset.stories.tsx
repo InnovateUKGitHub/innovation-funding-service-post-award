@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-
-import { Fieldset, Hint, Label, TextInput } from ".";
+import { Fieldset } from "./Fieldset";
+import { Hint } from "./Hint";
+import { Label } from "./Label";
+import { TextInput } from "./TextInput";
 
 const FieldSetExample = () => (
   <Fieldset>

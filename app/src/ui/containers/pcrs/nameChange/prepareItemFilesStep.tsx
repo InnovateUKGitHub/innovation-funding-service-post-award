@@ -1,14 +1,18 @@
 import React from "react";
-
-import * as ACC from "@ui/components";
-import { useStores } from "@ui/redux";
-import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { EditorStatus } from "@ui/constants/enums";
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -17,7 +21,7 @@ interface InnerProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 class Component extends React.Component<
   PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps
@@ -26,7 +30,7 @@ class Component extends React.Component<
     const { documents, documentsEditor, isSaving } = this.props;
 
     return (
-      <ACC.Section>
+      <Section>
         <UploadForm.Form
           enctype="multipart"
           editor={documentsEditor}
@@ -38,7 +42,7 @@ class Component extends React.Component<
           <UploadForm.Hidden name="description" value={() => DocumentDescription.CertificateOfNameChange} />
 
           <UploadForm.Fieldset heading={x => x.pages.pcrNameChangePrepareItemFiles.headingUploadCertificate}>
-            <ACC.DocumentGuidance />
+            <DocumentGuidance />
 
             <UploadForm.MultipleFileUpload
               label={x => x.documentLabels.uploadInputLabel}
@@ -59,24 +63,24 @@ class Component extends React.Component<
               styling="Secondary"
               onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
             >
-              <ACC.Content value={x => x.documentMessages.uploadTitle} />
+              <Content value={x => x.documentMessages.uploadTitle} />
             </UploadForm.Button>
 
             <UploadForm.Button name="uploadFileAndContinue" styling="Primary">
-              <ACC.Content value={x => x.pcrItem.submitButton} />
+              <Content value={x => x.pcrItem.submitButton} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
 
-        <ACC.Section>
-          <ACC.DocumentEdit
+        <Section>
+          <DocumentEdit
             qa="prepare-item-step-documents"
             onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
             documents={documents}
             disabled={isSaving}
           />
-        </ACC.Section>
-      </ACC.Section>
+        </Section>
+      </Section>
     );
   }
 }
@@ -90,7 +94,7 @@ export const PCRPrepareItemFilesStep = (
   const isParentPCRSaving = props.status === EditorStatus.Saving;
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
       render={documents => (
         <Component

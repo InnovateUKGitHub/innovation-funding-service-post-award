@@ -1,21 +1,22 @@
-import { MonitoringReportStatus } from "@framework/constants";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { ILinkInfo, ProjectRole } from "@framework/types";
-import {
-  Page,
-  Projects,
-  Renderers,
-  ValidationMessage,
-  Link,
-  Content,
-  Section,
-  createTypedTable,
-  PeriodTitle,
-} from "@ui/components";
-import { useContent } from "@ui/hooks";
-import { IRoutes } from "@ui/routing";
+import { useContent } from "@ui/hooks/content.hook";
+import { IRoutes } from "@ui/routing/routeConfig";
 import type { ContentSelector } from "@copy/type";
 import { useMonitoringReportDashboardQuery, MonitoringReport } from "./monitoringReportDashboard.logic";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { ProjectRole } from "@framework/constants/project";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { PeriodTitle } from "@ui/components/periodTitle";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { Link } from "@ui/components/links";
+import { ProjectBackLink } from "@ui/components/projects/projectBackLink";
 
 interface MonitoringReportDashboardParams {
   projectId: ProjectId;
@@ -29,11 +30,11 @@ const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & Base
 
   return (
     <Page
-      backLink={<Projects.ProjectBackLink routes={props.routes} projectId={project.id} />}
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
+      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       projectStatus={project.status}
     >
-      <Renderers.Messages messages={props.messages} />
+      <Messages messages={props.messages} />
       <ValidationMessage
         qa="guidance-message"
         messageType="info"
@@ -50,9 +51,9 @@ const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & Base
         {reportSections.open.length ? (
           <MonitoringReportTable reports={reportSections.open} section="current" routes={props.routes} />
         ) : (
-          <Renderers.SimpleString>
+          <SimpleString>
             <Content value={x => x.monitoringReportsMessages.noOpenReportsMessage} />
-          </Renderers.SimpleString>
+          </SimpleString>
         )}
       </Section>
 
@@ -60,9 +61,9 @@ const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & Base
         {reportSections.archived.length ? (
           <MonitoringReportTable reports={reportSections.archived} section="previous" routes={props.routes} />
         ) : (
-          <Renderers.SimpleString>
+          <SimpleString>
             <Content value={x => x.monitoringReportsMessages.noArchivedReportsMessage} />
-          </Renderers.SimpleString>
+          </SimpleString>
         )}
       </Section>
     </Page>

@@ -1,6 +1,4 @@
 import { v4 as uuid } from "uuid";
-
-import { LoanStatus } from "@framework/entities";
 import {
   CostCategoryVirementDtoValidator,
   FinancialLoanVirementDtoValidator,
@@ -14,6 +12,7 @@ import {
   PartnerVirementsDto,
 } from "@framework/dtos/financialVirementDto";
 import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
+import { LoanStatus } from "@framework/entities/loan-status";
 
 describe("financialVirementDtoValidator", () => {
   describe.each(["en-GB", "no"])("With %s i18n", language => {

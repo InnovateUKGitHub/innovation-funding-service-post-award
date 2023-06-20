@@ -1,18 +1,21 @@
 import { render } from "@testing-library/react";
-import {
-  EditClaimDetailsParams,
-  EditClaimLineItemsCallbacks,
-  EditClaimLineItemsComponent,
-  EditClaimLineItemsData,
-} from "@ui/containers";
 import { BaseProps, ContainerProps } from "@ui/containers/containerBase";
 import { Pending } from "@shared/pending";
-import { ClaimDetailsDto, DocumentSummaryDto, ForecastDetailsDTO, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { TestBed } from "@shared/TestBed";
-import { LoadingStatus } from "@framework/constants";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { CopyNamespaces } from "@copy/data";
+import { LoadingStatus } from "@framework/constants/enums";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import {
+  EditClaimDetailsParams,
+  EditClaimLineItemsData,
+  EditClaimLineItemsCallbacks,
+  EditClaimLineItemsComponent,
+} from "./editClaimLineItems.page";
 
 const projectId = "test-id";
 

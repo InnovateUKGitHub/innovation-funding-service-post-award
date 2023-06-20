@@ -9,13 +9,14 @@ import { getServerRoutes, noAuthRouter } from "@server/router";
 import { useBasicAuth } from "./basicAuth";
 
 import { allowCache, noCache, setOwaspHeaders, setBasicAuth } from "@server/cacheHeaders";
-import { configuration } from "@server/features/common";
+
 import { contextProvider } from "@server/features/common/contextProvider";
 import { InitialiseContentCommand } from "@server/features/general/initialiseContentCommand";
 import { fetchCaches } from "@server/features/initialCache";
 import { initInternationalisation, internationalisationRouter } from "@server/internationalisation";
 import { developmentRouter } from "@server/developmentReloader";
 import { Logger } from "@shared/developmentLogger";
+import { configuration } from "./features/common/config";
 
 export class Server {
   private readonly app: express.Express;

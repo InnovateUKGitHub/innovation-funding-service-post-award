@@ -1,4 +1,4 @@
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
 import {
   CondensedDateRange,
   DayAndLongMonth,

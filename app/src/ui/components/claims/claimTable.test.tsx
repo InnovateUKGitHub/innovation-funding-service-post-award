@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { PCROrganisationType } from "@framework/constants";
+
 
 import {
   createClaim,
@@ -16,6 +16,7 @@ import { getColumnTextValues } from "@tests/test-utils/tableHelpers";
 
 import { ClaimTable } from "@ui/components/claims/claimTable";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
 
 describe("<ClaimTable />", () => {
   const defaultStubData: ClaimProps = {

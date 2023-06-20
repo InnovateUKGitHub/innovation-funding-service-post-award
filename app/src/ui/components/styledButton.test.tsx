@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
-
 import { TestBed } from "@shared/TestBed";
-import { Button, StyledButtonProps } from ".";
+import { StyledButtonProps, Button } from "./styledButton";
 
 describe("StyledButton", () => {
   const setup = (props: StyledButtonProps) =>

@@ -1,20 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import {
-  CostCategoryList,
-  CostCategoryGroupType,
-  PCRItemForPartnerAdditionDto,
-  PCRItemStatus,
-  PCRItemType,
-  ProjectDto,
-  ProjectRole,
-  PCRStepId,
-} from "@framework/types";
-import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, useStores } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
@@ -25,15 +12,29 @@ import {
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import {
-  DeleteCapitalUsageCostFormComponent,
-  DeleteLabourCostFormComponent,
-  DeleteMaterialsCostFormComponent,
-  DeleteOtherCostFormComponent,
-  DeleteSubcontractingCostFormComponent,
-  DeleteTravelAndSubsCostFormComponent,
-} from "@ui/containers/pcrs/addPartner/spendProfile";
 import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost.page";
+import { CostCategoryGroupType } from "@framework/constants/enums";
+import { PCRItemType, PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { CostCategoryList } from "@framework/types/CostCategory";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { DeleteCapitalUsageCostFormComponent } from "./deleteCapitalUsageCostFormComponent";
+import { DeleteLabourCostFormComponent } from "./deleteLabourCostFormComponent";
+import { DeleteMaterialsCostFormComponent } from "./deleteMaterialCostFormComponent";
+import { DeleteOtherCostFormComponent } from "./deleteOtherCostFormComponent";
+import { DeleteSubcontractingCostFormComponent } from "./deleteSubcontractingCostFormComponent";
+import { DeleteTravelAndSubsCostFormComponent } from "./deleteTravelAndSubsCostFormComponent";
 
 export interface PcrDeleteSpendProfileCostParams extends PcrAddSpendProfileCostParams {
   costId: string;
@@ -55,7 +56,7 @@ export interface SpendProfileDeleteFormProps<T extends PCRSpendProfileCostDto> {
   costCategory: CostCategoryDto;
 }
 
-const DeleteForm = ACC.createTypedForm<PCRSpendProfileCostDto>();
+const DeleteForm = createTypedForm<PCRSpendProfileCostDto>();
 
 class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callbacks> {
   render() {
@@ -67,10 +68,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     });
 
     return (
-      <ACC.PageLoader
-        pending={combined}
-        render={x => this.renderContents(x.project, x.editor, x.costCategory, x.cost)}
-      />
+      <PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory, x.cost)} />
     );
   }
 
@@ -81,9 +79,9 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     cost: PCRSpendProfileCostDto,
   ) {
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink
+          <BackLink
             route={this.props.routes.pcrSpendProfileCostsSummary.getLink({
               itemId: this.props.itemId,
               pcrId: this.props.pcrId,
@@ -91,17 +89,15 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
               costCategoryId: this.props.costCategoryId,
             })}
           >
-            <ACC.Content
-              value={x => x.pages.pcrSpendProfileDeleteCost.backLink({ costCategoryName: costCategory.name })}
-            />
-          </ACC.BackLink>
+            <Content value={x => x.pages.pcrSpendProfileDeleteCost.backLink({ costCategoryName: costCategory.name })} />
+          </BackLink>
         }
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
         project={project}
         error={editor.error}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section>
+        <Messages messages={this.props.messages} />
+        <Section>
           <DeleteForm.Form data={cost} qa="pcrDelete">
             <DeleteForm.Hidden name="id" value={dto => (dto ? dto.id : "")} />
             {cost && this.renderComponent(costCategory, cost)}
@@ -110,11 +106,11 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
               styling="Warning"
               onClick={() => this.props.onDelete(editor.data, this.props.projectId)}
             >
-              <ACC.Content value={x => x.pages.pcrSpendProfileDeleteCost.buttonDelete} />
+              <Content value={x => x.pages.pcrSpendProfileDeleteCost.buttonDelete} />
             </DeleteForm.Button>
           </DeleteForm.Form>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 

@@ -1,5 +1,8 @@
+import { ProjectRole } from "@framework/constants/project";
+import { DocumentDto } from "@framework/dtos/documentDto";
+import { Authorisation } from "@framework/types/authorisation";
 import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
-import { Authorisation, DocumentDto, ProjectRole } from "@framework/types";
+
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetProjectDocumentQuery", () => {

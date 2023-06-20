@@ -1,5 +1,5 @@
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { GetAllForecastsGOLCostsQuery } from ".";
+import { GetAllForecastsGOLCostsQuery } from "./getAllForecastGOLCostsQuery";
 
 describe("GetAllForecastsForPartnerQuery", () => {
   it("returns objects of correct shape", async () => {

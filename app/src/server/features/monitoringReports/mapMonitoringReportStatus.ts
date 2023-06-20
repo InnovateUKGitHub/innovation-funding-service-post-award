@@ -1,4 +1,4 @@
-import { MonitoringReportStatus } from "@framework/constants";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 
 /**
  * converts monitoring report string to corresponding enum value,

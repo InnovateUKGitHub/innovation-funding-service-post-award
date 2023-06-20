@@ -1,15 +1,18 @@
 import { useEffect } from "react";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { FinancialLoanVirementDto, PCRItemForLoanDrawdownChangeDto } from "@framework/dtos";
-import { FinancialLoanVirementDtoValidator, PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validators";
-import * as ACC from "@ui/components";
-import { IEditorStore, useStores } from "@ui/redux";
-import { PCRItemStatus, PCRStepId } from "@framework/constants";
-import { useMounted } from "@ui/features";
-
-import { usePcrSummaryContext } from "../components/PcrSummary";
 import { LoanDrawdownChangeStepName } from "./LoanDrawdownChangeWorkflow";
 import { LoanEditTable } from "./LoanEditTable";
+import { PCRStepId, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
+import { PCRItemForLoanDrawdownChangeDto } from "@framework/dtos/pcrDtos";
+import { ValidationSummary } from "@ui/components/validationSummary";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { FinancialLoanVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { usePcrSummaryContext } from "../components/PcrSummary/PcrSummary";
+import { Loader } from "@ui/components/loading";
 
 type BaseLoanDrawdownSummaryProps = PcrSummaryProps<
   PCRItemForLoanDrawdownChangeDto,
@@ -35,7 +38,7 @@ export const LoanDrawdownChangeUI = ({
 
   return (
     <>
-      {isClient && <ACC.ValidationSummary validation={editor.validator} compressed={false} />}
+      {isClient && <ValidationSummary validation={editor.validator} compressed={false} />}
 
       <LoanEditTable {...editor} mode="view" onEditLink={props.getEditLink(PCRStepId.loanDrawdownChange, null)} />
     </>
@@ -58,7 +61,7 @@ export const LoanDrawdownChangeSummary = (props: BaseLoanDrawdownSummaryProps) =
   );
 
   return (
-    <ACC.Loader
+    <Loader
       pending={loanEditorPending}
       render={loanEditor => <LoanDrawdownChangeUI {...props} editor={loanEditor} />}
     />

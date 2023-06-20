@@ -1,4 +1,5 @@
-import { PartnerDto, ProjectContactDto } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 
 /**
  * Get the list of contact/partner pairs that match a specific partner role.

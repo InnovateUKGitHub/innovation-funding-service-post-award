@@ -1,11 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import * as ACC from "@ui/components";
-import { FormBuilder } from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Content } from "@ui/components/content";
+import { createTypedForm, FormBuilder } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { Title } from "@ui/components/projects/title";
 
 type BankCheckValidationError = {
   results: {
@@ -33,31 +43,31 @@ interface Callbacks {
   onChange: (submit: boolean, dto: PartnerDto) => void;
 }
 
-const Form = ACC.createTypedForm<PartnerDto>();
+const Form = createTypedForm<PartnerDto>();
 class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDetailsParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({ project: this.props.project, editor: this.props.editor });
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
+    return <PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
   }
   public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink
+          <BackLink
             route={this.props.routes.projectSetup.getLink({
               projectId: this.props.projectId,
               partnerId: this.props.partnerId,
             })}
           >
-            <ACC.Content value={x => x.pages.projectSetupBankDetails.backLink} />
-          </ACC.BackLink>
+            <Content value={x => x.pages.projectSetupBankDetails.backLink} />
+          </BackLink>
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
       >
         {this.renderGuidance()}
-        <ACC.Section qa="bank-details-section">
+        <Section qa="bank-details-section">
           <Form.Form
             editor={editor}
             onChange={() => this.props.onChange(false, editor.data)}
@@ -65,7 +75,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
             qa="bank-details-form"
           >
             <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleOrganisationInfo}>
-              <ACC.Renderers.SimpleString bold>{editor.data.name}</ACC.Renderers.SimpleString>
+              <SimpleString bold>{editor.data.name}</SimpleString>
               <Form.String
                 name="companyNumber"
                 width={"one-third"}
@@ -97,9 +107,9 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               />
             </Form.Fieldset> */}
             <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleBillingAddress}>
-              <ACC.Renderers.SimpleString qa={"billingAddressFieldsetGuidance"}>
-                <ACC.Content value={x => x.pages.projectSetupBankDetails.fieldsetGuidanceBillingAddress} />
-              </ACC.Renderers.SimpleString>
+              <SimpleString qa={"billingAddressFieldsetGuidance"}>
+                <Content value={x => x.pages.projectSetupBankDetails.fieldsetGuidanceBillingAddress} />
+              </SimpleString>
               <Form.String
                 name="accountBuilding"
                 width={"one-third"}
@@ -138,20 +148,20 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
             </Form.Fieldset>
             <Form.Fieldset>
               <Form.Submit>
-                <ACC.Content value={x => x.pages.projectSetupBankDetails.submitButton} />
+                <Content value={x => x.pages.projectSetupBankDetails.submitButton} />
               </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 
   private renderGuidance() {
     return (
-      <ACC.Section qa={"guidance"}>
-        <ACC.Content markdown value={x => x.pages.projectSetupBankDetails.guidanceMessage} />
-      </ACC.Section>
+      <Section qa={"guidance"}>
+        <Content markdown value={x => x.pages.projectSetupBankDetails.guidanceMessage} />
+      </Section>
     );
   }
 
@@ -174,9 +184,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
     return (
       <Form.Custom
         name="sortCode"
-        value={({ formData }) => (
-          <ACC.Renderers.SimpleString>{formData.bankDetails.sortCode}</ACC.Renderers.SimpleString>
-        )}
+        value={({ formData }) => <SimpleString>{formData.bankDetails.sortCode}</SimpleString>}
         label={x => x.partnerLabels.sortCode}
       />
     );
@@ -203,9 +211,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
     return (
       <Form.Custom
         name="accountNumber"
-        value={({ formData }) => (
-          <ACC.Renderers.SimpleString>{formData.bankDetails.accountNumber}</ACC.Renderers.SimpleString>
-        )}
+        value={({ formData }) => <SimpleString>{formData.bankDetails.accountNumber}</SimpleString>}
         label={x => x.partnerLabels.accountNumber}
         update={() => null}
       />

@@ -1,5 +1,8 @@
-import { CommandBase } from "@server/features/common";
-import { Authorisation, ClaimKey, IContext, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { ClaimKey } from "@framework/types/ClaimKey";
+import { IContext } from "@framework/types/IContext";
+import { CommandBase } from "../common/commandBase";
 
 export class DeleteClaimDocumentCommand extends CommandBase<void> {
   constructor(private readonly documentId: string, private readonly claimKey: ClaimKey) {

@@ -1,10 +1,12 @@
-import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails";
-import { BadRequestError, InActiveProjectError, ValidationError } from "@server/features/common/appError";
-import { ISalesforceProfileDetails } from "@server/repositories";
-import { GetByIdQuery } from "@server/features/partners";
-import { ForecastDetailsDTO } from "@framework/dtos";
-import { Authorisation, ProjectRole, SpendProfileStatus } from "@framework/types";
+import { SpendProfileStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
+import { GetByIdQuery } from "../partners/getByIdQuery";
+import { UpdateInitialForecastDetailsCommand } from "./updateInitialForecastDetailsCommand";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => ({
   costCategoryId: item.Acc_CostCategory__c,

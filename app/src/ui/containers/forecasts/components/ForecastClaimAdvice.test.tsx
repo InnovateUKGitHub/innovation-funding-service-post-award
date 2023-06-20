@@ -1,9 +1,9 @@
 import { render } from "@testing-library/react";
 
 import TestBed from "@shared/TestBed";
-import { ILinkInfo } from "@framework/types";
 import { ForecastClaimAdvice, ForecastClaimAdviceProps } from "./ForecastClaimAdvice";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 describe("<ForecastClaimAdvice />", () => {
   const stubContent = {

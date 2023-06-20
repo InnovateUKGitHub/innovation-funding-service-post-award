@@ -1,30 +1,50 @@
-import { combineReducers } from "redux";
-import * as Dtos from "@framework/dtos";
+import { TotalCosts } from "@framework/constants/claims";
+import { LoadingStatus } from "@framework/constants/enums";
 import {
-  ClaimDetailsDto,
-  ClaimDetailsSummaryDto,
-  CostsSummaryForPeriodDto,
-  FinancialLoanVirementDto,
-  FinancialVirementDto,
-  ForecastDetailsDTO,
-  GOLCostDto,
-  IAppError,
-  IContact,
-  LoadingStatus,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
   PCRSpendProfileCapitalUsageType,
   PCRSpendProfileOverheadRate,
-  ProjectContactDto,
-  ProjectRole,
-  TotalCosts,
-} from "@framework/types";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+} from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { AccountDto } from "@framework/dtos/accountDto";
+import { BroadcastDto } from "@framework/dtos/BroadcastDto";
+import { ClaimDetailsDto, ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
+import { CompanyDto } from "@framework/dtos/companyDto";
+import { IContact } from "@framework/dtos/contact";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { DataLoadAction, TransitionActions } from "../actions/common";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { DeveloperUser } from "@framework/dtos/developerUser";
+import { AllPartnerDocumentSummaryDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { FinancialLoanVirementDto, FinancialVirementDto } from "@framework/dtos/financialVirementDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { LoanDto } from "@framework/dtos/loanDto";
+import {
+  MonitoringReportDto,
+  MonitoringReportQuestionDto,
+  MonitoringReportStatusChangeDto,
+  MonitoringReportSummaryDto,
+} from "@framework/dtos/monitoringReportDto";
+import { Option } from "@framework/dtos/option";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import {
+  PCRDto,
+  PCRItemTypeDto,
+  PCRSummaryDto,
+  PCRTimeExtensionOption,
+  ProjectChangeRequestStatusChangeDto,
+} from "@framework/dtos/pcrDtos";
+import { ProjectContactDto } from "@framework/dtos/projectContactDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { IAppError } from "@framework/types/IAppError";
+import { combineReducers } from "redux";
+import { DataLoadAction } from "../actions/common/dataLoad";
+import { TransitionActions } from "../actions/common/transitionActions";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -67,18 +87,18 @@ const dataStoreReducer =
   };
 
 const reducers = {
-  jesOnlyAccounts: dataStoreReducer<Dtos.AccountDto[]>("jesOnlyAccounts"),
-  broadcasts: dataStoreReducer<Dtos.BroadcastDto[]>("broadcasts"),
-  broadcast: dataStoreReducer<Dtos.BroadcastDto>("broadcast"),
-  claims: dataStoreReducer<Dtos.ClaimDto[]>("claims"),
-  claim: dataStoreReducer<Dtos.ClaimDto>("claim"),
-  claimOverrides: dataStoreReducer<Dtos.ClaimOverrideRateDto>("claimOverrides"),
-  allClaimsIncludingNew: dataStoreReducer<Dtos.ClaimDto[]>("allClaimsIncludingNew"),
+  jesOnlyAccounts: dataStoreReducer<AccountDto[]>("jesOnlyAccounts"),
+  broadcasts: dataStoreReducer<BroadcastDto[]>("broadcasts"),
+  broadcast: dataStoreReducer<BroadcastDto>("broadcast"),
+  claims: dataStoreReducer<ClaimDto[]>("claims"),
+  claim: dataStoreReducer<ClaimDto>("claim"),
+  claimOverrides: dataStoreReducer<ClaimOverrideRateDto>("claimOverrides"),
+  allClaimsIncludingNew: dataStoreReducer<ClaimDto[]>("allClaimsIncludingNew"),
   claimTotalCosts: dataStoreReducer<TotalCosts>("claimTotalCosts"),
   claimDetail: dataStoreReducer<ClaimDetailsDto>("claimDetail"),
   claimDetails: dataStoreReducer<ClaimDetailsSummaryDto[]>("claimDetails"),
-  claimStatusChanges: dataStoreReducer<Dtos.ClaimStatusChangeDto[]>("claimStatusChanges"),
-  companies: dataStoreReducer<Dtos.CompanyDto[]>("companies"),
+  claimStatusChanges: dataStoreReducer<ClaimStatusChangeDto[]>("claimStatusChanges"),
+  companies: dataStoreReducer<CompanyDto[]>("companies"),
   costsSummary: dataStoreReducer<CostsSummaryForPeriodDto[]>("costsSummary"),
   costCategories: dataStoreReducer<CostCategoryDto[]>("costCategories"),
   contacts: dataStoreReducer<IContact[]>("contacts"),
@@ -90,41 +110,39 @@ const reducers = {
   initialForecastDetails: dataStoreReducer<ForecastDetailsDTO[]>("initialForecastDetails"),
   forecastDetail: dataStoreReducer<ForecastDetailsDTO>("forecastDetail"),
   forecastGolCosts: dataStoreReducer<GOLCostDto[]>("forecastGolCosts"),
-  monitoringReport: dataStoreReducer<Dtos.MonitoringReportDto>("monitoringReport"),
-  monitoringReports: dataStoreReducer<Dtos.MonitoringReportSummaryDto[]>("monitoringReports"),
-  monitoringReportQuestions: dataStoreReducer<Dtos.MonitoringReportQuestionDto[]>("monitoringReportQuestions"),
-  monitoringReportStatusChanges: dataStoreReducer<Dtos.MonitoringReportStatusChangeDto[]>(
-    "monitoringReportStatusChanges",
-  ),
-  partner: dataStoreReducer<Dtos.PartnerDto>("partner"),
-  partnerDocuments: dataStoreReducer<Dtos.AllPartnerDocumentSummaryDto>("partnerDocuments"),
-  partners: dataStoreReducer<Dtos.PartnerDto[]>("partners"),
-  pcrs: dataStoreReducer<Dtos.PCRSummaryDto[]>("pcrs"),
-  pcr: dataStoreReducer<Dtos.PCRDto>("pcr"),
-  pcrTypes: dataStoreReducer<Dtos.PCRItemTypeDto[]>("pcrTypes"),
-  pcrAvailableTypes: dataStoreReducer<Dtos.PCRItemTypeDto[]>("pcrAvailableTypes"),
-  pcrTimeExtensionOptions: dataStoreReducer<Dtos.PCRTimeExtensionOption[]>("pcrTimeExtensionOptions"),
-  pcrParticipantSizes: dataStoreReducer<Dtos.Option<PCRParticipantSize>[]>("pcrParticipantSizes"),
-  pcrProjectLocations: dataStoreReducer<Dtos.Option<PCRProjectLocation>[]>("pcrProjectLocations"),
-  pcrProjectRoles: dataStoreReducer<Dtos.Option<PCRProjectRole>[]>("pcrProjectRoles"),
-  pcrPartnerTypes: dataStoreReducer<Dtos.Option<PCRPartnerType>[]>("pcrPartnerTypes"),
-  pcrSpendProfileCapitalUsageTypes: dataStoreReducer<Dtos.Option<PCRSpendProfileCapitalUsageType>[]>(
+  monitoringReport: dataStoreReducer<MonitoringReportDto>("monitoringReport"),
+  monitoringReports: dataStoreReducer<MonitoringReportSummaryDto[]>("monitoringReports"),
+  monitoringReportQuestions: dataStoreReducer<MonitoringReportQuestionDto[]>("monitoringReportQuestions"),
+  monitoringReportStatusChanges: dataStoreReducer<MonitoringReportStatusChangeDto[]>("monitoringReportStatusChanges"),
+  partner: dataStoreReducer<PartnerDto>("partner"),
+  partnerDocuments: dataStoreReducer<AllPartnerDocumentSummaryDto>("partnerDocuments"),
+  partners: dataStoreReducer<PartnerDto[]>("partners"),
+  pcrs: dataStoreReducer<PCRSummaryDto[]>("pcrs"),
+  pcr: dataStoreReducer<PCRDto>("pcr"),
+  pcrTypes: dataStoreReducer<PCRItemTypeDto[]>("pcrTypes"),
+  pcrAvailableTypes: dataStoreReducer<PCRItemTypeDto[]>("pcrAvailableTypes"),
+  pcrTimeExtensionOptions: dataStoreReducer<PCRTimeExtensionOption[]>("pcrTimeExtensionOptions"),
+  pcrParticipantSizes: dataStoreReducer<Option<PCRParticipantSize>[]>("pcrParticipantSizes"),
+  pcrProjectLocations: dataStoreReducer<Option<PCRProjectLocation>[]>("pcrProjectLocations"),
+  pcrProjectRoles: dataStoreReducer<Option<PCRProjectRole>[]>("pcrProjectRoles"),
+  pcrPartnerTypes: dataStoreReducer<Option<PCRPartnerType>[]>("pcrPartnerTypes"),
+  pcrSpendProfileCapitalUsageTypes: dataStoreReducer<Option<PCRSpendProfileCapitalUsageType>[]>(
     "pcrSpendProfileCapitalUsageTypes",
   ),
-  pcrSpendProfileOverheadRateOptions: dataStoreReducer<Dtos.Option<PCRSpendProfileOverheadRate>[]>(
+  pcrSpendProfileOverheadRateOptions: dataStoreReducer<Option<PCRSpendProfileOverheadRate>[]>(
     "pcrSpendProfileOverheadRateOptions",
   ),
   projectRole: dataStoreReducer<AnyObject>("projectRole"),
-  project: dataStoreReducer<Dtos.ProjectDto>("project"),
-  projects: dataStoreReducer<Dtos.ProjectDto[]>("projects"),
-  projectChangeRequestStatusChanges: dataStoreReducer<Dtos.ProjectChangeRequestStatusChangeDto[]>(
+  project: dataStoreReducer<ProjectDto>("project"),
+  projects: dataStoreReducer<ProjectDto[]>("projects"),
+  projectChangeRequestStatusChanges: dataStoreReducer<ProjectChangeRequestStatusChangeDto[]>(
     "projectChangeRequestStatusChanges",
   ),
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
   validate: dataStoreReducer<AnyObject>("validate"),
   user: dataStoreReducer<{ [key: string]: ProjectRole }>("user"),
-  loans: dataStoreReducer<Dtos.LoanDto[]>("loans"),
-  loan: dataStoreReducer<Dtos.LoanDto | Dtos.LoanDto>("loan"),
+  loans: dataStoreReducer<LoanDto[]>("loans"),
+  loan: dataStoreReducer<LoanDto | LoanDto>("loan"),
 };
 
 export type DataStateKeys = keyof typeof reducers;

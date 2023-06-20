@@ -1,11 +1,17 @@
-import * as ACC from "@ui/components";
-import { useStores } from "@ui/redux";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { LinksList } from "@ui/components/linksList";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
 
 interface DeMinimisStepUiProps {
   documents: DocumentSummaryDto[];
@@ -14,8 +20,8 @@ interface DeMinimisStepUiProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 const DeMinimisStepUi = ({
   documents,
@@ -30,29 +36,26 @@ const DeMinimisStepUi = ({
     }
 
     return (
-      <ACC.Section>
-        <ACC.LinksList
+      <Section>
+        <LinksList
           openNewWindow
           links={itemType.files.map(x => ({
             url: x.relativeUrl,
             text: x => x.pcrAddPartnerLabels.deMinimisDeclarationForm,
           }))}
         />
-      </ACC.Section>
+      </Section>
     );
   };
 
   return (
     <>
-      <ACC.Section
-        qa="de-minimis-intro"
-        title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleDeMinimis}
-      >
-        <ACC.Content markdown value={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceDeMinimis} />
-      </ACC.Section>
+      <Section qa="de-minimis-intro" title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleDeMinimis}>
+        <Content markdown value={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceDeMinimis} />
+      </Section>
 
-      <ACC.Section qa="de-minimis">
-        <ACC.Section>
+      <Section qa="de-minimis">
+        <Section>
           <UploadForm.Form
             enctype="multipart"
             editor={documentsEditor}
@@ -73,7 +76,7 @@ const DeMinimisStepUi = ({
             >
               <UploadForm.Hidden name="description" value={() => DocumentDescription.DeMinimisDeclarationForm} />
 
-              <ACC.DocumentGuidance />
+              <DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
                 label={x => x.documentLabels.uploadInputLabel}
@@ -94,27 +97,27 @@ const DeMinimisStepUi = ({
                 styling="Secondary"
                 onClick={() => props.onFileChange(true, documentsEditor.data)}
               >
-                <ACC.Content value={x => x.documentMessages.uploadTitle} />
+                <Content value={x => x.documentMessages.uploadTitle} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section>
-          <ACC.DocumentEdit
+        <Section>
+          <DocumentEdit
             qa="de-minimis-document"
             onRemove={document => props.onFileDelete(documentsEditor.data, document)}
             documents={documents}
           />
-        </ACC.Section>
-      </ACC.Section>
+        </Section>
+      </Section>
       <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave(false)}>
         <Form.Fieldset>
           <Form.Submit>
-            <ACC.Content value={x => x.pcrItem.submitButton} />
+            <Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
+            <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
@@ -128,7 +131,7 @@ export const DeMinimisStep = (
   const stores = useStores();
 
   return (
-    <ACC.Loader
+    <Loader
       pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
       render={documents => (
         <DeMinimisStepUi

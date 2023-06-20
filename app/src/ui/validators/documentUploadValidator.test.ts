@@ -1,7 +1,7 @@
-import { IFileWrapper } from "@framework/types";
-import { configuration } from "@server/features/common";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { configuration } from "@server/features/common/config";
 import { initFullTestIntl, initStubTestIntl } from "@shared/initStubTestIntl";
-import { FileDtoValidator } from "@ui/validators";
+import { FileDtoValidator } from "./documentUploadValidator";
 
 describe("Document upload validator", () => {
   const createFile = (extension: string, givenSize = 10000, fileName = "test"): IFileWrapper => ({

@@ -1,11 +1,10 @@
 import React, { isValidElement, useContext, createContext } from "react";
 import cx from "classnames";
-
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import type { ContentSelector } from "@copy/type";
 import { SimpleString } from "@ui/components/renderers/simpleString";
-import * as typographyModule from "@ui/components/typography";
-
+import { GdsHeadingTypes } from "../typography/Heading";
+import { H1, H2, H3, H4 } from "../typography/Heading.variants";
 export interface SectionProps {
   children?: React.ReactNode;
   id?: string;
@@ -16,7 +15,7 @@ export interface SectionProps {
   className?: string;
 }
 
-type SectionTypes = Exclude<typographyModule.GdsHeadingTypes, "h1">;
+type SectionTypes = Exclude<GdsHeadingTypes, "h1">;
 
 export const sectionContext = createContext<SectionTypes>("h2");
 export const SectionProvider = sectionContext.Provider;
@@ -41,7 +40,7 @@ export function Section({ id, qa, title, subtitle, badge, className, children }:
   };
 
   const headingVariant = header.toUpperCase() as Uppercase<typeof header>;
-  const Header = typographyModule[headingVariant];
+  const Header = { H1, H2, H3, H4 }[headingVariant];
 
   return (
     <div

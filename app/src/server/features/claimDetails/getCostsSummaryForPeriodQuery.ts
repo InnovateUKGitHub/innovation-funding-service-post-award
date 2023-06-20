@@ -1,6 +1,9 @@
-import { QueryBase } from "@server/features/common";
-import { GetFilteredCostCategoriesQuery } from "@server/features/claims";
-import { Authorisation, CostsSummaryForPeriodDto, IContext, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { GetFilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
+import { QueryBase } from "../common/queryBase";
 
 export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeriodDto[]> {
   constructor(

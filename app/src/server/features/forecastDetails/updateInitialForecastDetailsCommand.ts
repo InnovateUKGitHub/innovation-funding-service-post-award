@@ -1,24 +1,22 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import { ISalesforcePartner, ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
-import { GetByIdQuery } from "@server/features/partners";
-import { GetAllForecastsGOLCostsQuery } from "@server/features/claims";
-import {
-  Authorisation,
-  ForecastDetailsDTO,
-  IContext,
-  PartnerDto,
-  PartnerStatus,
-  ProjectRole,
-  SpendProfileStatus,
-} from "@framework/types";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PartnerStatus, SpendProfileStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforcePartner } from "@server/repositories/partnersRepository";
+import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
-import { GetProjectStatusQuery } from "../projects";
+import { GetAllForecastsGOLCostsQuery } from "../claims/getAllForecastGOLCostsQuery";
+import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetByIdQuery } from "../partners/getByIdQuery";
+import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(

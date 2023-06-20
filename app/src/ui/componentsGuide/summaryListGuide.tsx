@@ -1,6 +1,6 @@
+import { IGuide } from "@framework/types/IGuide";
+import { LineBreakList } from "@ui/components/renderers/lineBreakList";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
-import { LineBreakList } from "@ui/components/renderers";
-import { IGuide } from "@framework/types";
 
 export const summaryListGuide: IGuide = {
   name: "Summary list",

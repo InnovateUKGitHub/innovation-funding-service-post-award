@@ -1,5 +1,7 @@
-import { Authorisation, IContext, PartnerBankDetailsDto } from "@framework/types";
-import { QueryBase } from "../common";
+import { PartnerBankDetailsDto } from "@framework/dtos/partnerDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 import { MapToPartnerBankDetailsDtoCommand } from "./mapToPartnerBankDetailsDto";
 
 /**

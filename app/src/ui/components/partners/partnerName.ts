@@ -1,4 +1,4 @@
-import { PartnerDtoGql } from "@framework/dtos";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 
 export type PartnerNameValues = Pick<PartnerDtoGql, "name" | "isWithdrawn" | "isLead">;
 

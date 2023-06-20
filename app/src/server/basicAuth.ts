@@ -1,5 +1,5 @@
 import Express from "express";
-import { configuration } from "./features/common";
+import { configuration } from "./features/common/config";
 
 /**
  * For environments without SSO we add basic auth protection.

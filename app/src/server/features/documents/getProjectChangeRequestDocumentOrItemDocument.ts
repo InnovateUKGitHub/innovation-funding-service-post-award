@@ -1,4 +1,6 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 import { DocumentQueryBase } from "@server/features/documents/documentQueryBase";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 

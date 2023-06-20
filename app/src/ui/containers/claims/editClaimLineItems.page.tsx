@@ -3,28 +3,44 @@ import type { ContentSelector } from "@copy/type";
 import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import {
-  ClaimDetailsDto,
-  ClaimLineItemDto,
-  CostCategoryType,
-  ForecastDetailsDTO,
-  ProjectDto,
-  ProjectRole,
-} from "@framework/types";
 import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
 import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
-import * as ACC from "@ui/components";
 import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
-import { createTypedForm, createTypedTable, UL } from "@ui/components";
 import { EditorStatus } from "@ui/constants/enums";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
-import { MountedHoc, useMounted } from "@ui/features";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { IEditorStore, useStores } from "@ui/redux";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { useNavigate } from "react-router-dom";
 import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { CostCategoryType } from "@framework/constants/enums";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Content } from "@ui/components/content";
+import { DocumentView } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { UL } from "@ui/components/layout/list";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { TextHint } from "@ui/components/layout/textHint";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { AccessibilityText } from "@ui/components/renderers/accessibilityText";
+import { Currency } from "@ui/components/renderers/currency";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { MountedHoc, useMounted } from "@ui/features/has-mounted/Mounted";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { ValidationError } from "@ui/components/validationError";
+import { NumberInput } from "@ui/components/inputs/numberInput";
+import { TextInput } from "@ui/components/inputs/textInput";
 
 export interface EditClaimDetailsParams {
   projectId: ProjectId;
@@ -62,10 +78,10 @@ const LineItemForm = createTypedForm<ClaimDetailsDto>();
 const LineItemTable = createTypedTable<ClaimLineItemDto>();
 
 const DeleteByEnteringZero = () => (
-  <ACC.ValidationMessage
+  <ValidationMessage
     messageType="info"
     qa="claim-warning"
-    message={<ACC.Content value={x => x.pages.editClaimLineItems.setToZeroToRemove} />}
+    message={<Content value={x => x.pages.editClaimLineItems.setToZeroToRemove} />}
   />
 );
 
@@ -95,7 +111,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
+    return <PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private renderContents({
@@ -115,16 +131,16 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
 
     const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
-    const editClaimLineItemGuidance = <ACC.Content value={x => x.claimsMessages.editClaimLineItemGuidance} />;
+    const editClaimLineItemGuidance = <Content value={x => x.claimsMessages.editClaimLineItemGuidance} />;
 
     const editClaimLineItemVat = (
       <>
-        <ACC.Renderers.SimpleString qa="vat-registered">
-          <ACC.Content value={x => x.claimsMessages.editClaimLineItemVatRegistered} />
-        </ACC.Renderers.SimpleString>
-        <ACC.Renderers.SimpleString qa="vat-contact-mo">
-          <ACC.Content value={x => x.claimsMessages.editClaimLineItemContactMo} />
-        </ACC.Renderers.SimpleString>
+        <SimpleString qa="vat-registered">
+          <Content value={x => x.claimsMessages.editClaimLineItemVatRegistered} />
+        </SimpleString>
+        <SimpleString qa="vat-contact-mo">
+          <Content value={x => x.claimsMessages.editClaimLineItemContactMo} />
+        </SimpleString>
       </>
     );
 
@@ -132,15 +148,15 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     const isVAT = costCategory.type === CostCategoryType.VAT;
 
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={back}>
-            <ACC.Content value={x => x.pages.editClaimLineItems.backLink} />
-          </ACC.BackLink>
+          <BackLink route={back}>
+            <Content value={x => x.pages.editClaimLineItems.backLink} />
+          </BackLink>
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...project} heading={costCategory.name} />}
+        pageTitle={<Title {...project} heading={costCategory.name} />}
       >
         <AwardRateOverridesMessage
           claimOverrides={claimOverrides}
@@ -155,23 +171,21 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
             <>
               {isOtherCosts && (
                 <>
-                  <ACC.Renderers.SimpleString qa="other-costs-guidance-message">
-                    <ACC.Content value={x => x.claimsMessages.editClaimLineItemOtherCostsTotalCosts} />
-                  </ACC.Renderers.SimpleString>
+                  <SimpleString qa="other-costs-guidance-message">
+                    <Content value={x => x.claimsMessages.editClaimLineItemOtherCostsTotalCosts} />
+                  </SimpleString>
                   {editClaimLineItemVat}
                 </>
               )}
               {isVAT && editClaimLineItemVat}
             </>
           ) : (
-            !isKTP && (
-              <ACC.Renderers.SimpleString qa="guidance-message">{editClaimLineItemGuidance}</ACC.Renderers.SimpleString>
-            )
+            !isKTP && <SimpleString qa="guidance-message">{editClaimLineItemGuidance}</SimpleString>
           )}
-          <ACC.Renderers.SimpleString qa="guidance-currency-message">
+          <SimpleString qa="guidance-currency-message">
             <MountedHoc>
               {y => (
-                <ACC.Content
+                <Content
                   value={x =>
                     y.isClient
                       ? x.claimsMessages.editClaimLineItemConvertGbp
@@ -180,11 +194,11 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
                 />
               )}
             </MountedHoc>
-          </ACC.Renderers.SimpleString>
+          </SimpleString>
         </>
 
-        <ACC.Section>
-          {costCategory.hintText && <ACC.TextHint>{costCategory.hintText}</ACC.TextHint>}
+        <Section>
+          {costCategory.hintText && <TextHint>{costCategory.hintText}</TextHint>}
           {costCategory.isCalculated
             ? this.renderCalculated(
                 costCategory,
@@ -195,8 +209,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
                 project.competitionType,
               )
             : this.renderTable(editor, forecastDetail, documents, project.competitionType)}
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 
@@ -261,7 +275,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         {supportingDocumentContent}
 
         <LineItemForm.Submit>
-          <ACC.Content value={x => x.pages.editClaimLineItems.buttonSaveAndReturn} />
+          <Content value={x => x.pages.editClaimLineItems.buttonSaveAndReturn} />
         </LineItemForm.Submit>
       </LineItemForm.Form>
     );
@@ -315,7 +329,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
               value={(x, i) =>
                 x.isAuthor && (
                   <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}>
-                    <ACC.Content value={y => y.pages.editClaimLineItems.buttonRemove} />
+                    <Content value={y => y.pages.editClaimLineItems.buttonRemove} />
                   </a>
                 )
               }
@@ -326,7 +340,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
 
         {documentSection}
         <LineItemForm.Submit>
-          <ACC.Content value={x => x.pages.editClaimLineItems.buttonSaveAndReturn} />
+          <Content value={x => x.pages.editClaimLineItems.buttonSaveAndReturn} />
         </LineItemForm.Submit>
       </LineItemForm.Form>
     );
@@ -415,38 +429,35 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
   ) {
     return (
       <>
-        <ACC.Section
-          title={x => x.pages.editClaimLineItems.headerSupportingDocuments}
-          qa="supporting-documents-section"
-        >
+        <Section title={x => x.pages.editClaimLineItems.headerSupportingDocuments} qa="supporting-documents-section">
           {isCombinationOfSBRI ? (
             <>
-              <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.claimsMessages.editClaimLineItemUploadEvidence} />
-              </ACC.Renderers.SimpleString>
+              <SimpleString>
+                <Content value={x => x.claimsMessages.editClaimLineItemUploadEvidence} />
+              </SimpleString>
 
-              <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.claimsMessages.editClaimLineItemClaimDocuments} />
-              </ACC.Renderers.SimpleString>
+              <SimpleString>
+                <Content value={x => x.claimsMessages.editClaimLineItemClaimDocuments} />
+              </SimpleString>
 
-              <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.claimsMessages.editClaimLineItemContactMo} />
-              </ACC.Renderers.SimpleString>
+              <SimpleString>
+                <Content value={x => x.claimsMessages.editClaimLineItemContactMo} />
+              </SimpleString>
             </>
           ) : (
-            <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.claimsMessages.editClaimLineItemDocumentGuidance} />
-            </ACC.Renderers.SimpleString>
+            <SimpleString>
+              <Content value={x => x.claimsMessages.editClaimLineItemDocumentGuidance} />
+            </SimpleString>
           )}
 
           <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editorData.data, true)}>
-            <ACC.Content value={x => x.pages.editClaimLineItems.buttonUploadAndRemoveDocuments} />
+            <Content value={x => x.pages.editClaimLineItems.buttonUploadAndRemoveDocuments} />
           </LineItemForm.Button>
-        </ACC.Section>
+        </Section>
 
-        <ACC.Section>
-          <ACC.DocumentView qa="edit-claim-line-items-documents" documents={documents} />
-        </ACC.Section>
+        <Section>
+          <DocumentView qa="edit-claim-line-items-documents" documents={documents} />
+        </Section>
       </>
     );
   }
@@ -459,8 +470,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
   ) {
     return (
       <span>
-        <ACC.ValidationError error={validation.cost} />
-        <ACC.Inputs.NumberInput
+        <ValidationError error={validation.cost} />
+        <NumberInput
           name={`value${index.row}`}
           value={item.value}
           disabled={editor.status === EditorStatus.Saving}
@@ -479,15 +490,15 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     const errorItemsList = errorItems.map(costCategory => <li key={costCategory}>{costCategory}</li>);
     const markup = (
       <>
-        <ACC.Renderers.SimpleString>
-          <ACC.Content value={x => x.claimsMessages.negativeClaimWarning} />
-        </ACC.Renderers.SimpleString>
+        <SimpleString>
+          <Content value={x => x.claimsMessages.negativeClaimWarning} />
+        </SimpleString>
 
         <UL>{errorItemsList}</UL>
       </>
     );
 
-    return <ACC.ValidationMessage messageType="info" qa="claim-warning" message={markup} />;
+    return <ValidationMessage messageType="info" qa="claim-warning" message={markup} />;
   }
 
   private renderDescription(
@@ -498,9 +509,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
   ) {
     return (
       <span>
-        <ACC.ValidationError error={validation.description} />
+        <ValidationError error={validation.description} />
         <input type="hidden" name={`id${index.row}`} value={item.id} />
-        <ACC.Inputs.TextInput
+        <TextInput
           name={`description${index.row}`}
           value={item.description}
           disabled={editor.status === EditorStatus.Saving}
@@ -568,7 +579,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         <tr key={1} className="govuk-table__row">
           <td className="govuk-table__cell" colSpan={4}>
             <a href="" className="govuk-link" role="button" onClick={e => this.addItem(e, editor)} data-qa="add-cost">
-              <ACC.Content value={x => x.pages.editClaimLineItems.addCost} />
+              <Content value={x => x.pages.editClaimLineItems.addCost} />
             </a>
           </td>
         </tr>,
@@ -578,21 +589,21 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     footers.push(
       <tr key={2} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-          <ACC.Content value={x => x.pages.editClaimLineItems.totalCosts} />
+          <Content value={x => x.pages.editClaimLineItems.totalCosts} />
         </td>
         <td className="govuk-table__cell govuk-table__cell--numeric">
-          <ACC.Renderers.Currency value={total} />
+          <Currency value={total} />
         </td>
         <td className="govuk-table__cell">
-          <ACC.Renderers.AccessibilityText>
-            <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
-          </ACC.Renderers.AccessibilityText>
+          <AccessibilityText>
+            <Content value={x => x.pages.editClaimLineItems.noData} />
+          </AccessibilityText>
         </td>
         {showAddRemove ? (
           <td className="govuk-table__cell">
-            <ACC.Renderers.AccessibilityText>
-              <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
-            </ACC.Renderers.AccessibilityText>
+            <AccessibilityText>
+              <Content value={x => x.pages.editClaimLineItems.noData} />
+            </AccessibilityText>
           </td>
         ) : null}
       </tr>,
@@ -601,21 +612,21 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     footers.push(
       <tr key={3} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-          <ACC.Content value={x => x.pages.editClaimLineItems.forecastCosts} />
+          <Content value={x => x.pages.editClaimLineItems.forecastCosts} />
         </td>
         <td className="govuk-table__cell govuk-table__cell--numeric">
-          <ACC.Renderers.Currency value={forecast} />
+          <Currency value={forecast} />
         </td>
         <td className="govuk-table__cell">
-          <ACC.Renderers.AccessibilityText>
-            <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
-          </ACC.Renderers.AccessibilityText>
+          <AccessibilityText>
+            <Content value={x => x.pages.editClaimLineItems.noData} />
+          </AccessibilityText>
         </td>
         {showAddRemove ? (
           <td className="govuk-table__cell">
-            <ACC.Renderers.AccessibilityText>
-              <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
-            </ACC.Renderers.AccessibilityText>
+            <AccessibilityText>
+              <Content value={x => x.pages.editClaimLineItems.noData} />
+            </AccessibilityText>
           </td>
         ) : null}
       </tr>,
@@ -625,21 +636,21 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       footers.push(
         <tr key={4} className="govuk-table__row">
           <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-            <ACC.Content value={x => x.pages.editClaimLineItems.difference} />
+            <Content value={x => x.pages.editClaimLineItems.difference} />
           </td>
           <td className="govuk-table__cell govuk-table__cell--numeric">
-            <ACC.Renderers.Percentage value={diff} />
+            <Percentage value={diff} />
           </td>
           <td className="govuk-table__cell">
-            <ACC.Renderers.AccessibilityText>
-              <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
-            </ACC.Renderers.AccessibilityText>
+            <AccessibilityText>
+              <Content value={x => x.pages.editClaimLineItems.noData} />
+            </AccessibilityText>
           </td>
           {showAddRemove ? (
             <td className="govuk-table__cell">
-              <ACC.Renderers.AccessibilityText>
-                <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
-              </ACC.Renderers.AccessibilityText>
+              <AccessibilityText>
+                <Content value={x => x.pages.editClaimLineItems.noData} />
+              </AccessibilityText>
             </td>
           ) : null}
         </tr>,

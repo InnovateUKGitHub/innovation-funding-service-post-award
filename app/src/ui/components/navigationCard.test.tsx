@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
-
-import { NavigationCard, NavigationCardProps, NavigationCardsGrid } from "@ui/components";
 import { TestBed } from "@shared/TestBed";
+import { NavigationCardProps, NavigationCard, NavigationCardsGrid } from "./navigationCard";
 
 const createRoute = (uid: string) => ({
   path: `${uid}-path`,

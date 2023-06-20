@@ -1,6 +1,6 @@
-import { useContent } from "@ui/hooks";
-import { ExternalLink } from "../renderers";
+import { useContent } from "@ui/hooks/content.hook";
 import { Content } from "../content";
+import { ExternalLink } from "../renderers/externalLink";
 
 /**
  * PhaseBanner component with dashboard link

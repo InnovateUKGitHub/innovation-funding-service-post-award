@@ -1,11 +1,13 @@
-import { PCRStatus, ProjectMonitoringLevel } from "@framework/constants";
-import { PCRDto, ProjectDto } from "@framework/dtos";
-import { createTypedForm } from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
+import { PCRStatus } from "@framework/constants/pcrConstants";
+import { ProjectMonitoringLevel } from "@framework/constants/project";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { createTypedForm } from "@ui/components/form";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 import { useProjectParticipants } from "@ui/features/project-participants";
-import { useContent } from "@ui/hooks";
-import { IEditorStore } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 const Form = createTypedForm<PCRDto>();
 

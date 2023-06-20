@@ -1,6 +1,6 @@
 import { SalesforceProjectRole } from "@framework/constants/salesforceProjectRole";
-import { ProjectsStore } from "@ui/redux/stores";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { ProjectsStore } from "./projectsStore";
 
 const createTestData = async (context: TestContext) => {
   const testStore = context.testStore;

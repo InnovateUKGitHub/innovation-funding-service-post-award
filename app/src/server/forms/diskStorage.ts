@@ -1,4 +1,4 @@
-import { configuration } from "@server/features/common";
+import { configuration } from "@server/features/common/config";
 import multer from "multer";
 
 const storage = multer.diskStorage({});

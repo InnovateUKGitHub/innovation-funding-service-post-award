@@ -1,6 +1,12 @@
-import { PartnerDto } from "@framework/dtos";
-import { GetByIdQuery } from "@server/features/partners";
-import { InActiveProjectError, ValidationError } from "@server/features/common";
+import {
+  PartnerStatus,
+  SpendProfileStatus,
+  BankDetailsTaskStatus,
+  BankCheckStatus,
+  PostcodeTaskStatus,
+} from "@framework/constants/partner";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Partner } from "@framework/entities/partner";
 import {
   BankCheckStatusMapper,
   BankDetailsTaskStatusMapper,
@@ -8,15 +14,9 @@ import {
   PartnerStatusMapper,
   PostcodeStatusMapper,
 } from "@server/features/partners/mapToPartnerDto";
-import { Partner } from "@framework/entities";
-import {
-  BankCheckStatus,
-  BankDetailsTaskStatus,
-  PartnerStatus,
-  PostcodeTaskStatus,
-  SpendProfileStatus,
-} from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { InActiveProjectError, ValidationError } from "@shared/appError";
+import { GetByIdQuery } from "./getByIdQuery";
 import { UpdatePartnerCommand } from "./updatePartnerCommand";
 
 describe("updatePartnerCommand", () => {

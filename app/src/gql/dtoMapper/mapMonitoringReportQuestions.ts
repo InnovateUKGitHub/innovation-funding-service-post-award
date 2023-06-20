@@ -1,4 +1,4 @@
-import type { MonitoringReportQuestionGqlDto, MonitoringReportOptionDto } from "@framework/dtos";
+import { MonitoringReportQuestionGqlDto, MonitoringReportOptionDto } from "@framework/dtos/monitoringReportDto";
 
 type MonitoringReportQuestionNode = Readonly<
   Partial<{

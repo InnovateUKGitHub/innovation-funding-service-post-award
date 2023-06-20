@@ -1,8 +1,9 @@
-import { DocumentSummaryDto, PartnerDocumentSummaryDto, ProjectDto } from "@framework/dtos";
-import { useContent } from "@ui/hooks";
+import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { useContent } from "@ui/hooks/content.hook";
 import React from "react";
-import { SimpleString } from "../renderers";
-import { H2 } from "../typography";
+import { SimpleString } from "../renderers/simpleString";
+import { H2 } from "../typography/Heading.variants";
 import { useDocumentSearch } from "./document-search.hook";
 import { DocumentFilter } from "./DocumentFilter";
 import { DocumentsUnavailable } from "./DocumentsUnavailable";

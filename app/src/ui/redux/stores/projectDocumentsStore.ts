@@ -1,4 +1,4 @@
-import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos";
+import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { Pending } from "@shared/pending";
 import { apiClient } from "@ui/apiClient";

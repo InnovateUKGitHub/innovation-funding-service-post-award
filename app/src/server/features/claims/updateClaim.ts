@@ -1,11 +1,17 @@
-import { CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
-import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { mapToClaimStatus } from "@server/features/claims/mapClaim";
-import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails";
-import { GetByIdQuery } from "@server/features/partners";
-import { GetProjectStatusQuery } from "../projects";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { ValidationError } from "../common/appError";
+import { GetCostsSummaryForPeriodQuery } from "../claimDetails/getCostsSummaryForPeriodQuery";
+import { InActiveProjectError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetByIdQuery } from "../partners/getByIdQuery";
+import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(

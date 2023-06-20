@@ -1,7 +1,7 @@
-import { ISalesforceMonitoringReportQuestions } from "@server/repositories";
-import { IContext } from "@framework/types";
-import { MonitoringReportQuestionDto } from "@framework/dtos";
-import { QueryBase } from "../common";
+import { MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceMonitoringReportQuestions } from "@server/repositories/monitoringReportQuestionsRepository";
+import { QueryBase } from "../common/queryBase";
 
 export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
   private async getQuestions(context: IContext) {

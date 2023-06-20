@@ -1,13 +1,23 @@
-import { ILinkInfo, PCRItemStatus, PCRItemType, PCRStepId } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, useStores } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { IReasoningWorkflowMetadata } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import * as ACC from "../../../components";
 import { BaseProps, ContainerBase } from "../../containerBase";
+import { PCRItemType, PCRStepId, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Content } from "@ui/components/content";
+import { DocumentList } from "@ui/components/documents/DocumentList";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { LineBreakList } from "@ui/components/renderers/lineBreakList";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { Loader } from "@ui/components/loading";
+import { Link } from "@ui/components/links";
 
 export interface Props {
   projectId: ProjectId;
@@ -25,7 +35,7 @@ interface Data {
   editableItemTypes: Pending<PCRItemType[]>;
 }
 
-const PCRForm = ACC.createTypedForm<PCRDto>();
+const PCRForm = createTypedForm<PCRDto>();
 
 class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
   render() {
@@ -34,57 +44,57 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
       editableItemTypes: this.props.editableItemTypes,
     });
 
-    return <ACC.Loader pending={combined} render={x => this.renderContents(x.files, x.editableItemTypes)} />;
+    return <Loader pending={combined} render={x => this.renderContents(x.files, x.editableItemTypes)} />;
   }
 
   private renderContents(documents: DocumentSummaryDto[], editableItemTypes: PCRItemType[]) {
     const { editor, getStepLink, mode, pcr } = this.props;
     return (
-      <ACC.Section qa="reasoning-save-and-return">
-        <ACC.Section>
-          <ACC.SummaryList qa="pcr_reasoning">
-            <ACC.SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem
+      <Section qa="reasoning-save-and-return">
+        <Section>
+          <SummaryList qa="pcr_reasoning">
+            <SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
+            <SummaryListItem
               label={x => x.pcrLabels.types}
-              content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />}
+              content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
               qa="typesRow"
             />
-            <ACC.SummaryListItem
+            <SummaryListItem
               label={x => x.pcrReasoningLabels.comments}
-              content={<ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>}
+              content={<SimpleString multiline>{pcr.reasoningComments}</SimpleString>}
               qa="comments"
               validation={editor.validator.reasoningComments}
               action={
                 mode === "prepare" && (
-                  <ACC.Link id={editor.validator.reasoningComments.key} route={getStepLink(PCRStepId.reasoningStep)}>
-                    <ACC.Content value={x => x.pages.pcrReasoningSummary.edit} />
-                  </ACC.Link>
+                  <Link id={editor.validator.reasoningComments.key} route={getStepLink(PCRStepId.reasoningStep)}>
+                    <Content value={x => x.pages.pcrReasoningSummary.edit} />
+                  </Link>
                 )
               }
             />
-            <ACC.SummaryListItem
+            <SummaryListItem
               label={x => x.pcrReasoningLabels.files}
               content={
                 documents.length ? (
-                  <ACC.DocumentList documents={documents} qa="docs" />
+                  <DocumentList documents={documents} qa="docs" />
                 ) : (
-                  <ACC.Content value={x => x.pages.pcrReasoningSummary.noDocuments} />
+                  <Content value={x => x.pages.pcrReasoningSummary.noDocuments} />
                 )
               }
               qa="files"
               action={
                 mode === "prepare" && (
-                  <ACC.Link route={getStepLink(PCRStepId.filesStep)}>
-                    <ACC.Content value={x => x.pages.pcrReasoningSummary.edit} />
-                  </ACC.Link>
+                  <Link route={getStepLink(PCRStepId.filesStep)}>
+                    <Content value={x => x.pages.pcrReasoningSummary.edit} />
+                  </Link>
                 )
               }
             />
-          </ACC.SummaryList>
-        </ACC.Section>
+          </SummaryList>
+        </Section>
         {mode === "prepare" && this.renderCompleteForm(editor)}
         {(mode === "review" || mode === "view") && this.renderNavigationArrows(pcr, editableItemTypes)}
-      </ACC.Section>
+      </Section>
     );
   }
 
@@ -101,7 +111,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
   }
 
   private renderCompleteForm(editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const options: ACC.SelectOption[] = [{ id: "true", value: "I have finished making changes." }];
+    const options: SelectOption[] = [{ id: "true", value: "I have finished making changes." }];
     return (
       <PCRForm.Form
         editor={editor}
@@ -122,7 +132,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
         </PCRForm.Fieldset>
         <PCRForm.Fieldset qa="submit-button">
           <PCRForm.Submit>
-            <ACC.Content value={x => x.pcrItem.returnToRequestButton} />
+            <Content value={x => x.pcrItem.returnToRequestButton} />
           </PCRForm.Submit>
         </PCRForm.Fieldset>
       </PCRForm.Form>

@@ -1,7 +1,7 @@
-import { ClaimStatus } from "@framework/constants";
+import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
-import { ClaimDto } from "@framework/dtos";
-import { ReceivedStatus } from "@framework/entities";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ReceivedStatus } from "@framework/entities/received-status";
 
 export default (mod?: Partial<ClaimDto>): ClaimDto => {
   const template: ClaimDto = {

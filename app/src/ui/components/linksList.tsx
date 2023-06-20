@@ -1,4 +1,4 @@
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
 import type { ContentSelector } from "@copy/type";
 
 interface Link {

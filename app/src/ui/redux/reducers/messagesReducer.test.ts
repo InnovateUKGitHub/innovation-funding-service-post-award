@@ -1,6 +1,7 @@
-import { routeTransition, removeMessages } from "../actions/common";
-import { messagesReducer } from ".";
-import { RootActions } from "../actions";
+import { removeMessages } from "../actions/common/messageActions";
+import { routeTransition } from "../actions/common/transitionActions";
+import { RootActions } from "../actions/root";
+import { messagesReducer } from "./messagesReducer";
 
 const successMessage = (message: string) =>
   ({

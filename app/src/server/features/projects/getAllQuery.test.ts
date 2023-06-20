@@ -1,6 +1,6 @@
-import { GetAllQuery } from "@server/features/projects";
-import { ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { GetAllQuery } from "./getAllQuery";
 
 describe("ProjectsGetAllQuery", () => {
   it("when valid returns all projects", async () => {

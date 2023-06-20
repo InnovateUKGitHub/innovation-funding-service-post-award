@@ -1,8 +1,8 @@
+import { ProjectRole } from "@framework/constants/project";
+import { BackLink } from "@ui/components/links";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useContent } from "@ui/hooks";
-import { ProjectRole } from "@framework/constants";
+import { useContent } from "@ui/hooks/content.hook";
 import { PartnerDetailsEditComponent, PartnerDetailsParams } from "../partnerDetails/partnerDetailsEdit.page";
-import { BackLink } from "@ui/components";
 
 const ProjectSetupPartnerPostcodeContainer = (props: PartnerDetailsParams & BaseProps) => {
   const { getContent } = useContent();

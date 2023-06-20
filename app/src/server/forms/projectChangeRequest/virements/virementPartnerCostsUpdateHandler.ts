@@ -1,16 +1,18 @@
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import {
-  FinancialVirementEditPartnerLevelRoute,
-  FinancialVirementParams,
-  PCRPrepareItemRoute,
-  VirementCostsParams,
-} from "@ui/containers";
-import { FinancialVirementDto, IContext, ILinkInfo } from "@framework/types";
+import { FinancialVirementDto } from "@framework/dtos/financialVirementDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
-import { BadRequestError } from "@server/features/common";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
+import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/forms/formHandlerBase";
+import { BadRequestError } from "@shared/appError";
+import { VirementCostsParams } from "@ui/containers/pcrs/financialVirements/editPage";
+import {
+  FinancialVirementParams,
+  FinancialVirementEditPartnerLevelRoute,
+} from "@ui/containers/pcrs/financialVirements/editPartnerLevel.page";
+import { PCRPrepareItemRoute } from "@ui/containers/pcrs/pcrItemWorkflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { FinancialVirementDtoValidator } from "@ui/validators";
+import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
 
 export class VirementPartnerCostsUpdateHandler extends StandardFormHandlerBase<
   FinancialVirementParams,

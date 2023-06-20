@@ -1,5 +1,6 @@
-import { Authorisation, ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
 import { DocumentEntity } from "@framework/entities/document";
+import { Authorisation } from "@framework/types/authorisation";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetPartnerDocumentsQuery extends DocumentsSummaryQueryBase {

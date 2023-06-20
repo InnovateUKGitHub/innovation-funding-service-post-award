@@ -1,9 +1,12 @@
-import type { ProjectDtoGql } from "@framework/dtos";
+import { ClaimFrequency } from "@framework/constants/enums";
+import { TypeOfAid } from "@framework/constants/project";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
 import { getProjectStatus } from "@framework/mappers/projectStatus";
-import { ClaimFrequency, TypeOfAid } from "@framework/types";
-import { Clock, dayComparator, roundCurrency } from "@framework/util";
+import { Clock } from "@framework/util/clock";
+import { dayComparator } from "@framework/util/comparator";
+import { roundCurrency } from "@framework/util/numberHelper";
 
 const clock = new Clock();
 

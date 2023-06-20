@@ -1,6 +1,7 @@
-import { Authorisation } from "@framework/types";
+import { Authorisation } from "@framework/types/authorisation";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
-import { H1, Page } from "@ui/components";
+import { Page } from "@ui/components/layout/page";
+import { H1 } from "@ui/components/typography/Heading.variants";
 import { defineRoute } from "@ui/containers/containerBase";
 import { PageCrasher } from "./PageCrasher";
 

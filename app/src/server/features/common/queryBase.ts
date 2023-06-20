@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */ // Note: due to this file being extended, it's okay for there to be unused params as they're required for children
-import { Authorisation, IContext } from "@framework/types";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
 
 export abstract class QueryBase<T> {
   protected abstract run(context: IContext): Promise<T>;

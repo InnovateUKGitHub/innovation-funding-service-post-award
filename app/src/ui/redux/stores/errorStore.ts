@@ -1,4 +1,4 @@
-import { removeError } from "../actions";
+import { removeError } from "../actions/common/errorActions";
 import { StoreBase } from "./storeBase";
 
 export class ErrorStore extends StoreBase {

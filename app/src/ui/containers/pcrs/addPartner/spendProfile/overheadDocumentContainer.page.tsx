@@ -1,13 +1,26 @@
-import * as ACC from "@ui/components";
-import { IEditorStore, useStores } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { PCRItemForPartnerAdditionDto, ProjectDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { DocumentDescription, ProjectRole } from "@framework/constants";
 import { Pending } from "@shared/pending";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { LinksList } from "@ui/components/linksList";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export interface OverheadDocumentsPageParams {
   projectId: ProjectId;
@@ -37,7 +50,7 @@ interface Callbacks {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsPageParams, Data, Callbacks> {
   public render() {
@@ -49,7 +62,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
+    return <PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private renderContents({ project, costCategories, documents, editor, pcrItem }: CombinedData) {
@@ -65,33 +78,33 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
 
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink route={back}>
-            <ACC.Content
+          <BackLink route={back}>
+            <Content
               value={x => x.pages.pcrSpendProfilePrepareCost.backLink({ costCategoryName: costCategory.name })}
             />
-          </ACC.BackLink>
+          </BackLink>
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<Title {...project} />}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
+        <Messages messages={this.props.messages} />
 
         {this.renderForm(editor)}
 
-        <ACC.Section>
-          <ACC.DocumentEdit
+        <Section>
+          <DocumentEdit
             qa="overhead-calculation-document"
             onRemove={document => this.props.onFileDelete(editor.data, document)}
             documents={documents}
           />
-        </ACC.Section>
-        <ACC.Link styling="PrimaryButton" route={back}>
-          <ACC.Content value={x => x.pages.pcrSpendProfileOverheadDocuments.buttonSubmit} />
-        </ACC.Link>
-      </ACC.Page>
+        </Section>
+        <Link styling="PrimaryButton" route={back}>
+          <Content value={x => x.pages.pcrSpendProfileOverheadDocuments.buttonSubmit} />
+        </Link>
+      </Page>
     );
   }
 
@@ -100,11 +113,11 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
   ): React.ReactNode {
     return (
       <>
-        <ACC.Section title={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceHeading}>
-          <ACC.Content markdown value={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceDocumentUpload} />
-        </ACC.Section>
+        <Section title={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceHeading}>
+          <Content markdown value={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceDocumentUpload} />
+        </Section>
 
-        <ACC.Section>
+        <Section>
           <UploadForm.Form
             enctype="multipart"
             editor={documentsEditor}
@@ -120,7 +133,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
               heading={x => x.pages.pcrSpendProfileOverheadDocuments.documentUploadHeading}
             >
               <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
-              <ACC.DocumentGuidance />
+              <DocumentGuidance />
               <UploadForm.MultipleFileUpload
                 label={x => x.documentLabels.uploadInputLabel}
                 name="attachment"
@@ -139,11 +152,11 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
                 styling="Secondary"
                 onClick={() => this.props.onFileChange(true, documentsEditor.data)}
               >
-                <ACC.Content value={x => x.documentMessages.uploadTitle} />
+                <Content value={x => x.documentMessages.uploadTitle} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
-        </ACC.Section>
+        </Section>
       </>
     );
   }
@@ -151,9 +164,9 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
   private renderTemplateLink() {
     const links = [{ text: "Overhead calculation spreadsheet", url: "/ifspa-assets/pcr_templates/overheads.ods" }];
     return (
-      <ACC.Section>
-        <ACC.LinksList data-qa="template-link" links={links} />
-      </ACC.Section>
+      <Section>
+        <LinksList data-qa="template-link" links={links} />
+      </Section>
     );
   }
 }

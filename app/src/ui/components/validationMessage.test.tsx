@@ -1,8 +1,9 @@
 import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
-import { IValidationMessageProps, ValidationMessage } from "@ui/components";
+
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { PossibleCopyFunctions } from "@copy/type";
+import { IValidationMessageProps, ValidationMessage } from "./validationMessage";
 
 describe("<ValidationMessage />", () => {
   const stubContent = {

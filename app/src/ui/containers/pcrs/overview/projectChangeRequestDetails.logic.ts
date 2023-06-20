@@ -1,11 +1,11 @@
 import { useLazyLoadQuery } from "react-relay";
 import { ProjectChangeRequestDetailsQuery } from "./__generated__/ProjectChangeRequestDetailsQuery.graphql";
 import { pcrDetailsQuery } from "./ProjectChangeRequestDetails.query";
-import { mapToProjectDto } from "@gql/dtoMapper";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
-import { PCRItemType } from "@framework/types";
 import { mapToPcrStatusDtoArray } from "@gql/dtoMapper/mapPcrStatus";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { PCRItemType } from "@framework/constants/pcrConstants";
 
 export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<ProjectChangeRequestDetailsQuery>(pcrDetailsQuery, { projectId, pcrId });

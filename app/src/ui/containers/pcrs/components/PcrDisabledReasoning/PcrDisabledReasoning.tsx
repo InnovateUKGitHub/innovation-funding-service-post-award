@@ -1,8 +1,10 @@
-import { PCRItemDisabledReason } from "@framework/constants";
-import { PCRItemTypeDto } from "@framework/dtos";
-import { Info, UL } from "@ui/components";
-import { Bold, SimpleString } from "@ui/components/renderers";
-import { useContent } from "@ui/hooks";
+import { PCRItemDisabledReason } from "@framework/constants/pcrConstants";
+import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { Info } from "@ui/components/layout/info";
+import { UL } from "@ui/components/layout/list";
+import { Bold } from "@ui/components/renderers/bold";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useContent } from "@ui/hooks/content.hook";
 import { ReactNode, useMemo } from "react";
 import { usePcrItemName } from "../../utils/getPcrItemName";
 

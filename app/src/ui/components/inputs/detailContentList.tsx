@@ -2,7 +2,7 @@ import React from "react";
 import cx from "classnames";
 
 import { ExpandedItem } from "./formGuidanceExpander";
-import { SimpleString } from "../renderers/simpleString";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 
 export interface DetailContentListProps {
   items: ExpandedItem[];

@@ -1,18 +1,18 @@
-import { ProjectRole } from "@framework/types";
-import { roundCurrency } from "@framework/util";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useFinanceSummaryContent, useFinanceSummaryData } from "./financeSummary.logic";
 import type { Partner } from "./financeSummary.logic";
-import {
-  Page,
-  Projects,
-  BackLink,
-  Section,
-  Renderers,
-  Content,
-  createTypedTable,
-  getPartnerName,
-} from "@ui/components";
+import { ProjectRole } from "@framework/constants/project";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { getPartnerName } from "@ui/components/partners/partnerName";
+import { Currency } from "@ui/components/renderers/currency";
+import { ShortDateRange } from "@ui/components/renderers/date";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { createTypedTable } from "@ui/components/table";
+import { Title } from "@ui/components/projects/title";
 
 type Props = {
   projectId: ProjectId;
@@ -36,7 +36,7 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
           {content.backToProjectOverview}
         </BackLink>
       }
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
     >
       <Section
         title={
@@ -49,7 +49,7 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
             }
           />
         }
-        subtitle={<Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
+        subtitle={<ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
         qa="financeSummarySection"
       >
         <Section title={content.projectCostsLabel}>
@@ -163,9 +163,9 @@ const renderTotalValueFooters = (
     : null;
 
   const footerColumns = [
-    <Renderers.Currency key={0} value={totalEligibleCostsTotal} />,
-    <Renderers.Currency key={1} value={totalCostsSubmittedTotal} />,
-    <Renderers.Percentage key={2} value={percentageParticipantCostsSubmittedTotal} />,
+    <Currency key={0} value={totalEligibleCostsTotal} />,
+    <Currency key={1} value={totalCostsSubmittedTotal} />,
+    <Percentage key={2} value={percentageParticipantCostsSubmittedTotal} />,
   ].map((x, i) => (
     <td key={i} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
       {x}

@@ -1,10 +1,11 @@
 import { CopyLanguages } from "@copy/data";
-import { Button, Info } from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
-import { useContent } from "@ui/hooks";
+import { Info } from "@ui/components/layout/info";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { Button } from "@ui/components/styledButton";
+import { useContent } from "@ui/hooks/content.hook";
 import i18next from "i18next";
 import { useState } from "react";
-import { clientInternationalisation } from "src/client/clientInternationalisation";
+import { clientInternationalisation } from "../../../client/clientInternationalisation";
 
 const LanguageChanger = () => {
   const [currentLanguage, setLanguage] = useState<CopyLanguages>(i18next.language as CopyLanguages);

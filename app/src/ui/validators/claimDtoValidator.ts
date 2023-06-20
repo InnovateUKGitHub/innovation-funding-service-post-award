@@ -1,10 +1,14 @@
-import { ClaimDto, ClaimStatus, CostsSummaryForPeriodDto, PartnerDto } from "@framework/types";
-import { DocumentSummaryDto } from "@framework/dtos";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { Results, Result } from "@ui/validation";
 import * as Validation from "@ui/validators/common";
-import { ReceivedStatus } from "@framework/entities";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ReceivedStatus } from "@framework/entities/received-status";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
 
 export const claimCommentsMaxLength = 1000;
 

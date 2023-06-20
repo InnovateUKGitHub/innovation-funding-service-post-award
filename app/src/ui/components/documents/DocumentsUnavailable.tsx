@@ -1,5 +1,5 @@
-import { useContent } from "@ui/hooks";
-import { SimpleString } from "@ui/components/renderers";
+import { useContent } from "@ui/hooks/content.hook";
+import { SimpleString } from "@ui/components/renderers/simpleString";
 
 export interface DocumentsUnavailableProps {
   validationMessage?: string;

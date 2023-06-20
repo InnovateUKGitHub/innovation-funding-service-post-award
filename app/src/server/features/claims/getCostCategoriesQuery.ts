@@ -1,8 +1,8 @@
-import { IContext } from "@framework/types";
-import { numberComparator } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostCategory } from "@framework/entities";
-import { ISalesforceProfileDetails } from "@server/repositories";
+import { CostCategory } from "@framework/entities/costCategory";
+import { IContext } from "@framework/types/IContext";
+import { numberComparator } from "@framework/util/comparator";
+import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { QueryBase } from "../common/queryBase";
 

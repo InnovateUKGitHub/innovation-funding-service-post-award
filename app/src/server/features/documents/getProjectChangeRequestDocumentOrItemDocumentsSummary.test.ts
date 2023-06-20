@@ -1,5 +1,7 @@
-import * as Entites from "@framework/entities";
-import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { RecordType } from "@framework/entities/recordType";
+import { Authorisation } from "@framework/types/authorisation";
 import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocumentsSummary";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
@@ -9,7 +11,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",
@@ -44,7 +46,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
     const pcr2 = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",
@@ -66,7 +68,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const project = context.testData.createProject();
 
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",
@@ -103,7 +105,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",
@@ -125,7 +127,7 @@ describe("authorisation", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",
@@ -143,7 +145,7 @@ describe("authorisation", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",
@@ -161,7 +163,7 @@ describe("authorisation", () => {
 
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",
@@ -180,7 +182,7 @@ describe("authorisation", () => {
     const project = context.testData.createProject();
     const project2 = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",
@@ -201,7 +203,7 @@ describe("authorisation", () => {
     const project = context.testData.createProject();
     const project2 = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type",

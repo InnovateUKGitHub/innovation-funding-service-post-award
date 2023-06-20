@@ -1,5 +1,5 @@
-import { PCRItemType, PCRStatus, getUnavailablePcrItemsMatrix } from "@framework/types";
 import { createPCRSummaryDto } from "@framework/util/stubDtos";
+import { PCRItemType, getUnavailablePcrItemsMatrix, PCRStatus } from "./pcrConstants";
 
 describe("getUnavailablePcrItemsMatrix()", () => {
   const stubItemType = (type: PCRItemType) => ({ type, typeName: "stub-typeName", shortName: "stub-shortName" });

@@ -1,24 +1,25 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import {
-  Authorisation,
-  CostCategoryVirementDto,
-  FinancialVirementDto,
-  IContext,
-  PartnerVirementsDto,
-  ProjectRole,
-} from "@framework/types";
 import { flatten } from "@framework/util/arrayHelpers";
-import { ISalesforceFinancialVirement } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
 import {
   calculateNewEligibleCosts,
   calculateNewRemainingGrant,
 } from "@server/features/financialVirements/financialVirementsCalculations";
-import { GetProjectStatusQuery } from "../projects";
-
+import { ProjectRole } from "@framework/constants/project";
+import {
+  FinancialVirementDto,
+  CostCategoryVirementDto,
+  PartnerVirementsDto,
+} from "@framework/dtos/financialVirementDto";
+import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities/financialVirement";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { ISalesforceFinancialVirement } from "@server/repositories/financialVirementRepository";
+import { ValidationError } from "../common/appError";
+import { InActiveProjectError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: ProjectId,

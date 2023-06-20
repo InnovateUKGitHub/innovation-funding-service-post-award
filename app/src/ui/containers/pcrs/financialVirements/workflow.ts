@@ -1,6 +1,6 @@
-import { PCRItemForMultiplePartnerFinancialVirementDto } from "@framework/dtos";
-import { MultiplePartnerFinancialVirementDtoValidator } from "@ui/validators";
+import { PCRItemForMultiplePartnerFinancialVirementDto } from "@framework/dtos/pcrDtos";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { MultiplePartnerFinancialVirementDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { FinancialVirementSummary } from "./financialVirementsSummary";
 
 export const financialVirementWorkflow: IPCRWorkflow<

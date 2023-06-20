@@ -7,9 +7,9 @@ import { ILogger, Logger } from "@shared/developmentLogger";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
-import { DocumentDescription } from "@framework/constants";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
-import { IFileWrapper } from "@framework/types";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { IFileWrapper } from "@framework/types/fileWapper";
 
 export class DocumentsRepository {
   private readonly logger: Logger = new Logger("DocumentsRepository");

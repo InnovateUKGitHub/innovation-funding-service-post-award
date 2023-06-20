@@ -1,15 +1,15 @@
 import type { ContentSelector } from "@copy/type";
-import { IFileWrapper } from "@framework/types";
+import { IFileWrapper } from "@framework/types/fileWapper";
 import { EditorStatus } from "@ui/constants/enums";
-import { isContentSolution } from "@ui/hooks";
-import { IEditorStore } from "@ui/redux";
-import { Result } from "@ui/validation";
+import { isContentSolution } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { Result } from "@ui/validation/result";
 import cx from "classnames";
 import React, { createContext, CSSProperties, isValidElement, ReactNode, useContext } from "react";
 import { Content } from "./content";
-import { DropdownList, DropdownListOption } from "./inputs";
 import { CheckboxList, CheckboxOptionProps } from "./inputs/checkboxList";
 import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
+import { DropdownListOption, DropdownList } from "./inputs/dropdownList";
 import { MultipleFileUpload } from "./inputs/fileUpload";
 import { FormInputWidths } from "./inputs/input-utils";
 import { NumberInput } from "./inputs/numberInput";
@@ -211,7 +211,7 @@ export const createTypedForm = <T,>() => {
 
   interface SubmitPropsWithoutType {
     type?: never;
-    // Note: <ACC.Content> returns an element not a string :(
+    // Note: <Content> returns an element not a string :(
     children: string | React.ReactElement;
   }
 

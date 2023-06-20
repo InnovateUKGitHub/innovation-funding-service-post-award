@@ -1,5 +1,5 @@
-import type { ContentSelector } from "@copy/type";
-import { CostCategoryType, CostCategoryGroupType } from ".";
+import { ContentSelector } from "@copy/type";
+import { CostCategoryType, CostCategoryGroupType } from "@framework/constants/enums";
 
 interface ICostCategoryType {
   id: CostCategoryType;

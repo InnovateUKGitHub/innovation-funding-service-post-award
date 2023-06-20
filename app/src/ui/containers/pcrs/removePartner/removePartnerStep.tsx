@@ -1,17 +1,22 @@
-import { PartnerDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos/pcrDtos";
 import { Pending } from "@shared/pending";
-import * as ACC from "@ui/components";
-import { RadioOptionProps } from "@ui/components/inputs";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { RadioOptionProps } from "@ui/components/inputs/radioList";
+import { Section } from "@ui/components/layout/section";
+import { Loader } from "@ui/components/loading";
+import { getPartnerName } from "@ui/components/partners/partnerName";
 import { EditorStatus } from "@ui/constants/enums";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { useStores } from "@ui/redux";
-import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
+import { useStores } from "@ui/redux/storesProvider";
+import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 interface InnerProps {
   partners: PartnerDto[];
 }
 
-const Form = ACC.createTypedForm<PCRItemForPartnerWithdrawalDto>();
+const Form = createTypedForm<PCRItemForPartnerWithdrawalDto>();
 
 const InnerContainer = (
   props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> & InnerProps,
@@ -20,13 +25,13 @@ const InnerContainer = (
     .filter(x => !x.isWithdrawn)
     .map(x => ({
       id: x.id,
-      value: ACC.getPartnerName(x),
+      value: getPartnerName(x),
     }));
 
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
 
   return (
-    <ACC.Section>
+    <Section>
       <Form.Form
         qa="withdrawPartnerForm"
         data={props.pcrItem}
@@ -68,10 +73,10 @@ const InnerContainer = (
           />
         </Form.Fieldset>
         <Form.Submit>
-          <ACC.Content value={x => x.pcrItem.submitButton} />
+          <Content value={x => x.pcrItem.submitButton} />
         </Form.Submit>
       </Form.Form>
-    </ACC.Section>
+    </Section>
   );
 };
 
@@ -84,5 +89,5 @@ export const RemovePartnerStep = (
     partners: stores.partners.getPartnersForProject(props.project.id),
   });
 
-  return <ACC.Loader pending={pending} render={({ partners }) => <InnerContainer partners={partners} {...props} />} />;
+  return <Loader pending={pending} render={({ partners }) => <InnerContainer partners={partners} {...props} />} />;
 };

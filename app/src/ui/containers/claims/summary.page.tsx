@@ -1,30 +1,40 @@
 import { useNavigate } from "react-router-dom";
-import { useStores } from "@ui/redux";
-import { useContent } from "@ui/hooks";
-import * as ACC from "@ui/components";
+import { useContent } from "@ui/hooks/content.hook";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ClaimDtoValidator, claimCommentsMaxLength } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import {
-  ClaimDto,
-  ClaimOverrideRateDto,
-  ClaimStatus,
-  ClaimStatusChangeDto,
-  CostsSummaryForPeriodDto,
-  getAuthRoles,
-  ILinkInfo,
-  PartnerDto,
-  ProjectDto,
-  ProjectMonitoringLevel,
-  ProjectRole,
-  TotalCosts,
-} from "@framework/types";
-import { roundCurrency } from "@framework/util";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { AwardRateOverridesMessage } from "@ui/components/claims";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { TotalCosts } from "@framework/constants/claims";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectMonitoringLevel, ProjectRole } from "@framework/constants/project";
+import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
+import { Content } from "@ui/components/content";
+import { DocumentList } from "@ui/components/documents/DocumentList";
+import { DocumentsUnavailable } from "@ui/components/documents/DocumentsUnavailable";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink, Link } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Currency } from "@ui/components/renderers/currency";
+import { Percentage } from "@ui/components/renderers/percentage";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { useStores } from "@ui/redux/storesProvider";
+import { ClaimPeriodDate } from "@ui/components/claims/claimPeriodDate";
 
 export interface ClaimSummaryParams {
   projectId: ProjectId;
@@ -58,7 +68,7 @@ interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
   onUpdate: (saving: boolean, dto: ClaimDto, next: ILinkInfo, isSubmitting: boolean) => void;
 }
 
-const Form = ACC.createTypedForm<ClaimDto>();
+const Form = createTypedForm<ClaimDto>();
 
 const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
   const getClaimLinkProps = (data: Pick<CombinedData, "project" | "partner">) => ({
@@ -79,86 +89,83 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
         : false;
 
     return (
-      <ACC.Page
+      <Page
         backLink={renderBackLink(data)}
         error={data.editor.error}
         validator={data.editor.validator}
-        pageTitle={<ACC.Projects.Title {...data.project} />}
+        pageTitle={<Title {...data.project} />}
       >
         {totalCosts.totalCostsClaimed < 0 && (
-          <ACC.ValidationMessage
+          <ValidationMessage
             qa="summary-warning"
             messageType="info"
             message={x => x.claimsMessages.claimSummaryWarning}
           />
         )}
 
-        <ACC.Section qa="claimSummaryForm" title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
+        <Section qa="claimSummaryForm" title={<ClaimPeriodDate claim={data.claim} />}>
           {impMgmtPcfNotSubmittedForFinalClaim &&
             (isMo ? (
-              <ACC.ValidationMessage
+              <ValidationMessage
                 messageType="info"
-                message={<ACC.Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
+                message={<Content value={x => x.claimsMessages.moIarPcfMissingFinalClaim} markdown />}
               />
             ) : (
-              <ACC.ValidationMessage
+              <ValidationMessage
                 messageType="info"
-                message={<ACC.Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
+                message={<Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
               />
             ))}
           {data.claim.isFinalClaim && (
-            <ACC.ValidationMessage
-              messageType="info"
-              message={<ACC.Content value={x => x.claimsMessages.finalClaim} />}
-            />
+            <ValidationMessage messageType="info" message={<Content value={x => x.claimsMessages.finalClaim} />} />
           )}
 
-          <ACC.Section
-            title={<ACC.Content value={x => x.pages.claimPrepareSummary.costsTitle} />}
+          <Section
+            title={<Content value={x => x.pages.claimPrepareSummary.costsTitle} />}
             qa="costs-to-be-claimed-summary"
           >
             <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
-            <ACC.SummaryList qa="costs-to-be-claimed-summary-list">
-              <ACC.SummaryListItem
+            <SummaryList qa="costs-to-be-claimed-summary-list">
+              <SummaryListItem
                 label={x => x.pages.claimPrepareSummary.costsClaimedLabel}
-                content={<ACC.Renderers.Currency value={totalCosts.totalCostsClaimed} />}
+                content={<Currency value={totalCosts.totalCostsClaimed} />}
                 qa="totalCostsClaimed"
               />
 
-              <ACC.SummaryListItem
+              <SummaryListItem
                 label={x => x.pages.claimPrepareSummary.fundingLevelLabel}
-                content={<ACC.Renderers.Percentage value={data.partner.awardRate} />}
+                content={<Percentage value={data.partner.awardRate} />}
                 qa="fundingLevel"
               />
 
               {!isLoans && (
-                <ACC.SummaryListItem
+                <SummaryListItem
                   label={x => x.pages.claimPrepareSummary.costsToBePaidLabel}
-                  content={<ACC.Renderers.Currency value={totalCosts.totalCostsPaid} />}
+                  content={<Currency value={totalCosts.totalCostsPaid} />}
                   qa="totalCostsPaid"
                 />
               )}
-            </ACC.SummaryList>
+            </SummaryList>
 
-            <ACC.Renderers.SimpleString>
-              <ACC.Link id="editCostsToBeClaimedLink" route={props.routes.prepareClaim.getLink(linkProps)}>
-                <ACC.Content value={x => x.pages.claimPrepareSummary.editCostsMessage} />
-              </ACC.Link>
-            </ACC.Renderers.SimpleString>
-          </ACC.Section>
+            <SimpleString>
+              <Link id="editCostsToBeClaimedLink" route={props.routes.prepareClaim.getLink(linkProps)}>
+                <Content value={x => x.pages.claimPrepareSummary.editCostsMessage} />
+              </Link>
+            </SimpleString>
+          </Section>
 
-          <ACC.Section
-            title={<ACC.Content value={x => x.pages.claimPrepareSummary.claimDocumentsTitle} />}
+          <Section
+            title={<Content value={x => x.pages.claimPrepareSummary.claimDocumentsTitle} />}
             qa="claim-documents-summary"
           >
             {renderDocumentValidation(data)}
-          </ACC.Section>
+          </Section>
 
           {!data.claim.isFinalClaim && renderForecastSummary(data)}
 
           <ClaimForm {...data} disabled={impMgmtPcfNotSubmittedForFinalClaim} />
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   };
 
@@ -167,21 +174,21 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
     const displayDocumentError = data.claim.isIarRequired && !data.documents.length;
 
     const editDocumentLink = (
-      <ACC.Renderers.SimpleString>
-        <ACC.Link id="claimDocumentsLink" route={props.routes.claimDocuments.getLink(linkProps)}>
-          <ACC.Content value={x => x.pages.claimPrepareSummary.editClaimDocuments} />
-        </ACC.Link>
-      </ACC.Renderers.SimpleString>
+      <SimpleString>
+        <Link id="claimDocumentsLink" route={props.routes.claimDocuments.getLink(linkProps)}>
+          <Content value={x => x.pages.claimPrepareSummary.editClaimDocuments} />
+        </Link>
+      </SimpleString>
     );
 
     return displayDocumentError ? (
-      <ACC.ValidationMessage
+      <ValidationMessage
         messageType="error"
         message={
           <>
-            <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.pages.claimPrepareSummary.finalClaimSupportingDocumentMessage} />
-            </ACC.Renderers.SimpleString>
+            <SimpleString>
+              <Content value={x => x.pages.claimPrepareSummary.finalClaimSupportingDocumentMessage} />
+            </SimpleString>
 
             {editDocumentLink}
           </>
@@ -191,11 +198,11 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
       // TODO: Speak with business about refactoring to document table UI
       <>
         {data.documents.length ? (
-          <ACC.Section subtitle={<ACC.Content value={x => x.documentMessages.newWindow} />}>
-            <ACC.DocumentList documents={data.documents} qa="claim-documents-list" />
-          </ACC.Section>
+          <Section subtitle={<Content value={x => x.documentMessages.newWindow} />}>
+            <DocumentList documents={data.documents} qa="claim-documents-list" />
+          </Section>
         ) : (
-          <ACC.DocumentsUnavailable />
+          <DocumentsUnavailable />
         )}
 
         {editDocumentLink}
@@ -207,13 +214,13 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
     const linkProps = getClaimLinkProps(data);
 
     return data.claim.isFinalClaim ? (
-      <ACC.BackLink route={props.routes.claimDocuments.getLink(linkProps)}>
-        <ACC.Content value={x => x.pages.claimPrepareSummary.backToDocuments} />
-      </ACC.BackLink>
+      <BackLink route={props.routes.claimDocuments.getLink(linkProps)}>
+        <Content value={x => x.pages.claimPrepareSummary.backToDocuments} />
+      </BackLink>
     ) : (
-      <ACC.BackLink route={props.routes.claimForecast.getLink(linkProps)}>
-        <ACC.Content value={x => x.pages.claimPrepareSummary.backToForecast} />
-      </ACC.BackLink>
+      <BackLink route={props.routes.claimForecast.getLink(linkProps)}>
+        <Content value={x => x.pages.claimPrepareSummary.backToForecast} />
+      </BackLink>
     );
   };
 
@@ -238,16 +245,16 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
         </Form.Fieldset>
 
         <Form.Fieldset qa="save-buttons">
-          <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.claimsMessages.submitClaimConfirmation} />
-          </ACC.Renderers.SimpleString>
+          <SimpleString>
+            <Content value={x => x.claimsMessages.submitClaimConfirmation} />
+          </SimpleString>
 
           <Form.Submit disabled={disabled}>
-            <ACC.Content value={x => x.pages.claimPrepareSummary.submitClaimMessage} />
+            <Content value={x => x.pages.claimPrepareSummary.submitClaimMessage} />
           </Form.Submit>
 
           <Form.Button name="save" onClick={() => onSave(claim, editor, false, project)}>
-            <ACC.Content value={x => x.pages.claimPrepareSummary.saveAndReturnMessage} />
+            <Content value={x => x.pages.claimPrepareSummary.saveAndReturnMessage} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
@@ -302,42 +309,41 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
 
     const difference = roundCurrency(totalEligibleCosts - totalForecastsAndCosts);
     const differencePercentage = totalEligibleCosts > 0 ? (difference * 100) / totalEligibleCosts : 0;
-    const editForecastMessage = <ACC.Content value={x => x.pages.claimPrepareSummary.editForecastMessage} />;
-    const forecastTitle = <ACC.Content value={x => x.pages.claimPrepareSummary.forecastTitle} />;
+    const editForecastMessage = <Content value={x => x.pages.claimPrepareSummary.editForecastMessage} />;
+    const forecastTitle = <Content value={x => x.pages.claimPrepareSummary.forecastTitle} />;
 
     return (
-      <ACC.Section title={forecastTitle} qa="forecast-summary">
-        <ACC.SummaryList qa="forecast-summary-list">
-          <ACC.SummaryListItem
+      <Section title={forecastTitle} qa="forecast-summary">
+        <SummaryList qa="forecast-summary-list">
+          <SummaryListItem
             label={x => x.pages.claimPrepareSummary.eligibleCostsLabel}
-            content={<ACC.Renderers.Currency value={totalEligibleCosts} />}
+            content={<Currency value={totalEligibleCosts} />}
             qa="totalEligibleCosts"
           />
 
-          <ACC.SummaryListItem
+          <SummaryListItem
             label={x => x.pages.claimPrepareSummary.forecastLabel}
-            content={<ACC.Renderers.Currency value={totalForecastsAndCosts} />}
+            content={<Currency value={totalForecastsAndCosts} />}
             qa="totalForecastsAndCosts"
           />
 
-          <ACC.SummaryListItem
+          <SummaryListItem
             label={x => x.pages.claimPrepareSummary.differenceLabel}
             content={
               <>
-                <ACC.Renderers.Currency value={difference} /> (<ACC.Renderers.Percentage value={differencePercentage} />
-                )
+                <Currency value={difference} /> (<Percentage value={differencePercentage} />)
               </>
             }
             qa="differenceEligibleAndForecast"
           />
-        </ACC.SummaryList>
+        </SummaryList>
 
-        <ACC.Renderers.SimpleString>
-          <ACC.Link id="editForecastLink" route={props.routes.claimForecast.getLink(linkProps)}>
+        <SimpleString>
+          <Link id="editForecastLink" route={props.routes.claimForecast.getLink(linkProps)}>
             {editForecastMessage}
-          </ACC.Link>
-        </ACC.Renderers.SimpleString>
-      </ACC.Section>
+          </Link>
+        </SimpleString>
+      </Section>
     );
   };
 
@@ -353,7 +359,7 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
     totalCosts: props.totalCosts,
   });
 
-  return <ACC.PageLoader pending={combined} render={renderContents} />;
+  return <PageLoader pending={combined} render={renderContents} />;
 };
 
 const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {

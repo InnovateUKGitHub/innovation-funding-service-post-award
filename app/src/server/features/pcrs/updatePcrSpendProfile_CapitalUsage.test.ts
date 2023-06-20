@@ -1,10 +1,15 @@
-import { ValidationError } from "@server/features/common";
-import { PCRPartnerType, PCRProjectRole } from "@framework/types";
-import { CostCategoryType, PCRItemStatus, PCRSpendProfileCapitalUsageType } from "@framework/constants";
 import { PCRSpendProfileCapitalUsageCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { setup } from "@tests/test-utils/pcr-spend-profile-helpers";
+import { CostCategoryType } from "@framework/constants/enums";
+import {
+  PCRItemStatus,
+  PCRProjectRole,
+  PCRPartnerType,
+  PCRSpendProfileCapitalUsageType,
+} from "@framework/constants/pcrConstants";
+import { ValidationError } from "@shared/appError";
 
 describe("UpdatePCRSpendProfileCommand", () => {
   describe("Capital Usage", () => {

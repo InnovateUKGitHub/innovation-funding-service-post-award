@@ -1,15 +1,15 @@
-import { FileTypeNotAllowedError } from "@server/repositories";
-import { NestedResult } from "@ui/validation";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { DocumentDescription } from "@framework/constants";
-import { IAppOptions } from "@framework/types/IAppOptions";
-import { IFileWrapper } from "@framework/types";
-import { getFileExtension, getFileName, getFileSize } from "@framework/util";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import * as Validation from "./common";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { IAppOptions } from "@framework/types/IAppOptions";
+import { getFileSize, getFileExtension, getFileName } from "@framework/util/files";
+import { FileTypeNotAllowedError } from "@server/repositories/errors";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
+import { NestedResult } from "@ui/validation/nestedResult";
 
 const invalidCharacterInFileName = <T extends Results<ResultBase>>(results: T, fileName: string) => {
   return results.getContent(x => x.validation.documentValidator.nameInvalidCharacters({ name: fileName }));

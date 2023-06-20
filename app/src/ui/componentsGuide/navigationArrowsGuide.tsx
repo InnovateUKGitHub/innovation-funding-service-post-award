@@ -2,9 +2,10 @@ import { Provider } from "react-redux";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { createStore } from "redux";
-import { IGuide, ILinkInfo } from "@framework/types";
-import { NavigationArrows } from "../components";
-import { rootReducer } from "../redux/reducers";
+import { IGuide } from "@framework/types/IGuide";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { NavigationArrows } from "@ui/components/navigationArrows";
+import { rootReducer } from "@ui/redux/reducers/rootReducer";
 
 const route = { name: "test", path: "/components" };
 

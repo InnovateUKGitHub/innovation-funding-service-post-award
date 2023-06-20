@@ -1,5 +1,5 @@
-import { Currency } from "@ui/components/renderers";
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
+import { Currency } from "@ui/components/renderers/currency";
 
 export const currencyGuide: IGuide = {
   name: "Currency guide",

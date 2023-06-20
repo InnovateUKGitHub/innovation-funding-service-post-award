@@ -1,4 +1,4 @@
-import { IFeatureFlags } from "@framework/types";
+import { IFeatureFlags } from "@framework/types/IFeaturesFlags";
 import { Field, Int, ObjectType } from "type-graphql";
 
 @ObjectType("ClientConfigFeaturesObject")

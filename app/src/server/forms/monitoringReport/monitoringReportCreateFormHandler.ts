@@ -1,16 +1,16 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { CreateMonitoringReportCommand, GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports";
-import {
-  MonitoringReportCreateRoute,
-  MonitoringReportDashboardRoute,
-  MonitoringReportWorkflowRoute,
-} from "@ui/containers/monitoringReports";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
-import { MonitoringReportStatus } from "@framework/constants";
-import { MonitoringReportDto } from "@framework/dtos";
-import { IContext, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MonitoringReportCreateParams } from "@ui/containers/monitoringReports/create/monitoringReportCreateDef";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
+import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
+import { MonitoringReportCreateRoute } from "@ui/containers/monitoringReports/create/monitoringReportCreate.page";
+import { MonitoringReportDashboardRoute } from "@ui/containers/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
+import { MonitoringReportWorkflowRoute } from "@ui/containers/monitoringReports/workflow/monitoringReportWorkflow.page";
 
 export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
   MonitoringReportCreateParams,

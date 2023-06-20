@@ -1,6 +1,6 @@
 import { GraphQLContext } from "@gql/GraphQLContext";
 import type { IFieldResolverOptions } from "@graphql-tools/utils";
-import { configuration } from "@server/features/common";
+import { configuration } from "@server/features/common/config";
 
 interface ExternalRoles {
   isMo: boolean;

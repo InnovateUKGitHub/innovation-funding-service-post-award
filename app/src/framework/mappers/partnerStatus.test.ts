@@ -1,4 +1,4 @@
-import { PartnerStatus } from "@framework/constants";
+import { PartnerStatus } from "@framework/constants/partner";
 import { getPartnerStatus, options } from "./partnerStatus";
 
 describe("getPartnerStatus", () => {

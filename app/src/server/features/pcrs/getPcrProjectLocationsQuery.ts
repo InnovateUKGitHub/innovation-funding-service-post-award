@@ -1,4 +1,5 @@
-import { IContext, PCRProjectLocation } from "@framework/types";
+import { PCRProjectLocation } from "@framework/constants/pcrConstants";
+import { IContext } from "@framework/types/IContext";
 import { PCRProjectLocationMapper } from "@server/repositories/mappers/projectChangeRequestMapper";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 

@@ -1,12 +1,14 @@
-import { IContext, ILinkInfo, PartnerDto } from "@framework/types";
-import { GetByIdQuery } from "@server/features/partners";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
+import { PartnerDetailsParams } from "@ui/containers/projects/partnerDetails/partnerDetailsEdit.page";
 import {
-  PartnerDetailsParams,
   ProjectSetupBankDetailsParams,
   ProjectSetupBankDetailsRoute,
-  ProjectSetupBankDetailsVerifyRoute,
-} from "@ui/containers";
+} from "@ui/containers/projects/setup/projectSetupBankDetails.page";
+import { ProjectSetupBankDetailsVerifyRoute } from "@ui/containers/projects/setup/projectSetupBankDetailsVerify.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "../../formHandlerBase";

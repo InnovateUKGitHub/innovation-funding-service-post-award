@@ -1,6 +1,6 @@
-import { configuration } from "@server/features/common";
 import { Query, Resolver } from "type-graphql";
 import { ClientConfigObject } from "@gql/typegraphql/object/ClientConfigObject";
+import { configuration } from "@server/features/common/config";
 
 @Resolver(ClientConfigObject)
 class ClientConfigResolver {

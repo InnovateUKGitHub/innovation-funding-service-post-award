@@ -3,9 +3,11 @@ import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { allClaimsDashboardQuery } from "./AllClaimsDashboard.query";
 import { AllClaimsDashboardQuery, AllClaimsDashboardQuery$data } from "./__generated__/AllClaimsDashboardQuery.graphql";
-import { mapToClaimDtoArray, mapToPartnerDtoArray, mapToProjectDto } from "@gql/dtoMapper";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToProfilePeriodDetailsDtoArray } from "@gql/dtoMapper/mapProfilePeriodDetail";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
 
 type ProjectGQL = GQL.NodeSelector<AllClaimsDashboardQuery$data, "Acc_Project__c">;
 

@@ -1,7 +1,8 @@
-import { DocumentDescription, getDocumentDescriptionContentSelector } from "@framework/constants";
+import { DocumentDescription, getDocumentDescriptionContentSelector } from "@framework/constants/documentDescription";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
-import { DropdownOption } from "@ui/components";
-import { useContent } from "@ui/hooks";
+import { DropdownOption } from "@ui/components/form";
+
+import { useContent } from "@ui/hooks/content.hook";
 
 /**
  * ### useEnumDocuments

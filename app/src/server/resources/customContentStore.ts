@@ -1,5 +1,6 @@
 import { S3Client, GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
-import { configuration, ConfigurationError } from "@server/features/common";
+import { configuration } from "@server/features/common/config";
+import { ConfigurationError } from "@shared/appError";
 
 export class CustomContentStore {
   private getConnection() {

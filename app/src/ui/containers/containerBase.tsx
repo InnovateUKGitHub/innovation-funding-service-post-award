@@ -1,11 +1,13 @@
 import React from "react";
-import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { IStores } from "@ui/redux";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { Copy } from "@copy/Copy";
 import { makeUrlWithQuery } from "@ui/helpers/make-url";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
+import { IStores } from "@ui/redux/storesProvider";
+import { Authorisation } from "@framework/types/authorisation";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IClientUser } from "@framework/types/IUser";
 
 type RouteStateParams = { [key: string]: string };
 

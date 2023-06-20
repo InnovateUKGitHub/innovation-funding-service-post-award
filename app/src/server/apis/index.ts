@@ -21,8 +21,8 @@ import * as partners from "./partners";
 import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
 import * as users from "./users";
-import { PartnerDto } from "@framework/dtos";
-import { IClientUser } from "@framework/types";
+import { IClientUser } from "@framework/types/IUser";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 
 export interface IApiClient {
   accounts: accounts.IAccountsApi;

@@ -1,5 +1,6 @@
+import { LogLevel } from "@framework/constants/enums";
 import { IAppOptions } from "@framework/types/IAppOptions";
-import { IFeatureFlags, LogLevel } from "@framework/types";
+import { IFeatureFlags } from "@framework/types/IFeaturesFlags";
 
 export interface IClientConfig {
   ifsRoot: string;

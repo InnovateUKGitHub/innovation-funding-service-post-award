@@ -1,8 +1,10 @@
-import { ClaimFrequency, ProjectDto, ProjectMonitoringLevel, ProjectRole, ProjectStatus } from "@framework/types";
-import { mapToProjectDto } from "@server/features/projects";
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ClaimFrequency } from "@framework/constants/enums";
+import { ProjectRole, ProjectMonitoringLevel, ProjectStatus } from "@framework/constants/project";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { mapToProjectDto } from "./mapToProjectDto";
 
 describe("mapToProjectDto", () => {
   const midnight = {

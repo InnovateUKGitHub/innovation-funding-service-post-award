@@ -1,5 +1,4 @@
-import { ILinkInfo } from "@framework/types";
-
+import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Link } from "@ui/components/links";
 import { ArrowLeft, ArrowRight } from "@ui/components/svg/arrows";
 

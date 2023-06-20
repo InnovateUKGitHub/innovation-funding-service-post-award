@@ -1,11 +1,12 @@
-import * as ACC from "@ui/components";
 import { PCRSpendProfileSubcontractingCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { Component } from "react";
 import { PCRSubcontractingCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { SpendProfileCostFormProps } from "./spendProfilePrepareCost.page";
 
-const Form = ACC.createTypedForm<PCRSpendProfileSubcontractingCostDto>();
+const Form = createTypedForm<PCRSpendProfileSubcontractingCostDto>();
 
 export class SubcontractingFormComponent extends Component<
   SpendProfileCostFormProps<PCRSpendProfileSubcontractingCostDto, PCRSubcontractingCostDtoValidator>
@@ -57,7 +58,7 @@ export class SubcontractingFormComponent extends Component<
         </Form.Fieldset>
         <Form.Fieldset qa="save">
           <Form.Submit>
-            <ACC.Content
+            <Content
               value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
             />
           </Form.Submit>

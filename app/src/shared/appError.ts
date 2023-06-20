@@ -1,4 +1,5 @@
-import { ErrorCode, IAppError } from "@framework/types";
+import { ErrorCode } from "@framework/constants/enums";
+import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 
 export class AppError extends Error implements IAppError {

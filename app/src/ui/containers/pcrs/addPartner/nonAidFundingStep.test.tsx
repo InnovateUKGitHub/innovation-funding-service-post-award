@@ -1,19 +1,16 @@
-import { fireEvent, render } from "@testing-library/react";
-import {
-  MultipleDocumentUploadDto,
-  PCRDto,
-  PCRItemForPartnerAdditionDto,
-  PCRItemTypeDto,
-  ProjectDto,
-} from "@framework/dtos";
-import TestBed from "@shared/TestBed";
-import { NonAidFundingStep } from "@ui/containers/pcrs/addPartner";
-import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { MultipleDocumentUploadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { IEditorStore } from "@ui/redux";
-import { EditorStatus } from "@ui/constants/enums";
-import { IRoutes } from "@ui/routing";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { PCRDto, PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import TestBed from "@shared/TestBed";
+import { fireEvent, render } from "@testing-library/react";
+import { EditorStatus } from "@ui/constants/enums";
+import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { IRoutes } from "@ui/routing/routeConfig";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { NonAidFundingStep } from "./nonAidFundingStep";
 
 describe("<NonAidFundingStep />", () => {
   type TestProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;

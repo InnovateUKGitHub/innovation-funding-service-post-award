@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 
-import { ProjectRole } from "@framework/constants";
-import { ClaimsDashboardGuidance, ClaimsDashboardGuidanceProps } from "@ui/containers/claims/components";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimsDashboardGuidance, ClaimsDashboardGuidanceProps } from "./ClaimsDashboardGuidance";
 import { TestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 

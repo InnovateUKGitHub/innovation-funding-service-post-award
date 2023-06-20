@@ -1,5 +1,5 @@
 import { AwardRateOverrideType } from "@framework/constants/awardRateOverride";
-import { ClaimOverrideRateDto } from "@framework/dtos";
+import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
 import { Content } from "../content";
 import { ValidationMessage } from "../validationMessage";
 

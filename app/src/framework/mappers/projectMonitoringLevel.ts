@@ -1,4 +1,4 @@
-import { ProjectMonitoringLevel } from "@framework/constants";
+import { ProjectMonitoringLevel } from "@framework/constants/project";
 
 const getMonitoringLevel = (level: string | null | undefined): ProjectMonitoringLevel => {
   switch (level) {

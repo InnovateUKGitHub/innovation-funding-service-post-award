@@ -1,6 +1,8 @@
+import { DocumentDescription } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { Authorisation } from "@framework/types/authorisation";
 import { ValidationError } from "@server/features/common/appError";
-import { DocumentDescription } from "@framework/constants";
-import { Authorisation, ProjectRole } from "@framework/types";
+
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 

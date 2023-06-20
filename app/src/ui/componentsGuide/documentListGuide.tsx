@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
-
-import { IGuide } from "@framework/types";
-import { DocumentList, DocumentListWithDelete } from "@ui/components";
+import { IGuide } from "@framework/types/IGuide";
+import { DocumentList, DocumentListWithDelete } from "@ui/components/documents/DocumentList";
 
 const documents = [
   {

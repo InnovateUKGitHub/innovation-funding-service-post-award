@@ -1,5 +1,6 @@
-import { configuration, ConfigurationError } from "@server/features/common";
-import { isError } from "@server/features/common";
+import { configuration } from "@server/features/common/config";
+import { ConfigurationError } from "@shared/appError";
+import { isError } from "util";
 
 export interface ICompaniesHouseParams {
   searchString: string;

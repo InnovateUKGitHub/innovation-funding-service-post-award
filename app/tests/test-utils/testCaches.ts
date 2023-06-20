@@ -1,9 +1,11 @@
 import { Cache } from "@server/features/common/cache";
-import { Option } from "@framework/dtos";
-import { ICaches, MonitoringReportStatus } from "@framework/types";
-import { PermissionGroup, RecordType } from "@framework/entities";
-import { IRoleInfo } from "@server/features/projects";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { PermissionGroup } from "@framework/entities/permissionGroup";
+import { ICaches } from "@framework/types/IContext";
+import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
+import { RecordType } from "@framework/entities/recordType";
+import { Option } from "@framework/dtos/option";
 
 export class TestCaches implements ICaches {
   readonly costCategories = new Cache<CostCategoryDto[]>(1);

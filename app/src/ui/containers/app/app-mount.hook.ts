@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
-import { scrollToTheTopInstantly } from "@framework/util";
-import { useStores } from "@ui/redux";
+import { useStores } from "@ui/redux/storesProvider";
+import { scrollToTheTopInstantly } from "@framework/util/windowHelpers";
 
 /**
  * @description This dispatches preflight requests thus avoiding loading, prefer static data which is unlikely to frequently change.

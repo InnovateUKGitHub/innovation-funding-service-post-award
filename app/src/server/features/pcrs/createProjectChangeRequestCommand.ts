@@ -1,14 +1,19 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos";
-import { Authorisation, IContext } from "@framework/types";
-import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
-import { PCRDtoValidator } from "@ui/validators";
-import { GetAllProjectRolesForUser, GetByIdQuery } from "@server/features/projects";
-import { PCRItemType, ProjectRole } from "@framework/constants";
+
 import { GetAvailableItemTypesQuery } from "./getAvailableItemTypesQuery";
 import { GetAllPCRsQuery } from "./getAllPCRsQuery";
-import { GetAllForProjectQuery } from "../partners";
+import { PCRItemType } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
+import { PCRDto, PCRItemTypeDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities/projectChangeRequest";
+import { Authorisation } from "@framework/types/authorisation";
+import { IContext } from "@framework/types/IContext";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { BadRequestError, ValidationError } from "../common/appError";
+import { CommandBase } from "../common/commandBase";
+import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
+import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
+import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
   constructor(private readonly projectId: ProjectId, private readonly projectChangeRequestDto: PCRDto) {

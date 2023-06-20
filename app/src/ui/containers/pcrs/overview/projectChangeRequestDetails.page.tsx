@@ -1,12 +1,13 @@
-import { Page, BackLink, Projects } from "@ui/components";
 import { BaseProps, defineRoute } from "../../containerBase";
-import { useContent } from "@ui/hooks";
 import { ProjectChangeRequestOverviewLog } from "./ProjectChangeRequestOverviewLog";
 import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverviewSummary";
 import { ProjectChangeRequestOverviewTasks } from "./ProjectChangeRequestOverviewTasks";
-
 import { usePCRDetailsQuery } from "./projectChangeRequestDetails.logic";
-import { ProjectRole } from "@framework/types";
+import { ProjectRole } from "@framework/constants/project";
+import { Page } from "@ui/components/layout/page";
+import { BackLink } from "@ui/components/links";
+import { Title } from "@ui/components/projects/title";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface ProjectChangeRequestDetailsParams {
   projectId: ProjectId;
@@ -23,7 +24,7 @@ const PCRDetailsPage = (props: BaseProps & ProjectChangeRequestDetailsParams) =>
           {getContent(x => x.pages.pcrOverview.backToPcrs)}
         </BackLink>
       }
-      pageTitle={<Projects.Title title={project.title} projectNumber={project.projectNumber} />}
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       projectStatus={project.status}
     >
       <ProjectChangeRequestOverviewSummary pcr={pcr} projectId={project.id} hideAddTypesLink isGqlData />

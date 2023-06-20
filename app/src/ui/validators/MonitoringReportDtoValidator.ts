@@ -1,5 +1,5 @@
-import { MonitoringReportStatus } from "@framework/constants";
-import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos";
+import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
+import { MonitoringReportQuestionDto, MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
 

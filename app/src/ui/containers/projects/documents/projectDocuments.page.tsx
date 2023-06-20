@@ -1,40 +1,38 @@
+import { DocumentDescription } from "@framework/constants/documentDescription";
 import {
   DocumentSummaryDto,
-  MultipleDocumentUploadDto,
   PartnerDocumentSummaryDto,
   PartnerDocumentSummaryDtoGql,
-  PartnerDtoGql,
-  ProjectDtoGql,
-} from "@framework/dtos";
-import {
-  Page,
-  Projects,
-  Renderers,
-  Section,
-  Content,
-  createTypedForm,
-  DocumentGuidance,
-  DropdownOption,
-  H2,
-  H3,
-  DocumentEdit,
-  PageLoader,
-} from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
+} from "@framework/dtos/documentDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { Pending } from "@shared/pending";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit, PartnerDocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm, DropdownOption } from "@ui/components/form";
+import { DropdownListOption } from "@ui/components/inputs/dropdownList";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { PageLoader } from "@ui/components/loading";
+import { ProjectBackLink } from "@ui/components/projects/projectBackLink";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { H2, H3 } from "@ui/components/typography/Heading.variants";
+import { EnumDocuments } from "@ui/containers/claims/components/EnumDocuments";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useContent } from "@ui/hooks";
-import { IEditorStore, useStores } from "@ui/redux";
+import { getCurrentPartnerName } from "@ui/helpers/getCurrentPartnerName";
+import { noop } from "@ui/helpers/noop";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { useProjectDocumentsQuery } from "./projectDocuments.logic";
-import { DocumentDescription, getAuthRoles } from "@framework/types";
-import { getCurrentPartnerName } from "@ui/helpers/getCurrentPartnerName";
-import { EnumDocuments } from "@ui/containers/claims/components";
-import { DropdownListOption } from "@ui/components/inputs";
-import { PartnerDocumentEdit } from "@ui/components";
-import { noop } from "@ui/helpers/noop";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
-import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;
@@ -119,13 +117,13 @@ const ProjectDocumentsPage = ({
 
   return (
     <Page
-      pageTitle={<Projects.Title projectNumber={project.projectNumber} title={project.title} />}
-      backLink={<Projects.ProjectBackLink routes={props.routes} projectId={project.id} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
+      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
       validator={editor.validator}
       error={editor.error}
       projectStatus={project.status}
     >
-      <Renderers.Messages messages={props.messages} />
+      <Messages messages={props.messages} />
 
       <Section>
         {isProjectMo ? (

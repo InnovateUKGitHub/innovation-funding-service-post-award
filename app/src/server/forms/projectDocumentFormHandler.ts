@@ -1,11 +1,16 @@
-import { configuration } from "@server/features/common";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { IContext, IFileWrapper, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
-import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "../../ui/containers";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "./formHandlerBase";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { IContext } from "@framework/types/IContext";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { configuration } from "@server/features/common/config";
+import {
+  ProjectDocumentPageParams,
+  ProjectDocumentsRoute,
+} from "@ui/containers/projects/documents/projectDocuments.page";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<
   ProjectDocumentPageParams,

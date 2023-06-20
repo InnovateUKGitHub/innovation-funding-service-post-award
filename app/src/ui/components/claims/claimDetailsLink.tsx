@@ -1,7 +1,13 @@
-import { ClaimDto, ClaimStatus, getAuthRoles, PartnerDto, PartnerStatus, ProjectDto } from "@framework/types";
-import { IRoutes } from "@ui/routing";
-import { useContent, useProjectStatus } from "@ui/hooks";
-import { Link } from "../links";
+import { IRoutes } from "@ui/routing/routeConfig";
+import { Link } from "@ui/components/links";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { PartnerStatus } from "@framework/constants/partner";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { useContent } from "@ui/hooks/content.hook";
+import { useProjectStatus } from "@ui/hooks/project-status.hook";
 
 interface ClaimDetailsBaseProps {
   claim: Pick<ClaimDto, "status" | "periodId">;

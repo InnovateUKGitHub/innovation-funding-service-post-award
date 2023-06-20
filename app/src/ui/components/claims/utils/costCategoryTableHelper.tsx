@@ -1,17 +1,14 @@
+import { CostCategoryType } from "@framework/constants/enums";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import {
-  ClaimDto,
-  CostCategoryType,
-  CostsSummaryForPeriodDto,
-  PartnerDto,
-  ProjectDto,
-  PCROrganisationType,
-} from "@framework/types";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-
-import { Link } from "@ui/components";
-import { Result } from "@ui/validation";
-import { roundCurrency, diffAsPercentage } from "@framework/util";
+import { roundCurrency, diffAsPercentage } from "@framework/util/numberHelper";
+import { Link } from "@ui/components/links";
+import { Result } from "@ui/validation/result";
 
 export interface ClaimProps {
   project: ProjectDto;

@@ -1,4 +1,4 @@
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription } from "@framework/constants/documentDescription";
 
 export interface DocumentEntity {
   contentDocumentId: string;

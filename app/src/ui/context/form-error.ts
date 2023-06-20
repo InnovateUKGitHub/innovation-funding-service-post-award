@@ -1,4 +1,4 @@
-import { Result } from "@ui/validation";
+import { Result } from "@ui/validation/result";
 import { createContext, useContext } from "react";
 
 const formErrorContext = createContext<Result[] | undefined>(undefined);

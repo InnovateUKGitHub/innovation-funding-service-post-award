@@ -1,4 +1,4 @@
-import { LoanFinancialVirement } from "@framework/entities";
+import { LoanFinancialVirement } from "@framework/entities/financialVirement";
 
 export interface FinancialLoanVirementDto {
   loans: LoanFinancialVirement[];

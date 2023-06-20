@@ -1,9 +1,11 @@
-import { PCRItemStatus, PCRItemType } from "@framework/constants";
-import { PCRDto } from "@framework/dtos";
-import { List, Task, TaskListSection } from "@ui/components";
-import { useContent } from "@ui/hooks";
-import { IEditorStore, useRoutes } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { PCRItemType, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { List } from "@ui/components/layout/list";
+import { TaskListSection, Task } from "@ui/components/taskList";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useRoutes } from "@ui/redux/routesProvider";
+import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 import { GetItemTasks, GetItemTaskProps } from "./GetItemTasks";
 

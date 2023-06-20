@@ -1,12 +1,13 @@
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { Pending } from "@shared/pending";
-import { LoanDto } from "@framework/dtos";
 import { LoanDtoValidator } from "@ui/validators/loanValidator";
 import { apiClient } from "../../apiClient";
-import { RootState } from "../reducers";
-import { messageSuccess, RootActionsOrThunk } from "../actions";
 import { LoanDocumentsStore } from "./loanDocumentsStore";
 import { StoreBase } from "./storeBase";
+import { LoanDto } from "@framework/dtos/loanDto";
+import { messageSuccess } from "../actions/common/messageActions";
+import { RootActionsOrThunk } from "../actions/root";
+import { RootState } from "../reducers/rootReducer";
 
 export class LoansStore extends StoreBase {
   constructor(

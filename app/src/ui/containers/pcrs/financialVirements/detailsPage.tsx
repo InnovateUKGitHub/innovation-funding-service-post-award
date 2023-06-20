@@ -1,12 +1,24 @@
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
-import * as ACC from "@ui/components";
-import { CostCategoryVirementDto, PartnerDto, PartnerVirementsDto, PCRDto, ProjectDto } from "@framework/dtos";
 import { createDto } from "@framework/util/dtoHelpers";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { roundCurrency } from "@framework/util";
-import { getAuthRoles } from "@framework/types";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { PartnerVirementsDto, CostCategoryVirementDto } from "@framework/dtos/financialVirementDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { PCRDto } from "@framework/dtos/pcrDtos";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { roundCurrency } from "@framework/util/numberHelper";
+import { Content } from "@ui/components/content";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Title } from "@ui/components/projects/title";
+import { Currency } from "@ui/components/renderers/currency";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { createTypedTable } from "@ui/components/table";
+import { useStores } from "@ui/redux/storesProvider";
+import { Info } from "@ui/components/layout/info";
 
 type Mode = "review" | "view";
 
@@ -31,7 +43,7 @@ interface TableData {
   virement: CostCategoryVirementDto;
 }
 
-const VirementTable = ACC.createTypedTable<TableData>();
+const VirementTable = createTypedTable<TableData>();
 
 class Component extends ContainerBase<Params, Props> {
   render() {
@@ -44,7 +56,7 @@ class Component extends ContainerBase<Params, Props> {
     });
 
     return (
-      <ACC.PageLoader
+      <PageLoader
         pending={combined}
         render={data =>
           this.renderPage(data.project, data.partner, data.costCategories, data.financialVirements, data.pcr)
@@ -67,41 +79,41 @@ class Component extends ContainerBase<Params, Props> {
         createDto<CostCategoryVirementDto>({}),
     }));
     return (
-      <ACC.Page backLink={this.getBackLink()} pageTitle={<ACC.Projects.Title {...project} />}>
-        <ACC.Section title={partner.name}>
+      <Page backLink={this.getBackLink()} pageTitle={<Title {...project} />}>
+        <Section title={partner.name}>
           {this.renderReasoning(project, pcr)}
           <VirementTable.Table qa="partnerVirements" data={data}>
             <VirementTable.String
               qa="costCategory"
               header={x => x.financialVirementLabels.costCategoryName}
               value={x => x.costCategory.name}
-              footer={<ACC.Content value={x => x.financialVirementLabels.partnerTotals} />}
+              footer={<Content value={x => x.financialVirementLabels.partnerTotals} />}
             />
             <VirementTable.Currency
               qa="originalEligibleCosts"
               header={x => x.financialVirementLabels.costCategoryOriginalEligibleCosts}
               value={x => x.virement.originalEligibleCosts}
-              footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts} />}
+              footer={<Currency value={financialVirements.originalEligibleCosts} />}
             />
             <VirementTable.Currency
               qa="newEligibleCosts"
               header={x => x.financialVirementLabels.costCategoryNewEligibleCosts}
               value={x => x.virement.newEligibleCosts}
-              footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts} />}
+              footer={<Currency value={financialVirements.newEligibleCosts} />}
             />
             <VirementTable.Currency
               qa="difference"
               header={x => x.financialVirementLabels.costCategoryDifferenceCosts}
               value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
               footer={
-                <ACC.Renderers.Currency
+                <Currency
                   value={roundCurrency(financialVirements.newEligibleCosts - financialVirements.originalEligibleCosts)}
                 />
               }
             />
           </VirementTable.Table>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 
@@ -112,9 +124,9 @@ class Component extends ContainerBase<Params, Props> {
     if (inValidReason) return null;
 
     return (
-      <ACC.Info summary="Reasoning for the request" qa="reasoning_for_the_request">
-        <ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
-      </ACC.Info>
+      <Info summary="Reasoning for the request" qa="reasoning_for_the_request">
+        <SimpleString multiline>{pcr.reasoningComments}</SimpleString>
+      </Info>
     );
   }
 
@@ -127,15 +139,15 @@ class Component extends ContainerBase<Params, Props> {
 
     if (this.props.mode === "review") {
       return (
-        <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)}>
-          <ACC.Content value={x => x.financialVirementLabels.backToSummary} />
-        </ACC.BackLink>
+        <BackLink route={this.props.routes.pcrReviewItem.getLink(params)}>
+          <Content value={x => x.financialVirementLabels.backToSummary} />
+        </BackLink>
       );
     }
     return (
-      <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)}>
-        <ACC.Content value={x => x.financialVirementLabels.backToSummary} />
-      </ACC.BackLink>
+      <BackLink route={this.props.routes.pcrViewItem.getLink(params)}>
+        <Content value={x => x.financialVirementLabels.backToSummary} />
+      </BackLink>
     );
   }
 }

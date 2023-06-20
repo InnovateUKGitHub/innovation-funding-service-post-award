@@ -1,4 +1,4 @@
-import { LoanStatus } from "@framework/entities";
+import { LoanStatus } from "@framework/entities/loan-status";
 
 export interface LoanDto {
   amount: number;

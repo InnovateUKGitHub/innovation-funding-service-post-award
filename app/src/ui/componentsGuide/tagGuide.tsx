@@ -1,4 +1,4 @@
-import { IGuide } from "@framework/types";
+import { IGuide } from "@framework/types/IGuide";
 import { createTypedTable } from "@ui/components/table";
 import { Tag, TagTypeOptions } from "@ui/components/Tag";
 

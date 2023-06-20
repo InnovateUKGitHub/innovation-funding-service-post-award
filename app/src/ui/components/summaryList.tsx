@@ -1,10 +1,9 @@
 import React from "react";
 import cx from "classnames";
-import * as ACC from "@ui/components";
-
-import { Result } from "@ui/validation";
 import type { ContentSelector } from "@copy/type";
-import { useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks/content.hook";
+import { Result } from "@ui/validation/result";
+import { Markdown } from "./renderers/markdown";
 
 export interface SummaryListProps {
   children: React.ReactNode;
@@ -58,9 +57,7 @@ export const SummaryListItem = ({ content, action, qa, validation, label, isMark
       })}
     >
       <dt className="govuk-summary-list__key">{typeof label === "string" ? label : getContent(label)}</dt>
-      <dd className="govuk-summary-list__value">
-        {isMarkdown ? <ACC.Renderers.Markdown value={content as string} /> : content}
-      </dd>
+      <dd className="govuk-summary-list__value">{isMarkdown ? <Markdown value={content as string} /> : content}</dd>
       <dd className="govuk-summary-list__actions">{action}</dd>
     </div>
   );

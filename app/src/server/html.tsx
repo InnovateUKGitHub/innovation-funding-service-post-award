@@ -1,13 +1,12 @@
 import { HelmetData } from "react-helmet";
 import * as colour from "../ui/styles/colours";
-import { configuration } from "../server/features/common";
-
 import * as pkg from "../../package.json";
 import { execSync } from "child_process";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { PreloadedState } from "redux";
-import { Result } from "@ui/validation";
-import { IAppError } from "@framework/types";
+import { IAppError } from "@framework/types/IAppError";
+import { Result } from "@ui/validation/result";
+import { configuration } from "./features/common/config";
 
 let versionInformation = "";
 

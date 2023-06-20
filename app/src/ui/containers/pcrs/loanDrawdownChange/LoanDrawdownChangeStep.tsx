@@ -1,14 +1,20 @@
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { FinancialLoanVirementDto, PCRItemForLoanDrawdownChangeDto } from "@framework/dtos";
-import * as ACC from "@ui/components";
-import { IEditorStore, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
-import { FinancialLoanVirementDtoValidator, PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validators";
 import { getPending } from "@ui/helpers/get-pending";
 import { EditorStatus } from "@ui/constants/enums";
-import { ValidationSummary } from "@ui/components";
 import { LoanEditTable } from "./LoanEditTable";
-import { LoanFinancialVirement } from "@framework/entities";
+import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
+import { PCRItemForLoanDrawdownChangeDto } from "@framework/dtos/pcrDtos";
+import { LoanFinancialVirement } from "@framework/entities/financialVirement";
+import { createTypedForm } from "@ui/components/form";
+import { Section } from "@ui/components/layout/section";
+import { LoadingMessage } from "@ui/components/loading";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationSummary } from "@ui/components/validationSummary";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { FinancialLoanVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validators/pcrDtoValidator";
 
 type LoanDrawdownPcrStepProps = PcrStepProps<PCRItemForLoanDrawdownChangeDto, PCRLoanDrawdownChangeItemDtoValidator>;
 
@@ -18,7 +24,7 @@ interface LoanDrawnDownUi extends Omit<LoanDrawdownPcrStepProps, "onChange"> {
   onChange: (saving: boolean, dto: FinancialLoanVirementDto) => void;
 }
 
-const LoanUpdateForm = ACC.createTypedForm<LoanFinancialVirement[]>();
+const LoanUpdateForm = createTypedForm<LoanFinancialVirement[]>();
 
 /**
  * React Component for Loan Drawdown CHange
@@ -27,10 +33,10 @@ function LoanDrawdownChange({ onChange, ...props }: LoanDrawnDownUi) {
   const { isLoading, payload, isRejected, error } = getPending(props.editor);
 
   if (isRejected || error) {
-    return <ACC.Renderers.SimpleString>There was an error getting your drawdown data.</ACC.Renderers.SimpleString>;
+    return <SimpleString>There was an error getting your drawdown data.</SimpleString>;
   }
 
-  if (!payload || isLoading) return <ACC.LoadingMessage />;
+  if (!payload || isLoading) return <LoadingMessage />;
 
   const handleTableChanges = (dto: FinancialLoanVirementDto): void => {
     // Note: Mutating this value frustrating, however the whole current UI revolves around mutating this data key
@@ -46,7 +52,7 @@ function LoanDrawdownChange({ onChange, ...props }: LoanDrawnDownUi) {
   };
 
   return (
-    <ACC.Section qa="uploadFileSection">
+    <Section qa="uploadFileSection">
       <ValidationSummary validation={payload.validator} compressed={false} />
 
       <LoanUpdateForm.Form
@@ -59,7 +65,7 @@ function LoanDrawdownChange({ onChange, ...props }: LoanDrawnDownUi) {
 
         <LoanUpdateForm.Submit name="loanEdit">Continue to summary</LoanUpdateForm.Submit>
       </LoanUpdateForm.Form>
-    </ACC.Section>
+    </Section>
   );
 }
 

@@ -1,5 +1,6 @@
-import { QueryBase } from "@server/features/common";
-import { ClaimDto, IContext } from "@framework/types";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { IContext } from "@framework/types/IContext";
+import { QueryBase } from "../common/queryBase";
 import { mapClaim } from "./mapClaim";
 
 // @TODO - nullable or throw to be decided

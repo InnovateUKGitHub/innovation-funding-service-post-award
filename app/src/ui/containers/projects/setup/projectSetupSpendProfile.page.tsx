@@ -1,12 +1,24 @@
 import { useNavigate } from "react-router-dom";
-import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { ForecastDetailsDTO, PartnerDto, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { IForecastDetailsDtosValidator } from "@ui/validators";
-import { useContent } from "@ui/hooks";
+import { SpendProfileStatus } from "@framework/constants/partner";
+import { ProjectRole } from "@framework/constants/project";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { Content } from "@ui/components/content";
+import { createTypedForm, SelectOption } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { IForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { ForecastData, ForecastTable } from "@ui/components/claims/forecastTable";
+import { Title } from "@ui/components/projects/title";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: ProjectId;
@@ -14,7 +26,7 @@ export interface ProjectSetupSpendProfileParams {
 }
 
 interface Data {
-  data: Pending<ACC.Claims.ForecastData>;
+  data: Pending<ForecastData>;
   editor: Pending<IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>>;
   partnerEditor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
 }
@@ -24,7 +36,7 @@ interface Callbacks {
   onChangePartner: (dto: PartnerDto) => void;
 }
 
-const Form = ACC.createTypedForm<ForecastDetailsDTO[]>();
+const Form = createTypedForm<ForecastDetailsDTO[]>();
 class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendProfileParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({
@@ -32,34 +44,34 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
       editor: this.props.editor,
       partnerEditor: this.props.partnerEditor,
     });
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor, x.partnerEditor)} />;
+    return <PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor, x.partnerEditor)} />;
   }
   public renderContents(
-    combined: ACC.Claims.ForecastData,
+    combined: ForecastData,
     editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>,
     partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>,
   ) {
-    const readyToSubmitMessage = <ACC.Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
+    const readyToSubmitMessage = <Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
 
-    const options: ACC.SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
+    const options: SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
 
     return (
-      <ACC.Page
+      <Page
         backLink={
-          <ACC.BackLink
+          <BackLink
             route={this.props.routes.projectSetup.getLink({
               projectId: this.props.projectId,
               partnerId: this.props.partnerId,
             })}
           >
-            <ACC.Content value={x => x.pages.projectSetupSpendProfile.backLink} />
-          </ACC.BackLink>
+            <Content value={x => x.pages.projectSetupSpendProfile.backLink} />
+          </BackLink>
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...combined.project} />}
+        pageTitle={<Title {...combined.project} />}
       >
-        <ACC.Section qa="project-setup-spend-profile">
+        <Section qa="project-setup-spend-profile">
           {this.renderGuidance()}
           <Form.Form
             editor={editor}
@@ -79,7 +91,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
             <Form.Custom
               name="forecastTable"
               update={() => null}
-              value={({ onChange }) => <ACC.Claims.ForecastTable onChange={onChange} data={combined} editor={editor} />}
+              value={({ onChange }) => <ForecastTable onChange={onChange} data={combined} editor={editor} />}
             />
             <Form.Fieldset heading={x => x.pages.projectSetupSpendProfile.markAsComplete}>
               <Form.Checkboxes
@@ -94,20 +106,20 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
                 }
               />
               <Form.Submit>
-                <ACC.Content value={x => x.pages.projectSetupSpendProfile.submitButton} />
+                <Content value={x => x.pages.projectSetupSpendProfile.submitButton} />
               </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
-        </ACC.Section>
-      </ACC.Page>
+        </Section>
+      </Page>
     );
   }
 
   private renderGuidance() {
     return (
-      <ACC.Renderers.SimpleString qa="guidance">
-        <ACC.Content value={x => x.pages.projectSetupSpendProfile.guidanceMessage} />
-      </ACC.Renderers.SimpleString>
+      <SimpleString qa="guidance">
+        <Content value={x => x.pages.projectSetupSpendProfile.guidanceMessage} />
+      </SimpleString>
     );
   }
 }

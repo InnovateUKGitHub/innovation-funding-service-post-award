@@ -3,13 +3,14 @@ import { IContext } from "@framework/types/IContext";
 import { UpdateForecastParams, UpdateForecastRoute } from "@ui/containers/forecasts/updateForecast.page";
 import { ViewForecastRoute } from "@ui/containers/forecasts/viewForecast.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ForecastDetailsDTO } from "@framework/dtos";
-import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
-import { GetByIdQuery } from "../features/projects";
-import { ForecastDetailsDtosValidator } from "../../ui/validators";
-import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GetAllForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllForecastsForPartnerQuery";
+import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails/updateForecastDetailsCommand";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
+import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
+import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
 
 export class UpdateForecastFormHandler extends StandardFormHandlerBase<UpdateForecastParams, "forecastDetails"> {
   constructor() {

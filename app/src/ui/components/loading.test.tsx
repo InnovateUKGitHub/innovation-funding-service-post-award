@@ -1,10 +1,9 @@
 import { render } from "@testing-library/react";
-
 import TestBed from "@shared/TestBed";
-import { ErrorCode, LoadingStatus } from "@framework/types";
 import { Pending } from "../../shared/pending";
-import { Loader, LoadingProps, PageLoader } from ".";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
+import { LoadingStatus, ErrorCode } from "@framework/constants/enums";
+import { LoadingProps, PageLoader, Loader } from "./loading";
 
 const stubContent = {
   pages: {

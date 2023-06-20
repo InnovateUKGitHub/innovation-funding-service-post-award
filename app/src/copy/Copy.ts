@@ -1,4 +1,4 @@
-import { ProjectMonitoringLevel } from "@framework/constants";
+import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { Logger } from "@shared/developmentLogger";
 import i18next from "i18next";
 import { ContentSelectorFunctionParser } from "./ContentSelectorFunctionParser";
