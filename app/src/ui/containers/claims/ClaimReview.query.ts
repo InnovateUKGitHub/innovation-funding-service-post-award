@@ -61,6 +61,7 @@ export const claimReviewQuery = graphql`
               }
             }
             orderBy: { CreatedDate: { order: DESC } }
+            first: 2000
           ) {
             edges {
               node {
@@ -165,7 +166,7 @@ export const claimReviewQuery = graphql`
                 Acc_CostCategory__c {
                   value
                 }
-                ContentDocumentLinks {
+                ContentDocumentLinks(first: 2000) {
                   edges {
                     node {
                       LinkedEntityId {

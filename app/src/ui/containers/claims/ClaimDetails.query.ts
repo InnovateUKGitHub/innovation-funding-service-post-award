@@ -54,6 +54,7 @@ export const claimDetailsQuery = graphql`
           Acc_StatusChange__c(
             where: { Acc_Claim__r: { Acc_ProjectParticipant__c: { eq: $partnerId } } }
             orderBy: { CreatedDate: { order: DESC } }
+            first: 2000
           ) {
             edges {
               node {
@@ -151,7 +152,7 @@ export const claimDetailsQuery = graphql`
                 Acc_CostCategory__c {
                   value
                 }
-                ContentDocumentLinks {
+                ContentDocumentLinks(first: 2000) {
                   edges {
                     node {
                       LinkedEntityId {

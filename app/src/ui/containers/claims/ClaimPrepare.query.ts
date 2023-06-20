@@ -70,6 +70,7 @@ export const claimPrepareQuery = graphql`
           Acc_StatusChange__c(
             where: { Acc_Claim__r: { Acc_ProjectParticipant__c: { eq: $partnerId } } }
             orderBy: { CreatedDate: { order: DESC } }
+            first: 2000
           ) {
             edges {
               node {
@@ -171,7 +172,7 @@ export const claimPrepareQuery = graphql`
                 Acc_CostCategory__c {
                   value
                 }
-                ContentDocumentLinks {
+                ContentDocumentLinks(first: 2000) {
                   edges {
                     node {
                       LinkedEntityId {
@@ -235,6 +236,7 @@ export const claimPrepareQuery = graphql`
           }
           Acc_ProjectParticipant__c(
             where: { and: [{ Acc_ProjectId__c: { eq: $projectId } }, { Id: { eq: $partnerId } }] }
+            first: 2000
           ) {
             edges {
               node {
