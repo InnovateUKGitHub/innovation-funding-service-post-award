@@ -9,7 +9,7 @@ exports[`AccordionItem @renders with isOpen when false 1`] = `
     class="govuk-accordion__section-header"
   >
     <h2
-      class="govuk-accordion__section-heading"
+      class="govuk-heading-l govuk-accordion__section-heading"
     >
       <button
         aria-controls="accordion-default-content-stub-qa"
@@ -79,7 +79,7 @@ exports[`AccordionItem @renders with isOpen when true 1`] = `
     class="govuk-accordion__section-header"
   >
     <h2
-      class="govuk-accordion__section-heading"
+      class="govuk-heading-l govuk-accordion__section-heading"
     >
       <button
         aria-controls="accordion-default-content-stub-qa"

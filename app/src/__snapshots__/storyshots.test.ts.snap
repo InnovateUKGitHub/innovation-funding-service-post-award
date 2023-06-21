@@ -17,7 +17,7 @@ exports[`Storyshots GOV.UK Components/Accordion Multiple accordions 1`] = `
         className="govuk-accordion__section-header"
       >
         <h2
-          className="govuk-accordion__section-heading"
+          className="govuk-heading-l govuk-accordion__section-heading"
         >
           <span
             className="govuk-accordion__section-button govuk-heading-m"
@@ -47,7 +47,7 @@ exports[`Storyshots GOV.UK Components/Accordion Multiple accordions 1`] = `
         className="govuk-accordion__section-header"
       >
         <h2
-          className="govuk-accordion__section-heading"
+          className="govuk-heading-l govuk-accordion__section-heading"
         >
           <span
             className="govuk-accordion__section-button govuk-heading-m"
@@ -90,7 +90,7 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
         className="govuk-accordion__section-header"
       >
         <h2
-          className="govuk-accordion__section-heading"
+          className="govuk-heading-l govuk-accordion__section-heading"
         >
           <span
             className="govuk-accordion__section-button govuk-heading-m"
@@ -120,7 +120,7 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
         className="govuk-accordion__section-header"
       >
         <h2
-          className="govuk-accordion__section-heading"
+          className="govuk-heading-l govuk-accordion__section-heading"
         >
           <span
             className="govuk-accordion__section-button govuk-heading-m"
@@ -150,7 +150,7 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
         className="govuk-accordion__section-header"
       >
         <h2
-          className="govuk-accordion__section-heading"
+          className="govuk-heading-l govuk-accordion__section-heading"
         >
           <span
             className="govuk-accordion__section-button govuk-heading-m"
@@ -180,7 +180,7 @@ exports[`Storyshots GOV.UK Components/Accordion Primary 1`] = `
         className="govuk-accordion__section-header"
       >
         <h2
-          className="govuk-accordion__section-heading"
+          className="govuk-heading-l govuk-accordion__section-heading"
         >
           <span
             className="govuk-accordion__section-button govuk-heading-m"
@@ -223,7 +223,7 @@ exports[`Storyshots GOV.UK Components/Accordion Single accordion 1`] = `
         className="govuk-accordion__section-header"
       >
         <h2
-          className="govuk-accordion__section-heading"
+          className="govuk-heading-l govuk-accordion__section-heading"
         >
           <span
             className="govuk-accordion__section-button govuk-heading-m"
@@ -754,7 +754,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
   >
     <li>
       <h2
-        className="app-task-list__section"
+        className="govuk-heading-l app-task-list__section"
       >
         <span
           className="app-task-list__section-number"
@@ -826,7 +826,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
     </li>
     <li>
       <h2
-        className="app-task-list__section"
+        className="govuk-heading-l app-task-list__section"
       >
         <span
           className="app-task-list__section-number"
@@ -874,7 +874,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
   >
     <li>
       <h2
-        className="app-task-list__section"
+        className="govuk-heading-l app-task-list__section"
       >
         <span
           className="app-task-list__section-number"
