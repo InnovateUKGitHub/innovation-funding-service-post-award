@@ -641,14 +641,14 @@
         "html": "Create monitoring report",
         "display": "Monitoring report"
       },
-      "backLink": "Back to monitoring reports"
+      "backLink": "Back to Monitoring Reports"
     },
     "monitoringReportsDelete": {
       "title": {
         "html": "Delete monitoring report",
         "display": "Monitoring report"
       },
-      "backLink": "Back to monitoring reports",
+      "backLink": "Back to Monitoring Reports",
       "buttonDeleteReport": "Delete report"
     },
     "monitoringReportsSummary": {
@@ -672,7 +672,7 @@
           "display": "Monitoring report"
         }
       },
-      "backLink": "Back to monitoring reports",
+      "backLink": "Back to Monitoring Reports",
       "linkBackToStep": "Back to {{step}}"
     },
     "monitoringReportsWorkflowEdit": {

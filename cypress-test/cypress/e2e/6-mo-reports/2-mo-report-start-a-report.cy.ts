@@ -29,7 +29,7 @@ describe("MO report > can start a new report", () => {
   it("Should have the project title", shouldShowProjectTitle);
 
   it("Should have a back link", () => {
-    cy.backLink("Back to monitoring reports");
+    cy.backLink("Back to Monitoring Reports");
   });
 
   it("Should have section content with guidance messaging", reportGuidance);

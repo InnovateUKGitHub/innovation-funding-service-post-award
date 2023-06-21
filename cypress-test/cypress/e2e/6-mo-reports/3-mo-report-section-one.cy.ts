@@ -41,7 +41,7 @@ describe("MO report > section 1 - can continue a report", () => {
   });
 
   it("Should have a back link", () => {
-    cy.backLink("Back to monitoring reports");
+    cy.backLink("Back to Monitoring Reports");
   });
 
   it("Should show the project title", shouldShowProjectTitle);
