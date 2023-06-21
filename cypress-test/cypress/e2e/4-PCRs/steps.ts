@@ -886,6 +886,10 @@ export const ktpUpdateVirement = () => {
     cy.getByAriaLabel(input).clear().type("0");
   });
   cy.wait(500);
+  cy.get("td").contains("Partner totals").siblings().contains("£40,000.00");
+  ["Associate employment", "Travel and subsistence", "Consumables", "Associate development"].forEach(row => {
+    cy.get("td").contains(row).siblings().contains("-£10,000.00");
+  });
 };
 
 export const saveAndReturn = () => {
