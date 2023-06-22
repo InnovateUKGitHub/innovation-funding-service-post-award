@@ -5,7 +5,7 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { formatDate } from "@framework/util/dateHelpers";
 import { getFileSize } from "@framework/util/files";
 import { useMounted } from "@ui/features/has-mounted/Mounted";
-import { useStores } from "@ui/redux/storesProvider";
+import { useClientConfig } from "../providers/ClientConfigProvider";
 
 const filterItems = <T extends Pick<DocumentSummaryDto, "id" | "dateCreated" | "fileSize">>(
   valueToSearch: string,
@@ -38,8 +38,7 @@ export function useDocumentSearch<T extends Pick<DocumentSummaryDto, "id" | "dat
   disableSearch: boolean,
   originalDocuments: T[],
 ) {
-  const stores = useStores();
-  const config = stores.config.getConfig();
+  const config = useClientConfig();
   const { isClient } = useMounted();
 
   const [filterValue, setFilterValue] = useState<string>("");

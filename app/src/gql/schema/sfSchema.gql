@@ -891,6 +891,9 @@ type Acc_MonitoringAnswer__c {
   Acc_ProjectPeriodStartDateHelper__c: DateValue
   LastViewedDate: DateTimeValue
   Acc_Question__c: IDValue
+
+  """parentRelationship"""
+  Acc_Question__r: Acc_MonitoringQuestion__c
   SystemModstamp: DateTimeValue
   CreatedDate: DateTimeValue
   LastActivityDate: DateValue
@@ -955,6 +958,7 @@ input Acc_MonitoringAnswer__c_Filter {
   Acc_ProjectPeriodStartDateHelper__c: DateOperators
   LastViewedDate: DateTimeOperators
   Acc_Question__c: IdOperators
+  Acc_Question__r: Acc_MonitoringQuestion__c_Filter
   SystemModstamp: DateTimeOperators
   CreatedDate: DateTimeOperators
   LastActivityDate: DateOperators
@@ -991,6 +995,7 @@ input Acc_MonitoringAnswer__c_GroupBy {
   Acc_ProjectPeriodStartDateHelper__c: GroupByClause
   LastViewedDate: GroupByDateFunction
   Acc_Question__c: GroupByClause
+  Acc_Question__r: Acc_MonitoringQuestion__c_GroupBy
   SystemModstamp: GroupByDateFunction
   CreatedDate: GroupByDateFunction
   LastActivityDate: GroupByClause
@@ -1029,6 +1034,7 @@ input Acc_MonitoringAnswer__c_OrderBy {
   Acc_ProjectPeriodStartDateHelper__c: OrderByClause
   LastViewedDate: OrderByClause
   Acc_Question__c: OrderByClause
+  Acc_Question__r: Acc_MonitoringQuestion__c_OrderBy
   SystemModstamp: OrderByClause
   CreatedDate: OrderByClause
   LastActivityDate: OrderByClause
@@ -1039,6 +1045,128 @@ input Acc_MonitoringAnswer__c_OrderBy {
   LastModifiedBy: User_OrderBy
   Acc_ProjectPeriodNumber__c: OrderByClause
   Acc_MonitoringReportStatus__c: OrderByClause
+}
+
+type Acc_MonitoringQuestion__c {
+  LastModifiedDate: DateTimeValue
+  Acc_ActiveFlag__c: BooleanValue
+  IsDeleted: BooleanValue
+  Acc_ScoredQuestion__c: BooleanValue
+  Acc_QuestionName__c: StringValue
+  Acc_QuestionScore__c: DoubleValue
+  LastViewedDate: DateTimeValue
+  LastReferencedDate: DateTimeValue
+  Name: StringValue
+  SystemModstamp: DateTimeValue
+  Acc_QuestionDescription__c: LongTextAreaValue
+  OwnerId: IDValue
+  CreatedById: IDValue
+
+  """parentRelationship"""
+  CreatedBy: User
+  CreatedDate: DateTimeValue
+  Acc_QuestionText__c: StringValue
+  LastModifiedById: IDValue
+
+  """parentRelationship"""
+  LastModifiedBy: User
+  Acc_DisplayOrder__c: DoubleValue
+
+  """childRelationship"""
+  Monitoring_Reports__r(orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+
+  """childRelationship"""
+  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type Acc_MonitoringQuestion__cConnection {
+  edges: [Acc_MonitoringQuestion__cEdge]
+  totalCount: Int!
+}
+
+type Acc_MonitoringQuestion__cEdge {
+  node: Acc_MonitoringQuestion__c
+  cursor: String!
+}
+
+input Acc_MonitoringQuestion__c_Filter {
+  LastModifiedDate: DateTimeOperators
+  Acc_ActiveFlag__c: BooleanOperators
+  IsDeleted: BooleanOperators
+  Acc_ScoredQuestion__c: BooleanOperators
+  Acc_QuestionName__c: StringOperators
+  Acc_QuestionScore__c: DoubleOperators
+  LastViewedDate: DateTimeOperators
+  LastReferencedDate: DateTimeOperators
+  Name: StringOperators
+  SystemModstamp: DateTimeOperators
+  Acc_QuestionDescription__c: LongTextAreaOperators
+  OwnerId: IdOperators
+  CreatedById: IdOperators
+  CreatedBy: User_Filter
+  CreatedDate: DateTimeOperators
+  Acc_QuestionText__c: StringOperators
+  Id: IdOperators
+  LastModifiedById: IdOperators
+  LastModifiedBy: User_Filter
+  Acc_DisplayOrder__c: DoubleOperators
+  and: [Acc_MonitoringQuestion__c_Filter]
+  or: [Acc_MonitoringQuestion__c_Filter]
+  not: Acc_MonitoringQuestion__c_Filter
+}
+
+input Acc_MonitoringQuestion__c_GroupBy {
+  LastModifiedDate: GroupByDateFunction
+  Acc_ActiveFlag__c: GroupByClause
+  IsDeleted: GroupByClause
+  Acc_ScoredQuestion__c: GroupByClause
+  Acc_QuestionName__c: GroupByClause
+  LastViewedDate: GroupByDateFunction
+  LastReferencedDate: GroupByDateFunction
+  SystemModstamp: GroupByDateFunction
+  OwnerId: GroupByClause
+  CreatedById: GroupByClause
+  CreatedBy: User_GroupBy
+  CloneSourceId: GroupByClause
+  CreatedDate: GroupByDateFunction
+  Acc_QuestionText__c: GroupByClause
+  Id: GroupByClause
+  LastModifiedById: GroupByClause
+  LastModifiedBy: User_GroupBy
+  type: GroupByType
+}
+
+input Acc_MonitoringQuestion__c_OrderBy {
+  LastModifiedDate: OrderByClause
+  Acc_ActiveFlag__c: OrderByClause
+  IsDeleted: OrderByClause
+  Acc_ScoredQuestion__c: OrderByClause
+  Acc_QuestionName__c: OrderByClause
+  Acc_QuestionScore__c: OrderByClause
+  LastViewedDate: OrderByClause
+  LastReferencedDate: OrderByClause
+  Name: OrderByClause
+  SystemModstamp: OrderByClause
+  Acc_QuestionDescription__c: OrderByClause
+  OwnerId: OrderByClause
+  CreatedById: OrderByClause
+  CreatedBy: User_OrderBy
+  CreatedDate: OrderByClause
+  Acc_QuestionText__c: OrderByClause
+  Id: OrderByClause
+  LastModifiedById: OrderByClause
+  LastModifiedBy: User_OrderBy
+  Acc_DisplayOrder__c: OrderByClause
 }
 
 type Acc_Prepayment__c {
@@ -5288,29 +5416,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  NEXT_WEEK
-  NEXT_YEAR
-  LAST_QUARTER
-  LAST_WEEK
-  LAST_90_DAYS
-  THIS_YEAR
-  LAST_FISCAL_QUARTER
-  THIS_WEEK
-  YESTERDAY
-  NEXT_FISCAL_YEAR
-  LAST_YEAR
-  THIS_FISCAL_QUARTER
-  LAST_FISCAL_YEAR
-  THIS_QUARTER
   TOMORROW
-  THIS_FISCAL_YEAR
-  NEXT_MONTH
-  THIS_MONTH
-  TODAY
-  NEXT_QUARTER
+  THIS_FISCAL_QUARTER
   LAST_MONTH
-  NEXT_90_DAYS
+  NEXT_YEAR
+  LAST_FISCAL_YEAR
   NEXT_FISCAL_QUARTER
+  NEXT_QUARTER
+  THIS_WEEK
+  LAST_90_DAYS
+  TODAY
+  LAST_YEAR
+  NEXT_WEEK
+  NEXT_90_DAYS
+  LAST_QUARTER
+  NEXT_FISCAL_YEAR
+  THIS_FISCAL_YEAR
+  LAST_WEEK
+  THIS_MONTH
+  THIS_YEAR
+  NEXT_MONTH
+  LAST_FISCAL_QUARTER
+  YESTERDAY
+  THIS_QUARTER
 }
 
 input DateOperators {
@@ -6382,6 +6510,9 @@ type RecordQuery {
 
   """Issues a query for the specified record type."""
   Acc_MonitoringAnswer__c(orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+
+  """Issues a query for the specified record type."""
+  Acc_MonitoringQuestion__c(orderBy: Acc_MonitoringQuestion__c_OrderBy, where: Acc_MonitoringQuestion__c_Filter, after: String, first: Int): Acc_MonitoringQuestion__cConnection
 
   """Issues a query for the specified record type."""
   Acc_Prepayment__c(orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection

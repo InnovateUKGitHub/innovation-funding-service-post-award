@@ -5,15 +5,14 @@ import { Page } from "../layout/page";
 import { Section } from "../layout/section";
 import { SimpleString } from "@ui/components/renderers/simpleString";
 import { Content } from "../content";
-import { useStores } from "@ui/redux/storesProvider";
 import { ExternalLink } from "../renderers/externalLink";
 import { H2 } from "../typography/Heading.variants";
+import { useClientConfig } from "../providers/ClientConfigProvider";
 
 export type GenericFallbackErrorProps = ErrorPayload["params"];
 
 export const GenericFallbackError = ({ errorStack, errorMessage }: GenericFallbackErrorProps) => {
-  const stores = useStores();
-  const config = stores.config.getConfig();
+  const config = useClientConfig();
 
   const goToDashboardLink = <ExternalLink href="/projects/dashboard"> </ExternalLink>;
 

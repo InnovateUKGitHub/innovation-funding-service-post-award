@@ -1,8 +1,8 @@
 import { useMounted } from "@ui/features/has-mounted/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
 import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
-import { useStores } from "@ui/redux/storesProvider";
 import { useMemo } from "react";
+import { useClientConfig } from "../providers/ClientConfigProvider";
 import { GovWidthContainer } from "./GovWidthContainer";
 import { Logo } from "./Logo";
 
@@ -16,8 +16,7 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
   const { getContent } = useContent();
   const { setRef } = useGovFrontend("Header");
 
-  const stores = useStores();
-  const config = stores.config.getConfig();
+  const config = useClientConfig();
 
   const menuItems = useMemo(
     () =>

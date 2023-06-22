@@ -22,22 +22,25 @@ import { IAppError } from "@framework/types/IAppError";
 import { RootState, rootReducer } from "@ui/redux/reducers/rootReducer";
 import { Result } from "@ui/validation/result";
 import { initaliseAction } from "@ui/redux/actions/initalise";
+import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
+import { IClientConfig } from "src/types/IClientConfig";
 
 // get servers store to initialise client store
+const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
 const formErrors = processDto(window.__PRELOADED_FORM_ERRORS__) as unknown as Result[] | undefined;
 const apiErrors = (processDto(window.__PRELOADED_API_ERRORS__) || null) as unknown as IAppError | null;
-Logger.setDefaultOptions({ logLevel: parseLogLevel(serverState.config.logLevel) });
+Logger.setDefaultOptions({ logLevel: parseLogLevel(clientConfig.logLevel) });
 
 const middleware = composeWithDevTools(setupClientMiddleware());
 const store = createStore(rootReducer, serverState, middleware);
 
 // Create a IFS-PA (not Redux) store.
 const getStores = () => {
-  return createStores(
-    () => store.getState(),
-    action => store.dispatch(action as AnyAction),
-  );
+  return createStores({
+    getState: () => store.getState(),
+    dispatch: action => store.dispatch(action as AnyAction),
+  });
 };
 
 // make sure middleware and reducers have run
@@ -67,17 +70,19 @@ const Client = () => {
 
   return (
     <Provider store={store}>
-      <ApiErrorContextProvider value={apiErrors}>
-        <FormErrorContextProvider value={formErrors}>
-          <BrowserRouter>
-            <StoresProvider value={getStores()}>
-              <ModalProvider value={new ModalRegister()}>
-                <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-              </ModalProvider>
-            </StoresProvider>
-          </BrowserRouter>
-        </FormErrorContextProvider>
-      </ApiErrorContextProvider>
+      <ClientConfigProvider config={clientConfig}>
+        <ApiErrorContextProvider value={apiErrors}>
+          <FormErrorContextProvider value={formErrors}>
+            <BrowserRouter>
+              <StoresProvider value={getStores()}>
+                <ModalProvider value={new ModalRegister()}>
+                  <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
+                </ModalProvider>
+              </StoresProvider>
+            </BrowserRouter>
+          </FormErrorContextProvider>
+        </ApiErrorContextProvider>
+      </ClientConfigProvider>
     </Provider>
   );
 };

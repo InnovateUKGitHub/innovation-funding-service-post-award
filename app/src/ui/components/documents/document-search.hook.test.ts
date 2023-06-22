@@ -36,17 +36,7 @@ describe("useDocumentSearch()", () => {
         `(
           "when document length is $name threshold",
           ({ documents, shown }: { documents: DocumentSummaryDto[]; shown: boolean }) => {
-            const { result } = setup(false, documents, {
-              overlayGraph: {
-                data: {
-                  clientConfig: {
-                    features: {
-                      searchDocsMinThreshold: 1,
-                    },
-                  },
-                },
-              },
-            });
+            const { result } = setup(false, documents);
 
             expect(result.current.displaySearch).toEqual(shown);
           },

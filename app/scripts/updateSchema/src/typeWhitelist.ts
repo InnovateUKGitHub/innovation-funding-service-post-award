@@ -41,6 +41,7 @@ const objectsToKeep = [
   "Acc_CostCategory__c",
   "Acc_Virements__c",
   "Acc_Prepayment__c",
+  "Acc_MonitoringQuestion__c",
   "Acc_MonitoringAnswer__c",
   "Acc_ProjectParticipant__c",
   "Acc_IFSSpendProfile",

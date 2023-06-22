@@ -3,7 +3,6 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IAppError } from "@framework/types/IAppError";
 import { IContext } from "@framework/types/IContext";
 import { IClientUser } from "@framework/types/IUser";
-import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
 import { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment } from "@gql/ServerGraphQLEnvironment";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { createErrorPayload } from "@shared/create-error-payload";
@@ -18,7 +17,7 @@ import { initaliseAction } from "@ui/redux/actions/initalise";
 import { setupInitialState } from "@ui/redux/initialState";
 import { setupServerMiddleware } from "@ui/redux/middleware";
 import { ModalProvider, ModalRegister } from "@ui/redux/modalProvider";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { IClientConfig } from "src/types/IClientConfig";
 import { rootReducer, RootState } from "@ui/redux/reducers/rootReducer";
 import { createStores, IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { matchRoute } from "@ui/routing/matchRoute";
@@ -33,12 +32,12 @@ import { Provider } from "react-redux";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { StaticRouter } from "react-router-dom/server";
 import { AnyAction, createStore, Store } from "redux";
-import { loadQuery } from "relay-hooks";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
 import { getErrorStatus } from "./errorHandlers";
 import { ForbiddenError, FormHandlerError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { renderHtml } from "./html";
+import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 
 interface IServerApp {
   requestUrl: string;
@@ -48,24 +47,36 @@ interface IServerApp {
   relayEnvironment: RelayModernEnvironment;
   formError?: Result[];
   apiError?: IAppError;
+  clientConfig: IClientConfig;
 }
 
 const logger = new Logger("HTML Render");
 
-const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment, formError, apiError }: IServerApp) => (
-  <ApiErrorContextProvider value={apiError}>
-    <FormErrorContextProvider value={formError}>
-      <Provider store={store}>
-        <StaticRouter location={requestUrl}>
-          <StoresProvider value={stores}>
-            <ModalProvider value={modalRegister}>
-              <App store={store} relayEnvironment={relayEnvironment} />
-            </ModalProvider>
-          </StoresProvider>
-        </StaticRouter>
-      </Provider>
-    </FormErrorContextProvider>
-  </ApiErrorContextProvider>
+const ServerApp = ({
+  requestUrl,
+  store,
+  stores,
+  modalRegister,
+  relayEnvironment,
+  formError,
+  apiError,
+  clientConfig,
+}: IServerApp) => (
+  <ClientConfigProvider config={clientConfig}>
+    <ApiErrorContextProvider value={apiError}>
+      <FormErrorContextProvider value={formError}>
+        <Provider store={store}>
+          <StaticRouter location={requestUrl}>
+            <StoresProvider value={stores}>
+              <ModalProvider value={modalRegister}>
+                <App store={store} relayEnvironment={relayEnvironment} />
+              </ModalProvider>
+            </StoresProvider>
+          </StaticRouter>
+        </Provider>
+      </FormErrorContextProvider>
+    </ApiErrorContextProvider>
+  </ClientConfigProvider>
 );
 
 /**
@@ -81,11 +92,7 @@ const serverRender =
     const clientConfig = getClientConfig(context);
     const modalRegister = new ModalRegister();
     const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
-    const preloadedQuery = loadQuery();
     let isErrorPage = false;
-
-    // Pre-load site configuration options
-    await preloadedQuery.next(ServerGraphQLEnvironment, clientConfigQueryQuery, {});
 
     try {
       let auth: Authorisation;
@@ -115,10 +122,10 @@ const serverRender =
       const initialState = setupInitialState(user, clientConfig);
       const store = createStore(rootReducer, initialState, middleware);
 
-      const stores = createStores(
-        () => store.getState(),
-        action => process.nextTick(() => store.dispatch(action as AnyAction)),
-      );
+      const stores = createStores({
+        getState: () => store.getState(),
+        dispatch: action => process.nextTick(() => store.dispatch(action as AnyAction)),
+      });
 
       let renderUrl = req.url;
 
@@ -181,6 +188,7 @@ const serverRender =
           stores,
           modalRegister,
           relayEnvironment: ServerGraphQLEnvironment,
+          clientConfig,
         });
       });
 
@@ -199,6 +207,7 @@ const serverRender =
           relayData,
           formError,
           apiError,
+          clientConfig,
         }),
       );
     } catch (renderError: unknown) {
@@ -248,6 +257,7 @@ function renderApp(props: {
   relayData?: SSRCache;
   formError?: Result[] | undefined;
   apiError?: IAppError | undefined;
+  clientConfig: IClientConfig;
 }): string {
   const state = props.store.getState();
   const html = renderToString(<ServerApp {...props} />);
@@ -262,13 +272,12 @@ function renderApp(props: {
     relayData: props.relayData,
     formError: props.formError,
     apiError: props.apiError,
+    clientConfig: props.clientConfig,
   });
 }
 
 /**
- * gets the client config
- *
- * @deprecated GraphQL Migration. See ACC-9043.
+ * Pick the ClientConfig from Context.
  */
 function getClientConfig(context: IContext): IClientConfig {
   return {

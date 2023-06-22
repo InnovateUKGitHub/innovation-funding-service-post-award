@@ -7,6 +7,7 @@ import { PreloadedState } from "redux";
 import { IAppError } from "@framework/types/IAppError";
 import { Result } from "@ui/validation/result";
 import { configuration } from "./features/common/config";
+import { IClientConfig } from "src/types/IClientConfig";
 
 let versionInformation = "";
 
@@ -56,6 +57,8 @@ try {
   `;
 } catch {}
 
+const injectJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
+
 /**
  * The template into which the React App is injected. It includes the meta tags, links and google tag manager
  */
@@ -67,6 +70,7 @@ export function renderHtml({
   relayData = [],
   formError,
   apiError,
+  clientConfig,
 }: {
   HelmetInstance: HelmetData;
   html: string;
@@ -75,6 +79,7 @@ export function renderHtml({
   relayData?: SSRCache;
   formError: Result[] | undefined;
   apiError: IAppError | undefined;
+  clientConfig: IClientConfig;
 }) {
   const titleMetaTag = HelmetInstance.title.toString();
 
@@ -116,14 +121,11 @@ export function renderHtml({
             setTimeout(function () {
               document.body.style.visibility = "visible";
             }, 10);
-            window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
-            window.__RELAY_BOOTSTRAP_DATA__ = ${JSON.stringify(relayData).replace(/</g, "\\u003c")}
-            window.__PRELOADED_FORM_ERRORS__ = ${
-              formError ? JSON.stringify(formError).replace(/</g, "\\u003c") : undefined
-            }
-            window.__PRELOADED_API_ERRORS__ = ${
-              apiError ? JSON.stringify(apiError).replace(/</g, "\\u003c") : undefined
-            }
+            window.__CLIENT_CONFIG__ = ${injectJson(clientConfig)}
+            window.__PRELOADED_STATE__ = ${injectJson(preloadedState)}
+            window.__RELAY_BOOTSTRAP_DATA__ = ${injectJson(relayData)}
+            window.__PRELOADED_FORM_ERRORS__ = ${formError ? injectJson(formError) : undefined}
+            window.__PRELOADED_API_ERRORS__ = ${apiError ? injectJson(apiError) : undefined}
           </script>
 
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${

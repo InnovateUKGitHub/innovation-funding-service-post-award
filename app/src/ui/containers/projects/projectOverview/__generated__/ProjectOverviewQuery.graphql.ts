@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0e333392c5646f6f5751d2fa0bcacca1>>
+ * @generated SignedSource<<446093634b15f23eac2fa10a7a7645c7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,9 +13,6 @@ export type ProjectOverviewQuery$variables = {
   projectId: string;
 };
 export type ProjectOverviewQuery$data = {
-  readonly clientConfig: {
-    readonly ssoEnabled: boolean;
-  };
   readonly currentUser: {
     readonly email: string | null;
   };
@@ -185,24 +182,6 @@ v6 = [
         "args": null,
         "kind": "ScalarField",
         "name": "email",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  },
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "ClientConfigObject",
-    "kind": "LinkedField",
-    "name": "clientConfig",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "ssoEnabled",
         "storageKey": null
       }
     ],
@@ -643,16 +622,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "2dcdf24e66cea7c54802083839bcb72a",
+    "cacheID": "e88352011f7581114e8bfa9896d7e06e",
     "id": null,
     "metadata": {},
     "name": "ProjectOverviewQuery",
     "operationKind": "query",
-    "text": "query ProjectOverviewQuery(\n  $projectId: ID!\n) {\n  currentUser {\n    email\n  }\n  clientConfig {\n    ssoEnabled\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_GOLTotalCostAwarded__c {\n                value\n              }\n              Acc_TotalProjectCosts__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_PCRsUnderQuery__c {\n                value\n              }\n              Acc_PCRsForReview__c {\n                value\n              }\n              Acc_ClaimsForReview__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_TotalApprovedCosts__c {\n                      value\n                    }\n                    Acc_NewForecastNeeded__c {\n                      value\n                    }\n                    Acc_TrackingClaims__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectOverviewQuery(\n  $projectId: ID!\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_GOLTotalCostAwarded__c {\n                value\n              }\n              Acc_TotalProjectCosts__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_PCRsUnderQuery__c {\n                value\n              }\n              Acc_PCRsForReview__c {\n                value\n              }\n              Acc_ClaimsForReview__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_TotalApprovedCosts__c {\n                      value\n                    }\n                    Acc_NewForecastNeeded__c {\n                      value\n                    }\n                    Acc_TrackingClaims__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ed53c66ebc103a563f1f363e8f06bbf8";
+(node as any).hash = "682f0deff04a9e15b87f86889b0d2c0e";
 
 export default node;

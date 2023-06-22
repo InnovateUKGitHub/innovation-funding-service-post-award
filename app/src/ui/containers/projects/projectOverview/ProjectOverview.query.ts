@@ -5,9 +5,6 @@ export const projectOverviewQuery = graphql`
     currentUser {
       email
     }
-    clientConfig {
-      ssoEnabled
-    }
     salesforce {
       uiapi {
         query {

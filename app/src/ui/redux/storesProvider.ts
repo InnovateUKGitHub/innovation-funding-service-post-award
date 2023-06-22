@@ -29,7 +29,13 @@ import { ProjectDocumentsStore } from "./stores/projectDocumentsStore";
 import { ProjectsStore } from "./stores/projectsStore";
 import { UserStore } from "./stores/userStore";
 
-export const createStores = (getState: () => RootState, dispatch: (action: RootActionsOrThunk) => void) => {
+export const createStores = ({
+  getState,
+  dispatch,
+}: {
+  getState: () => RootState;
+  dispatch: (action: RootActionsOrThunk) => void;
+}) => {
   const partnerDocuments = new PartnerDocumentsStore(getState, dispatch);
   const projects = new ProjectsStore(getState, dispatch);
   const partners = new PartnersStore(partnerDocuments, getState, dispatch);

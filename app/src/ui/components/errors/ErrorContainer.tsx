@@ -5,10 +5,10 @@ import { useInitContent } from "@ui/features/use-initial-content";
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./error.config";
 import { FallbackProps } from "react-error-boundary";
 import { IAppError } from "@framework/types/IAppError";
-import { useStores } from "@ui/redux/storesProvider";
 import { FullHeight } from "../FullHeight";
 import { GovWidthContainer } from "../layout/GovWidthContainer";
 import { Header } from "../layout/header";
+import { useClientConfig } from "../providers/ClientConfigProvider";
 
 export type ErrorContainerProps = ErrorPayload["params"] & { from?: string };
 
@@ -30,8 +30,7 @@ export const ErrorContainer = (props: ErrorContainerProps) => {
 export function ErrorBoundaryFallback({ error }: FallbackProps) {
   const errorPayload = createErrorPayload(error as unknown as IAppError, false);
   const content = useInitContent();
-  const stores = useStores();
-  const config = stores.config.getConfig();
+  const config = useClientConfig();
 
   return (
     <ContentProvider value={content}>

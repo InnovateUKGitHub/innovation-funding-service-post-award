@@ -1,8 +1,8 @@
 import { useContent } from "@ui/hooks/content.hook";
-import { useStores } from "@ui/redux/storesProvider";
 import bytes from "bytes";
 import { Content } from "../content";
 import { Info } from "../layout/info";
+import { useClientConfig } from "../providers/ClientConfigProvider";
 
 /**
  * A "Document Guidance" details pane, which describes what a user can/is allowed to upload.
@@ -11,8 +11,7 @@ import { Info } from "../layout/info";
  */
 const DocumentGuidance = () => {
   const { getContent } = useContent();
-  const stores = useStores();
-  const config = stores.config.getConfig();
+  const config = useClientConfig();
 
   return (
     <Info summary={getContent(x => x.components.documentGuidance.header)}>

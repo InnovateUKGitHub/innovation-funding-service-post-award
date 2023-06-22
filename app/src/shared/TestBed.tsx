@@ -2,12 +2,10 @@ import { createMemoryHistory } from "history";
 import _merge from "lodash.merge";
 import { Router } from "react-router-dom";
 import { Copy } from "@copy/Copy";
-import { getStubGraphQLEnvironment, stubGraphQLGraph } from "@gql/StubGraphQLEnvironment";
 import { mountedContext } from "@ui/features/has-mounted/Mounted";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { IStores, StoresProvider } from "@ui/redux/storesProvider";
-import { RelayEnvironmentProvider } from "relay-hooks";
 
 export type TestBedStore = Partial<IStores>;
 
@@ -24,7 +22,6 @@ export interface ITestBedProps {
    * in to enable building.
    */
   shouldOmitRouterProvider?: boolean;
-  overlayGraph?: RecursivePartial<typeof stubGraphQLGraph>;
 }
 
 /**
@@ -39,7 +36,6 @@ export function TestBed({
   children,
   pageTitle = "stub-displayTitle",
   shouldOmitRouterProvider,
-  overlayGraph,
 }: ITestBedProps) {
   const stubStores = {
     users: {
@@ -60,15 +56,13 @@ export function TestBed({
   const history = createMemoryHistory();
 
   const Providers = (
-    <RelayEnvironmentProvider environment={getStubGraphQLEnvironment(overlayGraph)}>
-      <mountedContext.Provider value={testBedMountState}>
-        <PageTitleProvider title={pageTitle}>
-          <StoresProvider value={storesValue}>
-            <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
-          </StoresProvider>
-        </PageTitleProvider>
-      </mountedContext.Provider>
-    </RelayEnvironmentProvider>
+    <mountedContext.Provider value={testBedMountState}>
+      <PageTitleProvider title={pageTitle}>
+        <StoresProvider value={storesValue}>
+          <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
+        </StoresProvider>
+      </PageTitleProvider>
+    </mountedContext.Provider>
   );
 
   return shouldOmitRouterProvider ? (

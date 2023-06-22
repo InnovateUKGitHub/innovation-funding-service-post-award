@@ -130,12 +130,5 @@ export const projectDashboardQuery = graphql`
         }
       }
     }
-    clientConfig {
-      ifsRoot
-      ssoEnabled
-      options {
-        numberOfProjectsToSearch
-      }
-    }
   }
 `;

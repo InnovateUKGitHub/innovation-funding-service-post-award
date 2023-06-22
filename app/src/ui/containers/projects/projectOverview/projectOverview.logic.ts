@@ -11,6 +11,7 @@ import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 type ProjectGql = GQL.NodeSelector<ProjectOverviewQuery$data, "Acc_Project__c">;
 
@@ -87,6 +88,7 @@ export const isPartnerWithdrawn = (roles: SfRoles, partners: Partner[]) => {
 };
 
 export const useProjectOverviewData = (projectId: string) => {
+  const clientConfig = useClientConfig();
   const data = useLazyLoadQuery<ProjectOverviewQuery>(projectOverviewQuery, {
     projectId,
   });
@@ -147,7 +149,7 @@ export const useProjectOverviewData = (projectId: string) => {
   };
 
   const accessControlOptions: IAccessControlOptions = {
-    ssoEnabled: data?.clientConfig?.ssoEnabled ?? false,
+    ssoEnabled: clientConfig.ssoEnabled,
   };
 
   return {

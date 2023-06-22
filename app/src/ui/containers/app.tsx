@@ -32,6 +32,7 @@ import { useModal } from "@ui/redux/modalProvider";
 import { RoutesProvider } from "@ui/redux/routesProvider";
 import { useStores } from "@ui/redux/storesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
+import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -58,7 +59,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const content = useInitContent(params);
   const modalRegister = useModal();
   const auth = stores.users.getCurrentUserAuthorisation();
-  const config = stores.config.getConfig();
+  const config = useClientConfig();
   const messages = stores.messages.messages();
 
   // Note: We treat no invocation as valid
