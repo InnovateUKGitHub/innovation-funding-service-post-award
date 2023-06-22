@@ -72,10 +72,10 @@ const PeriodStepComponent = (props: Props & BaseProps & MonitoringReportPrepareP
 const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
-  const { project } = useMonitoringReportPeriodStepQuery(props.projectId);
   const combined = Pending.combine({
     editor: stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id),
   });
+  const { project } = useMonitoringReportPeriodStepQuery(props.projectId);
   return (
     <PageLoader
       pending={combined}
