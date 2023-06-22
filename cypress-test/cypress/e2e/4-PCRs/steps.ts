@@ -688,12 +688,28 @@ export const otherFundingTable = () => {
   cy.tableCell("Total other funding");
 };
 
+export const addSourceOfFundingValidation = () => {
+  cy.getByQA("add-fund").contains("Add another source of funding").click().wait(500);
+  cy.submitButton("Save and continue").click();
+  ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
+    cy.getByQA("validation-summary").contains(message);
+  });
+  ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
+    cy.get("p").contains(message);
+  });
+  cy.get("#item_0_value").type("error").wait(500);
+  cy.getByQA("validation-summary").contains("Funding amount must be a number");
+  cy.get("p").contains("Funding amount must be a number");
+  cy.get("#item_0_date_month").type("error");
+  cy.getByQA("validation-summary").contains("Date secured must be a date");
+  cy.get("p").contains("Date secured must be a date");
+};
+
 export const addSourceOfFunding = () => {
-  cy.getByQA("add-fund").contains("Add another source of funding").click();
-  cy.get("#item_0_description").type("Public");
-  cy.get("#item_0_date_month").type("12");
-  cy.get("#item_0_date_year").type("2022");
-  cy.get("#item_0_value").type("50000");
+  cy.get("#item_0_description").clear().type("Public");
+  cy.get("#item_0_date_month").clear().type("12");
+  cy.get("#item_0_date_year").clear().type("2022");
+  cy.get("#item_0_value").clear().type("50000");
   cy.wait(500);
 };
 
@@ -1066,4 +1082,29 @@ export const clearAndEnterValidPersonInfo = () => {
   cy.getByLabel("Phone number").clear().type("01234567890");
   cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
   cy.getByLabel("Email").clear().type("Joseph.dredd@mc1.comtest");
+};
+
+export const newInfoValidation = () => {
+  cy.submitButton("Save and continue").click();
+  cy.getByQA("validation-summary").contains("Select a project role");
+  cy.getByQA("validation-summary").contains("Select a project type");
+  cy.get("p").contains("Select a project role.");
+  cy.get("p").contains("Select a project type.");
+};
+
+export const displayLocationWithGuidance = () => {
+  cy.get("h2").contains("Project location");
+  cy.getByQA("field-projectLocation").contains("Indicate where the majority");
+};
+
+export const locationRadioButtons = () => {
+  cy.getByLabel("Inside the United Kingdom").click();
+  cy.getByLabel("Outside the United Kingdom").click();
+  cy.getByLabel("Inside the United Kingdom").click();
+};
+
+export const townAndPostcodeFields = () => {
+  cy.get("h2").contains("Name of town or city");
+  cy.get("h2").contains("Postcode");
+  cy.getByQA("field-projectPostcode").contains("If this is not available,");
 };

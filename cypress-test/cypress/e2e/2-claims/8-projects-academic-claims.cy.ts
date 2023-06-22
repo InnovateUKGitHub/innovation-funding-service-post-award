@@ -7,6 +7,7 @@ import {
   correctTableHeaders,
   academicCosts,
   updateAcademicCosts,
+  academicForecastNavigate,
 } from "./steps";
 
 describe("claims > edit claims as FC", () => {
@@ -58,13 +59,7 @@ describe("claims > edit claims as FC", () => {
     cy.get("a").contains("Remove").click();
   });
 
-  it("Should navigate to the claims forecast page", () => {
-    cy.backLink("Back to claims").click();
-    cy.get("h1").contains("Costs to be claimed");
-    cy.submitButton("Continue to claims documents").click();
-    cy.get("h1").contains("Claim documents");
-    cy.get("a").contains("Continue to update forecast").click();
-  });
+  it("Should navigate to the claims forecast page", academicForecastNavigate);
 
   it("Should display the correct cost category forecast and update figures", updateAcademicCosts);
 });

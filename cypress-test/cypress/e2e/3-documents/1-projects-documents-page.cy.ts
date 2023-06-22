@@ -38,6 +38,11 @@ describe("Project Documents page", () => {
 
   it("Should have file description drop-down", selectFileDescription);
 
+  it("Should validate when uploading without choosing a file", () => {
+    cy.submitButton("Upload").click();
+    cy.getByQA("validation-summary").contains("Choose a file to upload");
+  });
+
   /**
    * Upload to IUK and MO Only
    */

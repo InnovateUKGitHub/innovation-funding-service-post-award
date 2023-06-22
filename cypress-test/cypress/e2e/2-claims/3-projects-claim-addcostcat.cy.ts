@@ -12,6 +12,7 @@ import {
   shouldShowProjectTitle,
   standardComments,
   shouldShowCostCatTable,
+  validateLineItem,
 } from "./steps";
 
 describe("claims > Editing a claim by accessing cost categories", () => {
@@ -49,10 +50,17 @@ describe("claims > Editing a claim by accessing cost categories", () => {
     cy.get("span.currency").contains("£1,000.00");
   });
 
+  it("Should type over the £1000 figure with an invalid number and check for validation", validateLineItem);
+
   it("Should display relevant messaging surrounding Supporting documents", evidenceRequiredMessage);
 
   it("Should navigate to files upload area", () => {
     cy.submitButton("Upload and remove documents").click();
+  });
+
+  it("Should validate doc uploads by clicking Upload without selecting a document", () => {
+    cy.submitButton("Upload documents").click();
+    cy.getByQA("validation-summary").contains("Choose a file to upload");
   });
 
   it("Should allow a file to be uploaded", allowFileUpload);

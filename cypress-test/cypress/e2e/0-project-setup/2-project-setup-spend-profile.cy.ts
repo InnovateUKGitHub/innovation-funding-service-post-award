@@ -1,6 +1,6 @@
 import { spendTableEdit } from "common/spend-table-edit";
 import { visitApp } from "../../common/visit";
-import { displayForecastTable, shouldShowProjectTitle } from "./steps";
+import { displayForecastTable, shouldShowProjectTitle, spendProfileValidation } from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -30,6 +30,8 @@ describe("Project setup > Set spend profile", () => {
   it("Should display the forecast table", displayForecastTable);
 
   it("Should edit the forecast table and calculate the new totals correctly", spendTableEdit);
+
+  it("Should enter an invalid character and display correct validation", spendProfileValidation);
 
   it("Should Mark as complete and have a 'Save and return to project setup' button", () => {
     cy.get("h2").contains("Mark as complete");

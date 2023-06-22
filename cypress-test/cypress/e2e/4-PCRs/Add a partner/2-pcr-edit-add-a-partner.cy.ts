@@ -7,6 +7,7 @@ import {
   organisationRadios,
   saveContinueSaveSummary,
   projectRoleRadios,
+  newInfoValidation,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -44,6 +45,11 @@ describe("PCR > Add partner > Edit PCR", () => {
   it("Should have a validation message stating 'You cannot change this information...", () => {
     cy.getByQA("validation-message-content").contains("You cannot change this information after you continue.");
   });
+
+  it(
+    "Should validate proceeding by clicking 'Save and continue' without making any selections on screen",
+    newInfoValidation,
+  );
 
   it("Should have a subheading called 'Project role' and allow radio buttons to be selected", projectRoleRadios);
 

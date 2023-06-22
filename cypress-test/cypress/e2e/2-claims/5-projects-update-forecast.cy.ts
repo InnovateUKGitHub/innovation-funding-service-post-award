@@ -6,6 +6,7 @@ import {
   forecastHeaders,
   savedFromPrev,
   shouldShowProjectTitle,
+  validateForecast,
 } from "./steps";
 
 const pm = "james.black@euimeabs.test";
@@ -50,6 +51,8 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
    * Please note below that as projects progress through different periods, the below period categories may need to be adjusted accordingly when testing.
    * If using a project that's currently in 'Period 2' you would need to update 'Period 3' and so on. Cannot update forecasts for period you're in.
    */
+  it("Should validate when null value is entered as a forecast", validateForecast);
+
   it("Should accept input and calculate the figures accordingly", () => {
     cy.getByAriaLabel("Labour Period 2").clear().type("1000");
     cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,000.00");

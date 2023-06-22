@@ -118,3 +118,11 @@ export const bankDetailsValidation = () => {
   cy.get("p").contains("Account number cannot be empty");
   cy.reload();
 };
+
+export const spendProfileValidation = () => {
+  cy.getByAriaLabel("Labour Period 1").clear();
+  cy.wait(500);
+  cy.submitButton("Save and return to project setup").click();
+  cy.getByQA("validation-summary").contains("Forecast is required");
+  cy.getByAriaLabel("Labour Period 1").type("0");
+};

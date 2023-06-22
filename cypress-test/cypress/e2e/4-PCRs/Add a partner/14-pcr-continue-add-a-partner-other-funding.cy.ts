@@ -10,6 +10,7 @@ import {
   fundingLevelPage,
   uploadPartnerInfo,
   otherFundingOptions,
+  addSourceOfFundingValidation,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -67,7 +68,9 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.submitButton("Save and return to summary");
   });
 
-  it("Should click 'Add another source of funding' and enter information", addSourceOfFunding);
+  it("Should click 'Add another source of funding' and then validate fields.", addSourceOfFundingValidation);
+
+  it("Should now clear and enter valid information into the fields", addSourceOfFunding);
 
   it("Should reflect the value entered in the table", () => {
     cy.tableCell("£50,000.00");

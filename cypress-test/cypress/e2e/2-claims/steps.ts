@@ -187,6 +187,8 @@ export const selectFileDescription = () => {
 };
 
 export const claimsDocUpload = () => {
+  cy.uploadButton("Upload documents").click();
+  cy.getByQA("validation-summary").contains("Choose a file to upload");
   cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
   cy.uploadButton("Upload documents").click();
 };
@@ -649,6 +651,27 @@ export const removeLineItems = () => {
       cy.get("a").contains("Remove").click();
     }
   });
+};
+
+export const validateLineItem = () => {
+  cy.getByAriaLabel("value of claim line item 1").clear().type("gsdfadsf").wait(500);
+  cy.submitButton("Save and return to claims").click();
+  cy.getByQA("validation-summary").contains("Costs must be a number");
+  cy.getByAriaLabel("value of claim line item 1").clear().type("1000").wait(500);
+};
+
+export const validateForecast = () => {
+  cy.getByAriaLabel("Labour Period 2").clear().wait(500);
+  cy.getByQA("button_save-qa").click();
+  cy.getByQA("validation-summary").contains("Forecast is required");
+};
+
+export const academicForecastNavigate = () => {
+  cy.backLink("Back to claims").click();
+  cy.get("h1").contains("Costs to be claimed");
+  cy.submitButton("Continue to claims documents").click();
+  cy.get("h1").contains("Claim documents");
+  cy.get("a").contains("Continue to update forecast").click();
 };
 
 export const drgClaimTwo = () => {
