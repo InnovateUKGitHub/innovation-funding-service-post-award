@@ -3,19 +3,16 @@ import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { claimDetailsQuery } from "./ClaimDetails.query";
 import { ClaimDetailsQuery } from "./__generated__/ClaimDetailsQuery.graphql";
-import {
-  DocumentSummaryNode,
-  mapToClaimDetailsDtoArray,
-  mapToClaimDtoArray,
-  mapToClaimStatusChangeDtoArray,
-  mapToForecastDetailsDtoArray,
-  mapToGolCostDtoArray,
-  mapToPartnerDto,
-  mapToProjectDocumentSummaryDtoArray,
-  mapToProjectDto,
-  mapToRequiredSortedCostCategoryDtoArray,
-} from "@gql/dtoMapper";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
+import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
+import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
+import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
+import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
+import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusChange";
 
 export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
   const data = useLazyLoadQuery<ClaimDetailsQuery>(

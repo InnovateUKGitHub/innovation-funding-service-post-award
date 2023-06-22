@@ -1,6 +1,6 @@
-import { ClaimStatusChangeDto } from "@framework/dtos";
+import { ClaimStatusChangeDto } from "@framework/dtos/claimDto";
 import { mapToClaimStatusLabel, mapToClaimStatus, mapClaimStatusValueToLabel } from "@framework/mappers/claimStatus";
-import { Clock } from "@framework/util";
+import { Clock } from "@framework/util/clock";
 
 const clock = new Clock();
 

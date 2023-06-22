@@ -1,40 +1,31 @@
-import {
-  ClaimDto,
-  ClaimStatus,
-  ClaimStatusChangeDto,
-  CostsSummaryForPeriodDto,
-  DocumentSummaryDto,
-  getAuthRoles,
-  ILinkInfo,
-  PartnerDto,
-  ProjectDto,
-  ProjectRole,
-} from "@framework/types";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import {
-  Page,
-  BackLink,
-  Section,
-  Content,
-  Projects,
-  ValidationMessage,
-  TypedDetails,
-  SectionPanel,
-  DualDetails,
-  Accordion,
-  AccordionItem,
-  DocumentView,
-  Renderers,
-  Logs,
-} from "@ui/components";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { ClaimPeriodDate } from "@ui/components/claims/claimPeriodDate";
+import { ClaimReviewTable } from "@ui/components/claims/claimReviewTable";
+import { ClaimTable } from "@ui/components/claims/claimTable";
+import { ForecastDataForTableLayout, ForecastTable } from "@ui/components/claims/forecastTable";
+import { Content } from "@ui/components/content";
+import { TypedDetails, DualDetails } from "@ui/components/details";
+import { DocumentView } from "@ui/components/documents/DocumentView";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { SectionPanel } from "@ui/components/layout/sectionPanel";
+import { BackLink } from "@ui/components/links";
+import { Logs } from "@ui/components/logs";
+import { Title } from "@ui/components/projects/title";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { ValidationMessage } from "@ui/components/validationMessage";
 import { BaseProps, defineRoute } from "../containerBase";
-import {
-  ClaimPeriodDate,
-  ClaimTable,
-  ClaimReviewTable,
-  ForecastTable,
-  ForecastDataForTableLayout,
-} from "@ui/components/claims";
 import { useClaimReviewPageData } from "./claimReview.logic";
 
 interface Params {
@@ -113,7 +104,7 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
           <Content value={x => x.pages.claimDetails.backLink} />
         </BackLink>
       }
-      pageTitle={<Projects.Title title={data.project.title} projectNumber={data.project.projectNumber} />}
+      pageTitle={<Title title={data.project.title} projectNumber={data.project.projectNumber} />}
       partnerStatus={data.partner.partnerStatus}
     >
       {/* If the partner is not withdrawn, and it's the final claim, show message. */}
@@ -254,7 +245,7 @@ const CommentsFromFC = ({
   if (isMo && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
     return (
       <Section title={x => x.pages.claimDetails.sectionTitleComments} qa="additionalComments">
-        <Renderers.SimpleString multiline>{claim.comments}</Renderers.SimpleString>
+        <SimpleString multiline>{claim.comments}</SimpleString>
       </Section>
     );
   }

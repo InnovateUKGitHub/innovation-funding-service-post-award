@@ -3,18 +3,16 @@ import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { claimPrepareQuery } from "./ClaimPrepare.query";
 import { ClaimPrepareQuery } from "./__generated__/ClaimPrepareQuery.graphql";
-import {
-  mapToClaimDetailsDtoArray,
-  mapToClaimDtoArray,
-  mapToClaimOverrides,
-  mapToClaimStatusChangeDtoArray,
-  mapToForecastDetailsDtoArray,
-  mapToGolCostDtoArray,
-  mapToPartnerDto,
-  mapToProjectDto,
-  mapToRequiredSortedCostCategoryDtoArray,
-} from "@gql/dtoMapper";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
+import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
+import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
+import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
+import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusChange";
+import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 
 export const useClaimPreparePageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
   const data = useLazyLoadQuery<ClaimPrepareQuery>(

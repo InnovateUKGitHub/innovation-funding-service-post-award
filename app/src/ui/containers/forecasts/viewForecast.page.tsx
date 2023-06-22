@@ -14,7 +14,7 @@ import { Messages } from "@ui/components/renderers/messages";
 import { Percentage } from "@ui/components/renderers/percentage";
 import { SimpleString } from "@ui/components/renderers/simpleString";
 import { ValidationMessage } from "@ui/components/validationMessage";
-import { PrepareClaimRoute } from "../claims/prepare.page";
+import { PrepareClaimRoute } from "../claims/claimPrepare.page";
 import { BaseProps, defineRoute } from "../containerBase";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 import { Data, useViewForecastData } from "./viewForecast.logic";

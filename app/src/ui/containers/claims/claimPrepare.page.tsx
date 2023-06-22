@@ -1,39 +1,34 @@
 import { useNavigate } from "react-router-dom";
-
-import { useStores } from "@ui/redux";
-import {
-  createTypedForm,
-  Page,
-  PageLoader,
-  Content,
-  BackLink,
-  Projects,
-  ValidationMessage,
-  Section,
-  Claims,
-  Accordion,
-  AccordionItem,
-  Logs,
-} from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import {
-  ClaimDto,
-  ClaimOverrideRateDto,
-  ClaimStatusChangeDto,
-  CostsSummaryForPeriodDto,
-  getAuthRoles,
-  ILinkInfo,
-  PartnerDto,
-  ProjectDto,
-  ProjectRole,
-} from "@framework/types";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
-import { AwardRateOverridesMessage } from "@ui/components/claims";
 import { useClaimPreparePageData } from "./claimPrepare.logic";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
+import { Content } from "@ui/components/content";
+import { createTypedForm } from "@ui/components/form";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Logs } from "@ui/components/logs";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { useStores } from "@ui/redux/storesProvider";
+import { ClaimPeriodDate } from "@ui/components/claims/claimPeriodDate";
+import { Title } from "@ui/components/projects/title";
+import { ClaimTable } from "@ui/components/claims/claimTable";
 
 export interface PrepareClaimParams {
   projectId: ProjectId;
@@ -82,13 +77,13 @@ const PrepareComponent = (props: BaseProps & Callbacks & Data & PrepareClaimPara
       }
       error={props.editor.error}
       validator={props.editor.validator}
-      pageTitle={<Projects.Title projectNumber={props.project.projectNumber} title={props.project.title} />}
+      pageTitle={<Title projectNumber={props.project.projectNumber} title={props.project.title} />}
     >
       <AwardRateOverridesMessage claimOverrides={props.claimOverrides} isNonFec={props.project.isNonFec} />
       {props.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
 
-      <Section title={<Claims.ClaimPeriodDate claim={props.claim} />}>
-        <Claims.ClaimTable
+      <Section title={<ClaimPeriodDate claim={props.claim} />}>
+        <ClaimTable
           {...props}
           validation={props.editor.validator.totalCosts}
           getLink={costCategoryId =>

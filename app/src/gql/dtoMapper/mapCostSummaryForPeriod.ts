@@ -1,4 +1,7 @@
-import { ClaimDetailsDto, CostsSummaryForPeriodDto, ForecastDetailsDTO, GOLCostDto } from "@framework/dtos";
+import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
 
 // on Acc_CostCategory__C
 type CostsSummaryForPeriodNode = Readonly<Partial<{

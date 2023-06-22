@@ -8,8 +8,8 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetClaimDetailsQuery } from "@server/features/claimDetails/getClaimDetailsQuery";
 import { ClaimDetailDocumentsRoute } from "@ui/containers/claims/claimDetailDocuments.page";
 import { EditClaimDetailsParams, EditClaimLineItemsRoute } from "@ui/containers/claims/editClaimLineItems.page";
-import { PrepareClaimRoute } from "@ui/containers/claims/prepare.page";
 import { StandardFormHandlerBase, IFormButton, IFormBody } from "./formHandlerBase";
+import { PrepareClaimRoute } from "@ui/containers/claims/claimPrepare.page";
 
 export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditClaimDetailsParams, "claimDetail"> {
   constructor() {

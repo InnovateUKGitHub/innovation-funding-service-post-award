@@ -1,55 +1,51 @@
 import { useNavigate } from "react-router-dom";
-import {
-  Accordion,
-  AccordionItem,
-  BackLink,
-  Claims,
-  Content,
-  createTypedForm,
-  DocumentEdit,
-  DocumentGuidance,
-  FormBuilder,
-  Logs,
-  Page,
-  PageLoader,
-  Projects,
-  Renderers,
-  Section,
-  SelectOption,
-  UL,
-  ValidationMessage,
-} from "@ui/components";
-import { IEditorStore, useStores } from "@ui/redux";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { claimCommentsMaxLength, ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import {
-  allowedClaimDocuments,
-  ClaimDetailsSummaryDto,
-  ClaimDto,
-  ClaimStatus,
-  ClaimStatusChangeDto,
-  CostsSummaryForPeriodDto,
-  ForecastDetailsDTO,
-  getAuthRoles,
-  GOLCostDto,
-  PartnerDto,
-  ProjectDtoGql,
-  ProjectRole,
-} from "@framework/types";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { useContent } from "@ui/hooks";
-import { useMounted } from "@ui/features";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { DropdownOption } from "@ui/components";
-import { EnumDocuments } from "./components";
-import { Markdown } from "@ui/components/renderers";
-import { ReceivedStatus } from "@framework/entities";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { useClaimReviewPageData } from "./claimReview.logic";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { allowedClaimDocuments } from "@framework/constants/documentDescription";
+import { ProjectRole } from "@framework/constants/project";
+import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
+import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDtoGql } from "@framework/dtos/projectDto";
+import { ReceivedStatus } from "@framework/entities/received-status";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { Accordion } from "@ui/components/accordion/Accordion";
+import { AccordionItem } from "@ui/components/accordion/AccordionItem";
+import { Content } from "@ui/components/content";
+import { DocumentGuidance } from "@ui/components/documents/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/documents/DocumentView";
+import { createTypedForm, SelectOption, DropdownOption, FormBuilder } from "@ui/components/form";
+import { UL } from "@ui/components/layout/list";
+import { Page } from "@ui/components/layout/page";
+import { Section } from "@ui/components/layout/section";
+import { BackLink } from "@ui/components/links";
+import { PageLoader } from "@ui/components/loading";
+import { Logs } from "@ui/components/logs";
+import { ValidationMessage } from "@ui/components/validationMessage";
+import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useContent } from "@ui/hooks/content.hook";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useStores } from "@ui/redux/storesProvider";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { EnumDocuments } from "./components/EnumDocuments";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import { Title } from "@ui/components/projects/title";
+import { Messages } from "@ui/components/renderers/messages";
+import { ClaimPeriodDate } from "@ui/components/claims/claimPeriodDate";
+import { ClaimReviewTable } from "@ui/components/claims/claimReviewTable";
+import { ForecastTable } from "@ui/components/claims/forecastTable";
+import { Markdown } from "@ui/components/renderers/markdown";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -171,32 +167,32 @@ const ReviewPage = (props: ReviewClaimParams & ReviewProps & BaseProps) => {
       backLink={backLinkElement}
       error={props.editor.error}
       validator={[props.editor.validator, props.documentsEditor.validator]}
-      pageTitle={<Projects.Title projectNumber={props.project.projectNumber} title={props.project.title} />}
+      pageTitle={<Title projectNumber={props.project.projectNumber} title={props.project.title} />}
     >
-      <Renderers.Messages messages={props.messages} />
+      <Messages messages={props.messages} />
 
       {props.claim.isFinalClaim && <ValidationMessage messageType="info" message={props.content.finalClaim} />}
 
       {props.project.competitionName && (
-        <Renderers.SimpleString className="margin-bottom-none">
+        <SimpleString className="margin-bottom-none">
           <span className="govuk-!-font-weight-bold">{props.content.competitionName}:</span>{" "}
           {props.project.competitionName}
-        </Renderers.SimpleString>
+        </SimpleString>
       )}
 
-      <Renderers.SimpleString>
+      <SimpleString>
         <span className="govuk-!-font-weight-bold">{props.content.competitionType}:</span>{" "}
         {props.project.competitionType}
-      </Renderers.SimpleString>
+      </SimpleString>
 
       {isMo && isCombinationOfSBRI && (
         <>
-          <Renderers.SimpleString>
+          <SimpleString>
             <Content value={x => x.claimsMessages.milestoneContractAchievement} />
-          </Renderers.SimpleString>
-          <Renderers.SimpleString>
+          </SimpleString>
+          <SimpleString>
             <Content value={x => x.claimsMessages.milestoneToDo} />
-          </Renderers.SimpleString>
+          </SimpleString>
           <UL>
             <li>
               <Content value={x => x.claimsMessages.milestoneBullet1} />
@@ -214,8 +210,8 @@ const ReviewPage = (props: ReviewClaimParams & ReviewProps & BaseProps) => {
         </>
       )}
 
-      <Section title={<Claims.ClaimPeriodDate claim={props.claim} partner={props.partner} />}>
-        <Claims.ClaimReviewTable
+      <Section title={<ClaimPeriodDate claim={props.claim} partner={props.partner} />}>
+        <ClaimReviewTable
           {...props}
           validation={props.editor.validator.totalCosts}
           getLink={costCategoryId => getClaimLineItemLink(props, costCategoryId)}
@@ -225,7 +221,7 @@ const ReviewPage = (props: ReviewClaimParams & ReviewProps & BaseProps) => {
       <Section>
         <Accordion>
           <AccordionItem qa="forecast-accordion" title={props.content.accordionTitleForecast}>
-            <Claims.ForecastTable
+            <ForecastTable
               hideValidation
               data={{
                 ...props.forecastData,
@@ -256,7 +252,7 @@ const ReviewPage = (props: ReviewClaimParams & ReviewProps & BaseProps) => {
                     qa="projectDocumentUpload"
                   >
                     <UploadForm.Fieldset>
-                      <Renderers.Markdown value={props.content.uploadInstruction} />
+                      <Markdown value={props.content.uploadInstruction} />
 
                       <DocumentGuidance />
 
@@ -369,9 +365,9 @@ const getMOReminderMessage = (competitionType: string, content: ReviewProps["con
   const reminderByCompetition = `${competitionType.toLowerCase()}-reminder`;
 
   return (
-    <Renderers.SimpleString key={reminderByCompetition} qa={reminderByCompetition}>
+    <SimpleString key={reminderByCompetition} qa={reminderByCompetition}>
       {content.monitoringReportReminder}
-    </Renderers.SimpleString>
+    </SimpleString>
   );
 };
 
@@ -388,9 +384,7 @@ const renderFormHiddenSection = (
       {getSubmitButtonLabel(editor, content)}
     </Form.Submit>
   );
-  const declarationElement = (
-    <Renderers.SimpleString key="declaration">{content.claimReviewDeclaration}</Renderers.SimpleString>
-  );
+  const declarationElement = <SimpleString key="declaration">{content.claimReviewDeclaration}</SimpleString>;
 
   // Note: <Fieldset> has not got got support for React.Fragment
   return [

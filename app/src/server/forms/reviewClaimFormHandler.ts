@@ -7,8 +7,8 @@ import { ClaimDto } from "@framework/dtos/claimDto";
 import { GetClaim } from "@server/features/claims/getClaim";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { AllClaimsDashboardRoute } from "@ui/containers/claims/allClaimsDashboard/allClaimsDashboard.page";
-import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/claims/review.page";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/claims/claimReview.page";
 
 export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, "claim"> {
   constructor() {

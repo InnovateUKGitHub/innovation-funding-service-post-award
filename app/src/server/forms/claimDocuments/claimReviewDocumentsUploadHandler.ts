@@ -6,8 +6,8 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "../formHandlerBase";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { configuration } from "@server/features/common/config";
-import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/claims/review.page";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { ReviewClaimParams, ReviewClaimRoute } from "@ui/containers/claims/claimReview.page";
 
 export class ClaimReviewDocumentsUploadHandler extends MultipleFileFormHandlerBase<
   ReviewClaimParams,

@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { CopyNamespaces } from "@copy/data";
-import { useReviewContent } from "./review.page";
+import { useReviewContent } from "./claimReview.page";
 
 const stubContent = {
   documentMessages: {

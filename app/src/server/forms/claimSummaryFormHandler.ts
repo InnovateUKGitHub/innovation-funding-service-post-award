@@ -12,8 +12,8 @@ import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
 import { AllClaimsDashboardRoute } from "@ui/containers/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ClaimsDashboardRoute } from "@ui/containers/claims/dashboard.page";
-import { PrepareClaimParams } from "@ui/containers/claims/prepare.page";
 import { ClaimSummaryRoute } from "@ui/containers/claims/summary.page";
+import { PrepareClaimParams } from "@ui/containers/claims/claimPrepare.page";
 
 export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {

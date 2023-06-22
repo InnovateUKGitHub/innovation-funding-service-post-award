@@ -6,8 +6,8 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
 import { configuration } from "@server/features/common/config";
 import { ClaimDocumentsPageParams } from "@ui/containers/claims/claimDocuments.page";
-import { ReviewClaimRoute } from "@ui/containers/claims/review.page";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { ReviewClaimRoute } from "@ui/containers/claims/claimReview.page";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;

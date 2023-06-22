@@ -1,11 +1,11 @@
 import { AwardRateOverrideTarget, AwardRateOverrideType } from "@framework/constants/awardRateOverride";
 import {
   CostCategoryClaimOverrideRate,
-  CostCategoryClaimOverrideRates,
-  NoClaimOverrideRates,
   PeriodClaimOverrideRate,
+  CostCategoryClaimOverrideRates,
   PeriodClaimOverrideRates,
-} from "@framework/dtos";
+  NoClaimOverrideRates,
+} from "@framework/dtos/claimOverrideRate";
 
 // NAME costCategory type = "Total Cost Category"
 // NAME period type = "Total Project Period"

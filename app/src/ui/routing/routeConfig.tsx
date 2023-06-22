@@ -1,14 +1,14 @@
 import { BroadcastPageRoute } from "@ui/containers/broadcasts/broadcast.page";
 import { AllClaimsDashboardRoute } from "@ui/containers/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ClaimDetailDocumentsRoute } from "@ui/containers/claims/claimDetailDocuments.page";
+import { ClaimsDetailsRoute } from "@ui/containers/claims/claimDetails.page";
 import { ClaimDocumentsRoute } from "@ui/containers/claims/claimDocuments.page";
 import { ClaimForecastRoute } from "@ui/containers/claims/claimForecast.page";
 import { ClaimLineItemsRoute, ReviewClaimLineItemsRoute } from "@ui/containers/claims/claimLineItems.page";
+import { PrepareClaimRoute } from "@ui/containers/claims/claimPrepare.page";
+import { ReviewClaimRoute } from "@ui/containers/claims/claimReview.page";
 import { ClaimsDashboardRoute } from "@ui/containers/claims/dashboard.page";
-import { ClaimsDetailsRoute } from "@ui/containers/claims/details.page";
 import { EditClaimLineItemsRoute } from "@ui/containers/claims/editClaimLineItems.page";
-import { PrepareClaimRoute } from "@ui/containers/claims/prepare.page";
-import { ReviewClaimRoute } from "@ui/containers/claims/review.page";
 import { ClaimSummaryRoute } from "@ui/containers/claims/summary.page";
 import { DeveloperHomePage } from "@ui/containers/developer/home.page";
 import { DeveloperPageCrasherPage } from "@ui/containers/developer/PageCrasher.page";

@@ -12,7 +12,7 @@ import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProje
 import { AllClaimsDashboardRoute } from "@ui/containers/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ClaimDocumentsRoute } from "@ui/containers/claims/claimDocuments.page";
 import { ClaimsDashboardRoute } from "@ui/containers/claims/dashboard.page";
-import { PrepareClaimParams, PrepareClaimRoute } from "@ui/containers/claims/prepare.page";
+import { PrepareClaimParams, PrepareClaimRoute } from "@ui/containers/claims/claimPrepare.page";
 
 export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {
