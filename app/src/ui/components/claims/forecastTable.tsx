@@ -549,7 +549,7 @@ export class ForecastTable extends React.Component<Props> {
     const differenceText = <Content value={x => x.components.forecastTable.differenceHeader} />;
     const periodText = <Content value={x => x.components.forecastTable.periodHeader} />;
     const iarDueText = <Content value={x => x.components.forecastTable.iarDueHeader} />;
-    const noDataText = <Content value={x => x.components.forecastTable.noDataText} />;
+    const noDataText = <Content value={x => x.components.table.noDataText} />;
     const costCategoriesText = <Content value={x => x.components.forecastTable.costCategoriesHeader} />;
 
     return [

@@ -18,6 +18,7 @@ import { Logs } from "@ui/components/logs";
 import { Fieldset } from "@ui/rhf-components/Fieldset";
 import { Button } from "@ui/rhf-components/Button";
 import { ValidationMessage } from "@ui/components/validationMessage";
+import { ClaimRetentionMessage } from "@ui/components/claims/ClaimRetentionMessage";
 
 export interface PrepareClaimParams {
   projectId: ProjectId;
@@ -45,6 +46,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
       }
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
     >
+      <ClaimRetentionMessage claim={data.claim} partner={data.partner} />
       <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
       {data.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
 

@@ -50,6 +50,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
         comments: null,
         isAuthor: false,
         lineItems: [], // @TODO move client-side logic here?
+        grantPaidToDate: 0,
         impactManagementParticipation: ImpactManagementParticipation.Unknown,
       };
     }

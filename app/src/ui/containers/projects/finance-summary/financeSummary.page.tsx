@@ -13,6 +13,8 @@ import { ShortDateRange } from "@ui/components/renderers/date";
 import { Percentage } from "@ui/components/renderers/percentage";
 import { createTypedTable } from "@ui/components/table";
 import { Title } from "@ui/components/projects/title";
+import { AccessibilityText } from "@ui/components/renderers/accessibilityText";
+import { useContent } from "@ui/hooks/content.hook";
 
 type Props = {
   projectId: ProjectId;
@@ -120,6 +122,12 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
               />
 
               <FinanceSummaryTable.Percentage qa="ClaimCap" header={content.capLimitLabel} value={x => x.capLimit} />
+
+              <FinanceSummaryTable.Currency
+                qa="CapLimitDeferredAmount"
+                header={content.capLimitDeferredAmountLabel}
+                value={x => x.capLimitDeferredAmount}
+              />
             </FinanceSummaryTable.Table>
           </Section>
           <Section title={content.accountantsReportTitle}>

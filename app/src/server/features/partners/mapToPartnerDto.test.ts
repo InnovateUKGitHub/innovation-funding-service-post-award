@@ -49,6 +49,7 @@ describe("mapToPartnerDto", () => {
     totalParticipantCosts: 186000,
     totalApprovedCosts: 37000,
     capLimit: 50,
+    capLimitDeferredAmount: 180000,
     awardRate: 50,
     totalPaidCosts: 123,
     totalFutureForecastsForParticipant: 48820.8,

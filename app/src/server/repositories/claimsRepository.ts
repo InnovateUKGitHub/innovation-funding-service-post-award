@@ -33,6 +33,7 @@ export interface ISalesforceClaim {
   Acc_ReasonForDifference__c: string | null;
   Acc_IARRequired__c: boolean;
   Acc_FinalClaim__c: boolean;
+  Acc_Grant_Paid_To_Date__c: number;
   Impact_Management_Participation__c: string;
 }
 

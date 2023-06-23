@@ -78,6 +78,7 @@ export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
     percentageParticipantCostsClaimed: 19.892473118279568,
     awardRate: 50,
     capLimit: 50,
+    capLimitDeferredAmount: 180_000,
     totalPaidCosts: null,
     totalFutureForecastsForParticipants: 48820.8,
     totalCostsSubmitted: 37000,

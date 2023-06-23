@@ -69,6 +69,9 @@ const financeSummaryQuery = graphql`
                       Acc_Cap_Limit__c {
                         value
                       }
+                      Acc_CapLimitDeferredAmount__c {
+                        value
+                      }
                       Acc_AuditReportFrequency__c {
                         value
                       }

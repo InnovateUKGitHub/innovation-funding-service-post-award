@@ -58,6 +58,7 @@ export interface PartnerDto {
   bankDetailsTaskStatus: BankDetailsTaskStatus;
   bankDetailsTaskStatusLabel: string | null;
   capLimit: number | null;
+  capLimitDeferredAmount: number | null;
   claimsOverdue: number | null;
   claimStatus: PartnerClaimStatus;
   claimsWithParticipant: number | null;
@@ -103,5 +104,6 @@ export interface PartnerDto {
 
 export interface PartnerDtoGql extends PartnerDto {
   forecastsAndCosts: number;
+  capLimitGrant: number;
   roles: SfRoles;
 }

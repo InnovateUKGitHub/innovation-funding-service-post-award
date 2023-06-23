@@ -126,6 +126,9 @@ export const claimPrepareQuery = graphql`
                     value
                   }
                 }
+                Acc_Grant_Paid_To_Date__c {
+                  value
+                }
                 Acc_ProjectParticipant__r {
                   Acc_AccountId__r {
                     Name {
@@ -284,6 +287,15 @@ export const claimPrepareQuery = graphql`
                   value
                 }
                 Acc_OverheadRate__c {
+                  value
+                }
+                Acc_Award_Rate__c {
+                  value
+                }
+                Acc_TotalApprovedCosts__c {
+                  value
+                }
+                Acc_StaticCapLimitGrant__c {
                   value
                 }
               }

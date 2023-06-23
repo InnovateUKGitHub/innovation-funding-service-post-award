@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e8e9a901b85e27d75c168a90886c5005>>
+ * @generated SignedSource<<ae8a3a0ab5ec55f9b405fa236bfdf1f4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -46,6 +46,9 @@ export type FinanceSummaryQuery$data = {
                       readonly value: string | null;
                     } | null;
                     readonly Acc_Award_Rate__c: {
+                      readonly value: number | null;
+                    } | null;
+                    readonly Acc_CapLimitDeferredAmount__c: {
                       readonly value: number | null;
                     } | null;
                     readonly Acc_Cap_Limit__c: {
@@ -445,6 +448,16 @@ v3 = [
                                       {
                                         "alias": null,
                                         "args": null,
+                                        "concreteType": "CurrencyValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_CapLimitDeferredAmount__c",
+                                        "plural": false,
+                                        "selections": (v2/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
                                         "concreteType": "PicklistValue",
                                         "kind": "LinkedField",
                                         "name": "Acc_AuditReportFrequency__c",
@@ -498,16 +511,16 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "34a755a4facdc34c64b12a91ae84cd86",
+    "cacheID": "daa334cc9714382c9500a18a1a7284a7",
     "id": null,
     "metadata": {},
     "name": "FinanceSummaryQuery",
     "operationKind": "query",
-    "text": "query FinanceSummaryQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalCostsSubmitted__c {\n                      value\n                    }\n                    Acc_Award_Rate__c {\n                      value\n                    }\n                    Acc_RemainingParticipantGrant__c {\n                      value\n                    }\n                    Acc_TotalPrepayment__c {\n                      value\n                    }\n                    Acc_TotalGrantApproved__c {\n                      value\n                    }\n                    Acc_Cap_Limit__c {\n                      value\n                    }\n                    Acc_AuditReportFrequency__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query FinanceSummaryQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalCostsSubmitted__c {\n                      value\n                    }\n                    Acc_Award_Rate__c {\n                      value\n                    }\n                    Acc_RemainingParticipantGrant__c {\n                      value\n                    }\n                    Acc_TotalPrepayment__c {\n                      value\n                    }\n                    Acc_TotalGrantApproved__c {\n                      value\n                    }\n                    Acc_Cap_Limit__c {\n                      value\n                    }\n                    Acc_CapLimitDeferredAmount__c {\n                      value\n                    }\n                    Acc_AuditReportFrequency__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c55fd05aaf118ac5aba1858f7cf95d4e";
+(node as any).hash = "fbedb621827aed72d33d32dfecd5685f";
 
 export default node;

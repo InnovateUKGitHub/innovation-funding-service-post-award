@@ -10,6 +10,7 @@ export interface ClaimDetailsSummaryDto {
   periodId: number;
   periodStart: Date | null;
   value: number;
+  grantPaidToDate: number;
   impactManagementParticipation: ImpactManagementParticipation;
 }
 

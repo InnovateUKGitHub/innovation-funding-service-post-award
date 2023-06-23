@@ -34,7 +34,11 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       "competitionType",
     ]);
 
-    const partner = mapToPartnerDto(partnerNode, ["id", "organisationType"], {});
+    const partner = mapToPartnerDto(
+      partnerNode,
+      ["id", "organisationType", "awardRate", "capLimitGrant", "totalParticipantCostsClaimed"],
+      {},
+    );
 
     const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
 
@@ -46,7 +50,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
 
     const claims = mapToClaimDtoArray(
       claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
-      ["id", "periodId", "isFinalClaim", "periodEndDate", "periodStartDate"],
+      ["id", "periodId", "isFinalClaim", "periodEndDate", "periodStartDate", "grantPaidToDate", "periodCostsToBePaid"],
       {},
     );
 
@@ -60,7 +64,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
 
     const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
       claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
-      ["costCategoryId", "periodId", "value"],
+      ["costCategoryId", "periodId", "value", "grantPaidToDate"],
     );
 
     if (!claim) throw new Error(" there is no matching claim");

@@ -25,6 +25,7 @@ export interface ISalesforcePartner {
   Acc_TotalParticipantCosts__c: number;
   Acc_TotalApprovedCosts__c: number;
   Acc_Cap_Limit__c: number;
+  Acc_CapLimitDeferredAmount__c: number;
   Acc_Award_Rate__c: number;
   Acc_TotalPaidCosts__c: number;
   Acc_TotalFutureForecastsForParticipant__c: number;
@@ -110,6 +111,7 @@ export class PartnerRepository
     "Acc_TotalParticipantCosts__c",
     "Acc_TotalApprovedCosts__c",
     "Acc_Cap_Limit__c",
+    "Acc_CapLimitDeferredAmount__c",
     "Acc_Award_Rate__c",
     "Acc_ProjectRole__c",
     "toLabel(Acc_ProjectRole__c) ProjectRoleName",

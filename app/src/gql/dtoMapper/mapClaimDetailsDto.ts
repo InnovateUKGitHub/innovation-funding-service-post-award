@@ -12,6 +12,7 @@ type ClaimDetailsNode = Readonly<
     Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
     Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
+    Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
     Impact_Management_Participation__c: GQL.Value<string>;
     RecordType: {
       Name: GQL.Value<string>;
@@ -21,7 +22,13 @@ type ClaimDetailsNode = Readonly<
 
 type ClaimDetailsDtoMapping = Pick<
   ClaimDetailsDto,
-  "periodId" | "costCategoryId" | "value" | "periodEnd" | "periodStart" | "impactManagementParticipation"
+  | "periodId"
+  | "costCategoryId"
+  | "value"
+  | "periodEnd"
+  | "periodStart"
+  | "impactManagementParticipation"
+  | "grantPaidToDate"
 >;
 
 const mapper: GQL.DtoMapper<ClaimDetailsDtoMapping, ClaimDetailsNode> = {
@@ -42,6 +49,9 @@ const mapper: GQL.DtoMapper<ClaimDetailsDtoMapping, ClaimDetailsNode> = {
   },
   impactManagementParticipation: function (node) {
     return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
+  },
+  grantPaidToDate(node) {
+    return node?.Acc_Grant_Paid_To_Date__c?.value ?? 0;
   },
 };
 

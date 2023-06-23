@@ -46,6 +46,7 @@ type ClaimNode = Readonly<
     Acc_TotalCostsSubmitted__c: GQL.Value<number>;
     LastModifiedDate: GQL.Value<string>;
     Impact_Management_Participation__c: GQL.Value<string>;
+    Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
     RecordType: {
       Name: GQL.Value<string>;
     } | null;
@@ -57,6 +58,7 @@ type ClaimDtoMapping = Pick<
   | "approvedDate"
   | "comments"
   | "forecastCost"
+  | "grantPaidToDate"
   | "id"
   | "isApproved"
   | "isFinalClaim"
@@ -105,6 +107,9 @@ const mapper: GQL.DtoMapper<
           x.partnerId === node?.Acc_ProjectParticipant__r?.Id && x.periodId === node?.Acc_ProjectPeriodNumber__c?.value,
       )?.forecastCost ?? 0
     );
+  },
+  grantPaidToDate(node) {
+    return node?.Acc_Grant_Paid_To_Date__c?.value ?? 0;
   },
   id(node) {
     return node?.Id ?? "";

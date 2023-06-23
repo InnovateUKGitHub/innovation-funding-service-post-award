@@ -33,6 +33,7 @@ const createNewDto = (partner: Partner, periodId: number, costCategory: CostCate
   periodStart: new Date(),
   periodEnd: new Date(),
   impactManagementParticipation: ImpactManagementParticipation.Unknown,
+  grantPaidToDate: 0,
 });
 
 const createDto = (context: TestContext, claimDetails: ISalesforceClaimDetails) => {

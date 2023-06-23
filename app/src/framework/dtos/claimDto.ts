@@ -9,6 +9,7 @@ export interface ClaimDto {
   forecastCost: number;
   iarStatus: ReceivedStatus;
   id: string;
+  grantPaidToDate: number;
   isApproved: boolean;
   isFinalClaim: boolean;
   isIarRequired: boolean;

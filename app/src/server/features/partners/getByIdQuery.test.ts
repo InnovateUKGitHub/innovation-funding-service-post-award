@@ -27,6 +27,7 @@ describe("getAllForProjectQuery", () => {
       x.projectRole = SalesforceProjectRole.ProjectLead;
       x.projectRoleName = SalesforceProjectRole.ProjectLead;
       x.capLimit = 50;
+      x.capLimitDeferredAmount = 180_000;
       x.totalFutureForecastsForParticipant = 1002;
       x.claimsForReview = 10;
       x.claimsUnderQuery = 20;
@@ -98,6 +99,7 @@ describe("getAllForProjectQuery", () => {
       percentageParticipantCostsClaimed: 13.9792,
       awardRate: 50,
       capLimit: 50,
+      capLimitDeferredAmount: 180_000,
       totalFutureForecastsForParticipants: 1002,
       totalCostsSubmitted: 100,
       roles: ProjectRole.ProjectManager,

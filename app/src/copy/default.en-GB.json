@@ -35,6 +35,9 @@
     "content": "Some example content"
   },
   "components": {
+    "table": {
+      "noDataText": "No data"
+    },
     "projectContactRoles": {
       "none": "There are no contacts with this role."
     },
@@ -67,6 +70,9 @@
       "message": "Changes last saved",
       "never": "Never"
     },
+    "claimRetentionMessage": {
+      "message": "Please be aware, approval of this claim will cause a percentage of your grant to be retained. Innovate UK will retain a portion of the grant value due for this project until the project is completed (as per the terms & conditions of your grant offer letter). To check your current retained balance, please see the financial summary area of your project dashboard."
+    },
     "awardRateOverridesMessage": {
       "periodAwardRateOverride": "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThe partner may have one or more periods paid at a different funding award rate compared to your overall funding award rate.",
       "costCategoryAwardRateOverride": "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThe partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
@@ -87,7 +93,6 @@
       "differenceHeader": "Difference",
       "periodHeader": "Period",
       "iarDueHeader": "IAR Due",
-      "noDataText": "No data",
       "costCategoriesHeader": "Cost categories"
     },
     "reportForm": {
@@ -1164,6 +1169,7 @@
     "partner": "Partner",
     "awardRate": "Funding level",
     "capLimit": "Claim cap",
+    "capLimitDeferredAmount": "Claim retention",
     "auditReportFrequency": "Audit frequency",
     "totalApproved": "Total grant approved",
     "remainingValue": "Remaining grant",

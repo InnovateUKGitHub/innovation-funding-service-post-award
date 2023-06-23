@@ -61,6 +61,7 @@ export const mapClaim =
       impactManagementParticipation: mapImpactManagementParticipationToEnum(
         claim.Impact_Management_Participation__c ?? null,
       ),
+      grantPaidToDate: claim.Acc_Grant_Paid_To_Date__c,
     };
   };
 

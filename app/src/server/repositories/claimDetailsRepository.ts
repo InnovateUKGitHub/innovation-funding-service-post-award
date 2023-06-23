@@ -16,6 +16,7 @@ export interface ISalesforceClaimDetails {
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_ReasonForDifference__c: string | null;
+  Acc_Grant_Paid_To_Date__c: number;
   Impact_Management_Participation__c: string;
   Owner: {
     Email: string;
@@ -62,6 +63,7 @@ export class ClaimDetailsRepository
     "Acc_ProjectPeriodStartDate__c",
     "Acc_ProjectPeriodEndDate__c",
     "Acc_ReasonForDifference__c",
+    "Acc_Grant_Paid_To_Date__c",
     "Owner.Email",
   ];
 

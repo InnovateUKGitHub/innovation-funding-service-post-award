@@ -29,6 +29,7 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     totalCostsApproved: 100,
     totalDeferredAmount: 100,
     periodCostsToBePaid: 100,
+    grantPaidToDate: 0,
     impactManagementParticipation: ImpactManagementParticipation.No,
   };
 

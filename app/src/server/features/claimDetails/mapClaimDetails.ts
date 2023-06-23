@@ -24,6 +24,7 @@ export function mapClaimDetailsSummary(
     isAuthor:
       context.user.email === context.config.salesforceServiceUser.serviceUsername ||
       salesforceClaimDetails.Owner.Email === context.user.email,
+    grantPaidToDate: salesforceClaimDetails.Acc_Grant_Paid_To_Date__c,
     impactManagementParticipation: mapImpactManagementParticipationToEnum(
       salesforceClaimDetails.Impact_Management_Participation__c,
     ),
