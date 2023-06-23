@@ -6,6 +6,8 @@ import { mountedContext } from "@ui/features/has-mounted/Mounted";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { IStores, StoresProvider } from "@ui/redux/storesProvider";
+import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
+import { IClientConfig } from "src/types/IClientConfig";
 
 export type TestBedStore = Partial<IStores>;
 
@@ -22,6 +24,7 @@ export interface ITestBedProps {
    * in to enable building.
    */
   shouldOmitRouterProvider?: boolean;
+  extendClientConfig?: (config: RecursiveMutable<IClientConfig>) => void;
 }
 
 /**
@@ -36,6 +39,7 @@ export function TestBed({
   children,
   pageTitle = "stub-displayTitle",
   shouldOmitRouterProvider,
+  extendClientConfig,
 }: ITestBedProps) {
   const stubStores = {
     users: {
@@ -50,6 +54,59 @@ export function TestBed({
 
   const storesValue = _merge(stubStores, stores) as Required<TestBedStore>;
 
+  const clientConfig = {
+    features: {
+      changePeriodLengthWorkflow: false,
+      customContent: false,
+      searchDocsMinThreshold: 9999,
+      futureTimeExtensionInYears: 5,
+    },
+    options: {
+      maxFileSize: 33554432,
+      maxUploadFileCount: 10,
+      permittedFileTypes: [
+        "pdf",
+        "xps",
+        "doc",
+        "docx",
+        "rtf",
+        "txt",
+        "csv",
+        "odt",
+        "ppt",
+        "pptx",
+        "odp",
+        "xls",
+        "xlsx",
+        "ods",
+        "jpg",
+        "jpeg",
+        "png",
+        "odg",
+      ],
+      permittedTypes: {
+        pdfTypes: ["pdf", "xps"],
+        textTypes: ["doc", "docx", "rtf", "txt", "csv", "odt"],
+        presentationTypes: ["ppt", "pptx", "odp"],
+        spreadsheetTypes: ["xls", "xlsx", "ods"],
+        imageTypes: ["jpg", "jpeg", "png", "odg"],
+      },
+      bankCheckValidationRetries: 3,
+      bankCheckAddressScorePass: 6,
+      bankCheckCompanyNameScorePass: 6,
+      standardOverheadRate: 20,
+      numberOfProjectsToSearch: 3,
+      maxClaimLineItems: 120,
+      nonJsMaxClaimLineItems: 10,
+    },
+    ifsRoot: "https://ifs-accdev.apps.ocp4.org.innovateuk.ukri.org",
+    ssoEnabled: false,
+    logLevel: "VERBOSE",
+  };
+
+  // Modify the clientConfig if the TextBed wants to.
+  extendClientConfig?.(clientConfig);
+
   // Note: We need a way of upfront toggling this can use 'MountedProvider'
   const testBedMountState = { isServer, isClient: !isServer };
 
@@ -57,11 +114,13 @@ export function TestBed({
 
   const Providers = (
     <mountedContext.Provider value={testBedMountState}>
-      <PageTitleProvider title={pageTitle}>
-        <StoresProvider value={storesValue}>
-          <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
-        </StoresProvider>
-      </PageTitleProvider>
+      <ClientConfigProvider config={clientConfig}>
+        <PageTitleProvider title={pageTitle}>
+          <StoresProvider value={storesValue}>
+            <ContentProvider value={new Copy({ competitionType })}>{children}</ContentProvider>
+          </StoresProvider>
+        </PageTitleProvider>
+      </ClientConfigProvider>
     </mountedContext.Provider>
   );
 

@@ -8,7 +8,8 @@ import { editorReducer } from "./editorsReducer";
 import { errorReducer } from "./errorReducer";
 import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
-import { configReducer, IClientConfig } from "./configReducer";
+import { configReducer } from "./configReducer";
+import { IClientConfig } from "src/types/IClientConfig";
 
 export type DataState = ReturnType<typeof dataReducer>;
 

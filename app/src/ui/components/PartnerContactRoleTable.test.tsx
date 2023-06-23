@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedStore } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 
 import { PartnerContactRoleTable, PartnersAndFinanceContactsProps } from "@ui/components/PartnerContactRoleTable";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
@@ -73,14 +73,6 @@ const testContactData: ProjectContactDto[] = [
 
 describe("<PartnersAndFinanceContacts />", () => {
   const setup = (partnerRole: ProjectContactDto["role"]) => {
-    const testStores = {
-      config: {
-        getConfig: () => ({
-          features: {},
-        }),
-      },
-    };
-
     const defaultProps: PartnersAndFinanceContactsProps = {
       contactRoles: getContactRole({
         contacts: testContactData,
@@ -91,7 +83,7 @@ describe("<PartnersAndFinanceContacts />", () => {
     };
 
     return render(
-      <TestBed stores={testStores as TestBedStore}>
+      <TestBed>
         <PartnerContactRoleTable {...defaultProps} />
       </TestBed>,
     );

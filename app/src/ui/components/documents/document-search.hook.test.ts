@@ -36,7 +36,11 @@ describe("useDocumentSearch()", () => {
         `(
           "when document length is $name threshold",
           ({ documents, shown }: { documents: DocumentSummaryDto[]; shown: boolean }) => {
-            const { result } = setup(false, documents);
+            const { result } = setup(false, documents, {
+              extendClientConfig(config) {
+                config.features.searchDocsMinThreshold = 1;
+              },
+            });
 
             expect(result.current.displaySearch).toEqual(shown);
           },

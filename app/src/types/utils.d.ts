@@ -37,6 +37,10 @@ declare type Mutable<T extends object> = {
   -readonly [Key in keyof T]: T[Key];
 };
 
+declare type RecursiveMutable<T extends object> = {
+  -readonly [Key in keyof T]: T[Key] extends object ? RecursiveMutable<T[Key]> : T[Key];
+};
+
 /**
  * will show the intersecting elements of two union types, or never if no intersection
  *

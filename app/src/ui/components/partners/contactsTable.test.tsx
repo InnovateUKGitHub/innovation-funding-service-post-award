@@ -1,17 +1,11 @@
 import { render } from "@testing-library/react";
-import { TestBed, TestBedStore } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { ContactsTable, IContactsTable } from "@ui/components/partners/contactsTable";
 import { getColumnValues } from "../../../../tests/test-utils/tableHelpers";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { ProjectContactDto } from "@framework/dtos/projectContactDto";
 
 describe("<ContactsTable />", () => {
-  const stubStores = {
-    config: {
-      getConfig: () => ({ features: {} }),
-    },
-  };
-
   const stubContent = {
     projectContactLabels: {
       contactName: "Contact",
@@ -27,7 +21,7 @@ describe("<ContactsTable />", () => {
     };
 
     return render(
-      <TestBed stores={stubStores as TestBedStore}>
+      <TestBed>
         <ContactsTable {...defaultProps} {...props} />
       </TestBed>,
     );

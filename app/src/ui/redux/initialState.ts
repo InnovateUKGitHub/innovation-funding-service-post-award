@@ -1,6 +1,6 @@
 import { IClientUser } from "@framework/types/IUser";
+import { IClientConfig } from "src/types/IClientConfig";
 import { RootState } from "./reducers/rootReducer";
-import { IClientConfig } from "./reducers/configReducer";
 
 /**
  * initializes the redux state
