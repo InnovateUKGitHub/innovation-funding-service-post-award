@@ -1,6 +1,6 @@
 import { graphql } from "react-relay";
 export const claimPrepareQuery = graphql`
-  query ClaimPrepareQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!) {
+  query ClaimPrepareQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     currentUser {
       email
     }
@@ -68,7 +68,14 @@ export const claimPrepareQuery = graphql`
             }
           }
           Acc_StatusChange__c(
-            where: { Acc_Claim__r: { Acc_ProjectParticipant__c: { eq: $partnerId } } }
+            where: {
+              Acc_Claim__r: {
+                and: [
+                  { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                  { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
+                ]
+              }
+            }
             orderBy: { CreatedDate: { order: DESC } }
             first: 2000
           ) {

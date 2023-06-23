@@ -17,7 +17,7 @@ import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 export const useClaimPreparePageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
   const data = useLazyLoadQuery<ClaimPrepareQuery>(
     claimPrepareQuery,
-    { projectId, projectIdStr: projectId, partnerId },
+    { projectId, projectIdStr: projectId, partnerId, periodId },
     { fetchPolicy: "network-only" },
   );
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
@@ -58,12 +58,8 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
 
     const claim = claims.find(claim => claim.periodId === periodId);
 
-    const claimDetails = mapToClaimDetailsDtoArray(
-      claimsGql?.filter(
-        x =>
-          x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId &&
-          x?.node?.RecordType?.Name?.value === "Claims Detail",
-      ),
+    const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
+      claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
       ["costCategoryId", "periodId", "value"],
     );
 
@@ -81,7 +77,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
         "remainingOfferCosts",
       ],
       {
-        claimDetails,
+        claimDetails: claimDetailsAllPeriods,
         forecastDetails,
         periodId,
         golCosts,

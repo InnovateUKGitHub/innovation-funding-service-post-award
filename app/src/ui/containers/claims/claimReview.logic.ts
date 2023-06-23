@@ -138,6 +138,11 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
       claims,
     };
 
+    const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
+      claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
+      ["costCategoryId", "periodId", "value"],
+    );
+
     const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
       [
@@ -149,7 +154,7 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
         "remainingOfferCosts",
       ],
       {
-        claimDetails,
+        claimDetails: claimDetailsAllPeriods,
         forecastDetails,
         periodId,
         golCosts,
