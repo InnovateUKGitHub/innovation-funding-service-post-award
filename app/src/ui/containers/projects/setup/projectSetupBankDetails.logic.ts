@@ -2,13 +2,14 @@ import { useLazyLoadQuery } from "react-relay";
 import { projectSetupBankDetailsQuery } from "./ProjectSetupBankDetails.query";
 import { ProjectSetupBankDetailsQuery } from "./__generated__/ProjectSetupBankDetailsQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { mapToPartnerDto, mapToProjectDto } from "@gql/dtoMapper";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { PartnerDto } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "@ui/apiClient";
-import { useRoutes } from "@ui/redux";
-import { BankCheckStatus } from "@framework/types";
+import { useRoutes } from "@ui/redux/routesProvider";
+import { BankCheckStatus } from "@framework/constants/partner";
 
 export type FormValues = {
   companyNumber: string;

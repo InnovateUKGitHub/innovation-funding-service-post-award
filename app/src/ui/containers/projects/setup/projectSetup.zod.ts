@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { BankDetailsTaskStatus, SpendProfileStatus } from "@framework/types";
+import { BankDetailsTaskStatus, SpendProfileStatus } from "@framework/constants/partner";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["projectSetup"] });
 

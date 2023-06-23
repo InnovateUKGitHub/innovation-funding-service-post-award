@@ -1,4 +1,4 @@
-import { BankDetailsTaskStatus } from "@framework/types";
+import { BankDetailsTaskStatus } from "@framework/constants/partner";
 
 export class BankDetailsTaskStatusMapper {
   private readonly options = {

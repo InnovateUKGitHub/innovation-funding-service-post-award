@@ -1,4 +1,4 @@
-import { BankCheckStatus } from "@framework/types";
+import { BankCheckStatus } from "@framework/constants/partner";
 
 export class BankCheckStatusMapper {
   private readonly options = {

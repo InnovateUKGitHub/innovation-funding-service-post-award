@@ -2,9 +2,10 @@ import { useLazyLoadQuery } from "react-relay";
 import { projectSetupQuery } from "./ProjectSetup.query";
 import { ProjectSetupQuery } from "./__generated__/ProjectSetupQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { mapToPartnerDto, mapToProjectDto } from "@gql/dtoMapper";
+import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { PartnerDto } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "@ui/apiClient";
 

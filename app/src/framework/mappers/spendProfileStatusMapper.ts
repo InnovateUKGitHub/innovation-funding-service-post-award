@@ -1,4 +1,4 @@
-import { SpendProfileStatus } from "@framework/types";
+import { SpendProfileStatus } from "@framework/constants/partner";
 
 export class PartnerSpendProfileStatusMapper {
   private readonly options = {
