@@ -13,6 +13,7 @@ import {
   assertChangeNamePage,
   completeChangeName,
   changeNameHeadings,
+  validateChangeName,
 } from "../steps";
 
 const projectManager = "james.black@euimeabs.test";
@@ -53,6 +54,8 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
   it("Should contain the PCR title, correct project title and back button", changeNameHeadings);
 
   it("Should contain guidance information and tick each list item of partners", tickEachPartner);
+
+  it("Should continue without entering a new name and validate that name is required on next page", validateChangeName);
 
   it("Should allow you to enter the new name", () => {
     cy.get("h2").contains("Enter new name");

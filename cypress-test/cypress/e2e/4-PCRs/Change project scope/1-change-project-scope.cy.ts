@@ -8,6 +8,7 @@ import {
   proposedSummary,
   scopeSummaryPage,
   shouldShowProjectTitle,
+  clearAndValidate,
 } from "../steps";
 
 import { pcrTidyUp } from "common/pcrtidyup";
@@ -43,6 +44,11 @@ describe("PCR > Change project scope", () => {
   it(
     "Should show a 'Proposed public description' subheading and expand to view the previous project scope",
     proposedDescription,
+  );
+
+  it(
+    "Should now clear each section of comments and validate that description and summary are required",
+    clearAndValidate,
   );
 
   it("Should now enter a new project scope and count the number of characters used", newDescriptionEntry);

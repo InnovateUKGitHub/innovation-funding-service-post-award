@@ -7,6 +7,7 @@ import {
   requestHeadingDetailsHeading,
   shouldShowProjectTitle,
   showPartners,
+  validateGrantMoving,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -54,7 +55,7 @@ describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs ta
   });
 
   it("Should show back to project link", () => {
-    cy.get("a.govuk-back-link").contains("Back to request");
+    cy.backLink("Back to request");
   });
 
   it("Should show the project title", shouldShowProjectTitle);
@@ -83,13 +84,15 @@ describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs ta
     cy.get("p.govuk-body").contains("The financial year ends");
   });
 
-  it("Has an input box for grant moving over financial year", () => {
-    cy.get("input#grantMovingOverFinancialYear").type("1000000");
+  it("Should validate the grant moving over financial year input", validateGrantMoving);
+
+  it("Clears the input and types a valid number", () => {
+    cy.get("input#grantMovingOverFinancialYear").type("10000");
   });
 
   it("Has a mark as complete section", () => {
     cy.get("h2").contains("Mark as complete");
-    cy.get("input#itemStatus_true.govuk-checkboxes__input").click();
+    cy.clickCheckBox("I agree with this change");
   });
 
   it("Has a save and return to request button", () => {

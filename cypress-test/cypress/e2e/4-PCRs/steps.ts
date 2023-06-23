@@ -784,10 +784,7 @@ export const proposedDescription = () => {
 };
 
 export const newDescriptionEntry = () => {
-  cy.get("textarea")
-    .contains("Hello! I am the public description for this Cypress project.")
-    .clear()
-    .type(newPubDescription);
+  cy.get("textarea").type(newPubDescription);
   cy.get("p.character-count.character-count--default.govuk-body").contains("You have 31945 characters remaining");
 };
 
@@ -798,7 +795,7 @@ export const proposedSummary = () => {
 };
 
 export const newSummaryEntry = () => {
-  cy.get("textarea").contains("Howdy! I am the public summary for this Cypress project.").clear().type(newPubSummary);
+  cy.get("textarea").type(newPubSummary);
   cy.get("p.character-count.character-count--default.govuk-body").contains("You have 31949 characters remaining");
 };
 
@@ -1038,10 +1035,10 @@ export const markAsCompleteSave = () => {
 };
 
 export const populateDateFields = () => {
-  cy.get("#suspensionStartDate_month").type("12");
-  cy.get("#suspensionStartDate_year").type("2023");
-  cy.get("#suspensionEndDate_month").type("03");
-  cy.get("#suspensionEndDate_year").type("2024");
+  cy.get("#suspensionStartDate_month").clear().type("12");
+  cy.get("#suspensionStartDate_year").clear().type("2023");
+  cy.get("#suspensionEndDate_month").clear().type("03");
+  cy.get("#suspensionEndDate_year").clear().type("2024");
 };
 
 export const dateChangeSummary = () => {
@@ -1107,4 +1104,57 @@ export const townAndPostcodeFields = () => {
   cy.get("h2").contains("Name of town or city");
   cy.get("h2").contains("Postcode");
   cy.getByQA("field-projectPostcode").contains("If this is not available,");
+};
+
+export const validateChangeName = () => {
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Upload change of name certificate");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Mark as complete");
+  cy.getByLabel("I agree with this change").click();
+  cy.getByQA("button_default-qa").contains("Save and return to request").click();
+  cy.getByQA("validation-summary").contains("Enter a new partner name");
+  cy.backLink("Back to request").click();
+  cy.get("h1").contains("Request");
+  cy.get("a").contains("Change a partner's name").click();
+  cy.getByQA("newPartnerName").contains("Edit").click();
+};
+
+export const clearAndValidate = () => {
+  cy.get("textarea").contains("Hello! I am the public description for this Cypress project.").clear();
+  cy.wait(500);
+  cy.submitButton("Save and continue").click();
+  cy.get("h1").contains("Change project scope");
+  cy.get("textarea").contains("Howdy! I am the public summary for this Cypress project.").clear();
+  cy.wait(500);
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Mark as complete");
+  cy.clickCheckBox("I agree with this change");
+  cy.submitButton("Save and return to request").click();
+  cy.getByQA("validation-summary").contains("Enter a project summary");
+  cy.getByQA("validation-summary").contains("Enter a public description");
+  cy.getByQA("newPublicDescription").contains("Edit").click();
+};
+
+export const validateDateRequired = () => {
+  [
+    "#suspensionStartDate_month",
+    "#suspensionStartDate_year",
+    "#suspensionEndDate_month",
+    "#suspensionEndDate_year",
+  ].forEach(input => {
+    cy.get(input).type("Error");
+  });
+  cy.submitButton("Save and continue").click();
+  cy.getByQA("validation-summary").contains("Enter a valid project suspension start date.");
+  cy.getByQA("validation-summary").contains("Enter a project suspension end date.");
+};
+
+export const validateGrantMoving = () => {
+  cy.get("input#grantMovingOverFinancialYear").type("Error");
+  cy.get("h2").contains("Mark as complete");
+  cy.clickCheckBox("I agree with this change");
+  cy.submitButton("Save and return to request").click();
+  cy.getByQA("validation-summary").contains("The value of a grant moving over financial year must be numerical.");
+  cy.clickCheckBox("I agree with this change");
 };

@@ -8,6 +8,7 @@ import {
   populateDateFields,
   dateChangeSummary,
   markAsCompleteSave,
+  validateDateRequired,
 } from "../steps";
 const projectManager = "james.black@euimeabs.test";
 
@@ -56,10 +57,12 @@ describe("PCR >  Put project on hold > Create PCR", () => {
     });
   });
 
+  it("Should validate that numbers and a date are required", validateDateRequired);
+
   it("Should populate the date fields", populateDateFields);
 
   it("Should click save and continue", () => {
-    cy.getByQA("button_default-qa").contains("Save and continue").click();
+    cy.submitButton("Save and continue").click();
   });
 
   it("Should show a summary of the date changes", dateChangeSummary);
