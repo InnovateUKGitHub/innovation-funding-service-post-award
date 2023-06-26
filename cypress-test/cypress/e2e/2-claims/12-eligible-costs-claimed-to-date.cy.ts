@@ -1,6 +1,6 @@
-const fcContact = "pauline.o'jones@uobcw.org.uk.test.prod";
 import { visitApp } from "common/visit";
 import { drgClaimTwo, shouldShowCostsClaimedtoDateTable } from "./steps";
+const fcContact = "pauline.o'jones@uobcw.org.uk.test.prod";
 
 describe("Claims > Eligible costs claimed to date", () => {
   before(() => {

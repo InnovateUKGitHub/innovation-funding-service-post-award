@@ -24,79 +24,26 @@ export const shouldShowCostCatTable = () => {
     cy.tableHeader(header);
   }),
     [
-      "Labour",
-      "Overheads",
-      "Materials",
-      "Capital usage",
-      "Subcontracting",
-      "Travel and subsistence",
-      "Other costs",
-      "Other costs 2",
-      "Other costs 3",
-      "Other costs 4",
-      "Other costs 5",
-      "Total",
-    ].forEach(cat => {
-      cy.tableCell(cat);
-    }),
-    [
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£0.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£350,000.00",
-    ].forEach((cost, rowNumber = 0) => {
+      ["Labour", "£35,000.00", "£0.00", "£35,000.00"],
+      ["Overheads", "£35,000.00", "£0.00", "£35,000.00"],
+      ["Materials", "£35,000.00", "£35,000.00", "£0.00"],
+      ["Capital usage", "£35,000.00", "£35,000.00", "£0.00"],
+      ["Subcontracting", "£0.00", "£0.00", "£0.00"],
+      ["Travel and subsistence", "£35,000.00", "£35,000.00", "£0.00"],
+      ["Other costs", "£35,000.00", "£35,000.00", "£0.00"],
+      ["Other costs 2", "£35,000.00", "£35,000.00", "£0.00"],
+      ["Other costs 3", "£35,000.00", "£35,000.00", "£0.00"],
+      ["Other costs 4", "£35,000.00", "£35,000.00", "£0.00"],
+      ["Other costs 5", "£35,000.00", "£35,000.00", "£0.00"],
+      ["Total", "£350,000.00", "£280,000.00", "£70,000.00"],
+    ].forEach(([costCat, eligibleCosts, claimedToDate, remainingEligibleCosts], rowNumber = 0) => {
       cy.get("tr")
         .eq(rowNumber + 1)
         .within(() => {
-          cy.get("td:nth-child(2)").contains(cost);
-        });
-    }),
-    [
-      "£0.00",
-      "£0.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£0.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£280,000.00",
-    ].forEach((cost, rowNumber = 0) => {
-      cy.get("tr")
-        .eq(rowNumber + 1)
-        .within(() => {
-          cy.get("td:nth-child(4)").contains(cost);
-        });
-    }),
-    [
-      "£35,000.00",
-      "£35,000.00",
-      "£0.00",
-      "£0.00",
-      "£0.00",
-      "£0.00",
-      "£0.00",
-      "£0.00",
-      "£0.00",
-      "£0.00",
-      "£0.00",
-      "£70,000.00",
-    ].forEach((cost, rowNumber = 0) => {
-      cy.get("tr")
-        .eq(rowNumber + 1)
-        .within(() => {
-          cy.get("td:nth-child(5)").contains(cost);
+          cy.get("td:nth-child(1)").contains(costCat);
+          cy.get("td:nth-child(2)").contains(eligibleCosts);
+          cy.get("td:nth-child(4)").contains(claimedToDate);
+          cy.get("td:nth-child(5)").contains(remainingEligibleCosts);
         });
     });
 };
@@ -110,87 +57,30 @@ export const shouldShowCostsClaimedtoDateTable = () => {
     "Remaining eligible costs",
   ].forEach(header => {
     cy.tableHeader(header);
-  }),
-    [
-      "Labour",
-      "Overheads",
-      "Materials",
-      "Capital usage",
-      "Subcontracting",
-      "Travel and subsistence",
-      "Other costs",
-      "Other costs 2",
-      "Other costs 3",
-      "Other costs 4",
-      "Other costs 5",
-      "Total",
-    ].forEach((cat, rowNumber = 0) => {
-      cy.get("tr")
-        .eq(rowNumber + 1)
-        .within(() => {
-          cy.get("td:nth-child(1)").contains(cat);
-        });
-    }),
-    [
-      "£10,000.00",
-      "£9,000.00",
-      "£8,000.00",
-      "£7,000.00",
-      "£0.00",
-      "£6,000.00",
-      "£5,000.00",
-      "£4,000.00",
-      "£3,000.50",
-      "£2,000.30",
-      "£666.66",
-      "£54,667.46",
-    ].forEach((cost, rowNumber = 0) => {
-      cy.get("tr")
-        .eq(rowNumber + 1)
-        .within(() => {
-          cy.get("td:nth-child(3)").contains(cost);
-        });
-    }),
-    [
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£0.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£35,000.00",
-      "£350,000.00",
-    ].forEach((cost, rowNumber = 0) => {
-      cy.get("tr")
-        .eq(rowNumber + 1)
-        .within(() => {
-          cy.get("td:nth-child(2)").contains(cost);
-        });
-    }),
-    [
-      "£25,000.00",
-      "£26,000.00",
-      "£27,000.00",
-      "£28,000.00",
-      "£0.00",
-      "£29,000.00",
-      "£30,000.00",
-      "£31,000.00",
-      "£31,999.50",
-      "£32,999.70",
-      "£34,333.34",
-      "£295,332.54",
-    ].forEach((cost, rowNumber = 0) => {
-      cy.get("tr")
-        .eq(rowNumber + 1)
-        .within(() => {
-          cy.get("td:nth-child(5)").contains(cost);
-        });
-    });
+  });
+  [
+    ["Labour", "£35,000.00", "£10,000.00", "£25,000.00"],
+    ["Overheads", "£35,000.00", "£9,000.00", "£26,000.00"],
+    ["Materials", "£35,000.00", "£8,000.00", "£27,000.00"],
+    ["Capital usage", "£35,000.00", "£7,000.00", "£28,000.00"],
+    ["Subcontracting", "£0.00", "£0.00", "£0.00"],
+    ["Travel and subsistence", "£35,000.00", "£6,000.00", "£29,000.00"],
+    ["Other costs", "£35,000.00", "£5,000.00", "£30,000.00"],
+    ["Other costs 2", "£35,000.00", "£4,000.00", "£31,000.00"],
+    ["Other costs 3", "£35,000.00", "£3,000.50", "£31,999.50"],
+    ["Other costs 4", "£35,000.00", "£2,000.30", "£32,999.70"],
+    ["Other costs 5", "£35,000.00", "£666.66", "£34,333.34"],
+    ["Total", "£350,000.00", "£54,667.46", "£295,332.54"],
+  ].forEach(([costCat, eligibleCosts, claimedToDate, remainingEligibleCosts], rowNumber = 0) => {
+    cy.get("tr")
+      .eq(rowNumber + 1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(costCat);
+        cy.get("td:nth-child(2)").contains(eligibleCosts);
+        cy.get("td:nth-child(3)").contains(claimedToDate);
+        cy.get("td:nth-child(5)").contains(remainingEligibleCosts);
+      });
+  });
 };
 
 export const shouldShowAcademicCostCatTable = () => {
