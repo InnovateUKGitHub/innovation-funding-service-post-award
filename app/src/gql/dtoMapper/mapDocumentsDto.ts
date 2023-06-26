@@ -145,7 +145,7 @@ export function mapToPartnerDocumentSummaryDtoArray<
           mapToDocumentSummaryDto(doc ?? null, pickList, {
             ...additionalData,
             partnerName: edge?.node?.Acc_AccountId__r?.Name?.value ?? "",
-            partnerId: (edge?.node?.Acc_AccountId__c?.value ?? "") as PartnerId,
+            partnerId: (edge?.node?.Id ?? "") as PartnerId,
           }),
         ),
       )
