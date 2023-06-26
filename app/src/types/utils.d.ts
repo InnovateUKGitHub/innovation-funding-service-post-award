@@ -118,3 +118,8 @@ declare type PartialByKeys<T, K = string> = Unify<
     [P in keyof T as P extends K ? never : P]: T[P];
   }
 >;
+
+declare type RhfFieldError = { message: string };
+
+// this can be deprecated with the imported Field Errors type from rhf once we support array and nested error types
+declare type RhfFieldErrors = { [key: string]: RhfFieldError };

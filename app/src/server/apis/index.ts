@@ -23,16 +23,32 @@ import * as projectContacts from "./projectContacts";
 import * as users from "./users";
 import { IClientUser } from "@framework/types/IUser";
 import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ClaimKey } from "@framework/types/ClaimKey";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export interface IApiClient {
   accounts: accounts.IAccountsApi;
   claimDetails: claimDetails.IClaimDetailsApi;
   costsSummary: costsSummary.ICostsSummaryApi;
   companies: companiesHouse.ICompaniesApi;
-  claims: claims.IClaimsApi;
+  claims: claims.IClaimsApi & {
+    update: (params: {
+      projectId: ProjectId;
+      partnerId: PartnerId;
+      periodId: PeriodId;
+      claim: ClaimDto;
+    }) => Promise<ClaimDto>;
+  };
   claimOverrides: claimOverrides.IClaimOverridesApi;
   costCategories: costCategories.ICostCategoriesApi;
-  documents: documents.IDocumentsApi;
+  documents: documents.IDocumentsApi & {
+    deleteClaimDocument: (params: { documentId: string; claimKey: ClaimKey }) => Promise<boolean>;
+    uploadClaimDocuments: (params: {
+      claimKey: ClaimKey;
+      documents: MultipleDocumentUploadDto;
+    }) => Promise<{ documentIds: string[] }>;
+  };
   financialVirements: financialVirements.IFinancialVirement;
   financialLoanVirements: financialLoanVirements.IFinancialLoanVirement;
   forecastDetails: forecastDetails.IForecastDetailsApi;

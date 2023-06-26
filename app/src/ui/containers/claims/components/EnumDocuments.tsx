@@ -12,7 +12,6 @@ interface EnumDocumentsProps {
  * wrapper component to allow use of `useEnumDocuments` hook with class components
  */
 export function EnumDocuments({ documentsToCheck, children }: EnumDocumentsProps) {
-  const documents = useEnumDocuments(DocumentDescription, documentsToCheck);
-
+  const documents = useEnumDocuments(documentsToCheck);
   return children(documents);
 }

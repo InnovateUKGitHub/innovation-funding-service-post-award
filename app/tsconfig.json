@@ -29,6 +29,7 @@
       "@util/*": ["src/framework/util/*"],
       "@copy/*": ["src/copy/*"],
       "@gql/*": ["src/gql/*"],
+      "@client/*":["src/client/*"],
       "@tests/*": ["tests/*"]
     },
     // "composite": true,                     /* Enable project compilation */

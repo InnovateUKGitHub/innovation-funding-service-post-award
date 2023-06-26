@@ -1791,6 +1791,23 @@
           "too_big": "Your location entry must be no more than {{ count }} characters."
         }
       }
+    },
+    "claimReview": {
+      "comments": {
+        "errors": {
+          "too_big": "Comments must be a maximum of 1000 characters",
+          "custom": "Comments are required if querying a claim."
+        }
+      }
+    },
+    "uploadDocuments": {
+      "attachment": {
+        "length": {
+          "errors": {
+            "too_small": "Choose a file to upload"
+          }
+        }
+      }
     }
   }
 }

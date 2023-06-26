@@ -80,6 +80,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
               this,
               this.model.comments,
               this.getContent(x => x.validation.claimDtoValidator.queryingCommentRequired),
+              "comments",
             )
           : Validation.valid(this),
       () =>
@@ -88,6 +89,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
           this.model.comments,
           claimCommentsMaxLength,
           this.getContent(x => x.validation.claimDtoValidator.queryingCommentLength({ count: claimCommentsMaxLength })),
+          "comments",
         ),
     );
   }

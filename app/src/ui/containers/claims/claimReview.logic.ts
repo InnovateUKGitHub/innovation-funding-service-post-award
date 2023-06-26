@@ -3,6 +3,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { claimReviewQuery } from "./ClaimReview.query";
 import { ClaimReviewQuery } from "./__generated__/ClaimReviewQuery.graphql";
+import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
@@ -13,16 +14,39 @@ import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusChange";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { useNavigate } from "react-router-dom";
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
+import { apiClient } from "@ui/apiClient";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ClaimStatus } from "@framework/constants/claimStatus";
+import { useContent } from "@ui/hooks/content.hook";
+import { useMessageContext } from "@ui/context/messages";
+import { DocumentDescription, allowedClaimDocuments } from "@framework/constants/documentDescription";
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { useEnumDocuments } from "./components/allowed-documents.hook";
+import { ClientFileWrapper } from "@client/clientFileWrapper";
 
-export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
+type QueryOptions = RefreshedQueryOptions | { fetchPolicy: "network-only" };
+export const useClaimReviewPageData = (
+  projectId: ProjectId,
+  partnerId: PartnerId,
+  periodId: PeriodId,
+  queryOptions: QueryOptions = { fetchPolicy: "network-only" },
+) => {
   const data = useLazyLoadQuery<ClaimReviewQuery>(
     claimReviewQuery,
     { projectId, projectIdStr: projectId, partnerId, periodId },
-    { fetchPolicy: "network-only" },
+    queryOptions,
   );
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
+
+  const documentsGql = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [])
+    .filter(x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId)
+    .map(x => x?.node?.ContentDocumentLinks?.edges ?? [])
+    .flat();
 
   return useMemo(() => {
     const project = mapToProjectDto(projectNode, [
@@ -71,18 +95,19 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
         "comments",
         "id",
         "isApproved",
-        "periodId",
         "isFinalClaim",
         "paidDate",
+        "partnerId",
         "pcfStatus",
+        "periodCostsToBePaid",
         "periodEndDate",
+        "periodId",
         "periodStartDate",
         "status",
         "statusLabel",
-        "totalCostsSubmitted",
         "totalCostsApproved",
+        "totalCostsSubmitted",
         "totalDeferredAmount",
-        "periodCostsToBePaid",
       ],
       { competitionType: project.competitionType },
     );
@@ -94,11 +119,6 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
       ["costCategoryId", "costCategoryName", "value"],
       costCategories,
     ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
-
-    const documentsGql = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [])
-      .filter(x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId)
-      .map(x => x?.node?.ContentDocumentLinks?.edges ?? [])
-      .flat();
 
     const documents = mapToProjectDocumentSummaryDtoArray(
       documentsGql as DocumentSummaryNode[],
@@ -177,5 +197,127 @@ export const useClaimReviewPageData = (projectId: ProjectId, partnerId: PartnerI
       statusChanges,
       documents,
     };
-  }, []);
+  }, [documentsGql.length]);
 };
+
+export type FormValues = { status: ClaimStatus; comments: string };
+
+export const useOnUpdateClaimReview = (
+  partnerId: PartnerId,
+  projectId: ProjectId,
+  periodId: PeriodId,
+  navigateTo: string,
+  claim: Partial<ClaimDto>,
+) => {
+  const navigate = useNavigate();
+  return useOnUpdate<FormValues, Pick<ClaimDto, "status" | "comments" | "partnerId">>({
+    req(data) {
+      return apiClient.claims.update({
+        partnerId,
+        projectId,
+        periodId,
+        claim: { ...claim, ...data } as ClaimDto,
+      });
+    },
+    onSuccess() {
+      navigate(navigateTo);
+    },
+  });
+};
+
+export const useOnDeleteClaimDocument = (
+  partnerId: PartnerId,
+  projectId: ProjectId,
+  periodId: PeriodId,
+  refresh: () => void,
+) => {
+  const { clearMessages, pushMessage } = useMessageContext();
+  const { getContent } = useContent();
+  return useOnUpdate<{ id: string; fileName: string }, boolean>({
+    req(document) {
+      clearMessages();
+      return apiClient.documents.deleteClaimDocument({
+        documentId: document.id,
+        claimKey: { partnerId, projectId, periodId },
+      });
+    },
+    onSuccess(document) {
+      refresh();
+      pushMessage(getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })));
+    },
+  });
+};
+
+export const useOnUploadClaimDocument = (
+  partnerId: PartnerId,
+  projectId: ProjectId,
+  periodId: PeriodId,
+  refresh: () => void,
+) => {
+  const { clearMessages, pushMessage } = useMessageContext();
+  const { getContent } = useContent();
+  const allowedDocumentTypes = useEnumDocuments(allowedClaimDocuments);
+
+  return useOnUpdate<{ description: string; attachment: FileList }, { documentIds: string[] }>({
+    req(data) {
+      clearMessages();
+      console.log("data", data);
+      const files: IFileWrapper[] = [];
+
+      for (const a of data.attachment) {
+        files.push(new ClientFileWrapper(a));
+      }
+
+      const payload = {
+        claimKey: { partnerId, projectId, periodId },
+        documents: {
+          description: Number(allowedDocumentTypes.find(x => x.value === data.description)?.id) as DocumentDescription,
+          files,
+          partnerId,
+        } as MultipleDocumentUploadDto,
+      };
+
+      return apiClient.documents.uploadClaimDocuments(payload);
+    },
+    onSuccess(_, res) {
+      const count = res?.documentIds?.length;
+      pushMessage(getContent(x => x.documentMessages.uploadedDocuments({ count })));
+      refresh();
+    },
+  });
+};
+
+/**
+ *
+ * @returns content for the review claims page
+ */
+export function useReviewContent() {
+  const { getContent } = useContent();
+
+  return {
+    accordionTitleClaimLog: getContent(x => x.claimsLabels.accordionTitleClaimLog),
+    accordionTitleForecast: getContent(x => x.claimsLabels.accordionTitleForecast),
+    accordionTitleSupportingDocumentsForm: getContent(x => x.pages.claimReview.accordionTitleSupportingDocumentsForm),
+    additionalInfo: getContent(x => x.pages.claimReview.additionalInfo),
+    additionalInfoHint: getContent(x => x.pages.claimReview.additionalInfoHint),
+    backLink: getContent(x => x.pages.claimReview.backLink),
+    buttonSendQuery: getContent(x => x.pages.claimReview.buttonSendQuery),
+    buttonSubmit: getContent(x => x.pages.claimReview.buttonSubmit),
+    buttonUpload: getContent(x => x.pages.claimReview.buttonUpload),
+    claimReviewDeclaration: getContent(x => x.pages.claimReview.claimReviewDeclaration),
+    competitionName: getContent(x => x.projectLabels.competitionName),
+    competitionType: getContent(x => x.projectLabels.competitionType),
+    descriptionLabel: getContent(x => x.pages.claimDocuments.descriptionLabel),
+    finalClaim: getContent(x => x.claimsMessages.finalClaim),
+    labelInputUpload: getContent(x => x.pages.claimReview.labelInputUpload),
+    monitoringReportReminder: getContent(x => x.pages.claimReview.monitoringReportReminder),
+    noDocumentsUploaded: getContent(x => x.documentMessages.noDocumentsUploaded),
+    noMatchingDocumentsMessage: getContent(x => x.pages.projectDocuments.noMatchingDocumentsMessage),
+    optionQueryClaim: getContent(x => x.pages.claimReview.optionQueryClaim),
+    optionSubmitClaim: getContent(x => x.pages.claimReview.optionSubmitClaim),
+    searchDocumentsMessage: getContent(x => x.pages.projectDocuments.searchDocumentsMessage),
+    sectionTitleAdditionalInfo: getContent(x => x.pages.claimReview.sectionTitleAdditionalInfo),
+    sectionTitleHowToProceed: getContent(x => x.pages.claimReview.sectionTitleHowToProceed),
+    uploadInstruction: getContent(x => x.documentMessages.uploadInstruction),
+  };
+}

@@ -74,7 +74,7 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
       (p, q, b) => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
-        periodId: parseInt(p.periodId, 10),
+        periodId: parseInt(p.periodId, 10) as PeriodId,
         claim: processDto(b),
       }),
       this.update,
@@ -103,9 +103,11 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
   }
 
   public async update(
-    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: number; claim: ClaimDto }>,
+    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId; claim: ClaimDto }>,
   ): Promise<ClaimDto> {
     const { projectId, partnerId, periodId, claim } = params;
+
+    console.log("update params", params);
 
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {
       throw new BadRequestError();

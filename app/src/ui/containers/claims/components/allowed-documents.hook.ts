@@ -7,12 +7,10 @@ import { useContent } from "@ui/hooks/content.hook";
 /**
  * ### useEnumDocuments
  */
-export function useEnumDocuments(
-  enumDocuments: typeof DocumentDescription,
-  documentsToCheck: Readonly<DocumentDescription[]>,
-): DropdownOption[] {
+export function useEnumDocuments(documentsToCheck: Readonly<DocumentDescription[]>): DropdownOption[] {
   const { getContent } = useContent();
-  const getRawDocs: number[] = getAllNumericalEnumValues(enumDocuments);
+
+  const getRawDocs: number[] = getAllNumericalEnumValues(DocumentDescription);
 
   return getRawDocs.reduce<DropdownOption[]>((acc, doc) => {
     const isInvalidDocument = !documentsToCheck.includes(doc);

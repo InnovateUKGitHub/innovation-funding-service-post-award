@@ -1,8 +1,9 @@
 import { renderHook } from "@testing-library/react";
+
+import { useReviewContent } from "./claimReview.logic";
 import { hookTestBed } from "@shared/TestBed";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { CopyNamespaces } from "@copy/data";
-import { useReviewContent } from "./claimReview.page";
 
 const stubContent = {
   documentMessages: {

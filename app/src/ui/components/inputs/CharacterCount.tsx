@@ -77,19 +77,15 @@ export const CharacterCount = ({ children, ...characterConfig }: CharacterCountP
     setMounted(true);
   }, []);
 
-  // Note: Disable for SSR - JS is needed to calcuate the values
+  // Note: Disable for SSR - JS is needed to calculate the values
   if (!mounted) return children;
 
   const { countClassName, countMessage } = checkCharacterCount(characterConfig);
 
   return (
     <div className="govuk-!-margin-bottom-3">
-      {cloneElement(children, {
-        ...children.props,
-        className: cx(children.props.className, "govuk-!-margin-bottom-3"),
-      })}
-
-      <SimpleString className={countClassName} aria-live="polite">
+      {children}
+      <SimpleString className={cx("margin-top-neg-sixteen", countClassName)} aria-live="polite">
         {countMessage}
       </SimpleString>
     </div>

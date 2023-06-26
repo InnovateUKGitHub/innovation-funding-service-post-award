@@ -88,7 +88,7 @@ export class ClaimsStore extends StoreBase {
     isClaimSummary: boolean,
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     init?: (dto: ClaimDto) => void,
   ) {
     return this.getEditor(
@@ -105,7 +105,7 @@ export class ClaimsStore extends StoreBase {
     saving: boolean,
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     dto: ClaimDto,
     message?: string,
     onComplete?: (result: ClaimDto) => void,
@@ -132,7 +132,7 @@ export class ClaimsStore extends StoreBase {
   private validate(
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     claim: ClaimDto,
     showErrors: boolean,
     isClaimSummary?: boolean,
@@ -162,13 +162,13 @@ export class ClaimsStore extends StoreBase {
     );
   }
 
-  public getStatusChanges(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
+  public getStatusChanges(projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) {
     return this.getData("claimStatusChanges", this.getClaimKey(partnerId, periodId), p =>
       apiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }),
     );
   }
 
-  public getTotalCosts(projectId: ProjectId, partnerId: PartnerId, periodId: number) {
+  public getTotalCosts(projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) {
     return this.getData("claimTotalCosts", storeKeys.getClaimTotalCostsKey(partnerId, projectId, periodId), p =>
       apiClient.claims.getTotalCosts({ partnerId, projectId, periodId, ...p }),
     );

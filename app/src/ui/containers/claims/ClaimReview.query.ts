@@ -111,6 +111,7 @@ export const claimReviewQuery = graphql`
                   }
                 }
                 Acc_ProjectParticipant__r {
+                  Id
                   Acc_AccountId__r {
                     Name {
                       value
@@ -233,6 +234,7 @@ export const claimReviewQuery = graphql`
           }
           Acc_ProjectParticipant__c(
             where: { and: [{ Acc_ProjectId__c: { eq: $projectId } }, { Id: { eq: $partnerId } }] }
+            first: 2000
           ) {
             edges {
               node {
