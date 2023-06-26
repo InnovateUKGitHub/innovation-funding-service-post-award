@@ -41,7 +41,7 @@ export const useOnUpdatePartnerDetails = (
   partner: Partial<PartnerDto>,
 ) => {
   const navigate = useNavigate();
-  return useOnUpdate<FormValues, Promise<Pick<PartnerDto, "postcode">>>({
+  return useOnUpdate<FormValues, Pick<PartnerDto, "postcode">>({
     req: data =>
       apiClient.partners.updatePartner({
         partnerId,

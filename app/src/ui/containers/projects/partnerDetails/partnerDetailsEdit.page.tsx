@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { usePartnerDetailsEditQuery, FormValues, useOnUpdatePartnerDetails } from "./partnerDetailsEdit.logic";
-import { useValidationErrors } from "@framework/util/errorHelpers";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 import {
   partnerDetailsEditSchema,
   postcodeSetupSchema,
@@ -11,14 +11,15 @@ import {
 } from "./partnerDetailsEdit.zod";
 import { PostcodeTaskStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
-import { Page } from "@ui/components/layout/page";
+import { Page } from "@ui/rhf-components/Page";
 import { BackLink } from "@ui/components/links";
 import { useContent } from "@ui/hooks/content.hook";
 import { Fieldset } from "@ui/rhf-components/Fieldset";
 import { FormGroup } from "@ui/rhf-components/FormGroup";
 import { Hint } from "@ui/rhf-components/Hint";
 import { Label } from "@ui/rhf-components/Label";
-import { SubmitButton } from "@ui/rhf-components/SubmitButton";
+import { ValidationError } from "@ui/rhf-components/ValidationError";
+import { SubmitButton } from "@ui/rhf-components/Button";
 import { TextInput } from "@ui/rhf-components/TextInput";
 import { P } from "@ui/rhf-components/Typography";
 import { Title } from "@ui/components/projects/title";
@@ -71,14 +72,15 @@ export function PartnerDetailsEditComponent({
 
   const { onUpdate, apiError } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
 
-  const validatorErrors = useValidationErrors<FormValues>(formState.errors);
+  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
 
+  const postcodeError = validatorErrors?.["new-postcode"];
   return (
     <Page
       backLink={backLink}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      validator={validatorErrors}
-      error={apiError}
+      validationErrors={validatorErrors}
+      apiError={apiError}
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
@@ -92,16 +94,17 @@ export function PartnerDetailsEditComponent({
               <P id="current-postcode">{partner.postcode}</P>
             </FormGroup>
           )}
-          <FormGroup>
+          <FormGroup hasError={!!postcodeError}>
             <Label htmlFor="new-postcode">{getContent(x => x.pages.partnerDetailsEdit.labelNewPostcode)}</Label>
             <Hint id="hint-for-new-postcode" className="govuk-hint">
               {getContent(x => x.pages.partnerDetailsEdit.hintNewPostcode)}
             </Hint>
+            <ValidationError error={postcodeError} />
             <TextInput
               defaultValue={partner.postcode ?? ""}
               inputWidth="one-quarter"
               id="new-postcode"
-              hasError={!!formState.errors?.["new-postcode"]}
+              hasError={!!postcodeError}
               aria-describedby="hint-for-new-postcode"
               {...register("new-postcode")}
             ></TextInput>
