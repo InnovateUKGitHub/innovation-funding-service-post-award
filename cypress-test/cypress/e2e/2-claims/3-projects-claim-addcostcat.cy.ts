@@ -9,7 +9,6 @@ import {
   newCostCatLineItem,
   reflectCostAdded,
   returnToCostCatPage,
-  shouldShowAllAccordion,
   shouldShowProjectTitle,
   standardComments,
   shouldShowCostCatTable,

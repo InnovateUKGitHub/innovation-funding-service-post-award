@@ -1,10 +1,11 @@
 import { visitApp } from "../../common/visit";
 import { claimsDocUpload, claimsFileTable, learnFiles, selectFileDescription, shouldShowProjectTitle } from "./steps";
+const pmEmail = "james.black@euimeabs.test";
 
 describe("claims > documents upload screen", () => {
   before(() => {
     cy.intercept("POST", "/api/documents/claim-details/*").as("uploadDocument");
-    visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
   });
 
   it("Should have a back option", () => {
