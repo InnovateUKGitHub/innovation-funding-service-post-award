@@ -107,6 +107,9 @@ export const projectDashboardQuery = graphql`
                         }
                         Id
                       }
+                      Acc_AccountId__c {
+                        value
+                      }
                       Id
                       Acc_NewForecastNeeded__c {
                         value

@@ -47,6 +47,7 @@ type PartnerNode = Readonly<
     Acc_ParticipantStatus__c: GQL.ValueAndLabel<string>;
     Acc_ParticipantType__c: GQL.Value<string>;
     Acc_Postcode__c: GQL.Value<string>;
+    Acc_ProjectId__c: GQL.Value<string>;
     Acc_ProjectRole__c: GQL.Value<string>;
     Acc_RemainingParticipantGrant__c: GQL.Value<number>;
     Acc_TotalApprovedCosts__c: GQL.Value<number>;
@@ -100,7 +101,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     return (node?.Id ?? "") as PartnerId;
   },
   accountId(node) {
-    return node?.Acc_AccountId__c?.value ?? "";
+    return node?.Acc_AccountId__c?.value || node?.Acc_AccountId__r?.Id || "";
   },
   auditReportFrequencyName(node) {
     return node?.Acc_AuditReportFrequency__c?.value ?? "";
@@ -176,7 +177,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     return node?.Acc_Postcode__c?.value ?? null ? PostcodeTaskStatus.Complete : PostcodeTaskStatus.ToDo; // matches existing logic and not depending on unused Acc_PostcodeStatus__c to limit breaking changes
   },
   projectId(node) {
-    return (node?.Acc_AccountId__r?.Id ?? "") as ProjectId;
+    return (node?.Acc_ProjectId__c?.value ?? "") as ProjectId;
   },
   remainingParticipantGrant(node) {
     return node?.Acc_RemainingParticipantGrant__c?.value ?? 0;

@@ -169,7 +169,7 @@ export function generateFilteredProjects(filters: FilterOptions[], projects: Pro
  */
 export function getRolesForPartner(partner: Partner, partnerRoles: SfPartnerRoles[]): SfRoles {
   return (
-    partnerRoles.find(x => x.partnerId === partner.projectId) ?? {
+    partnerRoles.find(x => x.partnerId === partner.accountId) ?? {
       isFc: false,
       isPm: false,
       isMo: false,
@@ -183,7 +183,7 @@ export function getRolesForPartner(partner: Partner, partnerRoles: SfPartnerRole
 export function getPartnerOnProject(project: Project): Partner | undefined {
   const { isPm } = getAuthRoles(project.roles);
 
-  const leadPartner = project.partners.find(partner => partner.projectId === project.leadPartnerId);
+  const leadPartner = project.partners.find(partner => partner.accountId === project.leadPartnerId);
 
   if (leadPartner && (isPm || getRolesForPartner(leadPartner, project?.partnerRoles)?.isFc)) {
     return leadPartner;
@@ -265,7 +265,17 @@ export const useProjectsDashboardData = (search: string | number) => {
     ]),
     partners: mapToPartnerDtoArray(
       x?.node?.Acc_ProjectParticipantsProject__r?.edges ?? [],
-      ["id", "claimStatus", "partnerStatus", "newForecastNeeded", "name", "isWithdrawn", "isLead", "projectId"],
+      [
+        "accountId",
+        "id",
+        "claimStatus",
+        "partnerStatus",
+        "newForecastNeeded",
+        "name",
+        "isWithdrawn",
+        "isLead",
+        "projectId",
+      ],
       {},
     ),
   }));

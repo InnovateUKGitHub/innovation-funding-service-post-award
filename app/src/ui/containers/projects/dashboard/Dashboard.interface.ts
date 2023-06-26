@@ -32,7 +32,15 @@ export type Project = Pick<
 > & { partners: Partner[] };
 export type Partner = Pick<
   PartnerDtoGql,
-  "id" | "claimStatus" | "partnerStatus" | "newForecastNeeded" | "name" | "isWithdrawn" | "isLead" | "projectId"
+  | "accountId"
+  | "id"
+  | "claimStatus"
+  | "partnerStatus"
+  | "newForecastNeeded"
+  | "name"
+  | "isWithdrawn"
+  | "isLead"
+  | "projectId"
 >;
 
 export interface ProjectProps {
