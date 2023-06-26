@@ -1,64 +1,19 @@
 import { flatten } from "@framework/util/arrayHelpers";
-import { scrollToTheTagSmoothly } from "@framework/util/windowHelpers";
 import { useContent } from "@ui/hooks/content.hook";
 import { NestedResult } from "@ui/validation/nestedResult";
 import { Result } from "@ui/validation/result";
 import { IValidationResult, Results } from "@ui/validation/results";
-import { useNavigate } from "react-router-dom";
 import { List } from "./layout/list";
 import { H2 } from "./typography/Heading.variants";
+import { ResultsLinks } from "./ValidationResultLinks";
 
 interface Props {
   validation?: IValidationResult | null;
   compressed?: boolean;
 }
 
-const prepareMessage = (errorMessage: string | null | undefined): React.ReactNode => {
-  if (errorMessage && errorMessage.indexOf("\n") === 0) {
-    return errorMessage;
-  }
-
-  if (errorMessage) {
-    return errorMessage.split("\n").reduce<React.ReactNode[]>((result, current, index) => {
-      if (index > 0) {
-        result.push(<br />);
-      }
-      result.push(current);
-      return result;
-    }, []);
-  }
-
-  return null;
-};
-
 export const ValidationSummary = ({ validation, compressed }: Props) => {
   const { getContent } = useContent();
-
-  /**
-   * creates links for the results
-   */
-  const ResultsLinks = ({ results }: { results: Result[] }) => {
-    const navigate = useNavigate();
-
-    return (
-      <>
-        {results.map(x => (
-          <li key={x.key}>
-            <a
-              onClick={e => {
-                e.preventDefault();
-                scrollToTheTagSmoothly(x.key);
-                navigate(`#${x.key}`, { replace: true });
-              }}
-              href={`#${x.key}`}
-            >
-              {prepareMessage(x.errorMessage)}
-            </a>
-          </li>
-        ))}
-      </>
-    );
-  };
 
   const results: Result[] = [];
   populateResults();
