@@ -8,6 +8,7 @@ import { ApiErrorContextProvider } from "@ui/context/api-error";
 import { FormErrorContextProvider } from "@ui/context/form-error";
 import { ModalProvider, ModalRegister } from "@ui/redux/modalProvider";
 import { createStores, StoresProvider } from "@ui/redux/storesProvider";
+import { MessageContextProvider } from "@ui/context/messages";
 import { useEffect, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -73,13 +74,15 @@ const Client = () => {
       <ClientConfigProvider config={clientConfig}>
         <ApiErrorContextProvider value={apiErrors}>
           <FormErrorContextProvider value={formErrors}>
-            <BrowserRouter>
-              <StoresProvider value={getStores()}>
-                <ModalProvider value={new ModalRegister()}>
-                  <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-                </ModalProvider>
-              </StoresProvider>
-            </BrowserRouter>
+            <MessageContextProvider>
+              <BrowserRouter>
+                <StoresProvider value={getStores()}>
+                  <ModalProvider value={new ModalRegister()}>
+                    <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
+                  </ModalProvider>
+                </StoresProvider>
+              </BrowserRouter>
+            </MessageContextProvider>
           </FormErrorContextProvider>
         </ApiErrorContextProvider>
       </ClientConfigProvider>

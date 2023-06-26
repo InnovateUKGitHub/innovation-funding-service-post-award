@@ -38,6 +38,7 @@ import { ForbiddenError, FormHandlerError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { renderHtml } from "./html";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
+import { MessageContextProvider } from "@ui/context/messages";
 
 interface IServerApp {
   requestUrl: string;
@@ -69,7 +70,9 @@ const ServerApp = ({
           <StaticRouter location={requestUrl}>
             <StoresProvider value={stores}>
               <ModalProvider value={modalRegister}>
-                <App store={store} relayEnvironment={relayEnvironment} />
+                <MessageContextProvider>
+                  <App store={store} relayEnvironment={relayEnvironment} />
+                </MessageContextProvider>
               </ModalProvider>
             </StoresProvider>
           </StaticRouter>
