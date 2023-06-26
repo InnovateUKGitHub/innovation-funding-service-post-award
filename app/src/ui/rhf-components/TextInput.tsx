@@ -3,7 +3,7 @@ import { forwardRef } from "react";
 import type { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import type { FormInputWidths } from "../components/inputs/input-utils";
 
-type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
+export type TextInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   "data-qa"?: string;
   hasError?: boolean;
   inputWidth?: FormInputWidths;
@@ -27,6 +27,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           className,
         )}
         type="text"
+        id={!!props.id ? props.id : props.name}
         {...props}
       />
       {suffix && <div className="govuk-input__suffix">{suffix}</div>}

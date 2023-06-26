@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { SubmitButton } from "./SubmitButton";
+import { SubmitButton } from "./Button";
 
 const meta: Meta<typeof SubmitButton> = {
   title: "React Hook Form/Submit Button",

@@ -4,7 +4,8 @@ import { DetailedHTMLProps, LabelHTMLAttributes } from "react";
 type Props = DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement> & {
   "data-qa"?: string;
   htmlFor: string;
+  bold?: boolean;
 };
-export const Label = ({ className, htmlFor, ...props }: Props) => (
-  <label className={cx("govuk-label", className)} htmlFor={htmlFor} {...props} />
+export const Label = ({ className, htmlFor, bold, ...props }: Props) => (
+  <label className={cx("govuk-label", { "govuk-label--m": bold }, className)} htmlFor={htmlFor} {...props} />
 );
