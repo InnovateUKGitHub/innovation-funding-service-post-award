@@ -2616,29 +2616,48 @@ exports[`Storyshots React Hook Form/Fieldset Standard Fieldset 1`] = `
   <fieldset
     className="govuk-fieldset"
   >
-    <label
-      className="govuk-label"
-      htmlFor="first-name"
+    <legend
+      className="govuk-fieldset__legend govuk-fieldset__legend--m"
     >
-      First name
-    </label>
+      Personal details
+    </legend>
     <div
-      className="govuk-hint"
-      id="hint-for-first-name"
+      className="govuk-form-group"
     >
-      your first name is your current legally registered first name
-    </div>
-    <div
-      className="govuk-input__wrapper"
-    >
-      <input
-        aria-describedby="hint-for-first-name"
-        className="govuk-input govuk-input--width-10"
-        id="first-name"
-        name="first-name"
-        placeholder="first name"
-        type="text"
-      />
+      <label
+        className="govuk-label"
+        htmlFor="first-name"
+      >
+        First name
+      </label>
+      <div
+        className="govuk-hint"
+        id="hint-for-first-name"
+      >
+        your first name is your current legally registered first name
+      </div>
+      <p
+        className="govuk-error-message"
+        style={
+          Object {
+            "textAlign": "left",
+          }
+        }
+      >
+        first name is required
+      </p>
+      <div
+        className="govuk-input__wrapper"
+      >
+        <input
+          aria-describedby="hint-for-first-name"
+          className="govuk-input govuk-input--width-10"
+          id="first-name"
+          name="first-name"
+          placeholder="first name"
+          type="text"
+        />
+      </div>
     </div>
   </fieldset>
 </div>
@@ -2669,6 +2688,109 @@ exports[`Storyshots React Hook Form/Label Standard Label 1`] = `
   >
     A Label
   </label>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/Legend Standard Label 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <legend
+    className="govuk-fieldset__legend govuk-fieldset__legend--m"
+  >
+    A Legendary Legend
+  </legend>
+</div>
+`;
+
+exports[`Storyshots React Hook Form/Page Standard Page 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-width-container"
+  >
+    <main
+      className="govuk-main-wrapper"
+      id="main-content"
+      role="main"
+    >
+      <div
+        aria-live="polite"
+      >
+        <div
+          aria-labelledby="error-summary-title"
+          className="govuk-error-summary"
+          data-module="govuk-error-summary"
+          data-qa="validation-summary"
+          role="alert"
+          tabIndex={-1}
+        >
+          <h2
+            className="govuk-error-summary__title"
+            id="error-summary-title"
+          >
+            components.validationSummary.title
+          </h2>
+          <div
+            className="govuk-error-summary__body"
+          >
+            <ul
+              className="govuk-list govuk-error-summary__list"
+            >
+              <li>
+                <a
+                  href="#input"
+                  onClick={[Function]}
+                >
+                  Field cannot be empty
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <h1>
+        Demo page
+      </h1>
+      <p
+        className="govuk-body"
+      >
+        This is a GovUk Page
+      </p>
+      <div
+        className="govuk-form-group"
+      >
+        <label
+          className="govuk-label"
+          htmlFor="input"
+        >
+          This is an input
+        </label>
+        <p
+          className="govuk-error-message"
+          style={
+            Object {
+              "textAlign": "left",
+            }
+          }
+        >
+          Field cannot be empty
+        </p>
+        <div
+          className="govuk-input__wrapper"
+        >
+          <input
+            className="govuk-input govuk-!-width-one-third"
+            id="input"
+            type="text"
+          />
+        </div>
+      </div>
+    </main>
+  </div>
 </div>
 `;
 

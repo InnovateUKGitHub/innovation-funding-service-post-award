@@ -3,6 +3,7 @@
 exports[`useOnUpdate should return an object with on \`onUpdate\` and an \`apiError\` property 1`] = `
 Object {
   "apiError": null,
+  "isFetching": false,
   "onUpdate": [Function],
 }
 `;

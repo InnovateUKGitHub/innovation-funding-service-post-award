@@ -3,6 +3,7 @@ import { useApiErrorContext } from "@ui/context/api-error";
 import { noop } from "@ui/helpers/noop";
 import { useState } from "react";
 import { Logger } from "@shared/developmentLogger";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 
 /**
  * ### useOnUpdate
@@ -15,33 +16,39 @@ import { Logger } from "@shared/developmentLogger";
  * @returns an object with `onUpdate` function and `apiError` response
  */
 
-export const useOnUpdate = <TFormValues, TPromise>({
+export const useOnUpdate = <TFormValues, TResponse>({
   req,
   onSuccess = noop,
   onError = noop,
 }: {
-  req: (data: TFormValues) => TPromise;
-  onSuccess?: () => void;
-  onError?: () => void;
+  req: (data: TFormValues) => Promise<TResponse>;
+  onSuccess?: (data: TFormValues, res: TResponse) => void;
+  onError?: (e: unknown) => void;
 }) => {
   const serverRenderedApiError = useApiErrorContext();
   const [apiError, setApiError] = useState(serverRenderedApiError);
+  const [isFetching, setIsFetching] = useState(false);
 
   const onUpdate = async (data: TFormValues) => {
     try {
-      await req(data);
-      onSuccess();
+      setIsFetching(true);
+      const res = await req(data);
+      setIsFetching(false);
+      onSuccess(data, res);
     } catch (e: unknown) {
       const logger = new Logger("onUpdate");
 
       if (isApiError(e)) {
         setApiError(e);
+        scrollToTheTopSmoothly();
       }
 
+      setIsFetching(false);
+
       logger.error("request error", e);
-      onError();
+      onError(e);
     }
   };
 
-  return { onUpdate, apiError };
+  return { onUpdate, apiError, isFetching };
 };
