@@ -65,10 +65,13 @@ export function Page({
   const projectState = useProjectStatus();
 
   const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;
+  const validationErrorSize = validationErrors === undefined ? 0 : Object.keys(validationErrors)?.length;
 
   useEffect(() => {
-    scrollToTheTopSmoothly();
-  }, [apiError]);
+    if (validationErrorSize > 1) {
+      scrollToTheTopSmoothly();
+    }
+  }, [apiError, validationErrorSize]);
 
   return (
     <GovWidthContainer qa={qa} className={className}>
