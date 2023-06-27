@@ -27,41 +27,40 @@ import { Markdown } from "@ui/components/renderers/markdown";
 import { P } from "@ui/rhf-components/Typography";
 import { Form } from "@ui/rhf-components/Form";
 import { Fieldset } from "@ui/rhf-components/Fieldset";
-import { ValidationError } from "@ui/rhf-components/ValidationError";
 import { Legend } from "@ui/rhf-components/Legend";
-import { Label } from "@ui/rhf-components/Label";
-import { SubmitButton, Button } from "@ui/rhf-components/Button";
+import { SubmitButton } from "@ui/rhf-components/Button";
 import { FormGroup } from "@ui/rhf-components/FormGroup";
 import { RadioList, Radio } from "@ui/rhf-components/Radio";
-import {
-  useClaimReviewPageData,
-  FormValues,
-  useOnUpdateClaimReview,
-  useReviewContent,
-  useOnDeleteClaimDocument,
-  useOnUploadClaimDocument,
-} from "./claimReview.logic";
+import { useClaimReviewPageData, FormValues, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
 import { useForm } from "react-hook-form";
-import { useRhfErrors } from "@framework/util/errorHelpers";
-import {
-  claimReviewErrorMap,
-  claimReviewSchema,
-  documentUploadSchema,
-  documentUploadErrorMap,
-} from "./claimReview.zod";
+import { convertResultErrorsToReactHookFormFormat, useRhfErrors } from "@framework/util/errorHelpers";
+import { claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TextAreaField } from "@ui/rhf-components/groups/TextAreaField";
-import { FileInput } from "@ui/rhf-components/FileInput";
-import { Select } from "@ui/rhf-components/Select";
-import { useEnumDocuments } from "./components/allowed-documents.hook";
-import { useMessageContext } from "@ui/context/messages";
-import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { RefreshedQueryOptions, useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { claimReviewQuery } from "./ClaimReview.query";
+import { PageLoader } from "@ui/components/loading";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { Pending } from "@shared/pending";
+import { useStores } from "@ui/redux/storesProvider";
+import { useContent } from "@ui/hooks/content.hook";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { DropdownOption, createTypedForm } from "@ui/components/form";
+import { EnumDocuments } from "./components/EnumDocuments";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
   partnerId: PartnerId;
   periodId: PeriodId;
+}
+
+interface ReviewClaimContainerProps {
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
+  onUpload: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
+  onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
+  refreshedQueryOptions: RefreshedQueryOptions;
 }
 
 /**
@@ -70,19 +69,13 @@ export interface ReviewClaimParams {
  * hook returns content needed for the review page
  */
 
-const ClaimReviewPage = (props: ReviewClaimParams & BaseProps) => {
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
+
+const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimContainerProps) => {
   const content = useReviewContent();
   const { isClient } = useMounted();
-  const [refreshedQueryOptions, refresh] = useRefreshQuery(claimReviewQuery, {
-    projectId: props.projectId,
-    projectIdStr: props.projectId,
-    partnerId: props.partnerId,
-    periodId: props.periodId,
-  });
 
-  const data = useClaimReviewPageData(props.projectId, props.partnerId, props.periodId, refreshedQueryOptions);
-
-  const { messages } = useMessageContext();
+  const data = useClaimReviewPageData(props.projectId, props.partnerId, props.periodId, props.refreshedQueryOptions);
 
   const { register, formState, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
@@ -90,20 +83,6 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps) => {
       comments: "",
     },
     resolver: zodResolver(claimReviewSchema, { errorMap: claimReviewErrorMap }),
-  });
-
-  const allowedDocumentTypes = useEnumDocuments(allowedClaimDocuments);
-
-  const {
-    register: registerDocuments,
-    formState: formStateDocuments,
-    handleSubmit: handleSubmitDocuments,
-  } = useForm<{ attachment: FileList; description: string }>({
-    defaultValues: {
-      attachment: undefined,
-      description: "",
-    },
-    resolver: zodResolver(documentUploadSchema, { errorMap: documentUploadErrorMap }),
   });
 
   const { onUpdate, apiError, isFetching } = useOnUpdateClaimReview(
@@ -114,28 +93,15 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps) => {
     data.claim,
   );
 
-  const { onUpdate: onDeleteClaimDocument, apiError: deleteApiError } = useOnDeleteClaimDocument(
-    props.partnerId,
-    props.projectId,
-    props.periodId,
-    refresh,
-  );
-
-  const { onUpdate: onUploadClaimDocuments, apiError: uploadApiError } = useOnUploadClaimDocument(
-    props.partnerId,
-    props.projectId,
-    props.periodId,
-    refresh,
-  );
+  console.log("documentSEditor", props.documentsEditor);
 
   const validatorErrors = useRhfErrors<FormValues>(formState.errors);
-  const documentValidatorErrors = useRhfErrors(formStateDocuments.errors);
+  const documentValidatorErrors = props.documentsEditor?.validator?.showValidationErrors
+    ? convertResultErrorsToReactHookFormFormat(props.documentsEditor?.validator?.errors)
+    : [];
   const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
   const { isMo } = getAuthRoles(data.project.roles);
 
-  console.log("documentFormState.errors", formStateDocuments.errors);
-
-  console.log("documentValidatorErrors", documentValidatorErrors);
   // Disable completing the form if internal impact management and not received PCF
   const impactManagementPcfNotSubmittedForFinalClaim =
     data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
@@ -166,11 +132,11 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps) => {
   return (
     <Page
       backLink={backLinkElement}
-      apiError={apiError || deleteApiError || uploadApiError}
+      apiError={apiError}
       validationErrors={Object.assign({}, validatorErrors, documentValidatorErrors)}
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
     >
-      <Messages messages={messages} />
+      <Messages messages={props.messages} />
 
       {data.claim.isFinalClaim && <ValidationMessage messageType="info" message={content.finalClaim} />}
 
@@ -236,55 +202,58 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps) => {
             title={content.accordionTitleSupportingDocumentsForm}
             qa="upload-supporting-documents-form-accordion"
           >
-            <Form
-              encType="multipart"
-              onSubmit={handleSubmitDocuments(onUploadClaimDocuments)}
-              data-qa="projectDocumentUpload"
-            >
-              <Fieldset>
-                <Markdown value={content.uploadInstruction} />
+            <EnumDocuments documentsToCheck={allowedClaimDocuments}>
+              {docs => (
+                <>
+                  <UploadForm.Form
+                    enctype="multipart"
+                    editor={props.documentsEditor}
+                    onChange={dto => props.onUpload(false, dto)}
+                    onSubmit={() => props.onUpload(true, props.documentsEditor.data)}
+                    qa="projectDocumentUpload"
+                  >
+                    <UploadForm.Fieldset>
+                      <Markdown value={content.uploadInstruction} />
 
-                <DocumentGuidance />
+                      <DocumentGuidance />
 
-                <FormGroup hasError={!!documentValidatorErrors?.attachment}>
-                  <ValidationError error={documentValidatorErrors?.attachment} />
-                  <FileInput
-                    aria-label={content.labelInputUpload}
-                    id="attachment"
-                    {...registerDocuments("attachment")}
-                    multiple
-                  />
-                </FormGroup>
+                      <UploadForm.MultipleFileUpload
+                        label={content.labelInputUpload}
+                        name="attachment"
+                        labelHidden
+                        value={x => x.files}
+                        update={(dto, files) => (dto.files = files || [])}
+                        validation={props.documentsEditor.validator.files}
+                      />
 
-                <FormGroup>
-                  <Label htmlFor="description">{content.descriptionLabel}</Label>
-                  <Select id="description" {...registerDocuments("description")}>
-                    <option data-qa="placeholder-option" aria-selected={false} value="">
-                      {"-- No description --"}
-                    </option>
-                    {allowedDocumentTypes.map(doc => (
-                      <option key={doc.id}>{doc.value}</option>
-                    ))}
-                  </Select>
-                </FormGroup>
-              </Fieldset>
+                      <UploadForm.DropdownList
+                        label={content.descriptionLabel}
+                        labelHidden={false}
+                        hasEmptyOption
+                        placeholder="-- No description --"
+                        name="description"
+                        validation={props.documentsEditor.validator.files}
+                        options={docs}
+                        value={selectedOption => filterDropdownList(selectedOption, docs)}
+                        update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
+                      />
+                    </UploadForm.Fieldset>
 
-              <FormGroup hasError={!!documentValidatorErrors?.attachment}>
-                <ValidationError error={documentValidatorErrors?.attachment} />
-                <Button type="submit" secondary name="button_reviewDocuments">
-                  {content.buttonUpload}
-                </Button>
-              </FormGroup>
-            </Form>
+                    <UploadForm.Submit name="reviewDocuments" styling="Secondary">
+                      {content.buttonUpload}
+                    </UploadForm.Submit>
+                  </UploadForm.Form>
 
-            <Section>
-              <DocumentEdit
-                qa="claim-supporting-documents"
-                // onRemove={document => props.onDelete(props.documentsEditor.data, document)}
-                onRemove={doc => onDeleteClaimDocument(doc)}
-                documents={data.documents}
-              />
-            </Section>
+                  <Section>
+                    <DocumentEdit
+                      qa="claim-supporting-documents"
+                      onRemove={document => props.onDelete(props.documentsEditor.data, document)}
+                      documents={data.documents}
+                    />
+                  </Section>
+                </>
+              )}
+            </EnumDocuments>
           </AccordionItem>
         </Accordion>
       </Section>
@@ -337,18 +306,82 @@ const getClaimLineItemLink = (props: BaseProps & ReviewClaimParams, costCategory
   });
 };
 
-// const filterDropdownList = (selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) => {
-//   if (!documents.length || !selectedDocument.description) return undefined;
+const filterDropdownList = (selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) => {
+  if (!documents.length || !selectedDocument.description) return undefined;
 
-//   const targetId = selectedDocument.description.toString();
+  const targetId = selectedDocument.description.toString();
 
-//   return documents.find(x => x.id === targetId);
-// };
+  return documents.find(x => x.id === targetId);
+};
+
+const ClaimReviewContainer = (props: ReviewClaimParams & BaseProps) => {
+  const stores = useStores();
+  const { getContent } = useContent();
+
+  const [refreshedQueryOptions, refresh] = useRefreshQuery(claimReviewQuery, {
+    projectId: props.projectId,
+    projectIdStr: props.projectId,
+    partnerId: props.partnerId,
+    periodId: props.periodId,
+  });
+
+  const combined = Pending.combine({
+    documentsEditor: stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId),
+  });
+
+  const onUpload = (saving: boolean, dto: MultipleDocumentUploadDto) => {
+    stores.messages.clearMessages();
+
+    stores.claimDocuments.updateClaimDocumentsEditor(
+      saving,
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      dto,
+      getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length })),
+      () => {
+        stores.claims.markClaimAsStale(props.partnerId, props.periodId);
+        refresh();
+      },
+    );
+  };
+
+  const onDelete = (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => {
+    stores.messages.clearMessages();
+
+    stores.claimDocuments.deleteClaimDocument(
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      dto,
+      document,
+      getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
+      () => {
+        stores.claims.markClaimAsStale(props.partnerId, props.periodId);
+        refresh();
+      },
+    );
+  };
+  return (
+    <PageLoader
+      pending={combined}
+      render={data => (
+        <ClaimReviewPage
+          refreshedQueryOptions={refreshedQueryOptions}
+          onUpload={onUpload}
+          onDelete={onDelete}
+          {...props}
+          {...data}
+        />
+      )}
+    />
+  );
+};
 
 export const ReviewClaimRoute = defineRoute({
   routeName: "reviewClaim",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId",
-  container: ClaimReviewPage,
+  container: ClaimReviewContainer,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,

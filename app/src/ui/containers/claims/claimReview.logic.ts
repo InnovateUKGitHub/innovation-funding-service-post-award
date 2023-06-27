@@ -20,12 +20,6 @@ import { apiClient } from "@ui/apiClient";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { useContent } from "@ui/hooks/content.hook";
-import { useMessageContext } from "@ui/context/messages";
-import { DocumentDescription, allowedClaimDocuments } from "@framework/constants/documentDescription";
-import { IFileWrapper } from "@framework/types/fileWapper";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { useEnumDocuments } from "./components/allowed-documents.hook";
-import { ClientFileWrapper } from "@client/clientFileWrapper";
 
 type QueryOptions = RefreshedQueryOptions | { fetchPolicy: "network-only" };
 export const useClaimReviewPageData = (
@@ -221,68 +215,6 @@ export const useOnUpdateClaimReview = (
     },
     onSuccess() {
       navigate(navigateTo);
-    },
-  });
-};
-
-export const useOnDeleteClaimDocument = (
-  partnerId: PartnerId,
-  projectId: ProjectId,
-  periodId: PeriodId,
-  refresh: () => void,
-) => {
-  const { clearMessages, pushMessage } = useMessageContext();
-  const { getContent } = useContent();
-  return useOnUpdate<{ id: string; fileName: string }, boolean>({
-    req(document) {
-      clearMessages();
-      return apiClient.documents.deleteClaimDocument({
-        documentId: document.id,
-        claimKey: { partnerId, projectId, periodId },
-      });
-    },
-    onSuccess(document) {
-      refresh();
-      pushMessage(getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })));
-    },
-  });
-};
-
-export const useOnUploadClaimDocument = (
-  partnerId: PartnerId,
-  projectId: ProjectId,
-  periodId: PeriodId,
-  refresh: () => void,
-) => {
-  const { clearMessages, pushMessage } = useMessageContext();
-  const { getContent } = useContent();
-  const allowedDocumentTypes = useEnumDocuments(allowedClaimDocuments);
-
-  return useOnUpdate<{ description: string; attachment: FileList }, { documentIds: string[] }>({
-    req(data) {
-      clearMessages();
-      console.log("data", data);
-      const files: IFileWrapper[] = [];
-
-      for (const a of data.attachment) {
-        files.push(new ClientFileWrapper(a));
-      }
-
-      const payload = {
-        claimKey: { partnerId, projectId, periodId },
-        documents: {
-          description: Number(allowedDocumentTypes.find(x => x.value === data.description)?.id) as DocumentDescription,
-          files,
-          partnerId,
-        } as MultipleDocumentUploadDto,
-      };
-
-      return apiClient.documents.uploadClaimDocuments(payload);
-    },
-    onSuccess(_, res) {
-      const count = res?.documentIds?.length;
-      pushMessage(getContent(x => x.documentMessages.uploadedDocuments({ count })));
-      refresh();
     },
   });
 };

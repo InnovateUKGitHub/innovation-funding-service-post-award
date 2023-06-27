@@ -107,8 +107,6 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
   ): Promise<ClaimDto> {
     const { projectId, partnerId, periodId, claim } = params;
 
-    console.log("update params", params);
-
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {
       throw new BadRequestError();
     }
