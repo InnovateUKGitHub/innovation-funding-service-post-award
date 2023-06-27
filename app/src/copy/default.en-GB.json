@@ -960,6 +960,11 @@
       "firstDayOfPauseTitle": "First day of pause",
       "lastDayOfPauseTitle": "Last day of pause (if known)",
       "lastDayOfPauseHint": "This will happen on the last day of the month."
+    },
+    "pcrDelete": {
+      "backLink": "Back to project change requests",
+      "alertMessage": "All the information will be permanently deleted.",
+      "button": "Delete request"
     }
   },
   "claimsMessages": {

@@ -13,6 +13,7 @@ import { Button } from "@ui/rhf-components/Button";
 import { useOnDeletePcr, usePcrDeleteQuery } from "./pcrDelete.logic";
 import { useForm } from "react-hook-form";
 import { useGetPcrTypeName } from "./utils/useGetPcrTypeName";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface PCRDeleteParams {
   projectId: ProjectId;
@@ -22,6 +23,8 @@ export interface PCRDeleteParams {
 const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeleteParams) => {
   const { project, pcr } = usePcrDeleteQuery(projectId, pcrId);
   const getPcRTypeName = useGetPcrTypeName();
+
+  const { getContent } = useContent();
 
   const {
     onUpdate: onDelete,
@@ -36,14 +39,16 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
   return (
     <Page
       backLink={
-        <BackLink route={props.routes.pcrsDashboard.getLink({ projectId })}>Back to project change requests</BackLink>
+        <BackLink route={props.routes.pcrsDashboard.getLink({ projectId })}>
+          {getContent(x => x.pages.pcrDelete.backLink)}
+        </BackLink>
       }
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       projectStatus={project.status}
       apiError={apiError}
     >
       <Section>
-        <ValidationMessage messageType="alert" message="All the information will be permanently deleted." />
+        <ValidationMessage messageType="alert" message={getContent(x => x.pages.pcrDelete.alertMessage)} />
         <SummaryList qa="pcr_viewItem">
           <SummaryListItem label="Request number" content={pcr.requestNumber} qa="requestNumber" />
           <SummaryListItem
@@ -59,7 +64,7 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
       <Section>
         <Form data-qa="pcrDelete" onSubmit={handleSubmit(onDelete)}>
           <Button type="submit" name="button_delete" warning disabled={isFetching}>
-            Delete request
+            {getContent(x => x.pages.pcrDelete.button)}
           </Button>
         </Form>
       </Section>
