@@ -60,7 +60,7 @@ describe("claims > Editing a claim by accessing cost categories", () => {
 
   it("Should validate doc uploads by clicking Upload without selecting a document", () => {
     cy.submitButton("Upload documents").click();
-    cy.getByQA("validation-summary").contains("Choose a file to upload");
+    cy.getByQA("validation-summary").contains("a", "Choose a file to upload");
   });
 
   it("Should allow a file to be uploaded", allowFileUpload);

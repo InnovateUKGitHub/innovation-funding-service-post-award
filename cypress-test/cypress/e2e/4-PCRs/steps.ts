@@ -538,10 +538,10 @@ export const navigateToPartnerCosts = () => {
 
 export const pcrNewCostCatLineItem = () => {
   cy.submitButton("Save and return to labour").click();
-  cy.getByQA("validation-summary").contains("Description of role is required");
-  cy.getByQA("validation-summary").contains("Gross cost of role is required");
-  cy.getByQA("validation-summary").contains("Rate per day is required");
-  cy.getByQA("validation-summary").contains("Days spent on project is required");
+  cy.getByQA("validation-summary").contains("a", "Description of role is required");
+  cy.getByQA("validation-summary").contains("a", "Gross cost of role is required");
+  cy.getByQA("validation-summary").contains("a", "Rate per day is required");
+  cy.getByQA("validation-summary").contains("a", "Days spent on project is required");
   cy.get(`input[id="description"]`).type("Law keeper");
   cy.get("h2").contains("Labour");
   cy.get(`input[id="grossCostOfRole"]`).type("50000");
@@ -559,7 +559,7 @@ export const addPartnerWholeDaysOnly = () => {
   ["0.5", "-100", "Stuff", "100.32", "$^&&*&)", "100.232321"].forEach(entry => {
     cy.get(`input[id="daysSpentOnProject"]`).clear().type(entry);
     cy.submitButton("Save and return to labour").click();
-    cy.getByQA("validation-summary").contains("Days spent on project must be a whole number, like 15");
+    cy.getByQA("validation-summary").contains("a", "Days spent on project must be a whole number, like 15");
     cy.reload();
   });
 };
@@ -692,16 +692,16 @@ export const addSourceOfFundingValidation = () => {
   cy.getByQA("add-fund").contains("Add another source of funding").click().wait(500);
   cy.submitButton("Save and continue").click();
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
-    cy.getByQA("validation-summary").contains(message);
+    cy.getByQA("validation-summary").contains("a", message);
   });
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
     cy.get("p").contains(message);
   });
   cy.get("#item_0_value").type("error").wait(500);
-  cy.getByQA("validation-summary").contains("Funding amount must be a number");
+  cy.getByQA("validation-summary").contains("a", "Funding amount must be a number");
   cy.get("p").contains("Funding amount must be a number");
   cy.get("#item_0_date_month").type("error");
-  cy.getByQA("validation-summary").contains("Date secured must be a date");
+  cy.getByQA("validation-summary").contains("a", "Date secured must be a date");
   cy.get("p").contains("Date secured must be a date");
 };
 
@@ -1053,12 +1053,12 @@ export const validateAddPerson = () => {
   ["First name", "Last name"].forEach(field => {
     cy.getByLabel(field).clear().type("Thisisovertheagreedlimitforvalidationfiftycharacter");
     cy.getByQA("button_default-qa").contains("Save and continue").click();
-    cy.getByQA("validation-summary").contains("Finance contact name must be 50 characters or less.");
+    cy.getByQA("validation-summary").contains("a", "Finance contact name must be 50 characters or less.");
   }),
     cy.getByLabel("Phone number").clear().type("012345678910111213141");
   cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
   cy.getByQA("button_default-qa").contains("Save and continue").click();
-  cy.getByQA("validation-summary").contains("Finance contact phone number must be 20 characters or less.");
+  cy.getByQA("validation-summary").contains("a", "Finance contact phone number must be 20 characters or less.");
   cy.getByQA("field-contact1Phone").contains("Finance contact phone number must be 20 characters or less.");
 
   cy.getByLabel("Email")
@@ -1067,7 +1067,7 @@ export const validateAddPerson = () => {
       "ThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThis",
     );
   cy.getByQA("button_default-qa").contains("Save and continue").click();
-  cy.getByQA("validation-summary").contains("Email address must be 255 characters or less.");
+  cy.getByQA("validation-summary").contains("a", "Email address must be 255 characters or less.");
   cy.getByQA("field-contact1Email").contains("Email address must be 255 characters or less.");
   cy.getByQA("field-contact1Forename").contains("Finance contact name must be 50 characters or less.");
   cy.getByQA("field-contact1Surname").contains("Finance contact surname must be 50 characters or less.");
@@ -1083,8 +1083,8 @@ export const clearAndEnterValidPersonInfo = () => {
 
 export const newInfoValidation = () => {
   cy.submitButton("Save and continue").click();
-  cy.getByQA("validation-summary").contains("Select a project role");
-  cy.getByQA("validation-summary").contains("Select a project type");
+  cy.getByQA("validation-summary").contains("a", "Select a project role");
+  cy.getByQA("validation-summary").contains("a", "Select a project type");
   cy.get("p").contains("Select a project role.");
   cy.get("p").contains("Select a project type.");
 };
@@ -1113,7 +1113,7 @@ export const validateChangeName = () => {
   cy.get("h2").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
   cy.getByQA("button_default-qa").contains("Save and return to request").click();
-  cy.getByQA("validation-summary").contains("Enter a new partner name");
+  cy.getByQA("validation-summary").contains("a", "Enter a new partner name");
   cy.backLink("Back to request").click();
   cy.get("h1").contains("Request");
   cy.get("a").contains("Change a partner's name").click();
@@ -1131,8 +1131,8 @@ export const clearAndValidate = () => {
   cy.get("h2").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
-  cy.getByQA("validation-summary").contains("Enter a project summary");
-  cy.getByQA("validation-summary").contains("Enter a public description");
+  cy.getByQA("validation-summary").contains("a", "Enter a project summary");
+  cy.getByQA("validation-summary").contains("a", "Enter a public description");
   cy.getByQA("newPublicDescription").contains("Edit").click();
 };
 
@@ -1146,8 +1146,8 @@ export const validateDateRequired = () => {
     cy.get(input).type("Error");
   });
   cy.submitButton("Save and continue").click();
-  cy.getByQA("validation-summary").contains("Enter a valid project suspension start date.");
-  cy.getByQA("validation-summary").contains("Enter a project suspension end date.");
+  cy.getByQA("validation-summary").contains("a", "Enter a valid project suspension start date.");
+  cy.getByQA("validation-summary").contains("a", "Enter a project suspension end date.");
 };
 
 export const validateGrantMoving = () => {
@@ -1155,6 +1155,15 @@ export const validateGrantMoving = () => {
   cy.get("h2").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
-  cy.getByQA("validation-summary").contains("The value of a grant moving over financial year must be numerical.");
+  cy.getByQA("validation-summary").contains("a", "The value of a grant moving over financial year must be numerical.");
   cy.clickCheckBox("I agree with this change");
+};
+
+export const validatePcrDurationPage = () => {
+  cy.submitButton("Submit request").click();
+  cy.getByQA("validation-summary").contains("a", "Reasons entry must be complete.");
+  cy.getByQA("validation-summary").contains("a", "Change project duration must be complete.");
+  cy.get("p").contains("Reasons entry must be complete.");
+  cy.get("p").contains("Change project duration must be complete.");
+  cy.reload();
 };

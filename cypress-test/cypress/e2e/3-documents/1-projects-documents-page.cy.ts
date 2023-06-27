@@ -40,7 +40,7 @@ describe("Project Documents page", () => {
 
   it("Should validate when uploading without choosing a file", () => {
     cy.submitButton("Upload").click();
-    cy.getByQA("validation-summary").contains("Choose a file to upload");
+    cy.getByQA("validation-summary").contains("a", "Choose a file to upload");
   });
 
   /**

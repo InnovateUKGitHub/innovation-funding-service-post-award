@@ -10,6 +10,7 @@ import {
   existingSubheadings,
   proposedSubheadings,
   markAsCompleteSave,
+  validatePcrDurationPage,
 } from "../steps";
 const projectManager = "james.black@euimeabs.test";
 
@@ -41,6 +42,8 @@ describe("PCR >  Change project duration > Create PCR", () => {
   });
 
   it("Should show the correct PCR type and continue to begin the PCR", changeDurationPcrType);
+
+  it("Should attempt to submit and trigger validation messaging", validatePcrDurationPage);
 
   it("Should click 'Change project duration' and continue", () => {
     cy.get("a").contains("Change project duration").click();
