@@ -24,9 +24,9 @@ export interface PCRDeleteParams {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  pcr: Pending<PCRDto>;
-  editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
+  project: ProjectDto;
+  pcr: PCRDto;
+  editor: IEditorStore<PCRDto, PCRDtoValidator>;
 }
 
 interface Callbacks {
@@ -37,16 +37,7 @@ const DeleteForm = createTypedForm<PCRDto>();
 
 class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      pcr: this.props.pcr,
-      editor: this.props.editor,
-    });
-
-    return <PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor)} />;
-  }
-
-  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+    const { project, pcr, editor } = this.props;
     return (
       <Page
         backLink={
@@ -93,22 +84,19 @@ const PCRDeleteContainer = (props: PCRDeleteParams & BaseProps) => {
   const navigate = useNavigate();
   const stores = useStores();
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    pcr: stores.projectChangeRequests.getById(props.projectId, props.pcrId),
+    editor: stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId),
+  });
+
+  const onDelete = (projectId: ProjectId, pcrId: PcrId, dto: PCRDto) =>
+    stores.projectChangeRequests.deletePcr(projectId, pcrId, dto, "The project change request has been deleted.", () =>
+      navigate(props.routes.pcrsDashboard.getLink({ projectId }).path),
+    );
+
   return (
-    <PCRDeleteComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-      editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-      onDelete={(projectId, pcrId, dto) =>
-        stores.projectChangeRequests.deletePcr(
-          projectId,
-          pcrId,
-          dto,
-          "The project change request has been deleted.",
-          () => navigate(props.routes.pcrsDashboard.getLink({ projectId }).path),
-        )
-      }
-    />
+    <PageLoader pending={combined} render={data => <PCRDeleteComponent {...props} {...data} onDelete={onDelete} />} />
   );
 };
 
