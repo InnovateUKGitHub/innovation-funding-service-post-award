@@ -1,57 +1,46 @@
-import { useNavigate } from "react-router-dom";
-import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { BaseProps, defineRoute } from "../containerBase";
 import { ProjectRole } from "@framework/constants/project";
-import { ProjectDto } from "@framework/dtos/projectDto";
-import { Page } from "@ui/components/layout/page";
+import { Page } from "@ui/rhf-components/Page";
 import { Section } from "@ui/components/layout/section";
 import { BackLink } from "@ui/components/links";
-import { PageLoader } from "@ui/components/loading";
 import { ShortDate } from "@ui/components/renderers/date";
 import { LineBreakList } from "@ui/components/renderers/lineBreakList";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { ValidationMessage } from "@ui/components/validationMessage";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
-import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Title } from "@ui/components/projects/title";
-import { createTypedForm } from "@ui/components/form";
-import { usePcrDeleteQuery } from "./pcrDelete.logic";
+import { Form } from "@ui/rhf-components/Form";
+import { Button } from "@ui/rhf-components/Button";
+import { useOnDeletePcr, usePcrDeleteQuery } from "./pcrDelete.logic";
+import { useForm } from "react-hook-form";
+import { useGetPcrTypeName } from "./utils/useGetPcrTypeName";
 
 export interface PCRDeleteParams {
   projectId: ProjectId;
   pcrId: PcrId;
 }
 
-interface Data {
-  editor: IEditorStore<PCRDto, PCRDtoValidator>;
-}
-
-interface Callbacks {
-  onDelete: (projectId: ProjectId, pcrId: PcrId, dto: PCRDto) => void;
-}
-
-const DeleteForm = createTypedForm<PCRDto>();
-
-const PCRDeleteComponent = ({
-  editor,
-  projectId,
-  pcrId,
-  onDelete,
-  routes,
-}: BaseProps & Data & Callbacks & PCRDeleteParams) => {
+const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeleteParams) => {
   const { project, pcr } = usePcrDeleteQuery(projectId, pcrId);
+  const getPcRTypeName = useGetPcrTypeName();
+
+  const {
+    onUpdate: onDelete,
+    apiError,
+    isFetching,
+  } = useOnDeletePcr(projectId, pcrId, props.routes.pcrsDashboard.getLink({ projectId }).path);
+
+  const { handleSubmit } = useForm({
+    defaultValues: {},
+  });
 
   return (
     <Page
       backLink={
-        <BackLink route={routes.pcrsDashboard.getLink({ projectId })}>Back to project change requests</BackLink>
+        <BackLink route={props.routes.pcrsDashboard.getLink({ projectId })}>Back to project change requests</BackLink>
       }
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
       projectStatus={project.status}
-      error={editor.error}
-      validator={editor.validator}
+      apiError={apiError}
     >
       <Section>
         <ValidationMessage messageType="alert" message="All the information will be permanently deleted." />
@@ -59,7 +48,7 @@ const PCRDeleteComponent = ({
           <SummaryListItem label="Request number" content={pcr.requestNumber} qa="requestNumber" />
           <SummaryListItem
             label="Types"
-            content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
+            content={<LineBreakList items={pcr.items.map(x => getPcRTypeName(x.shortName))} />}
             qa="types"
           />
           <SummaryListItem label="Started" content={<ShortDate value={pcr.started} />} qa="started" />
@@ -68,38 +57,20 @@ const PCRDeleteComponent = ({
       </Section>
 
       <Section>
-        <DeleteForm.Form editor={editor} qa="pcrDelete">
-          <DeleteForm.Button name="delete" styling="Warning" onClick={() => onDelete(projectId, pcrId, editor.data)}>
+        <Form data-qa="pcrDelete" onSubmit={handleSubmit(onDelete)}>
+          <Button type="submit" name="button_delete" warning disabled={isFetching}>
             Delete request
-          </DeleteForm.Button>
-        </DeleteForm.Form>
+          </Button>
+        </Form>
       </Section>
     </Page>
-  );
-};
-
-const PCRDeleteContainer = (props: PCRDeleteParams & BaseProps) => {
-  const navigate = useNavigate();
-  const stores = useStores();
-
-  const combined = Pending.combine({
-    editor: stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId),
-  });
-
-  const onDelete = (projectId: ProjectId, pcrId: PcrId, dto: PCRDto) =>
-    stores.projectChangeRequests.deletePcr(projectId, pcrId, dto, "The project change request has been deleted.", () =>
-      navigate(props.routes.pcrsDashboard.getLink({ projectId }).path),
-    );
-
-  return (
-    <PageLoader pending={combined} render={data => <PCRDeleteComponent {...props} {...data} onDelete={onDelete} />} />
   );
 };
 
 export const PCRDeleteRoute = defineRoute({
   routeName: "pcrDelete",
   routePath: "/projects/:projectId/pcrs/:pcrId/delete",
-  container: PCRDeleteContainer,
+  container: PCRDeletePage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,

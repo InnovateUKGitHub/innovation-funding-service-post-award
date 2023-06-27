@@ -56,7 +56,7 @@ export interface IApiClient {
   forecastGolCosts: forecastGolCosts.IForecastGolCostsApi;
   loans: loans.ILoansApi;
   monitoringReports: monitoringReports.IMonitoringReportsApi;
-  pcrs: pcrs.IPCRsApi;
+  pcrs: pcrs.IPCRsApi & { delete: (params: { projectId: ProjectId; id: PcrId }) => Promise<boolean> };
   projects: projects.IProjectsApi;
   projectContacts: projectContacts.IProjectContactsApi;
   partners: {
