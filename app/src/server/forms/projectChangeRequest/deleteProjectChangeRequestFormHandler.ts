@@ -5,7 +5,7 @@ import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteP
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { PCRsDashboardRoute } from "@ui/containers/pcrs/dashboard/PCRDashboard.page";
-import { PCRDeleteParams, PCRDeleteRoute } from "@ui/containers/pcrs/delete";
+import { PCRDeleteParams, PCRDeleteRoute } from "@ui/containers/pcrs/pcrDelete.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 

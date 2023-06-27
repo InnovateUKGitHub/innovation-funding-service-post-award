@@ -17,6 +17,7 @@ import { useStores } from "@ui/redux/storesProvider";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Title } from "@ui/components/projects/title";
 import { createTypedForm } from "@ui/components/form";
+import { usePcrDeleteQuery } from "./pcrDelete.logic";
 
 export interface PCRDeleteParams {
   projectId: ProjectId;
@@ -24,8 +25,6 @@ export interface PCRDeleteParams {
 }
 
 interface Data {
-  project: Pick<ProjectDto, "title" | "projectNumber" | "status">;
-  pcr: Pick<PCRDto, "requestNumber" | "started" | "lastUpdated"> & { items: Pick<PCRItemDto, "shortName">[] };
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
 }
 
@@ -36,14 +35,14 @@ interface Callbacks {
 const DeleteForm = createTypedForm<PCRDto>();
 
 const PCRDeleteComponent = ({
-  project,
-  pcr,
   editor,
   projectId,
   pcrId,
   onDelete,
   routes,
 }: BaseProps & Data & Callbacks & PCRDeleteParams) => {
+  const { project, pcr } = usePcrDeleteQuery(projectId, pcrId);
+
   return (
     <Page
       backLink={
@@ -84,8 +83,6 @@ const PCRDeleteContainer = (props: PCRDeleteParams & BaseProps) => {
   const stores = useStores();
 
   const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    pcr: stores.projectChangeRequests.getById(props.projectId, props.pcrId),
     editor: stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId),
   });
 
