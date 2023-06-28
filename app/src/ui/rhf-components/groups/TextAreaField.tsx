@@ -18,15 +18,27 @@ type TextAreaFieldProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaE
   id: string;
   name: string;
   characterCount: number;
+  "data-qa"?: string;
 };
 
 const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
-  ({ id, error, hint, disabled, label, characterCount, ...props }: TextAreaFieldProps, ref: TextAreaRef) => {
+  (
+    { id, error, hint, disabled, label, characterCount, "data-qa": dataQa = "textarea", ...props }: TextAreaFieldProps,
+    ref: TextAreaRef,
+  ) => {
     return (
-      <FormGroup hasError={!!error}>
-        {label && <Label htmlFor={id}>{label}</Label>}
-        {hint && <Hint id={`hint-for-${id}`}>{hint}</Hint>}
-        <ValidationError error={error} />
+      <FormGroup hasError={!!error} data-qa={`field-${dataQa}`}>
+        {label && (
+          <Label htmlFor={id} data-qa={`label-${dataQa}`}>
+            {label}
+          </Label>
+        )}
+        {hint && (
+          <Hint id={`hint-for-${id}`} data-qa={`hint-${dataQa}`}>
+            {hint}
+          </Hint>
+        )}
+        <ValidationError error={error} data-qa={`error-${dataQa}`} />
         <CharacterCount type="descending" count={characterCount} maxValue={claimCommentsMaxLength}>
           <Textarea
             aria-label={label}
@@ -37,6 +49,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             ref={ref}
+            data-qa={dataQa}
             {...props}
           />
         </CharacterCount>

@@ -103,10 +103,10 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
   const { isMo } = getAuthRoles(data.project.roles);
 
   // Disable completing the form if internal impact management and not received PCF
-  const impactManagementPcfNotSubmittedForFinalClaim =
-    data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
-      ? data.claim.isFinalClaim && data.claim.pcfStatus !== ReceivedStatus.Received
-      : false;
+  // const impactManagementPcfNotSubmittedForFinalClaim =
+  //   data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
+  //     ? data.claim.isFinalClaim && data.claim.pcfStatus !== ReceivedStatus.Received
+  //     : false;
 
   const backLinkElement = (
     <BackLink route={props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
@@ -263,8 +263,18 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
           <Legend>{content.sectionTitleHowToProceed}</Legend>
           <FormGroup>
             <RadioList inline name="status" register={register}>
-              <Radio id={ClaimStatus.MO_QUERIED} label={content.optionQueryClaim} disabled={isFetching} />
-              <Radio id={ClaimStatus.AWAITING_IUK_APPROVAL} label={content.optionSubmitClaim} disabled={isFetching} />
+              <Radio
+                data-qa={`status_${ClaimStatus.MO_QUERIED}`}
+                id={ClaimStatus.MO_QUERIED}
+                label={content.optionQueryClaim}
+                disabled={isFetching}
+              />
+              <Radio
+                data-qa={`status_${ClaimStatus.AWAITING_IUK_APPROVAL}`}
+                id={ClaimStatus.AWAITING_IUK_APPROVAL}
+                label={content.optionSubmitClaim}
+                disabled={isFetching}
+              />
             </RadioList>
           </FormGroup>
         </Fieldset>
@@ -272,7 +282,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
         {displayAdditionalInformationForm && (
           <>
             <Fieldset>
-              <Legend>{content.sectionTitleAdditionalInfo}</Legend>
+              <Legend data-qa="additional-information-title">{content.sectionTitleAdditionalInfo}</Legend>
               <TextAreaField
                 {...register("comments")}
                 hint={content.additionalInfoHint}
@@ -280,6 +290,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
                 disabled={isFetching}
                 error={formState?.errors?.comments}
                 characterCount={watchedComments?.length ?? 0}
+                data-qa="comments"
               />
             </Fieldset>
 
@@ -287,7 +298,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
 
             <P data-qa={`${data.project.competitionType.toLowerCase()}-reminder`}>{content.monitoringReportReminder}</P>
 
-            <SubmitButton disabled={impactManagementPcfNotSubmittedForFinalClaim || isFetching}>
+            <SubmitButton data-qa="claim-form-submit" disabled={isFetching}>
               {submitLabel}
             </SubmitButton>
           </>
