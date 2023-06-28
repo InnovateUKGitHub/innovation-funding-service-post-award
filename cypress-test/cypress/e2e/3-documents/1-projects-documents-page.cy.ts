@@ -13,7 +13,10 @@ import {
   uploadToEUI,
   uploadToEUIMed,
   uploadToMO,
+  validateFileUpload,
 } from "./steps";
+
+const docname = "";
 
 describe("Project Documents page", () => {
   before(() => {
@@ -38,10 +41,7 @@ describe("Project Documents page", () => {
 
   it("Should have file description drop-down", selectFileDescription);
 
-  it("Should validate when uploading without choosing a file", () => {
-    cy.submitButton("Upload").click();
-    cy.getByQA("validation-summary").contains("a", "Choose a file to upload");
-  });
+  it("Should validate when uploading without choosing a file as well as special characters", validateFileUpload);
 
   /**
    * Upload to IUK and MO Only

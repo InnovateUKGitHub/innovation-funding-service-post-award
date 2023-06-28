@@ -1167,3 +1167,59 @@ export const validatePcrDurationPage = () => {
   cy.get("p").contains("Change project duration must be complete.");
   cy.reload();
 };
+
+const pcrArray = [
+  "Reallocate project costs",
+  "Remove a partner",
+  "Add a partner",
+  "Change project scope",
+  "Change project duration",
+  "Change a partner's name",
+  "Put project on hold",
+];
+
+export const selectEachPcr = () => {
+  pcrArray.forEach(pcr => {
+    cy.clickCheckBox(pcr);
+  });
+  cy.submitButton("Create request").click();
+};
+
+export const confirmPcrsAdded = () => {
+  pcrArray.forEach(pcr => {
+    cy.getByQA("typesRow").contains(pcr);
+  });
+  pcrArray.forEach(pcr => {
+    cy.getByQA("WhatDoYouWantToDo").contains("a", pcr);
+  });
+};
+
+export const submitWithoutCompleting = () => {
+  cy.submitButton("Submit request").click();
+  pcrArray.forEach(pcr => {
+    cy.getByQA("validation-summary").contains("a", pcr);
+  });
+  pcrArray.forEach(pcr => {
+    cy.get("p").contains(pcr + " must be complete.");
+  });
+};
+
+export const backOutCreateNewPcr = () => {
+  cy.backLink("Back to project change requests").click();
+  cy.get("a").contains("Create request").click();
+  cy.get("h1").contains("Start a new request");
+};
+
+export const showMultiplePcrInfo = () => {
+  cy.clickCheckBox(pcrArray[1]);
+  cy.clickCheckBox(pcrArray[2]);
+  cy.clickCheckBox(pcrArray[5]);
+  cy.clickCheckBox(pcrArray[6]);
+  cy.get("span").contains("Learn about why some PCR types are missing").click();
+  cy.get("details").should("have.attr", "open");
+  cy.get("li").contains(pcrArray[4]);
+  cy.get("li").contains(pcrArray[0]);
+  cy.get("li").contains(pcrArray[3]);
+  cy.get("a").contains("Cancel").click();
+  cy.get("h1").contains("Project change requests");
+};
