@@ -541,7 +541,7 @@ export const closedSectionAccordions = () => {
   cy.get("p").contains("There are no closed claims for this partner");
 };
 
-export const projTitleandSubheaders = () => {
+export const projectTitleAndSubheaders = () => {
   ["Competition name:", "Competition type:", "a002600000CEUmL", "CR&D"].forEach(subHeading => {
     cy.get("p").contains(subHeading);
   });

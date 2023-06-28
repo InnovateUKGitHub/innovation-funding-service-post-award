@@ -3,7 +3,7 @@ import { visitApp } from "../../common/visit";
 import {
   goToQueriedClaim,
   navigateBackToDash,
-  projTitleandSubheaders,
+  projectTitleAndSubheaders,
   queryTheClaim,
   submittedCostCats,
   openSectionClaimData,
@@ -32,7 +32,7 @@ describe("Claims > Review as MO", () => {
     cy.get("h1").contains("Claim");
   });
 
-  it("Should contain the project title and correct claim headings and information", projTitleandSubheaders);
+  it("Should contain the project title and correct claim headings and information", projectTitleAndSubheaders);
 
   it("Should show the cost category table with submitted costs", submittedCostCats);
 
