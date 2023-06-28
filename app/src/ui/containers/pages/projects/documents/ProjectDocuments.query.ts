@@ -92,6 +92,7 @@ export const projectDocumentsQuery = graphql`
                     isMo
                     isPm
                     partnerId
+                    accountId
                   }
                 }
                 Acc_ProjectNumber__c {

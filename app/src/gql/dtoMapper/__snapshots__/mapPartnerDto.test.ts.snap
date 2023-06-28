@@ -6,20 +6,18 @@ Array [
     "id": "0",
     "isLead": true,
     "roles": Object {
-      "isFc": true,
+      "isFc": false,
       "isMo": false,
-      "isPm": true,
-      "partnerId": "123",
+      "isPm": false,
     },
   },
   Object {
     "id": "1",
     "isLead": false,
     "roles": Object {
-      "isFc": true,
+      "isFc": false,
       "isMo": false,
       "isPm": false,
-      "partnerId": "124",
     },
   },
 ]
@@ -50,10 +48,9 @@ Array [
     "postcodeStatus": 30,
     "remainingParticipantGrant": 3000,
     "roles": Object {
-      "isFc": true,
+      "isFc": false,
       "isMo": false,
-      "isPm": true,
-      "partnerId": "123",
+      "isPm": false,
     },
     "totalCostsSubmitted": 5000,
     "totalGrantApproved": 100000,
@@ -84,10 +81,9 @@ Array [
     "postcodeStatus": 10,
     "remainingParticipantGrant": 3000,
     "roles": Object {
-      "isFc": true,
+      "isFc": false,
       "isMo": false,
       "isPm": false,
-      "partnerId": "124",
     },
     "totalCostsSubmitted": 5000,
     "totalGrantApproved": 100000,

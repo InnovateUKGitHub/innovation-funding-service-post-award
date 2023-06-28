@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3f64d6d404fe57cd20a734d90b89e4a4>>
+ * @generated SignedSource<<ae25af97e2cdb7bd6bb2e1b7ab72accb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,9 +26,6 @@ export type PartnerDetailsQuery$data = {
               readonly Acc_ProjectParticipantsProject__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
-                    readonly Acc_AccountId__c: {
-                      readonly value: string | null;
-                    } | null;
                     readonly Acc_AccountId__r: {
                       readonly Name: {
                         readonly value: string | null;
@@ -341,16 +338,6 @@ v7 = [
                                       {
                                         "alias": null,
                                         "args": null,
-                                        "concreteType": "IDValue",
-                                        "kind": "LinkedField",
-                                        "name": "Acc_AccountId__c",
-                                        "plural": false,
-                                        "selections": (v6/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
                                         "concreteType": "PicklistValue",
                                         "kind": "LinkedField",
                                         "name": "Acc_ParticipantType__c",
@@ -430,16 +417,16 @@ return {
     "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "45692d6dcf7de779b70d591a9a8a276e",
+    "cacheID": "687c656ede2baed3b1067e984103043e",
     "id": null,
     "metadata": {},
     "name": "PartnerDetailsQuery",
     "operationKind": "query",
-    "text": "query PartnerDetailsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PartnerDetailsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "47f9178ddd69581697b6021719a2760c";
+(node as any).hash = "286119c0ed7d3f921e5cf10fcfb8f753";
 
 export default node;

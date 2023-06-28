@@ -99,6 +99,7 @@ export const allClaimsDashboardQuery = graphql`
                     isFc
                     isPm
                     partnerId
+                    accountId
                   }
                 }
                 Acc_ProjectNumber__c {

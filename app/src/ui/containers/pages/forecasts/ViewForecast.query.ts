@@ -139,6 +139,7 @@ export const viewForecastQuery = graphql`
                     isMo
                     isPm
                     partnerId
+                    accountId
                   }
                 }
                 Acc_ProjectNumber__c {

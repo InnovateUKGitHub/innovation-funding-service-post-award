@@ -62,8 +62,8 @@ describe("mapPartnerDtoArray", () => {
     },
   ];
   const partnerRoles = [
-    { isFc: true, isPm: true, isMo: false, partnerId: "123" },
-    { isFc: true, isPm: false, isMo: false, partnerId: "124" },
+    { isFc: true, isPm: true, isMo: false, partnerId: "123", accountId: "345" },
+    { isFc: true, isPm: false, isMo: false, partnerId: "124", accountId: "346" },
   ];
 
   it("should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records", () => {

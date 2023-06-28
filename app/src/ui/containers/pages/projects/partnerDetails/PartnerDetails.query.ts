@@ -40,9 +40,6 @@ export const partnerDetailsQuery = graphql`
                           value
                         }
                       }
-                      Acc_AccountId__c {
-                        value
-                      }
                       Acc_ParticipantType__c {
                         value
                       }
