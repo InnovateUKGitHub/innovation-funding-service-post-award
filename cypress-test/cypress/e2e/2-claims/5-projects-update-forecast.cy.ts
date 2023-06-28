@@ -20,7 +20,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   it("Should select the Claims tile, edit the current claim and navigate to documents page", () => {
     cy.selectTile("Claims");
     cy.get("a").contains("Edit").click();
-    cy.getByQA("button_default-qa").contains("Continue to claims documents").click();
+    cy.get("button").contains("Continue to claims documents").click();
   });
 
   it("Should have a back option", () => {
@@ -66,7 +66,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   it("Should re-open the claim", accessEUIOpenClaim);
 
   it("Should navigate to documents", () => {
-    cy.getByQA("button_default-qa").click();
+    cy.get("button").contains("Continue to claims documents").click();
   });
 
   it("Should continue through to forecast page again", () => {

@@ -61,6 +61,6 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   });
 
   it("Should have a Submit claim button", () => {
-    cy.getByQA("button_default-qa");
+    cy.get("button").contains("Submit");
   });
 });

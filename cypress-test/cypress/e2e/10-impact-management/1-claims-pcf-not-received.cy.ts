@@ -43,6 +43,6 @@ describe("Impact Management > Claim - PCF not received", () => {
   it("Should contain the Final claim message and PCF guidance message", summaryPageValidation);
 
   it("Should have the submit button greyed out and clicking on it does nothing", () => {
-    cy.getByQA("button_default-qa").contains("Submit").should("be.disabled");
+    cy.submitButton("Submit").should("be.disabled");
   });
 });

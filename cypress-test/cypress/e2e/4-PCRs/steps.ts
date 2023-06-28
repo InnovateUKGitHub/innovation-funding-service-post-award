@@ -909,7 +909,7 @@ export const saveAndReturn = () => {
   cy.get("#grantMovingOverFinancialYear").type("0");
   cy.clickCheckBox("I agree with this change");
   cy.wait(500);
-  cy.getByQA("button_default-qa").contains("Save and return to request").click({ force: true });
+  cy.get("button").contains("Save and return to request").click({ force: true });
   cy.get("h1").contains("Request");
 };
 
@@ -940,7 +940,7 @@ export const tickEachPartner = () => {
 };
 
 export const saveContinueProceed = () => {
-  cy.getByQA("button_default-qa").contains("Save and continue").click();
+  cy.get("button").contains("Save and continue").click();
   cy.get("h2").contains("Upload change of name certificate");
   shouldShowProjectTitle;
   cy.get("h1").contains("Change a partner's name");
@@ -986,7 +986,7 @@ export const assertChangeNamePage = () => {
 export const completeChangeName = () => {
   cy.get("h2").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
-  cy.getByQA("button_default-qa").contains("Save and return to request").click();
+  cy.get("button").contains("Save and return to request").click();
   cy.get("strong").contains("Complete");
 };
 
@@ -1030,7 +1030,7 @@ export const proposedSubheadings = () => {
 
 export const markAsCompleteSave = () => {
   cy.getByLabel("I agree with this change.").click();
-  cy.getByQA("button_default-qa").contains("Save and return to request").click();
+  cy.get("button").contains("Save and return to request").click();
   cy.get("strong").contains("Complete");
 };
 
@@ -1052,12 +1052,12 @@ export const dateChangeSummary = () => {
 export const validateAddPerson = () => {
   ["First name", "Last name"].forEach(field => {
     cy.getByLabel(field).clear().type("Thisisovertheagreedlimitforvalidationfiftycharacter");
-    cy.getByQA("button_default-qa").contains("Save and continue").click();
+    cy.get("button").contains("Save and continue").click();
     cy.getByQA("validation-summary").contains("a", "Finance contact name must be 50 characters or less.");
   }),
     cy.getByLabel("Phone number").clear().type("012345678910111213141");
   cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
-  cy.getByQA("button_default-qa").contains("Save and continue").click();
+  cy.get("button").contains("Save and continue").click();
   cy.getByQA("validation-summary").contains("a", "Finance contact phone number must be 20 characters or less.");
   cy.getByQA("field-contact1Phone").contains("Finance contact phone number must be 20 characters or less.");
 
@@ -1066,7 +1066,7 @@ export const validateAddPerson = () => {
     .type(
       "ThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThis",
     );
-  cy.getByQA("button_default-qa").contains("Save and continue").click();
+  cy.get("button").contains("Save and continue").click();
   cy.getByQA("validation-summary").contains("a", "Email address must be 255 characters or less.");
   cy.getByQA("field-contact1Email").contains("Email address must be 255 characters or less.");
   cy.getByQA("field-contact1Forename").contains("Finance contact name must be 50 characters or less.");
@@ -1112,7 +1112,7 @@ export const validateChangeName = () => {
   cy.submitButton("Save and continue").click();
   cy.get("h2").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
-  cy.getByQA("button_default-qa").contains("Save and return to request").click();
+  cy.get("button").contains("Save and return to request").click();
   cy.getByQA("validation-summary").contains("a", "Enter a new partner name");
   cy.backLink("Back to request").click();
   cy.get("h1").contains("Request");

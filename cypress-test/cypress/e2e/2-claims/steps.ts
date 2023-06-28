@@ -588,8 +588,8 @@ export const submittedCostCats = () => {
 };
 
 export const queryTheClaim = () => {
-  cy.get(`input[id="status_MO Queried"]`).click({ force: true });
-  cy.get("h2").contains("Additional information");
+  cy.getByQA("status_MO Queried").click({ force: true });
+  cy.getByQA("additional-information-title").contains("Additional information");
   cy.getByQA("field-comments").contains(
     "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
   );
@@ -597,7 +597,7 @@ export const queryTheClaim = () => {
   cy.get("p").contains("You have");
   cy.get("p").contains("I am satisfied that the costs claimed appear to comply");
   cy.getByQA("cr&d-reminder").contains("You must submit a monitoring report");
-  cy.getByQA("button_default-qa").contains("Send query").click();
+  cy.submitButton("Send query").click();
 };
 
 export const navigateBackToDash = () => {
@@ -611,10 +611,10 @@ export const goToQueriedClaim = () => {
   cy.contains("td", "Queried by Monitoring Officer").siblings().contains("a", "Edit").click();
   cy.get("h1").contains("Costs to be claimed");
   cy.get("td").contains(comments);
-  cy.getByQA("button_default-qa").contains("Continue to claims documents").click();
+  cy.get("button").contains("Continue to claims documents").click();
   cy.get("a").contains("Continue to update forecast").click();
-  cy.getByQA("button_default-qa").contains("Continue to summary").click();
-  cy.getByQA("button_default-qa").contains("Submit claim").click();
+  cy.get("button").contains("Continue to summary").click();
+  cy.get("button").contains("Submit claim").click();
 };
 
 export const beginEditing = () => {
@@ -637,8 +637,8 @@ export const add120Lines = () => {
 };
 
 export const saveLineItems = () => {
-  cy.submitButton("Save and return to claims").click();
-  cy.wait(1000);
+  cy.get("button").contains("Save and return to claims").click();
+  cy.wait(5000);
   cy.get("h1").contains("Costs to be claimed");
 };
 
@@ -669,7 +669,7 @@ export const validateForecast = () => {
 export const academicForecastNavigate = () => {
   cy.backLink("Back to claims").click();
   cy.get("h1").contains("Costs to be claimed");
-  cy.submitButton("Continue to claims documents").click();
+  cy.get("button").contains("Continue to claims documents").click();
   cy.get("h1").contains("Claim documents");
   cy.get("a").contains("Continue to update forecast").click();
 };

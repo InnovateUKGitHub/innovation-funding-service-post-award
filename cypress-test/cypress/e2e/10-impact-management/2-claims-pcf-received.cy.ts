@@ -40,6 +40,6 @@ describe("Impact Management > Claim - PCF received", () => {
   it("Should contain the Final claim message but not PCF guidance message", drgSummaryPageValidation);
 
   it("Should have the submit button enabled and ready for submitting", () => {
-    cy.getByQA("button_default-qa").contains("Submit").should("be.enabled");
+    cy.get("button").contains("Submit").should("be.enabled");
   });
 });
