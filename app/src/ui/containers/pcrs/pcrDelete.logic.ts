@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 import { apiClient } from "@ui/apiClient";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 
-export const usePcrDeleteQuery = (projectId: ProjectId, pcrId: PcrId) => {
-  const data = useLazyLoadQuery<PcrDeleteQuery>(pcrDeleteQuery, { projectId, pcrId }, { fetchPolicy: "network-only" });
+export const usePcrDeleteQuery = (projectId: ProjectId) => {
+  const data = useLazyLoadQuery<PcrDeleteQuery>(pcrDeleteQuery, { projectId }, { fetchPolicy: "network-only" });
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 

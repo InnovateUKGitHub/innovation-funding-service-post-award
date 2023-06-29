@@ -21,7 +21,7 @@ export interface PCRDeleteParams {
 }
 
 const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeleteParams) => {
-  const { project, pcr } = usePcrDeleteQuery(projectId, pcrId);
+  const { project, pcr } = usePcrDeleteQuery(projectId);
   const getPcRTypeName = useGetPcrTypeName();
 
   const { getContent } = useContent();
