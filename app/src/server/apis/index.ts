@@ -21,56 +21,28 @@ import * as partners from "./partners";
 import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
 import * as users from "./users";
-import { IClientUser } from "@framework/types/IUser";
-import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ClaimDto } from "@framework/dtos/claimDto";
-import { ClaimKey } from "@framework/types/ClaimKey";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
-export interface IApiClient {
-  accounts: accounts.IAccountsApi;
-  claimDetails: claimDetails.IClaimDetailsApi;
-  costsSummary: costsSummary.ICostsSummaryApi;
-  companies: companiesHouse.ICompaniesApi;
-  claims: claims.IClaimsApi & {
-    update: (params: {
-      projectId: ProjectId;
-      partnerId: PartnerId;
-      periodId: PeriodId;
-      claim: ClaimDto;
-    }) => Promise<ClaimDto>;
-  };
-  claimOverrides: claimOverrides.IClaimOverridesApi;
-  costCategories: costCategories.ICostCategoriesApi;
-  documents: documents.IDocumentsApi & {
-    deleteClaimDocument: (params: { documentId: string; claimKey: ClaimKey }) => Promise<boolean>;
-    uploadClaimDocuments: (params: {
-      claimKey: ClaimKey;
-      documents: MultipleDocumentUploadDto;
-    }) => Promise<{ documentIds: string[] }>;
-  };
-  financialVirements: financialVirements.IFinancialVirement;
-  financialLoanVirements: financialLoanVirements.IFinancialLoanVirement;
-  forecastDetails: forecastDetails.IForecastDetailsApi;
-  initialForecastDetails: initialForecastDetails.IInitialForecastDetailsApi;
-  forecastGolCosts: forecastGolCosts.IForecastGolCostsApi;
-  loans: loans.ILoansApi;
-  monitoringReports: monitoringReports.IMonitoringReportsApi;
-  pcrs: pcrs.IPCRsApi & { delete: (params: { projectId: ProjectId; id: PcrId }) => Promise<boolean> };
-  projects: projects.IProjectsApi;
-  projectContacts: projectContacts.IProjectContactsApi;
-  partners: {
-    getAll: (p: { user: IClientUser } | undefined) => Promise<PartnerDto[]>;
-    getAllByProjectId: (params: { projectId: ProjectId }) => Promise<PartnerDto[]>;
-    get: (params: { partnerId: PartnerId }) => Promise<PartnerDto>;
-    updatePartner: (params: {
-      partnerId: PartnerId;
-      partnerDto: Partial<PartnerDto>;
-      validateBankDetails?: boolean;
-      verifyBankDetails?: boolean;
-    }) => Promise<PartnerDto>;
-  };
-  users: users.IUserApi;
+export interface IApiClient<Context extends "client" | "server"> {
+  accounts: accounts.IAccountsApi<Context>;
+  claimDetails: claimDetails.IClaimDetailsApi<Context>;
+  costsSummary: costsSummary.ICostsSummaryApi<Context>;
+  companies: companiesHouse.ICompaniesApi<Context>;
+  claims: claims.IClaimsApi<Context>;
+  claimOverrides: claimOverrides.IClaimOverridesApi<Context>;
+  costCategories: costCategories.ICostCategoriesApi<Context>;
+  documents: documents.IDocumentsApi<Context>;
+  financialVirements: financialVirements.IFinancialVirement<Context>;
+  financialLoanVirements: financialLoanVirements.IFinancialLoanVirement<Context>;
+  forecastDetails: forecastDetails.IForecastDetailsApi<Context>;
+  initialForecastDetails: initialForecastDetails.IInitialForecastDetailsApi<Context>;
+  forecastGolCosts: forecastGolCosts.IForecastGolCostsApi<Context>;
+  loans: loans.ILoansApi<Context>;
+  monitoringReports: monitoringReports.IMonitoringReportsApi<Context>;
+  pcrs: pcrs.IPCRsApi<Context>;
+  projects: projects.IProjectsApi<Context>;
+  projectContacts: projectContacts.IProjectContactsApi<Context>;
+  partners: partners.IPartnersApi<Context>;
+  users: users.IUserApi<Context>;
 }
 
 export const serverApis = {

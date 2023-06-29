@@ -5,7 +5,7 @@ import { processResponse } from "@shared/processResponse";
 import { removeUndefinedString } from "@shared/string-helpers";
 import { ClientFileWrapper } from "../clientFileWrapper";
 
-const clientApi: IApiClient = {
+const clientApi: IApiClient<"client"> = {
   accounts: {
     getAllByJesName: params => ajaxJson(`/api/jes-accounts?search=${params.searchString}`),
   },
@@ -303,4 +303,7 @@ const ajaxPut = <T>(url: string, body: AnyObject, opts?: RequestInit) => {
   return ajaxJson<T>(url, options);
 };
 
-export const apiClient = clientApi;
+const clientsideApiClient = clientApi as unknown as IApiClient<"server">;
+const apiClient = clientApi as unknown as IApiClient<"server">;
+
+export { clientsideApiClient, apiClient };

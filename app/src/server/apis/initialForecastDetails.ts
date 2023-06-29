@@ -5,14 +5,17 @@ import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDe
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
-export interface IInitialForecastDetailsApi {
-  getAllByPartnerId: (params: ApiParams<{ partnerId: PartnerId }>) => Promise<ForecastDetailsDTO[]>;
+export interface IInitialForecastDetailsApi<Context extends "client" | "server"> {
+  getAllByPartnerId: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<ForecastDetailsDTO[]>;
   update: (
-    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; submit: boolean; forecasts: ForecastDetailsDTO[] }>,
+    params: ApiParams<
+      Context,
+      { projectId: ProjectId; partnerId: PartnerId; submit: boolean; forecasts: ForecastDetailsDTO[] }
+    >,
   ) => Promise<ForecastDetailsDTO[]>;
 }
 
-class Controller extends ControllerBase<ForecastDetailsDTO> implements IInitialForecastDetailsApi {
+class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements IInitialForecastDetailsApi<"server"> {
   constructor() {
     super("initial-forecast-details");
 
@@ -34,13 +37,16 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IInitialF
     );
   }
 
-  public async getAllByPartnerId(params: ApiParams<{ partnerId: PartnerId }>) {
+  public async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>) {
     const query = new GetAllInitialForecastsForPartnerQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async update(
-    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; submit: boolean; forecasts: ForecastDetailsDTO[] }>,
+    params: ApiParams<
+      "server",
+      { projectId: ProjectId; partnerId: PartnerId; submit: boolean; forecasts: ForecastDetailsDTO[] }
+    >,
   ) {
     const context = contextProvider.start(params);
     const forecastCmd = new UpdateInitialForecastDetailsCommand(

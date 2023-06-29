@@ -53,7 +53,7 @@ New controller interfaces are added to the `IApiClient` are registered with the 
         getAllByProjectId: (projectId: ProjectId) => Promise<ProjectContactDto[]>
     }
 
-    class Controller extends ControllerBase<ProjectContactDto> implements IProjectContactsApi {
+    class Controller extends ControllerBase<"server", ProjectContactDto> implements IProjectContactsApi {
         constructor() {
             super();
 

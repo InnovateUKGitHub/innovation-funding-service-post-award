@@ -8,7 +8,13 @@ import { GetLoan } from "@server/features/loans/getLoan";
 import { UpdateLoanCommand } from "@server/features/loans/updateLoanCommand";
 import { processDto } from "@shared/processResponse";
 
-class LoansApi extends ControllerBase<LoanDto> {
+export interface ILoansApi<Context extends "client" | "server"> {
+  getAll(params: ApiParams<Context, { projectId: ProjectId }>): Promise<LoanDto[]>;
+  get(params: ApiParams<Context, { projectId: ProjectId; loanId?: string; periodId?: number }>): Promise<LoanDto>;
+  update(params: ApiParams<Context, { projectId: ProjectId; loanId: string; loan: LoanDto }>): Promise<LoanDto>;
+}
+
+class LoansApi extends ControllerBase<"server", LoanDto> {
   constructor() {
     super("loans");
 
@@ -41,18 +47,22 @@ class LoansApi extends ControllerBase<LoanDto> {
     );
   }
 
-  public async getAll(params: ApiParams<{ projectId: ProjectId }>): Promise<LoanDto[]> {
+  public async getAll(params: ApiParams<"server", { projectId: ProjectId }>): Promise<LoanDto[]> {
     const query = new GetAllLoans(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ projectId: ProjectId; loanId?: string; periodId?: number }>): Promise<LoanDto> {
+  public async get(
+    params: ApiParams<"server", { projectId: ProjectId; loanId?: string; periodId?: number }>,
+  ): Promise<LoanDto> {
     const loanQuery = new GetLoan(params.projectId, params);
 
     return contextProvider.start(params).runQuery(loanQuery);
   }
 
-  public async update(params: ApiParams<{ projectId: ProjectId; loanId: string; loan: LoanDto }>): Promise<LoanDto> {
+  public async update(
+    params: ApiParams<"server", { projectId: ProjectId; loanId: string; loan: LoanDto }>,
+  ): Promise<LoanDto> {
     const context = contextProvider.start(params);
 
     const loanCommand = new UpdateLoanCommand(params.projectId, params.loanId, params.loan);
@@ -65,5 +75,3 @@ class LoansApi extends ControllerBase<LoanDto> {
 }
 
 export const controller = new LoansApi();
-
-export type ILoansApi = Pick<LoansApi, "getAll" | "get" | "update">;

@@ -7,15 +7,17 @@ import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails/getAllByPartnerQuery";
 import { GetClaimDetailsQuery } from "@server/features/claimDetails/getClaimDetailsQuery";
 
-export interface IClaimDetailsApi {
-  getAllByPartner: (params: ApiParams<{ partnerId: PartnerId }>) => Promise<ClaimDetailsSummaryDto[]>;
-  get: (params: ApiParams<ClaimDetailKey>) => Promise<ClaimDetailsDto>;
-  saveClaimDetails: (params: ApiParams<ClaimDetailKey & { claimDetails: ClaimDetailsDto }>) => Promise<ClaimDetailsDto>;
+export interface IClaimDetailsApi<Context extends "client" | "server"> {
+  getAllByPartner: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<ClaimDetailsSummaryDto[]>;
+  get: (params: ApiParams<Context, ClaimDetailKey>) => Promise<ClaimDetailsDto>;
+  saveClaimDetails: (
+    params: ApiParams<Context, ClaimDetailKey & { claimDetails: ClaimDetailsDto }>,
+  ) => Promise<ClaimDetailsDto>;
 }
 
 class Controller
-  extends ControllerBaseWithSummary<ClaimDetailsSummaryDto, ClaimDetailsDto>
-  implements IClaimDetailsApi
+  extends ControllerBaseWithSummary<"server", ClaimDetailsSummaryDto, ClaimDetailsDto>
+  implements IClaimDetailsApi<"server">
 {
   constructor() {
     super("claim-details");
@@ -48,19 +50,19 @@ class Controller
     );
   }
 
-  public async getAllByPartner(params: ApiParams<{ partnerId: PartnerId }>) {
+  public async getAllByPartner(params: ApiParams<"server", { partnerId: PartnerId }>) {
     const { partnerId } = params;
     const query = new GetAllClaimDetailsByPartner(partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<ClaimDetailKey>) {
+  public async get(params: ApiParams<"server", ClaimDetailKey>) {
     const query = new GetClaimDetailsQuery(params.projectId, params.partnerId, params.periodId, params.costCategoryId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async saveClaimDetails(
-    params: ApiParams<ClaimDetailKey & { claimDetails: ClaimDetailsDto }>,
+    params: ApiParams<"server", ClaimDetailKey & { claimDetails: ClaimDetailsDto }>,
   ): Promise<ClaimDetailsDto> {
     const { projectId, partnerId, costCategoryId, periodId, claimDetails } = params;
     const context = contextProvider.start(params);

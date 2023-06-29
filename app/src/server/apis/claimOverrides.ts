@@ -3,11 +3,11 @@ import { GetClaimOverrideRates } from "@server/features/claims/getClaimOverrideR
 import { contextProvider } from "@server/features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
-export interface IClaimOverridesApi {
-  getAllByPartner: (params: ApiParams<{ partnerId: PartnerId }>) => Promise<ClaimOverrideRateDto>;
+export interface IClaimOverridesApi<Context extends "client" | "server"> {
+  getAllByPartner: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<ClaimOverrideRateDto>;
 }
 
-class Controller extends ControllerBase<ClaimOverrideRateDto> implements IClaimOverridesApi {
+class Controller extends ControllerBase<"server", ClaimOverrideRateDto> implements IClaimOverridesApi<"server"> {
   constructor() {
     super("claim-overrides");
 
@@ -20,7 +20,7 @@ class Controller extends ControllerBase<ClaimOverrideRateDto> implements IClaimO
     );
   }
 
-  public async getAllByPartner(params: ApiParams<{ partnerId: PartnerId }>) {
+  public async getAllByPartner(params: ApiParams<"server", { partnerId: PartnerId }>) {
     const { partnerId } = params;
     const query = new GetClaimOverrideRates(partnerId);
     return contextProvider.start(params).runQuery(query);

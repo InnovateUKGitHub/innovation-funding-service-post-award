@@ -5,7 +5,27 @@ import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVi
 import { processDto } from "@shared/processResponse";
 import { ControllerBase, ApiParams } from "./controllerBase";
 
-class Controller extends ControllerBase<FinancialLoanVirementDto> {
+export interface IFinancialLoanVirement<Context extends "client" | "server"> {
+  get: (
+    params: ApiParams<Context, { projectId: ProjectId; pcrItemId: PcrItemId }>,
+  ) => Promise<FinancialLoanVirementDto>;
+  update: (
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrItemId: PcrItemId;
+        financialVirement: FinancialLoanVirementDto;
+        submit: boolean;
+      }
+    >,
+  ) => Promise<FinancialLoanVirementDto>;
+}
+
+class Controller
+  extends ControllerBase<"server", FinancialLoanVirementDto>
+  implements IFinancialLoanVirement<"server">
+{
   constructor() {
     super("financial-loan-virements");
 
@@ -30,19 +50,24 @@ class Controller extends ControllerBase<FinancialLoanVirementDto> {
     );
   }
 
-  async get(params: ApiParams<{ projectId: ProjectId; pcrItemId: PcrItemId }>): Promise<FinancialLoanVirementDto> {
+  async get(
+    params: ApiParams<"server", { projectId: ProjectId; pcrItemId: PcrItemId }>,
+  ): Promise<FinancialLoanVirementDto> {
     const virementQuery = new GetFinancialLoanVirementQuery(params.projectId, params.pcrItemId);
 
     return contextProvider.start(params).runQuery(virementQuery);
   }
 
   async update(
-    params: ApiParams<{
-      projectId: ProjectId;
-      pcrItemId: PcrItemId;
-      financialVirement: FinancialLoanVirementDto;
-      submit: boolean;
-    }>,
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrItemId: PcrItemId;
+        financialVirement: FinancialLoanVirementDto;
+        submit: boolean;
+      }
+    >,
   ): Promise<FinancialLoanVirementDto> {
     const context = contextProvider.start(params);
 
@@ -58,7 +83,5 @@ class Controller extends ControllerBase<FinancialLoanVirementDto> {
     return await context.runQuery(query);
   }
 }
-
-export type IFinancialLoanVirement = Pick<Controller, "get" | "update">;
 
 export const controller = new Controller();

@@ -1,8 +1,6 @@
-import { processDto } from "@shared/processResponse";
-import { contextProvider } from "@server/features/common/contextProvider";
-import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { TotalCosts } from "@framework/constants/claims";
 import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import { GetAllClaimsForProjectQuery } from "@server/features/claims/getAllClaimsForProjectQuery";
 import { GetAllForPartnerQuery } from "@server/features/claims/getAllForPartnerQuery";
 import { GetAllIncludingNewForPartnerQuery } from "@server/features/claims/getAllIncludingNewForPartnerQuery";
@@ -10,9 +8,27 @@ import { GetClaim } from "@server/features/claims/getClaim";
 import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
 import { GetClaimsTotalCosts } from "@server/features/claims/getClaimsTotalCosts";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
+import { contextProvider } from "@server/features/common/contextProvider";
 import { BadRequestError } from "@shared/appError";
+import { processDto } from "@shared/processResponse";
 
-class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
+export interface IClaimsApi<Context extends "client" | "server"> {
+  getAllByProjectId(params: ApiParams<Context, { projectId: ProjectId }>): Promise<ClaimDto[]>;
+  getAllByPartnerId(params: ApiParams<Context, { partnerId: PartnerId }>): Promise<ClaimDto[]>;
+  getAllIncludingNewByPartnerId(params: ApiParams<Context, { partnerId: PartnerId }>): Promise<ClaimDto[]>;
+  get(params: ApiParams<Context, { partnerId: PartnerId; periodId: number }>): Promise<ClaimDto>;
+  update(
+    params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; periodId: number; claim: ClaimDto }>,
+  ): Promise<ClaimDto>;
+  getStatusChanges(
+    params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
+  ): Promise<ClaimStatusChangeDto[]>;
+  getTotalCosts(
+    params: ApiParams<Context, { partnerId: PartnerId; projectId: ProjectId; periodId: number }>,
+  ): Promise<TotalCosts>;
+}
+
+class ClaimController extends ControllerBase<"server", ClaimDto> implements IClaimsApi<"server"> {
   constructor() {
     super("claims");
 
@@ -21,7 +37,7 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
       p => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
-        periodId: parseInt(p.periodId, 10),
+        periodId: parseInt(p.periodId, 10) as PeriodId,
       }),
       this.getTotalCosts,
     );
@@ -31,7 +47,7 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
       p => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
-        periodId: parseInt(p.periodId, 10),
+        periodId: parseInt(p.periodId, 10) as PeriodId,
       }),
       p => this.getStatusChanges(p),
     );
@@ -65,7 +81,7 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
 
     this.getItem(
       "/:partnerId/:periodId",
-      p => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) }),
+      p => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) as PeriodId }),
       this.get,
     );
 
@@ -81,29 +97,31 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
     );
   }
 
-  public async getAllByProjectId(params: ApiParams<{ projectId: ProjectId }>): Promise<ClaimDto[]> {
+  public async getAllByProjectId(params: ApiParams<"server", { projectId: ProjectId }>): Promise<ClaimDto[]> {
     const query = new GetAllClaimsForProjectQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAllByPartnerId(params: ApiParams<{ partnerId: PartnerId }>): Promise<ClaimDto[]> {
+  public async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>): Promise<ClaimDto[]> {
     const query = new GetAllForPartnerQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAllIncludingNewByPartnerId(params: ApiParams<{ partnerId: PartnerId }>): Promise<ClaimDto[]> {
+  public async getAllIncludingNewByPartnerId(
+    params: ApiParams<"server", { partnerId: PartnerId }>,
+  ): Promise<ClaimDto[]> {
     const query = new GetAllIncludingNewForPartnerQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ partnerId: PartnerId; periodId: number }>): Promise<ClaimDto> {
+  public async get(params: ApiParams<"server", { partnerId: PartnerId; periodId: PeriodId }>): Promise<ClaimDto> {
     const { partnerId, periodId } = params;
     const query = new GetClaim(partnerId, periodId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async update(
-    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId; claim: ClaimDto }>,
+    params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId; claim: ClaimDto }>,
   ): Promise<ClaimDto> {
     const { projectId, partnerId, periodId, claim } = params;
 
@@ -120,14 +138,14 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
   }
 
   public async getStatusChanges(
-    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
+    params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId }>,
   ): Promise<ClaimStatusChangeDto[]> {
     const query = new GetClaimStatusChangesQuery(params.projectId, params.partnerId, params.periodId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async getTotalCosts(
-    params: ApiParams<{ partnerId: PartnerId; projectId: ProjectId; periodId: number }>,
+    params: ApiParams<"server", { partnerId: PartnerId; projectId: ProjectId; periodId: PeriodId }>,
   ): Promise<TotalCosts> {
     const query = new GetClaimsTotalCosts(params.partnerId, params.projectId, params.periodId);
     return contextProvider.start(params).runQuery(query);
@@ -135,14 +153,3 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
 }
 
 export const controller = new ClaimController();
-
-export type IClaimsApi = Pick<
-  ClaimController,
-  | "getAllByProjectId"
-  | "getAllByPartnerId"
-  | "getAllIncludingNewByPartnerId"
-  | "get"
-  | "update"
-  | "getStatusChanges"
-  | "getTotalCosts"
->;

@@ -3,7 +3,7 @@ import { partnerDetailsEditQuery } from "./PartnerDetailsEdit.query";
 import { PartnerDetailsEditQuery, PartnerDetailsEditQuery$data } from "./__generated__/PartnerDetailsEditQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { apiClient } from "@ui/apiClient";
+import { clientsideApiClient } from "@ui/apiClient";
 import { useNavigate } from "react-router-dom";
 import { PartnerStatus } from "@framework/constants/partner";
 import { PartnerDto } from "@framework/dtos/partnerDto";
@@ -43,7 +43,7 @@ export const useOnUpdatePartnerDetails = (
   const navigate = useNavigate();
   return useOnUpdate<FormValues, Pick<PartnerDto, "postcode">>({
     req: data =>
-      apiClient.partners.updatePartner({
+      clientsideApiClient.partners.updatePartner({
         partnerId,
         partnerDto: { ...partner, ...data, postcode: data["new-postcode"], id: partnerId, projectId },
       }),

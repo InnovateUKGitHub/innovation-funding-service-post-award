@@ -7,7 +7,14 @@ import { GetAllQuery } from "@server/features/projects/getAllQuery";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { GetProjectStatusQuery } from "@server/features/projects/GetProjectStatus";
 
-class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
+export interface IProjectsApi<Context extends "client" | "server"> {
+  isProjectActive(params: ApiParams<Context, { projectId: ProjectId }>): Promise<ProjectStatusDto>;
+  get(params: ApiParams<Context, { projectId: ProjectId }>): Promise<ProjectDto>;
+  getAll(params: ApiParams<Context>): Promise<ProjectDto[]>;
+  getAllAsDeveloper(params: ApiParams<Context>): Promise<ProjectDto[]>;
+}
+
+class Controller extends ControllerBase<"server", ProjectDto> implements IProjectsApi<"server"> {
   constructor() {
     super("projects");
 
@@ -19,27 +26,25 @@ class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
     this.getItem("/:projectId", p => ({ projectId: p.projectId as ProjectId }), this.get);
   }
 
-  public async isProjectActive(params: ApiParams<{ projectId: ProjectId }>): Promise<ProjectStatusDto> {
+  public async isProjectActive(params: ApiParams<"server", { projectId: ProjectId }>): Promise<ProjectStatusDto> {
     const query = new GetProjectStatusQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ projectId: ProjectId }>): Promise<ProjectDto> {
+  public async get(params: ApiParams<"server", { projectId: ProjectId }>): Promise<ProjectDto> {
     const query = new GetByIdQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAll(params: ApiParams): Promise<ProjectDto[]> {
+  public async getAll(params: ApiParams<"server">): Promise<ProjectDto[]> {
     const query = new GetAllQuery();
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAllAsDeveloper(params: ApiParams): Promise<ProjectDto[]> {
+  public async getAllAsDeveloper(params: ApiParams<"server">): Promise<ProjectDto[]> {
     const query = new GetAllQuery();
     return contextProvider.start(params).asSystemUser().runQuery(query);
   }
 }
 
 export const controller = new Controller();
-
-export type IProjectsApi = Pick<Controller, "get" | "getAll" | "isProjectActive" | "getAllAsDeveloper">;

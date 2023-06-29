@@ -4,7 +4,11 @@ import { ICompaniesHouseParams } from "@server/resources/companiesHouse";
 import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
-class CompaniesHouse extends ControllerBase<CompanyDto> implements ICompaniesApi {
+export interface ICompaniesApi<Context extends "client" | "server"> {
+  searchCompany(params: ApiParams<Context, ICompaniesHouseParams>): Promise<CompanyDto[]>;
+}
+
+class CompaniesHouse extends ControllerBase<"server", CompanyDto> implements ICompaniesApi<"server"> {
   constructor() {
     super("companies");
 
@@ -19,12 +23,10 @@ class CompaniesHouse extends ControllerBase<CompanyDto> implements ICompaniesApi
     );
   }
 
-  public async searchCompany(params: ApiParams<ICompaniesHouseParams>) {
+  public async searchCompany(params: ApiParams<"server", ICompaniesHouseParams>): Promise<CompanyDto[]> {
     const query = new SearchCompaniesQuery(params);
     return contextProvider.start(params).runQuery(query);
   }
 }
 
 export const controller = new CompaniesHouse();
-
-export type ICompaniesApi = Pick<CompaniesHouse, "searchCompany">;

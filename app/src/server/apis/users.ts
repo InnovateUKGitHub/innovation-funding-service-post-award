@@ -4,11 +4,11 @@ interface UserDto {
   email: string;
 }
 
-export interface IUserApi {
-  getCurrent: (params: ApiParams) => Promise<UserDto>;
+export interface IUserApi<Context extends "client" | "server"> {
+  getCurrent: (params: ApiParams<Context>) => Promise<UserDto>;
 }
 
-class Controller extends ControllerBase<UserDto> implements IUserApi {
+class Controller extends ControllerBase<"server", UserDto> implements IUserApi<"server"> {
   constructor() {
     super("users");
 
@@ -19,7 +19,7 @@ class Controller extends ControllerBase<UserDto> implements IUserApi {
     );
   }
 
-  getCurrent(params: ApiParams) {
+  getCurrent(params: ApiParams<"server">) {
     return Promise.resolve<UserDto>({ email: params.user.email });
   }
 }

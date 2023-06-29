@@ -3,11 +3,11 @@ import { GetJesAccountsByNameQuery } from "@server/features/accounts/getJesAccou
 import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
-export interface IAccountsApi {
-  getAllByJesName: (params: ApiParams<{ searchString?: string }>) => Promise<AccountDto[]>;
+export interface IAccountsApi<Context extends "client" | "server"> {
+  getAllByJesName: (params: ApiParams<Context, { searchString?: string }>) => Promise<AccountDto[]>;
 }
 
-class Controller extends ControllerBase<AccountDto> implements IAccountsApi {
+class Controller extends ControllerBase<"server", AccountDto> implements IAccountsApi<"server"> {
   constructor() {
     super("jes-accounts");
 
@@ -20,7 +20,7 @@ class Controller extends ControllerBase<AccountDto> implements IAccountsApi {
     );
   }
 
-  public async getAllByJesName(params: ApiParams<{ searchString?: string }>) {
+  public async getAllByJesName(params: ApiParams<"server", { searchString?: string }>) {
     const query = new GetJesAccountsByNameQuery(params.searchString);
     return contextProvider.start(params).runQuery(query);
   }

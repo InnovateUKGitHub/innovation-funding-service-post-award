@@ -3,11 +3,11 @@ import { GetAllForecastsGOLCostsQuery } from "@server/features/claims/getAllFore
 import { contextProvider } from "@server/features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
-export interface IForecastGolCostsApi {
-  getAllByPartnerId: (params: ApiParams<{ partnerId: PartnerId }>) => Promise<GOLCostDto[]>;
+export interface IForecastGolCostsApi<Context extends "client" | "server"> {
+  getAllByPartnerId: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<GOLCostDto[]>;
 }
 
-class Controller extends ControllerBase<GOLCostDto> implements IForecastGolCostsApi {
+class Controller extends ControllerBase<"server", GOLCostDto> implements IForecastGolCostsApi<"server"> {
   constructor() {
     super("forecast-gol-costs");
 
@@ -18,7 +18,7 @@ class Controller extends ControllerBase<GOLCostDto> implements IForecastGolCosts
     );
   }
 
-  public async getAllByPartnerId(params: ApiParams<{ partnerId: PartnerId }>) {
+  public async getAllByPartnerId(params: ApiParams<"server", { partnerId: PartnerId }>) {
     const { partnerId } = params;
     const query = new GetAllForecastsGOLCostsQuery(partnerId);
     return contextProvider.start(params).runQuery(query);

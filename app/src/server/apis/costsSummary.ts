@@ -3,13 +3,13 @@ import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails/get
 import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
-export interface ICostsSummaryApi {
+export interface ICostsSummaryApi<Context extends "client" | "server"> {
   getAllByPartnerIdForPeriod: (
-    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
+    params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
   ) => Promise<CostsSummaryForPeriodDto[]>;
 }
 
-class Controller extends ControllerBase<CostsSummaryForPeriodDto> implements ICostsSummaryApi {
+class Controller extends ControllerBase<"server", CostsSummaryForPeriodDto> implements ICostsSummaryApi<"server"> {
   constructor() {
     super("costs-summary");
 
@@ -25,7 +25,7 @@ class Controller extends ControllerBase<CostsSummaryForPeriodDto> implements ICo
   }
 
   public async getAllByPartnerIdForPeriod(
-    params: ApiParams<{ projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
+    params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
   ) {
     const query = new GetCostsSummaryForPeriodQuery(params.projectId, params.partnerId, params.periodId);
     return contextProvider.start(params).runQuery(query);

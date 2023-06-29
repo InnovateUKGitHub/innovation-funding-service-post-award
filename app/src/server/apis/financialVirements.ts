@@ -5,7 +5,26 @@ import { UpdateFinancialVirementCommand } from "@server/features/financialVireme
 import { processDto } from "@shared/processResponse";
 import { ControllerBase, ApiParams } from "./controllerBase";
 
-class Controller extends ControllerBase<FinancialVirementDto> {
+export interface IFinancialVirement<Context extends "client" | "server"> {
+  get(
+    params: ApiParams<Context, { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; partnerId?: PartnerId }>,
+  ): Promise<FinancialVirementDto>;
+  update(
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        partnerId?: PartnerId;
+        financialVirement: FinancialVirementDto;
+        submit: boolean;
+      }
+    >,
+  ): Promise<FinancialVirementDto>;
+}
+
+class Controller extends ControllerBase<"server", FinancialVirementDto> {
   constructor() {
     super("financial-virements");
 
@@ -29,21 +48,24 @@ class Controller extends ControllerBase<FinancialVirementDto> {
   }
 
   async get(
-    params: ApiParams<{ projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; partnerId?: PartnerId }>,
+    params: ApiParams<"server", { projectId: ProjectId; pcrId: PcrId; pcrItemId: PcrItemId; partnerId?: PartnerId }>,
   ): Promise<FinancialVirementDto> {
     const query = new GetFinancialVirementQuery(params.projectId, params.pcrItemId, params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
   async update(
-    params: ApiParams<{
-      projectId: ProjectId;
-      pcrId: PcrId;
-      pcrItemId: PcrItemId;
-      partnerId?: PartnerId;
-      financialVirement: FinancialVirementDto;
-      submit: boolean;
-    }>,
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        pcrId: PcrId;
+        pcrItemId: PcrItemId;
+        partnerId?: PartnerId;
+        financialVirement: FinancialVirementDto;
+        submit: boolean;
+      }
+    >,
   ): Promise<FinancialVirementDto> {
     const context = contextProvider.start(params);
 
@@ -60,7 +82,5 @@ class Controller extends ControllerBase<FinancialVirementDto> {
     return await context.runQuery(query);
   }
 }
-
-export type IFinancialVirement = Pick<Controller, "get" | "update">;
 
 export const controller = new Controller();

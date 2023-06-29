@@ -7,21 +7,24 @@ import { GetAllQuery } from "@server/features/partners/getAllQuery";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetAllForProjectQuery } from "@server/features/partners/getAllForProjectQuery";
 
-export interface IPartnersApi {
-  getAll: (params: ApiParams) => Promise<PartnerDto[]>;
-  getAllByProjectId: (params: ApiParams<{ projectId: ProjectId }>) => Promise<PartnerDto[]>;
-  get: (params: ApiParams<{ partnerId: PartnerId }>) => Promise<PartnerDto>;
+export interface IPartnersApi<Context extends "client" | "server"> {
+  getAll: (params: ApiParams<Context>) => Promise<PartnerDto[]>;
+  getAllByProjectId: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<PartnerDto[]>;
+  get: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<PartnerDto>;
   updatePartner: (
-    params: ApiParams<{
-      partnerId: PartnerId;
-      partnerDto: PartnerDto;
-      validateBankDetails?: boolean;
-      verifyBankDetails?: boolean;
-    }>,
+    params: ApiParams<
+      Context,
+      {
+        partnerId: PartnerId;
+        partnerDto: Partial<PartnerDto>;
+        validateBankDetails?: boolean;
+        verifyBankDetails?: boolean;
+      }
+    >,
   ) => Promise<PartnerDto>;
 }
 
-class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
+class Controller extends ControllerBase<"server", PartnerDto> implements IPartnersApi<"server"> {
   constructor() {
     super("partners");
 
@@ -47,30 +50,33 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     );
   }
 
-  public async getAll(params: ApiParams) {
+  public async getAll(params: ApiParams<"server">) {
     const query = new GetAllQuery();
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAllByProjectId(params: ApiParams<{ projectId: ProjectId }>) {
+  public async getAllByProjectId(params: ApiParams<"server", { projectId: ProjectId }>) {
     const { projectId } = params;
     const query = new GetAllForProjectQuery(projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ partnerId: PartnerId }>) {
+  public async get(params: ApiParams<"server", { partnerId: PartnerId }>) {
     const { partnerId } = params;
     const query = new GetByIdQuery(partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async updatePartner(
-    params: ApiParams<{
-      partnerId: PartnerId;
-      partnerDto: Partial<PartnerDto>;
-      validateBankDetails?: boolean;
-      verifyBankDetails?: boolean;
-    }>,
+    params: ApiParams<
+      "server",
+      {
+        partnerId: PartnerId;
+        partnerDto: Partial<PartnerDto>;
+        validateBankDetails?: boolean;
+        verifyBankDetails?: boolean;
+      }
+    >,
   ) {
     const context = contextProvider.start(params);
     await context.runCommand(
