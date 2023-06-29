@@ -101,7 +101,7 @@ const deletePcr = (projectId: string) => {
   cy.navigateToProject(projectId);
   cy.selectTile("Project change requests");
   cy.getByQA("pcrDeleteLink").contains("Delete").click();
-  cy.getByQA("button_delete-qa").click({ force: true });
+  cy.get("button").contains("Delete request").click({ force: true });
 };
 
 Cypress.Commands.add("getByLabel", getByLabel);

@@ -1,5 +1,6 @@
 export type PcrType =
   | "Reallocate project costs"
+  | "Draft"
   | "Add a partner"
   | "Remove a partner"
   | "Change project scope"

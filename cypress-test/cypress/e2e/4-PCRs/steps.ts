@@ -2,6 +2,7 @@ import { PcrType } from "typings/pcr";
 
 let date = new Date();
 let year = date.getFullYear();
+let createdDay = date.getDate();
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 export const newPubDescription = "I am a new public description. I am 55 characters long.";
@@ -1178,11 +1179,21 @@ const pcrArray = [
   "Put project on hold",
 ];
 
+const multiPcrArray = [
+  "Reallocate project costs",
+  "Add a partner",
+  "Change project scope",
+  "Change project duration",
+  "Change a partner's name",
+  "Put project on hold",
+];
+
 export const selectEachPcr = () => {
   pcrArray.forEach(pcr => {
     cy.clickCheckBox(pcr);
   });
   cy.submitButton("Create request").click();
+  cy.get("h1").contains("Request", { timeout: 30000 });
 };
 
 export const confirmPcrsAdded = () => {
@@ -1222,4 +1233,39 @@ export const showMultiplePcrInfo = () => {
   cy.get("li").contains(pcrArray[3]);
   cy.get("a").contains("Cancel").click();
   cy.get("h1").contains("Project change requests");
+};
+
+export const backOutAndDelete = () => {
+  cy.backLink("Back to project change requests").click();
+  cy.get("h1").contains("Project change requests");
+  cy.get("td").contains("Draft").siblings().contains("a", "Delete").click();
+};
+
+export const verifyDeletePageLoads = () => {
+  cy.backLink("Back to project change requests");
+  cy.get("h1").contains("Delete draft request");
+  shouldShowProjectTitle;
+};
+
+export const deletionWarningMessage = () => {
+  cy.getByQA("validation-message-content").contains("All the information will be permanently deleted.");
+};
+
+export const validateTable = () => {
+  cy.getByQA("requestNumber").contains("Request");
+  cy.getByQA("started").contains("Started");
+  cy.getByQA("started").contains(createdDay);
+  cy.get("dt").contains("Last updated");
+  cy.get("dd").contains(createdDay);
+  pcrArray.forEach(type => {
+    cy.getByQA("types").contains(type);
+  });
+};
+
+export const deleteAndConfirm = () => {
+  cy.get("button").contains("Delete request").click();
+  cy.get("h1").contains("Project change requests");
+  multiPcrArray.forEach(type => {
+    cy.getByQA("pcrs-active").should("not.contain", type);
+  });
 };

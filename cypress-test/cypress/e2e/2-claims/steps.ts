@@ -642,7 +642,7 @@ export const add120Lines = () => {
 export const saveLineItems = () => {
   cy.get("button").contains("Save and return to claims").click();
   cy.wait(5000);
-  cy.get("h1").contains("Costs to be claimed");
+  cy.get("h1").contains("Costs to be claimed", { timeout: 60000 });
 };
 
 export const removeLineItems = () => {
