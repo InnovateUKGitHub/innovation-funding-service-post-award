@@ -249,3 +249,9 @@ export const pmShouldNotDelete = () => {
 export const fcShouldNotDelete = () => {
   cy.get("td").contains("James Black of EUI Small Ent Health").siblings().contains("Remove").should("be.disabled");
 };
+
+export const validateFileUpload = () => {
+  cy.get("button").contains("Upload").click();
+  cy.getByQA("validation-summary").contains("a", "Choose a file to upload");
+  cy.reload();
+};
