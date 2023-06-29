@@ -1,7 +1,7 @@
 import { graphql } from "relay-hooks";
 
 export const pcrDeleteQuery = graphql`
-  query PcrDeleteQuery($projectId: ID!) {
+  query PcrDeleteQuery($projectId: ID!, $pcrId: ID!) {
     salesforce {
       uiapi {
         query {
@@ -18,7 +18,10 @@ export const pcrDeleteQuery = graphql`
                 Acc_ProjectTitle__c {
                   value
                 }
-                Project_Change_Requests__r(first: 2000) {
+                Project_Change_Requests__r(
+                  first: 2000
+                  where: { or: [{ Id: { eq: $pcrId } }, { Acc_RequestHeader__c: { eq: $pcrId } }] }
+                ) {
                   edges {
                     node {
                       Id
