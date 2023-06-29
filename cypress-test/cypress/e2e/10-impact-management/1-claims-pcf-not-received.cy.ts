@@ -8,9 +8,11 @@ import {
   validatePage,
 } from "./steps";
 
+const fcEmail = "this'is'a'test@innovateuk.gov.uk.bjssdev";
+
 describe("Impact Management > Claim - PCF not received", () => {
   before(() => {
-    visitApp({});
+    visitApp({ asUser: fcEmail });
     cy.navigateToProject("663878");
   });
 
@@ -43,6 +45,6 @@ describe("Impact Management > Claim - PCF not received", () => {
   it("Should contain the Final claim message and PCF guidance message", summaryPageValidation);
 
   it("Should have the submit button greyed out and clicking on it does nothing", () => {
-    cy.submitButton("Submit").should("be.disabled");
+    cy.get("button").contains("Submit").should("be.disabled");
   });
 });

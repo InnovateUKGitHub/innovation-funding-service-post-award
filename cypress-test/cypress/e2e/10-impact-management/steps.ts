@@ -1,3 +1,5 @@
+import { fileTidyUp } from "common/filetidyup";
+
 const euiFC = "this'is'a'test@innovateuk.gov.uk.bjssdev";
 const drgFC = "contact77@test.co.uk";
 const pcfNotReceivedMessage =
@@ -73,14 +75,14 @@ export const validatePage = () => {
 };
 
 export const proceedToDocuments = () => {
-  cy.submitButton("Continue to claims documents").click();
+  cy.get("button").contains("Continue to claims documents").click();
   cy.get("h1").contains("Claim documents");
   cy.getByQA("validation-message-content").contains(pcfNotReceivedMessage);
   cy.getByQA("validation-message").contains(finalClaimMessage);
 };
 
 export const proceedToDRGDocuments = () => {
-  cy.submitButton("Continue to claims documents").click();
+  cy.get("button").contains("Continue to claims documents").click();
   cy.get("h1").contains("Claim documents");
   cy.getByQA("validation-message").contains(finalClaimMessage);
 };
@@ -99,6 +101,7 @@ export const drgSummaryPageValidation = () => {
 };
 
 export const pcfClaimsDocUpload = () => {
+  fileTidyUp("Neil O'Reilly");
   cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
   cy.uploadButton("Upload documents").click();
   cy.getByQA("validation-message-content").contains("Your document has been uploaded.");

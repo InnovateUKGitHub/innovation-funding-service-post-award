@@ -1,3 +1,5 @@
+import { fileTidyUp } from "common/filetidyup";
+
 const moLogin = "testman2@testing.com";
 let date = new Date();
 let comments = JSON.stringify(date);
@@ -187,6 +189,7 @@ export const selectFileDescription = () => {
 };
 
 export const claimsDocUpload = () => {
+  fileTidyUp("James Black");
   cy.uploadButton("Upload documents").click();
   cy.getByQA("validation-summary").contains("a", "Choose a file to upload");
   cy.get("input#attachment").selectFile("cypress/common/testfile.doc");

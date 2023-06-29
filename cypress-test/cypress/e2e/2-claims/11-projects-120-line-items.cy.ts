@@ -1,7 +1,7 @@
 import { visitApp } from "common/visit";
 import { add120Lines, beginEditing, removeLineItems, saveLineItems } from "./steps";
 
-describe("claims > edit claims as FC", () => {
+describe("claims > Add 120 line items", () => {
   before(() => {
     visitApp({ asUser: "contact77@test.co.uk" });
     cy.navigateToProject("879546");
@@ -17,7 +17,7 @@ describe("claims > edit claims as FC", () => {
   it("Should go back into Labour and delete the line items", removeLineItems);
 
   it("Should save and continue having deleted the line items", () => {
-    cy.submitButton("Save and return to claims").click();
+    cy.get("button").contains("Save and return to claims").click();
     cy.get("h1").contains("Costs to be claimed");
   });
 });
