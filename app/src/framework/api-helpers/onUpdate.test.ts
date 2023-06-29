@@ -34,7 +34,7 @@ describe("useOnUpdate", () => {
     await act(() => result.current.onUpdate({ data: { postcode: "SN1 2AP" } }));
 
     expect(result.current.apiError).toBe(null);
-    expect(onSuccess).toHaveBeenCalled();
+    expect(onSuccess).toHaveBeenCalledWith({ postcode: "SN1 2AP" }, { postcode: "SN1 2AP" }, undefined);
     expect(onError).not.toHaveBeenCalled();
   });
 
@@ -45,5 +45,14 @@ describe("useOnUpdate", () => {
     expect(result.current.apiError).toEqual({ code: 1, message: "Leo forgot his mama noodles" });
     expect(onSuccess).not.toHaveBeenCalled();
     expect(onError).toHaveBeenCalled();
+  });
+
+  it("should pass in an input ctx to the success callback", async () => {
+    const { result } = renderSuccessHook();
+    await act(() => result.current.onUpdate({ poland: "Poland" }, { bulgoggi: "Burger" }));
+
+    expect(result.current.apiError).toBe(null);
+    expect(onSuccess).toHaveBeenCalledWith({ poland: "Poland" }, { poland: "Poland" }, { bulgoggi: "Burger" });
+    expect(onError).not.toHaveBeenCalled();
   });
 });

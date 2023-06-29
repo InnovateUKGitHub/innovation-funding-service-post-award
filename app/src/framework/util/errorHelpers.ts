@@ -5,6 +5,7 @@ import { ZodError } from "zod";
 import { useState } from "react";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
+import { ValidationError } from "@shared/appError";
 
 /**
  * This converts from html error format as returned by react-hook-form, zod or yup, into the format used

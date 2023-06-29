@@ -94,7 +94,7 @@ const getDocumentDescriptionContentSelector = (type: DocumentDescription | null 
   }
 };
 
-export const allowedClaimDocuments: Readonly<DocumentDescription[]> = [
+export const allowedClaimDocuments = [
   DocumentDescription.Invoice,
   DocumentDescription.IAR,
   DocumentDescription.Evidence,

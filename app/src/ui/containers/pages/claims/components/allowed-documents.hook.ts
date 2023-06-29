@@ -12,20 +12,26 @@ export function useEnumDocuments(documentsToCheck: Readonly<DocumentDescription[
 
   const getRawDocs: number[] = getAllNumericalEnumValues(DocumentDescription);
 
-  return getRawDocs.reduce<DropdownOption[]>((acc, doc) => {
-    const isInvalidDocument = !documentsToCheck.includes(doc);
+  const options: DropdownOption[] = [];
 
-    if (isInvalidDocument) return acc;
+  options.push(
+    ...getRawDocs.reduce<DropdownOption[]>((acc, doc) => {
+      const isInvalidDocument = !documentsToCheck.includes(doc);
 
-    const id = doc.toString();
-    const value = getContent(getDocumentDescriptionContentSelector(doc));
+      if (isInvalidDocument) return acc;
 
-    return [
-      ...acc,
-      {
-        id,
-        value,
-      },
-    ];
-  }, []);
+      const id = doc.toString();
+      const value = getContent(getDocumentDescriptionContentSelector(doc));
+
+      return [
+        ...acc,
+        {
+          id,
+          value,
+        },
+      ];
+    }, []),
+  );
+
+  return options;
 }
