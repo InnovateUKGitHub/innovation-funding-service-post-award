@@ -2,7 +2,7 @@ import { createMemoryHistory } from "history";
 import _merge from "lodash.merge";
 import { Router } from "react-router-dom";
 import { Copy } from "@copy/Copy";
-import { mountedContext } from "@ui/features/has-mounted/Mounted";
+import { mountedContext } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { IStores, StoresProvider } from "@ui/redux/storesProvider";

@@ -5,7 +5,7 @@ import { ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { ClaimDtoValidator } from "@ui/validation/validators/claimDtoValidator";
 import { ValidationError } from "../common/appError";
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails/getCostsSummaryForPeriodQuery";
 import { InActiveProjectError } from "../common/appError";

@@ -1,4 +1,4 @@
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { ProjectRole } from "@framework/constants/project";

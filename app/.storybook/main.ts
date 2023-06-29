@@ -16,6 +16,9 @@ const config: StorybookConfig = {
   docs: {
     autodocs: "tag",
   },
+  core: {
+    disableTelemetry: true,
+  },
   staticDirs: ["../public"],
   webpackFinal: async (config: Configuration) => {
     const rule = {

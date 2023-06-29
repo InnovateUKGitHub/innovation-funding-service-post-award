@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { flatten } from "@framework/util/arrayHelpers";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 import {
   calculateNewEligibleCosts,
   calculateNewRemainingGrant,

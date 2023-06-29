@@ -1,6 +1,6 @@
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { Pending } from "@shared/pending";
-import { LoanDtoValidator } from "@ui/validators/loanValidator";
+import { LoanDtoValidator } from "@ui/validation/validators/loanValidator";
 import { apiClient } from "../../apiClient";
 import { LoanDocumentsStore } from "./loanDocumentsStore";
 import { StoreBase } from "./storeBase";

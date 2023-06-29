@@ -1,6 +1,6 @@
 import { apiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { PartnerDocumentsStore } from "@ui/redux/stores/partnerDocumentsStore";
 import { StoreBase } from "./storeBase";
 import { LoadingStatus } from "@framework/constants/enums";

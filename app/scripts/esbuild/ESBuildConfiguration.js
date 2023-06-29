@@ -147,16 +147,6 @@ class ESBuildConfiguration {
   }
 
   /**
-   * Include the IFS PA component library
-   *
-   * @returns {ESBuildConfiguration} Itself
-   */
-  withComponentLibrary() {
-    this.clientBuild.entryPoints.componentsGuide = path.join(this.dirname, "src/client/componentsGuide.tsx");
-    return this;
-  }
-
-  /**
    * Include sourcemap support
    *
    * @returns {ESBuildConfiguration} Itself

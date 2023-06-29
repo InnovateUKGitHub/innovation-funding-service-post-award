@@ -6,7 +6,7 @@ import { StoreBase } from "./storeBase";
 import { LoadingStatus } from "@framework/constants/enums";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 import { MonitoringReportSummaryDto, MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
-import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { dataLoadAction } from "../actions/common/dataLoad";
 import { messageSuccess } from "../actions/common/messageActions";
 import { RootActionsOrThunk } from "../actions/root";

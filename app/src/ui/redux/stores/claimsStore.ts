@@ -3,7 +3,7 @@ import { Pending } from "@shared/pending";
 import { apiClient } from "@ui/apiClient";
 import { StoreBase } from "@ui/redux/stores/storeBase";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { ClaimDtoValidator } from "@ui/validation/validators/claimDtoValidator";
 import { messageSuccess } from "../actions/common/messageActions";
 import { RootActionsOrThunk } from "../actions/root";
 import { RootState } from "../reducers/rootReducer";

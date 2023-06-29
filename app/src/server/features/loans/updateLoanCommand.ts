@@ -5,7 +5,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceLoan } from "@server/repositories/loanRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { LoanDtoValidator } from "@ui/validators/loanValidator";
+import { LoanDtoValidator } from "@ui/validation/validators/loanValidator";
 import { BadRequestError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetLoanDocumentsQuery } from "../documents/getLoanDocuments";

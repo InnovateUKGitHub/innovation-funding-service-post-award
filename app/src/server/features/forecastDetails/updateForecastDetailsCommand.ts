@@ -9,7 +9,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
+import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
 import { GetAllClaimDetailsByPartner } from "../claimDetails/getAllByPartnerQuery";
 import { GetAllForecastsGOLCostsQuery } from "../claims/getAllForecastGOLCostsQuery";
 import { GetAllForPartnerQuery } from "../claims/getAllForPartnerQuery";

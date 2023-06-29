@@ -1,4 +1,4 @@
-import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useCallback } from "react";
 
 // Note: There is no available interface for this module, this is an interim type

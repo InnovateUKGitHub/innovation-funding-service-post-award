@@ -2,13 +2,11 @@ import { getGraphQLSchema } from "@gql/getGraphQLSchema";
 import { createContext } from "@gql/GraphQLContext";
 import { Api } from "@gql/sf/Api";
 import { router as apiRoutes } from "@server/apis";
-import { componentGuideRender } from "@server/componentGuideRender";
-import { configureFormRouter } from "@server/forms/formRouter";
+import { configureFormRouter } from "@server/htmlFormHandler/formRouter";
 import { healthRouter } from "@server/health";
 import { serverRender } from "@server/serverRender";
 import { NotFoundError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
-import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
 import csrf from "csurf";
 import { ErrorRequestHandler, Router } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
@@ -44,11 +42,6 @@ const getServerRoutes = async () => {
       context: await createContext({ req }),
     })(req, res, next);
   });
-
-  // Only enable the components page if we're in development mode.
-  if (isAccDevOrDemo || isLocalDevelopment) {
-    router.use("/components", csrfProtection, componentGuideRender);
-  }
 
   /**
    * User Routes

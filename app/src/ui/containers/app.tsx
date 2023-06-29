@@ -8,7 +8,7 @@ import { IRouteDefinition } from "@ui/containers/containerBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PageTitleProvider } from "@ui/features/page-title";
-import { ProjectParticipantProvider } from "@ui/features/project-participants";
+import { ProjectParticipantProvider } from "@ui/components/atomicDesign/atoms/providers/ProjectParticipants/project-participants";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { noop } from "@ui/helpers/noop";
@@ -16,22 +16,25 @@ import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { useAppMount } from "./app/app-mount.hook";
 import { ErrorPayload } from "@shared/create-error-payload";
-import { DeveloperSection } from "@ui/components/layout/DeveloperSection";
+import { DeveloperSection } from "@ui/components/atomicDesign/organisms/DeveloperSection/DeveloperSection";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
-import { ErrorContainer, ErrorBoundaryFallback } from "@ui/components/errors/ErrorContainer";
-import { FullHeight } from "@ui/components/FullHeight";
-import { Footer } from "@ui/components/layout/footer";
-import { GovWidthContainer } from "@ui/components/layout/GovWidthContainer";
-import { Header } from "@ui/components/layout/header";
-import { PhaseBanner } from "@ui/components/layout/phaseBanner";
-import { SuspensePageLoader } from "@ui/components/loading";
-import { PrivateModal } from "@ui/components/modal";
-import { MountedProvider } from "@ui/features/has-mounted/Mounted";
+import { MountedProvider } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import {
+  ErrorContainer,
+  ErrorBoundaryFallback,
+} from "@ui/components/atomicDesign/organisms/ErrorContainer/ErrorContainer";
+import { FullHeight } from "@ui/components/atomicDesign/atoms/FullHeight/FullHeight";
+import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
+import { Header } from "@ui/components/atomicDesign/organisms/Header/header";
+import { PhaseBanner } from "@ui/components/atomicDesign/molecules/PhaseBanner/phaseBanner";
+import { SuspensePageLoader } from "@ui/components/bjss/loading";
+import { PrivateModal } from "@ui/components/atomicDesign/molecules/Modal/modal";
 import { routeTransition } from "@ui/redux/actions/common/transitionActions";
 import { useModal } from "@ui/redux/modalProvider";
 import { RoutesProvider } from "@ui/redux/routesProvider";
 import { useStores } from "@ui/redux/storesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
+import { Footer } from "@ui/components/atomicDesign/molecules/Footer/Footer";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 interface IAppProps {

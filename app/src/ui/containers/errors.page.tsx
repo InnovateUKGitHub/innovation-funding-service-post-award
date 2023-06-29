@@ -1,5 +1,5 @@
-import { ErrorContainer } from "@ui/components/errors/ErrorContainer";
-import { NotFoundError } from "@ui/components/errors/NotFoundError";
+import { ErrorContainer } from "@ui/components/atomicDesign/organisms/ErrorContainer/ErrorContainer";
+import { NotFoundError } from "@ui/containers/pages/error/NotFound/NotFoundError";
 import { useStores } from "@ui/redux/storesProvider";
 import { defineRoute } from "./containerBase";
 

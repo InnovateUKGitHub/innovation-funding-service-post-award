@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { EditorStatus } from "@ui/constants/enums";
+import { EditorStatus } from "@ui/redux/constants/enums";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -13,15 +13,18 @@ import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
-import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
-import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
-import { DocumentUploadDtoValidator, MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { ClaimDetailsValidator } from "@ui/validation/validators/claimDetailsValidator";
+import { ClaimDtoValidator } from "@ui/validation/validators/claimDtoValidator";
+import {
+  DocumentUploadDtoValidator,
+  MultipleDocumentUploadDtoValidator,
+} from "@ui/validation/validators/documentUploadValidator";
 import {
   FinancialVirementDtoValidator,
   FinancialLoanVirementDtoValidator,
-} from "@ui/validators/financialVirementDtoValidator";
-import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
-import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+} from "@ui/validation/validators/financialVirementDtoValidator";
+import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
+import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { RootActions } from "../actions/root";
 
 export interface IEditorStore<TDto, TValidator> {

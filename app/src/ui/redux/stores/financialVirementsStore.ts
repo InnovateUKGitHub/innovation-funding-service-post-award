@@ -5,7 +5,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { StoreBase } from "./storeBase";
 import { LoadingStatus } from "@framework/constants/enums";
 import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos/financialVirementDto";
-import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 import { IEditorStore } from "../reducers/editorsReducer";
 
 export class FinancialVirementsStore extends StoreBase {

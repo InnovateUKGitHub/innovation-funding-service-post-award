@@ -5,7 +5,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceMonitoringReportHeader } from "@server/repositories/monitoringReportHeaderRepository";
 import { ISalesforceMonitoringReportResponse } from "@server/repositories/monitoringReportResponseRepository";
-import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { BadRequestError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";

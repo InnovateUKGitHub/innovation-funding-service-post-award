@@ -7,7 +7,7 @@ import { IContext } from "@framework/types/IContext";
 import { isNumber } from "@framework/util/numberHelper";
 import { ISalesforceClaimLineItem } from "@server/repositories/claimLineItemRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
+import { ClaimDetailsValidator } from "@ui/validation/validators/claimDetailsValidator";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";

@@ -1,7 +1,7 @@
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IClientUser } from "@framework/types/IUser";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { removeMessages, messageSuccess } from "../actions/common/messageActions";
 import { StoreBase } from "./storeBase";
 

@@ -2,7 +2,7 @@ import { ErrorCode } from "@framework/constants/enums";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { IAppError } from "@framework/types/IAppError";
 import { createPartnerDto } from "@framework/util/stubDtos";
-import { EditorStatus } from "@ui/constants/enums";
+import { EditorStatus } from "@ui/redux/constants/enums";
 import {
   EditorErrorAction,
   EditorResetAction,
@@ -11,7 +11,7 @@ import {
   UpdateEditorAction,
 } from "@ui/redux/actions/common/editorActions";
 import { Results } from "@ui/validation/results";
-import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { ClaimDtoValidator } from "@ui/validation/validators/claimDtoValidator";
 import { routeTransition } from "../actions/common/transitionActions";
 import createClaim from "../stores/createClaim";
 import getRootState from "../stores/getRootState";

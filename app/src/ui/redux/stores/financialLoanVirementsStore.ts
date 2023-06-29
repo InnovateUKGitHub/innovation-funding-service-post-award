@@ -3,7 +3,7 @@ import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { StoreBase } from "./storeBase";
 import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
-import { FinancialLoanVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { FinancialLoanVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 import { IEditorStore } from "../reducers/editorsReducer";
 
 export class FinancialLoanVirementsStore extends StoreBase {

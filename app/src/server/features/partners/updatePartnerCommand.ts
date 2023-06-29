@@ -6,7 +6,7 @@ import {
   PartnerStatusMapper,
 } from "@server/features/partners/mapToPartnerDto";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummaryQuery";
 import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";

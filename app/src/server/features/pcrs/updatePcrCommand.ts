@@ -1,4 +1,4 @@
-import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";

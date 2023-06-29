@@ -23,7 +23,7 @@ import { CostCategoryList } from "@framework/types/CostCategory";
 import { IContext } from "@framework/types/IContext";
 import { isNumber, roundCurrency } from "@framework/util/numberHelper";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
-import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import { PCRSpendProfileDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";

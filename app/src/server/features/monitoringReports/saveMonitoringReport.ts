@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
-import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
+import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { ProjectRole } from "@framework/constants/project";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { Authorisation } from "@framework/types/authorisation";

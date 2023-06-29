@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Pending } from "@shared/pending";
-import { EditorStatus } from "@ui/constants/enums";
+import { EditorStatus } from "@ui/redux/constants/enums";
 import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
 import { LoadingStatus } from "@framework/constants/enums";

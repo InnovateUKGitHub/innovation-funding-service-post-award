@@ -1,4 +1,4 @@
-import { H1 } from "@ui/components/typography/Heading.variants";
+import { H1 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { createContext, useContext } from "react";
 
 export interface PageTitleContext {

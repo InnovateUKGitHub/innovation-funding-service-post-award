@@ -11,7 +11,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforcePartner } from "@server/repositories/partnersRepository";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
-import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
+import { InitialForecastDetailsDtosValidator } from "@ui/validation/validators/initialForecastDetailsDtosValidator";
 import { GetAllForecastsGOLCostsQuery } from "../claims/getAllForecastGOLCostsQuery";
 import { InActiveProjectError, BadRequestError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";

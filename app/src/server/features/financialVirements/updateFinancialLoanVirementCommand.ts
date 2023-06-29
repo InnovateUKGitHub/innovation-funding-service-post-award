@@ -4,7 +4,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { ISalesforceFinancialLoanVirement } from "@server/repositories/financialLoanVirementRepository";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { FinancialLoanVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { FinancialLoanVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 import { InActiveProjectError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";

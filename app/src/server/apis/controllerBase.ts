@@ -4,7 +4,7 @@ import { NotFoundError } from "@shared/appError";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
-import { upload } from "../forms/diskStorage";
+import { upload } from "../htmlFormHandler/diskStorage";
 import { readFileSync } from "fs";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { IAppError } from "@framework/types/IAppError";

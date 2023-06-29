@@ -27,7 +27,7 @@ if (opts.tsc) {
 }
 
 if (opts.devtools || shouldEnableDevTools) {
-  esbuildConfig.withComponentLibrary().withSourceMap();
+  esbuildConfig.withSourceMap();
 }
 
 switch (opts.target) {

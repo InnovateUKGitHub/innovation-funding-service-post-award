@@ -1,5 +1,5 @@
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
-import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { DocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { mapClaim } from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";

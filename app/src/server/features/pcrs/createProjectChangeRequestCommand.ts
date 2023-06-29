@@ -8,7 +8,7 @@ import { PCRDto, PCRItemTypeDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities/projectChangeRequest";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { BadRequestError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";

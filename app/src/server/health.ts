@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
 import { ILogger, Logger } from "@shared/developmentLogger";
 import { configuration } from "./features/common/config";
-import { checkSalesforce, checkGoogleAnalytics, checkCompaniesHouse } from "./health-check/checks";
-import { HealthCheckResult } from "./health-check/health-check.interface";
+import { checkSalesforce, checkGoogleAnalytics, checkCompaniesHouse } from "./healthCheck/checks";
+import { HealthCheckResult } from "./healthCheck/checks";
 
 export const healthRouter: Router = Router();
 

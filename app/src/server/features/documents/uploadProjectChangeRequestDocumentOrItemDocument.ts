@@ -2,7 +2,7 @@ import { ProjectRole } from "@framework/constants/project";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { ValidationError } from "../common/appError";
 import { CommandMultipleDocumentBase } from "../common/commandBase";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document

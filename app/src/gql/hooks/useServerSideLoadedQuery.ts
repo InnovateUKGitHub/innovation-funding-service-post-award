@@ -1,4 +1,4 @@
-import { useMounted } from "@ui/features/has-mounted/Mounted";
+import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useQuery } from "relay-hooks";
 import { OperationType } from "relay-runtime";
 

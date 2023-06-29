@@ -2,7 +2,7 @@ import express from "express";
 import passport from "passport";
 import cookieSession from "cookie-session";
 
-import { configuration } from "../server/features/common/config";
+import { configuration } from "@server/features/common/config";
 import { noCache } from "./cacheHeaders";
 import { Logger } from "@shared/developmentLogger";
 import {

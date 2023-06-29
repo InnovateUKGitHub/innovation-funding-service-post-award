@@ -5,7 +5,10 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { IContext } from "@framework/types/IContext";
 import { FileTypeNotAllowedError } from "@server/repositories/errors";
-import { MultipleDocumentUploadDtoValidator, DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
+import {
+  MultipleDocumentUploadDtoValidator,
+  DocumentUploadDtoValidator,
+} from "@ui/validation/validators/documentUploadValidator";
 
 // TODO this should become AuthorisedCommandBase and extend CommandBase
 export abstract class NonAuthorisedCommandBase<T> {
