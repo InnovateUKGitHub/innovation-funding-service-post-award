@@ -1,3 +1,4 @@
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import {
   DocumentSummaryDto,
@@ -8,7 +9,14 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
+import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  FileDeleteOutputs,
+  FileUploadOutputs,
+  getDocumentFormValidation,
+} from "@server/htmlFormHandler/handlers/projects/[projectId]/documents/projectLevelDocumentShare.zod";
 import { Pending } from "@shared/pending";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
@@ -16,7 +24,6 @@ import {
   DocumentEdit,
   PartnerDocumentEdit,
 } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { createTypedForm, DropdownOption } from "@ui/components/bjss/form/form";
 import { DropdownListOption } from "@ui/components/bjss/inputs/dropdownList";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
@@ -26,16 +33,29 @@ import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTit
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { H2, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
-import { EnumDocuments } from "@ui/containers/pages/claims/components/EnumDocuments";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { getCurrentPartnerName } from "@ui/helpers/getCurrentPartnerName";
-import { noop } from "@ui/helpers/noop";
 import { useContent } from "@ui/hooks/content.hook";
+import { messageSuccess, removeMessages } from "@ui/redux/actions/common/messageActions";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useStores } from "@ui/redux/storesProvider";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { useProjectDocumentsQuery } from "./projectDocuments.logic";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
+import { clientsideApiClient } from "@ui/apiClient";
+import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
+import { ClientFileWrapper } from "@client/clientFileWrapper";
+import { makeZodI18nMap } from "@shared/zodi18n";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { FileInput } from "@ui/components/atomicDesign/atoms/form/FileInput/FileInput";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { Select } from "@ui/components/atomicDesign/atoms/form/Select/Select";
+import { ValidationError } from "class-validator";
+import { useForm } from "react-hook-form";
+import { useStore } from "react-redux";
+import { Form } from "react-router-dom";
+import { useEnumDocuments } from "../../claims/components/allowed-documents.hook";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;
@@ -43,8 +63,7 @@ export interface ProjectDocumentPageParams {
 
 type ProjectDocumentsPageProps = {
   editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
-  onChange: (save: boolean, dto: MultipleDocumentUploadDto) => void;
-  onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto | PartnerDocumentSummaryDto) => void;
+  refresh: () => void;
   project: Pick<ProjectDtoGql, "id" | "projectNumber" | "title" | "status" | "roles">;
   partners: Pick<PartnerDtoGql, "id" | "name" | "roles">[];
   projectDocuments: Pick<
@@ -77,11 +96,8 @@ const allowedProjectDocuments: DocumentDescription[] = [
   DocumentDescription.MeetingAgenda,
 ];
 
-const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
-
 const ProjectDocumentsPage = ({
-  onChange,
-  onDelete,
+  refresh,
   editor,
   project,
   partners,
@@ -90,33 +106,63 @@ const ProjectDocumentsPage = ({
   ...props
 }: ProjectDocumentPageParams & BaseProps & ProjectDocumentsPageProps) => {
   const { getContent } = useContent();
+  const stores = useStores();
+
+  const { onUpdate: onUploadUpdate } = useOnUpload({
+    refresh() {
+      refresh();
+      reset();
+    },
+  });
+  const { onUpdate: onDeleteUpdate } = useOnDelete({ refresh });
+
+  const { register, handleSubmit, formState, reset } = useForm<FileUploadOutputs>({
+    resolver: zodResolver(getDocumentFormValidation("projectLevelUpload"), {
+      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+    }),
+  });
+
+  const onChange = (dto: FileUploadOutputs) => {
+    onUploadUpdate(
+      {
+        form: "projectLevelUpload",
+        description: dto.description,
+        files: dto.files as ClientFileWrapper[],
+        projectId: project.id,
+      },
+      dto,
+    );
+  };
+
+  const onDelete = (dto: MultipleDocumentUploadDto, doc: DocumentSummaryDto | PartnerDocumentSummaryDtoGql) => {
+    stores.messages.clearMessages();
+    if ("partnerId" in doc) {
+      onDeleteUpdate(
+        { form: "partnerLevelDelete", documentId: doc.id, projectId: project.id, partnerId: doc.partnerId },
+        doc,
+      );
+    } else {
+      onDeleteUpdate({ form: "projectLevelDelete", documentId: doc.id, projectId: project.id }, doc);
+    }
+  };
 
   const { isMo: isProjectMo } = getAuthRoles(project.roles);
   const partnerName = getCurrentPartnerName(partners);
-
-  const validUploadPartners = partners.filter(partner => {
-    const roles = getAuthRoles(partner.roles);
-    return isProjectMo || roles.isPm || roles.isMo || roles.isFc;
-  });
-
-  const partnerOptions: DropdownListOption[] = partners.map(partner => ({
-    id: partner.id,
-    value: partner.id,
-    displayName: getContent(x => x.documentLabels.participantOption({ partnerName: partner.name })),
-    qa: `document-partner-${partner.id}`,
-  }));
-
-  const filterDropdownList = (selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) => {
-    if (!documents.length || !selectedDocument.description) return undefined;
-    const targetId = selectedDocument.description.toString();
-    return documents.find(x => x.id === targetId);
-  };
-
-  const filterVisibilityList = (selectedOption: MultipleDocumentUploadDto, visibilityOptions: DropdownOption[]) => {
-    const res = visibilityOptions.find(x => x.value === selectedOption.partnerId);
-
-    return res;
-  };
+  const documentDropdownOptions = useEnumDocuments(DocumentDescription, allowedProjectDocuments);
+  const partnerOptions: DropdownListOption[] = [
+    {
+      id: "none",
+      value: "",
+      displayName: getContent(x => x.documentLabels.participantPlaceholder),
+      qa: `document-partner-null`,
+    },
+    ...partners.map(partner => ({
+      id: partner.id,
+      value: partner.id,
+      displayName: getContent(x => x.documentLabels.participantOption({ partnerName: partner.name })),
+      qa: `document-partner-${partner.id}`,
+    })),
+  ];
 
   return (
     <Page
@@ -137,7 +183,49 @@ const ProjectDocumentsPage = ({
       </Section>
 
       <Section>
-        <EnumDocuments documentsToCheck={allowedProjectDocuments}>
+        <DocumentGuidance />
+        <Form onSubmit={handleSubmit(onChange)}>
+          <Fieldset>
+            <input type="hidden" value="projectLevelUpload" {...register("form")} />
+            <input type="hidden" value={project.id} {...register("projectId")} />
+
+            <FormGroup hasError={!!formState.errors["files"]}>
+              <ValidationError error={formState.errors["files"]} />
+              <FileInput id="files" hasError={!!formState.errors["files"]} multiple {...register("files")} />
+            </FormGroup>
+
+            <FormGroup hasError={!!formState.errors["description"]}>
+              <Label htmlFor="description">Description</Label>
+              <ValidationError error={formState.errors["description"]} />
+              <Select id="description" {...register("description")}>
+                {documentDropdownOptions.map(x => (
+                  <option value={x.id} key={x.id}>
+                    {x.value}
+                  </option>
+                ))}
+              </Select>
+            </FormGroup>
+
+            <FormGroup hasError={!!formState.errors["partnerId"]}>
+              <Label htmlFor="partnerId">Access control</Label>
+              <ValidationError error={formState.errors["partnerId"]} />
+              <Select id="partnerId" {...register("partnerId")}>
+                {partnerOptions.map(x => (
+                  <option value={x.value} key={x.id}>
+                    {x.displayName}
+                  </option>
+                ))}
+              </Select>
+            </FormGroup>
+          </Fieldset>
+          <Fieldset>
+            <Button name="button_default" styling="Secondary" type="submit">
+              {getContent(x => x.documentLabels.uploadInputLabel)}
+            </Button>
+          </Fieldset>
+        </Form>
+
+        {/* <EnumDocuments documentsToCheck={allowedProjectDocuments}>
           {docs => (
             <UploadForm.Form
               enctype="multipart"
@@ -162,8 +250,6 @@ const ProjectDocumentsPage = ({
                   validation={editor?.validator?.files}
                 />
 
-                {/* If a user is the project MO, show them a list of partners to choose from. */}
-                {/* If a user is not the project MO, but they have more than one partner to select (?!?), show them all the partners. */}
                 {(isProjectMo || validUploadPartners.length > 1) && (
                   <UploadForm.DropdownList
                     label={x => x.documentLabels.participantLabel}
@@ -183,7 +269,6 @@ const ProjectDocumentsPage = ({
                   />
                 )}
 
-                {/* If a user is not the project MO, and they only have one partner option, hard code it to the form. */}
                 {!isProjectMo && validUploadPartners.length === 1 && (
                   <UploadForm.Hidden name="partnerId" value={dto => (dto.partnerId = validUploadPartners[0].id)} />
                 )}
@@ -207,7 +292,7 @@ const ProjectDocumentsPage = ({
               </UploadForm.Submit>
             </UploadForm.Form>
           )}
-        </EnumDocuments>
+        </EnumDocuments> */}
       </Section>
       <Section>
         <H2>
@@ -261,44 +346,89 @@ const ProjectDocumentsPage = ({
   );
 };
 
+const useOnUpload = <Inputs extends FileUploadOutputs>({ refresh }: { refresh: () => void }) => {
+  const store = useStore();
+  const { getContent } = useContent();
+
+  return useOnUpdate<Inputs, unknown, MultipleDocumentUploadDto>({
+    req(data) {
+      const { projectId, partnerId, description, files } = data;
+
+      if (partnerId) {
+        return clientsideApiClient.documents.uploadPartnerDocument({
+          projectId,
+          partnerId,
+          documents: {
+            files,
+            description,
+          },
+        });
+      } else {
+        return clientsideApiClient.documents.uploadProjectDocument({
+          projectId,
+          documents: {
+            files,
+            description,
+          },
+        });
+      }
+    },
+    onSuccess(data, res, ctx) {
+      const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: ctx?.files.length }));
+      store.dispatch(removeMessages());
+      store.dispatch(messageSuccess(successMessage));
+      scrollToTheTopSmoothly();
+      refresh();
+    },
+  });
+};
+
+const useOnDelete = <Inputs extends FileDeleteOutputs>({ refresh }: { refresh: () => void }) => {
+  const store = useStore();
+  const { getContent } = useContent();
+
+  return useOnUpdate<Inputs, unknown, DocumentSummaryDto>({
+    req(props) {
+      const { documentId, projectId, form } = props;
+      if (form === "projectLevelDelete") {
+        return clientsideApiClient.documents.deleteProjectDocument({ documentId, projectId });
+      } else if (form === "partnerLevelDelete") {
+        const { partnerId } = props;
+        return clientsideApiClient.documents.deletePartnerDocument({ documentId, partnerId, projectId });
+      } else if (form === "claimLevelDelete") {
+        const { partnerId, periodId } = props;
+        return clientsideApiClient.documents.deleteClaimDocument({
+          documentId,
+          claimKey: { projectId, partnerId, periodId },
+        });
+      } else if (form === "claimDetailLevelDelete") {
+        const { partnerId, periodId, costCategoryId } = props;
+        return clientsideApiClient.documents.deleteClaimDetailDocument({
+          documentId,
+          claimDetailKey: { costCategoryId, partnerId, periodId, projectId },
+        });
+      } else {
+        return Promise.reject();
+      }
+    },
+    onSuccess(input, _, ctx) {
+      const successMessage = getContent(x => x.documentMessages.deletedDocument({ deletedFileName: ctx?.fileName }));
+      store.dispatch(removeMessages());
+      store.dispatch(messageSuccess(successMessage));
+      scrollToTheTopSmoothly();
+      refresh();
+    },
+  });
+};
+
 const ProjectDocumentsPageContainer = (props: ProjectDocumentPageParams & BaseProps) => {
   const stores = useStores();
-  const { getContent } = useContent();
 
   const pending = Pending.combine({
     editor: stores.projectDocuments.getProjectDocumentEditor(props.projectId),
   });
 
   const [refreshedQueryOptions, refresh] = useRefreshQuery(projectDocumentsQuery, { projectId: props.projectId });
-
-  const onChange = (saving: boolean, dto: MultipleDocumentUploadDto) => {
-    stores.messages.clearMessages();
-    const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }));
-    stores.projectDocuments.updateProjectDocumentsEditor(
-      saving,
-      props.projectId,
-      dto,
-      successMessage,
-      saving ? refresh : noop,
-    );
-  };
-
-  const onDelete = (dto: MultipleDocumentUploadDto, doc: DocumentSummaryDto | PartnerDocumentSummaryDtoGql) => {
-    stores.messages.clearMessages();
-    const successMessage = getContent(x => x.documentMessages.deletedDocument({ deletedFileName: doc.fileName }));
-    if ("partnerId" in doc) {
-      stores.projectDocuments.deleteProjectPartnerDocumentsEditor(
-        props.projectId,
-        doc.linkedEntityId,
-        dto,
-        doc,
-        successMessage,
-        refresh,
-      );
-    } else {
-      stores.projectDocuments.deleteProjectDocument(props.projectId, dto, doc, successMessage, refresh);
-    }
-  };
 
   const { project, partners, partnerDocuments, projectDocuments } = useProjectDocumentsQuery(
     props.projectId,
@@ -310,8 +440,7 @@ const ProjectDocumentsPageContainer = (props: ProjectDocumentPageParams & BasePr
       pending={pending}
       render={x => (
         <ProjectDocumentsPage
-          onChange={onChange}
-          onDelete={onDelete}
+          refresh={refresh}
           project={project}
           partners={partners}
           partnerDocuments={partnerDocuments}

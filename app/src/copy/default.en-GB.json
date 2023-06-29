@@ -1796,7 +1796,8 @@
   },
   "forms": {
     "errors": {
-      "invalid": "A validation error occurred."
+      "invalid": "A validation error occurred.",
+      "invalid_literal": "A Zod 'z.literal(\"\")' was not passed into this form."
     },
     "partnerDetailsEdit": {
       "new-postcode": {
@@ -1876,6 +1877,18 @@
               "too_small": "Enter comments for {{input.title, lowercase}}."
             }
           }
+        }
+      }
+    },
+    "documents": {
+      "files": {
+        "errors": {
+          "file_name_too_small": "You cannot upload this file because the file has no name.",
+          "file_name_too_large": "You cannot upload '{{ input.fileName }}' because the name of the file must be shorter than {{ count }} characters.",
+          "file_size_too_small": "You cannot upload '{{ input.fileName }}' because it is empty.",
+          "file_size_too_large": "You cannot upload '{{ input.fileName }}' because it must be smaller than {{ size, bytes }}.",
+          "too_small": "Choose a file to upload.",
+          "too_big": "You can only select up to {{ count }} files at the same time."
         }
       }
     }
