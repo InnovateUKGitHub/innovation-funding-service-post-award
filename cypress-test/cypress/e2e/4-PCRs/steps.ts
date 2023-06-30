@@ -1253,10 +1253,8 @@ export const deletionWarningMessage = () => {
 
 export const validateTable = () => {
   cy.getByQA("requestNumber").contains("Request");
-  cy.getByQA("started").contains("Started");
-  cy.getByQA("started").contains(createdDay);
-  cy.get("dt").contains("Last updated");
-  cy.get("dd").contains(createdDay);
+  cy.getByQA("started").contains("Started").siblings().contains(createdDay);
+  cy.get("dt").contains("Last updated").siblings().contains(createdDay);
   pcrArray.forEach(type => {
     cy.getByQA("types").contains(type);
   });
