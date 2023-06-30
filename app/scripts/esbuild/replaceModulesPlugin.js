@@ -7,6 +7,9 @@ const replaceModulesPlugin = {
     buildProcess.onResolve({ filter: /apiClient/ }, () => {
       return { path: path.join(__dirname, "../../src/client/replacement-files", "apiClient.ts") };
     });
+    buildProcess.onResolve({ filter: /isomorphicFileWrapper/ }, () => {
+      return { path: path.join(__dirname, "../../src/client/replacement-files", "isomorphicFileWrapper.ts") };
+    });
   },
 };
 

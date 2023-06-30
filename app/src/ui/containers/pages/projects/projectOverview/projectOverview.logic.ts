@@ -65,7 +65,7 @@ const generateUserInfo = (
       isFc: x?.isFc ?? false,
       isPm: x?.isPm ?? false,
       isMo: x?.isMo ?? false,
-      id: partners.find(partner => x?.partnerId === partner.accountId)?.id ?? "unknown id",
+      id: partners.find(partner => x?.partnerId === partner.id)?.id ?? "unknown id",
     }))
     .reduce(
       (acc, cur) => ({

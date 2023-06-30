@@ -76,6 +76,7 @@ export interface DocumentTableWithDeleteProps<T extends DocumentSummaryDto> exte
   hideRemove?: (d: T) => boolean;
   onRemove: (d: T) => void;
   disabled?: boolean;
+  formType?: "projectLevelDelete";
 }
 
 export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithDeleteProps<DocumentSummaryDto>> = ({
@@ -84,11 +85,13 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
   hideRemove,
   onRemove,
   disabled,
+  formType,
 }: DocumentTableWithDeleteProps<DocumentSummaryDto>) => {
   if (!documents.length) return <DocumentsUnavailable />;
 
   return (
     <Form.Form data={documents}>
+      {formType && <Form.Hidden name="form" value={() => formType} />}
       <DocumentTable
         qa={qa}
         documents={documents}
@@ -100,7 +103,7 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
 
               return (
                 <Form.Button
-                  name="delete"
+                  name={formType ? "documentId" : "delete"} // "documentId" for RHF, "delete" for old forms
                   styling="Link"
                   className="govuk-!-font-size-19"
                   style={{ marginLeft: "15px" }}
@@ -157,7 +160,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
             return (
               <Form.Form data={documents} qa={`${qa}-form`}>
                 <Form.Button
-                  name="delete"
+                  name="documentId"
                   styling="Link"
                   className="govuk-!-font-size-19"
                   style={{ marginLeft: "15px" }}
@@ -168,6 +171,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
                   Remove
                 </Form.Button>
                 <Form.Hidden name="partnerId" value={() => x.partnerId} />
+                <Form.Hidden name="form" value={() => "partnerLevelDelete"} />
               </Form.Form>
             );
           }}

@@ -127,8 +127,19 @@ export class Server {
     next();
   };
 
+  private readonly preloadReduxActions = (
+    _req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ): void => {
+    res.locals.preloadedReduxActions = [];
+
+    next();
+  };
+
   private async routing(): Promise<void> {
     this.app.use(this.setNonceValue);
+    this.app.use(this.preloadReduxActions);
     this.app.use(setOwaspHeaders, allowCache, setBasicAuth, express.static("public"));
     this.app.use(useBasicAuth);
     this.app.use(noCache, noAuthRouter);
