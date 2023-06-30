@@ -2,7 +2,6 @@ import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodError
 import { allowedProjectLevelDocuments } from "@framework/constants/documentDescription";
 import { DocumentSummaryDto, PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 import { getAuthRoles } from "@framework/types/authorisation";
-import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { getProjectLevelUpload, ProjectLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
