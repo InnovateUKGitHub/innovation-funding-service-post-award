@@ -1,4 +1,4 @@
-import { allSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
+import { salesforceCompetitionTypesMap } from "@framework/constants/competitionTypes";
 import { allProjectParticipantOrganisationTypes } from "@framework/constants/projectParticipantOrganisationType";
 import { allProjectParticipantTypes } from "@framework/constants/projectParticipantTypes";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
@@ -19,7 +19,7 @@ const ProjectCreatorForm = createTypedForm();
 const ProjectCreator = () => {
   const { getContent } = useContent();
 
-  const competitionTypeOptions = allSalesforceCompetitionTypes
+  const competitionTypeOptions = salesforceCompetitionTypesMap
     .filter(([key]) => key !== "sbri" && key !== "sbriIfs")
     .map(([key, value]) => ({
       id: value,

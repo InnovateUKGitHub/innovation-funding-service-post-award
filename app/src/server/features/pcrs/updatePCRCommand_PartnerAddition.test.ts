@@ -1,6 +1,5 @@
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { CostCategoryType } from "@framework/constants/enums";
@@ -15,6 +14,7 @@ import {
   PCRStatus,
   PCRItemType,
   PCRStepId,
+  recordTypeMetaValues,
 } from "@framework/constants/pcrConstants";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
@@ -78,9 +78,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     context.testData.createCurrentUserAsProjectManager(project);
     const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
     const recordTypes = context.testData.createPCRRecordTypes();
-    const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
-      x => x.type === PCRItemType.PartnerAddition,
-    );
+    const projectSuspensionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
     const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
     return { context, recordType, projectChangeRequest, project };
   };
@@ -400,9 +398,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
     const recordTypes = context.testData.createPCRRecordTypes();
 
-    const partnerAddditionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
-      x => x.type === PCRItemType.PartnerAddition,
-    );
+    const partnerAddditionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
 
     const recordType = recordTypes.find(x => x.type === partnerAddditionType?.typeName);
     context.testData.createPCRItem(projectChangeRequest, recordType, {

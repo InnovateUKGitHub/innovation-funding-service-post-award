@@ -3,7 +3,6 @@ import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useOnDeletePcr, usePcrDeleteQuery } from "./pcrDelete.logic";
 import { useForm } from "react-hook-form";
-import { useGetPcrTypeName } from "./utils/useGetPcrTypeName";
 import { useContent } from "@ui/hooks/content.hook";
 import { ShortDate } from "@ui/components/atomicDesign/atoms/Date";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
@@ -14,6 +13,7 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { usePcrItemName } from "./utils/getPcrItemName";
 
 export interface PCRDeleteParams {
   projectId: ProjectId;
@@ -22,7 +22,7 @@ export interface PCRDeleteParams {
 
 const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeleteParams) => {
   const { project, pcr } = usePcrDeleteQuery(projectId, pcrId);
-  const getPcRTypeName = useGetPcrTypeName();
+  const { getPcrItemContent } = usePcrItemName();
 
   const { getContent } = useContent();
 
@@ -53,7 +53,7 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
           <SummaryListItem label="Request number" content={pcr.requestNumber} qa="requestNumber" />
           <SummaryListItem
             label="Types"
-            content={<LineBreakList items={pcr.items.map(x => getPcRTypeName(x.shortName))} />}
+            content={<LineBreakList items={pcr.items.map(x => getPcrItemContent(x.shortName).name)} />}
             qa="types"
           />
           <SummaryListItem label="Started" content={<ShortDate value={pcr.started} />} qa="started" />

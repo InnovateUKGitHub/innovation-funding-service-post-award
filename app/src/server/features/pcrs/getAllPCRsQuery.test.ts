@@ -1,4 +1,4 @@
-import { PCRStatus, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRStatus, PCRItemType, recordTypeMetaValues } from "@framework/constants/pcrConstants";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -167,7 +167,7 @@ describe("GetAllPCRsQuery", () => {
 
   it("returns the item short name if available", async () => {
     const context = new TestContext();
-    const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
+    const pcrItemType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
     const recordType = context.testData.createRecordType({
       type: pcrItemType?.typeName,
       parent: "Acc_ProjectChangeRequest__c",
@@ -181,7 +181,7 @@ describe("GetAllPCRsQuery", () => {
 
   it("returns the item type name if short name is not available", async () => {
     const context = new TestContext();
-    const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
+    const pcrItemType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
     const recordType = context.testData.createRecordType({
       type: pcrItemType?.typeName,
       parent: "Acc_ProjectChangeRequest__c",

@@ -8,6 +8,7 @@ import {
 } from "@framework/constants/pcrConstants";
 import { Option } from "@framework/dtos/option";
 import {
+  CreatePcrDto,
   PCRDto,
   PCRItemTypeDto,
   PCRSummaryDto,
@@ -34,7 +35,9 @@ import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
-  create: (params: ApiParams<Context, { projectId: ProjectId; projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
+  create: (
+    params: ApiParams<Context, { projectId: ProjectId; projectChangeRequestDto: CreatePcrDto }>,
+  ) => Promise<PCRDto>;
   getAll: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<PCRSummaryDto[]>;
   get: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<PCRDto>;
   getTypes: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<PCRItemTypeDto[]>;
@@ -105,7 +108,7 @@ class Controller extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRD
   }
 
   async create(
-    params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestDto: PCRDto }>,
+    params: ApiParams<"server", { projectId: ProjectId; projectChangeRequestDto: CreatePcrDto }>,
   ): Promise<PCRDto> {
     const context = contextProvider.start(params);
     const id = (await context.runCommand(

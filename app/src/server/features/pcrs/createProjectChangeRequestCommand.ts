@@ -2,9 +2,8 @@
 
 import { GetAvailableItemTypesQuery } from "./getAvailableItemTypesQuery";
 import { GetAllPCRsQuery } from "./getAllPCRsQuery";
-import { PCRItemType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
-import { PCRDto, PCRItemTypeDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemTypeDto, CreatePcrDto, CreatePcrItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities/projectChangeRequest";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -16,7 +15,7 @@ import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
-  constructor(private readonly projectId: ProjectId, private readonly projectChangeRequestDto: PCRDto) {
+  constructor(private readonly projectId: ProjectId, private readonly projectChangeRequestDto: CreatePcrDto) {
     super();
   }
 
@@ -26,7 +25,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
 
   private async insertProjectChangeRequest(
     context: IContext,
-    projectChangeRequestDto: PCRDto,
+    projectChangeRequestDto: CreatePcrDto,
     itemTypes: PCRItemTypeDto[],
   ): Promise<PcrId> {
     const newPCR = {
@@ -50,7 +49,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
   }
 
   protected async run(context: IContext) {
-    if (this.projectChangeRequestDto.id) {
+    if ("id" in this.projectChangeRequestDto) {
       throw new BadRequestError("Project change request has already been created");
     }
 
@@ -67,7 +66,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     const projectPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
 
     const validationResult = new PCRDtoValidator({
-      model: this.projectChangeRequestDto,
+      model: this.projectChangeRequestDto as PCRDto,
       role: projectRoles,
       recordTypes: itemTypes,
       showValidationErrors: true,
@@ -78,6 +77,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     });
 
     if (!validationResult.isValid) {
+      console.error(validationResult.errors);
       throw new ValidationError(validationResult);
     }
 
@@ -91,72 +91,16 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
   }
 
   private mapItem(
-    dto: PCRDto,
-    itemDto: PCRItemDto,
+    dto: CreatePcrDto,
+    itemDto: CreatePcrItemDto,
     itemTypes: PCRItemTypeDto[],
   ): ProjectChangeRequestItemForCreateEntity {
     const matchedItem = itemTypes.find(t => t.type === itemDto.type);
     if (!matchedItem) throw new Error(`cannot find item matching ${itemDto.type}`);
-    const init = {
+    return {
       projectId: dto.projectId,
       recordTypeId: matchedItem.recordTypeId,
       status: itemDto.status,
     };
-    switch (itemDto.type) {
-      case PCRItemType.TimeExtension:
-        return {
-          ...init,
-          offsetMonths: itemDto.offsetMonths,
-          projectDuration: itemDto.offsetMonths ? itemDto.offsetMonths + itemDto.projectDurationSnapshot : null,
-        };
-      case PCRItemType.ScopeChange:
-        return { ...init, projectSummary: itemDto.projectSummary, publicDescription: itemDto.publicDescription };
-      case PCRItemType.ProjectSuspension:
-        return {
-          ...init,
-          suspensionStartDate: itemDto.suspensionStartDate,
-          suspensionEndDate: itemDto.suspensionEndDate,
-        };
-      case PCRItemType.AccountNameChange:
-        return { ...init, accountName: itemDto.accountName, partnerId: itemDto.partnerId };
-      case PCRItemType.PartnerWithdrawal:
-        return { ...init, removalPeriod: itemDto.removalPeriod, partnerId: itemDto.partnerId };
-      case PCRItemType.PartnerAddition:
-        return {
-          ...init,
-          contact1ProjectRole: itemDto.contact1ProjectRole,
-          contact1Forename: itemDto.contact1Forename,
-          contact1Surname: itemDto.contact1Surname,
-          contact1Phone: itemDto.contact1Phone,
-          contact1Email: itemDto.contact1Email,
-          financialYearEndDate: itemDto.financialYearEndDate,
-          financialYearEndTurnover: itemDto.financialYearEndTurnover,
-          organisationName: itemDto.organisationName,
-          registeredAddress: itemDto.registeredAddress,
-          registrationNumber: itemDto.registrationNumber,
-          projectRole: itemDto.projectRole,
-          partnerType: itemDto.partnerType,
-          isCommercialWork: itemDto.isCommercialWork,
-          projectCity: itemDto.projectCity,
-          projectLocation: itemDto.projectLocation,
-          projectPostcode: itemDto.projectPostcode,
-          participantSize: itemDto.participantSize,
-          numberOfEmployees: itemDto.numberOfEmployees,
-          contact2ProjectRole: itemDto.contact2ProjectRole,
-          contact2Forename: itemDto.contact2Forename,
-          contact2Surname: itemDto.contact2Surname,
-          contact2Phone: itemDto.contact2Phone,
-          contact2Email: itemDto.contact2Email,
-          awardRate: itemDto.awardRate,
-          hasOtherFunding: itemDto.hasOtherFunding,
-          tsbReference: itemDto.tsbReference,
-        };
-      case PCRItemType.MultiplePartnerFinancialVirement:
-        return { ...init, grantMovingOverFinancialYear: itemDto.grantMovingOverFinancialYear };
-
-      case PCRItemType.LoanDrawdownChange:
-      default:
-        return init;
-    }
   }
 }

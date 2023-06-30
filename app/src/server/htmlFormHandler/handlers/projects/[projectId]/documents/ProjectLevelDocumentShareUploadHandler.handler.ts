@@ -16,7 +16,6 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      zod: getProjectLevelUpload(configuration.options),
       route: ProjectDocumentsRoute,
       forms: [FormTypes.ProjectLevelUpload],
       formIntlKeyPrefix: ["documents"],
@@ -24,6 +23,10 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   }
 
   public readonly acceptFiles = true;
+
+  protected async getZodSchema() {
+    return getProjectLevelUpload(configuration.options);
+  }
 
   protected async mapToZod({
     input,
@@ -39,10 +42,6 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
       projectId: input.projectId,
       partnerId: input.partnerId,
     };
-  }
-
-  protected async mapToRedirect() {
-    return null;
   }
 
   protected async run({

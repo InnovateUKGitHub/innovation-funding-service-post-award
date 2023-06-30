@@ -30,9 +30,10 @@ import { MonitoringReportDeleteFormHandler } from "./handlers/projects/[projectI
 import { MonitoringReportPreparePeriodFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/prepare-period/monitoringReportPeriodFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/[mode]/monitoringReportPrepareFormHandler";
 import { MonitoringReportSummaryFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/[mode]/monitoringReportSummaryFormHandler";
-import { ProjectChangeRequestCreateFormHandler } from "./handlers/projects/[projectId]/pcrs/create/createProjectChangeRequestFormHandler";
+import { ProjectChangeRequestCreateHandler } from "./handlers/projects/[projectId]/pcrs/create/ProjectChangeRequestCreateHandler.handler";
 import { ProjectChangeRequestDeleteFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/delete/deleteProjectChangeRequestFormHandler";
-import { ProjectChangeRequestAddTypeFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/projectChangeRequestAddTypeFormHandler";
+import { ProjectChangeRequestAddTypeHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/ProjectChangeRequestAddTypeHandler.handler";
+// import { ProjectChangeRequestAddTypeFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/add/projectChangeRequestAddTypeFormHandler";
 import { VirementCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/financial/[partnerId]/virementCostsUpdateHandler";
 import { VirementPartnerCostsUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/partner/virementPartnerCostsUpdateHandler";
 import { ProjectChangeRequestItemDocumentDeleteHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemDocumentDeleteHandler";
@@ -79,8 +80,8 @@ export const standardFormHandlers = [
   new MonitoringReportPrepareFormHandler(),
   new OverheadDocumentsDeleteHandler(),
   new LoanRequestFormHandler(),
-  new ProjectChangeRequestAddTypeFormHandler(),
-  new ProjectChangeRequestCreateFormHandler(),
+  // new ProjectChangeRequestAddTypeFormHandler(),
+  // new ProjectChangeRequestCreateFormHandler(),
   new ProjectChangeRequestDeleteFormHandler(),
   // ProjectChangeRequestReasoningUpdateHandler should be before ProjectChangeRequestItemUpdateHandler
   new ProjectChangeRequestReasoningUpdateHandler(),
@@ -109,6 +110,8 @@ export const standardFormHandlers = [
   // Zod
   new ProjectLevelDocumentShareDeleteHandler(),
   new ClaimLevelDocumentShareDeleteHandler(),
+  new ProjectChangeRequestCreateHandler(),
+  new ProjectChangeRequestAddTypeHandler(),
 ] as const;
 
 export const multiFileFormHandlers = [
@@ -127,7 +130,7 @@ export const developerFormHandlers = [
   new DeveloperPageCrasherHandler(),
 ] as const;
 
-export const zodFormhandlers = [
+export const zodFormHandlers = [
   new ProjectLevelDocumentShareUploadHandler(),
   new ClaimLevelDocumentShareUploadHandler(),
 ];
@@ -179,7 +182,7 @@ export const configureFormRouter = ({
   const result = express.Router();
   const finalHandler = new PostFormHandleHandler({ schema });
 
-  for (const x of zodFormhandlers) {
+  for (const x of zodFormHandlers) {
     result.post(
       getRoute(x),
       ((req, res, next) => {

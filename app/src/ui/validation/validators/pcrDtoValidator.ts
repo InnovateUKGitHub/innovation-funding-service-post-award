@@ -3,10 +3,10 @@ import {
   PCRStatus,
   PCRItemStatus,
   PCRItemType,
-  pcrUnduplicatableMatrix,
-  getUnavailablePcrItemsMatrix,
+  getPcrItemsSingleInstanceInAnyPcrViolations,
   PCROrganisationType,
   PCRProjectRole,
+  recordTypeMetaValues,
 } from "@framework/constants/pcrConstants";
 import { ProjectRole, ProjectMonitoringLevel } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
@@ -421,7 +421,10 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
                 for (const projectPcr of items) {
                   // If a PCR type is non-duplicatable, check if it has not already been added to the PCR.
-                  if (pcrUnduplicatableMatrix[projectPcr.type] && seenProjectPcrs.has(projectPcr.type)) {
+                  if (
+                    recordTypeMetaValues.find(x => x.type === projectPcr.type)?.singleInstanceInThisPcr &&
+                    seenProjectPcrs.has(projectPcr.type)
+                  ) {
                     return false;
                   }
 
@@ -506,7 +509,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
             if (!this.projectPcrs?.length) return children.valid();
 
             const allPcrsExceptDto = this.projectPcrs.filter(x => x.id !== this.model.id);
-            const unavailablePcrItems = getUnavailablePcrItemsMatrix(allPcrsExceptDto);
+            const unavailablePcrItems = getPcrItemsSingleInstanceInAnyPcrViolations(allPcrsExceptDto);
 
             return children.hasMatchingValue(
               unavailablePcrItems,

@@ -1,6 +1,5 @@
 import { DateTime } from "luxon";
 import { range } from "@shared/range";
-import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { ITestRepositories } from "./testRepositories";
 import { ClaimStatus } from "@framework/constants/claimStatus";
@@ -13,6 +12,7 @@ import {
   PCRProjectRole,
   PCRPartnerType,
   PCRParticipantSize,
+  recordTypeMetaValues,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PartnerFinancialVirement } from "@framework/entities/financialVirement";
@@ -770,7 +770,7 @@ export class TestData {
   }
 
   public createPCRRecordTypes() {
-    return GetPCRItemTypesQuery.recordTypeMetaValues.map(x => {
+    return recordTypeMetaValues.map(x => {
       const parent = "Acc_ProjectChangeRequest__c";
       const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
       return (

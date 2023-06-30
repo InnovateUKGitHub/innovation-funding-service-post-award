@@ -18,7 +18,6 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      zod: claimLevelDelete,
       route: ClaimDocumentsRoute,
       forms: [FormTypes.ClaimLevelDelete],
       formIntlKeyPrefix: ["documents"],
@@ -26,6 +25,10 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   }
 
   public readonly acceptFiles = false;
+
+  protected async getZodSchema() {
+    return claimLevelDelete;
+  }
 
   protected async mapToZod({
     input,
@@ -39,10 +42,6 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
       documentId: input.documentId ?? input.button_documentId,
       form: FormTypes.ClaimLevelDelete,
     };
-  }
-
-  protected async mapToRedirect() {
-    return null;
   }
 
   protected async run({
