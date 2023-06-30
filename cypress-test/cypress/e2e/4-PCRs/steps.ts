@@ -1085,9 +1085,9 @@ export const clearAndEnterValidPersonInfo = () => {
 export const newInfoValidation = () => {
   cy.submitButton("Save and continue").click();
   cy.getByQA("validation-summary").contains("a", "Select a project role");
-  cy.getByQA("validation-summary").contains("a", "Select a project type");
+  cy.getByQA("validation-summary").contains("a", "Select a partner type");
   cy.get("p").contains("Select a project role.");
-  cy.get("p").contains("Select a project type.");
+  cy.get("p").contains("Select a partner type.");
 };
 
 export const displayLocationWithGuidance = () => {
