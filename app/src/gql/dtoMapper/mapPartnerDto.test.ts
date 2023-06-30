@@ -4,14 +4,14 @@ describe("mapPartnerDtoArray", () => {
   const edges = [
     {
       node: {
-        Id: "0",
+        Id: "a0D-partner1",
         Acc_ProjectRole__c: { value: "Lead" },
         Acc_ParticipantStatus__c: { value: "Active" },
         Acc_AccountId__r: {
           Name: { value: "Swindon University" },
-          Id: "123",
+          Id: "001-partner1",
         },
-        Acc_AccountId__c: { value: "123" },
+        Acc_AccountId__c: { value: "001-partner1" },
         Acc_TotalParticipantCosts__c: { value: 10000 },
         Acc_TotalApprovedCosts__c: { value: 20000 },
         Acc_NewForecastNeeded__c: { value: true },
@@ -33,14 +33,14 @@ describe("mapPartnerDtoArray", () => {
     },
     {
       node: {
-        Id: "1",
+        Id: "a0D-partner2",
         Acc_ProjectRole__c: { value: "Regular" },
         Acc_ParticipantStatus__c: { value: "Voluntary Withdrawal" },
         Acc_AccountId__r: {
           Name: { value: "Kettering Nursing College" },
-          Id: "124",
+          Id: "001-partner2",
         },
-        Acc_AccountId__c: { value: "124" },
+        Acc_AccountId__c: { value: "001-partner2" },
         Acc_TotalParticipantCosts__c: { value: 10000 },
         Acc_TotalApprovedCosts__c: { value: 20000 },
         Acc_NewForecastNeeded__c: { value: true },
@@ -62,8 +62,8 @@ describe("mapPartnerDtoArray", () => {
     },
   ];
   const partnerRoles = [
-    { isFc: true, isPm: true, isMo: false, partnerId: "123" },
-    { isFc: true, isPm: false, isMo: false, partnerId: "124" },
+    { isFc: true, isPm: true, isMo: false, partnerId: "a0D-partner1" },
+    { isFc: true, isPm: false, isMo: false, partnerId: "a0D-partner2" },
   ];
 
   it("should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records", () => {

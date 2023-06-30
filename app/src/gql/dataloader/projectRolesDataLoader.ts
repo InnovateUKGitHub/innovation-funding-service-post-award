@@ -8,6 +8,7 @@ interface ProjectData {
     Acc_ProjectParticipantsProject__r: {
       edges: {
         node: {
+          Id: string;
           Acc_ProjectRole__c: {
             value: string;
           };
@@ -66,6 +67,7 @@ const getProjectRolesDataLoader = (ctx: PartialGraphQLContext) => {
                     Acc_ProjectParticipantsProject__r(first: 500) {
                       edges {
                         node {
+                          Id
                           Acc_ProjectRole__c {
                             value
                           }

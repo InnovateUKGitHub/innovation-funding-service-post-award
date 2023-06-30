@@ -34,11 +34,13 @@ import { StaticRouter } from "react-router-dom/server";
 import { AnyAction, createStore, Store } from "redux";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
 import { getErrorStatus } from "./errorHandlers";
-import { ForbiddenError, FormHandlerError } from "./features/common/appError";
+import { ForbiddenError, FormHandlerError, ZodFormHandlerError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { renderHtml } from "./html";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { MessageContextProvider } from "@ui/context/messages";
+import { setZodError } from "@ui/redux/actions/common/zodErrorAction";
+import { setPreviousReactHookFormInput } from "@ui/redux/actions/common/previousReactHookFormInputAction";
 
 interface IServerApp {
   requestUrl: string;
@@ -102,7 +104,7 @@ const serverRender =
       let user: IClientUser;
       let statusCode = 200;
 
-      if (err && !(err instanceof FormHandlerError)) {
+      if (err && !(err instanceof FormHandlerError || err instanceof ZodFormHandlerError)) {
         auth = new Authorisation({});
         user = {
           roleInfo: auth.permissions,
@@ -135,8 +137,16 @@ const serverRender =
       let formError: Result[] = [];
       let apiError: IAppError | undefined;
       if (err) {
-        if (err instanceof FormHandlerError) {
-          // A form handler error is an error that renders the original page.
+        // A form handler error is an error that renders the original page.
+        if (err instanceof ZodFormHandlerError) {
+          // Dispatch the Zod issues we have into Redux, such that they are
+          // available on page load.
+          store.dispatch(setZodError(err.zodError.issues));
+
+          // If a DTO is provided, add to Redux state so that it may be used
+          // to repopulate the user's input form.
+          if (err.dto) store.dispatch(setPreviousReactHookFormInput(err.dto));
+        } else if (err instanceof FormHandlerError) {
           // Mark the error message that we obtained into the Redux store.
           if (err?.code === ErrorCode.VALIDATION_ERROR) {
             // We've got some kind of validation error, so let the user know that happened.
@@ -179,6 +189,13 @@ const serverRender =
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
           return next(new ForbiddenError());
+        }
+
+        // Run any pre-loaded redux actions that may be emitted by form handlers.
+        if (res.locals.preloadedReduxActions) {
+          for (const action of res.locals.preloadedReduxActions) {
+            store.dispatch(action);
+          }
         }
       }
 

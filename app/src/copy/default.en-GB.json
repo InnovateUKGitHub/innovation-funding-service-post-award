@@ -1881,7 +1881,17 @@
       }
     },
     "documents": {
+      "description": {
+        "errors": {
+          "invalid": "Select a valid type."
+        }
+      },
       "files": {
+        "messages": {
+          "uploadedDocuments_one": "Your document has been uploaded.",
+          "uploadedDocuments_other": "{{count}} documents have been uploaded.",
+          "deletedDocument": "'{{deletedFileName}}' has been deleted."
+        },
         "errors": {
           "file_name_too_small": "You cannot upload this file because the file has no name.",
           "file_name_too_large": "You cannot upload '{{ input.fileName }}' because the name of the file must be shorter than {{ count }} characters.",

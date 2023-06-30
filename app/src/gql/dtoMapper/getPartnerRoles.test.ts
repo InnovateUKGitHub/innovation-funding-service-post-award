@@ -9,18 +9,21 @@ describe("getPartnerRoles", () => {
           isPm: false,
           isMo: false,
           partnerId: "1",
+          accountId: "a1",
         },
         {
           isFc: false,
           isPm: true,
           isMo: false,
           partnerId: "2",
+          accountId: "a2",
         },
         {
           isFc: false,
           isPm: false,
           isMo: true,
           partnerId: "3",
+          accountId: "a3",
         },
       ],
     };

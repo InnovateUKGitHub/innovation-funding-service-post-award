@@ -4,7 +4,6 @@ import csurf from "csurf";
 import express, { RequestHandler } from "express";
 import { GraphQLSchema } from "graphql";
 import { serverRender } from "../serverRender";
-import { BadRequestHandler } from "./badRequestHandler";
 import { upload } from "./diskStorage";
 import { DeveloperPageCrasherHandler } from "./handlers/developer/crash/developerPageCrasherHandler";
 import { DeveloperProjectCreatorHandler } from "./handlers/developer/projectcreator/developerProjectCreatorHandler";
@@ -60,6 +59,7 @@ import { ProjectSetupBankStatementHandler } from "./handlers/projects/[projectId
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/project-location/partnerDetailsEditFormHandler";
 import { ProjectSetupFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupFormHandler";
 import { ProjectSetupSpendProfileFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupSpendProfile/projectSetupSpendProfileFormHandler";
+import { PostFormHandleHandler } from "./postFormHandleHandler";
 
 export const standardFormHandlers = [
   new ClaimForecastFormHandler(),
@@ -127,6 +127,8 @@ export const developerFormHandlers = [
   new DeveloperPageCrasherHandler(),
 ] as const;
 
+export const zodFileFormHandlers = [new ProjectDocumentUploadHandler()];
+
 const getRoute = (handler: IFormHandler) => {
   return handler.routePath;
 };
@@ -172,9 +174,9 @@ export const configureFormRouter = ({
   csrfProtection: RequestHandler;
 }) => {
   const result = express.Router();
-  const badRequestHandler = new BadRequestHandler();
+  const finalHandler = new PostFormHandleHandler({ schema });
 
-  for (const x of multiFileFormHandlers) {
+  for (const x of [...zodFileFormHandlers, ...multiFileFormHandlers]) {
     result.post(
       getRoute(x),
       ((req, res, next) => {
@@ -208,7 +210,7 @@ export const configureFormRouter = ({
   result.post(
     "*",
     ((req, res, next) =>
-      handlePost({ schema, csrfProtection })(badRequestHandler)(undefined, req, res, next)) as RequestHandler,
+      handlePost({ schema, csrfProtection })(finalHandler)(undefined, req, res, next)) as RequestHandler,
     handleError({ schema, csrfProtection }),
   );
 

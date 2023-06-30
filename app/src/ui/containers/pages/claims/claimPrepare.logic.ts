@@ -48,7 +48,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
         "isWithdrawn",
         "partnerStatus",
       ],
-      { roles: getPartnerRoles(project.partnerRoles, partnerNode?.Acc_AccountId__c?.value ?? "unknown") },
+      { roles: getPartnerRoles(project.partnerRoles, partnerNode?.Id ?? "unknown") },
     );
 
     const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];

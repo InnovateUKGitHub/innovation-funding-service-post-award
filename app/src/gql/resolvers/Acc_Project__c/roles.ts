@@ -11,6 +11,7 @@ interface ExternalRoles {
 
 interface ExternalPartnerRoles extends ExternalRoles {
   partnerId: string;
+  accountId: string;
 }
 
 interface ExternalProjectRoles extends ExternalRoles {
@@ -53,15 +54,14 @@ const rolesResolver: IFieldResolverOptions = {
       }
 
       for (const { node: projectParticipant } of project.Acc_ProjectParticipantsProject__r.edges) {
-        const existingPartnerPermissions = permissions.partnerRoles.find(
-          x => x.partnerId === projectParticipant.Acc_AccountId__c.value,
-        );
+        const existingPartnerPermissions = permissions.partnerRoles.find(x => x.partnerId === projectParticipant.Id);
         const partnerPermissions = existingPartnerPermissions ?? {
           isMo: isSalesforceSystemUser,
           isFc: isSalesforceSystemUser,
           isPm: isSalesforceSystemUser,
           isSalesforceSystemUser: ctx.email === configuration.salesforceServiceUser.serviceUsername,
-          partnerId: projectParticipant.Acc_AccountId__c.value,
+          accountId: projectParticipant.Acc_AccountId__c.value,
+          partnerId: projectParticipant.Id,
         };
 
         if (

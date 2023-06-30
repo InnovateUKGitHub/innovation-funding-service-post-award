@@ -79,7 +79,7 @@ export class Authorisation {
 
   public readonly permissions: { [key: string]: IRoleInfo };
 
-  public forPartner(projectId: ProjectId, partnerId: PartnerId | LinkedEntityId) {
+  public forPartner(projectId: ProjectId, partnerId: PartnerId | AccountId | LinkedEntityId) {
     const roles = this.getRolesForPartner(projectId, partnerId);
     return new RoleChecker(roles);
   }
@@ -89,7 +89,7 @@ export class Authorisation {
     return new RoleChecker(roles);
   }
 
-  private getRolesForPartner(projectId: ProjectId, partnerId: PartnerId | LinkedEntityId) {
+  private getRolesForPartner(projectId: ProjectId, partnerId: PartnerId | AccountId | LinkedEntityId) {
     const project = this.permissions && this.permissions[projectId];
     if (project) {
       const partner = project.partnerRoles[partnerId];

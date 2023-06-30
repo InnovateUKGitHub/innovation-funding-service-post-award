@@ -23,7 +23,21 @@ export class UploadPartnerDocumentCommand extends CommandMultipleDocumentBase<st
   }
 
   protected async accessControl(auth: Authorisation): Promise<boolean> {
-    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
+    // Allow if the user is a MO, FC or PM of the partner.
+    const canUploadAsPartner = auth
+      .forPartner(this.projectId, this.partnerId)
+      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact, ProjectRole.ProjectManager);
+
+    if (canUploadAsPartner) return true;
+
+    // If a user is an MO for the project, allow.
+    const canUploadAsProjectMo = auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+
+    // If any of the above is true, allow
+    if (canUploadAsProjectMo) return true;
+
+    // User is unrelated to the project. Kick them out.
+    return false;
   }
 
   protected async run(context: IContext): Promise<string[]> {

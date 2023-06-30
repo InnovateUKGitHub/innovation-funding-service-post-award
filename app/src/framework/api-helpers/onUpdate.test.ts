@@ -49,7 +49,7 @@ describe("useOnUpdate", () => {
 
   it("should pass in an input ctx to the success callback", async () => {
     const { result } = renderSuccessHook();
-    await act(() => result.current.onUpdate({ poland: "Poland" }, { bulgoggi: "Burger" }));
+    await act(() => result.current.onUpdate({ data: { poland: "Poland" }, context: { bulgoggi: "Burger" } }));
 
     expect(result.current.apiError).toBe(null);
     expect(onSuccess).toHaveBeenCalledWith({ poland: "Poland" }, { poland: "Poland" }, { bulgoggi: "Burger" });

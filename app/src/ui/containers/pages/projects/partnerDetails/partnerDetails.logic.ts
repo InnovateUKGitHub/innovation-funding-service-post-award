@@ -20,7 +20,7 @@ export const usePartnerDetailsQuery = (projectId: ProjectId, partnerId: PartnerI
   const project = mapToProjectDto(projectNode, ["projectNumber", "roles", "partnerRoles", "status", "title"]);
 
   const partner = mapToPartnerDto(partnerNode, ["partnerStatus", "postcode", "roles", "name", "type"], {
-    roles: project.partnerRoles.find(roles => roles.partnerId === partnerNode?.Acc_AccountId__c?.value) ?? {
+    roles: project.partnerRoles.find(roles => roles.partnerId === partnerNode?.Id) ?? {
       isFc: false,
       isPm: false,
       isMo: false,

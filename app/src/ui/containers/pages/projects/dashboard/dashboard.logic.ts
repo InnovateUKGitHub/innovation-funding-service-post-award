@@ -169,7 +169,7 @@ export function generateFilteredProjects(filters: FilterOptions[], projects: Pro
  */
 export function getRolesForPartner(partner: Partner, partnerRoles: SfPartnerRoles[]): SfRoles {
   return (
-    partnerRoles.find(x => x.partnerId === partner.accountId) ?? {
+    partnerRoles.find(x => x.partnerId === partner.id) ?? {
       isFc: false,
       isPm: false,
       isMo: false,

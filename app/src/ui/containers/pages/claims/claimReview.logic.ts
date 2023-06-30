@@ -66,7 +66,7 @@ export const useClaimReviewPageData = (
       partnerNode,
       ["id", "partnerStatus", "isWithdrawn", "isLead", "name", "roles", "organisationType", "overheadRate"],
       {
-        roles: project.partnerRoles.find(x => x.partnerId === partnerNode?.Acc_AccountId__c?.value) ?? {
+        roles: project.partnerRoles.find(x => x.partnerId === partnerNode?.Id) ?? {
           isFc: false,
           isMo: false,
           isPm: false,

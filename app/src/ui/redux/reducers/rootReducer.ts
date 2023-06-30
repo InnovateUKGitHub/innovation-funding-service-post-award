@@ -10,6 +10,9 @@ import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
 import { configReducer } from "./configReducer";
 import { IClientConfig } from "src/types/IClientConfig";
+import { ZodIssue } from "zod";
+import { zodErrorReducer } from "./zodErrorReducer";
+import { previousReactHookFormInputReducer } from "./previousReactHookFormInputReducer";
 
 export type DataState = ReturnType<typeof dataReducer>;
 
@@ -28,6 +31,8 @@ export interface RootState {
   user: IClientUser;
   config: IClientConfig;
   globalError: ErrorPayload["params"] | null;
+  zodError: ZodIssue[];
+  previousReactHookFormInput: AnyObject | null;
 }
 
 export const rootReducer = combineReducers<RootState>({
@@ -39,4 +44,6 @@ export const rootReducer = combineReducers<RootState>({
   user: userReducer,
   config: configReducer,
   globalError: errorReducer,
+  zodError: zodErrorReducer,
+  previousReactHookFormInput: previousReactHookFormInputReducer,
 });

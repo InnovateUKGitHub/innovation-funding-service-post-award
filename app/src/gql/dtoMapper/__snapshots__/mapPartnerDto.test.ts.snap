@@ -3,23 +3,23 @@
 exports[`mapPartnerDtoArray should map the gql data only including fields on the picklist 1`] = `
 Array [
   Object {
-    "id": "0",
+    "id": "a0D-partner1",
     "isLead": true,
     "roles": Object {
       "isFc": true,
       "isMo": false,
       "isPm": true,
-      "partnerId": "123",
+      "partnerId": "a0D-partner1",
     },
   },
   Object {
-    "id": "1",
+    "id": "a0D-partner2",
     "isLead": false,
     "roles": Object {
       "isFc": true,
       "isMo": false,
       "isPm": false,
-      "partnerId": "124",
+      "partnerId": "a0D-partner2",
     },
   },
 ]
@@ -28,7 +28,7 @@ Array [
 exports[`mapPartnerDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
 Array [
   Object {
-    "accountId": "123",
+    "accountId": "001-partner1",
     "auditReportFrequencyName": "monthly",
     "awardRate": 10,
     "capLimit": 100,
@@ -36,7 +36,7 @@ Array [
     "competitionName": "bingo",
     "forecastLastModifiedDate": 2022-01-24T00:00:00.000Z,
     "forecastsAndCosts": 15000,
-    "id": "0",
+    "id": "a0D-partner1",
     "isLead": true,
     "isWithdrawn": false,
     "name": "Swindon University",
@@ -53,7 +53,7 @@ Array [
       "isFc": true,
       "isMo": false,
       "isPm": true,
-      "partnerId": "123",
+      "partnerId": "a0D-partner1",
     },
     "totalCostsSubmitted": 5000,
     "totalGrantApproved": 100000,
@@ -62,7 +62,7 @@ Array [
     "totalPrepayment": 4000,
   },
   Object {
-    "accountId": "124",
+    "accountId": "001-partner2",
     "auditReportFrequencyName": "monthly",
     "awardRate": 10,
     "capLimit": 100,
@@ -70,7 +70,7 @@ Array [
     "competitionName": "bingo",
     "forecastLastModifiedDate": 2022-01-24T00:00:00.000Z,
     "forecastsAndCosts": 15000,
-    "id": "1",
+    "id": "a0D-partner2",
     "isLead": false,
     "isWithdrawn": true,
     "name": "Kettering Nursing College",
@@ -87,7 +87,7 @@ Array [
       "isFc": true,
       "isMo": false,
       "isPm": false,
-      "partnerId": "124",
+      "partnerId": "a0D-partner2",
     },
     "totalCostsSubmitted": 5000,
     "totalGrantApproved": 100000,

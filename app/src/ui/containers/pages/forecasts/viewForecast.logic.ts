@@ -118,7 +118,7 @@ export const useViewForecastData = (projectId: ProjectId, partnerId: PartnerId):
       "roles",
       "forecastLastModifiedDate",
     ],
-    { roles: partnerRoles.find(x => x.partnerId === partnerNode?.Acc_AccountId__c?.value ?? "unknown") ?? defaultRole },
+    { roles: partnerRoles.find(x => x.partnerId === partnerNode?.Id ?? "unknown") ?? defaultRole },
   );
 
   // CLAIMS

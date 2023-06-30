@@ -17,7 +17,7 @@ const logger: Logger = new Logger("FormHandlerBase");
 
 // TODO: review types in this file
 
-interface RouteInfo<TParams> {
+export interface RouteInfo<TParams> {
   routeName: string;
   routePath: string;
   getParams: (route: { name: string; path: string; params: AnyObject }) => TParams;

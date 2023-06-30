@@ -1,6 +1,7 @@
 import { ErrorCode } from "@framework/constants/enums";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
+import { ZodError } from "zod";
 
 export class AppError extends Error implements IAppError {
   public results: Results<ResultBase> | null = null;
@@ -39,6 +40,12 @@ export class FormHandlerError extends AppError {
     public error: IAppError,
   ) {
     super(error.code, error.message || "Not Found");
+  }
+}
+
+export class ZodFormHandlerError extends AppError {
+  constructor(public dto: AnyObject | null, public zodError: ZodError) {
+    super(ErrorCode.VALIDATION_ERROR, zodError.message, zodError);
   }
 }
 
