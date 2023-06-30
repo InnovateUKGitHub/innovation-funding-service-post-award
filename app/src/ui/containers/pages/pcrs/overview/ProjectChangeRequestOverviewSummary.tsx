@@ -5,7 +5,7 @@ import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/l
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
+import { usePcrItemName } from "../utils/getPcrItemName";
 
 const ProjectChangeRequestOverviewSummary = ({
   pcr,
@@ -18,7 +18,7 @@ const ProjectChangeRequestOverviewSummary = ({
 }) => {
   const routes = useRoutes();
   const { getContent } = useContent();
-  const getPcRTypeName = useGetPcrTypeName();
+  const { getPcrItemContent } = usePcrItemName();
 
   return (
     <Section title={getContent(x => x.pcrLabels.details)}>
@@ -30,13 +30,13 @@ const ProjectChangeRequestOverviewSummary = ({
         />
         <SummaryListItem
           label={getContent(x => x.pcrLabels.types)}
-          content={<LineBreakList items={pcr.items.map(x => getPcRTypeName(x.shortName))} />}
+          content={<LineBreakList items={pcr.items.map(x => getPcrItemContent(x.shortName).name)} />}
           action={
             !hideAddTypesLink && (
               <Link
                 route={routes.projectChangeRequestAddType.getLink({
                   projectId,
-                  projectChangeRequestId: pcr.id,
+                  pcrId: pcr.id,
                 })}
               >
                 {getContent(x => x.pcrLabels.addTypes)}

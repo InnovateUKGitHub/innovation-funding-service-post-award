@@ -2,7 +2,6 @@ import { PCRItemSummaryDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { usePcrDashboardQuery } from "./PCRDashboard.logic";
-import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 import { PCRStatus } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
@@ -19,6 +18,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
+import { usePcrItemName } from "../utils/getPcrItemName";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -40,7 +40,7 @@ const PCRTable = createTypedTable<PCRDashboardType>();
 const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
   const { project, pcrs } = usePcrDashboardQuery(props.projectId);
-  const getPcRTypeName = useGetPcrTypeName();
+  const { getPcrItemContent } = usePcrItemName();
 
   const renderStartANewRequestLink = (project: Pick<ProjectDto, "roles">) => {
     const { isPm } = getAuthRoles(project.roles);
@@ -70,7 +70,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
         <PCRTable.Custom
           qa="types"
           header="Types"
-          value={x => <LineBreakList items={x.items.map(y => getPcRTypeName(y.shortName))} />}
+          value={x => <LineBreakList items={x.items.map(y => getPcrItemContent(y.shortName).name)} />}
         />
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
         <PCRTable.String qa="status" header="Status" value={x => x.statusName} />

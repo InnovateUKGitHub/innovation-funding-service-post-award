@@ -5,7 +5,7 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import express from "express";
 import { z } from "zod";
-import { partnerLevelDelete, PartnerLevelDeleteOutputs } from "@ui/zod/documentValidators.zod";
+import { partnerLevelDelete } from "@ui/zod/documentValidators.zod";
 import {
   ProjectDocumentsRoute,
   ProjectDocumentPageParams,
@@ -18,7 +18,6 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      zod: partnerLevelDelete,
       route: ProjectDocumentsRoute,
       forms: [FormTypes.PartnerLevelDelete],
       formIntlKeyPrefix: ["documents"],

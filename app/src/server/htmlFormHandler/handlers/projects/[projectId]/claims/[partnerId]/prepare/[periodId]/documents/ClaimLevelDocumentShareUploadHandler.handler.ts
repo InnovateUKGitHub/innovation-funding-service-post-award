@@ -16,7 +16,6 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      zod: getClaimLevelUpload(configuration.options),
       route: ClaimDocumentsRoute,
       forms: [FormTypes.ClaimLevelUpload],
       formIntlKeyPrefix: ["documents"],
@@ -24,6 +23,10 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   }
 
   public readonly acceptFiles = true;
+
+  protected async getZodSchema() {
+    return getClaimLevelUpload(configuration.options);
+  }
 
   protected async mapToZod({
     input,
@@ -40,10 +43,6 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
       partnerId: input.partnerId,
       periodId: parseInt(input.periodId, 10),
     };
-  }
-
-  protected async mapToRedirect() {
-    return null;
   }
 
   protected async run({

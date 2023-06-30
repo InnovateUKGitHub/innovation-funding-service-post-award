@@ -1,5 +1,4 @@
-import { PCRStatus, PCRItemType } from "@framework/constants/pcrConstants";
-import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
+import { PCRStatus, PCRItemType, recordTypeMetaValues } from "@framework/constants/pcrConstants";
 import { TestContext } from "./testContextProvider";
 
 export const setup = (projectStatus?: string) => {
@@ -12,9 +11,7 @@ export const setup = (projectStatus?: string) => {
   context.testData.createCurrentUserAsProjectManager(project);
   const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
   const recordTypes = context.testData.createPCRRecordTypes();
-  const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
-    x => x.type === PCRItemType.PartnerAddition,
-  );
+  const projectSuspensionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
   const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
   return { context, recordType, projectChangeRequest, project };
 };

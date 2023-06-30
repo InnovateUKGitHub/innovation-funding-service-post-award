@@ -1,8 +1,7 @@
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { Authorisation } from "@framework/types/authorisation";
-import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { PCRItemType, PCRStatus, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRStatus, PCRItemStatus, recordTypeMetaValues } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { PCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { ValidationError } from "@shared/appError";
@@ -21,7 +20,7 @@ describe("Create PCR Command", () => {
 
         // Note: Were getting all the data we need based on the PCR Item and ensuring validity
         const recordsToCreate = pcrItemsToCheck.map(pcrItem => {
-          const metaValue = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === pcrItem);
+          const metaValue = recordTypeMetaValues.find(x => x.type === pcrItem);
 
           if (!metaValue) {
             throw new Error(`recordTypeMetaValues item was not found: ${pcrItem}`);
@@ -174,10 +173,9 @@ describe("Create PCR Command", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     context.testData.createCurrentUserAsProjectManager(project);
-    const partner = context.testData.createPartner(project);
     const recordTypes = context.testData.createPCRRecordTypes();
 
-    const itemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange);
+    const itemType = recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange);
 
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
@@ -187,11 +185,9 @@ describe("Create PCR Command", () => {
         {
           type: itemType?.type,
           status: PCRItemStatus.ToDo,
-          accountName: "Frida",
-          partnerId: partner.id,
         },
       ],
-    } as unknown as PCRDto);
+    } as PCRDto);
 
     const id = await context.runCommand(command);
     const newPCR = context.repositories.projectChangeRequests.Items.find(x => x.id === id);
@@ -206,8 +202,8 @@ describe("Create PCR Command", () => {
         {
           status: PCRItemStatus.ToDo,
           projectId: project.Id,
-          partnerId: partner.id,
-          accountName: "Frida",
+          partnerId: "",
+          accountName: "",
           recordTypeId: recordTypes.find(x => x.type === itemType?.typeName)?.id,
         },
       ],

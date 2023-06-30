@@ -1,11 +1,11 @@
 import {
-  PCRItemType,
-  getUnavailablePcrItemsMatrix,
-  getUnduplicatablePcrItemsMatrix,
+  getPcrItemsSingleInstanceInAnyPcrViolations,
+  getPcrItemsSingleInstanceInThisPcrViolations,
   PCRItemDisabledReason,
+  getPcrItemsTooManyViolations,
 } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
-import { PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
@@ -25,37 +25,6 @@ export class GetAvailableItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
-  /**
-   * Get a list of PCR items that should be disabled, to prevent too many items that action on
-   * partners.
-   *
-   * @param numberOfPartners The number of partners in the project.
-   * @param currentPcr The current PCR
-   * @returns A list of PCR item types that should no longer have any more of the specified type.
-   */
-  private getPcrItemsLimitedByNumberOfPartners(numberOfPartners: number, currentPcr?: PCRSummaryDto): PCRItemType[] {
-    if (!currentPcr) return [];
-
-    const { items } = currentPcr;
-    const bannedTypes: PCRItemType[] = [];
-
-    // If we already have `n` renames, disallow adding an `n+1`th rename.
-    if (items.filter(x => x.type === PCRItemType.AccountNameChange).length >= numberOfPartners)
-      bannedTypes.push(PCRItemType.AccountNameChange);
-
-    const hasAnyAdditions = items.some(x => x.type === PCRItemType.PartnerAddition);
-
-    // Maximum number of deletes allowed.
-    // `n`   You can delete all partners if we have any additions
-    // `n-1` You cannot delete all partners if there are no additions
-    const maxDeletes = hasAnyAdditions ? numberOfPartners : numberOfPartners - 1;
-
-    if (items.filter(x => x.type === PCRItemType.PartnerWithdrawal).length >= maxDeletes)
-      bannedTypes.push(PCRItemType.PartnerWithdrawal);
-
-    return bannedTypes;
-  }
-
   protected async run(context: IContext): Promise<PCRItemTypeDto[]> {
     const itemTypeDtosPromise = context.runQuery(new GetPCRItemTypesQuery(this.projectId));
     const projectPcrsPromise = context.runQuery(new GetAllPCRsQuery(this.projectId));
@@ -72,9 +41,9 @@ export class GetAvailableItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     const partners = await partnersPromise;
     const currentPcr = await currentPcrPromise;
 
-    const nonDuplicatableItemTypesInAnyPcr = getUnavailablePcrItemsMatrix(projectPcrs);
-    const nonDuplicatableItemTypesInThisPcr = getUnduplicatablePcrItemsMatrix(currentPcr);
-    const tooManyItemTypes = this.getPcrItemsLimitedByNumberOfPartners(partners.length, currentPcr);
+    const nonDuplicatableItemTypesInAnyPcr = getPcrItemsSingleInstanceInAnyPcrViolations(projectPcrs);
+    const nonDuplicatableItemTypesInThisPcr = getPcrItemsSingleInstanceInThisPcrViolations(currentPcr);
+    const tooManyItemTypes = getPcrItemsTooManyViolations(partners.length, currentPcr);
 
     return itemTypeDtos.reduce<PCRItemTypeDto[]>((validPcrItems, pcrItem) => {
       // Note: Include items that are only true
@@ -82,10 +51,10 @@ export class GetAvailableItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
 
       let disabledReason = PCRItemDisabledReason.None;
 
-      if (nonDuplicatableItemTypesInAnyPcr.includes(pcrItem.type)) {
-        disabledReason = PCRItemDisabledReason.AnotherPcrAlreadyHasThisType;
-      } else if (nonDuplicatableItemTypesInThisPcr.includes(pcrItem.type)) {
+      if (nonDuplicatableItemTypesInThisPcr.includes(pcrItem.type)) {
         disabledReason = PCRItemDisabledReason.ThisPcrAlreadyHasThisType;
+      } else if (nonDuplicatableItemTypesInAnyPcr.includes(pcrItem.type)) {
+        disabledReason = PCRItemDisabledReason.AnotherPcrAlreadyHasThisType;
       } else if (tooManyItemTypes.includes(pcrItem.type)) {
         disabledReason = PCRItemDisabledReason.NotEnoughPartnersToActionThisType;
       }

@@ -20,7 +20,6 @@ abstract class ZodFormHandlerBase<
   QueryParams extends AnyObject,
 > implements IFormHandler
 {
-  public readonly zod: Schema;
   public readonly route: IRouteDefinition<QueryParams>;
   public readonly routePath: string;
   public readonly forms: FormTypes[];
@@ -36,17 +35,14 @@ abstract class ZodFormHandlerBase<
   public abstract readonly acceptFiles: boolean;
 
   constructor({
-    zod,
     route,
     forms,
     formIntlKeyPrefix,
   }: {
-    zod: Schema;
     route: IRouteDefinition<QueryParams>;
     forms: FormTypes[];
     formIntlKeyPrefix: string[];
   }) {
-    this.zod = zod;
     this.route = route;
     this.routePath = route.routePath;
     this.logger = new Logger(`${route.routeName} Form Handler`);
@@ -55,8 +51,16 @@ abstract class ZodFormHandlerBase<
     this.copy = new Copy();
   }
 
+  /**
+   * Process a user's `req.body` into a dto, validate the dto, and run a command against the validated dto.
+   *
+   * Order of operations:
+   * 1. `req.body` - The input the user entered, mapped as string or string[] (number is a string)
+   * 2. `userInput` - The input the user entered, mapped to the correct types (number is a number)
+   * 3. `validData` - The input the user entered and with the correct types (including nominal types)
+   */
   public async handle({ req, res, next }: { req: express.Request; res: express.Response; next: express.NextFunction }) {
-    let input: z.output<Schema> | null = null;
+    let userInput: z.output<Schema> | null = null;
 
     try {
       const session: ISession = { user: req.session?.user };
@@ -73,8 +77,8 @@ abstract class ZodFormHandlerBase<
 
       res.locals.isMatchedRoute = true;
 
-      // Convert the HTTP body input into a form acceptable for Zod parsing.
-      input = await this.mapToZod({
+      // Convert the HTML body input into a form acceptable for Zod parsing.
+      userInput = await this.mapToZod({
         input: req.body,
         req,
         res,
@@ -83,13 +87,10 @@ abstract class ZodFormHandlerBase<
         context,
       });
 
-      this.logger.debug(req.url, input);
-      const data = this.zod.parse(input, { errorMap: makeZodI18nMap({ keyPrefix: this.formIntlKeyPrefix }) });
-      this.logger.debug("Successfully parsed Zod input!", data);
-      await this.run({ input: data, context, res });
+      this.logger.debug(req.url, userInput);
 
       // TODO: Make `mapToRedirect` accept the Zod output instead of the req.body
-      const successRedirectParams = await this.mapToRedirect({
+      const zod = await this.getZodSchema({
         input: req.body,
         req,
         res,
@@ -97,19 +98,24 @@ abstract class ZodFormHandlerBase<
         files,
         context,
       });
+
+      const validData = zod.parse(userInput, { errorMap: makeZodI18nMap({ keyPrefix: this.formIntlKeyPrefix }) });
+      this.logger.debug("Successfully parsed Zod input!", validData);
+
+      const newPath = await this.run({ input: validData, context, res });
 
       res.locals.isFormSuccess = true;
 
       // If the params is null, we're staying on the same page.
-      if (!successRedirectParams) {
+      if (!newPath) {
         next();
       } else {
-        res.redirect(this.route.getLink(successRedirectParams).path);
+        res.redirect(newPath);
       }
     } catch (e) {
       if (e instanceof ZodError) {
-        this.logger.debug("Failed to parse Zod input.", input, e);
-        next(new ZodFormHandlerError(input, e));
+        this.logger.debug("Failed to parse Zod input.", userInput, e);
+        next(new ZodFormHandlerError(userInput, e));
       } else {
         this.logger.error("Failed to execute Zod form handler.", e);
         next(e);
@@ -117,11 +123,7 @@ abstract class ZodFormHandlerBase<
     }
   }
 
-  /**
-   * Redirect a user to a specified URL.
-   * Return `null` to avoid redirecting and re-render the page the user submitted from.
-   */
-  protected abstract mapToRedirect({
+  protected abstract getZodSchema({
     input,
     req,
     res,
@@ -135,7 +137,7 @@ abstract class ZodFormHandlerBase<
     params: QueryParams;
     files: ServerFileWrapper[];
     context: IContext;
-  }): Promise<QueryParams | null>;
+  }): Promise<Schema>;
 
   /**
    * Convert the `req.body` and `req.files` of Express into the input
@@ -158,7 +160,9 @@ abstract class ZodFormHandlerBase<
   }): Promise<z.input<Schema>>;
 
   /**
-   * Execute the query required by this handler with the user's validated Zod input.
+   * Execute the form handler.
+   *
+   * @returns The URL to redirect a successful request to. Return `void` to not redirect.
    */
   protected abstract run({
     input,
@@ -168,7 +172,7 @@ abstract class ZodFormHandlerBase<
     input: z.output<Schema>;
     context: IContext;
     res: express.Response;
-  }): Promise<void>;
+  }): Promise<void | string>;
 }
 
 export { ZodFormHandlerBase };

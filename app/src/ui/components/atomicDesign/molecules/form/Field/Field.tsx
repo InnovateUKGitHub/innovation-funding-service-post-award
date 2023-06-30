@@ -28,7 +28,11 @@ const Field = ({ hint, label, labelBold, id, error, children, ...props }: FieldP
         </Hint>
       )}
 
-      <ValidationError data-qa={props["data-qa"] ? `${props["data-qa"]}-error` : ""} error={error} />
+      {!!hint && (
+        <Hint id={`hint-for-${id}`} data-qa={props["data-qa"] ? `${props["data-qa"]}-hint` : ""}>
+          {hint}
+        </Hint>
+      )}
 
       {React.cloneElement(children, { hasError: !!error, id })}
     </FormGroup>

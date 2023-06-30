@@ -19,7 +19,6 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      zod: projectOrPartnerLevelDelete,
       route: ProjectDocumentsRoute,
       forms: [FormTypes.ProjectLevelDelete, FormTypes.PartnerLevelDelete],
       formIntlKeyPrefix: ["documents"],
@@ -27,6 +26,10 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   }
 
   public readonly acceptFiles = false;
+
+  protected async getZodSchema() {
+    return projectOrPartnerLevelDelete;
+  }
 
   protected async mapToZod({
     input,
@@ -41,10 +44,6 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
       projectId: params.projectId,
       partnerId: input.partnerId,
     };
-  }
-
-  protected async mapToRedirect() {
-    return null;
   }
 
   protected async run({

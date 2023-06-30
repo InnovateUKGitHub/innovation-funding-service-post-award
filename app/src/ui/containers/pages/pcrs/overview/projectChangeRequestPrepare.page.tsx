@@ -13,7 +13,6 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useForm } from "react-hook-form";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
-import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 import { GetItemTaskProps } from "./GetItemTasks";
 import { ProjectChangeRequestOverviewLog } from "./ProjectChangeRequestOverviewLog";
 import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverviewSummary";
@@ -23,6 +22,7 @@ import { pcrPrepareErrorMap, pcrPrepareSchema } from "./projectChangeRequestPrep
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { createRegisterButton } from "@framework/util/registerButton";
+import { usePcrItemName } from "../utils/getPcrItemName";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -35,10 +35,10 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
     props.pcrId,
   );
 
-  const getPcRTypeName = useGetPcrTypeName();
+  const { getPcrItemContent } = usePcrItemName();
 
   const pcrItems = pcr.items.map(x => ({
-    shortName: getPcRTypeName(x.shortName),
+    shortName: getPcrItemContent(x.shortName).name,
     status: getPcrItemTaskStatus(x.status),
   }));
 

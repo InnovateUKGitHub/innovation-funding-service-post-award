@@ -22,7 +22,7 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
     button: IFormButton,
     body: IFormBody,
   ): Promise<PCRDto> {
-    const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.projectChangeRequestId));
+    const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const formValuesAsArray: string[] = body.types ? (Array.isArray(body.types) ? body.types : [body.types]) : [];
 
@@ -52,18 +52,18 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
     await context.runCommand(
       new UpdatePCRCommand({
         projectId: params.projectId,
-        projectChangeRequestId: params.projectChangeRequestId,
+        projectChangeRequestId: params.pcrId,
         pcr: dto,
       }),
     );
     return ProjectChangeRequestPrepareRoute.getLink({
       projectId: params.projectId,
-      pcrId: params.projectChangeRequestId,
+      pcrId: params.pcrId,
     });
   }
 
   protected getStoreKey(params: PcrUpdateParams) {
-    return storeKeys.getPcrKey(params.projectId, params.projectChangeRequestId);
+    return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
   protected createValidationResult(params: PcrUpdateParams, dto: PCRDto) {

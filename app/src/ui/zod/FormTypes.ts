@@ -7,6 +7,10 @@ enum FormTypes {
   // Claim page
   ClaimLevelDelete = "claimLevelDelete",
   ClaimLevelUpload = "claimLevelUpload",
+
+  // Project Change Requests
+  ProjectChangeRequestCreate = "projectChangeRequestCreate",
+  ProjectChangeRequestUpdateTypes = "projectChangeRequestUpdateTypes",
 }
 
 export { FormTypes };

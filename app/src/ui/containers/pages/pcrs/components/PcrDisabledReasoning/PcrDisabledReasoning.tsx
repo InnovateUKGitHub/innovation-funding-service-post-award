@@ -1,4 +1,4 @@
-import { PCRItemDisabledReason } from "@framework/constants/pcrConstants";
+import { IMetaValue, PCRItemDisabledReason } from "@framework/constants/pcrConstants";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
 import { UL } from "@ui/components/atomicDesign/atoms/List/list";
@@ -14,7 +14,11 @@ import { usePcrItemName } from "../../utils/getPcrItemName";
  *
  * @returns A React component with reasons why a specific PCR type is unavailable
  */
-const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
+const PcrDisabledReasoning = ({
+  items,
+}: {
+  items: { item: IMetaValue; disabled: boolean; disabledReason: PCRItemDisabledReason }[];
+}) => {
   const { getContent } = useContent();
   const { getPcrItemContent } = usePcrItemName();
 
@@ -47,7 +51,10 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
     const foundDisableReasons = new Set<PCRItemDisabledReason>();
 
     for (const item of items) {
-      foundDisableReasons.add(item.disabledReason);
+      // Only collate reasons that are not "NONE"
+      if (item.disabledReason !== PCRItemDisabledReason.None) {
+        foundDisableReasons.add(item.disabledReason);
+      }
     }
 
     for (const disableReason of [...foundDisableReasons].sort((a, b) => a - b)) {
@@ -63,7 +70,7 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
 
           <UL>
             {itemsDisabledForThisReason
-              .map(x => getPcrItemContent(x.displayName).name)
+              .map(({ item }) => getContent(item.i18nName ?? (x => x.pcrTypes.unknown)))
               .sort()
               .map((name, i) => (
                 <li key={i}>{name}</li>
