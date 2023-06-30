@@ -12,7 +12,6 @@ type Ext_Partner_Roles implements Ext_Roles {
   isPm: Boolean!
   isSalesforceSystemUser: Boolean!
   partnerId: ID!
-  accountId: ID!
 }
 
 type Ext_Project_Roles implements Ext_Roles {

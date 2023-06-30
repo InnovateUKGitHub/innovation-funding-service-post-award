@@ -23,7 +23,6 @@ export const projectOverviewQuery = graphql`
                     isMo
                     isPm
                     partnerId
-                    accountId
                   }
                 }
                 Acc_ProjectNumber__c {

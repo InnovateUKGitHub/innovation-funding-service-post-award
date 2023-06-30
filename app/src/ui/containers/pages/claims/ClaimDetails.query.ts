@@ -275,7 +275,6 @@ export const claimDetailsQuery = graphql`
                     isFc
                     isPm
                     partnerId
-                    accountId
                   }
                 }
                 Acc_NumberofPeriods__c {

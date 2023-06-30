@@ -36,6 +36,7 @@ import { useStores } from "@ui/redux/storesProvider";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { useProjectDocumentsQuery } from "./projectDocuments.logic";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
+import { ValidationSummary } from "@ui/rhf-components/ValidationSummary";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;
@@ -126,6 +127,7 @@ const ProjectDocumentsPage = ({
       error={editor.error}
       projectStatus={project.status}
     >
+      <ValidationSummary />
       <Messages messages={props.messages} />
 
       <Section>

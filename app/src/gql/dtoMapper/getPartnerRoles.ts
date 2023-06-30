@@ -10,7 +10,6 @@ export const getPartnerRoles = (
       isPm: x?.isPm ?? false,
       isMo: x?.isMo ?? false,
       partnerId: x?.partnerId ?? "unknown partner id",
-      accountId: x?.accountId ?? "unknown account id",
     })) ?? []
   );
 };

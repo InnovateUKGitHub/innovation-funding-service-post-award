@@ -30,5 +30,4 @@ declare interface SfRoles {
 
 interface SfPartnerRoles extends SfRoles {
   partnerId: string;
-  accountId: string;
 }
