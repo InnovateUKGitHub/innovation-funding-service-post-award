@@ -1,35 +1,30 @@
 import { IContext } from "@framework/types/IContext";
-import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
+import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
 import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import express from "express";
 import { z } from "zod";
-import { projectOrPartnerLevelDelete } from "@ui/zod/documentValidators.zod";
+import { partnerLevelDelete } from "@ui/zod/documentValidators.zod";
 import {
   ProjectDocumentsRoute,
   ProjectDocumentPageParams,
 } from "@ui/containers/pages/projects/documents/projectDocuments.page";
-import { FormTypes } from "@ui/zod/FormTypes";
-import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
 
-class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
-  typeof projectOrPartnerLevelDelete,
+class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
+  typeof partnerLevelDelete,
   { projectId: ProjectId }
 > {
   constructor() {
     super({
+      zod: partnerLevelDelete,
       route: ProjectDocumentsRoute,
-      forms: [FormTypes.ProjectLevelDelete, FormTypes.PartnerLevelDelete],
+      forms: ["partnerLevelDelete"],
       formIntlKeyPrefix: ["documents"],
     });
   }
 
-  acceptFiles = false;
-
-  protected async getZodSchema() {
-    return projectOrPartnerLevelDelete;
-  }
+  acceptFiles = true;
 
   protected async mapToZod({
     input,
@@ -37,13 +32,17 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   }: {
     input: AnyObject;
     params: ProjectDocumentPageParams;
-  }): Promise<z.input<typeof projectOrPartnerLevelDelete>> {
+  }): Promise<z.input<typeof partnerLevelDelete>> {
     return {
-      form: input.form,
+      form: "partnerLevelDelete" as const,
       documentId: input.documentId ?? input.button_documentId,
       projectId: params.projectId,
       partnerId: input.partnerId,
     };
+  }
+
+  protected async mapToRedirect() {
+    return null;
   }
 
   protected async run({
@@ -52,18 +51,12 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: z.output<typeof projectOrPartnerLevelDelete>;
+    input: z.output<typeof partnerLevelDelete>;
     context: IContext;
   }): Promise<void> {
     const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);
-
     const documentSummaryInfo = mapToDocumentSummaryDto(documentInfo, "");
-
-    if (input.form === FormTypes.PartnerLevelDelete) {
-      await context.runCommand(new DeletePartnerDocumentCommand(input.projectId, input.partnerId, input.documentId));
-    } else {
-      await context.runCommand(new DeleteProjectDocumentCommand(input.projectId, input.documentId));
-    }
+    await context.runCommand(new DeletePartnerDocumentCommand(input.projectId, input.partnerId, input.documentId));
 
     // TODO: Actually use Redux instead of a temporary array
     res.locals.preloadedReduxActions.push(
@@ -76,4 +69,4 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   }
 }
 
-export { ProjectLevelDocumentShareDeleteHandler };
+export { PartnerLevelDocumentShareDeleteHandler };

@@ -1,12 +1,12 @@
 import { createPCRSummaryDto } from "@framework/util/stubDtos";
-import { PCRItemType, getUnavailablePcrItemsMatrix, PCRStatus } from "./pcrConstants";
+import { PCRItemType, getPcrItemsSingleInstanceInAnyPcrViolations, PCRStatus } from "./pcrConstants";
 
 describe("getUnavailablePcrItemsMatrix()", () => {
   const stubItemType = (type: PCRItemType) => ({ type, typeName: "stub-typeName", shortName: "stub-shortName" });
 
   describe("should never return a value", () => {
     test("with no pcrs", () => {
-      const filteredValues = getUnavailablePcrItemsMatrix([]);
+      const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([]);
 
       expect(filteredValues).toStrictEqual([]);
     });
@@ -19,7 +19,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
       ${"when Actioned"}  | ${PCRStatus.Actioned}
     `("with an invalid type $name", ({ statusType }) => {
       const stubPcr = createPCRSummaryDto({ status: statusType });
-      const filteredValues = getUnavailablePcrItemsMatrix([stubPcr]);
+      const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubPcr]);
 
       expect(filteredValues).toStrictEqual([]);
     });
@@ -33,7 +33,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           items: [stubItemType(PCRItemType.MultiplePartnerFinancialVirement)],
         });
 
-        const filteredValues = getUnavailablePcrItemsMatrix([stubDraftPcrPartnerVirement]);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubDraftPcrPartnerVirement]);
 
         expect(filteredValues).toStrictEqual([PCRItemType.MultiplePartnerFinancialVirement]);
       });
@@ -44,7 +44,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           items: [stubItemType(PCRItemType.TimeExtension)],
         });
 
-        const filteredValues = getUnavailablePcrItemsMatrix([stubDraftPcrTimeExtension]);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubDraftPcrTimeExtension]);
 
         expect(filteredValues).toStrictEqual([PCRItemType.TimeExtension]);
       });
@@ -55,7 +55,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           items: [stubItemType(PCRItemType.ScopeChange)],
         });
 
-        const filteredValues = getUnavailablePcrItemsMatrix([stubDraftPcrScopeChange]);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubDraftPcrScopeChange]);
 
         expect(filteredValues).toStrictEqual([PCRItemType.ScopeChange]);
       });
@@ -76,7 +76,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           items: [stubItemType(itemTypeInput)],
         });
 
-        const filteredValues = getUnavailablePcrItemsMatrix([stubSinglePcr]);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubSinglePcr]);
 
         expect(filteredValues).toStrictEqual([]);
       });
@@ -91,7 +91,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           items: [stubItemType(PCRItemType.MultiplePartnerFinancialVirement), stubItemType(PCRItemType.TimeExtension)],
         });
 
-        const filteredValues = getUnavailablePcrItemsMatrix([stubInvalidPcrStatus]);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubInvalidPcrStatus]);
 
         expect(filteredValues).toStrictEqual([]);
       });
@@ -102,7 +102,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           items: [stubItemType(PCRItemType.MultiplePartnerFinancialVirement), stubItemType(PCRItemType.TimeExtension)],
         });
 
-        const filteredValues = getUnavailablePcrItemsMatrix([stubSinglePcrMultipleTypes]);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubSinglePcrMultipleTypes]);
 
         expect(filteredValues).toStrictEqual([PCRItemType.MultiplePartnerFinancialVirement, PCRItemType.TimeExtension]);
       });
@@ -118,7 +118,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           ],
         });
 
-        const filteredValues = getUnavailablePcrItemsMatrix([stubSinglePcrMultipleTypesWithDupes]);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations([stubSinglePcrMultipleTypesWithDupes]);
 
         expect(filteredValues).toStrictEqual([PCRItemType.TimeExtension, PCRItemType.MultiplePartnerFinancialVirement]);
       });
@@ -140,7 +140,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           }),
         ];
 
-        const filteredValues = getUnavailablePcrItemsMatrix(stubMultiplePcrsMultipleTypes);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations(stubMultiplePcrsMultipleTypes);
 
         expect(filteredValues).toStrictEqual([]);
       });
@@ -160,7 +160,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           }),
         ];
 
-        const filteredValues = getUnavailablePcrItemsMatrix(stubMultiplePcrsMultipleTypes);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations(stubMultiplePcrsMultipleTypes);
 
         expect(filteredValues).toStrictEqual([PCRItemType.MultiplePartnerFinancialVirement, PCRItemType.TimeExtension]);
       });
@@ -177,7 +177,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           }),
         ];
 
-        const filteredValues = getUnavailablePcrItemsMatrix(stubMultiplePcrsMultipleTypes);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations(stubMultiplePcrsMultipleTypes);
 
         expect(filteredValues).toStrictEqual([]);
       });
@@ -197,7 +197,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           }),
         ];
 
-        const filteredValues = getUnavailablePcrItemsMatrix(stubMultiplePcrsMultipleTypes);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations(stubMultiplePcrsMultipleTypes);
 
         expect(filteredValues).toStrictEqual([PCRItemType.MultiplePartnerFinancialVirement, PCRItemType.TimeExtension]);
       });
@@ -220,7 +220,7 @@ describe("getUnavailablePcrItemsMatrix()", () => {
           }),
         ];
 
-        const filteredValues = getUnavailablePcrItemsMatrix(stubMultiplePcrsDuplicateItems);
+        const filteredValues = getPcrItemsSingleInstanceInAnyPcrViolations(stubMultiplePcrsDuplicateItems);
 
         expect(filteredValues).toStrictEqual([PCRItemType.MultiplePartnerFinancialVirement, PCRItemType.TimeExtension]);
       });

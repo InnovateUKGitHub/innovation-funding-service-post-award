@@ -48,6 +48,11 @@ interface PCRItemBaseDto extends PCRItemSummaryDto {
   statusName: string;
 }
 
+export type CreatePcrItemDto = Pick<PCRItemDto, "type" | "status">;
+export type CreatePcrDto = Pick<PCRDto, "projectId" | "reasoningStatus" | "status"> & {
+  items: CreatePcrItemDto[];
+};
+
 export type PCRItemDto =
   | PCRItemForAccountNameChangeDto
   | PCRItemForLoanDrawdownChangeDto

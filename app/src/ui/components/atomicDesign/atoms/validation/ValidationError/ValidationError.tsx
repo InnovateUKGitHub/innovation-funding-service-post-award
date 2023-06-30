@@ -1,28 +1,19 @@
+import { mapErrors, TValidationError } from "@framework/mappers/mapRhfError";
+import { useContent } from "@ui/hooks/content.hook";
 import React from "react";
-
-type TValidationError = { message?: string | null } | { [key: string]: TValidationError } | null | undefined;
+import { AccessibilityText } from "../../AccessibilityText/AccessibilityText";
 
 interface Props {
   error: TValidationError;
+  id?: string;
 }
 
 const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-export const ValidationError = ({ error }: Props) => {
-  const mapErrors = (error: TValidationError, mappedErrors: string[] = []) => {
-    if (error) {
-      if ("message" in error && typeof error.message === "string") {
-        mappedErrors.push(error?.message ?? "");
-        return mappedErrors;
-      } else {
-        Object.values(error).forEach(e => mapErrors(e, mappedErrors));
-      }
-    }
-
-    return mappedErrors;
-  };
+export const ValidationError = ({ error, id }: Props) => {
+  const { getContent } = useContent();
 
   if (!error) {
     return null;
@@ -32,9 +23,14 @@ export const ValidationError = ({ error }: Props) => {
 
   return (
     <>
-      {errorMap.map(message => (
-        <p key={message} style={alignTextLeftStyle} className="govuk-error-message">
-          {message}
+      {errorMap.map((message, index) => (
+        <p
+          id={id ? `${id}-${index}` : undefined}
+          key={message}
+          style={alignTextLeftStyle}
+          className="govuk-error-message"
+        >
+          <AccessibilityText>{getContent(x => x.components.validationError.prefix)}</AccessibilityText> {message}
         </p>
       ))}
     </>

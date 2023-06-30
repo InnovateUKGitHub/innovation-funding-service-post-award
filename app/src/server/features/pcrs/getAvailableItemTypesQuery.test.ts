@@ -1,4 +1,4 @@
-import { PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRItemType, recordTypeMetaValues } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { GetAvailableItemTypesQuery } from "@server/features/pcrs/getAvailableItemTypesQuery";
@@ -14,7 +14,7 @@ describe("GetAvailableItemTypesQuery", () => {
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project);
 
-      const reallocateProjectCostsType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+      const reallocateProjectCostsType = recordTypeMetaValues.find(
         x => x.type === PCRItemType.MultiplePartnerFinancialVirement,
       );
 
@@ -41,16 +41,14 @@ describe("GetAvailableItemTypesQuery", () => {
       const projectPcr = context.testData.createPCR(project);
       const editingPcr = context.testData.createPCR(project);
 
-      const reallocateProjectCostsType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+      const reallocateProjectCostsType = recordTypeMetaValues.find(
         x => x.type === PCRItemType.MultiplePartnerFinancialVirement,
       );
       const reallocateSeveralPartnersProjectCost = pcrRecordTypes.find(
         x => x.type === reallocateProjectCostsType?.typeName,
       );
 
-      const timeExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
-        x => x.type === PCRItemType.TimeExtension,
-      );
+      const timeExtensionType = recordTypeMetaValues.find(x => x.type === PCRItemType.TimeExtension);
       const changeProjectDuration = pcrRecordTypes.find(x => x.type === timeExtensionType?.typeName);
 
       context.testData.createPCRItem(projectPcr, reallocateSeveralPartnersProjectCost);

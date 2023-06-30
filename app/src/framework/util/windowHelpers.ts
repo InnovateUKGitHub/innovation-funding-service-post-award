@@ -5,7 +5,7 @@ export const scrollToTheTopInstantly = () => requestAnimationFrame(() => window.
 export const scrollToTheTagSmoothly = (tag: string) => {
   requestAnimationFrame(() => {
     // Find the first instance of the NAME or ID
-    const [nameTag] = [...document.getElementsByName(tag)];
+    const [nameTag] = [...document.getElementsByName(tag), document.getElementById(tag)];
 
     // If it exists, scroll to it.
     if (nameTag) {

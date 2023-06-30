@@ -53,6 +53,9 @@
       "insufficientAccessRights": "We are unable to save the changes. Please click 'Back to claims' and click into the cost category again. For claim line items that you want to remove, set the value to zero and save.",
       "notUploadedByOwner": "You cannot remove this file as you did not upload it. You can only remove files that you have uploaded."
     },
+    "validationError": {
+      "prefix": "Error:"
+    },
     "logs": {
       "noChangesMessage": "There are no changes.",
       "columnHeaderDate": "Date and time",
@@ -1323,29 +1326,16 @@
   },
   "pcrTypes": {
     "unknown": "Unknown PCR Type",
-    "accountNameChange": "Account Name Change",
-    "addAPartner": "Add a partner",
-    "betweenPartnerFinancialVirement": "Financial Virement",
-    "changeAPartnersName": "Change a partner's name",
-    "changeLoansDuration": "Change Loans Duration",
-    "changePeriodLength": "Change period length",
-    "changeProjectDuration": "Change project duration",
-    "changeProjectScope": "Change project scope",
-    "endTheProjectEarly": "End the project early",
-    "financialVirement": "Financial Virement",
-    "loanDrawdownChange": "Loan Drawdown Change",
-    "multiplePartnerFinancialVirement": "Financial Virement",
-    "partnerAddition": "Partner Addition",
-    "partnerWithdrawal": "Partner Withdrawal",
-    "projectSuspension": "Project Suspension",
-    "projectTermination": "Project Termination",
-    "putProjectOnHold": "Put project on hold",
-    "reallocateOnePartnersProjectCost": "Reallocate project costs",
-    "reallocateSeveralPartnersProjectCost": "Reallocate project costs",
-    "removeAPartner": "Remove a partner",
-    "requestHeader": "Request Header",
-    "scopeChange": "Scope Change",
-    "timeExtension": "Time Extension"
+    "accountNameChange": "Change a partner's name",
+    "partnerAddition": "Add a partner",
+    "partnerWithdrawal": "Remove a partner",
+    "projectSuspension": "Put a project on hold",
+    "projectTermination": "End the project early",
+    "multiplePartnerFinancialVirement": "Reallocate project costs",
+    "scopeChange": "Change project scope",
+    "timeExtension": "Change project duration",
+    "loanDrawdownChange": "Loan drawdown change",
+    "loanDrawdownExtension": "Change loans duration"
   },
   "pcrAddPartnerLabels": {
     "roleHeading": "Project role",
@@ -1828,6 +1818,17 @@
       },
       "errors": {
         "custom": "{{input.shortName}} must be complete."
+      }
+    },
+    "pcrModify": {
+      "types": {
+        "errors": {
+          "too_small": "You must select at least one of the types.",
+          "invalid_enum_value": "You can only select from the list of available types.",
+          "another_pcr_already_has_this": "You can only have one '{{ type }}' change in progress in any PCR at a time.",
+          "this_pcr_already_has_this_type": "You can only have one '{{ type }}' change in progress in this PCR at a time.",
+          "not_enough_partners_to_action_this_type": "You cannot select '{{ type }}' because you do not have enough partners to action these."
+        }
       }
     },
     "documents": {
