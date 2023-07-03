@@ -30,7 +30,6 @@ const getByAriaLabel = (label: string) => {
   cy.get(`[aria-label="${label}"]`);
 };
 
-
 const userSwitcher = (payload: Record<string, string>, goHome: boolean = false) => {
   if (goHome) {
     payload.button_home = "";
@@ -44,15 +43,14 @@ const userSwitcher = (payload: Record<string, string>, goHome: boolean = false) 
     form: true,
     body: payload,
     auth: {
-      username, password
+      username,
+      password,
     },
-  }).then((res) => {
+  }).then(res => {
     //
-    res.redirectedToUrl ?
-      cy.visit(res.redirectedToUrl, { auth: { username, password } }) :
-      cy.reload()
+    res.redirectedToUrl ? cy.visit(res.redirectedToUrl, { auth: { username, password } }) : cy.reload();
   });
-}
+};
 
 const switchUserTo = (email: string, goHome: boolean = false) => {
   cy.log(`**switchUserTo:${email}**`);
@@ -121,6 +119,16 @@ const deletePcr = (projectId: string) => {
   cy.get("button").contains("Delete request").click({ force: true });
 };
 
+const validationLink = (message: string) => {
+  cy.log("**validationLink**");
+  cy.getByQA("validation-summary").contains("a", message);
+};
+
+const validationMessage = (message: string) => {
+  cy.log("**validationMessage**");
+  cy.getByQA("validation-summary").contains(message);
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
@@ -137,3 +145,5 @@ Cypress.Commands.add("clickCheckBox", clickCheckBox);
 Cypress.Commands.add("navigateToProject", navigateToProject);
 Cypress.Commands.add("selectTile", selectTile);
 Cypress.Commands.add("deletePcr", deletePcr);
+Cypress.Commands.add("validationLink", validationLink);
+Cypress.Commands.add("validationMessage", validationMessage);

@@ -80,7 +80,7 @@ export const newLocation = () => {
   cy.get("#hint-for-new-postcode").contains("Enter the postcode.");
   cy.get("#new-postcode").type("SN123456788");
   cy.submitButton("Save and return to project setup").click();
-  cy.getByQA("validation-summary").contains("a", "Your location entry must be no more than 10 characters.");
+  cy.validationMessage("Your location entry must be no more than 10 characters.");
   cy.get("#new-postcode").clear().type("SN2 1FL");
   cy.submitButton("Save and return to project setup").click();
 };
@@ -104,7 +104,7 @@ export const partnerValidation = () => {
   cy.get("a").contains("Edit").click();
   cy.get("#new-postcode").clear().type("SN123456789");
   cy.submitButton("Save and return to partner information").click();
-  cy.getByQA("validation-summary").contains("a", "Your location entry must be no more than 10 characters.");
+  cy.validationMessage("Your location entry must be no more than 10 characters.");
   cy.get("#new-postcode").clear().type("SN2");
   cy.submitButton("Save and return to partner information").click();
   cy.backLink("Back to project details").click();
@@ -112,8 +112,8 @@ export const partnerValidation = () => {
 
 export const bankDetailsValidation = () => {
   cy.submitButton("Submit bank details").click();
-  cy.getByQA("validation-summary").contains("a", "Sort code cannot be empty.");
-  cy.getByQA("validation-summary").contains("a", "Account number cannot be empty.");
+  cy.validationMessage("Sort code cannot be empty.");
+  cy.validationMessage("Account number cannot be empty.");
   cy.get("p").contains("Sort code cannot be empty.");
   cy.get("p").contains("Account number cannot be empty");
   cy.reload();
@@ -123,6 +123,6 @@ export const spendProfileValidation = () => {
   cy.getByAriaLabel("Labour Period 1").clear();
   cy.wait(500);
   cy.submitButton("Save and return to project setup").click();
-  cy.getByQA("validation-summary").contains("a", "Forecast is required");
+  cy.validationMessage("Forecast is required");
   cy.getByAriaLabel("Labour Period 1").type("0");
 };

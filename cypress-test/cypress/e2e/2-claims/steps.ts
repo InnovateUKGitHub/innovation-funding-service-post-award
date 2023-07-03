@@ -191,7 +191,7 @@ export const selectFileDescription = () => {
 export const claimsDocUpload = () => {
   fileTidyUp("James Black");
   cy.uploadButton("Upload documents").click();
-  cy.getByQA("validation-summary").contains("a", "Choose a file to upload");
+  cy.validationLink("Choose a file to upload");
   cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
   cy.uploadButton("Upload documents").click();
 };
@@ -659,14 +659,14 @@ export const removeLineItems = () => {
 export const validateLineItem = () => {
   cy.getByAriaLabel("value of claim line item 1").clear().type("gsdfadsf").wait(500);
   cy.submitButton("Save and return to claims").click();
-  cy.getByQA("validation-summary").contains("a", "Costs must be a number");
+  cy.validationLink("Costs must be a number");
   cy.getByAriaLabel("value of claim line item 1").clear().type("1000").wait(500);
 };
 
 export const validateForecast = () => {
   cy.getByAriaLabel("Labour Period 2").clear().wait(500);
   cy.getByQA("button_save-qa").click();
-  cy.getByQA("validation-summary").contains("a", "Forecast is required");
+  cy.validationLink("Forecast is required");
 };
 
 export const academicForecastNavigate = () => {

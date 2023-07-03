@@ -30,7 +30,7 @@ describe("Forecast > Academic", () => {
     cy.getByAriaLabel("Directly incurred - Staff Period 2").clear();
     cy.wait(500);
     cy.submitButton("Submit").click();
-    cy.getByQA("validation-summary").contains("a", "Forecast is required.");
+    cy.validationLink("Forecast is required.");
     cy.get("a").contains("Forecast is required.");
   });
 

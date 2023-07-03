@@ -24,7 +24,7 @@ describe("claims > Trigger Cap Pot Message", () => {
   });
 
   it("Should show validation messaging around the project cap", () => {
-    cy.getByQA("validation-summary").contains(
+    cy.validationMessage(
       "Please be aware, approval of this claim will cause a percentage of your grant to be retained.",
     );
   });

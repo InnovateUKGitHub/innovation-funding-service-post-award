@@ -35,7 +35,7 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
 
   it("Should attempt to Save and continue without completing fields to prompt validation", () => {
     cy.submitButton("Save and continue").click();
-    cy.getByQA("validation-summary").contains("a", "Select a project location");
+    cy.validationLink("Select a project location");
     cy.get("p").contains("Select a project location.");
   });
 

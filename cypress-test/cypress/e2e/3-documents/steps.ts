@@ -252,6 +252,6 @@ export const fcShouldNotDelete = () => {
 
 export const validateFileUpload = () => {
   cy.get("button").contains("Upload").click();
-  cy.getByQA("validation-summary").contains("a", "Choose a file to upload");
+  cy.validationLink("Choose a file to upload");
   cy.reload();
 };

@@ -83,6 +83,10 @@ declare global {
       selectTile(label: Tile): Chainable<Element>;
 
       deletePcr(projectId: string): Chainable<Element>;
+
+      validationLink(message: string): Chainable<Element>;
+
+      validationMessage(message: string): Chainable<Element>;
     }
   }
 }
