@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { accessEUIOpenClaim, shouldShowAllAccordion, shouldShowCostCatTable, shouldShowProjectTitle } from "./steps";
+import { accessEUIOpenClaim, shouldShowCostCatTable, shouldShowProjectTitle } from "./steps";
 
 describe("claims > edit claims as FC", () => {
   before(() => {
