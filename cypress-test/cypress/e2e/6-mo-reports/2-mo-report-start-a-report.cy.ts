@@ -7,14 +7,12 @@ import {
   saveContinueSaveReturn,
   shouldShowProjectTitle,
 } from "./steps";
-import { moReportTidyup } from "common/mo-report-tidyup";
 
 const moContactEmail = "testman2@testing.com";
 
 describe("MO report > can start a new report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
-    moReportTidyup("Draft");
     cy.navigateToProject("328407");
   });
 

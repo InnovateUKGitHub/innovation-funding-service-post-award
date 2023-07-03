@@ -1,4 +1,5 @@
 import { visitApp } from "../../common/visit";
+import { moReportTidyup } from "common/mo-report-tidyup";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 
@@ -179,6 +180,7 @@ export const startNewReportButton = () => {
 };
 
 export const clickStartNewReportButton = () => {
+  moReportTidyup("Draft");
   cy.get("a").contains("Start a new report").click();
 };
 
