@@ -47,10 +47,10 @@ describe("Forecast > Link to claims page as FC", () => {
   it("Will allow the FC to click edit and it will display the claims page", clickEditDisplayClaim);
 
   it("Has a 'Continue to claims document' button", () => {
-    cy.submitButton("Continue to claims documents");
+    cy.get("button").contains("Continue to claims documents");
   });
 
   it("Has a 'Save and return to claims' button", () => {
-    cy.submitButton("Save and return to claims");
+    cy.get("button").contains("Save and return to claims");
   });
 });
