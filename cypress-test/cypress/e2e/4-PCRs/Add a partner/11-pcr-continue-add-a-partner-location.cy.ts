@@ -30,7 +30,7 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Add a partner' heading", () => {
-    cy.get("h1").contains("Add a partner");
+    cy.heading("Add a partner");
   });
 
   it("Should attempt to Save and continue without completing fields to prompt validation", () => {

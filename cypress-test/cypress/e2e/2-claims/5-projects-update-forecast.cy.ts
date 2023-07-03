@@ -34,7 +34,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   it("Should have correct project title", shouldShowProjectTitle);
 
   it("Should have forecasts header", () => {
-    cy.get("h1").contains("Update forecast");
+    cy.heading("Update forecast");
   });
 
   it("Should contain a 'last chance to change the forecast' message", () => {

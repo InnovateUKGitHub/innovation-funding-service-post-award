@@ -19,7 +19,7 @@ describe("claims > projects without claims", () => {
   it("Should have the project name displayed", shouldShowProjectTitle);
 
   it("Should display the 'Claims' heading", () => {
-    cy.get("h1").contains("Claims");
+    cy.heading("Claims");
   });
 
   it("Should display messaging", () => {

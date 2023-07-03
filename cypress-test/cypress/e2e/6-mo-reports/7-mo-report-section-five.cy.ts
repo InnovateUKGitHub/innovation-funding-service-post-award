@@ -37,7 +37,7 @@ describe("MO report > section 5 - can continue a report", () => {
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should show the heading 'Monitoring report'", () => {
-    cy.get("h1").contains("Monitoring report");
+    cy.heading("Monitoring report");
   });
 
   it("Should show the period title", () => {

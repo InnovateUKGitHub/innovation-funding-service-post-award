@@ -19,7 +19,7 @@ describe("Claims > Review as MO", () => {
   });
 
   it("Should ensure the Claims dashboard has loaded", () => {
-    cy.get("h1").contains("Claims");
+    cy.heading("Claims");
   });
 
   it("Should have the project name displayed", shouldShowProjectTitle);
@@ -30,7 +30,7 @@ describe("Claims > Review as MO", () => {
 
   it("Should click into 'Review claim' as MO and ensure the page loads", () => {
     cy.get("tr").contains("ABS EUI Medium Enterprise").siblings().contains("a", "Review").click();
-    cy.get("h1").contains("Claim");
+    cy.heading("Claim");
   });
 
   it("Should contain the project title and correct claim headings and information", projectTitleAndSubheaders);

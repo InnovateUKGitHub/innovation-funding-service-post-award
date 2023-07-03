@@ -42,7 +42,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Add a partner' heading", () => {
-    cy.get("h1").contains("Add a partner");
+    cy.heading("Add a partner");
   });
 
   it("Should click both radio buttons for 'Yes' and 'No'", otherFundingOptions);
@@ -89,7 +89,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Add a partner' heading", () => {
-    cy.get("h1").contains("Add a partner");
+    cy.heading("Add a partner");
   });
 
   it("Should enter a percentage and click 'Save and continue'", () => {
@@ -109,7 +109,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Add a partner' heading", () => {
-    cy.get("h1").contains("Add a partner");
+    cy.heading("Add a partner");
   });
 
   it("Should click the 'Learn more about files you can upload' and display information", learnFiles);

@@ -6,4 +6,6 @@ export type PcrType =
   | "Change project scope"
   | "Change project duration"
   | "Change a partner's name"
-  | "Put project on hold";
+  | "Put project on hold"
+  | "Loan Drawdown Change"
+  | "Change Loans Duration";

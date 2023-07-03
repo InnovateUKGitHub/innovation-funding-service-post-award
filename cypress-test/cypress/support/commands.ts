@@ -129,6 +129,11 @@ const validationMessage = (message: string) => {
   cy.getByQA("validation-summary").contains(message);
 };
 
+const heading = (title: string) => {
+  cy.log("**heading**");
+  cy.get("h1").contains(title);
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
@@ -147,3 +152,4 @@ Cypress.Commands.add("selectTile", selectTile);
 Cypress.Commands.add("deletePcr", deletePcr);
 Cypress.Commands.add("validationLink", validationLink);
 Cypress.Commands.add("validationMessage", validationMessage);
+Cypress.Commands.add("heading", heading);

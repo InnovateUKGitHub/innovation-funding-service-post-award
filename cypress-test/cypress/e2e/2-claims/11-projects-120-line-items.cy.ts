@@ -18,6 +18,6 @@ describe("claims > Add 120 line items", () => {
 
   it("Should save and continue having deleted the line items", () => {
     cy.get("button").contains("Save and return to claims").click();
-    cy.get("h1").contains("Costs to be claimed");
+    cy.heading("Costs to be claimed");
   });
 });

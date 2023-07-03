@@ -14,7 +14,7 @@ describe("Impact Management > Claim - PCF received", () => {
   });
 
   it("Should display the project dashboard including project title", () => {
-    cy.get("h1").contains("Project overview");
+    cy.heading("Project overview");
     cy.getByQA("page-title").contains("CYPRESS_DO_NOT_USE_IMPACT_MANAGEMENT");
   });
 
@@ -34,7 +34,7 @@ describe("Impact Management > Claim - PCF received", () => {
 
   it("Should proceed to the Summary page", () => {
     cy.get("a").contains("Continue to summary").click();
-    cy.get("h1").contains("Claim summary");
+    cy.heading("Claim summary");
   });
 
   it("Should contain the Final claim message but not PCF guidance message", drgSummaryPageValidation);

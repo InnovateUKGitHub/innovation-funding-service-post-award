@@ -20,7 +20,7 @@ export const monitoringReportCardShouldNotExist = () => {
 
 export const shouldNavigateToProjectDashboard = () => {
   cy.get("h2").contains("Projects").click();
-  cy.get("h1").contains("Dashboard");
+  cy.heading("Dashboard");
 };
 
 export const shouldFindMatchingProjectCard = (projectCard: string) => {
@@ -65,7 +65,7 @@ export const shouldFilterProjectsUsingSearchFilter = () => {
 export const shouldNavigateToProjectOverview = () => {
   cy.get(`${projectCardCss} a`).contains(cardId).wait(500).click({ force: true });
 
-  cy.get("h1").contains("Project overview");
+  cy.heading("Project overview");
   cy.getByQA("page-title").should("contain.text", cardId);
 };
 
@@ -96,7 +96,7 @@ export const hasBroadcast = () => {
 export const accessBroadCastMessageAndAssert = () => {
   cy.get("a").contains("Read more").click();
   cy.getByQA("page-title-caption").contains("Broadcast");
-  cy.get("h1").contains("Cypress broadcast message");
+  cy.heading("Cypress broadcast message");
   ["Details", "Message"].forEach(subheader => {
     cy.get("h2").contains(subheader);
   });
@@ -109,7 +109,7 @@ export const accessBroadCastMessageAndAssert = () => {
 
 export const backToDashboard = () => {
   cy.backLink("Back to Project").click();
-  cy.get("h1").contains("Dashboard");
+  cy.heading("Dashboard");
 };
 
 export const projectDashboardFinancials = () => {

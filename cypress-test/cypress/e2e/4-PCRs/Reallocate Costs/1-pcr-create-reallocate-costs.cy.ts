@@ -76,7 +76,7 @@ describe("PCR > Reallocate Costs > Creating  PCR", () => {
   });
 
   it("Should return to 'Project change requests' screen and show a 'Delete request' button", () => {
-    cy.get("h1").contains("Project change requests");
+    cy.heading("Project change requests");
     cy.get("a").contains("Delete");
   });
 });

@@ -344,7 +344,7 @@ export const ktpAssociateEmployment = () => {
 };
 
 export const ktpHeadings = () => {
-  cy.get("h1").contains("Associate Employment");
+  cy.heading("Associate Employment");
   cy.getByQA("validation-message-content").contains("This project does not follow the normal grant calculation rules");
   cy.getByQA("validation-message-content").contains(
     "The project and any partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
@@ -354,7 +354,7 @@ export const ktpHeadings = () => {
 };
 
 export const ktpCostsToClaim = () => {
-  cy.get("h1").contains("Costs to be claimed");
+  cy.heading("Costs to be claimed");
   cy.getByQA("validation-message-content").contains("This project does not follow the normal grant calculation rules");
   cy.getByQA("validation-message-content").contains("The project and any partner may have one or more cost categories");
 };
@@ -605,14 +605,14 @@ export const queryTheClaim = () => {
 
 export const navigateBackToDash = () => {
   cy.backLink("Back to project").click();
-  cy.get("h1").contains("Project overview");
+  cy.heading("Project overview");
   cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
 };
 
 export const goToQueriedClaim = () => {
   cy.selectTile("Claims");
   cy.contains("td", "Queried by Monitoring Officer").siblings().contains("a", "Edit").click();
-  cy.get("h1").contains("Costs to be claimed");
+  cy.heading("Costs to be claimed");
   cy.get("td").contains(comments);
   cy.get("button").contains("Continue to claims documents").click();
   cy.get("a").contains("Continue to update forecast").click();
@@ -622,7 +622,7 @@ export const goToQueriedClaim = () => {
 
 export const beginEditing = () => {
   cy.get("a").contains("Edit").click();
-  cy.get("h1").contains("Costs to be claimed");
+  cy.heading("Costs to be claimed");
   cy.get("a").contains("Labour").click();
 };
 
@@ -647,7 +647,7 @@ export const saveLineItems = () => {
 
 export const removeLineItems = () => {
   cy.get("a").contains("Labour").click();
-  cy.get("h1").contains("Labour");
+  cy.heading("Labour");
   cy.get('input[name="itemCount"]').then($input => {
     const count = Number($input.val() || 0);
     for (let i = count; i > 0; i--) {
@@ -671,17 +671,17 @@ export const validateForecast = () => {
 
 export const academicForecastNavigate = () => {
   cy.backLink("Back to claims").click();
-  cy.get("h1").contains("Costs to be claimed");
+  cy.heading("Costs to be claimed");
   cy.get("button").contains("Continue to claims documents").click();
-  cy.get("h1").contains("Claim documents");
+  cy.heading("Claim documents");
   cy.get("a").contains("Continue to update forecast").click();
 };
 
 export const drgClaimTwo = () => {
   cy.selectTile("Claims");
-  cy.get("h1").contains("Claims");
+  cy.heading("Claims");
   cy.tableCell("Draft").siblings().contains("Edit").click();
-  cy.get("h1").contains("Costs to be claimed");
+  cy.heading("Costs to be claimed");
   cy.get("h2").contains("Period 2");
 };
 

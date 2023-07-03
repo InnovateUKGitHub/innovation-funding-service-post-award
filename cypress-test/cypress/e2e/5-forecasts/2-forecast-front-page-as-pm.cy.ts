@@ -19,13 +19,13 @@ describe("Forecast front page as PM", () => {
   });
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Forecast");
+    cy.heading("Forecast");
   });
 
   it("should show the forecast table", displayForecastTable);
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Forecast");
+    cy.heading("Forecast");
   });
 
   it("Should have the project title", shouldShowProjectTitle);

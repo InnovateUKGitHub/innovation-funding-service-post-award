@@ -12,7 +12,7 @@ describe("Project setup > Set spend profile", () => {
 
   it("Should navigate to the spend profile section", () => {
     cy.get("a").contains("Set spend profile").click();
-    cy.get("h1").contains("Spend Profile");
+    cy.heading("Spend Profile");
   });
 
   it("Should have a back option", () => {

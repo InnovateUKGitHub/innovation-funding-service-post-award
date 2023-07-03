@@ -63,7 +63,7 @@ describe("PCR > Change project scope", () => {
   );
 
   it("Should again have the project title and page heading", () => {
-    cy.get("h1").contains("Change project scope"), shouldShowProjectTitle;
+    cy.heading("Change project scope"), shouldShowProjectTitle;
   });
 
   it("Should also have a back link", () => {
@@ -86,7 +86,7 @@ describe("PCR > Change project scope", () => {
   });
 
   it("Should again have the project title and page heading", () => {
-    cy.get("h1").contains("Change project scope"), shouldShowProjectTitle;
+    cy.heading("Change project scope"), shouldShowProjectTitle;
   });
 
   it("Should mark the 'I agree with this change' checkbox and click 'Save and return to request'", () => {

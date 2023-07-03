@@ -35,7 +35,7 @@ describe("PCR > Remove partner > Begin editing the Remove a partner section", ()
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should have the page title 'Remove a partner'", () => {
-    cy.get("h1").contains("Remove a partner");
+    cy.heading("Remove a partner");
   });
 
   it("Should have a subheading for 'Select partner to remove'", () => {

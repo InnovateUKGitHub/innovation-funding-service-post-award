@@ -8,19 +8,20 @@ describe("claims > Trigger Cap Pot Message", () => {
   it("Should navigate to claims and open the Period 2 claim for AB Cad Services", () => {
     cy.selectTile("Claims");
     cy.get("td").contains("Period 2").siblings().contains("a", "Edit").click();
-    cy.get("h1").contains("Costs to be claimed");
+    cy.heading("Costs to be claimed");
   });
 
   it("Should enter costs value in the Labour category which will trigger the Cap Pot messaging", () => {
     cy.get("a").contains("Labour").click();
-    cy.get("h1").contains("Labour");
+    cy.heading("Labour");
+    cy.get("a").contains("Add a cost").click();
     cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
     cy.getByAriaLabel("value of claim line item 1").clear().type("200").wait(800);
   });
 
   it("Should save and return to the first claims screen", () => {
     cy.submitButton("Save and return to claims").click();
-    cy.get("h1").contains("Costs to be claimed");
+    cy.heading("Costs to be claimed");
   });
 
   it("Should show validation messaging around the project cap", () => {

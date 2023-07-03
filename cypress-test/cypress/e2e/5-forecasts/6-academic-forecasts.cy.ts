@@ -11,7 +11,7 @@ describe("Forecast > Academic", () => {
 
   it("Should click the Forecast tile and continue to the Forecast page", () => {
     cy.selectTile("Forecast");
-    cy.get("h1").contains("Forecast");
+    cy.heading("Forecast");
   });
 
   it("Should have a back option", () => {
@@ -36,6 +36,6 @@ describe("Forecast > Academic", () => {
 
   it("Should click 'Back to project'", () => {
     cy.backLink("Back to forecast").click();
-    cy.get("h1").contains("Forecast");
+    cy.heading("Forecast");
   });
 });

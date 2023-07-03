@@ -13,7 +13,7 @@ describe("Forecast > front page as FC", () => {
   it("should click the forecast tile", clickForecastTile);
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Forecast");
+    cy.heading("Forecast");
   });
 
   it("Should have the project title", shouldShowProjectTitle);

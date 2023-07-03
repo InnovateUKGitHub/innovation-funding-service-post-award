@@ -11,7 +11,7 @@ describe("Project setup > Provide your project location postcode", () => {
 
   it("Should navigate to 'Provide your project location postcode' section", () => {
     cy.get("a").contains("Provide your project location postcode").click();
-    cy.get("h1").contains("Provide your project location postcode");
+    cy.heading("Provide your project location postcode");
   });
 
   it("Should have a back option", () => {

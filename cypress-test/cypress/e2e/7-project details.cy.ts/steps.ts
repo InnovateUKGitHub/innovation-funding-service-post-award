@@ -287,7 +287,7 @@ export const navigateToPartnerHeadings = () => {
   cy.getByQA("partner-information").contains("EUI Small Ent Health").click();
   cy.backLink("Back to project details");
   cy.getByQA("page-title").contains("328407");
-  cy.get("h1").contains("Partner information");
+  cy.heading("Partner information");
 };
 
 export const ensureTableIsPopulated = () => {
@@ -295,5 +295,5 @@ export const ensureTableIsPopulated = () => {
     cy.getByQA("section-content").contains(item);
   });
   cy.backLink("Back to project details").click();
-  cy.get("h1").contains("Project details");
+  cy.heading("Project details");
 };

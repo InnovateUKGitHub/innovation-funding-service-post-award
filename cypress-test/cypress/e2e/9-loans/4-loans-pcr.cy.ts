@@ -17,7 +17,7 @@ describe("Loans project > PCR", () => {
   after(deletePcr);
 
   it("Should have a 'Start new request heading'", () => {
-    cy.get("h1").contains("Start a new request");
+    cy.heading("Start a new request");
   });
 
   it("Should have a back link", () => {

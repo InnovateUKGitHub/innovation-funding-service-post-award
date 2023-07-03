@@ -20,7 +20,7 @@ describe("Projects details > Many partners", () => {
   });
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Project details");
+    cy.heading("Project details");
   });
 
   it("Should have the project title", shouldShowProjectTitle);

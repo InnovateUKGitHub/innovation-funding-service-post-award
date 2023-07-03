@@ -21,7 +21,7 @@ describe("MO report > can start a new report", () => {
   it("Should click the 'Start a new report' button", clickStartNewReportButton);
 
   it("Should land on the Monitoring report page and display the heading 'Monitoring report'", () => {
-    cy.get("h1").contains("Monitoring report");
+    cy.heading("Monitoring report");
   });
 
   it("Should have the project title", shouldShowProjectTitle);

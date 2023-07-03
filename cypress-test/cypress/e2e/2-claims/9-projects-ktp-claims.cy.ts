@@ -43,7 +43,7 @@ describe("claims > KTP", () => {
 
   it("Should click 'Continue to claims documents' and land on the right page", () => {
     cy.get("button").contains("Continue to claims documents").click();
-    cy.get("h1").contains("Claim documents");
+    cy.heading("Claim documents");
   });
 
   it("Should have KTP guidance messaging around document uploads", ktpGuidance);
@@ -57,7 +57,7 @@ describe("claims > KTP", () => {
 
   it("Should continue to summary and display the correct messaging", () => {
     cy.get("button").contains("Continue to summary").click({ force: true });
-    cy.get("h1").contains("Claim summary");
+    cy.heading("Claim summary");
   });
 
   it("Should display correct messaging", () => {

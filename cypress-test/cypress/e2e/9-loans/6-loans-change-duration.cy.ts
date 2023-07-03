@@ -25,7 +25,7 @@ describe("Loans project > Change Loans Duration", () => {
   });
 
   it("Should load the 'Request' page", () => {
-    cy.get("h1").contains("Request");
+    cy.heading("Request");
   });
 
   it("Should have a back option", () => {
@@ -41,7 +41,7 @@ describe("Loans project > Change Loans Duration", () => {
   });
 
   it("Should display the page heading 'Change Loans Duration'", () => {
-    cy.get("h1").contains("Change Loans Duration");
+    cy.heading("Change Loans Duration");
   });
 
   it("Should contain request guidance", loanDurationGuidance);
@@ -64,7 +64,7 @@ describe("Loans project > Change Loans Duration", () => {
   });
 
   it("Should display the page heading 'Change Loans Duration'", () => {
-    cy.get("h1").contains("Change Loans Duration");
+    cy.heading("Change Loans Duration");
   });
 
   it("Should display an updated loan duration table reflecting the changes we've just made", updatedLoansTable);

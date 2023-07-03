@@ -25,7 +25,7 @@ describe("Loans project > Loan Drawdown Change", () => {
   });
 
   it("Should load the 'Request' page", () => {
-    cy.get("h1").contains("Request");
+    cy.heading("Request");
   });
 
   it("Should have a back option", () => {
@@ -41,7 +41,7 @@ describe("Loans project > Loan Drawdown Change", () => {
   });
 
   it("Should display the page heading 'Loan Drawdown Change", () => {
-    cy.get("h1").contains("Loan Drawdown Change");
+    cy.heading("Loan Drawdown Change");
   });
 
   it("Has a project title", () => {
@@ -74,7 +74,7 @@ describe("Loans project > Loan Drawdown Change", () => {
   });
 
   it("Should display a Loan Drawdown Change title", () => {
-    cy.get("h1").contains("Loan Drawdown Change");
+    cy.heading("Loan Drawdown Change");
   });
 
   it("Should display the loan edit table", amendLoansTable);

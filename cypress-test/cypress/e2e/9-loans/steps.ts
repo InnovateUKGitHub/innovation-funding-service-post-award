@@ -53,7 +53,7 @@ export const learnFiles = () => {
 
 export const drawdownCard = () => {
   cy.get("a").contains("Drawdowns").click();
-  cy.get("h1").contains("Drawdowns");
+  cy.heading("Drawdowns");
 };
 
 export const drawdownTable = () => {
@@ -86,12 +86,12 @@ export const drawdownTable = () => {
 
 export const requestDrawdown = () => {
   cy.get("a").contains("Request").click();
-  cy.get("h1").contains("Drawdown");
+  cy.heading("Drawdown");
 };
 
 export const viewDrawdown = () => {
   cy.get("a").contains("View").click();
-  cy.get("h1").contains("Drawdown");
+  cy.heading("Drawdown");
 };
 
 export const fcDrawdownGuidance = () => {
@@ -430,9 +430,9 @@ export const markAndReturn = () => {
 export const assertForMissingPcr = () => {
   cy.clickCheckBox("Change project scope");
   cy.get("button").contains("Create request").click();
-  cy.get("h1").contains("Request");
+  cy.heading("Request");
   cy.getByQA("button_return-qa").contains("Save and return to requests").click();
-  cy.get("h1").contains("Project change requests");
+  cy.heading("Project change requests");
   cy.get("a").contains("Create request").click();
   cy.get("span").contains("Learn about why some PCR types are missing").click();
   cy.get("p").contains("Some types are unavailable because they have already been added to another PCR.");
@@ -453,5 +453,5 @@ export const hybridButtonAssertion = () => {
   cy.get("a")
     .contains(/^Request$/)
     .click();
-  cy.get("h1").contains("Drawdown");
+  cy.heading("Drawdown");
 };

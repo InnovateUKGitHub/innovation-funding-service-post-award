@@ -10,7 +10,7 @@ export const moClaimTidyUp = (claimType: string) => {
         cy.get("a").contains("Continue to update forecast").click();
         cy.get("button").contains("Continue to summary").click();
         cy.submitButton("Submit claim").click();
-        cy.get("h1").contains("Claims");
+        cy.heading("Claims");
         cy.switchUserTo("testman2@testing.com");
       } else {
         cy.switchUserTo("testman2@testing.com");

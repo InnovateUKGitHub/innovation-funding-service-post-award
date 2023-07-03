@@ -16,7 +16,7 @@ describe("Project details > Edit partner information", () => {
   });
 
   it("Should display the project details page", () => {
-    cy.get("h1").contains("Project details");
+    cy.heading("Project details");
   });
 
   it("Should have the project title", shouldShowProjectTitle);

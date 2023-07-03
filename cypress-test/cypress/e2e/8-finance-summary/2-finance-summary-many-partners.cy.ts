@@ -26,7 +26,7 @@ describe("Finance summary > Many partners", () => {
   });
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Finance summary");
+    cy.heading("Finance summary");
   });
 
   it("Should contain the correct table headers for 'Project costs to date' table", projCostsHeaders);

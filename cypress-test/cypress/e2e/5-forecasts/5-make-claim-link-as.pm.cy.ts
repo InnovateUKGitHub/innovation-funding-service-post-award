@@ -31,7 +31,7 @@ describe("Forecast > link to claims page as PM", () => {
   });
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Forecast");
+    cy.heading("Forecast");
   });
 
   it("should show the forecast table", displayForecastTable);
@@ -39,7 +39,7 @@ describe("Forecast > link to claims page as PM", () => {
   it("should click the 'make a claim' link and land you on the allClaimsDashboard page", makeClaimPM);
 
   it("Should display the claims header", () => {
-    cy.get("h1").contains("Claims");
+    cy.heading("Claims");
   });
 
   it("Should have the project title", shouldShowProjectTitle);

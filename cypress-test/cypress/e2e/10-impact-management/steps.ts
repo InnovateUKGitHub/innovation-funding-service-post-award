@@ -55,17 +55,17 @@ export const selectFileDescription = () => {
 export const navigateToEUIClaims = () => {
   cy.switchUserTo(euiFC);
   cy.selectTile("Claims");
-  cy.get("h1").contains("Claims");
+  cy.heading("Claims");
   cy.getByQA("current-claims-table").contains("Edit").click();
-  cy.get("h1").contains("Costs to be claimed");
+  cy.heading("Costs to be claimed");
 };
 
 export const navigateToDRGClaims = () => {
   cy.switchUserTo(drgFC);
   cy.selectTile("Claims");
-  cy.get("h1").contains("Claims");
+  cy.heading("Claims");
   cy.getByQA("current-claims-table").contains("Edit").click();
-  cy.get("h1").contains("Costs to be claimed");
+  cy.heading("Costs to be claimed");
 };
 
 export const validatePage = () => {
@@ -76,14 +76,14 @@ export const validatePage = () => {
 
 export const proceedToDocuments = () => {
   cy.get("button").contains("Continue to claims documents").click();
-  cy.get("h1").contains("Claim documents");
+  cy.heading("Claim documents");
   cy.getByQA("validation-message-content").contains(pcfNotReceivedMessage);
   cy.getByQA("validation-message").contains(finalClaimMessage);
 };
 
 export const proceedToDRGDocuments = () => {
   cy.get("button").contains("Continue to claims documents").click();
-  cy.get("h1").contains("Claim documents");
+  cy.heading("Claim documents");
   cy.getByQA("validation-message").contains(finalClaimMessage);
 };
 

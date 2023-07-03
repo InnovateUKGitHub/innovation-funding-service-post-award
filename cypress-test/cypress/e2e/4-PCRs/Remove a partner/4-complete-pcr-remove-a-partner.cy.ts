@@ -49,7 +49,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should have the page title 'Remove a partner'", () => {
-    cy.get("h1").contains("Remove a partner");
+    cy.heading("Remove a partner");
   });
 
   it("Should display a remove partner table containing information on the request entered so far", removePartnerTable);

@@ -17,7 +17,7 @@ describe("Project setup > Provide your bank details", () => {
 
   it("Should navigate to 'Provide your bank details' section", () => {
     cy.get("a").contains("Provide your bank details").click();
-    cy.get("h1").contains("Provide your bank details");
+    cy.heading("Provide your bank details");
   });
 
   it("Should have a back option", () => {
@@ -27,7 +27,7 @@ describe("Project setup > Provide your bank details", () => {
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should have the page title", () => {
-    cy.get("h1").contains("Provide your bank details");
+    cy.heading("Provide your bank details");
   });
 
   it("Should have guidance information", () => {

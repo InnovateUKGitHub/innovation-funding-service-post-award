@@ -13,7 +13,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   it("Should have correct project title", shouldShowProjectTitle);
 
   it("Should have Claims summary header", () => {
-    cy.get("h1").contains("Claim summary");
+    cy.heading("Claim summary");
   });
 
   it("Should show the Period heading", () => {

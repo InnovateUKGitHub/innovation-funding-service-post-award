@@ -38,12 +38,12 @@ export const makeClaimPM = () => {
 
 export const clickEditDisplayClaim = () => {
   cy.get("a").contains("Edit").click();
-  cy.get("h1").contains("Costs to be claimed");
+  cy.heading("Costs to be claimed");
 };
 
 export const clickViewDisplayClaim = () => {
   cy.get("a").contains("View").click();
-  cy.get("h1").contains("Claim");
+  cy.heading("Claim");
 };
 
 export const shouldShowAllAccordion = () => {

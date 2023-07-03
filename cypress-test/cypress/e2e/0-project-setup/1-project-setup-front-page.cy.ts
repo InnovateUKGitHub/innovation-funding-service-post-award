@@ -10,7 +10,7 @@ describe("Project setup > general", () => {
   });
 
   it("Should have a 'Project setup' paging heading with guidance text", () => {
-    cy.get("h1").contains("Project setup");
+    cy.heading("Project setup");
     cy.get("p").contains("You need to give us some information so that we can complete project setup.");
   });
 

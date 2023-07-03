@@ -55,7 +55,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Add a partner' heading", () => {
-    cy.get("h1").contains("Add a partner");
+    cy.heading("Add a partner");
   });
 
   it("Should have a 'Mark as complete box'", () => {

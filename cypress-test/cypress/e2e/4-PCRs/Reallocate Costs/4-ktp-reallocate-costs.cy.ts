@@ -28,7 +28,7 @@ describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
 
   it("Should click 'Reallocate project costs' and continue to the next page", () => {
     cy.get("a").contains("Reallocate project costs").click();
-    cy.get("h1").contains("Reallocate project costs");
+    cy.heading("Reallocate project costs");
   });
 
   it("Should show the KTP email address", () => {
@@ -37,7 +37,7 @@ describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
 
   it("Should select EUI Small Ent Health and follow to the next page", () => {
     cy.get("a").contains("EUI Small Ent Health (Lead)").click();
-    cy.get("h1").contains("Reallocate costs");
+    cy.heading("Reallocate costs");
   });
 
   it("Should display the correct messaging for KTP", correctKtpMessaging);
@@ -48,7 +48,7 @@ describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
 
   it("Should click 'Save and return to request'", () => {
     cy.get("button").contains("Save and return to reallocate project costs").click({ force: true });
-    cy.get("h1").contains("Reallocate project costs");
+    cy.heading("Reallocate project costs");
   });
 
   it(

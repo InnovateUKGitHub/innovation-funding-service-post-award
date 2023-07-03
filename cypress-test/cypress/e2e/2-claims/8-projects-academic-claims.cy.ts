@@ -40,7 +40,7 @@ describe("claims > edit claims as FC", () => {
   it("Should still display the project title and cost category title", shouldShowProjectTitle);
 
   it("Should display the cost category heading", () => {
-    cy.get("h1").contains("Directly incurred - Staff");
+    cy.heading("Directly incurred - Staff");
   });
 
   it("Should show relevant messaging at the top of the page", () => {

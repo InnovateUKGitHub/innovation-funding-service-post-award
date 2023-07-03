@@ -61,7 +61,7 @@ describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs ta
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Reallocate project costs' heading", () => {
-    cy.get("h1").contains("Reallocate project costs");
+    cy.heading("Reallocate project costs");
   });
 
   it("Should show correct table headers", reallocateCostsTableHeaders);

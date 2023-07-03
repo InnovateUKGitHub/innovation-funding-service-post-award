@@ -20,7 +20,7 @@ describe("PCR > Project Change Request front page", () => {
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Project change requests");
+    cy.heading("Project change requests");
   });
 
   it("Should display a table containing any ongoing requests", () => {
@@ -42,7 +42,7 @@ describe("PCR > Project Change Request front page", () => {
   it("Should display the project title", shouldShowProjectTitle);
 
   it("Should show the page title", () => {
-    cy.get("h1").contains("Start a new request");
+    cy.heading("Start a new request");
   });
 
   it("Should display a 'before you submit' message", beforeYouSubmit);

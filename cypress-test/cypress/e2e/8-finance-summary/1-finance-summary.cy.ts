@@ -20,7 +20,7 @@ describe("Finance summary", () => {
   });
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Finance summary");
+    cy.heading("Finance summary");
   });
 
   it("Should display the project period subheading and date", periodSubWithDate);

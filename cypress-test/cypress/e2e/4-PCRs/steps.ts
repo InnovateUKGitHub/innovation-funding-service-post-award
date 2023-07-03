@@ -178,11 +178,11 @@ export const clickCreateRequestButtonProceed = () => {
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
   cy.submitButton("Create request").click();
   cy.wait("@pcrPrepare");
-  cy.get("h1").should("contain.text", "Request");
+  cy.heading("Request");
 };
 
 export const requestHeadingDetailsHeading = () => {
-  cy.get("h1").contains("Request");
+  cy.heading("Request");
   cy.get("h2").contains("Details");
 };
 
@@ -240,12 +240,12 @@ export const saveContinueSaveSummary = () => {
 };
 
 export const stateAidAddPartnerHeading = () => {
-  cy.get("h1").contains("Add a partner");
+  cy.heading("Add a partner");
   cy.get("h2").contains("State aid eligibility");
 };
 
 export const nonAidAddPartnerHeading = () => {
-  cy.get("h1").contains("Add a partner");
+  cy.heading("Add a partner");
   cy.get("h2").contains("Non-aid funding");
 };
 
@@ -257,7 +257,7 @@ export const stateAidFurtherInfo = () => {
 };
 
 export const addPartnerCompanyHouseHeader = () => {
-  cy.get("h1").contains("Add a partner");
+  cy.heading("Add a partner");
   cy.get("h2").contains("Company house");
 };
 
@@ -326,7 +326,7 @@ export const reallocateCostsGiveUsInfoContinue = () => {
 };
 
 export const reallocateCostsAndPartner = () => {
-  cy.get("h1").contains("Reallocate costs");
+  cy.heading("Reallocate costs");
   cy.get("h2").contains("EUI Small Ent Health");
 };
 
@@ -386,7 +386,7 @@ export const navigateToPartnerOrgPage = () => {
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
   cy.submitButton("Create request").click();
   cy.wait("@pcrPrepare");
-  cy.get("h1").should("contain.text", "Request");
+  cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
@@ -409,7 +409,7 @@ export const navigateToFinancialsPage = () => {
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
   cy.submitButton("Create request").click();
   cy.wait("@pcrPrepare");
-  cy.get("h1").should("contain.text", "Request");
+  cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
@@ -436,7 +436,7 @@ export const navigateToPartnerLocation = () => {
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
   cy.submitButton("Create request").click();
   cy.wait("@pcrPrepare");
-  cy.get("h1").should("contain.text", "Request");
+  cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
@@ -468,7 +468,7 @@ export const navigateToPartnerPerson = () => {
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
   cy.submitButton("Create request").click();
   cy.wait("@pcrPrepare");
-  cy.get("h1").should("contain.text", "Request");
+  cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
@@ -505,7 +505,7 @@ export const navigateToPartnerCosts = () => {
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
   cy.submitButton("Create request").click();
   cy.wait("@pcrPrepare");
-  cy.get("h1").should("contain.text", "Request");
+  cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
@@ -782,7 +782,7 @@ export const headingAndGuidance = () => {
         cy.get("li").contains(bullet);
       },
     ),
-    cy.get("h1").contains("Change project scope");
+    cy.heading("Change project scope");
 };
 
 export const proposedDescription = () => {
@@ -918,23 +918,23 @@ export const saveAndReturn = () => {
   cy.clickCheckBox("I agree with this change");
   cy.wait(500);
   cy.get("button").contains("Save and return to request").click({ force: true });
-  cy.get("h1").contains("Request");
+  cy.heading("Request");
 };
 
 export const changeNameHeadings = () => {
-  cy.get("h1").contains("Change a partner's name");
+  cy.heading("Change a partner's name");
   cy.backLink("Back to request");
   shouldShowProjectTitle;
 };
 
 export const changeDurationHeadings = () => {
-  cy.get("h1").contains("Change project duration");
+  cy.heading("Change project duration");
   cy.backLink("Back to request");
   shouldShowProjectTitle;
 };
 
 export const projectOnHoldHeadings = () => {
-  cy.get("h1").contains("Put project on hold");
+  cy.heading("Put project on hold");
   cy.backLink("Back to request");
   shouldShowProjectTitle;
 };
@@ -951,7 +951,7 @@ export const saveContinueProceed = () => {
   cy.get("button").contains("Save and continue").click();
   cy.get("h2").contains("Upload change of name certificate");
   shouldShowProjectTitle;
-  cy.get("h1").contains("Change a partner's name");
+  cy.heading("Change a partner's name");
 };
 
 export const uploadNameChange = () => {
@@ -986,7 +986,7 @@ export const summaryOfChanges = () => {
 };
 
 export const assertChangeNamePage = () => {
-  cy.get("h1").contains("Change a partner's name");
+  cy.heading("Change a partner's name");
   cy.backLink("Back to request");
   shouldShowProjectTitle;
 };
@@ -1123,7 +1123,7 @@ export const validateChangeName = () => {
   cy.get("button").contains("Save and return to request").click();
   cy.validationLink("Enter a new partner name");
   cy.backLink("Back to request").click();
-  cy.get("h1").contains("Request");
+  cy.heading("Request");
   cy.get("a").contains("Change a partner's name").click();
   cy.getByQA("newPartnerName").contains("Edit").click();
 };
@@ -1132,7 +1132,7 @@ export const clearAndValidate = () => {
   cy.get("textarea").contains("Hello! I am the public description for this Cypress project.").clear();
   cy.wait(500);
   cy.submitButton("Save and continue").click();
-  cy.get("h1").contains("Change project scope");
+  cy.heading("Change project scope");
   cy.get("textarea").contains("Howdy! I am the public summary for this Cypress project.").clear();
   cy.wait(500);
   cy.submitButton("Save and continue").click();
@@ -1225,7 +1225,7 @@ export const submitWithoutCompleting = () => {
 export const backOutCreateNewPcr = () => {
   cy.backLink("Back to project change requests").click();
   cy.get("a").contains("Create request").click();
-  cy.get("h1").contains("Start a new request");
+  cy.heading("Start a new request");
 };
 
 export const showMultiplePcrInfo = () => {
@@ -1239,18 +1239,18 @@ export const showMultiplePcrInfo = () => {
   cy.get("li").contains(pcrArray[0]);
   cy.get("li").contains(pcrArray[3]);
   cy.get("a").contains("Cancel").click();
-  cy.get("h1").contains("Project change requests");
+  cy.heading("Project change requests");
 };
 
 export const backOutAndDelete = () => {
   cy.backLink("Back to project change requests").click();
-  cy.get("h1").contains("Project change requests");
+  cy.heading("Project change requests");
   cy.get("td").contains("Draft").siblings().contains("a", "Delete").click();
 };
 
 export const verifyDeletePageLoads = () => {
   cy.backLink("Back to project change requests");
-  cy.get("h1").contains("Delete draft request");
+  cy.heading("Delete draft request");
   shouldShowProjectTitle;
 };
 
@@ -1269,7 +1269,7 @@ export const validateTable = () => {
 
 export const deleteAndConfirm = () => {
   cy.get("button").contains("Delete request").click();
-  cy.get("h1").contains("Project change requests");
+  cy.heading("Project change requests");
   multiPcrArray.forEach(type => {
     cy.getByQA("pcrs-active").should("not.contain", type);
   });

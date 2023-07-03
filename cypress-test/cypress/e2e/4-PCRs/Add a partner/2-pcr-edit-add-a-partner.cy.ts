@@ -38,7 +38,7 @@ describe("PCR > Add partner > Edit PCR", () => {
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Add a partner' heading and 'New partner information' heading", () => {
-    cy.get("h1").contains("Add a partner");
+    cy.heading("Add a partner");
     cy.get("h2").contains("New partner information");
   });
 

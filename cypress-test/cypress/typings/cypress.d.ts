@@ -87,6 +87,8 @@ declare global {
       validationLink(message: string): Chainable<Element>;
 
       validationMessage(message: string): Chainable<Element>;
+
+      heading(title: string): Chainable<Element>;
     }
   }
 }

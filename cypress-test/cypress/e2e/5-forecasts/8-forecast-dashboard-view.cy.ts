@@ -11,7 +11,7 @@ describe("Forecast > Partner table as PM/MO before navigating to forecast", () =
 
   it("Should click the Forecast tile and bring up the partner table", () => {
     cy.selectTile("Forecasts");
-    cy.get("h1").contains("Forecasts");
+    cy.heading("Forecasts");
   });
 
   it("Should display the partner table with the correct headers", () => {

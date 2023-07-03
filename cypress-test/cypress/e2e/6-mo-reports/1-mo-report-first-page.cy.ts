@@ -25,7 +25,7 @@ describe("MO report > can navigate to the MO Reports tile", () => {
   it("Should have the project title", shouldShowProjectTitle);
 
   it("Should display a page heading", () => {
-    cy.get("h1").contains("Monitoring reports");
+    cy.heading("Monitoring reports");
   });
 
   it("Should have a guidance message", () => {
