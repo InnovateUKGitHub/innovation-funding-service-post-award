@@ -3,21 +3,18 @@
 exports[`getPartnerRoles should map from the partnerRoles object to a list of partner roles 1`] = `
 Array [
   Object {
-    "accountId": "11",
     "isFc": true,
     "isMo": false,
     "isPm": false,
     "partnerId": "1",
   },
   Object {
-    "accountId": "12",
     "isFc": false,
     "isMo": false,
     "isPm": true,
     "partnerId": "2",
   },
   Object {
-    "accountId": "13",
     "isFc": false,
     "isMo": true,
     "isPm": false,
