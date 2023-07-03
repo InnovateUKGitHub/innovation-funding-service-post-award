@@ -16,7 +16,7 @@ import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusCha
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { apiClient } from "@ui/apiClient";
+import { clientsideApiClient } from "@ui/apiClient";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { useContent } from "@ui/hooks/content.hook";
@@ -206,7 +206,7 @@ export const useOnUpdateClaimReview = (
   const navigate = useNavigate();
   return useOnUpdate<FormValues, Pick<ClaimDto, "status" | "comments" | "partnerId">>({
     req(data) {
-      return apiClient.claims.update({
+      return clientsideApiClient.claims.update({
         partnerId,
         projectId,
         periodId,

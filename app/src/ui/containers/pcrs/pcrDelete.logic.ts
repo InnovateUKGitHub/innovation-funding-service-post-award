@@ -6,8 +6,8 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { useNavigate } from "react-router-dom";
-import { apiClient } from "@ui/apiClient";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
+import { clientsideApiClient } from "@ui/apiClient";
 
 export const usePcrDeleteQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<PcrDeleteQuery>(pcrDeleteQuery, { projectId, pcrId }, { fetchPolicy: "network-only" });
@@ -29,7 +29,7 @@ export const usePcrDeleteQuery = (projectId: ProjectId, pcrId: PcrId) => {
 export const useOnDeletePcr = (projectId: ProjectId, pcrId: PcrId, navigateTo: string) => {
   const navigate = useNavigate();
   return useOnUpdate({
-    req: () => apiClient.pcrs.delete({ projectId, id: pcrId }),
+    req: () => clientsideApiClient.pcrs.delete({ projectId, id: pcrId }),
     onSuccess: () => navigate(navigateTo),
   });
 };
