@@ -21,6 +21,7 @@ import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrPrepareErrorMap, pcrPrepareSchema } from "./projectChangeRequestPrepare.zod";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
+import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -33,8 +34,10 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
     props.pcrId,
   );
 
+  const getPcRTypeName = useGetPcrTypeName();
+
   const pcrItems = pcr.items.map((x, i) => ({
-    shortName: x.shortName,
+    shortName: getPcRTypeName(x.shortName),
     status: getPcrItemTaskStatus(x.status),
   }));
 
