@@ -17,8 +17,8 @@ const ProjectChangeRequestPrepareForm = ({
   editor,
   onChange,
 }: {
-  pcr: PCRDto;
-  project: ProjectDto;
+  pcr: Pick<PCRDto, "status">;
+  project: Pick<ProjectDto, "monitoringLevel">;
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   onChange: (save: boolean, dto: PCRDto) => void;
 }) => {
