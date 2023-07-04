@@ -49,13 +49,13 @@ export interface EditClaimDetailsParams {
 }
 
 export interface EditClaimLineItemsData {
-  project: Pending<ProjectDto>;
-  claimDetails: Pending<ClaimDetailsDto>;
-  claimOverrides: Pending<ClaimOverrideRateDto>;
-  costCategories: Pending<CostCategoryDto[]>;
-  editor: Pending<IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>>;
-  forecastDetail: Pending<ForecastDetailsDTO>;
-  documents: Pending<DocumentSummaryDto[]>;
+  project: ProjectDto;
+  claimDetails: ClaimDetailsDto;
+  claimOverrides: ClaimOverrideRateDto;
+  costCategories: CostCategoryDto[];
+  editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
+  forecastDetail: ForecastDetailsDTO;
+  documents: DocumentSummaryDto[];
   maxClaimLineItems: number;
 }
 
@@ -100,28 +100,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
   }
 
   public render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      claimDetails: this.props.claimDetails,
-      claimOverrides: this.props.claimOverrides,
-      costCategories: this.props.costCategories,
-      forecastDetail: this.props.forecastDetail,
-      documents: this.props.documents,
-      editor: this.props.editor,
-    });
-
-    return <PageLoader pending={combined} render={data => this.renderContents(data)} />;
-  }
-
-  private renderContents({
-    project,
-    costCategories,
-    documents,
-    forecastDetail,
-    claimOverrides,
-    claimDetails,
-    editor,
-  }: CombinedData) {
+    const { project, costCategories, documents, forecastDetail, claimOverrides, claimDetails, editor }: CombinedData =
+      this.props;
     const back = this.props.routes.prepareClaim.getLink({
       projectId: project.id,
       partnerId: this.props.partnerId,
@@ -683,56 +663,66 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
   const navigate = useNavigate();
   const config = stores.config.getConfig();
 
-  return (
-    <EditClaimLineItemsComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
-      forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
-      claimOverrides={stores.claimOverrides.getAllByPartner(props.partnerId)}
-      documents={stores.claimDetailDocuments.getClaimDetailDocuments(
-        props.projectId,
-        props.partnerId,
-        props.periodId,
-        props.costCategoryId,
-      )}
-      editor={stores.claimDetails.getClaimDetailsEditor(
-        props.projectId,
-        props.partnerId,
-        props.periodId,
-        props.costCategoryId,
-        (dto: ClaimDetailsDto) => {
-          if (isClient) return;
-          const currentItemsLength = dto.lineItems.length;
-          const maximumItemsLength = config.options.nonJsMaxClaimLineItems;
-          const extraRows = maximumItemsLength - currentItemsLength;
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    claimDetails: stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId),
+    claimOverrides: stores.claimOverrides.getAllByPartner(props.partnerId),
+    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+    forecastDetail: stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId),
+    documents: stores.claimDetailDocuments.getClaimDetailDocuments(
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      props.costCategoryId,
+    ),
+    editor: stores.claimDetails.getClaimDetailsEditor(
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      props.costCategoryId,
+      (dto: ClaimDetailsDto) => {
+        if (isClient) return;
+        const currentItemsLength = dto.lineItems.length;
+        const maximumItemsLength = config.options.nonJsMaxClaimLineItems;
+        const extraRows = maximumItemsLength - currentItemsLength;
 
-          const extraLineItems: ClaimLineItemDto[] = range(extraRows).map(() => ({
-            costCategoryId: props.costCategoryId,
-            partnerId: props.partnerId,
-            periodId: props.periodId,
-            id: "",
-            description: "",
-            value: null as unknown as number,
-            lastModifiedDate: null as unknown as Date,
-            isAuthor: true,
-          }));
-          dto.lineItems.push(...extraLineItems);
-        },
+        const extraLineItems: ClaimLineItemDto[] = range(extraRows).map(() => ({
+          costCategoryId: props.costCategoryId,
+          partnerId: props.partnerId,
+          periodId: props.periodId,
+          id: "",
+          description: "",
+          value: null as unknown as number,
+          lastModifiedDate: null as unknown as Date,
+          isAuthor: true,
+        }));
+        dto.lineItems.push(...extraLineItems);
+      },
+    ),
+  });
+
+  const onUpdate = (saving: boolean, dto: ClaimDetailsDto, goToUpload?: boolean) =>
+    stores.claimDetails.updateClaimDetailsEditor(
+      saving,
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      props.costCategoryId,
+      dto,
+      () => navigate(getDestination(props, goToUpload).path),
+    );
+
+  return (
+    <PageLoader
+      pending={combined}
+      render={data => (
+        <EditClaimLineItemsComponent
+          onUpdate={onUpdate}
+          maxClaimLineItems={config.options.maxClaimLineItems}
+          {...data}
+          {...props}
+        />
       )}
-      onUpdate={(saving, dto, goToUpload) =>
-        stores.claimDetails.updateClaimDetailsEditor(
-          saving,
-          props.projectId,
-          props.partnerId,
-          props.periodId,
-          props.costCategoryId,
-          dto,
-          () => navigate(getDestination(props, goToUpload).path),
-        )
-      }
-      maxClaimLineItems={config.options.maxClaimLineItems} // TODO when this is refactored to a function component, we can replace this param with useStores inside the component
     />
   );
 };
