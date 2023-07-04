@@ -49,24 +49,27 @@ export interface EditClaimDetailsParams {
 }
 
 export interface EditClaimLineItemsData {
-  project: ProjectDto;
-  claimDetails: ClaimDetailsDto;
+  project: Pick<ProjectDto, "id" | "competitionType" | "title" | "projectNumber" | "isNonFec">;
+  claimDetails: Pick<ClaimDetailsDto, "isAuthor" | "value">;
   claimOverrides: ClaimOverrideRateDto;
-  costCategories: CostCategoryDto[];
+  costCategories: Pick<CostCategoryDto, "id" | "type" | "name" | "hintText" | "isCalculated">[];
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
-  forecastDetail: ForecastDetailsDTO;
-  documents: DocumentSummaryDto[];
+  forecastDetail: Pick<ForecastDetailsDTO, "value">;
+  documents: Pick<
+    DocumentSummaryDto,
+    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner" | "description"
+  >[];
   maxClaimLineItems: number;
 }
 
 interface CombinedData {
-  project: ProjectDto;
-  claimDetails: ClaimDetailsDto;
-  claimOverrides: ClaimOverrideRateDto;
-  costCategories: CostCategoryDto[];
-  forecastDetail: ForecastDetailsDTO;
-  documents: DocumentSummaryDto[];
-  editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
+  project: EditClaimLineItemsData["project"];
+  claimDetails: EditClaimLineItemsData["claimDetails"];
+  claimOverrides: EditClaimLineItemsData["claimOverrides"];
+  costCategories: EditClaimLineItemsData["costCategories"];
+  forecastDetail: EditClaimLineItemsData["forecastDetail"];
+  documents: EditClaimLineItemsData["documents"];
+  editor: EditClaimLineItemsData["editor"];
 }
 
 export interface EditClaimLineItemsCallbacks {
@@ -123,7 +126,7 @@ const EditClaimLineItemsComponent = (
       }
       error={editor.error}
       validator={editor.validator}
-      pageTitle={<Title {...project} heading={costCategory.name} />}
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} heading={costCategory.name} />}
     >
       <AwardRateOverridesMessage
         claimOverrides={claimOverrides}
@@ -198,8 +201,11 @@ const EditClaimLineItemsComponent = (
 
 const renderTable = (
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
-  forecastDetail: ForecastDetailsDTO,
-  documents: DocumentSummaryDto[],
+  forecastDetail: Pick<ForecastDetailsDTO, "value">,
+  documents: Pick<
+    DocumentSummaryDto,
+    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner" | "description"
+  >[],
   competitionType: string,
   showAddRemove: boolean,
   maxClaimLineItems: number,
@@ -279,7 +285,10 @@ const renderTable = (
 
 const getCompetitionRenderCalculatedDocumentSection = (
   competitionType: string,
-  documents: DocumentSummaryDto[],
+  documents: Pick<
+    DocumentSummaryDto,
+    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner" | "description"
+  >[],
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
   onUpdate: EditClaimLineItemsCallbacks["onUpdate"],
 ) => {
@@ -360,7 +369,10 @@ const getHintContent = (isKTP: boolean, isCombinationOfSBRI: boolean): ContentSe
 };
 
 const renderDocuments = (
-  documents: DocumentSummaryDto[],
+  documents: Pick<
+    DocumentSummaryDto,
+    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner" | "description"
+  >[],
   isCombinationOfSBRI: boolean,
   editorData: CombinedData["editor"],
   onUpdate: EditClaimLineItemsCallbacks["onUpdate"],
@@ -441,7 +453,7 @@ const renderNegativeClaimWarning = (editor: ClaimDetailsDto) => {
 };
 
 const renderDescription = (
-  item: ClaimLineItemDto,
+  item: Pick<ClaimLineItemDto, "description" | "id">,
   index: { column: number; row: number },
   validation: ClaimLineItemDtoValidator,
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
@@ -506,8 +518,8 @@ const updateItem = (
 };
 
 const renderFooters = (
-  data: ClaimLineItemDto[],
-  forecastDetail: ForecastDetailsDTO,
+  data: Pick<ClaimLineItemDto, "value">[],
+  forecastDetail: Pick<ForecastDetailsDTO, "value">,
   showAddRemove: boolean,
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
   maxClaimLineItems: number,
@@ -617,10 +629,13 @@ const renderFooters = (
 };
 
 const renderCalculated = (
-  costCategory: CostCategoryDto,
-  claimDetails: ClaimDetailsDto,
-  forecastDetail: ForecastDetailsDTO,
-  documents: DocumentSummaryDto[],
+  costCategory: Pick<CostCategoryDto, "id" | "name">,
+  claimDetails: Pick<ClaimDetailsDto, "value">,
+  forecastDetail: Pick<ForecastDetailsDTO, "value">,
+  documents: Pick<
+    DocumentSummaryDto,
+    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner" | "description"
+  >[],
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
   competitionType: string,
   onUpdate: EditClaimLineItemsCallbacks["onUpdate"],
