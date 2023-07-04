@@ -114,27 +114,23 @@ export const isApiError = (err: unknown): err is IAppError => {
 
 type ValidationError = {
   key: string;
-  message: string;
+  message: string | null;
 };
 
 /**
  * converts from generated react hook form errors to an array of messages and keys for creating the error message and links in the Validation Summary
  */
-export function convertErrorFormatFromRhfForErrorSummary(
-  errors: FieldErrors | null | undefined,
-): ValidationError[] | null {
-  if (!errors) return null;
-
+export function convertErrorFormatFromRhfForErrorSummary(errors: RhfErrors) {
   const validationErrors: ValidationError[] = [];
+  if (!errors) return validationErrors;
 
   Object.entries(errors).forEach(([key, value]) => {
     if (value && "message" in value) {
-      validationErrors.push({ key, message: value.message as string });
-    } else if (typeof value === "object") {
-      Object.values(value).forEach(v0 => {
-        if ("message" in v0) {
-          validationErrors.push({ key, message: v0.message });
-        }
+      const message = String(value.message);
+      validationErrors.push({ key, message });
+    } else if (Array.isArray(value)) {
+      value.forEach((x, i) => {
+        validationErrors.push({ key: `${key}_${i}`, message: x?.message ?? null });
       });
     }
   });

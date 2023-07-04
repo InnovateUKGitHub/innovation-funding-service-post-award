@@ -119,7 +119,11 @@ declare type PartialByKeys<T, K = string> = Unify<
   }
 >;
 
-declare type RhfFieldError = { message: string };
+declare type RhfErrors =
+  | {
+      [key: string]: { message: string | null; type: string } | ({ message: string | null; type: string } | null)[];
+    }
+  | null
+  | undefined;
 
-// this can be deprecated with the imported Field Errors type from rhf once we support array and nested error types
-declare type RhfFieldErrors = { [key: string]: RhfFieldError };
+declare type PickAndPart<Dto extends AnyObject, PickList extends keyof Dto> = Partial<Dto> & Pick<Dto, PickList>;

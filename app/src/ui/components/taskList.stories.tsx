@@ -16,12 +16,12 @@ export const Primary: Story = {
   render: () => (
     <OL className="app-task-list">
       <TaskListSection step={1} title="Scope Change">
-        <Task name="View files" status="Complete" route={null} />
-        <Task name="View rationale" status="Incomplete" route={null} />
-        <Task name="View reasoning" status="To do" route={null} />
+        <Task id="files" name="View files" status="Complete" route={null} />
+        <Task id="rationale" name="View rationale" status="Incomplete" route={null} />
+        <Task id="reasoning" name="View reasoning" status="To do" route={null} />
       </TaskListSection>
       <TaskListSection step={2} title="Partner Change">
-        <Task name="View files" status="To do" route={null} />
+        <Task id="blah" name="blah" status="To do" route={null} />
       </TaskListSection>
     </OL>
   ),
@@ -38,9 +38,9 @@ export const Validation: Story = {
           new Result(null, true, false, "Thanks to you, I am a figure of ridicule within the market community.", false),
         ]}
       >
-        <Task name="View files" status="Complete" route={null} />
-        <Task name="View rationale" status="Incomplete" route={null} />
-        <Task name="View reasoning" status="To do" route={null} />
+        <Task id="files" name="View files" status="Complete" route={null} />
+        <Task id="rationale" name="View rationale" status="Incomplete" route={null} />
+        <Task id="reasoning" name="View reasoning" status="To do" route={null} />
       </TaskListSection>
     </OL>
   ),

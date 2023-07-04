@@ -2,7 +2,7 @@ import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 import cx from "classnames";
 import { DetailedHTMLProps, ButtonHTMLAttributes } from "react";
 
-type ButtonName = `button_${"default" | "upload" | "save" | "reviewDocuments" | "delete"}`;
+type ButtonName = `button_${string}`;
 
 type Props = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
   "data-qa"?: string;

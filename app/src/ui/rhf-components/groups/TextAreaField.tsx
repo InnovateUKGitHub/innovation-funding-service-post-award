@@ -42,12 +42,12 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
         <CharacterCount type="descending" count={characterCount} maxValue={claimCommentsMaxLength}>
           <Textarea
             aria-label={label}
-            aria-describedby={`hint-for-${id}`}
+            aria-describedby={!!hint ? `hint-for-${id}` : undefined}
             id={id}
             hasError={!!error}
             disabled={disabled}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+            // @ts-ignore difficult to match exact types of ref and has no consequence elsewhere
             ref={ref}
             data-qa={dataQa}
             {...props}

@@ -26,20 +26,25 @@ export type GetItemTaskProps = {
     | "type"
     | "typeName"
     | "typeOfAid"
+    | "shortName"
   >;
   projectId: ProjectId;
   pcrId: PcrId;
   mode: "details" | "prepare";
+  rhfErrors?: { items?: { key: string; message: string | null }[] };
 };
 
-const GetItemTasks = ({ editor, index, item, projectId, pcrId, mode }: GetItemTaskProps) => {
+const GetItemTasks = ({ editor, rhfErrors, index, item, projectId, pcrId, mode }: GetItemTaskProps) => {
   const routes = useRoutes();
   const validationErrors = editor?.validator.items.results[index].errors;
   const workflow = PcrWorkflow.getWorkflow(item, 1);
   const { getPcrItemContent } = usePcrItemName();
 
+  const rhfError = rhfErrors?.items?.[index];
+
   return (
     <Task
+      id={`items_${index}`}
       name={getPcrItemContent(item.typeName, item).label}
       status={getPcrItemTaskStatus(item.status)}
       route={(mode === "prepare" ? routes.pcrPrepareItem : routes.pcrViewItem).getLink({
@@ -48,6 +53,7 @@ const GetItemTasks = ({ editor, index, item, projectId, pcrId, mode }: GetItemTa
         itemId: item.id,
         step: item.status === PCRItemStatus.ToDo && workflow && workflow.getCurrentStepInfo() ? 1 : undefined,
       })}
+      rhfError={rhfError}
       validation={validationErrors}
     />
   );

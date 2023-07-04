@@ -1,17 +1,16 @@
 import { useContent } from "@ui/hooks/content.hook";
 import { List } from "@ui/components/layout/list";
 import { ResultsLinks } from "@ui/components/ValidationResultLinks";
-import { FieldErrors } from "react-hook-form";
 import { convertErrorFormatFromRhfForErrorSummary } from "@framework/util/errorHelpers";
+
 interface Props {
-  validationErrors?: FieldErrors | null;
+  validationErrors?: RhfErrors;
 }
 
 export const ValidationSummary = ({ validationErrors }: Props) => {
   const { getContent } = useContent();
 
   const results = convertErrorFormatFromRhfForErrorSummary(validationErrors);
-
   if (!results || !results.length) {
     return null;
   }

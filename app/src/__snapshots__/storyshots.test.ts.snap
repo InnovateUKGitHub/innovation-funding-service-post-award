@@ -773,6 +773,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
         >
           <span
             className="app-task-list__task-name"
+            id="files"
           >
             View files
           </span>
@@ -791,6 +792,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
         >
           <span
             className="app-task-list__task-name"
+            id="rationale"
           >
             View rationale
           </span>
@@ -809,6 +811,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
         >
           <span
             className="app-task-list__task-name"
+            id="reasoning"
           >
             View reasoning
           </span>
@@ -845,8 +848,9 @@ exports[`Storyshots GOV.UK Patterns/Task list Primary 1`] = `
         >
           <span
             className="app-task-list__task-name"
+            id="blah"
           >
-            View files
+            blah
           </span>
           <span
             className="app-task-list__task-action"
@@ -907,6 +911,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
         >
           <span
             className="app-task-list__task-name"
+            id="files"
           >
             View files
           </span>
@@ -925,6 +930,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
         >
           <span
             className="app-task-list__task-name"
+            id="rationale"
           >
             View rationale
           </span>
@@ -943,6 +949,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
         >
           <span
             className="app-task-list__task-name"
+            id="reasoning"
           >
             View reasoning
           </span>

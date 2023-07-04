@@ -12,7 +12,7 @@ import { GovWidthContainer } from "@ui/components/layout/GovWidthContainer";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { ProjectStatus } from "@framework/constants/project";
 import { PartnerStatus } from "@framework/constants/partner";
-import { FieldErrors } from "react-hook-form";
+import isNil from "lodash/isNil";
 
 export const useInactiveMessage = (projectStatus?: ProjectStatus, partnerStatus?: PartnerStatus) => {
   const { getContent } = useContent();
@@ -38,7 +38,7 @@ export interface PageProps {
   children: React.ReactNode;
   backLink?: React.ReactElement<AnyObject>;
   apiError?: IAppError | null;
-  validationErrors?: FieldErrors;
+  validationErrors?: RhfErrors;
   projectStatus?: ProjectStatus;
   partnerStatus?: PartnerStatus;
   qa?: string;
@@ -65,10 +65,10 @@ export function Page({
   const projectState = useProjectStatus();
 
   const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;
-  const validationErrorSize = validationErrors === undefined ? 0 : Object.keys(validationErrors)?.length;
+  const validationErrorSize = isNil(validationErrors) ? 0 : Object.keys(validationErrors)?.length;
 
   useEffect(() => {
-    if (validationErrorSize > 1) {
+    if (validationErrorSize > 0) {
       scrollToTheTopSmoothly();
     }
   }, [apiError, validationErrorSize]);

@@ -1,20 +1,21 @@
 import React from "react";
-import { FieldError } from "react-hook-form";
+
+type TValidationError = { message?: string | null } | { [key: string]: TValidationError } | null | undefined;
 
 interface Props {
-  error: FieldError | null | undefined;
+  error: TValidationError;
 }
 
 const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-const mapErrors = (error: FieldError, mappedErrors: string[] = []) => {
-  if ("message" in error && typeof error.message === "string") {
+const mapErrors = (error: TValidationError, mappedErrors: string[] = []) => {
+  if (error && "message" in error && typeof error.message === "string") {
     mappedErrors.push(error?.message ?? "");
     return mappedErrors;
-  } else if (typeof error === "object") {
-    Object.values(error).forEach(e => mapErrors(e as FieldError, mappedErrors));
+  } else if (error && typeof error === "object") {
+    Object.values(error).forEach(e => mapErrors(e, mappedErrors));
   }
 
   return mappedErrors;

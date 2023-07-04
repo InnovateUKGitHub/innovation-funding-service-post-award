@@ -3,6 +3,7 @@ import cx from "classnames";
 import { v4 as uuid } from "uuid";
 import type { ContentSelector } from "@copy/type";
 import { ValidationError } from "./validationError";
+import { ValidationError as RhfValidationError } from "@ui/rhf-components/ValidationError";
 import { Link } from "@ui/components/links";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { useContent } from "@ui/hooks/content.hook";
@@ -24,11 +25,13 @@ interface ITask {
   route: ILinkInfo | null;
   status: TaskStatus;
   validation?: Result[];
+  rhfError?: { key: string; message: string | null };
+  id?: string;
 }
 
-export const Task = ({ route, name, status, validation }: ITask) => {
+export const Task = ({ route, name, status, validation, rhfError, id }: ITask) => {
   const { getContent } = useContent();
-  const hasError = !!validation?.find(x => !x.isValid);
+  const hasError = !!validation?.find(x => !x.isValid) || !!rhfError;
 
   const link = typeof name === "string" ? name : getContent(name);
   const taskName = route ? <Link route={route}>{link}</Link> : link;
@@ -41,7 +44,11 @@ export const Task = ({ route, name, status, validation }: ITask) => {
         <ValidationError error={v} key={uuid()} />
       ))}
 
-      <span className="app-task-list__task-name">{taskName}</span>
+      <RhfValidationError error={rhfError} />
+
+      <span id={id} className="app-task-list__task-name">
+        {taskName}
+      </span>
 
       <span className="app-task-list__task-action">
         <Tag type={taskStyle}>{status}</Tag>

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 type ValidationError = {
   key: string;
-  message: string;
+  message: string | null;
 };
 
 const isResultType = (error: Result | ValidationError): error is Result => "errorMessage" in error;
@@ -34,8 +34,8 @@ export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[
   const navigate = useNavigate();
   return (
     <>
-      {results.map(x => (
-        <li key={x.key}>
+      {results.map((x, i) => (
+        <li key={i}>
           <a
             onClick={e => {
               e.preventDefault();
@@ -44,7 +44,7 @@ export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[
             }}
             href={`#${x.key}`}
           >
-            {prepareMessage(isResultType(x) ? x.errorMessage : x.message)}
+            {prepareMessage(isResultType(x) ? x.errorMessage : x?.message)}
           </a>
         </li>
       ))}
