@@ -11,6 +11,7 @@ type CostCategoryNode = Readonly<
     Id: string;
     Acc_CompetitionType__c: GQL.Value<string>;
     Acc_CostCategoryName__c: GQL.Value<string>;
+    Acc_HintText__c: GQL.Value<string>;
     Acc_DisplayOrder__c: GQL.Value<number>;
     Acc_OrganisationType__c: GQL.Value<string>;
   }>
@@ -27,7 +28,7 @@ type ProfileNodeForRequiredCostCategories = ReadonlyArray<{
 
 type CostCategoryDtoMapping = Pick<
   CostCategoryDto,
-  "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type"
+  "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type" | "hintText"
 > & { displayOrder: number };
 
 const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
@@ -36,6 +37,9 @@ const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
   },
   displayOrder(node) {
     return node?.Acc_DisplayOrder__c?.value ?? 0;
+  },
+  hintText(node) {
+    return node?.Acc_HintText__c?.value ?? "";
   },
   id(node) {
     return node?.Id ?? "";

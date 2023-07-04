@@ -129,6 +129,7 @@ export const useClaimReviewPageData = (
           x?.node?.RecordType?.Name?.value === "Claims Detail",
       ),
       ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
+      {},
     );
 
     if (!claim) throw new Error(" there is no matching claim");
@@ -155,6 +156,7 @@ export const useClaimReviewPageData = (
     const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
       claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
       ["costCategoryId", "periodId", "value"],
+      {},
     );
 
     const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(

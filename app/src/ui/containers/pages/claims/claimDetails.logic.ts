@@ -109,13 +109,11 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
     const claim = claims.find(claim => claim.periodId === periodId);
 
     // CLAIM DETAILS
-    const claimDetails = mapToClaimDetailsDtoArray(claimsGql, [
-      "costCategoryId",
-      "periodEnd",
-      "periodStart",
-      "periodId",
-      "value",
-    ]);
+    const claimDetails = mapToClaimDetailsDtoArray(
+      claimsGql,
+      ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
+      {},
+    );
 
     if (!claim) throw new Error(" there is no matching claim");
     const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [
@@ -141,6 +139,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
     const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
       claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
       ["costCategoryId", "periodId", "value"],
+      {},
     );
 
     const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(

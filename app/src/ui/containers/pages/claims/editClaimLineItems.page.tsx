@@ -8,7 +8,7 @@ import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
 import { EditorStatus } from "@ui/redux/constants/enums";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validation/validators/claimDetailsValidator";
 import { useNavigate } from "react-router-dom";
@@ -40,6 +40,7 @@ import { ValidationError } from "@ui/components/atomicDesign/molecules/validatio
 import { NumberInput } from "@ui/components/bjss/inputs/numberInput";
 import { TextInput } from "@ui/components/bjss/inputs/textInput";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { useEditClaimLineItemsData } from "./editClaimLineItems.logic";
 
 export interface EditClaimDetailsParams {
   projectId: ProjectId;
@@ -48,9 +49,11 @@ export interface EditClaimDetailsParams {
   periodId: PeriodId;
 }
 
+type LineItem = Pick<ClaimLineItemDto, "lastModifiedDate" | "isAuthor" | "value" | "description" | "id">;
+
 export interface EditClaimLineItemsData {
   project: Pick<ProjectDto, "id" | "competitionType" | "title" | "projectNumber" | "isNonFec">;
-  claimDetails: Pick<ClaimDetailsDto, "isAuthor" | "value">;
+  claimDetails: Pick<ClaimDetailsDto, "isAuthor" | "value" | "comments"> & { lineItems: LineItem[] };
   claimOverrides: ClaimOverrideRateDto;
   costCategories: Pick<CostCategoryDto, "id" | "type" | "name" | "hintText" | "isCalculated">[];
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
@@ -72,12 +75,12 @@ interface CombinedData {
   editor: EditClaimLineItemsData["editor"];
 }
 
+const LineItemForm = createTypedForm<Pick<ClaimDetailsDto, "value" | "comments"> & { lineItems: LineItem[] }>();
+const LineItemTable = createTypedTable<LineItem>();
+
 export interface EditClaimLineItemsCallbacks {
   onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpload?: boolean) => void;
 }
-
-const LineItemForm = createTypedForm<ClaimDetailsDto>();
-const LineItemTable = createTypedTable<ClaimLineItemDto>();
 
 const DeleteByEnteringZero = () => (
   <ValidationMessage
@@ -91,8 +94,10 @@ const EditClaimLineItemsComponent = (
   props: BaseProps & EditClaimDetailsParams & EditClaimLineItemsData & EditClaimLineItemsCallbacks,
 ) => {
   const { isClient: showAddRemove } = useMounted();
+
   const { project, costCategories, documents, forecastDetail, claimOverrides, claimDetails, editor }: CombinedData =
     props;
+
   const back = props.routes.prepareClaim.getLink({
     projectId: project.id,
     partnerId: props.partnerId,
@@ -133,8 +138,8 @@ const EditClaimLineItemsComponent = (
         currentCostCategoryId={costCategory.id}
         isNonFec={project.isNonFec}
       />
-      {renderNegativeClaimWarning(editor.data)}
-      {(!claimDetails.isAuthor || editor.data.lineItems.some(x => !x.isAuthor)) && <DeleteByEnteringZero />}
+      {renderNegativeClaimWarning(claimDetails)}
+      {(!claimDetails.isAuthor || claimDetails.lineItems.some(x => !x.isAuthor)) && <DeleteByEnteringZero />}
 
       <>
         {isCombinationOfSBRI ? (
@@ -265,7 +270,7 @@ const renderTable = (
             qa="remove"
             value={(x, i) =>
               x.isAuthor && (
-                <a href="" className="govuk-link" role="button" onClick={e => removeItem(x, i, e, editor, onUpdate)}>
+                <a href="" className="govuk-link" role="button" onClick={e => removeItem(i, e, editor, onUpdate)}>
                   <Content value={y => y.pages.editClaimLineItems.buttonRemove} />
                 </a>
               )
@@ -413,7 +418,7 @@ const renderDocuments = (
 };
 
 const renderCost = (
-  item: ClaimLineItemDto,
+  item: Pick<ClaimLineItemDto, "value">,
   index: { column: number; row: number },
   validation: ClaimLineItemDtoValidator,
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
@@ -433,8 +438,11 @@ const renderCost = (
   );
 };
 
-const renderNegativeClaimWarning = (editor: ClaimDetailsDto) => {
-  const errorItems = editor.lineItems.reduce<string[]>((acc, i) => (i.value < 0 ? [...acc, i.description] : acc), []);
+const renderNegativeClaimWarning = (claimDetails: EditClaimLineItemsData["claimDetails"]) => {
+  const errorItems = claimDetails.lineItems.reduce<string[]>(
+    (acc, i) => (i.value < 0 ? [...acc, i.description] : acc),
+    [],
+  );
 
   if (!errorItems.length) return null;
 
@@ -475,7 +483,6 @@ const renderDescription = (
 };
 
 const removeItem = (
-  item: ClaimLineItemDto,
   i: { column: number; row: number },
   e: React.SyntheticEvent<HTMLAnchorElement>,
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
@@ -736,18 +743,10 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
   const navigate = useNavigate();
   const config = stores.config.getConfig();
 
+  const { project, claimDetails, claimOverrides, forecastDetail, costCategories, documents } =
+    useEditClaimLineItemsData(props.projectId, props.partnerId, props.periodId, props.costCategoryId);
+
   const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    claimDetails: stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId),
-    claimOverrides: stores.claimOverrides.getAllByPartner(props.partnerId),
-    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-    forecastDetail: stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId),
-    documents: stores.claimDetailDocuments.getClaimDetailDocuments(
-      props.projectId,
-      props.partnerId,
-      props.periodId,
-      props.costCategoryId,
-    ),
     editor: stores.claimDetails.getClaimDetailsEditor(
       props.projectId,
       props.partnerId,
@@ -790,7 +789,13 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
       pending={combined}
       render={data => (
         <EditClaimLineItemsComponent
+          project={project}
+          claimDetails={claimDetails}
+          claimOverrides={claimOverrides}
+          costCategories={costCategories}
+          forecastDetail={forecastDetail}
           onUpdate={onUpdate}
+          documents={documents}
           maxClaimLineItems={config.options.maxClaimLineItems}
           {...data}
           {...props}

@@ -56,7 +56,7 @@ const objectsToKeep = [
 ];
 
 const typeSuffixes = ["", "Input", "Value", "Operators", "Aggregate", "Literal"];
-const objectSuffixes = ["", "Node", "Edge", "Connection", "_Filter", "_OrderBy", "_GroupBy"];
+const objectSuffixes = ["", "Node", "Edge", "Connection", "_Filter", "_OrderBy", "_GroupBy", "_Owner"];
 const additionalObjects = [
   "Query",
   "UIAPI",

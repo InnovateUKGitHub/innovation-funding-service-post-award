@@ -85,6 +85,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
     const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
       claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
       ["costCategoryId", "periodId", "value", "grantPaidToDate"],
+      {},
     );
 
     if (!claim) throw new Error(" there is no matching claim");

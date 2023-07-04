@@ -20,6 +20,9 @@ type Acc_BroadcastMessage__c {
   Name: StringValue
   SystemModstamp: DateTimeValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_BroadcastMessage__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -128,6 +131,8 @@ input Acc_BroadcastMessage__c_OrderBy {
   LastModifiedBy: User_OrderBy
 }
 
+union Acc_BroadcastMessage__c_Owner = Group | User
+
 type Acc_Claims__c {
   LastModifiedDate: DateTimeValue
   Acc_ProjectNumber__c: StringValue
@@ -188,6 +193,15 @@ type Acc_Claims__c {
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   Acc_Grant_Paid_To_Date__c: CurrencyValue
   OwnerId: IDValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Claims__c_Owner
   RecordTypeId(
     """
     Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
@@ -718,6 +732,8 @@ input Acc_Claims__c_OrderBy {
   Acc_ProjectPeriodNumber__c: OrderByClause
 }
 
+union Acc_Claims__c_Owner = Group | User
+
 type Acc_CostCategory__c {
   LastModifiedDate: DateTimeValue
   Acc_CostCategoryName__c: StringValue
@@ -729,6 +745,9 @@ type Acc_CostCategory__c {
   SystemModstamp: DateTimeValue
   Acc_CostCategoryDescription__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_CostCategory__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -854,6 +873,8 @@ input Acc_CostCategory__c_OrderBy {
   VAT_Cost_Category__c: OrderByClause
 }
 
+union Acc_CostCategory__c_Owner = Group | User
+
 type Acc_MonitoringAnswer__c {
   LastModifiedDate: DateTimeValue
   Acc_PeriodEndDate__c: DateValue
@@ -867,6 +888,9 @@ type Acc_MonitoringAnswer__c {
   Acc_PeriodStartDate__c: DateValue
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_MonitoringAnswer__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -1047,6 +1071,8 @@ input Acc_MonitoringAnswer__c_OrderBy {
   Acc_MonitoringReportStatus__c: OrderByClause
 }
 
+union Acc_MonitoringAnswer__c_Owner = Group | User
+
 type Acc_MonitoringQuestion__c {
   LastModifiedDate: DateTimeValue
   Acc_ActiveFlag__c: BooleanValue
@@ -1060,6 +1086,9 @@ type Acc_MonitoringQuestion__c {
   SystemModstamp: DateTimeValue
   Acc_QuestionDescription__c: LongTextAreaValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_MonitoringQuestion__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -1169,6 +1198,8 @@ input Acc_MonitoringQuestion__c_OrderBy {
   Acc_DisplayOrder__c: OrderByClause
 }
 
+union Acc_MonitoringQuestion__c_Owner = Group | User
+
 type Acc_Prepayment__c {
   Loan_PlannedDateForDrawdown__c: DateValue
   LastModifiedDate: DateTimeValue
@@ -1184,6 +1215,9 @@ type Acc_Prepayment__c {
   Grant_Exceeded__c: BooleanValue
   Name: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Prepayment__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -1382,6 +1416,8 @@ input Acc_Prepayment__c_OrderBy {
   Acc_PreviousPrepaymentStatus__c: OrderByClause
 }
 
+union Acc_Prepayment__c_Owner = Group | User
+
 type Acc_Profile__c {
   LastModifiedDate: DateTimeValue
   Acc_ParentId__c: IDValue
@@ -1401,6 +1437,9 @@ type Acc_Profile__c {
   Acc_InitialForecastCost__c: CurrencyValue
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Profile__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -1639,6 +1678,8 @@ input Acc_Profile__c_OrderBy {
   Acc_CostCategoryFutureForecastCost__c: OrderByClause
 }
 
+union Acc_Profile__c_Owner = Group | User
+
 type Acc_ProjectChangeRequest__c {
   Acc_Employees__c: DoubleValue
   LastModifiedDate: DateTimeValue
@@ -1681,6 +1722,9 @@ type Acc_ProjectChangeRequest__c {
   Acc_SuspensionStarts__c: DateValue
   Acc_Nickname__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_ProjectChangeRequest__c_Owner
   Acc_TurnoverYearEnd__c: DateValue
   RecordTypeId(
     """
@@ -2164,6 +2208,8 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   LastModifiedBy: User_OrderBy
 }
 
+union Acc_ProjectChangeRequest__c_Owner = Group | User
+
 type Acc_ProjectContactLink__c {
   LastModifiedDate: DateTimeValue
   IsDeleted: BooleanValue
@@ -2185,6 +2231,9 @@ type Acc_ProjectContactLink__c {
   SystemModstamp: DateTimeValue
   Acc_Project_Number__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_ProjectContactLink__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -2331,6 +2380,8 @@ input Acc_ProjectContactLink__c_OrderBy {
   LastModifiedBy: User_OrderBy
 }
 
+union Acc_ProjectContactLink__c_Owner = Group | User
+
 type Acc_ProjectParticipant__c {
   Acc_CreateClaims__c: BooleanValue
   LastModifiedDate: DateTimeValue
@@ -2388,6 +2439,9 @@ type Acc_ProjectParticipant__c {
   Acc_SpendProfileCompleted__c: PicklistValue
   Acc_ValidationConditionsDesc__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_ProjectParticipant__c_Owner
   Acc_Iban__c: EncryptedStringValue
   Acc_WorkdaySupplierSetupComplete__c: BooleanValue
   Acc_AddressPostcode__c: StringValue
@@ -2886,6 +2940,8 @@ input Acc_ProjectParticipant__c_OrderBy {
   IM_Survey_Last_Updated__c: OrderByClause
 }
 
+union Acc_ProjectParticipant__c_Owner = Group | User
+
 type Acc_Project__c {
   LastModifiedDate: DateTimeValue
   Acc_ProjectNumber__c: StringValue
@@ -2923,6 +2979,9 @@ type Acc_Project__c {
   Acc_ThirdPartyPayment__c: BooleanValue
   Acc_LeadParticipantName__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Project__c_Owner
   Acc_CompetitionCode__c: StringValue
   Loans_RnDStatus__c: PicklistValue
   Acc_CurrentPeriodNumberHelper__c: DoubleValue
@@ -3321,6 +3380,8 @@ input Acc_Project__c_OrderBy {
   LastModifiedBy: User_OrderBy
 }
 
+union Acc_Project__c_Owner = Group | User
+
 type Acc_StatusChange__c {
   LastModifiedDate: DateTimeValue
   Acc_Reason_for_Querying__c: PicklistValue
@@ -3330,6 +3391,9 @@ type Acc_StatusChange__c {
   Name: StringValue
   Acc_ParticipantVisibility__c: BooleanValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_StatusChange__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -3489,6 +3553,8 @@ input Acc_StatusChange__c_OrderBy {
   Acc_MonitoringReport__r: Acc_MonitoringAnswer__c_OrderBy
 }
 
+union Acc_StatusChange__c_Owner = Group | User
+
 type Acc_Virements__c {
   LastModifiedDate: DateTimeValue
   Acc_CurrentAwardRate__c: PercentValue
@@ -3504,6 +3570,9 @@ type Acc_Virements__c {
   Acc_PcrRecordId__c: StringValue
   Acc_CostCategoryDescription__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Virements__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -3715,6 +3784,8 @@ input Acc_Virements__c_OrderBy {
   LastModifiedById: OrderByClause
   LastModifiedBy: User_OrderBy
 }
+
+union Acc_Virements__c_Owner = Group | User
 
 type Account {
   LastModifiedDate: DateTimeValue
@@ -4409,6 +4480,9 @@ type Competition__c {
   Acc_PortfolioManager__r: User
   Acc_TermsConditions__c: PicklistValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Competition__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -4660,6 +4734,8 @@ input Competition__c_OrderBy {
   Acc_Review_Team__c: OrderByClause
   SBRI_Contracting_Authority__c: OrderByClause
 }
+
+union Competition__c_Owner = Group | User
 
 type Contact {
   LastModifiedDate: DateTimeValue
@@ -5416,29 +5492,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  LAST_FISCAL_YEAR
-  THIS_MONTH
-  LAST_FISCAL_QUARTER
-  NEXT_FISCAL_YEAR
-  NEXT_WEEK
-  TOMORROW
-  TODAY
-  NEXT_QUARTER
-  NEXT_90_DAYS
-  YESTERDAY
-  LAST_90_DAYS
-  THIS_FISCAL_QUARTER
   LAST_QUARTER
-  THIS_WEEK
-  NEXT_YEAR
-  THIS_YEAR
-  THIS_FISCAL_YEAR
-  THIS_QUARTER
-  NEXT_FISCAL_QUARTER
   LAST_YEAR
+  LAST_FISCAL_QUARTER
   LAST_WEEK
   LAST_MONTH
+  THIS_QUARTER
+  NEXT_YEAR
+  TODAY
   NEXT_MONTH
+  NEXT_QUARTER
+  TOMORROW
+  NEXT_FISCAL_YEAR
+  LAST_90_DAYS
+  THIS_FISCAL_YEAR
+  THIS_FISCAL_QUARTER
+  THIS_WEEK
+  THIS_YEAR
+  LAST_FISCAL_YEAR
+  NEXT_WEEK
+  YESTERDAY
+  NEXT_FISCAL_QUARTER
+  NEXT_90_DAYS
+  THIS_MONTH
 }
 
 input DateOperators {
@@ -5681,6 +5757,9 @@ type Group {
   SystemModstamp: DateTimeValue
   Type: PicklistValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Group_Owner
   DoesSendEmailToMembers: BooleanValue
   CreatedById: IDValue
 
@@ -5831,6 +5910,8 @@ input Group_OrderBy {
   LastModifiedById: OrderByClause
   LastModifiedBy: User_OrderBy
 }
+
+union Group_Owner = User
 
 type IDAggregate {
   value: ID
@@ -6042,11 +6123,11 @@ type MultiPicklistValue {
 
 """Enum representing possible null ordering options."""
 enum NullOrder {
-  """The enum value represents null first order."""
-  FIRST
-
   """The enum value represents null last order."""
   LAST
+
+  """The enum value represents null first order."""
+  FIRST
 }
 
 type Order {
@@ -6069,6 +6150,9 @@ type Order {
   LastReferencedDate: DateTimeValue
   StatusCode: PicklistValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Order_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -6302,6 +6386,8 @@ input Order_OrderBy {
   ShippingLongitude: OrderByClause
   EffectiveDate: OrderByClause
 }
+
+union Order_Owner = Group | User
 
 scalar Percent
 

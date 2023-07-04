@@ -157,13 +157,11 @@ export const useViewForecastData = (projectId: ProjectId, partnerId: PartnerId):
   const claim = claims.find(claim => !claim.isApproved) || null;
 
   // CLAIM DETAILS
-  const claimDetails = mapToClaimDetailsDtoArray(claimsGql, [
-    "costCategoryId",
-    "periodEnd",
-    "periodStart",
-    "periodId",
-    "value",
-  ]);
+  const claimDetails = mapToClaimDetailsDtoArray(
+    claimsGql,
+    ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
+    {},
+  );
 
   return {
     project,
