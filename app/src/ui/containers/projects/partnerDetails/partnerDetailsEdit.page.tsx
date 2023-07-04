@@ -79,12 +79,12 @@ export function PartnerDetailsEditComponent({
     <Page
       backLink={backLink}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      validationErrors={validatorErrors}
+      validationErrors={validatorErrors as RhfErrors}
       apiError={apiError}
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
-      <Form onSubmit={handleSubmit(onUpdate)}>
+      <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <Fieldset>
           {!isSetup && (
             <FormGroup>

@@ -40,7 +40,9 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   getTypes: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<PCRItemTypeDto[]>;
   getAvailableTypes: (params: ApiParams<Context, { projectId: ProjectId; pcrId?: PcrId }>) => Promise<PCRItemTypeDto[]>;
   getTimeExtensionOptions: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<PCRTimeExtensionOption[]>;
-  update: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId; pcr: PCRDto }>) => Promise<PCRDto>;
+  update: (
+    params: ApiParams<Context, { projectId: ProjectId; id: PcrId; pcr: PickAndPart<PCRDto, "projectId" | "id"> }>,
+  ) => Promise<PCRDto>;
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
   getStatusChanges: (
     params: ApiParams<Context, { projectId: ProjectId; projectChangeRequestId: PcrId }>,
@@ -129,7 +131,9 @@ class Controller extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRD
     return contextProvider.start(params).runQuery(query);
   }
 
-  async update(params: ApiParams<"server", { projectId: ProjectId; id: PcrId; pcr: PCRDto }>): Promise<PCRDto> {
+  async update(
+    params: ApiParams<"server", { projectId: ProjectId; id: PcrId; pcr: PickAndPart<PCRDto, "projectId" | "id"> }>,
+  ): Promise<PCRDto> {
     const context = contextProvider.start(params);
     await context.runCommand(
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),

@@ -2,7 +2,7 @@ import { ProjectChangeRequestOverviewLog } from "./ProjectChangeRequestOverviewL
 import { ProjectChangeRequestOverviewSummary } from "./ProjectChangeRequestOverviewSummary";
 import { ProjectChangeRequestOverviewTasks } from "./ProjectChangeRequestOverviewTasks";
 import { ProjectChangeRequestPrepareForm } from "./ProjectChangeRequestPrepareForm";
-import { ProjectChangeRequestPrepareProps } from "./projectChangeRequestPrepare.page";
+// import { ProjectChangeRequestPrepareProps } from "./projectChangeRequestPrepare.page";
 import { GetItemTaskProps } from "./GetItemTasks";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { Page } from "@ui/components/layout/page";
@@ -19,7 +19,7 @@ const PCROverviewComponent = ({
   statusChanges,
   editableItemTypes,
   mode,
-}: ProjectChangeRequestPrepareProps) => {
+}: AnyObject) => {
   const routes = useRoutes();
   const { getContent } = useContent();
   return (

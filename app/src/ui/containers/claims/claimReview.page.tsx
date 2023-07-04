@@ -1,10 +1,8 @@
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { allowedClaimDocuments } from "@framework/constants/documentDescription";
 import { ProjectRole } from "@framework/constants/project";
-import { ReceivedStatus } from "@framework/entities/received-status";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { Accordion } from "@ui/components/accordion/Accordion";
 import { AccordionItem } from "@ui/components/accordion/AccordionItem";
@@ -102,12 +100,6 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
   const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
   const { isMo } = getAuthRoles(data.project.roles);
 
-  // Disable completing the form if internal impact management and not received PCF
-  // const impactManagementPcfNotSubmittedForFinalClaim =
-  //   data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
-  //     ? data.claim.isFinalClaim && data.claim.pcfStatus !== ReceivedStatus.Received
-  //     : false;
-
   const backLinkElement = (
     <BackLink route={props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
       {content.backLink}
@@ -133,7 +125,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
     <Page
       backLink={backLinkElement}
       apiError={apiError}
-      validationErrors={Object.assign({}, validatorErrors, documentValidatorErrors)}
+      validationErrors={Object.assign({}, validatorErrors, documentValidatorErrors) as RhfErrors}
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
     >
       <Messages messages={props.messages} />
@@ -258,7 +250,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
         </Accordion>
       </Section>
 
-      <Form onSubmit={handleSubmit(onUpdate)} data-qa="review-form">
+      <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="review-form">
         <Fieldset>
           <Legend>{content.sectionTitleHowToProceed}</Legend>
           <FormGroup>

@@ -16,25 +16,26 @@ import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
  * @returns an object with `onUpdate` function and `apiError` response
  */
 
-export const useOnUpdate = <TFormValues, TResponse>({
+export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
   req,
   onSuccess = noop,
   onError = noop,
 }: {
-  req: (data: TFormValues) => Promise<TResponse>;
-  onSuccess?: (data: TFormValues, res: TResponse) => void;
+  req: (data: TFormValues, context?: TContext) => Promise<TResponse>;
+  onSuccess?: (data: TFormValues, res: TResponse, context?: TContext) => void;
   onError?: (e: unknown) => void;
 }) => {
   const serverRenderedApiError = useApiErrorContext();
   const [apiError, setApiError] = useState(serverRenderedApiError);
   const [isFetching, setIsFetching] = useState(false);
 
-  const onUpdate = async (data: TFormValues) => {
+  const onUpdate = async ({ data, context }: { data: TFormValues; context?: TContext }) => {
     try {
       setIsFetching(true);
-      const res = await req(data);
+
+      const res = await req(data, context);
       setIsFetching(false);
-      onSuccess(data, res);
+      onSuccess(data, res, context);
     } catch (e: unknown) {
       const logger = new Logger("onUpdate");
 

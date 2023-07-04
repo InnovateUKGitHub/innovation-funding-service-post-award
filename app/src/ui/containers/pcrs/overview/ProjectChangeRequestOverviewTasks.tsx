@@ -9,12 +9,18 @@ import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { getPcrItemTaskStatus } from "../utils/getPcrItemTaskStatus";
 import { GetItemTasks, GetItemTaskProps } from "./GetItemTasks";
 
+export type TaskErrors = {
+  items?: { key: string; message: string | null }[];
+  reasoningStatus?: { key: string; message: string };
+};
+
 interface ProjectChangeRequestOverviewTasksProps {
   pcr: Pick<PCRDto, "id" | "reasoningStatus"> & { items: GetItemTaskProps["item"][] };
   projectId: ProjectId;
   editor?: IEditorStore<PCRDto, PCRDtoValidator>;
   editableItemTypes: PCRItemType[];
   mode: "details" | "prepare";
+  rhfErrors?: TaskErrors;
 }
 
 const ProjectChangeRequestOverviewTasks = (props: ProjectChangeRequestOverviewTasksProps) => {
@@ -32,6 +38,7 @@ const ProjectChangeRequestOverviewTasksActions = ({
   editor,
   editableItemTypes,
   mode,
+  rhfErrors,
 }: ProjectChangeRequestOverviewTasksProps) => {
   const { getContent } = useContent();
   if (!editableItemTypes.length) return null;
@@ -42,7 +49,16 @@ const ProjectChangeRequestOverviewTasksActions = ({
   return (
     <TaskListSection step={1} title={getContent(x => x.taskList.giveUsInfoSectionTitle)} qa="WhatDoYouWantToDo">
       {editableItems.map((x, i) => (
-        <GetItemTasks item={x} editor={editor} index={i} pcrId={pcr.id} projectId={projectId} key={i} mode={mode} />
+        <GetItemTasks
+          item={x}
+          rhfErrors={rhfErrors}
+          editor={editor}
+          index={i}
+          pcrId={pcr.id}
+          projectId={projectId}
+          key={i}
+          mode={mode}
+        />
       ))}
     </TaskListSection>
   );
@@ -54,6 +70,7 @@ const ProjectChangeRequestOverviewTasksReasoning = ({
   editor,
   editableItemTypes,
   mode,
+  rhfErrors,
 }: ProjectChangeRequestOverviewTasksProps) => {
   const routes = useRoutes();
   const { getContent } = useContent();
@@ -67,6 +84,8 @@ const ProjectChangeRequestOverviewTasksReasoning = ({
     step: pcr.reasoningStatus === PCRItemStatus.ToDo ? 1 : undefined,
   });
 
+  const rhfError = rhfErrors?.["reasoningStatus"];
+
   return (
     <TaskListSection step={stepCount} title={getContent(x => x.taskList.explainSectionTitle)} qa="reasoning">
       <Task
@@ -74,9 +93,15 @@ const ProjectChangeRequestOverviewTasksReasoning = ({
         status={getPcrItemTaskStatus(pcr.reasoningStatus)}
         route={route}
         validation={editor ? [editor.validator.reasoningStatus, editor.validator.reasoningComments] : undefined}
+        rhfError={rhfError}
+        id="reasoningStatus"
       />
     </TaskListSection>
   );
 };
 
-export { ProjectChangeRequestOverviewTasks };
+export {
+  ProjectChangeRequestOverviewTasks,
+  ProjectChangeRequestOverviewTasksActions,
+  ProjectChangeRequestOverviewTasksReasoning,
+};
