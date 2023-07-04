@@ -24,7 +24,7 @@ describe("PCR >  Put project on hold > Create PCR", () => {
 
   it("Should select the correct tick box and start a new 'Change project duration' PCR", () => {
     cy.clickCheckBox("Put project on hold");
-    cy.getByQA("button_default-qa").contains("Create request").click();
+    cy.get("button").contains("Create request").click();
   });
 
   it("Should have a back option", () => {

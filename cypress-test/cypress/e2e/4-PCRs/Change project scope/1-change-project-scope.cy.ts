@@ -91,6 +91,6 @@ describe("PCR > Change project scope", () => {
 
   it("Should mark the 'I agree with this change' checkbox and click 'Save and return to request'", () => {
     cy.clickCheckBox("I agree with this change.");
-    cy.submitButton("Save and return to request").click();
+    cy.get("button").contains("Save and return to request").click();
   });
 });

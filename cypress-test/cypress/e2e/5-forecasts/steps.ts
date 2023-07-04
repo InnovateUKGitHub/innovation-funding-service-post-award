@@ -297,7 +297,7 @@ export const updateAcademicCosts = () => {
 
 export const submitCalculations = () => {
   cy.tableCell("£33,999.00");
-  cy.getByQA("button_default-qa").contains("Submit").click();
+  cy.get("button").contains("Submit").click();
   cy.get("a").contains("Update forecast");
   cy.get("td:nth-child(4)").contains("111");
   cy.get("td:nth-child(14)").contains("£33,999.00");

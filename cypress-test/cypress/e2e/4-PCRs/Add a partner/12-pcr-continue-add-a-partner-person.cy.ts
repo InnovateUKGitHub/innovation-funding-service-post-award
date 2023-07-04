@@ -46,7 +46,7 @@ describe("PCR > Add partner > Continuing editing PCR person details section", ()
   );
 
   it("With valid data, it should now 'Save and continue' and then assert the next page loads correctly", () => {
-    cy.getByQA("button_default-qa").contains("Save and continue").click();
+    cy.get("button").contains("Save and continue").click();
     cy.get("h2").contains("Project costs for new partner");
   });
 });

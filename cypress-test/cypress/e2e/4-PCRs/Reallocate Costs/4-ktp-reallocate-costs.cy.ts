@@ -47,7 +47,7 @@ describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
   it("Should update figures and calculate the changes", ktpUpdateVirement);
 
   it("Should click 'Save and return to request'", () => {
-    cy.getByQA("button_default-qa").contains("Save and return to reallocate project costs").click({ force: true });
+    cy.get("button").contains("Save and return to reallocate project costs").click({ force: true });
     cy.get("h1").contains("Reallocate project costs");
   });
 

@@ -429,7 +429,7 @@ export const markAndReturn = () => {
 
 export const assertForMissingPcr = () => {
   cy.clickCheckBox("Change project scope");
-  cy.getByQA("button_default-qa").contains("Create request").click();
+  cy.get("button").contains("Create request").click();
   cy.get("h1").contains("Request");
   cy.getByQA("button_return-qa").contains("Save and return to requests").click();
   cy.get("h1").contains("Project change requests");

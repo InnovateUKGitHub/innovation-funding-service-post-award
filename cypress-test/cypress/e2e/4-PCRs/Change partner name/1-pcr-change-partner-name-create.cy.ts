@@ -30,7 +30,7 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
 
   it("Should select the correct tick box and start a new 'Change a partner's name' PCR", () => {
     cy.clickCheckBox("Change a partner's name");
-    cy.getByQA("button_default-qa").contains("Create request").click();
+    cy.get("button").contains("Create request").click();
   });
 
   it("Should have a back option", () => {

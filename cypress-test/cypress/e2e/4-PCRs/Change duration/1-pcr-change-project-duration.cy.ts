@@ -26,7 +26,7 @@ describe("PCR >  Change project duration > Create PCR", () => {
 
   it("Should select the correct tick box and start a new 'Change project duration' PCR", () => {
     cy.clickCheckBox("Change project duration");
-    cy.getByQA("button_default-qa").contains("Create request").click();
+    cy.get("button").contains("Create request").click();
   });
 
   it("Should have a back option", () => {
@@ -66,7 +66,7 @@ describe("PCR >  Change project duration > Create PCR", () => {
   it("Should select March 2024 from the dropdown box", selectDateDropdown);
 
   it("Should then click 'Save and continue' to proceed to the summary page", () => {
-    cy.getByQA("button_default-qa").contains("Save and continue").click();
+    cy.get("button").contains("Save and continue").click();
     cy.getByLabel("I agree with this change.");
   });
 

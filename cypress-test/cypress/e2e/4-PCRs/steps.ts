@@ -79,7 +79,7 @@ export const beforeYouSubmit = () => {
 };
 
 export const pcrCommentBox = () => {
-  cy.get("h2").contains("Add comments");
+  cy.get("legend").contains("Add comments");
   cy.get("textarea#comments.govuk-textarea").type(standardComments);
 };
 
@@ -1193,7 +1193,7 @@ export const selectEachPcr = () => {
     cy.clickCheckBox(pcr);
   });
   cy.submitButton("Create request").click();
-  cy.get("h1").contains("Request", { timeout: 30000 });
+  cy.get("h1").contains("Request");
 };
 
 export const confirmPcrsAdded = () => {

@@ -68,11 +68,11 @@ describe("PCR > Reallocate Costs > Creating  PCR", () => {
   it("Should count how many characters you have used", characterCount);
 
   it("Should have a submit request button", () => {
-    cy.getByQA("button_default-qa").contains("Submit request");
+    cy.get("button").contains("Submit request");
   });
 
   it("Should Save and return to requests", () => {
-    cy.getByQA("button_return-qa").contains("Save and return to requests").wait(500).click();
+    cy.get("button").contains("Save and return to requests").wait(500).click();
   });
 
   it("Should return to 'Project change requests' screen and show a 'Delete request' button", () => {

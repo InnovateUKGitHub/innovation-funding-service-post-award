@@ -60,7 +60,7 @@ describe("PCR > Project Change Request front page", () => {
   it("Should allow you to check the checkboxes", pcrCheckBoxes);
 
   it("Has a Create request button", () => {
-    cy.getByQA("button_default-qa").contains("Create request");
+    cy.get("button").contains("Create request");
   });
 
   it("Has a Cancel button", () => {

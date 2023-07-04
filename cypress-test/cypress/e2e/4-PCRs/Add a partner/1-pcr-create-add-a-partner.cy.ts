@@ -63,6 +63,6 @@ describe("PCR >  Add a partner > Create PCR", () => {
   it("Should count how many characters you have used", characterCount);
 
   it("Should have a submit request button", () => {
-    cy.getByQA("button_default-qa").contains("Submit request");
+    cy.get("button").contains("Submit request");
   });
 });
