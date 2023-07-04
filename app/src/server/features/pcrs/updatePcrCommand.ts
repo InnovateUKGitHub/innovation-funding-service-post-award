@@ -17,14 +17,18 @@ import { sumBy } from "@framework/util/numberHelper";
 import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
+import { merge } from "lodash";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
+import { GetPCRByIdQuery } from "./getPCRByIdQuery";
+
+type PcrData = PickAndPart<PCRDto, "projectId" | "id">;
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   private readonly projectId: ProjectId;
   private readonly projectChangeRequestId: PcrId;
-  private readonly pcr: PCRDto;
+  private readonly pcr: PcrData;
   private readonly pcrStepId: PCRStepId;
 
   constructor({
@@ -35,7 +39,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   }: {
     projectId: ProjectId;
     projectChangeRequestId: PcrId;
-    pcr: PCRDto;
+    pcr: PcrData;
     pcrStepId?: PCRStepId;
   }) {
     super();
@@ -80,6 +84,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     if (!isProjectActive) throw new InActiveProjectError();
 
+    const pcr = await context.runQuery(new GetPCRByIdQuery(this.pcr.projectId, this.pcr.id));
+
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
     const projectRoles = auth.forProject(this.projectId).getRoles();
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
@@ -89,10 +95,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const project = await context.runQuery(new GetByIdQuery(this.projectId));
     const allPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
 
+    const mergedPcr = merge(pcr, this.pcr);
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
     const validationResult = new PCRDtoValidator({
-      model: this.pcr,
+      model: mergedPcr,
       role: projectRoles,
       recordTypes: itemTypes,
       showValidationErrors: true,
@@ -105,23 +112,24 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     if (!validationResult.isValid) throw new ValidationError(validationResult);
 
-    entityToUpdate.status = this.pcr.status;
-    entityToUpdate.reasoning = this.pcr.reasoningComments;
-    entityToUpdate.reasoningStatus = this.pcr.reasoningStatus;
-    entityToUpdate.comments = originalDto.status === this.pcr.status ? this.pcr.comments : "";
+    entityToUpdate.status = mergedPcr.status;
+    entityToUpdate.reasoning = mergedPcr.reasoningComments;
+    entityToUpdate.reasoningStatus = mergedPcr.reasoningStatus;
+    entityToUpdate.comments = originalDto.status === mergedPcr.status ? mergedPcr.comments : "";
+
     await context.repositories.projectChangeRequests.updateProjectChangeRequest(entityToUpdate);
 
-    if (originalDto.status !== this.pcr.status) {
+    if (originalDto.status !== mergedPcr.status) {
       await this.insertStatusChange(
         context,
         this.projectChangeRequestId,
-        this.pcr.comments,
+        mergedPcr.comments,
         originalDto.status,
-        this.pcr.status,
+        mergedPcr.status,
       );
     }
 
-    const paired = this.pcr.items.map(item => ({
+    const paired = mergedPcr.items.map(item => ({
       item,
       originalItem: entityToUpdate.items.find(x => x.id === item.id),
     }));
@@ -158,7 +166,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     }
 
     if (auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager)) {
-      const partnerAdditionItemDto = this.pcr.items.find(
+      const partnerAdditionItemDto = this.pcr?.items?.find(
         x => x.type === PCRItemType.PartnerAddition,
       ) as PCRItemForPartnerAdditionDto;
 
@@ -186,7 +194,6 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   ): Partial<ProjectChangeRequestItemEntity> | null {
     const statusChange = item.status !== dto.status;
     const init = statusChange ? { status: dto.status } : null;
-
     switch (dto.type) {
       case PCRItemType.TimeExtension:
         if (statusChange || item.offsetMonths !== dto.offsetMonths) {

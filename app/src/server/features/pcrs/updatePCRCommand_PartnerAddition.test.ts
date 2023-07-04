@@ -124,137 +124,138 @@ describe("UpdatePCRCommand - Partner addition", () => {
       ),
     ).rejects.toThrow(ValidationError);
   });
+
   it("should require fields to be set when the organisation type is Academic", async () => {
     const { context, projectChangeRequest, recordType, project } = setup();
+
     const completeItem = createCompleteAcademicPcrItem();
+    // delete required fields from context
+    delete completeItem.organisationName;
+    delete completeItem.tsbReference;
+
     context.testData.createPCRItem(projectChangeRequest, recordType, completeItem);
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as Partial<PCRItemForPartnerAdditionDto>;
     item.status = PCRItemStatus.Complete;
+
+    // delete required fields from update command
+    delete item.tsbReference;
+    delete item.organisationName;
+
     const command = new UpdatePCRCommand({
       projectId: project.Id,
       projectChangeRequestId: projectChangeRequest.id,
       pcr: dto,
     });
 
-    delete item.organisationName;
+    // fails missing organisation name
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.organisationName = "Coventry University";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-    delete item.tsbReference;
+    // fails missing tsb ref
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.tsbReference = "12345ABCDE";
+    // passes
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
 
   it("should require fields to be set when the organisation type is Industrial", async () => {
     const { context, projectChangeRequest, recordType, project } = setup();
     const completeItem = createCompleteIndustrialPcrItem();
+    // delete required fields from context
+    delete completeItem.organisationName;
+    delete completeItem.registrationNumber;
+    delete completeItem.registeredAddress;
+    delete completeItem.contact1ProjectRole;
+    delete completeItem.contact1Forename;
+    delete completeItem.contact1Surname;
+    delete completeItem.contact1Phone;
+    delete completeItem.contact1Email;
+    delete completeItem.contact2Forename;
+    delete completeItem.contact2Surname;
+    delete completeItem.contact2Phone;
+    delete completeItem.contact2Email;
+    delete completeItem.participantSize;
+    delete completeItem.numberOfEmployees;
+    delete completeItem.financialYearEndDate;
+    delete completeItem.financialYearEndTurnover;
+    delete completeItem.projectLocation;
+    delete completeItem.awardRate;
+    delete completeItem.hasOtherFunding;
     context.testData.createPCRItem(projectChangeRequest, recordType, completeItem);
+
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as Partial<PCRItemForPartnerAdditionDto>;
     item.status = PCRItemStatus.Complete;
+
+    // delete required fields from update command
+    delete item.organisationName;
+    delete item.registrationNumber;
+    delete item.registeredAddress;
+    delete item.contact1ProjectRole;
+    delete item.contact1Forename;
+    delete item.contact1Surname;
+    delete item.contact1Phone;
+    delete item.contact1Email;
+    delete item.contact2Forename;
+    delete item.contact2Surname;
+    delete item.contact2Phone;
+    delete item.contact2Email;
+    delete item.participantSize;
+    delete item.numberOfEmployees;
+    delete item.financialYearEndDate;
+    delete item.financialYearEndTurnover;
+    delete item.projectLocation;
+    delete item.awardRate;
+    delete item.hasOtherFunding;
+
     const command = new UpdatePCRCommand({
       projectId: project.Id,
       projectChangeRequestId: projectChangeRequest.id,
       pcr: dto,
     });
 
-    delete item.organisationName;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.organisationName = "Coventry University";
-    await expect(context.runCommand(command)).resolves.toBe(true);
 
-    delete item.registrationNumber;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.registrationNumber = "12345";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.registeredAddress;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.registeredAddress = "1 Bristol Street, Bristol";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact1ProjectRole;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1ProjectRole = PCRContactRole.FinanceContact;
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact1Forename;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1Forename = "Homer";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact1Surname;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1Surname = "Of Iliad fame";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact1Phone;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1Phone = "112233";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact1Email;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1Email = "helen@troy.com";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.participantSize;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.participantSize = PCRParticipantSize.Medium;
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.numberOfEmployees;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.numberOfEmployees = 5;
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.financialYearEndDate;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.financialYearEndDate = new Date();
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.financialYearEndTurnover;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.financialYearEndTurnover = 20;
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact2Forename;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact2Forename = "Jon";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact2Surname;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact2Surname = "Doe";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact2Phone;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact2Phone = "12309833";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.contact2Email;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact2Email = "12309833@blah.com";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.projectLocation;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.projectLocation = PCRProjectLocation.InsideTheUnitedKingdom;
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.awardRate;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.awardRate = 12;
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
-    delete item.hasOtherFunding;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.hasOtherFunding = false;
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
+
   it("should not allow updates to project role & partner type fields once they are set", async () => {
     const { context, projectChangeRequest, recordType, project } = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, {
