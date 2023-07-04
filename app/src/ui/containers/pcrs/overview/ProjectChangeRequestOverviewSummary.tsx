@@ -11,18 +11,14 @@ const ProjectChangeRequestOverviewSummary = ({
   pcr,
   projectId,
   hideAddTypesLink,
-  isGqlData, // deprecate this once gql migration completed here
 }: {
   pcr: Pick<PCRDto, "id" | "requestNumber"> & { items: Pick<PCRItemDto, "shortName">[] };
   projectId: ProjectId;
   hideAddTypesLink?: boolean;
-  isGqlData?: boolean; // deprecate this once gql migration completed here
 }) => {
   const routes = useRoutes();
   const { getContent } = useContent();
   const getPcRTypeName = useGetPcrTypeName();
-
-  const typeNameMapper = isGqlData ? getPcRTypeName : (x: string) => x;
 
   return (
     <Section title={getContent(x => x.pcrLabels.details)}>
@@ -34,7 +30,7 @@ const ProjectChangeRequestOverviewSummary = ({
         />
         <SummaryListItem
           label={getContent(x => x.pcrLabels.types)}
-          content={<LineBreakList items={pcr.items.map(x => typeNameMapper(x.shortName))} />}
+          content={<LineBreakList items={pcr.items.map(x => getPcRTypeName(x.shortName))} />}
           action={
             !hideAddTypesLink && (
               <Link
