@@ -127,6 +127,7 @@ export const mapToPcrItemType = (shortName: string) => {
     case "scope change":
       return PCRItemType.ScopeChange;
     case "account name change":
+    case "change a partner's name":
       return PCRItemType.AccountNameChange;
     case "change project duration":
     case "time extension":

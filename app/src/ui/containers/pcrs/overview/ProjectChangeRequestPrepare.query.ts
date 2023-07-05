@@ -108,7 +108,6 @@ export const pcrPrepareQuery = graphql`
                       Acc_ExistingPartnerName__c {
                         value
                       }
-
                       Acc_Status__c {
                         value
                       }
