@@ -13,6 +13,7 @@ const pcrDetailsQuery = graphql`
               ]
             }
             orderBy: { CreatedDate: { order: DESC } }
+            first: 2000
           ) {
             edges {
               node {
