@@ -9,6 +9,7 @@ import {
   openSectionClaimData,
   closedSectionAccordions,
   shouldShowProjectTitle,
+  claimStatusTable,
 } from "./steps";
 
 describe("Claims > Review as MO", () => {
@@ -35,6 +36,8 @@ describe("Claims > Review as MO", () => {
   it("Should contain the project title and correct claim headings and information", projectTitleAndSubheaders);
 
   it("Should show the cost category table with submitted costs", submittedCostCats);
+
+  it("Should have more than 10 status changes recorded", claimStatusTable);
 
   it("Should query the claim back to the partner", queryTheClaim);
 

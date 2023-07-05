@@ -684,3 +684,14 @@ export const drgClaimTwo = () => {
   cy.get("h1").contains("Costs to be claimed");
   cy.get("h2").contains("Period 2");
 };
+
+export const claimStatusTable = () => {
+  cy.getByQA("claim-status-change-table")
+    .find("tr")
+    .then(row => {
+      let rowNumber = row.length;
+      if (rowNumber < 10) {
+        throw new Error("Test failed");
+      }
+    });
+};
