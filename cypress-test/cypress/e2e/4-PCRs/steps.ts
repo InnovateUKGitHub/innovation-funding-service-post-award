@@ -80,6 +80,9 @@ export const beforeYouSubmit = () => {
 
 export const pcrCommentBox = () => {
   cy.get("legend").contains("Add comments");
+  cy.getByQA("hint-info-text-area").contains(
+    "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
+  );
   cy.get("textarea#comments.govuk-textarea").type(standardComments);
 };
 
