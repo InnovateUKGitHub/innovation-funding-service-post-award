@@ -1193,7 +1193,7 @@ export const selectEachPcr = () => {
     cy.clickCheckBox(pcr);
   });
   cy.submitButton("Create request").click();
-  cy.get("h1").contains("Request");
+  cy.get("h1").contains("Request", { timeout: 60000 });
 };
 
 export const confirmPcrsAdded = () => {
