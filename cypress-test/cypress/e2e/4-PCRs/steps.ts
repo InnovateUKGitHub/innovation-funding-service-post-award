@@ -3,6 +3,10 @@ import { PcrType } from "typings/pcr";
 let date = new Date();
 let year = date.getFullYear();
 let createdDay = date.getDate();
+let comments = JSON.stringify(date);
+
+const moEmail = "testman2@testing.com";
+const pmEmail = "james.black@euimeabs.test";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 export const newPubDescription = "I am a new public description. I am 55 characters long.";
@@ -1269,4 +1273,57 @@ export const deleteAndConfirm = () => {
   multiPcrArray.forEach(type => {
     cy.getByQA("pcrs-active").should("not.contain", type);
   });
+};
+
+export const switchUserMoReviewPcr = () => {
+  cy.switchUserTo(moEmail);
+  cy.get("a").contains("Review").click();
+  cy.get("h1").contains("Request");
+};
+
+export const leaveCommentQuery = () => {
+  cy.getByLabel("Query the request").click();
+  cy.get("textarea").clear().type(comments);
+  cy.get("button").contains("Submit").click();
+  cy.get("h1").contains("Project change requests");
+};
+
+export const switchUserCheckForComments = () => {
+  cy.switchUserTo(pmEmail);
+  cy.get("a").contains("Edit").click();
+  cy.get("h1").contains("Request");
+  cy.reload();
+  cy.get("span").contains("Show").click();
+  cy.getByQA("projectChangeRequestStatusChangeTable").find("tr").eq(1).contains("Javier Baez");
+  cy.getByQA("projectChangeRequestStatusChangeTable").find("tr").eq(2).contains(comments);
+};
+
+export const enterCommentsSubmit = () => {
+  cy.get("textarea").clear().type(comments);
+  cy.get("button").contains("Submit request").click();
+  cy.get("h1").contains("Project change requests");
+};
+
+/**
+ * This is not a definitive test without cross-checking Salesforce. But given GQL, it will assert for greater that 10 items displayed on page.
+ */
+export const pcrStatusTable = () => {
+  cy.getByQA("projectChangeRequestStatusChangeTable")
+    .find("tr")
+    .then(row => {
+      let rowNumber = row.length;
+      if (rowNumber < 20) {
+        throw new Error("Test failed to find correct number of rows");
+      }
+    });
+};
+
+export const switchToMoCheckComments = () => {
+  cy.switchUserTo(moEmail);
+  cy.get("h1").contains("Project change requests");
+  cy.tableCell("Submitted to Monitoring Officer").siblings().contains("Review").click();
+  cy.get("h1").contains("Request");
+  cy.get("span").contains("Show").click();
+  cy.getByQA("projectChangeRequestStatusChangeTable").find("tr").eq(1).contains("James Black");
+  cy.getByQA("projectChangeRequestStatusChangeTable").find("tr").eq(2).contains(comments);
 };

@@ -690,7 +690,7 @@ export const claimStatusTable = () => {
     .find("tr")
     .then(row => {
       let rowNumber = row.length;
-      if (rowNumber < 10) {
+      if (rowNumber < 11) {
         throw new Error("Test failed");
       }
     });
