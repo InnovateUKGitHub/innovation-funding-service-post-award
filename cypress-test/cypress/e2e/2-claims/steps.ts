@@ -622,10 +622,10 @@ export const goToQueriedClaim = () => {
   cy.contains("td", "Queried by Monitoring Officer").siblings().contains("a", "Edit").click();
   cy.heading("Costs to be claimed");
   cy.get("td").contains(comments);
-  cy.get("button").contains("Continue to claims documents").click();
+  cy.button("Continue to claims documents").click();
   cy.get("a").contains("Continue to update forecast").click();
-  cy.get("button").contains("Continue to summary").click();
-  cy.get("button").contains("Submit claim").click();
+  cy.button("Continue to summary").click();
+  cy.button("Submit claim").click();
 };
 
 export const beginEditing = () => {
@@ -648,7 +648,7 @@ export const add120Lines = () => {
 };
 
 export const saveLineItems = () => {
-  cy.get("button").contains("Save and return to claims").click();
+  cy.button("Save and return to claims").click();
   cy.wait(5000);
   cy.get("h1").contains("Costs to be claimed", { timeout: 60000 });
 };
@@ -680,7 +680,7 @@ export const validateForecast = () => {
 export const academicForecastNavigate = () => {
   cy.backLink("Back to claims").click();
   cy.heading("Costs to be claimed");
-  cy.get("button").contains("Continue to claims documents").click();
+  cy.button("Continue to claims documents").click();
   cy.heading("Claim documents");
   cy.get("a").contains("Continue to update forecast").click();
 };

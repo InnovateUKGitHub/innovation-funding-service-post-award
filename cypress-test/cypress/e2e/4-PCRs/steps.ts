@@ -917,7 +917,7 @@ export const saveAndReturn = () => {
   cy.get("#grantMovingOverFinancialYear").type("0");
   cy.clickCheckBox("I agree with this change");
   cy.wait(500);
-  cy.get("button").contains("Save and return to request").click({ force: true });
+  cy.button("Save and return to request").click({ force: true });
   cy.heading("Request");
 };
 
@@ -948,7 +948,7 @@ export const tickEachPartner = () => {
 };
 
 export const saveContinueProceed = () => {
-  cy.get("button").contains("Save and continue").click();
+  cy.button("Save and continue").click();
   cy.get("h2").contains("Upload change of name certificate");
   shouldShowProjectTitle;
   cy.heading("Change a partner's name");
@@ -994,7 +994,7 @@ export const assertChangeNamePage = () => {
 export const completeChangeName = () => {
   cy.get("h2").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
-  cy.get("button").contains("Save and return to request").click();
+  cy.button("Save and return to request").click();
   cy.get("strong").contains("Complete");
 };
 
@@ -1038,7 +1038,7 @@ export const proposedSubheadings = () => {
 
 export const markAsCompleteSave = () => {
   cy.getByLabel("I agree with this change.").click();
-  cy.get("button").contains("Save and return to request").click();
+  cy.button("Save and return to request").click();
   cy.get("strong").contains("Complete");
 };
 
@@ -1060,12 +1060,12 @@ export const dateChangeSummary = () => {
 export const validateAddPerson = () => {
   ["First name", "Last name"].forEach(field => {
     cy.getByLabel(field).clear().type("Thisisovertheagreedlimitforvalidationfiftycharacter");
-    cy.get("button").contains("Save and continue").click();
+    cy.button("Save and continue").click();
     cy.validationLink("Finance contact name must be 50 characters or less.");
   }),
     cy.getByLabel("Phone number").clear().type("012345678910111213141");
   cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
-  cy.get("button").contains("Save and continue").click();
+  cy.button("Save and continue").click();
   cy.validationLink("Finance contact phone number must be 20 characters or less.");
   cy.getByQA("field-contact1Phone").contains("Finance contact phone number must be 20 characters or less.");
 
@@ -1074,7 +1074,7 @@ export const validateAddPerson = () => {
     .type(
       "ThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThismustbetwohundredandfiftycharactersonlyThis",
     );
-  cy.get("button").contains("Save and continue").click();
+  cy.button("Save and continue").click();
   cy.validationLink("Email address must be 255 characters or less.");
   cy.getByQA("field-contact1Email").contains("Email address must be 255 characters or less.");
   cy.getByQA("field-contact1Forename").contains("Finance contact name must be 50 characters or less.");
@@ -1120,7 +1120,7 @@ export const validateChangeName = () => {
   cy.submitButton("Save and continue").click();
   cy.get("h2").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
-  cy.get("button").contains("Save and return to request").click();
+  cy.button("Save and return to request").click();
   cy.validationLink("Enter a new partner name");
   cy.backLink("Back to request").click();
   cy.heading("Request");
@@ -1268,7 +1268,7 @@ export const validateTable = () => {
 };
 
 export const deleteAndConfirm = () => {
-  cy.get("button").contains("Delete request").click();
+  cy.button("Delete request").click();
   cy.heading("Project change requests");
   multiPcrArray.forEach(type => {
     cy.getByQA("pcrs-active").should("not.contain", type);
@@ -1284,7 +1284,7 @@ export const switchUserMoReviewPcr = () => {
 export const leaveCommentQuery = () => {
   cy.getByLabel("Query the request").click();
   cy.get("textarea").clear().type(comments);
-  cy.get("button").contains("Submit").click();
+  cy.button("Submit").click();
   cy.get("h1").contains("Project change requests");
 };
 
@@ -1300,7 +1300,7 @@ export const switchUserCheckForComments = () => {
 
 export const enterCommentsSubmit = () => {
   cy.get("textarea").clear().type(comments);
-  cy.get("button").contains("Submit request").click();
+  cy.button("Submit request").click();
   cy.get("h1").contains("Project change requests");
 };
 

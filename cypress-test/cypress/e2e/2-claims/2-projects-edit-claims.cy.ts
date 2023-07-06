@@ -25,11 +25,11 @@ describe("claims > edit claims as FC", () => {
   it("Displays the cost category table", shouldShowCostCatTable);
 
   it("Should have continue to claims documents button", () => {
-    cy.get("button").contains("Continue to claims documents");
+    cy.button("Continue to claims documents");
   });
 
   it("Should have a save and return to claims button", () => {
-    cy.get("button").contains("Save and return to claims");
+    cy.button("Save and return to claims");
   });
 
   it("Should show accordions", () => {
@@ -38,6 +38,6 @@ describe("claims > edit claims as FC", () => {
   });
 
   it("The Continue to claims button should direct you to the next page", () => {
-    cy.get("button").contains("Continue to claims documents").click();
+    cy.button("Continue to claims documents").click();
   });
 });

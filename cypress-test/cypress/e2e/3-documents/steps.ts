@@ -247,7 +247,7 @@ export const fcShouldNotDelete = () => {
 };
 
 export const validateFileUpload = () => {
-  cy.get("button").contains("Upload").click();
+  cy.button("Upload").click();
   cy.validationLink("Choose a file to upload");
   cy.reload();
 };

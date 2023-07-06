@@ -75,7 +75,7 @@ export const validatePage = () => {
 };
 
 export const proceedToDocuments = () => {
-  cy.get("button").contains("Continue to claims documents").click();
+  cy.button("Continue to claims documents").click();
   cy.heading("Claim documents");
   cy.getByQA("validation-message-content").contains(pcfNotReceivedMessage);
   cy.getByQA("validation-message").contains(finalClaimMessage);

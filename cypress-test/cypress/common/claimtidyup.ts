@@ -6,9 +6,9 @@ export const moClaimTidyUp = (claimType: string) => {
         cy.log(`Change claim status of ${claimType} claim`);
         cy.switchUserTo("iuk.accproject@bjss.com.bjssdev");
         cy.get("td").contains("ABS EUI Medium Enterprise").siblings().contains("a", "Edit").click();
-        cy.get("button").contains("Continue to claims documents").click();
+        cy.button("Continue to claims documents").click();
         cy.get("a").contains("Continue to update forecast").click();
-        cy.get("button").contains("Continue to summary").click();
+        cy.button("Continue to summary").click();
         cy.submitButton("Submit claim").click();
         cy.heading("Claims");
         cy.switchUserTo("testman2@testing.com");

@@ -42,7 +42,7 @@ describe("claims > KTP", () => {
   });
 
   it("Should click 'Continue to claims documents' and land on the right page", () => {
-    cy.get("button").contains("Continue to claims documents").click();
+    cy.button("Continue to claims documents").click();
     cy.heading("Claim documents");
   });
 
@@ -56,7 +56,7 @@ describe("claims > KTP", () => {
   );
 
   it("Should continue to summary and display the correct messaging", () => {
-    cy.get("button").contains("Continue to summary").click({ force: true });
+    cy.button("Continue to summary").click({ force: true });
     cy.heading("Claim summary");
   });
 
