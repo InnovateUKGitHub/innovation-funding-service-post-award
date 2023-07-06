@@ -12,7 +12,7 @@ export const shouldShowAllAccordion = () => {
   cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click();
   cy.getByQA("noClosedClaims-0012600001amaskAAA").contains("There are no closed claims for this partner.");
   cy.getByQA("noClosedClaims-0012600001amb0ZAAQ").contains("There are no closed claims for this partner.");
-  cy.getByQA("noClosedClaims-0012600001amb0RAAQ").contains("There are no closed claims for this partner.");
+  cy.get("td").contains("Period 1");
 };
 
 export const shouldShowCostCatTable = () => {
@@ -408,83 +408,83 @@ export const academicCosts = () => {
 
 export const updateAcademicCosts = () => {
   [
-    "Directly incurred - Staff Period 2",
     "Directly incurred - Staff Period 3",
     "Directly incurred - Staff Period 4",
-    "Directly incurred - Travel and subsistence Period 2",
+    "Directly incurred - Staff Period 5",
     "Directly incurred - Travel and subsistence Period 3",
     "Directly incurred - Travel and subsistence Period 4",
-    "Directly incurred - Equipment Period 2",
+    "Directly incurred - Travel and subsistence Period 5",
     "Directly incurred - Equipment Period 3",
     "Directly incurred - Equipment Period 4",
-    "Directly incurred - Other costs Period 2",
+    "Directly incurred - Equipment Period 5",
     "Directly incurred - Other costs Period 3",
     "Directly incurred - Other costs Period 4",
-    "Directly allocated - Investigations Period 2",
+    "Directly incurred - Other costs Period 5",
     "Directly allocated - Investigations Period 3",
     "Directly allocated - Investigations Period 4",
-    "Directly allocated - Estates costs Period 2",
-    "Directly allocated - Estates costs Period 3",
+    "Directly allocated - Investigations Period 5",
     "Directly allocated - Estates costs Period 4",
-    "Directly allocated - Other costs Period 2",
+    "Directly allocated - Estates costs Period 4",
+    "Directly allocated - Estates costs Period 5",
     "Directly allocated - Other costs Period 3",
     "Directly allocated - Other costs Period 4",
-    "Indirect costs - Investigations Period 2",
+    "Directly allocated - Other costs Period 5",
     "Indirect costs - Investigations Period 3",
     "Indirect costs - Investigations Period 4",
-    "Exceptions - Staff Period 2",
+    "Indirect costs - Investigations Period 5",
     "Exceptions - Staff Period 3",
     "Exceptions - Staff Period 4",
-    "Exceptions - Travel and subsistence Period 2",
+    "Exceptions - Staff Period 5",
     "Exceptions - Travel and subsistence Period 3",
     "Exceptions - Travel and subsistence Period 4",
-    "Exceptions - Equipment Period 2",
+    "Exceptions - Travel and subsistence Period 5",
     "Exceptions - Equipment Period 3",
     "Exceptions - Equipment Period 4",
-    "Exceptions - Other costs Period 2",
+    "Exceptions - Equipment Period 5",
     "Exceptions - Other costs Period 3",
     "Exceptions - Other costs Period 4",
+    "Exceptions - Other costs Period 5",
   ].forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("100");
   });
-  cy.get("td:nth-child(14)").contains("£3,600.00");
+  cy.get("td:nth-child(14)").contains("£52,500.00");
   [
-    "Directly incurred - Staff Period 2",
     "Directly incurred - Staff Period 3",
     "Directly incurred - Staff Period 4",
-    "Directly incurred - Travel and subsistence Period 2",
+    "Directly incurred - Staff Period 5",
     "Directly incurred - Travel and subsistence Period 3",
     "Directly incurred - Travel and subsistence Period 4",
-    "Directly incurred - Equipment Period 2",
+    "Directly incurred - Travel and subsistence Period 5",
     "Directly incurred - Equipment Period 3",
     "Directly incurred - Equipment Period 4",
-    "Directly incurred - Other costs Period 2",
+    "Directly incurred - Equipment Period 5",
     "Directly incurred - Other costs Period 3",
     "Directly incurred - Other costs Period 4",
-    "Directly allocated - Investigations Period 2",
+    "Directly incurred - Other costs Period 5",
     "Directly allocated - Investigations Period 3",
     "Directly allocated - Investigations Period 4",
-    "Directly allocated - Estates costs Period 2",
+    "Directly allocated - Investigations Period 5",
     "Directly allocated - Estates costs Period 3",
     "Directly allocated - Estates costs Period 4",
-    "Directly allocated - Other costs Period 2",
+    "Directly allocated - Estates costs Period 5",
     "Directly allocated - Other costs Period 3",
     "Directly allocated - Other costs Period 4",
-    "Indirect costs - Investigations Period 2",
+    "Directly allocated - Other costs Period 5",
     "Indirect costs - Investigations Period 3",
     "Indirect costs - Investigations Period 4",
-    "Exceptions - Staff Period 2",
+    "Indirect costs - Investigations Period 5",
     "Exceptions - Staff Period 3",
     "Exceptions - Staff Period 4",
-    "Exceptions - Travel and subsistence Period 2",
+    "Exceptions - Staff Period 5",
     "Exceptions - Travel and subsistence Period 3",
     "Exceptions - Travel and subsistence Period 4",
-    "Exceptions - Equipment Period 2",
+    "Exceptions - Travel and subsistence Period 5",
     "Exceptions - Equipment Period 3",
     "Exceptions - Equipment Period 4",
-    "Exceptions - Other costs Period 2",
+    "Exceptions - Equipment Period 5",
     "Exceptions - Other costs Period 3",
     "Exceptions - Other costs Period 4",
+    "Exceptions - Other costs Period 5",
   ].forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("0");
   });
@@ -694,4 +694,40 @@ export const claimStatusTable = () => {
         throw new Error("Test failed");
       }
     });
+  };
+
+export const period2AbCad = () => {
+  cy.selectTile("Claims");
+  cy.get("td").contains("Period 2").siblings().contains("a", "Edit").click();
+  cy.heading("Costs to be claimed");
+};
+
+export const capPotMessageNotExist = () => {
+  cy.getByQA("validation-message-content").should("not.exist");
+};
+
+export const triggerCapPot = () => {
+  cy.get("a").contains("Labour").click();
+  cy.heading("Labour");
+  cy.get("a").contains("Add a cost").click();
+  cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
+  cy.getByAriaLabel("value of claim line item 1").clear().type("200").wait(800);
+};
+
+export const saveAndReturnToPrepare = () => {
+  cy.submitButton("Save and return to claims").click();
+  cy.heading("Costs to be claimed");
+};
+
+export const capPotMessageDoesExist = () => {
+  cy.getByQA("validation-message-content").contains(
+    "Please be aware, approval of this claim will cause a percentage of your grant to be retained.",
+  );
+};
+
+export const clearCostCatReturn = () => {
+  cy.get("a").contains("Labour").click();
+  cy.get("a").contains("Remove").click();
+  cy.get("button").contains("Save and return to claims").click();
+  cy.get("h1").contains("Costs to be claimed");
 };

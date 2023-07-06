@@ -11,7 +11,7 @@ export const projCostsToDate = () => {
     "Percentage of eligible costs claimed to date",
     "£350,000.00",
     "£175,000.00",
-    "£525,000.00",
+    "£575,000.00",
     "Totals",
     "0.00%",
   ].forEach(projCost => {
@@ -102,24 +102,40 @@ export const eligibleCostsSummary = () => {
 };
 
 export const partnerFinanceDetails = () => {
-  [
-    "EUI Small Ent Health (Lead)",
-    "A B Cad Services",
-    "ABS EUI Medium Enterprise",
-    "Total eligible costs",
-    "Funding level",
-    "Total grant approved",
-    "Remaining grant",
-    "Total grant paid in advance",
-    "Claim cap",
-    "£350,000.00",
-    "£175,000.00",
-    "65.00%",
-    "80.00%",
-  ].forEach(partnerCost => {
-    cy.getByQA("PartnerFinanceDetails").contains(partnerCost);
-  });
   cy.get("h4").contains("Partner finance details");
+  [
+    ["EUI Small Ent Health (Lead)", "£350,000.00", "65.00%", "£0.00", "£227,500.00", "£0.00", "80.00%", "£0.00"],
+    ["A B Cad Services", "£175,000.00", "65.00%", "£0.00", "£113,750.00", "0.00", "80.00%", "£0.00"],
+    ["ABS EUI Medium Enterprise", "£50,000.00", "65.00%", "£26,000.00", "£6,500.00", "£0.00", "80.00%", "£9,000.00"],
+  ].forEach(
+    (
+      [
+        participant,
+        eligibleCosts,
+        fundingLevel,
+        totalApproved,
+        remainingGrant,
+        paidInAdvance,
+        claimCap,
+        claimRetention,
+      ],
+      rowNumber = 0,
+    ) => {
+      cy.getByQA("PartnerFinanceDetails")
+        .find("tr")
+        .eq(rowNumber + 1)
+        .within(() => {
+          cy.get("td:nth-child(1)").contains(participant);
+          cy.get("td:nth-child(2)").contains(eligibleCosts);
+          cy.get("td:nth-child(3)").contains(fundingLevel);
+          cy.get("td:nth-child(4)").contains(totalApproved);
+          cy.get("td:nth-child(5)").contains(remainingGrant);
+          cy.get("td:nth-child(6)").contains(paidInAdvance);
+          cy.get("td:nth-child(7)").contains(claimCap);
+          cy.get("td:nth-child(8)").contains(claimRetention);
+        });
+    },
+  );
 };
 
 export const manyPartnerFinanceDetails = () => {
