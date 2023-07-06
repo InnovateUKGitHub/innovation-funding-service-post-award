@@ -193,12 +193,6 @@ type Acc_Claims__c {
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   Acc_Grant_Paid_To_Date__c: CurrencyValue
   OwnerId: IDValue
-  RecordTypeId(
-    """
-    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
-    """
-    fallback: Boolean
-  ): IDValue
 
   """polymorphicParentRelationship"""
   Owner: Acc_Claims__c_Owner
@@ -5492,29 +5486,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  LAST_QUARTER
-  LAST_YEAR
-  LAST_FISCAL_QUARTER
-  LAST_WEEK
-  LAST_MONTH
-  THIS_QUARTER
-  NEXT_YEAR
-  TODAY
-  NEXT_MONTH
-  NEXT_QUARTER
-  TOMORROW
-  NEXT_FISCAL_YEAR
-  LAST_90_DAYS
-  THIS_FISCAL_YEAR
-  THIS_FISCAL_QUARTER
-  THIS_WEEK
-  THIS_YEAR
-  LAST_FISCAL_YEAR
-  NEXT_WEEK
-  YESTERDAY
-  NEXT_FISCAL_QUARTER
   NEXT_90_DAYS
+  TODAY
+  THIS_YEAR
+  LAST_YEAR
+  LAST_90_DAYS
+  NEXT_YEAR
+  NEXT_MONTH
+  NEXT_FISCAL_YEAR
+  NEXT_WEEK
+  THIS_FISCAL_QUARTER
+  YESTERDAY
+  LAST_MONTH
+  LAST_WEEK
+  LAST_QUARTER
+  LAST_FISCAL_YEAR
+  NEXT_QUARTER
+  LAST_FISCAL_QUARTER
+  TOMORROW
+  THIS_WEEK
   THIS_MONTH
+  THIS_QUARTER
+  NEXT_FISCAL_QUARTER
+  THIS_FISCAL_YEAR
 }
 
 input DateOperators {
@@ -6123,11 +6117,11 @@ type MultiPicklistValue {
 
 """Enum representing possible null ordering options."""
 enum NullOrder {
-  """The enum value represents null last order."""
-  LAST
-
   """The enum value represents null first order."""
   FIRST
+
+  """The enum value represents null last order."""
+  LAST
 }
 
 type Order {
