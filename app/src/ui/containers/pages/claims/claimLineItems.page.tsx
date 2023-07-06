@@ -36,13 +36,13 @@ interface ClaimLineItemsParams {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  partner: Pending<PartnerDto>;
-  claimDetails: Pending<ClaimDetailsDto>;
-  costCategories: Pending<CostCategoryDto[]>;
-  forecastDetail: Pending<ForecastDetailsDTO>;
-  documents: Pending<DocumentSummaryDto[]>;
-  claim: Pending<ClaimDto>;
+  project: ProjectDto;
+  partner: PartnerDto;
+  claimDetails: ClaimDetailsDto;
+  costCategories: CostCategoryDto[];
+  forecastDetail: ForecastDetailsDTO;
+  documents: DocumentSummaryDto[];
+  claim: ClaimDto;
   content: Record<string, string>;
 }
 
@@ -60,28 +60,9 @@ const LineItemTable = createTypedTable<ClaimLineItemDto>();
 
 export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams, Data> {
   public render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      partner: this.props.partner,
-      claimDetails: this.props.claimDetails,
-      costCategories: this.props.costCategories,
-      forecastDetail: this.props.forecastDetail,
-      documents: this.props.documents,
-      claim: this.props.claim,
-    });
+    const { project, partner, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData =
+      this.props;
 
-    return <PageLoader pending={combined} render={data => this.renderContents(data)} />;
-  }
-
-  private renderContents({
-    project,
-    partner,
-    claimDetails,
-    costCategories,
-    forecastDetail,
-    documents,
-    claim,
-  }: CombinedData) {
     const params: ClaimLineItemsParams = {
       partnerId: this.props.partnerId,
       costCategoryId: this.props.costCategoryId,
@@ -330,22 +311,25 @@ const ClaimLineItemsContainer = (props: ClaimLineItemsParams & BaseProps) => {
   const claimLineItemsContent = useClaimLineItemsContent();
   const stores = useStores();
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    partner: stores.partners.getById(props.partnerId),
+    claimDetails: stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId),
+    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+    forecastDetail: stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId),
+    documents: stores.claimDetailDocuments.getClaimDetailDocuments(
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      props.costCategoryId,
+    ),
+    claim: stores.claims.get(props.partnerId, props.periodId),
+  });
+
   return (
-    <ClaimLineItemsComponent
-      {...props}
-      content={claimLineItemsContent}
-      project={stores.projects.getById(props.projectId)}
-      partner={stores.partners.getById(props.partnerId)}
-      claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
-      forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
-      claim={stores.claims.get(props.partnerId, props.periodId)}
-      documents={stores.claimDetailDocuments.getClaimDetailDocuments(
-        props.projectId,
-        props.partnerId,
-        props.periodId,
-        props.costCategoryId,
-      )}
+    <PageLoader
+      pending={combined}
+      render={data => <ClaimLineItemsComponent {...props} {...data} content={claimLineItemsContent} />}
     />
   );
 };
