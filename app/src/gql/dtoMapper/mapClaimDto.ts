@@ -30,6 +30,7 @@ type ClaimNode = Readonly<
     Acc_ApprovedDate__c: GQL.Value<string>;
     Acc_ClaimStatus__c: GQL.ValueAndLabel<string>;
     Acc_FinalClaim__c: GQL.Value<boolean>;
+    Acc_OverheadRate__c: GQL.Value<number>;
     Acc_PaidDate__c: GQL.Value<string>;
     Acc_PCF_Status__c: GQL.Value<string>;
     Acc_PeriodCoststobePaid__c: GQL.Value<number>;
@@ -63,6 +64,7 @@ type ClaimDtoMapping = Pick<
   | "isApproved"
   | "isFinalClaim"
   | "lastModifiedDate"
+  | "overheadRate"
   | "paidDate"
   | "partnerId"
   | "pcfStatus"
@@ -126,6 +128,9 @@ const mapper: GQL.DtoMapper<
   },
   lastModifiedDate(node) {
     return DateTime.fromISO(node?.LastModifiedDate?.value ?? "").toJSDate();
+  },
+  overheadRate(node) {
+    return node?.Acc_OverheadRate__c?.value ?? 0;
   },
   paidDate(node) {
     return !!node?.Acc_PaidDate__c?.value ? clock.parse(node?.Acc_PaidDate__c?.value, salesforceDateFormat) : null;

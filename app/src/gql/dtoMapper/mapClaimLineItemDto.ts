@@ -100,7 +100,7 @@ export function mapToClaimLineItemDtoArray<
   return (
     edges
       ?.filter(
-        x => x?.node?.RecordType?.Name?.value === "Claim Line Item" && x?.node?.Acc_CostCategory__c?.value !== null,
+        x => x?.node?.RecordType?.Name?.value === "Claims Line Item" && x?.node?.Acc_CostCategory__c?.value !== null,
       )
       ?.map(node => {
         return mapToClaimLineItemDto(node?.node ?? null, pickList, additionalData);

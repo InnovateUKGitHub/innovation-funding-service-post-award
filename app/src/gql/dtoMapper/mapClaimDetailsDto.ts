@@ -149,10 +149,12 @@ export function mapToClaimDetailsWithLineItemsDtoArray<
     ) || null;
 
   const claimDetails = mapToClaimDetailsDtoArray(claimDetailsEdges, pickList, additionalData);
+
   const claimLineItemsEdges =
     edges?.filter(
-      x => x?.node?.RecordType?.Name?.value === "Claim Line Item" && x?.node?.Acc_CostCategory__c?.value !== null,
+      x => x?.node?.RecordType?.Name?.value === "Claims Line Item" && x?.node?.Acc_CostCategory__c?.value !== null,
     ) || null;
+
   const claimLineItems = mapToClaimLineItemDtoArray(
     claimLineItemsEdges,
     itemsPickList,

@@ -4,13 +4,11 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { useContent } from "@ui/hooks/content.hook";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
-import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute, RouteState } from "@ui/containers/containerBase";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
 import { NavigationArrows } from "@ui/components/atomicDesign/molecules/NavigationArrows/navigationArrows";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
@@ -20,13 +18,12 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { ProjectRole } from "@framework/constants/project";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
-import { ClaimDto } from "@framework/dtos/claimDto";
 import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { useStores } from "@ui/redux/storesProvider";
+import { useClaimLineItemsData } from "./claimLineItems.logic";
 
 interface ClaimLineItemsParams {
   projectId: ProjectId;
@@ -37,31 +34,26 @@ interface ClaimLineItemsParams {
 
 interface Data {
   project: Pick<ProjectDto, "title" | "projectNumber" | "competitionType" | "id">;
-  partner: Pick<PartnerDto, "id" | "organisationType">;
+  partner: Pick<PartnerDto, "id" | "organisationType" | "overheadRate">;
   claimDetails: Pick<ClaimDetailsDto, "comments"> & {
     lineItems: Pick<ClaimLineItemDto, "description" | "value" | "lastModifiedDate">[];
   };
   costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
   forecastDetail: Pick<ForecastDetailsDTO, "value">;
   documents: DocumentSummaryDto[];
-  claim: Pick<ClaimDto, "overheadRate">;
   content: Record<string, string>;
-}
-
-interface CombinedData {
-  project: Data["project"];
-  partner: Data["partner"];
-  claimDetails: Data["claimDetails"];
-  costCategories: Data["costCategories"];
-  forecastDetail: Data["forecastDetail"];
-  documents: Data["documents"];
-  claim: Data["claim"];
 }
 
 const LineItemTable = createTypedTable<Pick<ClaimLineItemDto, "description" | "value" | "lastModifiedDate">>();
 
-export const ClaimLineItemsPage = (props: BaseProps & ClaimLineItemsParams & Data) => {
-  const { project, partner, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData = props;
+export const ClaimLineItemsPage = (props: BaseProps & ClaimLineItemsParams) => {
+  const content = useClaimLineItemsContent();
+  const { project, partner, claimDetails, costCategories, forecastDetail, documents } = useClaimLineItemsData(
+    props.projectId,
+    props.partnerId,
+    props.periodId,
+    props.costCategoryId,
+  );
 
   const params: ClaimLineItemsParams = {
     partnerId: props.partnerId,
@@ -85,18 +77,13 @@ export const ClaimLineItemsPage = (props: BaseProps & ClaimLineItemsParams & Dat
       }
     >
       <Section>
-        <ClaimLineItemsTable
-          lineItems={claimDetails.lineItems}
-          forecastDetail={forecastDetail}
-          content={props.content}
-        />
+        <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} content={content} />
       </Section>
-      {getSupportingDocumentsSection(project.competitionType, documents, claimDetails, props.content)}
+      {getSupportingDocumentsSection(project.competitionType, documents, claimDetails, content)}
       {renderNavigationArrows(
         costCategories,
         project,
         partner,
-        claim,
         props.currentRoute.routeName,
         params,
         props.config.options.standardOverheadRate,
@@ -217,7 +204,6 @@ const renderNavigationArrows = (
   costCategories: Data["costCategories"],
   project: Data["project"],
   partner: Data["partner"],
-  claim: Data["claim"],
   routeName: string,
   params: ClaimLineItemsParams,
   standardOverheadRate: number,
@@ -228,7 +214,7 @@ const renderNavigationArrows = (
     costCategories,
     project,
     partner,
-    claim.overheadRate,
+    partner?.overheadRate ?? 0,
     route,
     params,
     standardOverheadRate,
@@ -324,33 +310,6 @@ export function useClaimLineItemsContent() {
   };
 }
 
-const ClaimLineItemsContainer = (props: ClaimLineItemsParams & BaseProps) => {
-  const claimLineItemsContent = useClaimLineItemsContent();
-  const stores = useStores();
-
-  const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partner: stores.partners.getById(props.partnerId),
-    claimDetails: stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId),
-    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-    forecastDetail: stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId),
-    documents: stores.claimDetailDocuments.getClaimDetailDocuments(
-      props.projectId,
-      props.partnerId,
-      props.periodId,
-      props.costCategoryId,
-    ),
-    claim: stores.claims.get(props.partnerId, props.periodId),
-  });
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={data => <ClaimLineItemsPage {...props} {...data} content={claimLineItemsContent} />}
-    />
-  );
-};
-
 const getParams = (route: RouteState): ClaimLineItemsParams => ({
   projectId: route.params.projectId as ProjectId,
   partnerId: route.params.partnerId as PartnerId,
@@ -362,7 +321,7 @@ export const ClaimLineItemsRoute = defineRoute({
   allowRouteInActiveAccess: true,
   routeName: "claimLineItemsView",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
-  container: ClaimLineItemsContainer,
+  container: ClaimLineItemsPage,
   getParams: route => getParams(route),
   getTitle: ({ params, stores }) => {
     const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
@@ -376,7 +335,7 @@ export const ClaimLineItemsRoute = defineRoute({
 export const ReviewClaimLineItemsRoute = defineRoute({
   routeName: "claimLineItemsReview",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId",
-  container: ClaimLineItemsContainer,
+  container: ClaimLineItemsPage,
   getParams: route => getParams(route),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager) ||
