@@ -4,8 +4,8 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { useContent } from "@ui/hooks/content.hook";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
-import { Pending } from "../../../../shared/pending";
-import { BaseProps, ContainerBase, defineRoute, RouteState } from "../../containerBase";
+import { Pending } from "@shared/pending";
+import { BaseProps, defineRoute, RouteState } from "@ui/containers/containerBase";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
@@ -58,149 +58,50 @@ interface CombinedData {
 
 const LineItemTable = createTypedTable<ClaimLineItemDto>();
 
-export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams, Data> {
-  public render() {
-    const { project, partner, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData =
-      this.props;
+export const ClaimLineItemsPage = (props: BaseProps & ClaimLineItemsParams & Data) => {
+  const { project, partner, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData = props;
 
-    const params: ClaimLineItemsParams = {
-      partnerId: this.props.partnerId,
-      costCategoryId: this.props.costCategoryId,
-      periodId: this.props.periodId,
-      projectId: this.props.projectId,
-    };
-
-    const backLink =
-      this.props.currentRoute.routeName === ReviewClaimLineItemsRoute.routeName
-        ? this.props.routes.reviewClaim.getLink(params)
-        : this.props.routes.claimDetails.getLink(params);
-
-    // TODO: we get this twice which is not ideal, but this whole file should be refactored to a function component and we can address it then
-    const currentCostCategory = costCategories.find(x => x.id === this.props.costCategoryId);
-
-    return (
-      <Page
-        backLink={<BackLink route={backLink}>Back to claim</BackLink>}
-        pageTitle={<Title {...project} heading={currentCostCategory?.name} />}
-      >
-        <Section>
-          <ClaimLineItemsTable
-            lineItems={claimDetails.lineItems}
-            forecastDetail={forecastDetail}
-            content={this.props.content}
-          />
-        </Section>
-        {this.getSupportingDocumentsSection(project.competitionType, documents, claimDetails)}
-        {this.renderNavigationArrows(costCategories, project, partner, claim)}
-      </Page>
-    );
-  }
-
-  private getSupportingDocumentsSection(
-    competitionType: string,
-    documents: DocumentSummaryDto[],
-    claimDetails: ClaimDetailsDto,
-  ) {
-    const { content } = this.props;
-    const { isKTP } = checkProjectCompetition(competitionType);
-
-    // Note: KTP projects submit evidence on the whole claim, not each cost category.
-    const displaySupportingDocs = !isKTP;
-
-    return (
-      displaySupportingDocs && (
-        <>
-          <Section qa="supporting-documents-section" title={content.supportingDocumentsTitle}>
-            <DocumentView hideHeader qa="claim-line-item-documents" documents={documents} />
-          </Section>
-
-          {this.renderAdditionalInformation(claimDetails)}
-        </>
-      )
-    );
-  }
-
-  // TODO - this is something which we do in at least two places so should be generic
-  private filterOverheads(costCategoryName: string, overheadRate: number): boolean {
-    return !(costCategoryName === "Overheads" && overheadRate <= this.props.config.options.standardOverheadRate);
-  }
-
-  private getLinks(
-    costCategories: CostCategoryDto[],
-    project: ProjectDto,
-    partner: PartnerDto,
-    overheadRate: number,
-    pages: { getLink: (params: ClaimLineItemsParams) => ILinkInfo },
-  ) {
-    const periodId = this.props.periodId;
-    const costCategoriesToUse = costCategories
-      .filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType)
-      .filter(x => this.filterOverheads(x.name, overheadRate));
-
-    const currentCostCategory = costCategoriesToUse.find(x => x.id === this.props.costCategoryId);
-    if (currentCostCategory === undefined) return null;
-
-    const currentPosition = costCategoriesToUse.indexOf(currentCostCategory);
-    let nextCostCategory = null;
-    let previousCostCategory = null;
-
-    if (currentPosition !== costCategoriesToUse.length - 1) {
-      nextCostCategory = costCategoriesToUse[currentPosition + 1];
-    }
-    if (currentPosition !== 0) {
-      previousCostCategory = costCategoriesToUse[currentPosition - 1];
-    }
-
-    const createCostCategoryLink = (costCategory: CostCategoryDto | null) =>
-      costCategory
-        ? {
-            label: costCategory.name,
-            route: pages.getLink({
-              partnerId: partner.id,
-              projectId: project.id,
-              periodId,
-              costCategoryId: costCategory.id,
-            }),
-          }
-        : null;
-
-    const previousLink = createCostCategoryLink(previousCostCategory);
-    const nextLink = createCostCategoryLink(nextCostCategory);
-
-    return {
-      previousLink,
-      nextLink,
-    };
-  }
-
-  private readonly renderNavigationArrows = (
-    costCategories: CostCategoryDto[],
-    project: ProjectDto,
-    partner: PartnerDto,
-    claim: ClaimDto,
-  ) => {
-    const route =
-      this.props.currentRoute.routeName === ReviewClaimLineItemsRoute.routeName
-        ? ReviewClaimLineItemsRoute
-        : ClaimLineItemsRoute;
-
-    const navigationLinks = this.getLinks(costCategories, project, partner, claim.overheadRate, route);
-
-    if (navigationLinks === null) return null;
-
-    return navigationLinks ? <NavigationArrows {...navigationLinks} /> : null;
+  const params: ClaimLineItemsParams = {
+    partnerId: props.partnerId,
+    costCategoryId: props.costCategoryId,
+    periodId: props.periodId,
+    projectId: props.projectId,
   };
 
-  private readonly renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
-    if (!claimDetail.comments) return null;
+  const backLink =
+    props.currentRoute.routeName === ReviewClaimLineItemsRoute.routeName
+      ? props.routes.reviewClaim.getLink(params)
+      : props.routes.claimDetails.getLink(params);
 
-    return (
-      <Section title={this.props.content.additionalInfoTitle} qa="additional-information">
-        <SimpleString>{claimDetail.comments}</SimpleString>
+  const currentCostCategory = costCategories.find(x => x.id === params.costCategoryId);
+
+  return (
+    <Page
+      backLink={<BackLink route={backLink}>Back to claim</BackLink>}
+      pageTitle={
+        <Title title={project.title} projectNumber={project.projectNumber} heading={currentCostCategory?.name} />
+      }
+    >
+      <Section>
+        <ClaimLineItemsTable
+          lineItems={claimDetails.lineItems}
+          forecastDetail={forecastDetail}
+          content={props.content}
+        />
       </Section>
-    );
-  };
-}
+      {getSupportingDocumentsSection(project.competitionType, documents, claimDetails, props.content)}
+      {renderNavigationArrows(
+        costCategories,
+        project,
+        partner,
+        claim,
+        props.currentRoute.routeName,
+        params,
+        props.config.options.standardOverheadRate,
+      )}
+    </Page>
+  );
+};
 
 const ClaimLineItemsTable = ({
   lineItems,
@@ -276,6 +177,120 @@ const ClaimLineItemsTable = ({
   );
 };
 
+const getSupportingDocumentsSection = (
+  competitionType: string,
+  documents: DocumentSummaryDto[],
+  claimDetails: ClaimDetailsDto,
+  content: Record<string, string>,
+) => {
+  const { isKTP } = checkProjectCompetition(competitionType);
+
+  // Note: KTP projects submit evidence on the whole claim, not each cost category.
+  const displaySupportingDocs = !isKTP;
+
+  return (
+    displaySupportingDocs && (
+      <>
+        <Section qa="supporting-documents-section" title={content.supportingDocumentsTitle}>
+          <DocumentView hideHeader qa="claim-line-item-documents" documents={documents} />
+        </Section>
+
+        {renderAdditionalInformation(claimDetails, content)}
+      </>
+    )
+  );
+};
+
+const renderAdditionalInformation = (claimDetail: ClaimDetailsDto, content: Record<string, string>) => {
+  if (!claimDetail.comments) return null;
+
+  return (
+    <Section title={content.additionalInfoTitle} qa="additional-information">
+      <SimpleString>{claimDetail.comments}</SimpleString>
+    </Section>
+  );
+};
+
+const renderNavigationArrows = (
+  costCategories: CostCategoryDto[],
+  project: ProjectDto,
+  partner: PartnerDto,
+  claim: ClaimDto,
+  routeName: string,
+  params: ClaimLineItemsParams,
+  standardOverheadRate: number,
+) => {
+  const route = routeName === ReviewClaimLineItemsRoute.routeName ? ReviewClaimLineItemsRoute : ClaimLineItemsRoute;
+
+  const navigationLinks = getLinks(
+    costCategories,
+    project,
+    partner,
+    claim.overheadRate,
+    route,
+    params,
+    standardOverheadRate,
+  );
+
+  if (navigationLinks === null) return null;
+
+  return navigationLinks ? <NavigationArrows {...navigationLinks} /> : null;
+};
+
+const getLinks = (
+  costCategories: CostCategoryDto[],
+  project: ProjectDto,
+  partner: PartnerDto,
+  overheadRate: number,
+  pages: { getLink: (params: ClaimLineItemsParams) => ILinkInfo },
+  params: ClaimLineItemsParams,
+  standardOverheadRate: number,
+) => {
+  const periodId = params.periodId;
+  const costCategoriesToUse = costCategories
+    .filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType)
+    .filter(x => filterOverheads(x.name, overheadRate, standardOverheadRate));
+
+  const currentCostCategory = costCategoriesToUse.find(x => x.id === params.costCategoryId);
+  if (currentCostCategory === undefined) return null;
+
+  const currentPosition = costCategoriesToUse.indexOf(currentCostCategory);
+  let nextCostCategory = null;
+  let previousCostCategory = null;
+
+  if (currentPosition !== costCategoriesToUse.length - 1) {
+    nextCostCategory = costCategoriesToUse[currentPosition + 1];
+  }
+  if (currentPosition !== 0) {
+    previousCostCategory = costCategoriesToUse[currentPosition - 1];
+  }
+
+  const createCostCategoryLink = (costCategory: CostCategoryDto | null) =>
+    costCategory
+      ? {
+          label: costCategory.name,
+          route: pages.getLink({
+            partnerId: partner.id,
+            projectId: project.id,
+            periodId,
+            costCategoryId: costCategory.id,
+          }),
+        }
+      : null;
+
+  const previousLink = createCostCategoryLink(previousCostCategory);
+  const nextLink = createCostCategoryLink(nextCostCategory);
+
+  return {
+    previousLink,
+    nextLink,
+  };
+};
+
+const filterOverheads = (costCategoryName: string, overheadRate: number, standardOverheadRate: number): boolean => {
+  return !(costCategoryName === "Overheads" && overheadRate <= standardOverheadRate);
+};
+
 /**
  * ### useClaimLineItemsContent
  *
@@ -329,7 +344,7 @@ const ClaimLineItemsContainer = (props: ClaimLineItemsParams & BaseProps) => {
   return (
     <PageLoader
       pending={combined}
-      render={data => <ClaimLineItemsComponent {...props} {...data} content={claimLineItemsContent} />}
+      render={data => <ClaimLineItemsPage {...props} {...data} content={claimLineItemsContent} />}
     />
   );
 };
