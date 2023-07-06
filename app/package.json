@@ -75,6 +75,7 @@
     "isomorphic-form-data": "^2.0.0",
     "jsforce": "^1.11.0",
     "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.21",
     "lodash.camelcase": "^4.3.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.merge": "^4.6.2",
