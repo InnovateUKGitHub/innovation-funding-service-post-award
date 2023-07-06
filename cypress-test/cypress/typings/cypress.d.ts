@@ -52,6 +52,11 @@ declare global {
        * Gets the submit button with the matching name
        */
       submitButton(name: string): Chainable<Element>;
+      /**
+       *
+       * Gets the button with the matching name
+       */
+      button(name: string): Chainable<Element>;
 
       /**
        *
@@ -79,9 +84,15 @@ declare global {
        * Finds the defined project name or number and navigates to it from projects main page
        */
       navigateToProject(projectId: string): Chainable<Element>;
-
+      /**
+       *
+       * Selects (clicks) the tile with the right title
+       */
       selectTile(label: Tile): Chainable<Element>;
-
+      /**
+       *
+       * Will navigate to the project ID in question and delete any PCRs in draft status
+       */
       deletePcr(projectId: string): Chainable<Element>;
 
       validationLink(message: string): Chainable<Element>;
