@@ -1,19 +1,23 @@
-import { ClaimDto } from "@framework/dtos/claimDto";
+import sumBy from "lodash/sumBy";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { useContent } from "@ui/hooks/content.hook";
 import { ValidationMessage } from "../validationMessage";
+import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 
 const ClaimRetentionMessage = ({
   partner,
-  claim,
+  claimDetails,
 }: {
   partner: Pick<PartnerDtoGql, "capLimitGrant" | "totalParticipantCostsClaimed">;
-  claim: Pick<ClaimDto, "periodCostsToBePaid">;
+  claimDetails: Pick<CostsSummaryForPeriodDto, "costsClaimedThisPeriod">[];
 }) => {
   const { getContent } = useContent();
+  const totalCostsClaimedThisPeriod = sumBy(claimDetails, "costsClaimedThisPeriod");
 
-  if (roundCurrency((partner.totalParticipantCostsClaimed ?? 0) + claim.periodCostsToBePaid) > partner.capLimitGrant) {
+  if (
+    roundCurrency((partner.totalParticipantCostsClaimed ?? 0) + totalCostsClaimedThisPeriod) > partner.capLimitGrant
+  ) {
     return (
       <ValidationMessage message={getContent(x => x.components.claimRetentionMessage.message)} messageType="info" />
     );

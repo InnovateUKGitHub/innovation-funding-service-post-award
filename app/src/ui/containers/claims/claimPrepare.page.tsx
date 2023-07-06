@@ -46,7 +46,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
       }
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
     >
-      <ClaimRetentionMessage claim={data.claim} partner={data.partner} />
+      <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />
       <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
       {data.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
 

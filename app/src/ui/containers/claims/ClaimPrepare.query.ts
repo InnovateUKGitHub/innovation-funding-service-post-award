@@ -130,6 +130,7 @@ export const claimPrepareQuery = graphql`
                   value
                 }
                 Acc_ProjectParticipant__r {
+                  Id
                   Acc_AccountId__r {
                     Name {
                       value
@@ -149,9 +150,6 @@ export const claimPrepareQuery = graphql`
                 Acc_PaidDate__c {
                   value
                 }
-                Acc_ProjectParticipant__r {
-                  Id
-                }
                 Acc_ProjectPeriodEndDate__c {
                   value
                 }
@@ -165,6 +163,9 @@ export const claimPrepareQuery = graphql`
                   value
                 }
                 Acc_PeriodCostCategoryTotal__c {
+                  value
+                }
+                Acc_PeriodCoststobePaid__c {
                   value
                 }
                 Acc_TotalCostsApproved__c {
