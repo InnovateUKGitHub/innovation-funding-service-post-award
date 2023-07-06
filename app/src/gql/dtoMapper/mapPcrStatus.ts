@@ -57,7 +57,7 @@ const mapper: GQL.DtoMapper<PcrStatusDtoMapping, PcrStatusNode, { roles?: SfRole
      * Acc_ExternalComment__c
      * roles from Acc_Project__c
      */
-    if (additionalData?.roles?.isMo || (additionalData?.roles?.isFc && node?.Acc_ParticipantVisibility__c?.value)) {
+    if (additionalData?.roles?.isMo || (additionalData?.roles?.isPm && node?.Acc_ParticipantVisibility__c?.value)) {
       return node?.Acc_ExternalComment__c?.value ?? null;
     }
     return null;
