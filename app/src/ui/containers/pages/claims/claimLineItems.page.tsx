@@ -36,27 +36,29 @@ interface ClaimLineItemsParams {
 }
 
 interface Data {
-  project: ProjectDto;
-  partner: PartnerDto;
-  claimDetails: ClaimDetailsDto;
-  costCategories: CostCategoryDto[];
-  forecastDetail: ForecastDetailsDTO;
+  project: Pick<ProjectDto, "title" | "projectNumber" | "competitionType" | "id">;
+  partner: Pick<PartnerDto, "id" | "organisationType">;
+  claimDetails: Pick<ClaimDetailsDto, "comments"> & {
+    lineItems: Pick<ClaimLineItemDto, "description" | "value" | "lastModifiedDate">[];
+  };
+  costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
+  forecastDetail: Pick<ForecastDetailsDTO, "value">;
   documents: DocumentSummaryDto[];
-  claim: ClaimDto;
+  claim: Pick<ClaimDto, "overheadRate">;
   content: Record<string, string>;
 }
 
 interface CombinedData {
-  project: ProjectDto;
-  partner: PartnerDto;
-  claimDetails: ClaimDetailsDto;
-  costCategories: CostCategoryDto[];
-  forecastDetail: ForecastDetailsDTO;
-  documents: DocumentSummaryDto[];
-  claim: ClaimDto;
+  project: Data["project"];
+  partner: Data["partner"];
+  claimDetails: Data["claimDetails"];
+  costCategories: Data["costCategories"];
+  forecastDetail: Data["forecastDetail"];
+  documents: Data["documents"];
+  claim: Data["claim"];
 }
 
-const LineItemTable = createTypedTable<ClaimLineItemDto>();
+const LineItemTable = createTypedTable<Pick<ClaimLineItemDto, "description" | "value" | "lastModifiedDate">>();
 
 export const ClaimLineItemsPage = (props: BaseProps & ClaimLineItemsParams & Data) => {
   const { project, partner, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData = props;
@@ -108,8 +110,8 @@ const ClaimLineItemsTable = ({
   forecastDetail,
   content,
 }: {
-  lineItems: ClaimLineItemDto[];
-  forecastDetail: ForecastDetailsDTO;
+  lineItems: Pick<ClaimLineItemDto, "description" | "value" | "lastModifiedDate">[];
+  forecastDetail: Data["forecastDetail"];
   content: Record<string, string>;
 }) => {
   const renderFooterRow = (row: {
@@ -179,8 +181,8 @@ const ClaimLineItemsTable = ({
 
 const getSupportingDocumentsSection = (
   competitionType: string,
-  documents: DocumentSummaryDto[],
-  claimDetails: ClaimDetailsDto,
+  documents: Data["documents"],
+  claimDetails: Data["claimDetails"],
   content: Record<string, string>,
 ) => {
   const { isKTP } = checkProjectCompetition(competitionType);
@@ -201,7 +203,7 @@ const getSupportingDocumentsSection = (
   );
 };
 
-const renderAdditionalInformation = (claimDetail: ClaimDetailsDto, content: Record<string, string>) => {
+const renderAdditionalInformation = (claimDetail: Data["claimDetails"], content: Record<string, string>) => {
   if (!claimDetail.comments) return null;
 
   return (
@@ -212,10 +214,10 @@ const renderAdditionalInformation = (claimDetail: ClaimDetailsDto, content: Reco
 };
 
 const renderNavigationArrows = (
-  costCategories: CostCategoryDto[],
-  project: ProjectDto,
-  partner: PartnerDto,
-  claim: ClaimDto,
+  costCategories: Data["costCategories"],
+  project: Data["project"],
+  partner: Data["partner"],
+  claim: Data["claim"],
   routeName: string,
   params: ClaimLineItemsParams,
   standardOverheadRate: number,
@@ -238,9 +240,9 @@ const renderNavigationArrows = (
 };
 
 const getLinks = (
-  costCategories: CostCategoryDto[],
-  project: ProjectDto,
-  partner: PartnerDto,
+  costCategories: Data["costCategories"],
+  project: Data["project"],
+  partner: Data["partner"],
   overheadRate: number,
   pages: { getLink: (params: ClaimLineItemsParams) => ILinkInfo },
   params: ClaimLineItemsParams,
@@ -265,7 +267,7 @@ const getLinks = (
     previousCostCategory = costCategoriesToUse[currentPosition - 1];
   }
 
-  const createCostCategoryLink = (costCategory: CostCategoryDto | null) =>
+  const createCostCategoryLink = (costCategory: Pick<CostCategoryDto, "name" | "id"> | null) =>
     costCategory
       ? {
           label: costCategory.name,
