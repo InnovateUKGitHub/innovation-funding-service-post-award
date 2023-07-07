@@ -60,7 +60,6 @@ export const enum PCRItemType {
   ProjectSuspension = 40,
   ProjectTermination = 50,
   MultiplePartnerFinancialVirement = 60,
-  SinglePartnerFinancialVirement = 70,
   ScopeChange = 80,
   TimeExtension = 90,
   PeriodLengthChange = 100,
@@ -76,7 +75,6 @@ export const enum PCRItemTypeName {
   ProjectSuspension = "ProjectSuspension",
   ProjectTermination = "ProjectTermination",
   MultiplePartnerFinancialVirement = "MultiplePartnerFinancialVirement",
-  SinglePartnerFinancialVirement = "SinglePartnerFinancialVirement",
   ScopeChange = "ScopeChange",
   TimeExtension = "TimeExtension",
   PeriodLengthChange = "PeriodLengthChange",
@@ -114,7 +112,7 @@ export const enum PCRStepId {
   // Loan Extension IDs
   loanExtension = "loanExtension",
 
-  // Parther Withdrawal Workflow IDs
+  // Partner Withdrawal Workflow IDs
   removalPeriodStep = "removalPeriodStep",
 
   // Scope Change Workflow IDs
@@ -190,7 +188,6 @@ const pcrDisabledMatrix = {
   [PCRItemType.ProjectSuspension]: [],
   [PCRItemType.ProjectTermination]: [],
   [PCRItemType.MultiplePartnerFinancialVirement]: [PCRItemType.MultiplePartnerFinancialVirement],
-  [PCRItemType.SinglePartnerFinancialVirement]: [],
   [PCRItemType.ScopeChange]: [PCRItemType.ScopeChange],
   [PCRItemType.TimeExtension]: [PCRItemType.TimeExtension],
   [PCRItemType.PeriodLengthChange]: [],
@@ -210,7 +207,6 @@ export const pcrUnduplicatableMatrix = {
   [PCRItemType.ProjectSuspension]: true,
   [PCRItemType.ProjectTermination]: true,
   [PCRItemType.MultiplePartnerFinancialVirement]: true,
-  [PCRItemType.SinglePartnerFinancialVirement]: true,
   [PCRItemType.ScopeChange]: true,
   [PCRItemType.TimeExtension]: true,
   [PCRItemType.PeriodLengthChange]: true,

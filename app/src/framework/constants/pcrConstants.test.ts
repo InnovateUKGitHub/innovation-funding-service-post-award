@@ -63,14 +63,13 @@ describe("getUnavailablePcrItemsMatrix()", () => {
 
     describe("returns with no matching values", () => {
       test.each`
-        name                                     | itemTypeInput
-        ${"with Unknown"}                        | ${PCRItemType.Unknown}
-        ${"with AccountNameChange"}              | ${PCRItemType.AccountNameChange}
-        ${"with PartnerAddition"}                | ${PCRItemType.PartnerAddition}
-        ${"with PartnerWithdrawal"}              | ${PCRItemType.PartnerWithdrawal}
-        ${"with ProjectSuspension"}              | ${PCRItemType.ProjectSuspension}
-        ${"with SinglePartnerFinancialVirement"} | ${PCRItemType.SinglePartnerFinancialVirement}
-        ${"with PeriodLengthChange"}             | ${PCRItemType.PeriodLengthChange}
+        name                         | itemTypeInput
+        ${"with Unknown"}            | ${PCRItemType.Unknown}
+        ${"with AccountNameChange"}  | ${PCRItemType.AccountNameChange}
+        ${"with PartnerAddition"}    | ${PCRItemType.PartnerAddition}
+        ${"with PartnerWithdrawal"}  | ${PCRItemType.PartnerWithdrawal}
+        ${"with ProjectSuspension"}  | ${PCRItemType.ProjectSuspension}
+        ${"with PeriodLengthChange"} | ${PCRItemType.PeriodLengthChange}
       `("$name", ({ itemTypeInput }) => {
         const stubSinglePcr = createPCRSummaryDto({
           status: PCRStatus.Draft,

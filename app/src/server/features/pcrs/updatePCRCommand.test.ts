@@ -8,7 +8,6 @@ import { ProjectRole } from "@framework/constants/project";
 import {
   PCRDto,
   PCRItemDto,
-  PCRStandardItemDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
   PCRItemForProjectSuspensionDto,
@@ -365,7 +364,7 @@ describe("UpdatePCRCommand", () => {
           type: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.typeName === changeProjectScopeRecord.type)?.type,
         };
 
-        dto.items.push(additionalItem as PCRStandardItemDto);
+        dto.items.push(additionalItem as PCRItemDto);
 
         const command = new UpdatePCRCommand({ projectId: project.Id, projectChangeRequestId: pcr.id, pcr: dto });
 

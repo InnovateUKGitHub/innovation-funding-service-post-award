@@ -145,9 +145,6 @@ export const mapToPcrItemType = (shortName: string) => {
       return PCRItemType.PartnerWithdrawal;
     case "loan drawdown change":
       return PCRItemType.LoanDrawdownChange;
-    case "reallocate one partner's project costs":
-    case "single partner financial virement":
-      return PCRItemType.SinglePartnerFinancialVirement;
     case "reallocate several partners' project cost":
     case "multiple partner financial virement":
       return PCRItemType.MultiplePartnerFinancialVirement;

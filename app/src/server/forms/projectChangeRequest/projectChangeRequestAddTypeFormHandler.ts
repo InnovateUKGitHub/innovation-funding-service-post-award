@@ -1,5 +1,5 @@
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
-import { PCRDto, PCRStandardItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
@@ -34,7 +34,7 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
           ({
             type: x,
             status: PCRItemStatus.ToDo,
-          } as PCRStandardItemDto),
+          } as PCRItemDto),
       );
 
     return {

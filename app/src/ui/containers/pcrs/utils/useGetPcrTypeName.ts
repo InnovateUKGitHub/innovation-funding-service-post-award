@@ -50,8 +50,6 @@ export const useGetPcrTypeName = () => {
           return getContent(x => x.pcrTypes.requestHeader);
         case "Scope Change":
           return getContent(x => x.pcrTypes.scopeChange);
-        case "Single Partner Financial Virement":
-          return getContent(x => x.pcrTypes.singlePartnerFinancialVirement);
         case "Time Extension":
           return getContent(x => x.pcrTypes.timeExtension);
         default:

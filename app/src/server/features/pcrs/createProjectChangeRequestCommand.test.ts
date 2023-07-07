@@ -147,7 +147,7 @@ describe("Create PCR Command", () => {
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
-  test("returns a validation error if a type is not enabled", async () => {
+  test("throws an error if a type is not enabled", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
@@ -160,10 +160,6 @@ describe("Create PCR Command", () => {
       reasoningStatus: PCRItemStatus.ToDo,
       items: [
         {
-          // TODO: This code needs to be refactored
-          // Note: This find query will never work since we have remove all matching competitions
-          // type: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement),
-          type: PCRItemType.SinglePartnerFinancialVirement,
           status: PCRItemStatus.ToDo,
           accountName: "Pocahontas",
           partnerId: partner.id,
@@ -171,7 +167,7 @@ describe("Create PCR Command", () => {
       ],
     } as unknown as PCRDto);
 
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(command)).rejects.toThrow("PCR Type not implemented");
   });
 
   test("should add a new project change request to the repo", async () => {

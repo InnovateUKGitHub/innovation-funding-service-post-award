@@ -59,14 +59,12 @@ describe("GetPCRItemTypesQuery", () => {
     const query = new GetPCRItemTypesQuery(project.Id);
     const result = await context.runQuery(query);
 
-    const singlePartnerVirement = result.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement);
     const multiplePartnerVirement = result.find(x => x.type === PCRItemType.MultiplePartnerFinancialVirement);
 
     if (!multiplePartnerVirement) {
       throw Error("multiplePartnerVirement was not found");
     }
 
-    expect(singlePartnerVirement).toBe(undefined);
     expect(multiplePartnerVirement.enabled).toBe(true);
   });
 

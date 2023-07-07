@@ -59,14 +59,7 @@ export type PCRItemDto =
   | PCRItemForProjectSuspensionDto
   | PCRItemForProjectTerminationDto
   | PCRItemForScopeChangeDto
-  | PCRItemForTimeExtensionDto
-  | PCRStandardItemDto;
-
-export type ProjectChangeRequestStandardItemTypes = PCRItemType.SinglePartnerFinancialVirement;
-
-export interface PCRStandardItemDto extends PCRItemBaseDto {
-  type: ProjectChangeRequestStandardItemTypes;
-}
+  | PCRItemForTimeExtensionDto;
 
 export interface PCRItemForMultiplePartnerFinancialVirementDto extends PCRItemBaseDto {
   grantMovingOverFinancialYear: number | null;

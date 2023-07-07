@@ -24,7 +24,6 @@ import {
   PCRItemForPartnerAdditionDto,
   PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPeriodLengthChangeDto,
-  PCRStandardItemDto,
   PCRItemForLoanDrawdownChangeDto,
   PCRItemForLoanDrawdownExtensionDto,
 } from "@framework/dtos/pcrDtos";
@@ -84,7 +83,6 @@ export class PCRDtoValidator extends Results<PCRDto> {
     | PCRPartnerAdditionItemDtoValidator
     | MultiplePartnerFinancialVirementDtoValidator
     | PCRPeriodLengthChangeItemDtoValidator
-    | PCRStandardItemDtoValidator
     | PCRLoanDrawdownChangeItemDtoValidator
     | PCRLoanExtensionItemDtoValidator
   >;
@@ -369,8 +367,6 @@ export class PCRDtoValidator extends Results<PCRDto> {
         return new PCRPeriodLengthChangeItemDtoValidator(
           params as PCRBaseItemDtoValidatorProps<PCRItemForPeriodLengthChangeDto>,
         );
-      case PCRItemType.SinglePartnerFinancialVirement:
-        return new PCRStandardItemDtoValidator(params as PCRBaseItemDtoValidatorProps<PCRStandardItemDto>);
       case PCRItemType.LoanDrawdownChange:
         return new PCRLoanDrawdownChangeItemDtoValidator(
           params as PCRBaseItemDtoValidatorProps<PCRItemForLoanDrawdownChangeDto>,
@@ -666,8 +662,6 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
     return Validation.isUnchanged(this, value, originalValue, message);
   }
 }
-
-export class PCRStandardItemDtoValidator extends PCRBaseItemDtoValidator<PCRStandardItemDto> {}
 
 export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDtoValidator<PCRItemForMultiplePartnerFinancialVirementDto> {
   private validateGrantMovingOverFinancialYear() {

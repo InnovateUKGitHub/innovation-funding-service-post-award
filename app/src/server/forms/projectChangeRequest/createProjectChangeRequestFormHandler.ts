@@ -1,5 +1,5 @@
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
-import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, PCRStandardItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -44,7 +44,7 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
       projectId: params.projectId,
-      items: items as PCRStandardItemDto[],
+      items: items as PCRItemDto[],
     };
 
     return dto as PCRDto;

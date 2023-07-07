@@ -9,7 +9,6 @@ import { periodLengthChangeWorkflow } from "@ui/containers/pcrs/periodLengthChan
 import { BaseProps } from "../containerBase";
 import { financialVirementWorkflow } from "./financialVirements/workflow";
 import { suspendProjectWorkflow } from "./suspendProject/workflow";
-import { standardItemWorkflow } from "./standardItem/workflow";
 import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { LoanDrawdownChangeWorkflow } from "./loanDrawdownChange/LoanDrawdownChangeWorkflow";
 import { loanExtensionItemWorkflow } from "./loanDrawdownExtension/loanDrawdownExtensionWorkflow";
@@ -94,8 +93,6 @@ export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends W
         return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);
       case PCRItemType.PeriodLengthChange:
         return new PcrWorkflow(periodLengthChangeWorkflow, step);
-      case PCRItemType.SinglePartnerFinancialVirement:
-        return new PcrWorkflow(standardItemWorkflow, step);
       default:
         return null;
     }

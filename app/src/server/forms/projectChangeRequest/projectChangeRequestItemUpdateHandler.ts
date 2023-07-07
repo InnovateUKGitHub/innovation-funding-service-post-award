@@ -96,9 +96,6 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       case PCRItemType.MultiplePartnerFinancialVirement:
         this.updateMultiplePartnerFinancialVirement(item, body, stepName);
         break;
-      case PCRItemType.SinglePartnerFinancialVirement:
-        // nothing to update as only files
-        break;
       case PCRItemType.LoanDrawdownExtension:
         this.updateLoanExtension(item, body, stepName);
         break;

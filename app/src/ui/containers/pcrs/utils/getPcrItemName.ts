@@ -107,10 +107,6 @@ export const usePcrItemName = () => {
           name = getContent(x => x.pcrTypes.scopeChange);
           description = getContent(x => x.pages.pcrModifyOptions.changeScopeMessage);
           break;
-        case "Single Partner Financial Virement":
-          name = getContent(x => x.pcrTypes.singlePartnerFinancialVirement);
-          description = getContent(x => x.pages.pcrModifyOptions.reallocateCostsMessage);
-          break;
         case "Time Extension":
           name = getContent(x => x.pcrTypes.timeExtension);
           description = getContent(x => x.pages.pcrModifyOptions.changeDurationMessage);
