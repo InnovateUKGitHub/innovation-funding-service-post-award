@@ -12,7 +12,7 @@ const pmEmail = "james.black@euimeabs.test";
 describe("Loans project > PCR", () => {
   before(() => {
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
-    pcrTidyUp("Change project scope");
+    pcrTidyUp("Draft");
   });
   after(deletePcr);
 

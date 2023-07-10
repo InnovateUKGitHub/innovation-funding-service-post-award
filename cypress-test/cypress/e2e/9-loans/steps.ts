@@ -3,6 +3,7 @@ const fcEmail = "wed.addams@test.test.co.uk";
 const hybridEmail = "s.shuang@irc.trde.org.uk.test";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
+import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "common/visit";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
@@ -208,7 +209,7 @@ export const loansPcrCheckboxesWithHint = () => {
 
 export const submitCancelButtons = () => {
   cy.submitButton("Create request");
-  cy.get("a").contains("Cancel");
+  cy.get("a").contains("Cancel").click();
 };
 
 export const giveUsInfoTodo = () => {
@@ -428,10 +429,11 @@ export const markAndReturn = () => {
 };
 
 export const assertForMissingPcr = () => {
+  cy.get("a").contains("Create request").click();
   cy.clickCheckBox("Change project scope");
   cy.get("button").contains("Create request").click();
   cy.heading("Request");
-  cy.getByQA("button_return-qa").contains("Save and return to requests").click();
+  cy.get("button").contains("Save and return to requests").click();
   cy.heading("Project change requests");
   cy.get("a").contains("Create request").click();
   cy.get("span").contains("Learn about why some PCR types are missing").click();

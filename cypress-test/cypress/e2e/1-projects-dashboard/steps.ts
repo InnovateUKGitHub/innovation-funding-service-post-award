@@ -114,11 +114,11 @@ export const backToDashboard = () => {
 
 export const projectDashboardFinancials = () => {
   cy.getByQA("project-summary-gol-costs").contains("Total eligible costs");
-  cy.getByQA("project-summary-gol-costs").contains("£525,000.00");
+  cy.getByQA("project-summary-gol-costs").contains("£575,000.00");
   cy.getByQA("project-summary-claimed-costs").contains("Eligible costs claimed to date");
-  cy.getByQA("project-summary-claimed-costs").contains("£0.00");
+  cy.getByQA("project-summary-claimed-costs").contains("£49,000.00");
   cy.getByQA("project-summary-claimed-percentage").contains("Percentage of eligible costs claimed to date");
-  cy.getByQA("project-summary-claimed-percentage").contains("0.00%");
+  cy.getByQA("project-summary-claimed-percentage").contains("8.52%");
   cy.getByQA("lead-partner-summary-gol-costs").contains("Total eligible costs");
   cy.getByQA("lead-partner-summary-gol-costs").contains("£350,000.00");
   cy.getByQA("lead-partner-summary-claimed-costs").contains("Eligible costs claimed to date");

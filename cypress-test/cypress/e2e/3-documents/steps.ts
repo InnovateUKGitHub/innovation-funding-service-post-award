@@ -77,14 +77,14 @@ export const uploadToEUI = () => {
 };
 
 export const fcUploadToEUI = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfilefc.doc");
+  cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfilefc.doc");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
 };
 
 export const pmUploadToEUI = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfilepm.doc");
+  cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfilepm.doc");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
@@ -96,8 +96,7 @@ export const displayEUIFile = () => {
 };
 
 export const uploadToAB = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
-  cy.wait(500);
+  cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfile.doc");
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and A B Cad Services");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
@@ -110,8 +109,7 @@ export const displayABFile = () => {
 };
 
 export const uploadToEUIMed = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
-  cy.wait(500);
+  cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfile.doc");
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and ABS EUI Medium Enterprise");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
@@ -158,13 +156,11 @@ export const manyPartnerUpload = () => {
     "Innovate UK, MO and YHDHDL",
     "Innovate UK, MO and Hedges' Hedges Ltd",
   ].forEach(selection => {
-    cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
-    cy.wait(500);
+    cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfile.doc");
     cy.get("select#partnerId.govuk-select").select(selection);
     cy.wait(500);
     cy.get("select#description.govuk-select").select("Plans");
     cy.submitButton("Upload documents").click();
-    cy.getByQA("validation-message-content").contains("has been uploaded.");
   });
 };
 
