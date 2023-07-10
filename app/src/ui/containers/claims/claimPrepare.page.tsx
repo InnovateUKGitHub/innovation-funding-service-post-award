@@ -19,6 +19,8 @@ import { Fieldset } from "@ui/rhf-components/Fieldset";
 import { Button } from "@ui/rhf-components/Button";
 import { ValidationMessage } from "@ui/components/validationMessage";
 import { ClaimRetentionMessage } from "@ui/components/claims/ClaimRetentionMessage";
+import { getClaimDetailsStatusType } from "@ui/components/claims/claimDetailsLink";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface PrepareClaimParams {
   projectId: ProjectId;
@@ -28,6 +30,11 @@ export interface PrepareClaimParams {
 
 const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
   const data = useClaimPreparePageData(props.projectId, props.partnerId, props.periodId);
+
+  const isNonEditable =
+    getClaimDetailsStatusType({ project: data.project, partner: data.partner, claim: data.claim }) !== "edit";
+
+  const { getContent } = useContent();
 
   const navigate = useNavigate();
 
@@ -47,6 +54,9 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
     >
       <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />
+      {isNonEditable && (
+        <ValidationMessage message={getContent(x => x.pages.claimPrepare.readonlyMessage)} messageType="info" />
+      )}
       <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
       {data.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
 
@@ -54,12 +64,19 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
         <ClaimTable
           {...data}
           getLink={costCategoryId =>
-            props.routes.prepareClaimLineItems.getLink({
-              partnerId: props.partnerId,
-              projectId: props.projectId,
-              periodId: props.periodId,
-              costCategoryId,
-            })
+            isNonEditable
+              ? props.routes.reviewClaimLineItems.getLink({
+                  partnerId: props.partnerId,
+                  projectId: props.projectId,
+                  periodId: props.periodId,
+                  costCategoryId,
+                })
+              : props.routes.prepareClaimLineItems.getLink({
+                  partnerId: props.partnerId,
+                  projectId: props.projectId,
+                  periodId: props.periodId,
+                  costCategoryId,
+                })
           }
         />
 
@@ -83,10 +100,17 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
                 }).path,
               )
             }
+            disabled={isNonEditable}
           >
             <Content value={x => x.pages.claimPrepare.buttonSaveAndContinue} />
           </Button>
-          <Button secondary name="button_save" onClick={() => navigate(backLink.path)}>
+          <Button
+            secondary
+            name="button_save"
+            onClick={() => {
+              navigate(backLink.path);
+            }}
+          >
             <Content value={x => x.pages.claimPrepare.buttonSaveAndReturn} />
           </Button>
         </Fieldset>

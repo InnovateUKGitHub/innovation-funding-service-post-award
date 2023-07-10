@@ -183,46 +183,6 @@ export const claimPrepareQuery = graphql`
                 Acc_CostCategory__c {
                   value
                 }
-                ContentDocumentLinks(first: 2000) {
-                  edges {
-                    node {
-                      LinkedEntityId {
-                        value
-                      }
-                      ContentDocument {
-                        Id
-                        LastModifiedBy {
-                          ContactId {
-                            value
-                          }
-                        }
-                        CreatedDate {
-                          value
-                        }
-                        LatestPublishedVersionId {
-                          value
-                        }
-                        FileExtension {
-                          value
-                        }
-                        Title {
-                          value
-                        }
-                        ContentSize {
-                          value
-                        }
-                        CreatedBy {
-                          Name {
-                            value
-                          }
-                          Username {
-                            value
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
               }
             }
           }
@@ -260,13 +220,7 @@ export const claimPrepareQuery = graphql`
                 Acc_AccountId__c {
                   value
                 }
-                Acc_TotalParticipantGrant__c {
-                  value
-                }
                 Acc_ProjectRole__c {
-                  value
-                }
-                Acc_ForecastLastModifiedDate__c {
                   value
                 }
                 Acc_OrganisationType__c {
@@ -275,28 +229,13 @@ export const claimPrepareQuery = graphql`
                 Acc_ParticipantStatus__c {
                   value
                 }
-                Acc_TotalFutureForecastsForParticipant__c {
-                  value
-                }
-                Acc_TotalParticipantCosts__c {
-                  value
-                }
-                Acc_TotalCostsSubmitted__c {
-                  value
-                }
-                Acc_Overdue_Project__c {
-                  value
-                }
-                Acc_OverheadRate__c {
-                  value
-                }
                 Acc_Award_Rate__c {
                   value
                 }
-                Acc_TotalApprovedCosts__c {
+                Acc_StaticCapLimitGrant__c {
                   value
                 }
-                Acc_StaticCapLimitGrant__c {
+                Acc_TotalParticipantCosts__c {
                   value
                 }
               }

@@ -79,46 +79,6 @@ export type ClaimPrepareQuery$data = {
               readonly Acc_TotalDeferredAmount__c: {
                 readonly value: number | null;
               } | null;
-              readonly ContentDocumentLinks: {
-                readonly edges: ReadonlyArray<{
-                  readonly node: {
-                    readonly ContentDocument: {
-                      readonly ContentSize: {
-                        readonly value: number | null;
-                      } | null;
-                      readonly CreatedBy: {
-                        readonly Name: {
-                          readonly value: string | null;
-                        } | null;
-                        readonly Username: {
-                          readonly value: string | null;
-                        } | null;
-                      } | null;
-                      readonly CreatedDate: {
-                        readonly value: string | null;
-                      } | null;
-                      readonly FileExtension: {
-                        readonly value: string | null;
-                      } | null;
-                      readonly Id: string;
-                      readonly LastModifiedBy: {
-                        readonly ContactId: {
-                          readonly value: string | null;
-                        } | null;
-                      } | null;
-                      readonly LatestPublishedVersionId: {
-                        readonly value: string | null;
-                      } | null;
-                      readonly Title: {
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
-                    readonly LinkedEntityId: {
-                      readonly value: string | null;
-                    } | null;
-                  } | null;
-                } | null> | null;
-              } | null;
               readonly Id: string;
               readonly LastModifiedDate: {
                 readonly value: string | null;
@@ -210,12 +170,6 @@ export type ClaimPrepareQuery$data = {
               } | null;
               readonly Acc_OrganisationType__c: {
                 readonly value: string | null;
-              } | null;
-              readonly Acc_Overdue_Project__c: {
-                readonly value: string | null;
-              } | null;
-              readonly Acc_OverheadRate__c: {
-                readonly value: number | null;
               } | null;
               readonly Acc_ParticipantStatus__c: {
                 readonly value: string | null;
@@ -395,30 +349,29 @@ v9 = {
 v10 = [
   (v9/*: any*/)
 ],
-v11 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "StringValue",
-  "kind": "LinkedField",
-  "name": "Name",
-  "plural": false,
-  "selections": (v10/*: any*/),
-  "storageKey": null
-},
-v12 = [
-  (v11/*: any*/)
+v11 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "StringValue",
+    "kind": "LinkedField",
+    "name": "Name",
+    "plural": false,
+    "selections": (v10/*: any*/),
+    "storageKey": null
+  }
 ],
-v13 = {
+v12 = {
   "alias": null,
   "args": null,
   "concreteType": "RecordType",
   "kind": "LinkedField",
   "name": "RecordType",
   "plural": false,
-  "selections": (v12/*: any*/),
+  "selections": (v11/*: any*/),
   "storageKey": null
 },
-v14 = {
+v13 = {
   "alias": null,
   "args": null,
   "concreteType": "IDValue",
@@ -428,7 +381,7 @@ v14 = {
   "selections": (v10/*: any*/),
   "storageKey": null
 },
-v15 = {
+v14 = {
   "alias": null,
   "args": null,
   "concreteType": "StringValue",
@@ -438,7 +391,7 @@ v15 = {
   "selections": (v10/*: any*/),
   "storageKey": null
 },
-v16 = {
+v15 = {
   "alias": null,
   "args": null,
   "concreteType": "DoubleValue",
@@ -448,7 +401,7 @@ v16 = {
   "selections": (v10/*: any*/),
   "storageKey": null
 },
-v17 = {
+v16 = {
   "alias": null,
   "args": null,
   "concreteType": "DateValue",
@@ -458,7 +411,7 @@ v17 = {
   "selections": (v10/*: any*/),
   "storageKey": null
 },
-v18 = {
+v17 = {
   "alias": null,
   "args": null,
   "concreteType": "DateValue",
@@ -468,68 +421,45 @@ v18 = {
   "selections": (v10/*: any*/),
   "storageKey": null
 },
-v19 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "DateTimeValue",
-  "kind": "LinkedField",
-  "name": "CreatedDate",
-  "plural": false,
-  "selections": (v10/*: any*/),
-  "storageKey": null
-},
-v20 = {
+v18 = {
   "alias": null,
   "args": null,
   "concreteType": "Account",
   "kind": "LinkedField",
   "name": "Acc_AccountId__r",
   "plural": false,
-  "selections": (v12/*: any*/),
+  "selections": (v11/*: any*/),
   "storageKey": null
 },
-v21 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "CurrencyValue",
-  "kind": "LinkedField",
-  "name": "Acc_TotalCostsSubmitted__c",
-  "plural": false,
-  "selections": (v10/*: any*/),
-  "storageKey": null
-},
-v22 = [
-  (v4/*: any*/)
-],
-v23 = [
+v19 = [
   {
     "kind": "Variable",
     "name": "eq",
     "variableName": "projectId"
   }
 ],
-v24 = {
+v20 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isMo",
   "storageKey": null
 },
-v25 = {
+v21 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isFc",
   "storageKey": null
 },
-v26 = {
+v22 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v27 = [
+v23 = [
   {
     "alias": null,
     "args": null,
@@ -643,8 +573,8 @@ v27 = [
                         "plural": false,
                         "selections": [
                           (v8/*: any*/),
+                          (v12/*: any*/),
                           (v13/*: any*/),
-                          (v14/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -653,7 +583,7 @@ v27 = [
                             "name": "Acc_CostCategory__r",
                             "plural": false,
                             "selections": [
-                              (v15/*: any*/)
+                              (v14/*: any*/)
                             ],
                             "storageKey": null
                           },
@@ -677,7 +607,7 @@ v27 = [
                             "selections": (v10/*: any*/),
                             "storageKey": null
                           },
-                          (v16/*: any*/),
+                          (v15/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -688,8 +618,8 @@ v27 = [
                             "selections": (v10/*: any*/),
                             "storageKey": null
                           },
+                          (v16/*: any*/),
                           (v17/*: any*/),
-                          (v18/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -821,7 +751,16 @@ v27 = [
                             "selections": (v10/*: any*/),
                             "storageKey": null
                           },
-                          (v19/*: any*/)
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DateTimeValue",
+                            "kind": "LinkedField",
+                            "name": "CreatedDate",
+                            "plural": false,
+                            "selections": (v10/*: any*/),
+                            "storageKey": null
+                          }
                         ],
                         "storageKey": null
                       }
@@ -945,7 +884,7 @@ v27 = [
                         "plural": false,
                         "selections": [
                           (v8/*: any*/),
-                          (v13/*: any*/),
+                          (v12/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -1018,9 +957,9 @@ v27 = [
                             "selections": (v10/*: any*/),
                             "storageKey": null
                           },
-                          (v18/*: any*/),
                           (v17/*: any*/),
                           (v16/*: any*/),
+                          (v15/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -1061,7 +1000,16 @@ v27 = [
                             "selections": (v10/*: any*/),
                             "storageKey": null
                           },
-                          (v21/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "CurrencyValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_TotalCostsSubmitted__c",
+                            "plural": false,
+                            "selections": (v10/*: any*/),
+                            "storageKey": null
+                          },
                           {
                             "alias": null,
                             "args": null,
@@ -1082,146 +1030,7 @@ v27 = [
                             "selections": (v10/*: any*/),
                             "storageKey": null
                           },
-                          (v14/*: any*/),
-                          {
-                            "alias": null,
-                            "args": (v22/*: any*/),
-                            "concreteType": "ContentDocumentLinkConnection",
-                            "kind": "LinkedField",
-                            "name": "ContentDocumentLinks",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "ContentDocumentLinkEdge",
-                                "kind": "LinkedField",
-                                "name": "edges",
-                                "plural": true,
-                                "selections": [
-                                  {
-                                    "alias": null,
-                                    "args": null,
-                                    "concreteType": "ContentDocumentLink",
-                                    "kind": "LinkedField",
-                                    "name": "node",
-                                    "plural": false,
-                                    "selections": [
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "IDValue",
-                                        "kind": "LinkedField",
-                                        "name": "LinkedEntityId",
-                                        "plural": false,
-                                        "selections": (v10/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "ContentDocument",
-                                        "kind": "LinkedField",
-                                        "name": "ContentDocument",
-                                        "plural": false,
-                                        "selections": [
-                                          (v8/*: any*/),
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "User",
-                                            "kind": "LinkedField",
-                                            "name": "LastModifiedBy",
-                                            "plural": false,
-                                            "selections": [
-                                              {
-                                                "alias": null,
-                                                "args": null,
-                                                "concreteType": "IDValue",
-                                                "kind": "LinkedField",
-                                                "name": "ContactId",
-                                                "plural": false,
-                                                "selections": (v10/*: any*/),
-                                                "storageKey": null
-                                              }
-                                            ],
-                                            "storageKey": null
-                                          },
-                                          (v19/*: any*/),
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "IDValue",
-                                            "kind": "LinkedField",
-                                            "name": "LatestPublishedVersionId",
-                                            "plural": false,
-                                            "selections": (v10/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "StringValue",
-                                            "kind": "LinkedField",
-                                            "name": "FileExtension",
-                                            "plural": false,
-                                            "selections": (v10/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "StringValue",
-                                            "kind": "LinkedField",
-                                            "name": "Title",
-                                            "plural": false,
-                                            "selections": (v10/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "IntValue",
-                                            "kind": "LinkedField",
-                                            "name": "ContentSize",
-                                            "plural": false,
-                                            "selections": (v10/*: any*/),
-                                            "storageKey": null
-                                          },
-                                          {
-                                            "alias": null,
-                                            "args": null,
-                                            "concreteType": "User",
-                                            "kind": "LinkedField",
-                                            "name": "CreatedBy",
-                                            "plural": false,
-                                            "selections": [
-                                              (v11/*: any*/),
-                                              {
-                                                "alias": null,
-                                                "args": null,
-                                                "concreteType": "StringValue",
-                                                "kind": "LinkedField",
-                                                "name": "Username",
-                                                "plural": false,
-                                                "selections": (v10/*: any*/),
-                                                "storageKey": null
-                                              }
-                                            ],
-                                            "storageKey": null
-                                          }
-                                        ],
-                                        "storageKey": null
-                                      }
-                                    ],
-                                    "storageKey": null
-                                  }
-                                ],
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": "ContentDocumentLinks(first:2000)"
-                          }
+                          (v13/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -1233,7 +1042,9 @@ v27 = [
               },
               {
                 "alias": null,
-                "args": (v22/*: any*/),
+                "args": [
+                  (v4/*: any*/)
+                ],
                 "concreteType": "Acc_CostCategory__cConnection",
                 "kind": "LinkedField",
                 "name": "Acc_CostCategory__c",
@@ -1256,7 +1067,7 @@ v27 = [
                         "plural": false,
                         "selections": [
                           (v8/*: any*/),
-                          (v15/*: any*/),
+                          (v14/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -1307,7 +1118,7 @@ v27 = [
                           {
                             "fields": [
                               {
-                                "fields": (v23/*: any*/),
+                                "fields": (v19/*: any*/),
                                 "kind": "ObjectValue",
                                 "name": "Acc_ProjectId__c"
                               }
@@ -1357,7 +1168,7 @@ v27 = [
                         "plural": false,
                         "selections": [
                           (v8/*: any*/),
-                          (v20/*: any*/),
+                          (v18/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -1371,29 +1182,9 @@ v27 = [
                           {
                             "alias": null,
                             "args": null,
-                            "concreteType": "CurrencyValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_TotalParticipantGrant__c",
-                            "plural": false,
-                            "selections": (v10/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
                             "concreteType": "PicklistValue",
                             "kind": "LinkedField",
                             "name": "Acc_ProjectRole__c",
-                            "plural": false,
-                            "selections": (v10/*: any*/),
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "DateTimeValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ForecastLastModifiedDate__c",
                             "plural": false,
                             "selections": (v10/*: any*/),
                             "storageKey": null
@@ -1509,7 +1300,7 @@ v27 = [
                   {
                     "fields": [
                       {
-                        "fields": (v23/*: any*/),
+                        "fields": (v19/*: any*/),
                         "kind": "ObjectValue",
                         "name": "Id"
                       }
@@ -1555,9 +1346,9 @@ v27 = [
                             "name": "roles",
                             "plural": false,
                             "selections": [
-                              (v24/*: any*/),
-                              (v25/*: any*/),
-                              (v26/*: any*/),
+                              (v20/*: any*/),
+                              (v21/*: any*/),
+                              (v22/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -1566,9 +1357,9 @@ v27 = [
                                 "name": "partnerRoles",
                                 "plural": true,
                                 "selections": [
-                                  (v24/*: any*/),
-                                  (v25/*: any*/),
-                                  (v26/*: any*/),
+                                  (v20/*: any*/),
+                                  (v21/*: any*/),
+                                  (v22/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -1599,7 +1390,7 @@ v27 = [
                             "kind": "LinkedField",
                             "name": "Acc_CompetitionId__r",
                             "plural": false,
-                            "selections": (v12/*: any*/),
+                            "selections": (v11/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -1732,7 +1523,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ClaimPrepareQuery",
-    "selections": (v27/*: any*/),
+    "selections": (v23/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -1746,7 +1537,7 @@ return {
     ],
     "kind": "Operation",
     "name": "ClaimPrepareQuery",
-    "selections": (v27/*: any*/)
+    "selections": (v23/*: any*/)
   },
   "params": {
     "cacheID": "ed8656555a8ad03253b24a5e48248800",

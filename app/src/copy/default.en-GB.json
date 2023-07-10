@@ -513,13 +513,15 @@
       "difference": "Difference",
       "addCost": "Add a cost",
       "additionalInfo": "Additional info",
-      "setToZeroToRemove": "You can only remove claim line items you created. For other claim line items you want to remove, set the value to zero and save."
+      "setToZeroToRemove": "You can only remove claim line items you created. For other claim line items you want to remove, set the value to zero and save.",
+      "readonlyMessage": "This claim has already been submitted. No changes can be made at this time."
     },
     "claimPrepare": {
       "title": "Costs to be claimed",
       "backLink": "Back to claims",
       "buttonSaveAndReturn": "Save and return to claims",
-      "buttonSaveAndContinue": "Continue to claims documents"
+      "buttonSaveAndContinue": "Continue to claims documents",
+      "readonlyMessage": "This claim has already been submitted. No changes can be made at this time."
     },
     "claimPrepareSummary": {
       "backToDocuments": "Back to claim documents",

@@ -235,8 +235,6 @@ export function mapToPartnerDto<TNode extends PartnerNode, TPickList extends key
   }, {} as Pick<PartnerDtoMapping, TPickList>);
 }
 
-const defaultRole = { isPm: false, isMo: false, isFc: false };
-
 /**
  * Maps Partner Edges to array of Partner DTOs.
  *
@@ -263,9 +261,7 @@ export function mapToPartnerDtoArray<
         /*
          * find the matching partner roles from the array of passed in roles
          */
-        const roles: SfRoles =
-          (partnerRoles as SfPartnerRoles[]).find(x => x?.partnerId === node?.node?.Acc_AccountId__c?.value) ??
-          defaultRole;
+        const roles: SfRoles = getPartnerRoles(partnerRoles, node?.node?.Acc_AccountId__c?.value ?? "unknown");
 
         return mapToPartnerDto(node?.node ?? null, pickList, {
           ...nextAdditionalData,
@@ -279,4 +275,11 @@ export function mapToPartnerDtoArray<
       );
     }) ?? []
   );
+}
+
+/**
+ * utility to fetch correct partner roles
+ */
+export function getPartnerRoles(roles: SfPartnerRoles[], accountId: string) {
+  return roles.find(x => x.partnerId === accountId) || ({ isFc: false, isMo: false, isPm: false } as SfPartnerRoles);
 }

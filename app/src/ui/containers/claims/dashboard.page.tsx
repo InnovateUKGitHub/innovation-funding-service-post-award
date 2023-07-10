@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { ClaimDetailsLink, getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
+import { ClaimDetailsLink, getClaimDetailsStatusType } from "@ui/components/claims/claimDetailsLink";
 import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
@@ -189,7 +189,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
   }
 
   private hasBodyRowFlag(claim: ClaimDto, project: ProjectDto, partner: PartnerDto) {
-    const linkType = getClaimDetailsLinkType({ claim, project, partner });
+    const linkType = getClaimDetailsStatusType({ claim, project, partner });
 
     return linkType === "edit" ? "edit" : null;
   }

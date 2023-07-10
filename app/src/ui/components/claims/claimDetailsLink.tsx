@@ -23,7 +23,7 @@ export const ClaimDetailsLink = ({ claim, partner, project, routes }: ClaimDetai
   const { getContent } = useContent();
   const { isActive: isProjectActive } = useProjectStatus();
 
-  const linkType = isProjectActive ? getClaimDetailsLinkType({ claim, partner, project }) : "view";
+  const linkType = isProjectActive ? getClaimDetailsStatusType({ claim, partner, project }) : "view";
 
   if (!linkType) return null;
 
@@ -55,11 +55,15 @@ export const ClaimDetailsLink = ({ claim, partner, project, routes }: ClaimDetai
   );
 };
 
-export const getClaimDetailsLinkType = ({
+export const getClaimDetailsStatusType = ({
   project,
   partner,
   claim,
-}: ClaimDetailsBaseProps): "edit" | "review" | "view" | null => {
+}: {
+  claim: Pick<ClaimDto, "status">;
+  project: Pick<ProjectDto, "roles">;
+  partner: Pick<PartnerDto, "roles" | "partnerStatus" | "isWithdrawn">;
+}): "edit" | "review" | "view" | null => {
   if (partner.partnerStatus === PartnerStatus.OnHold || partner.isWithdrawn) {
     return "view";
   }

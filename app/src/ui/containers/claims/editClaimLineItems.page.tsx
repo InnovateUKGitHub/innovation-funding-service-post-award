@@ -40,6 +40,7 @@ import { useStores } from "@ui/redux/storesProvider";
 import { TextInput } from "@ui/components/inputs/textInput";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { useNavigate } from "react-router-dom";
+import { getClaimDetailsStatusType } from "@ui/components/claims/claimDetailsLink";
 
 export interface EditClaimDetailsParams {
   projectId: ProjectId;

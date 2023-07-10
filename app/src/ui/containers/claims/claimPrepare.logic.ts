@@ -5,7 +5,7 @@ import { claimPrepareQuery } from "./ClaimPrepare.query";
 import { ClaimPrepareQuery } from "./__generated__/ClaimPrepareQuery.graphql";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { getPartnerRoles, mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
@@ -27,17 +27,28 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
   return useMemo(() => {
     const project = mapToProjectDto(projectNode, [
       "roles",
+      "partnerRoles",
       "id",
       "projectNumber",
       "title",
       "isNonFec",
       "competitionType",
+      "status",
     ]);
 
     const partner = mapToPartnerDto(
       partnerNode,
-      ["id", "organisationType", "awardRate", "capLimitGrant", "totalParticipantCostsClaimed"],
-      {},
+      [
+        "id",
+        "organisationType",
+        "awardRate",
+        "capLimitGrant",
+        "totalParticipantCostsClaimed",
+        "roles",
+        "isWithdrawn",
+        "partnerStatus",
+      ],
+      { roles: getPartnerRoles(project.partnerRoles, partnerNode?.Acc_AccountId__c?.value ?? "unknown") },
     );
 
     const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
@@ -50,7 +61,16 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
 
     const claims = mapToClaimDtoArray(
       claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
-      ["id", "periodId", "isFinalClaim", "periodEndDate", "periodStartDate", "grantPaidToDate", "periodCostsToBePaid"],
+      [
+        "id",
+        "periodId",
+        "isFinalClaim",
+        "periodEndDate",
+        "periodStartDate",
+        "grantPaidToDate",
+        "periodCostsToBePaid",
+        "status",
+      ],
       {},
     );
 

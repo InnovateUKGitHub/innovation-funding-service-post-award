@@ -2,7 +2,7 @@ import { getAuthRoles } from "@framework/types/authorisation";
 import { getLeadPartner } from "@framework/util/partnerHelper";
 import { Content } from "@ui/components/content";
 import { createTypedTable } from "@ui/components/table";
-import { ClaimDetailsLink, getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
+import { ClaimDetailsLink, getClaimDetailsStatusType } from "@ui/components/claims/claimDetailsLink";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { DateTime } from "luxon";
@@ -229,7 +229,7 @@ const getBodyRowFlag = (claim: ClaimType, project: ProjectType, partners: Partne
   const partner = partners.find(x => x.id === claim.partnerId);
   if (!partner) return false;
 
-  const linkType = getClaimDetailsLinkType({ claim, project, partner });
+  const linkType = getClaimDetailsStatusType({ claim, project, partner });
 
   return linkType === "edit" || linkType === "review";
 };
