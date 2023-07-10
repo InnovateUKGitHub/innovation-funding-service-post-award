@@ -97,7 +97,7 @@
       "saveAndReturnText": "Save and return to monitoring reports"
     },
     "forecastDetails": {
-      "finalClaimMessageFc": "You cannot change your forecast. You must",
+      "finalClaimMessageFc": "You cannot change your forecast. You must ",
       "submitLink": "submit your final claim",
       "finalClaimMessageMo": "has submitted their final claim so cannot change their forecast.",
       "finalClaimDueMessageMo": "is due to submit their final claim so cannot change their forecast."
