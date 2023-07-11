@@ -84,3 +84,15 @@ export function calcPercentage(total: Nullable<number>, amount: number) {
   if (!total) return null;
   return (100 * (amount || 0)) / total;
 }
+
+/**
+ * rounds down a currency to pennies to prevent calculated values having currency values
+ * of 3 decimal places or more
+ *
+ * @example
+ *
+ * roundCurrencyDown(23.688) // 23.68
+ */
+export function roundCurrencyDown(cur: number) {
+  return Math.floor(cur * 100) / 100;
+}

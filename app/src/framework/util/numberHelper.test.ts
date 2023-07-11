@@ -4,6 +4,7 @@ import {
   isNumber,
   parseNumber,
   roundCurrency,
+  roundCurrencyDown,
   sumBy,
   withinRange,
 } from "@framework/util/numberHelper";
@@ -157,5 +158,17 @@ describe("numberHelper", () => {
         expect(calcPercentage(total, amount)).toBe(expected);
       },
     );
+  });
+
+  describe("roundCurrencyDown", () => {
+    test.each`
+      input      | result
+      ${23.0006} | ${23}
+      ${46.688}  | ${46.68}
+      ${12.023}  | ${12.02}
+      ${14.109}  | ${14.1}
+    `("rounding down $input should give $result", ({ input, result }: { input: number; result: number }) => {
+      expect(roundCurrencyDown(input)).toBe(result);
+    });
   });
 });

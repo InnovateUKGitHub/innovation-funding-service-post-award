@@ -8,7 +8,7 @@ import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { numberComparator } from "@framework/util/comparator";
-import { diffAsPercentage, roundCurrency } from "@framework/util/numberHelper";
+import { diffAsPercentage, roundCurrency, roundCurrencyDown } from "@framework/util/numberHelper";
 import { EditorStatus } from "@ui/constants/enums";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import {
@@ -515,11 +515,13 @@ export class ForecastTable extends React.Component<Props> {
       const overheadRates = getOverheadRate(partner, project, costCategories, cell, data);
 
       if (overheadRates && overheadRates.overheadsData && overheadRates.labourCategory && partner.overheadRate) {
-        const updatedValue = calculateOverheadCell(
-          partner.overheadRate,
-          overheadRates.labourCategory.id,
-          overheadRates.overheadsData.value,
-          cell,
+        const updatedValue = roundCurrencyDown(
+          calculateOverheadCell(
+            partner.overheadRate,
+            overheadRates.labourCategory.id,
+            overheadRates.overheadsData.value,
+            cell,
+          ),
         );
 
         overheadRates.overheadsData.value = updatedValue;
