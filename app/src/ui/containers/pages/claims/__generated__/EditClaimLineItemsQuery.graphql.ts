@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1f535c1584a1925cd23e48140a1ef463>>
+ * @generated SignedSource<<9d79f7b08cf772396d064b04f47637c9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -622,12 +622,22 @@ v24 = {
   ],
   "storageKey": null
 },
-v25 = [
-  (v6/*: any*/)
-],
-v26 = {
+v25 = {
   "alias": null,
-  "args": (v25/*: any*/),
+  "args": [
+    (v6/*: any*/),
+    {
+      "kind": "Literal",
+      "name": "orderBy",
+      "value": {
+        "ContentDocument": {
+          "CreatedDate": {
+            "order": "DESC"
+          }
+        }
+      }
+    }
+  ],
   "concreteType": "ContentDocumentLinkConnection",
   "kind": "LinkedField",
   "name": "ContentDocumentLinks",
@@ -781,11 +791,13 @@ v26 = {
       "storageKey": null
     }
   ],
-  "storageKey": "ContentDocumentLinks(first:2000)"
+  "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"CreatedDate\":{\"order\":\"DESC\"}}})"
 },
-v27 = {
+v26 = {
   "alias": null,
-  "args": (v25/*: any*/),
+  "args": [
+    (v6/*: any*/)
+  ],
   "concreteType": "Acc_CostCategory__cConnection",
   "kind": "LinkedField",
   "name": "Acc_CostCategory__c",
@@ -857,7 +869,7 @@ v27 = {
   ],
   "storageKey": "Acc_CostCategory__c(first:2000)"
 },
-v28 = {
+v27 = {
   "alias": null,
   "args": [
     {
@@ -1038,7 +1050,7 @@ return {
                               (v23/*: any*/),
                               (v24/*: any*/),
                               (v13/*: any*/),
-                              (v26/*: any*/)
+                              (v25/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -1048,8 +1060,8 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v27/*: any*/),
-                  (v28/*: any*/)
+                  (v26/*: any*/),
+                  (v27/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1153,7 +1165,7 @@ return {
                               (v23/*: any*/),
                               (v24/*: any*/),
                               (v13/*: any*/),
-                              (v26/*: any*/)
+                              (v25/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -1163,8 +1175,8 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v27/*: any*/),
-                  (v28/*: any*/)
+                  (v26/*: any*/),
+                  (v27/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1177,16 +1189,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "676774d2018f9bb218f452960a706f85",
+    "cacheID": "5e141b778e302c345883885207100330",
     "id": null,
     "metadata": {},
     "name": "EditClaimLineItemsQuery",
     "operationKind": "query",
-    "text": "query EditClaimLineItemsQuery(\n  $projectId: ID!\n  $projectIdStr: String\n  $partnerId: ID!\n  $periodId: Double!\n  $costCategoryId: ID!\n) {\n  currentUser {\n    email\n    isSystemUser\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {Acc_ProjectPeriodNumber__c: {eq: $periodId}}, {RecordType: {Name: {eq: \"Profile Detail\"}}}, {Acc_CostCategory__c: {eq: $costCategoryId}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_CostCategoryGOLCost__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_LatestForecastCost__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {Acc_ProjectPeriodNumber__c: {eq: $periodId}}, {Acc_CostCategory__c: {eq: $costCategoryId}}, {or: [{RecordType: {Name: {eq: \"Claims Detail\"}}}, {RecordType: {Name: {eq: \"Claims Line Item\"}}}]}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_LineItemDescription__c {\n                value\n              }\n              Acc_LineItemCost__c {\n                value\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ReasonForDifference__c {\n                value\n              }\n              Owner {\n                __typename\n                ... on User {\n                  Email {\n                    value\n                  }\n                }\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_ClaimStatus__c {\n                value\n                label\n              }\n              Acc_CostCategory__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000) {\n                edges {\n                  node {\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Username {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_CostCategory__c(first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_NonFEC__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query EditClaimLineItemsQuery(\n  $projectId: ID!\n  $projectIdStr: String\n  $partnerId: ID!\n  $periodId: Double!\n  $costCategoryId: ID!\n) {\n  currentUser {\n    email\n    isSystemUser\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {Acc_ProjectPeriodNumber__c: {eq: $periodId}}, {RecordType: {Name: {eq: \"Profile Detail\"}}}, {Acc_CostCategory__c: {eq: $costCategoryId}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_CostCategoryGOLCost__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_LatestForecastCost__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {Acc_ProjectPeriodNumber__c: {eq: $periodId}}, {Acc_CostCategory__c: {eq: $costCategoryId}}, {or: [{RecordType: {Name: {eq: \"Claims Detail\"}}}, {RecordType: {Name: {eq: \"Claims Line Item\"}}}]}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_LineItemDescription__c {\n                value\n              }\n              Acc_LineItemCost__c {\n                value\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ReasonForDifference__c {\n                value\n              }\n              Owner {\n                __typename\n                ... on User {\n                  Email {\n                    value\n                  }\n                }\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_ClaimStatus__c {\n                value\n                label\n              }\n              Acc_CostCategory__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Username {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_CostCategory__c(first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_NonFEC__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "dfbec482ca3c7f39a5e857227d348bf6";
+(node as any).hash = "ec8c72352e528c6a497e3e12a829cb31";
 
 export default node;

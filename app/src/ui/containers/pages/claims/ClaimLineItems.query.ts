@@ -101,7 +101,7 @@ export const claimLineItemsQuery = graphql`
                 Acc_CostCategory__c {
                   value
                 }
-                ContentDocumentLinks(first: 2000) {
+                ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { CreatedDate: { order: DESC } } }) {
                   edges {
                     node {
                       LinkedEntityId {
