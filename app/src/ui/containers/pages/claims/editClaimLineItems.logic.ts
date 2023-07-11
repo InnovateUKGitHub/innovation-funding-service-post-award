@@ -48,22 +48,6 @@ export const useEditClaimLineItemsData = (
     )
     .flat();
 
-  // const claimLineItems = mapToClaimLineItemDtoArray(
-  //   claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Line Item"),
-  //   ["id", "isAuthor", "lastModifiedDate", "value", "description"],
-  //   {
-  //     currentUser: Object.assign({}, { email: "unknown email", isSystemUser: false }, data?.currentUser),
-  //   },
-  // );
-
-  // const claimsDetails = mapToClaimDetailsDtoArray(
-  //   claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
-  //   ["isAuthor", "value", "comments", "lineItems"],
-  //   {
-  //     currentUser: Object.assign({}, { email: "unknown email", isSystemUser: false }, data?.currentUser),
-  //   },
-  // );
-
   const claimsDetails = mapToClaimDetailsWithLineItemsDtoArray(
     claimsGql,
     ["isAuthor", "value", "comments"],
@@ -71,12 +55,18 @@ export const useEditClaimLineItemsData = (
     { currentUser: Object.assign({}, { email: "unknown email", isSystemUser: false }, data?.currentUser) },
   );
 
-  const claimDetails = head(claimsDetails);
-
-  if (!claimDetails) throw new Error("Matching claim details not found");
+  const claimDetails = head(claimsDetails) || {
+    partnerId,
+    costCategoryId,
+    periodId,
+    value: 0,
+    comments: null,
+    lineItems: [],
+    isAuthor: false,
+  };
 
   const forecastDetails = mapToForecastDetailsDtoArray(profileGql, ["value"]);
-  console.log("forecastDetails", forecastDetails);
+
   const forecastDetail = head(forecastDetails) || {
     costCategoryId,
     periodId,

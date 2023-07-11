@@ -56,7 +56,15 @@ export const useClaimLineItemsData = (
     {},
   );
 
-  const claimDetails = head(claimsDetails) ?? { comments: "", id: "", value: 0, description: 0, lineItems: [] };
+  const claimDetails =
+    head(claimsDetails) ??
+    ({ comments: "", id: "", value: 0, description: 0, lineItems: [] } || {
+      partnerId,
+      costCategoryId,
+      periodId,
+      comments: null,
+      lineItems: [],
+    });
 
   const forecastDetails = mapToForecastDetailsDtoArray(profileGql, ["value"]);
 
