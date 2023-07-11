@@ -225,7 +225,7 @@ export const explainReasoningTodo = () => {
 export const deletePcr = () => {
   visitApp({ path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
   cy.getByQA("pcrDeleteLink").contains("Delete").click();
-  cy.getByQA("button_delete-qa").click({ force: true });
+  cy.get("button").contains("Delete request").click({ force: true });
 };
 
 export const loansEditTable = () => {
