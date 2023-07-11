@@ -1,4 +1,5 @@
 import { fileTidyUp } from "common/filetidyup";
+import { error } from "cypress/types/jquery";
 
 const moLogin = "testman2@testing.com";
 let date = new Date();
@@ -285,9 +286,9 @@ export const learnFiles = () => {
 };
 
 export const savedFromPrev = () => {
-  cy.getByAriaLabel("Labour Period 2").should("contain.value", "1000");
-  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,000.00");
-  cy.getByAriaLabel("Overheads Period 2").should("contain.value", "1000");
+  cy.getByAriaLabel("Labour Period 2").should("have.value", "33.33");
+  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£33.33");
+  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.66");
 };
 
 export const openClosedSection = () => {
@@ -694,7 +695,7 @@ export const claimStatusTable = () => {
         throw new Error("Test failed");
       }
     });
-  };
+};
 
 export const period2AbCad = () => {
   cy.selectTile("Claims");

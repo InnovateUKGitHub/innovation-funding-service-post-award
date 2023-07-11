@@ -54,9 +54,9 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   it("Should validate when null value is entered as a forecast", validateForecast);
 
   it("Should accept input and calculate the figures accordingly", () => {
-    cy.getByAriaLabel("Labour Period 2").clear().type("1000");
-    cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,000.00");
-    cy.getByAriaLabel("Overheads Period 2").clear().type("1000").wait(1000);
+    cy.getByAriaLabel("Labour Period 2").clear().type("33.33");
+    cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£33.33");
+    cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.66");
   });
 
   it("Should save and return to claims", () => {
@@ -81,5 +81,6 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
 
   it("Should continue to summary", () => {
     cy.submitButton("Continue to summary").click();
+    cy.heading("Claim summary");
   });
 });
