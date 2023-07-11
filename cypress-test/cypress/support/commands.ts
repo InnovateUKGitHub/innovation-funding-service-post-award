@@ -72,7 +72,8 @@ const submitButton = (name: string) => {
 };
 
 /**
- * Note that this upload button is different to the one contained within Claims documents upload which is button_upload-qa
+ * Note that this upload button is different to the one contained within Claims documents upload which is button_upload-qa.
+ * N.B. this is identical to submitButton and should probably request a dev to use a standard data-qa for document uploads.
  */
 const uploadButton = (name: string) => {
   cy.get('button[type="submit"]').contains(name);
