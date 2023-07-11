@@ -466,7 +466,7 @@ export class ForecastTable extends React.Component<Props> {
     isSubmitting: boolean,
     allowRetroactiveForecastEdit?: boolean,
   ) {
-    const value = forecastRow.forecasts[periodId];
+    const value = roundCurrencyDown(forecastRow.forecasts[periodId]);
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators.find(x => x.model.periodId === periodId);
     const error = validator && validator.value;
