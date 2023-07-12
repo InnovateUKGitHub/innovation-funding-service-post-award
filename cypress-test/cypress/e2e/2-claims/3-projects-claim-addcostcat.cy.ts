@@ -3,7 +3,7 @@ import { visitApp } from "../../common/visit";
 import {
   additionalInformationHeading,
   allowFileUpload,
-  clearUpCostCat,
+  clearUpLabourCostCat,
   correctTableHeaders,
   evidenceRequiredMessage,
   newCostCatLineItem,
@@ -13,6 +13,7 @@ import {
   standardComments,
   shouldShowCostCatTable,
   validateLineItem,
+  clearUpOverheadsCostCat,
 } from "./steps";
 
 describe("claims > Editing a claim by accessing cost categories", () => {
@@ -85,7 +86,11 @@ describe("claims > Editing a claim by accessing cost categories", () => {
 
   it("Should reflect the £1000 change to the claim in the cost cat table", reflectCostAdded);
 
-  it("Should clear the cost category line item and delete the file that was uploaded", clearUpCostCat);
+  it("Should clear the cost category line item and delete the file that was uploaded", clearUpLabourCostCat);
+
+  it("Should return you to the cost category page", returnToCostCatPage);
+
+  it("Should clear the Overheads cost category", clearUpOverheadsCostCat);
 
   it("Should return you to the cost category page", returnToCostCatPage);
 

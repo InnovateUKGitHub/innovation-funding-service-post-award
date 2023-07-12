@@ -320,9 +320,33 @@ export const displayCorrectOverheadRate = () => {
 };
 
 export const updateLabourCalculateOH = () => {
-  cy.getByAriaLabel("Labour Period 2").clear().type("33.33");
-  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£33.33");
-  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.66");
+  [
+    [50.24, 10.04],
+    [6530.64, 1306.12],
+    [50.64, 10.12],
+    [100, 20],
+    [1000000, 200000],
+    [10000.33, 2000.06],
+    [5.11, 1.02],
+    [33.33, 6.66],
+  ].forEach(([labourCost, overhead]) => {
+    cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
+    let newCurrency = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    cy.get("tr")
+      .eq(4)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
+      });
+    cy.getByAriaLabel("Overheads Period 2").should("have.value", overhead);
+    cy.get("tr")
+      .eq(5)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(overhead));
+      });
+  });
 };
 
 export const submitForecastBackOut = () => {

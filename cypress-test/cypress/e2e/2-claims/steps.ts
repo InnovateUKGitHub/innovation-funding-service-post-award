@@ -1,5 +1,4 @@
 import { fileTidyUp } from "common/filetidyup";
-import { error } from "cypress/types/jquery";
 
 const moLogin = "testman2@testing.com";
 let date = new Date();
@@ -157,14 +156,22 @@ export const reflectCostAdded = () => {
   cy.get("span.currency").contains("£1,000.00");
 };
 
-export const clearUpCostCat = () => {
+export const clearUpLabourCostCat = () => {
   cy.get("td.govuk-table__cell").contains("Labour").click();
   cy.getByQA("button_upload-qa").click();
+  cy.heading("Labour documents");
   cy.getByQA("button_delete-qa").contains("Remove").click();
   cy.wait(1000);
   cy.get("a.govuk-back-link").click();
+  cy.heading("Labour");
   cy.get("a.govuk-link").contains("Remove").first().click();
   cy.get("textarea#comments").clear();
+};
+
+export const clearUpOverheadsCostCat = () => {
+  cy.get("td.govuk-table__cell").contains("Overheads").click();
+  cy.heading("Overheads");
+  cy.get("a.govuk-link").contains("Remove").first().click();
 };
 
 export const evidenceRequiredMessage = () => {
@@ -731,4 +738,35 @@ export const clearCostCatReturn = () => {
   cy.get("a").contains("Remove").click();
   cy.get("button").contains("Save and return to claims").click();
   cy.get("h1").contains("Costs to be claimed");
+};
+
+export const acceptInputAndUpdate = () => {
+  [
+    [22728.44, 4545.68],
+    [50.24, 10.04],
+    [6530.64, 1306.12],
+    [50.64, 10.12],
+    [100, 20],
+    [1000000, 200000],
+    [10000.33, 2000.06],
+    [5.11, 1.02],
+    [33.33, 6.66],
+  ].forEach(([labourCost, overhead]) => {
+    cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
+    let newCurrency = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    cy.get("tr")
+      .eq(4)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
+      });
+    cy.getByAriaLabel("Overheads Period 2").should("have.value", overhead);
+    cy.get("tr")
+      .eq(5)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(overhead));
+      });
+  });
 };
