@@ -302,3 +302,56 @@ export const submitCalculations = () => {
   cy.get("td:nth-child(4)").contains("111");
   cy.get("td:nth-child(14)").contains("£33,999.00");
 };
+
+export const clickForecastAccessEUI = () => {
+  cy.selectTile("Forecasts");
+  cy.get("td").contains("EUI Small Ent Health").siblings().contains("View forecast").click();
+};
+
+export const clickUpdateForecastButton = () => {
+  cy.heading("Forecast");
+  cy.get("a").contains("Update forecast").click();
+  cy.heading("Update forecast");
+};
+
+export const displayCorrectOverheadRate = () => {
+  cy.getByQA("overhead-costs").contains("Overhead costs");
+  cy.getByQA("overhead-costs").contains("20.00%");
+};
+
+export const updateLabourCalculateOH = () => {
+  cy.getByAriaLabel("Labour Period 2").clear().type("33.33");
+  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£33.33");
+  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.66");
+};
+
+export const submitForecastBackOut = () => {
+  cy.get("button").contains("Submit").click();
+  cy.heading("Forecast");
+  cy.backLink("Back to forecasts").click();
+  cy.heading("Forecasts");
+};
+
+export const backToDash = () => {
+  cy.backLink("Back to project").click();
+  cy.heading("Project overview");
+  cy.reload();
+};
+
+export const returnToForecastArea = () => {
+  cy.selectTile("Forecasts");
+  cy.heading("Forecasts");
+  cy.tableCell("EUI Small Ent Health").siblings().contains("View forecast").click();
+  cy.heading("Forecast");
+  cy.get("tr")
+    .eq(5)
+    .within(() => {
+      cy.get("td:nth-child(3)").contains(/^£6.66$/);
+    });
+};
+
+export const clickUpdateCheckValues = () => {
+  cy.get("a").contains("Update forecast").click();
+  cy.heading("Update forecast");
+  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.66");
+};
