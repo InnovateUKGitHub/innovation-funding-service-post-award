@@ -4,6 +4,7 @@ import {
   isNumber,
   parseNumber,
   roundCurrency,
+  roundCurrencyDown,
   sumBy,
   withinRange,
 } from "@framework/util/numberHelper";
@@ -157,5 +158,22 @@ describe("numberHelper", () => {
         expect(calcPercentage(total, amount)).toBe(expected);
       },
     );
+  });
+});
+
+describe("roundCurrencyDown", () => {
+  // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
+  const irrationalNumberHavingLostPrecision = 10.1199999999999999999999999999;
+  test.each`
+    input                                  | result
+    ${23.0006}                             | ${23}
+    ${46.688}                              | ${46.68}
+    ${12.023}                              | ${12.02}
+    ${14.109}                              | ${14.1}
+    ${10.048}                              | ${10.04}
+    ${10.128}                              | ${10.12}
+    ${irrationalNumberHavingLostPrecision} | ${10.12}
+  `("rounding down $input should give $result", ({ input, result }: { input: number; result: number }) => {
+    expect(roundCurrencyDown(input)).toBe(result);
   });
 });

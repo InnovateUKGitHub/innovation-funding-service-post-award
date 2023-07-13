@@ -1,5 +1,6 @@
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { Clock, salesforceDateFormat } from "@framework/util/clock";
+import { roundCurrencyDown } from "@framework/util/numberHelper";
 
 const clock = new Clock();
 
@@ -36,7 +37,7 @@ const mapper: GQL.DtoMapper<ForecastDetailsDtoMapping, ForecastDetailsNode> = {
     return clock.parse(node?.Acc_ProjectPeriodEndDate__c?.value ?? null, salesforceDateFormat);
   },
   value: function (node) {
-    return node?.Acc_LatestForecastCost__c?.value ?? 0;
+    return roundCurrencyDown(node?.Acc_LatestForecastCost__c?.value ?? 0);
   },
 };
 

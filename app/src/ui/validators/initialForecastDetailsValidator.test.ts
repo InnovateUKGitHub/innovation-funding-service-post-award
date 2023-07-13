@@ -189,7 +189,8 @@ describe("InitialForecastDetailsValidator()", () => {
 
       const forecastResult = validation.items.results.find(x => x.model.id === invalidForecast.Id);
 
-      expect(forecastResult?.isValid).toBe(false);
+      // as a result ACC-9813 these values are rounded and therefore valid
+      expect(forecastResult?.isValid).toBe(true);
 
       const labourResult = validation.costCategoryForecasts.results.find(x => x.model.costCategory.id === labour.id);
 

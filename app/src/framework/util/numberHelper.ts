@@ -84,3 +84,24 @@ export function calcPercentage(total: Nullable<number>, amount: number) {
   if (!total) return null;
   return (100 * (amount || 0)) / total;
 }
+
+/**
+ * using instead of Number.EPSILON since it is too small a value to
+ * work in unit tests.
+ *
+ * This is used to prevent negative loss of precision resulting in the
+ * loss of a whole penny from the calculation
+ */
+const POSITIVE_OFFSET = 0.00001;
+
+/**
+ * rounds down a currency to pennies to prevent calculated values having currency values
+ * of 3 decimal places or more
+ *
+ * @example
+ *
+ * roundCurrencyDown(23.688) // 23.68
+ */
+export function roundCurrencyDown(cur: number) {
+  return Math.floor((cur + POSITIVE_OFFSET) * 100) / 100;
+}
