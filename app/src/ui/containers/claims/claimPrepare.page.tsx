@@ -62,21 +62,15 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
 
       <Section title={<ClaimPeriodDate claim={data.claim} />}>
         <ClaimTable
+          disabled={isNonEditable}
           {...data}
           getLink={costCategoryId =>
-            isNonEditable
-              ? props.routes.reviewClaimLineItems.getLink({
-                  partnerId: props.partnerId,
-                  projectId: props.projectId,
-                  periodId: props.periodId,
-                  costCategoryId,
-                })
-              : props.routes.prepareClaimLineItems.getLink({
-                  partnerId: props.partnerId,
-                  projectId: props.projectId,
-                  periodId: props.periodId,
-                  costCategoryId,
-                })
+            props.routes.prepareClaimLineItems.getLink({
+              partnerId: props.partnerId,
+              projectId: props.projectId,
+              periodId: props.periodId,
+              costCategoryId,
+            })
           }
         />
 

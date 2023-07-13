@@ -8,6 +8,7 @@ import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { roundCurrency, diffAsPercentage } from "@framework/util/numberHelper";
 import { Link } from "@ui/components/links";
+import { P } from "@ui/rhf-components/Typography";
 import { Result } from "@ui/validation/result";
 
 export interface ClaimProps {
@@ -57,6 +58,7 @@ export interface ClaimTableProps {
   >[];
   getLink: (costCategoryId: string) => ILinkInfo | null;
   validation?: Result;
+  disabled?: boolean;
 }
 /**
  * creates the table data
@@ -73,7 +75,7 @@ export function createTableData(props: ClaimTableProps): ClaimTableResponse {
   });
 
   for (const category of filteredCategories) {
-    const row = createRow(category, props);
+    const row = createRow(category, props, props.disabled);
 
     costCategories.push(row.costCategory);
 
@@ -167,6 +169,7 @@ function createRow(
     getLink: ClaimTableProps["getLink"];
     validation?: ClaimTableProps["validation"];
   },
+  disabled?: boolean,
 ) {
   const { claimDetails, getLink, validation } = claimItem;
 
@@ -177,7 +180,7 @@ function createRow(
   const hasNegativeCost: boolean = !!item && item.remainingOfferCosts < 0;
 
   const costCategory = {
-    label: renderCostCategory({ getLink, validation }, category),
+    label: renderCostCategory({ getLink, validation }, category, disabled),
     isTotal: false,
     category,
     cost: item || emptyCostsSummaryForPeriodDto,
@@ -194,14 +197,16 @@ function createRow(
 export type ClaimInfoProps = Pick<ClaimProps, "getLink" | "validation">;
 export type CategoryInfoProps = Pick<CostCategoryDto, "id" | "name">;
 
-export const renderCostCategory = (claimInfo: ClaimInfoProps, categoryInfo: CategoryInfoProps) => {
+export const renderCostCategory = (claimInfo: ClaimInfoProps, categoryInfo: CategoryInfoProps, disabled?: boolean) => {
   const { getLink, validation } = claimInfo;
   const route = getLink(categoryInfo.id);
 
   if (!route) return categoryInfo.name;
 
   const linkId = (validation && validation.errorMessage && validation.key) || "";
-
+  if (disabled) {
+    return <P id={linkId}>{categoryInfo.name}</P>;
+  }
   return (
     <Link id={linkId} route={route}>
       {categoryInfo.name}
