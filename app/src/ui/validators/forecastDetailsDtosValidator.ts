@@ -118,12 +118,6 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> imp
         this.model.value,
         this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastNotNumber),
       ),
-    () =>
-      Validation.isCurrency(
-        this,
-        this.model.value,
-        this.getContent(x => x.validation.forecastDetailsDtoValidator.forecastNotCurrency),
-      ),
   );
 }
 
