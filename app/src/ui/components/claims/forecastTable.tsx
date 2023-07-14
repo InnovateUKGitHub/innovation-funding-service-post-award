@@ -8,7 +8,7 @@ import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { numberComparator } from "@framework/util/comparator";
-import { diffAsPercentage, roundCurrencyDown } from "@framework/util/numberHelper";
+import { diffAsPercentage, roundCurrency } from "@framework/util/numberHelper";
 import { EditorStatus } from "@ui/constants/enums";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import {
@@ -425,7 +425,7 @@ export class ForecastTable extends React.Component<Props> {
     const detail = claimDetails.find(x => x.costCategoryId === costCategory.id && x.periodId === periodId);
     if (detail) {
       row.claims[periodId] = detail.value;
-      row.total = roundCurrencyDown(row.total + detail.value);
+      row.total = roundCurrency(row.total + detail.value);
     } else {
       row.claims[periodId] = 0;
     }
@@ -440,7 +440,7 @@ export class ForecastTable extends React.Component<Props> {
     const forecast = forecasts.find(x => x.costCategoryId === costCategory.id && x.periodId === periodId);
     if (forecast) {
       row.forecasts[periodId] = forecast.value;
-      row.total = roundCurrencyDown(row.total + forecast.value);
+      row.total = row.total + forecast.value;
     } else {
       row.forecasts[periodId] = 0;
     }
@@ -466,7 +466,7 @@ export class ForecastTable extends React.Component<Props> {
     isSubmitting: boolean,
     allowRetroactiveForecastEdit?: boolean,
   ) {
-    const value = roundCurrencyDown(forecastRow.forecasts[periodId]);
+    const value = roundCurrency(forecastRow.forecasts[periodId]);
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators.find(x => x.model.periodId === periodId);
     const error = validator && validator.value;
@@ -515,13 +515,11 @@ export class ForecastTable extends React.Component<Props> {
       const overheadRates = getOverheadRate(partner, project, costCategories, cell, data);
 
       if (overheadRates && overheadRates.overheadsData && overheadRates.labourCategory && partner.overheadRate) {
-        const updatedValue = roundCurrencyDown(
-          calculateOverheadCell(
-            partner.overheadRate,
-            overheadRates.labourCategory.id,
-            overheadRates.overheadsData.value,
-            cell,
-          ),
+        const updatedValue = calculateOverheadCell(
+          partner.overheadRate,
+          overheadRates.labourCategory.id,
+          overheadRates.overheadsData.value,
+          cell,
         );
 
         overheadRates.overheadsData.value = updatedValue;
