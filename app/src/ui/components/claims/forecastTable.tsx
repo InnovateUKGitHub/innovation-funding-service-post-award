@@ -440,7 +440,7 @@ export class ForecastTable extends React.Component<Props> {
     const forecast = forecasts.find(x => x.costCategoryId === costCategory.id && x.periodId === periodId);
     if (forecast) {
       row.forecasts[periodId] = forecast.value;
-      row.total = row.total + forecast.value;
+      row.total = roundCurrency(row.total + forecast.value);
     } else {
       row.forecasts[periodId] = 0;
     }
@@ -466,7 +466,7 @@ export class ForecastTable extends React.Component<Props> {
     isSubmitting: boolean,
     allowRetroactiveForecastEdit?: boolean,
   ) {
-    const value = roundCurrency(forecastRow.forecasts[periodId]);
+    const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators.find(x => x.model.periodId === periodId);
     const error = validator && validator.value;
