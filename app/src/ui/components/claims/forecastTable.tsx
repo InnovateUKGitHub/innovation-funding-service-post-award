@@ -1,19 +1,12 @@
 import React from "react";
-import {
-  ClaimDetailsSummaryDto,
-  ClaimDto,
-  ForecastDetailsDTO,
-  GOLCostDto,
-  PartnerDto,
-  ProjectDto,
-} from "@framework/dtos";
+import { ClaimDetailsSummaryDto, ClaimDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { roundCurrency, numberComparator } from "@framework/util";
-import { IEditorStore } from "@ui/redux";
-import { IForecastDetailsDtosValidator, IForecastDetailsDtoValidator } from "@ui/validators";
-import classNames from "classnames";
-import { diffAsPercentage } from "@framework/util/numberHelper";
-import { CostCategoryType, PartnerStatus } from "@framework/constants";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { numberComparator } from "@framework/util/comparator";
+import { diffAsPercentage, roundCurrency } from "@framework/util/numberHelper";
 import { EditorStatus } from "@ui/constants/enums";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
@@ -23,6 +16,10 @@ import { Percentage } from "../renderers/percentage";
 import { createTypedTable } from "../table";
 import { Content } from "../content";
 import cx from "classnames";
+import { IForecastDetailsDtoValidator, IForecastDetailsDtosValidator } from "@ui/validators";
+import { IEditorStore } from "@ui/redux";
+import classNames from "classnames";
+import { CostCategoryType, PartnerStatus } from "@framework/types";
 
 export interface ForecastData {
   project: ProjectDto;
@@ -439,7 +436,7 @@ export class ForecastTable extends React.Component<Props> {
     const forecast = forecasts.find(x => x.costCategoryId === costCategory.id && x.periodId === periodId);
     if (forecast) {
       row.forecasts[periodId] = forecast.value;
-      row.total = roundCurrency(row.total + forecast.value);
+      row.total = row.total + forecast.value;
     } else {
       row.forecasts[periodId] = 0;
     }

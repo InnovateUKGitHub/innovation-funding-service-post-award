@@ -1,5 +1,5 @@
-import type { ForecastDetailsDTO } from "@framework/dtos";
-import { Clock, salesforceDateFormat } from "@framework/util";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { Clock, salesforceDateFormat } from "@framework/util/clock";
 
 const clock = new Clock();
 
