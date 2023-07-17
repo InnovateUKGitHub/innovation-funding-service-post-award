@@ -17,11 +17,11 @@ import { sumBy } from "@framework/util/numberHelper";
 import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
-import { merge } from "lodash";
 import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "./getPCRByIdQuery";
+import { mergePcrData } from "@framework/util/pcrHelper";
 
 type PcrData = PickAndPart<PCRDto, "projectId" | "id">;
 
@@ -95,7 +95,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const project = await context.runQuery(new GetByIdQuery(this.projectId));
     const allPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
 
-    const mergedPcr = merge(pcr, this.pcr);
+    const mergedPcr = mergePcrData(this.pcr, pcr);
+
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
     const validationResult = new PCRDtoValidator({
@@ -166,7 +167,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     }
 
     if (auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager)) {
-      const partnerAdditionItemDto = this.pcr?.items?.find(
+      const partnerAdditionItemDto = mergedPcr?.items?.find(
         x => x.type === PCRItemType.PartnerAddition,
       ) as PCRItemForPartnerAdditionDto;
 
