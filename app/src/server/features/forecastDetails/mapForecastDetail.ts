@@ -1,7 +1,6 @@
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { IContext } from "@framework/types/IContext";
 import { salesforceDateFormat } from "@framework/util/clock";
-import { roundCurrencyDown } from "@framework/util/numberHelper";
 import { ISalesforceProfileDetails } from "@server/repositories/profileDetailsRepository";
 
 const mapCommon = (
@@ -19,12 +18,12 @@ export const mapLatestForecastDetail =
   (context: IContext) =>
   (forecastDetail: ISalesforceProfileDetails): ForecastDetailsDTO => ({
     ...mapCommon(context, forecastDetail),
-    value: roundCurrencyDown(forecastDetail.Acc_LatestForecastCost__c),
+    value: forecastDetail.Acc_LatestForecastCost__c,
   });
 
 export const mapInitialForecastDetail =
   (context: IContext) =>
   (forecastDetail: ISalesforceProfileDetails): ForecastDetailsDTO => ({
     ...mapCommon(context, forecastDetail),
-    value: roundCurrencyDown(forecastDetail.Acc_InitialForecastCost__c),
+    value: forecastDetail.Acc_InitialForecastCost__c,
   });
