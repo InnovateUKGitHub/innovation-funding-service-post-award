@@ -47,7 +47,7 @@ describe("MO report > section 7 - can continue a report", () => {
   });
 
   it("Should contain summary guidance", () => {
-    cy.get("p").contains("Please summarise");
+    cy.paragraph("Please summarise");
   });
 
   it("Should have a subheading above the comment box", () => {

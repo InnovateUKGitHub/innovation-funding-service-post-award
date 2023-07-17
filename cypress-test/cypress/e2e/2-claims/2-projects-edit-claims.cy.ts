@@ -34,7 +34,7 @@ describe("claims > edit claims as FC", () => {
 
   it("Should show accordions", () => {
     cy.get("span").contains("Show all sections").click();
-    cy.get("p").contains("There are no changes");
+    cy.paragraph("There are no changes");
   });
 
   it("The Continue to claims button should direct you to the next page", () => {

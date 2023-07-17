@@ -52,8 +52,8 @@ describe("PCR >  Change project duration > Create PCR", () => {
   it("Should contain the PCR title, correct project title and back button", changeDurationHeadings);
 
   it("Should contain guidance information", () => {
-    cy.get("p").contains("Use this page to request an extension or reduction to your");
-    cy.get("p").contains("Select the new project end date you require.");
+    cy.paragraph("Use this page to request an extension or reduction to your");
+    cy.paragraph("Select the new project end date you require.");
   });
 
   it("Should contain existing project details heading and information", existingProjectDetails);

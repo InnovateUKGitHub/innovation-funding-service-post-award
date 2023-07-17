@@ -48,8 +48,8 @@ export const learnFiles = () => {
     cy.getByQA("loanDocumentsForm").contains(fileInfo);
   });
 
-  cy.get("p").contains("You can upload up to 10 documents");
-  cy.get("p").contains("There is no limit");
+  cy.paragraph("You can upload up to 10 documents");
+  cy.paragraph("There is no limit");
 };
 
 export const drawdownCard = () => {
@@ -96,13 +96,13 @@ export const viewDrawdown = () => {
 };
 
 export const fcDrawdownGuidance = () => {
-  cy.get("p").contains(
+  cy.paragraph(
     "You can request your drawdown here. If the amount of your drawdown needs to be changed, your Project Manager will need to submit a change drawdown project change request.",
   );
 };
 
 export const pmDrawdownGuidance = () => {
-  cy.get("p").contains(
+  cy.paragraph(
     "Your Finance Contact can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a change drawdown project change request.",
   );
   cy.get("a").contains("change drawdown");
@@ -127,7 +127,7 @@ export const drawdownRequestTable = () => {
 
 export const uploadApprovalGuidance = () => {
   cy.get("h2").contains("Upload drawdown approval request");
-  cy.get("p").contains("You must upload a signed drawdown approval request");
+  cy.paragraph("You must upload a signed drawdown approval request");
 };
 
 export const drawdownFileUpload = () => {
@@ -138,7 +138,7 @@ export const drawdownFileUpload = () => {
 
 export const fcFileUploadedSection = () => {
   cy.get("h2").contains("Files uploaded");
-  cy.get("p").contains("All documents uploaded will be shown here.");
+  cy.paragraph("All documents uploaded will be shown here.");
   ["File name", "Type", "Date uploaded", "Size", "Uploaded by", "Remove", "testfile.doc", "Drawdown approval"].forEach(
     docTableItem => {
       cy.getByQA("loan-documents-editor-container").contains(docTableItem);
@@ -148,7 +148,7 @@ export const fcFileUploadedSection = () => {
 
 export const pmFileUploadedSection = () => {
   cy.get("h2").contains("Files uploaded");
-  cy.get("p").contains("All documents uploaded will be shown here.");
+  cy.paragraph("All documents uploaded will be shown here.");
   ["File name", "Type", "Date uploaded", "Size", "Uploaded by", "Remove", "testfile.doc", "Drawdown approval"].forEach(
     docTableItem => {
       cy.getByQA("loan-documents-viewer-container").contains(docTableItem);
@@ -163,14 +163,14 @@ export const deleteFile = () => {
 
 export const additionalInfo = () => {
   cy.get("h2").contains("Additional information (Optional)");
-  cy.get("p").contains("If you want to explain anything to Innovate UK, add it here.");
+  cy.paragraph("If you want to explain anything to Innovate UK, add it here.");
   cy.getByQA("info-text-area").clear().type(standardComments);
   cy.getByQA("field-comments").contains("You have 74 characters");
 };
 
 export const sendYourRequestSection = () => {
   cy.get("h2").contains("Now send your request");
-  cy.get("p").contains("By submitting this drawdown request I confirm that");
+  cy.paragraph("By submitting this drawdown request I confirm that");
   cy.submitButton("Accept and send");
 };
 
@@ -419,8 +419,8 @@ export const updatedLoansTable = () => {
 };
 
 export const loanDurationGuidance = () => {
-  cy.get("p").contains("You can request a change to the duration of the phases of your loans project.");
-  cy.get("p").contains("Project start date:");
+  cy.paragraph("You can request a change to the duration of the phases of your loans project.");
+  cy.paragraph("Project start date:");
 };
 
 export const markAndReturn = () => {
@@ -437,7 +437,7 @@ export const assertForMissingPcr = () => {
   cy.heading("Project change requests");
   cy.get("a").contains("Create request").click();
   cy.get("span").contains("Learn about why some PCR types are missing").click();
-  cy.get("p").contains("Some types are unavailable because they have already been added to another PCR.");
+  cy.paragraph("Some types are unavailable because they have already been added to another PCR.");
   cy.get("li").contains("Change project scope");
   cy.get("a").contains("Cancel").click();
 };

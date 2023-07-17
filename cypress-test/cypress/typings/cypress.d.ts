@@ -100,6 +100,8 @@ declare global {
       validationMessage(message: string): Chainable<Element>;
 
       heading(title: string): Chainable<Element>;
+
+      paragraph(content: string): Chainable<Element>;
     }
   }
 }

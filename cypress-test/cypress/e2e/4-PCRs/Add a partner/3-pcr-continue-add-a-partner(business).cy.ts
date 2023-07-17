@@ -39,7 +39,7 @@ describe("PCR > Add partner > Continuing editing PCR as business", () => {
   it("Should display a 'Add a partner' heading and 'State aid eligibility' heading", stateAidAddPartnerHeading);
 
   it("Should have further information on state aid eligibility", () => {
-    cy.get("p").contains("If we decide to award this organisation");
+    cy.paragraph("If we decide to award this organisation");
   });
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);

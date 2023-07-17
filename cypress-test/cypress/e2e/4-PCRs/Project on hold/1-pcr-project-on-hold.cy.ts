@@ -48,7 +48,7 @@ describe("PCR >  Put project on hold > Create PCR", () => {
   it("Should contain the correct headings and back link", projectOnHoldHeadings);
 
   it("Should contain guidance on submitting the PCR", () => {
-    cy.get("p").contains("You will not be able to perform any normal activities while this project is on hold");
+    cy.paragraph("You will not be able to perform any normal activities while this project is on hold");
   });
 
   it("Should have subheadings for 'first day' and 'last day' of pause", () => {

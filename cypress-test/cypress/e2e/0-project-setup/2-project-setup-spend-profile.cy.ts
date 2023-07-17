@@ -22,7 +22,7 @@ describe("Project setup > Set spend profile", () => {
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should have guidance information", () => {
-    cy.get("p").contains(
+    cy.paragraph(
       "You must provide a forecast of all eligible project costs to reflect your spend throughout the project.",
     );
   });

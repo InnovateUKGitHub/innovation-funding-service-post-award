@@ -36,7 +36,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should land on a document upload page and contain 'Upload partner agreement' subheading and display guidance information", () => {
     cy.get("h2").contains("Upload partner agreement");
-    cy.get("p").contains("You must upload copies of signed letters");
+    cy.paragraph("You must upload copies of signed letters");
   });
 
   it("Should upload a file", addPartnerDocUpload);

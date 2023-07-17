@@ -96,6 +96,6 @@ describe("claims > Editing a claim by accessing cost categories", () => {
 
   it("Should show accordions", () => {
     cy.get("span").contains("Show all sections").click();
-    cy.get("p").contains("There are no changes");
+    cy.paragraph("There are no changes");
   });
 });

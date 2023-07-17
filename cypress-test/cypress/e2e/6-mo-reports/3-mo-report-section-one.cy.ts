@@ -57,7 +57,7 @@ describe("MO report > section 1 - can continue a report", () => {
   });
 
   it("Should have a paragraph with guidance on how to complete the report", () => {
-    cy.get("p").contains("For each question score the project");
+    cy.paragraph("For each question score the project");
   });
 
   it("Should have a number of score options", q1ScoreChoice);

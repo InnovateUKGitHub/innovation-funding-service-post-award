@@ -21,7 +21,7 @@ describe("PCR > Add partner > Continuing editing PCR person details section", ()
 
   it("Should have 'Add person to organisation' heading with guidance text", () => {
     cy.get("h2").contains("Add person to organisation");
-    cy.get("p").contains("This information will be used to create an account");
+    cy.paragraph("This information will be used to create an account");
   });
 
   it("Should have a back option", () => {

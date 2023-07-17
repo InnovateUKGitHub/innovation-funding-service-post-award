@@ -32,7 +32,7 @@ describe("PCR > Project Change Request front page", () => {
   it("Should click accordions", shouldShowAllAccordion);
 
   it("Should have a past requests message", () => {
-    cy.get("p").contains("You have no past requests.");
+    cy.paragraph("You have no past requests.");
   });
 
   it("Should check for existing PCRs and start creating a PCR", () => {

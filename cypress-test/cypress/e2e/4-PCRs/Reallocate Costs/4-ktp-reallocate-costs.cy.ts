@@ -32,7 +32,7 @@ describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
   });
 
   it("Should show the KTP email address", () => {
-    cy.get("p").contains("ktpqueries@iuk.ukri.org");
+    cy.paragraph("ktpqueries@iuk.ukri.org");
   });
 
   it("Should select EUI Small Ent Health and follow to the next page", () => {

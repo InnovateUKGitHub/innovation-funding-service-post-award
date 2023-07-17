@@ -32,7 +32,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should display the 'Other public sector funding?' subheading and guidance information", () => {
     cy.get("h2").contains("Other public sector funding?");
-    cy.get("p").contains("Is the new partner receiving any other public sector funding");
+    cy.paragraph("Is the new partner receiving any other public sector funding");
   });
 
   it("Should have a back option", () => {
@@ -53,7 +53,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should display guidance and the 'Other public sector funding?' subheading", () => {
-    cy.get("p").contains("Include all sources of funding the new partner is receiving");
+    cy.paragraph("Include all sources of funding the new partner is receiving");
     cy.get("h2").contains("Other public sector funding?");
   });
 

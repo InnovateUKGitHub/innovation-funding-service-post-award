@@ -36,7 +36,7 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
   it("Should attempt to Save and continue without completing fields to prompt validation", () => {
     cy.submitButton("Save and continue").click();
     cy.validationLink("Select a project location");
-    cy.get("p").contains("Select a project location.");
+    cy.paragraph("Select a project location.");
   });
 
   it("Should show radio buttons for 'Inside the UK' and 'Outside of the UK' and click in turn", locationRadioButtons);

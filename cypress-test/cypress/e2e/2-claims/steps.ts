@@ -178,7 +178,7 @@ export const evidenceRequiredMessage = () => {
   cy.get("h2").contains("Supporting documents");
   cy.getByQA("section-content").contains("Upload evidence of the costs");
   cy.get("h2").contains("Files uploaded");
-  cy.get("p").contains("No documents uploaded");
+  cy.paragraph("No documents uploaded");
 };
 
 export const additionalInformationHeading = () => {
@@ -288,7 +288,7 @@ export const learnFiles = () => {
     cy.get("li").contains(list);
   });
   ["You can upload", "There is no limit", "Each document must"].forEach(description => {
-    cy.get("p").contains(description);
+    cy.paragraph(description);
   });
 };
 
@@ -301,8 +301,8 @@ export const savedFromPrev = () => {
 export const openClosedSection = () => {
   cy.get("h2").contains("Open");
   cy.get("h2").contains("Closed");
-  cy.get("p").contains("There are no open claims.");
-  cy.get("p").contains("There are no closed claims for this partner.");
+  cy.paragraph("There are no open claims.");
+  cy.paragraph("There are no closed claims for this partner.");
 };
 
 export const ktpGuidance = () => {
@@ -546,12 +546,12 @@ export const closedSectionAccordions = () => {
   ["EUI Small Ent Health (Lead)", "A B Cad Services", "ABS EUI Medium Enterprise"].forEach(project => {
     cy.get("span").contains(project);
   });
-  cy.get("p").contains("There are no closed claims for this partner");
+  cy.paragraph("There are no closed claims for this partner");
 };
 
 export const projectTitleAndSubheaders = () => {
   ["Competition name:", "Competition type:", "a002600000CEUmL", "CR&D"].forEach(subHeading => {
-    cy.get("p").contains(subHeading);
+    cy.paragraph(subHeading);
   });
   shouldShowProjectTitle;
   cy.get("h2").contains("ABS EUI Medium Enterprise claim for period 1:");
@@ -605,8 +605,8 @@ export const queryTheClaim = () => {
     "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
   );
   cy.get("textarea").clear().type(comments);
-  cy.get("p").contains("You have");
-  cy.get("p").contains("I am satisfied that the costs claimed appear to comply");
+  cy.paragraph("You have");
+  cy.paragraph("I am satisfied that the costs claimed appear to comply");
   cy.getByQA("cr&d-reminder").contains("You must submit a monitoring report");
   cy.submitButton("Send query").click();
 };

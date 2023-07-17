@@ -102,7 +102,7 @@ export const accessBroadCastMessageAndAssert = () => {
   });
   ["Start date:", "End date:", "30 March 2023", "31 March 2027", "This is a test message for Cypress."].forEach(
     item => {
-      cy.get("p").contains(item);
+      cy.paragraph(item);
     },
   );
 };

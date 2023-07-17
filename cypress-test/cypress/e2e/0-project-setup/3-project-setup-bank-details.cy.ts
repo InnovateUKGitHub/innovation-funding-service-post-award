@@ -31,7 +31,7 @@ describe("Project setup > Provide your bank details", () => {
   });
 
   it("Should have guidance information", () => {
-    cy.get("p").contains(
+    cy.paragraph(
       "In order for us to pay your grant we need the bank details of your organisation. The bank account must belong to the organisation listed.",
     );
   });

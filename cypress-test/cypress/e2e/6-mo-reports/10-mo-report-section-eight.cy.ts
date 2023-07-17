@@ -47,7 +47,7 @@ describe("MO report > section 8 - can continue a report", () => {
   });
 
   it("Should contain guidance on any issues and actions", () => {
-    cy.get("p").contains("Please confirm any specific issues");
+    cy.paragraph("Please confirm any specific issues");
   });
 
   it("Should have a subheading above the comment box", () => {

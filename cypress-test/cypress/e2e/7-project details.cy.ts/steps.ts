@@ -26,7 +26,7 @@ export const pmDetailsSection = () => {
     },
   );
   cy.get("h3").contains("Project Manager");
-  cy.get("p").contains("Only project managers can raise project change requests.");
+  cy.paragraph("Only project managers can raise project change requests.");
 };
 
 export const financeDetailsSection = () => {
@@ -44,7 +44,7 @@ export const financeDetailsSection = () => {
     cy.getByQA("finance-contact-details").contains(fcInfo);
   });
   cy.get("h3").contains("Finance contacts");
-  cy.get("p").contains("Only finance contacts can submit claims.");
+  cy.paragraph("Only finance contacts can submit claims.");
 };
 
 export const manyFinanceDetailsSection = () => {
@@ -118,7 +118,7 @@ export const manyFinanceDetailsSection = () => {
     cy.getByQA("finance-contact-details").contains(fcInfo);
   });
   cy.get("h3").contains("Finance contacts");
-  cy.get("p").contains("Only finance contacts can submit claims.");
+  cy.paragraph("Only finance contacts can submit claims.");
 };
 
 export const ilDetailsSection = () => {
@@ -211,9 +211,9 @@ export const manyPartnerDetailsSection = () => {
 };
 
 export const detailsGuidanceMessage = () => {
-  cy.get("p").contains("Only project managers can raise project change requests.");
-  cy.get("p").contains("Only finance contacts can submit claims.");
-  cy.get("p").contains(
+  cy.paragraph("Only project managers can raise project change requests.");
+  cy.paragraph("Only finance contacts can submit claims.");
+  cy.paragraph(
     "If you need to change the lead project manager or finance contact, please email grants_service@iuk.ukri.org.",
   );
 };

@@ -30,9 +30,7 @@ describe("Project Documents page", () => {
   it("Should display correct project name", shouldShowProjectTitle);
 
   it("Should show page description and instruction on document uploads", () => {
-    cy.get("p").contains(
-      "This page displays documents which are shared with Innovate UK and each project participant.",
-    );
+    cy.paragraph("This page displays documents which are shared with Innovate UK and each project participant.");
   });
 
   it("Should display a clickable 'Learn more about files you can upload' message", learnAboutFiles);

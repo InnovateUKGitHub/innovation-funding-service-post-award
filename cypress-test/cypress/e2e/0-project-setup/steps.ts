@@ -47,7 +47,7 @@ export const displayForecastTable = () => {
 
 export const fillOrgInformation = () => {
   cy.get("legend").contains("Organisation information");
-  cy.get("p").contains("EUI Small Ent Health");
+  cy.paragraph("EUI Small Ent Health");
   cy.getByLabel("Company number");
   cy.get("#hint-for-companyNumber").contains("This is the registered organisation number.");
   cy.get("#companyNumber").type("12345678910");
@@ -65,9 +65,7 @@ export const fillAccountInformation = () => {
 
 export const fillAddressInformation = () => {
   cy.get("legend").contains("Billing address");
-  cy.get("p").contains(
-    "This is the billing address connected to this bank account. This is not the address of the bank.",
-  );
+  cy.paragraph("This is the billing address connected to this bank account. This is not the address of the bank.");
   cy.getByLabel("Building").type("Polaris House");
   cy.getByLabel("Street").type("North Star Avenue");
   cy.getByLabel("Locality").type("Off Great Western Way");
@@ -114,8 +112,8 @@ export const bankDetailsValidation = () => {
   cy.submitButton("Submit bank details").click();
   cy.validationMessage("Sort code cannot be empty.");
   cy.validationMessage("Account number cannot be empty.");
-  cy.get("p").contains("Sort code cannot be empty.");
-  cy.get("p").contains("Account number cannot be empty");
+  cy.paragraph("Sort code cannot be empty.");
+  cy.paragraph("Account number cannot be empty");
   cy.reload();
 };
 

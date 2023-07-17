@@ -35,7 +35,7 @@ export const accessControl = () => {
 export const learnAboutFiles = () => {
   cy.get("span.govuk-details__summary-text").contains("Learn more about files you can upload").click();
   ["You can upload up to 10 documents", "There is no limit", "upload these file types"].forEach(note => {
-    cy.get("p").contains(note);
+    cy.paragraph(note);
   });
   [
     "less than 32MB",

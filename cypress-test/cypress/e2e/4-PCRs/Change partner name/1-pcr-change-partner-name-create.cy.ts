@@ -68,7 +68,7 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
 
   it("Should show a files uploaded area with no files", () => {
     cy.get("h2").contains("Files uploaded");
-    cy.get("p").contains("No documents uploaded.");
+    cy.paragraph("No documents uploaded.");
   });
 
   it("Should upload a file", uploadNameChange);

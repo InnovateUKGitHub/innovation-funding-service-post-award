@@ -94,22 +94,10 @@ export const characterCount = () => {
   cy.get("p.character-count.character-count--default.govuk-body").contains("You have 926 characters remaining");
 };
 
-//export const deletePcr = () => {
-//  visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
-//  cy.getByQA("pcrDeleteLink").contains("Delete").click();
-//  cy.getByQA("button_delete-qa").click({ force: true });
-//};
-//
-//export const ktpDeletePcr = () => {
-//  visitApp({ path: "projects/a0E2600000kTfqTEAS/pcrs/dashboard" });
-//  cy.getByQA("pcrDeleteLink").contains("Delete").click();
-//  cy.getByQA("button_delete-qa").click({ force: true });
-//};
-
 export const learnFiles = () => {
   cy.get("span").contains("Learn more about files you can upload").click();
-  cy.get("p").contains("You can upload");
-  cy.get("p").contains("There is no limit");
+  cy.paragraph("You can upload");
+  cy.paragraph("There is no limit");
 };
 
 export const pcrDocUpload = () => {
@@ -133,10 +121,11 @@ export const pcrFileTable = () => {
 
 export const learnOrganisations = () => {
   cy.get("span").contains("What are the different types?").click();
-  cy.get("p").contains("Business");
-  cy.get("p").contains("Research");
-  cy.get("p").contains("Research and technology organisation (RTO)");
-  cy.get("p").contains("Public sector, charity or non Je-S");
+  ["Business", "Research", "Research and technology organisation (RTO)", "Public sector, charity or non Je-S"].forEach(
+    organisation => {
+      cy.paragraph(organisation);
+    },
+  );
 };
 
 export const completeNewPartnerInfoAsBus = () => {
@@ -250,10 +239,14 @@ export const nonAidAddPartnerHeading = () => {
 };
 
 export const stateAidFurtherInfo = () => {
-  cy.get("p").contains("This competition provides funding that is classed as non-aid");
-  cy.get("p").contains("Non-aid is only granted to organisations which declare");
-  cy.get("p").contains("in any way which gives them");
-  cy.get("p").contains("in any other way which would");
+  [
+    "This competition provides funding that is classed as non-aid",
+    "Non-aid is only granted to organisations which declare",
+    "in any way which gives them",
+    "in any other way which would",
+  ].forEach(furtherInfo => {
+    cy.paragraph(furtherInfo);
+  });
 };
 
 export const addPartnerCompanyHouseHeader = () => {
@@ -263,7 +256,7 @@ export const addPartnerCompanyHouseHeader = () => {
 
 export const searchCompanyHouseGuidance = () => {
   cy.get("h2").contains("Search companies house");
-  cy.get("p").contains("Is your organisation not showing in these results?");
+  cy.paragraph("Is your organisation not showing in these results?");
 };
 
 export const typeASearchResults = () => {
@@ -366,7 +359,7 @@ export const clickPartnerAddPeriod = () => {
 };
 
 export const removePartnerGuidanceInfo = () => {
-  cy.get("p").contains("You must upload these documents");
+  cy.paragraph("You must upload these documents");
   cy.get("li").contains("a confirmation letter");
   cy.get("li").contains("a brief list of");
   cy.get("li").contains("copies of signed letters");
@@ -678,7 +671,7 @@ export const addPartnerLabourGuidance = () => {
     "List the total days worked",
     "We will review the total",
   ].forEach(pGuidance => {
-    cy.get("p").contains(pGuidance);
+    cy.paragraph(pGuidance);
   });
 };
 
@@ -703,14 +696,14 @@ export const addSourceOfFundingValidation = () => {
     cy.validationLink(message);
   });
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
-    cy.get("p").contains(message);
+    cy.paragraph(message);
   });
   cy.get("#item_0_value").type("error").wait(500);
   cy.validationLink("Funding amount must be a number");
-  cy.get("p").contains("Funding amount must be a number");
+  cy.paragraph("Funding amount must be a number");
   cy.get("#item_0_date_month").type("error");
   cy.validationLink("Date secured must be a date");
-  cy.get("p").contains("Date secured must be a date");
+  cy.paragraph("Date secured must be a date");
 };
 
 export const addSourceOfFunding = () => {
@@ -723,13 +716,13 @@ export const addSourceOfFunding = () => {
 
 export const fundingLevelPage = () => {
   cy.get("h2").contains("Funding level");
-  cy.get("p").contains("The maximum the new organisation can enter");
-  cy.get("p").contains("The percentage applied for");
+  cy.paragraph("The maximum the new organisation can enter");
+  cy.paragraph("The percentage applied for");
 };
 
 export const uploadPartnerInfo = () => {
   cy.get("h2").contains("Upload partner agreement");
-  cy.get("p").contains("You must upload copies of signed letters");
+  cy.paragraph("You must upload copies of signed letters");
 };
 
 export const fundingLevelPercentage = () => {
@@ -740,8 +733,8 @@ export const fundingLevelPercentage = () => {
 
 export const addPartnerSize = () => {
   cy.get("h2").contains("Size");
-  cy.get("p").contains("This definition must include");
-  cy.get("p").contains("Use the European Commission (EC)");
+  cy.paragraph("This definition must include");
+  cy.paragraph("Use the European Commission (EC)");
 };
 
 export const addPartnerSizeOptions = () => {
@@ -775,7 +768,7 @@ export const headingAndGuidance = () => {
     "Do not include any information that is confidential",
     "Your project summary should provide a clear overview",
   ].forEach(guidance => {
-    cy.get("p").contains(guidance);
+    cy.paragraph(guidance);
   }),
     ["your vision for the project", "key objectives", "main areas of focus", "details of how it is innovative"].forEach(
       bullet => {
@@ -788,7 +781,7 @@ export const headingAndGuidance = () => {
 export const proposedDescription = () => {
   cy.get("h2").contains("Proposed public description");
   cy.get("span").contains("Published public description").click();
-  cy.get("p").contains("Hello! I am the public description for this Cypress project.");
+  cy.paragraph("Hello! I am the public description for this Cypress project.");
 };
 
 export const newDescriptionEntry = () => {
@@ -799,7 +792,7 @@ export const newDescriptionEntry = () => {
 export const proposedSummary = () => {
   cy.get("h2").contains("Proposed project summary");
   cy.get("span").contains("Published project summary").click();
-  cy.get("p").contains("Howdy! I am the public summary for this Cypress project.");
+  cy.paragraph("Howdy! I am the public summary for this Cypress project.");
 };
 
 export const newSummaryEntry = () => {
@@ -836,7 +829,7 @@ export const correctKtpMessaging = () => {
     "Virements are subject to approval by the Local Management Committee (LMC).",
     "Requests for virements must be submitted online using the Innovation Funding Service",
   ].forEach(sentence => {
-    cy.get("p").contains(sentence);
+    cy.paragraph(sentence);
   });
 };
 
@@ -940,7 +933,7 @@ export const projectOnHoldHeadings = () => {
 };
 
 export const tickEachPartner = () => {
-  cy.get("p").contains("This will change the partner's name in all projects");
+  cy.paragraph("This will change the partner's name in all projects");
   cy.get("h2").contains("Select partner");
   cy.getByLabel("EUI Small Ent Health").click();
   cy.getByLabel("A B Cad Services").wait(500).click();
@@ -1093,8 +1086,8 @@ export const newInfoValidation = () => {
   cy.submitButton("Save and continue").click();
   cy.validationLink("Select a project role");
   cy.validationLink("Select a partner type");
-  cy.get("p").contains("Select a project role.");
-  cy.get("p").contains("Select a partner type.");
+  cy.paragraph("Select a project role.");
+  cy.paragraph("Select a partner type.");
 };
 
 export const displayLocationWithGuidance = () => {
@@ -1171,8 +1164,8 @@ export const validatePcrDurationPage = () => {
   cy.submitButton("Submit request").click();
   cy.validationLink("Reasons entry must be complete.");
   cy.validationLink("Change project duration must be complete.");
-  cy.get("p").contains("Reasons entry must be complete.");
-  cy.get("p").contains("Change project duration must be complete.");
+  cy.paragraph("Reasons entry must be complete.");
+  cy.paragraph("Change project duration must be complete.");
   cy.reload();
 };
 
@@ -1218,7 +1211,7 @@ export const submitWithoutCompleting = () => {
     cy.validationLink(pcr);
   });
   pcrArray.forEach(pcr => {
-    cy.get("p").contains(pcr + " must be complete.");
+    cy.paragraph(pcr + " must be complete.");
   });
 };
 

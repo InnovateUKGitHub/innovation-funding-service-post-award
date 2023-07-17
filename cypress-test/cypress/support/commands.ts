@@ -139,6 +139,11 @@ const heading = (title: string) => {
   cy.get("h1").contains(title);
 };
 
+const paragraph = (content: string) => {
+  cy.log("**paragraph**");
+  cy.paragraph(content);
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
@@ -159,3 +164,4 @@ Cypress.Commands.add("validationLink", validationLink);
 Cypress.Commands.add("validationMessage", validationMessage);
 Cypress.Commands.add("heading", heading);
 Cypress.Commands.add("button", button);
+Cypress.Commands.add("paragraph", paragraph);
