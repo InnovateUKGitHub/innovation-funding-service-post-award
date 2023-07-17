@@ -101,7 +101,17 @@ declare global {
 
       heading(title: string): Chainable<Element>;
 
+      /**
+       *
+       * Finds text within a paragraph element
+       */
       paragraph(content: string): Chainable<Element>;
+
+      /**
+       *
+       * Finds text within a list element
+       */
+      list(title: string): Chainable<Element>;
     }
   }
 }

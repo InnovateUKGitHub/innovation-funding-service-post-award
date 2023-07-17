@@ -285,7 +285,7 @@ export const claimCommentBox = () => {
 export const learnFiles = () => {
   cy.get("span").contains("Learn more about files you can upload").click();
   ["PDF", "test", "presentation", "spreadsheet", "images", "be less than 32MB", "have a unique file"].forEach(list => {
-    cy.get("li").contains(list);
+    cy.list(list);
   });
   ["You can upload", "There is no limit", "Each document must"].forEach(description => {
     cy.paragraph(description);

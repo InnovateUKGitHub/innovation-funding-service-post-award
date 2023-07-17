@@ -78,8 +78,8 @@ export const pcrCheckBoxes = () => {
 
 export const beforeYouSubmit = () => {
   cy.get("span.govuk-body").contains("Before you submit");
-  cy.get("li").contains("ensure");
-  cy.get("li").contains("discuss");
+  cy.list("ensure");
+  cy.list("discuss");
 };
 
 export const pcrCommentBox = () => {
@@ -360,9 +360,9 @@ export const clickPartnerAddPeriod = () => {
 
 export const removePartnerGuidanceInfo = () => {
   cy.paragraph("You must upload these documents");
-  cy.get("li").contains("a confirmation letter");
-  cy.get("li").contains("a brief list of");
-  cy.get("li").contains("copies of signed letters");
+  cy.list("a confirmation letter");
+  cy.list("a brief list of");
+  cy.list("copies of signed letters");
 };
 
 export const removePartnerTable = () => {
@@ -660,7 +660,7 @@ export const addPartnerLabourGuidance = () => {
     "training days",
     "non-productive time",
   ].forEach(labourGuidance => {
-    cy.get("li").contains(labourGuidance);
+    cy.list(labourGuidance);
   });
   cy.get("span").contains("Labour guidance").click();
   cy.get("h2").contains("Labour");
@@ -772,7 +772,7 @@ export const headingAndGuidance = () => {
   }),
     ["your vision for the project", "key objectives", "main areas of focus", "details of how it is innovative"].forEach(
       bullet => {
-        cy.get("li").contains(bullet);
+        cy.list(bullet);
       },
     ),
     cy.heading("Change project scope");
@@ -1228,9 +1228,9 @@ export const showMultiplePcrInfo = () => {
   cy.clickCheckBox(pcrArray[6]);
   cy.get("span").contains("Learn about why some PCR types are missing").click();
   cy.get("details").should("have.attr", "open");
-  cy.get("li").contains(pcrArray[4]);
-  cy.get("li").contains(pcrArray[0]);
-  cy.get("li").contains(pcrArray[3]);
+  cy.list(pcrArray[4]);
+  cy.list(pcrArray[0]);
+  cy.list(pcrArray[3]);
   cy.get("a").contains("Cancel").click();
   cy.heading("Project change requests");
 };

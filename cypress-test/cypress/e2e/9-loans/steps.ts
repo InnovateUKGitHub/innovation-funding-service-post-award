@@ -438,7 +438,7 @@ export const assertForMissingPcr = () => {
   cy.get("a").contains("Create request").click();
   cy.get("span").contains("Learn about why some PCR types are missing").click();
   cy.paragraph("Some types are unavailable because they have already been added to another PCR.");
-  cy.get("li").contains("Change project scope");
+  cy.list("Change project scope");
   cy.get("a").contains("Cancel").click();
 };
 

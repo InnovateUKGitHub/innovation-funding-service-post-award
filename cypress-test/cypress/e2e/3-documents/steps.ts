@@ -46,7 +46,7 @@ export const learnAboutFiles = () => {
     "spreadsheet (xls, xlsx, ods)",
     "images (jpg, jpeg, png, odg)",
   ].forEach(fileItem => {
-    cy.get("li").contains(fileItem);
+    cy.list(fileItem);
   });
 };
 
