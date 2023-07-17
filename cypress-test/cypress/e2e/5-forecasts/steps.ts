@@ -321,14 +321,14 @@ export const displayCorrectOverheadRate = () => {
 
 export const updateLabourCalculateOH = () => {
   [
-    [50.24, 10.04],
-    [6530.64, 1306.12],
-    [50.64, 10.12],
+    [50.24, 10.048],
+    [6530.64, 1306.128],
+    [50.64, 10.128],
     [100, 20],
     [1000000, 200000],
-    [10000.33, 2000.06],
-    [5.11, 1.02],
-    [33.33, 6.66],
+    [10000.33, 2000.066],
+    [5.11, 1.022],
+    [33.33, 6.666],
   ].forEach(([labourCost, overhead]) => {
     cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
     let newCurrency = new Intl.NumberFormat("en-GB", {
@@ -370,12 +370,12 @@ export const returnToForecastArea = () => {
   cy.get("tr")
     .eq(5)
     .within(() => {
-      cy.get("td:nth-child(3)").contains(/^£6.66$/);
+      cy.get("td:nth-child(3)").contains(/^£6.67$/);
     });
 };
 
 export const clickUpdateCheckValues = () => {
   cy.get("a").contains("Update forecast").click();
   cy.heading("Update forecast");
-  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.66");
+  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.666");
 };

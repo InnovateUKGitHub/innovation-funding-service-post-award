@@ -295,7 +295,7 @@ export const learnFiles = () => {
 export const savedFromPrev = () => {
   cy.getByAriaLabel("Labour Period 2").should("have.value", "33.33");
   cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£33.33");
-  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.66");
+  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.666");
 };
 
 export const openClosedSection = () => {
@@ -742,15 +742,15 @@ export const clearCostCatReturn = () => {
 
 export const acceptInputAndUpdate = () => {
   [
-    [22728.44, 4545.68],
-    [50.24, 10.04],
-    [6530.64, 1306.12],
-    [50.64, 10.12],
+    [22728.44, 4545.688],
+    [50.24, 10.048],
+    [6530.64, 1306.128],
+    [50.64, 10.128],
     [100, 20],
     [1000000, 200000],
-    [10000.33, 2000.06],
-    [5.11, 1.02],
-    [33.33, 6.66],
+    [10000.33, 2000.066],
+    [5.11, 1.022],
+    [33.33, 6.666],
   ].forEach(([labourCost, overhead]) => {
     cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
     let newCurrency = new Intl.NumberFormat("en-GB", {
