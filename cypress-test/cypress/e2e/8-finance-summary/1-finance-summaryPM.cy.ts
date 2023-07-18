@@ -1,14 +1,16 @@
 import { visitApp } from "common/visit";
 import { partnerFinanceDetails, periodSubWithDate, projCostsToDate, whenIarNeeded } from "./steps";
 
-describe("Finance summary", () => {
+const pmEmail = "james.black@euimeabs.test";
+
+describe("Finance summary > As Project Manager", () => {
   before(() => {
-    visitApp({});
+    visitApp({ asUser: pmEmail });
     cy.navigateToProject("328407");
   });
 
   it("Should click the Finance summary tile", () => {
-    cy.get("h2.card-link__title").contains("Finance summary").click();
+    cy.selectTile("Finance summary");
   });
 
   it("Should have a back link", () => {

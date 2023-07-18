@@ -179,11 +179,15 @@ export const manyPartnerFinanceDetails = () => {
 };
 
 export const whenIarNeeded = () => {
-  ["EUI Small Ent Health (Lead)", "A B Cad Services", "ABS EUI Medium Enterprise", "Never, for this project"].forEach(
-    iarRequirement => {
-      cy.getByQA("WhenAnIarIsNeeded").contains(iarRequirement);
-    },
-  );
+  [
+    "EUI Small Ent Health (Lead)",
+    "A B Cad Services",
+    "ABS EUI Medium Enterprise",
+    "Never, for this project",
+    "Quarterly",
+  ].forEach(iarRequirement => {
+    cy.getByQA("WhenAnIarIsNeeded").contains(iarRequirement);
+  });
   cy.get("h4").contains("When an independent accountant's report is needed");
 };
 
@@ -377,5 +381,63 @@ export const partnerFinanceRemainingGrant = () => {
     "£706,408.50",
   ].forEach(remaining => {
     cy.getByQA("PartnerFinanceDetails").contains("td:nth-child(5)", remaining);
+  });
+};
+
+export const dashboardAsFC = () => {
+  cy.heading("Project overview");
+  cy.getByQA("section-content").contains("A B Cad Services costs to date");
+};
+
+export const fcValidateCostsToDate = () => {
+  cy.getByQA("claims-totals-col-0-gol-costs").contains("Total eligible costs");
+  cy.getByQA("claims-totals-col-0-gol-costs").contains("£175,000.00");
+  cy.getByQA("claims-totals-col-0-claimed-costs").contains("Eligible costs claimed to date");
+  cy.getByQA("claims-totals-col-0-claimed-costs").contains("£0.00");
+  cy.getByQA("claims-totals-col-0-percentage-costs").contains("Percentage of eligible costs claimed to date");
+  cy.getByQA("claims-totals-col-0-percentage-costs").contains("0.00%");
+};
+
+export const fcValidateCostsCheckForPartners = () => {
+  cy.get("h3").contains("Project costs to date");
+  let child = 0;
+  ["A B Cad Services", "£175,000.00", "£0.00", "0.00%"].forEach(cell => {
+    cy.getByQA("ProjectCostsToDate")
+      .eq(0)
+      .within(() => {
+        child++;
+        cy.get("td:nth-child(" + child + ")").contains(cell);
+      });
+  });
+  cy.getByQA("ProjectCostsToDate").within(() => {
+    cy.tableCell("EUI Small Ent Health (Lead)").should("not.exist");
+    cy.tableCell("ABS EUI Medium Enterprise").should("not.exist");
+  });
+};
+
+export const fcValidateFinancesCheckForPartners = () => {
+  cy.get("h4").contains("Partner finance details");
+  let child = 0;
+  ["A B Cad Services", "£175,000.00", "65.00%", "£0.00", "£113,750.00", "£0.00", "80.00%", "£0.00"].forEach(cell => {
+    cy.getByQA("PartnerFinanceDetails")
+      .eq(0)
+      .within(() => {
+        child++;
+        cy.get("td:nth-child(" + child + ")").contains(cell);
+      });
+  });
+  cy.getByQA("ProjectCostsToDate").within(() => {
+    cy.tableCell("EUI Small Ent Health (Lead)").should("not.exist");
+    cy.tableCell("ABS EUI Medium Enterprise").should("not.exist");
+  });
+};
+
+export const fcValidateIARCheckForPartners = () => {
+  cy.get("h4").contains("When an independent accountant's report is needed");
+  cy.getByQA("WhenAnIarIsNeeded").contains("A B Cad Services");
+  cy.getByQA("WhenAnIarIsNeeded").contains("Quarterly");
+  cy.getByQA("WhenAnIarIsNeeded").within(() => {
+    cy.tableCell("EUI Small Ent Health (Lead)").should("not.exist");
+    cy.tableCell("ABS EUI Medium Enterprise").should("not.exist");
   });
 };
