@@ -42,10 +42,6 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
     <Content value={x => x.pages.forecastsDetails.backLink} />
   );
 
-  const claimsLink = isFc
-    ? props.routes.claimsDashboard.getLink({ projectId: props.projectId, partnerId: props.partnerId })
-    : props.routes.allClaimsDashboard.getLink({ projectId: props.projectId });
-
   const partnerName = isProjectPmOrMo ? getPartnerName(data.partner) : undefined;
 
   const showUpdateSection =
@@ -70,7 +66,7 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
     >
       {!data.partner.isWithdrawn && (
         <>
-          <ForecastClaimAdvice claimLink={claimsLink} />
+          <ForecastClaimAdvice isFc={isFc} />
           <FinalClaimMessage data={data} isFc={isPartnerFc} />
         </>
       )}

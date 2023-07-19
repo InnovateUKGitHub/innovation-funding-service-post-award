@@ -593,7 +593,8 @@
       "grantAdvice": "If the new remaining grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant."
     },
     "forecastsComponents": {
-      "adviceMessage": "You can only update forecasts for future periods here. You must update your current period when you <0>make a claim</0>."
+      "adviceMessage": "Your Finance Contact can now amend the forecasted costs at any time (as long as the related period's claim has not yet been approved).",
+      "adviceMessageFc": "You can now amend your forecasted costs at any time (as long as the related period's claim has not yet been approved)."
     },
     "forecastsDashboard": {
       "title": {
@@ -617,7 +618,7 @@
       },
       "backLinkMoOrPm": "Back to forecasts",
       "backLink": "Back to project",
-      "linkUpdateForecast": "Update forecast"
+      "linkUpdateForecast": "Edit forecast"
     },
     "forecastsUpdate": {
       "title": {
@@ -625,7 +626,7 @@
         "display": "Update forecast"
       },
       "backLink": "Back to forecast",
-      "buttonSubmit": "Submit"
+      "buttonSubmit": "Submit changes"
     },
     "monitoringReportsDashboard": {
       "title": {

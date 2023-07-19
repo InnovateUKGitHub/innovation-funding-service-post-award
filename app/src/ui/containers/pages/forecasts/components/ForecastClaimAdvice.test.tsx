@@ -3,26 +3,19 @@ import { render } from "@testing-library/react";
 import TestBed from "@shared/TestBed";
 import { ForecastClaimAdvice, ForecastClaimAdviceProps } from "./ForecastClaimAdvice";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 describe("<ForecastClaimAdvice />", () => {
   const stubContent = {
     pages: {
       forecastsComponents: {
-        adviceMessage: "You must eat <0>lettuce</0> to proceed.",
+        adviceMessage: "Your Finance Contact must now eat lettuce to proceed.",
+        adviceMessageFc: "You must now eat lettuce to proceed.",
       },
     },
   };
 
-  const stubLink: ILinkInfo = {
-    path: "stub-path",
-    routeName: "stub-routeName",
-    routeParams: {},
-    accessControl: () => false,
-  };
-
   const defaultProps: ForecastClaimAdviceProps = {
-    claimLink: stubLink,
+    isFc: false,
   };
 
   const setup = (props: ForecastClaimAdviceProps) =>
@@ -39,8 +32,17 @@ describe("<ForecastClaimAdvice />", () => {
   });
 
   describe("@content", () => {
-    test("renders", () => {
-      const { queryByTestId } = setup({ claimLink: stubLink });
+    test("renders when not Fc", () => {
+      const { queryByTestId } = setup({ isFc: false });
+
+      const forecastClaimAdvice = queryByTestId("forecastClaimAdvice");
+
+      expect(forecastClaimAdvice).toBeInTheDocument();
+      expect(forecastClaimAdvice).toMatchSnapshot();
+    });
+
+    test("renders when Fc", () => {
+      const { queryByTestId } = setup({ isFc: true });
 
       const forecastClaimAdvice = queryByTestId("forecastClaimAdvice");
 

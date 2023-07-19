@@ -1,17 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ForecastClaimAdvice /> @content renders 1`] = `
+exports[`<ForecastClaimAdvice /> @content renders when Fc 1`] = `
 <p
   class="govuk-body"
   data-qa="forecastClaimAdvice"
 >
-  You must eat 
-  <a
-    class="govuk-link"
-    href="/stub-path"
-  >
-    lettuce
-  </a>
-   to proceed.
+  You must now eat lettuce to proceed.
+</p>
+`;
+
+exports[`<ForecastClaimAdvice /> @content renders when not Fc 1`] = `
+<p
+  class="govuk-body"
+  data-qa="forecastClaimAdvice"
+>
+  Your Finance Contact must now eat lettuce to proceed.
 </p>
 `;

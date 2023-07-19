@@ -47,7 +47,10 @@ const UpdateForecastComponent = ({
 }: UpdateForecastParams & UpdateForecastProps & BaseProps) => {
   const data = useUpdateForecastData(projectId, partnerId, undefined);
 
-  const { isActive } = data.project;
+  const {
+    isActive,
+    roles: { isFc },
+  } = data.project;
 
   const handleSubmit = () => {
     if (!isActive) return;
@@ -68,8 +71,6 @@ const UpdateForecastComponent = ({
     );
   };
 
-  const allClaimsDashboardLink = routes.allClaimsDashboard.getLink({ projectId });
-
   return (
     <Page
       backLink={
@@ -81,7 +82,7 @@ const UpdateForecastComponent = ({
       validator={editor.validator}
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
     >
-      <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
+      <ForecastClaimAdvice isFc={isFc} />
       {data.claim && data.claim.isFinalClaim && (
         <ValidationMessage messageType="info" message={x => x.forecastsMessages.finalClaim} />
       )}
