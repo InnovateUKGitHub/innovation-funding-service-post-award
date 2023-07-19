@@ -2,11 +2,12 @@ import { renderHook, act } from "@testing-library/react";
 import { useOnUpdate } from "./onUpdate";
 import * as windowHelpers from "@framework/util/windowHelpers";
 
-jest.spyOn(windowHelpers, "scrollToTheTagSmoothly").mockImplementation();
+jest.spyOn(windowHelpers, "scrollToTheTopSmoothly").mockImplementation();
 
 describe("useOnUpdate", () => {
   const onSuccess = jest.fn();
   const onError = jest.fn();
+  global.window.scrollTo = jest.fn();
 
   const renderSuccessHook = () =>
     renderHook(() => useOnUpdate({ req: data => Promise.resolve(data), onSuccess, onError }));
