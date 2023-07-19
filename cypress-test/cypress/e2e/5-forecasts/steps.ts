@@ -39,7 +39,7 @@ export const clickForecastsTile = () => {
   cy.selectTile("Forecasts");
 };
 
-export const showPartnerTable = () => {
+export const showPartnerTableHeadings = () => {
   ["Partner", "Total eligible costs", "Forecasts and costs", "Underspend", "Date of last update"].forEach(
     partnerHeader => {
       cy.tableHeader(partnerHeader);
@@ -80,7 +80,7 @@ export const updateLabourFields = () => {
     "Labour Period 6",
     "Labour Period 7",
   ].forEach(labourField => {
-    cy.getByAriaLabel(labourField).clear({ force: true }).type("111").wait(500);
+    cy.getByAriaLabel(labourField).clear({ force: true }).type("10").wait(500);
   });
 };
 
@@ -107,18 +107,16 @@ export const clearCostCategories = () => {
   cy.get("h2").contains("There is a problem");
 };
 
-export const populateCategoriesZeroSubmit = () => {
-  [
-    "Labour Period 3",
-    "Labour Period 4",
-    "Labour Period 5",
-    "Labour Period 6",
-    "Labour Period 7",
-    "Labour Period 8",
-  ].forEach(populateCat => {
-    cy.getByAriaLabel(populateCat).clear({ force: true }).type("0").wait(500);
-  });
+export const revertCategoriesSubmit = () => {
+  cy.getByAriaLabel("Labour Period 2").clear().type("11.10").wait(500);
+  cy.getByAriaLabel("Labour Period 3").clear().type("22.20").wait(500);
+  cy.getByAriaLabel("Labour Period 4").clear().type("33.30").wait(500);
+  cy.getByAriaLabel("Labour Period 5").clear().type("44.40").wait(500);
+  cy.getByAriaLabel("Labour Period 6").clear().type("55.55").wait(500);
+  cy.getByAriaLabel("Labour Period 7").clear().type("50.89").wait(500);
+  cy.getByAriaLabel("Labour Period 8").clear().type("777.00").wait(500);
   cy.submitButton("Submit").click();
+  cy.get("a").contains("Update forecast");
 };
 
 export const ktpCostCats = () => {
@@ -317,11 +315,19 @@ export const updateAcademicCosts = () => {
 };
 
 export const submitCalculations = () => {
-  cy.tableCell("£33,999.00");
+  cy.get("tr")
+    .eq(4)
+    .within(() => {
+      cy.get("td:nth-child(14)").contains("£34,781.66");
+    });
   cy.get("button").contains("Submit").click();
   cy.get("a").contains("Update forecast");
   cy.get("td:nth-child(4)").contains("111");
-  cy.get("td:nth-child(14)").contains("£33,999.00");
+  cy.get("tr")
+    .eq(4)
+    .within(() => {
+      cy.get("td:nth-child(14)").contains("£34,781.66");
+    });
 };
 
 export const clickForecastAccessEUI = () => {
@@ -445,8 +451,34 @@ export const topThreeRows = () => {
 export const forecastValues = () => {
   let rowNumber = 3;
   [
-    ["£33,333.00", "£111.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
-    ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
+    [
+      "£33,333.00",
+      "£11.10",
+      "£22.20",
+      "£33.30",
+      "£44.40",
+      "£55.55",
+      "£50.89",
+      "£777.00",
+      "£133.33",
+      "£144.99",
+      "£111.12",
+      "£222.22",
+    ],
+    [
+      "£35,000.00",
+      "-£5,000.00",
+      "£111.11",
+      "£222.22",
+      "£333.33",
+      "£444.44",
+      "£555.55",
+      "£666.66",
+      "£777.77",
+      "£888.88",
+      "£999.99",
+      "£0.00",
+    ],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
@@ -473,6 +505,59 @@ export const forecastValues = () => {
         cy.get("td:nth-child(11)").contains(col10);
         cy.get("td:nth-child(12)").contains(col11);
         cy.get("td:nth-child(13)").contains(col12);
+      });
+  });
+};
+
+export const correctTableHeaders = () => {
+  cy.getByQA("total-header").contains("Total");
+  cy.getByQA("total-eligible-cost").contains("Total eligible costs");
+  cy.tableHeader("Difference");
+};
+
+export const correctForecastTotals = () => {
+  let tableRow = 3;
+  [
+    ["£34,939.10", "£35,000.00", "-0.17%"],
+    ["£34,999.95", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£0.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£35,000.00", "£35,000.00", "0.00%"],
+    ["£349,939.05", "£350,000.00", "-0.02%"],
+  ].forEach(([total, totalEligible, difference]) => {
+    tableRow++;
+    cy.get("tr")
+      .eq(tableRow)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(total);
+        cy.get("td:nth-child(15)").contains(totalEligible);
+        cy.get("td:nth-child(16)").contains(difference);
+      });
+  });
+};
+
+export const forecastPartnerTable = () => {
+  let tableRow = 0;
+  [
+    ["EUI Small Ent Health (Lead)", "£350,000.00", "£349,939.05", "£350,000.00"],
+    ["A B Cad Services", "£50,000.00", "£42,400.00", "£50,000.00"],
+    ["ABS EUI Medium Enterprise", "£101,000.00", "£17,900.00", "£101,000.00"],
+    ["Deep Rock Galactic", "£350,000.00", "£54,667.46", "£350,000.00"],
+  ].forEach(([partner, totalEligible, forecasts, underspend]) => {
+    tableRow++;
+    cy.get("tr")
+      .eq(tableRow)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(partner);
+        cy.get("td:nth-child(2)").contains(totalEligible);
+        cy.get("td:nth-child(3)").contains(forecasts);
+        cy.get("td:nth-child(4)").contains(underspend);
       });
   });
 };

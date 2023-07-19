@@ -1,5 +1,15 @@
 import { visitApp } from "../../common/visit";
-import { clickForecastsTile, displayForecastTable, shouldShowProjectTitle, showPartnerTable } from "./steps";
+import {
+  clickForecastTile,
+  topThreeRows,
+  correctTableHeaders,
+  displayForecastTableCostCategories,
+  forecastValues,
+  correctForecastTotals,
+  shouldShowProjectTitle,
+  showPartnerTableHeadings,
+  forecastPartnerTable,
+} from "./steps";
 
 const projectManagerEmail = "james.black@euimeabs.test";
 
@@ -10,33 +20,50 @@ describe("Forecast front page as PM", () => {
     cy.navigateToProject("879546");
   });
 
-  it("should click the forecast tile", clickForecastsTile);
-
-  it("Should display the partner table", showPartnerTable);
-
-  it("Should click the first View forecast link", () => {
-    cy.contains("td", "EUI Small Ent Health (Lead)").siblings().contains("a", "View forecast").click();
-  });
+  it("should click the forecast tile", clickForecastTile);
 
   it("Should display a page heading", () => {
-    cy.heading("Forecast");
-  });
-
-  it("should show the forecast table", displayForecastTable);
-
-  it("Should display a page heading", () => {
-    cy.heading("Forecast");
+    cy.heading("Forecasts");
   });
 
   it("Should have the project title", shouldShowProjectTitle);
 
   it("Should have a back link", () => {
-    cy.backLink("Back to forecasts");
+    cy.backLink("Back to project");
   });
 
-  it("Should show the partner name", () => {
+  it("Should display the partner table", showPartnerTableHeadings);
+
+  it("Should show all partners on the project and an overview of finances", forecastPartnerTable);
+
+  it("Should click into the forecast for EUI Small Ent Health", () => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(6)").contains("View forecast").click();
+      });
+  });
+
+  it("Should display the Forecast heading and subheading for EUI Small Ent Health", () => {
+    cy.heading("Forecast");
     cy.get("h2").contains("EUI Small Ent Health");
   });
 
-  it("should show the forecast table", displayForecastTable);
+  it("Should have forecast advice text", () => {
+    cy.getByQA("forecastClaimAdvice").contains("You can only update forecasts");
+  });
+
+  it("Should display the Period, IAR and Month rows correctly", topThreeRows);
+
+  it("Should display the correct table headers", correctTableHeaders);
+
+  it("should show the forecast table cost categories", displayForecastTableCostCategories);
+
+  it("Should display correct Forecast values", forecastValues);
+
+  it("Should display the correct totals", correctForecastTotals);
+
+  it("Should have an 'Update forecast' button", () => {
+    cy.get("a").contains("Update forecast").should("not.exist");
+  });
 });

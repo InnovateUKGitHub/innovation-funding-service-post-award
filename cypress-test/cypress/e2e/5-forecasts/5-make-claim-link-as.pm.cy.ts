@@ -2,11 +2,11 @@ import { visitApp } from "../../common/visit";
 import {
   clickForecastsTile,
   clickViewDisplayClaim,
-  displayForecastTable,
+  displayForecastTableCostCategories,
   makeClaimPM,
   shouldShowAllAccordion,
   shouldShowProjectTitle,
-  showPartnerTable,
+  forecastPartnerTable,
 } from "./steps";
 
 const projectManagerEmail = "james.black@euimeabs.test";
@@ -24,7 +24,7 @@ describe("Forecast > link to claims page as PM", () => {
 
   it("should click the forecast tile", clickForecastsTile);
 
-  it("Should display the partner table", showPartnerTable);
+  it("Should display the partner table", forecastPartnerTable);
 
   it("Should click the first View forecast link", () => {
     cy.contains("td", "EUI Small Ent Health (Lead)").siblings().contains("a", "View forecast").click();
@@ -34,7 +34,7 @@ describe("Forecast > link to claims page as PM", () => {
     cy.heading("Forecast");
   });
 
-  it("should show the forecast table", displayForecastTable);
+  it("should show the forecast table", displayForecastTableCostCategories);
 
   it("should click the 'make a claim' link and land you on the allClaimsDashboard page", makeClaimPM);
 

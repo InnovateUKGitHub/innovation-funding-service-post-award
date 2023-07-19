@@ -2,7 +2,7 @@ import { visitApp } from "../../common/visit";
 import {
   clickEditDisplayClaim,
   clickForecastTile,
-  displayForecastTable,
+  displayForecastTableCostCategories,
   makeClaimFC,
   shouldShowProjectTitle,
 } from "./steps";
@@ -26,7 +26,7 @@ describe("Forecast > Link to claims page as FC", () => {
     cy.heading("Forecast");
   });
 
-  it("should show the forecast table", displayForecastTable);
+  it("should show the forecast table", displayForecastTableCostCategories);
 
   it("should click the 'make a claim' link and land you on the claimsDashboard", makeClaimFC);
 

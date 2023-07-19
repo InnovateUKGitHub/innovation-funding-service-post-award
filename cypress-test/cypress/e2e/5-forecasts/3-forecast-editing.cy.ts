@@ -3,7 +3,7 @@ import {
   clearCostCategories,
   clickForecastTile,
   exceedGrantValue,
-  populateCategoriesZeroSubmit,
+  revertCategoriesSubmit,
   updateLabourFields,
   submitCalculations,
 } from "./steps";
@@ -44,5 +44,5 @@ describe("Forecast > edit", () => {
     clearCostCategories,
   );
 
-  it("Should populate the cost categories with a zero and click submit", populateCategoriesZeroSubmit);
+  it("Should revert the cost categories back to how they were and click submit", revertCategoriesSubmit);
 });
