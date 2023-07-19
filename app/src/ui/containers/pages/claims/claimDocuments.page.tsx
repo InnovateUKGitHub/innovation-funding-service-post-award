@@ -402,7 +402,7 @@ export function ClaimDocumentAdvice({
 
       return (
         <>
-          {impactManagementParticipation !== ImpactManagementParticipation.Yes && (
+          {impactManagementParticipation !== ImpactManagementParticipation.Yes && isFinalClaim && (
             <>
               <SimpleString>{content.finalClaimGuidanceContent1}</SimpleString>
               <OL>
