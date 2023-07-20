@@ -109,7 +109,7 @@
     },
     "warningContent": {
       "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
-      "contactMessage": "Your Monitoring Officer will let you know if they have any concerns.",
+      "contactMessage": "Please amend your forecast costs to be in line with the grant offer letter.",
       "contactMessage_InternalAssurance": "Innovate UK will let you know if they have any concerns.",
       "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:"
     },
@@ -999,7 +999,6 @@
     "claimApproved": "You have approved this claim.",
     "frequencyChangeMessage": "Your project asked us to change the length of the remaining periods. You must make sure your forecast reflects your expected spend or your monitoring officer will not approve your claim.",
     "frequencyChangeMessage_InternalAssurance": "Your project asked us to change the length of the remaining periods. You must make sure your forecast reflects your expected spend or Innovate UK will not approve your claim.",
-    "lastChanceToChangeForecast": "This is your last chance to change the forecast for period {{periodId}}",
     "documentDetailGuidance": "Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.",
     "documentDisclaimerMessage": "Do not remove any documents for previous months' costs.",
     "interimClaimMessage": "When adding costs for last month, you must:\n\n* use a new line for every cost each month\n\n* name the month in the description\n\n* not alter any information for previous months' costs",
