@@ -114,7 +114,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
             <UploadForm.Fieldset>
               <DocumentGuidance />
 
-              <UploadForm.Hidden name="description" value={dto => dto.description} />
+              <UploadForm.Hidden name="description" value={() => DocumentDescription.Evidence} />
 
               <UploadForm.MultipleFileUpload
                 label={x => x.documentMessages.uploadDocuments}
@@ -151,7 +151,7 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
   const handleOnChange: Callbacks["onChange"] = (saving, dto) => {
     stores.messages.clearMessages();
     const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }));
-
+    dto.description = DocumentDescription.Evidence;
     stores.claimDetailDocuments.updateClaimDetailDocumentsEditor(
       saving,
       props.projectId,
