@@ -13,8 +13,6 @@ import { ShortDateRange } from "@ui/components/renderers/date";
 import { Percentage } from "@ui/components/renderers/percentage";
 import { createTypedTable } from "@ui/components/table";
 import { Title } from "@ui/components/projects/title";
-import { AccessibilityText } from "@ui/components/renderers/accessibilityText";
-import { useContent } from "@ui/hooks/content.hook";
 
 type Props = {
   projectId: ProjectId;
@@ -81,72 +79,72 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
               value={x => x.percentageParticipantCostsSubmitted}
             />
           </FinanceSummaryTable.Table>
+        </Section>
 
-          <Section title={content.partnerFinanceDetailsTitle}>
-            <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
-              <FinanceSummaryTable.Custom
-                hideHeader
-                qa="Partner"
-                value={x => getPartnerName(x, true)}
-                header={content.partnerProjectLabel}
-              />
+        <Section title={content.partnerFinanceDetailsTitle}>
+          <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
+            <FinanceSummaryTable.Custom
+              hideHeader
+              qa="Partner"
+              value={x => getPartnerName(x, true)}
+              header={content.partnerProjectLabel}
+            />
 
-              <FinanceSummaryTable.Currency
-                qa="TotalEligibleCosts"
-                header={content.totalEligibleCostsLabel}
-                value={x => x.totalParticipantGrant}
-              />
+            <FinanceSummaryTable.Currency
+              qa="TotalEligibleCosts"
+              header={content.totalEligibleCostsLabel}
+              value={x => x.totalParticipantGrant}
+            />
 
-              <FinanceSummaryTable.Percentage
-                qa="FundingLevel"
-                header={content.awardRateLabel}
-                value={x => x.awardRate}
-              />
+            <FinanceSummaryTable.Percentage
+              qa="FundingLevel"
+              header={content.awardRateLabel}
+              value={x => x.awardRate}
+            />
 
-              <FinanceSummaryTable.Currency
-                qa="TotalGrant"
-                header={content.totalApprovedLabel}
-                value={x => x.totalGrantApproved}
-              />
+            <FinanceSummaryTable.Currency
+              qa="TotalGrant"
+              header={content.totalApprovedLabel}
+              value={x => x.totalGrantApproved}
+            />
 
-              <FinanceSummaryTable.Currency
-                qa="RemainingGrant"
-                header={content.remainingValueLabel}
-                value={x => x.remainingParticipantGrant}
-              />
+            <FinanceSummaryTable.Currency
+              qa="RemainingGrant"
+              header={content.remainingValueLabel}
+              value={x => x.remainingParticipantGrant}
+            />
 
-              <FinanceSummaryTable.Currency
-                qa="TotalGrantPaidInAdvance"
-                header={content.totalPrepaymentLabel}
-                value={x => x.totalPrepayment}
-              />
+            <FinanceSummaryTable.Currency
+              qa="TotalGrantPaidInAdvance"
+              header={content.totalPrepaymentLabel}
+              value={x => x.totalPrepayment}
+            />
 
-              <FinanceSummaryTable.Percentage qa="ClaimCap" header={content.capLimitLabel} value={x => x.capLimit} />
+            <FinanceSummaryTable.Percentage qa="ClaimCap" header={content.capLimitLabel} value={x => x.capLimit} />
 
-              <FinanceSummaryTable.Currency
-                qa="CapLimitDeferredAmount"
-                header={content.capLimitDeferredAmountLabel}
-                value={x => x.capLimitDeferredAmount}
-              />
-            </FinanceSummaryTable.Table>
-          </Section>
-          <Section title={content.accountantsReportTitle}>
-            <FinanceSummaryTable.Table qa="WhenAnIarIsNeeded" data={partnersToShow}>
-              <FinanceSummaryTable.Custom
-                qa="Partner"
-                hideHeader
-                header={content.partnerProjectLabel}
-                value={x => getPartnerName(x, true)}
-              />
+            <FinanceSummaryTable.Currency
+              qa="CapLimitDeferredAmount"
+              header={content.capLimitDeferredAmountLabel}
+              value={x => x.capLimitDeferredAmount}
+            />
+          </FinanceSummaryTable.Table>
+        </Section>
+        <Section title={content.accountantsReportTitle}>
+          <FinanceSummaryTable.Table qa="WhenAnIarIsNeeded" data={partnersToShow}>
+            <FinanceSummaryTable.Custom
+              qa="Partner"
+              hideHeader
+              header={content.partnerProjectLabel}
+              value={x => getPartnerName(x, true)}
+            />
 
-              <FinanceSummaryTable.String
-                qa="Frequency"
-                header={content.auditReportFrequencyLabel}
-                hideHeader
-                value={x => x.auditReportFrequencyName}
-              />
-            </FinanceSummaryTable.Table>
-          </Section>
+            <FinanceSummaryTable.String
+              qa="Frequency"
+              header={content.auditReportFrequencyLabel}
+              hideHeader
+              value={x => x.auditReportFrequencyName}
+            />
+          </FinanceSummaryTable.Table>
         </Section>
       </Section>
     </Page>
@@ -193,7 +191,7 @@ const renderTotalValueFooters = (
 
 export const FinanceSummaryRoute = defineRoute({
   allowRouteInActiveAccess: true,
-  routeName: "FinanceSummary",
+  routeName: "financeSummary",
   routePath: "/projects/:projectId/finance-summary/:partnerId",
   container: FinanceSummaryPage,
   getParams: x => ({
