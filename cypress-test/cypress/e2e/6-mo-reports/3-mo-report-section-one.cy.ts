@@ -31,7 +31,7 @@ describe("MO report > section 1 - can continue a report", () => {
   it("Should display a period selection box and allow a figure to be entered", periodSelection);
 
   it("Should continue to the next page", () => {
-    cy.getByQA("button_save-continue-qa").click();
+    cy.button("Continue").click();
   });
 
   it("Should show the period number", () => {
@@ -53,11 +53,11 @@ describe("MO report > section 1 - can continue a report", () => {
   });
 
   it("Should show subheading 'Scope'", () => {
-    cy.get("h2").contains("Scope");
+    cy.get("Legend").contains("Scope");
   });
 
   it("Should have a paragraph with guidance on how to complete the report", () => {
-    cy.paragraph("For each question score the project");
+    cy.get("#hint-for-questions").contains("For each question score the project");
   });
 
   it("Should have a number of score options", q1ScoreChoice);

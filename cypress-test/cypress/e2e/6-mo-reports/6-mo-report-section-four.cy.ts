@@ -45,7 +45,7 @@ describe("MO report > section 4 - can continue a report", () => {
   });
 
   it("Should show subheading 'Exploitation'", () => {
-    cy.get("h2").contains("Exploitation");
+    cy.get("legend").contains("Exploitation");
   });
 
   it("Should have a number of score options", q4ScoreChoice);

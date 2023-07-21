@@ -45,7 +45,7 @@ describe("MO report > section 5 - can continue a report", () => {
   });
 
   it("Should show subheading 'Risk management'", () => {
-    cy.get("h2").contains("Risk management");
+    cy.get("legend").contains("Risk management");
   });
 
   it("Should have a number of score options", q5ScoreChoice);

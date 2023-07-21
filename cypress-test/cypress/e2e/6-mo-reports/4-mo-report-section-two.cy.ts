@@ -49,7 +49,7 @@ describe("MO report > section 2 - can continue a report", () => {
   });
 
   it("Should show subheading 'Time'", () => {
-    cy.get("h2").contains("Time");
+    cy.get("legend").contains("Time");
   });
 
   it("Should have a number of score options", q2ScoreChoice);

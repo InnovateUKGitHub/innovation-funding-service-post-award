@@ -43,11 +43,13 @@ describe("MO report > section 7 - can continue a report", () => {
   });
 
   it("Should show subheading 'Summary'", () => {
-    cy.get("h2").contains("Summary");
+    cy.get("legend").contains("Summary");
   });
 
   it("Should contain summary guidance", () => {
-    cy.paragraph("Please summarise");
+    cy.get("#hint-for-questions").contains(
+      "Please summarise the project's key achievements and the key issues and risks that it faces.",
+    );
   });
 
   it("Should have a subheading above the comment box", () => {

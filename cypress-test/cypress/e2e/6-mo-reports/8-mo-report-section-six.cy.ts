@@ -45,7 +45,7 @@ describe("MO report > section 6 - can continue a report", () => {
   });
 
   it("Should show subheading 'Project planning'", () => {
-    cy.get("h2").contains("Project planning");
+    cy.get("legend").contains("Project planning");
   });
 
   it("Should have a number of score options", q6ScoreChoice);

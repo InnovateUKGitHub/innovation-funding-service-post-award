@@ -43,11 +43,13 @@ describe("MO report > section 8 - can continue a report", () => {
   });
 
   it("Should show subheading 'Issues and actions'", () => {
-    cy.get("h2").contains("Issues and actions");
+    cy.get("legend").contains("Issues and actions");
   });
 
   it("Should contain guidance on any issues and actions", () => {
-    cy.paragraph("Please confirm any specific issues");
+    cy.get("#hint-for-questions").contains(
+      "Please confirm any specific issues that require Technology Strategy Board intervention - e.g. apparent scope change, partner changes, budget virements or time extensions.",
+    );
   });
 
   it("Should have a subheading above the comment box", () => {

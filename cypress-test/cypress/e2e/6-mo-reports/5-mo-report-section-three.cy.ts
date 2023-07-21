@@ -49,7 +49,7 @@ describe("MO report > section 3 - can continue a report", () => {
   });
 
   it("Should show subheading 'Cost'", () => {
-    cy.get("h2").contains("Cost");
+    cy.get("legend").contains("Cost");
   });
 
   it("Should have a number of score options", q3ScoreChoice);

@@ -6,14 +6,14 @@ export const standardComments = "This is a standard message for use in a text bo
 export const deleteMoReport = () => {
   visitApp({ path: "projects/a0E2600000kSotUEAS/monitoring-reports" });
   cy.getByQA("deleteLink").contains("Delete report").click();
-  cy.getByQA("button_delete-qa").click({ force: true });
+  cy.button("Delete").click({ force: true });
 };
 
 export const navigateToSection2 = () => {
-  cy.getByQA("field-period").contains("Period");
+  cy.getByLabel("Period");
   cy.get("input#period").type("1");
   cy.wait(500);
-  cy.getByQA("button_save-continue-qa").click();
+  cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
@@ -21,10 +21,10 @@ export const navigateToSection2 = () => {
 };
 
 export const navigateToSection3 = () => {
-  cy.getByQA("field-period").contains("Period");
+  cy.getByLabel("Period");
   cy.get("input#period").type("1");
   cy.wait(500);
-  cy.getByQA("button_save-continue-qa").click();
+  cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
@@ -36,10 +36,10 @@ export const navigateToSection3 = () => {
 };
 
 export const navigateToSection4 = () => {
-  cy.getByQA("field-period").contains("Period");
+  cy.getByLabel("Period");
   cy.get("input#period").type("1");
   cy.wait(500);
-  cy.getByQA("button_save-continue-qa").click();
+  cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
   cy.wait(1000);
   cy.submitButton("Continue").click();
@@ -55,10 +55,10 @@ export const navigateToSection4 = () => {
 };
 
 export const navigateToSection5 = () => {
-  cy.getByQA("field-period").contains("Period");
+  cy.getByLabel("Period");
   cy.get("input#period").type("1");
   cy.wait(500);
-  cy.getByQA("button_save-continue-qa").click();
+  cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
@@ -78,10 +78,10 @@ export const navigateToSection5 = () => {
 };
 
 export const navigateToSection6 = () => {
-  cy.getByQA("field-period").contains("Period");
+  cy.getByLabel("Period");
   cy.get("input#period").type("1");
   cy.wait(500);
-  cy.getByQA("button_save-continue-qa").click();
+  cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
@@ -105,10 +105,10 @@ export const navigateToSection6 = () => {
 };
 
 export const navigateToSection7 = () => {
-  cy.getByQA("field-period").contains("Period");
+  cy.getByLabel("Period");
   cy.get("input#period").type("1");
   cy.wait(500);
-  cy.getByQA("button_save-continue-qa").click();
+  cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
@@ -136,10 +136,10 @@ export const navigateToSection7 = () => {
 };
 
 export const navigateToSection8 = () => {
-  cy.getByQA("field-period").contains("Period");
+  cy.getByLabel("Period");
   cy.get("input#period").type("1");
   cy.wait(500);
-  cy.getByQA("button_save-continue-qa").click();
+  cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
   cy.wait(500);
   cy.submitButton("Continue").click();
@@ -164,6 +164,50 @@ export const navigateToSection8 = () => {
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 7 of 8");
+  cy.submitButton("Continue").click();
+  cy.get("h3").contains("Section 8");
+};
+
+export const completeAllSectionsWithComments = () => {
+  cy.getByLabel("Period");
+  cy.get("input#period").clear().type("1");
+  cy.wait(500);
+  cy.button("Continue").click();
+  cy.getByQA("question-1-score-1").check();
+  cy.get("textarea").clear().type("Section 1 // *&^%");
+  cy.wait(500);
+  cy.submitButton("Continue").click();
+  cy.get("h3").contains("Section 2 of 8");
+  cy.getByQA("question-2-score-1").check();
+  cy.get("textarea").clear().type("Section 2 // *&^%");
+  cy.wait(500);
+  cy.submitButton("Continue").click();
+  cy.get("h3").contains("Section 3 of 8");
+  cy.getByQA("question-3-score-1").check();
+  cy.get("textarea").clear().type("Section 3 // *&^%");
+  cy.wait(500);
+  cy.submitButton("Continue").click();
+  cy.get("h3").contains("Section 4 of 8");
+  cy.getByQA("question-4-score-1").check();
+  cy.get("textarea").clear().type("Section 4 // *&^%");
+  cy.wait(500);
+  cy.submitButton("Continue").click();
+  cy.get("h3").contains("Section 5 of 8");
+  cy.getByQA("question-5-score-1").check();
+  cy.get("textarea").clear().type("Section 5 // *&^%");
+  cy.wait(500);
+  cy.submitButton("Continue").click();
+  cy.get("h3").contains("Section 6 of 8");
+  cy.getByQA("question-6-score-1").check();
+  cy.get("textarea").clear().type("Section 6 // *&^%");
+  cy.wait(500);
+  cy.submitButton("Continue").click();
+  cy.get("h3").contains("Section 7 of 8");
+  cy.get("textarea").clear().type("Section 7 // *&^%");
+  cy.submitButton("Continue").click();
+  cy.get("h3").contains("Section 8");
+  cy.get("textarea").clear().type("Section 8 // *&^%");
+  cy.wait(500);
   cy.submitButton("Continue").click();
 };
 
@@ -267,8 +311,8 @@ export const q6SelectEachRadioButton = () => {
 };
 
 export const continueAndReturnButtons = () => {
-  cy.submitButton("Continue");
-  cy.submitButton("Save and return to summary");
+  cy.button("Continue");
+  cy.button("Save and return to summary");
 };
 
 export const openHeadingArchivedHeading = () => {
@@ -282,14 +326,14 @@ export const reportGuidance = () => {
 };
 
 export const periodSelection = () => {
-  cy.getByQA("field-period").contains("Period");
+  cy.getByLabel("Period");
   cy.get("input#period").type("1");
   cy.wait(500);
 };
 
 export const saveContinueSaveReturn = () => {
-  cy.getByQA("button_save-continue-qa").contains("Continue");
-  cy.getByQA("button_save-return-qa").contains("Save and return to monitoring reports");
+  cy.button("Continue");
+  cy.button("Save and return to monitoring reports");
 };
 
 export const q1ScoreChoice = () => {
@@ -345,5 +389,203 @@ export const q5ScoreChoice = () => {
 export const q6ScoreChoice = () => {
   ["Exceeding expectations", "Good", "Scope for improvement", "Very poor", "Unacceptable"].forEach(q6Choice => {
     cy.get("label").contains(q6Choice);
+  });
+};
+
+export const loremIpsumWithLineBreaks =
+  "Lorem ipsum dolor sit amet, agam saperet electram mea ea. Has no munere reprimique. \nIus an magna movet mediocrem, at mea dicit laudem. Mei id mutat dolorem nostrum, sed no integre accusamus, ius ut mandamus deseruisse. \nMundi postea mea te, enim detraxit scriptorem te vis. Sea melius fuisset splendide in. Ut per soluta laoreet. No mea eleifend sapientem persequeris. \nEa ubique eligendi nam, vim cu putent sententiae incorrupte. Cu qui voluptua voluptaria liberavisse. Duo ne aeterno graecis, cum duis splendide ei, vis ludus vocent rationibus id. \nEu dicit ullamcorper mea. Scripserit referrentur consectetuer ad est, vix an commodo dolorem conceptam, his no tollit apeirian insolens. \nComplectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. \nNe nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. \nPri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. Ne odio minim eam, recteque concludaturque ex usu, an sed epicurei perpetua abhorreant. \nLorem ipsum dolor sit amet, agam saperet electram mea ea. Has no munere reprimique. \nIus an magna movet mediocrem, at mea dicit laudem. Mei id mutat dolorem nostrum, sed no integre accusamus, ius ut mandamus deseruisse. \nMundi postea mea te, enim detraxit scriptorem te vis. Sea melius fuisset splendide in. Ut per soluta laoreet. No mea eleifend sapientem persequeris. \nEa ubique eligendi nam, vim cu putent sententiae incorrupte. Cu qui voluptua voluptaria liberavisse. Duo ne aeterno graecis, cum duis splendide ei, vis ludus vocent rationibus id. \nEu dicit ullamcorper mea. Scripserit referrentur consectetuer ad est, vix an commodo dolorem conceptam, his no tollit apeirian insolens. \nComplectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. \nNe nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. \nPri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. Ne odio minim eam, recteque concludaturque ex usu, an sed epicurei perpetua abhorreant.";
+
+export const loremIpsumNoLineBreaks =
+  "Lorem ipsum dolor sit amet, agam saperet electram mea ea. Has no munere reprimique. Ius an magna movet mediocrem, at mea dicit laudem. Mei id mutat dolorem nostrum, sed no integre accusamus, ius ut mandamus deseruisse. Mundi postea mea te, enim detraxit scriptorem te vis. Sea melius fuisset splendide in. Ut per soluta laoreet. No mea eleifend sapientem persequeris. Ea ubique eligendi nam, vim cu putent sententiae incorrupte. Cu qui voluptua voluptaria liberavisse. Duo ne aeterno graecis, cum duis splendide ei, vis ludus vocent rationibus id. Eu dicit ullamcorper mea. Scripserit referrentur consectetuer ad est, vix an commodo dolorem conceptam, his no tollit apeirian insolens. Complectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. Ne nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. Pri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. Ne odio minim eam, recteque concludaturque ex usu, an sed epicurei perpetua abhorreant. Lorem ipsum dolor sit amet, agam saperet electram mea ea. Has no munere reprimique. Ius an magna movet mediocrem, at mea dicit laudem. Mei id mutat dolorem nostrum, sed no integre accusamus, ius ut mandamus deseruisse. Mundi postea mea te, enim detraxit scriptorem te vis. Sea melius fuisset splendide in. Ut per soluta laoreet. No mea eleifend sapientem persequeris. Ea ubique eligendi nam, vim cu putent sententiae incorrupte. Cu qui voluptua voluptaria liberavisse. Duo ne aeterno graecis, cum duis splendide ei, vis ludus vocent rationibus id. Eu dicit ullamcorper mea. Scripserit referrentur consectetuer ad est, vix an commodo dolorem conceptam, his no tollit apeirian insolens. Complectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. Ne nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. Pri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. Ne odio minim eam, recteque concludaturque ex usu, an sed epicurei perpetua abhorreant.";
+
+export const section1Summary = () => {
+  cy.get("h3").contains("Scope");
+  [
+    "Score",
+    "Comments",
+    "1 - It is certain that the project will fail to deliver on one or more key objectives",
+    "Section 1 // *&^%",
+    "Edit",
+  ].forEach(section1Item => {
+    cy.getByQA("summary-question-1").contains(section1Item);
+  });
+};
+
+export const section2Summary = () => {
+  cy.get("h3").contains("Time");
+  [
+    "Score",
+    "Comments",
+    "1 - Milestones and deliverables for the current period have slipped by more than three months",
+    "Section 2 // *&^%",
+    "Edit",
+  ].forEach(section2Item => {
+    cy.getByQA("summary-question-2").contains(section2Item);
+  });
+};
+
+export const section3Summary = () => {
+  cy.get("h3").contains("Cost");
+  [
+    "Score",
+    "Comments",
+    "1 - Under/overspend +/- >21%. Expenditure is routinely not commensurate with progress. Forecasts not updated, and routinely inaccurate",
+    "Section 3 // *&^%",
+    "Edit",
+  ].forEach(section3Item => {
+    cy.getByQA("summary-question-3").contains(section3Item);
+  });
+};
+
+export const section4Summary = () => {
+  cy.get("h3").contains("Exploitation");
+  ["Score", "Comments", "1 - Unacceptable", "Section 4 // *&^%", "Edit"].forEach(section4Item => {
+    cy.getByQA("summary-question-4").contains(section4Item);
+  });
+};
+
+export const section5Summary = () => {
+  cy.get("h3").contains("Risk management");
+  ["Score", "Comments", "1 - Unacceptable", "Section 5 // *&^%", "Edit"].forEach(section5Item => {
+    cy.getByQA("summary-question-5").contains(section5Item);
+  });
+};
+
+export const section6Summary = () => {
+  cy.get("h3").contains("Project planning");
+  ["Score", "Comments", "1 - Unacceptable", "Section 6 // *&^%", "Edit"].forEach(section6Item => {
+    cy.getByQA("summary-question-6").contains(section6Item);
+  });
+};
+
+export const section7Summary = () => {
+  cy.get("h3").contains("Summary");
+  ["Comments", "Section 7 // *&^%", "Edit"].forEach(section7Item => {
+    cy.getByQA("summary-question-7").contains(section7Item);
+  });
+};
+
+export const section8Summary = () => {
+  cy.get("h3").contains("Issues and actions");
+  ["Comments", "Section 8 // *&^%", "Edit"].forEach(section8Item => {
+    cy.getByQA("summary-question-8").contains(section8Item);
+  });
+};
+
+export const backAllTheWayOut = () => {
+  cy.getByQA("summary-question-8").contains("Edit").click();
+  cy.get("h3").contains("Section 8 of 8");
+  cy.backLink("Back to summary").click();
+  cy.backLink("Back to project planning").click();
+  cy.backLink("Back to risk management").click();
+  cy.backLink("Back to exploitation").click();
+  cy.backLink("Back to cost").click();
+  cy.backLink("Back to time").click();
+  cy.backLink("Back to scope").click();
+  cy.backLink("Back to Monitoring Reports").click();
+  cy.backLink("Back to summary").click();
+  cy.backLink("Back to Monitoring Reports").click();
+  cy.get("h1").contains("Monitoring reports");
+};
+
+export const accessDraftReport = () => {
+  cy.tableCell("Draft").siblings().contains("Edit report").click();
+  cy.get("h1").contains("Monitoring report");
+};
+
+export const editSection3 = () => {
+  cy.getByQA("summary-question-3").contains("Edit").click();
+  cy.get("legend").contains("Cost");
+  cy.getByQA("question-3-score-4").click();
+  cy.get("textarea").clear().type("This is a new comment for Section 3 // *&^%");
+  cy.button("Save and return to summary").click();
+};
+
+export const reflectSection3 = () => {
+  cy.get("h3").contains("Cost");
+  [
+    "Score",
+    "Comments",
+    "4 - Under/overspend within +/- 6-10%. Accurate & evidenced forecasts are in place. Expenditure is in line with planned activity and budget",
+    "This is a new comment for Section 3 // *&^%",
+    "Edit",
+  ].forEach(section3Item => {
+    cy.getByQA("summary-question-3").contains(section3Item);
+  });
+};
+
+export const editSection1 = () => {
+  cy.getByQA("summary-question-1").contains("Edit").click();
+  cy.get("legend").contains("Scope");
+  cy.getByQA("question-1-score-5").click();
+  cy.get("textarea").clear().type("This is a new comment for Section 1 // *&^%");
+  cy.button("Continue").click();
+};
+
+export const updateSection2 = () => {
+  cy.get("legend").contains("Time");
+  cy.getByQA("question-2-score-5").click();
+  cy.get("textarea").clear().type("This is a new comment for Section 2 // *&^%");
+  cy.button("Continue").click();
+};
+
+export const skipSection3Update4 = () => {
+  cy.get("legend").contains("Cost");
+  cy.button("Continue").click();
+  cy.get("legend").contains("Exploitation");
+  cy.getByQA("question-4-score-5").click();
+  cy.get("textarea").clear().type("This is a new comment for Section 4 // *&^%");
+  cy.button("Save and return to summary").click();
+  cy.heading("Monitoring report");
+};
+
+export const reflectSection1Changes = () => {
+  cy.get("h3").contains("Cost");
+  [
+    "Score",
+    "Comments",
+    "5 - The consortium has identified opportunities, beyond those specified in it's proposal, and plans to explore these within this project",
+    "This is a new comment for Section 1 // *&^%",
+    "Edit",
+  ].forEach(section1Item => {
+    cy.getByQA("summary-question-1").contains(section1Item);
+  });
+};
+
+export const reflectSection2Changes = () => {
+  cy.get("h3").contains("Cost");
+  [
+    "Score",
+    "Comments",
+    "5 - The project is running ahead of schedule",
+    "This is a new comment for Section 2 // *&^%",
+    "Edit",
+  ].forEach(section2Item => {
+    cy.getByQA("summary-question-2").contains(section2Item);
+  });
+};
+
+export const reflectSection4Changes = () => {
+  cy.get("h3").contains("Cost");
+  ["Score", "Comments", "5 - Exceeding expectations", "This is a new comment for Section 4 // *&^%", "Edit"].forEach(
+    section4Item => {
+      cy.getByQA("summary-question-4").contains(section4Item);
+    },
+  );
+};
+
+export const editSection5WithCopy = () => {
+  cy.getByQA("summary-question-5").contains("Edit").click();
+  cy.get("legend").contains("Risk management");
+  cy.get("textarea").clear().type(loremIpsumWithLineBreaks);
+  cy.paragraph("You have 2844 characters");
+  cy.button("Save and return to summary").click();
+  cy.heading("Monitoring report");
+};
+
+export const reflectSection5Changes = () => {
+  cy.get("h3").contains("Risk management");
+  ["Score", "Comments", "1 - Unacceptable", "Edit", loremIpsumNoLineBreaks].forEach(section5Item => {
+    cy.getByQA("summary-question-5").contains(section5Item);
   });
 };
