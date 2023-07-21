@@ -102,7 +102,7 @@ export const eligibleCostsSummary = () => {
 };
 
 export const partnerFinanceDetails = () => {
-  cy.get("h4").contains("Partner finance details");
+  cy.get("h3").contains("Partner finance details");
   [
     ["EUI Small Ent Health (Lead)", "£350,000.00", "65.00%", "£0.00", "£227,500.00", "£0.00", "80.00%", "£0.00"],
     ["A B Cad Services", "£175,000.00", "65.00%", "£0.00", "£113,750.00", "0.00", "80.00%", "£0.00"],
@@ -175,7 +175,7 @@ export const manyPartnerFinanceDetails = () => {
   ].forEach(manyPartnerCost => {
     cy.getByQA("PartnerFinanceDetails").contains("td:nth-child(1)", manyPartnerCost);
   });
-  cy.get("h4").contains("Partner finance details");
+  cy.get("h3").contains("Partner finance details");
 };
 
 export const whenIarNeeded = () => {
@@ -188,7 +188,7 @@ export const whenIarNeeded = () => {
   ].forEach(iarRequirement => {
     cy.getByQA("WhenAnIarIsNeeded").contains(iarRequirement);
   });
-  cy.get("h4").contains("When an independent accountant's report is needed");
+  cy.get("h3").contains("When an independent accountant's report is needed");
 };
 
 export const manyWhenIarNeeded = () => {
@@ -234,7 +234,7 @@ export const manyWhenIarNeeded = () => {
     "With the first claim, last claim and on every anniversary of the project start date",
     "Quarterly",
   ];
-  cy.get("h4").contains("When an independent accountant's report is needed");
+  cy.get("h3").contains("When an independent accountant's report is needed");
 };
 
 export const periodSubWithDate = () => {
@@ -416,7 +416,7 @@ export const fcValidateCostsCheckForPartners = () => {
 };
 
 export const fcValidateFinancesCheckForPartners = () => {
-  cy.get("h4").contains("Partner finance details");
+  cy.get("h3").contains("Partner finance details");
   let child = 0;
   ["A B Cad Services", "£175,000.00", "65.00%", "£0.00", "£113,750.00", "£0.00", "80.00%", "£0.00"].forEach(cell => {
     cy.getByQA("PartnerFinanceDetails")
@@ -433,7 +433,7 @@ export const fcValidateFinancesCheckForPartners = () => {
 };
 
 export const fcValidateIARCheckForPartners = () => {
-  cy.get("h4").contains("When an independent accountant's report is needed");
+  cy.get("h3").contains("When an independent accountant's report is needed");
   cy.getByQA("WhenAnIarIsNeeded").contains("A B Cad Services");
   cy.getByQA("WhenAnIarIsNeeded").contains("Quarterly");
   cy.getByQA("WhenAnIarIsNeeded").within(() => {
