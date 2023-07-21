@@ -2,9 +2,8 @@ import { visitApp } from "../../common/visit";
 import {
   acceptInputAndUpdate,
   accessEUIOpenClaim,
-  displayForecastTable,
   forecastCostCats,
-  forecastHeaders,
+  topThreeRows,
   savedFromPrev,
   shouldShowProjectTitle,
   validateForecast,
@@ -42,9 +41,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
     cy.getByQA("validation-message-content").contains("last chance");
   });
 
-  it("Should display the forecast table", displayForecastTable);
-
-  it("Should contain the correct table headers", forecastHeaders);
+  it("Should display the Period, IAR and Month rows correctly", topThreeRows);
 
   it("Should contain the correct cost categories", forecastCostCats);
 
