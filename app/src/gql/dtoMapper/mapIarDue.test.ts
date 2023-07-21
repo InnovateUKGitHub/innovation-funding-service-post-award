@@ -4,30 +4,52 @@ describe("getIARDueOnClaimPeriods", () => {
   const edges = [
     {
       node: {
+        RecordType: {
+          Name: { value: "Total Project Period" },
+        },
         Acc_IAR_Status__c: { value: "Not Received" },
         Acc_IARRequired__c: { value: true },
-        Acc_ProjectID__c: { value: "1" },
+        Acc_ProjectPeriodNumber__c: { value: 1 },
       },
     },
     {
       node: {
+        RecordType: {
+          Name: { value: "Total Project Period" },
+        },
         Acc_IAR_Status__c: { value: "Not Received" },
         Acc_IARRequired__c: { value: true },
-        Acc_ProjectID__c: { value: "2" },
+        Acc_ProjectPeriodNumber__c: { value: 2 },
       },
     },
     {
       node: {
+        RecordType: {
+          Name: { value: "Total Project Period" },
+        },
         Acc_IAR_Status__c: { value: "Not Received" },
         Acc_IARRequired__c: { value: false },
-        Acc_ProjectID__c: { value: "3" },
+        Acc_ProjectPeriodNumber__c: { value: 3 },
       },
     },
     {
       node: {
+        RecordType: {
+          Name: { value: "Unwanted Record Type" },
+        },
         Acc_IAR_Status__c: { value: "Received" },
         Acc_IARRequired__c: { value: true },
-        Acc_ProjectID__c: { value: "4" },
+        Acc_ProjectPeriodNumber__c: { value: 3.5 },
+      },
+    },
+    {
+      node: {
+        RecordType: {
+          Name: { value: "Total Project Period" },
+        },
+        Acc_IAR_Status__c: { value: "Received" },
+        Acc_IARRequired__c: { value: true },
+        Acc_ProjectPeriodNumber__c: { value: 4 },
       },
     },
   ];
