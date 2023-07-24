@@ -79,6 +79,9 @@ export const pcrPrepareQuery = graphql`
                   edges {
                     node {
                       Id
+                      Acc_Comments__c {
+                        value
+                      }
                       Acc_Status__c {
                         value
                       }

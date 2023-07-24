@@ -35,7 +35,7 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
 
   const pcr = mapToPcrDtoArray(
     projectNode?.Project_Change_Requests__r?.edges ?? [],
-    ["id", "status", "reasoningStatus", "requestNumber", "projectId"],
+    ["id", "status", "reasoningStatus", "requestNumber", "projectId", "comments"],
     [
       "accountName",
       "hasOtherFunding",

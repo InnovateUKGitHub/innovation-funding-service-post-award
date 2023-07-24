@@ -44,7 +44,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
 
   const { register, formState, handleSubmit, watch } = useForm<FormValues>({
     defaultValues: {
-      comments: "",
+      comments: pcr.comments ?? "",
       items: pcrItems,
       reasoningStatus: getPcrItemTaskStatus(pcr.reasoningStatus),
     },
@@ -95,6 +95,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
             data-qa="info-text-area"
             characterCount={characterCount}
             disabled={isFetching}
+            defaultValue={pcr.comments}
           />
         </Fieldset>
         <Fieldset data-qa="save-buttons">
