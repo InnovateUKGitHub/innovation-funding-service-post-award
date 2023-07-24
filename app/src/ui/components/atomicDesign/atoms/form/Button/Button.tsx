@@ -1,27 +1,15 @@
+import { useMounted } from "@ui/features/has-mounted/Mounted";
 import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 import cx from "classnames";
-import { DetailedHTMLProps, ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes } from "react";
 
 type ButtonName = `button_${string}`;
 
-type Props = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> & {
-  "data-qa"?: string;
-  // name field is required in order to be compatible with form handlers when JS disabled
-  name?: ButtonName;
-};
-export const SubmitButton = ({ className, name = "button_default", ...props }: Props) => {
-  const { setRef } = useGovFrontend("Button");
-  return (
-    <button
-      ref={setRef}
-      type="submit"
-      name={name}
-      className={cx("govuk-button govuk-!-margin-right-1", className)}
-      data-module="govuk-button"
-      {...props}
-    />
-  );
-};
+type ButtonSubTypes =
+  | { secondary?: true; styling?: never; link?: never; warning?: never }
+  | { warning?: true; styling?: never; link?: never; secondary?: never }
+  | { link?: true; styling?: never; secondary?: never; warning?: never }
+  | { styling?: "Link" | "Secondary" | "Primary" | "Warning"; link?: never; secondary?: never; warning?: never };
 
 const getButtonTypeClass = (type: ButtonProps["styling"] = "Primary") => {
   const govukButton = "govuk-button govuk-!-margin-right-1";
@@ -36,14 +24,15 @@ const getButtonTypeClass = (type: ButtonProps["styling"] = "Primary") => {
   return buttonTypeMap[type];
 };
 
-type ButtonSubTypes =
-  | { secondary?: true; styling?: never; link?: never; warning?: never }
-  | { warning?: true; styling?: never; link?: never; secondary?: never }
-  | { link?: true; styling?: never; secondary?: never; warning?: never }
-  | { styling?: "Link" | "Secondary" | "Primary" | "Warning"; link?: never; secondary?: never; warning?: never };
+export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { name?: ButtonName } & ButtonSubTypes;
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & { name: ButtonName } & ButtonSubTypes;
+/**
+ * secondarySubmit allows the button to behave as submit type when javascript is disabled and as a button type
+ * when javascript is enabled. Used to allow both validation with javascript enabled and also to use the submit
+ * form handler with js disabled
+ */
 export const Button = ({
+  secondarySubmit,
   className,
   styling = "Primary",
   name = "button_default",
@@ -51,7 +40,9 @@ export const Button = ({
   link,
   warning,
   ...props
-}: ButtonProps) => {
+}: ButtonProps & {
+  secondarySubmit?: boolean;
+}) => {
   let styleTag = styling;
   if (secondary) {
     styleTag = "Secondary";
@@ -60,9 +51,20 @@ export const Button = ({
   } else if (warning) {
     styleTag = "Warning";
   }
+
+  const { isClient } = useMounted();
   const { setRef } = useGovFrontend("Button");
   const buttonStyling = getButtonTypeClass(styleTag);
   return (
-    <button ref={setRef} name={name} className={cx(buttonStyling, className)} data-module="govuk-button" {...props} />
+    <button
+      type={secondarySubmit && !isClient ? "submit" : "button"}
+      ref={setRef}
+      name={name}
+      className={cx(buttonStyling, className)}
+      data-module="govuk-button"
+      {...props}
+    />
   );
 };
+
+export const SubmitButton = (props: ButtonProps) => <Button type="submit" {...props} />;

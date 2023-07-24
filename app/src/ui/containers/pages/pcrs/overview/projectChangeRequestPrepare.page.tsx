@@ -105,6 +105,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
           </SubmitButton>
 
           <Button
+            secondarySubmit
             disabled={isFetching}
             secondary
             name="button_return"
