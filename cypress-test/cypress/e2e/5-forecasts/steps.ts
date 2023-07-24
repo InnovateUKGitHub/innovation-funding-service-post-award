@@ -410,7 +410,7 @@ export const clickUpdateCheckValues = () => {
 export const topThreeRows = () => {
   [
     ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-    ["IAR Due", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"],
+    ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
     [
       "Month",
       "Feb 2023",
