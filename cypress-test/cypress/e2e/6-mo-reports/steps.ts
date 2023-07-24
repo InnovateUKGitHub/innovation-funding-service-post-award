@@ -589,3 +589,40 @@ export const reflectSection5Changes = () => {
     cy.getByQA("summary-question-5").contains(section5Item);
   });
 };
+
+export const validateMoReport = () => {
+  cy.button("Continue").click();
+  cy.get("h3").contains("Section 1 of 8");
+  cy.button("Save and return to summary").click();
+  cy.button("Submit").click({ timeout: 30000 });
+  [
+    "Enter comments for scope.",
+    "Enter a score for scope.",
+    "Enter comments for time.",
+    "Enter a score for time.",
+    "Enter comments for cost.",
+    "Enter a score for cost",
+    "Enter comments for exploitation",
+    "Enter a score for exploitation",
+    "Enter comments for risk management.",
+    "Enter a score for risk management.",
+    "Enter comments for project planning.",
+    "Enter a score for project planning.",
+    "Enter comments for summary.",
+    "Enter comments for issues and actions",
+  ].forEach(validation => {
+    cy.validationLink(validation);
+  });
+  cy.validationMessage("There is a problem");
+};
+
+export const validatePeriodBox = () => {
+  cy.getByLabel("Period");
+  cy.get("input#period").clear().type("NaN");
+  cy.wait(500);
+  cy.button("Continue").click();
+  cy.validationMessage("There is a problem");
+  cy.validationLink("Period must be a whole number, like 3.");
+  cy.get("input#period").clear().type("1");
+  cy.wait(500);
+};

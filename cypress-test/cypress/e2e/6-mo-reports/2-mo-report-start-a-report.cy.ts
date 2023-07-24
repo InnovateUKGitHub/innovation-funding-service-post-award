@@ -1,4 +1,5 @@
 import { visitApp } from "../../common/visit";
+import { deleteMoReport, validatePeriodBox } from "./steps";
 import {
   clickMoReportTile,
   clickStartNewReportButton,
@@ -6,6 +7,7 @@ import {
   reportGuidance,
   saveContinueSaveReturn,
   shouldShowProjectTitle,
+  validateMoReport,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -14,6 +16,10 @@ describe("MO report > can start a new report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
     cy.navigateToProject("328407");
+  });
+
+  after(() => {
+    deleteMoReport();
   });
 
   it("should click the MO Reports tile", clickMoReportTile);
@@ -34,5 +40,15 @@ describe("MO report > can start a new report", () => {
 
   it("Should display a period selection box and allow a figure to be entered", periodSelection);
 
+  it(
+    "Should enter an invalid character in the period box and attempt to create, prompting validation",
+    validatePeriodBox,
+  );
+
   it("Should have a 'Continue' button and a 'Save and return to monitoring reports' button", saveContinueSaveReturn);
+
+  it(
+    "Should 'Save and return' to display the MO Report Summary page and attempt to submit, prompting validation",
+    validateMoReport,
+  );
 });
