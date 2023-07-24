@@ -18,6 +18,7 @@ const clock = new Clock();
 export type PcrNode = Readonly<
   Partial<{
     Id: string;
+    Acc_Comments__c: GQL.Value<string>;
     Acc_ExistingPartnerName__c: GQL.Value<string>;
     Acc_OtherFunding__c: GQL.Value<boolean>;
     Acc_CommercialWork__c: GQL.Value<boolean>;
@@ -41,7 +42,15 @@ export type PcrNode = Readonly<
 
 type PcrDtoMapping = Pick<
   PCRDto,
-  "id" | "requestNumber" | "projectId" | "started" | "lastUpdated" | "reasoningStatus" | "status" | "statusName"
+  | "comments"
+  | "id"
+  | "lastUpdated"
+  | "projectId"
+  | "reasoningStatus"
+  | "requestNumber"
+  | "started"
+  | "status"
+  | "statusName"
 >;
 
 type PcrItemDtoMapping = Pick<
@@ -119,6 +128,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
  * Mapper for the PCR header node
  */
 const headMapper: GQL.DtoMapper<PcrDtoMapping, PcrNode> = {
+  comments(node) {
+    return node?.Acc_Comments__c?.value ?? "";
+  },
   id(node) {
     return (node?.Id ?? "") as PcrId;
   },
