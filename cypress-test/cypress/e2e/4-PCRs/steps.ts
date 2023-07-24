@@ -1320,3 +1320,25 @@ export const switchToMoCheckComments = () => {
   cy.getByQA("projectChangeRequestStatusChangeTable").find("tr").eq(1).contains("James Black");
   cy.getByQA("projectChangeRequestStatusChangeTable").find("tr").eq(2).contains(comments);
 };
+
+export const createChangeScope = () => {
+  cy.button("Create request").click();
+  cy.heading("Start a new request");
+  cy.clickCheckBox("Change project scope");
+  cy.wait(500);
+  cy.button("Create request").click();
+  cy.heading("Request");
+};
+
+export const populateCommentsAndSave = () => {
+  cy.get("textarea").clear().type(standardComments);
+  cy.wait(500);
+  cy.get(`button[name="button_return"]`).contains("Save and return to requests").click();
+  cy.heading("Project change requests");
+};
+
+export const accessPcrCheckForComments = () => {
+  cy.tableCell("Draft").siblings().contains("Edit").click();
+  cy.heading("Request");
+  cy.get("textarea").contains(standardComments);
+};
