@@ -20,6 +20,11 @@ const getByQA = (tag: string, options?: CommandOptions) => {
   cy.get(`[data-qa="${tag}"]`, options ?? { timeout: 15000 });
 };
 
+const getByRole = (role: string) => {
+  cy.log("**getByRole**");
+  cy.get(`[role="${role}"]`);
+};
+
 const getByPageQA = (tag: string) => {
   cy.log("**getByQA**");
   cy.get(`[data-page-qa="${tag}"]`);
@@ -151,13 +156,14 @@ const list = (title: string) => {
 
 const fileInput = (fileName: string) => {
   cy.log("*fileInput**");
-  cy.get(`input[type="file"]`).wait(300).selectFile(`cypress/common/${fileName}`);
+  cy.get(`input[type="file"]`).wait(300).selectFile(`cypress/documents/${fileName}`);
   cy.wait(300);
 };
 
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
+Cypress.Commands.add("getByRole", getByRole);
 Cypress.Commands.add("getByAriaLabel", getByAriaLabel);
 Cypress.Commands.add("switchUserTo", switchUserTo);
 Cypress.Commands.add("resetUser", resetUser);

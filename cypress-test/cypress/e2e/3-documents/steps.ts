@@ -119,7 +119,7 @@ export const fcUploadToEUI = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
 
 export const pmUploadToEUI = () => {
@@ -127,7 +127,7 @@ export const pmUploadToEUI = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
 
 export const displayEUIFile = () => {
@@ -148,7 +148,7 @@ export const uploadToAB = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
 
 export const displayABFile = () => {
@@ -169,7 +169,7 @@ export const uploadToEUIMed = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
 
 export const displayEUIMedFile = () => {
@@ -187,7 +187,7 @@ export const displayEUIMedFile = () => {
 
 export const manyPartnerUpload = () => {
   partnersList.forEach(selection => {
-    cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfile.doc");
+    cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/documents/testfile.doc");
     cy.get("select#partnerId.govuk-select").select(`Innovate UK, MO and ${selection}`);
     cy.wait(500);
     cy.get("select#description.govuk-select").select("Plans");

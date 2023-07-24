@@ -24,12 +24,20 @@ declare global {
        */
       getByQA(tag: string): Chainable<Element>;
 
+      /**
+       * Gets an element based on the PageQA data tag
+       */
       getByPageQA(tag: string): Chainable<Element>;
 
       /**
        * Gets an element based on the aria-label
        */
       getByAriaLabel(label: string): Chainable<Element>;
+
+      /**
+       * Gets an element based on the role
+       */
+      getByRole(role: string): Chainable<Element>;
 
       /**
        * Uses the dev tools to switch to a different named user,
@@ -114,7 +122,7 @@ declare global {
       list(title: string): Chainable<Element>;
 
       /**
-       * Will access the input of type file and pass in file name to files stored in 'cypress-test/cypress/common/'
+       * Will access the input of type file and pass in file name to files stored in 'cypress-test/cypress/documents/'
        */
 
       fileInput(fileName: string): Chainable<Element>;

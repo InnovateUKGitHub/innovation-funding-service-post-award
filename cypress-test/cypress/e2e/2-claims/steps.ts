@@ -1,4 +1,4 @@
-import { claimReviewfileTidyUp, fileTidyUp } from "common/filetidyup";
+import { claimReviewFileTidyUp, fileTidyUp } from "common/filetidyup";
 
 let date = new Date();
 let comments = JSON.stringify(date);
@@ -147,7 +147,44 @@ export const newCostCatLineItem = () => {
 export const allowFileUpload = () => {
   cy.fileInput("testfile.doc");
   cy.submitButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+  cy.getByRole("alert").contains("Your document has been uploaded.");
+};
+
+export const documents = [
+  "testfile.doc",
+  "testfile2.doc",
+  "testfile3.doc",
+  "testfile4.doc",
+  "testfile5.doc",
+  "testfile6.doc",
+  "testfile7.doc",
+  "testfile8.doc",
+  "testfile9.doc",
+  "testfile10.doc",
+];
+
+const documentPaths = documents.map(doc => `cypress/documents/${doc}`);
+
+export const rejectElevenDocsAndShowError = () => {
+  const tooManyDocuments = [...documentPaths, "cypress/documents/testfile.doc"];
+  cy.get(`input[type="file"]`).selectFile(tooManyDocuments);
+  cy.submitButton("Upload documents").click();
+  cy.getByRole("alert").contains("You can only select up to 10 files at the same time.");
+};
+
+export const allowBatchFileUpload = () => {
+  cy.get(`input[type="file"]`).selectFile(documentPaths);
+  cy.submitButton("Upload documents").click();
+};
+
+export const deleteClaimDocument = (document: string) => {
+  cy.get("tr").then($tr => {
+    if ($tr.text().includes(document)) {
+      cy.log(`Deleting existing ${document} document`);
+      cy.tableCell(document).parent().siblings().contains("button", "Remove").click({ force: true });
+      cy.getByAriaLabel("success message").contains(`'${document}' has been deleted.`);
+    }
+  });
 };
 
 export const reflectCostAdded = () => {
@@ -673,7 +710,7 @@ export const saveAndReturnToPrepare = () => {
 };
 
 export const capPotMessageDoesExist = () => {
-  cy.getByQA("validation-message-content").contains(
+  cy.getByRole("alert").contains(
     "Please be aware, approval of this claim will cause a percentage of your grant to be retained.",
   );
 };
@@ -788,7 +825,7 @@ export const claimReviewDocArea = () => {
 };
 
 export const claimReviewExistingEvidence = () => {
-  claimReviewfileTidyUp("Javier Baez");
+  claimReviewFileTidyUp("Javier Baez");
   [
     ["Sheet1.xlsx", "Claim evidence", "4 Sep 2023", "6KB", "Innovate UK"],
     ["Sheet2.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
@@ -881,5 +918,5 @@ export const claimReviewDeleteDoc = () => {
         cy.getByQA("button_delete-qa").contains("Remove").click();
       });
   });
-  cy.getByQA("validation-message-content").contains("has been deleted");
+  cy.getByRole("alert").contains("has been deleted");
 };

@@ -15,7 +15,7 @@ export const fileTidyUp = (name: string) => {
   });
 };
 
-export const claimReviewfileTidyUp = (name: string) => {
+export const claimReviewFileTidyUp = (name: string) => {
   cy.getByQA("claim-supporting-documents-container").within(() => {
     cy.get("tr").then($container => {
       if ($container.text().includes(name)) {
