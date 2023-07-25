@@ -388,7 +388,9 @@ export class PCRDtoValidator extends Results<PCRDto> {
       return acc.concat(x.displayName);
     }, []);
 
-    return this.getContent(x => x.validation.pcrDtoValidator.typeOverpopulated({ types: errorTypes }));
+    return this.getContent(x =>
+      x.validation.pcrDtoValidator.typeOverpopulated({ types: errorTypes, count: errorTypes.length }),
+    );
   }
 
   private validateItems() {
