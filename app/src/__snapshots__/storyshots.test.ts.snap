@@ -2615,6 +2615,21 @@ exports[`Storyshots IUK Components/Message Box Warning 1`] = `
 </div>
 `;
 
+exports[`Storyshots React Hook Form/Button Standard Button 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <button
+    className="govuk-button govuk-!-margin-right-1"
+    data-module="govuk-button"
+    name="button_default"
+  >
+    Bocchi the Button!!
+  </button>
+</div>
+`;
+
 exports[`Storyshots React Hook Form/Fieldset Standard Fieldset 1`] = `
 <div
   className="govuk-template__body"

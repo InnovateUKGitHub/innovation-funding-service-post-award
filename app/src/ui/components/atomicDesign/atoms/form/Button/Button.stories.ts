@@ -1,19 +1,19 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { SubmitButton } from "./Button";
+import { Button } from "./Button";
 
-const meta: Meta<typeof SubmitButton> = {
-  title: "React Hook Form/Submit Button",
-  component: SubmitButton,
+const meta: Meta<typeof Button> = {
+  title: "React Hook Form/Button",
+  component: Button,
 };
 
 export default meta;
 
-type Story = StoryObj<typeof SubmitButton>;
+type Story = StoryObj<typeof Button>;
 
-export const StandardSubmitButton: Story = {
+export const StandardButton: Story = {
   args: {
     name: "button_default",
-    children: "Submit and return to summary",
+    children: "Bocchi the Button!!",
   },
 };
