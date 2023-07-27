@@ -1,7 +1,7 @@
-import { useMounted } from "@ui/features/has-mounted/Mounted";
 import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 import cx from "classnames";
 import { ButtonHTMLAttributes } from "react";
+import { useMounted } from "../../providers/Mounted/Mounted";
 
 type ButtonName = `button_${string}`;
 
