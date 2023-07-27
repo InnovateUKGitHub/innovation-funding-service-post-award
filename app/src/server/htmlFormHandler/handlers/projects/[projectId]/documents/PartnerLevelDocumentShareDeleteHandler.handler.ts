@@ -5,11 +5,12 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import express from "express";
 import { z } from "zod";
-import { partnerLevelDelete } from "@ui/zod/documentValidators.zod";
+import { partnerLevelDelete, PartnerLevelDeleteOutputs } from "@ui/zod/documentValidators.zod";
 import {
   ProjectDocumentsRoute,
   ProjectDocumentPageParams,
 } from "@ui/containers/pages/projects/documents/projectDocuments.page";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   typeof partnerLevelDelete,
@@ -19,7 +20,7 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     super({
       zod: partnerLevelDelete,
       route: ProjectDocumentsRoute,
-      forms: ["partnerLevelDelete"],
+      forms: [FormTypes.PartnerLevelDelete],
       formIntlKeyPrefix: ["documents"],
     });
   }
@@ -34,7 +35,7 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     params: ProjectDocumentPageParams;
   }): Promise<z.input<typeof partnerLevelDelete>> {
     return {
-      form: "partnerLevelDelete" as const,
+      form: FormTypes.PartnerLevelDelete,
       documentId: input.documentId ?? input.button_documentId,
       projectId: params.projectId,
       partnerId: input.partnerId,
@@ -51,7 +52,7 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: z.output<typeof partnerLevelDelete>;
+    input: PartnerLevelDeleteOutputs;
     context: IContext;
   }): Promise<void> {
     const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);
