@@ -238,6 +238,9 @@ export const claimPrepareQuery = graphql`
                 Acc_TotalParticipantCosts__c {
                   value
                 }
+                Acc_TotalApprovedCosts__c {
+                  value
+                }
               }
             }
           }
