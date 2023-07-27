@@ -45,4 +45,8 @@ describe("Forecast > edit", () => {
   );
 
   it("Should revert the cost categories back to how they were and click submit", revertCategoriesSubmit);
+
+  it("Should load the page correctly", () => {
+    cy.get("a").contains("Update forecast");
+  });
 });

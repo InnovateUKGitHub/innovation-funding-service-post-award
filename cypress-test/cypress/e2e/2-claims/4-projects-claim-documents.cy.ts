@@ -51,6 +51,8 @@ describe("claims > documents upload screen", () => {
   });
 
   it("Should save and return to claims", () => {
+    cy.wait(500);
     cy.get("a.govuk-button--secondary").click();
+    cy.heading("Claims");
   });
 });

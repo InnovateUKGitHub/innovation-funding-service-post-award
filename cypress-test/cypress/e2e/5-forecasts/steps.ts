@@ -116,7 +116,6 @@ export const revertCategoriesSubmit = () => {
   cy.getByAriaLabel("Labour Period 7").clear().type("50.89").wait(500);
   cy.getByAriaLabel("Labour Period 8").clear().type("777.00").wait(500);
   cy.submitButton("Submit").click();
-  cy.get("a").contains("Update forecast");
 };
 
 export const ktpCostCats = () => {
