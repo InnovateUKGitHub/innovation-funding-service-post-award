@@ -48,6 +48,7 @@ type ClaimNode = Readonly<
     LastModifiedDate: GQL.Value<string>;
     Impact_Management_Participation__c: GQL.Value<string>;
     Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
+    Acc_IARRequired__c: GQL.Value<boolean>;
     RecordType: {
       Name: GQL.Value<string>;
     } | null;
@@ -63,6 +64,7 @@ type ClaimDtoMapping = Pick<
   | "id"
   | "isApproved"
   | "isFinalClaim"
+  | "isIarRequired"
   | "lastModifiedDate"
   | "overheadRate"
   | "paidDate"
@@ -125,6 +127,9 @@ const mapper: GQL.DtoMapper<
   },
   isFinalClaim(node) {
     return node?.Acc_FinalClaim__c?.value ?? false;
+  },
+  isIarRequired(node) {
+    return node?.Acc_IARRequired__c?.value ?? false;
   },
   lastModifiedDate(node) {
     return DateTime.fromISO(node?.LastModifiedDate?.value ?? "").toJSDate();

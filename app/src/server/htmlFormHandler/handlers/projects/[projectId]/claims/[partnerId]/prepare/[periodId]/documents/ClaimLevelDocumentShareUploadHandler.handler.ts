@@ -1,23 +1,23 @@
 import { IContext } from "@framework/types/IContext";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
-import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
-import { projectLevelUpload, ProjectLevelUploadOutputs } from "@ui/zod/documentValidators.zod";
+import { claimLevelUpload, ClaimLevelUploadOutputs } from "@ui/zod/documentValidators.zod";
 import express from "express";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
-import { ProjectDocumentsRoute } from "@ui/containers/pages/projects/documents/projectDocuments.page";
+import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
+import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 
-class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
-  typeof projectLevelUpload,
-  { projectId: ProjectId }
+class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
+  typeof claimLevelUpload,
+  { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId }
 > {
   constructor() {
     super({
-      zod: projectLevelUpload,
-      route: ProjectDocumentsRoute,
-      forms: [FormTypes.ProjectLevelUpload],
+      zod: claimLevelUpload,
+      route: ClaimDocumentsRoute,
+      forms: [FormTypes.ClaimLevelUpload],
       formIntlKeyPrefix: ["documents"],
     });
   }
@@ -30,13 +30,14 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   }: {
     input: AnyObject;
     files: ServerFileWrapper[];
-  }): Promise<z.input<typeof projectLevelUpload>> {
+  }): Promise<z.input<typeof claimLevelUpload>> {
     return {
-      form: FormTypes.ProjectLevelUpload,
+      form: FormTypes.ClaimLevelUpload,
       files,
       description: input.description,
       projectId: input.projectId,
       partnerId: input.partnerId,
+      periodId: parseInt(input.periodId, 10),
     };
   }
 
@@ -50,10 +51,15 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: ProjectLevelUploadOutputs;
+    input: ClaimLevelUploadOutputs;
     context: IContext;
   }): Promise<void> {
-    await context.runCommand(new UploadProjectDocumentCommand(input.projectId, input));
+    await context.runCommand(
+      new UploadClaimDocumentsCommand(
+        { partnerId: input.partnerId, periodId: input.periodId, projectId: input.projectId },
+        input,
+      ),
+    );
 
     // TODO: Actually use Redux instead of a temporary array
     res.locals.preloadedReduxActions.push(
@@ -64,4 +70,4 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   }
 }
 
-export { ProjectLevelDocumentShareUploadHandler };
+export { ClaimLevelDocumentShareUploadHandler };

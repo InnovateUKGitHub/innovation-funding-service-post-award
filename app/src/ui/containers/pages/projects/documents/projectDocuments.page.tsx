@@ -7,7 +7,7 @@ import { DocumentSummaryDto, PartnerDocumentSummaryDtoGql } from "@framework/dto
 import { getAuthRoles } from "@framework/types/authorisation";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProjectLevelUploadOutputs, projectLevelUpload } from "@ui/zod/documentValidators.zod";
+import { FileUploadOutputs, projectLevelUpload } from "@ui/zod/documentValidators.zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -32,16 +32,13 @@ import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { getCurrentPartnerName } from "@ui/helpers/getCurrentPartnerName";
 import { useContent } from "@ui/hooks/content.hook";
-import { useStores } from "@ui/redux/storesProvider";
 import { useForm } from "react-hook-form";
-import { Form } from "react-router-dom";
-import {
-  useOnDelete,
-  useOnUpload,
-  useProjectDocumentsQuery,
-  useValidPartnerDropdownOptions,
-} from "./projectDocuments.logic";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { useProjectDocumentsQuery, useValidPartnerDropdownOptions } from "./projectDocuments.logic";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useOnDelete } from "@framework/api-helpers/onFileDelete";
+import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;
@@ -57,28 +54,27 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   );
 
   // Form
-  const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<ProjectLevelUploadOutputs>({
+  const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<FileUploadOutputs>({
     resolver: zodResolver(projectLevelUpload, {
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
   });
 
   const { getContent } = useContent();
-  const stores = useStores();
 
-  const { onUpdate: onUploadUpdate } = useOnUpload({
+  const { onUpdate: onUploadUpdate, apiError: onUploadApiError } = useOnUpload({
     refresh() {
       refresh();
       reset();
     },
   });
-  const { onUpdate: onDeleteUpdate } = useOnDelete({ refresh });
+  const { onUpdate: onDeleteUpdate, apiError: onDeleteApiError } = useOnDelete({ refresh });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useServerError<ProjectLevelUploadOutputs>(setError, formState.errors);
-  const defaults = useServerInput<ProjectLevelUploadOutputs>();
+  const allErrors = useServerError<FileUploadOutputs>(setError, formState.errors);
+  const defaults = useServerInput<FileUploadOutputs>();
 
-  const onChange = (dto: ProjectLevelUploadOutputs) => {
+  const onChange = (dto: FileUploadOutputs) => {
     onUploadUpdate({
       data: dto,
       context: dto,
@@ -86,15 +82,19 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   };
 
   const onDelete = (doc: DocumentSummaryDto | PartnerDocumentSummaryDtoGql) => {
-    stores.messages.clearMessages();
     if ("partnerId" in doc) {
       onDeleteUpdate({
-        data: { form: "partnerLevelDelete", documentId: doc.id, projectId: project.id, partnerId: doc.partnerId },
+        data: {
+          form: FormTypes.PartnerLevelDelete,
+          documentId: doc.id,
+          projectId: project.id,
+          partnerId: doc.partnerId,
+        },
         context: doc,
       });
     } else {
       onDeleteUpdate({
-        data: { form: "projectLevelDelete", documentId: doc.id, projectId: project.id },
+        data: { form: FormTypes.ProjectLevelDelete, documentId: doc.id, projectId: project.id },
         context: doc,
       });
     }
@@ -117,6 +117,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
       backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
       projectStatus={project.status}
       validationErrors={allErrors}
+      apiError={onUploadApiError ?? onDeleteApiError}
     >
       <Messages messages={props.messages} />
 
@@ -203,7 +204,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
               qa="project-documents"
               onRemove={document => onDelete(document)}
               documents={projectDocuments}
-              formType="projectLevelDelete"
+              formType={FormTypes.ProjectLevelDelete}
             />
           </>
         )}

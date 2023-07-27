@@ -1,26 +1,26 @@
 import { IContext } from "@framework/types/IContext";
-import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
+import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { mapToDocumentSummaryDto } from "@server/features/documents/mapToDocumentSummaryDto";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
+import {
+  ClaimDocumentsPageParams,
+  ClaimDocumentsRoute,
+} from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
+import { claimLevelDelete, ClaimLevelDeleteOutputs } from "@ui/zod/documentValidators.zod";
+import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
 import { z } from "zod";
-import { partnerLevelDelete, PartnerLevelDeleteOutputs } from "@ui/zod/documentValidators.zod";
-import {
-  ProjectDocumentsRoute,
-  ProjectDocumentPageParams,
-} from "@ui/containers/pages/projects/documents/projectDocuments.page";
-import { FormTypes } from "@ui/zod/FormTypes";
 
-class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
-  typeof partnerLevelDelete,
-  { projectId: ProjectId }
+class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
+  typeof claimLevelDelete,
+  { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId }
 > {
   constructor() {
     super({
-      zod: partnerLevelDelete,
-      route: ProjectDocumentsRoute,
-      forms: [FormTypes.PartnerLevelDelete],
+      zod: claimLevelDelete,
+      route: ClaimDocumentsRoute,
+      forms: [FormTypes.ClaimLevelDelete],
       formIntlKeyPrefix: ["documents"],
     });
   }
@@ -32,13 +32,14 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     params,
   }: {
     input: AnyObject;
-    params: ProjectDocumentPageParams;
-  }): Promise<z.input<typeof partnerLevelDelete>> {
+    params: ClaimDocumentsPageParams;
+  }): Promise<z.input<typeof claimLevelDelete>> {
     return {
-      form: FormTypes.PartnerLevelDelete,
+      form: FormTypes.ClaimLevelDelete,
       documentId: input.documentId ?? input.button_documentId,
       projectId: params.projectId,
-      partnerId: input.partnerId,
+      partnerId: params.partnerId,
+      periodId: params.periodId,
     };
   }
 
@@ -52,12 +53,19 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: PartnerLevelDeleteOutputs;
+    input: ClaimLevelDeleteOutputs;
     context: IContext;
   }): Promise<void> {
     const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);
+
     const documentSummaryInfo = mapToDocumentSummaryDto(documentInfo, "");
-    await context.runCommand(new DeletePartnerDocumentCommand(input.projectId, input.partnerId, input.documentId));
+    await context.runCommand(
+      new DeleteClaimDocumentCommand(input.documentId, {
+        projectId: input.projectId,
+        partnerId: input.partnerId,
+        periodId: input.periodId,
+      }),
+    );
 
     // TODO: Actually use Redux instead of a temporary array
     res.locals.preloadedReduxActions.push(
@@ -70,4 +78,4 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   }
 }
 
-export { PartnerLevelDocumentShareDeleteHandler };
+export { ClaimLevelDocumentShareDeleteHandler };

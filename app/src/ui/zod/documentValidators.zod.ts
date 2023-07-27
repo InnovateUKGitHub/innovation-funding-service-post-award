@@ -4,6 +4,7 @@ import {
   DocumentDescription,
 } from "@framework/constants/documentDescription";
 import { z } from "zod";
+import { FormTypes } from "./FormTypes";
 import {
   projectIdValidation,
   emptyStringToUndefinedValidation,
@@ -13,7 +14,7 @@ import {
 } from "./helperValidators.zod";
 
 const projectLevelUpload = z.object({
-  form: z.literal("projectLevelUpload"),
+  form: z.literal(FormTypes.ProjectLevelUpload),
   projectId: projectIdValidation,
   partnerId: z.union([emptyStringToUndefinedValidation, partnerIdValidation]),
   description: z.union([
@@ -28,7 +29,7 @@ const projectLevelUpload = z.object({
 });
 
 const claimLevelUpload = z.object({
-  form: z.literal("claimLevelUpload"),
+  form: z.literal(FormTypes.ClaimLevelUpload),
   projectId: projectIdValidation,
   partnerId: partnerIdValidation,
   description: z.union([
@@ -44,24 +45,42 @@ const claimLevelUpload = z.object({
 });
 
 const projectLevelDelete = z.object({
-  form: z.literal("projectLevelDelete"),
+  form: z.literal(FormTypes.ProjectLevelDelete),
   projectId: projectIdValidation,
   documentId: z.string(),
 });
 
 const partnerLevelDelete = z.object({
-  form: z.literal("partnerLevelDelete"),
+  form: z.literal(FormTypes.PartnerLevelDelete),
   projectId: projectIdValidation,
   partnerId: partnerIdValidation,
   documentId: z.string(),
 });
 
+const claimLevelDelete = z.object({
+  form: z.literal(FormTypes.ClaimLevelDelete),
+  projectId: projectIdValidation,
+  partnerId: partnerIdValidation,
+  periodId: periodIdValidation,
+  documentId: z.string(),
+});
+
 type ProjectLevelDeleteOutputs = z.output<typeof projectLevelDelete>;
 type PartnerLevelDeleteOutputs = z.output<typeof partnerLevelDelete>;
-type FileDeleteOutputs = ProjectLevelDeleteOutputs | PartnerLevelDeleteOutputs;
+type ClaimLevelDeleteOutputs = z.output<typeof claimLevelDelete>;
+type FileDeleteOutputs = ProjectLevelDeleteOutputs | PartnerLevelDeleteOutputs | ClaimLevelDeleteOutputs;
 
 type ClaimLevelUploadOutputs = z.output<typeof claimLevelUpload>;
 type ProjectLevelUploadOutputs = z.output<typeof projectLevelUpload>;
+type FileUploadOutputs = ClaimLevelUploadOutputs | ProjectLevelUploadOutputs;
 
-export type { FileDeleteOutputs, ProjectLevelUploadOutputs, ClaimLevelUploadOutputs };
-export { projectLevelUpload, projectLevelDelete, partnerLevelDelete };
+export type {
+  FileDeleteOutputs,
+  FileUploadOutputs,
+  ProjectLevelDeleteOutputs,
+  PartnerLevelDeleteOutputs,
+  ClaimLevelDeleteOutputs,
+  ClaimLevelUploadOutputs,
+  ProjectLevelUploadOutputs,
+};
+export { projectLevelUpload, projectLevelDelete, partnerLevelDelete, claimLevelUpload, claimLevelDelete };

@@ -10,9 +10,9 @@ import { ClaimDto } from "@framework/dtos/claimDto";
 import { GetClaim } from "@server/features/claims/getClaim";
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
 import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
-import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/claimDocuments.page";
 import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/dashboard.page";
 import { PrepareClaimParams, PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page";
+import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 
 export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {
