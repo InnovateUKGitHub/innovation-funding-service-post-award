@@ -428,19 +428,15 @@ export const topThreeRows = () => {
       "Jan 2024",
       "Feb 2024",
     ],
-  ].forEach(
-    ([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12, col13, index], rowNumber = 0) => {
-      cy.get("tr")
-        .eq(rowNumber + 1)
-        .within(() => {
-          let indexNum = 0;
-          for (let child = 2; child < 14; child++) {
-            cy.get(`td:nth-child(${child})`).contains(index[indexNum]);
-            indexNum++;
-          }
-        });
-    },
-  );
+  ].forEach((cols, rowNumber = 0) => {
+    cy.get("tr")
+      .eq(rowNumber + 1)
+      .within(() => {
+        for (let i = 0; i < cols.length; i++) {
+          cy.get(`td:nth-child(${i + 2})`).contains(cols[i]);
+        }
+      });
+  });
 };
 
 export const forecastValues = () => {
@@ -483,15 +479,13 @@ export const forecastValues = () => {
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
-  ].forEach(([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12, index]) => {
+  ].forEach((cols, index) => {
     rowNumber++;
     cy.get("tr")
       .eq(rowNumber)
       .within(() => {
-        let indexNum = 0;
-        for (let child = 2; child < 13; child++) {
-          cy.get(`td:nth-child(${child})`).contains(index[indexNum]);
-          indexNum++;
+        for (let i = 0; i < cols.length; i++) {
+          cy.get(`td:nth-child(${i})`).contains(cols[i]);
         }
       });
   });
