@@ -1,3 +1,5 @@
+import { forEach } from "cypress/types/lodash";
+
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -426,25 +428,19 @@ export const topThreeRows = () => {
       "Jan 2024",
       "Feb 2024",
     ],
-  ].forEach(([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12, col13], rowNumber = 0) => {
-    cy.get("tr")
-      .eq(rowNumber + 1)
-      .within(() => {
-        cy.get("th:nth-child(1)").contains(col1);
-        cy.get("th:nth-child(2)").contains(col2);
-        cy.get("th:nth-child(3)").contains(col3);
-        cy.get("th:nth-child(4)").contains(col4);
-        cy.get("th:nth-child(5)").contains(col5);
-        cy.get("th:nth-child(6)").contains(col6);
-        cy.get("th:nth-child(7)").contains(col7);
-        cy.get("th:nth-child(8)").contains(col8);
-        cy.get("th:nth-child(9)").contains(col9);
-        cy.get("th:nth-child(10)").contains(col10);
-        cy.get("th:nth-child(11)").contains(col11);
-        cy.get("th:nth-child(12)").contains(col12);
-        cy.get("th:nth-child(13)").contains(col13);
-      });
-  });
+  ].forEach(
+    ([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12, col13, index], rowNumber = 0) => {
+      cy.get("tr")
+        .eq(rowNumber + 1)
+        .within(() => {
+          let indexNum = 0;
+          for (let child = 2; child < 14; child++) {
+            cy.get(`td:nth-child(${child})`).contains(index[indexNum]);
+            indexNum++;
+          }
+        });
+    },
+  );
 };
 
 export const forecastValues = () => {
@@ -487,23 +483,16 @@ export const forecastValues = () => {
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
-  ].forEach(([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12]) => {
+  ].forEach(([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12, index]) => {
     rowNumber++;
     cy.get("tr")
       .eq(rowNumber)
       .within(() => {
-        cy.get("td:nth-child(2)").contains(col1);
-        cy.get("td:nth-child(3)").contains(col2);
-        cy.get("td:nth-child(4)").contains(col3);
-        cy.get("td:nth-child(5)").contains(col4);
-        cy.get("td:nth-child(6)").contains(col5);
-        cy.get("td:nth-child(7)").contains(col6);
-        cy.get("td:nth-child(8)").contains(col7);
-        cy.get("td:nth-child(9)").contains(col8);
-        cy.get("td:nth-child(10)").contains(col9);
-        cy.get("td:nth-child(11)").contains(col10);
-        cy.get("td:nth-child(12)").contains(col11);
-        cy.get("td:nth-child(13)").contains(col12);
+        let indexNum = 0;
+        for (let child = 2; child < 13; child++) {
+          cy.get(`td:nth-child(${child})`).contains(index[indexNum]);
+          indexNum++;
+        }
       });
   });
 };
