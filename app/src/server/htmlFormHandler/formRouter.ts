@@ -16,15 +16,16 @@ import { ClaimSummaryFormHandler } from "./handlers/projects/[projectId]/claims/
 import { ClaimDetailDocumentDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/claimDetailDocumentDeleteHandler";
 import { ClaimDetailDocumentUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/claimDetailDocumentUploadHandler";
 import { EditClaimLineItemsFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/editClaimLineItemsFormHandler";
-import { ClaimDocumentsDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/claimDocumentsDeleteHandler";
-import { ClaimDocumentsUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/claimDocumentsUploadHandler";
+import { ClaimLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareDeleteHandler.handler";
+import { ClaimLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareUploadHandler.handler";
 import { PrepareClaimFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/prepareClaimFormHandler";
 import { ClaimReviewDocumentsDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/claimReviewDocumentsDeleteHandler";
 import { ClaimReviewDocumentsUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/claimReviewDocumentsUploadHandler";
 import { ReviewClaimFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/reviewClaimFormHandler";
 import { UpdateForecastFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/updateForecast/[periodId]/updateForecastFormHandler";
-import { ProjectDocumentDeleteHandler } from "./handlers/projects/[projectId]/documents/ProjectDocumentDeleteHandler";
-import { ProjectDocumentUploadHandler } from "./handlers/projects/[projectId]/documents/projectDocumentFormHandler";
+import { PartnerLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/documents/PartnerLevelDocumentShareDeleteHandler.handler";
+import { ProjectLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareDeleteHandler.handler";
+import { ProjectLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareUploadHandler.handler";
 import { MonitoringReportCreateFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/create/monitoringReportCreateFormHandler";
 import { MonitoringReportDeleteFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/delete/monitoringReportDeleteFormHandler";
 import { MonitoringReportPreparePeriodFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/prepare-period/monitoringReportPeriodFormHandler";
@@ -69,7 +70,6 @@ export const standardFormHandlers = [
   new ReviewClaimFormHandler(),
   new UpdateForecastFormHandler(),
   new ClaimDetailDocumentDeleteHandler(),
-  new ClaimDocumentsDeleteHandler(),
   new ClaimReviewDocumentsDeleteHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
@@ -80,7 +80,6 @@ export const standardFormHandlers = [
   new MonitoringReportPrepareFormHandler(),
   new OverheadDocumentsDeleteHandler(),
   new LoanRequestFormHandler(),
-  new ProjectDocumentDeleteHandler(),
   new ProjectChangeRequestAddTypeFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
   new ProjectChangeRequestDeleteFormHandler(),
@@ -107,16 +106,19 @@ export const standardFormHandlers = [
   new ProjectSetupBankDetailsVerifyHandler(),
   new ProjectSetupBankStatementHandler(),
   new LoanRequestDocumentDeleteHandler(),
+
+  // Zod
+  new ProjectLevelDocumentShareDeleteHandler(),
+  new PartnerLevelDocumentShareDeleteHandler(),
+  new ClaimLevelDocumentShareDeleteHandler(),
 ] as const;
 
 export const multiFileFormHandlers = [
   new ClaimDetailDocumentUploadHandler(),
-  new ClaimDocumentsUploadHandler(),
   new ClaimReviewDocumentsUploadHandler(),
   new OverheadDocumentsUploadHandler(),
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
-  new ProjectDocumentUploadHandler(),
   new BankSetupStatementDocumentUploadHandler(),
   new LoanRequestDocumentUploadHandler(),
 ] as const;
@@ -127,7 +129,10 @@ export const developerFormHandlers = [
   new DeveloperPageCrasherHandler(),
 ] as const;
 
-export const zodFileFormHandlers = [new ProjectDocumentUploadHandler()];
+export const zodFormhandlers = [
+  new ProjectLevelDocumentShareUploadHandler(),
+  new ClaimLevelDocumentShareUploadHandler(),
+];
 
 const getRoute = (handler: IFormHandler) => {
   return handler.routePath;
@@ -176,7 +181,20 @@ export const configureFormRouter = ({
   const result = express.Router();
   const finalHandler = new PostFormHandleHandler({ schema });
 
-  for (const x of [...zodFileFormHandlers, ...multiFileFormHandlers]) {
+  for (const x of zodFormhandlers) {
+    result.post(
+      getRoute(x),
+      ((req, res, next) => {
+        // Capture any multer errors and pass them into our form handler.
+        upload.array("files")(req, res, error => {
+          handlePost({ schema, csrfProtection })(x)(error, req, res, next);
+        });
+      }) as RequestHandler,
+      handleError({ schema, csrfProtection }),
+    );
+  }
+
+  for (const x of multiFileFormHandlers) {
     result.post(
       getRoute(x),
       ((req, res, next) => {

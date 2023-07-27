@@ -5,9 +5,9 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { configuration } from "@server/features/common/config";
-import { ClaimDocumentsPageParams } from "@ui/containers/pages/claims/claimDocuments.page";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview.page";
+import { ClaimDocumentsPageParams } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;

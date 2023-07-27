@@ -32,8 +32,10 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
   const onUpdate = async ({ data, context }: { data: TFormValues; context?: TContext }) => {
     try {
       setIsFetching(true);
+      setApiError(null);
 
       const res = await req(data, context);
+
       setIsFetching(false);
       onSuccess(data, res, context);
     } catch (e: unknown) {

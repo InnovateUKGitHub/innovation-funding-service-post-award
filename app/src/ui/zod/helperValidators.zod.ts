@@ -20,7 +20,12 @@ const emptyStringToUndefinedValidation = z
   .transform(() => undefined)
   .optional();
 
-const periodIdValidation = z.number().int().gt(0).lt(100);
+const periodIdValidation = z.coerce
+  .number()
+  .int()
+  .gt(0)
+  .lt(100) // Assumption that a project has fewer than 100 periods.
+  .transform(x => x as PeriodId);
 
 const fileValidation = z.preprocess(
   (x: unknown) => {

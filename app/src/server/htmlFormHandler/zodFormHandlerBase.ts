@@ -6,6 +6,7 @@ import { ZodFormHandlerError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { IRouteDefinition } from "@ui/containers/containerBase";
+import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
 import { z, ZodError } from "zod";
 import { IFormHandler } from "./formHandlerBase";
@@ -16,7 +17,7 @@ abstract class ZodFormHandlerBase<Schema extends z.ZodObject<AnyObject>, QueryPa
   public readonly zod: Schema;
   public readonly route: IRouteDefinition<QueryParams>;
   public readonly routePath: string;
-  public readonly forms: string[];
+  public readonly forms: FormTypes[];
   private readonly formIntlKeyPrefix: string[];
   public abstract readonly acceptFiles: boolean;
   protected readonly logger: Logger;
@@ -30,7 +31,7 @@ abstract class ZodFormHandlerBase<Schema extends z.ZodObject<AnyObject>, QueryPa
   }: {
     zod: Schema;
     route: IRouteDefinition<QueryParams>;
-    forms: string[];
+    forms: FormTypes[];
     formIntlKeyPrefix: string[];
   }) {
     this.zod = zod;

@@ -8,6 +8,7 @@ import { createTypedForm } from "../../../../bjss/form/form";
 import { DocumentsBase } from "../utils/documents.interface";
 import { DocumentsUnavailable } from "../DocumentsUnavailable/DocumentsUnavailable";
 import { ProjectPartnerDocumentEditProps } from "../DocumentView/DocumentView";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 export interface DocumentTableProps<T extends DocumentSummaryDto> extends DocumentsBase<T> {
   customContent?: (
@@ -76,7 +77,7 @@ export interface DocumentTableWithDeleteProps<T extends DocumentSummaryDto> exte
   hideRemove?: (d: T) => boolean;
   onRemove: (d: T) => void;
   disabled?: boolean;
-  formType?: "projectLevelDelete";
+  formType?: FormTypes.ProjectLevelDelete | FormTypes.ClaimLevelDelete;
 }
 
 export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithDeleteProps<DocumentSummaryDto>> = ({
