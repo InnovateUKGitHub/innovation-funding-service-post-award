@@ -2624,6 +2624,7 @@ exports[`Storyshots React Hook Form/Button Standard Button 1`] = `
     className="govuk-button govuk-!-margin-right-1"
     data-module="govuk-button"
     name="button_default"
+    type="button"
   >
     Bocchi the Button!!
   </button>
