@@ -8,13 +8,17 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { useStore } from "react-redux";
 import { FileUploadOutputs } from "@ui/zod/documentValidators.zod";
 import { useOnUpdate } from "./onUpdate";
+import { useStores } from "@ui/redux/storesProvider";
 
 export const useOnUpload = <Inputs extends FileUploadOutputs>({ refresh }: { refresh: () => void }) => {
   const store = useStore<RootState>();
+  const stores = useStores();
   const { getContent } = useContent();
 
   return useOnUpdate<Inputs, unknown, MultipleDocumentUploadDto>({
     req(data) {
+      stores.messages.clearMessages();
+
       const { projectId, partnerId, description, files, form } = data;
 
       if (form === FormTypes.ClaimLevelUpload) {

@@ -23,7 +23,7 @@ import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/document
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { allowedClaimDocuments, useValidDocumentDropdownOptions } from "@framework/constants/documentDescription";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { useServerError, useServerInput } from "@framework/api-helpers/useServerSideZod";
+import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -33,6 +33,7 @@ import { ClaimDocumentAdvice } from "./ClaimDocumentAdvice";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
+import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
 
 export interface ClaimDocumentsPageParams {
   projectId: ProjectId;
@@ -42,6 +43,8 @@ export interface ClaimDocumentsPageParams {
 
 const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const { projectId, partnerId, periodId } = props;
+  const { getContent } = useContent();
+  const onBlurOrChange = useClearMessagesOnBlurOrChange();
 
   const [refreshedQueryOptions, refresh] = useRefreshQuery(claimDocumentsQuery, {
     projectId,
@@ -55,13 +58,11 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   );
 
   // Form
-  const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<FileUploadOutputs>({
+  const { register, handleSubmit, formState, getFieldState, reset, setError, watch } = useForm<FileUploadOutputs>({
     resolver: zodResolver(claimLevelUpload, {
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
   });
-
-  const { getContent } = useContent();
 
   const { onUpdate: onUploadUpdate, apiError: onUploadApiError } = useOnUpload({
     refresh() {
@@ -72,7 +73,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const { onUpdate: onDeleteUpdate, apiError: onDeleteApiError } = useOnDelete({ refresh });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useServerError<FileUploadOutputs>(setError, formState.errors);
+  const allErrors = useZodErrors<FileUploadOutputs>(setError, formState.errors);
   const defaults = useServerInput<FileUploadOutputs>();
 
   const onChange = (dto: FileUploadOutputs) => {
@@ -132,7 +133,13 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
 
       <Section title={getContent(x => x.documentMessages.uploadTitle)}>
         <DocumentGuidance />
-        <Form onSubmit={handleSubmit(onChange)} method="POST" encType="multipart/form-data">
+        <Form
+          onBlur={onBlurOrChange}
+          onChange={onBlurOrChange}
+          onSubmit={handleSubmit(onChange)}
+          method="POST"
+          encType="multipart/form-data"
+        >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
             <input type="hidden" value={FormTypes.ClaimLevelUpload} {...register("form")} />
