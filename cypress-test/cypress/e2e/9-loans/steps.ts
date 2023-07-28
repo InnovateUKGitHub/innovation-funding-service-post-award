@@ -131,7 +131,7 @@ export const uploadApprovalGuidance = () => {
 };
 
 export const drawdownFileUpload = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.fileInput("testfile.doc");
   cy.submitButton("Upload documents").click();
   cy.getByQA("validation-message-content").contains("file has been uploaded");
 };

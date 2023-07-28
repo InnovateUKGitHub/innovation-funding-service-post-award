@@ -112,6 +112,12 @@ declare global {
        * Finds text within a list element
        */
       list(title: string): Chainable<Element>;
+
+      /**
+       * Will access the input of type file and pass in file name to files stored in 'cypress-test/cypress/common/'
+       */
+
+      fileInput(fileName: string): Chainable<Element>;
     }
   }
 }

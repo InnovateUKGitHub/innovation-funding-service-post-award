@@ -51,7 +51,7 @@ export const learnAboutFiles = () => {
 };
 
 export const uploadToMO = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.fileInput("testfile.doc");
   cy.get("select#partnerId.govuk-select").select("Innovate UK and MO only");
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
@@ -59,16 +59,19 @@ export const uploadToMO = () => {
 
 export const displayMOFile = () => {
   cy.get("h3").contains("Documents shared with Innovate UK and Monitoring Officer");
-  cy.tableCell("testfile.doc");
+  cy.reload();
+  cy.getByQA("project-documents-container").within(() => {
+    cy.tableCell("testfile.doc");
+  });
 };
 
 export const deleteDocFromArea = () => {
-  cy.getByQA("button_delete-qa").contains("Remove").click();
+  cy.button("Remove").click();
   cy.getByQA("validation-message-content").contains("has been deleted.");
 };
 
 export const uploadToEUI = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.fileInput("testfile.doc");
   cy.wait(500);
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and EUI Small Ent Health");
   cy.wait(500);
@@ -77,14 +80,14 @@ export const uploadToEUI = () => {
 };
 
 export const fcUploadToEUI = () => {
-  cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfilefc.doc");
+  cy.fileInput("testfilefc.doc");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
 };
 
 export const pmUploadToEUI = () => {
-  cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfilepm.doc");
+  cy.fileInput("testfilepm.doc");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
@@ -92,11 +95,18 @@ export const pmUploadToEUI = () => {
 
 export const displayEUIFile = () => {
   cy.get("h3").contains("Documents shared with Innovate UK and partners");
-  cy.tableCell("testfile.doc");
+  cy.reload();
+  cy.getByQA("partner-documents-container").within(() => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(6)").contains("EUI Small Ent Health");
+      });
+  });
 };
 
 export const uploadToAB = () => {
-  cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfile.doc");
+  cy.fileInput("testfile.doc");
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and A B Cad Services");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
@@ -105,11 +115,18 @@ export const uploadToAB = () => {
 
 export const displayABFile = () => {
   cy.get("h3").contains("Innovate UK and partners");
-  cy.tableCell("testfile.doc");
+  cy.reload();
+  cy.getByQA("partner-documents-container").within(() => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(6)").contains("A B Cad Services");
+      });
+  });
 };
 
 export const uploadToEUIMed = () => {
-  cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfile.doc");
+  cy.fileInput("testfile.doc");
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and ABS EUI Medium Enterprise");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
@@ -118,7 +135,14 @@ export const uploadToEUIMed = () => {
 
 export const displayEUIMedFile = () => {
   cy.get("h3").contains("Innovate UK and partners");
-  cy.tableCell("testfile.doc");
+  cy.reload();
+  cy.getByQA("partner-documents-container").within(() => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(6)").contains("ABS EUI Medium Enterprise");
+      });
+  });
 };
 
 export const manyPartnerUpload = () => {
@@ -156,12 +180,15 @@ export const manyPartnerUpload = () => {
     "Innovate UK, MO and YHDHDL",
     "Innovate UK, MO and Hedges' Hedges Ltd",
   ].forEach(selection => {
-    cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/common/testfile.doc");
+    cy.fileInput("testfile.doc");
     cy.get("select#partnerId.govuk-select").select(selection);
-    cy.wait(500);
     cy.get("select#description.govuk-select").select("Plans");
     cy.submitButton("Upload documents").click();
+    cy.getByQA("validation-summary").should("not.exist");
+    cy.getByQA("validation-message-content").contains("has been uploaded");
   });
+  cy.reload();
+  cy.heading("Project documents");
 };
 
 export const manyPartnerDocDelete = () => {

@@ -149,6 +149,12 @@ const list = (title: string) => {
   cy.get("li").contains(title);
 };
 
+const fileInput = (fileName: string) => {
+  cy.log("*fileInput**");
+  cy.get(`input[type="file"]`).wait(300).selectFile(`cypress/common/${fileName}`);
+  cy.wait(300);
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
@@ -171,3 +177,4 @@ Cypress.Commands.add("heading", heading);
 Cypress.Commands.add("button", button);
 Cypress.Commands.add("paragraph", paragraph);
 Cypress.Commands.add("list", list);
+Cypress.Commands.add("fileInput", fileInput);

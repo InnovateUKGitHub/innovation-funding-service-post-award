@@ -146,7 +146,7 @@ export const newCostCatLineItem = () => {
 };
 
 export const allowFileUpload = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.fileInput("testfile.doc");
   cy.submitButton("Upload documents").click();
   cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
@@ -200,7 +200,7 @@ export const claimsDocUpload = () => {
   fileTidyUp("James Black");
   cy.uploadButton("Upload documents").click();
   cy.validationLink("Choose a file to upload");
-  cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
+  cy.fileInput("testfile.doc");
   cy.uploadButton("Upload documents").click();
 };
 

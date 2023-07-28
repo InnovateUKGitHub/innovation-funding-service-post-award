@@ -102,7 +102,7 @@ export const drgSummaryPageValidation = () => {
 
 export const pcfClaimsDocUpload = () => {
   fileTidyUp("Neil O'Reilly");
-  cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
+  cy.fileInput("testfile.doc");
   cy.uploadButton("Upload documents").click();
   cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
   cy.reload();
