@@ -55,6 +55,12 @@ describe("Forecast front page as PM", () => {
     );
   });
 
+  it("Should have guidance on forecast values", () => {
+    ["The amount you are requesting differs from the agreed costs for:", "labour", "overheads"].forEach(guidance => {
+      cy.getByQA("forecasts-warning-mo-pm-content").contains(guidance);
+    });
+  });
+
   it("Should display the Period, IAR and Month rows correctly", topThreeRows);
 
   it("Should display the correct table headers", correctTableHeaders);
