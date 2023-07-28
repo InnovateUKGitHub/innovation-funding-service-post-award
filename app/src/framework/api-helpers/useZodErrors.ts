@@ -12,7 +12,7 @@ import { ZodIssue } from "zod";
  * @param formErrors React Hook Form clientside errors
  * @returns Serverside errors converted to RHF errors, or clientside errors as-is
  */
-const useServerError = <T extends FieldValues>(setError: UseFormSetError<T>, formErrors: FieldErrors): RhfErrors => {
+const useZodErrors = <T extends FieldValues>(setError: UseFormSetError<T>, formErrors: FieldErrors): RhfErrors => {
   const store = useStore<RootState>();
   const { isServer } = useMounted();
 
@@ -50,4 +50,4 @@ const useServerInput = <T extends FieldValues>() => {
   return previousInput;
 };
 
-export { useServerError, useServerInput };
+export { useZodErrors, useServerInput };

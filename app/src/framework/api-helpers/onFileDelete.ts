@@ -8,13 +8,17 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import { useStore } from "react-redux";
 import { FileDeleteOutputs } from "@ui/zod/documentValidators.zod";
 import { useOnUpdate } from "./onUpdate";
+import { useStores } from "@ui/redux/storesProvider";
 
 export const useOnDelete = <Inputs extends FileDeleteOutputs>({ refresh }: { refresh: () => void }) => {
   const store = useStore<RootState>();
+  const stores = useStores();
   const { getContent } = useContent();
 
   return useOnUpdate<Inputs, unknown, DocumentSummaryDto>({
     req(props) {
+      stores.messages.clearMessages();
+
       const { documentId, projectId, form } = props;
       if (form === FormTypes.ProjectLevelDelete) {
         return clientsideApiClient.documents.deleteProjectDocument({ documentId, projectId });

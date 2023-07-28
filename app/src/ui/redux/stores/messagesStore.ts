@@ -7,6 +7,9 @@ export class MessagesStore extends StoreBase {
   }
 
   public clearMessages() {
-    this.queue(removeMessages());
+    // Clear messages if there are any messages to clear
+    if (this.getState().messages.length) {
+      this.queue(removeMessages());
+    }
   }
 }

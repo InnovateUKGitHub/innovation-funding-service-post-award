@@ -1,4 +1,4 @@
-import { useServerError, useServerInput } from "@framework/api-helpers/useServerSideZod";
+import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
 import {
   allowedProjectLevelDocuments,
   useValidDocumentDropdownOptions,
@@ -39,6 +39,8 @@ import { projectDocumentsQuery } from "./ProjectDocuments.query";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
+import { useStores } from "@ui/redux/storesProvider";
+import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;
@@ -46,6 +48,8 @@ export interface ProjectDocumentPageParams {
 
 const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   const [refreshedQueryOptions, refresh] = useRefreshQuery(projectDocumentsQuery, { projectId: props.projectId });
+  const { getContent } = useContent();
+  const onBlurOrChange = useClearMessagesOnBlurOrChange();
 
   // GraphQL data loading
   const { project, partners, partnerDocuments, projectDocuments } = useProjectDocumentsQuery(
@@ -54,13 +58,11 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   );
 
   // Form
-  const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<FileUploadOutputs>({
+  const { register, handleSubmit, formState, getFieldState, reset, setError, watch } = useForm<FileUploadOutputs>({
     resolver: zodResolver(projectLevelUpload, {
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
   });
-
-  const { getContent } = useContent();
 
   const { onUpdate: onUploadUpdate, apiError: onUploadApiError } = useOnUpload({
     refresh() {
@@ -71,7 +73,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   const { onUpdate: onDeleteUpdate, apiError: onDeleteApiError } = useOnDelete({ refresh });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useServerError<FileUploadOutputs>(setError, formState.errors);
+  const allErrors = useZodErrors<FileUploadOutputs>(setError, formState.errors);
   const defaults = useServerInput<FileUploadOutputs>();
 
   const onChange = (dto: FileUploadOutputs) => {
@@ -131,7 +133,13 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
 
       <Section>
         <DocumentGuidance />
-        <Form onSubmit={handleSubmit(onChange)} method="POST" encType="multipart/form-data">
+        <Form
+          onBlur={onBlurOrChange}
+          onChange={onBlurOrChange}
+          onSubmit={handleSubmit(onChange)}
+          method="POST"
+          encType="multipart/form-data"
+        >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
             <input type="hidden" value="projectLevelUpload" {...register("form")} />
