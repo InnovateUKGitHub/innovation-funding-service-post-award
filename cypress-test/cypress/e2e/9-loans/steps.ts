@@ -102,7 +102,7 @@ export const fcDrawdownGuidance = () => {
 
 export const pmDrawdownGuidance = () => {
   cy.paragraph(
-    "Your Finance Contact can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a change drawdown project change request.",
+    "The Finance Contact can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a change drawdown project change request.",
   );
   cy.get("a").contains("change drawdown");
 };

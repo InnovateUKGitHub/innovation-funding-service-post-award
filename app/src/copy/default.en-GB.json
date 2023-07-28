@@ -108,7 +108,7 @@
       "finalClaimDueMessageMo": "is due to submit their final claim so cannot change their forecast."
     },
     "warningContent": {
-      "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
+      "amountRequestMessage": "The amount you are requesting differs from the agreed costs for:",
       "contactMessage": "Please amend your forecast costs to be in line with the grant offer letter.",
       "contactMessage_InternalAssurance": "Innovate UK will let you know if they have any concerns.",
       "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:"
@@ -402,7 +402,7 @@
       "errorDrawdown": "There was a problem trying to get your drawdown.",
       "backToLoanOverview": "Back to loans summary page",
       "financeContactIntroduction": "You can request your drawdown here. If the amount of your drawdown needs to be changed, your Project Manager will need to submit a change drawdown project change request.",
-      "projectManagerIntroduction": "Your Finance Contact can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a <0>change drawdown</0> project change request.",
+      "projectManagerIntroduction": "The Finance Contact can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a <0>change drawdown</0> project change request.",
       "uploadTitle": "Upload drawdown approval request",
       "uploadFormLabel": "Upload",
       "uploadIntro": "You must upload a signed drawdown approval request",
