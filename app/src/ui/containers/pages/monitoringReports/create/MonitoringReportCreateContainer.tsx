@@ -11,17 +11,15 @@ const MonitoringReportCreateContainer = (props: MonitoringReportCreateParams & B
   const navigate = useNavigate();
 
   const pending = Pending.combine({
-    project: stores.projects.getById(props.projectId),
     editor: stores.monitoringReports.getCreateMonitoringReportEditor(props.projectId),
   });
 
   return (
     <PageLoader
       pending={pending}
-      render={({ project, editor }) => (
+      render={({ editor }) => (
         <MonitoringReportCreate
           {...props}
-          project={project}
           editor={editor}
           onChange={(save, dto, submit, getLink) => {
             stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, newDto => {

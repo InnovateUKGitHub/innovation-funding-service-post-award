@@ -1,5 +1,4 @@
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
@@ -9,7 +8,6 @@ export interface MonitoringReportCreateParams {
 }
 
 export interface MonitoringReportCreateData {
-  project: ProjectDto;
   editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
 }
 

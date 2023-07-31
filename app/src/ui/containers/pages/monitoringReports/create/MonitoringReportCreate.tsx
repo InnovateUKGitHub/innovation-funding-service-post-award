@@ -9,14 +9,15 @@ import {
   MonitoringReportCreateData,
   MonitoringReportCreateParams,
 } from "./monitoringReportCreateDef";
+import { useMonitoringReportCreateQuery } from "./monitoringReportCreate.logic";
 
 const MonitoringReportCreate = ({
   routes,
   projectId,
-  project,
   editor,
   onChange,
 }: MonitoringReportCreateParams & MonitoringReportCreateData & MonitoringReportCreateCallbacks & BaseProps) => {
+  const { project } = useMonitoringReportCreateQuery(projectId);
   const getLink = (progress: boolean) => {
     return (id: MonitoringReportId) => {
       if (!progress) {
@@ -38,7 +39,7 @@ const MonitoringReportCreate = ({
           <Content value={x => x.pages.monitoringReportsCreate.backLink} />
         </BackLink>
       }
-      pageTitle={<Title {...project} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validator={editor.validator}
       error={editor.error}
     >
