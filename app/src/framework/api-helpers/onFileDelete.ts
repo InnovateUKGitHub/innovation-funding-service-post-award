@@ -6,11 +6,18 @@ import { removeMessages, messageSuccess } from "@ui/redux/actions/common/message
 import { RootState } from "@ui/redux/reducers/rootReducer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useStore } from "react-redux";
-import { FileDeleteOutputs } from "@ui/zod/documentValidators.zod";
 import { useOnUpdate } from "./onUpdate";
 import { useStores } from "@ui/redux/storesProvider";
+import type { z } from "zod";
+import type { claimLevelDelete, partnerLevelDelete, projectLevelDelete } from "@ui/zod/documentValidators.zod";
 
-export const useOnDelete = <Inputs extends FileDeleteOutputs>({ refresh }: { refresh: () => void }) => {
+export const useOnDelete = <
+  Inputs extends z.output<typeof projectLevelDelete | typeof partnerLevelDelete | typeof claimLevelDelete>,
+>({
+  refresh,
+}: {
+  refresh: () => void;
+}) => {
   const store = useStore<RootState>();
   const stores = useStores();
   const { getContent } = useContent();

@@ -65,22 +65,13 @@ const claimLevelDelete = z.object({
   documentId: z.string(),
 });
 
-type ProjectLevelDeleteOutputs = z.output<typeof projectLevelDelete>;
-type PartnerLevelDeleteOutputs = z.output<typeof partnerLevelDelete>;
-type ClaimLevelDeleteOutputs = z.output<typeof claimLevelDelete>;
-type FileDeleteOutputs = ProjectLevelDeleteOutputs | PartnerLevelDeleteOutputs | ClaimLevelDeleteOutputs;
+const projectOrPartnerLevelDelete = z.discriminatedUnion("form", [partnerLevelDelete, projectLevelDelete]);
 
-type ClaimLevelUploadOutputs = z.output<typeof claimLevelUpload>;
-type ProjectLevelUploadOutputs = z.output<typeof projectLevelUpload>;
-type FileUploadOutputs = ClaimLevelUploadOutputs | ProjectLevelUploadOutputs;
-
-export type {
-  FileDeleteOutputs,
-  FileUploadOutputs,
-  ProjectLevelDeleteOutputs,
-  PartnerLevelDeleteOutputs,
-  ClaimLevelDeleteOutputs,
-  ClaimLevelUploadOutputs,
-  ProjectLevelUploadOutputs,
+export {
+  projectLevelUpload,
+  projectLevelDelete,
+  partnerLevelDelete,
+  claimLevelUpload,
+  claimLevelDelete,
+  projectOrPartnerLevelDelete,
 };
-export { projectLevelUpload, projectLevelDelete, partnerLevelDelete, claimLevelUpload, claimLevelDelete };

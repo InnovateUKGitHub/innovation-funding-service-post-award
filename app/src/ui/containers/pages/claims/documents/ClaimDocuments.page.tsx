@@ -9,7 +9,7 @@ import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTit
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { claimLevelUpload, FileUploadOutputs } from "@ui/zod/documentValidators.zod";
+import { claimLevelUpload } from "@ui/zod/documentValidators.zod";
 import { useForm } from "react-hook-form";
 import { useContent } from "@ui/hooks/content.hook";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
@@ -34,6 +34,7 @@ import { ImpactManagementParticipation } from "@framework/constants/competitionT
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
+import { z } from "zod";
 
 export interface ClaimDocumentsPageParams {
   projectId: ProjectId;
@@ -58,7 +59,9 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   );
 
   // Form
-  const { register, handleSubmit, formState, getFieldState, reset, setError, watch } = useForm<FileUploadOutputs>({
+  const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<
+    z.output<typeof claimLevelUpload>
+  >({
     resolver: zodResolver(claimLevelUpload, {
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
@@ -73,10 +76,10 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const { onUpdate: onDeleteUpdate, apiError: onDeleteApiError } = useOnDelete({ refresh });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<FileUploadOutputs>(setError, formState.errors);
-  const defaults = useServerInput<FileUploadOutputs>();
+  const allErrors = useZodErrors<z.output<typeof claimLevelUpload>>(setError, formState.errors);
+  const defaults = useServerInput<z.output<typeof claimLevelUpload>>();
 
-  const onChange = (dto: FileUploadOutputs) => {
+  const onChange = (dto: z.output<typeof claimLevelUpload>) => {
     onUploadUpdate({
       data: dto,
       context: dto,

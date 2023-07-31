@@ -8,11 +8,15 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { IRouteDefinition } from "@ui/containers/containerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
-import { z, ZodError } from "zod";
+import { z, ZodError, ZodTypeAny } from "zod";
 import { IFormHandler } from "./formHandlerBase";
 
-abstract class ZodFormHandlerBase<Schema extends z.ZodObject<AnyObject>, QueryParams extends AnyObject>
-  implements IFormHandler
+type AnyForm = { form: ZodTypeAny } & AnyObject;
+
+abstract class ZodFormHandlerBase<
+  Schema extends z.ZodObject<AnyForm> | z.ZodDiscriminatedUnion<"form", z.ZodObject<AnyForm>[]>,
+  QueryParams extends AnyObject,
+> implements IFormHandler
 {
   public readonly zod: Schema;
   public readonly route: IRouteDefinition<QueryParams>;

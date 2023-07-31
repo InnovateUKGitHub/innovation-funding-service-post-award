@@ -7,7 +7,7 @@ import {
   ClaimDocumentsRoute,
 } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
-import { claimLevelDelete, ClaimLevelDeleteOutputs } from "@ui/zod/documentValidators.zod";
+import { claimLevelDelete } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
 import { z } from "zod";
@@ -53,7 +53,7 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: ClaimLevelDeleteOutputs;
+    input: z.output<typeof claimLevelDelete>;
     context: IContext;
   }): Promise<void> {
     const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);

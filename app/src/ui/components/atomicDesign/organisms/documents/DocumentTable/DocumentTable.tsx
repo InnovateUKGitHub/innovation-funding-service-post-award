@@ -172,7 +172,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
                   Remove
                 </Form.Button>
                 <Form.Hidden name="partnerId" value={() => x.partnerId} />
-                <Form.Hidden name="form" value={() => "partnerLevelDelete"} />
+                <Form.Hidden name="form" value={() => FormTypes.PartnerLevelDelete} />
               </Form.Form>
             );
           }}

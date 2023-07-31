@@ -5,22 +5,23 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import express from "express";
 import { z } from "zod";
-import { projectLevelDelete, ProjectLevelDeleteOutputs } from "@ui/zod/documentValidators.zod";
+import { projectOrPartnerLevelDelete } from "@ui/zod/documentValidators.zod";
 import {
   ProjectDocumentsRoute,
   ProjectDocumentPageParams,
 } from "@ui/containers/pages/projects/documents/projectDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
 
 class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
-  typeof projectLevelDelete,
+  typeof projectOrPartnerLevelDelete,
   { projectId: ProjectId }
 > {
   constructor() {
     super({
-      zod: projectLevelDelete,
+      zod: projectOrPartnerLevelDelete,
       route: ProjectDocumentsRoute,
-      forms: [FormTypes.ProjectLevelDelete],
+      forms: [FormTypes.ProjectLevelDelete, FormTypes.PartnerLevelDelete],
       formIntlKeyPrefix: ["documents"],
     });
   }
@@ -33,11 +34,12 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   }: {
     input: AnyObject;
     params: ProjectDocumentPageParams;
-  }): Promise<z.input<typeof projectLevelDelete>> {
+  }): Promise<z.input<typeof projectOrPartnerLevelDelete>> {
     return {
-      form: FormTypes.ProjectLevelDelete,
+      form: input.form,
       documentId: input.documentId ?? input.button_documentId,
       projectId: params.projectId,
+      partnerId: input.partnerId,
     };
   }
 
@@ -51,13 +53,18 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: ProjectLevelDeleteOutputs;
+    input: z.output<typeof projectOrPartnerLevelDelete>;
     context: IContext;
   }): Promise<void> {
     const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);
 
     const documentSummaryInfo = mapToDocumentSummaryDto(documentInfo, "");
-    await context.runCommand(new DeleteProjectDocumentCommand(input.projectId, input.documentId));
+
+    if (input.form === FormTypes.PartnerLevelDelete) {
+      await context.runCommand(new DeletePartnerDocumentCommand(input.projectId, input.partnerId, input.documentId));
+    } else {
+      await context.runCommand(new DeleteProjectDocumentCommand(input.projectId, input.documentId));
+    }
 
     // TODO: Actually use Redux instead of a temporary array
     res.locals.preloadedReduxActions.push(

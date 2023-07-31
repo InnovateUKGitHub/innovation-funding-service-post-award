@@ -2,7 +2,7 @@ import { IContext } from "@framework/types/IContext";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
-import { claimLevelUpload, ClaimLevelUploadOutputs } from "@ui/zod/documentValidators.zod";
+import { claimLevelUpload } from "@ui/zod/documentValidators.zod";
 import express from "express";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
@@ -51,7 +51,7 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: ClaimLevelUploadOutputs;
+    input: z.output<typeof claimLevelUpload>;
     context: IContext;
   }): Promise<void> {
     await context.runCommand(

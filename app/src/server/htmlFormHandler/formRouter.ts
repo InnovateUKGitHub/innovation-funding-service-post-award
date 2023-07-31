@@ -23,7 +23,6 @@ import { ClaimReviewDocumentsDeleteHandler } from "./handlers/projects/[projectI
 import { ClaimReviewDocumentsUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/claimReviewDocumentsUploadHandler";
 import { ReviewClaimFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/review/[periodId]/reviewClaimFormHandler";
 import { UpdateForecastFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/updateForecast/[periodId]/updateForecastFormHandler";
-import { PartnerLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/documents/PartnerLevelDocumentShareDeleteHandler.handler";
 import { ProjectLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareDeleteHandler.handler";
 import { ProjectLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/documents/ProjectLevelDocumentShareUploadHandler.handler";
 import { MonitoringReportCreateFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/create/monitoringReportCreateFormHandler";
@@ -109,7 +108,6 @@ export const standardFormHandlers = [
 
   // Zod
   new ProjectLevelDocumentShareDeleteHandler(),
-  new PartnerLevelDocumentShareDeleteHandler(),
   new ClaimLevelDocumentShareDeleteHandler(),
 ] as const;
 
