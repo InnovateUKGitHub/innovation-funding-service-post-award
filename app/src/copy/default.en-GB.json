@@ -593,7 +593,7 @@
       "grantAdvice": "If the new remaining grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant."
     },
     "forecastsComponents": {
-      "adviceMessage": "Your Finance Contact can now amend the forecasted costs at any time (as long as the related period's claim has not yet been approved).",
+      "adviceMessage": "The Finance Contact can now amend the forecasted costs at any time (as long as the related period's claim has not yet been approved).",
       "adviceMessageFc": "You can now amend your forecasted costs at any time (as long as the related period's claim has not yet been approved)."
     },
     "forecastsDashboard": {
