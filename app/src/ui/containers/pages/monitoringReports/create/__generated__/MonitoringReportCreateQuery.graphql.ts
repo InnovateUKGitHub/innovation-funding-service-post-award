@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e4d05731580860beb4f22768eabf1ef8>>
+ * @generated SignedSource<<e598fe69981e9340afda56a8ce5e06d1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,9 @@ export type MonitoringReportCreateQuery$data = {
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly Acc_CurrentPeriodNumber__c: {
+                readonly value: number | null;
+              } | null;
               readonly Acc_ProjectNumber__c: {
                 readonly value: string | null;
               } | null;
@@ -148,6 +151,16 @@ v2 = [
                             "plural": false,
                             "selections": (v1/*: any*/),
                             "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DoubleValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_CurrentPeriodNumber__c",
+                            "plural": false,
+                            "selections": (v1/*: any*/),
+                            "storageKey": null
                           }
                         ],
                         "storageKey": null
@@ -186,16 +199,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "cd9149003497afa695aa666ba5dae9d6",
+    "cacheID": "049741ce673304ddffbf761f48b59c99",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportCreateQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportCreateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportCreateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4854419d3c5433013078fd56fc4deef3";
+(node as any).hash = "30090af35cbade105bcf882ebabdba9a";
 
 export default node;

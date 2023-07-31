@@ -1,7 +1,6 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MonitoringReportCreateParams } from "@ui/containers/pages/monitoringReports/create/monitoringReportCreateDef";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
@@ -13,7 +12,7 @@ import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringR
 import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 
 export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
-  MonitoringReportCreateParams,
+  { projectId: ProjectId },
   "monitoringReport"
 > {
   constructor() {
@@ -22,7 +21,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
 
   protected async getDto(
     context: IContext,
-    params: MonitoringReportCreateParams,
+    params: { projectId: ProjectId },
     button: IFormButton,
     body: IFormBody,
   ): Promise<MonitoringReportDto> {
@@ -42,17 +41,17 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
     };
   }
 
-  protected createValidationResult(params: MonitoringReportCreateParams, dto: MonitoringReportDto) {
+  protected createValidationResult(params: { projectId: ProjectId }, dto: MonitoringReportDto) {
     return new MonitoringReportDtoValidator(dto, false, false, dto.questions, 100);
   }
 
-  protected getStoreKey(params: MonitoringReportCreateParams) {
+  protected getStoreKey(params: { projectId: ProjectId }) {
     return storeKeys.getMonitoringReportKey(params.projectId);
   }
 
   protected async run(
     context: IContext,
-    params: MonitoringReportCreateParams,
+    params: { projectId: ProjectId },
     button: IFormButton,
     dto: MonitoringReportDto,
   ): Promise<ILinkInfo> {

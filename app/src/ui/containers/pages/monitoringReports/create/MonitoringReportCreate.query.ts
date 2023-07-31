@@ -15,6 +15,9 @@ export const monitoringReportCreateQuery = graphql`
                 Acc_ProjectTitle__c {
                   value
                 }
+                Acc_CurrentPeriodNumber__c {
+                  value
+                }
               }
             }
           }

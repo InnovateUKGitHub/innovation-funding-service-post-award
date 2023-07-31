@@ -12,7 +12,10 @@ import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 
 export class CreateMonitoringReportCommand extends CommandBase<string> {
-  constructor(private readonly monitoringReportDto: MonitoringReportDto, private readonly submit: boolean) {
+  constructor(
+    private readonly monitoringReportDto: PickAndPart<MonitoringReportDto, "periodId" | "projectId" | "status">,
+    private readonly submit: boolean,
+  ) {
     super();
   }
 
@@ -63,7 +66,9 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
   }
 
   private async insertResponse(context: IContext, headerId: string): Promise<void> {
-    const insertItems = this.monitoringReportDto.questions
+    const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
+
+    const insertItems = questions
       .filter(x => x.optionId)
       .map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
         Acc_MonitoringHeader__c: headerId,
@@ -79,7 +84,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
       throw new BadRequestError("Report has already been created");
     }
 
-    if (this.monitoringReportDto.questions.some(x => !!x.responseId)) {
+    if (this.monitoringReportDto?.questions?.some(x => !!x.responseId)) {
       throw new BadRequestError("Report questions have already been created");
     }
 
@@ -88,7 +93,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
     const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
 
     const validationResult = new MonitoringReportDtoValidator(
-      this.monitoringReportDto,
+      this.monitoringReportDto as MonitoringReportDto,
       true,
       this.submit,
       questions,

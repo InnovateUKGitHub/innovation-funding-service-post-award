@@ -181,11 +181,12 @@ export function number(
 /**
  * validates is an integer
  */
-export function integer(results: Results<ResultBase>, value?: number | null, message?: string) {
+export function integer(results: Results<ResultBase>, value?: number | null, message?: string, keyId?: string) {
   return isTrue(
     results,
     value === undefined || value === null || isValueWholeNumber(value),
     message || "Field must be a number.",
+    keyId,
   );
 }
 

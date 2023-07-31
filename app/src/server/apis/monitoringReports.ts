@@ -17,7 +17,10 @@ import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 
 export interface IMonitoringReportsApi<Context extends "client" | "server"> {
   createMonitoringReport: (
-    params: ApiParams<Context, { monitoringReportDto: MonitoringReportDto; submit: boolean }>,
+    params: ApiParams<
+      Context,
+      { monitoringReportDto: Pick<MonitoringReportDto, "periodId" | "projectId" | "status">; submit: boolean }
+    >,
   ) => Promise<MonitoringReportDto>;
   get: (
     params: ApiParams<Context, { projectId: ProjectId; reportId: MonitoringReportId }>,
@@ -96,7 +99,10 @@ class Controller
   }
 
   public async createMonitoringReport(
-    params: ApiParams<"server", { monitoringReportDto: MonitoringReportDto; submit: boolean }>,
+    params: ApiParams<
+      "server",
+      { monitoringReportDto: Pick<MonitoringReportDto, "periodId" | "projectId" | "status">; submit: boolean }
+    >,
   ) {
     const { monitoringReportDto, submit } = params;
     const context = contextProvider.start(params);

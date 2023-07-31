@@ -78,12 +78,14 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
         this,
         this.model.periodId,
         this.getContent(x => x.validation.monitoringReportDtoValidator.periodRequired),
+        "period",
       ),
     () =>
       Validation.integer(
         this,
         this.model.periodId,
         this.getContent(x => x.validation.monitoringReportDtoValidator.periodNotNumber),
+        "period",
       ),
     () =>
       Validation.isTrue(
@@ -92,6 +94,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
         this.getContent(x =>
           x.validation.monitoringReportDtoValidator.periodTooLarge({ count: this.totalProjectPeriods }),
         ),
+        "period",
       ),
   );
 

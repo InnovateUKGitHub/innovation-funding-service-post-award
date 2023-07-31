@@ -5,6 +5,14 @@ import { Content } from "../../../molecules/Content/content";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { useContent } from "@ui/hooks/content.hook";
+import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { FieldError, useForm } from "react-hook-form";
 
 interface PeriodProps {
   editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
@@ -45,6 +53,43 @@ export const MonitoringReportPeriodFormComponent = ({ editor, onChange, onSave }
             </ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
+      </Section>
+    </>
+  );
+};
+
+type FormValues = {
+  period: PeriodId;
+};
+export const RhfMonitoringReportPeriodFormComponent = ({ onUpdate }: { onUpdate: () => void }) => {
+  const { getContent } = useContent();
+
+  const { register, handleSubmit, formState } = useForm<FormValues>({
+    defaultValues: {
+      period: undefined,
+    },
+  });
+
+  return (
+    <>
+      <Section>
+        <P>{getContent(x => x.components.reportForm.reportMessage)}</P>
+        <P>{getContent(x => x.components.reportForm.questionScoreMessage)}</P>
+      </Section>
+      <Section>
+        <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(onUpdate)}>
+          <Field labelBold label="Period" id="period" error={formState?.errors?.period as FieldError}>
+            <NumberInput id="period" inputWidth={3} {...register("period")} />
+          </Field>
+          <Fieldset data-qa="save-buttons">
+            <SubmitButton name="button_save-continue">
+              {getContent(x => x.components.reportForm.continueText)}
+            </SubmitButton>
+            <SubmitButton secondary name="button_save-return">
+              {getContent(x => x.components.reportForm.saveAndReturnText)}
+            </SubmitButton>
+          </Fieldset>
+        </Form>
       </Section>
     </>
   );
