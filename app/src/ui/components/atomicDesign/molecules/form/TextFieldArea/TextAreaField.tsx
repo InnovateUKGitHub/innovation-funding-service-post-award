@@ -1,7 +1,6 @@
 import { forwardRef, type DetailedHTMLProps, type TextareaHTMLAttributes, Ref } from "react";
 import { ValidationError } from "../../../atoms/validation/ValidationError/ValidationError";
 import { Textarea } from "../../../atoms/form/TextArea/Textarea";
-import { FieldError } from "react-hook-form";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
@@ -11,7 +10,7 @@ import { claimCommentsMaxLength } from "@ui/validation/validators/claimDtoValida
 type TextAreaRef = Ref<HTMLTextAreaElement>;
 
 type TextAreaFieldProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> & {
-  error: FieldError | null | undefined;
+  error: RhfError;
   disabled?: boolean;
   hint?: string;
   label?: string;

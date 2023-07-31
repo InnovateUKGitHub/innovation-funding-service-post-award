@@ -2,7 +2,6 @@ import { ProjectRole } from "@framework/constants/project";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
@@ -67,7 +66,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
       }
       pageTitle={<Title {...project} />}
       projectStatus={project.status}
-      validationErrors={validatorErrors as RhfErrors}
+      validationErrors={validatorErrors}
       apiError={apiError}
     >
       <ProjectChangeRequestOverviewSummary pcr={pcr} projectId={project.id} />
@@ -81,16 +80,13 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
 
       <ProjectChangeRequestOverviewLog statusChanges={statusChanges} />
 
-      <Form
-        data-qa="prepare-form"
-        onSubmit={handleSubmit(data => onUpdate({ data, context: { saveAndContinue: true } }))}
-      >
+      <Form data-qa="prepare-form" onSubmit={handleSubmit(onUpdate)}>
         <Fieldset>
           <Legend>{getContent(x => x.pages.pcrOverview.addComments)}</Legend>
           <TextAreaField
             id="comments"
             {...register("comments")}
-            error={validatorErrors?.comments}
+            error={validatorErrors?.comments as RhfError}
             hint={getContent(x => x.pcrMessages.additionalCommentsGuidance)}
             data-qa="info-text-area"
             characterCount={characterCount}
@@ -105,15 +101,9 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
             {getContent(x => x.pages.pcrOverview.submitRequest)}
           </SubmitButton>
 
-          <Button
-            secondarySubmit
-            disabled={isFetching}
-            secondary
-            name="button_return"
-            onClick={() => onUpdate({ data: watch(), context: { saveAndContinue: false } })}
-          >
+          <SubmitButton disabled={isFetching} secondary name="button_return">
             {getContent(x => x.pages.pcrOverview.saveAndReturn)}
-          </Button>
+          </SubmitButton>
         </Fieldset>
       </Form>
     </Page>

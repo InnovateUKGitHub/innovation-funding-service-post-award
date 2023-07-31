@@ -119,9 +119,11 @@ declare type PartialByKeys<T, K = string> = Unify<
   }
 >;
 
+declare type RhfError = { message: string | null | undefined; type: string | null | undefined };
+
 declare type RhfErrors =
   | {
-      [key: string]: { message: string | null; type: string } | ({ message: string | null; type: string } | null)[];
+      [key: string]: RhfError | null | undefined | (RhfError | null | undefined)[];
     }
   | null
   | undefined;

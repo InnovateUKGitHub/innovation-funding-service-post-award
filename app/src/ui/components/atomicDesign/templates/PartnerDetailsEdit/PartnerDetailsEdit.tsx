@@ -70,7 +70,7 @@ export function PartnerDetailsEditComponent({
     resolver: zodResolver(getZodResolver(isSetup, partner.postcodeStatus), { errorMap: partnerDetailsEditErrorMap }),
   });
 
-  const { onUpdate, apiError } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
+  const { onUpdate, apiError, isFetching } = useOnUpdatePartnerDetails(partnerId, projectId, navigateTo, partner);
 
   const validatorErrors = useRhfErrors<FormValues>(formState.errors);
 
@@ -84,7 +84,7 @@ export function PartnerDetailsEditComponent({
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
-      <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
+      <Form onSubmit={handleSubmit(onUpdate)}>
         <Fieldset>
           {!isSetup && (
             <FormGroup>
@@ -99,7 +99,7 @@ export function PartnerDetailsEditComponent({
             <Hint id="hint-for-new-postcode" className="govuk-hint">
               {getContent(x => x.pages.partnerDetailsEdit.hintNewPostcode)}
             </Hint>
-            <ValidationError error={postcodeError} />
+            <ValidationError error={postcodeError as RhfErrors} />
             <TextInput
               defaultValue={partner.postcode ?? ""}
               inputWidth="one-quarter"
@@ -111,7 +111,7 @@ export function PartnerDetailsEditComponent({
           </FormGroup>
         </Fieldset>
         <Fieldset>
-          <SubmitButton>
+          <SubmitButton disabled={isFetching}>
             {typeof saveButtonContent === "string" ? saveButtonContent : getContent(saveButtonContent)}
           </SubmitButton>
         </Fieldset>

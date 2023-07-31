@@ -249,7 +249,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
         </Accordion>
       </Section>
 
-      <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="review-form">
+      <Form onSubmit={handleSubmit(onUpdate)} data-qa="review-form">
         <Fieldset>
           <Legend>{content.sectionTitleHowToProceed}</Legend>
           <FormGroup>
@@ -279,7 +279,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
                 hint={content.additionalInfoHint}
                 id="comments"
                 disabled={isFetching}
-                error={formState?.errors?.comments}
+                error={validatorErrors?.comments as RhfError}
                 characterCount={watchedComments?.length ?? 0}
                 data-qa="comments"
               />

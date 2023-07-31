@@ -31,7 +31,7 @@ describe("useOnUpdate", () => {
   it("should call the success method and no errors if the promise resolves", async () => {
     const { result } = renderSuccessHook();
 
-    await act(() => result.current.onUpdate({ data: { postcode: "SN1 2AP" } }));
+    await act(() => result.current.onUpdate({ postcode: "SN1 2AP" }));
 
     expect(result.current.apiError).toBe(null);
     expect(onSuccess).toHaveBeenCalled();
@@ -40,7 +40,7 @@ describe("useOnUpdate", () => {
 
   it("should call the error method and show the apiError if the promise rejects", async () => {
     const { result } = renderFailHook();
-    await act(() => result.current.onUpdate({ data: { postcode: "SN1 2AP" } }));
+    await act(() => result.current.onUpdate({ postcode: "SN1 2AP" }));
 
     expect(result.current.apiError).toEqual({ code: 1, message: "Leo forgot his mama noodles" });
     expect(onSuccess).not.toHaveBeenCalled();
