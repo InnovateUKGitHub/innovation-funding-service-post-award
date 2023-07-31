@@ -7,7 +7,7 @@ import { DocumentSummaryDto, PartnerDocumentSummaryDtoGql } from "@framework/dto
 import { getAuthRoles } from "@framework/types/authorisation";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileUploadOutputs, projectLevelUpload } from "@ui/zod/documentValidators.zod";
+import { projectLevelUpload } from "@ui/zod/documentValidators.zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -39,8 +39,8 @@ import { projectDocumentsQuery } from "./ProjectDocuments.query";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
-import { useStores } from "@ui/redux/storesProvider";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
+import { z } from "zod";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;
@@ -58,7 +58,9 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   );
 
   // Form
-  const { register, handleSubmit, formState, getFieldState, reset, setError, watch } = useForm<FileUploadOutputs>({
+  const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<
+    z.output<typeof projectLevelUpload>
+  >({
     resolver: zodResolver(projectLevelUpload, {
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
@@ -73,10 +75,10 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   const { onUpdate: onDeleteUpdate, apiError: onDeleteApiError } = useOnDelete({ refresh });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<FileUploadOutputs>(setError, formState.errors);
-  const defaults = useServerInput<FileUploadOutputs>();
+  const allErrors = useZodErrors<z.output<typeof projectLevelUpload>>(setError, formState.errors);
+  const defaults = useServerInput<z.output<typeof projectLevelUpload>>();
 
-  const onChange = (dto: FileUploadOutputs) => {
+  const onChange = (dto: z.output<typeof projectLevelUpload>) => {
     onUploadUpdate({
       data: dto,
       context: dto,
@@ -142,7 +144,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
         >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
-            <input type="hidden" value="projectLevelUpload" {...register("form")} />
+            <input type="hidden" value={FormTypes.ProjectLevelUpload} {...register("form")} />
             <input type="hidden" value={project.id} {...register("projectId")} />
 
             {/* File uploads */}
