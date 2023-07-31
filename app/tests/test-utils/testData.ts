@@ -507,6 +507,8 @@ export class TestData {
       Acc_PeriodCoststobePaid__c: 100,
       Acc_TotalDeferredAmount__c: 100,
       Impact_Management_Participation__c: "No",
+      IM_PhasedCompetition__c: false,
+      IM_PhasedCompetitionStage__c: null,
     };
 
     if (update) {

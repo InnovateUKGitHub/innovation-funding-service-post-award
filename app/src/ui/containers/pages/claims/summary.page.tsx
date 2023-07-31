@@ -6,7 +6,6 @@ import { ClaimDtoValidator, claimCommentsMaxLength } from "@ui/validation/valida
 import { Pending } from "@shared/pending";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { TotalCosts } from "@framework/constants/claims";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectMonitoringLevel, ProjectRole } from "@framework/constants/project";
@@ -35,6 +34,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { useStores } from "@ui/redux/storesProvider";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
+import { checkImpactManagementPcfNotSubmittedForFinalClaim } from "@ui/helpers/checkImpPcfNotSubmittedForFinalClaim";
 
 export interface ClaimSummaryParams {
   projectId: ProjectId;
@@ -83,10 +83,7 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
     const { isMo } = getAuthRoles(data.project.roles);
 
     // Disable completing the form if impact management and not received PCF
-    const impMgmtPcfNotSubmittedForFinalClaim =
-      data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
-        ? data.claim.isFinalClaim && data.claim.pcfStatus !== "Received"
-        : false;
+    const impMgmtPcfNotSubmittedForFinalClaim = checkImpactManagementPcfNotSubmittedForFinalClaim(data.claim);
 
     return (
       <Page

@@ -1,6 +1,6 @@
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import * as Validation from "@ui/validation/validators/common";
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ImpactManagementParticipation, ImpactManagementPhase } from "@framework/constants/competitionTypes";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
@@ -38,8 +38,16 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
   private readonly hasDocuments: boolean = !!this.documents.length;
   private readonly isPcfStatusValid = this.model.pcfStatus === ReceivedStatus.Received;
   private readonly shouldValidatePcf =
-    (!this.isKtpCompetition && this.model.isFinalClaim) ||
-    (this.model.impactManagementParticipation === ImpactManagementParticipation.Yes && this.model.isFinalClaim);
+    (!this.isKtpCompetition &&
+      this.model.isFinalClaim &&
+      this.model.impactManagementParticipation !== ImpactManagementParticipation.Yes) ||
+    (this.model.impactManagementParticipation === ImpactManagementParticipation.Yes &&
+      !this.model.impactManagementPhasedCompetition &&
+      this.model.isFinalClaim) ||
+    (this.model.impactManagementParticipation === ImpactManagementParticipation.Yes &&
+      this.model.impactManagementPhasedCompetition &&
+      this.model.impactManagementPhasedCompetitionStage === ImpactManagementPhase.Last &&
+      this.model.isFinalClaim);
 
   private readonly isReceivedIarStatus: boolean = this.model.iarStatus === ReceivedStatus.Received;
   private readonly isIarStatusWithDocsValid: boolean = this.hasDocuments && this.isReceivedIarStatus;

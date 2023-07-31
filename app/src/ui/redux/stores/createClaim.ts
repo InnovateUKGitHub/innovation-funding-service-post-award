@@ -1,5 +1,5 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ImpactManagementParticipation, ImpactManagementPhase } from "@framework/constants/competitionTypes";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ReceivedStatus } from "@framework/entities/received-status";
 
@@ -31,6 +31,8 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     periodCostsToBePaid: 100,
     grantPaidToDate: 0,
     impactManagementParticipation: ImpactManagementParticipation.No,
+    impactManagementPhasedCompetition: false,
+    impactManagementPhasedCompetitionStage: ImpactManagementPhase.Unknown,
   };
 
   return { ...template, ...mod };

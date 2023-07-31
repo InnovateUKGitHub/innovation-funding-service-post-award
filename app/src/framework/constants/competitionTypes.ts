@@ -17,6 +17,20 @@ enum ImpactManagementParticipation {
   No = "No",
 }
 
+/**
+ * What stage of Impact Management the project is in, if phased.
+ */
+enum ImpactManagementPhase {
+  Unknown = "Unknown",
+  First = "1st",
+  Second = "2nd",
+  Third = "3rd",
+  Fourth = "4th",
+  Fifth = "5th",
+  Sixth = "6th",
+  Last = "Last",
+}
+
 const allSalesforceCompetitionTypes = [
   SalesforceCompetitionTypes.crnd,
   SalesforceCompetitionTypes.contracts,
@@ -68,8 +82,9 @@ const mapToSalesforceCompetitionTypes = (type: string): SalesforceCompetitionTyp
 
 export {
   allSalesforceCompetitionTypes,
-  salesforceCompetitionTypesMap,
   SalesforceCompetitionTypes,
   ImpactManagementParticipation,
+  ImpactManagementPhase,
   mapToSalesforceCompetitionTypes,
+  salesforceCompetitionTypesMap,
 };

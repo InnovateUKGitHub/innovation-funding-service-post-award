@@ -190,6 +190,8 @@ exports[`Context should contain the repositories 1`] = `
       "Acc_TotalDeferredAmount__c",
       "Acc_PeriodCoststobePaid__c",
       "Impact_Management_Participation__c",
+      "IM_PhasedCompetition__c",
+      "IM_PhasedCompetitionStage__c",
     ],
     "salesforceObjectName": "Acc_Claims__c",
   },

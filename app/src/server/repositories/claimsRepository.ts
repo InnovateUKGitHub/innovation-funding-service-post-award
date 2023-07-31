@@ -35,6 +35,8 @@ export interface ISalesforceClaim {
   Acc_FinalClaim__c: boolean;
   Acc_Grant_Paid_To_Date__c: number;
   Impact_Management_Participation__c: string;
+  IM_PhasedCompetition__c: boolean;
+  IM_PhasedCompetitionStage__c: string | null;
 }
 
 export interface IClaimRepository {
@@ -85,6 +87,8 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_TotalDeferredAmount__c",
     "Acc_PeriodCoststobePaid__c",
     "Impact_Management_Participation__c",
+    "IM_PhasedCompetition__c",
+    "IM_PhasedCompetitionStage__c",
   ];
 
   private getStandardFilter() {

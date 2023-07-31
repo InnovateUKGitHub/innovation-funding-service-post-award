@@ -1,5 +1,5 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { ImpactManagementParticipation, ImpactManagementPhase } from "@framework/constants/competitionTypes";
 import { ReceivedStatus } from "@framework/entities/received-status";
 
 export interface ClaimDto {
@@ -29,6 +29,8 @@ export interface ClaimDto {
   totalCostsSubmitted: number;
   totalDeferredAmount: number;
   impactManagementParticipation: ImpactManagementParticipation;
+  impactManagementPhasedCompetition: boolean;
+  impactManagementPhasedCompetitionStage: ImpactManagementPhase;
 }
 
 export interface ClaimStatusChangeDto {

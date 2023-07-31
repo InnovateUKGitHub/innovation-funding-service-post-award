@@ -1,6 +1,9 @@
 import { DateTime } from "luxon";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
+import {
+  mapImpactManagementParticipationToEnum,
+  mapImpactManagementPhasedStageToEnum,
+} from "@framework/mappers/impactManagementParticipation";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
@@ -61,6 +64,8 @@ export const mapClaim =
       impactManagementParticipation: mapImpactManagementParticipationToEnum(
         claim.Impact_Management_Participation__c ?? null,
       ),
+      impactManagementPhasedCompetition: claim.IM_PhasedCompetition__c,
+      impactManagementPhasedCompetitionStage: mapImpactManagementPhasedStageToEnum(claim.IM_PhasedCompetitionStage__c),
       grantPaidToDate: claim.Acc_Grant_Paid_To_Date__c,
     };
   };
