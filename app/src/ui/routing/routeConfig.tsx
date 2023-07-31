@@ -19,9 +19,9 @@ import { ViewForecastRoute } from "@ui/containers/pages/forecasts/viewForecast.p
 import { LoansSummaryRoute } from "@ui/containers/pages/loans/overview.page";
 import { LoansRequestRoute } from "@ui/containers/pages/loans/request.page";
 import { MonitoringReportCreateRoute } from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.page";
-import { MonitoringReportDeleteRoute } from "@ui/containers/pages/monitoringReports/delete.page";
+import { MonitoringReportDeleteRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDelete.page";
 import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
-import { MonitoringReportPreparePeriodRoute } from "@ui/containers/pages/monitoringReports/periodStep.page";
+import { MonitoringReportPreparePeriodRoute } from "@ui/containers/pages/monitoringReports/monitoringReportPeriodStep.page";
 import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 import { PCRSpendProfileOverheadDocumentRoute } from "@ui/containers/pages/pcrs/addPartner/spendProfile/overheadDocumentContainer.page";
 import { PCRSpendProfileCostsSummaryRoute } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfileCostsSummary.page";

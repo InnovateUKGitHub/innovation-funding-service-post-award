@@ -1,5 +1,5 @@
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
-import { MonitoringReportQuestionStep } from "@ui/containers/pages/monitoringReports/workflow/questionStep";
+import { MonitoringReportQuestionStep } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportQuestionStep";
 import { MonitoringReportSummary } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportSummary";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { BaseProps } from "@ui/containers/containerBase";

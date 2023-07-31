@@ -10,7 +10,7 @@ import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringR
 import {
   MonitoringReportPreparePeriodParams,
   MonitoringReportPreparePeriodRoute,
-} from "@ui/containers/pages/monitoringReports/periodStep.page";
+} from "@ui/containers/pages/monitoringReports/monitoringReportPeriodStep.page";
 import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 
 export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandlerBase<

@@ -28,7 +28,7 @@ import { ProjectDocumentDeleteHandler } from "./handlers/projects/[projectId]/do
 import { ProjectDocumentUploadHandler } from "./handlers/projects/[projectId]/documents/projectDocumentFormHandler";
 import { MonitoringReportCreateFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/create/monitoringReportCreateFormHandler";
 import { MonitoringReportDeleteFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/delete/monitoringReportDeleteFormHandler";
-import { MonitoringReportPreparePeriodFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/prepare-period/monitoringReportPreparePeriodFormHandler";
+import { MonitoringReportPreparePeriodFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/prepare-period/monitoringReportPeriodFormHandler";
 import { MonitoringReportPrepareFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/[mode]/monitoringReportPrepareFormHandler";
 import { MonitoringReportSummaryFormHandler } from "./handlers/projects/[projectId]/monitoring-reports/[monitoringReportId]/[mode]/monitoringReportSummaryFormHandler";
 import { ProjectChangeRequestCreateFormHandler } from "./handlers/projects/[projectId]/pcrs/create/createProjectChangeRequestFormHandler";
