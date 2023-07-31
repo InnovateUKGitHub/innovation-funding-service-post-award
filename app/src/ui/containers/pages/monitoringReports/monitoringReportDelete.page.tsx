@@ -1,40 +1,41 @@
-import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
-import { Pending } from "@shared/pending";
 import { ProjectRole } from "@framework/constants/project";
 import { useContent } from "@ui/hooks/content.hook";
-import { useMonitoringReportDeleteQuery } from "./monitoringReportDelete.logic";
-import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
+import { useMonitoringReportDeleteQuery, useOnMonitoringReportDelete } from "./monitoringReportDelete.logic";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
+import { useForm } from "react-hook-form";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 
 export interface MonitoringReportDeleteParams {
   projectId: ProjectId;
   id: MonitoringReportId;
 }
 
-interface Props {
-  project: Pick<ProjectDto, "title" | "projectNumber">;
-  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
-  delete: (dto: MonitoringReportDto) => void;
-}
+const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams) => {
+  const { getContent } = useContent();
+  const { project } = useMonitoringReportDeleteQuery(props.projectId);
 
-const DeleteForm = createTypedForm<MonitoringReportDto>();
+  const { handleSubmit, formState } = useForm<{}>({});
 
-const DeleteVerificationComponent = (props: BaseProps & Props & MonitoringReportDeleteParams) => {
+  const {
+    onUpdate: onDelete,
+    apiError,
+    isFetching,
+  } = useOnMonitoringReportDelete(props.projectId, props.id, props.routes);
+
+  const validatorErrors = useRhfErrors<{}>(formState.errors);
+
   return (
     <Page
-      pageTitle={<Title projectNumber={props.project.projectNumber} title={props.project.title} />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={
         <BackLink
           route={props.routes.monitoringReportDashboard.getLink({
@@ -45,71 +46,28 @@ const DeleteVerificationComponent = (props: BaseProps & Props & MonitoringReport
           <Content value={x => x.pages.monitoringReportsDelete.backLink} />
         </BackLink>
       }
-      error={props.editor.error}
+      validationErrors={validatorErrors}
+      apiError={apiError}
     >
       <Section>
-        <SimpleString>
-          <Content value={x => x.monitoringReportsMessages.deletingMonitoringReportMessage} />
-        </SimpleString>
-        <DeleteForm.Form editor={props.editor} qa="monitoringReportDelete">
-          <DeleteForm.Fieldset>
-            <DeleteForm.Button
-              name="delete"
-              styling="Warning"
-              className="govuk-!-font-size-19"
-              onClick={() => props.delete(props.editor.data)}
-              value={props.editor.data.headerId}
-            >
-              <Content value={x => x.pages.monitoringReportsDelete.buttonDeleteReport} />
-            </DeleteForm.Button>
-          </DeleteForm.Fieldset>
-        </DeleteForm.Form>
+        <P>{getContent(x => x.monitoringReportsMessages.deletingMonitoringReportMessage)}</P>
+        <Form onSubmit={handleSubmit(onDelete)} data-qa="monitoringReportDelete">
+          <Fieldset>
+            <Button name="button_delete" type="submit" disabled={isFetching}>
+              {" "}
+              {getContent(x => x.pages.monitoringReportsDelete.buttonDeleteReport)}
+            </Button>
+          </Fieldset>
+        </Form>
       </Section>
     </Page>
-  );
-};
-
-const DeleteVerificationContainer = (props: MonitoringReportDeleteParams & BaseProps) => {
-  const stores = useStores();
-  const { getContent } = useContent();
-  const navigate = useNavigate();
-
-  const { project } = useMonitoringReportDeleteQuery(props.projectId);
-  const combined = Pending.combine({
-    editor: stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id),
-  });
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={data => (
-        <DeleteVerificationComponent
-          project={project}
-          delete={dto =>
-            stores.monitoringReports.deleteReport(
-              props.projectId,
-              props.id,
-              dto,
-              getContent(x => x.monitoringReportsMessages.onDeleteMonitoringReportMessage),
-              () =>
-                navigate(
-                  props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId, periodId: undefined })
-                    .path,
-                ),
-            )
-          }
-          {...props}
-          {...data}
-        />
-      )}
-    />
   );
 };
 
 export const MonitoringReportDeleteRoute = defineRoute({
   routeName: "monitoringReportDeleteVerification",
   routePath: "/projects/:projectId/monitoring-reports/:id/delete",
-  container: DeleteVerificationContainer,
+  container: DeleteVerificationPage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     id: route.params.id as MonitoringReportId,
