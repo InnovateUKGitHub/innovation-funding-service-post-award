@@ -123,7 +123,7 @@ declare type RhfError = { message: string | null | undefined; type: string | nul
 
 declare type RhfErrors =
   | {
-      [key: string]: RhfError | null | undefined | (RhfError | null | undefined)[];
+      [key: string]: RhfError | null | undefined | (RhfError | null | undefined)[] | RhfErrors | RhfErrors[];
     }
   | null
   | undefined;

@@ -120,20 +120,30 @@ type ValidationError = {
 /**
  * converts from generated react hook form errors to an array of messages and keys for creating the error message and links in the Validation Summary
  */
-export function convertErrorFormatFromRhfForErrorSummary(errors: RhfErrors) {
-  const validationErrors: ValidationError[] = [];
+export function convertErrorFormatFromRhfForErrorSummary(
+  errors: RhfErrors | RhfError,
+  path = "",
+  validationErrors: ValidationError[] = [],
+) {
   if (!errors) return validationErrors;
 
-  Object.entries(errors).forEach(([key, value]) => {
-    if (value && "message" in value) {
-      const message = String(value.message);
-      validationErrors.push({ key, message });
-    } else if (Array.isArray(value)) {
-      value.forEach((x, i) => {
-        validationErrors.push({ key: `${key}_${i}`, message: x?.message ?? null });
-      });
-    }
-  });
+  if (typeof errors === "object" && "message" in errors) {
+    const message = String(errors.message);
+    const key = path;
+    validationErrors.push({ key, message });
+    return validationErrors;
+  } else if (Array.isArray(errors)) {
+    errors.forEach((e, i) => {
+      if (e === null) {
+        validationErrors.push({ key: path ? `${path}_${i}` : `${i}`, message: null });
+      }
+      convertErrorFormatFromRhfForErrorSummary(e, path ? `${path}_${i}` : `${i}`, validationErrors);
+    });
+  } else {
+    Object.entries(errors).forEach(([key, value]) =>
+      convertErrorFormatFromRhfForErrorSummary(value as RhfError, path ? `${path}_${key}` : key, validationErrors),
+    );
+  }
 
   return validationErrors;
 }
