@@ -22,6 +22,7 @@ import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { monitoringReportWorkflowErrorMap, monitoringReportWorkflowSchema } from "./monitoringReportWorkflow.zod";
 import { monitoringReportSummaryErrorMap, monitoringReportSummarySchema } from "./monitoringReportSummary.zod";
+import { RegisterButton, createRegisterButton } from "@framework/util/registerButton";
 
 type MonitoringReportContextType = {
   register: UseFormRegister<FormValues>;
@@ -30,6 +31,7 @@ type MonitoringReportContextType = {
   isFetching: boolean;
   onUpdate: (data: FormValues, submitEvent?: BaseSyntheticEvent) => Promise<void>;
   validatorErrors: RhfErrors;
+  registerButton: RegisterButton<FormValues>;
 };
 
 export const MonitoringReportFormContext = createContext<MonitoringReportContextType>({
@@ -39,6 +41,7 @@ export const MonitoringReportFormContext = createContext<MonitoringReportContext
   isFetching: false,
   onUpdate: noop as unknown as (data: FormValues, submitEvent?: BaseSyntheticEvent) => Promise<void>,
   validatorErrors: undefined,
+  registerButton: noop,
 } as MonitoringReportContextType);
 
 const getMonitoringReportSchema = (step?: number | null | undefined) =>
@@ -73,7 +76,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const zodSchema = getMonitoringReportSchema(props.step);
 
-  const { register, watch, handleSubmit, formState } = useForm({
+  const { register, watch, handleSubmit, formState, setValue } = useForm({
     defaultValues: {
       addComments: report.addComments ?? "",
       questions: report.questions.map(x => ({
@@ -81,9 +84,12 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
         comments: x?.comments ?? "",
       })),
       periodId: report.periodId,
+      button_submit: "submit",
     },
     resolver: zodResolver(zodSchema.schema, { errorMap: zodSchema.errorMap }),
   });
+
+  const registerButton = createRegisterButton(setValue, "button_submit");
 
   const { onUpdate, isFetching, apiError } = useOnMonitoringReportUpdateWorkflow(
     props.projectId,
@@ -104,6 +110,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
     isFetching,
     onUpdate,
     validatorErrors,
+    registerButton,
   };
 
   return (

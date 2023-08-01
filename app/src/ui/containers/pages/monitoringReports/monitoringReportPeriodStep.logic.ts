@@ -74,7 +74,7 @@ export const useOnMonitoringReportUpdatePeriodStep = (
       }),
 
     onSuccess: ({ response }, submitEvent: SyntheticEvent<HTMLButtonElement, SubmitEvent>) => {
-      const link = getLink(isSubmittedBy("button_save-continue", submitEvent), projectId, response.headerId, routes);
+      const link = getLink(isSubmittedBy(submitEvent, "button_save-continue"), projectId, response.headerId, routes);
       return navigate(link.path);
     },
   });

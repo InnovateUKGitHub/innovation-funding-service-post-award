@@ -66,6 +66,7 @@ export type FormValues = {
   periodId: PeriodId;
   questions: { optionId: string; comments: string }[];
   addComments: string;
+  button_submit: string;
 };
 
 const hasFormChanged = (data: FormValues, questions: MonitoringReportQuestionDto[]) =>
@@ -99,7 +100,7 @@ export const useOnMonitoringReportUpdateWorkflow = (
   const navigate = useNavigate();
   return useOnUpdate<FormValues, Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">>({
     req: (data, submitEvent) => {
-      const isFinalSubmit = isSubmittedBy("button_submit", submitEvent);
+      const isFinalSubmit = isSubmittedBy(submitEvent, "button_submit", "submit");
       if (isFinalSubmit || hasFormChanged(data, report.questions)) {
         return clientsideApiClient.monitoringReports.saveMonitoringReport({
           monitoringReportDto: {
@@ -118,7 +119,7 @@ export const useOnMonitoringReportUpdateWorkflow = (
         mode,
         projectId,
         id: headerId,
-        progress: isSubmittedBy("button_save-continue", submitEvent),
+        progress: isSubmittedBy(submitEvent, "button_save-continue"),
         routes,
         workflow,
       });

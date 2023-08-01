@@ -71,6 +71,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
                       data-qa={option.qa}
                       label={option.label}
                       disabled={isFetching || disabledForm}
+                      defaultValue={q?.optionId ?? ""}
                     />
                   ))}
                 </RadioList>
@@ -87,6 +88,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
             characterCount={watch(commentFieldName)?.length ?? 0}
             data-qa={commentFieldId}
             characterCountType="ascending"
+            defaultValue={q?.comments ?? ""}
           />
 
           {mode === "prepare" && (

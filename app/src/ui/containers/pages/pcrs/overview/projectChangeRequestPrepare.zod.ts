@@ -3,22 +3,9 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 
 export const pcrPrepareErrorMap = makeZodI18nMap({ keyPrefix: ["pcrPrepare"] });
 
-// export const pcrPrepareSchema = z.object({
-//   items: z
-//     .object({
-//       status: z.string(),
-//       shortName: z.string(),
-//     })
-//     // refine here rather than simply use z.enum in order to make sure the data gets passed through to i18n
-//     .refine(({ status }) => status === "Complete")
-//     .array(),
-//   reasoningStatus: z.enum(["Complete"]),
-//   comments: z.string().max(1000),
-// });
-
-export const pcrPrepareSchema = z.discriminatedUnion("submitButton", [
+export const pcrPrepareSchema = z.discriminatedUnion("button_submit", [
   z.object({
-    submitButton: z.literal("submit"),
+    button_submit: z.literal("submit"),
     items: z
       .object({
         status: z.string(),
@@ -31,7 +18,7 @@ export const pcrPrepareSchema = z.discriminatedUnion("submitButton", [
     comments: z.string().max(1000).optional(),
   }),
   z.object({
-    submitButton: z.literal("save-and-return"),
+    button_submit: z.literal("save-and-return"),
     items: z
       .object({
         status: z.string().optional(),

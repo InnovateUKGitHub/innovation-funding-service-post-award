@@ -75,7 +75,7 @@ const ReportLog = ({ statusChanges }: { statusChanges: MonitoringReportReportSum
 };
 
 const ReportForm = () => {
-  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors } =
+  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, registerButton } =
     useContext(MonitoringReportFormContext);
   const { getContent } = useContent();
   return (
@@ -99,10 +99,10 @@ const ReportForm = () => {
 
         <P>{getContent(x => x.monitoringReportsMessages.submittingMonitoringReportMessage)}</P>
         <Fieldset data-qa="save-buttons">
-          <Button type="submit" name="button_submit" disabled={isFetching}>
+          <Button type="submit" disabled={isFetching} {...registerButton("submit")}>
             {getContent(x => x.pages.monitoringReportsSummary.buttonSubmit)}
           </Button>
-          <Button type="submit" name="button_saveAndReturnToSummary" secondary disabled={isFetching}>
+          <Button type="submit" secondary disabled={isFetching} {...registerButton("saveAndReturnToSummary")}>
             {getContent(x => x.pages.monitoringReportsSummary.buttonSaveAndReturn)}
           </Button>
         </Fieldset>
