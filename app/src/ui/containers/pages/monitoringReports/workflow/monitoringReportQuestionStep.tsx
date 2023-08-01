@@ -17,7 +17,6 @@ import { useContent } from "@ui/hooks/content.hook";
 
 interface Props {
   questionNumber: number;
-
   report: Pick<MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">;
   mode: "prepare" | "view";
 }
@@ -56,6 +55,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
               x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: report.questions.length }),
             )}
           </H3>
+          <input type="hidden" name="questionDisplayOrder" value={questionNumber} />
           <Fieldset>
             <Legend>{q.title}</Legend>
             <Hint id="hint-for-questions">{q.description}</Hint>
