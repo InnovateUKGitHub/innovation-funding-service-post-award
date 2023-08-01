@@ -17,14 +17,35 @@ type TextAreaFieldProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaE
   id: string;
   name: string;
   characterCount: number;
+  characterCountType?: "descending" | "ascending";
+  characterCountMax?: number;
   "data-qa"?: string;
 };
 
 const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
   (
-    { id, error, hint, disabled, label, characterCount, "data-qa": dataQa = "textarea", ...props }: TextAreaFieldProps,
+    {
+      id,
+      error,
+      hint,
+      disabled,
+      label,
+      characterCount,
+      characterCountType = "descending",
+      characterCountMax = claimCommentsMaxLength,
+      "data-qa": dataQa = "textarea",
+      ...props
+    }: TextAreaFieldProps,
     ref: TextAreaRef,
   ) => {
+    const characterCountProps =
+      characterCountType === "descending"
+        ? {
+            type: characterCountType,
+            maxValue: characterCountMax,
+          }
+        : { type: characterCountType, minValue: 0 };
+
     return (
       <FormGroup hasError={!!error} data-qa={`field-${dataQa}`}>
         {label && (
@@ -38,7 +59,7 @@ const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(
           </Hint>
         )}
         <ValidationError error={error} data-qa={`error-${dataQa}`} />
-        <CharacterCount type="descending" count={characterCount} maxValue={claimCommentsMaxLength}>
+        <CharacterCount count={characterCount} {...characterCountProps}>
           <Textarea
             aria-label={label}
             aria-describedby={!!hint ? `hint-for-${id}` : undefined}
