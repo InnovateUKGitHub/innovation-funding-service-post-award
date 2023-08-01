@@ -1,6 +1,6 @@
 import { ProjectRole } from "@framework/constants/project";
 import { defineRoute } from "@ui/containers/containerBase";
-import { MonitoringReportWorkflowContainer } from "./MonitoringReportWorkflowContainer";
+import { MonitoringReportWorkflow } from "./MonitoringReportWorkflow";
 
 export const MonitoringReportWorkflowRoute = defineRoute<{
   projectId: ProjectId;
@@ -12,7 +12,7 @@ export const MonitoringReportWorkflowRoute = defineRoute<{
   routeName: "monitoringReportPrepare",
   routePath: "/projects/:projectId/monitoring-reports/:id/:mode",
   routePathWithQuery: "/projects/:projectId/monitoring-reports/:id/:mode?:step",
-  container: MonitoringReportWorkflowContainer,
+  container: MonitoringReportWorkflow,
   getParams: r => ({
     projectId: r.params.projectId as ProjectId,
     id: r.params.id as MonitoringReportId,

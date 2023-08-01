@@ -2,22 +2,16 @@ import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/t
 import { MonitoringReportQuestionStep } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportQuestionStep";
 import { MonitoringReportSummary } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportSummary";
 import { IRoutes } from "@ui/routing/routeConfig";
-import { BaseProps } from "@ui/containers/containerBase";
-import { MonitoringReportWorkflowParams, MonitoringReportWorkflowWorkflow } from "./MonitoringReportWorkflowProps";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { numberComparator } from "@framework/util/comparator";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import {
   MonitoringReportDtoValidator,
   QuestionValidator,
 } from "@ui/validation/validators/MonitoringReportDtoValidator";
 
 export interface MonitoringReportReportStepProps extends IStepProps {
-  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
   report: MonitoringReportDto;
-  onChange: (dto: MonitoringReportDto) => void;
-  onSave: (dto: MonitoringReportDto, progress: boolean) => void;
   mode: "prepare" | "view";
 }
 
@@ -26,11 +20,6 @@ export interface MonitoringReportReportSummaryProps extends ISummaryProps {
   id: MonitoringReportId;
   mode: "prepare" | "view";
   report: MonitoringReportDto;
-  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
-  onChange: (dto: MonitoringReportDto) => void;
-  onSave: (dto: MonitoringReportDto, submit?: boolean) => void;
-  routes: IRoutes;
-  // TODO type step name
   getEditLink: (stepName: string) => ILinkInfo;
 }
 
@@ -75,7 +64,14 @@ export const getForwardLink = ({
   workflow,
   id,
   progress,
-}: MonitoringReportWorkflowParams & MonitoringReportWorkflowWorkflow & BaseProps & { progress: boolean }) => {
+}: {
+  mode: "prepare" | "view";
+  routes: IRoutes;
+  projectId: ProjectId;
+  id: MonitoringReportId;
+  workflow: MonitoringReportWorkflowDef;
+  progress: boolean;
+}) => {
   if (progress) {
     const nextStep = workflow.getNextStepInfo();
     return routes.monitoringReportWorkflow.getLink({

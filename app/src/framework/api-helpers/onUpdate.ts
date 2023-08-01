@@ -28,7 +28,7 @@ export function useOnUpdate<TFormValues, TResponse>({
   onError = noop,
 }: {
   req: (data: TFormValues, submitEvent?: OnUpdateEvent) => Promise<TResponse>;
-  onSuccess?: ({ data, response }: { data: TFormValues; response: TResponse }, submitEvent: OnUpdateEvent) => void;
+  onSuccess?: ({ data, response }: { data: TFormValues; response: TResponse }, submitEvent?: OnUpdateEvent) => void;
   onError?: (e: unknown) => void;
 }) {
   const serverRenderedApiError = useApiErrorContext();
@@ -81,7 +81,7 @@ export function useOnUpdateWithOptions<TFormValues, TResponse, TOptions = undefi
   req: (data: TFormValues, options?: TOptions, submitEvent?: OnUpdateEvent) => Promise<TResponse>;
   onSuccess?: (
     { data, response, options }: { data: TFormValues; response: TResponse; options: TOptions },
-    submitEvent: OnUpdateEvent,
+    submitEvent?: OnUpdateEvent,
   ) => void;
   onError?: (e: unknown) => void;
 }) {

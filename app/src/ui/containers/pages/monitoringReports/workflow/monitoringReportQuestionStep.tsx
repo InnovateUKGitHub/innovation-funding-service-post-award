@@ -1,96 +1,102 @@
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { Section } from "@ui/components/atomicDesign/atoms/form/Section/Section";
 import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
+import { MonitoringReportFormContext } from "./MonitoringReportWorkflow";
+import { H2, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { useContext } from "react";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useContent } from "@ui/hooks/content.hook";
 
 interface Props {
   questionNumber: number;
-  editor: IEditorStore<MonitoringReportDto, MonitoringReportDtoValidator>;
+
   report: Pick<MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">;
   mode: "prepare" | "view";
-  onChange: (dto: MonitoringReportDto) => void;
-  onSave: (dto: MonitoringReportDto, progress: boolean) => void;
 }
 
-const ReportForm = createTypedForm<Pick<MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">>();
+const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) => {
+  const { getContent } = useContent();
 
-const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave, report, mode }: Props) => {
-  const title = (
-    <PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
-  );
+  const i = report.questions.findIndex(x => x.displayOrder === questionNumber);
+  const q = report.questions[i];
 
-  const { validator } = editor;
-
-  const i = editor.data.questions.findIndex(x => x.displayOrder === questionNumber);
-  const q = editor.data.questions[i];
   const radioOptions = q.isScored
     ? (q.options || []).map(y => ({
         id: y.id,
-        value: `${y.questionScore} - ${y.questionText}`,
+        label: `${y.questionScore} - ${y.questionText}`,
         qa: `question-${q.displayOrder}-score-${y.questionScore}`,
       }))
     : [];
 
+  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors } =
+    useContext(MonitoringReportFormContext);
+
+  const commentFieldName: `questions.${number}.comments` = `questions.${q.displayOrder - 1}.comments`;
+
+  const disabledForm = mode === "view";
+
   return (
-    <Section title={title} qa="period-information">
+    <Section data-qa="period-information">
+      <H2>
+        <PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
+      </H2>
       <Section>
-        <ReportForm.Form
-          disabled={mode === "view"}
-          editor={editor}
-          onChange={dto => {
-            return onChange(dto as MonitoringReportDto);
-          }}
-          qa="monitoringReportQuestionForm"
-        >
+        <Form onSubmit={handleSubmit(onUpdate)} data-qa="monitoringReportQuestionForm">
           <H3>
-            <Content
-              value={x =>
-                x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: report.questions.length })
-              }
-            />
+            {getContent(x =>
+              x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: report.questions.length }),
+            )}
           </H3>
-          <ReportForm.Fieldset heading={q.title}>
-            <SimpleString className="govuk-hint">{q.description}</SimpleString>
-            <ReportForm.Hidden name={"questionDisplayOrder"} value={() => questionNumber} />
+          <Fieldset>
+            <Legend>{q.title}</Legend>
+            <Hint id="hint-for-questions">{q.description}</Hint>
+            {/* <ReportForm.Hidden name={"questionDisplayOrder"} value={() => questionNumber} /> */}
 
             {!!radioOptions.length && (
-              <ReportForm.Radio
-                name={`question_${q.displayOrder}_options`}
-                label=""
-                inline={false}
-                options={radioOptions}
-                value={() => radioOptions.find(x => !!q.optionId && x.id === q.optionId)}
-                update={(x, value) => (x.questions[i].optionId = value && value.id)}
-                validation={validator.responses.results[i].score}
-              />
+              <FormGroup>
+                <RadioList name={`questions.${q.displayOrder - 1}.optionId`} id="questions" register={register}>
+                  {radioOptions.map(option => (
+                    <Radio
+                      key={option.id}
+                      id={option.id}
+                      data-qa={option.qa}
+                      label={option.label}
+                      disabled={isFetching || disabledForm}
+                    />
+                  ))}
+                </RadioList>
+              </FormGroup>
             )}
+          </Fieldset>
 
-            <ReportForm.MultilineString
-              name={`question_${q.displayOrder}_comments`}
-              label={x => x.pages.monitoringReportsQuestionStep.commentLabel}
-              value={() => q.comments}
-              update={(x, value) => {
-                x.questions[i].comments = value;
-              }}
-              validation={validator.responses.results[i].comments}
-            />
-          </ReportForm.Fieldset>
+          <TextAreaField
+            {...register(commentFieldName)}
+            id={commentFieldName}
+            label={getContent(x => x.pages.monitoringReportsQuestionStep.commentLabel)}
+            disabled={isFetching || disabledForm}
+            error={validatorErrors?.[commentFieldName] as RhfError}
+            characterCount={watch(commentFieldName)?.length ?? 0}
+            data-qa={commentFieldName}
+          />
+
           {mode === "prepare" && (
-            <ReportForm.Fieldset qa="save-buttons">
-              <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}>
-                <Content value={x => x.pages.monitoringReportsQuestionStep.buttonContinue} />
-              </ReportForm.Button>
-              <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}>
-                <Content value={x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn} />
-              </ReportForm.Button>
-            </ReportForm.Fieldset>
+            <Fieldset data-qa="save-buttons">
+              <Button type="submit" name="button_save-continue" disabled={isFetching}>
+                {getContent(x => x.pages.monitoringReportsQuestionStep.buttonContinue)}
+              </Button>
+              <Button secondary type="submit" name="button_save-return" disabled={isFetching}>
+                {getContent(x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn)}
+              </Button>
+            </Fieldset>
           )}
-        </ReportForm.Form>
+        </Form>
       </Section>
     </Section>
   );
