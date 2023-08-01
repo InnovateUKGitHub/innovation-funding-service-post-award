@@ -27,7 +27,10 @@ export interface IMonitoringReportsApi<Context extends "client" | "server"> {
   ) => Promise<MonitoringReportDto>;
   getAllForProject: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<MonitoringReportSummaryDto[]>;
   saveMonitoringReport: (
-    params: ApiParams<Context, { monitoringReportDto: MonitoringReportDto; submit: boolean }>,
+    params: ApiParams<
+      Context,
+      { monitoringReportDto: PickAndPart<MonitoringReportDto, "projectId" | "headerId">; submit: boolean }
+    >,
   ) => Promise<MonitoringReportDto>;
   deleteMonitoringReport: (
     params: ApiParams<Context, { projectId: ProjectId; reportId: MonitoringReportId }>,
@@ -89,12 +92,15 @@ class Controller
   }
 
   public async saveMonitoringReport(
-    params: ApiParams<"server", { monitoringReportDto: MonitoringReportDto; submit: boolean }>,
+    params: ApiParams<
+      "server",
+      { monitoringReportDto: PickAndPart<MonitoringReportDto, "projectId" | "headerId">; submit: boolean }
+    >,
   ) {
     const { monitoringReportDto, submit } = params;
     const context = contextProvider.start(params);
 
-    await context.runCommand(new SaveMonitoringReport(monitoringReportDto, submit));
+    await context.runCommand(new SaveMonitoringReport(monitoringReportDto as MonitoringReportDto, submit));
     return context.runQuery(new GetMonitoringReportById(monitoringReportDto.projectId, monitoringReportDto.headerId));
   }
 

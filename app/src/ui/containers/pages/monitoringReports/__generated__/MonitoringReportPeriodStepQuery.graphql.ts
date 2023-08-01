@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ea850a46a413e2702c4a589e6da48690>>
+ * @generated SignedSource<<148c12db56c9c103e450ffa570b99a89>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,15 +10,34 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type MonitoringReportPeriodStepQuery$variables = {
+  monitoringReportId: string;
   projectId: string;
 };
 export type MonitoringReportPeriodStepQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
+        readonly Acc_MonitoringAnswer__c: {
+          readonly edges: ReadonlyArray<{
+            readonly node: {
+              readonly Acc_ProjectPeriodNumber__c: {
+                readonly value: number | null;
+              } | null;
+              readonly Id: string;
+              readonly RecordType: {
+                readonly Name: {
+                  readonly value: string | null;
+                } | null;
+              } | null;
+            } | null;
+          } | null> | null;
+        } | null;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly Acc_CurrentPeriodNumber__c: {
+                readonly value: number | null;
+              } | null;
               readonly Acc_ProjectNumber__c: {
                 readonly value: string | null;
               } | null;
@@ -39,14 +58,24 @@ export type MonitoringReportPeriodStepQuery = {
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "projectId"
-  }
-],
-v1 = [
+var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "monitoringReportId"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "projectId"
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "Id",
+  "storageKey": null
+},
+v3 = [
   {
     "alias": null,
     "args": null,
@@ -55,7 +84,7 @@ v1 = [
     "storageKey": null
   }
 ],
-v2 = [
+v4 = [
   {
     "alias": null,
     "args": null,
@@ -80,6 +109,103 @@ v2 = [
             "name": "query",
             "plural": false,
             "selections": [
+              {
+                "alias": null,
+                "args": [
+                  {
+                    "kind": "Literal",
+                    "name": "first",
+                    "value": 1000
+                  },
+                  {
+                    "kind": "Literal",
+                    "name": "orderBy",
+                    "value": {
+                      "LastModifiedDate": {
+                        "order": "DESC"
+                      }
+                    }
+                  },
+                  {
+                    "fields": [
+                      {
+                        "fields": [
+                          {
+                            "kind": "Variable",
+                            "name": "eq",
+                            "variableName": "monitoringReportId"
+                          }
+                        ],
+                        "kind": "ObjectValue",
+                        "name": "Id"
+                      }
+                    ],
+                    "kind": "ObjectValue",
+                    "name": "where"
+                  }
+                ],
+                "concreteType": "Acc_MonitoringAnswer__cConnection",
+                "kind": "LinkedField",
+                "name": "Acc_MonitoringAnswer__c",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Acc_MonitoringAnswer__cEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Acc_MonitoringAnswer__c",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v2/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "RecordType",
+                            "kind": "LinkedField",
+                            "name": "RecordType",
+                            "plural": false,
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Name",
+                                "plural": false,
+                                "selections": (v3/*: any*/),
+                                "storageKey": null
+                              }
+                            ],
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DoubleValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectPeriodNumber__c",
+                            "plural": false,
+                            "selections": (v3/*: any*/),
+                            "storageKey": null
+                          }
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
               {
                 "alias": null,
                 "args": [
@@ -122,13 +248,7 @@ v2 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          {
-                            "alias": null,
-                            "args": null,
-                            "kind": "ScalarField",
-                            "name": "Id",
-                            "storageKey": null
-                          },
+                          (v2/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -136,7 +256,7 @@ v2 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectNumber__c",
                             "plural": false,
-                            "selections": (v1/*: any*/),
+                            "selections": (v3/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -146,7 +266,17 @@ v2 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectTitle__c",
                             "plural": false,
-                            "selections": (v1/*: any*/),
+                            "selections": (v3/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DoubleValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_CurrentPeriodNumber__c",
+                            "plural": false,
+                            "selections": (v3/*: any*/),
                             "storageKey": null
                           }
                         ],
@@ -170,32 +300,38 @@ v2 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "MonitoringReportPeriodStepQuery",
-    "selections": (v2/*: any*/),
+    "selections": (v4/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "MonitoringReportPeriodStepQuery",
-    "selections": (v2/*: any*/)
+    "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "d2dac3ed25446b8c5dcb9ca8c44002e4",
+    "cacheID": "7694876413ec8115d68c204abc8976f1",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportPeriodStepQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportPeriodStepQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportPeriodStepQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {Id: {eq: $monitoringReportId}}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "458171dfa12b66847288b0068a99bc00";
+(node as any).hash = "e503a0a97751a87f7b512704a2f5bbdd";
 
 export default node;

@@ -2,7 +2,6 @@ import React from "react";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
-import { FieldError } from "react-hook-form";
 import { ValidationError } from "../../../atoms/validation/ValidationError/ValidationError";
 
 type FieldProps = {
@@ -11,7 +10,7 @@ type FieldProps = {
   labelBold?: boolean;
   id: string;
   "data-qa"?: string;
-  error?: FieldError | undefined | null;
+  error?: RhfError | undefined | null;
   children: JSX.Element;
 };
 

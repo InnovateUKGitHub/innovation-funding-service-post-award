@@ -119,7 +119,7 @@ declare type PartialByKeys<T, K = string> = Unify<
   }
 >;
 
-declare type RhfError = { message: string | null | undefined; type: string | null | undefined };
+declare type RhfError = { message: string | null | undefined; type: string | null | undefined } | null | undefined;
 
 declare type RhfErrors =
   | {

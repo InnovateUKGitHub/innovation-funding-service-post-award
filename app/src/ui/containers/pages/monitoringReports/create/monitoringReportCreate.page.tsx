@@ -7,7 +7,7 @@ import {
 } from "./monitoringReportCreate.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContent } from "@ui/hooks/content.hook";
-import { FieldError, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
@@ -60,7 +60,7 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
       </Section>
       <Section>
         <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(onUpdate)}>
-          <Field labelBold label="Period" id="period" error={formState?.errors?.period as FieldError}>
+          <Field labelBold label="Period" id="period" error={validatorErrors?.period as RhfError}>
             <NumberInput id="period" inputWidth={3} {...register("period")} />
           </Field>
           <Fieldset data-qa="save-buttons">

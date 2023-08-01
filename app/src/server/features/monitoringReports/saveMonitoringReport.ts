@@ -11,9 +11,13 @@ import { ISalesforceMonitoringReportResponse } from "@server/repositories/monito
 import { BadRequestError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
+import { noop } from "lodash";
 
 export class SaveMonitoringReport extends CommandBase<boolean> {
-  constructor(private readonly monitoringReportDto: MonitoringReportDto, private readonly submit: boolean) {
+  constructor(
+    private readonly monitoringReportDto: PickAndPart<MonitoringReportDto, "projectId" | "periodId" | "headerId">,
+    private readonly submit: boolean,
+  ) {
     super();
   }
 
@@ -60,27 +64,28 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
   private async updateMonitoringReport(context: IContext): Promise<void> {
     const existing =
       (await context.repositories.monitoringReportResponse.getAllForHeader(this.monitoringReportDto.headerId)) || [];
-    const updateDtos = this.monitoringReportDto.questions.filter(x => x.responseId && x.optionId);
-    const insertDtos = this.monitoringReportDto.questions.filter(x => !x.responseId && x.optionId);
-    const persistedIds = updateDtos.map(x => x.responseId);
-    const deleteItems = existing.filter(x => persistedIds.indexOf(x.Id) === -1).map(x => x.Id);
 
-    const updateItems = updateDtos.map<Updatable<ISalesforceMonitoringReportResponse>>(updateDto => ({
+    const updateDtos = this.monitoringReportDto?.questions?.filter(x => x.responseId && x.optionId);
+    const insertDtos = this.monitoringReportDto?.questions?.filter(x => !x.responseId && x.optionId);
+    const persistedIds = updateDtos?.map(x => x.responseId);
+    const deleteItems = existing.filter(x => persistedIds?.indexOf(x.Id) === -1).map(x => x.Id);
+
+    const updateItems = updateDtos?.map<Updatable<ISalesforceMonitoringReportResponse>>(updateDto => ({
       Id: updateDto.responseId ?? "",
       Acc_Question__c: updateDto.optionId ?? "",
       Acc_QuestionComments__c: updateDto.comments,
     }));
 
-    const insertItems = insertDtos.map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
+    const insertItems = insertDtos?.map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
       Acc_MonitoringHeader__c: this.monitoringReportDto.headerId,
       Acc_Question__c: insertDto.optionId ?? "",
       Acc_QuestionComments__c: insertDto.comments,
     }));
 
     await Promise.all<AnyObject>([
-      context.repositories.monitoringReportResponse.update(updateItems),
-      context.repositories.monitoringReportResponse.insert(insertItems),
-      context.repositories.monitoringReportResponse.delete(deleteItems),
+      updateItems ? context.repositories.monitoringReportResponse.update(updateItems) : noop,
+      insertItems ? context.repositories.monitoringReportResponse.insert(insertItems) : noop,
+      deleteItems ? context.repositories.monitoringReportResponse.delete(deleteItems) : noop,
     ]);
   }
 
@@ -106,7 +111,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     const project = await context.runQuery(new GetByIdQuery(this.monitoringReportDto.projectId));
 
     const validationResult = new MonitoringReportDtoValidator(
-      this.monitoringReportDto,
+      this.monitoringReportDto as MonitoringReportDto,
       true,
       this.submit,
       questions,

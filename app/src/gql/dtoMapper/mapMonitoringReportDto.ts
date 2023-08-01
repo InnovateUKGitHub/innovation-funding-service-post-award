@@ -193,7 +193,7 @@ function populateAnswer<T extends Pick<MonitoringReportQuestionDto, "options">>(
 }
 
 /**
- * something something
+ * maps monitoring report data to the header and linked questions
  */
 export function mapToFullMonitoringReport<
   T extends ReadonlyArray<{ node: MonitoringReportNode } | null> | null,
