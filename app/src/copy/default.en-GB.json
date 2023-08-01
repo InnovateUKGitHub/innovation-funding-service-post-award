@@ -1709,7 +1709,7 @@
     "pcrPartnerWithdrawalItemDtoValidator": {
       "periodReadOnly": "Period cannot be changed.",
       "periodRequired": "Enter a removal period",
-      "periodNotInteger": "Period must be a whole number, like 3",
+      "periodNotInteger": "Period must be a whole number, like 3.",
       "periodInvalid_one": "Period must be {{ count }}",
       "periodInvalid_other": "Period must be {{ count }} or fewer",
       "partnerIdReadOnly": "Partner cannot be changed.",
@@ -1833,7 +1833,7 @@
   "monitoringReportCreate" : {
     "period": {
       "errors": {
-        "invalid_type": "Period must be a whole number, like 3",
+        "invalid_type": "Period must be a whole number, like 3.",
         "too_small": "Period cannot be zero",
         "too_big": "Period must between 1 and {{count}}"
       }
