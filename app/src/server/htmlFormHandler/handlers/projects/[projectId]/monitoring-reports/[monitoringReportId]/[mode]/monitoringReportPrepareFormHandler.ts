@@ -31,9 +31,9 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     const q = dto.questions.find(x => x.displayOrder === questionDisplayOrder);
     if (!q) throw new Error(`Cannot find monitoring report question dto matching ${questionDisplayOrder}`);
     if (q.isScored) {
-      q.optionId = body[`question_${q.displayOrder}_options`];
+      q.optionId = body[`questions.${q.displayOrder - 1}.optionId`];
     }
-    q.comments = body[`question_${q.displayOrder}_comments`];
+    q.comments = body[`question.${q.displayOrder - 1}.comments`];
     return dto;
   }
 
