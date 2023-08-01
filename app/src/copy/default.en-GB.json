@@ -1839,11 +1839,13 @@
       }
     },
     "monitoringReportWorkflow": {
+      "errors": {
+        "too_big": "Maximum of 5000 characters"
+      },
       "questions": [
         {
           "comments": {
             "errors": {
-              "too_big": "Maximum of 5000 characters",
               "custom": "Enter a score for scope."
             }
           }
@@ -1851,7 +1853,6 @@
         {
           "comments": {
             "errors": {
-              "too_big": "Maximum of 5000 characters",
               "custom": "Enter a score for time."
             }
           }
@@ -1859,7 +1860,6 @@
         {
           "comments": {
             "errors": {
-              "too_big": "Maximum of 5000 characters",
               "custom": "Enter a score for cost."
             }
           }
@@ -1867,7 +1867,6 @@
         {
           "comments": {
             "errors": {
-              "too_big": "Maximum of 5000 characters",
               "custom": "Enter a score for exploitation."
             }
           }
@@ -1875,7 +1874,6 @@
         {
           "comments": {
             "errors": {
-              "too_big": "Maximum of 5000 characters",
               "custom": "Enter a score for risk management."
             }
           }
@@ -1883,22 +1881,7 @@
         {
           "comments": {
             "errors": {
-              "too_big": "Maximum of 5000 characters",
               "custom": "Enter a score for project planning."
-            }
-          }
-        },
-        {
-          "comments": {
-            "errors": {
-              "too_big": "Maximum of 5000 characters"
-            }
-          }
-        },
-        {
-          "comments": {
-            "errors": {
-              "too_big": "Maximum of 5000 characters"
             }
           }
         }
