@@ -2,13 +2,10 @@ import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/t
 import { MonitoringReportQuestionStep } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportQuestionStep";
 import { MonitoringReportSummary } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportSummary";
 import { IRoutes } from "@ui/routing/routeConfig";
-import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { MonitoringReportDto, MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { numberComparator } from "@framework/util/comparator";
-import {
-  MonitoringReportDtoValidator,
-  QuestionValidator,
-} from "@ui/validation/validators/MonitoringReportDtoValidator";
+import { BaseProps } from "@ui/containers/containerBase";
 
 export interface MonitoringReportReportStepProps extends IStepProps {
   report: MonitoringReportDto;
@@ -19,15 +16,16 @@ export interface MonitoringReportReportSummaryProps extends ISummaryProps {
   projectId: ProjectId;
   id: MonitoringReportId;
   mode: "prepare" | "view";
-  report: MonitoringReportDto;
+  report: Pick<MonitoringReportDto, "startDate" | "endDate" | "questions" | "periodId">;
   getEditLink: (stepName: string) => ILinkInfo;
+  statusChanges: Pick<MonitoringReportStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[];
 }
 
 export type IMonitoringReportWorkflow = IWorkflow<
   string,
   MonitoringReportReportStepProps,
-  MonitoringReportReportSummaryProps,
-  MonitoringReportDtoValidator
+  MonitoringReportReportSummaryProps & BaseProps,
+  undefined
 >;
 
 const getQuestionSteps = (dto: MonitoringReportDto, startingStepNumber: number) => {
@@ -37,8 +35,6 @@ const getQuestionSteps = (dto: MonitoringReportDto, startingStepNumber: number) 
       stepName: `question-${x.displayOrder}`,
       displayName: x.title,
       stepNumber: i + startingStepNumber,
-      validation: (val: MonitoringReportDtoValidator) =>
-        val.responses.results.find(response => response.question.displayOrder === x.displayOrder) as QuestionValidator,
       stepRender: function QuestionStepWrapper(props: MonitoringReportReportStepProps) {
         return <MonitoringReportQuestionStep questionNumber={x.displayOrder} {...props} />;
       },
@@ -51,7 +47,6 @@ const monitoringReportWorkflowDef = (dto: MonitoringReportDto): IMonitoringRepor
   return {
     steps: getQuestionSteps(dto, 1),
     summary: {
-      validation: val => val,
       summaryRender: MonitoringReportSummary,
     },
   };
@@ -95,8 +90,8 @@ export const getForwardLink = ({
 export class MonitoringReportWorkflowDef extends WorkflowBase<
   string,
   MonitoringReportReportStepProps,
-  MonitoringReportReportSummaryProps,
-  MonitoringReportDtoValidator
+  MonitoringReportReportSummaryProps & BaseProps,
+  undefined
 > {
   public constructor(definition: IMonitoringReportWorkflow, stepNumber: number | undefined) {
     super(definition, stepNumber);

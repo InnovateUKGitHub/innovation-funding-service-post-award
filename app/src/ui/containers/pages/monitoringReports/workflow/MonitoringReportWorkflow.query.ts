@@ -5,6 +5,35 @@ export const monitoringReportWorkflowQuery = graphql`
     salesforce {
       uiapi {
         query {
+          Acc_StatusChange__c(
+            where: { Acc_MonitoringReport__c: { eq: $monitoringReportId } }
+            orderBy: { CreatedDate: { order: DESC } }
+            first: 2000
+          ) {
+            edges {
+              node {
+                Id
+                Acc_NewMonitoringReportStatus__c {
+                  value
+                }
+                Acc_PreviousMonitoringReportStatus__c {
+                  value
+                }
+                Acc_MonitoringReport__c {
+                  value
+                }
+                Acc_ExternalComment__c {
+                  value
+                }
+                Acc_CreatedByAlias__c {
+                  value
+                }
+                CreatedDate {
+                  value
+                }
+              }
+            }
+          }
           Acc_MonitoringAnswer__c(
             where: {
               or: [

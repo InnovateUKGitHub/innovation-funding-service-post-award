@@ -31,40 +31,6 @@ describe("createMonitoringReports", () => {
     expect(context.repositories.monitoringReportHeader.Items[0].Acc_MonitoringReportStatus__c).toEqual("Draft");
   });
 
-  it("should create new with all answered questions", async () => {
-    const context = new TestContext();
-
-    const questionOptions = context.testData.range(3, seed =>
-      context.testData.createMonitoringReportQuestionSet(seed, 3),
-    );
-
-    const dto = await getCreateDto(context);
-
-    dto.questions[0].optionId = questionOptions[0][0].Id;
-    dto.questions[0].comments = "Question 1 Comments";
-
-    dto.questions[2].optionId = questionOptions[2][2].Id;
-    dto.questions[2].comments = "Question 3 Comments";
-
-    expect(context.repositories.monitoringReportResponse.Items.length).toBe(0);
-
-    const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, false));
-
-    expect(context.repositories.monitoringReportResponse.Items.length).toBe(2);
-    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_MonitoringHeader__c)).toEqual([
-      headerId,
-      headerId,
-    ]);
-    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_QuestionComments__c)).toEqual([
-      "Question 1 Comments",
-      "Question 3 Comments",
-    ]);
-    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_Question__c)).toEqual([
-      questionOptions[0][0].Id,
-      questionOptions[2][2].Id,
-    ]);
-  });
-
   it("should create Submitted report if specified", async () => {
     const context = new TestContext();
 

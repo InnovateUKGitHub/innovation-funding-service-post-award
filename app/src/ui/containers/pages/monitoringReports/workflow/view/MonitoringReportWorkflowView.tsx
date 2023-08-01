@@ -4,11 +4,20 @@ import {
   MonitoringReportWorkflowParams,
   MonitoringReportWorkflowWorkflow,
 } from "../MonitoringReportWorkflowProps";
+import { MonitoringReportStatusChangeDto } from "@framework/dtos/monitoringReportDto";
 
 const MonitoringReportWorkflowView = (
-  props: MonitoringReportWorkflowParams & MonitoringReportWorkflowWorkflow & MonitoringReportWorkflowData & BaseProps,
+  props: MonitoringReportWorkflowParams &
+    MonitoringReportWorkflowWorkflow &
+    MonitoringReportWorkflowData &
+    BaseProps & {
+      statusChanges: Pick<
+        MonitoringReportStatusChangeDto,
+        "newStatusLabel" | "createdBy" | "createdDate" | "comments"
+      >[];
+    },
 ) => {
-  const { workflow, projectId, id, mode, routes, report } = props;
+  const { workflow, projectId, id, mode, routes, report, statusChanges, ...rest } = props;
   const summary = workflow.getSummary();
   return (
     <>
@@ -18,6 +27,7 @@ const MonitoringReportWorkflowView = (
           id,
           mode,
           report,
+          statusChanges,
           routes,
           getEditLink: (stepName: string) =>
             routes.monitoringReportWorkflow.getLink({
@@ -26,6 +36,7 @@ const MonitoringReportWorkflowView = (
               mode,
               step: workflow.findStepNumberByName(stepName),
             }),
+          ...rest,
         })}
     </>
   );

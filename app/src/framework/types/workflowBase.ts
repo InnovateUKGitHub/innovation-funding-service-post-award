@@ -5,30 +5,34 @@ import React from "react";
 export type IStepProps = AnyObject;
 export type ISummaryProps = AnyObject;
 
-export interface IStep<TStepName extends string, TStepProps extends IStepProps, TVal extends Results<ResultBase>> {
+export interface IStep<
+  TStepName extends string,
+  TStepProps extends IStepProps,
+  TVal extends Results<ResultBase> | undefined,
+> {
   stepName: TStepName;
   displayName: string;
   stepNumber: number;
-  validation: (val: TVal) => Results<ResultBase>;
+  validation?: TVal extends undefined ? never : (val: TVal) => Results<ResultBase>;
   stepRender: (props: TStepProps) => React.ReactElement;
   readonlyStepRender?: (props: TStepProps) => React.ReactElement;
 }
 
-interface ISummary<TSummaryProps, TVal extends Results<ResultBase>> {
-  validation: (val: TVal) => Results<ResultBase>;
+interface ISummary<TSummaryProps, TVal extends Results<ResultBase> | undefined> {
+  validation?: TVal extends undefined ? never : (val: TVal) => Results<ResultBase>;
   summaryRender: (props: TSummaryProps) => React.ReactElement;
 }
 export interface IWorkflow<
   TStepName extends string,
   TStepProps extends IStepProps,
   TSummaryProps extends ISummaryProps,
-  TVal extends Results<ResultBase>,
+  TVal extends Results<ResultBase> | undefined,
 > {
   steps: IStep<TStepName, TStepProps, TVal>[];
   summary: ISummary<TSummaryProps, TVal>;
 }
 
-export type ICallableStep<TStepProps extends IStepProps, TVal extends Results<ResultBase>> = IStep<
+export type ICallableStep<TStepProps extends IStepProps, TVal extends Results<ResultBase> | undefined> = IStep<
   string,
   TStepProps,
   TVal
@@ -37,7 +41,7 @@ export type ICallableStep<TStepProps extends IStepProps, TVal extends Results<Re
 export interface ICallableWorkflow<
   TStepProps extends IStepProps,
   TSummaryProps extends ISummaryProps,
-  TVal extends Results<ResultBase>,
+  TVal extends Results<ResultBase> | undefined,
 > {
   isOnSummary: () => boolean;
   getSummary: () => { summaryRender: (props: TSummaryProps) => React.ReactNode } | undefined;
@@ -53,7 +57,7 @@ export abstract class WorkflowBase<
   TStepNames extends string,
   TStepProps extends IStepProps,
   TSummaryProps extends ISummaryProps,
-  TVal extends Results<ResultBase>,
+  TVal extends Results<ResultBase> | undefined,
 > implements ICallableWorkflow<TStepProps, TSummaryProps, TVal>
 {
   private readonly steps: IStep<TStepNames, TStepProps, TVal>[];
@@ -116,6 +120,9 @@ export abstract class WorkflowBase<
   }
 
   public getValidation(validators: TVal) {
+    if (!validators) {
+      return;
+    }
     if (this.isOnSummary()) {
       const summary = this.getSummary();
       return summary && summary.validation && summary.validation(validators);

@@ -8,11 +8,12 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { useNavigate } from "react-router";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
+import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
 import { clientsideApiClient } from "@ui/apiClient";
 import { isSubmittedBy } from "@framework/util/getSubmittingElementNameFromEvent";
 import { MonitoringReportWorkflowDef, getForwardLink } from "./monitoringReportWorkflowDef";
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
+import { mapToMonitoringReportStatusChangeDtoArray } from "@gql/dtoMapper/mapMonitoringReportStatusChange";
 
 export const useMonitoringReportWorkflowQuery = (
   projectId: ProjectId,
@@ -53,12 +54,26 @@ export const useMonitoringReportWorkflowQuery = (
     { questions },
   );
 
-  return { project, report };
+  const statusChanges = mapToMonitoringReportStatusChangeDtoArray(
+    data?.salesforce?.uiapi?.query?.Acc_StatusChange__c?.edges ?? [],
+    ["comments", "createdBy", "createdDate", "id", "newStatusLabel"],
+  );
+
+  return { project, report, statusChanges };
 };
 
 export type FormValues = {
-  questions: { optionId: string | null; comments: string | null }[];
+  periodId: PeriodId;
+  questions: { optionId: string; comments: string }[];
+  addComments: string;
 };
+
+const hasFormChanged = (data: FormValues, questions: MonitoringReportQuestionDto[]) =>
+  questions.some(
+    (question, i) =>
+      (question.comments ?? "") !== (data.questions[i].comments ?? "") ||
+      (question.optionId ?? "") !== (data.questions[i].optionId ?? ""),
+  );
 
 export const useOnMonitoringReportUpdateWorkflow = (
   projectId: ProjectId,
@@ -83,16 +98,22 @@ export const useOnMonitoringReportUpdateWorkflow = (
 ) => {
   const navigate = useNavigate();
   return useOnUpdate<FormValues, Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">>({
-    req: data =>
-      clientsideApiClient.monitoringReports.saveMonitoringReport({
-        monitoringReportDto: {
-          ...report,
-          questions: report.questions.map((question, index) => Object.assign({}, question, data?.questions?.[index])),
-        },
-        submit: false, // just saving an update
-      }),
+    req: (data, submitEvent) => {
+      const isFinalSubmit = isSubmittedBy("button_submit", submitEvent);
+      if (isFinalSubmit || hasFormChanged(data, report.questions)) {
+        return clientsideApiClient.monitoringReports.saveMonitoringReport({
+          monitoringReportDto: {
+            ...report,
+            questions: report.questions.map((question, index) => Object.assign({}, question, data?.questions?.[index])),
+          },
+          submit: isFinalSubmit,
+        });
+      } else {
+        return Promise.resolve(report);
+      }
+    },
 
-    onSuccess: (_, submitEvent: SyntheticEvent<HTMLButtonElement, SubmitEvent>) => {
+    onSuccess: ({ data }, submitEvent: SyntheticEvent<HTMLButtonElement, SubmitEvent>) => {
       const link = getForwardLink({
         mode,
         projectId,
@@ -101,7 +122,10 @@ export const useOnMonitoringReportUpdateWorkflow = (
         routes,
         workflow,
       });
-      setFetchKey(s => s + 1);
+      if (hasFormChanged(data, report.questions)) {
+        // fetch new gql data if there is a change made
+        setFetchKey(s => s + 1);
+      }
       if (link) navigate(link.path);
       return;
     },

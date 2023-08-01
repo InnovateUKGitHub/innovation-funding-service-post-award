@@ -30,6 +30,8 @@ interface SummaryListItemProps {
   action?: React.ReactNode;
   validation?: Result;
   qa: string;
+  hasError?: boolean;
+  id?: string;
 }
 
 interface SummaryListItemNotMarkdownProps extends SummaryListItemProps {
@@ -44,17 +46,27 @@ interface SummaryListItemMarkdownProps extends SummaryListItemProps {
 
 type Props = SummaryListItemMarkdownProps | SummaryListItemNotMarkdownProps;
 
-export const SummaryListItem = ({ content, action, qa, validation, label, isMarkdown = false }: Props) => {
+export const SummaryListItem = ({
+  content,
+  action,
+  qa,
+  validation,
+  label,
+  isMarkdown = false,
+  hasError,
+  id,
+}: Props) => {
   const { getContent } = useContent();
 
-  const hasError = validation && !validation.isValid && validation.showValidationErrors;
+  const showError = hasError || (validation && !validation.isValid && validation.showValidationErrors);
 
   return (
     <div
       data-qa={qa}
       className={cx("govuk-summary-list__row", {
-        "summary-list__row--error": hasError,
+        "summary-list__row--error": showError,
       })}
+      id={id}
     >
       <dt className="govuk-summary-list__key">{typeof label === "string" ? label : getContent(label)}</dt>
       <dd className="govuk-summary-list__value">{isMarkdown ? <Markdown value={content as string} /> : content}</dd>

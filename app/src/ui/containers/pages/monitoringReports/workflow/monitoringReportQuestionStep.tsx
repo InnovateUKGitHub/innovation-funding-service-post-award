@@ -4,6 +4,7 @@ import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/p
 import { MonitoringReportFormContext } from "./MonitoringReportWorkflow";
 import { H2, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContext } from "react";
+import { get } from "lodash";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
@@ -39,6 +40,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
     useContext(MonitoringReportFormContext);
 
   const commentFieldName: `questions.${number}.comments` = `questions.${q.displayOrder - 1}.comments`;
+  const commentFieldId = commentFieldName.replaceAll(".", "_");
 
   const disabledForm = mode === "view";
 
@@ -78,12 +80,13 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
 
           <TextAreaField
             {...register(commentFieldName)}
-            id={commentFieldName}
+            id={commentFieldId}
             label={getContent(x => x.pages.monitoringReportsQuestionStep.commentLabel)}
             disabled={isFetching || disabledForm}
-            error={validatorErrors?.[commentFieldName] as RhfError}
+            error={get(validatorErrors, commentFieldName) as RhfError}
             characterCount={watch(commentFieldName)?.length ?? 0}
-            data-qa={commentFieldName}
+            data-qa={commentFieldId}
+            characterCountType="ascending"
           />
 
           {mode === "prepare" && (

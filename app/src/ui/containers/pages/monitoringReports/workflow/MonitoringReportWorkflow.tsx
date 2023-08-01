@@ -19,27 +19,40 @@ import {
 import { UseFormHandleSubmit, UseFormRegister, UseFormWatch, useForm } from "react-hook-form";
 import { noop } from "lodash";
 import { useRhfErrors } from "@framework/util/errorHelpers";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { monitoringReportWorkflowErrorMap, monitoringReportWorkflowSchema } from "./monitoringReportWorkflow.zod";
+import { monitoringReportSummaryErrorMap, monitoringReportSummarySchema } from "./monitoringReportSummary.zod";
 
-export const MonitoringReportFormContext = createContext<{
+type MonitoringReportContextType = {
   register: UseFormRegister<FormValues>;
   watch: UseFormWatch<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   isFetching: boolean;
   onUpdate: (data: FormValues, submitEvent?: BaseSyntheticEvent) => Promise<void>;
   validatorErrors: RhfErrors;
-}>({
+};
+
+export const MonitoringReportFormContext = createContext<MonitoringReportContextType>({
   register: noop as UseFormRegister<FormValues>,
   watch: noop as UseFormWatch<FormValues>,
   handleSubmit: noop as UseFormHandleSubmit<FormValues>,
   isFetching: false,
   onUpdate: noop as unknown as (data: FormValues, submitEvent?: BaseSyntheticEvent) => Promise<void>,
   validatorErrors: undefined,
-});
+} as MonitoringReportContextType);
+
+const getMonitoringReportSchema = (step?: number | null | undefined) =>
+  typeof step == "number"
+    ? { schema: monitoringReportWorkflowSchema, errorMap: monitoringReportWorkflowErrorMap }
+    : { schema: monitoringReportSummarySchema, errorMap: monitoringReportSummaryErrorMap };
 
 export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams & BaseProps) => {
+  /**
+   * fetchKey is incremented and reset whenever a gql update is required
+   */
   const [fetchKey, setFetchKey] = useState(0);
 
-  const { project, report } = useMonitoringReportWorkflowQuery(props.projectId, props.id, fetchKey);
+  const { project, report, statusChanges } = useMonitoringReportWorkflowQuery(props.projectId, props.id, fetchKey);
   const { getContent } = useContent();
 
   useEffect(() => {
@@ -58,8 +71,18 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
   // If the mode in the URL and the mode we are displaying as don't match, display some guidance message.
   const displayUrlDiscrepancy = urlMode === "prepare" && displayMode === "view";
 
+  const zodSchema = getMonitoringReportSchema(props.step);
+
   const { register, watch, handleSubmit, formState } = useForm({
-    defaultValues: { questions: report.questions.map(x => ({ optionId: x?.optionId, comments: x?.comments })) },
+    defaultValues: {
+      addComments: report.addComments ?? "",
+      questions: report.questions.map(x => ({
+        optionId: x?.optionId ?? "",
+        comments: x?.comments ?? "",
+      })),
+      periodId: report.periodId,
+    },
+    resolver: zodResolver(zodSchema.schema, { errorMap: zodSchema.errorMap }),
   });
 
   const { onUpdate, isFetching, apiError } = useOnMonitoringReportUpdateWorkflow(
@@ -74,10 +97,17 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const validatorErrors = useRhfErrors<FormValues>(formState.errors);
 
+  const MonitoringReportContextValues = {
+    register,
+    watch,
+    handleSubmit,
+    isFetching,
+    onUpdate,
+    validatorErrors,
+  };
+
   return (
-    <MonitoringReportFormContext.Provider
-      value={{ register, watch, handleSubmit, isFetching, onUpdate, validatorErrors }}
-    >
+    <MonitoringReportFormContext.Provider value={MonitoringReportContextValues}>
       <Page
         backLink={<MonitoringReportWorkflowBackLink {...props} workflow={workflow} />}
         pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
@@ -93,7 +123,13 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
         {!workflow.isOnSummary() ? (
           <MonitoringReportWorkflowPrepare project={project} report={report} workflow={workflow} {...props} />
         ) : (
-          <MonitoringReportWorkflowView project={project} report={report} workflow={workflow} {...props} />
+          <MonitoringReportWorkflowView
+            project={project}
+            report={report}
+            workflow={workflow}
+            statusChanges={statusChanges}
+            {...props}
+          />
         )}
       </Page>
     </MonitoringReportFormContext.Provider>

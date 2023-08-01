@@ -14,8 +14,6 @@ export const claimReviewSchema = z
     path: ["comments"],
   });
 
-// attachment: z.instanceof(FileList),
-
 export const documentUploadSchema = z.object({
   attachment: z.object({
     length: z.number().gt(0),

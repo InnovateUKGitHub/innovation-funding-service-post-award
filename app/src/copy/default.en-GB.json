@@ -1837,6 +1837,172 @@
         "too_small": "Period cannot be zero",
         "too_big": "Period must between 1 and {{count}}"
       }
+    },
+    "monitoringReportWorkflow": {
+      "questions": [
+        {
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 5000 characters",
+              "custom": "Enter a score for scope."
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 5000 characters",
+              "custom": "Enter a score for time."
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 5000 characters",
+              "custom": "Enter a score for cost."
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 5000 characters",
+              "custom": "Enter a score for exploitation."
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 5000 characters",
+              "custom": "Enter a score for risk management."
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 5000 characters",
+              "custom": "Enter a score for project planning."
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 5000 characters"
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 5000 characters"
+            }
+          }
+        }
+      ]
+    },
+    "monitoringReportSummary": {
+      "periodId": {
+        "errors": {
+          "invalid_type": "Enter a period"
+        }
+      },
+      "addComments": {
+        "errors": {
+          "too_big": "Maximum of 5000 characters"
+        }
+      },
+      "questions": [
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for scope."
+            }
+          },
+          "comments": {
+            "errors": {
+              "too_small": "Enter comments for scope."
+            }
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for time."
+            }
+          },
+          "comments": {
+            "errors": {
+              "too_small": "Enter comments for time."
+            }
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for cost."
+            }
+          },
+          "comments": {
+            "errors": {
+              "too_small": "Enter comments for cost."
+            }
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for exploitation."
+            }
+          },
+          "comments": {
+            "errors": {
+              "too_small": "Enter comments for exploitation."
+            }
+          }
+        },
+        {            
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for risk management."
+            }
+          },
+          "comments": {
+            "errors": {
+              "too_small": "Enter comments for risk management."
+            }
+          }
+        },
+        {
+          "optionId": {
+            "errors": {
+              "too_small": "Enter a score for project planning."
+            }
+          },
+          "comments": {
+            "errors": {
+              "too_small": "Enter comments for project planning."
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_small": "Enter comments for summary."
+            }
+          }
+        },
+        {
+          "comments": {
+            "errors": {
+              "too_small": "Enter comments for issues and actions."
+            }
+          }
+        }
+      ]
     }
-  }
+  }  
 }
