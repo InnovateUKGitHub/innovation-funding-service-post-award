@@ -87,10 +87,10 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     if (err instanceof MulterError && this.store === "multipleDocuments") {
       // Stub Multer errors with a stub button.
       // We don't know what the button is because we don't have any body anymore (great!)
-      logger.error("A multer error occured!", err);
+      logger.error("A multer error occurred!", err);
       button = { name: "", value: "" };
     } else if (err) {
-      // If another error has occured, pass it on to Express.
+      // If another error has occurred, pass it on to Express.
       return next(err);
     } else {
       // See if our button matches this handler.

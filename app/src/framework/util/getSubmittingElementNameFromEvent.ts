@@ -1,20 +1,21 @@
 import { SyntheticEvent } from "react";
 
 /**
- * dives into the Synthetic Submit Event to get the name of the element that initiated the submit action
+ * dives into the Synthetic Submit Event to get the element that initiated the submit action
  */
-export function getSubmittingElementNameFromEvent(event: SyntheticEvent<HTMLButtonElement, SubmitEvent>) {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore  -- inexplicably "name" is declared as not existing on type HTMLElement
-  return (event?.nativeEvent?.submitter?.name ?? "no_submitting_element_found_in_event") as string;
+export function getSubmittingElementFromEvent(event: SyntheticEvent<HTMLButtonElement, SubmitEvent>) {
+  return event?.nativeEvent?.submitter as HTMLButtonElement;
 }
 
 /**
  * returns true if the event was submitted by the element with the matching name
+ * and value if provided
  *
  * @example
- * isSubmittedBy("button_save-and-continue", event); // true
+ * isSubmittedBy(event,"button_save-and-continue" ); // true
+ * isSubmittedBy(event,"submitButton", "save-and-continue" ); // true
  */
-export function isSubmittedBy(name: string, event: SyntheticEvent<HTMLButtonElement, SubmitEvent>) {
-  return getSubmittingElementNameFromEvent(event) === name;
+export function isSubmittedBy(event: SyntheticEvent<HTMLButtonElement, SubmitEvent>, name: string, value = "") {
+  const submitter = getSubmittingElementFromEvent(event);
+  return value ? submitter?.name === name && submitter?.value === value : submitter?.name === name;
 }

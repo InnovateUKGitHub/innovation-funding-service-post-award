@@ -20,7 +20,7 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
   "pcr"
 > {
   constructor() {
-    super(ProjectChangeRequestPrepareRoute, ["default", "return"], "pcr");
+    super(ProjectChangeRequestPrepareRoute, ["submit"], "pcr");
   }
 
   protected async getDto(
@@ -35,7 +35,7 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
     ]);
     pcr.comments = body.comments;
 
-    if (button.name === "default") {
+    if (button.value === "submit") {
       switch (pcr.status) {
         case PCRStatus.Draft:
         case PCRStatus.QueriedByMonitoringOfficer:

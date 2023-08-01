@@ -3,7 +3,7 @@ import cx from "classnames";
 import { ButtonHTMLAttributes } from "react";
 import { useMounted } from "../../providers/Mounted/Mounted";
 
-type ButtonName = `button_${string}`;
+type ButtonName = string;
 
 type ButtonSubTypes =
   | { secondary?: true; styling?: never; link?: never; warning?: never }

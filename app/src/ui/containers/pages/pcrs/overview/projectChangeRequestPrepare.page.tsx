@@ -22,6 +22,7 @@ import { FormValues, useOnUpdatePcrPrepare, usePCRPrepareQuery } from "./project
 import { pcrPrepareErrorMap, pcrPrepareSchema } from "./projectChangeRequestPrepare.zod";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { createRegisterButton } from "@framework/util/registerButton";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -41,14 +42,17 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
     status: getPcrItemTaskStatus(x.status),
   }));
 
-  const { register, formState, handleSubmit, watch } = useForm<FormValues>({
+  const { register, formState, handleSubmit, watch, setValue } = useForm<FormValues>({
     defaultValues: {
       comments: pcr.comments ?? "",
       items: pcrItems,
       reasoningStatus: getPcrItemTaskStatus(pcr.reasoningStatus),
+      button_submit: "submit",
     },
     resolver: zodResolver(pcrPrepareSchema, { errorMap: pcrPrepareErrorMap }),
   });
+
+  const registerButton = createRegisterButton(setValue, "button_submit");
 
   const { onUpdate, apiError, isFetching } = useOnUpdatePcrPrepare(props.projectId, props.pcrId, pcr, project);
 
@@ -97,11 +101,11 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
         <Fieldset data-qa="save-buttons">
           {isMultipleParticipants && <P>{getContent(x => x.pcrMessages.submittingGuidance)}</P>}
 
-          <SubmitButton name="button_default" disabled={isFetching}>
+          <SubmitButton {...registerButton("submit")} disabled={isFetching}>
             {getContent(x => x.pages.pcrOverview.submitRequest)}
           </SubmitButton>
 
-          <SubmitButton disabled={isFetching} secondary name="button_return">
+          <SubmitButton disabled={isFetching} secondary {...registerButton("save-and-return")}>
             {getContent(x => x.pages.pcrOverview.saveAndReturn)}
           </SubmitButton>
         </Fieldset>

@@ -72,7 +72,12 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   return { project, pcr, editableItemTypes, statusChanges, isMultipleParticipants };
 };
 
-export type FormValues = { comments: string; items: { [k: string]: string }[]; reasoningStatus: string };
+export type FormValues = {
+  comments: string;
+  items: { [k: string]: string }[];
+  reasoningStatus: string;
+  button_submit: string;
+};
 
 const getPayload = (
   saveAndContinue: boolean,
@@ -117,7 +122,7 @@ export const useOnUpdatePcrPrepare = (
       const payload = {
         projectId,
         id: pcrId,
-        pcr: getPayload(isSubmittedBy("button_default", submitEvent), project, pcr, data),
+        pcr: getPayload(isSubmittedBy(submitEvent, "button_submit", "submit"), project, pcr, data),
       };
 
       return clientsideApiClient.pcrs.update(payload);
