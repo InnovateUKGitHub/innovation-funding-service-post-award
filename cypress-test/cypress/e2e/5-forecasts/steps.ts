@@ -88,7 +88,7 @@ export const exceedGrantValue = () => {
   cy.get("a").contains("Edit forecast").click();
   cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true }).type("34446").wait(500);
   cy.getByQA("forecasts-warning-fc-content").contains(
-    "The amount you are requesting is more than the agreed costs for:",
+    "The amount you are requesting differs from the agreed costs for:",
   );
 };
 
