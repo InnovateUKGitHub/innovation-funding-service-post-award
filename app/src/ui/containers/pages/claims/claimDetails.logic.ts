@@ -103,7 +103,13 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
     const documents = mapToProjectDocumentSummaryDtoArray(
       documentsGql as DocumentSummaryNode[],
       ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner"],
-      { projectId, currentUser: { email: data?.currentUser?.email ?? "unknown email" } },
+      {
+        projectId,
+        currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+        type: "claims",
+        partnerId,
+        periodId,
+      },
     );
 
     const claim = claims.find(claim => claim.periodId === periodId);

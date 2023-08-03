@@ -39,7 +39,11 @@ export const useClaimReviewPageData = (
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
   const documentsGql = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [])
-    .filter(x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId)
+    .filter(
+      x =>
+        x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId &&
+        x?.node.RecordType?.Name?.value === "Total Project Period",
+    )
     .map(x => x?.node?.ContentDocumentLinks?.edges ?? [])
     .flat();
 
@@ -118,7 +122,13 @@ export const useClaimReviewPageData = (
     const documents = mapToProjectDocumentSummaryDtoArray(
       documentsGql as DocumentSummaryNode[],
       ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
-      { projectId, currentUser: { email: data?.currentUser?.email ?? "unknown email" } },
+      {
+        projectId,
+        currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+        type: "claims",
+        partnerId,
+        periodId,
+      },
     );
 
     const claim = claims.find(claim => claim.periodId === periodId);

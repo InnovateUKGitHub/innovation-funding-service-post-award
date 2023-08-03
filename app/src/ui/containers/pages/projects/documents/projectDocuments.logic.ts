@@ -34,7 +34,7 @@ export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOpt
   const projectDocuments = mapToProjectDocumentSummaryDtoArray(
     projectNode?.ContentDocumentLinks?.edges ?? [],
     ["id", "fileName", "fileSize", "link", "description", "dateCreated", "uploadedBy", "isOwner"],
-    { currentUser: (data?.currentUser as { email: string }) ?? { email: "unknown user" }, projectId },
+    { currentUser: (data?.currentUser as { email: string }) ?? { email: "unknown user" }, projectId, type: "projects" },
   );
 
   const partnerDocuments = mapToPartnerDocumentSummaryDtoArray(
