@@ -45,19 +45,26 @@ const mapper: GQL.DtoMapper<
     projectId: ProjectId;
     currentUser: { email: string };
     partnerName: string;
-    partnerId: PartnerId;
+    partnerId?: PartnerId;
+    periodId?: PeriodId;
+    type: "projects" | "partners" | "claims";
   }
 > = {
   id(node) {
     return node?.node?.ContentDocument?.Id ?? "";
   },
-  link(node, { projectId, partnerId }) {
+  link(node, { projectId, partnerId, periodId, type }) {
     const fileId = node?.node?.ContentDocument?.LatestPublishedVersionId?.value ?? "";
     const linkedEntityId = node?.node?.LinkedEntityId?.value ?? "unknown-linked-entity-id";
 
-    return !!partnerId
-      ? `/api/documents/partners/${projectId}/${linkedEntityId}/${fileId}/content`
-      : `/api/documents/projects/${projectId}/${fileId}/content`;
+    switch (type) {
+      case "projects":
+        return `/api/documents/projects/${projectId}/${fileId}/content`;
+      case "partners":
+        return `/api/documents/partners/${projectId}/${linkedEntityId}/${fileId}/content`;
+      case "claims":
+        return `/api/documents/claims/${projectId}/${partnerId}/${periodId}/${fileId}/content`;
+    }
   },
   fileName(node) {
     return node?.node?.ContentDocument?.FileExtension?.value
@@ -112,7 +119,14 @@ export function mapToDocumentSummaryDto<
 >(
   node: T,
   pickList: PickList[],
-  additionalData: { projectId: ProjectId; currentUser: { email: string }; partnerName: string; partnerId: PartnerId },
+  additionalData: {
+    projectId: ProjectId;
+    currentUser: { email: string };
+    partnerName: string;
+    partnerId?: PartnerId;
+    periodId?: PeriodId;
+    type: "projects" | "partners" | "claims";
+  },
 ): Pick<PartnerDocumentSummaryDtoGql, PickList> {
   return pickList.reduce((dto, field) => {
     dto[field] = mapper[field](node, additionalData);
@@ -146,6 +160,7 @@ export function mapToPartnerDocumentSummaryDtoArray<
             ...additionalData,
             partnerName: edge?.node?.Acc_AccountId__r?.Name?.value ?? "",
             partnerId: (edge?.node?.Acc_AccountId__c?.value ?? "") as PartnerId,
+            type: "partners",
           }),
         ),
       )
@@ -170,11 +185,20 @@ export function mapToPartnerDocumentSummaryDtoArray<
 export function mapToProjectDocumentSummaryDtoArray<
   T extends ReadonlyArray<DocumentSummaryNode | null> | null,
   PickList extends keyof Omit<PartnerDocumentSummaryDtoGql, "linkedEntityId">,
->(edges: T, pickList: PickList[], additionalData: { projectId: ProjectId; currentUser: { email: string } }) {
+>(
+  edges: T,
+  pickList: PickList[],
+  additionalData: {
+    projectId: ProjectId;
+    currentUser: { email: string };
+    partnerId?: PartnerId;
+    periodId?: PeriodId;
+    type: "projects" | "claims";
+  },
+) {
   return (edges ?? []).map(x =>
     mapToDocumentSummaryDto(x ?? null, pickList, {
       ...additionalData,
-      partnerId: "" as PartnerId,
       partnerName: "",
     }),
   );

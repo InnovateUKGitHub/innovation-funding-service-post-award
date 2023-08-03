@@ -2012,6 +2012,7 @@ describe("mapToProjectDocumentSummaryDtoArray", () => {
         {
           currentUser: (data?.currentUser as { email: string }) ?? { email: "unknown user" },
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
+          type: "projects",
         },
       ),
     ).toMatchSnapshot();
