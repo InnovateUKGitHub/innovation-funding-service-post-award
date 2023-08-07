@@ -626,3 +626,18 @@ export const validatePeriodBox = () => {
   cy.get("input#period").clear().type("1");
   cy.wait(500);
 };
+
+export const saveSectionOneAndCheckSummary = () => {
+  cy.button("Save and return to summary").click();
+  cy.heading("Monitoring report");
+  cy.get("h3").contains("Scope");
+  [
+    "Score",
+    "Comments",
+    "1 - It is certain that the project will fail to deliver on one or more key objectives",
+    "This is a standard message for use in a text box. I am 74 characters long.",
+    "Edit",
+  ].forEach(section1Item => {
+    cy.getByQA("summary-question-1").contains(section1Item);
+  });
+};
