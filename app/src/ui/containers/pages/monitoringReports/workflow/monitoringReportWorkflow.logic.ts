@@ -18,7 +18,7 @@ import { mapToMonitoringReportStatusChangeDtoArray } from "@gql/dtoMapper/mapMon
 export const useMonitoringReportWorkflowQuery = (
   projectId: ProjectId,
   monitoringReportId: MonitoringReportId,
-  fetchKey?: number,
+  fetchKey: number,
 ) => {
   const data = useLazyLoadQuery<MonitoringReportWorkflowQuery>(
     monitoringReportWorkflowQuery,

@@ -59,8 +59,6 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
           <Fieldset>
             <Legend>{q.title}</Legend>
             <Hint id="hint-for-questions">{q.description}</Hint>
-            {/* <ReportForm.Hidden name={"questionDisplayOrder"} value={() => questionNumber} /> */}
-
             {!!radioOptions.length && (
               <FormGroup>
                 <RadioList name={`questions.${q.displayOrder - 1}.optionId`} id="questions" register={register}>
@@ -71,7 +69,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
                       data-qa={option.qa}
                       label={option.label}
                       disabled={isFetching || disabledForm}
-                      defaultValue={q?.optionId ?? ""}
+                      defaultChecked={option.id === q.optionId}
                     />
                   ))}
                 </RadioList>

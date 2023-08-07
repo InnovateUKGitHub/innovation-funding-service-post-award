@@ -33,7 +33,7 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     if (q.isScored) {
       q.optionId = body[`questions.${q.displayOrder - 1}.optionId`];
     }
-    q.comments = body[`question.${q.displayOrder - 1}.comments`];
+    q.comments = body[`questions.${q.displayOrder - 1}.comments`];
     return dto;
   }
 
