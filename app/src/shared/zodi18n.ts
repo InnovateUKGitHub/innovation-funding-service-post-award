@@ -72,10 +72,29 @@ export const makeZodI18nMap =
       const alternativeKeys = [...keys, "errors.invalid"];
       const fullPrefix = [...keyPrefix, ...issue.path];
 
+      const isArrayTypeError = fullPrefix.some(x => /^\d+$/.test(String(x)));
+
       for (let i = fullPrefix.length; i >= 0; i--) {
         for (const key of alternativeKeys) {
-          const path = ["forms", ...fullPrefix.slice(0, i), key];
-          paths.push(path.join("."));
+          const path = ["forms", ...fullPrefix.slice(0, i), key].join(".");
+          paths.push(path);
+
+          /*
+           * in the event this is an array type error, as well as making paths for each index, there is also a generic
+           * key made with "arrayType" in the place where the array index would have been.
+           *
+           * This means for array type errors where there is only a simple variation that can passed in as a variable
+           * we can reuse copy.
+           *
+           * e.g.
+           * ["questions.1.comments.error.too_big", "questions.3.comments.error.too_big", "questions.arrayType.comments.error.too_big"]
+           */
+          if (isArrayTypeError) {
+            const basicArrayTypePath = path.replace(/\.\d+\./g, ".arrayType.");
+            if (!paths.includes(basicArrayTypePath)) {
+              paths.push(basicArrayTypePath);
+            }
+          }
         }
       }
 
