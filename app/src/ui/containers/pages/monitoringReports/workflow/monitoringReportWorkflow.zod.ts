@@ -9,6 +9,7 @@ export const monitoringReportWorkflowSchema = z.object({
       .object({
         optionId: z.string(),
         comments: z.string().max(5000),
+        title: z.string(),
       })
       .refine(
         ({ comments, optionId }) => {

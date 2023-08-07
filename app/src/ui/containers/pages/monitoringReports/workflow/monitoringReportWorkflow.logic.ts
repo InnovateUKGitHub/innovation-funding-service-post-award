@@ -64,7 +64,7 @@ export const useMonitoringReportWorkflowQuery = (
 
 export type FormValues = {
   periodId: PeriodId;
-  questions: { optionId: string; comments: string }[];
+  questions: { optionId: string; comments: string; title: string }[];
   addComments: string;
   button_submit: string;
 };

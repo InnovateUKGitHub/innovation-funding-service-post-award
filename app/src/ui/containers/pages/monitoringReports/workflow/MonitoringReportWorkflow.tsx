@@ -82,6 +82,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
       questions: report.questions.map(x => ({
         optionId: x?.optionId ?? "",
         comments: x?.comments ?? "",
+        title: x?.title ?? "",
       })),
       periodId: report.periodId,
       button_submit: "submit",
