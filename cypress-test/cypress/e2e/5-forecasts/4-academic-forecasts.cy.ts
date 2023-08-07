@@ -20,8 +20,8 @@ describe("Forecast > Academic", () => {
 
   it("Should display the forecast table with correct academic cost categories", academicCosts);
 
-  it("Should click 'Update forecast button'", () => {
-    cy.get("a").contains("Update forecast").click();
+  it("Should click 'Edit forecast button'", () => {
+    cy.get("a").contains("Edit forecast").click();
   });
 
   it("Should update the forecast table and calculate the entries correctly", updateAcademicCosts);
@@ -29,7 +29,7 @@ describe("Forecast > Academic", () => {
   it("Should remove a number from the box, attempt to submit and generate an error", () => {
     cy.getByAriaLabel("Directly incurred - Staff Period 3").clear();
     cy.wait(500);
-    cy.submitButton("Submit").click();
+    cy.submitButton("Submit changes").click();
     cy.validationLink("Forecast is required.");
     cy.get("a").contains("Forecast is required.");
   });

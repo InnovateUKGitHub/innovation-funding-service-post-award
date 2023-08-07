@@ -87,7 +87,7 @@ export const updateLabourFields = () => {
 };
 
 export const exceedGrantValue = () => {
-  cy.get("a").contains("Update forecast").click();
+  cy.get("a").contains("Edit forecast").click();
   cy.get(`input[aria-label="Labour Period 3"]`).clear({ force: true }).type("34446").wait(500);
   cy.getByQA("forecasts-warning-fc-content").contains(
     "The amount you are requesting is more than the agreed costs for:",
@@ -105,7 +105,7 @@ export const clearCostCategories = () => {
   ].forEach(clearCost => {
     cy.getByAriaLabel(clearCost).clear({ force: true });
   });
-  cy.submitButton("Submit").click();
+  cy.submitButton("Submit changes").click();
   cy.get("h2").contains("There is a problem");
 };
 
@@ -117,7 +117,7 @@ export const revertCategoriesSubmit = () => {
   cy.getByAriaLabel("Labour Period 6").clear().type("55.55").wait(500);
   cy.getByAriaLabel("Labour Period 7").clear().type("50.89").wait(500);
   cy.getByAriaLabel("Labour Period 8").clear().type("777.00").wait(500);
-  cy.submitButton("Submit").click();
+  cy.submitButton("Submit changes").click();
 };
 
 export const ktpCostCats = () => {
@@ -321,8 +321,8 @@ export const submitCalculations = () => {
     .within(() => {
       cy.get("td:nth-child(14)").contains("£34,781.66");
     });
-  cy.get("button").contains("Submit").click();
-  cy.get("a").contains("Update forecast");
+  cy.get("button").contains("Submit changes").click();
+  cy.get("a").contains("Edit forecast");
   cy.get("td:nth-child(4)").contains("111");
   cy.get("tr")
     .eq(4)
@@ -336,9 +336,9 @@ export const clickForecastAccessEUI = () => {
   cy.get("td").contains("EUI Small Ent Health").siblings().contains("View forecast").click();
 };
 
-export const clickUpdateForecastButton = () => {
+export const clickEditForecastButton = () => {
   cy.heading("Forecast");
-  cy.get("a").contains("Update forecast").click();
+  cy.get("a").contains("Edit forecast").click();
   cy.heading("Update forecast");
 };
 
@@ -378,7 +378,7 @@ export const updateLabourCalculateOH = () => {
 };
 
 export const submitForecastBackOut = () => {
-  cy.get("button").contains("Submit").click();
+  cy.get("button").contains("Submit changes").click();
   cy.heading("Forecast");
   cy.backLink("Back to forecasts").click();
   cy.heading("Forecasts");
@@ -402,8 +402,8 @@ export const returnToForecastArea = () => {
     });
 };
 
-export const clickUpdateCheckValues = () => {
-  cy.get("a").contains("Update forecast").click();
+export const clickEditCheckValues = () => {
+  cy.get("a").contains("Edit forecast").click();
   cy.heading("Update forecast");
   cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.666");
 };
@@ -426,14 +426,13 @@ export const topThreeRows = () => {
       "Nov 2023",
       "Dec 2023",
       "Jan 2024",
-      "Feb 2024",
     ],
   ].forEach((cols, rowNumber = 0) => {
     cy.get("tr")
       .eq(rowNumber + 1)
       .within(() => {
         for (let i = 0; i < cols.length; i++) {
-          cy.get(`td:nth-child(${i + 2})`).contains(cols[i]);
+          cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
         }
       });
   });
@@ -479,13 +478,13 @@ export const forecastValues = () => {
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
-  ].forEach((cols, index) => {
+  ].forEach(cols => {
     rowNumber++;
     cy.get("tr")
       .eq(rowNumber)
       .within(() => {
         for (let i = 0; i < cols.length; i++) {
-          cy.get(`td:nth-child(${i})`).contains(cols[i]);
+          cy.get(`td:nth-child(${i + 2})`).contains(cols[i]);
         }
       });
   });

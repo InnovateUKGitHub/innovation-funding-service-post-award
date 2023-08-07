@@ -31,7 +31,9 @@ describe("Forecast > front page as FC", () => {
   });
 
   it("Should have forecast advice text", () => {
-    cy.getByQA("forecastClaimAdvice").contains("You can only update forecasts");
+    cy.getByQA("forecastClaimAdvice").contains(
+      "You can now amend your forecasted costs at any time (as long as the related period's claim has not yet been approved).",
+    );
   });
 
   it("Should display the Period, IAR and Month rows correctly", topThreeRows);
@@ -44,7 +46,7 @@ describe("Forecast > front page as FC", () => {
 
   it("Should display the correct totals", correctForecastTotals);
 
-  it("Should have an 'Update forecast' button", () => {
-    cy.get("a").contains("Update forecast");
+  it("Should have an 'Edit forecast' button", () => {
+    cy.get("a").contains("Edit forecast");
   });
 });

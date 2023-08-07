@@ -21,7 +21,7 @@ describe("Forecast > KTP", () => {
   it("Should display the forecast table with correct KTP cost categories", ktpCostCats);
 
   it("Should click 'Update forecast button'", () => {
-    cy.get("a").contains("Update forecast").click();
+    cy.get("a").contains("Edit forecast").click();
   });
 
   it("Should update the forecast table and calculate the entries correctly", ktpUpdateForecast);

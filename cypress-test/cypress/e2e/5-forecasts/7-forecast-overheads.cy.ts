@@ -2,8 +2,8 @@ import { visitApp } from "common/visit";
 import {
   backToDash,
   clickForecastAccessEUI,
-  clickUpdateCheckValues,
-  clickUpdateForecastButton,
+  clickEditCheckValues,
+  clickEditForecastButton,
   displayCorrectOverheadRate,
   returnToForecastArea,
   submitForecastBackOut,
@@ -20,7 +20,7 @@ describe("Forecast > edit", () => {
 
   it("Should click the Forecast tile and access EUI Small Ent Health", clickForecastAccessEUI);
 
-  it("Should click the update forecast button", clickUpdateForecastButton);
+  it("Should click the update forecast button", clickEditForecastButton);
 
   it("Should display the correct overhead rate", displayCorrectOverheadRate);
 
@@ -38,5 +38,5 @@ describe("Forecast > edit", () => {
     returnToForecastArea,
   );
 
-  it("Should click the update forecast button and check the value is correct", clickUpdateCheckValues);
+  it("Should click the update forecast button and check the value is correct", clickEditCheckValues);
 });

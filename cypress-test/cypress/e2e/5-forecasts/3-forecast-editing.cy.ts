@@ -24,7 +24,7 @@ describe("Forecast > edit", () => {
   });
 
   it("Should have an 'Update forecast' button", () => {
-    cy.get("a").contains("Update forecast").click();
+    cy.get("a").contains("Edit forecast").click();
   });
 
   it("Should allow Labour cost fields to be updated", updateLabourFields);
@@ -47,6 +47,6 @@ describe("Forecast > edit", () => {
   it("Should revert the cost categories back to how they were and click submit", revertCategoriesSubmit);
 
   it("Should load the page correctly", () => {
-    cy.get("a").contains("Update forecast");
+    cy.get("a").contains("Edit forecast");
   });
 });

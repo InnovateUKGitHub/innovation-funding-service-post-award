@@ -50,7 +50,9 @@ describe("Forecast front page as PM", () => {
   });
 
   it("Should have forecast advice text", () => {
-    cy.getByQA("forecastClaimAdvice").contains("You can only update forecasts");
+    cy.getByQA("forecastClaimAdvice").contains(
+      "The Finance Contact can now amend the forecasted costs at any time (as long as the related period's claim has not yet been approved).",
+    );
   });
 
   it("Should display the Period, IAR and Month rows correctly", topThreeRows);
