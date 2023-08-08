@@ -10,7 +10,7 @@ import { configuration } from "@server/features/common/config";
 import {
   ProjectChangeRequestPrepareReasoningParams,
   PCRPrepareReasoningRoute,
-} from "@ui/containers/pages/pcrs/reasoning/workflow.page";
+} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 
 export class ProjectChangeRequestReasoningDocumentUploadHandler extends MultipleFileFormHandlerBase<

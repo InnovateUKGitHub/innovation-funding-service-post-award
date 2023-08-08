@@ -44,7 +44,7 @@ import {
   PCRPrepareReasoningRoute,
   PCRReviewReasoningRoute,
   PCRViewReasoningRoute,
-} from "@ui/containers/pages/pcrs/reasoning/workflow.page";
+} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
 import { PCRReviewRoute } from "@ui/containers/pages/pcrs/review";
 import { ProjectDashboardRoute } from "@ui/containers/pages/projects/dashboard/Dashboard.page";
 import { ProjectDetailsRoute } from "@ui/containers/pages/projects/details/ProjectDetails.page";

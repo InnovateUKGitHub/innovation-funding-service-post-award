@@ -9,7 +9,7 @@ import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/over
 import {
   ProjectChangeRequestPrepareReasoningParams,
   PCRPrepareReasoningRoute,
-} from "@ui/containers/pages/pcrs/reasoning/workflow.page";
+} from "@ui/containers/pages/pcrs/reasoning/pcrReasoningWorkflow.page";
 import { reasoningWorkflowSteps } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";

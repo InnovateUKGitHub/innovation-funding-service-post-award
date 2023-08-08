@@ -14,7 +14,7 @@ import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTit
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { PCRReasoningSummary } from "@ui/containers/pages/pcrs/reasoning/summary";
+import { PCRReasoningSummary } from "./pcrReasoningSummary";
 import {
   IReasoningWorkflowMetadata,
   reasoningWorkflowSteps,
@@ -40,12 +40,20 @@ interface Data {
   mode: "prepare" | "review" | "view";
 }
 
+interface ResolvedData {
+  project: ProjectDto;
+  pcr: PCRDto;
+  editor: IEditorStore<PCRDto, PCRDtoValidator>;
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
+  mode: "prepare" | "review" | "view";
+}
+
 interface Callbacks {
   onChange: (dto: PCRDto) => void;
   onSave: (dto: PCRDto, link: ILinkInfo) => void;
 }
 
-class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPrepareReasoningParams, Data, Callbacks> {
+class PCRReasoningComponentLoader extends ContainerBase<ProjectChangeRequestPrepareReasoningParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -54,8 +62,32 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
       documentsEditor: this.props.documentsEditor,
     });
 
+    return <PageLoader pending={combined} render={x => <PCRReasoningWorkflowComponent {...this.props} {...x} />} />;
+  }
+}
+
+class PCRReasoningWorkflowComponent extends ContainerBase<
+  ProjectChangeRequestPrepareReasoningParams,
+  ResolvedData,
+  Callbacks
+> {
+  render() {
+    const { project, pcr, editor, documentsEditor } = this.props;
     return (
-      <PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.documentsEditor)} />
+      <Page
+        backLink={this.getBackLink()}
+        pageTitle={<Title {...project} />}
+        projectStatus={project.status}
+        error={editor.error || documentsEditor.error}
+        // If we are on the final summary step, remove all the validators.
+        validator={!this.props.step ? [] : [editor.validator, documentsEditor.validator]}
+      >
+        {!!this.props.step && <Messages messages={this.props.messages} />}
+        {this.props.mode === "prepare" &&
+          !!this.props.step &&
+          this.renderStep(this.props.step, pcr, editor, documentsEditor)}
+        {!this.props.step && this.renderSummary(pcr, editor)}
+      </Page>
     );
   }
 
@@ -81,30 +113,6 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
       pcrId: this.props.pcrId,
       step: this.findStepByName(stepName).stepNumber,
     });
-  }
-
-  private renderContents(
-    project: ProjectDto,
-    pcr: PCRDto,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-  ) {
-    return (
-      <Page
-        backLink={this.getBackLink()}
-        pageTitle={<Title {...project} />}
-        project={project}
-        error={editor.error || documentsEditor.error}
-        // If we are on the final summary step, remove all the validators.
-        validator={!this.props.step ? [] : [editor.validator, documentsEditor.validator]}
-      >
-        {!!this.props.step && <Messages messages={this.props.messages} />}
-        {this.props.mode === "prepare" &&
-          !!this.props.step &&
-          this.renderStep(this.props.step, pcr, editor, documentsEditor)}
-        {!this.props.step && this.renderSummary(pcr, editor)}
-      </Page>
-    );
   }
 
   private getBackLink() {
@@ -226,7 +234,7 @@ const PCRReasoningWorkflowContainer = (
   const stores = useStores();
 
   return (
-    <PCRReasoningWorkflowComponent
+    <PCRReasoningComponentLoader
       {...props}
       project={stores.projects.getById(props.projectId)}
       pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}

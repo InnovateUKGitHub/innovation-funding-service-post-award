@@ -30,25 +30,16 @@ export interface Props {
   getStepLink: (stepName: IReasoningWorkflowMetadata["stepName"]) => ILinkInfo;
 }
 
-interface Data {
-  files: Pending<DocumentSummaryDto[]>;
-  editableItemTypes: Pending<PCRItemType[]>;
+interface ResolvedData {
+  files: DocumentSummaryDto[];
+  editableItemTypes: PCRItemType[];
 }
 
 const PCRForm = createTypedForm<PCRDto>();
 
-class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
+class PCRReasoningSummaryComponent extends ContainerBase<Props, ResolvedData> {
   render() {
-    const combined = Pending.combine({
-      files: this.props.files,
-      editableItemTypes: this.props.editableItemTypes,
-    });
-
-    return <Loader pending={combined} render={x => this.renderContents(x.files, x.editableItemTypes)} />;
-  }
-
-  private renderContents(documents: DocumentSummaryDto[], editableItemTypes: PCRItemType[]) {
-    const { editor, getStepLink, mode, pcr } = this.props;
+    const { editor, getStepLink, mode, pcr, files: documents, editableItemTypes } = this.props;
     return (
       <Section qa="reasoning-save-and-return">
         <Section>
@@ -142,12 +133,9 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
 
 export const PCRReasoningSummary = (props: Props & BaseProps) => {
   const stores = useStores();
-
-  return (
-    <PCRReasoningSummaryComponent
-      {...props}
-      files={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
-      editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
-    />
-  );
+  const combined = Pending.combine({
+    files: stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrId),
+    editableItemTypes: stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId),
+  });
+  return <Loader pending={combined} render={x => <PCRReasoningSummaryComponent {...props} {...x} />} />;
 };
