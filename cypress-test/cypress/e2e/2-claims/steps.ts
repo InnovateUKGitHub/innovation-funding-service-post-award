@@ -624,8 +624,6 @@ export const goToQueriedClaim = () => {
   cy.get("td").contains(comments);
   cy.button("Continue to claims documents").click();
   cy.get("a").contains("Continue to update forecast").click();
-  cy.button("Continue to summary").click();
-  cy.button("Submit claim").click();
 };
 
 export const beginEditing = () => {
@@ -774,7 +772,7 @@ export const acceptInputAndUpdate = () => {
 export const topThreeRows = () => {
   [
     ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-    ["IAR Due", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes", "Yes"],
+    ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
     [
       "Month",
       "Mar 2023",
@@ -798,5 +796,58 @@ export const topThreeRows = () => {
           cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
         }
       });
+  });
+};
+
+export const claimReviewTopThreeRows = () => {
+  cy.getByQA("forecast-table").within(() => {
+    [
+      ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+      ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
+      [
+        "Month",
+        "Feb 2023",
+        "Mar 2023",
+        "Apr 2023",
+        "May 2023",
+        "Jun 2023",
+        "Jul 2023",
+        "Aug 2023",
+        "Sep 2023",
+        "Oct 2023",
+        "Nov 2023",
+        "Dec 2023",
+        "Jan 2024",
+      ],
+    ].forEach((cols, rowNumber = 0) => {
+      cy.get("tr")
+        .eq(rowNumber + 1)
+        .within(() => {
+          for (let i = 0; i < cols.length; i++) {
+            cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
+          }
+        });
+    });
+  });
+};
+
+export const claimReviewCostCat = () => {
+  cy.getByQA("forecast-table").within(() => {
+    [
+      "Labour",
+      "Overheads",
+      "Materials",
+      "Capital usage",
+      "Subcontracting",
+      "Travel and subsistence",
+      "Other costs",
+      "Other costs 2",
+      "Other costs 3",
+      "Other costs 4",
+      "Other costs 5",
+    ].forEach(forecastCostCat => {
+      cy.tableCell(forecastCostCat);
+    });
+    cy.tableHeader("Total");
   });
 };
