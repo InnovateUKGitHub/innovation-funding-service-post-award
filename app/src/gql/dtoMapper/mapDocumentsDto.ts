@@ -47,13 +47,14 @@ const mapper: GQL.DtoMapper<
     partnerName: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
-    type: "projects" | "partners" | "claims";
+    costCategoryId?: string;
+    type: "projects" | "partners" | "claims" | "claim details";
   }
 > = {
   id(node) {
     return node?.node?.ContentDocument?.Id ?? "";
   },
-  link(node, { projectId, partnerId, periodId, type }) {
+  link(node, { projectId, partnerId, periodId, type, costCategoryId }) {
     const fileId = node?.node?.ContentDocument?.LatestPublishedVersionId?.value ?? "";
     const linkedEntityId = node?.node?.LinkedEntityId?.value ?? "unknown-linked-entity-id";
 
@@ -64,6 +65,8 @@ const mapper: GQL.DtoMapper<
         return `/api/documents/partners/${projectId}/${linkedEntityId}/${fileId}/content`;
       case "claims":
         return `/api/documents/claims/${projectId}/${partnerId}/${periodId}/${fileId}/content`;
+      case "claim details":
+        return `/api/documents/claim-details/${projectId}/${partnerId}/${periodId}/${costCategoryId}/${fileId}/content`;
     }
   },
   fileName(node) {
@@ -125,7 +128,8 @@ export function mapToDocumentSummaryDto<
     partnerName: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
-    type: "projects" | "partners" | "claims";
+    costCategoryId?: string;
+    type: "projects" | "partners" | "claims" | "claim details";
   },
 ): Pick<PartnerDocumentSummaryDtoGql, PickList> {
   return pickList.reduce((dto, field) => {
@@ -193,7 +197,8 @@ export function mapToProjectDocumentSummaryDtoArray<
     currentUser: { email: string };
     partnerId?: PartnerId;
     periodId?: PeriodId;
-    type: "projects" | "claims";
+    costCategoryId?: string;
+    type: "projects" | "claims" | "claim details";
   },
 ) {
   return (edges ?? []).map(x =>
