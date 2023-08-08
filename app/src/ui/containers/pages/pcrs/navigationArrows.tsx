@@ -3,9 +3,13 @@ import { PCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { NavigationArrows } from "@ui/components/atomicDesign/molecules/NavigationArrows/navigationArrows";
 import { IRoutes } from "@ui/routing/routeConfig";
 
+export type PCRTypeForNavigationArrows = Pick<Omit<PCRDto, "items">, "projectId" | "id"> & {
+  items: Pick<PCRItemDto, "type" | "typeName" | "id">[];
+};
+
 interface Props {
-  currentItem: PCRItemDto | null;
-  pcr: PCRDto;
+  currentItem: Pick<PCRItemDto, "id"> | null;
+  pcr: PCRTypeForNavigationArrows;
   isReviewing: boolean;
   editableItemTypes: PCRItemType[];
   routes: IRoutes;
@@ -32,7 +36,7 @@ export const NavigationArrowsForPCRs = (props: Props) => {
 
 const getLinkForReviewingItem = (
   routes: IRoutes,
-  pcrItem: PCRItemDto,
+  pcrItem: Pick<PCRItemDto, "typeName" | "id">,
   projectId: ProjectId,
   pcrId: PcrId,
   allowReasoningLink: boolean,
@@ -53,7 +57,7 @@ const getLinkForReviewingItem = (
 
 const getLinkForViewingItem = (
   routes: IRoutes,
-  pcrItem: PCRItemDto,
+  pcrItem: Pick<PCRItemDto, "typeName" | "id">,
   projectId: ProjectId,
   pcrId: PcrId,
   allowReasoning: boolean,

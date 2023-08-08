@@ -1,7 +1,7 @@
 import { PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { PCRDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Pending } from "@shared/pending";
@@ -32,9 +32,16 @@ export interface ProjectChangeRequestPrepareReasoningParams {
   step?: number;
 }
 
+type PCRTypeForPcrReasoning = Pick<
+  Omit<PCRDto, "items">,
+  "reasoningComments" | "requestNumber" | "projectId" | "id"
+> & {
+  items: Pick<PCRItemDto, "shortName" | "id" | "type" | "typeName">[];
+};
+
 interface Data {
   project: Pending<ProjectDto>;
-  pcr: Pending<PCRDto>;
+  pcr: Pending<PCRTypeForPcrReasoning>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
   mode: "prepare" | "review" | "view";
@@ -42,7 +49,7 @@ interface Data {
 
 interface ResolvedData {
   project: ProjectDto;
-  pcr: PCRDto;
+  pcr: PCRTypeForPcrReasoning;
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   mode: "prepare" | "review" | "view";
@@ -145,7 +152,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<
 
   private renderStep(
     stepNumber: number,
-    pcr: PCRDto,
+    pcr: PCRTypeForPcrReasoning,
     editor: IEditorStore<PCRDto, PCRDtoValidator>,
     documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ) {
@@ -174,7 +181,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<
     );
   }
 
-  private renderSummary(pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
+  private renderSummary(pcr: PCRTypeForPcrReasoning, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
     return (
       <PCRReasoningSummary
         {...this.props}

@@ -1,6 +1,6 @@
 import { Pending } from "@shared/pending";
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { NavigationArrowsForPCRs } from "@ui/containers/pages/pcrs/navigationArrows";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { NavigationArrowsForPCRs, PCRTypeForNavigationArrows } from "@ui/containers/pages/pcrs/navigationArrows";
 import { IReasoningWorkflowMetadata } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { BaseProps, ContainerBase } from "../../../containerBase";
@@ -22,7 +22,9 @@ import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 export interface Props {
   projectId: ProjectId;
   pcrId: PcrId;
-  pcr: PCRDto;
+  pcr: Pick<Omit<PCRDto, "items">, "reasoningComments" | "requestNumber" | "projectId" | "id"> & {
+    items: Pick<PCRItemDto, "shortName" | "id" | "type" | "typeName">[];
+  };
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   mode: "review" | "view" | "prepare";
   onChange: (dto: PCRDto) => void;
@@ -89,7 +91,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, ResolvedData> {
     );
   }
 
-  private renderNavigationArrows(pcr: PCRDto, editableItemTypes: PCRItemType[]) {
+  private renderNavigationArrows(pcr: PCRTypeForNavigationArrows, editableItemTypes: PCRItemType[]) {
     return (
       <NavigationArrowsForPCRs
         pcr={pcr}
