@@ -38,14 +38,11 @@ export const useClaimReviewPageData = (
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
-  const documentsGql = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [])
-    .filter(
-      x =>
-        x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId &&
-        x?.node.RecordType?.Name?.value === "Total Project Period",
-    )
-    .map(x => x?.node?.ContentDocumentLinks?.edges ?? [])
-    .flat();
+  const documentsGql = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? []).filter(
+    x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId,
+  );
+
+  const totalDocumentsLength = documentsGql.map(x => x?.node?.ContentDocumentLinks?.edges ?? []).flat().length ?? 0;
 
   return useMemo(() => {
     const project = mapToProjectDto(projectNode, [
@@ -119,17 +116,22 @@ export const useClaimReviewPageData = (
       costCategories,
     ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
 
-    const documents = mapToProjectDocumentSummaryDtoArray(
-      documentsGql as DocumentSummaryNode[],
-      ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
-      {
-        projectId,
-        currentUser: { email: data?.currentUser?.email ?? "unknown email" },
-        type: "claims",
-        partnerId,
-        periodId,
-      },
-    );
+    const documents = documentsGql
+      .map(docs =>
+        mapToProjectDocumentSummaryDtoArray(
+          docs?.node?.ContentDocumentLinks?.edges ?? ([] as DocumentSummaryNode[]),
+          ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
+          {
+            projectId,
+            currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+            type: docs?.node?.RecordType?.Name?.value === "Claims Detail" ? "claim details" : "claims",
+            partnerId,
+            periodId,
+            costCategoryId: docs?.node?.Acc_CostCategory__c?.value ?? "",
+          },
+        ),
+      )
+      .flat();
 
     const claim = claims.find(claim => claim.periodId === periodId);
 
@@ -208,7 +210,7 @@ export const useClaimReviewPageData = (
       documents,
       IARDueOnClaimPeriods,
     };
-  }, [documentsGql.length]);
+  }, [totalDocumentsLength]);
 };
 
 export type FormValues = { status: ClaimStatus; comments: string };
