@@ -75,7 +75,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
       <Guidance />
 
       <Section qa="bank-details-section">
-        <Form onSubmit={handleSubmit(onUpdate)} data-qa="bank-details-form">
+        <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="bank-details-form">
           <Fieldset>
             <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleOrganisationInfo)}</Legend>
             <P bold>{partner.name}</P>
@@ -90,13 +90,9 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
           <Fieldset>
             <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleAccountDetails)}</Legend>
 
-            <SortCode partner={partner} register={register} error={validationErrors?.sortCode as RhfFieldError} />
+            <SortCode partner={partner} register={register} error={validationErrors?.sortCode as RhfErrors} />
 
-            <AccountNumber
-              partner={partner}
-              register={register}
-              error={validationErrors?.accountNumber as RhfFieldError}
-            />
+            <AccountNumber partner={partner} register={register} error={validationErrors?.accountNumber as RhfErrors} />
           </Fieldset>
 
           <Fieldset>
@@ -154,7 +150,7 @@ const SortCode = ({
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
   register: UseFormRegister<FormValues>;
-  error?: { message: string };
+  error?: RhfErrors;
 }) => {
   const { getContent: c } = useContent();
   if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
@@ -184,7 +180,7 @@ const AccountNumber = ({
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
   register: UseFormRegister<FormValues>;
-  error?: RhfFieldError;
+  error?: RhfErrors;
 }) => {
   const { getContent: c } = useContent();
   if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {

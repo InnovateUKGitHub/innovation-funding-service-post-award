@@ -5,7 +5,6 @@ import { Hint } from "../Hint/Hint";
 import { Label } from "../Label/Label";
 import { TextInput } from "../TextInput/TextInput";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { BrowserRouter } from "react-router-dom";
 import { FormGroup } from "../FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 

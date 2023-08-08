@@ -3,7 +3,6 @@ import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
 import { ResultsLinks } from "@ui/components/atomicDesign/atoms/validation/ValidationResultLinks/ValidationResultLinks";
 import { useContent } from "@ui/hooks/content.hook";
-import { ResultsLinks } from "./ValidationResultLinks";
 import { NestedResult } from "@ui/validation/nestedResult";
 import { Result } from "@ui/validation/result";
 import { IValidationResult, Results } from "@ui/validation/results";

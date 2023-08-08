@@ -71,7 +71,6 @@ type PartnerNode = Readonly<
     Acc_Postcode__c: GQL.Value<string>;
     Acc_ProjectId__c: GQL.Value<string>;
     Acc_ProjectRole__c: GQL.Value<string>;
-    Acc_ProjectId__c: GQL.Value<string>;
     Acc_RegistrationNumber__c: GQL.Value<string>;
     Acc_RemainingParticipantGrant__c: GQL.Value<number>;
     Acc_SortCode__c: GQL.Value<string>;

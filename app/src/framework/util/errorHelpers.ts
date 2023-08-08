@@ -100,7 +100,6 @@ export const useValidationErrors = <TFormValues extends AnyObject>(errors: Field
  */
 export const useRhfErrors = <TFormValues extends AnyObject>(errors: FieldErrors<TFormValues>) => {
   const serverSideFormErrors = useFormErrorContext();
-
   return Object.assign({}, errors, convertResultErrorsToReactHookFormFormat(serverSideFormErrors)) as RhfErrors;
 };
 

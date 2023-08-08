@@ -7,7 +7,7 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
-import { apiClient } from "@ui/apiClient";
+import { clientsideApiClient } from "@ui/apiClient";
 
 export const useProjectSetupQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ProjectSetupQuery>(
@@ -48,7 +48,7 @@ export const useOnUpdateProjectSetup = (
   const navigate = useNavigate();
   return useOnUpdate<Pick<PartnerDto, "partnerStatus">, Pick<PartnerDto, "postcode">>({
     req: data =>
-      apiClient.partners.updatePartner({
+      clientsideApiClient.partners.updatePartner({
         partnerId,
         partnerDto: { ...partner, ...data },
       }),

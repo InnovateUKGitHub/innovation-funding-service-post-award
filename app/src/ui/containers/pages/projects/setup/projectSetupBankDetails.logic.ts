@@ -7,7 +7,7 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
-import { apiClient } from "@ui/apiClient";
+import { clientsideApiClient } from "@ui/apiClient";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { BankCheckStatus } from "@framework/constants/partner";
 
@@ -73,7 +73,7 @@ export const useOnUpdateProjectSetupBankDetails = (
 
   return useOnUpdate<FormValues, { bankCheckStatus: BankCheckStatus }>({
     req: data =>
-      apiClient.partners.updatePartner({
+      clientsideApiClient.partners.updatePartner({
         partnerId,
         partnerDto: {
           ...partner,
@@ -94,7 +94,7 @@ export const useOnUpdateProjectSetupBankDetails = (
         },
         validateBankDetails: true,
       }),
-    onSuccess: resp => {
+    onSuccess: (_, resp) => {
       if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
         navigate(
           routes.failedBankCheckConfirmation.getLink({

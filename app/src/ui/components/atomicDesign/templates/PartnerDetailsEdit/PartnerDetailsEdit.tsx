@@ -74,7 +74,7 @@ export function PartnerDetailsEditComponent({
 
   const validatorErrors = useRhfErrors<FormValues>(formState.errors);
 
-  const postcodeError = validatorErrors?.["new-postcode"];
+  const postcodeError = validatorErrors?.["new-postcode"] as RhfErrors;
   return (
     <Page
       backLink={backLink}

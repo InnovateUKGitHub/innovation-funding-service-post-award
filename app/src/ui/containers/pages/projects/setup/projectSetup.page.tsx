@@ -164,7 +164,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
             /*
              * if validation passed, proceed to update and move on
              */
-            onUpdate({ partnerStatus: PartnerStatus.Active });
+            onUpdate({ data: { partnerStatus: PartnerStatus.Active } });
           }
         }}
         qa="projectSetupForm"
