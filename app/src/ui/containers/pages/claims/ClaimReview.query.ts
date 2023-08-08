@@ -95,8 +95,6 @@ export const claimReviewQuery = graphql`
                     { RecordType: { Name: { eq: "Claims Detail" } } }
                   ]
                 }
-                { Acc_ClaimStatus__c: { ne: "New" } }
-                { Acc_ClaimStatus__c: { ne: "Not used" } }
               ]
             }
             first: 2000
@@ -127,6 +125,12 @@ export const claimReviewQuery = graphql`
                 Acc_ClaimStatus__c {
                   value
                   label
+                }
+                Acc_IAR_Status__c {
+                  value
+                }
+                Acc_IARRequired__c {
+                  value
                 }
                 Acc_PaidDate__c {
                   value

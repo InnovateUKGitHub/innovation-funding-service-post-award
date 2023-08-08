@@ -91,8 +91,6 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
     data.claim,
   );
 
-  console.log("documentSEditor", props.documentsEditor);
-
   const validatorErrors = useRhfErrors<FormValues>(formState.errors);
   const documentValidatorErrors = props.documentsEditor?.validator?.showValidationErrors
     ? convertResultErrorsToReactHookFormFormat(props.documentsEditor?.validator?.errors)
@@ -182,6 +180,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
                 partner: data.partner,
                 claim: data.claim,
                 costCategories: data.costCategories,
+                IARDueOnClaimPeriods: data.IARDueOnClaimPeriods,
               }}
             />
           </AccordionItem>

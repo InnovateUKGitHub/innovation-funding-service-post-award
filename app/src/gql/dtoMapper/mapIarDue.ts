@@ -10,7 +10,7 @@ type IARClaimNode = Readonly<{
 /**
  * Calculates the periods for which IAR is due
  *
- * Requires Claims with Record Type "Total Project Period"
+ * Requires Claims with Record Type "Total Project Period" and including New
  */
 export const getIARDueOnClaimPeriods = (claimsGql: ReadonlyArray<{ node: IARClaimNode | null } | null>) =>
   claimsGql

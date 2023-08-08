@@ -14,6 +14,7 @@ import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusChange";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { getIARDueOnClaimPeriods } from "@gql/dtoMapper/mapIarDue";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
@@ -183,6 +184,9 @@ export const useClaimReviewPageData = (
       { roles: project.roles, competitionType: project.competitionType },
     );
 
+    // IAR DUE ON CLAIM PERIODS
+    const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(claimsGql);
+
     return {
       project,
       partner,
@@ -192,6 +196,7 @@ export const useClaimReviewPageData = (
       claimDetails: costsSummaryForPeriod,
       statusChanges,
       documents,
+      IARDueOnClaimPeriods,
     };
   }, [documentsGql.length]);
 };
