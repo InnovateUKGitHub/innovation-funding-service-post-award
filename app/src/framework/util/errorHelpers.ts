@@ -5,6 +5,7 @@ import { ZodError } from "zod";
 import { useState } from "react";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
+import { NestedResult } from "@ui/validation/nestedResult";
 
 /**
  * This converts from html error format as returned by react-hook-form, zod or yup, into the format used
@@ -28,6 +29,11 @@ export const convertHookFormErrorsToResultFormat = <TFormValues extends AnyObjec
   return resultArray;
 };
 
+const isNestedResult = (
+  error: Result | NestedResult<Results<ResultBase>>,
+): error is NestedResult<Results<ResultBase>> =>
+  "results" in error && Array.isArray(error?.results) && error.results.length > 0;
+
 /**
  * This converts from html error format as returned by react-hook-form, zod or yup, into the format used
  * by our error components. Hopefully we should be able to retire the need for this function in the future.
@@ -35,10 +41,18 @@ export const convertHookFormErrorsToResultFormat = <TFormValues extends AnyObjec
  * It uses the key of the errors object to be used as the url link, with the assumption that the `name` and the `id` of the input
  * match
  */
-export const convertResultErrorsToReactHookFormFormat = (errors: Result[] | null | undefined) => {
+export const convertResultErrorsToReactHookFormFormat = (errors: Result[] | null | undefined): RhfErrors => {
   if (!errors || !errors.length) return null;
 
-  return errors.reduce((acc, cur) => ({ ...acc, [cur.key]: { message: cur.errorMessage } }), {});
+  return errors.reduce(
+    (acc, cur) => ({
+      ...acc,
+      [cur.key]: isNestedResult(cur)
+        ? cur.results.map(nestedResult => convertResultErrorsToReactHookFormFormat(nestedResult?.errors ?? []))
+        : { message: cur.errorMessage },
+    }),
+    {},
+  );
 };
 
 /**
@@ -81,6 +95,7 @@ export const useValidationErrors = <TFormValues extends AnyObject>(errors: Field
  */
 export const useRhfErrors = <TFormValues extends AnyObject>(errors: FieldErrors<TFormValues>) => {
   const serverSideFormErrors = useFormErrorContext();
+
   return Object.assign({}, errors, convertResultErrorsToReactHookFormFormat(serverSideFormErrors)) as RhfErrors;
 };
 

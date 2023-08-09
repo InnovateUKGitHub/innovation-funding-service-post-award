@@ -1,4 +1,79 @@
-import { convertErrorFormatFromRhfForErrorSummary } from "./errorHelpers";
+import { Result } from "@ui/validation/result";
+import { convertErrorFormatFromRhfForErrorSummary, convertResultErrorsToReactHookFormFormat } from "./errorHelpers";
+
+describe("convertResultErrorsToReactHookFormFormat", () => {
+  it("should handle the simple case of converting a server side error to rhf format", () => {
+    const resultError = [
+      { errorMessage: "You should have eaten the lettuce", key: "lettuce" },
+      { errorMessage: "You should have had the pocari sweat", key: "pocariSweat" },
+    ] as Result[];
+
+    expect(convertResultErrorsToReactHookFormFormat(resultError)).toEqual({
+      lettuce: {
+        message: "You should have eaten the lettuce",
+      },
+      pocariSweat: {
+        message: "You should have had the pocari sweat",
+      },
+    });
+  });
+
+  it("should handle nested errors", () => {
+    const resultError = [
+      {
+        errorMessage: "No Good",
+        key: "food",
+        results: [
+          {
+            errors: [
+              {
+                errorMessage: "You should have eaten the lettuce",
+                key: "lettuce",
+              },
+              {
+                errorMessage: "You should have had the pocari sweat",
+                key: "pocariSweat",
+              },
+            ],
+          },
+          {
+            errors: [
+              {
+                errorMessage: "You should have eaten the mama",
+                key: "mama",
+              },
+              {
+                errorMessage: "You should have had the fish snacks",
+                key: "fishSnacks",
+              },
+            ],
+          },
+        ],
+      },
+    ] as unknown as Result[];
+
+    expect(convertResultErrorsToReactHookFormFormat(resultError)).toEqual({
+      food: [
+        {
+          lettuce: {
+            message: "You should have eaten the lettuce",
+          },
+          pocariSweat: {
+            message: "You should have had the pocari sweat",
+          },
+        },
+        {
+          mama: {
+            message: "You should have eaten the mama",
+          },
+          fishSnacks: {
+            message: "You should have had the fish snacks",
+          },
+        },
+      ],
+    });
+  });
+});
 
 describe("convertErrorFormatFromRhfForErrorSummary", () => {
   it("should handle the simple case of converting an rhf error to the format for error summary", () => {
