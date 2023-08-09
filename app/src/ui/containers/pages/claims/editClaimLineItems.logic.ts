@@ -43,7 +43,14 @@ export const useEditClaimLineItemsData = (
       mapToProjectDocumentSummaryDtoArray(
         edge?.node?.ContentDocumentLinks?.edges ?? [],
         ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
-        { projectId, currentUser: { email: data?.currentUser?.email ?? "unknown email" } },
+        {
+          projectId,
+          currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+          type: "claim details",
+          periodId,
+          partnerId,
+          costCategoryId,
+        },
       ),
     )
     .flat();
