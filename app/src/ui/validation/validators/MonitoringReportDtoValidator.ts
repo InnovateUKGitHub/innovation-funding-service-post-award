@@ -23,6 +23,7 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
             this.getContent(x =>
               x.validation.monitoringReportDtoValidator.scoreRequired({ name: this.question.title }),
             ),
+            "comments",
           )
         : Validation.valid(this),
     () =>
@@ -33,6 +34,7 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
             this.getContent(x =>
               x.validation.monitoringReportDtoValidator.commentRequired({ name: this.question.title }),
             ),
+            "comments",
           )
         : Validation.valid(this),
   );
@@ -48,6 +50,7 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
                 this.getContent(x =>
                   x.validation.monitoringReportDtoValidator.scoreRequired({ name: this.question.title }),
                 ),
+                "optionId",
               )
             : Validation.valid(this),
         () =>
@@ -55,6 +58,7 @@ export class QuestionValidator extends Results<MonitoringReportQuestionDto> {
             this,
             !this.answer.optionId || !!this.question.options.find(x => x.id === this.answer.optionId),
             this.getContent(x => x.validation.monitoringReportDtoValidator.scoreInvalidChoice),
+            "optionId",
           ),
       )
     : Validation.valid(this);
@@ -110,6 +114,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
         this.submit,
       ),
     this.getContent(x => x.validation.monitoringReportDtoValidator.responsesInvalid),
+    "questions",
   );
 
   private readonly editableStates = [
@@ -126,5 +131,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
   );
 
   // Limit the monitoring report comment to a max-length of 5000 characters.
-  public readonly addComments = Validation.all(this, () => Validation.maxLength(this, this.model.addComments, 5000));
+  public readonly addComments = Validation.all(this, () =>
+    Validation.maxLength(this, this.model.addComments, 5000, undefined, "addComments"),
+  );
 }
