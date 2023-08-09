@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { claimReviewQuery } from "./ClaimReview.query";
@@ -36,168 +37,173 @@ export const useClaimReviewPageData = (
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
-  const project = mapToProjectDto(projectNode, [
-    "claimedPercentage",
-    "claimFrequency",
-    "claimFrequencyName",
-    "claimsOverdue",
-    "claimsToReview",
-    "claimsWithParticipant",
-    "competitionName",
-    "competitionType",
-    "costsClaimedToDate",
-    "id",
-    "impactManagementParticipation",
-    "numberOfPeriods",
-    "partnerRoles",
-    "periodId",
-    "projectNumber",
-    "roles",
-    "title",
-  ]);
-
-  const partner = mapToPartnerDto(
-    partnerNode,
-    ["id", "partnerStatus", "isWithdrawn", "isLead", "name", "roles", "organisationType", "overheadRate"],
-    {
-      roles: project.partnerRoles.find(x => x.partnerId === partnerNode?.Acc_AccountId__c?.value) ?? {
-        isFc: false,
-        isMo: false,
-        isPm: false,
-      },
-    },
-  );
-
-  const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
-
-  const costCategories = mapToRequiredSortedCostCategoryDtoArray(
-    data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
-    ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
-    profileGql,
-  );
-
-  const claims = mapToClaimDtoArray(
-    claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
-    [
-      "comments",
-      "id",
-      "isApproved",
-      "isFinalClaim",
-      "paidDate",
-      "partnerId",
-      "pcfStatus",
-      "periodCostsToBePaid",
-      "periodEndDate",
-      "periodId",
-      "periodStartDate",
-      "status",
-      "statusLabel",
-      "totalCostsApproved",
-      "totalCostsSubmitted",
-      "totalDeferredAmount",
-    ],
-    { competitionType: project.competitionType },
-  );
-
-  const costCategoriesOrder = costCategories.map(y => y.id);
-
-  const golCosts = mapToGolCostDtoArray(
-    profileGql,
-    ["costCategoryId", "costCategoryName", "value"],
-    costCategories,
-  ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
-
   const documentsGql = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? []).filter(
     x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId,
   );
 
-  const documents = documentsGql
-    .map(docs =>
-      mapToProjectDocumentSummaryDtoArray(
-        docs?.node?.ContentDocumentLinks?.edges ?? ([] as DocumentSummaryNode[]),
-        ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
-        {
-          projectId,
-          currentUser: { email: data?.currentUser?.email ?? "unknown email" },
-          type: docs?.node?.RecordType?.Name?.value === "Claims Detail" ? "claim details" : "claims",
-          partnerId,
-          periodId,
-          costCategoryId: docs?.node?.Acc_CostCategory__c?.value ?? "",
-        },
-      ),
-    )
-    .flat();
+  const totalDocumentsLength = documentsGql.map(x => x?.node?.ContentDocumentLinks?.edges ?? []).flat().length ?? 0;
 
-  const claim = claims.find(claim => claim.periodId === periodId);
-
-  const claimDetails = mapToClaimDetailsDtoArray(
-    claimsGql?.filter(
-      x =>
-        x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId && x?.node?.RecordType?.Name?.value === "Claims Detail",
-    ),
-    ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
-  );
-
-  if (!claim) throw new Error(" there is no matching claim");
-  const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [
-    "id",
-    "costCategoryId",
-    "periodEnd",
-    "periodStart",
-    "periodId",
-    "value",
-  ]);
-
-  const forecastData = {
-    golCosts,
-    forecastDetails,
-    claimDetails,
-    costCategories,
-    project,
-    partner,
-    claim,
-    claims,
-  };
-
-  const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
-    claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
-    ["costCategoryId", "periodId", "value"],
-  );
-
-  const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(
-    data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
-    [
-      "costCategoryId",
-      "costsClaimedThisPeriod",
+  return useMemo(() => {
+    const project = mapToProjectDto(projectNode, [
+      "claimedPercentage",
+      "claimFrequency",
+      "claimFrequencyName",
+      "claimsOverdue",
+      "claimsToReview",
+      "claimsWithParticipant",
+      "competitionName",
+      "competitionType",
       "costsClaimedToDate",
-      "forecastThisPeriod",
-      "offerTotal",
-      "remainingOfferCosts",
-    ],
-    {
-      claimDetails: claimDetailsAllPeriods,
-      forecastDetails,
-      periodId,
+      "id",
+      "impactManagementParticipation",
+      "numberOfPeriods",
+      "partnerRoles",
+      "periodId",
+      "projectNumber",
+      "roles",
+      "title",
+    ]);
+
+    const partner = mapToPartnerDto(
+      partnerNode,
+      ["id", "partnerStatus", "isWithdrawn", "isLead", "name", "roles", "organisationType", "overheadRate"],
+      {
+        roles: project.partnerRoles.find(x => x.partnerId === partnerNode?.Acc_AccountId__c?.value) ?? {
+          isFc: false,
+          isMo: false,
+          isPm: false,
+        },
+      },
+    );
+
+    const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
+
+    const costCategories = mapToRequiredSortedCostCategoryDtoArray(
+      data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
+      ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
+      profileGql,
+    );
+
+    const claims = mapToClaimDtoArray(
+      claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
+      [
+        "comments",
+        "id",
+        "isApproved",
+        "isFinalClaim",
+        "paidDate",
+        "partnerId",
+        "pcfStatus",
+        "periodCostsToBePaid",
+        "periodEndDate",
+        "periodId",
+        "periodStartDate",
+        "status",
+        "statusLabel",
+        "totalCostsApproved",
+        "totalCostsSubmitted",
+        "totalDeferredAmount",
+      ],
+      { competitionType: project.competitionType },
+    );
+
+    const costCategoriesOrder = costCategories.map(y => y.id);
+
+    const golCosts = mapToGolCostDtoArray(
+      profileGql,
+      ["costCategoryId", "costCategoryName", "value"],
+      costCategories,
+    ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
+
+    const documents = documentsGql
+      .map(docs =>
+        mapToProjectDocumentSummaryDtoArray(
+          docs?.node?.ContentDocumentLinks?.edges ?? ([] as DocumentSummaryNode[]),
+          ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
+          {
+            projectId,
+            currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+            type: docs?.node?.RecordType?.Name?.value === "Claims Detail" ? "claim details" : "claims",
+            partnerId,
+            periodId,
+            costCategoryId: docs?.node?.Acc_CostCategory__c?.value ?? "",
+          },
+        ),
+      )
+      .flat();
+
+    const claim = claims.find(claim => claim.periodId === periodId);
+
+    const claimDetails = mapToClaimDetailsDtoArray(
+      claimsGql?.filter(
+        x =>
+          x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId &&
+          x?.node?.RecordType?.Name?.value === "Claims Detail",
+      ),
+      ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
+    );
+
+    if (!claim) throw new Error(" there is no matching claim");
+    const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [
+      "id",
+      "costCategoryId",
+      "periodEnd",
+      "periodStart",
+      "periodId",
+      "value",
+    ]);
+
+    const forecastData = {
       golCosts,
-    },
-  );
+      forecastDetails,
+      claimDetails,
+      costCategories,
+      project,
+      partner,
+      claim,
+      claims,
+    };
 
-  const statusChanges = mapToClaimStatusChangeDtoArray(
-    data?.salesforce?.uiapi?.query?.Acc_StatusChange__c?.edges ?? [],
-    ["comments", "createdBy", "createdDate", "newStatusLabel"],
-    { roles: project.roles, competitionType: project.competitionType },
-  );
+    const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
+      claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
+      ["costCategoryId", "periodId", "value"],
+    );
 
-  return {
-    project,
-    partner,
-    costCategories,
-    claim,
-    forecastData,
-    claimDetails: costsSummaryForPeriod,
-    statusChanges,
-    documents,
-  };
+    const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(
+      data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
+      [
+        "costCategoryId",
+        "costsClaimedThisPeriod",
+        "costsClaimedToDate",
+        "forecastThisPeriod",
+        "offerTotal",
+        "remainingOfferCosts",
+      ],
+      {
+        claimDetails: claimDetailsAllPeriods,
+        forecastDetails,
+        periodId,
+        golCosts,
+      },
+    );
+
+    const statusChanges = mapToClaimStatusChangeDtoArray(
+      data?.salesforce?.uiapi?.query?.Acc_StatusChange__c?.edges ?? [],
+      ["comments", "createdBy", "createdDate", "newStatusLabel"],
+      { roles: project.roles, competitionType: project.competitionType },
+    );
+
+    return {
+      project,
+      partner,
+      costCategories,
+      claim,
+      forecastData,
+      claimDetails: costsSummaryForPeriod,
+      statusChanges,
+      documents,
+    };
+  }, [totalDocumentsLength]);
 };
 
 export type FormValues = { status: ClaimStatus; comments: string };
