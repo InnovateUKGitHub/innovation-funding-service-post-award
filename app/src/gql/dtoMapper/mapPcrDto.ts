@@ -23,6 +23,7 @@ export type PcrNode = Readonly<
     Acc_OtherFunding__c: GQL.Value<boolean>;
     Acc_CommercialWork__c: GQL.Value<boolean>;
     Acc_NewOrganisationName__c: GQL.Value<string>;
+    Acc_Reasoning__c: GQL.Value<string>;
     Acc_RequestHeader__c: GQL.Value<string>;
     Acc_RequestNumber__c: GQL.Value<number>;
     Acc_MarkedasComplete__c: GQL.Value<string>;
@@ -46,6 +47,7 @@ type PcrDtoMapping = Pick<
   | "id"
   | "lastUpdated"
   | "projectId"
+  | "reasoningComments"
   | "reasoningStatus"
   | "requestNumber"
   | "started"
@@ -53,7 +55,7 @@ type PcrDtoMapping = Pick<
   | "statusName"
 >;
 
-type PcrItemDtoMapping = Pick<
+export type PcrItemDtoMapping = Pick<
   FullPCRItemDto,
   | "accountName"
   | "hasOtherFunding"
@@ -141,6 +143,9 @@ const headMapper: GQL.DtoMapper<PcrDtoMapping, PcrNode> = {
   },
   projectId(node) {
     return (node?.Acc_Project__c?.value ?? "unknown-project-id") as ProjectId;
+  },
+  reasoningComments(node) {
+    return node?.Acc_Reasoning__c?.value ?? "";
   },
   reasoningStatus(node) {
     return mapToPCRItemStatus(node?.Acc_MarkedasComplete__c?.value ?? "");

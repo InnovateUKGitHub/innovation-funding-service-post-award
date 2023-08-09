@@ -1,14 +1,14 @@
 import { PCRItemType } from "@framework/constants/pcrConstants";
-import { PCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { NavigationArrows } from "@ui/components/atomicDesign/molecules/NavigationArrows/navigationArrows";
 import { IRoutes } from "@ui/routing/routeConfig";
 
 export type PCRTypeForNavigationArrows = Pick<Omit<PCRDto, "items">, "projectId" | "id"> & {
-  items: Pick<PCRItemDto, "type" | "typeName" | "id">[];
+  items: Pick<FullPCRItemDto, "type" | "typeName" | "id">[];
 };
 
 interface Props {
-  currentItem: Pick<PCRItemDto, "id"> | null;
+  currentItem: Pick<FullPCRItemDto, "id"> | null;
   pcr: PCRTypeForNavigationArrows;
   isReviewing: boolean;
   editableItemTypes: PCRItemType[];
@@ -36,7 +36,7 @@ export const NavigationArrowsForPCRs = (props: Props) => {
 
 const getLinkForReviewingItem = (
   routes: IRoutes,
-  pcrItem: Pick<PCRItemDto, "typeName" | "id">,
+  pcrItem: Pick<FullPCRItemDto, "typeName" | "id">,
   projectId: ProjectId,
   pcrId: PcrId,
   allowReasoningLink: boolean,
@@ -57,7 +57,7 @@ const getLinkForReviewingItem = (
 
 const getLinkForViewingItem = (
   routes: IRoutes,
-  pcrItem: Pick<PCRItemDto, "typeName" | "id">,
+  pcrItem: Pick<FullPCRItemDto, "typeName" | "id">,
   projectId: ProjectId,
   pcrId: PcrId,
   allowReasoning: boolean,

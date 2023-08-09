@@ -1,9 +1,9 @@
 import { Pending } from "@shared/pending";
-import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
-import { NavigationArrowsForPCRs, PCRTypeForNavigationArrows } from "@ui/containers/pages/pcrs/navigationArrows";
+import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
+import { NavigationArrowsForPCRs } from "@ui/containers/pages/pcrs/navigationArrows";
 import { IReasoningWorkflowMetadata } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { BaseProps, ContainerBase } from "../../../containerBase";
+import { BaseProps } from "../../../containerBase";
 import { PCRItemType, PCRStepId, PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
@@ -23,7 +23,7 @@ export interface Props {
   projectId: ProjectId;
   pcrId: PcrId;
   pcr: Pick<Omit<PCRDto, "items">, "reasoningComments" | "requestNumber" | "projectId" | "id"> & {
-    items: Pick<PCRItemDto, "shortName" | "id" | "type" | "typeName">[];
+    items: Pick<FullPCRItemDto, "shortName" | "id" | "type" | "typeName">[];
   };
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   mode: "review" | "view" | "prepare";
@@ -39,99 +39,97 @@ interface ResolvedData {
 
 const PCRForm = createTypedForm<PCRDto>();
 
-class PCRReasoningSummaryComponent extends ContainerBase<Props, ResolvedData> {
-  render() {
-    const { editor, getStepLink, mode, pcr, files: documents, editableItemTypes } = this.props;
-    return (
-      <Section qa="reasoning-save-and-return">
-        <Section>
-          <SummaryList qa="pcr_reasoning">
-            <SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
-            <SummaryListItem
-              label={x => x.pcrLabels.types}
-              content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
-              qa="typesRow"
-            />
-            <SummaryListItem
-              label={x => x.pcrReasoningLabels.comments}
-              content={<SimpleString multiline>{pcr.reasoningComments}</SimpleString>}
-              qa="comments"
-              validation={editor.validator.reasoningComments}
-              action={
-                mode === "prepare" && (
-                  <Link id={editor.validator.reasoningComments.key} route={getStepLink(PCRStepId.reasoningStep)}>
-                    <Content value={x => x.pages.pcrReasoningSummary.edit} />
-                  </Link>
-                )
-              }
-            />
-            <SummaryListItem
-              label={x => x.pcrReasoningLabels.files}
-              content={
-                documents.length ? (
-                  <DocumentList documents={documents} qa="docs" />
-                ) : (
-                  <Content value={x => x.pages.pcrReasoningSummary.noDocuments} />
-                )
-              }
-              qa="files"
-              action={
-                mode === "prepare" && (
-                  <Link route={getStepLink(PCRStepId.filesStep)}>
-                    <Content value={x => x.pages.pcrReasoningSummary.edit} />
-                  </Link>
-                )
-              }
-            />
-          </SummaryList>
-        </Section>
-        {mode === "prepare" && this.renderCompleteForm(editor)}
-        {(mode === "review" || mode === "view") && this.renderNavigationArrows(pcr, editableItemTypes)}
-      </Section>
-    );
-  }
-
-  private renderNavigationArrows(pcr: PCRTypeForNavigationArrows, editableItemTypes: PCRItemType[]) {
-    return (
-      <NavigationArrowsForPCRs
-        pcr={pcr}
-        currentItem={null}
-        isReviewing={this.props.mode === "review"}
-        editableItemTypes={editableItemTypes}
-        routes={this.props.routes}
-      />
-    );
-  }
-
-  private renderCompleteForm(editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const options: SelectOption[] = [{ id: "true", value: "I have finished making changes." }];
-    return (
-      <PCRForm.Form
-        editor={editor}
-        onChange={dto => this.props.onChange(dto)}
-        onSubmit={() => this.props.onSave(editor.data)}
-      >
-        <PCRForm.Fieldset heading={x => x.pages.pcrReasoningSummary.headingMarkAsComplete}>
-          <PCRForm.Checkboxes
-            name="reasoningStatus"
-            options={options}
-            value={m => (m.reasoningStatus === PCRItemStatus.Complete ? [options[0]] : [])}
-            update={(m, v) =>
-              (m.reasoningStatus =
-                v && v.some(x => x.id === "true") ? PCRItemStatus.Complete : PCRItemStatus.Incomplete)
-            }
-            validation={editor.validator.reasoningStatus}
+const PCRReasoningSummaryComponent = (props: BaseProps & Props & ResolvedData) => {
+  const { editor, getStepLink, mode, pcr, files: documents, editableItemTypes } = props;
+  return (
+    <Section qa="reasoning-save-and-return">
+      <Section>
+        <SummaryList qa="pcr_reasoning">
+          <SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
+          <SummaryListItem
+            label={x => x.pcrLabels.types}
+            content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
+            qa="typesRow"
           />
-        </PCRForm.Fieldset>
-        <PCRForm.Fieldset qa="submit-button">
-          <PCRForm.Submit>
-            <Content value={x => x.pcrItem.returnToRequestButton} />
-          </PCRForm.Submit>
-        </PCRForm.Fieldset>
-      </PCRForm.Form>
-    );
-  }
-}
+          <SummaryListItem
+            label={x => x.pcrReasoningLabels.comments}
+            content={<SimpleString multiline>{pcr.reasoningComments}</SimpleString>}
+            qa="comments"
+            validation={editor.validator.reasoningComments}
+            action={
+              mode === "prepare" && (
+                <Link id={editor.validator.reasoningComments.key} route={getStepLink(PCRStepId.reasoningStep)}>
+                  <Content value={x => x.pages.pcrReasoningSummary.edit} />
+                </Link>
+              )
+            }
+          />
+          <SummaryListItem
+            label={x => x.pcrReasoningLabels.files}
+            content={
+              documents.length ? (
+                <DocumentList documents={documents} qa="docs" />
+              ) : (
+                <Content value={x => x.pages.pcrReasoningSummary.noDocuments} />
+              )
+            }
+            qa="files"
+            action={
+              mode === "prepare" && (
+                <Link route={getStepLink(PCRStepId.filesStep)}>
+                  <Content value={x => x.pages.pcrReasoningSummary.edit} />
+                </Link>
+              )
+            }
+          />
+        </SummaryList>
+      </Section>
+      {mode === "prepare" && <CompleteForm editor={editor} onChange={props.onChange} onSave={props.onSave} />}
+
+      {(mode === "review" || mode === "view") && (
+        <NavigationArrowsForPCRs
+          pcr={pcr}
+          currentItem={null}
+          isReviewing={props.mode === "review"}
+          editableItemTypes={editableItemTypes}
+          routes={props.routes}
+        />
+      )}
+    </Section>
+  );
+};
+
+const CompleteForm = ({
+  editor,
+  onChange,
+  onSave,
+}: {
+  editor: IEditorStore<PCRDto, PCRDtoValidator>;
+  onChange: Props["onChange"];
+  onSave: Props["onSave"];
+}) => {
+  const options: SelectOption[] = [{ id: "true", value: "I have finished making changes." }];
+  return (
+    <PCRForm.Form editor={editor} onChange={dto => onChange(dto)} onSubmit={() => onSave(editor.data)}>
+      <PCRForm.Fieldset heading={x => x.pages.pcrReasoningSummary.headingMarkAsComplete}>
+        <PCRForm.Checkboxes
+          name="reasoningStatus"
+          options={options}
+          value={m => (m.reasoningStatus === PCRItemStatus.Complete ? [options[0]] : [])}
+          update={(m, v) =>
+            (m.reasoningStatus = v && v.some(x => x.id === "true") ? PCRItemStatus.Complete : PCRItemStatus.Incomplete)
+          }
+          validation={editor.validator.reasoningStatus}
+        />
+      </PCRForm.Fieldset>
+      <PCRForm.Fieldset qa="submit-button">
+        <PCRForm.Submit>
+          <Content value={x => x.pcrItem.returnToRequestButton} />
+        </PCRForm.Submit>
+      </PCRForm.Fieldset>
+    </PCRForm.Form>
+  );
+};
 
 export const PCRReasoningSummary = (props: Props & BaseProps) => {
   const stores = useStores();

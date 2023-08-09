@@ -13,6 +13,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { useRoutes } from "@ui/redux/routesProvider";
+import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
 
 export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<ProjectChangeRequestPrepareQuery>(
@@ -64,9 +65,8 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
     ["id", "pcrId", "createdBy", "createdDate", "newStatus", "previousStatus", "newStatusLabel", "comments"],
     { roles: project.roles },
   );
-  const nonEditableTypes: PCRItemType[] = [PCRItemType.ProjectTermination];
 
-  const editableItemTypes = pcr.items.map(x => x.type).filter(x => !nonEditableTypes.includes(x));
+  const editableItemTypes = getEditableItemTypes(pcr);
 
   return { project, pcr, editableItemTypes, statusChanges, isMultipleParticipants };
 };
