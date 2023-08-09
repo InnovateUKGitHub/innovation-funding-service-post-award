@@ -304,10 +304,11 @@ export function child<T, U extends Results<ResultBase>>(
   validateModel: (model: T) => U,
   listValidation: (children: ChildValidators<T>) => Result,
   summaryMessage?: string,
+  keyId?: string,
 ) {
   const listResults = listValidation(new ChildValidators(parentResults, model));
   const childResults = model ? model.map(m => validateModel(m)) : [];
-  return new NestedResult(parentResults, childResults, listResults, summaryMessage);
+  return new NestedResult(parentResults, childResults, listResults, summaryMessage, keyId);
 }
 
 /**
@@ -337,8 +338,9 @@ export function optionalChild<T, U extends Results<ResultBase>>(
   model: T[],
   validateModel: (model: T) => U,
   summaryMessage?: string,
+  keyId?: string,
 ) {
-  return child<T, U>(parentResults, model, validateModel, children => children.valid(), summaryMessage);
+  return child<T, U>(parentResults, model, validateModel, children => children.valid(), summaryMessage, keyId);
 }
 
 /**
