@@ -6,7 +6,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { mapToPcrStatusDtoArray } from "@gql/dtoMapper/mapPcrStatus";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { PCRItemType, PCRStatus } from "@framework/constants/pcrConstants";
+import { PCRStatus } from "@framework/constants/pcrConstants";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";

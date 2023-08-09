@@ -17,7 +17,7 @@ const pcrReasoningWorkflowQuery = graphql`
                 Acc_ProjectStatus__c {
                   value
                 }
-                Project_Change_Requests__r(first: 1, where: { Id: { eq: $pcrId } }) {
+                Project_Change_Requests__r(where: { Id: { eq: $pcrId } }) {
                   edges {
                     node {
                       Id

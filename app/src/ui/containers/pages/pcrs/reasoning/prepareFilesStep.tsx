@@ -1,4 +1,3 @@
-import React, { Component } from "react";
 import { Pending } from "@shared/pending";
 import { ReasoningStepProps } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -11,6 +10,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { useStores } from "@ui/redux/storesProvider";
 import { Loader } from "@ui/components/bjss/loading";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { BaseProps } from "@ui/containers/containerBase";
 
 const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
@@ -19,68 +19,67 @@ interface InnerProps {
   onFileChange: (saving: "DontSave" | "SaveAndRemain" | "SaveAndContinue", dto: MultipleDocumentUploadDto) => void;
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
-class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & InnerProps> {
-  render(): React.ReactNode {
-    const { documentsEditor, pcrId, projectId } = this.props;
 
-    // Get the step-less review-before-submit page.
-    const back = this.props.routes.pcrPrepareReasoning.getLink({
-      projectId: projectId,
-      pcrId: pcrId,
-    });
+const PrepareReasoningFilesStepComponent = (props: BaseProps & InnerProps & ReasoningStepProps) => {
+  const { documentsEditor, pcrId, projectId } = props;
 
-    return (
-      <Loader
-        pending={this.props.documents}
-        render={documents => (
-          <>
-            <Section qa="uploadFileSection">
-              <UploadForm.Form
-                enctype="multipart"
-                editor={documentsEditor}
-                onSubmit={() => this.props.onFileChange("SaveAndContinue", documentsEditor.data)}
-                onChange={dto => this.props.onFileChange("DontSave", dto)}
-                qa="projectChangeRequestItemUpload"
-              >
-                <UploadForm.Fieldset heading={x => x.documentMessages.uploadDocuments}>
-                  <DocumentGuidance />
+  // Get the step-less review-before-submit page.
+  const back = props.routes.pcrPrepareReasoning.getLink({
+    projectId: projectId,
+    pcrId: pcrId,
+  });
 
-                  <UploadForm.MultipleFileUpload
-                    label={x => x.documentLabels.uploadInputLabel}
-                    name="attachment"
-                    labelHidden
-                    value={data => data.files}
-                    update={(dto, files) => (dto.files = files || [])}
-                    validation={documentsEditor.validator.files}
-                  />
+  return (
+    <Loader
+      pending={props.documents}
+      render={documents => (
+        <>
+          <Section qa="uploadFileSection">
+            <UploadForm.Form
+              enctype="multipart"
+              editor={documentsEditor}
+              onSubmit={() => props.onFileChange("SaveAndContinue", documentsEditor.data)}
+              onChange={dto => props.onFileChange("DontSave", dto)}
+              qa="projectChangeRequestItemUpload"
+            >
+              <UploadForm.Fieldset heading={x => x.documentMessages.uploadDocuments}>
+                <DocumentGuidance />
 
-                  <UploadForm.Button
-                    name="uploadFile"
-                    styling="Secondary"
-                    onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
-                  >
-                    <Content value={x => x.documentMessages.uploadDocuments} />
-                  </UploadForm.Button>
-                </UploadForm.Fieldset>
-              </UploadForm.Form>
-              <Section>
-                <DocumentEdit
-                  qa="prepare-files-documents"
-                  onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
-                  documents={documents}
+                <UploadForm.MultipleFileUpload
+                  label={x => x.documentLabels.uploadInputLabel}
+                  name="attachment"
+                  labelHidden
+                  value={data => data.files}
+                  update={(dto, files) => (dto.files = files || [])}
+                  validation={documentsEditor.validator.files}
                 />
-              </Section>
 
-              <Link styling="PrimaryButton" route={back}>
-                <Content value={x => x.pcrItem.submitButton} />
-              </Link>
+                <UploadForm.Button
+                  name="uploadFile"
+                  styling="Secondary"
+                  onClick={() => props.onFileChange("SaveAndRemain", documentsEditor.data)}
+                >
+                  <Content value={x => x.documentMessages.uploadDocuments} />
+                </UploadForm.Button>
+              </UploadForm.Fieldset>
+            </UploadForm.Form>
+            <Section>
+              <DocumentEdit
+                qa="prepare-files-documents"
+                onRemove={document => props.onFileDelete(documentsEditor.data, document)}
+                documents={documents}
+              />
             </Section>
-          </>
-        )}
-      />
-    );
-  }
-}
+
+            <Link styling="PrimaryButton" route={back}>
+              <Content value={x => x.pcrItem.submitButton} />
+            </Link>
+          </Section>
+        </>
+      )}
+    />
+  );
+};
 
 export const PCRPrepareReasoningFilesStep = (props: ReasoningStepProps) => {
   const stores = useStores();

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ed51f3578a3241a03c933b2ecfd96966>>
+ * @generated SignedSource<<111552390f99370abf1b859ac5f92bd7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -191,11 +191,6 @@ v4 = [
                             "alias": null,
                             "args": [
                               {
-                                "kind": "Literal",
-                                "name": "first",
-                                "value": 1
-                              },
-                              {
                                 "fields": [
                                   {
                                     "fields": [
@@ -373,16 +368,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "011dacf14b5c8edcdc5942837bc13ec3",
+    "cacheID": "7e01df8658a2c17e005bab533795d5e5",
     "id": null,
     "metadata": {},
     "name": "PcrReasoningWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrReasoningWorkflowQuery(\n  $projectId: ID\n  $pcrId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Project_Change_Requests__r(first: 1, where: {Id: {eq: $pcrId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Reasoning__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrReasoningWorkflowQuery(\n  $projectId: ID\n  $pcrId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Project_Change_Requests__r(where: {Id: {eq: $pcrId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Reasoning__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5b6b87eb230d39c0befa059d91c06fab";
+(node as any).hash = "c4b8a4d598ec0a4adeaf2fb6d9273418";
 
 export default node;

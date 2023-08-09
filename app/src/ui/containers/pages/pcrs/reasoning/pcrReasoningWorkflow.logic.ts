@@ -15,10 +15,7 @@ export const usePcrReasoningQuery = (projectId: ProjectId, pcrId: PcrId) => {
       pcrId,
     },
     {
-      fetchPolicy: "network-only",
-      networkCacheConfig: {
-        force: true,
-      },
+      fetchPolicy: "store-and-network",
     },
   );
 
