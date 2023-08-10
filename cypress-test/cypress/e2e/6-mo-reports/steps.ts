@@ -1,6 +1,15 @@
 import { visitApp } from "../../common/visit";
 import { moReportTidyup } from "common/mo-report-tidyup";
 
+const section1Comments = "Section 1 // *&^%";
+const section2Comments = "Section 2 // *&^%";
+const section3Comments = "Section 3 // *&^%";
+const section4Comments = "Section 4 // *&^%";
+const section5Comments = "Section 5 // *&^%";
+const section6Comments = "Section 6 // *&^%";
+const section7Comments = "Section 7 // *&^%";
+const section8Comments = "Section 8 // *&^%";
+
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 
 export const deleteMoReport = () => {
@@ -15,6 +24,7 @@ export const navigateToSection2 = () => {
   cy.wait(500);
   cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
+  cy.get("textarea").type(section1Comments);
   cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 2 of 8");
@@ -26,10 +36,12 @@ export const navigateToSection3 = () => {
   cy.wait(500);
   cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
+  cy.get("textarea").type(section1Comments);
   cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
+  cy.get("textarea").type(section2Comments);
   cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 3 of 8");
@@ -41,14 +53,17 @@ export const navigateToSection4 = () => {
   cy.wait(500);
   cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
+  cy.get("textarea").type(section1Comments);
   cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
+  cy.get("textarea").type(section2Comments);
   cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
+  cy.get("textarea").type(section3Comments);
   cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 4 of 8");
@@ -60,18 +75,22 @@ export const navigateToSection5 = () => {
   cy.wait(500);
   cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section1Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section2Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section3Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
+  cy.get("textarea").type(section4Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 5 of 8");
@@ -83,22 +102,27 @@ export const navigateToSection6 = () => {
   cy.wait(500);
   cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section1Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section2Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section3Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
+  cy.get("textarea").type(section4Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 5 of 8");
   cy.getByQA("question-5-score-1").check();
+  cy.get("textarea").type(section5Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 6 of 8");
@@ -110,26 +134,32 @@ export const navigateToSection7 = () => {
   cy.wait(500);
   cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section1Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section2Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section3Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
+  cy.get("textarea").type(section4Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 5 of 8");
   cy.getByQA("question-5-score-1").check();
+  cy.get("textarea").type(section5Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 6 of 8");
   cy.getByQA("question-6-score-1").check();
+  cy.get("textarea").type(section6Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 7 of 8");
@@ -141,29 +171,36 @@ export const navigateToSection8 = () => {
   cy.wait(500);
   cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section1Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section2Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
-  cy.wait(500);
+  cy.get("textarea").type(section3Comments);
+  cy.wait(1000);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
+  cy.get("textarea").type(section4Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 5 of 8");
   cy.getByQA("question-5-score-1").check();
+  cy.get("textarea").type(section5Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 6 of 8");
   cy.getByQA("question-6-score-1").check();
+  cy.get("textarea").type(section6Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 7 of 8");
+  cy.get("textarea").type(section7Comments);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 8");
 };
@@ -174,39 +211,39 @@ export const completeAllSectionsWithComments = () => {
   cy.wait(500);
   cy.button("Continue").click();
   cy.getByQA("question-1-score-1").check();
-  cy.get("textarea").clear().type("Section 1 // *&^%");
+  cy.get("textarea").clear().type(section1Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 2 of 8");
   cy.getByQA("question-2-score-1").check();
-  cy.get("textarea").clear().type("Section 2 // *&^%");
+  cy.get("textarea").clear().type(section2Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 3 of 8");
   cy.getByQA("question-3-score-1").check();
-  cy.get("textarea").clear().type("Section 3 // *&^%");
+  cy.get("textarea").clear().type(section3Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 4 of 8");
   cy.getByQA("question-4-score-1").check();
-  cy.get("textarea").clear().type("Section 4 // *&^%");
+  cy.get("textarea").clear().type(section4Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 5 of 8");
   cy.getByQA("question-5-score-1").check();
-  cy.get("textarea").clear().type("Section 5 // *&^%");
+  cy.get("textarea").clear().type(section5Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 6 of 8");
   cy.getByQA("question-6-score-1").check();
-  cy.get("textarea").clear().type("Section 6 // *&^%");
+  cy.get("textarea").clear().type(section6Comments);
   cy.wait(500);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 7 of 8");
-  cy.get("textarea").clear().type("Section 7 // *&^%");
+  cy.get("textarea").clear().type(section7Comments);
   cy.submitButton("Continue").click();
   cy.get("h3").contains("Section 8");
-  cy.get("textarea").clear().type("Section 8 // *&^%");
+  cy.get("textarea").clear().type(section8Comments);
   cy.wait(500);
 };
 
@@ -643,48 +680,48 @@ export const saveSectionOneAndCheckSummary = () => {
 
 export const assertSection7Comments = () => {
   cy.backLink("Back to summary").click();
-  cy.get("h2").contains("Summary");
-  cy.get("textarea").contains("Section 7 // *&^%");
+  cy.get("legend").contains("Summary");
+  cy.get("textarea").contains(section7Comments);
 };
 
 export const assertSection6CommentsAndScore = () => {
   cy.backLink("Back to project planning").click();
-  cy.get("h2").contains("Project planning");
+  cy.get("legend").contains("Project planning");
   cy.getByQA("question-6-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains("Section 6 // *&^%");
+  cy.get("textarea").contains(section6Comments);
 };
 
 export const assertSection5CommentsAndScore = () => {
   cy.backLink("Back to risk management").click();
-  cy.get("h2").contains("Risk management");
+  cy.get("legend").contains("Risk management");
   cy.getByQA("question-5-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains("Section 5 // *&^%");
+  cy.get("textarea").contains(section5Comments);
 };
 
 export const assertSection4CommentsAndScore = () => {
   cy.backLink("Back to exploitation").click();
-  cy.get("h2").contains("Exploitation");
+  cy.get("legend").contains("Exploitation");
   cy.getByQA("question-4-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains("Section 4 // *&^%");
+  cy.get("textarea").contains(section4Comments);
 };
 
 export const assertSection3CommentsAndScore = () => {
   cy.backLink("Back to cost").click();
-  cy.get("h2").contains("Cost");
+  cy.get("legend").contains("Cost");
   cy.getByQA("question-3-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains("Section 3 // *&^%");
+  cy.get("textarea").contains(section3Comments);
 };
 
 export const assertSection2CommentsAndScore = () => {
   cy.backLink("Back to time").click();
-  cy.get("h2").contains("Time");
+  cy.get("legend").contains("Time");
   cy.getByQA("question-2-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains("Section 2 // *&^%");
+  cy.get("textarea").contains(section2Comments);
 };
 
 export const assertSection1CommentsAndScore = () => {
   cy.backLink("Back to scope").click();
-  cy.get("h2").contains("Scope");
+  cy.get("legend").contains("Scope");
   cy.getByQA("question-1-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains("Section 1 // *&^%");
+  cy.get("textarea").contains(section1Comments);
 };

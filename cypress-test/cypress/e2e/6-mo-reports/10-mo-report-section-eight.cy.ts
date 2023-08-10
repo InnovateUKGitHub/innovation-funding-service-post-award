@@ -8,6 +8,7 @@ import {
   shouldShowProjectTitle,
   standardComments,
   deleteMoReport,
+  assertSection7Comments,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -64,4 +65,6 @@ describe("MO report > section 8 - can continue a report", () => {
   it("Should count how many characters you have", characterCount);
 
   it("Should have a 'Continue' button and a 'Save and return to summary' button", continueAndReturnButtons);
+
+  it("Should navigate back to section 7 and assert text entered previously is still saved", assertSection7Comments);
 });
