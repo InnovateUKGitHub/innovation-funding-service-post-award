@@ -208,7 +208,6 @@ export const completeAllSectionsWithComments = () => {
   cy.get("h3").contains("Section 8");
   cy.get("textarea").clear().type("Section 8 // *&^%");
   cy.wait(500);
-  cy.submitButton("Continue").click();
 };
 
 export const shouldShowProjectTitle = () => {
@@ -640,4 +639,52 @@ export const saveSectionOneAndCheckSummary = () => {
   ].forEach(section1Item => {
     cy.getByQA("summary-question-1").contains(section1Item);
   });
+};
+
+export const assertSection7Comments = () => {
+  cy.backLink("Back to summary").click();
+  cy.get("h2").contains("Summary");
+  cy.get("textarea").contains("Section 7 // *&^%");
+};
+
+export const assertSection6CommentsAndScore = () => {
+  cy.backLink("Back to project planning").click();
+  cy.get("h2").contains("Project planning");
+  cy.getByQA("question-6-score-1").should("have.attr", "checked");
+  cy.get("textarea").contains("Section 6 // *&^%");
+};
+
+export const assertSection5CommentsAndScore = () => {
+  cy.backLink("Back to risk management").click();
+  cy.get("h2").contains("Risk management");
+  cy.getByQA("question-5-score-1").should("have.attr", "checked");
+  cy.get("textarea").contains("Section 5 // *&^%");
+};
+
+export const assertSection4CommentsAndScore = () => {
+  cy.backLink("Back to exploitation").click();
+  cy.get("h2").contains("Exploitation");
+  cy.getByQA("question-4-score-1").should("have.attr", "checked");
+  cy.get("textarea").contains("Section 4 // *&^%");
+};
+
+export const assertSection3CommentsAndScore = () => {
+  cy.backLink("Back to cost").click();
+  cy.get("h2").contains("Cost");
+  cy.getByQA("question-3-score-1").should("have.attr", "checked");
+  cy.get("textarea").contains("Section 3 // *&^%");
+};
+
+export const assertSection2CommentsAndScore = () => {
+  cy.backLink("Back to time").click();
+  cy.get("h2").contains("Time");
+  cy.getByQA("question-2-score-1").should("have.attr", "checked");
+  cy.get("textarea").contains("Section 2 // *&^%");
+};
+
+export const assertSection1CommentsAndScore = () => {
+  cy.backLink("Back to scope").click();
+  cy.get("h2").contains("Scope");
+  cy.getByQA("question-1-score-1").should("have.attr", "checked");
+  cy.get("textarea").contains("Section 1 // *&^%");
 };
