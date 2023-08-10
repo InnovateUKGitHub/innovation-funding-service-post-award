@@ -11,6 +11,7 @@ import {
   standardComments,
   deleteMoReport,
   saveSectionOneAndCheckSummary,
+  continueNoScore,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -62,6 +63,11 @@ describe("MO report > section 1 - can continue a report", () => {
   });
 
   it("Should have a number of score options", q1ScoreChoice);
+
+  it(
+    "Should enter some sample text and attempt to 'Continue' without selecting a radio button to trigger validation",
+    continueNoScore,
+  );
 
   it("Should be able to select each radio button in turn", q1SelectEachRadioButton);
 
