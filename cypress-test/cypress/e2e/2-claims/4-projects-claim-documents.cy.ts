@@ -1,5 +1,13 @@
 import { visitApp } from "../../common/visit";
 import { claimsDocUpload, claimsFileTable, learnFiles, selectFileDescription, shouldShowProjectTitle } from "./steps";
+import {
+  validateFileUpload,
+  uploadFileTooLarge,
+  uploadSingleChar,
+  deleteSingleChar,
+  validateExcessiveFileName,
+  doNotUploadSpecialChar,
+} from "e2e/3-documents/steps";
 const pmEmail = "james.black@euimeabs.test";
 
 describe("claims > documents upload screen", () => {
@@ -49,6 +57,18 @@ describe("claims > documents upload screen", () => {
   it("Should display a document removal validation message", () => {
     cy.getByQA("validation-message-content").contains("has been deleted.");
   });
+
+  it("Should validate when uploading without choosing a file.", validateFileUpload);
+
+  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+
+  it("Should upload a file with a single character as the name", uploadSingleChar);
+
+  it("Should delete the file with the very short file name", deleteSingleChar);
+
+  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
+
+  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
 
   it("Should save and return to claims", () => {
     cy.wait(500);

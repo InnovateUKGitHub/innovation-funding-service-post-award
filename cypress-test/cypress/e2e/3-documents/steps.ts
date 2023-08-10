@@ -135,6 +135,7 @@ export const uploadToEUIMed = () => {
 
 export const displayEUIMedFile = () => {
   cy.get("h3").contains("Innovate UK and partners");
+  cy.wait(500);
   cy.reload();
   cy.getByQA("partner-documents-container").within(() => {
     cy.get("tr")
@@ -276,5 +277,54 @@ export const fcShouldNotDelete = () => {
 export const validateFileUpload = () => {
   cy.button("Upload").click();
   cy.validationLink("Choose a file to upload");
+  cy.reload();
+};
+
+export const uploadSingleChar = () => {
+  cy.fileInput("T.doc");
+  cy.button("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("has been uploaded.");
+};
+
+export const deleteSingleChar = () => {
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.tableCell("Remove").scrollIntoView().click();
+    });
+  cy.getByQA("validation-message-content").contains("has been deleted.");
+};
+
+export const validateExcessiveFileName = () => {
+  cy.fileInput(
+    "specialcharhellothisissuperlongsowonderingifthisbailsoutinsalesforcebecausewowthisissuperlonganditkeepsgoingonandonandonandonandonandon.docx",
+  );
+  cy.button("Upload documents").click();
+  cy.validationLink(
+    "You cannot upload 'specialcharhellothisissuperlongsowonderingifthisbailsoutinsalesforcebecausewowthisissuperlonganditkeepsgoingonandonandonandonandonandon.docx' because the name of the file must be shorter than 80 characters.",
+  );
+  cy.reload();
+};
+
+export const doNotUploadSpecialChar = () => {
+  cy.fileInput("specialchar@)(*&^%$£!#}{.doc");
+  cy.button("Upload documents").click();
+  cy.validationLink(
+    "Your document 'specialchar@)(*&^%$£!#}{.doc' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.",
+  );
+  cy.reload();
+};
+
+export const uploadFileTooLarge = () => {
+  cy.fileInput("bigger_test.png");
+  cy.button("Upload documents").click();
+  cy.validationLink("You cannot upload 'bigger_test.png' because it must be smaller than 32MB.");
+  cy.reload();
+};
+
+export const uploadFileNameTooShort = () => {
+  cy.fileInput(".txt");
+  cy.button("Upload").click();
+  cy.validationLink("You cannot upload '.txt' because the file name is too short.");
   cy.reload();
 };
