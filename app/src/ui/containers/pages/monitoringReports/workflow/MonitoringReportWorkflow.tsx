@@ -16,7 +16,7 @@ import {
   useMonitoringReportWorkflowQuery,
   useOnMonitoringReportUpdateWorkflow,
 } from "./monitoringReportWorkflow.logic";
-import { UseFormHandleSubmit, UseFormRegister, UseFormWatch, useForm } from "react-hook-form";
+import { UseFormHandleSubmit, UseFormRegister, UseFormReset, UseFormWatch, useForm } from "react-hook-form";
 import { noop } from "lodash";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,6 +32,7 @@ type MonitoringReportContextType = {
   onUpdate: (data: FormValues, submitEvent?: BaseSyntheticEvent) => Promise<void>;
   validatorErrors: RhfErrors;
   registerButton: RegisterButton<FormValues>;
+  reset: UseFormReset<FormValues>;
 };
 
 export const MonitoringReportFormContext = createContext<MonitoringReportContextType>({
@@ -42,6 +43,7 @@ export const MonitoringReportFormContext = createContext<MonitoringReportContext
   onUpdate: noop as unknown as (data: FormValues, submitEvent?: BaseSyntheticEvent) => Promise<void>,
   validatorErrors: undefined,
   registerButton: noop,
+  reset: noop,
 } as MonitoringReportContextType);
 
 const getMonitoringReportSchema = (step?: number | null | undefined) =>
@@ -76,7 +78,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const zodSchema = getMonitoringReportSchema(props.step);
 
-  const { register, watch, handleSubmit, formState, setValue } = useForm({
+  const { register, watch, handleSubmit, formState, setValue, reset } = useForm({
     defaultValues: {
       addComments: report.addComments ?? "",
       questions: report.questions.map(x => ({
@@ -112,6 +114,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
     onUpdate,
     validatorErrors,
     registerButton,
+    reset,
   };
 
   return (

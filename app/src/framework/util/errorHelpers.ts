@@ -41,15 +41,20 @@ const isNestedResult = (
  * It uses the key of the errors object to be used as the url link, with the assumption that the `name` and the `id` of the input
  * match
  */
-export const convertResultErrorsToReactHookFormFormat = (errors: Result[] | null | undefined): RhfErrors => {
+export const convertResultErrorsToReactHookFormFormat = (
+  errors: Result[] | null | undefined,
+  originalData: AnyObject = {},
+): RhfErrors => {
   if (!errors || !errors.length) return null;
 
   return errors.reduce(
     (acc, cur) => ({
       ...acc,
       [cur.key]: isNestedResult(cur)
-        ? cur.results.map(nestedResult => convertResultErrorsToReactHookFormFormat(nestedResult?.errors ?? []))
-        : { message: cur.errorMessage },
+        ? cur.results.map(nestedResult =>
+            convertResultErrorsToReactHookFormFormat(nestedResult?.errors ?? [], nestedResult ?? {}),
+          )
+        : { message: cur.errorMessage, originalData },
     }),
     {},
   );

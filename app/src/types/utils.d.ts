@@ -119,7 +119,11 @@ declare type PartialByKeys<T, K = string> = Unify<
   }
 >;
 
-declare type RhfError = { message: string | null | undefined; type: string | null | undefined } | null | undefined;
+// original data supports passing in form values for js disabled
+declare type RhfError =
+  | { message: string | null | undefined; type: string | null | undefined; originalData?: AnyObject | null | undefined }
+  | null
+  | undefined;
 
 declare type RhfErrors =
   | {

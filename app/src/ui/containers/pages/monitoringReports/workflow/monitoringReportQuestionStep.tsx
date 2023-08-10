@@ -3,7 +3,7 @@ import { Section } from "@ui/components/atomicDesign/atoms/form/Section/Section"
 import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
 import { MonitoringReportFormContext } from "./MonitoringReportWorkflow";
 import { H2, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { get } from "lodash";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -17,7 +17,7 @@ import { useContent } from "@ui/hooks/content.hook";
 
 interface Props {
   questionNumber: number;
-  report: Pick<MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate">;
+  report: Pick<MonitoringReportDto, "periodId" | "questions" | "startDate" | "endDate" | "addComments">;
   mode: "prepare" | "view";
 }
 
@@ -35,13 +35,32 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
       }))
     : [];
 
-  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors } =
+  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, reset } =
     useContext(MonitoringReportFormContext);
+
+  useEffect(() => {
+    reset({
+      addComments: report.addComments ?? "",
+      questions: report.questions.map(x => ({
+        optionId: x?.optionId ?? "",
+        comments: x?.comments ?? "",
+        title: x?.title ?? "",
+      })),
+      periodId: report.periodId,
+      button_submit: "submit",
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionNumber]);
 
   const commentFieldName: `questions.${number}.comments` = `questions.${q.displayOrder - 1}.comments`;
   const commentFieldId = commentFieldName.replaceAll(".", "_");
 
   const disabledForm = mode === "view";
+
+  const serverRenderedCommentPreFillOnError = (get(validatorErrors, commentFieldName) as RhfError)?.originalData?.answer
+    ?.comments;
+
+  const defaultCommentValue = q?.comments || serverRenderedCommentPreFillOnError || undefined;
 
   return (
     <Section data-qa="period-information">
@@ -86,7 +105,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
             characterCount={watch(commentFieldName)?.length ?? 0}
             data-qa={commentFieldId}
             characterCountType="ascending"
-            defaultValue={q?.comments ?? ""}
+            defaultValue={defaultCommentValue}
           />
 
           {mode === "prepare" && (

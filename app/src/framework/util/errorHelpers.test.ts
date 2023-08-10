@@ -11,9 +11,11 @@ describe("convertResultErrorsToReactHookFormFormat", () => {
     expect(convertResultErrorsToReactHookFormFormat(resultError)).toEqual({
       lettuce: {
         message: "You should have eaten the lettuce",
+        originalData: {},
       },
       pocariSweat: {
         message: "You should have had the pocari sweat",
+        originalData: {},
       },
     });
   });
@@ -57,17 +59,65 @@ describe("convertResultErrorsToReactHookFormFormat", () => {
         {
           lettuce: {
             message: "You should have eaten the lettuce",
+            originalData: {
+              errors: [
+                {
+                  errorMessage: "You should have eaten the lettuce",
+                  key: "lettuce",
+                },
+                {
+                  errorMessage: "You should have had the pocari sweat",
+                  key: "pocariSweat",
+                },
+              ],
+            },
           },
           pocariSweat: {
             message: "You should have had the pocari sweat",
+            originalData: {
+              errors: [
+                {
+                  errorMessage: "You should have eaten the lettuce",
+                  key: "lettuce",
+                },
+                {
+                  errorMessage: "You should have had the pocari sweat",
+                  key: "pocariSweat",
+                },
+              ],
+            },
           },
         },
         {
           mama: {
             message: "You should have eaten the mama",
+            originalData: {
+              errors: [
+                {
+                  errorMessage: "You should have eaten the mama",
+                  key: "mama",
+                },
+                {
+                  errorMessage: "You should have had the fish snacks",
+                  key: "fishSnacks",
+                },
+              ],
+            },
           },
           fishSnacks: {
             message: "You should have had the fish snacks",
+            originalData: {
+              errors: [
+                {
+                  errorMessage: "You should have eaten the mama",
+                  key: "mama",
+                },
+                {
+                  errorMessage: "You should have had the fish snacks",
+                  key: "fishSnacks",
+                },
+              ],
+            },
           },
         },
       ],
