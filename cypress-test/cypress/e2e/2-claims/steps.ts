@@ -851,3 +851,12 @@ export const claimReviewCostCat = () => {
     cy.tableHeader("Total");
   });
 };
+
+export const openAccordions = () => {
+  cy.button("Show all sections").click();
+  ["forecast-accordion", "log-accordion", "upload-supporting-documents-form-accordion"].forEach(accordion => {
+    cy.getByQA(accordion).within(() => {
+      cy.get(`[aria-expanded="true"]`);
+    });
+  });
+};

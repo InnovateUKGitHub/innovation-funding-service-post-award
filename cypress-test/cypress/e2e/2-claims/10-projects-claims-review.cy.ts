@@ -14,6 +14,7 @@ import {
   claimReviewCostCat,
   topThreeRows,
   forecastCostCats,
+  openAccordions,
 } from "./steps";
 
 describe("Claims > Review as MO", () => {
@@ -43,14 +44,7 @@ describe("Claims > Review as MO", () => {
 
   it("Should have more than 10 status changes recorded", claimStatusTable);
 
-  /**
-   * This step needs updating once QA tags have been updated on the page.
-   * Currently there are duplicates of 'accordion-toggle' on each accordion
-   */
-  it("Should click the 'Show all sections' and verify that the accordions are all open", () => {
-    cy.button("Show all sections").click();
-    cy.get(`[aria-expanded="true"]`);
-  });
+  it("Should click the 'Show all sections' and verify that the accordions are all open", openAccordions);
 
   it("Should check the top three rows including IAR status of forecast table is correct", claimReviewTopThreeRows);
 
