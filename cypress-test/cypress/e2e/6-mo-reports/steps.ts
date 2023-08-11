@@ -677,51 +677,15 @@ export const saveSectionOneAndCheckSummary = () => {
     cy.getByQA("summary-question-1").contains(section1Item);
   });
 };
-
 export const assertSection7Comments = () => {
   cy.backLink("Back to summary").click();
   cy.get("legend").contains("Summary");
   cy.get("textarea").contains(section7Comments);
 };
 
-export const assertSection6CommentsAndScore = () => {
-  cy.backLink("Back to project planning").click();
-  cy.get("legend").contains("Project planning");
-  cy.getByQA("question-6-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains(section6Comments);
-};
-
-export const assertSection5CommentsAndScore = () => {
-  cy.backLink("Back to risk management").click();
-  cy.get("legend").contains("Risk management");
-  cy.getByQA("question-5-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains(section5Comments);
-};
-
-export const assertSection4CommentsAndScore = () => {
-  cy.backLink("Back to exploitation").click();
-  cy.get("legend").contains("Exploitation");
-  cy.getByQA("question-4-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains(section4Comments);
-};
-
-export const assertSection3CommentsAndScore = () => {
-  cy.backLink("Back to cost").click();
-  cy.get("legend").contains("Cost");
-  cy.getByQA("question-3-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains(section3Comments);
-};
-
-export const assertSection2CommentsAndScore = () => {
-  cy.backLink("Back to time").click();
-  cy.get("legend").contains("Time");
-  cy.getByQA("question-2-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains(section2Comments);
-};
-
-export const assertSection1CommentsAndScore = () => {
-  cy.backLink("Back to scope").click();
-  cy.get("legend").contains("Scope");
-  cy.getByQA("question-1-score-1").should("have.attr", "checked");
-  cy.get("textarea").contains(section1Comments);
+export const assertSectionCommentsAndScore = (title: string, section: number) => {
+  cy.backLink(`Back to ${title.toLowerCase()}`).click();
+  cy.get("h2").contains(title);
+  cy.getByQA(`question-${String(section)}-score-1`).should("have.attr", "checked");
+  cy.get("textarea").contains(`Section ${String(section)} // *&^%`);
 };

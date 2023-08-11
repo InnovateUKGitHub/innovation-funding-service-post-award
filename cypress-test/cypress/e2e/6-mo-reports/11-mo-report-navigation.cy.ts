@@ -25,12 +25,7 @@ import {
   editSection5WithCopy,
   reflectSection5Changes,
   assertSection7Comments,
-  assertSection6CommentsAndScore,
-  assertSection5CommentsAndScore,
-  assertSection4CommentsAndScore,
-  assertSection3CommentsAndScore,
-  assertSection2CommentsAndScore,
-  assertSection1CommentsAndScore,
+  assertSectionCommentsAndScore,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -53,35 +48,23 @@ describe("MO report > Complete all sections, navigate sections", () => {
 
   it("Should navigate back to section 7 and assert text entered previously is still saved", assertSection7Comments);
 
-  it(
-    "Should navigate back to section 6 and assert the score and text entered previously is saved",
-    assertSection6CommentsAndScore,
-  );
+  it("Should navigate back to section 6, Project planning and assert the score and text entered previously is saved", () =>
+    assertSectionCommentsAndScore("Project planning", 6));
 
-  it(
-    "Should navigate back to section 5 and assert the score and text entered previously is saved",
-    assertSection5CommentsAndScore,
-  );
+  it("Should navigate back to section 5, Risk management and assert the score and text entered previously is saved", () =>
+    assertSectionCommentsAndScore("Risk management", 5));
 
-  it(
-    "Should navigate back to section 4 and assert the score and text entered previously is saved",
-    assertSection4CommentsAndScore,
-  );
+  it("Should navigate back to section 4, Exploitation and assert the score and text entered previously is saved", () =>
+    assertSectionCommentsAndScore("Exploitation", 4));
 
-  it(
-    "Should navigate back to section 3 and assert the score and text entered previously is saved",
-    assertSection3CommentsAndScore,
-  );
+  it("Should navigate back to section 3, Cost and assert the score and text entered previously is saved", () =>
+    assertSectionCommentsAndScore("Cost", 3));
 
-  it(
-    "Should navigate back to section 2 and assert the score and text entered previously is saved",
-    assertSection2CommentsAndScore,
-  );
+  it("Should navigate back to section 2, Time and assert the score and text entered previously is saved", () =>
+    assertSectionCommentsAndScore("Time", 2));
 
-  it(
-    "Should navigate back to section 1 and assert the score and text entered previously is saved",
-    assertSection1CommentsAndScore,
-  );
+  it("Should navigate back to section 1, Scope and assert the score and text entered previously is saved", () =>
+    assertSectionCommentsAndScore("Scope", 1));
 
   it("Should click 'Save and return to summary'", () => {
     cy.button("Save and return to summary").click();
