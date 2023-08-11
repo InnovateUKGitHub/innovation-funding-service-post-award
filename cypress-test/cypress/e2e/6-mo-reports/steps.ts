@@ -685,7 +685,7 @@ export const assertSection7Comments = () => {
 
 export const assertSectionCommentsAndScore = (title: string, section: number) => {
   cy.backLink(`Back to ${title.toLowerCase()}`).click();
-  cy.get("h2").contains(title);
+  cy.get("legend").contains(title);
   cy.getByQA(`question-${String(section)}-score-1`).should("have.attr", "checked");
   cy.get("textarea").contains(`Section ${String(section)} // *&^%`);
 };
