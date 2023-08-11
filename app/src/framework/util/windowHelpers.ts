@@ -1,22 +1,45 @@
-import { Logger } from "@shared/developmentLogger";
 import { useEffect } from "react";
-
-const logger = new Logger("Window Helpers");
 
 export const scrollToTheTopSmoothly = () =>
   requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "smooth" }));
 export const scrollToTheTopInstantly = () => requestAnimationFrame(() => window.scrollTo(0, 0));
 
-export const scrollToTheTagSmoothly = (tag: string) => {
+/**
+ * Find a HTML element and scroll the page to the closest parent instance of FIELDSET.
+ *
+ * @param tag The HTML `name` or `id` to scroll to
+ */
+export const scrollToTheParentFieldsetSmoothly = (tag: string) => {
+  /**
+   * Find the closest HTML parent, starting from a child and climbing up to the parent.
+   *
+   * @param child The HTML element to start searching from
+   * @param element The target HTML element, in uppercase characters
+   * @returns The found HTML element, or null if not found.
+   */
+  const getParentElement = (child: HTMLElement, element: string): HTMLElement | null => {
+    if (child.tagName === element) return child;
+    if (child.parentElement) return getParentElement(child.parentElement, element);
+    return null;
+  };
+
+  // Wait for the next animation frame before starting,
+  // just in case the error message hasn't been rendered yet.
   requestAnimationFrame(() => {
     // Find the first instance of the NAME or ID
-    const element = [...document.getElementsByName(tag)]?.[0] ?? document.getElementById(tag);
+    const [nameTag] = [...document.getElementsByName(tag), document.getElementById(tag)];
 
     // If it exists, scroll to it.
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    } else {
-      logger.error("Failed to find element to scroll to", tag, element);
+    if (nameTag) {
+      const parentFieldset = getParentElement(nameTag, "FIELDSET");
+
+      // If the parent fieldset exists, scroll to that.
+      // Otherwise, just scroll to the tag.
+      if (parentFieldset) {
+        parentFieldset.scrollIntoView({ behavior: "smooth" });
+      } else {
+        nameTag.scrollIntoView({ behavior: "smooth" });
+      }
     }
   });
 };
