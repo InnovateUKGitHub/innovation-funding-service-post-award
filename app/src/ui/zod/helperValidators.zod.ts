@@ -5,7 +5,6 @@ import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
 import { validDocumentFilenameCharacters } from "@ui/validation/validators/documentUploadValidator";
 import { getFileExtension } from "@framework/util/files";
 import { IAppOptions } from "@framework/types/IAppOptions";
-import { IMetaValue, pcrItems, PCRItemType } from "@framework/constants/pcrConstants";
 
 const projectIdValidation = z
   .string()
