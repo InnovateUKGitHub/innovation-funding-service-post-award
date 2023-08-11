@@ -173,7 +173,6 @@ describe("Create PCR Command", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     context.testData.createCurrentUserAsProjectManager(project);
-    const partner = context.testData.createPartner(project);
     const recordTypes = context.testData.createPCRRecordTypes();
 
     const itemType = recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange);
@@ -186,11 +185,9 @@ describe("Create PCR Command", () => {
         {
           type: itemType?.type,
           status: PCRItemStatus.ToDo,
-          accountName: "Frida",
-          partnerId: partner.id,
         },
       ],
-    } as unknown as PCRDto);
+    } as PCRDto);
 
     const id = await context.runCommand(command);
     const newPCR = context.repositories.projectChangeRequests.Items.find(x => x.id === id);
@@ -205,8 +202,8 @@ describe("Create PCR Command", () => {
         {
           status: PCRItemStatus.ToDo,
           projectId: project.Id,
-          partnerId: partner.id,
-          accountName: "Frida",
+          partnerId: "",
+          accountName: "",
           recordTypeId: recordTypes.find(x => x.type === itemType?.typeName)?.id,
         },
       ],

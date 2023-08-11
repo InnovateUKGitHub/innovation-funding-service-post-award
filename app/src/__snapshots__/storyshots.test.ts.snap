@@ -2667,6 +2667,12 @@ exports[`Storyshots React Hook Form/Fieldset Standard Fieldset 1`] = `
           }
         }
       >
+        <div
+          className="govuk-visually-hidden"
+        >
+          components.validationError.prefix
+        </div>
+         
         first name is required
       </p>
       <div
@@ -2800,6 +2806,12 @@ exports[`Storyshots React Hook Form/Page Standard Page 1`] = `
             }
           }
         >
+          <div
+            className="govuk-visually-hidden"
+          >
+            components.validationError.prefix
+          </div>
+           
           Field cannot be empty
         </p>
         <div

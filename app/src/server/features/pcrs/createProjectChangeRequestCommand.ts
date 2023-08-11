@@ -77,6 +77,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     });
 
     if (!validationResult.isValid) {
+      console.error(validationResult.errors);
       throw new ValidationError(validationResult);
     }
 
