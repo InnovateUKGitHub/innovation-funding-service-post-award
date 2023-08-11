@@ -247,6 +247,12 @@ export const completeAllSectionsWithComments = () => {
   cy.wait(500);
 };
 
+export const completeSection8 = () => {
+  cy.getByQA("summary-question-8").contains("Edit").click();
+  cy.get("textarea").clear().type(section8Comments);
+  cy.button("Save and return to summary").click();
+};
+
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };

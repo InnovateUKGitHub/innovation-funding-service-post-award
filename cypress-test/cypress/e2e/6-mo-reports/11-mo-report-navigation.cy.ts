@@ -26,6 +26,7 @@ import {
   reflectSection5Changes,
   assertSection7Comments,
   assertSectionCommentsAndScore,
+  completeSection8,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -69,6 +70,8 @@ describe("MO report > Complete all sections, navigate sections", () => {
   it("Should click 'Save and return to summary'", () => {
     cy.button("Save and return to summary").click();
   });
+
+  it("Should now enter comments into section 8 and save", completeSection8);
 
   it("Should correctly display the period number", () => {
     ["Period", "1", "Edit"].forEach(periodSection => {
