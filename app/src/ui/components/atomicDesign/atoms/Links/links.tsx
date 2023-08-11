@@ -14,9 +14,10 @@ interface LinkProps extends StyledLinkProps {
   className?: string;
   replace?: boolean;
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
-const getClassNames = (styling: TStyling, className?: string) => {
+const getClassNames = (styling: TStyling, disabled = false, ...className: cx.ArgumentArray) => {
   return cx(
     {
       "govuk-link": styling === "Link",
@@ -24,17 +25,26 @@ const getClassNames = (styling: TStyling, className?: string) => {
       "govuk-!-margin-right-1": styling === "PrimaryButton" || styling === "SecondaryButton",
       "govuk-button--secondary": styling === "SecondaryButton",
       "govuk-back-link": styling === "BackLink",
+      "govuk-button--disabled": (styling === "PrimaryButton" || styling === "SecondaryButton") && disabled,
     },
-    className,
+    ...className,
   );
 };
 
 export class Link extends React.Component<LinkProps> {
   render() {
-    const { route, className, styling, id, replace = false, children } = this.props;
+    const { route, className, styling, id, replace = false, children, disabled } = this.props;
     const linkStyling = styling ?? "Link";
 
-    const styledClassName = getClassNames(linkStyling, className);
+    const styledClassName = getClassNames(linkStyling, disabled, className);
+
+    if (disabled) {
+      return (
+        <span id={id} className={styledClassName}>
+          {children}
+        </span>
+      );
+    }
 
     return (
       <RouterLink id={id} to={route.path} className={styledClassName} replace={replace}>
@@ -55,7 +65,7 @@ export class ModalLink extends React.Component<ModalLinkProps> {
   render() {
     const { modalId, children } = this.props;
     const styling = this.props.styling || "Link";
-    const className = getClassNames(styling, this.props.className);
+    const className = getClassNames(styling, false, this.props.className);
 
     return (
       <a href={this.props.open ? `#${modalId}` : "#"} className={className}>
