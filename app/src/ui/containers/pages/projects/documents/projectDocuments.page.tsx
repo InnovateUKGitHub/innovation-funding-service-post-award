@@ -7,7 +7,7 @@ import { DocumentSummaryDto, PartnerDocumentSummaryDtoGql } from "@framework/dto
 import { getAuthRoles } from "@framework/types/authorisation";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { projectLevelUpload } from "@ui/zod/documentValidators.zod";
+import { getProjectLevelUpload, ProjectLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
@@ -41,6 +41,7 @@ import { useOnDelete } from "@framework/api-helpers/onFileDelete";
 import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
 import { z } from "zod";
+import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;
@@ -50,6 +51,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   const [refreshedQueryOptions, refresh] = useRefreshQuery(projectDocumentsQuery, { projectId: props.projectId });
   const { getContent } = useContent();
   const onBlurOrChange = useClearMessagesOnBlurOrChange();
+  const config = useClientConfig();
 
   // GraphQL data loading
   const { project, partners, partnerDocuments, projectDocuments } = useProjectDocumentsQuery(
@@ -59,26 +61,36 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
 
   // Form
   const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<
-    z.output<typeof projectLevelUpload>
+    z.output<ProjectLevelUploadSchemaType>
   >({
-    resolver: zodResolver(projectLevelUpload, {
+    resolver: zodResolver(getProjectLevelUpload(config.options), {
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
   });
 
-  const { onUpdate: onUploadUpdate, apiError: onUploadApiError } = useOnUpload({
+  const {
+    onUpdate: onUploadUpdate,
+    apiError: onUploadApiError,
+    isFetching: onUploadFetching,
+  } = useOnUpload({
     refresh() {
       refresh();
       reset();
     },
   });
-  const { onUpdate: onDeleteUpdate, apiError: onDeleteApiError } = useOnDelete({ refresh });
+  const {
+    onUpdate: onDeleteUpdate,
+    apiError: onDeleteApiError,
+    isFetching: onDeleteFetching,
+  } = useOnDelete({ refresh });
+
+  const isFetching = onUploadFetching || onDeleteFetching;
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<typeof projectLevelUpload>>(setError, formState.errors);
-  const defaults = useServerInput<z.output<typeof projectLevelUpload>>();
+  const allErrors = useZodErrors<z.output<ProjectLevelUploadSchemaType>>(setError, formState.errors);
+  const defaults = useServerInput<z.output<ProjectLevelUploadSchemaType>>();
 
-  const onChange = (dto: z.output<typeof projectLevelUpload>) => {
+  const onChange = (dto: z.output<ProjectLevelUploadSchemaType>) => {
     onUploadUpdate({
       data: dto,
       context: dto,
@@ -141,6 +153,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
           onSubmit={handleSubmit(onChange)}
           method="POST"
           encType="multipart/form-data"
+          aria-disabled={isFetching}
         >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
@@ -150,7 +163,13 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
             {/* File uploads */}
             <FormGroup hasError={!!getFieldState("files").error}>
               <ValidationError error={getFieldState("files").error} />
-              <FileInput id="files" hasError={!!getFieldState("files").error} multiple {...register("files")} />
+              <FileInput
+                disabled={isFetching}
+                id="files"
+                hasError={!!getFieldState("files").error}
+                multiple
+                {...register("files")}
+              />
             </FormGroup>
 
             {/* Monitoring officers or FC/PMs that are assigned to more than one partner */}
@@ -158,7 +177,12 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
               <FormGroup hasError={!!getFieldState("partnerId").error}>
                 <Label htmlFor="partnerId">{getContent(x => x.documentLabels.participantLabel)}</Label>
                 <ValidationError error={getFieldState("partnerId").error} />
-                <Select id="partnerId" defaultValue={defaults?.partnerId} {...register("partnerId")}>
+                <Select
+                  disabled={isFetching}
+                  id="partnerId"
+                  defaultValue={defaults?.partnerId}
+                  {...register("partnerId")}
+                >
                   {partnerOptions.map(x => (
                     <option value={x.value} key={x.id} data-qa={x.qa}>
                       {x.displayName}
@@ -177,7 +201,12 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
             <FormGroup hasError={!!getFieldState("description").error}>
               <Label htmlFor="description">{getContent(x => x.documentLabels.descriptionLabel)}</Label>
               <ValidationError error={getFieldState("description").error} />
-              <Select id="description" defaultValue={defaults?.description} {...register("description")}>
+              <Select
+                disabled={isFetching}
+                id="description"
+                defaultValue={defaults?.description}
+                {...register("description")}
+              >
                 {documentDropdownOptions.map(x => (
                   <option value={x.value} key={x.id} data-qa={x.qa}>
                     {x.displayName}
@@ -187,7 +216,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
             </FormGroup>
           </Fieldset>
           <Fieldset>
-            <Button name="button_default" styling="Secondary" type="submit">
+            <Button disabled={isFetching} name="button_default" styling="Secondary" type="submit">
               {getContent(x => x.documentMessages.uploadDocuments)}
             </Button>
           </Fieldset>
@@ -215,6 +244,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
               onRemove={document => onDelete(document)}
               documents={projectDocuments}
               formType={FormTypes.ProjectLevelDelete}
+              disabled={isFetching}
             />
           </>
         )}
@@ -240,6 +270,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
           onRemove={document => onDelete(document)}
           documents={partnerDocuments}
           project={project}
+          disabled={isFetching}
         />
       </Section>
     </Page>

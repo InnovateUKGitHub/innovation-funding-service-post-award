@@ -2,20 +2,21 @@ import { IContext } from "@framework/types/IContext";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
-import { claimLevelUpload } from "@ui/zod/documentValidators.zod";
+import { ClaimLevelUploadSchemaType, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
 import express from "express";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
+import { configuration } from "@server/features/common/config";
 
 class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
-  typeof claimLevelUpload,
+  ClaimLevelUploadSchemaType,
   { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId }
 > {
   constructor() {
     super({
-      zod: claimLevelUpload,
+      zod: getClaimLevelUpload(configuration.options),
       route: ClaimDocumentsRoute,
       forms: [FormTypes.ClaimLevelUpload],
       formIntlKeyPrefix: ["documents"],
@@ -30,7 +31,7 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   }: {
     input: AnyObject;
     files: ServerFileWrapper[];
-  }): Promise<z.input<typeof claimLevelUpload>> {
+  }): Promise<z.input<ClaimLevelUploadSchemaType>> {
     return {
       form: FormTypes.ClaimLevelUpload,
       files,
@@ -51,7 +52,7 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: z.output<typeof claimLevelUpload>;
+    input: z.output<ClaimLevelUploadSchemaType>;
     context: IContext;
   }): Promise<void> {
     await context.runCommand(

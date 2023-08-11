@@ -34,20 +34,26 @@ export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[
   const navigate = useNavigate();
   return (
     <>
-      {results.map((x, i) => (
-        <li key={i}>
-          <a
-            onClick={e => {
-              e.preventDefault();
-              scrollToTheTagSmoothly(x.key);
-              navigate(`#${x.key}`, { replace: true });
-            }}
-            href={`#${x.key}`}
-          >
-            {prepareMessage(isResultType(x) ? x.errorMessage : x?.message)}
-          </a>
-        </li>
-      ))}
+      {results.map((error, i) => {
+        let key = error.key;
+
+        if (/files_\d+/.test(key)) key = "files";
+
+        return (
+          <li key={i}>
+            <a
+              onClick={e => {
+                e.preventDefault();
+                scrollToTheTagSmoothly(key);
+                navigate(`#${key}`, { replace: true });
+              }}
+              href={`#${key}`}
+            >
+              {prepareMessage(isResultType(error) ? error.errorMessage : error?.message)}
+            </a>
+          </li>
+        );
+      })}
     </>
   );
 };

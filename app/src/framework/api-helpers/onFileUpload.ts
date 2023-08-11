@@ -9,9 +9,9 @@ import { useStore } from "react-redux";
 import { useOnUpdate } from "./onUpdate";
 import { useStores } from "@ui/redux/storesProvider";
 import type { z } from "zod";
-import type { projectLevelUpload, claimLevelUpload } from "@ui/zod/documentValidators.zod";
+import type { ProjectLevelUploadSchemaType, ClaimLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
 
-export const useOnUpload = <Inputs extends z.output<typeof projectLevelUpload | typeof claimLevelUpload>>({
+export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType | ClaimLevelUploadSchemaType>>({
   refresh,
 }: {
   refresh: () => void;
