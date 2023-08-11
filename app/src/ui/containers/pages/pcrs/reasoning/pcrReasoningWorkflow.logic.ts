@@ -7,7 +7,7 @@ import { PcrReasoningWorkflowQuery } from "./__generated__/PcrReasoningWorkflowQ
 import { head } from "lodash";
 import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
 
-export const usePcrReasoningQuery = (projectId: ProjectId, pcrId: PcrId) => {
+export const usePcrReasoningQuery = (projectId: ProjectId, pcrId: PcrId, fetchKey: number) => {
   const data = useLazyLoadQuery<PcrReasoningWorkflowQuery>(
     pcrReasoningWorkflowQuery,
     {
@@ -16,6 +16,7 @@ export const usePcrReasoningQuery = (projectId: ProjectId, pcrId: PcrId) => {
     },
     {
       fetchPolicy: "store-and-network",
+      fetchKey,
     },
   );
 

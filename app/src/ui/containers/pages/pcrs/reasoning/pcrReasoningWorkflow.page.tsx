@@ -25,6 +25,7 @@ import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { usePcrReasoningQuery } from "./pcrReasoningWorkflow.logic";
+import { useState } from "react";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: ProjectId;
@@ -43,12 +44,14 @@ interface Data {
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
   mode: "prepare" | "review" | "view";
+  fetchKey: number;
 }
 
 interface ResolvedData {
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   mode: "prepare" | "review" | "view";
+  fetchKey: number;
 }
 
 interface Callbacks {
@@ -71,7 +74,8 @@ const PCRReasoningWorkflowComponent = (
   props: BaseProps & ProjectChangeRequestPrepareReasoningParams & ResolvedData & Callbacks,
 ) => {
   const { editor, documentsEditor, projectId, mode, pcrId, routes } = props;
-  const { project, pcr } = usePcrReasoningQuery(projectId, pcrId);
+
+  const { project, pcr } = usePcrReasoningQuery(projectId, pcrId, props.fetchKey);
 
   return (
     <Page
@@ -226,6 +230,7 @@ const findStepByName = (stepName: IReasoningWorkflowMetadata["stepName"]) => {
 const PCRReasoningWorkflowContainer = (
   props: ProjectChangeRequestPrepareReasoningParams & BaseProps & { mode: "prepare" | "review" | "view" },
 ) => {
+  const [fetchKey, setFetchKey] = useState(0);
   const navigate = useNavigate();
   const stores = useStores();
 
@@ -245,7 +250,10 @@ const PCRReasoningWorkflowContainer = (
           pcrStepId: PCRStepId.reasoningStep,
           dto,
           message: undefined,
-          onComplete: () => navigate(link.path),
+          onComplete: () => {
+            setFetchKey(s => s + 1);
+            navigate(link.path);
+          },
         });
       }}
       onChange={dto => {
@@ -257,6 +265,7 @@ const PCRReasoningWorkflowContainer = (
           dto,
         });
       }}
+      fetchKey={fetchKey}
     />
   );
 };
