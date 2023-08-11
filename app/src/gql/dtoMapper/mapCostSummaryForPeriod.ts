@@ -13,7 +13,7 @@ const mapper: GQL.DtoMapper<
   CostsSummaryForPeriodDto,
   CostsSummaryForPeriodNode,
   {
-    forecastDetails?: { value: number; costCategoryId: string }[];
+    forecastDetails?: { value: number; costCategoryId: string; periodId: PeriodId }[];
     claimDetails?: { value: number; costCategoryId: string; periodId: PeriodId }[];
     golCosts?: { value: number; costCategoryId: string }[];
     periodId?: PeriodId;
@@ -37,7 +37,11 @@ const mapper: GQL.DtoMapper<
     );
   },
   forecastThisPeriod(node, additionalData) {
-    return additionalData?.forecastDetails?.find(x => x?.costCategoryId === node?.Id)?.value ?? 0;
+    return (
+      additionalData?.forecastDetails?.find(
+        x => (x?.costCategoryId === node?.Id && x.periodId === additionalData?.periodId) ?? 0,
+      )?.value ?? 0
+    );
   },
   offerTotal(node, additionalData) {
     return additionalData?.golCosts?.find(x => x.costCategoryId === node?.Id)?.value ?? 0;
@@ -56,7 +60,7 @@ const mapper: GQL.DtoMapper<
 type CostsSummaryAdditionalData<TPickList extends string> = AdditionalDataType<
   TPickList,
   [
-    ["forecastThisPeriod", "forecastDetails", Pick<ForecastDetailsDTO, "costCategoryId" | "value">[]],
+    ["forecastThisPeriod", "forecastDetails", Pick<ForecastDetailsDTO, "costCategoryId" | "periodId" | "value">[]],
     ["costsClaimedThisPeriod", "claimDetails", Pick<ClaimDetailsDto, "costCategoryId" | "periodId" | "value">[]],
     ["costsClaimedThisPeriod", "periodId", PeriodId],
     ["costsClaimedToDate", "claimDetails", Pick<ClaimDetailsDto, "costCategoryId" | "periodId" | "value">[]],
