@@ -1,4 +1,4 @@
-import { scrollToTheTagSmoothly } from "@framework/util/windowHelpers";
+import { scrollToTheParentFieldsetSmoothly } from "@framework/util/windowHelpers";
 import { Result } from "@ui/validation/result";
 import { useNavigate } from "react-router-dom";
 
@@ -34,9 +34,8 @@ export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[
   const navigate = useNavigate();
   return (
     <>
-      {results.map((error, i) => {
-        let key = error.key;
-
+      {results.map((x, i) => {
+        let key = x.key;
         if (/files_\d+/.test(key)) key = "files";
 
         return (
@@ -44,12 +43,12 @@ export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[
             <a
               onClick={e => {
                 e.preventDefault();
-                scrollToTheTagSmoothly(key);
+                scrollToTheParentFieldsetSmoothly(key);
                 navigate(`#${key}`, { replace: true });
               }}
               href={`#${key}`}
             >
-              {prepareMessage(isResultType(error) ? error.errorMessage : error?.message)}
+              {prepareMessage(isResultType(x) ? x.errorMessage : x?.message)}
             </a>
           </li>
         );
