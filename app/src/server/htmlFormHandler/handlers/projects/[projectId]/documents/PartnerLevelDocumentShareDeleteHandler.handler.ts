@@ -10,6 +10,7 @@ import {
   ProjectDocumentsRoute,
   ProjectDocumentPageParams,
 } from "@ui/containers/pages/projects/documents/projectDocuments.page";
+import { FormTypes } from "@ui/zod/FormTypes";
 
 class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
   typeof partnerLevelDelete,
@@ -17,14 +18,17 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
 > {
   constructor() {
     super({
-      zod: partnerLevelDelete,
       route: ProjectDocumentsRoute,
-      forms: ["partnerLevelDelete"],
+      forms: [FormTypes.PartnerLevelDelete],
       formIntlKeyPrefix: ["documents"],
     });
   }
 
-  acceptFiles = true;
+  acceptFiles = false;
+
+  protected async getZodSchema() {
+    return partnerLevelDelete;
+  }
 
   protected async mapToZod({
     input,
@@ -34,7 +38,7 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     params: ProjectDocumentPageParams;
   }): Promise<z.input<typeof partnerLevelDelete>> {
     return {
-      form: "partnerLevelDelete" as const,
+      form: input.form,
       documentId: input.documentId ?? input.button_documentId,
       projectId: params.projectId,
       partnerId: input.partnerId,

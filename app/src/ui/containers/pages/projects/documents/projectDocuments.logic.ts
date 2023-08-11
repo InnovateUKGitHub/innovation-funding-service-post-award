@@ -1,6 +1,5 @@
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
-import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
 import {
   mapToPartnerDocumentSummaryDtoArray,
@@ -15,7 +14,6 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useLazyLoadQuery } from "react-relay";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
 import { ProjectDocumentsQuery, ProjectDocumentsQuery$data } from "./__generated__/ProjectDocumentsQuery.graphql";
-import { DropdownListOption } from "@ui/components/bjss/inputs/dropdownList";
 
 type ProjectGQL = GQL.NodeSelector<ProjectDocumentsQuery$data, "Acc_Project__c">;
 

@@ -130,7 +130,10 @@ export const developerFormHandlers = [
   new DeveloperPageCrasherHandler(),
 ] as const;
 
-export const zodFormhandlers = [new ProjectLevelDocumentShareUploadHandler(), new ClaimLevelDocumentShareUploadHandler()];
+export const zodFormHandlers = [
+  new ProjectLevelDocumentShareUploadHandler(),
+  new ClaimLevelDocumentShareUploadHandler(),
+];
 
 const getRoute = (handler: IFormHandler) => {
   return handler.routePath;
@@ -179,7 +182,7 @@ export const configureFormRouter = ({
   const result = express.Router();
   const finalHandler = new PostFormHandleHandler({ schema });
 
-  for (const x of zodFormhandlers) {
+  for (const x of zodFormHandlers) {
     result.post(
       getRoute(x),
       ((req, res, next) => {
@@ -192,7 +195,7 @@ export const configureFormRouter = ({
     );
   }
 
-  for (const x of [...zodFileFormHandlers, ...multiFileFormHandlers]) {
+  for (const x of multiFileFormHandlers) {
     result.post(
       getRoute(x),
       ((req, res, next) => {
