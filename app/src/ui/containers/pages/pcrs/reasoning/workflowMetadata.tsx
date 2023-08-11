@@ -7,6 +7,7 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export interface ReasoningStepProps extends BaseProps {
   projectId: ProjectId;
@@ -15,6 +16,8 @@ export interface ReasoningStepProps extends BaseProps {
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   onChange: (dto: PCRDto) => void;
   onSave: (dto: PCRDto) => void;
+  documents: DocumentSummaryDto[];
+  refresh: () => void;
 }
 
 export interface IReasoningWorkflowMetadata {

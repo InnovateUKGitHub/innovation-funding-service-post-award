@@ -1,4 +1,3 @@
-import { Pending } from "@shared/pending";
 import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { NavigationArrowsForPCRs } from "@ui/containers/pages/pcrs/navigationArrows";
 import { IReasoningWorkflowMetadata } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
@@ -14,9 +13,7 @@ import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/l
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { Loader } from "@ui/components/bjss/loading";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 
 export interface Props {
@@ -30,17 +27,14 @@ export interface Props {
   onChange: (dto: PCRDto) => void;
   onSave: (dto: PCRDto) => void;
   getStepLink: (stepName: IReasoningWorkflowMetadata["stepName"]) => ILinkInfo;
-}
-
-interface ResolvedData {
-  files: DocumentSummaryDto[];
   editableItemTypes: PCRItemType[];
+  documents: DocumentSummaryDto[];
 }
 
 const PCRForm = createTypedForm<PCRDto>();
 
-const PCRReasoningSummaryComponent = (props: BaseProps & Props & ResolvedData) => {
-  const { editor, getStepLink, mode, pcr, files: documents, editableItemTypes } = props;
+export const PCRReasoningSummary = (props: BaseProps & Props) => {
+  const { editor, getStepLink, mode, pcr, documents, editableItemTypes } = props;
   return (
     <Section qa="reasoning-save-and-return">
       <Section>
@@ -129,13 +123,4 @@ const CompleteForm = ({
       </PCRForm.Fieldset>
     </PCRForm.Form>
   );
-};
-
-export const PCRReasoningSummary = (props: Props & BaseProps) => {
-  const stores = useStores();
-  const combined = Pending.combine({
-    files: stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrId),
-    editableItemTypes: stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId),
-  });
-  return <Loader pending={combined} render={x => <PCRReasoningSummaryComponent {...props} {...x} />} />;
 };

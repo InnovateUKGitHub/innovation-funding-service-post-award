@@ -9,6 +9,7 @@ import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { PageLoader } from "@ui/components/bjss/loading";
+
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { LineBreakList } from "@ui/components/atomicDesign/atoms/LineBreakList/lineBreakList";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
@@ -26,6 +27,9 @@ import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { usePcrReasoningQuery } from "./pcrReasoningWorkflow.logic";
 import { useState } from "react";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { pcrReasoningWorkflowQuery } from "./PcrReasoningWorkflow.query";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: ProjectId;
@@ -75,7 +79,17 @@ const PCRReasoningWorkflowComponent = (
 ) => {
   const { editor, documentsEditor, projectId, mode, pcrId, routes } = props;
 
-  const { project, pcr } = usePcrReasoningQuery(projectId, pcrId, props.fetchKey);
+  const [refreshedQueryOptions, refresh] = useRefreshQuery(pcrReasoningWorkflowQuery, {
+    projectId: props.projectId,
+    pcrId: props.pcrId,
+  });
+
+  const { project, pcr, documents, editableItemTypes } = usePcrReasoningQuery(
+    projectId,
+    pcrId,
+    props.fetchKey,
+    refreshedQueryOptions,
+  );
 
   return (
     <Page
@@ -87,7 +101,9 @@ const PCRReasoningWorkflowComponent = (
       validator={!props.step ? [] : [editor.validator, documentsEditor.validator]}
     >
       {!!props.step && <Messages messages={props.messages} />}
-      {props.mode === "prepare" && !!props.step && renderStep(props.step, pcr, editor, documentsEditor, props)}
+      {props.mode === "prepare" &&
+        !!props.step &&
+        renderStep(props.step, pcr, editor, documentsEditor, { documents, refresh, ...props })}
       {!props.step && (
         <PCRReasoningSummary
           {...props}
@@ -98,6 +114,8 @@ const PCRReasoningWorkflowComponent = (
           getStepLink={(stepName: IReasoningWorkflowMetadata["stepName"]) =>
             getStepLink(stepName, projectId, pcrId, routes)
           }
+          documents={documents}
+          editableItemTypes={editableItemTypes}
         />
       )}
     </Page>
@@ -136,7 +154,10 @@ const renderStep = (
   pcr: PCRTypeForPcrReasoning,
   editor: IEditorStore<PCRDto, PCRDtoValidator>,
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-  props: BaseProps & ProjectChangeRequestPrepareReasoningParams & ResolvedData & Callbacks,
+  props: BaseProps &
+    ProjectChangeRequestPrepareReasoningParams &
+    ResolvedData &
+    Callbacks & { documents: DocumentSummaryDto[]; refresh: () => void },
 ) => {
   const step = findStepByNumber(stepNumber);
   return (
