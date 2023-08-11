@@ -15,7 +15,7 @@ export const monitoringReportWorkflowSchema = z.object({
         ({ comments, optionId }) => {
           return comments?.length ?? 0 > 0 ? optionId?.length ?? 0 > 0 : true;
         },
-        { path: ["comments"] },
+        { path: ["optionId"] },
       ),
   ),
 });

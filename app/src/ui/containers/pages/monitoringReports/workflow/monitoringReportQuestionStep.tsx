@@ -14,6 +14,7 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useContent } from "@ui/hooks/content.hook";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 interface Props {
   questionNumber: number;
@@ -53,9 +54,11 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
   }, [questionNumber]);
 
   const commentFieldName: `questions.${number}.comments` = `questions.${q.displayOrder - 1}.comments`;
+  const optionFieldName: `questions.${number}.optionId` = `questions.${q.displayOrder - 1}.optionId`;
   const commentFieldId = commentFieldName.replaceAll(".", "_");
 
   const disabledForm = mode === "view";
+  const optionError = get(validatorErrors, optionFieldName) as RhfError;
 
   const serverRenderedCommentPreFillOnError = (get(validatorErrors, commentFieldName) as RhfError)?.originalData?.answer
     ?.comments;
@@ -79,7 +82,8 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
             <Legend>{q.title}</Legend>
             <Hint id="hint-for-questions">{q.description}</Hint>
             {!!radioOptions.length && (
-              <FormGroup>
+              <FormGroup hasError={!!optionError}>
+                <ValidationError error={optionError} data-qa="monitoring-report-option-error" />
                 <RadioList name={`questions.${q.displayOrder - 1}.optionId`} id="questions" register={register}>
                   {radioOptions.map(option => (
                     <Radio
@@ -101,7 +105,6 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
             id={commentFieldId}
             label={getContent(x => x.pages.monitoringReportsQuestionStep.commentLabel)}
             disabled={isFetching || disabledForm}
-            error={get(validatorErrors, commentFieldName) as RhfError}
             characterCount={watch(commentFieldName)?.length ?? 0}
             data-qa={commentFieldId}
             characterCountType="ascending"

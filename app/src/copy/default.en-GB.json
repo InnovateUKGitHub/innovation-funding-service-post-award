@@ -1844,7 +1844,7 @@
       },
       "questions": {
         "arrayType": {
-          "comments": {
+          "optionId": {
             "errors": {
               "custom": "Enter a score for {{input.title, lowercase}}."
             }

@@ -10,7 +10,7 @@ import { claimCommentsMaxLength } from "@ui/validation/validators/claimDtoValida
 type TextAreaRef = Ref<HTMLTextAreaElement>;
 
 type TextAreaFieldProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> & {
-  error: RhfError;
+  error?: RhfError;
   disabled?: boolean;
   hint?: string;
   label?: string;
