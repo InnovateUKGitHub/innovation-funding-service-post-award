@@ -9,7 +9,7 @@ import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTit
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { claimLevelUpload } from "@ui/zod/documentValidators.zod";
+import { ClaimLevelUploadSchemaType, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
 import { useForm } from "react-hook-form";
 import { useContent } from "@ui/hooks/content.hook";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
@@ -35,6 +35,7 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
 import { z } from "zod";
+import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 export interface ClaimDocumentsPageParams {
   projectId: ProjectId;
@@ -46,6 +47,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const { projectId, partnerId, periodId } = props;
   const { getContent } = useContent();
   const onBlurOrChange = useClearMessagesOnBlurOrChange();
+  const config = useClientConfig();
 
   const [refreshedQueryOptions, refresh] = useRefreshQuery(claimDocumentsQuery, {
     projectId,
@@ -60,9 +62,9 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
 
   // Form
   const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<
-    z.output<typeof claimLevelUpload>
+    z.output<ClaimLevelUploadSchemaType>
   >({
-    resolver: zodResolver(claimLevelUpload, {
+    resolver: zodResolver(getClaimLevelUpload(config.options), {
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
   });
@@ -76,10 +78,10 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const { onUpdate: onDeleteUpdate, apiError: onDeleteApiError } = useOnDelete({ refresh });
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
-  const allErrors = useZodErrors<z.output<typeof claimLevelUpload>>(setError, formState.errors);
-  const defaults = useServerInput<z.output<typeof claimLevelUpload>>();
+  const allErrors = useZodErrors<z.output<ClaimLevelUploadSchemaType>>(setError, formState.errors);
+  const defaults = useServerInput<z.output<ClaimLevelUploadSchemaType>>();
 
-  const onChange = (dto: z.output<typeof claimLevelUpload>) => {
+  const onChange = (dto: z.output<ClaimLevelUploadSchemaType>) => {
     onUploadUpdate({
       data: dto,
       context: dto,

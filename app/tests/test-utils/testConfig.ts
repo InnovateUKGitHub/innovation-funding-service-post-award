@@ -56,7 +56,13 @@ export class TestConfig implements IConfig {
       "jpeg",
       "png",
     ], // TODO: deprecated list
-    permittedTypes: {}, // TODO: test when we deprecate the permittedFileTypes field
+    permittedTypes: {
+      pdfTypes: ["pdf", "xps"],
+      textTypes: ["doc", "docx", "rtf", "txt", "csv", "odt"],
+      presentationTypes: ["ppt", "pptx", "odp"],
+      spreadsheetTypes: ["xls", "xlsx", "ods"],
+      imageTypes: ["jpg", "jpeg", "png", "odg"],
+    },
     bankCheckValidationRetries: 2,
     bankCheckPersonalDetailsScorePass: 6,
     bankCheckAddressScorePass: 6,

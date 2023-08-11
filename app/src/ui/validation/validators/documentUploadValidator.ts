@@ -11,6 +11,8 @@ import { FileTypeNotAllowedError } from "@server/repositories/errors";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { NestedResult } from "@ui/validation/nestedResult";
 
+export const validDocumentFilenameCharacters = /^[\w\d\s\\.\-()]+$/;
+
 const invalidCharacterInFileName = <T extends Results<ResultBase>>(results: T, fileName: string) => {
   return results.getContent(x => x.validation.documentValidator.nameInvalidCharacters({ name: fileName }));
 };
@@ -227,8 +229,6 @@ function validateFileExtension<T extends Results<ResultBase>>(
  * validates file name
  */
 function validateFileName<T extends Results<ResultBase>>(results: T, file: IFileWrapper | null): Result {
-  const validCharacters = /^[\w\d\s\\.\-()]+$/;
-
   if (!file) {
     return Validation.inValid(
       results,
@@ -238,7 +238,7 @@ function validateFileName<T extends Results<ResultBase>>(results: T, file: IFile
     const fileName = file.fileName;
     const name = getFileName(fileName);
 
-    const hasValidName: boolean = validCharacters.test(name);
+    const hasValidName: boolean = validDocumentFilenameCharacters.test(name);
     return Validation.isTrue(results, hasValidName, invalidCharacterInFileName(results, fileName));
   }
 }
