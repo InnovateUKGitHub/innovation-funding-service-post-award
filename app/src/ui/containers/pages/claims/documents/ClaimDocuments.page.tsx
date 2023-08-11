@@ -69,13 +69,23 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     }),
   });
 
-  const { onUpdate: onUploadUpdate, apiError: onUploadApiError } = useOnUpload({
+  const {
+    onUpdate: onUploadUpdate,
+    apiError: onUploadApiError,
+    isFetching: onUploadFetching,
+  } = useOnUpload({
     refresh() {
       refresh();
       reset();
     },
   });
-  const { onUpdate: onDeleteUpdate, apiError: onDeleteApiError } = useOnDelete({ refresh });
+  const {
+    onUpdate: onDeleteUpdate,
+    apiError: onDeleteApiError,
+    isFetching: onDeleteFetching,
+  } = useOnDelete({ refresh });
+
+  const isFetching = onUploadFetching || onDeleteFetching;
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<ClaimLevelUploadSchemaType>>(setError, formState.errors);
@@ -144,6 +154,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
           onSubmit={handleSubmit(onChange)}
           method="POST"
           encType="multipart/form-data"
+          aria-disabled={isFetching}
         >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
@@ -155,14 +166,25 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
             {/* File uploads */}
             <FormGroup hasError={!!getFieldState("files").error}>
               <ValidationError error={getFieldState("files").error} />
-              <FileInput id="files" hasError={!!getFieldState("files").error} multiple {...register("files")} />
+              <FileInput
+                disabled={isFetching}
+                id="files"
+                hasError={!!getFieldState("files").error}
+                multiple
+                {...register("files")}
+              />
             </FormGroup>
 
             {/* Description selection */}
             <FormGroup hasError={!!getFieldState("description").error}>
               <Label htmlFor="description">{getContent(x => x.documentLabels.descriptionLabel)}</Label>
               <ValidationError error={getFieldState("description").error} />
-              <Select id="description" defaultValue={defaults?.description} {...register("description")}>
+              <Select
+                disabled={isFetching}
+                id="description"
+                defaultValue={defaults?.description}
+                {...register("description")}
+              >
                 {documentDropdownOptions.map(x => (
                   <option value={x.value} key={x.id} data-qa={x.qa}>
                     {x.displayName}
@@ -172,7 +194,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
             </FormGroup>
           </Fieldset>
           <Fieldset>
-            <Button name="button_default" styling="Secondary" type="submit">
+            <Button disabled={isFetching} name="button_default" styling="Secondary" type="submit">
               {getContent(x => x.documentMessages.uploadDocuments)}
             </Button>
           </Fieldset>
@@ -196,6 +218,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
       <Section qa="buttons">
         {claim.isFinalClaim ? (
           <Link
+            disabled={isFetching}
             styling="PrimaryButton"
             id="continue-claim"
             route={props.routes.claimSummary.getLink({ projectId, partnerId, periodId })}
@@ -204,6 +227,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
           </Link>
         ) : (
           <Link
+            disabled={isFetching}
             styling="PrimaryButton"
             id="continue-claim"
             route={props.routes.claimForecast.getLink({ projectId, partnerId, periodId })}
@@ -213,6 +237,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
         )}
 
         <Link
+          disabled={isFetching}
           styling="SecondaryButton"
           id="save-claim"
           route={
