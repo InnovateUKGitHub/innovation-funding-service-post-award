@@ -35,9 +35,11 @@
     }
   },
   "components": {
-    "amountRequestMessage": "The total of your actual costs claimed and forecasted costs is different than the agreed for:",
-    "advisoryMoPmMessage": "The partner is requesting an amount more than the maximum contract value offered for:",
-    "contactMessage": "If you are forecasting to underspend the contract value offered, please add a comment for the attention of your Monitoring Service Provider or Innovate UK when submitting this claim.",
-    "contactMessage_InternalAssurance": "If you are forecasting to underspend the contract value offered, please add a comment for the attention of Innovate UK when submitting this claim."
+    "warningContent": {
+      "amountRequestMessage": "The total of your actual costs claimed and forecasted costs is different than the agreed for:",
+      "advisoryMoPmMessage": "The partner is requesting an amount more than the maximum contract value offered for:",
+      "contactMessage": "If you are forecasting to underspend the contract value offered, please add a comment for the attention of your Monitoring Service Provider or Innovate UK when submitting this claim.",
+      "contactMessage_InternalAssurance": "If you are forecasting to underspend the contract value offered, please add a comment for the attention of Innovate UK when submitting this claim."
+    }
   }
 }
