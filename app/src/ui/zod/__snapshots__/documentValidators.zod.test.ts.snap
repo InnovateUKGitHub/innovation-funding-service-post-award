@@ -1,0 +1,249 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`documentValidators partnerLevelDelete accept normal input 1`] = `
+Object {
+  "data": Object {
+    "documentId": "string",
+    "form": "partnerLevelDelete",
+    "partnerId": "a0D project participant id",
+    "projectId": "a0E project id",
+  },
+  "success": true,
+}
+`;
+
+exports[`documentValidators partnerLevelDelete decline empty form 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "projectId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "partnerId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "documentId"
+    ],
+    "message": "Required"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`documentValidators partnerLevelDelete decline empty object 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "invalid_literal",
+    "expected": "partnerLevelDelete",
+    "path": [
+      "form"
+    ],
+    "message": "Invalid literal value, expected \\"partnerLevelDelete\\""
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "projectId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "partnerId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "documentId"
+    ],
+    "message": "Required"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`documentValidators partnerLevelDelete decline incorrect form 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "received": "claimLevelUpload",
+    "code": "invalid_literal",
+    "expected": "partnerLevelDelete",
+    "path": [
+      "form"
+    ],
+    "message": "Invalid literal value, expected \\"partnerLevelDelete\\""
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`documentValidators partnerLevelDelete decline incorrect projectId prefix 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "invalid_string",
+    "validation": {
+      "startsWith": "a0E"
+    },
+    "message": "Invalid input: must start with \\"a0E\\"",
+    "path": [
+      "projectId"
+    ]
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`documentValidators partnerLevelDelete decline missing partner id 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "partnerId"
+    ],
+    "message": "Required"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`documentValidators projectLevelDelete accept normal input 1`] = `
+Object {
+  "data": Object {
+    "documentId": "string",
+    "form": "projectLevelDelete",
+    "projectId": "a0E project id",
+  },
+  "success": true,
+}
+`;
+
+exports[`documentValidators projectLevelDelete decline empty form 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "projectId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "documentId"
+    ],
+    "message": "Required"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`documentValidators projectLevelDelete decline empty object 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "invalid_literal",
+    "expected": "projectLevelDelete",
+    "path": [
+      "form"
+    ],
+    "message": "Invalid literal value, expected \\"projectLevelDelete\\""
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "projectId"
+    ],
+    "message": "Required"
+  },
+  {
+    "code": "invalid_type",
+    "expected": "string",
+    "received": "undefined",
+    "path": [
+      "documentId"
+    ],
+    "message": "Required"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`documentValidators projectLevelDelete decline incorrect form 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "received": "claimLevelUpload",
+    "code": "invalid_literal",
+    "expected": "projectLevelDelete",
+    "path": [
+      "form"
+    ],
+    "message": "Invalid literal value, expected \\"projectLevelDelete\\""
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`documentValidators projectLevelDelete decline incorrect projectId prefix 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "invalid_string",
+    "validation": {
+      "startsWith": "a0E"
+    },
+    "message": "Invalid input: must start with \\"a0E\\"",
+    "path": [
+      "projectId"
+    ]
+  }
+]],
+  "success": false,
+}
+`;

@@ -26,7 +26,7 @@ const periodIdValidation = z.coerce
   .number()
   .int()
   .gt(0)
-  .lt(100) // Assumption that a project has fewer than 100 periods.
+  .lt(500) // Assumption that a project has fewer than 500 periods.
   .transform(x => x as PeriodId);
 
 const getFileValidation = (options: IAppOptions) => {
