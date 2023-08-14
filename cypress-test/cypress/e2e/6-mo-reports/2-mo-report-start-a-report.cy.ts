@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { deleteMoReport, validatePeriodBox } from "./steps";
+import { deleteMoReport, deleteUsingCorrectDeleteButton, validatePeriodBox } from "./steps";
 import {
   clickMoReportTile,
   clickStartNewReportButton,
@@ -16,10 +16,6 @@ describe("MO report > can start a new report", () => {
   before(() => {
     visitApp({ asUser: moContactEmail });
     cy.navigateToProject("328407");
-  });
-
-  after(() => {
-    deleteMoReport();
   });
 
   it("should click the MO Reports tile", clickMoReportTile);
@@ -51,4 +47,6 @@ describe("MO report > can start a new report", () => {
     "Should 'Save and return' to display the MO Report Summary page and attempt to submit, prompting validation",
     validateMoReport,
   );
+
+  it("Should delete the report asserting for correct Delete button", deleteUsingCorrectDeleteButton);
 });

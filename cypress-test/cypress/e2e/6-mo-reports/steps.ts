@@ -695,3 +695,11 @@ export const assertSectionCommentsAndScore = (title: string, section: number) =>
   cy.getByQA(`question-${String(section)}-score-1`).should("have.attr", "checked");
   cy.get("textarea").contains(`Section ${String(section)} // *&^%`);
 };
+
+export const deleteUsingCorrectDeleteButton = () => {
+  cy.button("Save and return to project").click();
+  cy.getByQA("deleteLink").contains("Delete report").click();
+  cy.button("Delete report").should("have.css", "background-color").and("eq", "rgb(212, 53, 28)");
+  cy.button("Delete report").click();
+  cy.getByQA("deleteLink").should("not.exist");
+};
