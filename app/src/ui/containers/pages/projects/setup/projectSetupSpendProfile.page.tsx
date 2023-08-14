@@ -17,8 +17,13 @@ import { useContent } from "@ui/hooks/content.hook";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useStores } from "@ui/redux/storesProvider";
 import { IForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
-import { ForecastData, ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
+import {
+  ForecastDataForTableLayout,
+  ForecastTable,
+} from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { useSetupSpendProfileData } from "./projectSetupSpendProfile.logic";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: ProjectId;
@@ -26,7 +31,12 @@ export interface ProjectSetupSpendProfileParams {
 }
 
 interface Data {
-  data: ForecastData;
+  data: ForecastDataForTableLayout & {
+    project: {
+      title: ProjectDto["title"];
+      projectNumber: ProjectDto["projectNumber"];
+    };
+  };
   editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
   partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
@@ -58,7 +68,7 @@ const ProjectSetupSpendProfile = (props: BaseProps & ProjectSetupSpendProfilePar
       }
       error={editor.error}
       validator={editor.validator}
-      pageTitle={<Title {...data.project} />}
+      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
     >
       <Section qa="project-setup-spend-profile">
         <SimpleString qa="guidance">
@@ -116,17 +126,7 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
     navigate(props.routes.projectSetup.getLink(projectSetupParams).path);
   };
 
-  const data = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partner: stores.partners.getById(props.partnerId),
-    forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
-    golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-    // Initial forecast so happens before claims
-    claim: Pending.done(null),
-    claims: Pending.done([]),
-    claimDetails: Pending.done([]),
-  });
+  const data = useSetupSpendProfileData(props.projectId, props.partnerId);
 
   const editor = stores.forecastDetails.getInitialForecastEditor(props.partnerId);
 
@@ -146,7 +146,6 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
   const onChangePartner = (dto: PartnerDto) => stores.partners.updatePartner(false, props.partnerId, dto);
 
   const combined = Pending.combine({
-    data,
     editor,
     partnerEditor,
   });
@@ -154,7 +153,9 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
   return (
     <PageLoader
       pending={combined}
-      render={x => <ProjectSetupSpendProfile onChange={onChange} onChangePartner={onChangePartner} {...props} {...x} />}
+      render={x => (
+        <ProjectSetupSpendProfile data={data} onChange={onChange} onChangePartner={onChangePartner} {...props} {...x} />
+      )}
     />
   );
 };
