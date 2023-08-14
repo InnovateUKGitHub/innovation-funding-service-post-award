@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { Pending } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { SpendProfileStatus } from "@framework/constants/partner";
@@ -37,81 +37,70 @@ interface Callbacks {
 }
 
 const Form = createTypedForm<ForecastDetailsDTO[]>();
-class ProjectSetupSpendProfile extends ContainerBase<ProjectSetupSpendProfileParams, Data, Callbacks> {
-  render() {
-    const { data, editor, partnerEditor } = this.props;
-    const readyToSubmitMessage = <Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
 
-    const options: SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
+const ProjectSetupSpendProfile = (props: BaseProps & ProjectSetupSpendProfileParams & Data & Callbacks) => {
+  const { data, editor, partnerEditor } = props;
+  const readyToSubmitMessage = <Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
 
-    return (
-      <Page
-        backLink={
-          <BackLink
-            route={this.props.routes.projectSetup.getLink({
-              projectId: this.props.projectId,
-              partnerId: this.props.partnerId,
-            })}
-          >
-            <Content value={x => x.pages.projectSetupSpendProfile.backLink} />
-          </BackLink>
-        }
-        error={editor.error}
-        validator={editor.validator}
-        pageTitle={<Title {...data.project} />}
-      >
-        <Section qa="project-setup-spend-profile">
-          {this.renderGuidance()}
-          <Form.Form
-            editor={editor}
-            onChange={data => {
-              this.props.onChangePartner(partnerEditor.data);
-              this.props.onChange(false, partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete, data);
-            }}
-            onSubmit={() =>
-              this.props.onChange(
-                true,
-                partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete,
-                editor.data,
-              )
-            }
-            qa="project-setup-spend-profile-form"
-          >
-            <Form.Custom
-              name="forecastTable"
-              update={() => null}
-              value={({ onChange }) => <ForecastTable onChange={onChange} data={data} editor={editor} />}
+  const options: SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
+
+  return (
+    <Page
+      backLink={
+        <BackLink
+          route={props.routes.projectSetup.getLink({
+            projectId: props.projectId,
+            partnerId: props.partnerId,
+          })}
+        >
+          <Content value={x => x.pages.projectSetupSpendProfile.backLink} />
+        </BackLink>
+      }
+      error={editor.error}
+      validator={editor.validator}
+      pageTitle={<Title {...data.project} />}
+    >
+      <Section qa="project-setup-spend-profile">
+        <SimpleString qa="guidance">
+          <Content value={x => x.pages.projectSetupSpendProfile.guidanceMessage} />
+        </SimpleString>
+        <Form.Form
+          editor={editor}
+          onChange={data => {
+            props.onChangePartner(partnerEditor.data);
+            props.onChange(false, partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete, data);
+          }}
+          onSubmit={() =>
+            props.onChange(true, partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete, editor.data)
+          }
+          qa="project-setup-spend-profile-form"
+        >
+          <Form.Custom
+            name="forecastTable"
+            update={() => null}
+            value={({ onChange }) => <ForecastTable onChange={onChange} data={data} editor={editor} />}
+          />
+          <Form.Fieldset heading={x => x.pages.projectSetupSpendProfile.markAsComplete}>
+            <Form.Checkboxes
+              name="isComplete"
+              options={options}
+              value={() => (partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete ? options : [])}
+              update={(_, value) =>
+                (partnerEditor.data.spendProfileStatus =
+                  value && value.some(y => y.id === "true")
+                    ? SpendProfileStatus.Complete
+                    : SpendProfileStatus.Incomplete)
+              }
             />
-            <Form.Fieldset heading={x => x.pages.projectSetupSpendProfile.markAsComplete}>
-              <Form.Checkboxes
-                name="isComplete"
-                options={options}
-                value={() => (partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete ? options : [])}
-                update={(_, value) =>
-                  (partnerEditor.data.spendProfileStatus =
-                    value && value.some(y => y.id === "true")
-                      ? SpendProfileStatus.Complete
-                      : SpendProfileStatus.Incomplete)
-                }
-              />
-              <Form.Submit>
-                <Content value={x => x.pages.projectSetupSpendProfile.submitButton} />
-              </Form.Submit>
-            </Form.Fieldset>
-          </Form.Form>
-        </Section>
-      </Page>
-    );
-  }
-
-  private renderGuidance() {
-    return (
-      <SimpleString qa="guidance">
-        <Content value={x => x.pages.projectSetupSpendProfile.guidanceMessage} />
-      </SimpleString>
-    );
-  }
-}
+            <Form.Submit>
+              <Content value={x => x.pages.projectSetupSpendProfile.submitButton} />
+            </Form.Submit>
+          </Form.Fieldset>
+        </Form.Form>
+      </Section>
+    </Page>
+  );
+};
 
 const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams & BaseProps) => {
   const stores = useStores();
