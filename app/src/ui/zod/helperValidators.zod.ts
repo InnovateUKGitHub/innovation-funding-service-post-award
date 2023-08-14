@@ -1,6 +1,6 @@
 import { SalesforcePrefixes } from "@framework/constants/salesforceConstants";
 import { ClientFileWrapper } from "@client/clientFileWrapper";
-import { z } from "zod";
+import { z, ZodIssueCode } from "zod";
 import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
 import { validDocumentFilenameCharacters } from "@ui/validation/validators/documentUploadValidator";
 import { getFileExtension, getFileName } from "@framework/util/files";
@@ -29,8 +29,11 @@ const periodIdValidation = z.coerce
   .lt(100) // Assumption that a project has fewer than 100 periods.
   .transform(x => x as PeriodId);
 
-const getFileValidation = (options: IAppOptions) =>
-  z.preprocess(
+const getFileValidation = (options: IAppOptions) => {
+  const { imageTypes, pdfTypes, presentationTypes, spreadsheetTypes, textTypes } = options.permittedTypes;
+  const permittedFileTypes = [...pdfTypes, ...textTypes, ...presentationTypes, ...spreadsheetTypes, ...imageTypes];
+
+  return z.preprocess(
     (x: unknown) => {
       // Map to ClientFileWrapper/ServerFileWrapper
       if (Array.isArray(x) && x.every(x => x instanceof IsomorphicFileWrapper)) return x;
@@ -39,61 +42,68 @@ const getFileValidation = (options: IAppOptions) =>
     },
     z
       .array(
-        z
-          .custom<ClientFileWrapper>()
-          .refine(file => getFileName(file.fileName).length > 0, {
-            params: {
-              i18n: "errors.file_name_too_small",
-            },
-          })
-          .refine(file => file.fileName.length <= 80, {
-            params: {
-              i18n: "errors.file_name_too_large",
-              count: 80,
-            },
-          })
-          .refine(file => validDocumentFilenameCharacters.test(file.fileName), {
-            params: {
-              i18n: "errors.file_name_invalid_characters",
-            },
-          })
-          .refine(
-            file => {
-              const { imageTypes, pdfTypes, presentationTypes, spreadsheetTypes, textTypes } = options.permittedTypes;
+        z.custom<ClientFileWrapper>().superRefine((file, ctx) => {
+          if (!(getFileName(file.fileName).length > 0)) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              params: {
+                i18n: "errors.file_name_too_small",
+              },
+            });
+          }
 
-              const permittedFileTypes = [
-                ...pdfTypes,
-                ...textTypes,
-                ...presentationTypes,
-                ...spreadsheetTypes,
-                ...imageTypes,
-              ];
+          if (!(file.fileName.length <= 80)) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              params: {
+                i18n: "errors.file_name_too_large",
+                count: 80,
+              },
+            });
+          }
 
-              const extension = getFileExtension(file.fileName);
+          if (!validDocumentFilenameCharacters.test(file.fileName)) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              params: {
+                i18n: "errors.file_name_invalid_characters",
+              },
+            });
+          }
 
-              return permittedFileTypes.includes(extension);
-            },
-            {
+          if (!permittedFileTypes.includes(getFileExtension(file.fileName))) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
               params: {
                 i18n: "errors.file_name_invalid_type",
               },
-            },
-          )
-          .refine(file => file.size > 0, {
-            params: {
-              i18n: "errors.file_size_too_small",
-            },
-          })
-          .refine(file => file.size <= options.maxFileSize, {
-            params: {
-              i18n: "errors.file_size_too_large",
-              size: options.maxFileSize,
-            },
-          }),
+            });
+          }
+
+          if (!(file.size > 0)) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              params: {
+                i18n: "errors.file_size_too_small",
+              },
+            });
+          }
+
+          if (!(file.size <= options.maxFileSize)) {
+            ctx.addIssue({
+              code: ZodIssueCode.custom,
+              params: {
+                i18n: "errors.file_size_too_large",
+                size: options.maxFileSize,
+              },
+            });
+          }
+        }),
       )
       .min(1)
       .max(options.maxUploadFileCount),
   );
+};
 
 export {
   projectIdValidation,

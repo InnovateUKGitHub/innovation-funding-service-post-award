@@ -25,6 +25,7 @@ describe("files", () => {
       ${"file name with a trailing dot"} | ${"trailingdot."}                    | ${"trailingdot"}                 | ${""}
       ${"file name with a starting dot"} | ${".helloworld.pptx"}                | ${".helloworld"}                 | ${"pptx"}
       ${"file name with many dots"}      | ${".ktp..tar.gz"}                    | ${".ktp..tar"}                   | ${"gz"}
+      ${"file name with no basename"}    | ${".gitignore"}                      | ${".gitignore"}                  | ${""}
     `("$name", ({ fileName, basename, extension }) => {
       const ext = getFileExtension(fileName);
       const bas = getFileName(fileName);
