@@ -56,6 +56,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
   const commentFieldName: `questions.${number}.comments` = `questions.${q.displayOrder - 1}.comments`;
   const optionFieldName: `questions.${number}.optionId` = `questions.${q.displayOrder - 1}.optionId`;
   const commentFieldId = commentFieldName.replaceAll(".", "_");
+  const optionFieldId = optionFieldName.replaceAll(".", "_");
 
   const disabledForm = mode === "view";
   const optionError = get(validatorErrors, optionFieldName) as RhfError;
@@ -82,7 +83,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
             <Legend>{q.title}</Legend>
             <Hint id="hint-for-questions">{q.description}</Hint>
             {!!radioOptions.length && (
-              <FormGroup hasError={!!optionError}>
+              <FormGroup hasError={!!optionError} id={optionFieldId}>
                 <ValidationError error={optionError} data-qa="monitoring-report-option-error" />
                 <RadioList name={`questions.${q.displayOrder - 1}.optionId`} id="questions" register={register}>
                   {radioOptions.map(option => (

@@ -30,13 +30,7 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
 /**
  * creates links for Error results so that they can link to the appropriate input element
  */
-export const ResultsLinks = ({
-  results,
-  bailoutErrorNavigation,
-}: {
-  results: (Result | ValidationError)[];
-  bailoutErrorNavigation?: boolean;
-}) => {
+export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[] }) => {
   const navigate = useNavigate();
 
   return (
@@ -46,10 +40,10 @@ export const ResultsLinks = ({
           <a
             onClick={e => {
               e.preventDefault();
-              !bailoutErrorNavigation && scrollToTheTagSmoothly(x.key);
-              !bailoutErrorNavigation && navigate(`#${x.key}`, { replace: true });
+              scrollToTheTagSmoothly(x.key);
+              navigate(`#${x.key}`, { replace: true });
             }}
-            href={`#${bailoutErrorNavigation ? "" : x.key}`}
+            href={`#${x.key}`}
           >
             {prepareMessage(isResultType(x) ? x.errorMessage : x?.message)}
           </a>
