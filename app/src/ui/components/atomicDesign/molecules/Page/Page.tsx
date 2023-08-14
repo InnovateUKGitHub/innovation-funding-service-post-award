@@ -43,6 +43,7 @@ export interface PageProps {
   partnerStatus?: PartnerStatus;
   qa?: string;
   className?: string;
+  bailoutErrorNavigation?: boolean;
 }
 
 /**
@@ -58,6 +59,7 @@ export function Page({
   className,
   projectStatus,
   partnerStatus,
+  bailoutErrorNavigation,
 }: PageProps) {
   const displayAriaLive: boolean = !!apiError || !!validationErrors;
 
@@ -89,7 +91,12 @@ export function Page({
             {displayAriaLive && (
               <AriaLive>
                 {apiError && <ErrorSummary {...apiError} />}
-                {validationErrors && <ValidationSummary validationErrors={validationErrors} />}
+                {validationErrors && (
+                  <ValidationSummary
+                    validationErrors={validationErrors}
+                    bailoutErrorNavigation={bailoutErrorNavigation}
+                  />
+                )}
               </AriaLive>
             )}
 

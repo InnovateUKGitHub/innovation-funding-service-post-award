@@ -4,9 +4,10 @@ import { convertErrorFormatFromRhfForErrorSummary } from "@framework/util/errorH
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
 interface Props {
   validationErrors?: RhfErrors;
+  bailoutErrorNavigation?: boolean;
 }
 
-export const ValidationSummary = ({ validationErrors }: Props) => {
+export const ValidationSummary = ({ validationErrors, bailoutErrorNavigation }: Props) => {
   const { getContent } = useContent();
 
   const results = convertErrorFormatFromRhfForErrorSummary(validationErrors);
@@ -28,7 +29,7 @@ export const ValidationSummary = ({ validationErrors }: Props) => {
       </h2>
       <div className="govuk-error-summary__body">
         <List className="govuk-error-summary__list">
-          <ResultsLinks results={results}></ResultsLinks>
+          <ResultsLinks results={results} bailoutErrorNavigation={bailoutErrorNavigation} />
         </List>
       </div>
     </div>
