@@ -108,10 +108,10 @@
       "finalClaimDueMessageMo": "is due to submit their final claim so cannot change their forecast."
     },
     "warningContent": {
-      "amountRequestMessage": "The amount you are requesting differs from the agreed costs for:",
-      "contactMessage": "Please amend your forecast costs to be in line with the grant offer letter.",
-      "contactMessage_InternalAssurance": "Innovate UK will let you know if they have any concerns.",
-      "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:"
+      "amountRequestMessage": "The total of your actual costs claimed and forecasted costs is different than the agreed for:",
+      "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:",
+      "contactMessage": "If you are forecasting to underspend the grant offered, please add a comment for the attention of your Monitoring Service Provider or Innovate UK when submitting this claim.",
+      "contactMessage_InternalAssurance": "If you are forecasting to underspend the grant offered, please add a comment for the attention of Innovate UK when submitting this claim."
     },
     "projectInactiveContent": {
       "projectInactiveMessage": "This project is currently inactive, you can't edit this project so you have been prevented from viewing this page.",
