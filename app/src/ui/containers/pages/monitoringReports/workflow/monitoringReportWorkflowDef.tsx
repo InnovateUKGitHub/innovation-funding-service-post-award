@@ -65,6 +65,7 @@ const monitoringReportWorkflowDef = (dto: MonitoringReportDto): IMonitoringRepor
       validation: val => val,
       summaryRender: MonitoringReportSummary,
     },
+    gqlQuery: undefined,
   };
 };
 

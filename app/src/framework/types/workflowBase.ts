@@ -1,9 +1,13 @@
 import { numberComparator } from "@framework/util/comparator";
 import { Results } from "@ui/validation/results";
 import React from "react";
+import { GraphQLTaggedNode, OperationType } from "relay-runtime";
 
 export type IStepProps = AnyObject;
 export type ISummaryProps = AnyObject;
+type QueryIfAvailable<TQuery extends OperationType | undefined = undefined> = TQuery extends undefined
+  ? { gqlQuery: TQuery }
+  : Record<string, never>;
 
 export interface IStep<TStepName extends string, TStepProps extends IStepProps, TVal extends Results<ResultBase>> {
   stepName: TStepName;
@@ -23,9 +27,11 @@ export interface IWorkflow<
   TStepProps extends IStepProps,
   TSummaryProps extends ISummaryProps,
   TVal extends Results<ResultBase>,
+  TQuery extends OperationType | undefined = undefined,
 > {
-  steps: IStep<TStepName, TStepProps, TVal>[];
-  summary: ISummary<TSummaryProps, TVal>;
+  steps: IStep<TStepName, TStepProps & QueryIfAvailable<TQuery>, TVal>[];
+  summary: ISummary<TSummaryProps & QueryIfAvailable<TQuery>, TVal>;
+  gqlQuery: TQuery extends undefined ? undefined : GraphQLTaggedNode;
 }
 
 export type ICallableStep<TStepProps extends IStepProps, TVal extends Results<ResultBase>> = IStep<
@@ -38,14 +44,15 @@ export interface ICallableWorkflow<
   TStepProps extends IStepProps,
   TSummaryProps extends ISummaryProps,
   TVal extends Results<ResultBase>,
+  TQuery extends OperationType | undefined = undefined,
 > {
   isOnSummary: () => boolean;
-  getSummary: () => { summaryRender: (props: TSummaryProps) => React.ReactNode } | undefined;
+  getSummary: () => { summaryRender: (props: TSummaryProps & QueryIfAvailable<TQuery>) => React.ReactNode } | undefined;
   findStepNumberByName: (name: string) => number | undefined;
-  getCurrentStepInfo: () => ICallableStep<TStepProps, TVal> | undefined;
+  getCurrentStepInfo: () => ICallableStep<TStepProps & QueryIfAvailable<TQuery>, TVal> | undefined;
   getCurrentStepName: () => string | undefined;
-  getNextStepInfo: () => ICallableStep<TStepProps, TVal> | undefined;
-  getPrevStepInfo: () => ICallableStep<TStepProps, TVal> | undefined;
+  getNextStepInfo: () => ICallableStep<TStepProps & QueryIfAvailable<TQuery>, TVal> | undefined;
+  getPrevStepInfo: () => ICallableStep<TStepProps & QueryIfAvailable<TQuery>, TVal> | undefined;
   getValidation: (validators: TVal) => Results<ResultBase> | undefined;
 }
 
@@ -54,13 +61,14 @@ export abstract class WorkflowBase<
   TStepProps extends IStepProps,
   TSummaryProps extends ISummaryProps,
   TVal extends Results<ResultBase>,
-> implements ICallableWorkflow<TStepProps, TSummaryProps, TVal>
+  TQuery extends OperationType | undefined = undefined,
+> implements ICallableWorkflow<TStepProps, TSummaryProps, TVal, TQuery>
 {
-  private readonly steps: IStep<TStepNames, TStepProps, TVal>[];
-  private readonly summary: ISummary<TSummaryProps, TVal>;
+  private readonly steps: IStep<TStepNames, TStepProps & QueryIfAvailable<TQuery>, TVal>[];
+  private readonly summary: ISummary<TSummaryProps & QueryIfAvailable<TQuery>, TVal>;
 
   protected constructor(
-    definition: IWorkflow<TStepNames, TStepProps, TSummaryProps, TVal>,
+    definition: IWorkflow<TStepNames, TStepProps, TSummaryProps, TVal, TQuery>,
     private readonly stepNumber: number | undefined,
   ) {
     this.steps = definition.steps;
