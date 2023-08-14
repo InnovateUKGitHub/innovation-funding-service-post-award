@@ -3,7 +3,7 @@ import { ClientFileWrapper } from "@client/clientFileWrapper";
 import { z } from "zod";
 import { IsomorphicFileWrapper } from "@server/apis/isomorphicFileWrapper";
 import { validDocumentFilenameCharacters } from "@ui/validation/validators/documentUploadValidator";
-import { getFileExtension } from "@framework/util/files";
+import { getFileExtension, getFileName } from "@framework/util/files";
 import { IAppOptions } from "@framework/types/IAppOptions";
 
 const projectIdValidation = z
@@ -41,7 +41,7 @@ const getFileValidation = (options: IAppOptions) =>
       .array(
         z
           .custom<ClientFileWrapper>()
-          .refine(file => file.fileName.length > 0, {
+          .refine(file => getFileName(file.fileName).length > 0, {
             params: {
               i18n: "errors.file_name_too_small",
             },

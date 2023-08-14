@@ -1,4 +1,4 @@
-import { getFileSize, getFileExtension } from "./files";
+import { getFileSize, getFileExtension, getFileName } from "./files";
 
 describe("getFileSize()", () => {
   test.each`
@@ -14,18 +14,22 @@ describe("getFileSize()", () => {
 });
 
 describe("files", () => {
-  describe("getFileExtension", () => {
+  describe("getFileName / getFileExtension", () => {
     test.each`
-      name                               | fileName                             | expected
-      ${"empty file name"}               | ${""}                                | ${""}
-      ${"file name with multiple dots"}  | ${"this.file.has.multiple.dots.txt"} | ${"txt"}
-      ${"file name with file type"}      | ${"test.jpeg"}                       | ${"jpeg"}
-      ${"file name with no file type"}   | ${"file"}                            | ${""}
-      ${"file name in capitals"}         | ${"test.PDF"}                        | ${"pdf"}
-      ${"file name with a trailing dot"} | ${"trailingdot."}                    | ${""}
-    `("$name", ({ fileName, expected }) => {
+      name                               | fileName                             | basename                         | extension
+      ${"empty file name"}               | ${""}                                | ${""}                            | ${""}
+      ${"file name with multiple dots"}  | ${"this.file.has.multiple.dots.txt"} | ${"this.file.has.multiple.dots"} | ${"txt"}
+      ${"file name with file type"}      | ${"test.jpeg"}                       | ${"test"}                        | ${"jpeg"}
+      ${"file name with no file type"}   | ${"file"}                            | ${"file"}                        | ${""}
+      ${"file name in capitals"}         | ${"test.PDF"}                        | ${"test"}                        | ${"pdf"}
+      ${"file name with a trailing dot"} | ${"trailingdot."}                    | ${"trailingdot"}                 | ${""}
+      ${"file name with a starting dot"} | ${".helloworld.pptx"}                | ${".helloworld"}                 | ${"pptx"}
+      ${"file name with many dots"}      | ${".ktp..tar.gz"}                    | ${".ktp..tar"}                   | ${"gz"}
+    `("$name", ({ fileName, basename, extension }) => {
       const ext = getFileExtension(fileName);
-      expect(ext).toBe(expected);
+      const bas = getFileName(fileName);
+      expect(ext).toBe(extension);
+      expect(bas).toBe(basename);
     });
   });
 });
