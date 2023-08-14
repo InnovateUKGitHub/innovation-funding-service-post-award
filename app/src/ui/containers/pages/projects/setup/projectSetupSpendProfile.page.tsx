@@ -26,9 +26,9 @@ export interface ProjectSetupSpendProfileParams {
 }
 
 interface Data {
-  data: Pending<ForecastData>;
-  editor: Pending<IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>>;
-  partnerEditor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
+  data: ForecastData;
+  editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
+  partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
 interface Callbacks {
@@ -37,20 +37,9 @@ interface Callbacks {
 }
 
 const Form = createTypedForm<ForecastDetailsDTO[]>();
-class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendProfileParams, Data, Callbacks> {
-  public render() {
-    const combined = Pending.combine({
-      data: this.props.data,
-      editor: this.props.editor,
-      partnerEditor: this.props.partnerEditor,
-    });
-    return <PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor, x.partnerEditor)} />;
-  }
-  public renderContents(
-    combined: ForecastData,
-    editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>,
-    partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>,
-  ) {
+class ProjectSetupSpendProfile extends ContainerBase<ProjectSetupSpendProfileParams, Data, Callbacks> {
+  render() {
+    const { data, editor, partnerEditor } = this.props;
     const readyToSubmitMessage = <Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
 
     const options: SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
@@ -69,7 +58,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<Title {...combined.project} />}
+        pageTitle={<Title {...data.project} />}
       >
         <Section qa="project-setup-spend-profile">
           {this.renderGuidance()}
@@ -91,7 +80,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
             <Form.Custom
               name="forecastTable"
               update={() => null}
-              value={({ onChange }) => <ForecastTable onChange={onChange} data={combined} editor={editor} />}
+              value={({ onChange }) => <ForecastTable onChange={onChange} data={data} editor={editor} />}
             />
             <Form.Fieldset heading={x => x.pages.projectSetupSpendProfile.markAsComplete}>
               <Form.Checkboxes
@@ -138,34 +127,45 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
     navigate(props.routes.projectSetup.getLink(projectSetupParams).path);
   };
 
+  const data = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    partner: stores.partners.getById(props.partnerId),
+    forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
+    golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
+    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+    // Initial forecast so happens before claims
+    claim: Pending.done(null),
+    claims: Pending.done([]),
+    claimDetails: Pending.done([]),
+  });
+
+  const editor = stores.forecastDetails.getInitialForecastEditor(props.partnerId);
+
+  const partnerEditor = stores.partners.getPartnerEditor(props.projectId, props.partnerId);
+  const onChange = (saving: boolean, submit: boolean, payload: ForecastDetailsDTO[]) => {
+    stores.forecastDetails.updateInitialForecastEditor(
+      saving,
+      props.projectId,
+      props.partnerId,
+      payload,
+      submit,
+      getContent(x => x.pages.projectSetupSpendProfile.spendProfileUpdatedMessage),
+      navigateToProjectSetup,
+    );
+  };
+
+  const onChangePartner = (dto: PartnerDto) => stores.partners.updatePartner(false, props.partnerId, dto);
+
+  const combined = Pending.combine({
+    data,
+    editor,
+    partnerEditor,
+  });
+
   return (
-    <ProjectSetupSpendProfileComponent
-      {...props}
-      data={Pending.combine({
-        project: stores.projects.getById(props.projectId),
-        partner: stores.partners.getById(props.partnerId),
-        forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
-        golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-        costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-        // Initial forecast so happens before claims
-        claim: Pending.done(null),
-        claims: Pending.done([]),
-        claimDetails: Pending.done([]),
-      })}
-      editor={stores.forecastDetails.getInitialForecastEditor(props.partnerId)}
-      partnerEditor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-      onChange={(saving, submit, payload) => {
-        stores.forecastDetails.updateInitialForecastEditor(
-          saving,
-          props.projectId,
-          props.partnerId,
-          payload,
-          submit,
-          getContent(x => x.pages.projectSetupSpendProfile.spendProfileUpdatedMessage),
-          navigateToProjectSetup,
-        );
-      }}
-      onChangePartner={dto => stores.partners.updatePartner(false, props.partnerId, dto)}
+    <PageLoader
+      pending={combined}
+      render={x => <ProjectSetupSpendProfile onChange={onChange} onChangePartner={onChangePartner} {...props} {...x} />}
     />
   );
 };
