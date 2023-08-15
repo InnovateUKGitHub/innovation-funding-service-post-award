@@ -31,7 +31,7 @@ export const useOnMonitoringReportDelete = (
 ) => {
   const navigate = useNavigate();
 
-  return useOnUpdate<{}, {}>({
+  return useOnUpdate<EmptyObject, boolean>({
     req: () =>
       clientsideApiClient.monitoringReports.deleteMonitoringReport({
         reportId: monitoringReportId,

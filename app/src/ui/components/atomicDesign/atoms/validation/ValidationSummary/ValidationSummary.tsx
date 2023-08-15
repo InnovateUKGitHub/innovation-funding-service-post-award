@@ -28,7 +28,7 @@ export const ValidationSummary = ({ validationErrors }: Props) => {
       </h2>
       <div className="govuk-error-summary__body">
         <List className="govuk-error-summary__list">
-          <ResultsLinks results={results} />
+          <ResultsLinks results={results}></ResultsLinks>
         </List>
       </div>
     </div>

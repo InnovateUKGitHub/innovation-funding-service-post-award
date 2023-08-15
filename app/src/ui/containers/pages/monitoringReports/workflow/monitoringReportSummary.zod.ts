@@ -25,7 +25,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
               path: ["optionId"],
             });
           }
-
+          // need to use super refine to ensure title is in the scope for i18n
           if (data.comments.length < 1) {
             ctx.addIssue({
               code: z.ZodIssueCode.too_small,

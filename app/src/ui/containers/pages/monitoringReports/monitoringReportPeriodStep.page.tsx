@@ -70,7 +70,12 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
       </Section>
       <Section>
         <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(onUpdate)}>
-          <Field labelBold label="Period" id="period" error={validatorErrors?.period as RhfError}>
+          <Field
+            labelBold
+            label={getContent(x => x.pages.monitoringReportsPeriodStep.periodLabel)}
+            id="period"
+            error={validatorErrors?.period as RhfError}
+          >
             <NumberInput id="period" inputWidth={3} {...register("period")} />
           </Field>
           <Fieldset data-qa="save-buttons">

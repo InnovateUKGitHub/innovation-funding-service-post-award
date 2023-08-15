@@ -5,5 +5,5 @@ export const createMonitoringReportErrorMap = makeZodI18nMap({ keyPrefix: ["moni
 
 export const createMonitoringReportSchema = (maxNumberOfPeriods: number) =>
   z.object({
-    period: z.preprocess(a => parseFloat(a as string), z.number().int().min(1).max(maxNumberOfPeriods)),
+    period: z.coerce.number().int().min(1).max(maxNumberOfPeriods),
   });

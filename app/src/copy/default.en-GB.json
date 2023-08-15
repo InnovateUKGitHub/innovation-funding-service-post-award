@@ -700,7 +700,8 @@
         "html": "Edit monitoring report",
         "display": "Monitoring report"
       },
-      "backLink": "Back to summary"
+      "backLink": "Back to summary",
+      "periodLabel": "Period"
     },
     "monitoringReportsQuestionStep": {
       "buttonContinue": "Continue",

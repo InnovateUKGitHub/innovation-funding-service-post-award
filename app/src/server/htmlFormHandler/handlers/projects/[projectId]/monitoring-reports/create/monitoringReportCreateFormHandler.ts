@@ -7,12 +7,15 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
-import { MonitoringReportCreateRoute } from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.page";
+import {
+  MonitoringReportCreateParams,
+  MonitoringReportCreateRoute,
+} from "@ui/containers/pages/monitoringReports/create/monitoringReportCreate.page";
 import { MonitoringReportDashboardRoute } from "@ui/containers/pages/monitoringReports/monitoringReportDashboard/monitoringReportDashboard.page";
 import { MonitoringReportWorkflowRoute } from "@ui/containers/pages/monitoringReports/workflow/monitoringReportWorkflow.page";
 
 export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
-  { projectId: ProjectId },
+  MonitoringReportCreateParams,
   "monitoringReport"
 > {
   constructor() {
@@ -21,7 +24,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
 
   protected async getDto(
     context: IContext,
-    params: { projectId: ProjectId },
+    params: MonitoringReportCreateParams,
     button: IFormButton,
     body: IFormBody,
   ): Promise<MonitoringReportDto> {
@@ -41,17 +44,17 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
     };
   }
 
-  protected createValidationResult(params: { projectId: ProjectId }, dto: MonitoringReportDto) {
+  protected createValidationResult(params: MonitoringReportCreateParams, dto: MonitoringReportDto) {
     return new MonitoringReportDtoValidator(dto, false, false, dto.questions, 100);
   }
 
-  protected getStoreKey(params: { projectId: ProjectId }) {
+  protected getStoreKey(params: MonitoringReportCreateParams) {
     return storeKeys.getMonitoringReportKey(params.projectId);
   }
 
   protected async run(
     context: IContext,
-    params: { projectId: ProjectId },
+    params: MonitoringReportCreateParams,
     button: IFormButton,
     dto: MonitoringReportDto,
   ): Promise<ILinkInfo> {

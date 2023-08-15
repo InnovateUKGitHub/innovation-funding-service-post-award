@@ -32,7 +32,6 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
  */
 export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[] }) => {
   const navigate = useNavigate();
-
   return (
     <>
       {results.map((x, i) => (
