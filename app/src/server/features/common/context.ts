@@ -130,6 +130,7 @@ export class Context implements IContext {
 
     // use fat arrow so this is bound - extracted to shorten line length
     const connectionCallback = () => this.getSalesforceConnection();
+    const asSystemUserConnectionCallback = () => this.asSystemUser().getSalesforceConnection();
     const recordTypeCallback = (objectName: string, recordType: string) => this.getRecordTypeId(objectName, recordType);
 
     this.repositories = {
@@ -141,7 +142,7 @@ export class Context implements IContext {
       claimTotalCostCategory: new ClaimTotalCostCategoryRepository(connectionCallback, this.logger),
       claimLineItems: new ClaimLineItemRepository(recordTypeCallback, connectionCallback, this.logger),
       costCategories: new CostCategoryRepository(connectionCallback, this.logger),
-      documents: new DocumentsRepository(connectionCallback, this.logger),
+      documents: new DocumentsRepository(connectionCallback, asSystemUserConnectionCallback, this.logger),
       financialVirements: new FinancialVirementRepository(recordTypeCallback, connectionCallback, this.logger),
       financialLoanVirements: new FinancialLoanVirementRepository(recordTypeCallback, connectionCallback, this.logger),
       pcrSpendProfile: new PcrSpendProfileRepository(recordTypeCallback, connectionCallback, this.logger),
