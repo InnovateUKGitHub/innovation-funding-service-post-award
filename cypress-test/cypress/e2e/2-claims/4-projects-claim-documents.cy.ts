@@ -7,6 +7,7 @@ import {
   deleteSingleChar,
   validateExcessiveFileName,
   doNotUploadSpecialChar,
+  uploadFileNameTooShort,
 } from "e2e/3-documents/steps";
 const pmEmail = "james.black@euimeabs.test";
 
@@ -51,7 +52,7 @@ describe("claims > documents upload screen", () => {
   });
 
   it("Should allow you to delete the document that was just uploaded", () => {
-    cy.getByQA("button_delete-qa").contains("Remove").click();
+    cy.getByQA("button_documentId-qa").contains("Remove").click();
   });
 
   it("Should display a document removal validation message", () => {
@@ -69,6 +70,8 @@ describe("claims > documents upload screen", () => {
   it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
 
   it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+
+  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
 
   it("Should save and return to claims", () => {
     cy.wait(500);

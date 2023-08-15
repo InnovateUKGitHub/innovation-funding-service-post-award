@@ -325,6 +325,7 @@ export const uploadFileTooLarge = () => {
 export const uploadFileNameTooShort = () => {
   cy.fileInput(".txt");
   cy.button("Upload").click();
-  cy.validationLink("You cannot upload '.txt' because the file name is too short.");
+  cy.validationLink("You cannot upload '.txt' because the file must have a name.");
+  cy.get("p").contains("You cannot upload '.txt' because the file must have a name.");
   cy.reload();
 };
