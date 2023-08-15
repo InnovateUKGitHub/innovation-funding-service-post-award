@@ -10,17 +10,28 @@ import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/rep
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { IFileWrapper } from "@framework/types/fileWapper";
+import { SalesforceFeedAttachmentRepository } from "./salesforceFeedAttachmentRepository";
+import { ForbiddenError } from "@shared/appError";
 
 export class DocumentsRepository {
   private readonly logger: Logger = new Logger("DocumentsRepository");
   private readonly contentVersionRepository: ContentVersionRepository;
   private readonly contentDocumentLinkRepository: ContentDocumentLinkRepository;
   private readonly contentDocumentRepository: ContentDocumentRepository;
+  private readonly salesforceFeedAttachmentRepository: SalesforceFeedAttachmentRepository;
 
-  public constructor(getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  public constructor(
+    getSalesforceConnection: () => Promise<Connection>,
+    getAdministratorSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger,
+  ) {
     this.contentVersionRepository = new ContentVersionRepository(getSalesforceConnection, logger);
     this.contentDocumentLinkRepository = new ContentDocumentLinkRepository(getSalesforceConnection, logger);
     this.contentDocumentRepository = new ContentDocumentRepository(getSalesforceConnection, logger);
+    this.salesforceFeedAttachmentRepository = new SalesforceFeedAttachmentRepository(
+      getAdministratorSalesforceConnection,
+      logger,
+    );
   }
 
   private async canDeleteDocument(documentId: string): Promise<boolean> {
