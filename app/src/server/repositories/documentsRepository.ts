@@ -12,6 +12,7 @@ import { DocumentDescription } from "@framework/constants/documentDescription";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { SalesforceFeedAttachmentRepository } from "./salesforceFeedAttachmentRepository";
 import { ForbiddenError } from "@shared/appError";
+import { SalesforceFeedItemRepository } from "./salesforceFeedItemRepository";
 
 export class DocumentsRepository {
   private readonly logger: Logger = new Logger("DocumentsRepository");
@@ -19,6 +20,7 @@ export class DocumentsRepository {
   private readonly contentDocumentLinkRepository: ContentDocumentLinkRepository;
   private readonly contentDocumentRepository: ContentDocumentRepository;
   private readonly salesforceFeedAttachmentRepository: SalesforceFeedAttachmentRepository;
+  private readonly salesforceFeedItemRepository: SalesforceFeedItemRepository;
 
   public constructor(
     getSalesforceConnection: () => Promise<Connection>,
@@ -32,6 +34,7 @@ export class DocumentsRepository {
       getAdministratorSalesforceConnection,
       logger,
     );
+    this.salesforceFeedItemRepository = new SalesforceFeedItemRepository(getAdministratorSalesforceConnection, logger);
   }
 
   private async canDeleteDocument(documentId: string): Promise<boolean> {
@@ -112,11 +115,25 @@ export class DocumentsRepository {
   }
 
   public async getDocumentContent(versionId: string): Promise<Stream> {
-    const chatterFiles = await this.salesforceFeedAttachmentRepository.getAllByRecordId(versionId);
+    const chatterFilesPromise = this.salesforceFeedAttachmentRepository.getAllByRecordId(versionId);
+    const contentVersionPromise = this.contentVersionRepository.getDocument(versionId);
 
-    // Disallow files that are in chatter from being accessed
-    if (chatterFiles.some(x => x.RecordId === versionId))
-      throw new ForbiddenError("You do not have permissions to access this file.");
+    const [chatterFiles, contentVersion] = await Promise.all([chatterFilesPromise, contentVersionPromise]);
+
+    const contentDocumentLinks = await this.contentDocumentLinkRepository.getFromDocumentId(
+      contentVersion.ContentDocumentId,
+    );
+
+    for (const contentDocumentLink of contentDocumentLinks) {
+      const chatterItems = await this.salesforceFeedItemRepository.getById(contentDocumentLink.LinkedEntityId);
+
+      // Disallow files that are in chatter from being accessed
+      if (
+        chatterFiles.some(x => x.RecordId === versionId) ||
+        chatterItems.some(x => x.Body?.includes(`sfdc://${contentVersion.ContentDocumentId}`))
+      )
+        throw new ForbiddenError("You do not have permissions to access this file.");
+    }
 
     return this.contentVersionRepository.getDocumentData(versionId);
   }

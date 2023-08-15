@@ -1,3 +1,4 @@
+import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 interface ISalesforceContentDocumentLink {
@@ -9,6 +10,7 @@ interface ISalesforceContentDocumentLink {
 
 export interface IContentDocumentLinkRepository {
   get(documentId: string, linkedEntityId: string): Promise<ISalesforceContentDocumentLink | null>;
+  getFromDocumentId(documentId: string): Promise<ISalesforceContentDocumentLink[]>;
   getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]>;
   insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string): Promise<string>;
 }
@@ -27,6 +29,10 @@ export class ContentDocumentLinkRepository
 
   public get(documentId: string, linkedEntityId: string): Promise<ISalesforceContentDocumentLink | null> {
     return super.filterOne({ LinkedEntityId: linkedEntityId, ContentDocumentId: documentId });
+  }
+
+  public getFromDocumentId(documentId: string): Promise<ISalesforceContentDocumentLink[]> {
+    return super.where(`ContentDocumentId = '${sss(documentId)}'`);
   }
 
   public insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string) {
