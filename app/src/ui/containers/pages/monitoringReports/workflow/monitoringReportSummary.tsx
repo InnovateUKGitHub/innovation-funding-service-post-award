@@ -4,7 +4,7 @@ import { MonitoringReportOptionDto, MonitoringReportQuestionDto } from "@framewo
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Section } from "@ui/components/atomicDesign/atoms/form/Section/Section";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { H2, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs";

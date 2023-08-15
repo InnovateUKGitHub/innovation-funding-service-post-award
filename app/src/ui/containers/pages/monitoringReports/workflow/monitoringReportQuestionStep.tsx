@@ -1,5 +1,5 @@
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
-import { Section } from "@ui/components/atomicDesign/atoms/form/Section/Section";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
 import { MonitoringReportFormContext } from "./MonitoringReportWorkflow";
 import { H2, H3 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";

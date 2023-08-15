@@ -13,7 +13,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRhfErrors } from "@framework/util/errorHelpers";
-import { Section } from "@ui/components/atomicDesign/atoms/form/Section/Section";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
