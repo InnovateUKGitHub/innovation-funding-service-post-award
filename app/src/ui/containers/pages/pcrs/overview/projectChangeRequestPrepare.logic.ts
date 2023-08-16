@@ -13,7 +13,6 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { isSubmittedBy } from "@framework/util/getSubmittingElementNameFromEvent";
 
 export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<ProjectChangeRequestPrepareQuery>(
@@ -118,11 +117,11 @@ export const useOnUpdatePcrPrepare = (
   const navigate = useNavigate();
 
   return useOnUpdate<FormValues, PCRDto>({
-    req(data, submitEvent) {
+    req(data) {
       const payload = {
         projectId,
         id: pcrId,
-        pcr: getPayload(isSubmittedBy(submitEvent, "button_submit", "submit"), project, pcr, data),
+        pcr: getPayload(data["button_submit"] === "submit", project, pcr, data),
       };
 
       return clientsideApiClient.pcrs.update(payload);

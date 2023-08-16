@@ -36,7 +36,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
       }))
     : [];
 
-  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, reset } =
+  const { register, watch, handleSubmit, onUpdate, isFetching, validatorErrors, reset, registerButton } =
     useContext(MonitoringReportFormContext);
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
         <PeriodTitle periodId={report.periodId} periodStartDate={report.startDate} periodEndDate={report.endDate} />
       </H2>
       <Section>
-        <Form onSubmit={handleSubmit(onUpdate)} data-qa="monitoringReportQuestionForm">
+        <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="monitoringReportQuestionForm">
           <H3>
             {getContent(x =>
               x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: report.questions.length }),
@@ -114,10 +114,10 @@ const MonitoringReportQuestionStep = ({ questionNumber, report, mode }: Props) =
 
           {mode === "prepare" && (
             <Fieldset data-qa="save-buttons">
-              <Button type="submit" name="button_save-continue" disabled={isFetching}>
+              <Button type="submit" {...registerButton("save-continue")} disabled={isFetching}>
                 {getContent(x => x.pages.monitoringReportsQuestionStep.buttonContinue)}
               </Button>
-              <Button secondary type="submit" name="button_save-return" disabled={isFetching}>
+              <Button secondary type="submit" {...registerButton("save-return")} disabled={isFetching}>
                 {getContent(x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn)}
               </Button>
             </Fieldset>

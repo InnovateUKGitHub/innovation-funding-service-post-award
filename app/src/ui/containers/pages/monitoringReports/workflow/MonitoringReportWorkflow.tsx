@@ -5,7 +5,7 @@ import { MonitoringReportWorkflowBackLink } from "./MonitoringReportWorkflowBack
 import { MonitoringReportWorkflowParams } from "./MonitoringReportWorkflowProps";
 import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
 import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
-import { BaseSyntheticEvent, createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
@@ -29,7 +29,7 @@ type MonitoringReportContextType = {
   watch: UseFormWatch<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   isFetching: boolean;
-  onUpdate: (data: FormValues, submitEvent?: BaseSyntheticEvent) => Promise<void>;
+  onUpdate: ({ data }: { data: FormValues }) => Promise<void>;
   validatorErrors: RhfErrors;
   registerButton: RegisterButton<FormValues>;
   reset: UseFormReset<FormValues>;
@@ -40,10 +40,10 @@ export const MonitoringReportFormContext = createContext<MonitoringReportContext
   watch: noop as UseFormWatch<FormValues>,
   handleSubmit: noop as UseFormHandleSubmit<FormValues>,
   isFetching: false,
-  onUpdate: noop as unknown as (data: FormValues, submitEvent?: BaseSyntheticEvent) => Promise<void>,
+  onUpdate: noop as unknown as ({ data }: { data: FormValues }) => Promise<void>,
   validatorErrors: undefined,
-  registerButton: noop,
-  reset: noop,
+  registerButton: noop as RegisterButton<FormValues>,
+  reset: noop as UseFormReset<FormValues>,
 } as MonitoringReportContextType);
 
 const getMonitoringReportSchema = (step?: number | null | undefined) =>
@@ -78,7 +78,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
 
   const zodSchema = getMonitoringReportSchema(props.step);
 
-  const { register, watch, handleSubmit, formState, setValue, reset } = useForm({
+  const { register, watch, handleSubmit, formState, setValue, reset } = useForm<FormValues>({
     defaultValues: {
       addComments: report.addComments ?? "",
       questions: report.questions.map(x => ({

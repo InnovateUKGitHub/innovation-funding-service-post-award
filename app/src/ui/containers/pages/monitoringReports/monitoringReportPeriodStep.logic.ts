@@ -11,10 +11,8 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { clientsideApiClient } from "@ui/apiClient";
 import { IRoutes } from "@ui/routing/routeConfig";
-import { isSubmittedBy } from "@framework/util/getSubmittingElementNameFromEvent";
 import { mapToMonitoringReportDto } from "@gql/dtoMapper/mapMonitoringReportDto";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
-import { SyntheticEvent } from "react";
 
 type ProjectGql = GQL.NodeSelector<MonitoringReportPeriodStepQuery$data, "Acc_Project__c">;
 
@@ -38,7 +36,7 @@ export const useMonitoringReportPeriodStepQuery = (projectId: ProjectId, monitor
   return { project, monitoringReport };
 };
 
-export type FormValues = { period: PeriodId };
+export type FormValues = { period: PeriodId; button_submit: string };
 
 const getLink = (progress: boolean, projectId: ProjectId, id: MonitoringReportId, routes: IRoutes) => {
   if (!progress) {
@@ -72,9 +70,8 @@ export const useOnMonitoringReportUpdatePeriodStep = (
         },
         submit: false, // just saving an update
       }),
-
-    onSuccess: ({ response }, submitEvent: SyntheticEvent<HTMLButtonElement, SubmitEvent>) => {
-      const link = getLink(isSubmittedBy(submitEvent, "button_save-continue"), projectId, response.headerId, routes);
+    onSuccess: (data, response) => {
+      const link = getLink(data["button_submit"] === "save-continue", projectId, response.headerId, routes);
       return navigate(link.path);
     },
   });

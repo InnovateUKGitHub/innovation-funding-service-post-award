@@ -16,7 +16,7 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
   "monitoringReport"
 > {
   constructor() {
-    super(MonitoringReportWorkflowRoute, ["save-continue", "save-return"], "monitoringReport");
+    super(MonitoringReportWorkflowRoute, ["submit"], "monitoringReport");
   }
 
   protected async getDto(
@@ -67,7 +67,7 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
   ): Promise<ILinkInfo> {
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
-    if (button.name === "save-return") {
+    if (button.value === "save-return") {
       const workflow = MonitoringReportWorkflowDef.getWorkflow(dto, params.step);
       if (workflow.isOnSummary()) {
         return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId, periodId: undefined });
@@ -79,6 +79,6 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
         step: undefined,
       });
     }
-    return this.getLink(button.name === "save-continue", dto, params);
+    return this.getLink(button.value === "save-continue", dto, params);
   }
 }

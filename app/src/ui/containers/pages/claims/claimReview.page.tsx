@@ -249,7 +249,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
         </Accordion>
       </Section>
 
-      <Form onSubmit={handleSubmit(onUpdate)} data-qa="review-form">
+      <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="review-form">
         <Fieldset>
           <Legend>{content.sectionTitleHowToProceed}</Legend>
           <FormGroup>

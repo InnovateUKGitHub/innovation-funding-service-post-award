@@ -8,8 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import { clientsideApiClient } from "@ui/apiClient";
 import { IRoutes } from "@ui/routing/routeConfig";
-import { isSubmittedBy } from "@framework/util/getSubmittingElementNameFromEvent";
-import { SyntheticEvent } from "react";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 
 export const useMonitoringReportCreateQuery = (projectId: ProjectId) => {
@@ -25,6 +23,7 @@ export const useMonitoringReportCreateQuery = (projectId: ProjectId) => {
 
 export type FormValues = {
   period: PeriodId;
+  button_submit: "save-continue" | "save-return";
 };
 
 const getLink = (progress: boolean, projectId: ProjectId, id: MonitoringReportId, routes: IRoutes) => {
@@ -47,9 +46,8 @@ export const useOnMonitoringReportCreate = (projectId: ProjectId, routes: IRoute
         monitoringReportDto: { periodId: data.period, projectId, status: MonitoringReportStatus.Draft },
         submit: false, // just the create step, not the submit step
       }),
-
-    onSuccess: ({ response }, submitEvent: SyntheticEvent<HTMLButtonElement, SubmitEvent>) => {
-      const link = getLink(isSubmittedBy(submitEvent, "button_save-continue"), projectId, response.headerId, routes);
+    onSuccess: (data, response) => {
+      const link = getLink(data["button_submit"] === "save-continue", projectId, response.headerId, routes);
       return navigate(link.path);
     },
   });

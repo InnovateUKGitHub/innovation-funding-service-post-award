@@ -84,7 +84,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
 
       <ProjectChangeRequestOverviewLog statusChanges={statusChanges} />
 
-      <Form data-qa="prepare-form" onSubmit={handleSubmit(onUpdate)}>
+      <Form data-qa="prepare-form" onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <Fieldset>
           <Legend>{getContent(x => x.pages.pcrOverview.addComments)}</Legend>
           <TextAreaField

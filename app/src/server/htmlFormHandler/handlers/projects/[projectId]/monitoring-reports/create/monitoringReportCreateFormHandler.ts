@@ -19,7 +19,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
   "monitoringReport"
 > {
   constructor() {
-    super(MonitoringReportCreateRoute, ["save-continue", "save-return"], "monitoringReport");
+    super(MonitoringReportCreateRoute, ["submit"], "monitoringReport");
   }
 
   protected async getDto(
@@ -61,7 +61,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
     const command = new CreateMonitoringReportCommand(dto, false);
     const id = (await context.runCommand(command)) as MonitoringReportId;
 
-    if (button.name === "save-return") {
+    if (button.value === "save-return") {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId, periodId: undefined });
     }
     return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id, mode: "prepare", step: 1 });

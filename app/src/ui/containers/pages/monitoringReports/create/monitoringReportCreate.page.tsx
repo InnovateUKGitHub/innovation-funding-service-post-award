@@ -21,6 +21,7 @@ import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { createMonitoringReportSchema, createMonitoringReportErrorMap } from "./monitoringReportCreate.zod";
+import { createRegisterButton } from "@framework/util/registerButton";
 
 export interface MonitoringReportCreateParams {
   projectId: ProjectId;
@@ -30,12 +31,15 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
   const { project } = useMonitoringReportCreateQuery(props.projectId);
   const { getContent } = useContent();
 
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+  const { register, handleSubmit, formState, setValue } = useForm<FormValues>({
     defaultValues: {
       period: undefined,
+      button_submit: "save-continue",
     },
     resolver: zodResolver(createMonitoringReportSchema(project.periodId), { errorMap: createMonitoringReportErrorMap }),
   });
+
+  const registerButton = createRegisterButton(setValue, "button_submit");
 
   const { onUpdate, apiError, isFetching } = useOnMonitoringReportCreate(props.projectId, props.routes);
 
@@ -59,15 +63,21 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
         <P>{getContent(x => x.components.reportForm.questionScoreMessage)}</P>
       </Section>
       <Section>
-        <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(onUpdate)}>
+        <Form
+          data-qa="monitoringReportCreateForm"
+          onSubmit={handleSubmit(data => {
+            console.log("formhandler data", data);
+            onUpdate({ data });
+          })}
+        >
           <Field labelBold label="Period" id="period" error={validatorErrors?.period as RhfError}>
             <NumberInput id="period" inputWidth={3} {...register("period")} />
           </Field>
           <Fieldset data-qa="save-buttons">
-            <Button disabled={isFetching} type="submit" name="button_save-continue">
+            <Button disabled={isFetching} type="submit" {...registerButton("save-continue")}>
               {getContent(x => x.components.reportForm.continueText)}
             </Button>
-            <Button disabled={isFetching} secondary type="submit" name="button_save-return">
+            <Button disabled={isFetching} secondary type="submit" {...registerButton("save-return")}>
               {getContent(x => x.components.reportForm.saveAndReturnText)}
             </Button>
           </Fieldset>

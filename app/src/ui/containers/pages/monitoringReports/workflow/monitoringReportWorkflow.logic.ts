@@ -10,9 +10,8 @@ import { useNavigate } from "react-router";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
 import { clientsideApiClient } from "@ui/apiClient";
-import { isSubmittedBy } from "@framework/util/getSubmittingElementNameFromEvent";
 import { MonitoringReportWorkflowDef, getForwardLink } from "./monitoringReportWorkflowDef";
-import { Dispatch, SetStateAction, SyntheticEvent } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { mapToMonitoringReportStatusChangeDtoArray } from "@gql/dtoMapper/mapMonitoringReportStatusChange";
 
 export const useMonitoringReportWorkflowQuery = (
@@ -66,7 +65,7 @@ export type FormValues = {
   periodId: PeriodId;
   questions: { optionId: string; comments: string; title: string }[];
   addComments: string;
-  button_submit: string;
+  button_submit: "save-continue" | "save-return" | "submit" | "saveAndReturnToSummary";
 };
 
 const hasFormChanged = (data: FormValues, questions: MonitoringReportQuestionDto[]) =>
@@ -99,8 +98,9 @@ export const useOnMonitoringReportUpdateWorkflow = (
 ) => {
   const navigate = useNavigate();
   return useOnUpdate<FormValues, Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">>({
-    req: (data, submitEvent) => {
-      const isFinalSubmit = isSubmittedBy(submitEvent, "button_submit", "submit");
+    req: data => {
+      console.log("data", data);
+      const isFinalSubmit = data["button_submit"] === "submit";
       if (isFinalSubmit || hasFormChanged(data, report.questions)) {
         return clientsideApiClient.monitoringReports.saveMonitoringReport({
           monitoringReportDto: {
@@ -114,12 +114,12 @@ export const useOnMonitoringReportUpdateWorkflow = (
       }
     },
 
-    onSuccess: ({ data }, submitEvent: SyntheticEvent<HTMLButtonElement, SubmitEvent>) => {
+    onSuccess: data => {
       const link = getForwardLink({
         mode,
         projectId,
         id: headerId,
-        progress: isSubmittedBy(submitEvent, "button_save-continue"),
+        progress: data["button_submit"] === "save-continue",
         routes,
         workflow,
       });

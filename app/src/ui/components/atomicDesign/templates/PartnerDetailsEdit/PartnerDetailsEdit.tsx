@@ -84,7 +84,7 @@ export function PartnerDetailsEditComponent({
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
-      <Form onSubmit={handleSubmit(onUpdate)}>
+      <Form onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <Fieldset>
           {!isSetup && (
             <FormGroup>

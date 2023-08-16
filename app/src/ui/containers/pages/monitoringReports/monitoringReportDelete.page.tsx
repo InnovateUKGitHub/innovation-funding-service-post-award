@@ -51,7 +51,7 @@ const DeleteVerificationPage = (props: BaseProps & MonitoringReportDeleteParams)
     >
       <Section>
         <P>{getContent(x => x.monitoringReportsMessages.deletingMonitoringReportMessage)}</P>
-        <Form onSubmit={handleSubmit(onDelete)} data-qa="monitoringReportDelete">
+        <Form onSubmit={handleSubmit(data => onDelete({ data }))} data-qa="monitoringReportDelete">
           <Fieldset>
             <Button name="button_delete" type="submit" warning disabled={isFetching}>
               {getContent(x => x.pages.monitoringReportsDelete.buttonDeleteReport)}

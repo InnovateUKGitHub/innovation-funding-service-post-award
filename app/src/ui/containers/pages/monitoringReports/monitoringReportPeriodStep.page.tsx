@@ -21,6 +21,7 @@ import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { createMonitoringReportErrorMap, createMonitoringReportSchema } from "./create/monitoringReportCreate.zod";
+import { createRegisterButton } from "@framework/util/registerButton";
 
 export interface MonitoringReportPreparePeriodParams {
   projectId: ProjectId;
@@ -31,9 +32,10 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
   const { project, monitoringReport } = useMonitoringReportPeriodStepQuery(props.projectId, props.id);
   const { getContent } = useContent();
 
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+  const { register, handleSubmit, formState, setValue } = useForm<FormValues>({
     defaultValues: {
       period: monitoringReport.periodId,
+      button_submit: "save-continue",
     },
     resolver: zodResolver(createMonitoringReportSchema(project.periodId), { errorMap: createMonitoringReportErrorMap }),
   });
@@ -44,8 +46,9 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
     props.routes,
   );
 
-  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
+  const registerButton = createRegisterButton(setValue, "button_submit");
 
+  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
   return (
     <Page
       backLink={
@@ -69,7 +72,7 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
         <P>{getContent(x => x.components.reportForm.questionScoreMessage)}</P>
       </Section>
       <Section>
-        <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(onUpdate)}>
+        <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(async data => await onUpdate({ data }))}>
           <Field
             labelBold
             label={getContent(x => x.pages.monitoringReportsPeriodStep.periodLabel)}
@@ -79,10 +82,10 @@ const PeriodStepPage = (props: BaseProps & MonitoringReportPreparePeriodParams) 
             <NumberInput id="period" inputWidth={3} {...register("period")} />
           </Field>
           <Fieldset data-qa="save-buttons">
-            <Button disabled={isFetching} type="submit" name="button_save-continue">
+            <Button disabled={isFetching} type="submit" {...registerButton("save-continue")}>
               {getContent(x => x.components.reportForm.continueText)}
             </Button>
-            <Button disabled={isFetching} secondary type="submit" name="button_save-return">
+            <Button disabled={isFetching} secondary type="submit" {...registerButton("save-return")}>
               {getContent(x => x.components.reportForm.saveAndReturnText)}
             </Button>
           </Fieldset>

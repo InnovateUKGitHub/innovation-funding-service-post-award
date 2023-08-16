@@ -80,7 +80,7 @@ const ReportForm = () => {
   const { getContent } = useContent();
   return (
     <Section>
-      <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(onUpdate)}>
+      <Form data-qa="monitoringReportCreateForm" onSubmit={handleSubmit(data => onUpdate({ data }))}>
         <Fieldset data-qa="additional-comments-section">
           <Legend>{getContent(x => x.monitoringReportsLabels.additionalComments)}</Legend>
 

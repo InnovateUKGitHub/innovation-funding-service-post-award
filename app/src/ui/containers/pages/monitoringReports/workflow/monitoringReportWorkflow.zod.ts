@@ -4,6 +4,7 @@ import { z } from "zod";
 export const monitoringReportWorkflowErrorMap = makeZodI18nMap({ keyPrefix: ["monitoringReportWorkflow"] });
 
 export const monitoringReportWorkflowSchema = z.object({
+  button_submit: z.string(),
   questions: z.array(
     z
       .object({
