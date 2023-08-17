@@ -1,5 +1,8 @@
+import { IFileWrapper } from "@framework/types/fileWapper";
+import { TestConfig } from "@tests/test-utils/testConfig";
 import {
   emptyStringToUndefinedValidation,
+  getSingleFileValidation,
   partnerIdValidation,
   periodIdValidation,
   projectIdValidation,
@@ -58,6 +61,35 @@ describe("helperValidators", () => {
       ["decline infinity", Infinity, false],
     ])("%s", (name, input, accept) => {
       const parse = periodIdValidation.safeParse(input);
+      expect(parse.success).toBe(accept);
+      expect(parse as unknown).toMatchSnapshot();
+    });
+  });
+
+  describe("getSingleFileValidation", () => {
+    const testConfig = new TestConfig();
+    const singleFileValidation = getSingleFileValidation(testConfig.options);
+
+    test.each([
+      // Valid files
+      ["standard file", { fileName: "awoo.png", size: 120 }, true],
+
+      // Bad prefixes
+      [".tar.gz", { fileName: "awoo.tar.gz", size: 12442 }, false],
+      [".webm", { fileName: "awoo.webm", size: 12442 }, false],
+      [".docm", { fileName: "awoo.docm", size: 12442 }, false],
+
+      // Invalid size files
+      ["zero sized file", { fileName: "awoo.png", size: 0 }, false],
+      ["very big sized file", { fileName: "awoo.png", size: 908172862 }, false],
+
+      // Invalid name files
+      ["no prefix file", { fileName: "jjajangmyeon", size: 4353 }, false],
+      ["Linux/UNIX hidden file", { fileName: ".gitignore", size: 4353 }, false],
+      ["no basename file", { fileName: ".pptx", size: 4353 }, false],
+      ["crazy characters file", { fileName: '*&"£&.pptx', size: 4353 }, false],
+    ])("%s", (name, input: IFileWrapper, accept) => {
+      const parse = singleFileValidation.safeParse(input);
       expect(parse.success).toBe(accept);
       expect(parse as unknown).toMatchSnapshot();
     });

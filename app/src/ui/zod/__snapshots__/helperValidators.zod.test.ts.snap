@@ -42,6 +42,185 @@ Object {
 }
 `;
 
+exports[`helperValidators getSingleFileValidation .docm 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_invalid_type"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation .tar.gz 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_invalid_type"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation .webm 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_invalid_type"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation Linux/UNIX hidden file 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_too_small"
+    },
+    "path": [],
+    "message": "Invalid input"
+  },
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_invalid_type"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation crazy characters file 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_invalid_characters"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation no basename file 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_too_small"
+    },
+    "path": [],
+    "message": "Invalid input"
+  },
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_invalid_type"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation no prefix file 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_too_small"
+    },
+    "path": [],
+    "message": "Invalid input"
+  },
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_name_invalid_type"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation standard file 1`] = `
+Object {
+  "data": Object {
+    "fileName": "awoo.png",
+    "size": 120,
+  },
+  "success": true,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation very big sized file 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_size_too_large",
+      "size": 100000
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
+exports[`helperValidators getSingleFileValidation zero sized file 1`] = `
+Object {
+  "error": [ZodError: [
+  {
+    "code": "custom",
+    "params": {
+      "i18n": "errors.file_size_too_small"
+    },
+    "path": [],
+    "message": "Invalid input"
+  }
+]],
+  "success": false,
+}
+`;
+
 exports[`helperValidators partnerIdValidation accept project participant id 1`] = `
 Object {
   "data": "a0D2600000zXrAIEA0",

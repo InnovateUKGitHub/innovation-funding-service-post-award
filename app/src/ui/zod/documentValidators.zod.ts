@@ -10,7 +10,7 @@ import {
   projectIdValidation,
   emptyStringToUndefinedValidation,
   partnerIdValidation,
-  getFileValidation,
+  getMultiFileValidation,
   periodIdValidation,
 } from "./helperValidators.zod";
 
@@ -28,7 +28,7 @@ const getProjectLevelUpload = (config: IAppOptions) =>
         .optional()
         .transform(x => x as DocumentDescription),
     ]),
-    files: getFileValidation(config),
+    files: getMultiFileValidation(config),
   });
 
 type ClaimLevelUploadSchemaType = ReturnType<typeof getClaimLevelUpload>;
@@ -46,7 +46,7 @@ const getClaimLevelUpload = (config: IAppOptions) =>
         .transform(x => x as DocumentDescription),
     ]),
     periodId: periodIdValidation,
-    files: getFileValidation(config),
+    files: getMultiFileValidation(config),
   });
 
 const projectLevelDelete = z.object({
