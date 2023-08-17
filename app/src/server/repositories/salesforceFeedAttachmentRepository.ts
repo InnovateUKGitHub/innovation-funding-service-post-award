@@ -25,4 +25,8 @@ export class SalesforceFeedAttachmentRepository
   getAllByRecordId(id: string) {
     return super.where(`RecordId = '${sss(id)}'`);
   }
+
+  getAllByRecordIds(ids: string[]) {
+    return super.where(`RecordId IN ('${ids.map(sss).join("','")}')`);
+  }
 }

@@ -102,20 +102,35 @@ export class DocumentsRepository {
     filter?: DocumentFilter,
   ): Promise<DocumentEntity[]> {
     const linkedDocs = await this.contentDocumentLinkRepository.getAllForEntity(recordId);
+
     if (!linkedDocs || !linkedDocs.length) {
       return [];
     }
-    return this.getDocumentsMetadata(
+
+    const metadata = await this.getDocumentsMetadata(
       linkedDocs.map(x => x.ContentDocumentId),
       filter,
     );
+
+    // Obtain a list of illegal files
+    const chatterFiles = await this.salesforceFeedAttachmentRepository.getAllByRecordIds([
+      ...linkedDocs.map(x => x.ContentDocumentId),
+      ...metadata.map(x => x.id),
+    ]);
+
+    // Remove all the illegal files
+    return metadata.filter(x => !chatterFiles.some(y => y.RecordId === x.id || y.RecordId === x.contentDocumentId));
   }
 
   public async getDocumentContent(versionId: string): Promise<Stream> {
-    const chatterFiles = await this.salesforceFeedAttachmentRepository.getAllByRecordId(versionId);
+    const contentVersion = await this.contentVersionRepository.getDocument(versionId);
+    const chatterFiles = await this.salesforceFeedAttachmentRepository.getAllByRecordIds([
+      versionId,
+      contentVersion.ContentDocumentId,
+    ]);
 
     // Disallow files that are in chatter from being accessed
-    if (chatterFiles.some(x => x.RecordId === versionId))
+    if (chatterFiles.some(x => x.RecordId === versionId || x.RecordId === contentVersion.ContentDocumentId))
       throw new ForbiddenError("You do not have permissions to access this file.");
 
     return this.contentVersionRepository.getDocumentData(versionId);

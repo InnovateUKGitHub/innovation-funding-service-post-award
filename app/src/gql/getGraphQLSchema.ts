@@ -13,6 +13,7 @@ import { Api } from "./sf/Api";
 import typeDefs from "./typeDefs.gql";
 import { getTypeGraphQLSchema } from "./typegraphql/schema";
 import { usernameResolver } from "./resolvers/Acc_ProjectContactLink__c/username";
+import { isFeedAttachmentResolver } from "./resolvers/ContentDocument/isFeedAttachment";
 
 export interface ExecutableSchema {
   schema: GraphQLSchema;
@@ -49,6 +50,9 @@ const getGraphQLSchema = async ({ api }: { api?: Api }) => {
         },
         Contact: {
           username: usernameResolver,
+        },
+        ContentDocumentLink: {
+          isFeedAttachment: isFeedAttachmentResolver,
         },
       },
     });

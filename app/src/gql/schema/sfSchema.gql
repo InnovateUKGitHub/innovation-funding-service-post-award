@@ -142,6 +142,7 @@ type Acc_Claims__c {
   Acc_Date_Submitted__c: DateValue
   Acc_DeferredGrantToBePaid__c: CurrencyValue
   VAT_Cost_Category__c: BooleanValue
+  IM_PhasedCompetition__c: BooleanValue
   Acc_AccountIdReference__c: StringValue
   Acc_DeferredGrant__c: CurrencyValue
   Acc_AddComments__c: LongTextAreaValue
@@ -268,6 +269,7 @@ type Acc_Claims__c {
 
   """parentRelationship"""
   Acc_ParentId__r: Acc_Claims__c
+  IM_PreCursorCompetition__c: StringValue
   Acc_IsLockedDetail__c: BooleanValue
   Claim_VAT_total__c: DoubleValue
   LastReferencedDate: DateTimeValue
@@ -293,6 +295,7 @@ type Acc_Claims__c {
   Acc_ClaimUnderQuery__c: DoubleValue
   Acc_ProjectPeriodId__c: DoubleValue
   Acc_Non_FEC_project__c: BooleanValue
+  IM_PhasedCompetitionStage__c: StringValue
   Acc_Overdue_Project__c: StringValue
   Acc_OverrideGrantToBePaid__c: CurrencyValue
   Impact_Management_Participation__c: StringValue
@@ -346,6 +349,7 @@ input Acc_Claims__c_Filter {
   Acc_Date_Submitted__c: DateOperators
   Acc_DeferredGrantToBePaid__c: CurrencyOperators
   VAT_Cost_Category__c: BooleanOperators
+  IM_PhasedCompetition__c: BooleanOperators
   Acc_AccountIdReference__c: StringOperators
   Acc_DeferredGrant__c: CurrencyOperators
   Acc_AddComments__c: LongTextAreaOperators
@@ -456,6 +460,7 @@ input Acc_Claims__c_Filter {
   Acc_Over100k__c: StringOperators
   Acc_ParentId__c: IdOperators
   Acc_ParentId__r: Acc_Claims__c_Filter
+  IM_PreCursorCompetition__c: StringOperators
   Acc_IsLockedDetail__c: BooleanOperators
   Claim_VAT_total__c: DoubleOperators
   LastReferencedDate: DateTimeOperators
@@ -481,6 +486,7 @@ input Acc_Claims__c_Filter {
   Acc_ClaimUnderQuery__c: DoubleOperators
   Acc_ProjectPeriodId__c: DoubleOperators
   Acc_Non_FEC_project__c: BooleanOperators
+  IM_PhasedCompetitionStage__c: StringOperators
   Acc_Overdue_Project__c: StringOperators
   Acc_OverrideGrantToBePaid__c: CurrencyOperators
   Impact_Management_Participation__c: StringOperators
@@ -501,6 +507,7 @@ input Acc_Claims__c_GroupBy {
   Acc_ClaimReference__c: GroupByClause
   Acc_Date_Submitted__c: GroupByClause
   VAT_Cost_Category__c: GroupByClause
+  IM_PhasedCompetition__c: GroupByClause
   Acc_OverdueEmailSentDate__c: GroupByClause
   Acc_DeferredApprovalStatus__c: GroupByClause
   IsDeleted: GroupByClause
@@ -575,6 +582,7 @@ input Acc_Claims__c_OrderBy {
   Acc_Date_Submitted__c: OrderByClause
   Acc_DeferredGrantToBePaid__c: OrderByClause
   VAT_Cost_Category__c: OrderByClause
+  IM_PhasedCompetition__c: OrderByClause
   Acc_AccountIdReference__c: OrderByClause
   Acc_DeferredGrant__c: OrderByClause
   Acc_AddComments__c: OrderByClause
@@ -685,6 +693,7 @@ input Acc_Claims__c_OrderBy {
   Acc_Over100k__c: OrderByClause
   Acc_ParentId__c: OrderByClause
   Acc_ParentId__r: Acc_Claims__c_OrderBy
+  IM_PreCursorCompetition__c: OrderByClause
   Acc_IsLockedDetail__c: OrderByClause
   Claim_VAT_total__c: OrderByClause
   LastReferencedDate: OrderByClause
@@ -710,6 +719,7 @@ input Acc_Claims__c_OrderBy {
   Acc_ClaimUnderQuery__c: OrderByClause
   Acc_ProjectPeriodId__c: OrderByClause
   Acc_Non_FEC_project__c: OrderByClause
+  IM_PhasedCompetitionStage__c: OrderByClause
   Acc_Overdue_Project__c: OrderByClause
   Acc_OverrideGrantToBePaid__c: OrderByClause
   Impact_Management_Participation__c: OrderByClause
@@ -2902,6 +2912,7 @@ type Acc_Project__c {
   Acc_Loan_Availability_End_Date__c: DateValue
   Acc_LegacyID__c: StringValue
   Acc_FlaggedProject__c: BooleanValue
+  IM_PhasedCompetition__c: BooleanValue
   Acc_TotalFutureForecastsforProject__c: CurrencyValue
   IsDeleted: BooleanValue
   Acc_Loan_Extension_End_Date__c: DateValue
@@ -2978,6 +2989,7 @@ type Acc_Project__c {
   Loans_DocusignRDConfirmation__c: PicklistValue
   Acc_SubsidyControlScheme__c: StringValue
   SBRI_Contracting_Authority__c: StringValue
+  IM_PreCursorCompetition__c: StringValue
   LastReferencedDate: DateTimeValue
   Acc_NumberofPeriods__c: DoubleValue
   Acc_GOLTotalCostAwarded__c: CurrencyValue
@@ -2994,6 +3006,7 @@ type Acc_Project__c {
   Acc_TotalProjectCosts__c: CurrencyValue
   Acc_FlaggedProjectComments__c: LongTextAreaValue
   Acc_ClaimsForReview__c: DoubleValue
+  IM_PhasedCompetitionStage__c: StringValue
   Acc_Overdue_Project__c: StringValue
   Impact_Management_Participation__c: StringValue
   LastModifiedById: IDValue
@@ -3056,6 +3069,7 @@ input Acc_Project__c_Filter {
   Acc_Loan_Availability_End_Date__c: DateOperators
   Acc_LegacyID__c: StringOperators
   Acc_FlaggedProject__c: BooleanOperators
+  IM_PhasedCompetition__c: BooleanOperators
   Acc_TotalFutureForecastsforProject__c: CurrencyOperators
   IsDeleted: BooleanOperators
   Acc_Loan_Extension_End_Date__c: DateOperators
@@ -3127,6 +3141,7 @@ input Acc_Project__c_Filter {
   Loans_DocusignRDConfirmation__c: PicklistOperators
   Acc_SubsidyControlScheme__c: StringOperators
   SBRI_Contracting_Authority__c: StringOperators
+  IM_PreCursorCompetition__c: StringOperators
   LastReferencedDate: DateTimeOperators
   Acc_NumberofPeriods__c: DoubleOperators
   Acc_GOLTotalCostAwarded__c: CurrencyOperators
@@ -3141,6 +3156,7 @@ input Acc_Project__c_Filter {
   Acc_TotalProjectCosts__c: CurrencyOperators
   Acc_FlaggedProjectComments__c: LongTextAreaOperators
   Acc_ClaimsForReview__c: DoubleOperators
+  IM_PhasedCompetitionStage__c: StringOperators
   Acc_Overdue_Project__c: StringOperators
   Impact_Management_Participation__c: StringOperators
   LastModifiedById: IdOperators
@@ -3162,6 +3178,7 @@ input Acc_Project__c_GroupBy {
   Acc_LegacyID__c: GroupByClause
   CloneSourceId: GroupByClause
   Acc_FlaggedProject__c: GroupByClause
+  IM_PhasedCompetition__c: GroupByClause
   IsDeleted: GroupByClause
   Acc_Loan_Extension_End_Date__c: GroupByClause
   Acc_Overdue_Claim_Helper__c: GroupByClause
@@ -3231,6 +3248,7 @@ input Acc_Project__c_OrderBy {
   Acc_Loan_Availability_End_Date__c: OrderByClause
   Acc_LegacyID__c: OrderByClause
   Acc_FlaggedProject__c: OrderByClause
+  IM_PhasedCompetition__c: OrderByClause
   Acc_TotalFutureForecastsforProject__c: OrderByClause
   IsDeleted: OrderByClause
   Acc_Loan_Extension_End_Date__c: OrderByClause
@@ -3301,6 +3319,7 @@ input Acc_Project__c_OrderBy {
   Loans_DocusignRDConfirmation__c: OrderByClause
   Acc_SubsidyControlScheme__c: OrderByClause
   SBRI_Contracting_Authority__c: OrderByClause
+  IM_PreCursorCompetition__c: OrderByClause
   LastReferencedDate: OrderByClause
   Acc_NumberofPeriods__c: OrderByClause
   Acc_GOLTotalCostAwarded__c: OrderByClause
@@ -3315,6 +3334,7 @@ input Acc_Project__c_OrderBy {
   Acc_TotalProjectCosts__c: OrderByClause
   Acc_FlaggedProjectComments__c: OrderByClause
   Acc_ClaimsForReview__c: OrderByClause
+  IM_PhasedCompetitionStage__c: OrderByClause
   Acc_Overdue_Project__c: OrderByClause
   Impact_Management_Participation__c: OrderByClause
   LastModifiedById: OrderByClause
@@ -4397,62 +4417,69 @@ type Competition__c {
   LastModifiedDate: DateTimeValue
   Acc_ProjectHardStopDate__c: DateValue
   Acc_NonStandardProjectInformation__c: TextAreaValue
-  LastReferencedDate: DateTimeValue
   Acc_PublicityEmbargoOnResults__c: PicklistValue
-  ACC_PaymentType__c: PicklistValue
   Authorisation_Gateway__c: IDValue
-  Acc_AGRefNumber__c: IDValue
   Name: StringValue
   Acc_PortfolioManager__c: IDValue
 
   """parentRelationship"""
   Acc_PortfolioManager__r: User
   Acc_TermsConditions__c: PicklistValue
-  OwnerId: IDValue
   CreatedById: IDValue
 
   """parentRelationship"""
   CreatedBy: User
-  Acc_CompetitionCode__c: StringValue
   Sent_to_MM__c: BooleanValue
   Acc_LegacyCompetitionCode__c: StringValue
+  IM_PhasedCompetition__c: BooleanValue
+  Acc_ExpectedLastDateOfProjectsEnd__c: DateValue
+  IsDeleted: BooleanValue
+  Acc_LevelOfMonitoring__c: PicklistValue
+  LastViewedDate: DateTimeValue
+  CSS_Representative__c: IDValue
+
+  """parentRelationship"""
+  CSS_Representative__r: User
+  Acc_CompetitionType__c: PicklistValue
+  Acc_FinanceBusinessPartner__c: IDValue
+
+  """parentRelationship"""
+  Acc_FinanceBusinessPartner__r: User
+  Acc_ExpectedFirstDateOfProjectsStart__c: DateValue
+  Acc_CompetitionName__c: StringValue
+  CreatedDate: DateTimeValue
+  SBRI_Contracting_Authority__c: PicklistValue
+  Phased_Competition_Stage__c: PicklistValue
+  IM_PreCursorCompetition__c: IDValue
+
+  """parentRelationship"""
+  IM_PreCursorCompetition__r: Competition__c
+  LastReferencedDate: DateTimeValue
+  ACC_PaymentType__c: PicklistValue
+  Acc_AGRefNumber__c: IDValue
+  OwnerId: IDValue
+  Acc_CompetitionCode__c: StringValue
   Impact_Management_participation__c: PicklistValue
   Technologists__c: IDValue
 
   """parentRelationship"""
   Technologists__r: Contact
-  Acc_ExpectedLastDateOfProjectsEnd__c: DateValue
   Acc_ProgrammeID__c: IDValue
-  IsDeleted: BooleanValue
-  Acc_LevelOfMonitoring__c: PicklistValue
   Acc_ProgrammeName__c: StringValue
   Acc_ActivityCode__c: StringValue
   Competition_Manager__c: IDValue
 
   """parentRelationship"""
   Competition_Manager__r: User
-  LastViewedDate: DateTimeValue
   Authorisation_hard_stop_date__c: DateValue
-  CSS_Representative__c: IDValue
-
-  """parentRelationship"""
-  CSS_Representative__r: User
   Competition_Exec__c: IDValue
 
   """parentRelationship"""
   Competition_Exec__r: Contact
-  Acc_CompetitionType__c: PicklistValue
   Authorisation_expected_end_date__c: DateValue
-  Acc_FinanceBusinessPartner__c: IDValue
-
-  """parentRelationship"""
-  Acc_FinanceBusinessPartner__r: User
   SystemModstamp: DateTimeValue
   ACC_SubsidyControlScheme__c: IDValue
-  Acc_ExpectedFirstDateOfProjectsStart__c: DateValue
   Acc_InsertCostCentreCode__c: StringValue
-  Acc_CompetitionName__c: StringValue
-  CreatedDate: DateTimeValue
   LastActivityDate: DateValue
   LastModifiedById: IDValue
 
@@ -4460,13 +4487,15 @@ type Competition__c {
   LastModifiedBy: User
   Acc_TypeofAid__c: PicklistValue
   Acc_Review_Team__c: PicklistValue
-  SBRI_Contracting_Authority__c: PicklistValue
 
   """childRelationship"""
   Claims__r(orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
   """childRelationship"""
   Acc_ProjectCompetition__r(orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+
+  """childRelationship"""
+  Competitions__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
   ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
@@ -4496,55 +4525,59 @@ input Competition__c_Filter {
   LastModifiedDate: DateTimeOperators
   Acc_ProjectHardStopDate__c: DateOperators
   Acc_NonStandardProjectInformation__c: TextAreaOperators
-  LastReferencedDate: DateTimeOperators
   Acc_PublicityEmbargoOnResults__c: PicklistOperators
-  ACC_PaymentType__c: PicklistOperators
   Authorisation_Gateway__c: IdOperators
-  Acc_AGRefNumber__c: IdOperators
   Name: StringOperators
   Acc_PortfolioManager__c: IdOperators
   Acc_PortfolioManager__r: User_Filter
   Acc_TermsConditions__c: PicklistOperators
-  OwnerId: IdOperators
   CreatedById: IdOperators
   CreatedBy: User_Filter
-  Acc_CompetitionCode__c: StringOperators
   Sent_to_MM__c: BooleanOperators
   Acc_LegacyCompetitionCode__c: StringOperators
+  IM_PhasedCompetition__c: BooleanOperators
+  Acc_ExpectedLastDateOfProjectsEnd__c: DateOperators
+  IsDeleted: BooleanOperators
+  Acc_LevelOfMonitoring__c: PicklistOperators
+  LastViewedDate: DateTimeOperators
+  CSS_Representative__c: IdOperators
+  CSS_Representative__r: User_Filter
+  Acc_CompetitionType__c: PicklistOperators
+  Acc_FinanceBusinessPartner__c: IdOperators
+  Acc_FinanceBusinessPartner__r: User_Filter
+  Acc_ExpectedFirstDateOfProjectsStart__c: DateOperators
+  Acc_CompetitionName__c: StringOperators
+  CreatedDate: DateTimeOperators
+  Id: IdOperators
+  SBRI_Contracting_Authority__c: PicklistOperators
+  Phased_Competition_Stage__c: PicklistOperators
+  IM_PreCursorCompetition__c: IdOperators
+  IM_PreCursorCompetition__r: Competition__c_Filter
+  LastReferencedDate: DateTimeOperators
+  ACC_PaymentType__c: PicklistOperators
+  Acc_AGRefNumber__c: IdOperators
+  OwnerId: IdOperators
+  Acc_CompetitionCode__c: StringOperators
   Impact_Management_participation__c: PicklistOperators
   Technologists__c: IdOperators
   Technologists__r: Contact_Filter
-  Acc_ExpectedLastDateOfProjectsEnd__c: DateOperators
   Acc_ProgrammeID__c: IdOperators
-  IsDeleted: BooleanOperators
-  Acc_LevelOfMonitoring__c: PicklistOperators
   Acc_ProgrammeName__c: StringOperators
   Acc_ActivityCode__c: StringOperators
   Competition_Manager__c: IdOperators
   Competition_Manager__r: User_Filter
-  LastViewedDate: DateTimeOperators
   Authorisation_hard_stop_date__c: DateOperators
-  CSS_Representative__c: IdOperators
-  CSS_Representative__r: User_Filter
   Competition_Exec__c: IdOperators
   Competition_Exec__r: Contact_Filter
-  Acc_CompetitionType__c: PicklistOperators
   Authorisation_expected_end_date__c: DateOperators
-  Acc_FinanceBusinessPartner__c: IdOperators
-  Acc_FinanceBusinessPartner__r: User_Filter
   SystemModstamp: DateTimeOperators
   ACC_SubsidyControlScheme__c: IdOperators
-  Acc_ExpectedFirstDateOfProjectsStart__c: DateOperators
   Acc_InsertCostCentreCode__c: StringOperators
-  Acc_CompetitionName__c: StringOperators
-  CreatedDate: DateTimeOperators
   LastActivityDate: DateOperators
-  Id: IdOperators
   LastModifiedById: IdOperators
   LastModifiedBy: User_Filter
   Acc_TypeofAid__c: PicklistOperators
   Acc_Review_Team__c: PicklistOperators
-  SBRI_Contracting_Authority__c: PicklistOperators
   and: [Competition__c_Filter]
   or: [Competition__c_Filter]
   not: Competition__c_Filter
@@ -4554,55 +4587,59 @@ input Competition__c_GroupBy {
   LastModifiedDate: GroupByDateFunction
   Acc_ProjectHardStopDate__c: GroupByClause
   Acc_NonStandardProjectInformation__c: GroupByClause
-  LastReferencedDate: GroupByDateFunction
   Acc_PublicityEmbargoOnResults__c: GroupByClause
-  ACC_PaymentType__c: GroupByClause
   Authorisation_Gateway__c: GroupByClause
-  Acc_AGRefNumber__c: GroupByClause
   Name: GroupByClause
   Acc_PortfolioManager__c: GroupByClause
   Acc_PortfolioManager__r: User_GroupBy
   Acc_TermsConditions__c: GroupByClause
-  OwnerId: GroupByClause
   CreatedById: GroupByClause
   CreatedBy: User_GroupBy
-  Acc_CompetitionCode__c: GroupByClause
   CloneSourceId: GroupByClause
   Sent_to_MM__c: GroupByClause
   Acc_LegacyCompetitionCode__c: GroupByClause
+  IM_PhasedCompetition__c: GroupByClause
+  Acc_ExpectedLastDateOfProjectsEnd__c: GroupByClause
+  IsDeleted: GroupByClause
+  Acc_LevelOfMonitoring__c: GroupByClause
+  LastViewedDate: GroupByDateFunction
+  CSS_Representative__c: GroupByClause
+  CSS_Representative__r: User_GroupBy
+  Acc_CompetitionType__c: GroupByClause
+  Acc_FinanceBusinessPartner__c: GroupByClause
+  Acc_FinanceBusinessPartner__r: User_GroupBy
+  Acc_ExpectedFirstDateOfProjectsStart__c: GroupByClause
+  Acc_CompetitionName__c: GroupByClause
+  CreatedDate: GroupByDateFunction
+  Id: GroupByClause
+  SBRI_Contracting_Authority__c: GroupByClause
+  Phased_Competition_Stage__c: GroupByClause
+  IM_PreCursorCompetition__c: GroupByClause
+  IM_PreCursorCompetition__r: Competition__c_GroupBy
+  LastReferencedDate: GroupByDateFunction
+  ACC_PaymentType__c: GroupByClause
+  Acc_AGRefNumber__c: GroupByClause
+  OwnerId: GroupByClause
+  Acc_CompetitionCode__c: GroupByClause
   Impact_Management_participation__c: GroupByClause
   Technologists__c: GroupByClause
   Technologists__r: Contact_GroupBy
-  Acc_ExpectedLastDateOfProjectsEnd__c: GroupByClause
   Acc_ProgrammeID__c: GroupByClause
-  IsDeleted: GroupByClause
-  Acc_LevelOfMonitoring__c: GroupByClause
   Acc_ActivityCode__c: GroupByClause
   Competition_Manager__c: GroupByClause
   Competition_Manager__r: User_GroupBy
-  LastViewedDate: GroupByDateFunction
   Authorisation_hard_stop_date__c: GroupByClause
-  CSS_Representative__c: GroupByClause
-  CSS_Representative__r: User_GroupBy
   Competition_Exec__c: GroupByClause
   Competition_Exec__r: Contact_GroupBy
-  Acc_CompetitionType__c: GroupByClause
   Authorisation_expected_end_date__c: GroupByClause
-  Acc_FinanceBusinessPartner__c: GroupByClause
-  Acc_FinanceBusinessPartner__r: User_GroupBy
   SystemModstamp: GroupByDateFunction
   ACC_SubsidyControlScheme__c: GroupByClause
-  Acc_ExpectedFirstDateOfProjectsStart__c: GroupByClause
   Acc_InsertCostCentreCode__c: GroupByClause
-  Acc_CompetitionName__c: GroupByClause
-  CreatedDate: GroupByDateFunction
   LastActivityDate: GroupByClause
-  Id: GroupByClause
   LastModifiedById: GroupByClause
   LastModifiedBy: User_GroupBy
   Acc_TypeofAid__c: GroupByClause
   Acc_Review_Team__c: GroupByClause
-  SBRI_Contracting_Authority__c: GroupByClause
   type: GroupByType
 }
 
@@ -4610,55 +4647,59 @@ input Competition__c_OrderBy {
   LastModifiedDate: OrderByClause
   Acc_ProjectHardStopDate__c: OrderByClause
   Acc_NonStandardProjectInformation__c: OrderByClause
-  LastReferencedDate: OrderByClause
   Acc_PublicityEmbargoOnResults__c: OrderByClause
-  ACC_PaymentType__c: OrderByClause
   Authorisation_Gateway__c: OrderByClause
-  Acc_AGRefNumber__c: OrderByClause
   Name: OrderByClause
   Acc_PortfolioManager__c: OrderByClause
   Acc_PortfolioManager__r: User_OrderBy
   Acc_TermsConditions__c: OrderByClause
-  OwnerId: OrderByClause
   CreatedById: OrderByClause
   CreatedBy: User_OrderBy
-  Acc_CompetitionCode__c: OrderByClause
   Sent_to_MM__c: OrderByClause
   Acc_LegacyCompetitionCode__c: OrderByClause
+  IM_PhasedCompetition__c: OrderByClause
+  Acc_ExpectedLastDateOfProjectsEnd__c: OrderByClause
+  IsDeleted: OrderByClause
+  Acc_LevelOfMonitoring__c: OrderByClause
+  LastViewedDate: OrderByClause
+  CSS_Representative__c: OrderByClause
+  CSS_Representative__r: User_OrderBy
+  Acc_CompetitionType__c: OrderByClause
+  Acc_FinanceBusinessPartner__c: OrderByClause
+  Acc_FinanceBusinessPartner__r: User_OrderBy
+  Acc_ExpectedFirstDateOfProjectsStart__c: OrderByClause
+  Acc_CompetitionName__c: OrderByClause
+  CreatedDate: OrderByClause
+  Id: OrderByClause
+  SBRI_Contracting_Authority__c: OrderByClause
+  Phased_Competition_Stage__c: OrderByClause
+  IM_PreCursorCompetition__c: OrderByClause
+  IM_PreCursorCompetition__r: Competition__c_OrderBy
+  LastReferencedDate: OrderByClause
+  ACC_PaymentType__c: OrderByClause
+  Acc_AGRefNumber__c: OrderByClause
+  OwnerId: OrderByClause
+  Acc_CompetitionCode__c: OrderByClause
   Impact_Management_participation__c: OrderByClause
   Technologists__c: OrderByClause
   Technologists__r: Contact_OrderBy
-  Acc_ExpectedLastDateOfProjectsEnd__c: OrderByClause
   Acc_ProgrammeID__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_LevelOfMonitoring__c: OrderByClause
   Acc_ProgrammeName__c: OrderByClause
   Acc_ActivityCode__c: OrderByClause
   Competition_Manager__c: OrderByClause
   Competition_Manager__r: User_OrderBy
-  LastViewedDate: OrderByClause
   Authorisation_hard_stop_date__c: OrderByClause
-  CSS_Representative__c: OrderByClause
-  CSS_Representative__r: User_OrderBy
   Competition_Exec__c: OrderByClause
   Competition_Exec__r: Contact_OrderBy
-  Acc_CompetitionType__c: OrderByClause
   Authorisation_expected_end_date__c: OrderByClause
-  Acc_FinanceBusinessPartner__c: OrderByClause
-  Acc_FinanceBusinessPartner__r: User_OrderBy
   SystemModstamp: OrderByClause
   ACC_SubsidyControlScheme__c: OrderByClause
-  Acc_ExpectedFirstDateOfProjectsStart__c: OrderByClause
   Acc_InsertCostCentreCode__c: OrderByClause
-  Acc_CompetitionName__c: OrderByClause
-  CreatedDate: OrderByClause
   LastActivityDate: OrderByClause
-  Id: OrderByClause
   LastModifiedById: OrderByClause
   LastModifiedBy: User_OrderBy
   Acc_TypeofAid__c: OrderByClause
   Acc_Review_Team__c: OrderByClause
-  SBRI_Contracting_Authority__c: OrderByClause
 }
 
 type Contact {
@@ -5416,29 +5457,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  LAST_FISCAL_YEAR
-  THIS_MONTH
-  LAST_FISCAL_QUARTER
-  NEXT_FISCAL_YEAR
-  NEXT_WEEK
-  TOMORROW
-  TODAY
-  NEXT_QUARTER
-  NEXT_90_DAYS
   YESTERDAY
-  LAST_90_DAYS
   THIS_FISCAL_QUARTER
-  LAST_QUARTER
-  THIS_WEEK
-  NEXT_YEAR
   THIS_YEAR
-  THIS_FISCAL_YEAR
-  THIS_QUARTER
-  NEXT_FISCAL_QUARTER
-  LAST_YEAR
-  LAST_WEEK
+  NEXT_FISCAL_YEAR
+  TODAY
   LAST_MONTH
+  NEXT_YEAR
+  THIS_FISCAL_YEAR
+  NEXT_QUARTER
+  THIS_MONTH
+  LAST_FISCAL_YEAR
+  THIS_WEEK
+  NEXT_WEEK
+  NEXT_90_DAYS
+  LAST_FISCAL_QUARTER
+  TOMORROW
+  LAST_QUARTER
   NEXT_MONTH
+  NEXT_FISCAL_QUARTER
+  LAST_WEEK
+  LAST_90_DAYS
+  THIS_QUARTER
+  LAST_YEAR
 }
 
 input DateOperators {
@@ -6671,11 +6712,11 @@ input RecordType_OrderBy {
 
 """Enum representing possible results ordering options."""
 enum ResultOrder {
-  """The enum value represents ascending order."""
-  ASC
-
   """The enum value represents descending order."""
   DESC
+
+  """The enum value represents ascending order."""
+  ASC
 }
 
 scalar RichTextArea

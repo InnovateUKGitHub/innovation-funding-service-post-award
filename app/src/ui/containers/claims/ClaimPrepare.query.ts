@@ -182,9 +182,11 @@ export const claimPrepareQuery = graphql`
                 ContentDocumentLinks(first: 2000) {
                   edges {
                     node {
+                      Id
                       LinkedEntityId {
                         value
                       }
+                      isFeedAttachment
                       ContentDocument {
                         Id
                         LastModifiedBy {

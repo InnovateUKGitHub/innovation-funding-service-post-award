@@ -4,6 +4,7 @@ import { PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 export type DocumentSummaryNode = {
   readonly node: {
     readonly LinkedEntityId?: GQL.Value<string>;
+    readonly isFeedAttachment: boolean;
     readonly ContentDocument: {
       readonly Id: string | null;
       readonly LastModifiedBy: {
@@ -159,14 +160,16 @@ export function mapToPartnerDocumentSummaryDtoArray<
   return (
     (edges ?? [])
       .map(edge =>
-        (edge?.node?.ContentDocumentLinks?.edges ?? []).map(doc =>
-          mapToDocumentSummaryDto(doc ?? null, pickList, {
-            ...additionalData,
-            partnerName: edge?.node?.Acc_AccountId__r?.Name?.value ?? "",
-            partnerId: (edge?.node?.Acc_AccountId__c?.value ?? "") as PartnerId,
-            type: "partners",
-          }),
-        ),
+        (edge?.node?.ContentDocumentLinks?.edges ?? [])
+          .filter(doc => !doc?.node?.isFeedAttachment)
+          .map(doc =>
+            mapToDocumentSummaryDto(doc ?? null, pickList, {
+              ...additionalData,
+              partnerName: edge?.node?.Acc_AccountId__r?.Name?.value ?? "",
+              partnerId: (edge?.node?.Acc_AccountId__c?.value ?? "") as PartnerId,
+              type: "partners",
+            }),
+          ),
       )
       // if isFc or Pm, filter out document summaries belonging to other partners
       .filter(x => {
@@ -201,10 +204,12 @@ export function mapToProjectDocumentSummaryDtoArray<
     type: "projects" | "claims" | "claim details";
   },
 ) {
-  return (edges ?? []).map(x =>
-    mapToDocumentSummaryDto(x ?? null, pickList, {
-      ...additionalData,
-      partnerName: "",
-    }),
-  );
+  return (edges ?? [])
+    .filter(x => !x?.node?.isFeedAttachment)
+    .map(x =>
+      mapToDocumentSummaryDto(x ?? null, pickList, {
+        ...additionalData,
+        partnerName: "",
+      }),
+    );
 }
