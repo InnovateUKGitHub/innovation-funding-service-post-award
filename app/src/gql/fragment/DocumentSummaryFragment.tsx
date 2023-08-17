@@ -4,6 +4,8 @@ export const documentSummaryFragment = graphql`
   fragment DocumentSummaryFragment on ContentDocumentLinkConnection {
     edges {
       node {
+        Id
+        isFeedAttachment
         ContentDocument {
           Id
           LatestPublishedVersionId {

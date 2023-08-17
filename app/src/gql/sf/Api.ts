@@ -144,13 +144,15 @@ export class Api {
    *
    * @returns SOQL Result - Is typed as `any` because the result may vary, including potential errors.
    */
-  public executeSOQL<T>({ query }: { query: string }): Promise<T> {
+  public async executeSOQL<T>({ query }: { query: string }): Promise<T> {
     this.logger.debug("SOQL Query", query);
-    return this.fetch(`/services/data/${this.version}/query`, {
+    const data = this.fetch(`/services/data/${this.version}/query`, {
       method: "GET",
       searchParams: {
         q: query,
       },
     });
+    this.logger.debug("SOQL Query Return", query, await data);
+    return data;
   }
 }

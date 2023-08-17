@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e598fe69981e9340afda56a8ce5e06d1>>
+ * @generated SignedSource<<9a2766a0b83680f45824866c18a22c13>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -86,6 +86,11 @@ v2 = [
               {
                 "alias": null,
                 "args": [
+                  {
+                    "kind": "Literal",
+                    "name": "first",
+                    "value": 1
+                  },
                   {
                     "fields": [
                       {
@@ -199,16 +204,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "049741ce673304ddffbf761f48b59c99",
+    "cacheID": "d255b35c49bb9ff96cd8ce05a65348d9",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportCreateQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportCreateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportCreateQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "30090af35cbade105bcf882ebabdba9a";
+(node as any).hash = "0e21e25d0b33549e8e9d9e620c173a12";
 
 export default node;

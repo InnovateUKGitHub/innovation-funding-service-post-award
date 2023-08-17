@@ -30,6 +30,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KthEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -37,6 +38,7 @@ const data = {
                             },
                           },
                           Id: "069260000024UOxAAM",
+
                           LatestPublishedVersionId: {
                             value: "068260000028zfSAAQ",
                           },
@@ -77,6 +79,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KthEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -84,6 +87,7 @@ const data = {
                             },
                           },
                           Id: "069260000024UOOAA2",
+
                           LatestPublishedVersionId: {
                             value: "068260000028zeeAAA",
                           },
@@ -124,6 +128,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KthEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -131,6 +136,7 @@ const data = {
                             },
                           },
                           Id: "069260000024UOEAA2",
+
                           LatestPublishedVersionId: {
                             value: "068260000028zePAAQ",
                           },
@@ -171,6 +177,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KthEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -178,6 +185,7 @@ const data = {
                             },
                           },
                           Id: "06926000001iE1AAAU",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iXM2AAM",
                           },
@@ -238,6 +246,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KtgEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -245,6 +254,7 @@ const data = {
                             },
                           },
                           Id: "069260000024ZZ7AAM",
+
                           LatestPublishedVersionId: {
                             value: "0682600000294s5AAA",
                           },
@@ -285,6 +295,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KtgEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -292,6 +303,7 @@ const data = {
                             },
                           },
                           Id: "069260000024ZZ2AAM",
+
                           LatestPublishedVersionId: {
                             value: "0682600000294s0AAA",
                           },
@@ -332,6 +344,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KtgEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -339,6 +352,7 @@ const data = {
                             },
                           },
                           Id: "069260000024ZYxAAM",
+
                           LatestPublishedVersionId: {
                             value: "0682600000294rvAAA",
                           },
@@ -379,6 +393,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KtgEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -386,6 +401,7 @@ const data = {
                             },
                           },
                           Id: "069260000024ZGFAA2",
+
                           LatestPublishedVersionId: {
                             value: "0682600000294YPAAY",
                           },
@@ -426,6 +442,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KtgEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -433,6 +450,7 @@ const data = {
                             },
                           },
                           Id: "069260000024ZFlAAM",
+
                           LatestPublishedVersionId: {
                             value: "0682600000294XvAAI",
                           },
@@ -493,6 +511,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KtfEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -500,6 +519,7 @@ const data = {
                             },
                           },
                           Id: "06926000001iKRJAA2",
+
                           LatestPublishedVersionId: {
                             value: "06826000001idqhAAA",
                           },
@@ -540,6 +560,7 @@ const data = {
                         LinkedEntityId: {
                           value: "a0D2600000z6KtfEAE",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -547,6 +568,7 @@ const data = {
                             },
                           },
                           Id: "06926000001Y1tUAAS",
+
                           LatestPublishedVersionId: {
                             value: "06826000001YIbBAAW",
                           },
@@ -634,8 +656,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001UyMLAA0",
+
                           LatestPublishedVersionId: {
                             value: "06826000001VEILAA4",
                           },
@@ -681,8 +705,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001Y1jjAAC",
+
                           LatestPublishedVersionId: {
                             value: "06826000001YIRJAA4",
                           },
@@ -728,8 +754,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001Y1tZAAS",
+
                           LatestPublishedVersionId: {
                             value: "06826000001YIbGAAW",
                           },
@@ -775,8 +803,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iE0MAAU",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iXLEAA2",
                           },
@@ -822,8 +852,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iE0WAAU",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iXLOAA2",
                           },
@@ -869,8 +901,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iE0bAAE",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iXLTAA2",
                           },
@@ -916,8 +950,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iE0lAAE",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iXLdAAM",
                           },
@@ -963,8 +999,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iE0vAAE",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iXLnAAM",
                           },
@@ -1010,8 +1048,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iE1jAAE",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iXMgAAM",
                           },
@@ -1057,8 +1097,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iE1oAAE",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iXMlAAM",
                           },
@@ -1104,8 +1146,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iP8qAAE",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iiYmAAI",
                           },
@@ -1151,8 +1195,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iP9UAAU",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iiZQAAY",
                           },
@@ -1198,8 +1244,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iPAXAA2",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iiaTAAQ",
                           },
@@ -1245,8 +1293,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iQ4uAAE",
+
                           LatestPublishedVersionId: {
                             value: "06826000001ijU8AAI",
                           },
@@ -1292,8 +1342,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iQUxAAM",
+
                           LatestPublishedVersionId: {
                             value: "06826000001ijuVAAQ",
                           },
@@ -1339,8 +1391,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001iQYLAA2",
+
                           LatestPublishedVersionId: {
                             value: "06826000001ijxtAAA",
                           },
@@ -1386,8 +1440,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001icV4AAI",
+
                           LatestPublishedVersionId: {
                             value: "06826000001ivvtAAA",
                           },
@@ -1433,8 +1489,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001icVTAAY",
+
                           LatestPublishedVersionId: {
                             value: "06826000001ivwSAAQ",
                           },
@@ -1480,8 +1538,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001icaYAAQ",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iw1XAAQ",
                           },
@@ -1527,8 +1587,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001icbCAAQ",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iw2BAAQ",
                           },
@@ -1574,8 +1636,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001icbHAAQ",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iw2GAAQ",
                           },
@@ -1621,8 +1685,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001ifFYAAY",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iymsAAA",
                           },
@@ -1668,8 +1734,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001ifFdAAI",
+
                           LatestPublishedVersionId: {
                             value: "06826000001iymxAAA",
                           },
@@ -1715,8 +1783,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001igHzAAI",
+
                           LatestPublishedVersionId: {
                             value: "06826000001izq0AAA",
                           },
@@ -1762,8 +1832,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001igJlAAI",
+
                           LatestPublishedVersionId: {
                             value: "06826000001izrhAAA",
                           },
@@ -1809,8 +1881,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001igJvAAI",
+
                           LatestPublishedVersionId: {
                             value: "06826000001izrrAAA",
                           },
@@ -1856,8 +1930,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001igK0AAI",
+
                           LatestPublishedVersionId: {
                             value: "06826000001izrwAAA",
                           },
@@ -1903,8 +1979,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "06926000001igK5AAI",
+
                           LatestPublishedVersionId: {
                             value: "06826000001izs1AAA",
                           },
@@ -1950,8 +2028,10 @@ const data = {
                         LinkedEntityId: {
                           value: "a0E2600000kSp3gEAC",
                         },
+                        isFeedAttachment: false,
                         ContentDocument: {
                           Id: "069260000024WnpAAE",
+
                           LatestPublishedVersionId: {
                             value: "06826000002925LAAQ",
                           },
@@ -2078,5 +2158,32 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
         },
       ),
     ).toMatchSnapshot();
+  });
+
+  it("should not parse Salesforce Chatter documents", () => {
+    expect(
+      mapToProjectDocumentSummaryDtoArray(
+        [
+          {
+            node: {
+              isFeedAttachment: false,
+              ContentDocument: {
+                Id: "good",
+              },
+            },
+          },
+          {
+            node: {
+              isFeedAttachment: true,
+              ContentDocument: {
+                Id: "bad",
+              },
+            },
+          },
+        ] as any,
+        ["id"],
+        {} as any,
+      ),
+    ).toEqual([{ id: "good" }]);
   });
 });

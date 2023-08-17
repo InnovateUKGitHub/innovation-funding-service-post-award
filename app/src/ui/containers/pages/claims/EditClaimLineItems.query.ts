@@ -117,6 +117,7 @@ export const editClaimLineItemsQuery = graphql`
                       LinkedEntityId {
                         value
                       }
+                      isFeedAttachment
                       ContentDocument {
                         Id
                         LastModifiedBy {

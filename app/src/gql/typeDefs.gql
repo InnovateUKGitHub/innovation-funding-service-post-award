@@ -30,3 +30,7 @@ extend type Acc_Project__c {
 extend type Contact {
   username: String
 }
+
+extend type ContentDocumentLink {
+  isFeedAttachment: Boolean!
+}

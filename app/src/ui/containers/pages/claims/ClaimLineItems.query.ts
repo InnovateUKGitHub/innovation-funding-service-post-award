@@ -107,6 +107,7 @@ export const claimLineItemsQuery = graphql`
                       LinkedEntityId {
                         value
                       }
+                      isFeedAttachment
                       ContentDocument {
                         Id
                         LastModifiedBy {

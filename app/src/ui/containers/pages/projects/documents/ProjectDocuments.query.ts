@@ -30,9 +30,11 @@ export const projectDocumentsQuery = graphql`
                 ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { LastModifiedDate: { order: DESC } } }) {
                   edges {
                     node {
+                      Id
                       LinkedEntityId {
                         value
                       }
+                      isFeedAttachment
                       ContentDocument {
                         Id
                         LastModifiedBy {
@@ -106,6 +108,8 @@ export const projectDocumentsQuery = graphql`
                 ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { LastModifiedDate: { order: DESC } } }) {
                   edges {
                     node {
+                      Id
+                      isFeedAttachment
                       ContentDocument {
                         Id
                         LastModifiedBy {
