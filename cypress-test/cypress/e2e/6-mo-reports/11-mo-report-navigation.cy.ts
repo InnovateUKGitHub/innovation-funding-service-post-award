@@ -22,11 +22,12 @@ import {
   reflectSection1Changes,
   reflectSection2Changes,
   reflectSection4Changes,
-  editSection5WithCopy,
+  editSection5WithTooMuchCopy,
   reflectSection5Changes,
   assertSection7Comments,
   assertSectionCommentsAndScore,
   completeSection8,
+  editSection5WithCorrectCopy,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -121,7 +122,19 @@ describe("MO report > Complete all sections, navigate sections", () => {
 
   it("Should reflect the Section 4 changes on the Summary page", reflectSection4Changes);
 
-  it("Should access Section 5 'Risk management' and update the text with 2844 characters", editSection5WithCopy);
+  it("Should access Section 5 'Risk management' and update the text with 5001 characters", editSection5WithTooMuchCopy);
+
+  it("Should validate that you are over the allowed character limit of 5000", () => {
+    cy.button("Save and return to summary").click();
+    cy.validationLink("Maximum of 5000 characters");
+  });
+
+  it("Should backspace a single character to bring the text to 5000 characters", editSection5WithCorrectCopy);
+
+  it("Should now correctly save and continue to the summary page", () => {
+    cy.button("Save and return to summary").click();
+    cy.heading("Monitoring report");
+  });
 
   it("Should reflect the Section 5 changes on the Summary page", reflectSection5Changes);
 });
