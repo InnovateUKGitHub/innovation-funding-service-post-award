@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8b9dd2124ff55b4090fd1834529ac5bc>>
+ * @generated SignedSource<<fdf28cf40ab68cfeccfb6cbe8b59faca>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -48,6 +48,8 @@ export type DocumentSummaryFragment$data = {
           readonly value: string | null;
         } | null;
       } | null;
+      readonly Id: string;
+      readonly isFeedAttachment: boolean;
     } | null;
   } | null> | null;
   readonly " $fragmentType": "DocumentSummaryFragment";
@@ -58,7 +60,14 @@ export type DocumentSummaryFragment$key = {
 };
 
 const node: ReaderFragment = (function(){
-var v0 = [
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "Id",
+  "storageKey": null
+},
+v1 = [
   {
     "alias": null,
     "args": null,
@@ -89,6 +98,14 @@ return {
           "name": "node",
           "plural": false,
           "selections": [
+            (v0/*: any*/),
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "isFeedAttachment",
+              "storageKey": null
+            },
             {
               "alias": null,
               "args": null,
@@ -97,13 +114,7 @@ return {
               "name": "ContentDocument",
               "plural": false,
               "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "Id",
-                  "storageKey": null
-                },
+                (v0/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -111,7 +122,7 @@ return {
                   "kind": "LinkedField",
                   "name": "LatestPublishedVersionId",
                   "plural": false,
-                  "selections": (v0/*: any*/),
+                  "selections": (v1/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -121,7 +132,7 @@ return {
                   "kind": "LinkedField",
                   "name": "Description",
                   "plural": false,
-                  "selections": (v0/*: any*/),
+                  "selections": (v1/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -131,7 +142,7 @@ return {
                   "kind": "LinkedField",
                   "name": "ContentSize",
                   "plural": false,
-                  "selections": (v0/*: any*/),
+                  "selections": (v1/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -141,7 +152,7 @@ return {
                   "kind": "LinkedField",
                   "name": "CreatedDate",
                   "plural": false,
-                  "selections": (v0/*: any*/),
+                  "selections": (v1/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -151,7 +162,7 @@ return {
                   "kind": "LinkedField",
                   "name": "FileType",
                   "plural": false,
-                  "selections": (v0/*: any*/),
+                  "selections": (v1/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -161,7 +172,7 @@ return {
                   "kind": "LinkedField",
                   "name": "FileExtension",
                   "plural": false,
-                  "selections": (v0/*: any*/),
+                  "selections": (v1/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -171,7 +182,7 @@ return {
                   "kind": "LinkedField",
                   "name": "Title",
                   "plural": false,
-                  "selections": (v0/*: any*/),
+                  "selections": (v1/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -181,7 +192,7 @@ return {
                   "kind": "LinkedField",
                   "name": "LastModifiedDate",
                   "plural": false,
-                  "selections": (v0/*: any*/),
+                  "selections": (v1/*: any*/),
                   "storageKey": null
                 },
                 {
@@ -199,7 +210,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Username",
                       "plural": false,
-                      "selections": (v0/*: any*/),
+                      "selections": (v1/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -209,7 +220,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Name",
                       "plural": false,
-                      "selections": (v0/*: any*/),
+                      "selections": (v1/*: any*/),
                       "storageKey": null
                     }
                   ],
@@ -230,6 +241,6 @@ return {
 };
 })();
 
-(node as any).hash = "344bbb0a40c3e43dde6059835de40085";
+(node as any).hash = "36859f4cca95257e9dd2e1640c750c11";
 
 export default node;

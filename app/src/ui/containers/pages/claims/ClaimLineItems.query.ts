@@ -104,6 +104,7 @@ export const claimLineItemsQuery = graphql`
                 ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { CreatedDate: { order: DESC } } }) {
                   edges {
                     node {
+                      isFeedAttachment
                       LinkedEntityId {
                         value
                       }
