@@ -18,7 +18,7 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
   const { getContent } = useContent();
   const { getPcrItemContent } = usePcrItemName();
 
-  const list = useMemo<ReactNode[]>(() => {
+  const [anyEnabled, list] = useMemo<[boolean, ReactNode[]]>(() => {
     const returnList: ReactNode[] = [];
 
     const disableReasonMessages = {
@@ -44,10 +44,15 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
       ),
     };
 
+    let anyEnabled = false;
     const foundDisableReasons = new Set<PCRItemDisabledReason>();
 
     for (const item of items) {
-      foundDisableReasons.add(item.disabledReason);
+      if (item.disabledReason === PCRItemDisabledReason.None) {
+        anyEnabled = true;
+      } else {
+        foundDisableReasons.add(item.disabledReason);
+      }
     }
 
     for (const disableReason of [...foundDisableReasons].sort((a, b) => a - b)) {
@@ -73,12 +78,22 @@ const PcrDisabledReasoning = ({ items }: { items: PCRItemTypeDto[] }) => {
       );
     }
 
-    return returnList;
+    return [anyEnabled, returnList];
   }, [items, getContent, getPcrItemContent]);
 
   if (list.length === 0) return null;
 
-  return <Info summary={getContent(x => x.pages.pcrModifyOptions.learnMoreMissingTitle)}>{list}</Info>;
+  return (
+    <Info
+      summary={getContent(x =>
+        anyEnabled
+          ? x.pages.pcrModifyOptions.learnMoreMissingSomeTitle
+          : x.pages.pcrModifyOptions.learnMoreMissingAllTitle,
+      )}
+    >
+      {list}
+    </Info>
+  );
 };
 
 export { PcrDisabledReasoning };

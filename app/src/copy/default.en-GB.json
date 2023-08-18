@@ -787,7 +787,8 @@
       "buttonCreateRequest": "Create request",
       "buttonCancelRequest": "Cancel",
       "buttonUpdateRequest": "Add to request",
-      "learnMoreMissingTitle": "Learn about why some PCR types are missing",
+      "learnMoreMissingSomeTitle": "Learn about why some PCR types are missing",
+      "learnMoreMissingAllTitle": "Learn about why all PCR types are missing",
       "reallocateCostsMessage": "This allows you to move costs from one category to another.",
       "removePartnerMessage": "Use this when a partner is leaving the project and is ready to submit their final claim.",
       "addPartnerMessage": "This allows you to add a new partner to a project. When adding a new partner to replace an existing one, also use 'Remove a partner' to remove the existing one.",
@@ -802,7 +803,9 @@
       "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
       "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
       "thisPcrAlreadyHasThisTypeMessage": "These types of request are already a part of this current PCR.",
-      "notEnoughPartnersToActionThisTypeTitle": "Some types are unavailable because you have reached the maximum number of this type in a single PCR."
+      "notEnoughPartnersToActionThisTypeTitle": "Some types are unavailable because you have reached the maximum number of this type in a single PCR.",
+      "noTypesAvailableTitle": "No types available",
+      "noTypesAvailableMessage": "There are no PCR types for you to select as each option is currently in progress on this, or another, PCR."
     },
     "pcrTimeExtensionStep": {
       "existingProjectHeading": "Existing project details",

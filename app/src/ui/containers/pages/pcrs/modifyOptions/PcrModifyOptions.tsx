@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { BaseProps } from "../../../containerBase";
 import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisabledReasoning";
 import { usePcrItemName } from "../utils/getPcrItemName";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 
 /**
  * Difference between "Create", "Modify" and "Update"
@@ -69,7 +70,6 @@ const PcrModifySelectedPage = ({
 
   const availableOptions: CheckboxOptionProps[] = [];
   const selectedOptions: CheckboxOptionProps[] = [];
-  const dtoUnavailable: PCRItemTypeDto[] = [];
 
   for (const itemType of itemTypes) {
     const { name, description } = getPcrItemContent(itemType.displayName);
@@ -88,8 +88,6 @@ const PcrModifySelectedPage = ({
 
     if (!itemType.disabled) {
       availableOptions.push(dtoOption);
-    } else {
-      dtoUnavailable.push(itemType);
     }
 
     if (
@@ -115,52 +113,68 @@ const PcrModifySelectedPage = ({
       validator={editor.validator}
       error={editor.error}
     >
-      <Content markdown value={x => x.pages.pcrModifyOptions.guidance} />
+      {availableOptions.length ? (
+        <>
+          <Content markdown value={x => x.pages.pcrModifyOptions.guidance} />
 
-      <Section qa="pcr-modify-options-section">
-        <PCRForm.Form
-          qa="pcr-modify-options-form"
-          editor={editor}
-          onSubmit={() => onChange(true, editor.data)}
-          onChange={dto => onChange(false, dto)}
-        >
-          <PCRForm.Fieldset heading={x => x.pages.pcrModifyOptions.selectRequestTypesTitle}>
-            <PCRForm.Checkboxes
-              options={availableOptions}
-              name="types"
-              validation={editor.validator.items}
-              value={() => selectedOptions}
-              update={(model, selectedValues) => {
-                const selectedOptions = itemTypes.filter(x => selectedValues?.some(y => y.id === `${x.type}`));
-                const updatedItems = [
-                  ...model.items.filter(x => x.id.length !== 0),
-                  ...selectedOptions.map(
-                    x =>
-                      model.items.filter(x => x.id.length === 0).find(y => x.type === y.type) ||
-                      createNewChangeRequestItem(x),
-                  ),
-                ];
+          <Section qa="pcr-modify-options-section">
+            <PCRForm.Form
+              qa="pcr-modify-options-form"
+              editor={editor}
+              onSubmit={() => onChange(true, editor.data)}
+              onChange={dto => onChange(false, dto)}
+            >
+              <PCRForm.Fieldset heading={x => x.pages.pcrModifyOptions.selectRequestTypesTitle}>
+                <PCRForm.Checkboxes
+                  options={availableOptions}
+                  name="types"
+                  validation={editor.validator.items}
+                  value={() => selectedOptions}
+                  update={(model, selectedValues) => {
+                    const selectedOptions = itemTypes.filter(x => selectedValues?.some(y => y.id === `${x.type}`));
+                    const updatedItems = [
+                      ...model.items.filter(x => x.id.length !== 0),
+                      ...selectedOptions.map(
+                        x =>
+                          model.items.filter(x => x.id.length === 0).find(y => x.type === y.type) ||
+                          createNewChangeRequestItem(x),
+                      ),
+                    ];
 
-                model.items = updatedItems;
-              }}
-            />
+                    model.items = updatedItems;
+                  }}
+                />
 
-            <PcrDisabledReasoning items={dtoUnavailable} />
-          </PCRForm.Fieldset>
+                <PcrDisabledReasoning items={itemTypes} />
+              </PCRForm.Fieldset>
 
-          <PCRForm.Fieldset>
-            <PCRForm.Submit>
-              {projectChangeRequestId
-                ? getContent(x => x.pages.pcrModifyOptions.buttonUpdateRequest)
-                : getContent(x => x.pages.pcrModifyOptions.buttonCreateRequest)}
-            </PCRForm.Submit>
+              <PCRForm.Fieldset>
+                <PCRForm.Submit>
+                  {projectChangeRequestId
+                    ? getContent(x => x.pages.pcrModifyOptions.buttonUpdateRequest)
+                    : getContent(x => x.pages.pcrModifyOptions.buttonCreateRequest)}
+                </PCRForm.Submit>
+
+                <Link styling="SecondaryButton" route={cancelLink}>
+                  {getContent(x => x.pages.pcrModifyOptions.buttonCancelRequest)}
+                </Link>
+              </PCRForm.Fieldset>
+            </PCRForm.Form>
+          </Section>
+        </>
+      ) : (
+        <>
+          <Section title={x => x.pages.pcrModifyOptions.noTypesAvailableTitle}>
+            <P>{getContent(x => x.pages.pcrModifyOptions.noTypesAvailableMessage)}</P>
+
+            <PcrDisabledReasoning items={itemTypes} />
 
             <Link styling="SecondaryButton" route={cancelLink}>
               {getContent(x => x.pages.pcrModifyOptions.buttonCancelRequest)}
             </Link>
-          </PCRForm.Fieldset>
-        </PCRForm.Form>
-      </Section>
+          </Section>
+        </>
+      )}
     </Page>
   );
 };
