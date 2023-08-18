@@ -43,7 +43,13 @@ export const useClaimDocumentsQuery = (
   const claimDocuments = mapToProjectDocumentSummaryDtoArray(
     claimNode?.ContentDocumentLinks?.edges ?? [],
     ["id", "fileName", "fileSize", "link", "description", "dateCreated", "uploadedBy", "isOwner"],
-    { currentUser: (data?.currentUser as { email: string }) ?? { email: "unknown user" }, projectId, type: "claims" },
+    {
+      currentUser: (data?.currentUser as { email: string }) ?? { email: "unknown user" },
+      projectId,
+      partnerId,
+      periodId: periodId as PeriodId,
+      type: "claims",
+    },
   );
 
   return { claim, project, claimDocuments };
