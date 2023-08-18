@@ -80,17 +80,19 @@ export const uploadToEUI = () => {
 };
 
 export const fcUploadToEUI = () => {
-  cy.fileInput("testfilefc.doc");
+  cy.fileInput("testfileEUIfc.doc");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
 };
 
 export const pmUploadToEUI = () => {
-  cy.fileInput("testfilepm.doc");
+  cy.fileInput("testfileEUIpm.doc");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
 };
 
 export const displayEUIFile = () => {
@@ -111,6 +113,7 @@ export const uploadToAB = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
 };
 
 export const displayABFile = () => {
@@ -131,6 +134,7 @@ export const uploadToEUIMed = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Plans");
   cy.submitButton("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
 };
 
 export const displayEUIMedFile = () => {
@@ -235,7 +239,9 @@ export const manyPartnerDocDelete = () => {
 
 export const fcLoginDelete = () => {
   cy.switchUserTo(fc);
-  cy.get("td").contains("testfilefc.doc");
+  cy.selectTile("Documents");
+  cy.heading("Project documents");
+  cy.get("td").contains("testfileEUIfc.doc");
   cy.get("td").contains("Wednesday Addams of EUI Small Ent Health").siblings().contains("Remove").click();
   cy.getByQA("validation-message-content").contains("has been deleted.");
 };
@@ -243,18 +249,19 @@ export const fcLoginDelete = () => {
 export const pmLoginViewFile = () => {
   cy.switchUserTo(pm);
   cy.get("h3").contains("Documents for EUI Small Ent Health");
-  cy.getByQA("partner-documents-container").contains("td", "testfilefc.doc");
+  cy.getByQA("partner-documents-container").contains("td", "testfileEUIfc.doc");
 };
 
 export const fcLoginViewFile = () => {
   cy.switchUserTo(fc);
   cy.get("h3").contains("Documents for EUI Small Ent Health");
-  cy.getByQA("partner-documents-container").contains("td", "testfilepm.doc");
+  cy.getByQA("partner-documents-container").contains("td", "testfileEUIpm.doc");
+  cy.get("body").contains("documentUploadedByIUK.docx").should("not.exist");
 };
 
 export const pmLoginDelete = () => {
   cy.switchUserTo(pm);
-  cy.get("td").contains("testfilepm.doc");
+  cy.get("td").contains("testfileEUIpm.doc");
   cy.get("td").contains("James Black of EUI Small Ent Health").siblings().contains("Remove").click();
   cy.getByQA("validation-message-content").contains("has been deleted.");
 };
@@ -262,8 +269,8 @@ export const pmLoginDelete = () => {
 export const moLoginViewFile = () => {
   cy.switchUserTo(mo);
   cy.get("h3").contains("Documents shared with Innovate UK and partners");
-  cy.getByQA("partner-documents-container").contains("td", "testfilepm.doc");
-  cy.getByQA("partner-documents-container").contains("td", "testfilefc.doc");
+  cy.getByQA("partner-documents-container").contains("td", "testfileEUIpm.doc");
+  cy.getByQA("partner-documents-container").contains("td", "testfileEUIfc.doc");
 };
 
 export const pmShouldNotDelete = () => {
@@ -296,12 +303,10 @@ export const deleteSingleChar = () => {
 };
 
 export const validateExcessiveFileName = () => {
-  cy.fileInput(
-    "specialcharhellothisissuperlongsowonderingifthisbailsoutinsalesforcebecausewowthisissuperlonganditkeepsgoingonandonandonandonandonandon.docx",
-  );
+  cy.fileInput("Specialcharhellothisissuperlongsowonderingifthisbailsoutinsalesforcebecausewowth1.docx");
   cy.button("Upload documents").click();
   cy.validationLink(
-    "You cannot upload 'specialcharhellothisissuperlongsowonderingifthisbailsoutinsalesforcebecausewowthisissuperlonganditkeepsgoingonandonandonandonandonandon.docx' because the name of the file must be shorter than 80 characters.",
+    "You cannot upload 'Specialcharhellothisissuperlongsowonderingifthisbailsoutinsalesforcebecausewowth1.docx' because the name of the file must be shorter than 80 characters.",
   );
   cy.reload();
 };
@@ -328,4 +333,33 @@ export const uploadFileNameTooShort = () => {
   cy.validationLink("You cannot upload '.txt' because the file must have a name.");
   cy.get("p").contains("You cannot upload '.txt' because the file must have a name.");
   cy.reload();
+};
+
+export const checkABCadVisibility = () => {
+  cy.backLink("Back to project").click();
+  cy.heading("Project overview");
+  cy.switchUserTo("contact77@test.co.uk");
+  cy.selectTile("Documents");
+  cy.heading("Project documents");
+  cy.get("testfileEUIpm.doc").should("not.exist");
+  cy.get("testfileEUIfc.doc").should("not.exist");
+};
+
+export const uploadABCadFc = () => {
+  cy.fileInput("testfileABCadFc.doc");
+  cy.wait(500);
+  cy.get("select#description.govuk-select").select("Plans");
+  cy.submitButton("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+};
+
+export const abCadFcDelete = () => {
+  cy.backLink("Back to project").click();
+  cy.heading("Project overview");
+  cy.switchUserTo("contact77@test.co.uk");
+  cy.selectTile("Documents");
+  cy.heading("Project documents");
+  cy.get("td").contains("testfileABCadFc.doc");
+  cy.get("td").contains("ken Charles of A B Cad Services").siblings().contains("Remove").click();
+  cy.getByQA("validation-message-content").contains("has been deleted.");
 };

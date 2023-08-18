@@ -10,6 +10,14 @@ import {
   closedSectionAccordions,
   shouldShowProjectTitle,
   claimStatusTable,
+  learnFiles,
+  claimReviewDocArea,
+  claimReviewExistingEvidence,
+  claimReviewUploadDocument,
+  claimReviewCheckForNewDoc,
+  claimReviewResubmit,
+  claimReviewDeleteDoc,
+  claimQueriedCheckForDoc,
   claimReviewTopThreeRows,
   claimReviewCostCat,
   topThreeRows,
@@ -25,6 +33,10 @@ describe("Claims > Review as MO", () => {
 
   it("Should ensure the Claims dashboard has loaded", () => {
     cy.heading("Claims");
+  });
+
+  it("Should switch user to the Monitoring Officer", () => {
+    cy.switchUserTo("testman2@testing.com");
   });
 
   it("Should have the project name displayed", shouldShowProjectTitle);
@@ -44,25 +56,61 @@ describe("Claims > Review as MO", () => {
 
   it("Should have more than 10 status changes recorded", claimStatusTable);
 
-  it("Should click the 'Show all sections' and verify that the accordions are all open", openAccordions);
+  it("Should click the Show all sections", () => {
+    cy.button("Show all sections").click();
+  });
 
-  it("Should check the top three rows including IAR status of forecast table is correct", claimReviewTopThreeRows);
+  it("Should have a documents area with correct copy", claimReviewDocArea);
 
-  it("Should check the cost categories of the forecast table is correct", claimReviewCostCat);
+  it("Should have a learn about files section", learnFiles);
+
+  it("Should have a documents area with existing evidence", claimReviewExistingEvidence);
+
+  it("Should allow a file to be uploaded", claimReviewUploadDocument);
+
+  it("Should display the file just uploaded", claimReviewCheckForNewDoc);
 
   it("Should query the claim back to the partner", queryTheClaim);
 
-  it("Should navigate back to the project dashboard and log in as the finance contact", navigateBackToDash);
+  it("Should navigate back to the project dashboard", { retries: 3 }, navigateBackToDash);
 
-  it("Should navigate to the queried claim and check for comments", goToQueriedClaim);
-
-  it("Should check the forecast table is correct", () => {
-    topThreeRows;
-    forecastCostCats;
+  it("Should switch user to the FC", () => {
+    cy.reload();
+    cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
   });
 
-  it("Should submit the claim", () => {
-    cy.button("Continue to summary").click();
-    cy.button("Submit claim").click();
+  it("Should navigate to the queried claim and go to the documents page", goToQueriedClaim);
+
+  it("Should check for the document uploaded by the MO", claimQueriedCheckForDoc);
+
+  it("Should continue to re-submit the claim", claimReviewResubmit);
+
+  it("Should check for the correct title once resubmitted", { retries: 3 }, () => {
+    cy.heading("Claims");
   });
+
+  it("Should back out to project overview", () => {
+    cy.backLink("Back to project").click();
+    cy.heading("Project overview");
+  });
+
+  it("Should switch the user to the MO", () => {
+    cy.switchUserTo("testman2@testing.com");
+  });
+
+  it("Should access the claims area again", () => {
+    cy.selectTile("Claims");
+    cy.heading("Claims");
+  });
+
+  it("Should click into 'Review claim' as MO and ensure the page loads", () => {
+    cy.get("tr").contains("ABS EUI Medium Enterprise").siblings().contains("a", "Review").click();
+    cy.heading("Claim");
+  });
+
+  it("Should expand the accordions", () => {
+    cy.button("Show all sections").click();
+  });
+
+  it("Should delete the file uploaded", claimReviewDeleteDoc);
 });

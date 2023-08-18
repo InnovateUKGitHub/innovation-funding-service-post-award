@@ -14,3 +14,15 @@ export const fileTidyUp = (name: string) => {
     }
   });
 };
+
+export const claimReviewfileTidyUp = (name: string) => {
+  cy.getByQA("claim-supporting-documents-container").within(() => {
+    cy.get("tr").then($container => {
+      if ($container.text().includes(name)) {
+        cy.log(`Deleting existing ${name} document`);
+        cy.tableCell(name).siblings().contains("button", "Remove").click({ force: true });
+        cy.wait(1000);
+      }
+    });
+  });
+};

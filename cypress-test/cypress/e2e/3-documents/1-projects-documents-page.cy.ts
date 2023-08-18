@@ -36,7 +36,13 @@ describe("Project Documents page", () => {
   it("Should display correct project name", shouldShowProjectTitle);
 
   it("Should show page description and instruction on document uploads", () => {
-    cy.paragraph("This page displays documents which are shared with Innovate UK and each project participant.");
+    cy.paragraph(
+      "This page displays documents which are shared with Innovate UK and each project participant. Documents shared here are only accessible to the monitoring officer. Documents shared with the finance contact and project manager (for lead applicant), are accessible only to that participant, Innovate UK and the monitoring officer. When uploading documents, you can choose whether they are accessible by Innovate UK only, or with a participant.",
+    );
+    cy.paragraph("Do not select a participant if you wish to share the file with Innovate UK only.");
+    cy.paragraph(
+      "You must upload supporting documents on the page you are submitting your claim or PCR. Do not use this page for claims or PCRs.",
+    );
   });
 
   it("Should display a clickable 'Learn more about files you can upload' message", learnAboutFiles);

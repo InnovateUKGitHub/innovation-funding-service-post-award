@@ -1,4 +1,4 @@
-import { fileTidyUp } from "common/filetidyup";
+import { claimReviewfileTidyUp, fileTidyUp } from "common/filetidyup";
 
 const moLogin = "testman2@testing.com";
 let date = new Date();
@@ -614,7 +614,6 @@ export const queryTheClaim = () => {
 export const navigateBackToDash = () => {
   cy.backLink("Back to project").click();
   cy.heading("Project overview");
-  cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
 };
 
 export const goToQueriedClaim = () => {
@@ -623,7 +622,6 @@ export const goToQueriedClaim = () => {
   cy.heading("Costs to be claimed");
   cy.get("td").contains(comments);
   cy.button("Continue to claims documents").click();
-  cy.get("a").contains("Continue to update forecast").click();
 };
 
 export const beginEditing = () => {
@@ -826,6 +824,32 @@ export const claimReviewTopThreeRows = () => {
           for (let i = 0; i < cols.length; i++) {
             cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
           }
+export const claimReviewDocArea = () => {
+  cy.getByQA("projectDocumentUpload").within(() => {
+    cy.paragraph("You can upload and store any documents for this claim on this page.");
+    cy.paragraph(
+      "You will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
+    );
+  });
+};
+
+export const claimReviewExistingEvidence = () => {
+  claimReviewfileTidyUp("Javier Baez");
+  [
+    ["Sheet1.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
+    ["Sheet2.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
+    ["Sheet3.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
+    ["t10.pdf", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
+  ].forEach(([claimDoc, type, date, size, uploadBy], rowNumber = 1) => {
+    cy.getByQA("claim-supporting-documents-container").within(() => {
+      cy.get("tr")
+        .eq(rowNumber + 1)
+        .within(() => {
+          cy.get("td:nth-child(1)").contains(claimDoc);
+          cy.get("td:nth-child(2)").contains(type);
+          cy.get("td:nth-child(3)").contains(date);
+          cy.get("td:nth-child(4)").contains(size);
+          cy.get("td:nth-child(5)").contains(uploadBy);
         });
     });
   });
@@ -859,4 +883,48 @@ export const openAccordions = () => {
       cy.get(`[aria-expanded="true"]`);
     });
   });
+};
+export const claimReviewUploadDocument = () => {
+  cy.fileInput("testfile.doc");
+  cy.wait(500);
+  cy.get("select#description.govuk-select").select("Invoice");
+  cy.submitButton("Upload documents").click();
+  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+};
+
+export const claimReviewCheckForNewDoc = () => {
+  cy.getByQA("claim-supporting-documents-container").within(() => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains("testfile.doc");
+        cy.get("td:nth-child(2)").contains("Invoice");
+        cy.get("td:nth-child(3)").contains("2023");
+        cy.get("td:nth-child(4)").contains("0KB");
+        cy.get("td:nth-child(5)").contains("Javier Baez");
+      });
+  });
+};
+
+export const claimQueriedCheckForDoc = () => {
+  ["testfile.doc", "Invoice", "2023", "0KB", "Javier Baez"].forEach(fileDetails => {
+    cy.get("tr").contains(fileDetails);
+  });
+};
+
+export const claimReviewResubmit = () => {
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.button("Continue to summary").click();
+  cy.button("Submit claim").click();
+};
+
+export const claimReviewDeleteDoc = () => {
+  cy.getByQA("claim-supporting-documents-container").within(() => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.getByQA("button_delete-qa").contains("Remove").click();
+      });
+  });
+  cy.getByQA("validation-message-content").contains("has been deleted");
 };

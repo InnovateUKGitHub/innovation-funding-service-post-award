@@ -65,7 +65,7 @@ describe("claims > documents upload screen", () => {
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
 
-  it("Should delete the file with the very short file name", deleteSingleChar);
+  it("Should delete the file with asingle character as the name", deleteSingleChar);
 
   it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
 
