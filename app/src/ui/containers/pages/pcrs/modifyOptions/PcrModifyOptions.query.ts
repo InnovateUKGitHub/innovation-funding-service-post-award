@@ -12,6 +12,12 @@ const pcrModifyOptionsQuery = graphql`
                 Acc_CompetitionType__c {
                   value
                 }
+                Acc_ProjectTitle__c {
+                  value
+                }
+                Acc_ProjectNumber__c {
+                  value
+                }
               }
             }
           }

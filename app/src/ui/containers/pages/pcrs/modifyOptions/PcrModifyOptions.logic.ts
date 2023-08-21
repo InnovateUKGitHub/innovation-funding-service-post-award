@@ -69,7 +69,7 @@ const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
     { fetchPolicy: "network-only" },
   );
   const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce.uiapi.query.Acc_Project__c?.edges);
-  const project = mapToProjectDto(projectNode, ["id", "competitionType"]);
+  const project = mapToProjectDto(projectNode, ["id", "competitionType", "title", "projectNumber"]);
   const pcrs = mapToPcrDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
     ["id", "status"],
