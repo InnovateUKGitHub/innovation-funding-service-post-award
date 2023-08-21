@@ -1,3 +1,4 @@
+import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { visitApp } from "../../common/visit";
 import {
   accessControl,
@@ -27,6 +28,11 @@ const docname = "";
 describe("Project Documents page", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/documents" });
+    createTestFile("bigger_test", 33);
+  });
+
+  after(() => {
+    deleteTestFile("bigger_test");
   });
 
   it("Should show back to project link", () => {

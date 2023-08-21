@@ -1,4 +1,5 @@
 import { visitApp } from "../../common/visit";
+import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { claimsDocUpload, claimsFileTable, learnFiles, selectFileDescription, shouldShowProjectTitle } from "./steps";
 import {
   validateFileUpload,
@@ -15,6 +16,11 @@ describe("claims > documents upload screen", () => {
   before(() => {
     cy.intercept("POST", "/api/documents/claim-details/*").as("uploadDocument");
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
+    createTestFile("bigger_test", 33);
+  });
+
+  after(() => {
+    deleteTestFile("bigger_test");
   });
 
   it("Should have a back option", () => {

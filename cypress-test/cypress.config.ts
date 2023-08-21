@@ -1,6 +1,6 @@
 require("dotenv").config();
 import { defineConfig } from "cypress";
-
+const fs = require("fs");
 /**
  * To target specific deployment branches with ACC number
  *
@@ -57,9 +57,16 @@ export default defineConfig({
   video: isTrue(process.env.VIDEOS),
   e2e: {
     baseUrl,
-    // setupNodeEvents(on, config) {
-    //   // implement node event listeners here
-    // },
+    setupNodeEvents(on, config) {
+      on("task", {
+        deleteFile(path) {
+          fs.unlinkSync(path);
+          console.log(`Deleting file ${path}`);
+          return null;
+        },
+      });
+    },
+
     defaultCommandTimeout,
     specPattern: getSpecPatternArray(specPattern),
     env: {

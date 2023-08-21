@@ -824,6 +824,11 @@ export const claimReviewTopThreeRows = () => {
           for (let i = 0; i < cols.length; i++) {
             cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
           }
+        });
+    });
+  });
+};
+
 export const claimReviewDocArea = () => {
   cy.getByQA("projectDocumentUpload").within(() => {
     cy.paragraph("You can upload and store any documents for this claim on this page.");
@@ -884,6 +889,7 @@ export const openAccordions = () => {
     });
   });
 };
+
 export const claimReviewUploadDocument = () => {
   cy.fileInput("testfile.doc");
   cy.wait(500);

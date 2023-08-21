@@ -321,9 +321,9 @@ export const doNotUploadSpecialChar = () => {
 };
 
 export const uploadFileTooLarge = () => {
-  cy.fileInput("bigger_test.png");
+  cy.fileInput("bigger_test.txt");
   cy.button("Upload documents").click();
-  cy.validationLink("You cannot upload 'bigger_test.png' because it must be smaller than 32MB.");
+  cy.validationLink("You cannot upload 'bigger_test.txt' because it must be smaller than 32MB.");
   cy.reload();
 };
 
