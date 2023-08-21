@@ -235,7 +235,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
           const head = {
             "Content-Length": result.contentLength,
             "Content-Type": `${contentType || defaultContentType}; charset=utf-8`,
-            "Content-Disposition": `filename="${result.fileName}"`,
+            "Content-Disposition": `attachment; filename="${result.fileName}"`,
           };
           resp.writeHead(successStatus, head);
           return result.stream.pipe(resp);
