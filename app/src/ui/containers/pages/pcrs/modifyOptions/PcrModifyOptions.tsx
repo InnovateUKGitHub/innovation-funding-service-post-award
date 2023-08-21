@@ -4,11 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/SubmitButton/SubmitButton";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
@@ -100,7 +97,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
             : getContent(x => x.pages.pcrModifyOptions.backToPcrs)}
         </BackLink>
       }
-      pageTitle={<Title projectNumber="000000" title="awoooo" />}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       validationErrors={allErrors}
       apiError={apiError}
     >
@@ -119,7 +116,11 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
           </>
         )}
 
-        <Field error={getFieldState("types").error} id="types">
+        <Field
+          legend={getContent(x => x.pages.pcrModifyOptions.selectRequestTypesTitle)}
+          error={getFieldState("types").error}
+          id="types"
+        >
           <CheckboxList name="types" register={register}>
             {pcrItems
               .filter(x => !x.disabled)

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ad91b6cb9741cc462b55e608ffd4503a>>
+ * @generated SignedSource<<85a2827c02373b3c0d3f01c3218fd2b7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -43,6 +43,12 @@ export type PcrModifyOptionsQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CompetitionType__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_ProjectNumber__c: {
+                readonly value: string | null;
+              } | null;
+              readonly Acc_ProjectTitle__c: {
                 readonly value: string | null;
               } | null;
               readonly Id: string;
@@ -168,6 +174,26 @@ v6 = [
                             "concreteType": "StringValue",
                             "kind": "LinkedField",
                             "name": "Acc_CompetitionType__c",
+                            "plural": false,
+                            "selections": (v4/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectTitle__c",
+                            "plural": false,
+                            "selections": (v4/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectNumber__c",
                             "plural": false,
                             "selections": (v4/*: any*/),
                             "storageKey": null
@@ -338,16 +364,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "a251633b97aa27d16ed3b7dabf984d8a",
+    "cacheID": "5a4243b0860f9e6e45d437aac922461e",
     "id": null,
     "metadata": {},
     "name": "PcrModifyOptionsQuery",
     "operationKind": "query",
-    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "8a3be4254e4c1bdd2463bdec81c783e4";
+(node as any).hash = "5ff3b4341a81ce2fee9bb069f3eda93e";
 
 export default node;
