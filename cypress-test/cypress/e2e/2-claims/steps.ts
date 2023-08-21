@@ -1,6 +1,5 @@
 import { claimReviewfileTidyUp, fileTidyUp } from "common/filetidyup";
 
-const moLogin = "testman2@testing.com";
 let date = new Date();
 let comments = JSON.stringify(date);
 
@@ -415,7 +414,7 @@ export const academicCosts = () => {
 };
 
 export const updateAcademicCosts = () => {
-  [
+  const costs = [
     "Directly incurred - Staff Period 3",
     "Directly incurred - Staff Period 4",
     "Directly incurred - Staff Period 5",
@@ -452,48 +451,13 @@ export const updateAcademicCosts = () => {
     "Exceptions - Other costs Period 3",
     "Exceptions - Other costs Period 4",
     "Exceptions - Other costs Period 5",
-  ].forEach(forecastInput => {
+  ];
+
+  costs.forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("100");
   });
   cy.get("td:nth-child(14)").contains("£52,500.00");
-  [
-    "Directly incurred - Staff Period 3",
-    "Directly incurred - Staff Period 4",
-    "Directly incurred - Staff Period 5",
-    "Directly incurred - Travel and subsistence Period 3",
-    "Directly incurred - Travel and subsistence Period 4",
-    "Directly incurred - Travel and subsistence Period 5",
-    "Directly incurred - Equipment Period 3",
-    "Directly incurred - Equipment Period 4",
-    "Directly incurred - Equipment Period 5",
-    "Directly incurred - Other costs Period 3",
-    "Directly incurred - Other costs Period 4",
-    "Directly incurred - Other costs Period 5",
-    "Directly allocated - Investigations Period 3",
-    "Directly allocated - Investigations Period 4",
-    "Directly allocated - Investigations Period 5",
-    "Directly allocated - Estates costs Period 3",
-    "Directly allocated - Estates costs Period 4",
-    "Directly allocated - Estates costs Period 5",
-    "Directly allocated - Other costs Period 3",
-    "Directly allocated - Other costs Period 4",
-    "Directly allocated - Other costs Period 5",
-    "Indirect costs - Investigations Period 3",
-    "Indirect costs - Investigations Period 4",
-    "Indirect costs - Investigations Period 5",
-    "Exceptions - Staff Period 3",
-    "Exceptions - Staff Period 4",
-    "Exceptions - Staff Period 5",
-    "Exceptions - Travel and subsistence Period 3",
-    "Exceptions - Travel and subsistence Period 4",
-    "Exceptions - Travel and subsistence Period 5",
-    "Exceptions - Equipment Period 3",
-    "Exceptions - Equipment Period 4",
-    "Exceptions - Equipment Period 5",
-    "Exceptions - Other costs Period 3",
-    "Exceptions - Other costs Period 4",
-    "Exceptions - Other costs Period 5",
-  ].forEach(forecastInput => {
+  costs.forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("0");
   });
 };
@@ -563,38 +527,23 @@ export const submittedCostCats = () => {
       cy.tableHeader(tablehead);
     },
   );
-  ["£0.00", "£2,000.00", "-£2,000.00", "0.00%"].forEach(labourCost => {
-    cy.contains("td", "Labour").siblings().contains(labourCost);
-  });
-  ["£0.00", "£100", "-£100", "0.00%"].forEach(overheadsCost => {
-    cy.contains("td", "Overheads").siblings().contains(overheadsCost);
-  });
-  ["£0.00", "£200", "-£200.00", "0.00%"].forEach(materialsCost => {
-    cy.contains("td", "Materials").siblings().contains(materialsCost);
-  });
-  ["£0.00", "£3,000.00", "-£3,000.00", "0.00%"].forEach(capUseCost => {
-    cy.contains("td", "Capital usage").siblings().contains(capUseCost);
-  });
-  ["£0.00", "£1,500.00", "-£1,500.00", "0.00%"].forEach(subCost => {
-    cy.contains("td", "Subcontracting").siblings().contains(subCost);
-  });
-  ["£0.00", "£1,600.00", "-£1,600.00", "0.00%"].forEach(travelCost => {
-    cy.contains("td", "Travel and subsistence").siblings().contains(travelCost);
-  });
-  ["£0.00", "£1,700.00", "-£1,700.00", "0.00%"].forEach(otherOneCost => {
-    cy.contains("td", "Other costs").siblings().contains(otherOneCost);
-  });
-  ["£0.00", "£1,800.00", "-£1,800.00", "0.00%"].forEach(otherTwoCost => {
-    cy.contains("td", "Other costs 2").siblings().contains(otherTwoCost);
-  });
-  ["£0.00", "£1,900.00", "-£1,900.00", "0.00%"].forEach(otherThreeCost => {
-    cy.contains("td", "Other costs 3").siblings().contains(otherThreeCost);
-  });
-  ["£0.00", "£2,000.00", "-£2,000.00", "0.00%"].forEach(otherFourCost => {
-    cy.contains("td", "Other costs 4").siblings().contains(otherFourCost);
-  });
-  ["£0.00", "£2,100.00", "-£2,100.00", "0.00%"].forEach(otherFiveCost => {
-    cy.contains("td", "Other costs 5").siblings().contains(otherFiveCost);
+
+  [
+    { category: "Labour", data: ["£0.00", "£2,000.00", "-£2,000.00", "0.00%"] },
+    { category: "Overheads", data: ["£0.00", "£100", "-£100", "0.00%"] },
+    { category: "Materials", data: ["£0.00", "£200", "-£200.00", "0.00%"] },
+    { category: "Capital usage", data: ["£0.00", "£3,000.00", "-£3,000.00", "0.00%"] },
+    { category: "Subcontracting", data: ["£0.00", "£1,500.00", "-£1,500.00", "0.00%"] },
+    { category: "Travel and subsistence", data: ["£0.00", "£1,600.00", "-£1,600.00", "0.00%"] },
+    { category: "Other costs", data: ["£0.00", "£1,700.00", "-£1,700.00", "0.00%"] },
+    { category: "Other costs 2", data: ["£0.00", "£1,800.00", "-£1,800.00", "0.00%"] },
+    { category: "Other costs 3", data: ["£0.00", "£1,900.00", "-£1,900.00", "0.00%"] },
+    { category: "Other costs 4", data: ["£0.00", "£2,000.00", "-£2,000.00", "0.00%"] },
+    { category: "Other costs 5", data: ["£0.00", "£2,100.00", "-£2,100.00", "0.00%"] },
+  ].forEach(row => {
+    row.data.forEach(cost => {
+      cy.contains("td", row.category).siblings().contains(cost);
+    });
   });
 };
 

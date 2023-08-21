@@ -1,5 +1,3 @@
-import { forEach } from "cypress/types/lodash";
-
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -231,7 +229,7 @@ export const ktpUpdateForecast = () => {
 };
 
 export const updateAcademicCosts = () => {
-  [
+  const costCats = [
     "Directly incurred - Staff Period 3",
     "Directly incurred - Staff Period 4",
     "Directly incurred - Staff Period 5",
@@ -268,48 +266,13 @@ export const updateAcademicCosts = () => {
     "Exceptions - Other costs Period 3",
     "Exceptions - Other costs Period 4",
     "Exceptions - Other costs Period 5",
-  ].forEach(forecastInput => {
+  ];
+
+  costCats.forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("100");
   });
   cy.get("td:nth-child(14)").contains("£52,600.00");
-  [
-    "Directly incurred - Staff Period 3",
-    "Directly incurred - Staff Period 4",
-    "Directly incurred - Staff Period 5",
-    "Directly incurred - Travel and subsistence Period 3",
-    "Directly incurred - Travel and subsistence Period 4",
-    "Directly incurred - Travel and subsistence Period 5",
-    "Directly incurred - Equipment Period 3",
-    "Directly incurred - Equipment Period 4",
-    "Directly incurred - Equipment Period 5",
-    "Directly incurred - Other costs Period 3",
-    "Directly incurred - Other costs Period 4",
-    "Directly incurred - Other costs Period 5",
-    "Directly allocated - Investigations Period 3",
-    "Directly allocated - Investigations Period 4",
-    "Directly allocated - Investigations Period 5",
-    "Directly allocated - Estates costs Period 3",
-    "Directly allocated - Estates costs Period 4",
-    "Directly allocated - Estates costs Period 5",
-    "Directly allocated - Other costs Period 3",
-    "Directly allocated - Other costs Period 4",
-    "Directly allocated - Other costs Period 5",
-    "Indirect costs - Investigations Period 3",
-    "Indirect costs - Investigations Period 4",
-    "Indirect costs - Investigations Period 5",
-    "Exceptions - Staff Period 3",
-    "Exceptions - Staff Period 4",
-    "Exceptions - Staff Period 5",
-    "Exceptions - Travel and subsistence Period 3",
-    "Exceptions - Travel and subsistence Period 4",
-    "Exceptions - Travel and subsistence Period 5",
-    "Exceptions - Equipment Period 3",
-    "Exceptions - Equipment Period 4",
-    "Exceptions - Equipment Period 5",
-    "Exceptions - Other costs Period 3",
-    "Exceptions - Other costs Period 4",
-    "Exceptions - Other costs Period 5",
-  ].forEach(forecastInput => {
+  costCats.forEach(forecastInput => {
     cy.getByAriaLabel(forecastInput).clear().type("0");
   });
   cy.wait(500);
@@ -439,7 +402,6 @@ export const topThreeRows = () => {
 };
 
 export const forecastValues = () => {
-  let rowNumber = 3;
   [
     [
       "£33,333.00",
@@ -478,10 +440,9 @@ export const forecastValues = () => {
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
     ["£35,000.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00", "£0.00"],
-  ].forEach(cols => {
-    rowNumber++;
+  ].forEach((cols, index) => {
     cy.get("tr")
-      .eq(rowNumber)
+      .eq(index + 4)
       .within(() => {
         for (let i = 0; i < cols.length; i++) {
           cy.get(`td:nth-child(${i + 2})`).contains(cols[i]);
@@ -497,7 +458,6 @@ export const correctTableHeaders = () => {
 };
 
 export const correctForecastTotals = () => {
-  let tableRow = 3;
   [
     ["£34,939.10", "£35,000.00", "-0.17%"],
     ["£34,999.95", "£35,000.00", "0.00%"],
@@ -511,10 +471,9 @@ export const correctForecastTotals = () => {
     ["£35,000.00", "£35,000.00", "0.00%"],
     ["£35,000.00", "£35,000.00", "0.00%"],
     ["£349,939.05", "£350,000.00", "-0.02%"],
-  ].forEach(([total, totalEligible, difference]) => {
-    tableRow++;
+  ].forEach(([total, totalEligible, difference], index) => {
     cy.get("tr")
-      .eq(tableRow)
+      .eq(index + 4)
       .within(() => {
         cy.get("td:nth-child(14)").contains(total);
         cy.get("td:nth-child(15)").contains(totalEligible);
@@ -524,16 +483,14 @@ export const correctForecastTotals = () => {
 };
 
 export const forecastPartnerTable = () => {
-  let tableRow = 0;
   [
     ["EUI Small Ent Health (Lead)", "£350,000.00", "£349,939.05", "£350,000.00"],
     ["A B Cad Services", "£50,000.00", "£42,400.00", "£50,000.00"],
     ["ABS EUI Medium Enterprise", "£101,000.00", "£17,900.00", "£101,000.00"],
     ["Deep Rock Galactic", "£350,000.00", "£54,667.46", "£350,000.00"],
-  ].forEach(([partner, totalEligible, forecasts, underspend]) => {
-    tableRow++;
+  ].forEach(([partner, totalEligible, forecasts, underspend], index) => {
     cy.get("tr")
-      .eq(tableRow)
+      .eq(index + 1)
       .within(() => {
         cy.get("td:nth-child(1)").contains(partner);
         cy.get("td:nth-child(2)").contains(totalEligible);

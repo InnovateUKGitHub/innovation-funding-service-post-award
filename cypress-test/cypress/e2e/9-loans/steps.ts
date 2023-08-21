@@ -3,7 +3,6 @@ const fcEmail = "wed.addams@test.test.co.uk";
 const hybridEmail = "s.shuang@irc.trde.org.uk.test";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
-import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "common/visit";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
@@ -312,7 +311,7 @@ export const currentLoanTable = () => {
 };
 
 export const newLoanDurationTable = () => {
-  [
+  const quarts = [
     "1 quarter",
     "2 quarters",
     "3 quarters",
@@ -338,65 +337,15 @@ export const newLoanDurationTable = () => {
     "23 quarters",
     "24 quarters",
     "25 quarters",
-  ].forEach(availQuarter => {
+  ];
+
+  quarts.forEach(availQuarter => {
     cy.get(`select[name="availabilityPeriodChange"]`).select(availQuarter);
+  });
+  quarts.forEach(extensionQuarter => {
+    cy.get(`select[name="extensionPeriodChange"]`).select(extensionQuarter);
   }),
-    [
-      "1 quarter",
-      "2 quarters",
-      "3 quarters",
-      "4 quarters",
-      "5 quarters",
-      "6 quarters",
-      "7 quarters",
-      "8 quarters",
-      "9 quarters",
-      "10 quarters",
-      "11 quarters",
-      "12 quarters",
-      "13 quarters",
-      "14 quarters",
-      "15 quarters",
-      "16 quarters",
-      "17 quarters",
-      "18 quarters",
-      "19 quarters",
-      "20 quarters",
-      "21 quarters",
-      "22 quarters",
-      "23 quarters",
-      "24 quarters",
-      "25 quarters",
-    ].forEach(extensionQuarter => {
-      cy.get(`select[name="extensionPeriodChange"]`).select(extensionQuarter);
-    }),
-    [
-      "1 quarter",
-      "2 quarters",
-      "3 quarters",
-      "4 quarters",
-      "5 quarters",
-      "6 quarters",
-      "7 quarters",
-      "8 quarters",
-      "9 quarters",
-      "10 quarters",
-      "11 quarters",
-      "12 quarters",
-      "13 quarters",
-      "14 quarters",
-      "15 quarters",
-      "16 quarters",
-      "17 quarters",
-      "18 quarters",
-      "19 quarters",
-      "20 quarters",
-      "21 quarters",
-      "22 quarters",
-      "23 quarters",
-      "24 quarters",
-      "25 quarters",
-    ].forEach(repaymentQuarter => {
+    quarts.forEach(repaymentQuarter => {
       cy.get(`select[name="repaymentPeriodChange"]`).select(repaymentQuarter);
     });
 };

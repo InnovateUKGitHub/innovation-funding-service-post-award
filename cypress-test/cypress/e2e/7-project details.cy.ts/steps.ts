@@ -261,8 +261,9 @@ export const editEachPartner = () => {
 export const showUpdatedPostcodes = () => {
   cy.reload();
   partners.forEach((partnerName, index) => {
-    const row = cy.getByQA("partner-information").contains("tr", partnerName);
-    row.contains("td:nth-child(5)", "SN" + index);
+    cy.getByQA("partner-information")
+      .contains("tr", partnerName)
+      .contains("td:nth-child(5)", "SN" + index);
   });
 };
 
