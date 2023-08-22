@@ -20,6 +20,9 @@ type Acc_BroadcastMessage__c {
   Name: StringValue
   SystemModstamp: DateTimeValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_BroadcastMessage__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -128,6 +131,8 @@ input Acc_BroadcastMessage__c_OrderBy {
   LastModifiedBy: User_OrderBy
 }
 
+union Acc_BroadcastMessage__c_Owner = Group | User
+
 type Acc_Claims__c {
   LastModifiedDate: DateTimeValue
   Acc_ProjectNumber__c: StringValue
@@ -142,6 +147,7 @@ type Acc_Claims__c {
   Acc_Date_Submitted__c: DateValue
   Acc_DeferredGrantToBePaid__c: CurrencyValue
   VAT_Cost_Category__c: BooleanValue
+  IM_PhasedCompetition__c: BooleanValue
   Acc_AccountIdReference__c: StringValue
   Acc_DeferredGrant__c: CurrencyValue
   Acc_AddComments__c: LongTextAreaValue
@@ -188,6 +194,9 @@ type Acc_Claims__c {
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   Acc_Grant_Paid_To_Date__c: CurrencyValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Claims__c_Owner
   RecordTypeId(
     """
     Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
@@ -268,6 +277,7 @@ type Acc_Claims__c {
 
   """parentRelationship"""
   Acc_ParentId__r: Acc_Claims__c
+  IM_PreCursorCompetition__c: StringValue
   Acc_IsLockedDetail__c: BooleanValue
   Claim_VAT_total__c: DoubleValue
   LastReferencedDate: DateTimeValue
@@ -293,6 +303,7 @@ type Acc_Claims__c {
   Acc_ClaimUnderQuery__c: DoubleValue
   Acc_ProjectPeriodId__c: DoubleValue
   Acc_Non_FEC_project__c: BooleanValue
+  IM_PhasedCompetitionStage__c: StringValue
   Acc_Overdue_Project__c: StringValue
   Acc_OverrideGrantToBePaid__c: CurrencyValue
   Impact_Management_Participation__c: StringValue
@@ -346,6 +357,7 @@ input Acc_Claims__c_Filter {
   Acc_Date_Submitted__c: DateOperators
   Acc_DeferredGrantToBePaid__c: CurrencyOperators
   VAT_Cost_Category__c: BooleanOperators
+  IM_PhasedCompetition__c: BooleanOperators
   Acc_AccountIdReference__c: StringOperators
   Acc_DeferredGrant__c: CurrencyOperators
   Acc_AddComments__c: LongTextAreaOperators
@@ -456,6 +468,7 @@ input Acc_Claims__c_Filter {
   Acc_Over100k__c: StringOperators
   Acc_ParentId__c: IdOperators
   Acc_ParentId__r: Acc_Claims__c_Filter
+  IM_PreCursorCompetition__c: StringOperators
   Acc_IsLockedDetail__c: BooleanOperators
   Claim_VAT_total__c: DoubleOperators
   LastReferencedDate: DateTimeOperators
@@ -481,6 +494,7 @@ input Acc_Claims__c_Filter {
   Acc_ClaimUnderQuery__c: DoubleOperators
   Acc_ProjectPeriodId__c: DoubleOperators
   Acc_Non_FEC_project__c: BooleanOperators
+  IM_PhasedCompetitionStage__c: StringOperators
   Acc_Overdue_Project__c: StringOperators
   Acc_OverrideGrantToBePaid__c: CurrencyOperators
   Impact_Management_Participation__c: StringOperators
@@ -501,6 +515,7 @@ input Acc_Claims__c_GroupBy {
   Acc_ClaimReference__c: GroupByClause
   Acc_Date_Submitted__c: GroupByClause
   VAT_Cost_Category__c: GroupByClause
+  IM_PhasedCompetition__c: GroupByClause
   Acc_OverdueEmailSentDate__c: GroupByClause
   Acc_DeferredApprovalStatus__c: GroupByClause
   IsDeleted: GroupByClause
@@ -575,6 +590,7 @@ input Acc_Claims__c_OrderBy {
   Acc_Date_Submitted__c: OrderByClause
   Acc_DeferredGrantToBePaid__c: OrderByClause
   VAT_Cost_Category__c: OrderByClause
+  IM_PhasedCompetition__c: OrderByClause
   Acc_AccountIdReference__c: OrderByClause
   Acc_DeferredGrant__c: OrderByClause
   Acc_AddComments__c: OrderByClause
@@ -685,6 +701,7 @@ input Acc_Claims__c_OrderBy {
   Acc_Over100k__c: OrderByClause
   Acc_ParentId__c: OrderByClause
   Acc_ParentId__r: Acc_Claims__c_OrderBy
+  IM_PreCursorCompetition__c: OrderByClause
   Acc_IsLockedDetail__c: OrderByClause
   Claim_VAT_total__c: OrderByClause
   LastReferencedDate: OrderByClause
@@ -710,6 +727,7 @@ input Acc_Claims__c_OrderBy {
   Acc_ClaimUnderQuery__c: OrderByClause
   Acc_ProjectPeriodId__c: OrderByClause
   Acc_Non_FEC_project__c: OrderByClause
+  IM_PhasedCompetitionStage__c: OrderByClause
   Acc_Overdue_Project__c: OrderByClause
   Acc_OverrideGrantToBePaid__c: OrderByClause
   Impact_Management_Participation__c: OrderByClause
@@ -717,6 +735,8 @@ input Acc_Claims__c_OrderBy {
   LastModifiedBy: User_OrderBy
   Acc_ProjectPeriodNumber__c: OrderByClause
 }
+
+union Acc_Claims__c_Owner = Group | User
 
 type Acc_CostCategory__c {
   LastModifiedDate: DateTimeValue
@@ -729,6 +749,9 @@ type Acc_CostCategory__c {
   SystemModstamp: DateTimeValue
   Acc_CostCategoryDescription__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_CostCategory__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -854,6 +877,8 @@ input Acc_CostCategory__c_OrderBy {
   VAT_Cost_Category__c: OrderByClause
 }
 
+union Acc_CostCategory__c_Owner = Group | User
+
 type Acc_MonitoringAnswer__c {
   LastModifiedDate: DateTimeValue
   Acc_PeriodEndDate__c: DateValue
@@ -867,6 +892,9 @@ type Acc_MonitoringAnswer__c {
   Acc_PeriodStartDate__c: DateValue
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_MonitoringAnswer__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -1047,6 +1075,8 @@ input Acc_MonitoringAnswer__c_OrderBy {
   Acc_MonitoringReportStatus__c: OrderByClause
 }
 
+union Acc_MonitoringAnswer__c_Owner = Group | User
+
 type Acc_MonitoringQuestion__c {
   LastModifiedDate: DateTimeValue
   Acc_ActiveFlag__c: BooleanValue
@@ -1060,6 +1090,9 @@ type Acc_MonitoringQuestion__c {
   SystemModstamp: DateTimeValue
   Acc_QuestionDescription__c: LongTextAreaValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_MonitoringQuestion__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -1169,6 +1202,8 @@ input Acc_MonitoringQuestion__c_OrderBy {
   Acc_DisplayOrder__c: OrderByClause
 }
 
+union Acc_MonitoringQuestion__c_Owner = Group | User
+
 type Acc_Prepayment__c {
   Loan_PlannedDateForDrawdown__c: DateValue
   LastModifiedDate: DateTimeValue
@@ -1184,6 +1219,9 @@ type Acc_Prepayment__c {
   Grant_Exceeded__c: BooleanValue
   Name: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Prepayment__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -1382,6 +1420,8 @@ input Acc_Prepayment__c_OrderBy {
   Acc_PreviousPrepaymentStatus__c: OrderByClause
 }
 
+union Acc_Prepayment__c_Owner = Group | User
+
 type Acc_Profile__c {
   LastModifiedDate: DateTimeValue
   Acc_ParentId__c: IDValue
@@ -1401,6 +1441,9 @@ type Acc_Profile__c {
   Acc_InitialForecastCost__c: CurrencyValue
   Acc_ProjectPeriodEndDateHelper__c: DateValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Profile__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -1639,6 +1682,8 @@ input Acc_Profile__c_OrderBy {
   Acc_CostCategoryFutureForecastCost__c: OrderByClause
 }
 
+union Acc_Profile__c_Owner = Group | User
+
 type Acc_ProjectChangeRequest__c {
   Acc_Employees__c: DoubleValue
   LastModifiedDate: DateTimeValue
@@ -1681,6 +1726,9 @@ type Acc_ProjectChangeRequest__c {
   Acc_SuspensionStarts__c: DateValue
   Acc_Nickname__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_ProjectChangeRequest__c_Owner
   Acc_TurnoverYearEnd__c: DateValue
   RecordTypeId(
     """
@@ -2164,6 +2212,8 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   LastModifiedBy: User_OrderBy
 }
 
+union Acc_ProjectChangeRequest__c_Owner = Group | User
+
 type Acc_ProjectContactLink__c {
   LastModifiedDate: DateTimeValue
   IsDeleted: BooleanValue
@@ -2185,6 +2235,9 @@ type Acc_ProjectContactLink__c {
   SystemModstamp: DateTimeValue
   Acc_Project_Number__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_ProjectContactLink__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -2331,6 +2384,8 @@ input Acc_ProjectContactLink__c_OrderBy {
   LastModifiedBy: User_OrderBy
 }
 
+union Acc_ProjectContactLink__c_Owner = Group | User
+
 type Acc_ProjectParticipant__c {
   Acc_CreateClaims__c: BooleanValue
   LastModifiedDate: DateTimeValue
@@ -2376,7 +2431,6 @@ type Acc_ProjectParticipant__c {
   Acc_CompanyName__c: StringValue
   Acc_VerificationConditionsCode__c: StringValue
   Acc_Prepayment__c: BooleanValue
-  Loans_NextDrawdown__c: DoubleValue
   Acc_AddressOrganisation__c: StringValue
   Acc_AuditReportFrequency__c: PicklistValue
   Acc_CapLimitDeferredGrant__c: CurrencyValue
@@ -2389,9 +2443,11 @@ type Acc_ProjectParticipant__c {
   Acc_SpendProfileCompleted__c: PicklistValue
   Acc_ValidationConditionsDesc__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_ProjectParticipant__c_Owner
   Acc_Iban__c: EncryptedStringValue
   Acc_WorkdaySupplierSetupComplete__c: BooleanValue
-  Loans_DrawdownStatus__c: PicklistValue
   Acc_AddressPostcode__c: StringValue
   Acc_ParticipantType__c: PicklistValue
   Acc_Open_Claim_Period__c: DoubleValue
@@ -2422,7 +2478,6 @@ type Acc_ProjectParticipant__c {
   Name: StringValue
   Acc_ValidationCheckPassed__c: BooleanValue
   Acc_OverdueEmailsSent__c: MultiPicklistValue
-  Loans_Drawdownduedate__c: DateValue
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -2566,7 +2621,6 @@ input Acc_ProjectParticipant__c_Filter {
   Acc_CompanyName__c: StringOperators
   Acc_VerificationConditionsCode__c: StringOperators
   Acc_Prepayment__c: BooleanOperators
-  Loans_NextDrawdown__c: DoubleOperators
   Acc_AddressOrganisation__c: StringOperators
   Acc_AuditReportFrequency__c: PicklistOperators
   Acc_CapLimitDeferredGrant__c: CurrencyOperators
@@ -2579,7 +2633,6 @@ input Acc_ProjectParticipant__c_Filter {
   Acc_ValidationConditionsDesc__c: StringOperators
   OwnerId: IdOperators
   Acc_WorkdaySupplierSetupComplete__c: BooleanOperators
-  Loans_DrawdownStatus__c: PicklistOperators
   Acc_AddressPostcode__c: StringOperators
   Acc_ParticipantType__c: PicklistOperators
   Acc_Open_Claim_Period__c: DoubleOperators
@@ -2606,7 +2659,6 @@ input Acc_ProjectParticipant__c_Filter {
   Name: StringOperators
   Acc_ValidationCheckPassed__c: BooleanOperators
   Acc_OverdueEmailsSent__c: MultiPicklistOperators
-  Loans_Drawdownduedate__c: DateOperators
   CreatedById: IdOperators
   CreatedBy: User_Filter
   Acc_Postcode__c: StringOperators
@@ -2705,7 +2757,6 @@ input Acc_ProjectParticipant__c_GroupBy {
   Acc_ValidationConditionsDesc__c: GroupByClause
   OwnerId: GroupByClause
   Acc_WorkdaySupplierSetupComplete__c: GroupByClause
-  Loans_DrawdownStatus__c: GroupByClause
   Acc_AddressPostcode__c: GroupByClause
   Acc_ParticipantType__c: GroupByClause
   Acc_FinanceContactPcl__c: GroupByClause
@@ -2721,7 +2772,6 @@ input Acc_ProjectParticipant__c_GroupBy {
   Acc_NonfundedParticipant__c: GroupByClause
   Acc_Recovery__c: GroupByClause
   Acc_ValidationCheckPassed__c: GroupByClause
-  Loans_Drawdownduedate__c: GroupByClause
   CreatedById: GroupByClause
   CreatedBy: User_GroupBy
   Acc_Postcode__c: GroupByClause
@@ -2801,7 +2851,6 @@ input Acc_ProjectParticipant__c_OrderBy {
   Acc_CompanyName__c: OrderByClause
   Acc_VerificationConditionsCode__c: OrderByClause
   Acc_Prepayment__c: OrderByClause
-  Loans_NextDrawdown__c: OrderByClause
   Acc_AddressOrganisation__c: OrderByClause
   Acc_AuditReportFrequency__c: OrderByClause
   Acc_CapLimitDeferredGrant__c: OrderByClause
@@ -2814,7 +2863,6 @@ input Acc_ProjectParticipant__c_OrderBy {
   Acc_ValidationConditionsDesc__c: OrderByClause
   OwnerId: OrderByClause
   Acc_WorkdaySupplierSetupComplete__c: OrderByClause
-  Loans_DrawdownStatus__c: OrderByClause
   Acc_AddressPostcode__c: OrderByClause
   Acc_ParticipantType__c: OrderByClause
   Acc_Open_Claim_Period__c: OrderByClause
@@ -2840,7 +2888,6 @@ input Acc_ProjectParticipant__c_OrderBy {
   Acc_Recovery__c: OrderByClause
   Name: OrderByClause
   Acc_ValidationCheckPassed__c: OrderByClause
-  Loans_Drawdownduedate__c: OrderByClause
   CreatedById: OrderByClause
   CreatedBy: User_OrderBy
   Acc_Postcode__c: OrderByClause
@@ -2897,6 +2944,8 @@ input Acc_ProjectParticipant__c_OrderBy {
   IM_Survey_Last_Updated__c: OrderByClause
 }
 
+union Acc_ProjectParticipant__c_Owner = Group | User
+
 type Acc_Project__c {
   LastModifiedDate: DateTimeValue
   Acc_ProjectNumber__c: StringValue
@@ -2912,8 +2961,8 @@ type Acc_Project__c {
   Acc_ClaimsOverdue__c: DoubleValue
   Acc_Loan_Availability_End_Date__c: DateValue
   Acc_LegacyID__c: StringValue
-  Sent_to_MM__c: BooleanValue
   Acc_FlaggedProject__c: BooleanValue
+  IM_PhasedCompetition__c: BooleanValue
   Acc_TotalFutureForecastsforProject__c: CurrencyValue
   IsDeleted: BooleanValue
   Acc_Loan_Extension_End_Date__c: DateValue
@@ -2934,8 +2983,10 @@ type Acc_Project__c {
   Acc_WatchFlag__c: StringValue
   Acc_ThirdPartyPayment__c: BooleanValue
   Acc_LeadParticipantName__c: StringValue
-  IFS_Competition_Code__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Project__c_Owner
   Acc_CompetitionCode__c: StringValue
   Loans_RnDStatus__c: PicklistValue
   Acc_CurrentPeriodNumberHelper__c: DoubleValue
@@ -2991,6 +3042,7 @@ type Acc_Project__c {
   Loans_DocusignRDConfirmation__c: PicklistValue
   Acc_SubsidyControlScheme__c: StringValue
   SBRI_Contracting_Authority__c: StringValue
+  IM_PreCursorCompetition__c: StringValue
   LastReferencedDate: DateTimeValue
   Acc_NumberofPeriods__c: DoubleValue
   Acc_GOLTotalCostAwarded__c: CurrencyValue
@@ -3007,8 +3059,8 @@ type Acc_Project__c {
   Acc_TotalProjectCosts__c: CurrencyValue
   Acc_FlaggedProjectComments__c: LongTextAreaValue
   Acc_ClaimsForReview__c: DoubleValue
+  IM_PhasedCompetitionStage__c: StringValue
   Acc_Overdue_Project__c: StringValue
-  IM_Inflight_Notification_Sent__c: BooleanValue
   Impact_Management_Participation__c: StringValue
   LastModifiedById: IDValue
 
@@ -3069,8 +3121,8 @@ input Acc_Project__c_Filter {
   Acc_ClaimsOverdue__c: DoubleOperators
   Acc_Loan_Availability_End_Date__c: DateOperators
   Acc_LegacyID__c: StringOperators
-  Sent_to_MM__c: BooleanOperators
   Acc_FlaggedProject__c: BooleanOperators
+  IM_PhasedCompetition__c: BooleanOperators
   Acc_TotalFutureForecastsforProject__c: CurrencyOperators
   IsDeleted: BooleanOperators
   Acc_Loan_Extension_End_Date__c: DateOperators
@@ -3090,7 +3142,6 @@ input Acc_Project__c_Filter {
   Acc_WatchFlag__c: StringOperators
   Acc_ThirdPartyPayment__c: BooleanOperators
   Acc_LeadParticipantName__c: StringOperators
-  IFS_Competition_Code__c: StringOperators
   OwnerId: IdOperators
   Acc_CompetitionCode__c: StringOperators
   Loans_RnDStatus__c: PicklistOperators
@@ -3143,6 +3194,7 @@ input Acc_Project__c_Filter {
   Loans_DocusignRDConfirmation__c: PicklistOperators
   Acc_SubsidyControlScheme__c: StringOperators
   SBRI_Contracting_Authority__c: StringOperators
+  IM_PreCursorCompetition__c: StringOperators
   LastReferencedDate: DateTimeOperators
   Acc_NumberofPeriods__c: DoubleOperators
   Acc_GOLTotalCostAwarded__c: CurrencyOperators
@@ -3157,8 +3209,8 @@ input Acc_Project__c_Filter {
   Acc_TotalProjectCosts__c: CurrencyOperators
   Acc_FlaggedProjectComments__c: LongTextAreaOperators
   Acc_ClaimsForReview__c: DoubleOperators
+  IM_PhasedCompetitionStage__c: StringOperators
   Acc_Overdue_Project__c: StringOperators
-  IM_Inflight_Notification_Sent__c: BooleanOperators
   Impact_Management_Participation__c: StringOperators
   LastModifiedById: IdOperators
   LastModifiedBy: User_Filter
@@ -3178,8 +3230,8 @@ input Acc_Project__c_GroupBy {
   Acc_Loan_Availability_End_Date__c: GroupByClause
   Acc_LegacyID__c: GroupByClause
   CloneSourceId: GroupByClause
-  Sent_to_MM__c: GroupByClause
   Acc_FlaggedProject__c: GroupByClause
+  IM_PhasedCompetition__c: GroupByClause
   IsDeleted: GroupByClause
   Acc_Loan_Extension_End_Date__c: GroupByClause
   Acc_Overdue_Claim_Helper__c: GroupByClause
@@ -3228,7 +3280,6 @@ input Acc_Project__c_GroupBy {
   Acc_CurrentPeriodEndDateHelper__c: GroupByClause
   Loan_FinanceContact__c: GroupByClause
   Loan_FinanceContact__r: Contact_GroupBy
-  IM_Inflight_Notification_Sent__c: GroupByClause
   LastModifiedById: GroupByClause
   LastModifiedBy: User_GroupBy
   type: GroupByType
@@ -3249,8 +3300,8 @@ input Acc_Project__c_OrderBy {
   Acc_ClaimsOverdue__c: OrderByClause
   Acc_Loan_Availability_End_Date__c: OrderByClause
   Acc_LegacyID__c: OrderByClause
-  Sent_to_MM__c: OrderByClause
   Acc_FlaggedProject__c: OrderByClause
+  IM_PhasedCompetition__c: OrderByClause
   Acc_TotalFutureForecastsforProject__c: OrderByClause
   IsDeleted: OrderByClause
   Acc_Loan_Extension_End_Date__c: OrderByClause
@@ -3269,7 +3320,6 @@ input Acc_Project__c_OrderBy {
   Acc_WatchFlag__c: OrderByClause
   Acc_ThirdPartyPayment__c: OrderByClause
   Acc_LeadParticipantName__c: OrderByClause
-  IFS_Competition_Code__c: OrderByClause
   OwnerId: OrderByClause
   Acc_CompetitionCode__c: OrderByClause
   Loans_RnDStatus__c: OrderByClause
@@ -3322,6 +3372,7 @@ input Acc_Project__c_OrderBy {
   Loans_DocusignRDConfirmation__c: OrderByClause
   Acc_SubsidyControlScheme__c: OrderByClause
   SBRI_Contracting_Authority__c: OrderByClause
+  IM_PreCursorCompetition__c: OrderByClause
   LastReferencedDate: OrderByClause
   Acc_NumberofPeriods__c: OrderByClause
   Acc_GOLTotalCostAwarded__c: OrderByClause
@@ -3336,12 +3387,14 @@ input Acc_Project__c_OrderBy {
   Acc_TotalProjectCosts__c: OrderByClause
   Acc_FlaggedProjectComments__c: OrderByClause
   Acc_ClaimsForReview__c: OrderByClause
+  IM_PhasedCompetitionStage__c: OrderByClause
   Acc_Overdue_Project__c: OrderByClause
-  IM_Inflight_Notification_Sent__c: OrderByClause
   Impact_Management_Participation__c: OrderByClause
   LastModifiedById: OrderByClause
   LastModifiedBy: User_OrderBy
 }
+
+union Acc_Project__c_Owner = Group | User
 
 type Acc_StatusChange__c {
   LastModifiedDate: DateTimeValue
@@ -3352,6 +3405,9 @@ type Acc_StatusChange__c {
   Name: StringValue
   Acc_ParticipantVisibility__c: BooleanValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_StatusChange__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -3511,6 +3567,8 @@ input Acc_StatusChange__c_OrderBy {
   Acc_MonitoringReport__r: Acc_MonitoringAnswer__c_OrderBy
 }
 
+union Acc_StatusChange__c_Owner = Group | User
+
 type Acc_Virements__c {
   LastModifiedDate: DateTimeValue
   Acc_CurrentAwardRate__c: PercentValue
@@ -3526,6 +3584,9 @@ type Acc_Virements__c {
   Acc_PcrRecordId__c: StringValue
   Acc_CostCategoryDescription__c: StringValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_Virements__c_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -3738,6 +3799,8 @@ input Acc_Virements__c_OrderBy {
   LastModifiedBy: User_OrderBy
 }
 
+union Acc_Virements__c_Owner = Group | User
+
 type Account {
   LastModifiedDate: DateTimeValue
   pi__utm_term__pc: StringValue
@@ -3764,15 +3827,12 @@ type Account {
   Converting_Person_Account__pc: BooleanValue
   ChannelProgramLevelName: StringValue
   LinkedIn_Id__pc: StringValue
-  PersonAssistantPhone: PhoneNumberValue
   PersonOtherGeocodeAccuracy: PicklistValue
   pi__Needs_Score_Synced__pc: BooleanValue
   ShippingPostalCode: StringValue
   SF_Id__c: StringValue
   ShippingState: StringValue
-  AnnualRevenue: CurrencyValue
   Jigsaw: StringValue
-  Site: StringValue
   Acc_Name__c: StringValue
   Description: LongTextAreaValue
   Dissolution_Date__c: DateValue
@@ -3818,7 +3878,6 @@ type Account {
   BillingCountry: StringValue
   LastActivityDate: DateValue
   Experience_Type__pc: PicklistValue
-  PersonAssistantName: StringValue
   Acc_Overdue_Project_Helper__c: BooleanValue
   BillingCity: StringValue
   PersonContactId: IDValue
@@ -3832,7 +3891,6 @@ type Account {
   PersonTitle: StringValue
   Industry: PicklistValue
   pi__last_activity__pc: DateTimeValue
-  PersonHasOptedOutOfFax: BooleanValue
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -3867,7 +3925,6 @@ type Account {
   Email__c: StringValue
   SugarContactId__pc: StringValue
   Acc_FundingStatus__c: PicklistValue
-  Rating: PicklistValue
   Acc_RiskRating__c: PicklistValue
   LastReferencedDate: DateTimeValue
   Acc_OnHold__c: BooleanValue
@@ -3887,14 +3944,12 @@ type Account {
   PersonOtherState: StringValue
   Alt_Email__pc: EmailValue
   AccountNumber: StringValue
-  VAT_Number__c: StringValue
   Incorporation_Date__c: DateValue
   Twitter_Name__pc: StringValue
   BillingStreet: TextAreaValue
   pi__campaign__pc: StringValue
   PersonOtherCity: StringValue
   pi__first_activity__pc: DateTimeValue
-  PersonLeadSource: PicklistValue
   Acc_Overdue_Project__c: StringValue
   Fax: PhoneNumberValue
   LastModifiedById: IDValue
@@ -3996,16 +4051,13 @@ input Account_Filter {
   Converting_Person_Account__pc: BooleanOperators
   ChannelProgramLevelName: StringOperators
   LinkedIn_Id__pc: StringOperators
-  PersonAssistantPhone: PhoneNumberOperators
   PersonOtherGeocodeAccuracy: PicklistOperators
   pi__Needs_Score_Synced__pc: BooleanOperators
   ShippingPostalCode: StringOperators
   SF_Id__c: StringOperators
   ShippingState: StringOperators
   Id: IdOperators
-  AnnualRevenue: CurrencyOperators
   Jigsaw: StringOperators
-  Site: StringOperators
   Acc_Name__c: StringOperators
   Description: LongTextAreaOperators
   Dissolution_Date__c: DateOperators
@@ -4038,7 +4090,6 @@ input Account_Filter {
   BillingCountry: StringOperators
   LastActivityDate: DateOperators
   Experience_Type__pc: PicklistOperators
-  PersonAssistantName: StringOperators
   Acc_Overdue_Project_Helper__c: BooleanOperators
   BillingCity: StringOperators
   PersonContactId: IdOperators
@@ -4050,7 +4101,6 @@ input Account_Filter {
   PersonTitle: StringOperators
   Industry: PicklistOperators
   pi__last_activity__pc: DateTimeOperators
-  PersonHasOptedOutOfFax: BooleanOperators
   CreatedById: IdOperators
   CreatedBy: User_Filter
   Email__pc: StringOperators
@@ -4081,7 +4131,6 @@ input Account_Filter {
   Email__c: StringOperators
   SugarContactId__pc: StringOperators
   Acc_FundingStatus__c: PicklistOperators
-  Rating: PicklistOperators
   Acc_RiskRating__c: PicklistOperators
   LastReferencedDate: DateTimeOperators
   Acc_OnHold__c: BooleanOperators
@@ -4101,14 +4150,12 @@ input Account_Filter {
   PersonOtherState: StringOperators
   Alt_Email__pc: EmailOperators
   AccountNumber: StringOperators
-  VAT_Number__c: StringOperators
   Incorporation_Date__c: DateOperators
   Twitter_Name__pc: StringOperators
   BillingStreet: TextAreaOperators
   pi__campaign__pc: StringOperators
   PersonOtherCity: StringOperators
   pi__first_activity__pc: DateTimeOperators
-  PersonLeadSource: PicklistOperators
   Acc_Overdue_Project__c: StringOperators
   Fax: PhoneNumberOperators
   LastModifiedById: IdOperators
@@ -4145,7 +4192,6 @@ input Account_GroupBy {
   Converting_Person_Account__pc: GroupByClause
   ChannelProgramLevelName: GroupByClause
   LinkedIn_Id__pc: GroupByClause
-  PersonAssistantPhone: GroupByClause
   PersonOtherGeocodeAccuracy: GroupByClause
   pi__Needs_Score_Synced__pc: GroupByClause
   ShippingPostalCode: GroupByClause
@@ -4153,7 +4199,6 @@ input Account_GroupBy {
   ShippingState: GroupByClause
   Id: GroupByClause
   Jigsaw: GroupByClause
-  Site: GroupByClause
   Acc_Name__c: GroupByClause
   Dissolution_Date__c: GroupByClause
   Company_Status__c: GroupByClause
@@ -4186,7 +4231,6 @@ input Account_GroupBy {
   BillingCountry: GroupByClause
   LastActivityDate: GroupByClause
   Experience_Type__pc: GroupByClause
-  PersonAssistantName: GroupByClause
   Acc_Overdue_Project_Helper__c: GroupByClause
   BillingCity: GroupByClause
   PersonContactId: GroupByClause
@@ -4197,7 +4241,6 @@ input Account_GroupBy {
   PersonTitle: GroupByClause
   Industry: GroupByClause
   pi__last_activity__pc: GroupByDateFunction
-  PersonHasOptedOutOfFax: GroupByClause
   CreatedById: GroupByClause
   CreatedBy: User_GroupBy
   Email__pc: GroupByClause
@@ -4227,7 +4270,6 @@ input Account_GroupBy {
   Email__c: GroupByClause
   SugarContactId__pc: GroupByClause
   Acc_FundingStatus__c: GroupByClause
-  Rating: GroupByClause
   Acc_RiskRating__c: GroupByClause
   LastReferencedDate: GroupByDateFunction
   Acc_OnHold__c: GroupByClause
@@ -4245,14 +4287,12 @@ input Account_GroupBy {
   PersonOtherState: GroupByClause
   Alt_Email__pc: GroupByClause
   AccountNumber: GroupByClause
-  VAT_Number__c: GroupByClause
   Incorporation_Date__c: GroupByClause
   Twitter_Name__pc: GroupByClause
   BillingStreet: GroupByClause
   pi__campaign__pc: GroupByClause
   PersonOtherCity: GroupByClause
   pi__first_activity__pc: GroupByDateFunction
-  PersonLeadSource: GroupByClause
   Fax: GroupByClause
   LastModifiedById: GroupByClause
   LastModifiedBy: User_GroupBy
@@ -4288,7 +4328,6 @@ input Account_OrderBy {
   ChannelProgramLevelName: OrderByClause
   PersonMailingLatitude: OrderByClause
   LinkedIn_Id__pc: OrderByClause
-  PersonAssistantPhone: OrderByClause
   PersonOtherGeocodeAccuracy: OrderByClause
   pi__Needs_Score_Synced__pc: OrderByClause
   ShippingPostalCode: OrderByClause
@@ -4296,9 +4335,7 @@ input Account_OrderBy {
   SF_Id__c: OrderByClause
   ShippingState: OrderByClause
   Id: OrderByClause
-  AnnualRevenue: OrderByClause
   Jigsaw: OrderByClause
-  Site: OrderByClause
   Acc_Name__c: OrderByClause
   Description: OrderByClause
   Dissolution_Date__c: OrderByClause
@@ -4337,7 +4374,6 @@ input Account_OrderBy {
   LastActivityDate: OrderByClause
   Experience_Type__pc: OrderByClause
   ShippingLongitude: OrderByClause
-  PersonAssistantName: OrderByClause
   Acc_Overdue_Project_Helper__c: OrderByClause
   BillingCity: OrderByClause
   PersonContactId: OrderByClause
@@ -4350,7 +4386,6 @@ input Account_OrderBy {
   Industry: OrderByClause
   PersonOtherLatitude: OrderByClause
   pi__last_activity__pc: OrderByClause
-  PersonHasOptedOutOfFax: OrderByClause
   CreatedById: OrderByClause
   CreatedBy: User_OrderBy
   Email__pc: OrderByClause
@@ -4381,7 +4416,6 @@ input Account_OrderBy {
   Email__c: OrderByClause
   SugarContactId__pc: OrderByClause
   Acc_FundingStatus__c: OrderByClause
-  Rating: OrderByClause
   Acc_RiskRating__c: OrderByClause
   LastReferencedDate: OrderByClause
   Acc_OnHold__c: OrderByClause
@@ -4401,14 +4435,12 @@ input Account_OrderBy {
   PersonOtherState: OrderByClause
   Alt_Email__pc: OrderByClause
   AccountNumber: OrderByClause
-  VAT_Number__c: OrderByClause
   Incorporation_Date__c: OrderByClause
   Twitter_Name__pc: OrderByClause
   BillingStreet: OrderByClause
   pi__campaign__pc: OrderByClause
   PersonOtherCity: OrderByClause
   pi__first_activity__pc: OrderByClause
-  PersonLeadSource: OrderByClause
   Acc_Overdue_Project__c: OrderByClause
   Fax: OrderByClause
   LastModifiedById: OrderByClause
@@ -4450,62 +4482,72 @@ type Competition__c {
   LastModifiedDate: DateTimeValue
   Acc_ProjectHardStopDate__c: DateValue
   Acc_NonStandardProjectInformation__c: TextAreaValue
-  LastReferencedDate: DateTimeValue
   Acc_PublicityEmbargoOnResults__c: PicklistValue
-  ACC_PaymentType__c: PicklistValue
   Authorisation_Gateway__c: IDValue
-  Acc_AGRefNumber__c: IDValue
   Name: StringValue
   Acc_PortfolioManager__c: IDValue
 
   """parentRelationship"""
   Acc_PortfolioManager__r: User
   Acc_TermsConditions__c: PicklistValue
-  OwnerId: IDValue
   CreatedById: IDValue
 
   """parentRelationship"""
   CreatedBy: User
-  Acc_CompetitionCode__c: StringValue
   Sent_to_MM__c: BooleanValue
   Acc_LegacyCompetitionCode__c: StringValue
+  IM_PhasedCompetition__c: BooleanValue
+  Acc_ExpectedLastDateOfProjectsEnd__c: DateValue
+  IsDeleted: BooleanValue
+  Acc_LevelOfMonitoring__c: PicklistValue
+  LastViewedDate: DateTimeValue
+  CSS_Representative__c: IDValue
+
+  """parentRelationship"""
+  CSS_Representative__r: User
+  Acc_CompetitionType__c: PicklistValue
+  Acc_FinanceBusinessPartner__c: IDValue
+
+  """parentRelationship"""
+  Acc_FinanceBusinessPartner__r: User
+  Acc_ExpectedFirstDateOfProjectsStart__c: DateValue
+  Acc_CompetitionName__c: StringValue
+  CreatedDate: DateTimeValue
+  SBRI_Contracting_Authority__c: PicklistValue
+  Phased_Competition_Stage__c: PicklistValue
+  IM_PreCursorCompetition__c: IDValue
+
+  """parentRelationship"""
+  IM_PreCursorCompetition__r: Competition__c
+  LastReferencedDate: DateTimeValue
+  ACC_PaymentType__c: PicklistValue
+  Acc_AGRefNumber__c: IDValue
+  OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Competition__c_Owner
+  Acc_CompetitionCode__c: StringValue
   Impact_Management_participation__c: PicklistValue
   Technologists__c: IDValue
 
   """parentRelationship"""
   Technologists__r: Contact
-  Acc_ExpectedLastDateOfProjectsEnd__c: DateValue
   Acc_ProgrammeID__c: IDValue
-  IsDeleted: BooleanValue
-  Acc_LevelOfMonitoring__c: PicklistValue
   Acc_ProgrammeName__c: StringValue
   Acc_ActivityCode__c: StringValue
   Competition_Manager__c: IDValue
 
   """parentRelationship"""
   Competition_Manager__r: User
-  LastViewedDate: DateTimeValue
   Authorisation_hard_stop_date__c: DateValue
-  CSS_Representative__c: IDValue
-
-  """parentRelationship"""
-  CSS_Representative__r: User
   Competition_Exec__c: IDValue
 
   """parentRelationship"""
   Competition_Exec__r: Contact
-  Acc_CompetitionType__c: PicklistValue
   Authorisation_expected_end_date__c: DateValue
-  Acc_FinanceBusinessPartner__c: IDValue
-
-  """parentRelationship"""
-  Acc_FinanceBusinessPartner__r: User
   SystemModstamp: DateTimeValue
   ACC_SubsidyControlScheme__c: IDValue
-  Acc_ExpectedFirstDateOfProjectsStart__c: DateValue
   Acc_InsertCostCentreCode__c: StringValue
-  Acc_CompetitionName__c: StringValue
-  CreatedDate: DateTimeValue
   LastActivityDate: DateValue
   LastModifiedById: IDValue
 
@@ -4513,13 +4555,15 @@ type Competition__c {
   LastModifiedBy: User
   Acc_TypeofAid__c: PicklistValue
   Acc_Review_Team__c: PicklistValue
-  SBRI_Contracting_Authority__c: PicklistValue
 
   """childRelationship"""
   Claims__r(orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
   """childRelationship"""
   Acc_ProjectCompetition__r(orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+
+  """childRelationship"""
+  Competitions__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
   ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
@@ -4549,55 +4593,59 @@ input Competition__c_Filter {
   LastModifiedDate: DateTimeOperators
   Acc_ProjectHardStopDate__c: DateOperators
   Acc_NonStandardProjectInformation__c: TextAreaOperators
-  LastReferencedDate: DateTimeOperators
   Acc_PublicityEmbargoOnResults__c: PicklistOperators
-  ACC_PaymentType__c: PicklistOperators
   Authorisation_Gateway__c: IdOperators
-  Acc_AGRefNumber__c: IdOperators
   Name: StringOperators
   Acc_PortfolioManager__c: IdOperators
   Acc_PortfolioManager__r: User_Filter
   Acc_TermsConditions__c: PicklistOperators
-  OwnerId: IdOperators
   CreatedById: IdOperators
   CreatedBy: User_Filter
-  Acc_CompetitionCode__c: StringOperators
   Sent_to_MM__c: BooleanOperators
   Acc_LegacyCompetitionCode__c: StringOperators
+  IM_PhasedCompetition__c: BooleanOperators
+  Acc_ExpectedLastDateOfProjectsEnd__c: DateOperators
+  IsDeleted: BooleanOperators
+  Acc_LevelOfMonitoring__c: PicklistOperators
+  LastViewedDate: DateTimeOperators
+  CSS_Representative__c: IdOperators
+  CSS_Representative__r: User_Filter
+  Acc_CompetitionType__c: PicklistOperators
+  Acc_FinanceBusinessPartner__c: IdOperators
+  Acc_FinanceBusinessPartner__r: User_Filter
+  Acc_ExpectedFirstDateOfProjectsStart__c: DateOperators
+  Acc_CompetitionName__c: StringOperators
+  CreatedDate: DateTimeOperators
+  Id: IdOperators
+  SBRI_Contracting_Authority__c: PicklistOperators
+  Phased_Competition_Stage__c: PicklistOperators
+  IM_PreCursorCompetition__c: IdOperators
+  IM_PreCursorCompetition__r: Competition__c_Filter
+  LastReferencedDate: DateTimeOperators
+  ACC_PaymentType__c: PicklistOperators
+  Acc_AGRefNumber__c: IdOperators
+  OwnerId: IdOperators
+  Acc_CompetitionCode__c: StringOperators
   Impact_Management_participation__c: PicklistOperators
   Technologists__c: IdOperators
   Technologists__r: Contact_Filter
-  Acc_ExpectedLastDateOfProjectsEnd__c: DateOperators
   Acc_ProgrammeID__c: IdOperators
-  IsDeleted: BooleanOperators
-  Acc_LevelOfMonitoring__c: PicklistOperators
   Acc_ProgrammeName__c: StringOperators
   Acc_ActivityCode__c: StringOperators
   Competition_Manager__c: IdOperators
   Competition_Manager__r: User_Filter
-  LastViewedDate: DateTimeOperators
   Authorisation_hard_stop_date__c: DateOperators
-  CSS_Representative__c: IdOperators
-  CSS_Representative__r: User_Filter
   Competition_Exec__c: IdOperators
   Competition_Exec__r: Contact_Filter
-  Acc_CompetitionType__c: PicklistOperators
   Authorisation_expected_end_date__c: DateOperators
-  Acc_FinanceBusinessPartner__c: IdOperators
-  Acc_FinanceBusinessPartner__r: User_Filter
   SystemModstamp: DateTimeOperators
   ACC_SubsidyControlScheme__c: IdOperators
-  Acc_ExpectedFirstDateOfProjectsStart__c: DateOperators
   Acc_InsertCostCentreCode__c: StringOperators
-  Acc_CompetitionName__c: StringOperators
-  CreatedDate: DateTimeOperators
   LastActivityDate: DateOperators
-  Id: IdOperators
   LastModifiedById: IdOperators
   LastModifiedBy: User_Filter
   Acc_TypeofAid__c: PicklistOperators
   Acc_Review_Team__c: PicklistOperators
-  SBRI_Contracting_Authority__c: PicklistOperators
   and: [Competition__c_Filter]
   or: [Competition__c_Filter]
   not: Competition__c_Filter
@@ -4607,55 +4655,59 @@ input Competition__c_GroupBy {
   LastModifiedDate: GroupByDateFunction
   Acc_ProjectHardStopDate__c: GroupByClause
   Acc_NonStandardProjectInformation__c: GroupByClause
-  LastReferencedDate: GroupByDateFunction
   Acc_PublicityEmbargoOnResults__c: GroupByClause
-  ACC_PaymentType__c: GroupByClause
   Authorisation_Gateway__c: GroupByClause
-  Acc_AGRefNumber__c: GroupByClause
   Name: GroupByClause
   Acc_PortfolioManager__c: GroupByClause
   Acc_PortfolioManager__r: User_GroupBy
   Acc_TermsConditions__c: GroupByClause
-  OwnerId: GroupByClause
   CreatedById: GroupByClause
   CreatedBy: User_GroupBy
-  Acc_CompetitionCode__c: GroupByClause
   CloneSourceId: GroupByClause
   Sent_to_MM__c: GroupByClause
   Acc_LegacyCompetitionCode__c: GroupByClause
+  IM_PhasedCompetition__c: GroupByClause
+  Acc_ExpectedLastDateOfProjectsEnd__c: GroupByClause
+  IsDeleted: GroupByClause
+  Acc_LevelOfMonitoring__c: GroupByClause
+  LastViewedDate: GroupByDateFunction
+  CSS_Representative__c: GroupByClause
+  CSS_Representative__r: User_GroupBy
+  Acc_CompetitionType__c: GroupByClause
+  Acc_FinanceBusinessPartner__c: GroupByClause
+  Acc_FinanceBusinessPartner__r: User_GroupBy
+  Acc_ExpectedFirstDateOfProjectsStart__c: GroupByClause
+  Acc_CompetitionName__c: GroupByClause
+  CreatedDate: GroupByDateFunction
+  Id: GroupByClause
+  SBRI_Contracting_Authority__c: GroupByClause
+  Phased_Competition_Stage__c: GroupByClause
+  IM_PreCursorCompetition__c: GroupByClause
+  IM_PreCursorCompetition__r: Competition__c_GroupBy
+  LastReferencedDate: GroupByDateFunction
+  ACC_PaymentType__c: GroupByClause
+  Acc_AGRefNumber__c: GroupByClause
+  OwnerId: GroupByClause
+  Acc_CompetitionCode__c: GroupByClause
   Impact_Management_participation__c: GroupByClause
   Technologists__c: GroupByClause
   Technologists__r: Contact_GroupBy
-  Acc_ExpectedLastDateOfProjectsEnd__c: GroupByClause
   Acc_ProgrammeID__c: GroupByClause
-  IsDeleted: GroupByClause
-  Acc_LevelOfMonitoring__c: GroupByClause
   Acc_ActivityCode__c: GroupByClause
   Competition_Manager__c: GroupByClause
   Competition_Manager__r: User_GroupBy
-  LastViewedDate: GroupByDateFunction
   Authorisation_hard_stop_date__c: GroupByClause
-  CSS_Representative__c: GroupByClause
-  CSS_Representative__r: User_GroupBy
   Competition_Exec__c: GroupByClause
   Competition_Exec__r: Contact_GroupBy
-  Acc_CompetitionType__c: GroupByClause
   Authorisation_expected_end_date__c: GroupByClause
-  Acc_FinanceBusinessPartner__c: GroupByClause
-  Acc_FinanceBusinessPartner__r: User_GroupBy
   SystemModstamp: GroupByDateFunction
   ACC_SubsidyControlScheme__c: GroupByClause
-  Acc_ExpectedFirstDateOfProjectsStart__c: GroupByClause
   Acc_InsertCostCentreCode__c: GroupByClause
-  Acc_CompetitionName__c: GroupByClause
-  CreatedDate: GroupByDateFunction
   LastActivityDate: GroupByClause
-  Id: GroupByClause
   LastModifiedById: GroupByClause
   LastModifiedBy: User_GroupBy
   Acc_TypeofAid__c: GroupByClause
   Acc_Review_Team__c: GroupByClause
-  SBRI_Contracting_Authority__c: GroupByClause
   type: GroupByType
 }
 
@@ -4663,85 +4715,125 @@ input Competition__c_OrderBy {
   LastModifiedDate: OrderByClause
   Acc_ProjectHardStopDate__c: OrderByClause
   Acc_NonStandardProjectInformation__c: OrderByClause
-  LastReferencedDate: OrderByClause
   Acc_PublicityEmbargoOnResults__c: OrderByClause
-  ACC_PaymentType__c: OrderByClause
   Authorisation_Gateway__c: OrderByClause
-  Acc_AGRefNumber__c: OrderByClause
   Name: OrderByClause
   Acc_PortfolioManager__c: OrderByClause
   Acc_PortfolioManager__r: User_OrderBy
   Acc_TermsConditions__c: OrderByClause
-  OwnerId: OrderByClause
   CreatedById: OrderByClause
   CreatedBy: User_OrderBy
-  Acc_CompetitionCode__c: OrderByClause
   Sent_to_MM__c: OrderByClause
   Acc_LegacyCompetitionCode__c: OrderByClause
+  IM_PhasedCompetition__c: OrderByClause
+  Acc_ExpectedLastDateOfProjectsEnd__c: OrderByClause
+  IsDeleted: OrderByClause
+  Acc_LevelOfMonitoring__c: OrderByClause
+  LastViewedDate: OrderByClause
+  CSS_Representative__c: OrderByClause
+  CSS_Representative__r: User_OrderBy
+  Acc_CompetitionType__c: OrderByClause
+  Acc_FinanceBusinessPartner__c: OrderByClause
+  Acc_FinanceBusinessPartner__r: User_OrderBy
+  Acc_ExpectedFirstDateOfProjectsStart__c: OrderByClause
+  Acc_CompetitionName__c: OrderByClause
+  CreatedDate: OrderByClause
+  Id: OrderByClause
+  SBRI_Contracting_Authority__c: OrderByClause
+  Phased_Competition_Stage__c: OrderByClause
+  IM_PreCursorCompetition__c: OrderByClause
+  IM_PreCursorCompetition__r: Competition__c_OrderBy
+  LastReferencedDate: OrderByClause
+  ACC_PaymentType__c: OrderByClause
+  Acc_AGRefNumber__c: OrderByClause
+  OwnerId: OrderByClause
+  Acc_CompetitionCode__c: OrderByClause
   Impact_Management_participation__c: OrderByClause
   Technologists__c: OrderByClause
   Technologists__r: Contact_OrderBy
-  Acc_ExpectedLastDateOfProjectsEnd__c: OrderByClause
   Acc_ProgrammeID__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_LevelOfMonitoring__c: OrderByClause
   Acc_ProgrammeName__c: OrderByClause
   Acc_ActivityCode__c: OrderByClause
   Competition_Manager__c: OrderByClause
   Competition_Manager__r: User_OrderBy
-  LastViewedDate: OrderByClause
   Authorisation_hard_stop_date__c: OrderByClause
-  CSS_Representative__c: OrderByClause
-  CSS_Representative__r: User_OrderBy
   Competition_Exec__c: OrderByClause
   Competition_Exec__r: Contact_OrderBy
-  Acc_CompetitionType__c: OrderByClause
   Authorisation_expected_end_date__c: OrderByClause
-  Acc_FinanceBusinessPartner__c: OrderByClause
-  Acc_FinanceBusinessPartner__r: User_OrderBy
   SystemModstamp: OrderByClause
   ACC_SubsidyControlScheme__c: OrderByClause
-  Acc_ExpectedFirstDateOfProjectsStart__c: OrderByClause
   Acc_InsertCostCentreCode__c: OrderByClause
-  Acc_CompetitionName__c: OrderByClause
-  CreatedDate: OrderByClause
   LastActivityDate: OrderByClause
-  Id: OrderByClause
   LastModifiedById: OrderByClause
   LastModifiedBy: User_OrderBy
   Acc_TypeofAid__c: OrderByClause
   Acc_Review_Team__c: OrderByClause
-  SBRI_Contracting_Authority__c: OrderByClause
 }
+
+union Competition__c_Owner = Group | User
 
 type Contact {
   LastModifiedDate: DateTimeValue
+  AccountId: IDValue
+
+  """parentRelationship"""
+  Account: Account
+  Email: EmailValue
   Alt_Email__c: EmailValue
-  HasOptedOutOfFax: BooleanValue
+  pi__campaign__c: StringValue
   pi__first_search_type__c: StringValue
+  pi__first_touch_url__c: LongTextAreaValue
+  MobilePhone: PhoneNumberValue
   pi__Needs_Score_Synced__c: BooleanValue
+  LinkedIn_Id__c: StringValue
+  Name: StringValue
   Region__c: StringValue
   Department: StringValue
   pi__created_date__c: DateTimeValue
   ContactMigrationId__c: StringValue
+  CreatedById: IDValue
+
+  """parentRelationship"""
+  CreatedBy: User
   pi__conversion_object_name__c: StringValue
   OtherCity: StringValue
   OrgMigrationID__c: StringValue
+  pi__utm_campaign__c: StringValue
   PhotoUrl: UrlValue
+  pi__utm_source__c: StringValue
+  MasterRecordId: IDValue
+
+  """parentRelationship"""
+  MasterRecord: Contact
+  IndividualId: IDValue
   IsDeleted: BooleanValue
   OtherGeocodeAccuracy: PicklistValue
+  IsEmailBounced: BooleanValue
   pi__comments__c: LongTextAreaValue
+  HasOptedOutOfEmail: BooleanValue
+  LastViewedDate: DateTimeValue
   MailingCity: StringValue
+  Birthdate: DateValue
   OtherStreet: TextAreaValue
+  pi__first_activity__c: DateTimeValue
+  Application_Number__c: StringValue
+  Experience_Type__c: PicklistValue
+  CreatedDate: DateTimeValue
+  LastName: StringValue
+  MailingStreet: TextAreaValue
   Jigsaw: StringValue
+  Email__c: StringValue
   Converting_Person_Account__c: BooleanValue
   pi__utm_medium__c: StringValue
+  EmailBouncedDate: DateTimeValue
   OtherPhone: PhoneNumberValue
   Description: LongTextAreaValue
   DoNotCall: BooleanValue
-  AssistantName: StringValue
   MailingCountry: StringValue
+  LastReferencedDate: DateTimeValue
+  pi__notes__c: LongTextAreaValue
   Salutation: PicklistValue
+  OtherState: StringValue
   pi__last_activity__c: DateTimeValue
   MailingState: StringValue
   Federation_Id__c: StringValue
@@ -4749,79 +4841,41 @@ type Contact {
 
   """parentRelationship"""
   Owner: User
+  Phone: PhoneNumberValue
+  MailingPostalCode: StringValue
   OtherCountry: StringValue
+  LastCUUpdateDate: DateTimeValue
   pi__conversion_object_type__c: StringValue
+  MailingGeocodeAccuracy: PicklistValue
   SugarContactId__c: StringValue
+  Twitter_Name__c: StringValue
+  pi__url__c: UrlValue
   EmailBouncedReason: StringValue
   IsPersonAccount: BooleanValue
   pi__grade__c: StringValue
   FirstName: StringValue
   OtherPostalCode: StringValue
-  SystemModstamp: DateTimeValue
-  pi__score__c: DoubleValue
-  HomePhone: PhoneNumberValue
-  LastActivityDate: DateValue
-  pi__utm_content__c: StringValue
-  pi__first_search_term__c: StringValue
-  AccountId: IDValue
-
-  """parentRelationship"""
-  Account: Account
-  Email: EmailValue
-  pi__campaign__c: StringValue
-  pi__first_touch_url__c: LongTextAreaValue
-  MobilePhone: PhoneNumberValue
-  LinkedIn_Id__c: StringValue
-  Name: StringValue
-  CreatedById: IDValue
-
-  """parentRelationship"""
-  CreatedBy: User
-  pi__utm_campaign__c: StringValue
-  pi__utm_source__c: StringValue
-  MasterRecordId: IDValue
-
-  """parentRelationship"""
-  MasterRecord: Contact
-  IndividualId: IDValue
-  IsEmailBounced: BooleanValue
-  HasOptedOutOfEmail: BooleanValue
-  LastViewedDate: DateTimeValue
-  Birthdate: DateValue
-  pi__first_activity__c: DateTimeValue
-  Application_Number__c: StringValue
-  Experience_Type__c: PicklistValue
-  LeadSource: PicklistValue
-  CreatedDate: DateTimeValue
-  LastName: StringValue
-  MailingStreet: TextAreaValue
-  Email__c: StringValue
-  AssistantPhone: PhoneNumberValue
-  EmailBouncedDate: DateTimeValue
-  LastReferencedDate: DateTimeValue
-  pi__notes__c: LongTextAreaValue
-  OtherState: StringValue
-  Phone: PhoneNumberValue
-  MailingPostalCode: StringValue
-  LastCUUpdateDate: DateTimeValue
-  MailingGeocodeAccuracy: PicklistValue
-  Twitter_Name__c: StringValue
-  pi__url__c: UrlValue
   Title: StringValue
   pi__Pardot_Last_Scored_At__c: DateTimeValue
   pi__utm_term__c: StringValue
   LastCURequestDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  pi__score__c: DoubleValue
+  HomePhone: PhoneNumberValue
   pi__conversion_date__c: DateTimeValue
   ReportsToId: IDValue
 
   """parentRelationship"""
   ReportsTo: Contact
+  LastActivityDate: DateValue
   pi__pardot_hard_bounced__c: BooleanValue
+  pi__utm_content__c: StringValue
   Fax: PhoneNumberValue
   LastModifiedById: IDValue
 
   """parentRelationship"""
   LastModifiedBy: User
+  pi__first_search_term__c: StringValue
   JigsawContactId: StringValue
 
   """childRelationship"""
@@ -4880,99 +4934,95 @@ type ContactEdge {
 
 input Contact_Filter {
   LastModifiedDate: DateTimeOperators
+  AccountId: IdOperators
+  Account: Account_Filter
+  Email: EmailOperators
   Alt_Email__c: EmailOperators
-  HasOptedOutOfFax: BooleanOperators
+  pi__campaign__c: StringOperators
   pi__first_search_type__c: StringOperators
+  pi__first_touch_url__c: LongTextAreaOperators
+  MobilePhone: PhoneNumberOperators
   pi__Needs_Score_Synced__c: BooleanOperators
+  LinkedIn_Id__c: StringOperators
+  Name: StringOperators
   Region__c: StringOperators
   Department: StringOperators
   pi__created_date__c: DateTimeOperators
   ContactMigrationId__c: StringOperators
+  CreatedById: IdOperators
+  CreatedBy: User_Filter
   pi__conversion_object_name__c: StringOperators
   OtherCity: StringOperators
   OrgMigrationID__c: StringOperators
-  IsDeleted: BooleanOperators
-  OtherGeocodeAccuracy: PicklistOperators
-  pi__comments__c: LongTextAreaOperators
-  MailingCity: StringOperators
-  OtherStreet: TextAreaOperators
-  Id: IdOperators
-  Jigsaw: StringOperators
-  Converting_Person_Account__c: BooleanOperators
-  pi__utm_medium__c: StringOperators
-  OtherPhone: PhoneNumberOperators
-  Description: LongTextAreaOperators
-  DoNotCall: BooleanOperators
-  AssistantName: StringOperators
-  MailingCountry: StringOperators
-  Salutation: PicklistOperators
-  pi__last_activity__c: DateTimeOperators
-  MailingState: StringOperators
-  Federation_Id__c: StringOperators
-  OwnerId: IdOperators
-  Owner: User_Filter
-  OtherCountry: StringOperators
-  pi__conversion_object_type__c: StringOperators
-  SugarContactId__c: StringOperators
-  EmailBouncedReason: StringOperators
-  IsPersonAccount: BooleanOperators
-  pi__grade__c: StringOperators
-  FirstName: StringOperators
-  OtherPostalCode: StringOperators
-  SystemModstamp: DateTimeOperators
-  pi__score__c: DoubleOperators
-  HomePhone: PhoneNumberOperators
-  LastActivityDate: DateOperators
-  pi__utm_content__c: StringOperators
-  pi__first_search_term__c: StringOperators
-  AccountId: IdOperators
-  Account: Account_Filter
-  Email: EmailOperators
-  pi__campaign__c: StringOperators
-  pi__first_touch_url__c: LongTextAreaOperators
-  MobilePhone: PhoneNumberOperators
-  LinkedIn_Id__c: StringOperators
-  Name: StringOperators
-  CreatedById: IdOperators
-  CreatedBy: User_Filter
   pi__utm_campaign__c: StringOperators
   pi__utm_source__c: StringOperators
   MasterRecordId: IdOperators
   MasterRecord: Contact_Filter
   IndividualId: IdOperators
+  IsDeleted: BooleanOperators
+  OtherGeocodeAccuracy: PicklistOperators
   IsEmailBounced: BooleanOperators
+  pi__comments__c: LongTextAreaOperators
   HasOptedOutOfEmail: BooleanOperators
   LastViewedDate: DateTimeOperators
+  MailingCity: StringOperators
   Birthdate: DateOperators
+  OtherStreet: TextAreaOperators
   pi__first_activity__c: DateTimeOperators
   Application_Number__c: StringOperators
   Experience_Type__c: PicklistOperators
-  LeadSource: PicklistOperators
   CreatedDate: DateTimeOperators
+  Id: IdOperators
   LastName: StringOperators
   MailingStreet: TextAreaOperators
+  Jigsaw: StringOperators
   Email__c: StringOperators
-  AssistantPhone: PhoneNumberOperators
+  Converting_Person_Account__c: BooleanOperators
+  pi__utm_medium__c: StringOperators
   EmailBouncedDate: DateTimeOperators
+  OtherPhone: PhoneNumberOperators
+  Description: LongTextAreaOperators
+  DoNotCall: BooleanOperators
+  MailingCountry: StringOperators
   LastReferencedDate: DateTimeOperators
   pi__notes__c: LongTextAreaOperators
+  Salutation: PicklistOperators
   OtherState: StringOperators
+  pi__last_activity__c: DateTimeOperators
+  MailingState: StringOperators
+  Federation_Id__c: StringOperators
+  OwnerId: IdOperators
+  Owner: User_Filter
   Phone: PhoneNumberOperators
   MailingPostalCode: StringOperators
+  OtherCountry: StringOperators
   LastCUUpdateDate: DateTimeOperators
+  pi__conversion_object_type__c: StringOperators
   MailingGeocodeAccuracy: PicklistOperators
+  SugarContactId__c: StringOperators
   Twitter_Name__c: StringOperators
+  EmailBouncedReason: StringOperators
+  IsPersonAccount: BooleanOperators
+  pi__grade__c: StringOperators
+  FirstName: StringOperators
+  OtherPostalCode: StringOperators
   Title: StringOperators
   pi__Pardot_Last_Scored_At__c: DateTimeOperators
   pi__utm_term__c: StringOperators
   LastCURequestDate: DateTimeOperators
+  SystemModstamp: DateTimeOperators
+  pi__score__c: DoubleOperators
+  HomePhone: PhoneNumberOperators
   pi__conversion_date__c: DateTimeOperators
   ReportsToId: IdOperators
   ReportsTo: Contact_Filter
+  LastActivityDate: DateOperators
   pi__pardot_hard_bounced__c: BooleanOperators
+  pi__utm_content__c: StringOperators
   Fax: PhoneNumberOperators
   LastModifiedById: IdOperators
   LastModifiedBy: User_Filter
+  pi__first_search_term__c: StringOperators
   JigsawContactId: StringOperators
   and: [Contact_Filter]
   or: [Contact_Filter]
@@ -4981,202 +5031,194 @@ input Contact_Filter {
 
 input Contact_GroupBy {
   LastModifiedDate: GroupByDateFunction
+  AccountId: GroupByClause
+  Account: Account_GroupBy
+  Email: GroupByClause
   Alt_Email__c: GroupByClause
-  HasOptedOutOfFax: GroupByClause
+  pi__campaign__c: GroupByClause
   pi__first_search_type__c: GroupByClause
+  MobilePhone: GroupByClause
   pi__Needs_Score_Synced__c: GroupByClause
+  LinkedIn_Id__c: GroupByClause
+  Name: GroupByClause
   Region__c: GroupByClause
   Department: GroupByClause
   pi__created_date__c: GroupByDateFunction
   ContactMigrationId__c: GroupByClause
+  CreatedById: GroupByClause
+  CreatedBy: User_GroupBy
   pi__conversion_object_name__c: GroupByClause
   OtherCity: GroupByClause
   OrgMigrationID__c: GroupByClause
+  pi__utm_campaign__c: GroupByClause
   CloneSourceId: GroupByClause
   PhotoUrl: GroupByClause
+  pi__utm_source__c: GroupByClause
+  MasterRecordId: GroupByClause
+  MasterRecord: Contact_GroupBy
+  IndividualId: GroupByClause
   IsDeleted: GroupByClause
   OtherGeocodeAccuracy: GroupByClause
+  IsEmailBounced: GroupByClause
+  HasOptedOutOfEmail: GroupByClause
+  LastViewedDate: GroupByDateFunction
   MailingCity: GroupByClause
+  Birthdate: GroupByClause
   OtherStreet: GroupByClause
+  pi__first_activity__c: GroupByDateFunction
+  Application_Number__c: GroupByClause
+  Experience_Type__c: GroupByClause
+  CreatedDate: GroupByDateFunction
   Id: GroupByClause
+  LastName: GroupByClause
+  MailingStreet: GroupByClause
   Jigsaw: GroupByClause
+  Email__c: GroupByClause
   Converting_Person_Account__c: GroupByClause
   pi__utm_medium__c: GroupByClause
+  EmailBouncedDate: GroupByDateFunction
   OtherPhone: GroupByClause
   DoNotCall: GroupByClause
-  AssistantName: GroupByClause
   MailingCountry: GroupByClause
+  LastReferencedDate: GroupByDateFunction
   Salutation: GroupByClause
+  OtherState: GroupByClause
   pi__last_activity__c: GroupByDateFunction
   MailingState: GroupByClause
   Federation_Id__c: GroupByClause
   OwnerId: GroupByClause
   Owner: User_GroupBy
+  Phone: GroupByClause
+  MailingPostalCode: GroupByClause
   OtherCountry: GroupByClause
+  LastCUUpdateDate: GroupByDateFunction
   pi__conversion_object_type__c: GroupByClause
+  MailingGeocodeAccuracy: GroupByClause
   SugarContactId__c: GroupByClause
+  Twitter_Name__c: GroupByClause
+  pi__url__c: GroupByClause
   EmailBouncedReason: GroupByClause
   IsPersonAccount: GroupByClause
   pi__grade__c: GroupByClause
   FirstName: GroupByClause
   OtherPostalCode: GroupByClause
-  SystemModstamp: GroupByDateFunction
-  HomePhone: GroupByClause
-  LastActivityDate: GroupByClause
-  pi__utm_content__c: GroupByClause
-  pi__first_search_term__c: GroupByClause
-  AccountId: GroupByClause
-  Account: Account_GroupBy
-  Email: GroupByClause
-  pi__campaign__c: GroupByClause
-  MobilePhone: GroupByClause
-  LinkedIn_Id__c: GroupByClause
-  Name: GroupByClause
-  CreatedById: GroupByClause
-  CreatedBy: User_GroupBy
-  pi__utm_campaign__c: GroupByClause
-  pi__utm_source__c: GroupByClause
-  MasterRecordId: GroupByClause
-  MasterRecord: Contact_GroupBy
-  IndividualId: GroupByClause
-  IsEmailBounced: GroupByClause
-  HasOptedOutOfEmail: GroupByClause
-  LastViewedDate: GroupByDateFunction
-  Birthdate: GroupByClause
-  pi__first_activity__c: GroupByDateFunction
-  Application_Number__c: GroupByClause
-  Experience_Type__c: GroupByClause
-  LeadSource: GroupByClause
-  CreatedDate: GroupByDateFunction
-  LastName: GroupByClause
-  MailingStreet: GroupByClause
-  Email__c: GroupByClause
-  AssistantPhone: GroupByClause
-  EmailBouncedDate: GroupByDateFunction
-  LastReferencedDate: GroupByDateFunction
-  OtherState: GroupByClause
-  Phone: GroupByClause
-  MailingPostalCode: GroupByClause
-  LastCUUpdateDate: GroupByDateFunction
-  MailingGeocodeAccuracy: GroupByClause
-  Twitter_Name__c: GroupByClause
-  pi__url__c: GroupByClause
   Title: GroupByClause
   pi__Pardot_Last_Scored_At__c: GroupByDateFunction
   pi__utm_term__c: GroupByClause
   LastCURequestDate: GroupByDateFunction
+  SystemModstamp: GroupByDateFunction
+  HomePhone: GroupByClause
   pi__conversion_date__c: GroupByDateFunction
   ReportsToId: GroupByClause
   ReportsTo: Contact_GroupBy
+  LastActivityDate: GroupByClause
   pi__pardot_hard_bounced__c: GroupByClause
+  pi__utm_content__c: GroupByClause
   Fax: GroupByClause
   LastModifiedById: GroupByClause
   LastModifiedBy: User_GroupBy
+  pi__first_search_term__c: GroupByClause
   JigsawContactId: GroupByClause
   type: GroupByType
 }
 
 input Contact_OrderBy {
   LastModifiedDate: OrderByClause
+  AccountId: OrderByClause
+  Account: Account_OrderBy
+  Email: OrderByClause
   Alt_Email__c: OrderByClause
-  HasOptedOutOfFax: OrderByClause
+  pi__campaign__c: OrderByClause
   pi__first_search_type__c: OrderByClause
+  pi__first_touch_url__c: OrderByClause
+  MobilePhone: OrderByClause
   pi__Needs_Score_Synced__c: OrderByClause
+  LinkedIn_Id__c: OrderByClause
+  Name: OrderByClause
   Region__c: OrderByClause
   Department: OrderByClause
   pi__created_date__c: OrderByClause
   OtherLongitude: OrderByClause
   ContactMigrationId__c: OrderByClause
+  CreatedById: OrderByClause
+  CreatedBy: User_OrderBy
   pi__conversion_object_name__c: OrderByClause
   OtherCity: OrderByClause
+  MailingLatitude: OrderByClause
   OrgMigrationID__c: OrderByClause
+  pi__utm_campaign__c: OrderByClause
   PhotoUrl: OrderByClause
+  pi__utm_source__c: OrderByClause
+  MasterRecordId: OrderByClause
+  MasterRecord: Contact_OrderBy
+  IndividualId: OrderByClause
   IsDeleted: OrderByClause
   OtherGeocodeAccuracy: OrderByClause
+  IsEmailBounced: OrderByClause
   pi__comments__c: OrderByClause
+  HasOptedOutOfEmail: OrderByClause
+  LastViewedDate: OrderByClause
   MailingCity: OrderByClause
+  Birthdate: OrderByClause
   OtherStreet: OrderByClause
+  pi__first_activity__c: OrderByClause
+  Application_Number__c: OrderByClause
+  Experience_Type__c: OrderByClause
   OtherLatitude: OrderByClause
+  CreatedDate: OrderByClause
   Id: OrderByClause
+  LastName: OrderByClause
+  MailingStreet: OrderByClause
   Jigsaw: OrderByClause
+  Email__c: OrderByClause
   Converting_Person_Account__c: OrderByClause
   pi__utm_medium__c: OrderByClause
+  EmailBouncedDate: OrderByClause
   OtherPhone: OrderByClause
   Description: OrderByClause
   DoNotCall: OrderByClause
-  AssistantName: OrderByClause
   MailingCountry: OrderByClause
+  LastReferencedDate: OrderByClause
+  pi__notes__c: OrderByClause
   Salutation: OrderByClause
+  OtherState: OrderByClause
   pi__last_activity__c: OrderByClause
   MailingState: OrderByClause
   Federation_Id__c: OrderByClause
   OwnerId: OrderByClause
   Owner: User_OrderBy
+  MailingLongitude: OrderByClause
+  Phone: OrderByClause
+  MailingPostalCode: OrderByClause
   OtherCountry: OrderByClause
+  LastCUUpdateDate: OrderByClause
   pi__conversion_object_type__c: OrderByClause
+  MailingGeocodeAccuracy: OrderByClause
   SugarContactId__c: OrderByClause
+  Twitter_Name__c: OrderByClause
+  pi__url__c: OrderByClause
   EmailBouncedReason: OrderByClause
   IsPersonAccount: OrderByClause
   pi__grade__c: OrderByClause
   FirstName: OrderByClause
   OtherPostalCode: OrderByClause
-  SystemModstamp: OrderByClause
-  pi__score__c: OrderByClause
-  HomePhone: OrderByClause
-  LastActivityDate: OrderByClause
-  pi__utm_content__c: OrderByClause
-  pi__first_search_term__c: OrderByClause
-  AccountId: OrderByClause
-  Account: Account_OrderBy
-  Email: OrderByClause
-  pi__campaign__c: OrderByClause
-  pi__first_touch_url__c: OrderByClause
-  MobilePhone: OrderByClause
-  LinkedIn_Id__c: OrderByClause
-  Name: OrderByClause
-  CreatedById: OrderByClause
-  CreatedBy: User_OrderBy
-  MailingLatitude: OrderByClause
-  pi__utm_campaign__c: OrderByClause
-  pi__utm_source__c: OrderByClause
-  MasterRecordId: OrderByClause
-  MasterRecord: Contact_OrderBy
-  IndividualId: OrderByClause
-  IsEmailBounced: OrderByClause
-  HasOptedOutOfEmail: OrderByClause
-  LastViewedDate: OrderByClause
-  Birthdate: OrderByClause
-  pi__first_activity__c: OrderByClause
-  Application_Number__c: OrderByClause
-  Experience_Type__c: OrderByClause
-  LeadSource: OrderByClause
-  CreatedDate: OrderByClause
-  LastName: OrderByClause
-  MailingStreet: OrderByClause
-  Email__c: OrderByClause
-  AssistantPhone: OrderByClause
-  EmailBouncedDate: OrderByClause
-  LastReferencedDate: OrderByClause
-  pi__notes__c: OrderByClause
-  OtherState: OrderByClause
-  MailingLongitude: OrderByClause
-  Phone: OrderByClause
-  MailingPostalCode: OrderByClause
-  LastCUUpdateDate: OrderByClause
-  MailingGeocodeAccuracy: OrderByClause
-  Twitter_Name__c: OrderByClause
-  pi__url__c: OrderByClause
   Title: OrderByClause
   pi__Pardot_Last_Scored_At__c: OrderByClause
   pi__utm_term__c: OrderByClause
   LastCURequestDate: OrderByClause
+  SystemModstamp: OrderByClause
+  pi__score__c: OrderByClause
+  HomePhone: OrderByClause
   pi__conversion_date__c: OrderByClause
   ReportsToId: OrderByClause
   ReportsTo: Contact_OrderBy
+  LastActivityDate: OrderByClause
   pi__pardot_hard_bounced__c: OrderByClause
+  pi__utm_content__c: OrderByClause
   Fax: OrderByClause
   LastModifiedById: OrderByClause
   LastModifiedBy: User_OrderBy
+  pi__first_search_term__c: OrderByClause
   JigsawContactId: OrderByClause
 }
 
@@ -5485,29 +5527,29 @@ input DateInput {
 }
 
 enum DateLiteral {
+  TOMORROW
+  THIS_FISCAL_QUARTER
+  THIS_WEEK
+  LAST_90_DAYS
+  LAST_FISCAL_YEAR
+  NEXT_FISCAL_QUARTER
+  NEXT_YEAR
+  THIS_FISCAL_YEAR
+  NEXT_QUARTER
+  TODAY
+  LAST_FISCAL_QUARTER
+  NEXT_MONTH
+  LAST_YEAR
+  LAST_WEEK
   NEXT_FISCAL_YEAR
+  THIS_YEAR
+  NEXT_WEEK
   THIS_MONTH
   NEXT_90_DAYS
   YESTERDAY
-  LAST_FISCAL_YEAR
-  THIS_FISCAL_QUARTER
-  NEXT_FISCAL_QUARTER
-  LAST_FISCAL_QUARTER
-  TOMORROW
-  LAST_YEAR
-  NEXT_YEAR
-  THIS_FISCAL_YEAR
+  THIS_QUARTER
   LAST_MONTH
   LAST_QUARTER
-  NEXT_WEEK
-  THIS_QUARTER
-  LAST_90_DAYS
-  THIS_WEEK
-  NEXT_MONTH
-  LAST_WEEK
-  THIS_YEAR
-  NEXT_QUARTER
-  TODAY
 }
 
 input DateOperators {
@@ -5750,6 +5792,9 @@ type Group {
   SystemModstamp: DateTimeValue
   Type: PicklistValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Group_Owner
   DoesSendEmailToMembers: BooleanValue
   CreatedById: IDValue
 
@@ -5900,6 +5945,8 @@ input Group_OrderBy {
   LastModifiedById: OrderByClause
   LastModifiedBy: User_OrderBy
 }
+
+union Group_Owner = User
 
 type IDAggregate {
   value: ID
@@ -6138,6 +6185,9 @@ type Order {
   LastReferencedDate: DateTimeValue
   StatusCode: PicklistValue
   OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Order_Owner
   CreatedById: IDValue
 
   """parentRelationship"""
@@ -6371,6 +6421,8 @@ input Order_OrderBy {
   ShippingLongitude: OrderByClause
   EffectiveDate: OrderByClause
 }
+
+union Order_Owner = Group | User
 
 scalar Percent
 
@@ -7110,6 +7162,7 @@ type User {
   pi__Pardot_User_Key__c: EncryptedStringValue
   UserPreferencesShowTitleToExternalUsers: BooleanValue
   UserPreferencesShowPostalCodeToExternalUsers: BooleanValue
+  UserPreferencesNativeEmailClient: BooleanValue
   MobilePhone: PhoneNumberValue
   BannerPhotoUrl: UrlValue
   CompanyName: StringValue
@@ -7362,6 +7415,7 @@ input User_Filter {
   UserPreferencesDisableProfilePostEmail: BooleanOperators
   UserPreferencesShowTitleToExternalUsers: BooleanOperators
   UserPreferencesShowPostalCodeToExternalUsers: BooleanOperators
+  UserPreferencesNativeEmailClient: BooleanOperators
   MobilePhone: PhoneNumberOperators
   CompanyName: StringOperators
   UserPreferencesShowFaxToGuestUsers: BooleanOperators
@@ -7651,6 +7705,7 @@ input User_OrderBy {
   UserPreferencesDisableProfilePostEmail: OrderByClause
   UserPreferencesShowTitleToExternalUsers: OrderByClause
   UserPreferencesShowPostalCodeToExternalUsers: OrderByClause
+  UserPreferencesNativeEmailClient: OrderByClause
   MobilePhone: OrderByClause
   BannerPhotoUrl: OrderByClause
   CompanyName: OrderByClause
