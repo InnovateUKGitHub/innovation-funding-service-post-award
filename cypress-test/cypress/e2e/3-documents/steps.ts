@@ -103,13 +103,20 @@ export const uploadToMO = () => {
   cy.submitButton("Upload documents").click();
 };
 
-export const displayMOFile = () => {
-  cy.wait(500);
-  cy.reload();
+export const downloadMoFile = () => {
   cy.get("h3").contains("Documents shared with Innovate UK and Monitoring Officer");
-  cy.reload();
-  cy.getByQA("project-documents-container").within(() => {
-    cy.tableCell(testFile);
+  cy.readFile("cypress/documents/testfile.doc", "base64").then((base64: string) => {
+    cy.get("a")
+      .contains("testfile.doc")
+      .invoke("attr", "href")
+      .then(href => cy.downloadFile(href))
+      .should(obj => {
+        expect(obj.headers["content-disposition"] ?? "").to.include("testfile.doc");
+        expect(obj.redirected).to.eq(false);
+        expect(obj.status).to.eq(200);
+        expect(obj.ok).to.eq(true);
+        expect(obj.base64).to.eq(base64);
+      });
   });
 };
 
@@ -237,14 +244,37 @@ export const fcLoginDelete = () => {
 export const pmLoginViewFile = () => {
   cy.switchUserTo(pm);
   cy.get("h3").contains("Documents for EUI Small Ent Health");
-  cy.getByQA("partner-documents-container").contains("td", testFileEUIFinance);
+  cy.readFile("cypress/documents/testfileEUIfc.doc", "base64").then((base64: string) => {
+    cy.getByQA("partner-documents-container")
+      .contains("a", "testfileEUIfc.doc")
+      .invoke("attr", "href")
+      .then(href => cy.downloadFile(href))
+      .should(obj => {
+        expect(obj.headers["content-disposition"] ?? "").to.include("testfileEUIfc.doc");
+        expect(obj.redirected).to.eq(false);
+        expect(obj.status).to.eq(200);
+        expect(obj.ok).to.eq(true);
+        expect(obj.base64).to.eq(base64);
+      });
+  });
 };
 
 export const fcLoginViewFile = () => {
   cy.switchUserTo(fc);
   cy.get("h3").contains("Documents for EUI Small Ent Health");
-  cy.getByQA("partner-documents-container").contains("td", testfileEUIProjectManager);
-  cy.get("body").contains("documentUploadedByIUK.docx").should("not.exist");
+  cy.readFile("cypress/documents/testfileEUIpm.doc", "base64").then((base64: string) => {
+    cy.getByQA("partner-documents-container")
+      .contains("a", "testfileEUIpm.doc")
+      .invoke("attr", "href")
+      .then(href => cy.downloadFile(href))
+      .should(obj => {
+        expect(obj.headers["content-disposition"] ?? "").to.include("testfileEUIpm.doc");
+        expect(obj.redirected).to.eq(false);
+        expect(obj.status).to.eq(200);
+        expect(obj.ok).to.eq(true);
+        expect(obj.base64).to.eq(base64);
+      });
+  });
 };
 
 export const pmLoginDelete = () => {

@@ -132,6 +132,20 @@ declare global {
        */
 
       validationNotification(message: string): Chainable<Element>;
+
+      /*
+       * Download a file
+       */
+      downloadFile(url: string): Chainable<{
+        headers: Record<string, string | undefined>;
+        ok: boolean;
+        redirected: boolean;
+        statusText: string;
+        status: number;
+        type: globalThis.ResponseType;
+        url: string;
+        base64: string;
+      }>;
     }
   }
 }

@@ -164,6 +164,29 @@ const fileInput = (fileName: string) => {
   cy.wait(300);
 };
 
+const downloadFile = (href: string): ReturnType<Cypress.Chainable["downloadFile"]> => {
+  return cy.url().then(async path => {
+    const pathToFetch = new URL(path);
+    if (href.startsWith("/")) pathToFetch.pathname = href;
+
+    const res = await fetch(pathToFetch);
+    const blob = await res.arrayBuffer();
+    const base64 = Buffer.from(blob).toString("base64");
+    const headers = [...(res.headers as any)] as [[string, string]];
+
+    return {
+      headers: Object.fromEntries(headers),
+      ok: res.ok,
+      redirected: res.redirected,
+      statusText: res.statusText,
+      status: res.status,
+      type: res.type,
+      url: res.url,
+      base64,
+    };
+  });
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
@@ -189,3 +212,4 @@ Cypress.Commands.add("paragraph", paragraph);
 Cypress.Commands.add("list", list);
 Cypress.Commands.add("fileInput", fileInput);
 Cypress.Commands.add("validationNotification", validationNotification);
+Cypress.Commands.add("downloadFile", downloadFile);

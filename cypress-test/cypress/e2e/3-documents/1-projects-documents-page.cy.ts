@@ -7,8 +7,8 @@ import {
   displayABFile,
   displayEUIFile,
   displayEUIMedFile,
-  displayMOFile,
   doNotUploadSpecialChar,
+  downloadMoFile,
   learnAboutFiles,
   selectFileDescription,
   shouldShowProjectTitle,
@@ -23,8 +23,6 @@ import {
   uploadFileNameTooShort,
 } from "./steps";
 import { fileTidyUp } from "common/filetidyup";
-
-const docname = "";
 
 describe("Project Documents page", () => {
   before(() => {
@@ -78,7 +76,7 @@ describe("Project Documents page", () => {
    */
   it("Should allow for a file to be uploaded under Innovate UK and MO only", uploadToMO);
 
-  it("Should display the file just uploaded under the Innovate UK and MO section", displayMOFile);
+  it("Should download the file just uploaded under the Innovate UK and MO section", downloadMoFile);
 
   it("Should then delete the document uploaded to this area", deleteDocFromArea);
 

@@ -66,7 +66,6 @@ export default defineConfig({
         },
       });
     },
-
     defaultCommandTimeout,
     specPattern: getSpecPatternArray(specPattern),
     env: {
