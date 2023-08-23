@@ -7,6 +7,8 @@ enum FormTypes {
   // Claim page
   ClaimLevelDelete = "claimLevelDelete",
   ClaimLevelUpload = "claimLevelUpload",
+  ClaimForecastSaveAndContinue = "claimForecastSaveAndContinue",
+  ClaimForecastSaveAndQuit = "claimForecastSaveAndQuit",
 
   // Project Change Requests
   ProjectChangeRequestCreate = "projectChangeRequestCreate",

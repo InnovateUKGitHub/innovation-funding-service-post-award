@@ -13,6 +13,7 @@ import {
   getMultiFileValidation,
   periodIdValidation,
 } from "./helperValidators.zod";
+import { makeZodI18nMap } from "@shared/zodi18n";
 
 type ProjectLevelUploadSchemaType = ReturnType<typeof getProjectLevelUpload>;
 const getProjectLevelUpload = (config: IAppOptions) =>
@@ -32,6 +33,7 @@ const getProjectLevelUpload = (config: IAppOptions) =>
   });
 
 type ClaimLevelUploadSchemaType = ReturnType<typeof getClaimLevelUpload>;
+const documentsErrorMap = makeZodI18nMap({ keyPrefix: ["documents"] });
 const getClaimLevelUpload = (config: IAppOptions) =>
   z.object({
     form: z.literal(FormTypes.ClaimLevelUpload),
@@ -79,5 +81,6 @@ export {
   getClaimLevelUpload,
   claimLevelDelete,
   projectOrPartnerLevelDelete,
+  documentsErrorMap,
 };
 export type { ProjectLevelUploadSchemaType, ClaimLevelUploadSchemaType };

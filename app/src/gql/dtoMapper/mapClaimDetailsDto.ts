@@ -115,7 +115,7 @@ export function mapToClaimDetailsDtoArray<
     edges
       ?.filter(
         x =>
-          x?.node?.RecordType?.Name?.value === "Claims Detail" &&
+          (x?.node?.RecordType?.Name?.value === undefined || x?.node?.RecordType?.Name?.value === "Claims Detail") &&
           x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
           x?.node?.Acc_CostCategory__c?.value !== null,
       )
@@ -143,7 +143,7 @@ export function mapToClaimDetailsWithLineItemsDtoArray<
   const claimDetailsEdges =
     edges?.filter(
       x =>
-        x?.node?.RecordType?.Name?.value === "Claims Detail" &&
+        (x?.node?.RecordType?.Name?.value === undefined || x?.node?.RecordType?.Name?.value === "Claims Detail") &&
         x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
         x?.node?.Acc_CostCategory__c?.value !== null,
     ) || null;

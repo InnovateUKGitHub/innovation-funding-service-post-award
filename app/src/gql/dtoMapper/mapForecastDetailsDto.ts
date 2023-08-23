@@ -7,6 +7,9 @@ type ForecastDetailsNode = Readonly<
   Partial<{
     Id: string;
     Acc_CostCategory__c: GQL.Value<string>;
+    Acc_CostCategory__r: {
+      Id: string;
+    } | null;
     Acc_LatestForecastCost__c: GQL.Value<number>;
     Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
     Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
@@ -24,7 +27,7 @@ const mapper: GQL.DtoMapper<ForecastDetailsDtoMapping, ForecastDetailsNode> = {
     return node?.Id ?? "";
   },
   costCategoryId: function (node) {
-    return node?.Acc_CostCategory__c?.value ?? "unknown";
+    return node?.Acc_CostCategory__c?.value ?? node?.Acc_CostCategory__r?.Id ?? "unknown";
   },
   periodId: function (node) {
     return (node?.Acc_ProjectPeriodNumber__c?.value ?? 0) as PeriodId;
@@ -63,7 +66,9 @@ export function mapToForecastDetailsDtoArray<
 >(edges: T, pickList: PickList[]): Pick<ForecastDetailsDtoMapping, PickList>[] {
   return (
     edges
-      ?.filter(x => x?.node?.RecordType?.Name?.value === "Profile Detail")
+      ?.filter(
+        x => x?.node?.RecordType?.Name?.value === "Profile Detail" || x?.node?.RecordType?.Name?.value === undefined,
+      )
       ?.map(node => {
         return mapToForecastDetailsDto(node?.node ?? null, pickList);
       }) ?? []

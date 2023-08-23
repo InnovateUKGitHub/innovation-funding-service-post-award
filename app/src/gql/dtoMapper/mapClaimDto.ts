@@ -5,6 +5,7 @@ import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ReceivedStatus } from "@framework/entities/received-status";
 import { Clock, salesforceDateFormat } from "@framework/util/clock";
+import { equalityIfDefined, inequalityIfDefined } from "./equalityIfDefined";
 
 const clock = new Clock();
 
@@ -30,6 +31,7 @@ type ClaimNode = Readonly<
     Acc_ApprovedDate__c: GQL.Value<string>;
     Acc_ClaimStatus__c: GQL.ValueAndLabel<string>;
     Acc_FinalClaim__c: GQL.Value<boolean>;
+    Acc_IAR_Status__c: GQL.Value<string>;
     Acc_OverheadRate__c: GQL.Value<number>;
     Acc_PaidDate__c: GQL.Value<string>;
     Acc_PCF_Status__c: GQL.Value<string>;
@@ -61,10 +63,11 @@ type ClaimDtoMapping = Pick<
   | "comments"
   | "forecastCost"
   | "grantPaidToDate"
+  | "iarStatus"
+  | "isIarRequired"
   | "id"
   | "isApproved"
   | "isFinalClaim"
-  | "isIarRequired"
   | "lastModifiedDate"
   | "overheadRate"
   | "paidDate"
@@ -114,6 +117,9 @@ const mapper: GQL.DtoMapper<
   },
   grantPaidToDate(node) {
     return node?.Acc_Grant_Paid_To_Date__c?.value ?? 0;
+  },
+  iarStatus(node) {
+    return mapToReceivedStatus(node?.Acc_IAR_Status__c?.value ?? "");
   },
   id(node) {
     return node?.Id ?? "";
@@ -212,20 +218,33 @@ export function mapToClaimDto<T extends ClaimNode, PickList extends keyof ClaimD
 /**
  * Maps claim edges to array of Claim DTOs.
  */
-export function mapToClaimDtoArray<
+export function mapToClaimsDtoArray<
   T extends ReadonlyArray<{ node: ClaimNode } | null> | null,
   PickList extends keyof ClaimDtoMapping,
 >(edges: T, pickList: PickList[], additionalData: ClaimsAdditionalData<PickList>): Pick<ClaimDtoMapping, PickList>[] {
   return (
-    edges
-      ?.filter(
-        x =>
-          x?.node?.RecordType?.Name?.value === "Total Project Period" &&
-          x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
-          x?.node?.Acc_ClaimStatus__c?.value !== "Not used",
-      )
-      ?.map(x => {
-        return mapToClaimDto(x?.node ?? null, pickList, additionalData);
-      }) ?? []
+    edges?.map(x => {
+      return mapToClaimDto(x?.node ?? null, pickList, additionalData);
+    }) ?? []
+  );
+}
+
+/**
+ * Maps claim edges to array of Claim DTOs.
+ * Only processes edges that are not "New" and "Not used"
+ */
+export function mapToCurrentClaimsDtoArray<
+  T extends ReadonlyArray<{ node: ClaimNode } | null> | null,
+  PickList extends keyof ClaimDtoMapping,
+>(edges: T, pickList: PickList[], additionalData: ClaimsAdditionalData<PickList>): Pick<ClaimDtoMapping, PickList>[] {
+  return mapToClaimsDtoArray(
+    edges?.filter(
+      x =>
+        equalityIfDefined(x?.node?.RecordType?.Name?.value, "Total Project Period") &&
+        inequalityIfDefined(x?.node?.Acc_ClaimStatus__c?.value, "New") &&
+        inequalityIfDefined(x?.node?.Acc_ClaimStatus__c?.value, "Not used"),
+    ) || [],
+    pickList,
+    additionalData,
   );
 }

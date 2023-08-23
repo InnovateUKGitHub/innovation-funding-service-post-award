@@ -16,7 +16,7 @@ import {
   sbriEnCopy,
   sbriIfsEnCopy,
 } from "@copy/data";
-import { i18nInterpolationOptions } from "@copy/interpolation";
+import { i18nInterpolationOptions, registerIntlFormatter } from "@copy/interpolation";
 
 import { useEffect } from "react";
 import "../src/styles/index.css";
@@ -28,6 +28,8 @@ i18next.use(initReactI18next).init({
   fallbackNS: CopyNamespaces.DEFAULT,
   interpolation: i18nInterpolationOptions,
 });
+
+registerIntlFormatter();
 
 i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.DEFAULT, enCopy, true, true);
 i18next.addResourceBundle(CopyLanguages.en_GB, CopyNamespaces.KTP, ktpEnCopy, true, true);

@@ -4,8 +4,9 @@ export const isNumber = (value?: number | null): value is number => {
 
   const isValueNumber = typeof value === "number";
   const isNotNaN = !isNaN(value);
+  const finite = isFinite(value);
 
-  return isValueNumber && isNotNaN;
+  return isValueNumber && isNotNaN && finite;
 };
 
 /**
@@ -23,6 +24,8 @@ export function roundCurrency(value: number) {
   if (roundedValue === 0) return 0;
   return roundedValue / 100;
 }
+
+export const validCurrencyRegex = /^-?£?(\d+|\.|\d+\.|\.\d{1,2}|\d+\.\d{1,2})?$/;
 
 /**
  * returns difference between two numbers as a percentage to two decimal points
@@ -58,6 +61,18 @@ export function parseNumber(x?: string | number | null) {
 }
 
 /**
+ * @description Converts a currency string to a number whereever possible.
+ * - Strips out all instances of "£" to make sure there aren't any loose characters when parsing later.
+ * - Disallows more than 2-decimal places.
+ * @param x The string based representation of a number to convert to a number
+ * @returns A number, unless invalid, in which case, null is returned.
+ */
+export function parseCurrency(x?: string | number | null) {
+  if (typeof x === "string") return parseNumber(x.replace(/£/g, ""));
+  return parseNumber(x);
+}
+
+/**
  * _sumBy_
  *
  * Takes an array of values as first argument, and a reducer function for second.
@@ -83,4 +98,8 @@ export const withinRange = <T = number>(numberToCheck: T, startRange: T, endRang
 export function calcPercentage(total: Nullable<number>, amount: number) {
   if (!total) return null;
   return (100 * (amount || 0)) / total;
+}
+
+export function countDecimalDigitsInString(number: string) {
+  return number.split(".")?.[1]?.length || 0;
 }

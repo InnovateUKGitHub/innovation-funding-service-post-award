@@ -1,5 +1,6 @@
 export enum ClaimStatus {
   UNKNOWN = "",
+  NEW = "New",
   DRAFT = "Draft",
   SUBMITTED = "Submitted",
   MO_QUERIED = "MO Queried",
@@ -9,4 +10,5 @@ export enum ClaimStatus {
   PAID = "Paid",
   AWAITING_IAR = "Awaiting IAR",
   PAYMENT_REQUESTED = "Payment Requested",
+  NOT_USED = "Not used",
 }

@@ -13,7 +13,7 @@ import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/d
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusChange";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { getIARDueOnClaimPeriods } from "@gql/dtoMapper/mapIarDue";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
@@ -82,7 +82,7 @@ export const useClaimReviewPageData = (
       profileGql,
     );
 
-    const claims = mapToClaimDtoArray(
+    const claims = mapToCurrentClaimsDtoArray(
       data?.salesforce?.uiapi?.query?.AllClaimsForPartner?.edges ?? [],
       [
         "comments",

@@ -1,5 +1,5 @@
 import { CopyLanguages, CopyNamespaces } from "@copy/data";
-import { i18nInterpolationOptions } from "@copy/interpolation";
+import { i18nInterpolationOptions, registerIntlFormatter } from "@copy/interpolation";
 import express from "express";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
@@ -13,6 +13,8 @@ export const initInternationalisation = async () => {
     fallbackNS: CopyNamespaces.DEFAULT,
     interpolation: i18nInterpolationOptions,
   });
+
+  registerIntlFormatter();
 };
 
 export const internationalisationRouter = express.Router();

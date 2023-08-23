@@ -5,7 +5,7 @@ import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import express from "express";
 import { z } from "zod";
-import { projectOrPartnerLevelDelete } from "@ui/zod/documentValidators.zod";
+import { documentsErrorMap, projectOrPartnerLevelDelete } from "@ui/zod/documentValidators.zod";
 import {
   ProjectDocumentsRoute,
   ProjectDocumentPageParams,
@@ -21,14 +21,13 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     super({
       route: ProjectDocumentsRoute,
       forms: [FormTypes.ProjectLevelDelete, FormTypes.PartnerLevelDelete],
-      formIntlKeyPrefix: ["documents"],
     });
   }
 
   public readonly acceptFiles = false;
 
   protected async getZodSchema() {
-    return projectOrPartnerLevelDelete;
+    return { schema: projectOrPartnerLevelDelete, errorMap: documentsErrorMap };
   }
 
   protected async mapToZod({

@@ -7,7 +7,7 @@ import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummary
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
@@ -65,7 +65,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
     );
 
     // CLAIMS
-    const claims = mapToClaimDtoArray(
+    const claims = mapToCurrentClaimsDtoArray(
       claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
       [
         "comments",

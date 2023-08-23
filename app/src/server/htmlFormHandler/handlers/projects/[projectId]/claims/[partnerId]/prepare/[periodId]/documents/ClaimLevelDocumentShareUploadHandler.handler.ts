@@ -2,7 +2,7 @@ import { IContext } from "@framework/types/IContext";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
-import { ClaimLevelUploadSchemaType, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
+import { ClaimLevelUploadSchemaType, documentsErrorMap, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
 import express from "express";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
@@ -18,14 +18,16 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
     super({
       route: ClaimDocumentsRoute,
       forms: [FormTypes.ClaimLevelUpload],
-      formIntlKeyPrefix: ["documents"],
     });
   }
 
   public readonly acceptFiles = true;
 
   protected async getZodSchema() {
-    return getClaimLevelUpload(configuration.options);
+    return {
+      schema: getClaimLevelUpload(configuration.options),
+      errorMap: documentsErrorMap,
+    };
   }
 
   protected async mapToZod({

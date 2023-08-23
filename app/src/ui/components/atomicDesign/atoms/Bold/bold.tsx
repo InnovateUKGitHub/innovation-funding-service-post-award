@@ -1,8 +1,4 @@
-type SpanAttributes = React.HTMLAttributes<HTMLSpanElement>;
+import { WithStyle } from "@ui/hoc/WithStyle";
+import { HTMLProps } from "react";
 
-/**
- * Bold text component (`<span>`)
- */
-export function Bold(props: SpanAttributes) {
-  return <span {...props} className="govuk-!-font-weight-bold" />;
-}
+export const Bold = WithStyle<HTMLProps<HTMLSpanElement>>("span", "govuk-!-font-weight-bold");

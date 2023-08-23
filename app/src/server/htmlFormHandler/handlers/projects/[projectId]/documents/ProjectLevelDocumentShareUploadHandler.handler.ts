@@ -3,7 +3,7 @@ import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
-import { getProjectLevelUpload, ProjectLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
+import { documentsErrorMap, getProjectLevelUpload, ProjectLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
 import express from "express";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { ProjectDocumentsRoute } from "@ui/containers/pages/projects/documents/projectDocuments.page";
@@ -18,14 +18,13 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
     super({
       route: ProjectDocumentsRoute,
       forms: [FormTypes.ProjectLevelUpload],
-      formIntlKeyPrefix: ["documents"],
     });
   }
 
   public readonly acceptFiles = true;
 
   protected async getZodSchema() {
-    return getProjectLevelUpload(configuration.options);
+    return { schema: getProjectLevelUpload(configuration.options), errorMap: documentsErrorMap };
   }
 
   protected async mapToZod({

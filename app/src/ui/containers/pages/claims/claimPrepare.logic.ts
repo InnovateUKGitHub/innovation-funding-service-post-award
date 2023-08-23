@@ -6,7 +6,7 @@ import { ClaimPrepareQuery } from "./__generated__/ClaimPrepareQuery.graphql";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getPartnerRoles, mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
@@ -59,7 +59,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       profileGql,
     );
 
-    const claims = mapToClaimDtoArray(
+    const claims = mapToCurrentClaimsDtoArray(
       claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
       [
         "id",

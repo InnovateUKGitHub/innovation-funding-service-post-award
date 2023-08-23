@@ -90,6 +90,7 @@ export enum DateFormat {
   DAY_AND_LONG_MONTH,
   LONG_YEAR,
   MONTH_YEAR,
+  SHORT_MONTH_YEAR,
 }
 
 export enum LogLevel {

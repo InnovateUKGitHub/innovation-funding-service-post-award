@@ -1,5 +1,6 @@
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { RootState } from "@ui/redux/reducers/rootReducer";
+import { useEffect } from "react";
 import { FieldErrors, FieldValues, Path, UseFormSetError } from "react-hook-form";
 import { useStore } from "react-redux";
 import { ZodIssue } from "zod";
@@ -25,7 +26,7 @@ const useZodErrors = <T extends FieldValues>(setError: UseFormSetError<T>, formE
       for (const error of errors) {
         const rhfError = { message: error.message, type: error.code };
         setError(error.path.join(".") as Path<T>, rhfError);
-        collatedErrors[error.path.join(".")] = rhfError;
+        collatedErrors[error.path.join("_").replaceAll(".", "_")] = rhfError;
       }
 
       return collatedErrors;

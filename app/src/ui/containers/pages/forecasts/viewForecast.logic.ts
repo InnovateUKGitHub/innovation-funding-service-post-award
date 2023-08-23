@@ -7,7 +7,7 @@ import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
@@ -122,7 +122,11 @@ export const useViewForecastData = (projectId: ProjectId, partnerId: PartnerId):
   );
 
   // CLAIMS
-  const claims = mapToClaimDtoArray(claimsGql, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"], {});
+  const claims = mapToCurrentClaimsDtoArray(
+    claimsGql,
+    ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"],
+    {},
+  );
 
   // COST CATEGORIES
   const costCategories = mapToRequiredSortedCostCategoryDtoArray(

@@ -23,6 +23,7 @@ describe("numberHelper", () => {
       ${"with NaN"}                   | ${NaN}       | ${false}
       ${"with positive boolean true"} | ${true}      | ${false}
       ${"with negative boolean true"} | ${false}     | ${false}
+      ${"with infinity"}              | ${Infinity}  | ${false}
     `("$name value", ({ inputValue, expectedValue }) => {
       const value = isNumber(inputValue);
 

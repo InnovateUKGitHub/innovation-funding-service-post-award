@@ -1,5 +1,5 @@
 import { CopyLanguages, CopyNamespaces, enCopy, ktpEnCopy, loansEnCopy, sbriEnCopy, sbriIfsEnCopy } from "@copy/data";
-import { i18nInterpolationOptions } from "@copy/interpolation";
+import { i18nInterpolationOptions, registerIntlFormatter } from "@copy/interpolation";
 import i18next, { ResourceKey } from "i18next";
 import { initReactI18next } from "react-i18next";
 
@@ -37,6 +37,8 @@ const initFullTestIntl = async () => {
       },
     },
   });
+
+  registerIntlFormatter();
 };
 
 export { initStubTestIntl, initFullTestIntl };

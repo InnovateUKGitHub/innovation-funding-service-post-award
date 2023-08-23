@@ -122,7 +122,7 @@ export class Api {
    * @todo Remove decodeHTMLEntities when Salesforce no longer returns encoded results.
    * @returns GraphQL Result - Is typed as `any` because the result may vary, including potential errors.
    */
-  public executeGraphQL<T>({
+  public async executeGraphQL<T>({
     document,
     variables,
     decodeHTMLEntities,
@@ -131,12 +131,16 @@ export class Api {
     this.logger.debug("GraphQL Query", query, variables);
     // "graphql" is not part of the template string because our ESbuild/Relay GraphQL hack
     // does thinks our code is actually a query.
-    return this.fetch(`/services/data/${this.version}/` + "graphql", {
+    const data = await this.fetch(`/services/data/${this.version}/` + "graphql", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query, variables }),
       decodeHTMLEntities,
     });
+
+    this.logger.debug("GraphQL Result", query, variables, data);
+
+    return data;
   }
 
   /**
