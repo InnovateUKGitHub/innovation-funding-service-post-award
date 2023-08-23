@@ -21,7 +21,7 @@ export type PCRSpendProfileFundingDto = PCRSpendProfileOtherFundingDto;
 
 interface PCRSpendProfileBaseCostDto {
   costCategory: CostCategoryType;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   description: string | null;
   id: PcrId;
   value: number | null;

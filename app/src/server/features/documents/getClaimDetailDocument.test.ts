@@ -18,7 +18,7 @@ describe("GetClaimDetailDocumentQuery", () => {
         projectId: project.Id,
         partnerId: partner.id,
         periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-        costCategoryId: claimDetail.Acc_CostCategory__c,
+        costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
       },
       document.Id,
     );
@@ -42,7 +42,7 @@ describe("GetClaimDetailDocumentQuery", () => {
         projectId: project.Id,
         partnerId: partner.id,
         periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-        costCategoryId: claimDetail.Acc_CostCategory__c,
+        costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
       },
       "FAKE ID",
     );
@@ -68,7 +68,7 @@ describe("GetClaimDetailDocumentQuery", () => {
         projectId: project2.Id,
         partnerId: partner2.id,
         periodId: claimDetail2.Acc_ProjectPeriodNumber__c,
-        costCategoryId: claimDetail2.Acc_CostCategory__c,
+        costCategoryId: claimDetail2.Acc_CostCategory__c as CostCategoryId,
       },
       document.Id,
     );
@@ -93,7 +93,7 @@ describe("GetClaimDetailDocumentQuery", () => {
         projectId: project.Id,
         partnerId: partner2.id,
         periodId: claimDetail2.Acc_ProjectPeriodNumber__c,
-        costCategoryId: claimDetail2.Acc_CostCategory__c,
+        costCategoryId: claimDetail2.Acc_CostCategory__c as CostCategoryId,
       },
       document.Id,
     );
@@ -116,7 +116,7 @@ describe("GetClaimDetailDocumentQuery", () => {
         projectId: project.Id,
         partnerId: partner.id,
         periodId: claimDetail2.Acc_ProjectPeriodNumber__c,
-        costCategoryId: claimDetail2.Acc_CostCategory__c,
+        costCategoryId: claimDetail2.Acc_CostCategory__c as CostCategoryId,
       },
       document.Id,
     );
@@ -140,7 +140,7 @@ describe("GetClaimDetailDocumentQuery", () => {
           projectId: project.Id,
           partnerId: partner.id,
           periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-          costCategoryId: claimDetail.Acc_CostCategory__c,
+          costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
       );
@@ -164,7 +164,7 @@ describe("GetClaimDetailDocumentQuery", () => {
           projectId: project.Id,
           partnerId: partner.id,
           periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-          costCategoryId: claimDetail.Acc_CostCategory__c,
+          costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
       );
@@ -192,7 +192,7 @@ describe("GetClaimDetailDocumentQuery", () => {
           projectId: project.Id,
           partnerId: partner1.id,
           periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-          costCategoryId: claimDetail.Acc_CostCategory__c,
+          costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
       );
@@ -219,7 +219,7 @@ describe("GetClaimDetailDocumentQuery", () => {
           projectId: project.Id,
           partnerId: partner.id,
           periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-          costCategoryId: claimDetail.Acc_CostCategory__c,
+          costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
       );
@@ -247,7 +247,7 @@ describe("GetClaimDetailDocumentQuery", () => {
           projectId: project.Id,
           partnerId: partner.id,
           periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-          costCategoryId: claimDetail.Acc_CostCategory__c,
+          costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
       );

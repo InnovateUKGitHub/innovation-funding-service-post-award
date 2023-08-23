@@ -24,7 +24,7 @@ const mapper: GQL.DtoMapper<ForecastDetailsDtoMapping, ForecastDetailsNode> = {
     return node?.Id ?? "";
   },
   costCategoryId: function (node) {
-    return node?.Acc_CostCategory__c?.value ?? "unknown";
+    return (node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId;
   },
   periodId: function (node) {
     return (node?.Acc_ProjectPeriodNumber__c?.value ?? 0) as PeriodId;

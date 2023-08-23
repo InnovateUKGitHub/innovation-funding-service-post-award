@@ -13,9 +13,13 @@ type GolCostNode = Readonly<
 
 type GolCostDtoMapping = Pick<GOLCostDto, "costCategoryId" | "costCategoryName" | "value">;
 
-const mapper: GQL.DtoMapper<GolCostDtoMapping, GolCostNode, { costCategories: { id: string; name: string }[] }> = {
+const mapper: GQL.DtoMapper<
+  GolCostDtoMapping,
+  GolCostNode,
+  { costCategories: { id: CostCategoryId; name: string }[] }
+> = {
   costCategoryId: function (node) {
-    return node?.Acc_CostCategory__c?.value ?? "unknown category";
+    return (node?.Acc_CostCategory__c?.value ?? "unknown category") as CostCategoryId;
   },
   costCategoryName: function (node, additionalData) {
     return additionalData.costCategories
@@ -34,7 +38,7 @@ const mapper: GQL.DtoMapper<GolCostDtoMapping, GolCostNode, { costCategories: { 
 export function mapToGolCostDto<
   T extends GolCostNode,
   PickList extends keyof GolCostDtoMapping,
-  AdditionalData extends { costCategories: { id: string; name: string }[] },
+  AdditionalData extends { costCategories: { id: CostCategoryId; name: string }[] },
 >(node: T, pickList: PickList[], additionalData: AdditionalData): Pick<GolCostDtoMapping, PickList> {
   return pickList.reduce((dto, field) => {
     dto[field] = mapper[field](node, additionalData);
@@ -52,7 +56,11 @@ export function mapToGolCostDto<
 export function mapToGolCostDtoArray<
   T extends ReadonlyArray<{ node: GolCostNode } | null> | null,
   PickList extends keyof GolCostDtoMapping,
->(edges: T, pickList: PickList[], costCategories: { id: string; name: string }[]): Pick<GolCostDtoMapping, PickList>[] {
+>(
+  edges: T,
+  pickList: PickList[],
+  costCategories: { id: CostCategoryId; name: string }[],
+): Pick<GolCostDtoMapping, PickList>[] {
   return (
     edges
       ?.filter(x => x?.node?.RecordType?.Name?.value === "Total Cost Category")

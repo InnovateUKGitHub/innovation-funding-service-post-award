@@ -9,7 +9,7 @@ export class GetClaimDetailDocumentsQuery extends DocumentsSummaryQueryBase {
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
     private readonly periodId: number,
-    private readonly costCategoryId: string,
+    private readonly costCategoryId: CostCategoryId,
   ) {
     super();
   }

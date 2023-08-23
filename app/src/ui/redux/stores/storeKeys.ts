@@ -25,9 +25,9 @@ const getClaimKey = (partnerId: PartnerId, periodId: number) =>
 const getClaimOverrideKey = (partnerId: PartnerId) => getKey("claimOverrideKey", "partner", partnerId);
 const getClaimTotalCostsKey = (partnerId: PartnerId, projectId: ProjectId, periodId: number) =>
   getKey("claimTotalCosts", "project", projectId, "partner", partnerId, "period", periodId);
-const getClaimDetailKey = (partnerId: PartnerId, periodId: number, costCategoryId: string) =>
+const getClaimDetailKey = (partnerId: PartnerId, periodId: number, costCategoryId: CostCategoryId) =>
   getKey("claimDetailsKey", "partner", partnerId, "period", periodId, "costCategory", costCategoryId);
-const getForecastDetailKey = (partnerId: PartnerId, periodId: number, costCategoryId: string) =>
+const getForecastDetailKey = (partnerId: PartnerId, periodId: number, costCategoryId: CostCategoryId) =>
   getKey("forecastDetailKey", "partner", partnerId, "period", periodId, "costCategory", costCategoryId);
 const getMonitoringReportKey = (projectId: ProjectId, id?: string) =>
   getKey("monitoringReportKey", "project", projectId, "report", id || "new");

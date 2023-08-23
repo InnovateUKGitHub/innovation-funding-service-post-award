@@ -10,7 +10,7 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type ClaimLineItemsQuery$variables = {
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   partnerId: string;
   periodId: number;
   projectId: string;

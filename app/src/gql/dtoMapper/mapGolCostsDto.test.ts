@@ -56,7 +56,7 @@ describe("mapToGolCostDtoArray", () => {
     {
       competitionType: "KTP",
       displayOrder: 1,
-      id: "2",
+      id: "2" as CostCategoryId,
       isCalculated: false,
       name: "Materials",
       organisationType: "Business",
@@ -65,7 +65,7 @@ describe("mapToGolCostDtoArray", () => {
     {
       competitionType: "CR&D",
       displayOrder: 3,
-      id: "0",
+      id: "0" as CostCategoryId,
       isCalculated: false,
       name: "Labour",
       organisationType: "Academic",
@@ -74,7 +74,7 @@ describe("mapToGolCostDtoArray", () => {
     {
       competitionType: "Loans",
       displayOrder: 4,
-      id: "3",
+      id: "3" as CostCategoryId,
       isCalculated: false,
       name: "Other costs",
       organisationType: "Business",

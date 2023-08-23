@@ -3,7 +3,7 @@ import { ClaimLineItemDto } from "./claimLineItemDto";
 
 export interface ClaimDetailsSummaryDto {
   comments: string | null;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   isAuthor: boolean;
   partnerId: PartnerId;
   periodEnd: Date | null;

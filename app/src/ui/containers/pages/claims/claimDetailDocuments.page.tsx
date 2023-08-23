@@ -26,7 +26,7 @@ import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 export interface ClaimDetailDocumentsPageParams {
   projectId: ProjectId;
   partnerId: PartnerId;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   periodId: PeriodId;
 }
 
@@ -207,7 +207,7 @@ export const ClaimDetailDocumentsRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
-    costCategoryId: route.params.costCategoryId,
+    costCategoryId: route.params.costCategoryId  as CostCategoryId,
     periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, { projectId, partnerId }) =>

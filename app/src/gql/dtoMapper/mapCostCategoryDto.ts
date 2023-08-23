@@ -42,7 +42,7 @@ const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
     return node?.Acc_HintText__c?.value ?? "";
   },
   id(node) {
-    return node?.Id ?? "";
+    return (node?.Id ?? "") as CostCategoryId;
   },
   isCalculated() {
     return false;

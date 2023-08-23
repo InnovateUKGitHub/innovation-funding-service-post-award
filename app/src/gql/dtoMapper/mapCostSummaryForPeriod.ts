@@ -13,14 +13,14 @@ const mapper: GQL.DtoMapper<
   CostsSummaryForPeriodDto,
   CostsSummaryForPeriodNode,
   {
-    forecastDetails?: { value: number; costCategoryId: string; periodId: PeriodId }[];
-    claimDetails?: { value: number; costCategoryId: string; periodId: PeriodId }[];
-    golCosts?: { value: number; costCategoryId: string }[];
+    forecastDetails?: { value: number; costCategoryId: CostCategoryId; periodId: PeriodId }[];
+    claimDetails?: { value: number; costCategoryId: CostCategoryId; periodId: PeriodId }[];
+    golCosts?: { value: number; costCategoryId: CostCategoryId }[];
     periodId?: PeriodId;
   }
 > = {
   costCategoryId(node) {
-    return node?.Id ?? "";
+    return (node?.Id ?? "") as CostCategoryId;
   },
   costsClaimedThisPeriod(node, additionalData) {
     return (

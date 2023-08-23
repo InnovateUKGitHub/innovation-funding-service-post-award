@@ -27,7 +27,7 @@ export interface OverheadDocumentsPageParams {
   projectId: ProjectId;
   pcrId: PcrId;
   itemId: PcrItemId;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
 }
 
 interface Data {
@@ -231,7 +231,7 @@ export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocument
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
-    costCategoryId: route.params.costCategoryId,
+    costCategoryId: route.params.costCategoryId  as CostCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileOverheadDocuments.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),

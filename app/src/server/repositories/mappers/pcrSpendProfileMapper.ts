@@ -16,7 +16,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<
   public map(x: ISalesforcePcrSpendProfile): PcrSpendProfileEntity {
     return {
       id: x.Id,
-      costCategoryId: x.Acc_CostCategoryID__c,
+      costCategoryId: x.Acc_CostCategoryID__c as CostCategoryId,
       pcrItemId: x.Acc_ProjectChangeRequest__c,
       value: x.Acc_TotalCost__c,
       description: x.Acc_ItemDescription__c,

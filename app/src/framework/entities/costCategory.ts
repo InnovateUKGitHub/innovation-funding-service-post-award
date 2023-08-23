@@ -7,7 +7,7 @@ export interface CostCategory {
   displayOrder: number;
   hasRelated: boolean;
   hintText: string;
-  id: string;
+  id: CostCategoryId;
   isCalculated: boolean;
   name: string;
   organisationType: PCROrganisationType;

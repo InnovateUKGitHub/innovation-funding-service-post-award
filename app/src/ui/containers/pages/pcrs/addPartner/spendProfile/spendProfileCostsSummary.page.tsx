@@ -33,7 +33,7 @@ export interface PcrSpendProfileCostSummaryParams {
   projectId: ProjectId;
   pcrId: PcrId;
   itemId: PcrItemId;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
 }
 
 interface Data {
@@ -205,7 +205,13 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     );
   }
 
-  private renderLinks(itemId: PcrItemId, costId: string, costCategoryId: string, projectId: ProjectId, pcrId: PcrId) {
+  private renderLinks(
+    itemId: PcrItemId,
+    costId: string,
+    costCategoryId: CostCategoryId,
+    projectId: ProjectId,
+    pcrId: PcrId,
+  ) {
     const links: { route: ILinkInfo; text: React.ReactNode; qa: string }[] = [];
     links.push({
       route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({
@@ -295,7 +301,7 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
-    costCategoryId: route.params.costCategoryId,
+    costCategoryId: route.params.costCategoryId as CostCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileCostsSummary.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager),

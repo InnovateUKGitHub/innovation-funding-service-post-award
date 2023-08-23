@@ -11,7 +11,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
   it("Maps spend profile correctly to entity", () => {
     const expectedEntity: PcrSpendProfileEntity = {
       id: "id1" as PcrId,
-      costCategoryId: "costCatId1",
+      costCategoryId: "costCatId1" as CostCategoryId,
       pcrItemId: "pcrItemId1" as PcrItemId,
       value: 50,
       description: "A description",
@@ -65,7 +65,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
   it("Maps spend profile entity correctly to sf record", () => {
     const entity: PcrSpendProfileEntity = {
       id: "id1" as PcrId,
-      costCategoryId: "costCatId1",
+      costCategoryId: "costCatId1" as CostCategoryId,
       pcrItemId: "pcrItemId1" as PcrItemId,
       value: 50,
       description: "A description",

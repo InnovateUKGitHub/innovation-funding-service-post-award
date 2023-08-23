@@ -24,7 +24,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
     const claimDetailKey = {
       projectId: project.Id,
       partnerId: partner.id,
-      costCategoryId: claimDetail.Acc_CostCategory__c,
+      costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
     };
     const deleteCommand = new DeleteClaimDetailDocumentCommand(document.ContentDocumentId, claimDetailKey);
@@ -44,7 +44,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
       const claimDetailKey = {
         projectId: project.Id,
         partnerId: partner.id,
-        costCategoryId: claimDetail.Acc_CostCategory__c,
+        costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         periodId: claimDetail.Acc_ProjectPeriodNumber__c,
       };
       const command = new DeleteClaimDetailDocumentCommand(document.ContentDocumentId, claimDetailKey);

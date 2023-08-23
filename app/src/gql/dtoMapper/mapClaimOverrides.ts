@@ -44,7 +44,7 @@ export function mapToClaimOverrides<T extends ReadonlyArray<{ node: ClaimOverrid
       foundOverride = {
         amount: totalCostCategory?.node?.Acc_OverrideAwardRate__c?.value,
         target: AwardRateOverrideTarget.ALL_PARTICIPANTS,
-        costCategoryId: totalCostCategory?.node?.Acc_CostCategory__c?.value ?? "unknown",
+        costCategoryId: (totalCostCategory?.node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId,
         costCategoryName: totalCostCategory?.node?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ?? "unknown",
       };
     }
@@ -53,7 +53,7 @@ export function mapToClaimOverrides<T extends ReadonlyArray<{ node: ClaimOverrid
       foundOverride = {
         amount: totalCostCategory?.node?.Acc_ProfileOverrideAwardRate__c?.value,
         target: AwardRateOverrideTarget.THIS_PARTICIPANT,
-        costCategoryId: totalCostCategory?.node?.Acc_CostCategory__c?.value ?? "unknown",
+        costCategoryId: (totalCostCategory?.node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId,
         costCategoryName: totalCostCategory?.node?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ?? "unknown",
       };
     }

@@ -11,7 +11,7 @@ interface PeriodClaimOverrideRate extends BaseClaimOverrideRate {
 }
 
 interface CostCategoryClaimOverrideRate extends BaseClaimOverrideRate {
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   costCategoryName: string;
 }
 

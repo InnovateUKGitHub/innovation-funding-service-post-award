@@ -6,7 +6,7 @@ export interface CostCategoryDto {
   description: string;
   hasRelated: boolean;
   hintText: string;
-  id: string;
+  id: CostCategoryId;
   isCalculated: boolean;
   name: string;
   organisationType: PCROrganisationType;

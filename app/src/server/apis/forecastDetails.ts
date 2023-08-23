@@ -9,7 +9,7 @@ import { ApiParams, ControllerBase } from "./controllerBase";
 export interface IForecastDetailsApi<Context extends "client" | "server"> {
   getAllByPartnerId: (params: ApiParams<Context, { partnerId: PartnerId }>) => Promise<ForecastDetailsDTO[]>;
   get: (
-    params: ApiParams<Context, { partnerId: PartnerId; periodId: number; costCategoryId: string }>,
+    params: ApiParams<Context, { partnerId: PartnerId; periodId: number; costCategoryId: CostCategoryId }>,
   ) => Promise<ForecastDetailsDTO>;
   update: (
     params: ApiParams<
@@ -52,7 +52,7 @@ class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<"server", { partnerId: PartnerId; periodId: number; costCategoryId: string }>) {
+  public async get(params: ApiParams<"server", { partnerId: PartnerId; periodId: number; costCategoryId: CostCategoryId }>) {
     const query = new GetForecastDetailQuery(params.partnerId, params.periodId, params.costCategoryId);
     return contextProvider.start(params).runQuery(query);
   }

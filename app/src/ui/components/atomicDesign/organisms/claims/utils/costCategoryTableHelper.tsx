@@ -17,7 +17,7 @@ export interface ClaimProps {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
-  getLink: (costCategoryId: string) => ILinkInfo | null;
+  getLink: (costCategoryId: CostCategoryId) => ILinkInfo | null;
   validation?: Result;
 }
 
@@ -56,7 +56,7 @@ export interface ClaimTableProps {
     | "offerTotal"
     | "costsClaimedToDate"
   >[];
-  getLink: (costCategoryId: string) => ILinkInfo | null;
+  getLink: (costCategoryId: CostCategoryId) => ILinkInfo | null;
   validation?: Result;
   disabled?: boolean;
 }
@@ -94,7 +94,7 @@ export function createTableData(props: ClaimTableProps): ClaimTableResponse {
 }
 
 const emptyCostsSummaryForPeriodDto: CostsSummaryForPeriodDto = {
-  costCategoryId: "",
+  costCategoryId: "" as CostCategoryId,
   offerTotal: 0,
   forecastThisPeriod: 0,
   costsClaimedToDate: 0,
@@ -107,7 +107,7 @@ const emptyCostsSummaryForPeriodDto: CostsSummaryForPeriodDto = {
  */
 function calculateTotalRow(claimDetails: ClaimTableProps["claimDetails"]): ClaimTableRow {
   let totalRowCosts: CostsSummaryForPeriodDto = {
-    costCategoryId: "",
+    costCategoryId: "" as CostCategoryId,
     offerTotal: 0,
     forecastThisPeriod: 0,
     costsClaimedToDate: 0,
@@ -118,7 +118,7 @@ function calculateTotalRow(claimDetails: ClaimTableProps["claimDetails"]): Claim
   // Note: Populate totals form all claim items
   for (const item of claimDetails) {
     totalRowCosts = {
-      costCategoryId: "",
+      costCategoryId: "" as CostCategoryId,
       offerTotal: totalRowCosts.offerTotal + item.offerTotal,
       forecastThisPeriod: totalRowCosts.forecastThisPeriod + item.forecastThisPeriod,
       costsClaimedToDate: totalRowCosts.costsClaimedToDate + item.costsClaimedToDate,
@@ -133,7 +133,7 @@ function calculateTotalRow(claimDetails: ClaimTableProps["claimDetails"]): Claim
     category: {
       name: "Total",
       type: CostCategoryType.Unknown,
-      id: "",
+      id: "" as CostCategoryId,
       isCalculated: false,
       hasRelated: false,
       competitionType: "Unknown",

@@ -398,7 +398,7 @@ export const PCRSpendProfileReviewCostsSummaryRoute = defineRoute<PcrSpendProfil
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
-    costCategoryId: route.params.costCategoryId,
+    costCategoryId: route.params.costCategoryId as CostCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileCostsSummary.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),

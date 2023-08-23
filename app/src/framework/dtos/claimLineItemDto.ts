@@ -1,5 +1,5 @@
 export interface ClaimLineItemDto {
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   description: string;
   id: string;
   isAuthor: boolean;

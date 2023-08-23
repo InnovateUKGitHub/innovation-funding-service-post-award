@@ -48,7 +48,7 @@ const mapper: GQL.DtoMapper<
   { currentUser?: { email?: string; isSystemUser?: boolean } }
 > = {
   costCategoryId(node) {
-    return node?.Acc_CostCategory__c?.value ?? "unknown";
+    return (node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId;
   },
   isAuthor(node, additionalData) {
     return (

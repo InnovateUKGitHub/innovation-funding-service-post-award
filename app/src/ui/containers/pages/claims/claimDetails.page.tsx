@@ -257,7 +257,7 @@ const CommentsFromFC = ({
 };
 
 const getLink = (
-  costCategoryId: string,
+  costCategoryId: CostCategoryId,
   project: Pick<ProjectDto, "id" | "roles">,
   partner: Pick<PartnerDto, "id" | "roles">,
   periodId: PeriodId,

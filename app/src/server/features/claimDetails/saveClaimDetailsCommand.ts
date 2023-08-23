@@ -18,7 +18,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
     private readonly periodId: number,
-    private readonly costCategoryId: string,
+    private readonly costCategoryId: CostCategoryId,
     private readonly claimDetails: ClaimDetailsDto,
   ) {
     super();

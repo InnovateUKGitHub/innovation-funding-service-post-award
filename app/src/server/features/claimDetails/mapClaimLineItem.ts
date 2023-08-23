@@ -9,7 +9,7 @@ export default (context: IContext) =>
     value: item.Acc_LineItemCost__c,
     partnerId: item.Acc_ProjectParticipant__c as PartnerId,
     periodId: item.Acc_ProjectPeriodNumber__c as PeriodId,
-    costCategoryId: item.Acc_CostCategory__c,
+    costCategoryId: item.Acc_CostCategory__c as CostCategoryId,
     lastModifiedDate: context.clock.parseRequiredSalesforceDateTime(item.LastModifiedDate),
     isAuthor:
       context.user.email === context.config.salesforceServiceUser.serviceUsername ||

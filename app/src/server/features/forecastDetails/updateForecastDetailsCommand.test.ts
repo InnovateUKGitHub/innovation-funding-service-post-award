@@ -10,7 +10,7 @@ import { UpdateForecastDetailsCommand } from "./updateForecastDetailsCommand";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {
   return {
-    costCategoryId: item.Acc_CostCategory__c,
+    costCategoryId: item.Acc_CostCategory__c as CostCategoryId,
     id: item.Id,
     periodEnd: new Date(),
     periodStart: new Date(),
@@ -38,7 +38,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const dto: ForecastDetailsDTO[] = [
         {
           id: "123",
-          costCategoryId: profileDetail.Acc_CostCategory__c,
+          costCategoryId: profileDetail.Acc_CostCategory__c as CostCategoryId,
           periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
           periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
           periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
@@ -60,7 +60,7 @@ describe("UpdateForecastDetailsCommand", () => {
         {
           // @ts-expect-error invalid id scenario
           id: null,
-          costCategoryId: profileDetail.Acc_CostCategory__c,
+          costCategoryId: profileDetail.Acc_CostCategory__c as CostCategoryId,
           periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
           periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
           periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
@@ -505,7 +505,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
       const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
         id: profileDetail.Id,
-        costCategoryId: profileDetail.Acc_CostCategory__c,
+        costCategoryId: profileDetail.Acc_CostCategory__c as CostCategoryId,
         periodId: profileDetail.Acc_ProjectPeriodNumber__c as PeriodId,
         periodStart: projectStart.plus({ months: i }).toJSDate(),
         periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
@@ -550,7 +550,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
       const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
         id: profileDetail.Id,
-        costCategoryId: profileDetail.Acc_CostCategory__c,
+        costCategoryId: profileDetail.Acc_CostCategory__c as CostCategoryId,
         periodId: profileDetail.Acc_ProjectPeriodNumber__c as PeriodId,
         periodStart: projectStart.plus({ months: i }).toJSDate(),
         periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),

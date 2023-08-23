@@ -7,7 +7,7 @@ import { GetClaimDetailsQuery } from "./getClaimDetailsQuery";
 describe("GetClaimDetailsQuery", () => {
   it("returns single result", async () => {
     const context = new TestContext();
-    const expectedCostCategoryId = "Expected_CostCategory_Id";
+    const expectedCostCategoryId = "Expected_CostCategory_Id" as CostCategoryId;
     const expectedParticipantId = "Expected_Participant_Id" as PartnerId;
     const expectedId = "Expected_Id";
     const expectedPeriod = 3;
@@ -51,7 +51,7 @@ describe("GetClaimDetailsQuery", () => {
   it("if not found returns default item", async () => {
     const context = new TestContext();
 
-    const expectedCostCategoryId = "Expected_CostCategory_Id";
+    const expectedCostCategoryId = "Expected_CostCategory_Id" as CostCategoryId;
     const expectedParticipantId = "Expected_Participant_Id" as PartnerId;
     const expectedPeriod = 3;
     const requestedPeriodId = expectedPeriod + 1;
@@ -149,7 +149,7 @@ describe("GetClaimDetailsQuery", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "");
+      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.MonitoringOfficer,
@@ -164,7 +164,7 @@ describe("GetClaimDetailsQuery", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "");
+      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
@@ -179,7 +179,7 @@ describe("GetClaimDetailsQuery", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "");
+      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
@@ -194,7 +194,7 @@ describe("GetClaimDetailsQuery", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "");
+      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,

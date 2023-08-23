@@ -9,7 +9,7 @@ import { GetByIdQuery } from "../partners/getByIdQuery";
 import { UpdateInitialForecastDetailsCommand } from "./updateInitialForecastDetailsCommand";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => ({
-  costCategoryId: item.Acc_CostCategory__c,
+  costCategoryId: item.Acc_CostCategory__c as CostCategoryId,
   id: item.Id,
   periodEnd: new Date(),
   periodStart: new Date(),
@@ -27,7 +27,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const dto: ForecastDetailsDTO[] = [
       {
         id: "123",
-        costCategoryId: profileDetail.Acc_CostCategory__c,
+        costCategoryId: profileDetail.Acc_CostCategory__c as CostCategoryId,
         periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
         periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
@@ -49,7 +49,7 @@ describe("UpdateInitialForecastDetailsCommand", () => {
       {
         // @ts-expect-error invalid id scenario
         id: null,
-        costCategoryId: profileDetail.Acc_CostCategory__c,
+        costCategoryId: profileDetail.Acc_CostCategory__c as CostCategoryId,
         periodId: parseInt(profileDetail.Acc_CostCategory__c, 10) as PeriodId,
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
         periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),

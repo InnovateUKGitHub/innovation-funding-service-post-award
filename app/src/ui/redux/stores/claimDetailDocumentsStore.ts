@@ -6,11 +6,11 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
-  private getKey(partnerId: PartnerId, periodId: number, costCategoryId: string) {
+  private getKey(partnerId: PartnerId, periodId: number, costCategoryId: CostCategoryId) {
     return storeKeys.getClaimDetailKey(partnerId, periodId, costCategoryId);
   }
 
-  public getClaimDetailDocuments(projectId: ProjectId, partnerId: PartnerId, periodId: number, costCategoryId: string) {
+  public getClaimDetailDocuments(projectId: ProjectId, partnerId: PartnerId, periodId: number, costCategoryId: CostCategoryId) {
     return this.getData("documents", this.getKey(partnerId, periodId, costCategoryId), p =>
       apiClient.documents.getClaimDetailDocuments({
         claimDetailKey: { projectId, partnerId, periodId, costCategoryId },
@@ -23,7 +23,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
     projectId: ProjectId,
     partnerId: PartnerId,
     periodId: number,
-    costCategoryId: string,
+    costCategoryId: CostCategoryId,
     init?: (dto: MultipleDocumentUploadDto) => void,
   ) {
     return this.getEditor(
@@ -40,7 +40,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
     projectId: ProjectId,
     partnerId: PartnerId,
     periodId: number,
-    costCategoryId: string,
+    costCategoryId: CostCategoryId,
     dto: MultipleDocumentUploadDto,
     message: string,
     onComplete?: () => void,
@@ -65,7 +65,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
     projectId: ProjectId,
     partnerId: PartnerId,
     periodId: number,
-    costCategoryId: string,
+    costCategoryId: CostCategoryId,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto,
     message?: string,

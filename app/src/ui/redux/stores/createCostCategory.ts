@@ -4,7 +4,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export default (mod?: Partial<CostCategoryDto>): CostCategoryDto => {
   const template: CostCategoryDto = {
-    id: "",
+    id: "" as CostCategoryId,
     name: "Labour",
     type: CostCategoryType.Labour,
     competitionType: "Sector",

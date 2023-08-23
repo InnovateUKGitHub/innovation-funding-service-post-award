@@ -9,6 +9,7 @@ declare type PcrId = Nominal<string, "PcrId">;
 declare type PcrItemId = Nominal<string, "PcrItemId">;
 declare type LinkedEntityId = Nominal<string, "LinkedEntityId">;
 declare type PeriodId = Nominal<number, "PeriodId">;
+declare type CostCategoryId = Nominal<string, "CostCategoryId">;
 
 interface INominalTypes {
   projectId: ProjectId;
@@ -19,9 +20,18 @@ interface INominalTypes {
   pcrId: PcrId;
   projectChangeRequestId: PcrId;
   pcrItemId: PcrItemId;
+  costCategoryId: CostCategoryId;
 }
 
-declare type NominalTypes = ProjectId | PartnerId | LoanId | DocumentId | MonitoringReportId | PcrId | PcrItemId;
+declare type NominalTypes =
+  | ProjectId
+  | PartnerId
+  | LoanId
+  | DocumentId
+  | MonitoringReportId
+  | PcrId
+  | PcrItemId
+  | CostCategoryId;
 
 declare interface SfRoles {
   isPm: boolean;

@@ -14,7 +14,7 @@ export const useClaimLineItemsData = (
   projectId: ProjectId,
   partnerId: PartnerId,
   periodId: PeriodId,
-  costCategoryId: string,
+  costCategoryId: CostCategoryId,
 ) => {
   const data = useLazyLoadQuery<ClaimLineItemsQuery>(
     claimLineItemsQuery,

@@ -73,13 +73,13 @@ describe("GetClaimOverrideRates", () => {
   };
 
   describe("detects overridden cost categories or profiles", () => {
-    it("should detect nothing with 1 non-overriden cost category", async () => {
+    it("should detect nothing with 1 non-overridden cost category", async () => {
       const { ctx } = setup().standardCostCategory();
       const result = await ctx.runQuery(new GetClaimOverrideRates(partnerId));
       expect(result).toEqual({ type: AwardRateOverrideType.NONE, overrides: [] });
     });
 
-    it("should detect nothing with 3 non-overriden cost categories", async () => {
+    it("should detect nothing with 3 non-overridden cost categories", async () => {
       const { ctx } = setup().standardCostCategory().standardCostCategory().standardCostCategory();
       const result = await ctx.runQuery(new GetClaimOverrideRates(partnerId));
       expect(result).toEqual({ type: AwardRateOverrideType.NONE, overrides: [] });
@@ -88,7 +88,7 @@ describe("GetClaimOverrideRates", () => {
     it("should detect with cost category override award rate", async () => {
       const { ctx } = setup()
         .standardCostCategory()
-        .costCategoryWithOverride({ id: "Cost40", name: "Cost 40", overrideAwardRate: 40 });
+        .costCategoryWithOverride({ id: "Cost40" as CostCategoryId, name: "Cost 40", overrideAwardRate: 40 });
       const result = await ctx.runQuery(new GetClaimOverrideRates(partnerId));
       expect(result).toEqual({
         type: AwardRateOverrideType.BY_COST_CATEGORY,
@@ -96,7 +96,7 @@ describe("GetClaimOverrideRates", () => {
           {
             amount: 40,
             target: AwardRateOverrideTarget.ALL_PARTICIPANTS,
-            costCategoryId: "Cost40",
+            costCategoryId: "Cost40" as CostCategoryId,
             costCategoryName: "Cost 40",
           },
         ],
@@ -106,8 +106,8 @@ describe("GetClaimOverrideRates", () => {
     it("should detect with 2 cost category override award rates", async () => {
       const { ctx } = setup()
         .standardCostCategory()
-        .costCategoryWithOverride({ id: "Cost40", name: "Cost 40", overrideAwardRate: 40 })
-        .costCategoryWithOverride({ id: "Cost10", name: "Cost 10", overrideAwardRate: 10 });
+        .costCategoryWithOverride({ id: "Cost40" as CostCategoryId, name: "Cost 40", overrideAwardRate: 40 })
+        .costCategoryWithOverride({ id: "Cost10" as CostCategoryId, name: "Cost 10", overrideAwardRate: 10 });
       const result = await ctx.runQuery(new GetClaimOverrideRates(partnerId));
       expect(result).toEqual({
         type: AwardRateOverrideType.BY_COST_CATEGORY,
@@ -129,7 +129,9 @@ describe("GetClaimOverrideRates", () => {
     });
 
     it("should detect with cost category profile override award rate", async () => {
-      const { ctx } = setup().standardCostCategory().costCategoryWithOverride({ id: "Cost25", name: "Cost 25" }, 25);
+      const { ctx } = setup()
+        .standardCostCategory()
+        .costCategoryWithOverride({ id: "Cost25" as CostCategoryId, name: "Cost 25" }, 25);
       const result = await ctx.runQuery(new GetClaimOverrideRates(partnerId));
       expect(result).toEqual({
         type: AwardRateOverrideType.BY_COST_CATEGORY,
@@ -147,7 +149,7 @@ describe("GetClaimOverrideRates", () => {
     it("should detect with cost category profile rate overriding cost category rate", async () => {
       const { ctx } = setup()
         .standardCostCategory()
-        .costCategoryWithOverride({ id: "Cost89", name: "Cost 89", overrideAwardRate: 12 }, 89);
+        .costCategoryWithOverride({ id: "Cost89" as CostCategoryId, name: "Cost 89", overrideAwardRate: 12 }, 89);
       const result = await ctx.runQuery(new GetClaimOverrideRates(partnerId));
       expect(result).toEqual({
         type: AwardRateOverrideType.BY_COST_CATEGORY,
@@ -198,7 +200,7 @@ describe("GetClaimOverrideRates", () => {
     const { ctx } = setup()
       .standardCostCategory()
       .standardCostCategory()
-      .costCategoryWithOverride({ id: "abcdefg", name: "Neil Little", overrideAwardRate: 10 })
+      .costCategoryWithOverride({ id: "abcdefg" as CostCategoryId, name: "Neil Little", overrideAwardRate: 10 })
       .periodWithOverride(4, 50);
 
     const query = async () => {

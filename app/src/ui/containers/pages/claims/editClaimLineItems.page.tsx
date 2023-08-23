@@ -45,7 +45,7 @@ import { useEditClaimLineItemsData } from "./editClaimLineItems.logic";
 export interface EditClaimDetailsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   periodId: PeriodId;
 }
 
@@ -222,7 +222,7 @@ const renderTable = (
   onUpdate: EditClaimLineItemsCallbacks["onUpdate"],
   partnerId: PartnerId,
   periodId: PeriodId,
-  costCategoryId: string,
+  costCategoryId: CostCategoryId,
 ) => {
   const validationResults = editor.validator.items.results;
 
@@ -504,7 +504,7 @@ const addItem = (
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
   partnerId: PartnerId,
   periodId: PeriodId,
-  costCategoryId: string,
+  costCategoryId: CostCategoryId,
   onUpdate: EditClaimLineItemsCallbacks["onUpdate"],
 ) => {
   e.preventDefault();
@@ -514,7 +514,7 @@ const addItem = (
     periodId,
     costCategoryId,
     isAuthor: true,
-  } as ClaimLineItemDto);
+  } as unknown as ClaimLineItemDto);
   onUpdate(false, dto);
 };
 
@@ -537,7 +537,7 @@ const renderFooters = (
   maxClaimLineItems: number,
   partnerId: PartnerId,
   periodId: PeriodId,
-  costCategoryId: string,
+  costCategoryId: CostCategoryId,
   onUpdate: EditClaimLineItemsCallbacks["onUpdate"],
 ) => {
   const total: number = sumBy(data, item => item.value);
@@ -809,7 +809,7 @@ export const EditClaimLineItemsRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
-    costCategoryId: route.params.costCategoryId,
+    costCategoryId: route.params.costCategoryId as CostCategoryId,
     periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   accessControl: (auth, params) =>

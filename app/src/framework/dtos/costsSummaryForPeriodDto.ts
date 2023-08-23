@@ -1,5 +1,5 @@
 export interface CostsSummaryForPeriodDto {
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   costsClaimedThisPeriod: number;
   costsClaimedToDate: number;
   forecastThisPeriod: number;

@@ -586,7 +586,7 @@ class ProfileDetailsTestRepository
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 
-  getById(partnerId: PartnerId, periodId: number, costCategoryId: string) {
+  getById(partnerId: PartnerId, periodId: number, costCategoryId: CostCategoryId) {
     return super
       .getWhere(
         x =>

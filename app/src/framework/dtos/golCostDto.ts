@@ -1,5 +1,5 @@
 export interface GOLCostDto {
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   costCategoryName: string;
   value: number;
 }

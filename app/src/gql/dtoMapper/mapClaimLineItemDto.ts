@@ -44,7 +44,7 @@ const mapper: GQL.DtoMapper<
     );
   },
   costCategoryId(node) {
-    return node?.Acc_CostCategory__c?.value ?? "";
+    return (node?.Acc_CostCategory__c?.value ?? "") as CostCategoryId;
   },
   description(node) {
     return node?.Acc_LineItemDescription__c?.value ?? "";

@@ -43,7 +43,7 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<
     return {
       id: costCategoryItem.Id,
       profileId: costCategoryItem.Acc_Profile__c,
-      costCategoryId: costCategoryItem.Acc_Profile__r.Acc_CostCategory__c,
+      costCategoryId: costCategoryItem.Acc_Profile__r.Acc_CostCategory__c as CostCategoryId,
       originalEligibleCosts: costCategoryItem.Acc_CurrentCosts__c,
       originalCostsClaimedToDate: costCategoryItem.Acc_ClaimedCostsToDate__c,
       newEligibleCosts: costCategoryItem.Acc_NewCosts__c,

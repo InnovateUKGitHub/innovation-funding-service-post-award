@@ -49,7 +49,7 @@ export class CostCategoriesStore extends StoreBase {
     );
   }
 
-  public get(costCategoryId: string) {
+  public get(costCategoryId: CostCategoryId) {
     return this.getAllUnfiltered().chain(costCategories => {
       const result = costCategories.find(costCategory => costCategory.id === costCategoryId);
       return new Pending(

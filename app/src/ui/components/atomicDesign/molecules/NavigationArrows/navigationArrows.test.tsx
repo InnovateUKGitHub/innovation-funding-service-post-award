@@ -30,7 +30,7 @@ describe("<NavigationArrows />", () => {
       partnerId: "a0B0Q000001e3HdUAI" as PartnerId,
       projectId: "a0C0Q000001tr5yUAA" as ProjectId,
       periodId: 2 as PeriodId,
-      costCategoryId: "a060Q000000oAYZQA2",
+      costCategoryId: "a060Q000000oAYZQA2" as CostCategoryId,
     }),
   };
 
@@ -40,7 +40,7 @@ describe("<NavigationArrows />", () => {
       partnerId: "a0B0Q000001e3HdUAI" as PartnerId,
       projectId: "a0C0Q000001tr5yUAA" as ProjectId,
       periodId: 2 as PeriodId,
-      costCategoryId: "a060Q000000oAYYQA2",
+      costCategoryId: "a060Q000000oAYYQA2" as CostCategoryId,
     }),
   };
 

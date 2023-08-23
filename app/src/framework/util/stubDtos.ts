@@ -147,7 +147,7 @@ export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
 export const createCostCategories = (): CostCategoryDto[] => {
   return [
     {
-      id: "a060C000000dxWtQAI",
+      id: "a060C000000dxWtQAI" as CostCategoryId,
       name: "Labour",
       type: CostCategoryType.Labour,
       competitionType: "CR&D",
@@ -158,7 +158,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxWuQAI",
+      id: "a060C000000dxWuQAI" as CostCategoryId,
       name: "Overheads",
       type: CostCategoryType.Overheads,
       competitionType: "CR&D",
@@ -169,7 +169,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxWvQAI",
+      id: "a060C000000dxWvQAI" as CostCategoryId,
       name: "Materials",
       type: CostCategoryType.Materials,
       competitionType: "CR&D",
@@ -180,7 +180,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxWwQAI",
+      id: "a060C000000dxWwQAI" as CostCategoryId,
       name: "Capital usage",
       type: CostCategoryType.Capital_Usage,
       competitionType: "CR&D",
@@ -191,7 +191,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxWxQAI",
+      id: "a060C000000dxWxQAI" as CostCategoryId,
       name: "Subcontracting",
       type: CostCategoryType.Subcontracting,
       competitionType: "CR&D",
@@ -202,7 +202,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxWyQAI",
+      id: "a060C000000dxWyQAI" as CostCategoryId,
       name: "Travel and subsistence",
       type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "CR&D",
@@ -213,7 +213,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxWzQAI",
+      id: "a060C000000dxWzQAI" as CostCategoryId,
       name: "Other costs",
       type: CostCategoryType.Other_Costs,
       competitionType: "CR&D",
@@ -224,7 +224,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX0QAI",
+      id: "a060C000000dxX0QAI" as CostCategoryId,
       name: "Directly incurred - Staff",
       type: 5,
       competitionType: "CR&D",
@@ -235,7 +235,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX1QAI",
+      id: "a060C000000dxX1QAI" as CostCategoryId,
       name: "Directly incurred - Travel and subsistence",
       type: 5,
       competitionType: "CR&D",
@@ -246,7 +246,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX2QAI",
+      id: "a060C000000dxX2QAI" as CostCategoryId,
       name: "Directly incurred - Equipment",
       type: 5,
       competitionType: "CR&D",
@@ -257,7 +257,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX3QAI",
+      id: "a060C000000dxX3QAI" as CostCategoryId,
       name: "Directly incurred - Other costs",
       type: 5,
       competitionType: "CR&D",
@@ -268,7 +268,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX4QAI",
+      id: "a060C000000dxX4QAI" as CostCategoryId,
       name: "Directly allocated - Investigations",
       type: 5,
       competitionType: "CR&D",
@@ -279,7 +279,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX5QAI",
+      id: "a060C000000dxX5QAI" as CostCategoryId,
       name: "Directly allocated - Estates costs",
       type: 5,
       competitionType: "CR&D",
@@ -290,7 +290,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX6QAI",
+      id: "a060C000000dxX6QAI" as CostCategoryId,
       name: "Directly allocated - Other costs",
       type: 5,
       competitionType: "CR&D",
@@ -301,7 +301,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX7QAI",
+      id: "a060C000000dxX7QAI" as CostCategoryId,
       name: "Indirect costs - Investigations",
       type: 5,
       competitionType: "CR&D",
@@ -312,7 +312,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX8QAI",
+      id: "a060C000000dxX8QAI" as CostCategoryId,
       name: "Exceptions - Staff",
       type: 5,
       competitionType: "CR&D",
@@ -323,7 +323,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxX9QAI",
+      id: "a060C000000dxX9QAI" as CostCategoryId,
       name: "Exceptions - Travel and subsistence",
       type: 5,
       competitionType: "CR&D",
@@ -334,7 +334,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXAQAY",
+      id: "a060C000000dxXAQAY" as CostCategoryId,
       name: "Exceptions - Equipment",
       type: 5,
       competitionType: "CR&D",
@@ -345,7 +345,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXBQAY",
+      id: "a060C000000dxXBQAY" as CostCategoryId,
       name: "Exceptions - Other costs",
       type: 5,
       competitionType: "CR&D",
@@ -356,7 +356,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXCQAY",
+      id: "a060C000000dxXCQAY" as CostCategoryId,
       name: "Labour",
       type: CostCategoryType.Labour,
       competitionType: "CONTRACTS",
@@ -367,7 +367,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXDQAY",
+      id: "a060C000000dxXDQAY" as CostCategoryId,
       name: "Overheads",
       type: CostCategoryType.Overheads,
       competitionType: "CONTRACTS",
@@ -378,7 +378,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXEQAY",
+      id: "a060C000000dxXEQAY" as CostCategoryId,
       name: "Materials",
       type: CostCategoryType.Materials,
       competitionType: "CONTRACTS",
@@ -389,7 +389,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXFQAY",
+      id: "a060C000000dxXFQAY" as CostCategoryId,
       name: "Capital usage",
       type: CostCategoryType.Capital_Usage,
       competitionType: "CONTRACTS",
@@ -400,7 +400,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXGQAY",
+      id: "a060C000000dxXGQAY" as CostCategoryId,
       name: "Subcontracting",
       type: CostCategoryType.Subcontracting,
       competitionType: "CONTRACTS",
@@ -411,7 +411,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXHQAY",
+      id: "a060C000000dxXHQAY" as CostCategoryId,
       name: "Travel and subsistence",
       type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "CONTRACTS",
@@ -422,7 +422,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXIQAY",
+      id: "a060C000000dxXIQAY" as CostCategoryId,
       name: "Other costs",
       type: CostCategoryType.Other_Costs,
       competitionType: "CONTRACTS",
@@ -433,7 +433,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXJQAY",
+      id: "a060C000000dxXJQAY" as CostCategoryId,
       name: "VAT",
       type: CostCategoryType.VAT,
       competitionType: "CONTRACTS",
@@ -444,7 +444,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXKQAY",
+      id: "a060C000000dxXKQAY" as CostCategoryId,
       name: "Directly incurred - Staff",
       type: 5,
       competitionType: "CONTRACTS",
@@ -455,7 +455,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXLQAY",
+      id: "a060C000000dxXLQAY" as CostCategoryId,
       name: "Directly incurred - Travel and subsistence",
       type: 5,
       competitionType: "CONTRACTS",
@@ -466,7 +466,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXMQAY",
+      id: "a060C000000dxXMQAY" as CostCategoryId,
       name: "Directly incurred - Equipment",
       type: 5,
       competitionType: "CONTRACTS",
@@ -477,7 +477,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXNQAY",
+      id: "a060C000000dxXNQAY" as CostCategoryId,
       name: "Directly incurred - Other costs",
       type: 5,
       competitionType: "CONTRACTS",
@@ -488,7 +488,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXOQAY",
+      id: "a060C000000dxXOQAY" as CostCategoryId,
       name: "Directly allocated - Investigations",
       type: 5,
       competitionType: "CONTRACTS",
@@ -499,7 +499,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXPQAY",
+      id: "a060C000000dxXPQAY" as CostCategoryId,
       name: "Directly allocated - Estates costs",
       type: 5,
       competitionType: "CONTRACTS",
@@ -510,7 +510,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXQQAY",
+      id: "a060C000000dxXQQAY" as CostCategoryId,
       name: "Directly allocated - Other costs",
       type: 5,
       competitionType: "CONTRACTS",
@@ -521,7 +521,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXRQAY",
+      id: "a060C000000dxXRQAY" as CostCategoryId,
       name: "Indirect costs - Investigations",
       type: 5,
       competitionType: "CONTRACTS",
@@ -532,7 +532,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXSQAY",
+      id: "a060C000000dxXSQAY" as CostCategoryId,
       name: "Exceptions - Staff",
       type: 5,
       competitionType: "CONTRACTS",
@@ -543,7 +543,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXTQAY",
+      id: "a060C000000dxXTQAY" as CostCategoryId,
       name: "Exceptions - Travel and subsistence",
       type: 5,
       competitionType: "CONTRACTS",
@@ -554,7 +554,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXUQAY",
+      id: "a060C000000dxXUQAY" as CostCategoryId,
       name: "Exceptions - Equipment",
       type: 5,
       competitionType: "CONTRACTS",
@@ -565,7 +565,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXVQAY",
+      id: "a060C000000dxXVQAY" as CostCategoryId,
       name: "Exceptions - Other costs",
       type: 5,
       competitionType: "CONTRACTS",
@@ -576,7 +576,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXWQAY",
+      id: "a060C000000dxXWQAY" as CostCategoryId,
       name: "VAT",
       type: 5,
       competitionType: "CONTRACTS",
@@ -587,7 +587,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXXQAY",
+      id: "a060C000000dxXXQAY" as CostCategoryId,
       name: "Labour",
       type: CostCategoryType.Labour,
       competitionType: "SBRI",
@@ -598,7 +598,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXYQAY",
+      id: "a060C000000dxXYQAY" as CostCategoryId,
       name: "Overheads",
       type: CostCategoryType.Overheads,
       competitionType: "SBRI",
@@ -609,7 +609,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXZQAY",
+      id: "a060C000000dxXZQAY" as CostCategoryId,
       name: "Materials",
       type: CostCategoryType.Materials,
       competitionType: "SBRI",
@@ -620,7 +620,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXaQAI",
+      id: "a060C000000dxXaQAI" as CostCategoryId,
       name: "Capital usage",
       type: CostCategoryType.Capital_Usage,
       competitionType: "SBRI",
@@ -631,7 +631,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXbQAI",
+      id: "a060C000000dxXbQAI" as CostCategoryId,
       name: "Subcontracting",
       type: CostCategoryType.Subcontracting,
       competitionType: "SBRI",
@@ -642,7 +642,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXcQAI",
+      id: "a060C000000dxXcQAI" as CostCategoryId,
       name: "Travel and subsistence",
       type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "SBRI",
@@ -653,7 +653,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXdQAI",
+      id: "a060C000000dxXdQAI" as CostCategoryId,
       name: "Other costs",
       type: CostCategoryType.Other_Costs,
       competitionType: "SBRI",
@@ -664,7 +664,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXeQAI",
+      id: "a060C000000dxXeQAI" as CostCategoryId,
       name: "VAT",
       type: CostCategoryType.VAT,
       competitionType: "SBRI",
@@ -675,7 +675,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXfQAI",
+      id: "a060C000000dxXfQAI" as CostCategoryId,
       name: "Directly incurred - Staff",
       type: 5,
       competitionType: "SBRI",
@@ -686,7 +686,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXgQAI",
+      id: "a060C000000dxXgQAI" as CostCategoryId,
       name: "Directly incurred - Travel and subsistence",
       type: 5,
       competitionType: "SBRI",
@@ -697,7 +697,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXhQAI",
+      id: "a060C000000dxXhQAI" as CostCategoryId,
       name: "Directly incurred - Staff",
       type: 5,
       competitionType: "SBRI",
@@ -708,7 +708,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXiQAI",
+      id: "a060C000000dxXiQAI" as CostCategoryId,
       name: "Directly incurred - Travel and subsistence",
       type: 5,
       competitionType: "SBRI",
@@ -719,7 +719,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXjQAI",
+      id: "a060C000000dxXjQAI" as CostCategoryId,
       name: "Directly incurred - Equipment",
       type: 5,
       competitionType: "SBRI",
@@ -730,7 +730,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXkQAI",
+      id: "a060C000000dxXkQAI" as CostCategoryId,
       name: "Directly incurred - Other costs",
       type: 5,
       competitionType: "SBRI",
@@ -741,7 +741,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXlQAI",
+      id: "a060C000000dxXlQAI" as CostCategoryId,
       name: "Directly allocated - Investigations",
       type: 5,
       competitionType: "SBRI",
@@ -752,7 +752,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXmQAI",
+      id: "a060C000000dxXmQAI" as CostCategoryId,
       name: "Directly allocated - Estates costs",
       type: 5,
       competitionType: "SBRI",
@@ -763,7 +763,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXnQAI",
+      id: "a060C000000dxXnQAI" as CostCategoryId,
       name: "Directly allocated - Other costs",
       type: 5,
       competitionType: "SBRI",
@@ -774,7 +774,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXoQAI",
+      id: "a060C000000dxXoQAI" as CostCategoryId,
       name: "Indirect costs - Investigations",
       type: 5,
       competitionType: "SBRI",
@@ -785,7 +785,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXpQAI",
+      id: "a060C000000dxXpQAI" as CostCategoryId,
       name: "Associate employment",
       type: CostCategoryType.Associate_Employment,
       competitionType: "KTP",
@@ -796,7 +796,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXqQAI",
+      id: "a060C000000dxXqQAI" as CostCategoryId,
       name: "Travel and subsistence",
       type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "KTP",
@@ -807,7 +807,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXrQAI",
+      id: "a060C000000dxXrQAI" as CostCategoryId,
       name: "Consumables",
       type: CostCategoryType.Consumables,
       competitionType: "KTP",
@@ -818,7 +818,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXsQAI",
+      id: "a060C000000dxXsQAI" as CostCategoryId,
       name: "Associate development",
       type: CostCategoryType.Associate_development,
       competitionType: "KTP",
@@ -829,7 +829,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXtQAI",
+      id: "a060C000000dxXtQAI" as CostCategoryId,
       name: "Knowledge base supervisor",
       type: CostCategoryType.Knowledge_base_supervisor,
       competitionType: "KTP",
@@ -840,7 +840,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXuQAI",
+      id: "a060C000000dxXuQAI" as CostCategoryId,
       name: "Associate estate costs",
       type: CostCategoryType.Estate,
       competitionType: "KTP",
@@ -851,7 +851,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXvQAI",
+      id: "a060C000000dxXvQAI" as CostCategoryId,
       name: "Additional associate support",
       type: CostCategoryType.Additional_associate_support,
       competitionType: "KTP",
@@ -862,7 +862,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXwQAI",
+      id: "a060C000000dxXwQAI" as CostCategoryId,
       name: "Other costs",
       type: CostCategoryType.Other_Costs,
       competitionType: "KTP",
@@ -873,7 +873,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXxQAI",
+      id: "a060C000000dxXxQAI" as CostCategoryId,
       name: "Labour",
       type: CostCategoryType.Labour,
       competitionType: "CATAPULTS",
@@ -884,7 +884,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXyQAI",
+      id: "a060C000000dxXyQAI" as CostCategoryId,
       name: "Overheads",
       type: CostCategoryType.Overheads,
       competitionType: "CATAPULTS",
@@ -895,7 +895,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxXzQAI",
+      id: "a060C000000dxXzQAI" as CostCategoryId,
       name: "Materials",
       type: CostCategoryType.Materials,
       competitionType: "CATAPULTS",
@@ -906,7 +906,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY0QAI",
+      id: "a060C000000dxY0QAI" as CostCategoryId,
       name: "Subcontracting",
       type: CostCategoryType.Subcontracting,
       competitionType: "CATAPULTS",
@@ -917,7 +917,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY1QAI",
+      id: "a060C000000dxY1QAI" as CostCategoryId,
       name: "Travel and subsistence",
       type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "CATAPULTS",
@@ -928,7 +928,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY2QAI",
+      id: "a060C000000dxY2QAI" as CostCategoryId,
       name: "Property Revenue",
       type: CostCategoryType.Property_Revenue,
       competitionType: "CATAPULTS",
@@ -939,7 +939,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY3QAI",
+      id: "a060C000000dxY3QAI" as CostCategoryId,
       name: "Other Costs - Resource",
       type: CostCategoryType.Other_Costs_Resource,
       competitionType: "CATAPULTS",
@@ -950,7 +950,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY4QAI",
+      id: "a060C000000dxY4QAI" as CostCategoryId,
       name: "Capital Equipment",
       type: CostCategoryType.Capital_Equipment,
       competitionType: "CATAPULTS",
@@ -961,7 +961,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY5QAI",
+      id: "a060C000000dxY5QAI" as CostCategoryId,
       name: "Property Capital",
       type: CostCategoryType.Property_Capital,
       competitionType: "CATAPULTS",
@@ -972,7 +972,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY6QAI",
+      id: "a060C000000dxY6QAI" as CostCategoryId,
       name: "Capitalised Labour",
       type: CostCategoryType.Capitalised_Labour,
       competitionType: "CATAPULTS",
@@ -983,8 +983,8 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY7QAI",
-      name: "Other costs- Capital",
+      id: "a060C000000dxY7QAI" as CostCategoryId,
+      name: "Other costs- Capital" as CostCategoryId,
       type: CostCategoryType.Other_Costs_Capital,
       competitionType: "CATAPULTS",
       organisationType: PCROrganisationType.Industrial,
@@ -994,7 +994,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY8QAI",
+      id: "a060C000000dxY8QAI" as CostCategoryId,
       name: "Advance on Grant",
       type: CostCategoryType.Advance_on_Grant,
       competitionType: "CATAPULTS",
@@ -1005,7 +1005,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxY9QAI",
+      id: "a060C000000dxY9QAI" as CostCategoryId,
       name: "Labour",
       type: CostCategoryType.Labour,
       competitionType: "CATAPULTS",
@@ -1016,7 +1016,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYAQAY",
+      id: "a060C000000dxYAQAY" as CostCategoryId,
       name: "Overheads",
       type: CostCategoryType.Overheads,
       competitionType: "CATAPULTS",
@@ -1027,7 +1027,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYBQAY",
+      id: "a060C000000dxYBQAY" as CostCategoryId,
       name: "Materials",
       type: CostCategoryType.Materials,
       competitionType: "CATAPULTS",
@@ -1038,7 +1038,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYCQAY",
+      id: "a060C000000dxYCQAY" as CostCategoryId,
       name: "Subcontracting",
       type: CostCategoryType.Subcontracting,
       competitionType: "CATAPULTS",
@@ -1049,7 +1049,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYDQAY",
+      id: "a060C000000dxYDQAY" as CostCategoryId,
       name: "Travel and subsistence",
       type: CostCategoryType.Travel_And_Subsistence,
       competitionType: "CATAPULTS",
@@ -1060,7 +1060,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYEQAY",
+      id: "a060C000000dxYEQAY" as CostCategoryId,
       name: "Property Revenue",
       type: CostCategoryType.Property_Revenue,
       competitionType: "CATAPULTS",
@@ -1071,7 +1071,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYFQAY",
+      id: "a060C000000dxYFQAY" as CostCategoryId,
       name: "Other Costs - Resource",
       type: CostCategoryType.Other_Costs_Resource,
       competitionType: "CATAPULTS",
@@ -1082,7 +1082,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYGQAY",
+      id: "a060C000000dxYGQAY" as CostCategoryId,
       name: "Capital Equipment",
       type: CostCategoryType.Capital_Equipment,
       competitionType: "CATAPULTS",
@@ -1093,7 +1093,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYHQAY",
+      id: "a060C000000dxYHQAY" as CostCategoryId,
       name: "Property Capital",
       type: CostCategoryType.Property_Capital,
       competitionType: "CATAPULTS",
@@ -1104,7 +1104,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYIQAY",
+      id: "a060C000000dxYIQAY" as CostCategoryId,
       name: "Capitalised Labour",
       type: CostCategoryType.Capitalised_Labour,
       competitionType: "CATAPULTS",
@@ -1115,7 +1115,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYJQAY",
+      id: "a060C000000dxYJQAY" as CostCategoryId,
       name: "Other costs - Capital",
       type: CostCategoryType.Other_Costs_Capital,
       competitionType: "CATAPULTS",
@@ -1126,7 +1126,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000dxYKQAY",
+      id: "a060C000000dxYKQAY" as CostCategoryId,
       name: "Advance on Grant",
       type: CostCategoryType.Advance_on_Grant,
       competitionType: "CATAPULTS",
@@ -1137,7 +1137,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
       hintText: "stub-hintText",
     },
     {
-      id: "a060C000000eT2cQAE",
+      id: "a060C000000eT2cQAE" as CostCategoryId,
       name: "Indirect costs",
       type: CostCategoryType.Indirect_Costs,
       competitionType: "KTP",
@@ -1153,7 +1153,7 @@ export const createCostCategories = (): CostCategoryDto[] => {
 export const createClaimDetails = (): CostsSummaryForPeriodDto[] => {
   return [
     {
-      costCategoryId: "a060C000000dxWtQAI",
+      costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
       offerTotal: 30000,
       forecastThisPeriod: 10000,
       costsClaimedToDate: 5000,
@@ -1161,7 +1161,7 @@ export const createClaimDetails = (): CostsSummaryForPeriodDto[] => {
       remainingOfferCosts: 21500,
     },
     {
-      costCategoryId: "a060C000000dxWuQAI",
+      costCategoryId: "a060C000000dxWuQAI" as CostCategoryId,
       offerTotal: 6000,
       forecastThisPeriod: 2000,
       costsClaimedToDate: 1000,
@@ -1169,7 +1169,7 @@ export const createClaimDetails = (): CostsSummaryForPeriodDto[] => {
       remainingOfferCosts: 4300,
     },
     {
-      costCategoryId: "a060C000000dxWvQAI",
+      costCategoryId: "a060C000000dxWvQAI" as CostCategoryId,
       offerTotal: 30000,
       forecastThisPeriod: 10000,
       costsClaimedToDate: 7000,
@@ -1177,7 +1177,7 @@ export const createClaimDetails = (): CostsSummaryForPeriodDto[] => {
       remainingOfferCosts: -1,
     },
     {
-      costCategoryId: "a060C000000dxWwQAI",
+      costCategoryId: "a060C000000dxWwQAI" as CostCategoryId,
       offerTotal: 30000,
       forecastThisPeriod: 10000,
       costsClaimedToDate: 8000,
@@ -1185,7 +1185,7 @@ export const createClaimDetails = (): CostsSummaryForPeriodDto[] => {
       remainingOfferCosts: 14000,
     },
     {
-      costCategoryId: "a060C000000dxWxQAI",
+      costCategoryId: "a060C000000dxWxQAI" as CostCategoryId,
       offerTotal: 30000,
       forecastThisPeriod: 10000,
       costsClaimedToDate: 9000,
@@ -1193,7 +1193,7 @@ export const createClaimDetails = (): CostsSummaryForPeriodDto[] => {
       remainingOfferCosts: 12000,
     },
     {
-      costCategoryId: "a060C000000dxWyQAI",
+      costCategoryId: "a060C000000dxWyQAI" as CostCategoryId,
       offerTotal: 30000,
       forecastThisPeriod: 10000,
       costsClaimedToDate: 4000,
@@ -1201,7 +1201,7 @@ export const createClaimDetails = (): CostsSummaryForPeriodDto[] => {
       remainingOfferCosts: 22000,
     },
     {
-      costCategoryId: "a060C000000dxWzQAI",
+      costCategoryId: "a060C000000dxWzQAI" as CostCategoryId,
       offerTotal: 30000,
       forecastThisPeriod: 10000,
       costsClaimedToDate: 3000,

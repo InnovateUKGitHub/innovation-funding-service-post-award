@@ -4,7 +4,7 @@ import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@f
 export interface PcrSpendProfileEntityForCreate {
   capitalUsageType?: PCRSpendProfileCapitalUsageType;
   costCategory?: CostCategoryType;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   costOfEach?: number;
   costPerItem?: number;
   dateOtherFundingSecured?: string;

@@ -47,7 +47,7 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
   public async getById(
     partnerId: PartnerId,
     periodId: number,
-    costCategoryId: string,
+    costCategoryId: CostCategoryId,
   ): Promise<ISalesforceProfileDetails> {
     const filter = `
       Acc_ProjectParticipant__c = '${sss(partnerId)}'

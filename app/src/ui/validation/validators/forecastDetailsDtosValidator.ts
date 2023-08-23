@@ -126,7 +126,7 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> imp
       ),
   );
 
-  static getKey(costCategoryId: string, periodId: number) {
+  static getKey(costCategoryId: CostCategoryId, periodId: number) {
     return `value_${periodId}_${costCategoryId}`;
   }
 }

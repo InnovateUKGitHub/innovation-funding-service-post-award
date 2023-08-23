@@ -216,7 +216,7 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
-    costCategoryId: route.params.costCategoryId,
+    costCategoryId: route.params.costCategoryId as CostCategoryId,
     costId: route.params.costId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileDeleteCost.title),

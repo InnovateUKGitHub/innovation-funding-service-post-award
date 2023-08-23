@@ -32,7 +32,7 @@ import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 interface BaseEntityFields {
   id: PcrId;
   pcrItemId: PcrItemId;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   costCategory: CostCategoryType;
   description: string | null;
 }

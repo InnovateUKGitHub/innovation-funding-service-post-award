@@ -40,7 +40,7 @@ import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
 interface IBaseCost {
   id: PcrId;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   description: string;
   value: number | null;
 }

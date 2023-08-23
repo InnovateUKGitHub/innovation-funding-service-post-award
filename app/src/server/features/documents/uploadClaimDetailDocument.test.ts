@@ -16,7 +16,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
       projectId: project.Id,
       partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-      costCategoryId: claimDetail.Acc_CostCategory__c,
+      costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
     };
 
     const expectedContent = "Some content1";
@@ -43,7 +43,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
       projectId: project.Id,
       partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-      costCategoryId: claimDetail.Acc_CostCategory__c,
+      costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
     };
 
     const files = context.testData.range(3, () => context.testData.createFile());
@@ -70,7 +70,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
       projectId: project.Id,
       partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
       periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-      costCategoryId: claimDetail.Acc_CostCategory__c,
+      costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
     };
 
     const file = context.testData.createFile();
@@ -114,7 +114,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
         projectId: project.Id,
         partnerId: claimDetail.Acc_ProjectParticipant__r.Id as PartnerId,
         periodId: claimDetail.Acc_ProjectPeriodNumber__c,
-        costCategoryId: claimDetail.Acc_CostCategory__c,
+        costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
       };
 
       const file = context.testData.createFile();

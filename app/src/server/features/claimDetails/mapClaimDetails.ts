@@ -18,7 +18,7 @@ export function mapClaimDetailsSummary(
     periodId: salesforceClaimDetails.Acc_ProjectPeriodNumber__c,
     periodStart: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodStartDate__c, salesforceDateFormat),
     periodEnd: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodEndDate__c, salesforceDateFormat),
-    costCategoryId: salesforceClaimDetails.Acc_CostCategory__c,
+    costCategoryId: salesforceClaimDetails.Acc_CostCategory__c as CostCategoryId,
     value: salesforceClaimDetails.Acc_PeriodCostCategoryTotal__c,
     comments: salesforceClaimDetails.Acc_ReasonForDifference__c,
     isAuthor:

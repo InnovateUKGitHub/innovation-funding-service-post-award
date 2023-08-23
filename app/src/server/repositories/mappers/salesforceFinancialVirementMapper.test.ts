@@ -19,7 +19,7 @@ const createPartnerLevelSalesforceRecord = (
 
 const createVirementLevelSalesforceRecord = (
   partnerLevel: ISalesforceFinancialVirement,
-  costCategoryId: string,
+  costCategoryId: CostCategoryId,
   update?: Partial<ISalesforceFinancialVirement>,
 ): ISalesforceFinancialVirement => {
   return createDto<ISalesforceFinancialVirement>({
@@ -58,7 +58,7 @@ describe("SalesforceFinancialVirementMapper", () => {
   it("Maps partner virement correctly", () => {
     const partner = createPartnerLevelSalesforceRecord();
 
-    const virement = createVirementLevelSalesforceRecord(partner, "Expected Cost Category", {
+    const virement = createVirementLevelSalesforceRecord(partner, "Expected Cost Category" as CostCategoryId, {
       Acc_ClaimedCostsToDate__c: 10,
       Acc_CurrentCosts__c: 20,
       Acc_NewCosts__c: 30,
@@ -87,7 +87,7 @@ describe("SalesforceFinancialVirementMapper", () => {
       Acc_ProjectChangeRequest__c: "Expected PCR Id",
     });
 
-    const virement1 = createVirementLevelSalesforceRecord(partner1, "Expected Cost Category 1", {
+    const virement1 = createVirementLevelSalesforceRecord(partner1, "Expected Cost Category 1" as CostCategoryId, {
       Acc_ClaimedCostsToDate__c: 10,
       Acc_CurrentCosts__c: 20,
       Acc_NewCosts__c: 30,
@@ -98,13 +98,13 @@ describe("SalesforceFinancialVirementMapper", () => {
       Acc_ProjectChangeRequest__c: "Expected PCR Id",
     });
 
-    const virement2 = createVirementLevelSalesforceRecord(partner2, "Expected Cost Category 1", {
+    const virement2 = createVirementLevelSalesforceRecord(partner2, "Expected Cost Category 1" as CostCategoryId, {
       Acc_ClaimedCostsToDate__c: 40,
       Acc_CurrentCosts__c: 50,
       Acc_NewCosts__c: 60,
     });
 
-    const virement3 = createVirementLevelSalesforceRecord(partner2, "Expected Cost Category 2", {
+    const virement3 = createVirementLevelSalesforceRecord(partner2, "Expected Cost Category 2" as CostCategoryId, {
       Acc_ClaimedCostsToDate__c: 70,
       Acc_CurrentCosts__c: 80,
       Acc_NewCosts__c: 90,

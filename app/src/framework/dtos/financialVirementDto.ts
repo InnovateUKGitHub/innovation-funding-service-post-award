@@ -35,7 +35,7 @@ export interface PartnerVirementsDto {
 }
 
 export interface CostCategoryVirementDto {
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   costCategoryName: string;
   costsClaimedToDate: number;
   newEligibleCosts: number;

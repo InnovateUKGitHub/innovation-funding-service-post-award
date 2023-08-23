@@ -17,7 +17,7 @@ export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesfor
   public map(x: ISalesforceCostCategory): CostCategory {
     const type = this.typeMapper(x);
     return {
-      id: x.Id,
+      id: x.Id as CostCategoryId,
       name: x.Acc_CostCategoryName__c,
       type,
       competitionType: x.Acc_CompetitionType__c,

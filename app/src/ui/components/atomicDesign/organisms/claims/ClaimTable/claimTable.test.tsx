@@ -66,7 +66,7 @@ describe("<ClaimTable />", () => {
           ...defaultStubData,
           costCategories: [
             {
-              id: "a060C000000dxWtQAI",
+              id: "a060C000000dxWtQAI" as CostCategoryId,
               name: "Labour",
               type: 10,
               competitionType: "CR&D",
@@ -77,7 +77,7 @@ describe("<ClaimTable />", () => {
               hintText: "stub-hintText",
             },
             {
-              id: "a060C000000dxWuQAI",
+              id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
               type: 20,
               competitionType: "CR&D",
@@ -90,7 +90,7 @@ describe("<ClaimTable />", () => {
           ],
           claimDetails: [
             {
-              costCategoryId: "a060C000000dxWtQAI",
+              costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
               offerTotal: 30000,
               forecastThisPeriod: 10000,
               costsClaimedToDate: 5000,
@@ -98,7 +98,7 @@ describe("<ClaimTable />", () => {
               remainingOfferCosts: 21500,
             },
             {
-              costCategoryId: "a060C000000dxWuQAI",
+              costCategoryId: "a060C000000dxWuQAI" as CostCategoryId,
               offerTotal: 6000,
               forecastThisPeriod: 2000,
               costsClaimedToDate: 1000,
@@ -121,7 +121,7 @@ describe("<ClaimTable />", () => {
           ...defaultStubData,
           costCategories: [
             {
-              id: "a060C000000dxWtQAI",
+              id: "a060C000000dxWtQAI" as CostCategoryId,
               name: "Labour",
               type: 10,
               competitionType: "CR&D",
@@ -132,7 +132,7 @@ describe("<ClaimTable />", () => {
               hintText: "stub-hintText",
             },
             {
-              id: "a060C000000dxWuQAI",
+              id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
               type: 20,
               competitionType: "CR&D",
@@ -145,7 +145,7 @@ describe("<ClaimTable />", () => {
           ],
           claimDetails: [
             {
-              costCategoryId: "a060C000000dxWtQAI",
+              costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
               offerTotal: 30000,
               forecastThisPeriod: 10000,
               costsClaimedToDate: 5000,
@@ -153,7 +153,7 @@ describe("<ClaimTable />", () => {
               remainingOfferCosts: 21500,
             },
             {
-              costCategoryId: "a060C000000dxWuQAI",
+              costCategoryId: "a060C000000dxWuQAI" as CostCategoryId,
               offerTotal: 6000,
               forecastThisPeriod: 2000,
               costsClaimedToDate: 1000,
@@ -176,7 +176,7 @@ describe("<ClaimTable />", () => {
           ...defaultStubData,
           costCategories: [
             {
-              id: "a060C000000dxWtQAI",
+              id: "a060C000000dxWtQAI" as CostCategoryId,
               name: "Labour",
               type: 10,
               competitionType: "CR&D",
@@ -187,7 +187,7 @@ describe("<ClaimTable />", () => {
               hintText: "stub-hintText",
             },
             {
-              id: "a060C000000dxWuQAI",
+              id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
               type: 20,
               competitionType: "CR&D",
@@ -200,7 +200,7 @@ describe("<ClaimTable />", () => {
           ],
           claimDetails: [
             {
-              costCategoryId: "a060C000000dxWtQAI",
+              costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
               offerTotal: 30000,
               forecastThisPeriod: 10000,
               costsClaimedToDate: 5000,
@@ -208,7 +208,7 @@ describe("<ClaimTable />", () => {
               remainingOfferCosts: 21500,
             },
             {
-              costCategoryId: "a060C000000dxWuQAI",
+              costCategoryId: "a060C000000dxWuQAI" as CostCategoryId,
               offerTotal: 6000,
               forecastThisPeriod: 2000,
               costsClaimedToDate: 1000,

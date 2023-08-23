@@ -35,7 +35,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       context.testData.createCostCategory({
         organisationType: PCROrganisationType.Industrial,
         displayOrder: 5 - i,
-        id: `costCategory_${5 - i}`,
+        id: `costCategory_${5 - i}` as CostCategoryId,
       }),
     );
 

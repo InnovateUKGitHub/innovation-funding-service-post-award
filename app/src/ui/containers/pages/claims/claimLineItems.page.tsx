@@ -28,7 +28,7 @@ import { useClaimLineItemsData } from "./claimLineItems.logic";
 interface ClaimLineItemsParams {
   projectId: ProjectId;
   partnerId: PartnerId;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
   periodId: PeriodId;
 }
 
@@ -313,7 +313,7 @@ export function useClaimLineItemsContent() {
 const getParams = (route: RouteState): ClaimLineItemsParams => ({
   projectId: route.params.projectId as ProjectId,
   partnerId: route.params.partnerId as PartnerId,
-  costCategoryId: route.params.costCategoryId,
+  costCategoryId: route.params.costCategoryId  as CostCategoryId,
   periodId: parseInt(route.params.periodId, 10) as PeriodId,
 });
 

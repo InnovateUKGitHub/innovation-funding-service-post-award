@@ -299,7 +299,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
   );
 };
 
-const getClaimLineItemLink = (props: BaseProps & ReviewClaimParams, costCategoryId: string) => {
+const getClaimLineItemLink = (props: BaseProps & ReviewClaimParams, costCategoryId: CostCategoryId) => {
   return props.routes.reviewClaimLineItems.getLink({
     partnerId: props.partnerId,
     projectId: props.projectId,

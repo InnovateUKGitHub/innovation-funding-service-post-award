@@ -59,7 +59,7 @@ describe("createTableData()", () => {
         },
         costCategories: [
           {
-            id: "should-not-find-a-claim-detail",
+            id: "should-not-find-a-claim-detail" as CostCategoryId,
             name: "Directly incurred - Other costs",
             type: 5,
             competitionType: "CR&D",
@@ -86,7 +86,7 @@ describe("createTableData()", () => {
         ...defaultStubData,
         costCategories: [
           {
-            id: "does-not-match-a-claim-detail",
+            id: "does-not-match-a-claim-detail" as CostCategoryId,
             name: "Directly incurred - Other costs",
             type: 5,
             competitionType: "CR&D",
@@ -99,7 +99,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "sorry-bro-i-match-nobody",
+            costCategoryId: "sorry-bro-i-match-nobody" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 3000,
@@ -126,7 +126,7 @@ describe("createTableData()", () => {
         },
         costCategories: [
           {
-            id: "a060C000000dxWtQAI",
+            id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
             type: 10,
             competitionType: "CR&D",
@@ -139,7 +139,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "a060C000000dxWtQAI",
+            costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 5000,
@@ -166,7 +166,7 @@ describe("createTableData()", () => {
         },
         costCategories: [
           {
-            id: "a060C000000dxWtQAI",
+            id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
             type: 10,
             competitionType: "CR&D",
@@ -179,7 +179,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "a060C000000dxWtQAI",
+            costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 5000,
@@ -210,7 +210,7 @@ describe("createTableData()", () => {
         },
         costCategories: [
           {
-            id: "a060C000000dxWtQAI",
+            id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
             type: 10,
             competitionType: "CR&D",
@@ -223,7 +223,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "a060C000000dxWtQAI",
+            costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 5000,
@@ -248,7 +248,7 @@ describe("createTableData()", () => {
         ...defaultStubData,
         costCategories: [
           {
-            id: "a060C000000dxWtQAI",
+            id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
             type: 10,
             competitionType: "CR&D",
@@ -261,7 +261,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "a060C000000dxWtQAI",
+            costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 5000,
@@ -283,7 +283,7 @@ describe("createTableData()", () => {
         ...defaultStubData,
         costCategories: [
           {
-            id: "a060C000000dxWtQAI",
+            id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
             type: 10,
             competitionType: "CR&D",
@@ -294,7 +294,7 @@ describe("createTableData()", () => {
             hintText: "stub-hintText",
           },
           {
-            id: "a060C000000dxWuQAI",
+            id: "a060C000000dxWuQAI" as CostCategoryId,
             name: "Overheads",
             type: 20,
             competitionType: "CR&D",
@@ -307,7 +307,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "a060C000000dxWtQAI",
+            costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 5000,
@@ -315,7 +315,7 @@ describe("createTableData()", () => {
             remainingOfferCosts: 21500,
           },
           {
-            costCategoryId: "a060C000000dxWuQAI",
+            costCategoryId: "a060C000000dxWuQAI" as CostCategoryId,
             offerTotal: 6000,
             forecastThisPeriod: 2000,
             costsClaimedToDate: 1000,
@@ -351,7 +351,7 @@ describe("createTableData()", () => {
           ...defaultStubData,
           costCategories: [
             {
-              id: "a060C000000dxWuQAI",
+              id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
               type: 20,
               competitionType: "CR&D",
@@ -364,7 +364,7 @@ describe("createTableData()", () => {
           ],
           claimDetails: [
             {
-              costCategoryId: "a060C000000dxWuQAI",
+              costCategoryId: "a060C000000dxWuQAI" as CostCategoryId,
               offerTotal: 6000,
               forecastThisPeriod: 2000,
               costsClaimedToDate: 1000,
@@ -387,7 +387,7 @@ describe("createTableData()", () => {
           ...defaultStubData,
           costCategories: [
             {
-              id: "a060C000000dxWtQAI",
+              id: "a060C000000dxWtQAI" as CostCategoryId,
               name: "Labour",
               type: 10,
               competitionType: "CR&D",
@@ -398,7 +398,7 @@ describe("createTableData()", () => {
               hintText: "stub-hintText",
             },
             {
-              id: "a060C000000dxWuQAI",
+              id: "a060C000000dxWuQAI" as CostCategoryId,
               name: "Overheads",
               type: 20,
               competitionType: "CR&D",
@@ -411,7 +411,7 @@ describe("createTableData()", () => {
           ],
           claimDetails: [
             {
-              costCategoryId: "a060C000000dxWtQAI",
+              costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
               offerTotal: 30000,
               forecastThisPeriod: 10000,
               costsClaimedToDate: 5000,
@@ -419,7 +419,7 @@ describe("createTableData()", () => {
               remainingOfferCosts: -100,
             },
             {
-              costCategoryId: "a060C000000dxWuQAI",
+              costCategoryId: "a060C000000dxWuQAI" as CostCategoryId,
               offerTotal: 6000,
               forecastThisPeriod: 2000,
               costsClaimedToDate: 1000,
@@ -443,7 +443,7 @@ describe("createTableData()", () => {
           ...defaultStubData,
           costCategories: [
             {
-              id: "a060C000000dxWwQAI",
+              id: "a060C000000dxWwQAI" as CostCategoryId,
               name: "Capital usage",
               type: CostCategoryType.Capital_Usage,
               competitionType: "CR&D",
@@ -456,7 +456,7 @@ describe("createTableData()", () => {
           ],
           claimDetails: [
             {
-              costCategoryId: "a060C000000dxWwQAI",
+              costCategoryId: "a060C000000dxWwQAI" as CostCategoryId,
               offerTotal: 30000,
               forecastThisPeriod: 10000,
               costsClaimedToDate: 8000,
@@ -478,7 +478,7 @@ describe("createTableData()", () => {
         ...defaultStubData,
         costCategories: [
           {
-            id: "a060C000000dxWtQAI",
+            id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
             type: 10,
             competitionType: "CR&D",
@@ -491,7 +491,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "a060C000000dxWtQAI",
+            costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 5000,
@@ -518,7 +518,7 @@ describe("createTableData()", () => {
         ...defaultStubData,
         costCategories: [
           {
-            id: "a060C000000dxWtQAI",
+            id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
             type: 10,
             competitionType: "CR&D",
@@ -529,7 +529,7 @@ describe("createTableData()", () => {
             hintText: "stub-hintText",
           },
           {
-            id: "a060C000000dxWwQAI",
+            id: "a060C000000dxWwQAI" as CostCategoryId,
             name: "Capital usage",
             type: CostCategoryType.Capital_Usage,
             competitionType: "CR&D",
@@ -542,7 +542,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "a060C000000dxWtQAI",
+            costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 5000,
@@ -588,7 +588,7 @@ describe("createTableData()", () => {
         ...defaultStubData,
         costCategories: [
           {
-            id: "a060C000000dxWtQAI",
+            id: "a060C000000dxWtQAI" as CostCategoryId,
             name: "Labour",
             type: 10,
             competitionType: "CR&D",
@@ -599,7 +599,7 @@ describe("createTableData()", () => {
             hintText: "stub-hintText",
           },
           {
-            id: "a060C000000dxWuQAI",
+            id: "a060C000000dxWuQAI" as CostCategoryId,
             name: "Overheads",
             type: 20,
             competitionType: "CR&D",
@@ -612,7 +612,7 @@ describe("createTableData()", () => {
         ],
         claimDetails: [
           {
-            costCategoryId: "a060C000000dxWtQAI",
+            costCategoryId: "a060C000000dxWtQAI" as CostCategoryId,
             offerTotal: 30000,
             forecastThisPeriod: 10000,
             costsClaimedToDate: 5000,
@@ -620,7 +620,7 @@ describe("createTableData()", () => {
             remainingOfferCosts: 21500,
           },
           {
-            costCategoryId: "a060C000000dxWuQAI",
+            costCategoryId: "a060C000000dxWuQAI" as CostCategoryId,
             offerTotal: 6000,
             forecastThisPeriod: 2000,
             costsClaimedToDate: 1000,
@@ -660,7 +660,7 @@ describe("renderCostCategory()", () => {
       getLink: stubGetLink.mockReturnValue(null),
     };
     const stubCategory: CategoryInfoProps = {
-      id: "stub-id",
+      id: "stub-id" as CostCategoryId,
       name: "stub-name",
     };
 
@@ -681,7 +681,7 @@ describe("renderCostCategory()", () => {
       getLink: stubGetLink.mockReturnValue(stubRoute),
     };
     const stubCategory: CategoryInfoProps = {
-      id: "stub-id",
+      id: "stub-id" as CostCategoryId,
       name: "stub-name",
     };
 
@@ -707,7 +707,7 @@ describe("renderCostCategory()", () => {
       getLink: stubGetLink.mockReturnValue(stubRoute),
     };
     const stubCategory: CategoryInfoProps = {
-      id: "stub-id",
+      id: "stub-id" as CostCategoryId,
       name: "stub-name",
     };
 

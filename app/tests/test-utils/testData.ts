@@ -53,7 +53,7 @@ export class TestData {
     const seed = this.repositories.costCategories.Items.length + 1;
 
     const newItem: CostCategory = {
-      id: `CostCat${seed}`,
+      id: `CostCat${seed}` as CostCategoryId,
       name: `Cost Category ${seed}`,
       type: CostCategoryType.Unknown,
       displayOrder: seed,

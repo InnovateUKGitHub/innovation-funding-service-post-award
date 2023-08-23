@@ -56,7 +56,7 @@ export interface PcrAddSpendProfileCostParams {
   projectId: ProjectId;
   pcrId: PcrId;
   itemId: PcrItemId;
-  costCategoryId: string;
+  costCategoryId: CostCategoryId;
 }
 
 export interface PcrEditSpendProfileCostParams extends PcrAddSpendProfileCostParams {
@@ -381,7 +381,7 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
-    costCategoryId: route.params.costCategoryId,
+    costCategoryId: route.params.costCategoryId as CostCategoryId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfilePrepareCost.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
@@ -395,7 +395,7 @@ export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostP
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,
     itemId: route.params.itemId as PcrItemId,
-    costCategoryId: route.params.costCategoryId,
+    costCategoryId: route.params.costCategoryId as CostCategoryId,
     costId: route.params.costId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfilePrepareCost.title),

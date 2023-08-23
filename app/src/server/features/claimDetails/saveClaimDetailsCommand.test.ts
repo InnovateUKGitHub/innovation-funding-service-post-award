@@ -494,7 +494,7 @@ describe("SaveClaimDetails", () => {
 
       const dto = createDto(context, claimDetail);
       const lineItem = createNewLineItemDto(dto);
-      lineItem.costCategoryId = "Invalid";
+      lineItem.costCategoryId = "Invalid" as CostCategoryId;
       dto.lineItems = [lineItem];
 
       const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
