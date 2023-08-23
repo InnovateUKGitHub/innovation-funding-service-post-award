@@ -1,7 +1,7 @@
 import i18next from "i18next";
 
 import { allNamespaces, CopyLanguages, CopyNamespaces } from "@copy/data";
-import { i18nInterpolationOptions } from "@copy/interpolation";
+import { i18nInterpolationOptions, registerIntlFormatter } from "@copy/interpolation";
 import { initReactI18next } from "react-i18next";
 import { Logger } from "@shared/developmentLogger";
 
@@ -30,6 +30,8 @@ const clientInternationalisation = async (language: CopyLanguages) => {
     fallbackNS: CopyNamespaces.DEFAULT,
     interpolation: i18nInterpolationOptions,
   });
+
+  registerIntlFormatter();
 
   const promises = [];
 

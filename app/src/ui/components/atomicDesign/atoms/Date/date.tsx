@@ -71,6 +71,10 @@ export const MonthYear: React.FunctionComponent<DateProps> = props => {
   return render(props, DateFormat.MONTH_YEAR);
 };
 
+export const ShortMonthYear: React.FunctionComponent<DateProps> = props => {
+  return render(props, DateFormat.SHORT_MONTH_YEAR);
+};
+
 export const FullDate: React.FunctionComponent<DateProps> = props => {
   return render(props, DateFormat.FULL_DATE);
 };

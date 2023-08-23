@@ -25,7 +25,7 @@ const useZodErrors = <T extends FieldValues>(setError: UseFormSetError<T>, formE
       for (const error of errors) {
         const rhfError = { message: error.message, type: error.code };
         setError(error.path.join(".") as Path<T>, rhfError);
-        collatedErrors[error.path.join(".")] = rhfError;
+        collatedErrors[error.path.join("_").replaceAll(".", "_")] = rhfError;
       }
 
       return collatedErrors;

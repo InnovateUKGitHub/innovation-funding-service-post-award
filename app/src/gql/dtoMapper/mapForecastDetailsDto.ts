@@ -1,12 +1,16 @@
 import { Profile } from "@framework/constants/recordTypes";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { Clock, salesforceDateFormat } from "@framework/util/clock";
+import { equalityIfDefined } from "./equalityIfDefined";
 
 const clock = new Clock();
 
 type ForecastDetailsNode = GQL.PartialNode<{
   Id: string;
   Acc_CostCategory__c: GQL.Value<string>;
+  Acc_CostCategory__r: {
+    Id: string;
+  } | null;
   Acc_LatestForecastCost__c: GQL.Value<number>;
   Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
   Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
@@ -62,7 +66,7 @@ export function mapToForecastDetailsDtoArray<
 >(edges: T, pickList: PickList[]): Pick<ForecastDetailsDtoMapping, PickList>[] {
   return (
     edges
-      ?.filter(x => x?.node?.RecordType?.DeveloperName?.value === Profile.profileDetails)
+      ?.filter(x => equalityIfDefined(x?.node?.RecordType?.DeveloperName?.value, Profile.profileDetails))
       ?.map(node => {
         return mapToForecastDetailsDto(node?.node ?? null, pickList);
       }) ?? []

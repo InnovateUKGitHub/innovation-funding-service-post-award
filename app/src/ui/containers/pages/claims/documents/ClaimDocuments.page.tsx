@@ -1,43 +1,42 @@
+import { useOnDelete } from "@framework/api-helpers/onFileDelete";
+import { useOnUpload } from "@framework/api-helpers/onFileUpload";
+import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
+import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { allowedClaimDocuments, allowedImpactManagementClaimDocuments } from "@framework/constants/documentDescription";
 import { ProjectRole } from "@framework/constants/project";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { claimDocumentsQuery } from "./ClaimDocuments.query";
-import { useClaimDocumentsQuery } from "./ClaimDocuments.logic";
-import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
-import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
-import { makeZodI18nMap } from "@shared/zodi18n";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ClaimLevelUploadSchemaType, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
-import { useForm } from "react-hook-form";
-import { useContent } from "@ui/hooks/content.hook";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
+import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { FileInput } from "@ui/components/atomicDesign/atoms/form/FileInput/FileInput";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { Select } from "@ui/components/atomicDesign/atoms/form/Select/Select";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { allowedClaimDocuments, allowedImpactManagementClaimDocuments } from "@framework/constants/documentDescription";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
-import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { FormTypes } from "@ui/zod/FormTypes";
-import { useOnDelete } from "@framework/api-helpers/onFileDelete";
-import { useOnUpload } from "@framework/api-helpers/onFileUpload";
-import { ClaimDocumentAdvice } from "./ClaimDocumentAdvice";
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
-import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
-import { z } from "zod";
+import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
+import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { useContent } from "@ui/hooks/content.hook";
 import { useValidDocumentDropdownOptions } from "@ui/hooks/useValidDocumentDropdownOptions.hook";
 import { getClaimDetailsStatusType } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { ClaimLevelUploadSchemaType, documentsErrorMap, getClaimLevelUpload } from "@ui/zod/documentValidators.zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { ClaimDocumentAdvice } from "./ClaimDocumentAdvice";
+import { useClaimDocumentsQuery } from "./ClaimDocuments.logic";
+import { claimDocumentsQuery } from "./ClaimDocuments.query";
 
 export interface ClaimDocumentsPageParams {
   projectId: ProjectId;
@@ -69,7 +68,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     z.output<ClaimLevelUploadSchemaType>
   >({
     resolver: zodResolver(getClaimLevelUpload({ config: config.options, project }), {
-      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+      errorMap: documentsErrorMap,
     }),
   });
 

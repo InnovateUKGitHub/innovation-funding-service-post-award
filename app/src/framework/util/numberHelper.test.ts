@@ -17,6 +17,7 @@ describe("numberHelper", () => {
       ${"with positive decimal"}      | ${0.587}     | ${true}
       ${"with negative"}              | ${-100}      | ${true}
       ${"with negative decimal"}      | ${-0.587}    | ${true}
+      ${"with infinity"}              | ${Infinity}  | ${true}
       ${"with undefined"}             | ${undefined} | ${false}
       ${"with null"}                  | ${null}      | ${false}
       ${"with number as string"}      | ${"four"}    | ${false}

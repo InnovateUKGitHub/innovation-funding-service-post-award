@@ -91,6 +91,7 @@
       "costsClaimedHeader": "Costs claimed",
       "costsClaimingHeader": "Costs you are claiming",
       "forecastHeader": "Forecast",
+      "unusedHeader": "Not Used",
       "totalHeader": "Total",
       "totalEligibleCostsHeader": "Total eligible costs",
       "differenceHeader": "Difference",
@@ -106,9 +107,7 @@
     },
     "forecastDetails": {
       "finalClaimMessageFc": "You cannot change your forecast. You must ",
-      "submitLink": "submit your final claim",
-      "finalClaimMessageMo": "has submitted their final claim so cannot change their forecast.",
-      "finalClaimDueMessageMo": "is due to submit their final claim so cannot change their forecast."
+      "submitLink": "submit your final claim"
     },
     "warningContent": {
       "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
@@ -2100,6 +2099,25 @@
         "errors": {
           "too_big": "Postcode must be {{ count }} characters or less."
         }
+      }
+    },
+    "forecastTable": {
+      "profile": {
+        "errors": {
+          "too_small": "Enter a forecast for period {{issue.path.1, lookup(within: profiles; from: id; to: periodId)}} for the cost category '{{issue.path.1, lookup(within: profiles; from: id; to: costCategoryId), lookup(within: costCategories; from: costCategoryId; to: costCategoryName) }}'",
+          "invalid_string": {
+            "regex": "Enter a valid forecast for period {{issue.path.1, lookup(within: profiles; from: id; to: periodId)}} for the cost category '{{issue.path.1, lookup(within: profiles; from: id; to: costCategoryId), lookup(within: costCategories; from: costCategoryId; to: costCategoryName) }}'"
+          }
+        }
+      },
+      "total": {
+        "errors": {
+          "too_big": "Your overall total cannot be higher than your total eligible costs."
+        }
+      },
+      "errors": {
+        "final_claim": "You cannot change your forecast as you are due to submit your final claim.",
+        "final_claim_already_approved": "You cannot change your forecast as you have submitted your final claim."
       }
     }
   }

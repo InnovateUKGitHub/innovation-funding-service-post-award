@@ -28,7 +28,7 @@ exports[`mapToGolCostDtoArray should map the gql data to the correct Dtos filter
   },
   {
     "costCategoryId": "unknown category",
-    "costCategoryName": undefined,
+    "costCategoryName": "",
     "value": 0,
   },
 ]

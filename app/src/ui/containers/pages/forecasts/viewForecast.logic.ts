@@ -1,5 +1,5 @@
 import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
@@ -49,7 +49,11 @@ export const useViewForecastData = (projectId: ProjectId, partnerId: PartnerId) 
   );
 
   // CLAIMS
-  const claims = mapToClaimDtoArray(claimsGql, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"], {});
+  const claims = mapToCurrentClaimsDtoArray(
+    claimsGql,
+    ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"],
+    {},
+  );
 
   return {
     project,

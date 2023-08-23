@@ -1,0 +1,80 @@
+/*
+https://frontend.design-system.service.gov.uk/sass-api-reference/#govuk-breakpoints
+
+$govuk-breakpoints: (
+  mobile:  320px,
+  tablet:  641px,
+  desktop: 769px
+);
+
+*/
+
+.ifspa-forecast-wrapper {
+  display: grid;
+  position: relative;
+}
+
+.ifspa-forecast-table {
+  display: block;
+  overflow-x: scroll;
+}
+
+.ifspa-forecast-table tbody tr:last-of-type td,
+.ifspa-forecast-table tbody tr:last-of-type th {
+  border-bottom: 2px solid black;
+}
+
+.ifspa-forecast-table-border-right {
+  border-right: 1px solid #b1b4b6;
+}
+
+.ifspa-forecast-table-border-left {
+  border-left: 1px solid #b1b4b6;
+}
+
+@media screen and (min-width: 320px) {
+  .ifspa-forecast-table {
+    font-size: 12pt;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .ifspa-forecast-table {
+    border-collapse: separate;
+  }
+
+  .ifspa-forecast-table-sticky-col {
+    position: sticky;
+    box-sizing: border-box;
+    background-color: white;
+  }
+
+  .ifspa-forecast-table-left-col-1 {
+    left: 0;
+    width: 150px;
+  }
+  .ifspa-forecast-table-right-col-1,
+  .ifspa-forecast-table-right-col-2,
+  .ifspa-forecast-table-right-col-3 {
+    right: 0;
+  }
+  .ifspa-forecast-table-right-col-1 {
+    right: 0;
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
+    padding-left: 10px;
+  }
+  .ifspa-forecast-table-right-col-2 {
+    right: 100px;
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+  }
+  .ifspa-forecast-table-right-col-3 {
+    right: 250px;
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+  }
+}

@@ -33,6 +33,7 @@ export const claimPrepareQuery = graphql`
                   value
                 }
                 Acc_CostCategory__r {
+                  Id
                   Acc_CostCategoryName__c {
                     value
                   }

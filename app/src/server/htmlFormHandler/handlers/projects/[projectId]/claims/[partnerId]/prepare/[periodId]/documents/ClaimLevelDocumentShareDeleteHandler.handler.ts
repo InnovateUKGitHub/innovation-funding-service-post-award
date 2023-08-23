@@ -7,7 +7,7 @@ import {
   ClaimDocumentsRoute,
 } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
-import { claimLevelDelete } from "@ui/zod/documentValidators.zod";
+import { claimLevelDelete, documentsErrorMap } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
 import { z } from "zod";
@@ -20,14 +20,16 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     super({
       route: ClaimDocumentsRoute,
       forms: [FormTypes.ClaimLevelDelete],
-      formIntlKeyPrefix: ["documents"],
     });
   }
 
   public readonly acceptFiles = false;
 
   protected async getZodSchema() {
-    return claimLevelDelete;
+    return {
+      schema: claimLevelDelete,
+      errorMap: documentsErrorMap,
+    };
   }
 
   protected async mapToZod({

@@ -7,12 +7,13 @@ import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummary
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { Claims } from "@framework/constants/recordTypes";
+import { equalityIfDefined } from "@gql/dtoMapper/equalityIfDefined";
 
 export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
   const data = useLazyLoadQuery<ClaimDetailsQuery>(
@@ -49,8 +50,8 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
     );
 
     // CLAIMS
-    const claims = mapToClaimDtoArray(
-      claimsGql.filter(x => x?.node?.RecordType?.DeveloperName?.value === Claims.totalProjectPeriod),
+    const claims = mapToCurrentClaimsDtoArray(
+      claimsGql.filter(x => equalityIfDefined(x?.node?.RecordType?.DeveloperName?.value, Claims.totalProjectPeriod)),
       [
         "comments",
         "id",

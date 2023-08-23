@@ -26,7 +26,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
-    private readonly forecasts: ForecastDetailsDTO[],
+    private readonly forecasts: Pick<ForecastDetailsDTO, "id" | "value">[],
     private readonly submit: boolean,
   ) {
     super();
@@ -45,13 +45,13 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
-    const preparedForecasts = await this.ignoreCalculatedCostCategories(context, this.forecasts);
+    const preparedForecasts = await this.prepareForecasts(context, existing, this.forecasts);
     const claims = await context.runQuery(new GetAllForPartnerQuery(this.partnerId));
     const claimDetails = await context.runQuery(new GetAllClaimDetailsByPartner(this.partnerId));
     const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
     const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
 
-    await this.testValidation(claims, claimDetails, golCosts, partner);
+    await this.testValidation(preparedForecasts, claims, claimDetails, golCosts, partner);
     await this.updateProfileDetails(context, preparedForecasts, existing);
     await this.updatePartner(context, partner);
 
@@ -60,6 +60,25 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     }
 
     return true;
+  }
+
+  private async prepareForecasts(
+    context: IContext,
+    existingDtos: ForecastDetailsDTO[],
+    newDtos: Pick<ForecastDetailsDTO, "id" | "value">[],
+  ): Promise<ForecastDetailsDTO[]> {
+    const returnDtos: ForecastDetailsDTO[] = [];
+
+    for (const newDto of newDtos) {
+      const existingDto = existingDtos.find(x => x.id === newDto.id);
+
+      returnDtos.push({
+        ...existingDto,
+        ...newDto,
+      } as ForecastDetailsDTO);
+    }
+
+    return await this.ignoreCalculatedCostCategories(context, returnDtos);
   }
 
   private async ignoreCalculatedCostCategories(context: IContext, dtos: ForecastDetailsDTO[]) {
@@ -72,20 +91,14 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   private async testValidation(
+    forecasts: ForecastDetailsDTO[],
     claims: ClaimDto[],
     claimDetails: ClaimDetailsSummaryDto[],
     golCosts: GOLCostDto[],
     partner: PartnerDto,
   ) {
     const showErrors = true;
-    const validation = new ForecastDetailsDtosValidator(
-      this.forecasts,
-      claims,
-      claimDetails,
-      golCosts,
-      partner,
-      showErrors,
-    );
+    const validation = new ForecastDetailsDtosValidator(forecasts, claims, claimDetails, golCosts, partner, showErrors);
 
     if (!validation.isValid) {
       throw new ValidationError(validation);

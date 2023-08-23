@@ -4,7 +4,6 @@ import { ISession, ServerFileWrapper } from "@server/apis/controllerBase";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { ValidationError, ZodFormHandlerError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
-import { makeZodI18nMap } from "@shared/zodi18n";
 import { IRouteDefinition } from "@ui/containers/containerBase";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
@@ -17,14 +16,16 @@ import { convertResultErrorsToZodFormat } from "@framework/util/errorHelpers";
 type AnyForm = { form: ZodTypeAny };
 
 abstract class ZodFormHandlerBase<
-  Schema extends z.ZodObject<AnyForm> | z.ZodDiscriminatedUnion<"form", z.ZodObject<AnyForm>[]>,
+  Schema extends
+    | z.ZodObject<AnyForm>
+    | z.ZodEffects<z.ZodObject<AnyForm>>
+    | z.ZodDiscriminatedUnion<"form", z.ZodObject<AnyForm>[]>,
   QueryParams extends AnyObject,
 > implements IFormHandler
 {
   public readonly route: IRouteDefinition<QueryParams>;
   public readonly routePath: string;
   public readonly forms: FormTypes[];
-  private readonly formIntlKeyPrefix: string[];
   protected readonly logger: Logger;
   protected readonly copy: Copy;
 
@@ -35,20 +36,11 @@ abstract class ZodFormHandlerBase<
    */
   public abstract readonly acceptFiles: boolean;
 
-  constructor({
-    route,
-    forms,
-    formIntlKeyPrefix,
-  }: {
-    route: IRouteDefinition<QueryParams>;
-    forms: FormTypes[];
-    formIntlKeyPrefix: string[];
-  }) {
+  constructor({ route, forms }: { route: IRouteDefinition<QueryParams>; forms: FormTypes[] }) {
     this.route = route;
     this.routePath = route.routePath;
     this.logger = new Logger(`${route.routeName} Form Handler`);
     this.forms = forms;
-    this.formIntlKeyPrefix = formIntlKeyPrefix;
     this.copy = new Copy();
   }
 
@@ -91,7 +83,7 @@ abstract class ZodFormHandlerBase<
       this.logger.debug(req.url, userInput);
 
       // TODO: Make `mapToRedirect` accept the Zod output instead of the req.body
-      const zod = await this.getZodSchema({
+      const { schema, errorMap } = await this.getZodSchema({
         input: req.body,
         req,
         res,
@@ -100,10 +92,10 @@ abstract class ZodFormHandlerBase<
         context,
       });
 
-      const validData = zod.parse(userInput, { errorMap: makeZodI18nMap({ keyPrefix: this.formIntlKeyPrefix }) });
+      const validData = schema.parse(userInput, { errorMap });
       this.logger.debug("Successfully parsed Zod input!", validData);
 
-      const newPath = await this.run({ input: validData, context, res });
+      const newPath = await this.run({ input: validData, context, res, params: req.params as QueryParams });
 
       res.locals.isFormSuccess = true;
 
@@ -141,7 +133,7 @@ abstract class ZodFormHandlerBase<
     params: QueryParams;
     files: ServerFileWrapper[];
     context: IContext;
-  }): Promise<Schema>;
+  }): Promise<{ schema: Schema; errorMap: z.ZodErrorMap }>;
 
   /**
    * Convert the `req.body` and `req.files` of Express into the input
@@ -172,10 +164,12 @@ abstract class ZodFormHandlerBase<
     input,
     context,
     res,
+    params,
   }: {
     input: z.output<Schema>;
     context: IContext;
     res: express.Response;
+    params: QueryParams;
   }): Promise<void | string>;
 }
 

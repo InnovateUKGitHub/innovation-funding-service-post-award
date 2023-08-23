@@ -1,18 +1,16 @@
-import { getAuthRoles } from "@framework/types/authorisation";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { AriaLive } from "../../../atoms/AriaLive/ariaLive";
-import { ValidationMessage } from "../../../molecules/validation/ValidationMessage/ValidationMessage";
-import { Content } from "../../../molecules/Content/content";
 import { ClaimDetailsSummaryDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
+import { getAuthRoles } from "@framework/types/authorisation";
 import { roundCurrency } from "@framework/util/numberHelper";
+import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
-import { UL } from "../../../atoms/List/list";
+import { AriaLive } from "../../../atoms/AriaLive/ariaLive";
 
 interface Props {
   project: Pick<ProjectDto, "id">;
@@ -71,32 +69,9 @@ export const Warning = ({
 
   const { isFc } = getAuthRoles(partner.roles);
 
-  const categoriesList = (
-    <UL className="govuk-!-margin-top-4">
-      {categories.map(x => (
-        <li key={x}>{x.toLocaleLowerCase()}</li>
-      ))}
-    </UL>
-  );
-
-  const qaValue = isFc ? "forecasts-warning-fc" : "forecasts-warning-mo-pm";
-
-  const warningContent = isFc ? (
-    <>
-      <Content value={x => x.components.warningContent.amountRequestMessage} />
-      {categoriesList}
-      <Content value={x => x.components.warningContent.contactMessage} />
-    </>
-  ) : (
-    <>
-      <Content value={x => x.components.warningContent.advisoryMoPmMessage} />
-      {categoriesList}
-    </>
-  );
-
   return (
     <AriaLive>
-      <ValidationMessage messageType="info" qa={qaValue} message={warningContent} />
+      <ForecastAgreedCostWarning isFc={isFc} costCategories={categories} />
     </AriaLive>
   );
 };

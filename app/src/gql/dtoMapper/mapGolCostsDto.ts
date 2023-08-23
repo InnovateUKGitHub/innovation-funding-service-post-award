@@ -9,6 +9,10 @@ type GolCostNode = GQL.PartialNode<{
   RecordType: GQL.Maybe<{
     DeveloperName?: GQL.Value<string>;
   }>;
+  Acc_CostCategory__r: GQL.Maybe<{
+    Id: string;
+    Acc_CostCategoryName__c: GQL.Value<string>;
+  }>;
 }>;
 
 type GolCostDtoMapping = Pick<GOLCostDto, "costCategoryId" | "costCategoryName" | "value">;
@@ -16,15 +20,19 @@ type GolCostDtoMapping = Pick<GOLCostDto, "costCategoryId" | "costCategoryName" 
 const mapper: GQL.DtoMapper<
   GolCostDtoMapping,
   GolCostNode,
-  { costCategories: { id: CostCategoryId; name: string }[] }
+  { costCategories?: { id: CostCategoryId; name: string }[] }
 > = {
   costCategoryId: function (node) {
-    return (node?.Acc_CostCategory__c?.value ?? "unknown category") as CostCategoryId;
+    return (node?.Acc_CostCategory__r?.Id ?? node?.Acc_CostCategory__c?.value ?? "unknown category") as CostCategoryId;
   },
   costCategoryName: function (node, additionalData) {
-    return additionalData.costCategories
-      .filter(costCategory => costCategory.id === node?.Acc_CostCategory__c?.value)
-      .map(costCategory => costCategory.name)[0];
+    return (
+      node?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ??
+      additionalData?.costCategories
+        ?.filter(costCategory => costCategory.id === node?.Acc_CostCategory__c?.value)
+        .map(costCategory => costCategory.name)[0] ??
+      ""
+    );
   },
   value: function (node) {
     return node?.Acc_CostCategoryGOLCost__c?.value ?? 0;
@@ -38,7 +46,7 @@ const mapper: GQL.DtoMapper<
 export function mapToGolCostDto<
   T extends GolCostNode,
   PickList extends keyof GolCostDtoMapping,
-  AdditionalData extends { costCategories: { id: CostCategoryId; name: string }[] },
+  AdditionalData extends { costCategories?: { id: CostCategoryId; name: string }[] },
 >(node: T, pickList: PickList[], additionalData: AdditionalData): Pick<GolCostDtoMapping, PickList> {
   return pickList.reduce((dto, field) => {
     dto[field] = mapper[field](node, additionalData);
@@ -59,7 +67,7 @@ export function mapToGolCostDtoArray<
 >(
   edges: T,
   pickList: PickList[],
-  costCategories: { id: CostCategoryId; name: string }[],
+  costCategories?: { id: CostCategoryId; name: string }[],
 ): Pick<GolCostDtoMapping, PickList>[] {
   return (
     edges

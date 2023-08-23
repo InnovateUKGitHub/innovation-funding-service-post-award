@@ -1,4 +1,4 @@
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
@@ -33,7 +33,7 @@ export const useUpdateForecastData = (
   const partner = mapToPartnerDto(partnerNode, ["overheadRate", "forecastLastModifiedDate"], {});
 
   // CLAIMS
-  const claims = mapToClaimDtoArray(claimsGql, ["id", "isApproved", "periodId", "isFinalClaim"], {});
+  const claims = mapToCurrentClaimsDtoArray(claimsGql, ["id", "isApproved", "periodId", "isFinalClaim"], {});
 
   // ACTIVE CLAIM
   const claim = claims.find(claim => !claim.isApproved) || null;

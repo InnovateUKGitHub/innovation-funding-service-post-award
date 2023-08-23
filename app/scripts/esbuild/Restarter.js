@@ -1,6 +1,6 @@
 // @ts-check
 /** @typedef {import('child_process').ChildProcess} ChildProcess */
-const { spawn, spawnSync } = require("child_process");
+const { spawn } = require("child_process");
 const fetch = require("isomorphic-fetch");
 
 class Restarter {

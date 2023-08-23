@@ -12,7 +12,7 @@ import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
@@ -71,7 +71,7 @@ export const useClaimReviewPageData = (
       profileGql,
     );
 
-    const claims = mapToClaimDtoArray(
+    const claims = mapToCurrentClaimsDtoArray(
       data?.salesforce?.uiapi?.query?.AllClaimsForPartner?.edges ?? [],
       ["id", "isFinalClaim", "periodEndDate", "periodId", "periodStartDate", "partnerId", "status"],
       {},

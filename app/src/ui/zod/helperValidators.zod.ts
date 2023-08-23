@@ -6,6 +6,7 @@ import { validDocumentFilenameCharacters } from "@ui/validation/validators/docum
 import { getFileExtension, getFileName } from "@framework/util/files";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFileWrapper } from "@framework/types/fileWapper";
+import { validCurrencyRegex } from "@framework/util/numberHelper";
 
 const projectIdValidation = z
   .string()
@@ -32,6 +33,8 @@ const costCategoryIdValidation = z
   .startsWith(SalesforcePrefixes.Acc_CostCategory__c)
   .transform(x => x as CostCategoryId);
 
+const profileIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Profile__c);
+
 const emptyStringToUndefinedValidation = z
   .string()
   .refine(x => x === "")
@@ -50,6 +53,8 @@ const periodIdValidation = z.coerce
   .gt(0)
   .lt(500) // Assumption that a project has fewer than 500 periods.
   .transform(x => x as PeriodId);
+
+const currencyValidation = z.string().regex(validCurrencyRegex).nonempty();
 
 const getSingleFileValidation = (options: IAppOptions) => {
   const { imageTypes, pdfTypes, presentationTypes, spreadsheetTypes, textTypes } = options.permittedTypes;
@@ -131,7 +136,9 @@ export {
   pcrIdValidation,
   pcrItemIdValidation,
   partnerIdValidation,
+  profileIdValidation,
   periodIdValidation,
+  currencyValidation,
   emptyStringToUndefinedValidation,
   emptyStringToNullValidation,
   getSingleFileValidation,

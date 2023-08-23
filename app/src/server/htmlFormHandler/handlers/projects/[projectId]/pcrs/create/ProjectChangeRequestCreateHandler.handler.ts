@@ -10,7 +10,7 @@ import { PCRCreateRoute } from "@ui/containers/pages/pcrs/create";
 import { PcrModifyParams } from "@ui/containers/pages/pcrs/modifyOptions/PcrModifyOptions";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { getPcrCreateSchema, PcrCreateSchemaType } from "@ui/zod/pcrValidator.zod";
+import { getPcrCreateSchema, PcrCreateSchemaType, pcrModifyErrorMap } from "@ui/zod/pcrValidator.zod";
 import { z } from "zod";
 
 class ProjectChangeRequestCreateHandler extends ZodFormHandlerBase<PcrCreateSchemaType, PcrModifyParams> {
@@ -18,7 +18,6 @@ class ProjectChangeRequestCreateHandler extends ZodFormHandlerBase<PcrCreateSche
     super({
       route: PCRCreateRoute,
       forms: [FormTypes.ProjectChangeRequestCreate],
-      formIntlKeyPrefix: ["pcrModify"],
     });
   }
 
@@ -30,7 +29,10 @@ class ProjectChangeRequestCreateHandler extends ZodFormHandlerBase<PcrCreateSche
 
     const [types, partners] = await Promise.all([typesPromise, partnersPromise]);
 
-    return getPcrCreateSchema({ pcrItemInfo: types, numberOfPartners: partners.length, currentPcrItems: [] });
+    return {
+      schema: getPcrCreateSchema({ pcrItemInfo: types, numberOfPartners: partners.length, currentPcrItems: [] }),
+      errorMap: pcrModifyErrorMap,
+    };
   }
 
   protected async mapToZod({ input }: { input: AnyObject }): Promise<z.input<PcrCreateSchemaType>> {

@@ -7,6 +7,7 @@ import {
   mapToClaimLineItemDtoArray,
 } from "./mapClaimLineItemDto";
 import { Claims } from "@framework/constants/recordTypes";
+import { equalityIfDefined } from "./equalityIfDefined";
 
 const clock = new Clock();
 
@@ -114,7 +115,7 @@ export function mapToClaimDetailsDtoArray<
     edges
       ?.filter(
         x =>
-          x?.node?.RecordType?.DeveloperName?.value === Claims.claimsDetail &&
+          equalityIfDefined(x?.node?.RecordType?.DeveloperName?.value, Claims.claimsDetail) &&
           x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
           x?.node?.Acc_CostCategory__c?.value !== null,
       )
@@ -142,7 +143,7 @@ export function mapToClaimDetailsWithLineItemsDtoArray<
   const claimDetailsEdges =
     edges?.filter(
       x =>
-        x?.node?.RecordType?.DeveloperName?.value === Claims.claimsDetail &&
+        equalityIfDefined(x?.node?.RecordType?.DeveloperName?.value, Claims.claimsDetail) &&
         x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
         x?.node?.Acc_CostCategory__c?.value !== null,
     ) || null;

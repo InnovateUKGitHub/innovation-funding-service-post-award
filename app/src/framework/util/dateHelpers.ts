@@ -59,6 +59,9 @@ export const formatDate = (
     case DateFormat.MONTH_YEAR: {
       return date.toFormat("MMMM yyyy");
     }
+    case DateFormat.SHORT_MONTH_YEAR: {
+      return date.toFormat("MMM yyyy");
+    }
     default:
       return "INVALID DATE FORMAT";
   }

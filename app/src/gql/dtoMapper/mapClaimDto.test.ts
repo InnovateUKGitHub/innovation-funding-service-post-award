@@ -1,4 +1,4 @@
-import { mapToClaimDtoArray } from "./mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "./mapClaimDto";
 
 describe("mapToClaimDtoArray", () => {
   const edges = [
@@ -236,13 +236,13 @@ describe("mapToClaimDtoArray", () => {
 
   it("should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records", () => {
     expect(
-      mapToClaimDtoArray(edges, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"], {}),
+      mapToCurrentClaimsDtoArray(edges, ["id", "isApproved", "periodId", "isFinalClaim", "paidDate"], {}),
     ).toMatchSnapshot();
   });
 
   it("should map with additional data if statusLabel or forecastCost needed", () => {
     expect(
-      mapToClaimDtoArray(
+      mapToCurrentClaimsDtoArray(
         edges,
         [
           "approvedDate",
@@ -296,6 +296,6 @@ describe("mapToClaimDtoArray", () => {
   });
 
   it("should map the gql data only including fields on the picklist", () => {
-    expect(mapToClaimDtoArray(edges, ["id", "paidDate"], {})).toMatchSnapshot();
+    expect(mapToCurrentClaimsDtoArray(edges, ["id", "paidDate"], {})).toMatchSnapshot();
   });
 });

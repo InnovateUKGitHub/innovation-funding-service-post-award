@@ -11,7 +11,7 @@ import { DeveloperUserSwitcherHandler } from "./handlers/developer/userswitcher/
 import { LoanRequestDocumentDeleteHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestDocumentDeleteHandler";
 import { LoanRequestDocumentUploadHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestDocumentUploadHandler";
 import { LoanRequestFormHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestFormHandler";
-import { ClaimForecastFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/claimForecastFormHandler";
+import { ClaimForecastFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/ClaimForecastFormHandler.handler";
 import { ClaimSummaryFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/summary/claimSummaryFormHandler";
 import { EditClaimLineItemsFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/editClaimLineItemsFormHandler";
 import { ClaimLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareDeleteHandler.handler";

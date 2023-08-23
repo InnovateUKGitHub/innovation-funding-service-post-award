@@ -43,8 +43,8 @@
     white-space: normal !important;
   }
 
-  td,
-  th {
+  .acc-sticky-table td,
+  .acc-sticky-table th {
     width: unset !important;
     height: unset !important;
   }

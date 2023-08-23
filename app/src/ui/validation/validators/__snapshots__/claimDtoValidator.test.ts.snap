@@ -98,6 +98,10 @@ exports[`claimDtoValidator() With en-GB i18n with comments with correct length v
 
 exports[`claimDtoValidator() With en-GB i18n with status when invalid claim status when Approved 1`] = `"The claim status 'Approved' is not permitted to continue."`;
 
+exports[`claimDtoValidator() With en-GB i18n with status when invalid claim status when New 1`] = `"The claim status 'New' is not permitted to continue."`;
+
+exports[`claimDtoValidator() With en-GB i18n with status when invalid claim status when Not used 1`] = `"The claim status 'Not used' is not permitted to continue."`;
+
 exports[`claimDtoValidator() With en-GB i18n with status when invalid claim status when Paid 1`] = `"The claim status 'Paid' is not permitted to continue."`;
 
 exports[`claimDtoValidator() With en-GB i18n with status when invalid claim status when Payment Requested 1`] = `"The claim status 'Payment Requested' is not permitted to continue."`;
@@ -205,6 +209,10 @@ exports[`claimDtoValidator() With no i18n with comments with correct length vali
 exports[`claimDtoValidator() With no i18n with comments with correct length validation with max comment length of 1000 1`] = `null`;
 
 exports[`claimDtoValidator() With no i18n with status when invalid claim status when Approved 1`] = `"validation.claimDtoValidator.statusInvalid"`;
+
+exports[`claimDtoValidator() With no i18n with status when invalid claim status when New 1`] = `"validation.claimDtoValidator.statusInvalid"`;
+
+exports[`claimDtoValidator() With no i18n with status when invalid claim status when Not used 1`] = `"validation.claimDtoValidator.statusInvalid"`;
 
 exports[`claimDtoValidator() With no i18n with status when invalid claim status when Paid 1`] = `"validation.claimDtoValidator.statusInvalid"`;
 

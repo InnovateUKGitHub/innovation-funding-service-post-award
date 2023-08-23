@@ -2,7 +2,7 @@ import { BroadcastPageRoute } from "@ui/containers/pages/broadcasts/broadcast.pa
 import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ClaimDetailDocumentsRoute } from "@ui/containers/pages/claims/claimDetailDocuments.page";
 import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
-import { ClaimForecastRoute } from "@ui/containers/pages/claims/claimForecast.page";
+import { ClaimForecastRoute } from "@ui/containers/pages/claims/forecast/ClaimForecast.page";
 import { ClaimLineItemsRoute, ReviewClaimLineItemsRoute } from "@ui/containers/pages/claims/claimLineItems.page";
 import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
 import { EditClaimLineItemsRoute } from "@ui/containers/pages/claims/editClaimLineItems.page";

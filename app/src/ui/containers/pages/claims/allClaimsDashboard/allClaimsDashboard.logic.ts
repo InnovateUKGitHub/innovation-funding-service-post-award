@@ -7,7 +7,7 @@ import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToProfilePeriodDetailsDtoArray } from "@gql/dtoMapper/mapProfilePeriodDetail";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 
 export const useAllClaimsDashboardData = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<AllClaimsDashboardQuery>(
@@ -47,7 +47,7 @@ export const useAllClaimsDashboardData = (projectId: ProjectId) => {
       "periodId",
     ]);
 
-    const claims = mapToClaimDtoArray(
+    const claims = mapToCurrentClaimsDtoArray(
       claimsGql,
       [
         "approvedDate",

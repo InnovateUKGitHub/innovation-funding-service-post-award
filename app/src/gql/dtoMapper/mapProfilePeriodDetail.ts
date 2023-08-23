@@ -3,9 +3,17 @@ type ProfilePeriodDetailsNode = GQL.PartialNode<{
   Acc_PeriodLatestForecastCost__c: GQL.Value<number>;
   Acc_ProjectParticipant__c?: GQL.Value<string>;
   Acc_ProjectPeriodNumber__c: GQL.Value<number>;
+  Acc_CostCategory__r?: GQL.Maybe<{
+    Id?: string;
+  }>;
 }>;
 
-type ProfilePeriodDetailsDtoMapping = { partnerId: PartnerId; forecastCost: number; periodId: number };
+type ProfilePeriodDetailsDtoMapping = {
+  partnerId: PartnerId;
+  forecastCost: number;
+  periodId: number;
+  costCategoryId: string;
+};
 
 const mapper: GQL.DtoMapper<ProfilePeriodDetailsDtoMapping, ProfilePeriodDetailsNode> = {
   partnerId(node) {
@@ -16,6 +24,9 @@ const mapper: GQL.DtoMapper<ProfilePeriodDetailsDtoMapping, ProfilePeriodDetails
   },
   periodId(node) {
     return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
+  },
+  costCategoryId(node) {
+    return node?.Acc_CostCategory__r?.Id ?? "";
   },
 };
 

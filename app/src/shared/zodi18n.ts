@@ -35,20 +35,28 @@ export type ZodI18nMapOption = {
   t?: i18n["t"];
   ns?: string | readonly string[];
   keyPrefix: string[];
+  context?: unknown;
 };
 
 const defaultNs = "zod";
 
 export const makeZodI18nMap =
   (option?: ZodI18nMapOption): ZodErrorMap =>
-  (issue, ctx) => {
-    const { t, ns, keyPrefix } = {
+  (issue, zodIssueContext) => {
+    const { t, ns, keyPrefix, context } = {
       t: i18next.t,
       ns: defaultNs,
       keyPrefix: [],
+      context: {},
       ...option,
     };
-    const { data: input } = ctx;
+
+    const interpValues = {
+      ns,
+      input: zodIssueContext.data,
+      context,
+      issue,
+    };
 
     /**
      * Create all permutations of valid i18n translation keys.
@@ -98,83 +106,72 @@ export const makeZodI18nMap =
         }
       }
 
-      logger.debug("Translating error with one of the following keys", paths, issue, ctx);
+      logger.debug("Translating error with one of the following keys", paths, issue, interpValues);
 
       return paths;
     };
 
     let message: string;
-    message = defaultErrorMap(issue, ctx).message;
+    message = defaultErrorMap(issue, zodIssueContext).message;
 
     switch (issue.code) {
       case ZodIssueCode.invalid_type:
         message = t(makeKey(`errors.invalid_type_received_${issue.received}`, "errors.invalid_type"), {
-          ns,
-          input,
+          ...interpValues,
           expected: t(`types.${issue.expected}`, {
             defaultValue: issue.expected,
-            ns,
-            input,
+            ...interpValues,
           }),
           received: t(`types.${issue.received}`, {
             defaultValue: issue.received,
-            ns,
-            input,
+            ...interpValues,
           }),
         });
         break;
       case ZodIssueCode.invalid_literal:
         message = t(makeKey("errors.invalid_literal"), {
           expected: JSON.stringify(issue.expected),
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.unrecognized_keys:
         message = t(makeKey("errors.unrecognized_keys"), {
           keys: joinValues(issue.keys, ", "),
           count: issue.keys.length,
-          ns,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.invalid_union:
         message = t(makeKey("errors.invalid_union"), {
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.invalid_union_discriminator:
         message = t(makeKey("errors.invalid_union_discriminator"), {
           options: joinValues(issue.options),
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.invalid_enum_value:
         message = t(makeKey("errors.invalid_enum_value"), {
           options: joinValues(issue.options),
           received: issue.received,
-          ns,
-          input,
-          issue,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.invalid_arguments:
         message = t(makeKey("errors.invalid_arguments"), {
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.invalid_return_type:
         message = t(makeKey("errors.invalid_return_type"), {
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.invalid_date:
         message = t(makeKey("errors.invalid_date"), {
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.invalid_string:
@@ -182,25 +179,21 @@ export const makeZodI18nMap =
           if ("startsWith" in issue.validation) {
             message = t(makeKey(`errors.invalid_string.startsWith`), {
               startsWith: issue.validation.startsWith,
-              ns,
-              input,
+              ...interpValues,
             });
           } else if ("endsWith" in issue.validation) {
             message = t(makeKey(`errors.invalid_string.endsWith`), {
               endsWith: issue.validation.endsWith,
-              ns,
-              input,
+              ...interpValues,
             });
           }
         } else {
           message = t(makeKey(`errors.invalid_string.${issue.validation}`), {
             validation: t(`validations.${issue.validation}`, {
               defaultValue: issue.validation,
-              ns,
-              input,
+              ...interpValues,
             }),
-            ns,
-            input,
+            ...interpValues,
           });
         }
         break;
@@ -209,8 +202,7 @@ export const makeZodI18nMap =
         message = t(makeKey(`errors.too_small`), {
           minimum,
           count: typeof minimum === "number" ? minimum : undefined,
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.too_big:
@@ -218,34 +210,29 @@ export const makeZodI18nMap =
         message = t(makeKey(`errors.too_big`), {
           maximum,
           count: typeof maximum === "number" ? maximum : undefined,
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.custom:
         message = t(makeKey(issue.params?.i18n ?? "errors.custom"), {
           ...issue.params,
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.invalid_intersection_types:
         message = t(makeKey("errors.invalid_intersection_types"), {
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.not_multiple_of:
         message = t(makeKey("errors.not_multiple_of"), {
           multipleOf: issue.multipleOf,
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       case ZodIssueCode.not_finite:
         message = t(makeKey("errors.not_finite"), {
-          ns,
-          input,
+          ...interpValues,
         });
         break;
       default:

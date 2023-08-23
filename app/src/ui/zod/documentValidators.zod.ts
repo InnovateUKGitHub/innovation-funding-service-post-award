@@ -19,6 +19,7 @@ import {
 } from "./helperValidators.zod";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { makeZodI18nMap } from "@shared/zodi18n";
 
 type ProjectLevelUploadSchemaType = ReturnType<typeof getProjectLevelUpload>;
 const getProjectLevelUpload = (config: IAppOptions) =>
@@ -60,6 +61,7 @@ interface ClaimLevelUploadSchemaExtraProps {
 }
 
 type ClaimLevelUploadSchemaType = ReturnType<typeof getClaimLevelUpload>;
+const documentsErrorMap = makeZodI18nMap({ keyPrefix: ["documents"] });
 const getClaimLevelUpload = ({ config, project }: ClaimLevelUploadSchemaExtraProps) =>
   z.object({
     form: z.literal(FormTypes.ClaimLevelUpload),
@@ -175,6 +177,7 @@ export {
   pcrLevelDelete,
   projectOrPartnerLevelDelete,
   getBankStatementUpload,
+  documentsErrorMap,
 };
 export type {
   ProjectLevelUploadSchemaType,

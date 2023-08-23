@@ -61,6 +61,7 @@ type PartnerNode = GQL.PartialNode<{
   Acc_LastName__c: GQL.Value<string>;
   Acc_NewForecastNeeded__c: GQL.Value<boolean>;
   Acc_NonfundedParticipant__c: GQL.Value<boolean>;
+  Acc_Open_Claim_Period__c: GQL.Value<number>;
   Acc_OpenClaimStatus__c: GQL.Value<string>;
   Acc_OrganisationType__c: GQL.Value<string>;
   Acc_Overdue_Project__c: GQL.Value<string>;
@@ -107,6 +108,7 @@ type PartnerDtoMapping = Pick<
   | "isWithdrawn"
   | "name"
   | "newForecastNeeded"
+  | "openClaimPeriodNumber"
   | "organisationType"
   | "overdueProject"
   | "overheadRate"
@@ -222,6 +224,9 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   newForecastNeeded(node) {
     return node?.Acc_NewForecastNeeded__c?.value ?? false;
+  },
+  openClaimPeriodNumber(node) {
+    return node?.Acc_Open_Claim_Period__c?.value ?? 1;
   },
   organisationType(node) {
     return node?.Acc_OrganisationType__c?.value ?? "unknown";
