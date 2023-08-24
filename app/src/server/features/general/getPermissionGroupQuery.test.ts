@@ -15,6 +15,7 @@ describe("GetPermissionGroupQuery", () => {
   it("returns error if group not found", async () => {
     const context = new TestContext();
 
+    // @ts-expect-error invalid identifier code
     context.repositories.permissionGroups.Items = [{ id: "Unknown ID", identifier: 22, name: "TEST NAME" }];
 
     const query = new GetPermissionGroupQuery(PermissionGroupIdentifier.ClaimsTeam);

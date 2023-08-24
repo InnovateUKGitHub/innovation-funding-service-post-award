@@ -1,32 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapToClaimDtoArray should map the gql data only including fields on the picklist 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "a0526000009Mc2aAAC",
     "paidDate": null,
   },
-  Object {
+  {
     "id": "a0526000009Mc1OAAS",
     "paidDate": null,
   },
-  Object {
+  {
     "id": "a0526000009Mc2RAAS",
     "paidDate": null,
   },
-  Object {
+  {
     "id": "a0526000009Mc2QAAS",
     "paidDate": null,
   },
-  Object {
+  {
     "id": "id-1",
     "paidDate": null,
   },
-  Object {
+  {
     "id": "id-3-defaults",
     "paidDate": null,
   },
-  Object {
+  {
     "id": "id-4",
     "paidDate": null,
   },
@@ -34,50 +34,50 @@ Array [
 `;
 
 exports[`mapToClaimDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "a0526000009Mc2aAAC",
     "isApproved": false,
     "isFinalClaim": false,
     "paidDate": null,
     "periodId": 12,
   },
-  Object {
+  {
     "id": "a0526000009Mc1OAAS",
     "isApproved": true,
     "isFinalClaim": false,
     "paidDate": null,
     "periodId": 1,
   },
-  Object {
+  {
     "id": "a0526000009Mc2RAAS",
     "isApproved": true,
     "isFinalClaim": false,
     "paidDate": null,
     "periodId": 3,
   },
-  Object {
+  {
     "id": "a0526000009Mc2QAAS",
     "isApproved": true,
     "isFinalClaim": false,
     "paidDate": null,
     "periodId": 2,
   },
-  Object {
+  {
     "id": "id-1",
     "isApproved": true,
     "isFinalClaim": false,
     "paidDate": null,
     "periodId": 3,
   },
-  Object {
+  {
     "id": "id-3-defaults",
     "isApproved": false,
     "isFinalClaim": false,
     "paidDate": null,
     "periodId": 0,
   },
-  Object {
+  {
     "id": "id-4",
     "isApproved": true,
     "isFinalClaim": false,
@@ -88,8 +88,8 @@ Array [
 `;
 
 exports[`mapToClaimDtoArray should map with additional data if statusLabel or forecastCost needed 1`] = `
-Array [
-  Object {
+[
+  {
     "approvedDate": null,
     "forecastCost": 400,
     "id": "a0526000009Mc2aAAC",
@@ -106,7 +106,7 @@ Array [
     "statusLabel": "Queried by Innovate UK",
     "totalCost": 498000,
   },
-  Object {
+  {
     "approvedDate": 2023-05-16T23:00:00.000Z,
     "forecastCost": 10000,
     "id": "a0526000009Mc1OAAS",
@@ -123,7 +123,7 @@ Array [
     "statusLabel": "Payment being processed",
     "totalCost": 0,
   },
-  Object {
+  {
     "approvedDate": 2023-05-15T23:00:00.000Z,
     "forecastCost": 300,
     "id": "a0526000009Mc2RAAS",
@@ -140,7 +140,7 @@ Array [
     "statusLabel": "Payment being processed",
     "totalCost": 500000,
   },
-  Object {
+  {
     "approvedDate": 2023-05-15T23:00:00.000Z,
     "forecastCost": 200,
     "id": "a0526000009Mc2QAAS",
@@ -157,7 +157,7 @@ Array [
     "statusLabel": "Payment being processed",
     "totalCost": 1000,
   },
-  Object {
+  {
     "approvedDate": 2023-05-15T23:00:00.000Z,
     "forecastCost": 0,
     "id": "id-1",
@@ -174,7 +174,7 @@ Array [
     "statusLabel": "unknown",
     "totalCost": 0,
   },
-  Object {
+  {
     "approvedDate": null,
     "forecastCost": 0,
     "id": "id-3-defaults",
@@ -191,7 +191,7 @@ Array [
     "statusLabel": "unknown",
     "totalCost": 0,
   },
-  Object {
+  {
     "approvedDate": null,
     "forecastCost": 100,
     "id": "id-4",

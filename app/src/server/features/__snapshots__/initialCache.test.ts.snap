@@ -1,52 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`initialCache should initialise log errors if the attempt to query fails 1`] = `
-Array [
-  Array [
+[
+  [
     "Unable to prime cache 'Permission group cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'Record type cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'Cost Categories cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'Claim Statuses cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'Monitoring Report Status cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'PCR - Status cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'PCR - Project Roles cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'PCR - Partner Types cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'PCR - Participant Sizes cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'PCR - Project Locations cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'PCR - Spend Profile Capital Usage Types cache'",
     [Error: bang!],
   ],
-  Array [
+  [
     "Unable to prime cache 'PCR - Spend Profile Overhead Rate Options cache'",
     [Error: bang!],
   ],
@@ -54,59 +54,59 @@ Array [
 `;
 
 exports[`initialCache should initialise the cache 1`] = `
-Array [
-  Array [
+[
+  [
     GetPermissionGroupQuery {
       "identifier": 1,
     },
   ],
-  Array [
+  [
     GetAllRecordTypesQuery {},
   ],
-  Array [
+  [
     GetUnfilteredCostCategoriesQuery {},
   ],
-  Array [
+  [
     GetClaimStatusesQuery {
       "key": "ClaimStatus",
     },
   ],
-  Array [
+  [
     GetMonitoringReportStatusesQuery {
       "key": "MonitoringReports",
     },
   ],
-  Array [
+  [
     GetPcrStatusesQuery {
       "key": "PCRStatuses",
     },
   ],
-  Array [
+  [
     GetPcrProjectRolesQuery {
       "key": "PCRProjectRoles",
     },
   ],
-  Array [
+  [
     GetPcrPartnerTypesQuery {
       "key": "PCRPartnerTypes",
     },
   ],
-  Array [
+  [
     GetPcrParticipantSizesQuery {
       "key": "PCRParticipantSize",
     },
   ],
-  Array [
+  [
     GetPcrProjectLocationsQuery {
       "key": "PCRProjectLocations",
     },
   ],
-  Array [
+  [
     GetPcrSpendProfileCapitalUsageTypesQuery {
       "key": "PCRSpendProfileCapitalUsageTypes",
     },
   ],
-  Array [
+  [
     GetPcrSpendProfileOverheadRateOptionsQuery {
       "key": "PCRSpendProfileOverheadRateOptions",
     },
@@ -115,77 +115,77 @@ Array [
 `;
 
 exports[`initialCache should initialise the cache 2`] = `
-Array [
-  Array [
+[
+  [
     "Priming cache 'Permission group cache'",
   ],
-  Array [
+  [
     "Priming cache 'Record type cache'",
   ],
-  Array [
+  [
     "Priming cache 'Cost Categories cache'",
   ],
-  Array [
+  [
     "Priming cache 'Claim Statuses cache'",
   ],
-  Array [
+  [
     "Priming cache 'Monitoring Report Status cache'",
   ],
-  Array [
+  [
     "Priming cache 'PCR - Status cache'",
   ],
-  Array [
+  [
     "Priming cache 'PCR - Project Roles cache'",
   ],
-  Array [
+  [
     "Priming cache 'PCR - Partner Types cache'",
   ],
-  Array [
+  [
     "Priming cache 'PCR - Participant Sizes cache'",
   ],
-  Array [
+  [
     "Priming cache 'PCR - Project Locations cache'",
   ],
-  Array [
+  [
     "Priming cache 'PCR - Spend Profile Capital Usage Types cache'",
   ],
-  Array [
+  [
     "Priming cache 'PCR - Spend Profile Overhead Rate Options cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'Permission group cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'Record type cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'Cost Categories cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'Claim Statuses cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'Monitoring Report Status cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'PCR - Status cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'PCR - Project Roles cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'PCR - Partner Types cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'PCR - Participant Sizes cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'PCR - Project Locations cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'PCR - Spend Profile Capital Usage Types cache'",
   ],
-  Array [
+  [
     "Successfully primed cache 'PCR - Spend Profile Overhead Rate Options cache'",
   ],
 ]

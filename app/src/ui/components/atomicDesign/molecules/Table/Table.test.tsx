@@ -261,7 +261,7 @@ describe("Table", () => {
         const initialFirstColumData = getCellData(firstColumnIndex);
 
         expect(initialFirstColumData).toMatchInlineSnapshot(`
-          Array [
+          [
             "Batman",
             "Flash",
             "Superman",
@@ -274,7 +274,7 @@ describe("Table", () => {
         });
 
         expect(getCellData(firstColumnIndex)).toMatchInlineSnapshot(`
-          Array [
+          [
             "Flash",
             "Batman",
             "Superman",
@@ -290,7 +290,7 @@ describe("Table", () => {
         });
 
         expect(getCellData(firstColumnIndex)).toMatchInlineSnapshot(`
-          Array [
+          [
             "Superman",
             "Batman",
             "Flash",

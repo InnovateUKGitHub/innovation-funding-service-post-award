@@ -167,6 +167,7 @@ describe("authorisation", () => {
     });
 
     it("when partner found and roles not all found returns false", async () => {
+      // @ts-expect-error invalid partner role
       expect(auth.forPartner(projectTwo, partner2A).hasAllRoles(ProjectRole.FinancialContact, 32)).toBe(false);
     });
 

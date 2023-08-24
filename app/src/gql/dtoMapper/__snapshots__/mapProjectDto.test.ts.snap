@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapToProjectDto should map the node to a subset of the project dto 1`] = `
-Object {
+{
   "claimedPercentage": 90,
   "claimsToReview": 3,
   "competitionType": "CR&D",
   "id": "0",
   "projectNumber": "2345",
-  "roles": Object {
+  "roles": {
     "isFc": true,
     "isMo": false,
     "isPm": false,
@@ -18,7 +18,7 @@ Object {
 `;
 
 exports[`mapToProjectDto should map the node to the projectDto structure 1`] = `
-Object {
+{
   "claimedPercentage": 90,
   "claimsOverdue": 1,
   "claimsToReview": 3,
@@ -33,8 +33,8 @@ Object {
   "leadPartnerName": "",
   "numberOfOpenClaims": 1,
   "numberOfPeriods": 12,
-  "partnerRoles": Array [
-    Object {
+  "partnerRoles": [
+    {
       "isFc": true,
       "isMo": false,
       "isPm": false,
@@ -47,7 +47,7 @@ Object {
   "periodId": 1,
   "periodStartDate": 2022-01-24T00:00:00.000Z,
   "projectNumber": "2345",
-  "roles": Object {
+  "roles": {
     "isFc": true,
     "isMo": false,
     "isPm": false,

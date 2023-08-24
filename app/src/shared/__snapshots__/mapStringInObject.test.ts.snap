@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapStringInObject should uppercase all strings values in a matrix: a matrix 1`] = `
-Array [
-  Array [
-    Array [
-      Array [
-        Array [
-          Array [
-            Array [
+[
+  [
+    [
+      [
+        [
+          [
+            [
               "MATRIX",
             ],
           ],
@@ -21,25 +21,25 @@ Array [
 `;
 
 exports[`mapStringInObject should uppercase all strings values in an array: an array 1`] = `
-Array [
+[
   "HELLO",
   "WORLD",
 ]
 `;
 
 exports[`mapStringInObject should uppercase all strings values in an object: an object 1`] = `
-Object {
+{
   "count": 1,
   "nicole": "HEDGES",
 }
 `;
 
 exports[`mapStringInObject should uppercase all strings values in nested strings in array and object: nested strings in array and object 1`] = `
-Object {
-  "array": Array [
+{
+  "array": [
     "HELLO",
-    Object {
-      "count": Object {
+    {
+      "count": {
         "min": 2,
         "reason": "TEST",
       },

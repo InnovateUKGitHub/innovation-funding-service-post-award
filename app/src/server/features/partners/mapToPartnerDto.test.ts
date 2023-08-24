@@ -115,7 +115,11 @@ describe("mapToPartnerDto", () => {
     } as Partial<PartnerDto>;
 
     const expected = createPartnerDto(stubExpectedPartnerDto);
-    const mappedPartnerDto = new MapToPartnerDtoCommand(stubPartnerToMap, 7, ProjectRole.ProjectManager).run();
+    const mappedPartnerDto = new MapToPartnerDtoCommand(
+      stubPartnerToMap,
+      7 as ProjectRole,
+      ProjectRole.ProjectManager,
+    ).run();
 
     expect(mappedPartnerDto).toMatchObject(expected);
   });

@@ -1,21 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapPartnerDtoArray should map the gql data only including fields on the picklist 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "a0D-partner1",
     "isLead": true,
-    "roles": Object {
+    "roles": {
       "isFc": true,
       "isMo": false,
       "isPm": true,
       "partnerId": "a0D-partner1",
     },
   },
-  Object {
+  {
     "id": "a0D-partner2",
     "isLead": false,
-    "roles": Object {
+    "roles": {
       "isFc": true,
       "isMo": false,
       "isPm": false,
@@ -26,8 +26,8 @@ Array [
 `;
 
 exports[`mapPartnerDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
-Array [
-  Object {
+[
+  {
     "accountId": "001-partner1",
     "auditReportFrequencyName": "monthly",
     "awardRate": 10,
@@ -49,7 +49,7 @@ Array [
     "postcode": "SN2 1HG",
     "postcodeStatus": 30,
     "remainingParticipantGrant": 3000,
-    "roles": Object {
+    "roles": {
       "isFc": true,
       "isMo": false,
       "isPm": true,
@@ -61,7 +61,7 @@ Array [
     "totalParticipantGrant": 10000,
     "totalPrepayment": 4000,
   },
-  Object {
+  {
     "accountId": "001-partner2",
     "auditReportFrequencyName": "monthly",
     "awardRate": 10,
@@ -83,7 +83,7 @@ Array [
     "postcode": null,
     "postcodeStatus": 10,
     "remainingParticipantGrant": 3000,
-    "roles": Object {
+    "roles": {
       "isFc": true,
       "isMo": false,
       "isPm": false,

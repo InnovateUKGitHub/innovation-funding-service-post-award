@@ -35,16 +35,16 @@ describe("GetTimeExtensionOptionsQuery", () => {
       const results = await context.runQuery(query);
 
       expect(results.slice(0, 3)).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "label": "November 2021",
             "offset": -1,
           },
-          Object {
+          {
             "label": "December 2021",
             "offset": 0,
           },
-          Object {
+          {
             "label": "January 2022",
             "offset": 1,
           },
@@ -58,20 +58,20 @@ describe("GetTimeExtensionOptionsQuery", () => {
       const results = await context.runQuery(query);
 
       expect(results.slice(0, 4)).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "label": "October 2021",
             "offset": -2,
           },
-          Object {
+          {
             "label": "November 2021",
             "offset": -1,
           },
-          Object {
+          {
             "label": "December 2021",
             "offset": 0,
           },
-          Object {
+          {
             "label": "January 2022",
             "offset": 1,
           },
@@ -86,248 +86,248 @@ describe("GetTimeExtensionOptionsQuery", () => {
 
       // Note: The test config has 5 years - there is no present way of overriding this
       expect(results).toMatchInlineSnapshot(`
-        Array [
-          Object {
+        [
+          {
             "label": "December 2021",
             "offset": 0,
           },
-          Object {
+          {
             "label": "January 2022",
             "offset": 1,
           },
-          Object {
+          {
             "label": "February 2022",
             "offset": 2,
           },
-          Object {
+          {
             "label": "March 2022",
             "offset": 3,
           },
-          Object {
+          {
             "label": "April 2022",
             "offset": 4,
           },
-          Object {
+          {
             "label": "May 2022",
             "offset": 5,
           },
-          Object {
+          {
             "label": "June 2022",
             "offset": 6,
           },
-          Object {
+          {
             "label": "July 2022",
             "offset": 7,
           },
-          Object {
+          {
             "label": "August 2022",
             "offset": 8,
           },
-          Object {
+          {
             "label": "September 2022",
             "offset": 9,
           },
-          Object {
+          {
             "label": "October 2022",
             "offset": 10,
           },
-          Object {
+          {
             "label": "November 2022",
             "offset": 11,
           },
-          Object {
+          {
             "label": "December 2022",
             "offset": 12,
           },
-          Object {
+          {
             "label": "January 2023",
             "offset": 13,
           },
-          Object {
+          {
             "label": "February 2023",
             "offset": 14,
           },
-          Object {
+          {
             "label": "March 2023",
             "offset": 15,
           },
-          Object {
+          {
             "label": "April 2023",
             "offset": 16,
           },
-          Object {
+          {
             "label": "May 2023",
             "offset": 17,
           },
-          Object {
+          {
             "label": "June 2023",
             "offset": 18,
           },
-          Object {
+          {
             "label": "July 2023",
             "offset": 19,
           },
-          Object {
+          {
             "label": "August 2023",
             "offset": 20,
           },
-          Object {
+          {
             "label": "September 2023",
             "offset": 21,
           },
-          Object {
+          {
             "label": "October 2023",
             "offset": 22,
           },
-          Object {
+          {
             "label": "November 2023",
             "offset": 23,
           },
-          Object {
+          {
             "label": "December 2023",
             "offset": 24,
           },
-          Object {
+          {
             "label": "January 2024",
             "offset": 25,
           },
-          Object {
+          {
             "label": "February 2024",
             "offset": 26,
           },
-          Object {
+          {
             "label": "March 2024",
             "offset": 27,
           },
-          Object {
+          {
             "label": "April 2024",
             "offset": 28,
           },
-          Object {
+          {
             "label": "May 2024",
             "offset": 29,
           },
-          Object {
+          {
             "label": "June 2024",
             "offset": 30,
           },
-          Object {
+          {
             "label": "July 2024",
             "offset": 31,
           },
-          Object {
+          {
             "label": "August 2024",
             "offset": 32,
           },
-          Object {
+          {
             "label": "September 2024",
             "offset": 33,
           },
-          Object {
+          {
             "label": "October 2024",
             "offset": 34,
           },
-          Object {
+          {
             "label": "November 2024",
             "offset": 35,
           },
-          Object {
+          {
             "label": "December 2024",
             "offset": 36,
           },
-          Object {
+          {
             "label": "January 2025",
             "offset": 37,
           },
-          Object {
+          {
             "label": "February 2025",
             "offset": 38,
           },
-          Object {
+          {
             "label": "March 2025",
             "offset": 39,
           },
-          Object {
+          {
             "label": "April 2025",
             "offset": 40,
           },
-          Object {
+          {
             "label": "May 2025",
             "offset": 41,
           },
-          Object {
+          {
             "label": "June 2025",
             "offset": 42,
           },
-          Object {
+          {
             "label": "July 2025",
             "offset": 43,
           },
-          Object {
+          {
             "label": "August 2025",
             "offset": 44,
           },
-          Object {
+          {
             "label": "September 2025",
             "offset": 45,
           },
-          Object {
+          {
             "label": "October 2025",
             "offset": 46,
           },
-          Object {
+          {
             "label": "November 2025",
             "offset": 47,
           },
-          Object {
+          {
             "label": "December 2025",
             "offset": 48,
           },
-          Object {
+          {
             "label": "January 2026",
             "offset": 49,
           },
-          Object {
+          {
             "label": "February 2026",
             "offset": 50,
           },
-          Object {
+          {
             "label": "March 2026",
             "offset": 51,
           },
-          Object {
+          {
             "label": "April 2026",
             "offset": 52,
           },
-          Object {
+          {
             "label": "May 2026",
             "offset": 53,
           },
-          Object {
+          {
             "label": "June 2026",
             "offset": 54,
           },
-          Object {
+          {
             "label": "July 2026",
             "offset": 55,
           },
-          Object {
+          {
             "label": "August 2026",
             "offset": 56,
           },
-          Object {
+          {
             "label": "September 2026",
             "offset": 57,
           },
-          Object {
+          {
             "label": "October 2026",
             "offset": 58,
           },
-          Object {
+          {
             "label": "November 2026",
             "offset": 59,
           },
-          Object {
+          {
             "label": "December 2026",
             "offset": 60,
           },

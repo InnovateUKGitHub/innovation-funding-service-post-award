@@ -24,13 +24,13 @@ describe("dataLoadAction", () => {
   });
 
   it("should have correct payload with error", () => {
-    const result = dataLoadAction("a", "b", 2, "d", { code: 418, message: "I'm a teapot" });
+    const result = dataLoadAction("a", "b", 2, "d", { code: 1, message: "I'm a teapot" });
     const expected = {
       id: "a",
       store: "b",
       status: 2,
       data: "d",
-      error: { code: 418, message: "I'm a teapot" },
+      error: { code: 1, message: "I'm a teapot" },
     };
     expect(result.payload).toMatchObject(expected);
   });
@@ -97,7 +97,7 @@ describe("conditionalLoad", () => {
       store: "test",
     } as unknown as IDataSelector<unknown>;
     const error: IAppError = {
-      code: 418,
+      code: 1,
       message: "I am a teapot",
     };
     const load = jest.fn(() => Promise.reject(error));

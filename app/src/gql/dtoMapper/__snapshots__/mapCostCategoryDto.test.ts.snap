@@ -1,20 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapToRequiredSortedCostCategoryDtoArray should map the gql data only including fields on the picklist 1`] = `
-Array [
-  Object {
+[
+  {
     "displayOrder": 1,
     "id": "2",
     "name": "Materials",
     "type": 6,
   },
-  Object {
+  {
     "displayOrder": 3,
     "id": "0",
     "name": "Labour",
     "type": 2,
   },
-  Object {
+  {
     "displayOrder": 4,
     "id": "3",
     "name": "Other costs",
@@ -24,8 +24,8 @@ Array [
 `;
 
 exports[`mapToRequiredSortedCostCategoryDtoArray should map the gql data to the correct Dtos filtering out for not New and not Claim Detail records 1`] = `
-Array [
-  Object {
+[
+  {
     "competitionType": "KTP",
     "displayOrder": 1,
     "id": "2",
@@ -34,7 +34,7 @@ Array [
     "organisationType": "Business",
     "type": 6,
   },
-  Object {
+  {
     "competitionType": "CR&D",
     "displayOrder": 3,
     "id": "0",
@@ -43,7 +43,7 @@ Array [
     "organisationType": "Academic",
     "type": 2,
   },
-  Object {
+  {
     "competitionType": "Loans",
     "displayOrder": 4,
     "id": "3",

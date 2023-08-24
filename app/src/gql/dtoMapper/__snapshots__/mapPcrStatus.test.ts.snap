@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapPcrStatusDtoArray should map the node to the projectDto structure 1`] = `
-Array [
-  Object {
+[
+  {
     "comments": "all good",
     "createdBy": "Innovate UK",
     "createdDate": 2023-05-24T09:46:09.000Z,
@@ -13,7 +13,7 @@ Array [
     "previousStatus": 2,
     "previousStatusLabel": "Submitted to Monitoring Officer",
   },
-  Object {
+  {
     "comments": null,
     "createdBy": "Innovate UK",
     "createdDate": 2023-05-24T09:45:11.000Z,
@@ -24,7 +24,7 @@ Array [
     "previousStatus": 1,
     "previousStatusLabel": "Draft",
   },
-  Object {
+  {
     "comments": null,
     "createdBy": "Innovate UK",
     "createdDate": 2023-05-24T09:29:49.000Z,

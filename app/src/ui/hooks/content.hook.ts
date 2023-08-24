@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, isValidElement } from "react";
 import type { ContentSelector, TranslationResult, ContentSelectorCallInformation } from "@copy/type";
 import { contentContext } from "@ui/redux/contentProvider";
 
@@ -14,6 +14,16 @@ export function isContentSolution(content: unknown): content is ContentSelector 
   const isFn = typeof content === "function";
 
   return isNotString && isFn;
+}
+
+/**
+ * type guard to help evaluate whether field is a valid content selector
+ *
+ * @param {unknown} item
+ * @returns {boolean} whether is ContentSelector type
+ */
+export function isContentSelector(item: unknown): item is ContentSelector {
+  return typeof item === "function" && !isValidElement(item);
 }
 
 /**

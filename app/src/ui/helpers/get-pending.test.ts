@@ -10,7 +10,7 @@ describe("getPending()", () => {
         const value = getPending(loadingNoDataPending);
 
         expect(value).toMatchInlineSnapshot(`
-          Object {
+          {
             "error": undefined,
             "isIdle": false,
             "isLoading": true,
@@ -26,7 +26,7 @@ describe("getPending()", () => {
         const value = getPending(loadingWithDataPending);
 
         expect(value).toMatchInlineSnapshot(`
-          Object {
+          {
             "error": undefined,
             "isIdle": false,
             "isLoading": false,
@@ -43,7 +43,7 @@ describe("getPending()", () => {
       const value = getPending(preloadPending);
 
       expect(value).toMatchInlineSnapshot(`
-        Object {
+        {
           "error": undefined,
           "isIdle": true,
           "isLoading": true,
@@ -60,7 +60,7 @@ describe("getPending()", () => {
         const value = getPending(staleNoDataPending);
 
         expect(value).toMatchInlineSnapshot(`
-          Object {
+          {
             "error": undefined,
             "isIdle": false,
             "isLoading": true,
@@ -76,7 +76,7 @@ describe("getPending()", () => {
         const value = getPending(staleDataPending);
 
         expect(value).toMatchInlineSnapshot(`
-          Object {
+          {
             "error": undefined,
             "isIdle": false,
             "isLoading": false,
@@ -94,7 +94,7 @@ describe("getPending()", () => {
         const value = getPending(failedNoErrorPending);
 
         expect(value).toMatchInlineSnapshot(`
-          Object {
+          {
             "error": undefined,
             "isIdle": false,
             "isLoading": false,
@@ -110,7 +110,7 @@ describe("getPending()", () => {
         const value = getPending(failedWithErrorPending);
 
         expect(value).toMatchInlineSnapshot(`
-          Object {
+          {
             "error": "stub-error",
             "isIdle": false,
             "isLoading": false,
@@ -127,7 +127,7 @@ describe("getPending()", () => {
       const value = getPending(updatedPending);
 
       expect(value).toMatchInlineSnapshot(`
-        Object {
+        {
           "error": undefined,
           "isIdle": false,
           "isLoading": false,
@@ -143,7 +143,7 @@ describe("getPending()", () => {
       const value = getPending(donePending);
 
       expect(value).toMatchInlineSnapshot(`
-        Object {
+        {
           "error": undefined,
           "isIdle": false,
           "isLoading": false,

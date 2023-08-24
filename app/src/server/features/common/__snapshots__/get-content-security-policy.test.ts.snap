@@ -3,26 +3,26 @@
 exports[`getContentSecurityPolicy() @returns with correct formatting 1`] = `"default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-eval' 'strict-dynamic' 'nonce-STUB_UNIQUE_NONCE_VALUE' https://www.googletagmanager.com https://tagmanager.google.com https://*.google-analytics.com https://tagassistant.google.com/; style-src 'self' 'unsafe-inline' https://tagmanager.google.com https://fonts.googleapis.com https://www.googletagmanager.com; img-src 'self' data: https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com https://fonts.gstatic.com; frame-src https://www.googletagmanager.com; connect-src 'self' https://*.google-analytics.com; font-src 'self' https://assets.publishing.service.gov.uk/frontend/ https://fonts.gstatic.com; report-uri /api/csp/violation-report;"`;
 
 exports[`policyConfig() returns with config 1`] = `
-Object {
-  "base-uri": Array [
+{
+  "base-uri": [
     "self",
   ],
-  "connect-src": Array [
+  "connect-src": [
     "self",
     "https://*.google-analytics.com",
   ],
-  "default-src": Array [
+  "default-src": [
     "self",
   ],
-  "font-src": Array [
+  "font-src": [
     "self",
     "https://assets.publishing.service.gov.uk/frontend/",
     "https://fonts.gstatic.com",
   ],
-  "frame-src": Array [
+  "frame-src": [
     "https://www.googletagmanager.com",
   ],
-  "img-src": Array [
+  "img-src": [
     "self",
     "data:",
     "https://www.googletagmanager.com",
@@ -31,13 +31,13 @@ Object {
     "https://www.gstatic.com",
     "https://fonts.gstatic.com",
   ],
-  "object-src": Array [
+  "object-src": [
     "none",
   ],
-  "report-uri": Array [
+  "report-uri": [
     "/api/csp/violation-report",
   ],
-  "script-src": Array [
+  "script-src": [
     "self",
     "unsafe-eval",
     "strict-dynamic",
@@ -47,7 +47,7 @@ Object {
     "https://*.google-analytics.com",
     "https://tagassistant.google.com/",
   ],
-  "style-src": Array [
+  "style-src": [
     "self",
     "unsafe-inline",
     "https://tagmanager.google.com",

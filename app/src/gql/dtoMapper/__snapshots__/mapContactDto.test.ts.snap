@@ -1,23 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapToContactDtoArray should map the gql data only including fields on the picklist 1`] = `
-Array [
-  Object {
+[
+  {
     "email": "ramsey.bolton@email.com",
     "id": "id-0",
     "name": "Ramsey Bolton",
   },
-  Object {
+  {
     "email": "john.snow@email.com",
     "id": "id-1",
     "name": "John Snow",
   },
-  Object {
+  {
     "email": "tywin.lannister@email.com",
     "id": "id-2",
     "name": "Tywin Lannister",
   },
-  Object {
+  {
     "email": "",
     "id": "id-3-defaults",
     "name": "",
@@ -26,8 +26,8 @@ Array [
 `;
 
 exports[`mapToContactDtoArray should map the gql data to the correct Dtos 1`] = `
-Array [
-  Object {
+[
+  {
     "accountId": "1233",
     "email": "ramsey.bolton@email.com",
     "id": "id-0",
@@ -36,7 +36,7 @@ Array [
     "role": "unknown role",
     "roleName": "Active label",
   },
-  Object {
+  {
     "accountId": "1233",
     "email": "john.snow@email.com",
     "id": "id-1",
@@ -45,7 +45,7 @@ Array [
     "role": "unknown role",
     "roleName": "Active label",
   },
-  Object {
+  {
     "accountId": "1233",
     "email": "tywin.lannister@email.com",
     "id": "id-2",
@@ -54,7 +54,7 @@ Array [
     "role": "unknown role",
     "roleName": "Active label",
   },
-  Object {
+  {
     "accountId": "unknown",
     "email": "",
     "id": "id-3-defaults",

@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapPcrDtoArray should map the node to the projectDto structure 1`] = `
-Array [
-  Object {
+[
+  {
     "id": "a0G26000007KkbiEAC",
-    "items": Array [
-      Object {
+    "items": [
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007KkbnEAC",
@@ -30,10 +30,10 @@ Array [
     "status": 10,
     "statusName": "Approved",
   },
-  Object {
+  {
     "id": "a0G26000007KkfzEAC",
-    "items": Array [
-      Object {
+    "items": [
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007Kkg4EAC",
@@ -58,10 +58,10 @@ Array [
     "status": 9,
     "statusName": "Withdrawn",
   },
-  Object {
+  {
     "id": "a0G26000007Ko6gEAC",
-    "items": Array [
-      Object {
+    "items": [
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007Ko6lEAC",
@@ -86,10 +86,10 @@ Array [
     "status": 3,
     "statusName": "Queried by Monitoring Officer",
   },
-  Object {
+  {
     "id": "a0G26000007KqPTEA0",
-    "items": Array [
-      Object {
+    "items": [
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007KqPYEA0",
@@ -105,7 +105,7 @@ Array [
         "typeName": "Add a partner",
         "typeOfAid": 0,
       },
-      Object {
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007KqPdEAK",
@@ -121,7 +121,7 @@ Array [
         "typeName": "Add a partner",
         "typeOfAid": 0,
       },
-      Object {
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007KqPiEAK",
@@ -137,7 +137,7 @@ Array [
         "typeName": "Add a partner",
         "typeOfAid": 0,
       },
-      Object {
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007KqPsEAK",
@@ -162,10 +162,10 @@ Array [
     "status": 12,
     "statusName": "Submitted to Innovate UK",
   },
-  Object {
+  {
     "id": "a0G26000007KtLnEAK",
-    "items": Array [
-      Object {
+    "items": [
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007KtLsEAK",
@@ -190,10 +190,10 @@ Array [
     "status": 1,
     "statusName": "Draft",
   },
-  Object {
+  {
     "id": "a0G26000007KtsoEAC",
-    "items": Array [
-      Object {
+    "items": [
+      {
         "accountName": null,
         "hasOtherFunding": false,
         "id": "a0G26000007KtstEAC",

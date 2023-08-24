@@ -1,6 +1,6 @@
-import React, { isValidElement, useContext, createContext } from "react";
+import React, { useContext, createContext } from "react";
 import cx from "classnames";
-import { useContent } from "@ui/hooks/content.hook";
+import { isContentSelector, useContent } from "@ui/hooks/content.hook";
 import type { ContentSelector } from "@copy/type";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { GdsHeadingTypes } from "../../atoms/Heading/Heading";
@@ -66,13 +66,13 @@ export function Section({ id, qa, title, subtitle, badge, className, children }:
                 "govuk-!-margin-bottom-0": !subtitle,
               })}
             >
-              {typeof title === "string" || isValidElement(title) ? title : getContent(title)}
+              {isContentSelector(title) ? getContent(title) : title}
             </Header>
           )}
 
           {subtitle && (
             <SimpleString qa="section-subtitle">
-              {typeof subtitle === "string" || isValidElement(subtitle) ? subtitle : getContent(subtitle)}
+              {isContentSelector(subtitle) ? getContent(subtitle) : subtitle}
             </SimpleString>
           )}
         </div>

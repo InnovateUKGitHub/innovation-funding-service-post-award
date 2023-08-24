@@ -6,7 +6,7 @@ import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import * as colour from "@ui/styles/colours";
 import type { ContentSelector } from "@copy/type";
 import { DateConvertible } from "@framework/util/dateHelpers";
-import { useContent } from "@ui/hooks/content.hook";
+import { isContentSelector, useContent } from "@ui/hooks/content.hook";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 import { useTableSorter } from "@ui/components/atomicDesign/organisms/documents/utils/table-sorter";
@@ -168,7 +168,7 @@ export const createTypedTable = <T,>() => {
         headerValue = header;
       } else if (typeof header === "number" || typeof header === "boolean") {
         headerValue = `${header}`;
-      } else if (header) {
+      } else if (isContentSelector(header)) {
         headerValue = getContent(header);
       } else {
         headerValue = "";

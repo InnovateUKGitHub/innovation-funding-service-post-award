@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mapToMonitoringReportQuestionsDtoArray should map the gql data to the correct Dtos 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",
     "displayOrder": 1,
     "id": "a0926000004WYHsAAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYHsAAO",
         "questionScore": 5,
         "questionText": "The consortium has identified opportunities, beyond those specified in it's proposal, and plans to explore these within this project",
@@ -17,14 +17,14 @@ Array [
     ],
     "title": "Scope",
   },
-  Object {
+  {
     "description": "For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",
     "displayOrder": 1,
     "id": "a0926000004WYHtAAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYHtAAO",
         "questionScore": 4,
         "questionText": "The project remains on course to deliver all planned objectives",
@@ -32,14 +32,14 @@ Array [
     ],
     "title": "Scope",
   },
-  Object {
+  {
     "description": "For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",
     "displayOrder": 1,
     "id": "a0926000004WYHuAAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYHuAAO",
         "questionScore": 3,
         "questionText": "There is a possibility that the project will fail to deliver on all planned objectives",
@@ -47,14 +47,14 @@ Array [
     ],
     "title": "Scope",
   },
-  Object {
+  {
     "description": "For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",
     "displayOrder": 1,
     "id": "a0926000004WYHvAAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYHvAAO",
         "questionScore": 2,
         "questionText": "It appears highly likely that the project will fail to deliver on one or more key objectives",
@@ -62,14 +62,14 @@ Array [
     ],
     "title": "Scope",
   },
-  Object {
+  {
     "description": "For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. Your Monitoring Portfolio Executive will return the report to you otherwise.",
     "displayOrder": 1,
     "id": "a0926000004WYHwAAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYHwAAO",
         "questionScore": 1,
         "questionText": "It is certain that the project will fail to deliver on one or more key objectives",
@@ -77,14 +77,14 @@ Array [
     ],
     "title": "Scope",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 2,
     "id": "a0926000004WYHxAAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYHxAAO",
         "questionScore": 5,
         "questionText": "The project is running ahead of schedule",
@@ -92,14 +92,14 @@ Array [
     ],
     "title": "Time",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 2,
     "id": "a0926000004WYHyAAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYHyAAO",
         "questionScore": 4,
         "questionText": "The project is meeting its planned timetable",
@@ -107,29 +107,29 @@ Array [
     ],
     "title": "Time",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 2,
     "id": "a0926000004WYHzAAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYHzAAO",
         "questionScore": 3,
-        "questionText": "Milestones and deliverables for the current period have been met but future ones appear to be \\"at risk\\"",
+        "questionText": "Milestones and deliverables for the current period have been met but future ones appear to be "at risk"",
       },
     ],
     "title": "Time",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 2,
     "id": "a0926000004WYI0AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI0AAO",
         "questionScore": 2,
         "questionText": "Milestones and deliverables for the current period have slipped by up to three months",
@@ -137,14 +137,14 @@ Array [
     ],
     "title": "Time",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 2,
     "id": "a0926000004WYI1AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI1AAO",
         "questionScore": 1,
         "questionText": "Milestones and deliverables for the current period have slipped by more than three months",
@@ -152,14 +152,14 @@ Array [
     ],
     "title": "Time",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 3,
     "id": "a0926000004WYI2AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI2AAO",
         "questionScore": 5,
         "questionText": "Under/overspend within +/- <5%. Accurate & evidenced forecasts in place across project. Expenditure is lower than expected for work done",
@@ -167,14 +167,14 @@ Array [
     ],
     "title": "Cost",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 3,
     "id": "a0926000004WYI3AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI3AAO",
         "questionScore": 4,
         "questionText": "Under/overspend within +/- 6-10%. Accurate & evidenced forecasts are in place. Expenditure is in line with planned activity and budget",
@@ -182,14 +182,14 @@ Array [
     ],
     "title": "Cost",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 3,
     "id": "a0926000004WYI4AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI4AAO",
         "questionScore": 3,
         "questionText": "Under/overspend within +/- 11-15%. Expenditure not commensurate with progress in some instances. Limited forecast evidence",
@@ -197,14 +197,14 @@ Array [
     ],
     "title": "Cost",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 3,
     "id": "a0926000004WYI5AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI5AAO",
         "questionScore": 2,
         "questionText": "Under/overspend within +/- 16-20%. Expenditure is not commensurate with progress. Forecasts not updated properly, and significantly inaccurate",
@@ -212,14 +212,14 @@ Array [
     ],
     "title": "Cost",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 3,
     "id": "a0926000004WYI6AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI6AAO",
         "questionScore": 1,
         "questionText": "Under/overspend +/- >21%. Expenditure is routinely not commensurate with progress. Forecasts not updated, and routinely inaccurate",
@@ -227,14 +227,14 @@ Array [
     ],
     "title": "Cost",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 4,
     "id": "a0926000004WYI7AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI7AAO",
         "questionScore": 5,
         "questionText": "Exceeding expectations",
@@ -242,14 +242,14 @@ Array [
     ],
     "title": "Exploitation",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 4,
     "id": "a0926000004WYI8AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI8AAO",
         "questionScore": 4,
         "questionText": "Good",
@@ -257,14 +257,14 @@ Array [
     ],
     "title": "Exploitation",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 4,
     "id": "a0926000004WYI9AAO",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYI9AAO",
         "questionScore": 3,
         "questionText": "Scope for improvement",
@@ -272,14 +272,14 @@ Array [
     ],
     "title": "Exploitation",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 4,
     "id": "a0926000004WYIAAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIAAA4",
         "questionScore": 2,
         "questionText": "Very poor",
@@ -287,14 +287,14 @@ Array [
     ],
     "title": "Exploitation",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 4,
     "id": "a0926000004WYIBAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIBAA4",
         "questionScore": 1,
         "questionText": "Unacceptable",
@@ -302,14 +302,14 @@ Array [
     ],
     "title": "Exploitation",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 5,
     "id": "a0926000004WYICAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYICAA4",
         "questionScore": 5,
         "questionText": "Exceeding expectations",
@@ -317,14 +317,14 @@ Array [
     ],
     "title": "Risk management",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 5,
     "id": "a0926000004WYIDAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIDAA4",
         "questionScore": 4,
         "questionText": "Good practice",
@@ -332,14 +332,14 @@ Array [
     ],
     "title": "Risk management",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 5,
     "id": "a0926000004WYIEAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIEAA4",
         "questionScore": 3,
         "questionText": "Scope for improvement",
@@ -347,14 +347,14 @@ Array [
     ],
     "title": "Risk management",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 5,
     "id": "a0926000004WYIFAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIFAA4",
         "questionScore": 2,
         "questionText": "Very poor",
@@ -362,14 +362,14 @@ Array [
     ],
     "title": "Risk management",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 5,
     "id": "a0926000004WYIGAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIGAA4",
         "questionScore": 1,
         "questionText": "Unacceptable",
@@ -377,14 +377,14 @@ Array [
     ],
     "title": "Risk management",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 6,
     "id": "a0926000004WYIHAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIHAA4",
         "questionScore": 5,
         "questionText": "Exceeding expectations",
@@ -392,14 +392,14 @@ Array [
     ],
     "title": "Project planning",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 6,
     "id": "a0926000004WYIIAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIIAA4",
         "questionScore": 4,
         "questionText": "Good",
@@ -407,14 +407,14 @@ Array [
     ],
     "title": "Project planning",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 6,
     "id": "a0926000004WYIJAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIJAA4",
         "questionScore": 3,
         "questionText": "Scope for improvement",
@@ -422,14 +422,14 @@ Array [
     ],
     "title": "Project planning",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 6,
     "id": "a0926000004WYIKAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIKAA4",
         "questionScore": 2,
         "questionText": "Very poor",
@@ -437,14 +437,14 @@ Array [
     ],
     "title": "Project planning",
   },
-  Object {
+  {
     "description": null,
     "displayOrder": 6,
     "id": "a0926000004WYILAA4",
     "isActive": true,
     "isScored": true,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYILAA4",
         "questionScore": 1,
         "questionText": "Unacceptable",
@@ -452,14 +452,14 @@ Array [
     ],
     "title": "Project planning",
   },
-  Object {
+  {
     "description": "Please summarise the project's key achievements and the key issues and risks that it faces.",
     "displayOrder": 7,
     "id": "a0926000004WYIMAA4",
     "isActive": true,
     "isScored": false,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYIMAA4",
         "questionScore": 0,
         "questionText": "unknown question",
@@ -467,14 +467,14 @@ Array [
     ],
     "title": "Summary",
   },
-  Object {
+  {
     "description": "Please confirm any specific issues that require Technology Strategy Board intervention - e.g. apparent scope change, partner changes, budget virements or time extensions.",
     "displayOrder": 8,
     "id": "a0926000004WYINAA4",
     "isActive": true,
     "isScored": false,
-    "options": Array [
-      Object {
+    "options": [
+      {
         "id": "a0926000004WYINAA4",
         "questionScore": 0,
         "questionText": "unknown question",

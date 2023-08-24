@@ -1,6 +1,6 @@
 import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { Logger } from "@shared/developmentLogger";
-import i18next from "i18next";
+import i18next, { TFunctionDetailedResult } from "i18next";
 import { ContentSelectorFunctionParser } from "./ContentSelectorFunctionParser";
 import {
   DataOption,
@@ -16,6 +16,10 @@ interface ICopy {
   competitionType?: string;
   monitoringLevel?: ProjectMonitoringLevel;
 }
+
+const isI18nDetailedResult = (
+  i18nResult: string | TFunctionDetailedResult<string>,
+): i18nResult is TFunctionDetailedResult<string> => typeof i18nResult === "object" && "res" in i18nResult;
 
 /**
  * A repository of copy, with automatic competition type switching.
@@ -93,7 +97,14 @@ class Copy {
    */
   public getCopyString(contentSelector: ContentSelector | string, options?: DataOption): string {
     const { i18nKey, values: dataOption } = this.getContentCall(contentSelector);
-    return i18next.t(i18nKey, { ...options, ...dataOption }) || i18nKey;
+    const i18nResult: string | TFunctionDetailedResult<string> =
+      i18next.t(i18nKey, { ...options, ...dataOption }) || i18nKey;
+
+    if (isI18nDetailedResult(i18nResult)) {
+      return i18nResult.res;
+    } else {
+      return i18nResult;
+    }
   }
 
   /**

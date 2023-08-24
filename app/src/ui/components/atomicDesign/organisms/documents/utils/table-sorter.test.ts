@@ -306,16 +306,16 @@ describe("useTableSorter()", () => {
 
         // Note: the easiest way of checking the change has occurred is to check the unique id changes order
         expect(getUpdatedSortOrder(result.current.sortedRows, "dateCreated")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-3.docx",
               2019-04-12T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-2.docx",
               2014-11-02T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-1.docx",
               2000-01-01T00:00:00.000Z,
             ],
@@ -325,16 +325,16 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(5));
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "dateCreated")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-1.docx",
               2000-01-01T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-2.docx",
               2014-11-02T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-3.docx",
               2019-04-12T00:00:00.000Z,
             ],
@@ -395,20 +395,20 @@ describe("useTableSorter()", () => {
         const { result } = setup(stubTwoSortedColumns, stubMultipleSortTableData);
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "dateCreated")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-3.docx",
               2019-04-12T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-2.docx",
               2014-11-02T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-1.docx",
               2000-01-01T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-4.docx",
               1999-01-01T00:00:00.000Z,
             ],
@@ -418,20 +418,20 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(5));
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "dateCreated")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-4.docx",
               1999-01-01T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-1.docx",
               2000-01-01T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-2.docx",
               2014-11-02T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-3.docx",
               2019-04-12T00:00:00.000Z,
             ],
@@ -441,20 +441,20 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(0));
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "dateCreated")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-1.docx",
               2000-01-01T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-2.docx",
               2014-11-02T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-3.docx",
               2019-04-12T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-4.docx",
               1999-01-01T00:00:00.000Z,
             ],
@@ -508,7 +508,7 @@ describe("useTableSorter()", () => {
         const { result } = setup(stubFileNameOnlySort, stubStringTableData);
 
         expect(getUpdatedSortOrder(result.current.sortedRows)).toMatchInlineSnapshot(`
-          Array [
+          [
             "document-1.docx",
             "document-3.docx",
             "document-2.docx",
@@ -518,7 +518,7 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(0));
 
         expect(getUpdatedSortOrder(result.current.sortedRows)).toMatchInlineSnapshot(`
-          Array [
+          [
             "document-1.docx",
             "document-2.docx",
             "document-3.docx",
@@ -528,7 +528,7 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(0));
 
         expect(getUpdatedSortOrder(result.current.sortedRows)).toMatchInlineSnapshot(`
-          Array [
+          [
             "document-3.docx",
             "document-2.docx",
             "document-1.docx",
@@ -580,16 +580,16 @@ describe("useTableSorter()", () => {
         const { result } = setup(stubFileNameOnlySort, stubDateTableData);
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "dateCreated")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-1.docx",
               2020-04-22T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-3.docx",
               2021-09-26T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-2.docx",
               2021-10-03T00:00:00.000Z,
             ],
@@ -599,16 +599,16 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(3));
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "dateCreated")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-1.docx",
               2020-04-22T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-3.docx",
               2021-09-26T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-2.docx",
               2021-10-03T00:00:00.000Z,
             ],
@@ -618,16 +618,16 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(3));
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "dateCreated")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-2.docx",
               2021-10-03T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-3.docx",
               2021-09-26T00:00:00.000Z,
             ],
-            Array [
+            [
               "document-1.docx",
               2020-04-22T00:00:00.000Z,
             ],
@@ -679,16 +679,16 @@ describe("useTableSorter()", () => {
         const { result } = setup(stubFileNameOnlySort, stubNumberTableData);
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "fileSize")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-1.docx",
               20635049,
             ],
-            Array [
+            [
               "document-3.docx",
               10635049,
             ],
-            Array [
+            [
               "document-2.docx",
               18635049,
             ],
@@ -698,16 +698,16 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(2));
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "fileSize")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-3.docx",
               10635049,
             ],
-            Array [
+            [
               "document-2.docx",
               18635049,
             ],
-            Array [
+            [
               "document-1.docx",
               20635049,
             ],
@@ -717,16 +717,16 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(2));
 
         expect(getUpdatedSortOrder(result.current.sortedRows, "fileSize")).toMatchInlineSnapshot(`
-          Array [
-            Array [
+          [
+            [
               "document-1.docx",
               20635049,
             ],
-            Array [
+            [
               "document-2.docx",
               18635049,
             ],
-            Array [
+            [
               "document-3.docx",
               10635049,
             ],
@@ -780,7 +780,7 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(6));
 
         expect(getUpdatedSortOrder(result.current.sortedRows)).toMatchInlineSnapshot(`
-          Array [
+          [
             "document-1.docx",
             "document-3.docx",
             "document-2.docx",
@@ -790,7 +790,7 @@ describe("useTableSorter()", () => {
         act(() => result.current.handleSort(6));
 
         expect(getUpdatedSortOrder(result.current.sortedRows)).toMatchInlineSnapshot(`
-          Array [
+          [
             "document-1.docx",
             "document-3.docx",
             "document-2.docx",

@@ -15,6 +15,7 @@ import { ProjectParticipantProvider } from "@ui/components/atomicDesign/atoms/pr
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { initStubTestIntl } from "@shared/initStubTestIntl";
 import { PCRItemType } from "@framework/constants/pcrConstants";
+import { ProjectRole } from "@framework/constants/project";
 
 describe("<FinancialVirementSummary />", () => {
   const context = new TestContext();
@@ -329,7 +330,7 @@ describe("<FinancialVirementSummary />", () => {
         totalPaidCosts: null,
         totalFutureForecastsForParticipants: 92923.78,
         totalCostsSubmitted: 37000,
-        roles: 7,
+        roles: 7 as ProjectRole,
         forecastLastModifiedDate: new Date(),
         overdueProject: false,
         claimsOverdue: 1,
@@ -409,7 +410,7 @@ describe("<FinancialVirementSummary />", () => {
         totalPaidCosts: null,
         totalFutureForecastsForParticipants: null,
         totalCostsSubmitted: 74600,
-        roles: 7,
+        roles: 7 as ProjectRole,
         forecastLastModifiedDate: null,
         overdueProject: false,
         claimsOverdue: 1,

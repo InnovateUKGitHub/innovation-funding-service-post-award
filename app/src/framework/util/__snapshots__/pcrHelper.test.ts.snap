@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`mergePcrData should merge PcrData left to right matching and merging items 1`] = `
-Object {
+{
   "comments": "",
   "id": "a0G26000007LUrbEAG",
-  "items": Array [
-    Object {
+  "items": [
+    {
       "accountName": "banana services",
       "guidance": "This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.
 ",
@@ -17,7 +17,7 @@ Object {
       "statusName": "Complete",
       "typeName": "Change a partner's name",
     },
-    Object {
+    {
       "contact1Forename": "Ramsey",
       "contact1Surname": "Bolton",
       "id": "a0G26000007LdsWEAS",
@@ -30,7 +30,7 @@ Object {
       "statusName": "Complete",
       "typeName": "Add a partner",
     },
-    Object {
+    {
       "id": "a0G26000007Ldgjhk",
       "organisationName": "Wetherspoons",
       "shortName": "Add a partner",

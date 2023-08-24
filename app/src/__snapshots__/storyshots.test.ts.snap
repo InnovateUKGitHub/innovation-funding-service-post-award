@@ -899,7 +899,7 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
         <p
           className="govuk-error-message"
           style={
-            Object {
+            {
               "textAlign": "left",
             }
           }
@@ -990,7 +990,7 @@ exports[`Storyshots IFSPA Renderer/Currency Primary 1`] = `
   <span
     className="currency"
     style={
-      Object {
+      {
         "whiteSpace": "nowrap",
       }
     }
@@ -1008,7 +1008,7 @@ exports[`Storyshots IFSPA Renderer/Currency Round To Zero Decimal Places 1`] = `
   <span
     className="currency"
     style={
-      Object {
+      {
         "whiteSpace": "nowrap",
       }
     }
@@ -1026,7 +1026,7 @@ exports[`Storyshots IFSPA Renderer/Currency Whole Number With Commas 1`] = `
   <span
     className="currency"
     style={
-      Object {
+      {
         "whiteSpace": "nowrap",
       }
     }
@@ -1187,7 +1187,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Differ
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1197,7 +1197,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Differ
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1216,7 +1216,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Primar
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1226,7 +1226,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Primar
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1245,7 +1245,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Same Y
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1255,7 +1255,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Condensed Date Range Same Y
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1274,7 +1274,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Different Y
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1284,7 +1284,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Different Y
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1303,7 +1303,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Primary 1`]
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1313,7 +1313,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Primary 1`]
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1332,7 +1332,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Same Year 1
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1342,7 +1342,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Long Date Range Same Year 1
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1361,7 +1361,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Different 
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1371,7 +1371,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Different 
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1390,7 +1390,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Primary 1`
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1400,7 +1400,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Primary 1`
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1419,7 +1419,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Same Year 
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1429,7 +1429,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range Same Year 
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1448,7 +1448,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1458,7 +1458,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1477,7 +1477,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1487,7 +1487,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1513,7 +1513,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
   <span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1523,7 +1523,7 @@ exports[`Storyshots IFSPA Renderer/Date & Time/Range/Short Date Range from Durat
     </span>
     <span
       style={
-        Object {
+        {
           "whiteSpace": "nowrap",
         }
       }
@@ -1576,7 +1576,7 @@ exports[`Storyshots IFSPA Renderer/Markdown Primary 1`] = `
   <span
     className="govuk-body markdown"
     dangerouslySetInnerHTML={
-      Object {
+      {
         "__html": "<p>The quick brown fox
 jumps over the lazy dog.</p>
 ",
@@ -1594,8 +1594,8 @@ exports[`Storyshots IFSPA Renderer/Markdown Trusted 1`] = `
   <span
     className="govuk-body markdown"
     dangerouslySetInnerHTML={
-      Object {
-        "__html": "<h1 id=\\"markdown\\">Markdown</h1>
+      {
+        "__html": "<h1 id="markdown">Markdown</h1>
 <p>A button should appear because it is trusted.  </p>
 <p><button>This button is trusted!</button>
     </p>
@@ -1614,8 +1614,8 @@ exports[`Storyshots IFSPA Renderer/Markdown Untrusted 1`] = `
   <span
     className="govuk-body markdown"
     dangerouslySetInnerHTML={
-      Object {
-        "__html": "<h1 id=\\"markdown\\">Markdown</h1>
+      {
+        "__html": "<h1 id="markdown">Markdown</h1>
 <p>A button should not appear because it is not trusted.<br>Instead, the text content of the button should show.</p>
 <p>This button is trusted!</p>
 ",
@@ -1632,7 +1632,7 @@ exports[`Storyshots IFSPA Renderer/Percentage Infinte Story 1`] = `
 >
   <span
     style={
-      Object {
+      {
         "whiteSpace": "nowrap",
       }
     }
@@ -1649,7 +1649,7 @@ exports[`Storyshots IFSPA Renderer/Percentage Primary 1`] = `
 >
   <span
     style={
-      Object {
+      {
         "whiteSpace": "nowrap",
       }
     }
@@ -1666,7 +1666,7 @@ exports[`Storyshots IFSPA Renderer/Percentage Round To Zero Decimal Places 1`] =
 >
   <span
     style={
-      Object {
+      {
         "whiteSpace": "nowrap",
       }
     }
@@ -1683,7 +1683,7 @@ exports[`Storyshots IFSPA Renderer/Percentage Whole Number With Commas 1`] = `
 >
   <span
     style={
-      Object {
+      {
         "whiteSpace": "nowrap",
       }
     }
@@ -1751,11 +1751,11 @@ exports[`Storyshots IFSPA Renderer/Table Custom Column 1`] = `
       <colgroup>
         <col
           data-qa="col-col-string"
-          style={Object {}}
+          style={{}}
         />
         <col
           data-qa="col-col-custom"
-          style={Object {}}
+          style={{}}
         />
       </colgroup>
       <thead
@@ -1789,7 +1789,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Column 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1799,7 +1799,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Column 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1822,7 +1822,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Column 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1832,7 +1832,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Column 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1855,7 +1855,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Column 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1865,7 +1865,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Column 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1903,11 +1903,11 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
       <colgroup>
         <col
           data-qa="col-col-string"
-          style={Object {}}
+          style={{}}
         />
         <col
           data-qa="col-col-currency"
-          style={Object {}}
+          style={{}}
         />
       </colgroup>
       <thead
@@ -1941,7 +1941,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1951,7 +1951,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
           <td
             className="govuk-table__cell govuk-table__cell--numeric"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1959,7 +1959,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
             <span
               className="currency"
               style={
-                Object {
+                {
                   "whiteSpace": "nowrap",
                 }
               }
@@ -1974,7 +1974,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1984,7 +1984,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
           <td
             className="govuk-table__cell govuk-table__cell--numeric"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -1992,7 +1992,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
             <span
               className="currency"
               style={
-                Object {
+                {
                   "whiteSpace": "nowrap",
                 }
               }
@@ -2007,7 +2007,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2017,7 +2017,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
           <td
             className="govuk-table__cell govuk-table__cell--numeric"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2025,7 +2025,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
             <span
               className="currency"
               style={
-                Object {
+                {
                   "whiteSpace": "nowrap",
                 }
               }
@@ -2050,7 +2050,7 @@ exports[`Storyshots IFSPA Renderer/Table Custom Footer 1`] = `
             <span
               className="currency"
               style={
-                Object {
+                {
                   "whiteSpace": "nowrap",
                 }
               }
@@ -2080,23 +2080,23 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
       <colgroup>
         <col
           data-qa="col-col-number"
-          style={Object {}}
+          style={{}}
         />
         <col
           data-qa="col-col-string"
-          style={Object {}}
+          style={{}}
         />
         <col
           data-qa="col-col-currency"
-          style={Object {}}
+          style={{}}
         />
         <col
           data-qa="col-col-shortdate"
-          style={Object {}}
+          style={{}}
         />
         <col
           data-qa="col-col-fulldate"
-          style={Object {}}
+          style={{}}
         />
       </colgroup>
       <thead
@@ -2151,7 +2151,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2161,7 +2161,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2171,7 +2171,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell govuk-table__cell--numeric"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2179,7 +2179,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
             <span
               className="currency"
               style={
-                Object {
+                {
                   "whiteSpace": "nowrap",
                 }
               }
@@ -2190,7 +2190,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2202,7 +2202,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2218,7 +2218,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2228,7 +2228,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2238,7 +2238,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell govuk-table__cell--numeric"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2246,7 +2246,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
             <span
               className="currency"
               style={
-                Object {
+                {
                   "whiteSpace": "nowrap",
                 }
               }
@@ -2257,7 +2257,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2269,7 +2269,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2285,7 +2285,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2295,7 +2295,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2305,7 +2305,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell govuk-table__cell--numeric"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2313,7 +2313,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
             <span
               className="currency"
               style={
-                Object {
+                {
                   "whiteSpace": "nowrap",
                 }
               }
@@ -2324,7 +2324,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2336,7 +2336,7 @@ exports[`Storyshots IFSPA Renderer/Table Primary 1`] = `
           <td
             className="govuk-table__cell"
             style={
-              Object {
+              {
                 "paddingRight": undefined,
               }
             }
@@ -2362,7 +2362,7 @@ exports[`Storyshots IUK Components/Message Box Alert 1`] = `
     data-qa="validation-message"
     data-qa-type="alert"
     style={
-      Object {
+      {
         "borderColor": "#d4351c",
         "color": "#d4351c",
       }
@@ -2378,7 +2378,7 @@ exports[`Storyshots IUK Components/Message Box Alert 1`] = `
       className="govuk-body"
       data-qa="validation-message-content"
       style={
-        Object {
+        {
           "color": "#d4351c",
         }
       }
@@ -2399,7 +2399,7 @@ exports[`Storyshots IUK Components/Message Box Error 1`] = `
     data-qa="validation-message"
     data-qa-type="error"
     style={
-      Object {
+      {
         "borderColor": "#d4351c",
       }
     }
@@ -2414,7 +2414,7 @@ exports[`Storyshots IUK Components/Message Box Error 1`] = `
       className="govuk-body"
       data-qa="validation-message-content"
       style={
-        Object {
+        {
           "color": undefined,
         }
       }
@@ -2435,7 +2435,7 @@ exports[`Storyshots IUK Components/Message Box Info 1`] = `
     data-qa="validation-message"
     data-qa-type="info"
     style={
-      Object {
+      {
         "borderColor": "#1d70b8",
       }
     }
@@ -2450,7 +2450,7 @@ exports[`Storyshots IUK Components/Message Box Info 1`] = `
       className="govuk-body"
       data-qa="validation-message-content"
       style={
-        Object {
+        {
           "color": undefined,
         }
       }
@@ -2471,7 +2471,7 @@ exports[`Storyshots IUK Components/Message Box Markdown 1`] = `
     data-qa="validation-message"
     data-qa-type="info"
     style={
-      Object {
+      {
         "borderColor": "#1d70b8",
       }
     }
@@ -2486,7 +2486,7 @@ exports[`Storyshots IUK Components/Message Box Markdown 1`] = `
       className="govuk-body"
       data-qa="validation-message-content"
       style={
-        Object {
+        {
           "color": undefined,
         }
       }
@@ -2494,8 +2494,8 @@ exports[`Storyshots IUK Components/Message Box Markdown 1`] = `
       <span
         className="govuk-body markdown"
         dangerouslySetInnerHTML={
-          Object {
-            "__html": "<p>Please <a target=\\"_blank\\" href=\\"https://ktp-uk.org\\">ktp</a> your way to victory</p>
+          {
+            "__html": "<p>Please <a target="_blank" href="https://ktp-uk.org">ktp</a> your way to victory</p>
 <p>Please decide now.</p>
 ",
           }
@@ -2516,7 +2516,7 @@ exports[`Storyshots IUK Components/Message Box Primary 1`] = `
     data-qa="validation-message"
     data-qa-type="info"
     style={
-      Object {
+      {
         "borderColor": "#1d70b8",
       }
     }
@@ -2531,7 +2531,7 @@ exports[`Storyshots IUK Components/Message Box Primary 1`] = `
       className="govuk-body"
       data-qa="validation-message-content"
       style={
-        Object {
+        {
           "color": undefined,
         }
       }
@@ -2552,7 +2552,7 @@ exports[`Storyshots IUK Components/Message Box Success 1`] = `
     data-qa="validation-message"
     data-qa-type="success"
     style={
-      Object {
+      {
         "borderColor": "#00703c",
         "color": "#00703c",
       }
@@ -2568,7 +2568,7 @@ exports[`Storyshots IUK Components/Message Box Success 1`] = `
       className="govuk-body"
       data-qa="validation-message-content"
       style={
-        Object {
+        {
           "color": "#00703c",
         }
       }
@@ -2589,7 +2589,7 @@ exports[`Storyshots IUK Components/Message Box Warning 1`] = `
     data-qa="validation-message"
     data-qa-type="warning"
     style={
-      Object {
+      {
         "borderColor": "var(--govukColourBlack)",
       }
     }
@@ -2604,7 +2604,7 @@ exports[`Storyshots IUK Components/Message Box Warning 1`] = `
       className="govuk-body"
       data-qa="validation-message-content"
       style={
-        Object {
+        {
           "color": undefined,
         }
       }
@@ -2662,7 +2662,7 @@ exports[`Storyshots React Hook Form/Fieldset Standard Fieldset 1`] = `
       <p
         className="govuk-error-message"
         style={
-          Object {
+          {
             "textAlign": "left",
           }
         }
@@ -2795,7 +2795,7 @@ exports[`Storyshots React Hook Form/Page Standard Page 1`] = `
         <p
           className="govuk-error-message"
           style={
-            Object {
+            {
               "textAlign": "left",
             }
           }
