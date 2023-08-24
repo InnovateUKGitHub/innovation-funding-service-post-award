@@ -16,17 +16,17 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SectionPanel } from "@ui/components/atomicDesign/molecules/SectionPanel/sectionPanel";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
-import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
+import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDateWithGql";
+import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTableWithGql";
+import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTableWithGql";
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
-import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
+import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentViewWithGql";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { TypedDetails, DualDetails } from "@ui/components/bjss/details/details";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useClaimDetailsPageData } from "./claimDetails.logic";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
+import { useClaimDetailsPageData } from "./claimDetails.logic";
 
 interface Params {
   projectId: ProjectId;
@@ -110,7 +110,7 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
       {!data.partner.isWithdrawn && data.claim?.isFinalClaim && (
         <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
       )}
-      <Section title={<ClaimPeriodDate claim={data.claim} partner={data.partner} />} />
+      <Section title={<ClaimPeriodDate />} />
 
       <Section>
         <CostsAndGrantSummary claim={data.claim} project={data.project} />
@@ -118,11 +118,14 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
 
       <Section>
         {isFc ? (
-          <ClaimTable getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)} {...data} />
+          <ClaimTable
+            getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
+            periodId={props.periodId}
+          />
         ) : (
           <ClaimReviewTable
+            periodId={props.periodId}
             getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
-            {...data}
           />
         )}
       </Section>
@@ -200,7 +203,6 @@ const AccordionSection = ({
   data: {
     claim: Pick<ClaimData["claim"], "status">;
     project: Pick<ClaimData["project"], "roles">;
-    documents: ClaimData["documents"];
   };
   periodId: PeriodId;
 }) => {
@@ -224,7 +226,14 @@ const AccordionSection = ({
 
       {isMo && (
         <AccordionItem qa="documents-list-accordion" title={x => x.claimsLabels.documentListTitle}>
-          <DocumentView hideHeader qa="claim-detail-documents" documents={data.documents} />
+          <DocumentView
+            hideHeader
+            qa="claim-detail-documents"
+            partnerId={partnerId}
+            projectId={projectId}
+            periodId={periodId}
+            email={email}
+          />
         </AccordionItem>
       )}
     </Accordion>

@@ -19,15 +19,15 @@ import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
+import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logsWithGql";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
+import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDateWithGql";
+import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTableWithGql";
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
-import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
+import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentViewWithGql";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { createTypedForm, DropdownOption } from "@ui/components/bjss/form/form";
 import { PageLoader } from "@ui/components/bjss/loading";
@@ -167,8 +167,11 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
         </>
       )}
 
-      <Section title={<ClaimPeriodDate claim={data.claim} partner={data.partner} />}>
-        <ClaimReviewTable {...data} getLink={costCategoryId => getClaimLineItemLink(props, costCategoryId)} />
+      <Section title={<ClaimPeriodDate />}>
+        <ClaimReviewTable
+          periodId={props.periodId}
+          getLink={costCategoryId => getClaimLineItemLink(props, costCategoryId)}
+        />
       </Section>
 
       <Section>
@@ -235,9 +238,12 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
 
                   <Section>
                     <DocumentEdit
+                      partnerId={props.partnerId}
+                      periodId={props.periodId}
+                      projectId={props.projectId}
+                      email={data.currentUser?.email ?? "unknown_email"}
                       qa="claim-supporting-documents"
                       onRemove={document => props.onDelete(props.documentsEditor.data, document)}
-                      documents={data.documents}
                     />
                   </Section>
                 </>

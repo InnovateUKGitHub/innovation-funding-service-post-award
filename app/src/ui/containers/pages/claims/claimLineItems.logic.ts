@@ -3,7 +3,6 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import head from "lodash/head";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapToCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
-import { mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToClaimDetailsWithLineItemsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { claimLineItemsQuery } from "./ClaimLineItems.query";
@@ -25,7 +24,7 @@ export const useClaimLineItemsData = (
   const { node: partnerNode } = getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
-  const project = mapToProjectDto(projectNode, ["id", "title", "competitionType", "projectNumber"]);
+  const project = mapToProjectDto(projectNode, ["id", "competitionType"]);
 
   const partner = mapToPartnerDto(partnerNode, ["id", "organisationType", "overheadRate"], {});
   const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
@@ -38,23 +37,6 @@ export const useClaimLineItemsData = (
     "competitionType",
     "organisationType",
   ]);
-
-  const documents = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [])
-    .map(edge =>
-      mapToProjectDocumentSummaryDtoArray(
-        edge?.node?.ContentDocumentLinks?.edges ?? [],
-        ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
-        {
-          projectId,
-          currentUser: { userId: data.currentUser.userId },
-          type: "claim details",
-          periodId,
-          partnerId,
-          costCategoryId,
-        },
-      ),
-    )
-    .flat();
 
   const claimsDetails = mapToClaimDetailsWithLineItemsDtoArray(
     claimsGql,
@@ -87,6 +69,7 @@ export const useClaimLineItemsData = (
     claimDetails,
     forecastDetail,
     costCategories,
-    documents,
+    email: data?.currentUser?.email ?? "unknown-email",
+    fragmentRef: data?.salesforce?.uiapi,
   };
 };

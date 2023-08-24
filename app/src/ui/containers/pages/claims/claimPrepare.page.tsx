@@ -9,8 +9,8 @@ import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragme
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
-import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
+import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDateWithGql";
+import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTableWithGql";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -56,16 +56,17 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
       fragmentRef={data?.fragmentRef}
     >
       <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />
+
       {isNonEditable && (
         <ValidationMessage message={getContent(x => x.pages.claimPrepare.readonlyMessage)} messageType="info" />
       )}
       <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
       {data.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
 
-      <Section title={<ClaimPeriodDate claim={data.claim} />}>
+      <Section title={<ClaimPeriodDate />}>
         <ClaimTable
           disabled={isNonEditable}
-          {...data}
+          periodId={props.periodId}
           getLink={costCategoryId =>
             props.routes.prepareClaimLineItems.getLink({
               partnerId: props.partnerId,

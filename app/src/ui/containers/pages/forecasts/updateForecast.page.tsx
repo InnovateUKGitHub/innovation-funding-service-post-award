@@ -13,7 +13,7 @@ import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { PageLoader } from "@ui/components/bjss/loading";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/projectTitleWithGql";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
@@ -22,13 +22,13 @@ import { useStores } from "@ui/redux/storesProvider";
 import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
 import { isNumber } from "@framework/util/numberHelper";
 import { ClaimLastModified } from "@ui/components/atomicDesign/organisms/claims/ClaimLastModified/claimLastModified";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
-import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warning";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTableWithGql";
+import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warningWithGql";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
   partnerId: PartnerId;
-  periodId: number;
+  periodId: PeriodId;
 }
 
 interface UpdateForecastProps {
@@ -61,16 +61,6 @@ const UpdateForecastComponent = ({
     return onChange(true, arrayExcludingClaimedPeriods);
   };
 
-  const renderOverheadsRate = (overheadRate: number | null) => {
-    if (!isNumber(overheadRate)) return null;
-    return (
-      <SimpleString qa="overhead-costs">
-        <Content value={x => x.forecastsLabels.overheadCosts} />
-        <Percentage value={overheadRate} />
-      </SimpleString>
-    );
-  };
-
   return (
     <Page
       backLink={
@@ -80,15 +70,23 @@ const UpdateForecastComponent = ({
       }
       error={editor.error}
       validator={editor.validator}
-      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
+      pageTitle={<Title />}
+      fragmentRef={data.fragmentRef}
     >
       <ForecastClaimAdvice isFc={isFc} />
       {data.claim && data.claim.isFinalClaim && (
         <ValidationMessage messageType="info" message={x => x.forecastsMessages.finalClaim} />
       )}
       <Section title="" qa="partner-forecast">
-        <Warning {...data} editor={editor} />
-        {renderOverheadsRate(data.partner.overheadRate)}
+        <Warning editor={editor} />
+
+        {isNumber(data.partner.overheadRate) && (
+          <SimpleString qa="overhead-costs">
+            <Content value={x => x.forecastsLabels.overheadCosts} />
+            <Percentage value={data.partner.overheadRate} />
+          </SimpleString>
+        )}
+
         <Form.Form
           editor={editor}
           onChange={forecastDetail => onChange(false, forecastDetail)}
@@ -99,7 +97,12 @@ const UpdateForecastComponent = ({
             name="forecastTable"
             update={() => null}
             value={({ onChange }) => (
-              <ForecastTable onChange={onChange} data={data} editor={editor} allowRetroactiveForecastEdit />
+              <ForecastTable
+                selectCurrentClaimByApprovedStatus
+                onChange={onChange}
+                editor={editor}
+                allowRetroactiveForecastEdit
+              />
             )}
           />
           <Form.Fieldset>
@@ -156,7 +159,7 @@ export const UpdateForecastRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
-    periodId: parseInt(route.params.periodId, 10),
+    periodId: parseInt(route.params.periodId, 10) as PeriodId,
   }),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.forecastsUpdate.title),
   accessControl: (auth, { projectId, partnerId }) =>

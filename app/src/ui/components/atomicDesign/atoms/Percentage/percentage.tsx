@@ -1,4 +1,5 @@
 import { isNumber } from "@framework/util/numberHelper";
+import { Fragment } from "react";
 
 export interface Props {
   value: number | null;
@@ -15,6 +16,10 @@ export const Percentage: React.FunctionComponent<Props> = ({ value, fractionDigi
     maximumFractionDigits: fractionDigits,
   });
 
+  // Enable word wrap if the value is above a billion percent.
+
+  const shouldWordWrap = isNumber(value) && value > 1_000_000_000;
+
   // Note: If the input matches a negative zero, then remove the change of a minus later on
   const absoluteNumber = Object.is(Math.sign(value), -0) ? Math.abs(value) : value;
 
@@ -25,6 +30,23 @@ export const Percentage: React.FunctionComponent<Props> = ({ value, fractionDigi
   if (isNumber(defaultIfInfinite) && !isFinite(value)) {
     return <span style={{ whiteSpace: "nowrap" }}>{formatter.format(defaultIfInfinite)}</span>;
   }
+  const wordWrap = shouldWordWrap ? "normal" : "nowrap";
 
-  return <span style={{ whiteSpace: "nowrap" }}>{percentage}</span>;
+  return (
+    <span style={{ whiteSpace: wordWrap }}>
+      {shouldWordWrap
+        ? percentage.split(",").map((x, i, a) => (
+            // Inject WBR after commas as a word wrap hint.
+            <Fragment key={i}>
+              {x}
+              {i < a.length - 1 && (
+                <>
+                  ,<wbr />
+                </>
+              )}
+            </Fragment>
+          ))
+        : percentage}
+    </span>
+  );
 };

@@ -12,6 +12,8 @@ export const claimLineItemsQuery = graphql`
     }
     salesforce {
       uiapi {
+        ...ProjectTitleFragment
+        ...DocumentViewFragment @arguments(documentRecordType: "Claims Detail")
         query {
           Acc_Profile__c(
             where: {
@@ -101,48 +103,6 @@ export const claimLineItemsQuery = graphql`
                 Acc_CostCategory__c {
                   value
                 }
-                ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { CreatedDate: { order: DESC } } }) {
-                  edges {
-                    node {
-                      LinkedEntityId {
-                        value
-                      }
-                      isFeedAttachment
-                      ContentDocument {
-                        Id
-                        LastModifiedBy {
-                          ContactId {
-                            value
-                          }
-                        }
-                        CreatedDate {
-                          value
-                        }
-                        LatestPublishedVersionId {
-                          value
-                        }
-                        FileExtension {
-                          value
-                        }
-                        Title {
-                          value
-                        }
-                        ContentSize {
-                          value
-                        }
-                        Description {
-                          value
-                        }
-                        CreatedBy {
-                          Name {
-                            value
-                          }
-                          Id
-                        }
-                      }
-                    }
-                  }
-                }
               }
             }
           }
@@ -169,12 +129,6 @@ export const claimLineItemsQuery = graphql`
             edges {
               node {
                 Id
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
                 Acc_CompetitionType__c {
                   value
                 }

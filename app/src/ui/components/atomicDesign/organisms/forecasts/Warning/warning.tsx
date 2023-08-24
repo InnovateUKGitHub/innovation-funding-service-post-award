@@ -25,9 +25,7 @@ interface Props {
   editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
 }
 
-export const Warning = (props: Props) => <AriaLive>{renderWarningMessage(props)}</AriaLive>;
-
-const renderWarningMessage = ({
+export const Warning = ({
   costCategories,
   claims,
   editor,
@@ -86,5 +84,9 @@ const renderWarningMessage = ({
     </>
   );
 
-  return <ValidationMessage messageType="info" qa={qaValue} message={warningContent} />;
+  return (
+    <AriaLive>
+      <ValidationMessage messageType="info" qa={qaValue} message={warningContent} />
+    </AriaLive>
+  );
 };

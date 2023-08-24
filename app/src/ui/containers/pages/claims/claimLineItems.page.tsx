@@ -5,12 +5,12 @@ import { useContent } from "@ui/hooks/content.hook";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
 import { BaseProps, defineRoute, RouteState } from "@ui/containers/containerBase";
-import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
+import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentViewWithGql";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { NavigationArrows } from "@ui/components/atomicDesign/molecules/NavigationArrows/navigationArrows";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/projectTitleWithGql";
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
@@ -48,7 +48,7 @@ const LineItemTable = createTypedTable<Pick<ClaimLineItemDto, "description" | "v
 
 export const ClaimLineItemsPage = (props: BaseProps & ClaimLineItemsParams) => {
   const content = useClaimLineItemsContent();
-  const { project, partner, claimDetails, costCategories, forecastDetail, documents } = useClaimLineItemsData(
+  const { project, partner, claimDetails, costCategories, forecastDetail, email, fragmentRef } = useClaimLineItemsData(
     props.projectId,
     props.partnerId,
     props.periodId,
@@ -72,14 +72,21 @@ export const ClaimLineItemsPage = (props: BaseProps & ClaimLineItemsParams) => {
   return (
     <Page
       backLink={<BackLink route={backLink}>Back to claim</BackLink>}
-      pageTitle={
-        <Title title={project.title} projectNumber={project.projectNumber} heading={currentCostCategory?.name} />
-      }
+      fragmentRef={fragmentRef}
+      pageTitle={<Title heading={currentCostCategory?.name} />}
     >
       <Section>
         <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} content={content} />
       </Section>
-      {getSupportingDocumentsSection(project.competitionType, documents, claimDetails, content)}
+      {getSupportingDocumentsSection(
+        project.competitionType,
+        email,
+        params.projectId,
+        params.partnerId,
+        params.periodId,
+        claimDetails,
+        content,
+      )}
       {renderNavigationArrows(
         costCategories,
         project,
@@ -168,7 +175,10 @@ const ClaimLineItemsTable = ({
 
 const getSupportingDocumentsSection = (
   competitionType: string,
-  documents: Data["documents"],
+  email: string,
+  projectId: ProjectId,
+  partnerId: PartnerId,
+  periodId: PeriodId,
   claimDetails: Data["claimDetails"],
   content: Record<string, string>,
 ) => {
@@ -181,7 +191,14 @@ const getSupportingDocumentsSection = (
     displaySupportingDocs && (
       <>
         <Section qa="supporting-documents-section" title={content.supportingDocumentsTitle}>
-          <DocumentView hideHeader qa="claim-line-item-documents" documents={documents} />
+          <DocumentView
+            hideHeader
+            qa="claim-line-item-documents"
+            email={email}
+            partnerId={partnerId}
+            projectId={projectId}
+            periodId={periodId}
+          />
         </Section>
 
         {renderAdditionalInformation(claimDetails, content)}
@@ -202,7 +219,7 @@ const renderAdditionalInformation = (claimDetail: Data["claimDetails"], content:
 
 const renderNavigationArrows = (
   costCategories: Data["costCategories"],
-  project: Data["project"],
+  project: Pick<Data["project"], "competitionType" | "id">,
   partner: Data["partner"],
   routeName: string,
   params: ClaimLineItemsParams,
@@ -227,7 +244,7 @@ const renderNavigationArrows = (
 
 const getLinks = (
   costCategories: Data["costCategories"],
-  project: Data["project"],
+  project: Pick<Data["project"], "competitionType" | "id">,
   partner: Data["partner"],
   overheadRate: number,
   pages: { getLink: (params: ClaimLineItemsParams) => ILinkInfo },
