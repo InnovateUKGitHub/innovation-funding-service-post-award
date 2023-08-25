@@ -129,7 +129,7 @@ const WithPcrFilesStep = <TDto extends PCRItemDto, TValidator>({
               stores.messages.clearMessages();
               // show message if remaining on page
               const successMessage = saving
-                ? getContent(x => x.documentMessages.uploadDocuments({ count: dto.files.length }))
+                ? getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }))
                 : undefined;
 
               // Save the documents editor.
