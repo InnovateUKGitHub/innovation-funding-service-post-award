@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7a26395b4fb429285b592f8a24d8aac3>>
+ * @generated SignedSource<<ea850a46a413e2702c4a589e6da48690>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -83,108 +83,6 @@ v2 = [
               {
                 "alias": null,
                 "args": [
-                  {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 1000
-                  },
-                  {
-                    "kind": "Literal",
-                    "name": "orderBy",
-                    "value": {
-                      "LastModifiedDate": {
-                        "order": "DESC"
-                      }
-                    }
-                  },
-                  {
-                    "fields": [
-                      {
-                        "fields": [
-                          {
-                            "kind": "Variable",
-                            "name": "eq",
-                            "variableName": "monitoringReportId"
-                          }
-                        ],
-                        "kind": "ObjectValue",
-                        "name": "Id"
-                      }
-                    ],
-                    "kind": "ObjectValue",
-                    "name": "where"
-                  }
-                ],
-                "concreteType": "Acc_MonitoringAnswer__cConnection",
-                "kind": "LinkedField",
-                "name": "Acc_MonitoringAnswer__c",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "Acc_MonitoringAnswer__cEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "Acc_MonitoringAnswer__c",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v2/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "RecordType",
-                            "kind": "LinkedField",
-                            "name": "RecordType",
-                            "plural": false,
-                            "selections": [
-                              {
-                                "alias": null,
-                                "args": null,
-                                "concreteType": "StringValue",
-                                "kind": "LinkedField",
-                                "name": "Name",
-                                "plural": false,
-                                "selections": (v3/*: any*/),
-                                "storageKey": null
-                              }
-                            ],
-                            "storageKey": null
-                          },
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "DoubleValue",
-                            "kind": "LinkedField",
-                            "name": "Acc_ProjectPeriodNumber__c",
-                            "plural": false,
-                            "selections": (v3/*: any*/),
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      }
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": [
-                  {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 1
-                  },
                   {
                     "fields": [
                       {
@@ -288,16 +186,16 @@ return {
     "selections": (v2/*: any*/)
   },
   "params": {
-    "cacheID": "ba42491e85f5c0a8cc5a0d884b4ff526",
+    "cacheID": "d2dac3ed25446b8c5dcb9ca8c44002e4",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportPeriodStepQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportPeriodStepQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {Id: {eq: $monitoringReportId}}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportPeriodStepQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "cedbe47e6178631abf006ae1227908b1";
+(node as any).hash = "458171dfa12b66847288b0068a99bc00";
 
 export default node;
