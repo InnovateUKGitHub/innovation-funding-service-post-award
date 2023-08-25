@@ -160,6 +160,7 @@ export const useClaimReviewPageData = (
       partner,
       claim,
       claims,
+      IARDueOnClaimPeriods,
     };
 
     const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(
