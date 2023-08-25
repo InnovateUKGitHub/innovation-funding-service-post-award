@@ -21,6 +21,7 @@ import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
 import { getClaimDetailsStatusType } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
 import { useContent } from "@ui/hooks/content.hook";
 import { ClaimRetentionMessage } from "@ui/components/atomicDesign/organisms/claims/ClaimRetentionMessage/ClaimRetentionMessage";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 
 export interface PrepareClaimParams {
   projectId: ProjectId;
@@ -82,32 +83,36 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
           </AccordionItem>
         </Accordion>
 
-        <Fieldset data-qa="save-and-continue">
-          <Button
-            name="button_default"
-            onClick={() =>
-              navigate(
-                props.routes.claimDocuments.getLink({
-                  projectId: props.projectId,
-                  partnerId: props.partnerId,
-                  periodId: props.periodId,
-                }).path,
-              )
-            }
-            disabled={isNonEditable}
-          >
-            <Content value={x => x.pages.claimPrepare.buttonSaveAndContinue} />
-          </Button>
-          <Button
-            secondary
-            name="button_save"
-            onClick={() => {
-              navigate(backLink.path);
-            }}
-          >
-            <Content value={x => x.pages.claimPrepare.buttonSaveAndReturn} />
-          </Button>
-        </Fieldset>
+        <Form>
+          <Fieldset data-qa="save-and-continue">
+            <Button
+              name="button_default"
+              secondarySubmit
+              onClick={() =>
+                navigate(
+                  props.routes.claimDocuments.getLink({
+                    projectId: props.projectId,
+                    partnerId: props.partnerId,
+                    periodId: props.periodId,
+                  }).path,
+                )
+              }
+              disabled={isNonEditable}
+            >
+              <Content value={x => x.pages.claimPrepare.buttonSaveAndContinue} />
+            </Button>
+            <Button
+              secondary
+              secondarySubmit
+              name="button_save"
+              onClick={() => {
+                navigate(backLink.path);
+              }}
+            >
+              <Content value={x => x.pages.claimPrepare.buttonSaveAndReturn} />
+            </Button>
+          </Fieldset>
+        </Form>
       </Section>
     </Page>
   );
