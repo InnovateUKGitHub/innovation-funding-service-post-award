@@ -155,6 +155,9 @@ export const useClaimReviewPageData = (
       "value",
     ]);
 
+    // IAR DUE ON CLAIM PERIODS
+    const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(claimsGql);
+
     const forecastData = {
       golCosts,
       forecastDetails,
@@ -164,6 +167,7 @@ export const useClaimReviewPageData = (
       partner,
       claim,
       claims,
+      IARDueOnClaimPeriods,
     };
 
     const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
@@ -195,9 +199,6 @@ export const useClaimReviewPageData = (
       ["comments", "createdBy", "createdDate", "newStatusLabel"],
       { roles: project.roles, competitionType: project.competitionType },
     );
-
-    // IAR DUE ON CLAIM PERIODS
-    const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(claimsGql);
 
     return {
       project,
