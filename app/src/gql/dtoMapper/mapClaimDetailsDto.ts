@@ -9,6 +9,57 @@ import {
 
 const clock = new Clock();
 
+/**
+ * Maps for claim details e.g. for constructing forecast table
+ * 
+ * on `Acc_Claims__c WHERE RecordType.Name == "Claims Detail" AND Acc_ClaimStatus__c != "New" AND Acc_CostCategory__c != null`
+ * 
+ * Example Query
+ * -------------
+ *
+ * @example
+  ClaimDetails: Acc_Claims__c(
+    where: {
+      and: [
+        { Acc_ProjectParticipant__c: { eq: $partnerId } }
+        { RecordType: { Name: { eq: "Claims Detail" } } }
+        { Acc_ClaimStatus__c: { ne: "New" } }
+        { Acc_CostCategory__c: { ne: null } }
+      ]
+    }
+    first: 2000
+    orderBy: { Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } } }
+  ) {
+    edges {
+      node {
+        RecordType {
+          Name {
+            value
+          }
+        }
+        Acc_ClaimStatus__c {
+          value
+        }
+        Acc_CostCategory__c {
+          value
+        }
+        Acc_PeriodCostCategoryTotal__c {
+          value
+        }
+        Acc_ProjectPeriodEndDate__c {
+          value
+        }
+        Acc_ProjectPeriodNumber__c {
+          value
+        }
+        Acc_ProjectPeriodStartDate__c {
+          value
+        }
+      }
+    }
+  }
+ */
+
 type ClaimDetailsNode = Readonly<
   Partial<{
     Acc_ClaimStatus__c: GQL.Value<string>;

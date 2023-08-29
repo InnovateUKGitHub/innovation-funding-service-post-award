@@ -136,11 +136,7 @@ export const useClaimReviewPageData = (
     const claim = claims.find(claim => claim.periodId === periodId);
 
     const claimDetails = mapToClaimDetailsDtoArray(
-      claimsGql?.filter(
-        x =>
-          x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId &&
-          x?.node?.RecordType?.Name?.value === "Claims Detail",
-      ),
+      data?.salesforce?.uiapi?.query?.ClaimDetails?.edges ?? [],
       ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
       {},
     );

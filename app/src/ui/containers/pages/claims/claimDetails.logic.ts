@@ -66,7 +66,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
 
     // CLAIMS
     const claims = mapToClaimDtoArray(
-      claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
+      claimsGql,
       [
         "comments",
         "id",
@@ -116,10 +116,12 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
 
     // CLAIM DETAILS
     const claimDetails = mapToClaimDetailsDtoArray(
-      claimsGql,
+      data?.salesforce?.uiapi?.query?.ClaimDetails?.edges ?? [],
       ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
       {},
     );
+
+    console.log("claimDetails", claimDetails);
 
     if (!claim) throw new Error(" there is no matching claim");
     const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [
