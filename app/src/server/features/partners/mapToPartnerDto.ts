@@ -55,6 +55,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
       awardRate: this.valueIfPermission(this.item.awardRate),
       capLimit: this.valueIfPermission(this.item.capLimit),
       capLimitDeferredAmount: this.valueIfPermission(this.item.capLimitDeferredAmount),
+      capLimitDeferredGrant: this.valueIfPermission(this.item.capLimitDeferredGrant),
       totalPaidCosts: this.valueIfPermission(this.item.totalPaidCosts),
       totalFutureForecastsForParticipants: this.valueIfPermission(this.item.totalFutureForecastsForParticipant),
       totalCostsSubmitted: this.valueIfPermission(this.item.totalCostsSubmitted),

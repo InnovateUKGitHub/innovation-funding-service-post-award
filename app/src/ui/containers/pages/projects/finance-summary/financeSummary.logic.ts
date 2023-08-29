@@ -27,7 +27,7 @@ export const useFinanceSummaryContent = () => {
       remainingValueLabel: getContent(x => x.projectLabels.remainingValue),
       totalPrepaymentLabel: getContent(x => x.projectLabels.totalPrepayment),
       capLimitLabel: getContent(x => x.projectLabels.capLimit),
-      capLimitDeferredAmountLabel: getContent(x => x.projectLabels.capLimitDeferredAmount),
+      capLimitDeferredGrantLabel: getContent(x => x.projectLabels.capLimitDeferredAmount),
     }),
     [],
   );
@@ -50,7 +50,7 @@ export type Partner = {
   remainingParticipantGrant: number | null;
   totalPrepayment: number | null;
   capLimit: number | null;
-  capLimitDeferredAmount: number | null;
+  capLimitDeferredGrant: number | null;
   auditReportFrequencyName: string;
 };
 
@@ -87,7 +87,7 @@ export const useFinanceSummaryData = (projectId: ProjectId) => {
       "remainingParticipantGrant",
       "totalPrepayment",
       "capLimit",
-      "capLimitDeferredAmount",
+      "capLimitDeferredGrant",
       "auditReportFrequencyName",
     ],
     {},
