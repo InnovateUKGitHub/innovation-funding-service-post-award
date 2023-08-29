@@ -84,6 +84,67 @@ export const claimReviewQuery = graphql`
               }
             }
           }
+          AllClaimsForPartner: Acc_Claims__c(
+            where: {
+              and: [
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                { RecordType: { Name: { eq: "Total Project Period" } } }
+                { Acc_ClaimStatus__c: { ne: "New " } }
+                { Acc_ClaimStatus__c: { ne: "Not used" } }
+              ]
+            }
+            first: 2000
+          ) {
+            edges {
+              node {
+                RecordType {
+                  Name {
+                    value
+                  }
+                }
+                Id
+                Acc_ReasonForDifference__c {
+                  value
+                }
+                Acc_ClaimStatus__c {
+                  value
+                }
+                Acc_FinalClaim__c {
+                  value
+                }
+                Acc_PaidDate__c {
+                  value
+                }
+                Acc_ProjectParticipant__r {
+                  Id
+                }
+                Acc_PCF_Status__c {
+                  value
+                }
+                Acc_PeriodCoststobePaid__c {
+                  value
+                }
+                Acc_ProjectPeriodEndDate__c {
+                  value
+                }
+                Acc_ProjectPeriodNumber__c {
+                  value
+                }
+                Acc_ProjectPeriodStartDate__c {
+                  value
+                }
+                Acc_TotalCostsApproved__c {
+                  value
+                }
+                Acc_TotalCostsSubmitted__c {
+                  value
+                }
+                Acc_TotalDeferredAmount__c {
+                  value
+                }
+              }
+            }
+          }
           ClaimDetails: Acc_Claims__c(
             where: {
               and: [
@@ -124,7 +185,7 @@ export const claimReviewQuery = graphql`
               }
             }
           }
-          Acc_Claims__c(
+          ClaimsForIarDue: Acc_Claims__c(
             where: {
               and: [
                 { Acc_ProjectID__c: { eq: $projectIdStr } }
@@ -133,33 +194,13 @@ export const claimReviewQuery = graphql`
               ]
             }
             first: 2000
-            orderBy: { Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } } }
           ) {
             edges {
               node {
-                Id
                 RecordType {
                   Name {
                     value
                   }
-                }
-                Acc_ProjectParticipant__r {
-                  Id
-                  Acc_AccountId__r {
-                    Name {
-                      value
-                    }
-                  }
-                }
-                LastModifiedDate {
-                  value
-                }
-                Acc_ApprovedDate__c {
-                  value
-                }
-                Acc_ClaimStatus__c {
-                  value
-                  label
                 }
                 Acc_IAR_Status__c {
                   value
@@ -167,41 +208,29 @@ export const claimReviewQuery = graphql`
                 Acc_IARRequired__c {
                   value
                 }
-                Acc_PaidDate__c {
-                  value
-                }
-                Acc_PeriodCostCategoryTotal__c {
-                  value
-                }
-                Acc_ProjectParticipant__r {
-                  Id
-                }
-                Acc_ProjectPeriodEndDate__c {
-                  value
-                }
-                Acc_ProjectPeriodStartDate__c {
-                  value
-                }
                 Acc_ProjectPeriodNumber__c {
                   value
                 }
-                Acc_ProjectPeriodCost__c {
-                  value
-                }
-                Acc_TotalCostsApproved__c {
-                  value
-                }
-                Acc_TotalCostsSubmitted__c {
-                  value
-                }
-                Acc_TotalDeferredAmount__c {
-                  value
-                }
-                Acc_FinalClaim__c {
-                  value
-                }
-                Acc_PCF_Status__c {
-                  value
+              }
+            }
+          }
+          ClaimsByPeriodForDocuments: Acc_Claims__c(
+            where: {
+              and: [
+                { Acc_ProjectID__c: { eq: $projectIdStr } }
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
+              ]
+            }
+            first: 2000
+            orderBy: { Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } } }
+          ) {
+            edges {
+              node {
+                RecordType {
+                  Name {
+                    value
+                  }
                 }
                 Acc_CostCategory__c {
                   value

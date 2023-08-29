@@ -36,11 +36,8 @@ export const useClaimReviewPageData = (
   );
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
-  const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
-  const documentsGql = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? []).filter(
-    x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId,
-  );
+  const documentsGql = data?.salesforce?.uiapi?.query?.ClaimsByPeriodForDocuments?.edges ?? [];
 
   const totalDocumentsLength = documentsGql.map(x => x?.node?.ContentDocumentLinks?.edges ?? []).flat().length ?? 0;
 
@@ -86,7 +83,7 @@ export const useClaimReviewPageData = (
     );
 
     const claims = mapToClaimDtoArray(
-      claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
+      data?.salesforce?.uiapi?.query?.AllClaimsForPartner?.edges ?? [],
       [
         "comments",
         "id",
@@ -152,7 +149,7 @@ export const useClaimReviewPageData = (
     ]);
 
     // IAR DUE ON CLAIM PERIODS
-    const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(claimsGql);
+    const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(data?.salesforce?.uiapi?.query?.ClaimsForIarDue?.edges ?? []);
 
     const forecastData = {
       golCosts,
@@ -166,12 +163,6 @@ export const useClaimReviewPageData = (
       IARDueOnClaimPeriods,
     };
 
-    const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
-      claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
-      ["costCategoryId", "periodId", "value"],
-      {},
-    );
-
     const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
       [
@@ -183,7 +174,7 @@ export const useClaimReviewPageData = (
         "remainingOfferCosts",
       ],
       {
-        claimDetails: claimDetailsAllPeriods,
+        claimDetails,
         forecastDetails,
         periodId,
         golCosts,
