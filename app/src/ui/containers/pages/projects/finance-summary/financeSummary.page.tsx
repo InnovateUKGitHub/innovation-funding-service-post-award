@@ -123,9 +123,9 @@ const FinanceSummaryPage = (props: Props & BaseProps) => {
             <FinanceSummaryTable.Percentage qa="ClaimCap" header={content.capLimitLabel} value={x => x.capLimit} />
 
             <FinanceSummaryTable.Currency
-              qa="CapLimitDeferredAmount"
-              header={content.capLimitDeferredAmountLabel}
-              value={x => x.capLimitDeferredAmount}
+              qa="capLimitDeferredGrant"
+              header={content.capLimitDeferredGrantLabel}
+              value={x => x.capLimitDeferredGrant}
             />
           </FinanceSummaryTable.Table>
         </Section>

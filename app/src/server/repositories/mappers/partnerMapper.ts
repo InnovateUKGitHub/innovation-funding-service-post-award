@@ -23,6 +23,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       totalApprovedCosts: item.Acc_TotalApprovedCosts__c,
       capLimit: item.Acc_Cap_Limit__c,
       capLimitDeferredAmount: item.Acc_CapLimitDeferredAmount__c,
+      capLimitDeferredGrant: item.Acc_CapLimitDeferredGrant__c,
       awardRate: item.Acc_Award_Rate__c,
       totalPaidCosts: item.Acc_TotalPaidCosts__c,
       totalFutureForecastsForParticipant: item.Acc_TotalFutureForecastsForParticipant__c,

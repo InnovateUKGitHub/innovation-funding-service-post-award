@@ -100,6 +100,7 @@ describe("getAllForProjectQuery", () => {
       awardRate: 50,
       capLimit: 50,
       capLimitDeferredAmount: 180_000,
+      capLimitDeferredGrant: 90_000,
       totalFutureForecastsForParticipants: 1002,
       totalCostsSubmitted: 100,
       roles: ProjectRole.ProjectManager,

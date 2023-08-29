@@ -38,6 +38,7 @@ type PartnerNode = Readonly<
     Acc_Award_Rate__c: GQL.Value<number>;
     Acc_Cap_Limit__c: GQL.Value<number>;
     Acc_CapLimitDeferredAmount__c: GQL.Value<number>;
+    Acc_CapLimitDeferredGrant__c: GQL.Value<number>;
     Acc_StaticCapLimitGrant__c: GQL.Value<number>;
     Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
     Acc_NewForecastNeeded__c: GQL.Value<boolean>;
@@ -70,6 +71,7 @@ type PartnerDtoMapping = Pick<
   | "awardRate"
   | "capLimit"
   | "capLimitDeferredAmount"
+  | "capLimitDeferredGrant"
   | "capLimitGrant"
   | "claimStatus"
   | "competitionName"
@@ -118,6 +120,9 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   capLimitDeferredAmount(node) {
     return node?.Acc_CapLimitDeferredAmount__c?.value ?? 0;
+  },
+  capLimitDeferredGrant(node) {
+    return node?.Acc_CapLimitDeferredGrant__c?.value ?? 0;
   },
   capLimitGrant(node) {
     return node?.Acc_StaticCapLimitGrant__c?.value ?? 0;
