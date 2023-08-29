@@ -172,17 +172,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
       <Section>
         <Accordion>
           <AccordionItem qa="forecast-accordion" title={content.accordionTitleForecast}>
-            <ForecastTable
-              hideValidation
-              data={{
-                ...data.forecastData,
-                project: data.project,
-                partner: data.partner,
-                claim: data.claim,
-                costCategories: data.costCategories,
-                IARDueOnClaimPeriods: data.IARDueOnClaimPeriods,
-              }}
-            />
+            <ForecastTable hideValidation data={data.forecastData} />
           </AccordionItem>
 
           <AccordionItem title={content.accordionTitleClaimLog} qa="log-accordion">

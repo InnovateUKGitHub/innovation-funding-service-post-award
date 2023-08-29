@@ -121,8 +121,6 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
       {},
     );
 
-    console.log("claimDetails", claimDetails);
-
     if (!claim) throw new Error(" there is no matching claim");
     const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [
       "id",
