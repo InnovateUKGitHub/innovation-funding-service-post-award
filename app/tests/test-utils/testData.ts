@@ -162,6 +162,7 @@ export class TestData {
       totalPaidCosts: 25000,
       capLimit: 50,
       capLimitDeferredAmount: 180_000,
+      capLimitDeferredGrant: 90_000,
       awardRate: 50,
       forecastLastModifiedDate: null,
       organisationType: PCROrganisationType.Industrial,

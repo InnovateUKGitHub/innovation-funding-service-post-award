@@ -17,6 +17,7 @@ export interface Partner {
   bankDetailsTaskStatusLabel: string;
   capLimit: number;
   capLimitDeferredAmount: number;
+  capLimitDeferredGrant: number;
   claimsForReview: number;
   claimsOverdue: number;
   claimsUnderQuery: number;

@@ -59,6 +59,7 @@ export interface PartnerDto {
   bankDetailsTaskStatusLabel: string | null;
   capLimit: number | null;
   capLimitDeferredAmount: number | null;
+  capLimitDeferredGrant: number | null;
   claimsOverdue: number | null;
   claimStatus: PartnerClaimStatus;
   claimsWithParticipant: number | null;

@@ -582,6 +582,7 @@ exports[`Context should contain the repositories 1`] = `
       "Acc_TotalApprovedCosts__c",
       "Acc_Cap_Limit__c",
       "Acc_CapLimitDeferredAmount__c",
+      "Acc_CapLimitDeferredGrant__c",
       "Acc_Award_Rate__c",
       "Acc_ProjectRole__c",
       "toLabel(Acc_ProjectRole__c) ProjectRoleName",
