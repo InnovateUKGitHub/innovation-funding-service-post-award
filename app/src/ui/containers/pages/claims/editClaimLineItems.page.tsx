@@ -56,12 +56,15 @@ export interface EditClaimLineItemsData {
   claimDetails: Pick<ClaimDetailsDto, "isAuthor" | "value" | "comments"> & { lineItems: LineItem[] };
   claimOverrides: ClaimOverrideRateDto;
   costCategories: Pick<CostCategoryDto, "id" | "type" | "name" | "hintText" | "isCalculated">[];
-  editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
   forecastDetail: Pick<ForecastDetailsDTO, "value">;
   documents: Pick<
     DocumentSummaryDto,
     "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner" | "description"
   >[];
+}
+
+export interface ContainerProps {
+  editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
   maxClaimLineItems: number;
 }
 
@@ -72,7 +75,7 @@ interface CombinedData {
   costCategories: EditClaimLineItemsData["costCategories"];
   forecastDetail: EditClaimLineItemsData["forecastDetail"];
   documents: EditClaimLineItemsData["documents"];
-  editor: EditClaimLineItemsData["editor"];
+  editor: ContainerProps["editor"];
 }
 
 const LineItemForm = createTypedForm<Pick<ClaimDetailsDto, "value" | "comments"> & { lineItems: LineItem[] }>();
@@ -91,12 +94,14 @@ const DeleteByEnteringZero = () => (
 );
 
 const EditClaimLineItemsComponent = (
-  props: BaseProps & EditClaimDetailsParams & EditClaimLineItemsData & EditClaimLineItemsCallbacks,
+  props: BaseProps & EditClaimDetailsParams & ContainerProps & EditClaimLineItemsCallbacks,
 ) => {
   const { isClient: showAddRemove } = useMounted();
 
-  const { project, costCategories, documents, forecastDetail, claimOverrides, claimDetails, editor }: CombinedData =
-    props;
+  const { project, claimDetails, claimOverrides, forecastDetail, costCategories, documents } =
+    useEditClaimLineItemsData(props.projectId, props.partnerId, props.periodId, props.costCategoryId);
+
+  const { editor } = props;
 
   const back = props.routes.prepareClaim.getLink({
     projectId: project.id,
@@ -743,9 +748,6 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
   const navigate = useNavigate();
   const config = stores.config.getConfig();
 
-  const { project, claimDetails, claimOverrides, forecastDetail, costCategories, documents } =
-    useEditClaimLineItemsData(props.projectId, props.partnerId, props.periodId, props.costCategoryId);
-
   const combined = Pending.combine({
     editor: stores.claimDetails.getClaimDetailsEditor(
       props.projectId,
@@ -789,13 +791,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
       pending={combined}
       render={data => (
         <EditClaimLineItemsComponent
-          project={project}
-          claimDetails={claimDetails}
-          claimOverrides={claimOverrides}
-          costCategories={costCategories}
-          forecastDetail={forecastDetail}
           onUpdate={onUpdate}
-          documents={documents}
           maxClaimLineItems={config.options.maxClaimLineItems}
           {...data}
           {...props}
