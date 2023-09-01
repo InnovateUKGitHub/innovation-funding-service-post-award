@@ -93,7 +93,7 @@ describe("useCompetitionType()", () => {
                 } as unknown as IStores,
               }),
             ),
-          ).toThrowError(`There was an error getting the competitionType from projectId - ${stubProjectId}`);
+          ).toThrow(`There was an error getting the competitionType from projectId - ${stubProjectId}`);
         });
 
         test("with error message", () => {
@@ -111,7 +111,7 @@ describe("useCompetitionType()", () => {
                 } as unknown as IStores,
               }),
             ),
-          ).toThrowError(stubError);
+          ).toThrow(stubError);
         });
 
         test("with no error", () => {
@@ -128,7 +128,7 @@ describe("useCompetitionType()", () => {
                 } as unknown as IStores,
               }),
             ),
-          ).toThrowError(`There was an error getting the competitionType from projectId - ${stubProjectId}`);
+          ).toThrow(`There was an error getting the competitionType from projectId - ${stubProjectId}`);
         });
       });
     });

@@ -160,7 +160,7 @@ describe("UpdatePCRCommand", () => {
           pcr: pcrPayload,
         });
 
-        await expect(context.runCommand(command)).rejects.toThrowError(ValidationError);
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       });
 
       test("when a multiple PCR Items are already in progress", async () => {
@@ -184,7 +184,7 @@ describe("UpdatePCRCommand", () => {
           pcr: pcrPayload,
         });
 
-        await expect(context.runCommand(command)).rejects.toThrowError(ValidationError);
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       });
     });
   });

@@ -81,7 +81,7 @@ describe("Create PCR Command", () => {
 
         const command = new CreateProjectChangeRequestCommand(project.Id, pcrPayload);
 
-        await expect(context.runCommand(command)).rejects.toThrowError(ValidationError);
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       });
 
       test("when a multiple PCR Items are already in progress", async () => {
@@ -103,7 +103,7 @@ describe("Create PCR Command", () => {
 
         const command = new CreateProjectChangeRequestCommand(project.Id, pcrPayload);
 
-        await expect(context.runCommand(command)).rejects.toThrowError(ValidationError);
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
       });
     });
   });

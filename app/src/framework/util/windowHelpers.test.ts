@@ -16,11 +16,11 @@ describe("windowHelpers", () => {
 
   test("scrollToTheTopSmoothly", () => {
     scrollToTheTopSmoothly();
-    expect(global.window.scrollTo).toBeCalledWith({ top: 0, behavior: "smooth" });
+    expect(global.window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
   });
 
   test("scrollToTheTopInstantly", () => {
     scrollToTheTopInstantly();
-    expect(global.window.scrollTo).toBeCalledWith(0, 0);
+    expect(global.window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
 });

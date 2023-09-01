@@ -28,7 +28,7 @@ describe("useContent()", () => {
     const consoleSpy = jest.spyOn(console, "error").mockImplementation(noop);
 
     // Note: renderHook() is not used here, I do not want a provider as I want to test error
-    expect(() => renderHook(() => useContent())).toThrowError("useContent() must be used within a <ContentProvider />");
+    expect(() => renderHook(() => useContent())).toThrow("useContent() must be used within a <ContentProvider />");
     consoleSpy.mockRestore();
   });
 

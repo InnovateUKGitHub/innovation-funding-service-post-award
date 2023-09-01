@@ -1,4 +1,4 @@
-import React, { cloneElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import cx from "classnames";
 import { SimpleString } from "../../atomicDesign/atoms/SimpleString/simpleString";
 

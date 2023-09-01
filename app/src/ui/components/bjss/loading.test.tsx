@@ -62,7 +62,7 @@ describe("<PageLoader />", () => {
       const targetElement = queryByTestId("not-found");
 
       expect(targetElement).toBeInTheDocument();
-      expect(stubRender).toBeCalledTimes(0);
+      expect(stubRender).toHaveBeenCalledTimes(0);
     });
 
     it("with custom renderError()", () => {
@@ -77,7 +77,7 @@ describe("<PageLoader />", () => {
       const targetElement = getByText(stubCustomErrorContent);
 
       expect(targetElement).toBeInTheDocument();
-      expect(stubRender).toBeCalledTimes(0);
+      expect(stubRender).toHaveBeenCalledTimes(0);
     });
   });
 });
@@ -134,8 +134,8 @@ describe("<Loader />", () => {
           pending: new Pending(loadingStatus, stubData),
         });
 
-        expect(stubRender).toBeCalledTimes(1);
-        expect(stubRender).toBeCalledWith(stubData, true);
+        expect(stubRender).toHaveBeenCalledTimes(1);
+        expect(stubRender).toHaveBeenCalledWith(stubData, true);
       });
 
       it("with renderLoading", () => {
@@ -171,8 +171,8 @@ describe("<Loader />", () => {
         pending: new Pending(loadingStatus, stubData),
       });
 
-      expect(stubRender).toBeCalledTimes(1);
-      expect(stubRender).toBeCalledWith(stubData, false);
+      expect(stubRender).toHaveBeenCalledTimes(1);
+      expect(stubRender).toHaveBeenCalledWith(stubData, false);
     });
 
     describe("should render with Failed state", () => {

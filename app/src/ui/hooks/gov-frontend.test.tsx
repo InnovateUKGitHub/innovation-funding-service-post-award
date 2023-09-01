@@ -27,7 +27,7 @@ describe("useGovFrontend()", () => {
 
     expect(stubGdsInit).toHaveBeenCalledTimes(1);
     expect(stubGdsModule).toHaveBeenCalledTimes(1);
-    expect(stubGdsModule).toBeCalledWith(stubElement);
+    expect(stubGdsModule).toHaveBeenCalledWith(stubElement);
   });
 
   describe("should not invoke gds library", () => {

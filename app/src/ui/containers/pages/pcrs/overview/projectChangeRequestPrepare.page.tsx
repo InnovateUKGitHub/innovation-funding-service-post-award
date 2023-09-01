@@ -37,7 +37,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
 
   const getPcRTypeName = useGetPcrTypeName();
 
-  const pcrItems = pcr.items.map((x, i) => ({
+  const pcrItems = pcr.items.map(x => ({
     shortName: getPcRTypeName(x.shortName),
     status: getPcrItemTaskStatus(x.status),
   }));

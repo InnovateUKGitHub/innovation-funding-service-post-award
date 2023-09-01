@@ -76,8 +76,8 @@ describe("NumberInput", () => {
     });
 
     jest.runAllTimers();
-    expect(onChange).toBeCalledTimes(1);
-    expect(onChange).toBeCalledWith(23);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(23);
     jest.useRealTimers();
   });
 

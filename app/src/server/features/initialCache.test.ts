@@ -42,7 +42,7 @@ describe("initialCache", () => {
   it("should not initialise the cache if not prod (not https domain)", async () => {
     const notProdContext = { ...context, config: { serverUrl: "http://acc-dev.ukri.org" } } as unknown as IContext;
     await fetchCaches(notProdContext);
-    expect(runQuery).not.toBeCalled();
-    expect(logger.info).not.toBeCalled();
+    expect(runQuery).not.toHaveBeenCalled();
+    expect(logger.info).not.toHaveBeenCalled();
   });
 });

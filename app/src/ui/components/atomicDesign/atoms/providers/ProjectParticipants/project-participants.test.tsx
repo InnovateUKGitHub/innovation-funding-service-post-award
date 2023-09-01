@@ -47,7 +47,7 @@ describe("useProjectParticipants", () => {
       test("with non specific error message", () => {
         const failedQuery = new Pending(LoadingStatus.Failed, undefined, stubErrorMessage);
 
-        expect(() => setup(stubProjectId, failedQuery)).toThrowError(
+        expect(() => setup(stubProjectId, failedQuery)).toThrow(
           "There was an error fetching data within useGetProjectParticipants",
         );
       });
@@ -55,7 +55,7 @@ describe("useProjectParticipants", () => {
       test("with no error", () => {
         const failedQuery = new Pending(LoadingStatus.Failed, undefined, undefined);
 
-        expect(() => setup(stubProjectId, failedQuery)).toThrowError(
+        expect(() => setup(stubProjectId, failedQuery)).toThrow(
           "There was an error fetching data within useGetProjectParticipants",
         );
       });
@@ -64,7 +64,7 @@ describe("useProjectParticipants", () => {
         const stubError = new Error(stubErrorMessage);
         const failedQuery = new Pending(LoadingStatus.Failed, undefined, stubError);
 
-        expect(() => setup(stubProjectId, failedQuery)).toThrowError(stubErrorMessage);
+        expect(() => setup(stubProjectId, failedQuery)).toThrow(stubErrorMessage);
       });
     });
 
