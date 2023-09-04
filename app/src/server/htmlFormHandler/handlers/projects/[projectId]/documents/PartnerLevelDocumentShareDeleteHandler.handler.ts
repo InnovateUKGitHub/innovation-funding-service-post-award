@@ -26,6 +26,10 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
 
   acceptFiles = true;
 
+  protected async getZodSchema() {
+    return partnerLevelDelete;
+  }
+
   protected async mapToZod({
     input,
     params,
@@ -51,7 +55,7 @@ class PartnerLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     context,
   }: {
     res: express.Response;
-    input: PartnerLevelDeleteOutputs;
+    input: z.output<typeof partnerLevelDelete>;
     context: IContext;
   }): Promise<void> {
     const [documentInfo] = await context.repositories.documents.getDocumentsMetadata([input.documentId]);

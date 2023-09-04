@@ -1873,6 +1873,17 @@
         }
       }
     },
+    "pcrModify": {
+      "types": {
+        "errors": {
+          "too_small": "You must select at least one of the types.",
+          "invalid_enum_value": "You can only select from the list of available types.",
+          "another_pcr_already_has_this": "You can only have one '{{ type }}' change in progress in any PCR at a time.",
+          "this_pcr_already_has_this_type": "You can only have one '{{ type }}' change in progress in this PCR at a time.",
+          "not_enough_partners_to_action_this_type": "You cannot select '{{ type }}' because you do not have enough partners to action these."
+        }
+      }
+    },
     "documents": {
       "description": {
         "errors": {

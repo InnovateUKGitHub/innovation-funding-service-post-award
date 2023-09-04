@@ -118,7 +118,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
 
         <Field
           legend={getContent(x => x.pages.pcrModifyOptions.selectRequestTypesTitle)}
-          error={getFieldState("types").error}
+          error={getFieldState("types").error as RhfError}
           id="types"
         >
           <CheckboxList name="types" register={register}>
