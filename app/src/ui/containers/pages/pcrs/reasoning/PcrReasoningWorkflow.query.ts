@@ -10,6 +10,7 @@ const pcrReasoningWorkflowQuery = graphql`
         query {
           Acc_ProjectChangeRequest__c(
             where: { or: [{ Id: { eq: $pcrId } }, { Acc_RequestHeader__c: { eq: $pcrId } }] }
+            first: 2000
           ) {
             edges {
               node {
