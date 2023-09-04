@@ -12,7 +12,6 @@ import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 export const usePcrReasoningQuery = (
   projectId: ProjectId,
   pcrId: PcrId,
-  fetchKey: number,
   refreshedQueryOptions: RefreshedQueryOptions,
 ) => {
   const data = useLazyLoadQuery<PcrReasoningWorkflowQuery>(

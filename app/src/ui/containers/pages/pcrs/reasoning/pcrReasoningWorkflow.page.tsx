@@ -26,9 +26,8 @@ import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "../../../containerBase";
 import { usePcrReasoningQuery } from "./pcrReasoningWorkflow.logic";
-import { useState } from "react";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { RefreshedQueryOptions, useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { pcrReasoningWorkflowQuery } from "./PcrReasoningWorkflow.query";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
@@ -48,19 +47,20 @@ interface Data {
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
   mode: "prepare" | "review" | "view";
-  fetchKey: number;
+  refreshedQueryOptions: RefreshedQueryOptions;
 }
 
 interface ResolvedData {
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   mode: "prepare" | "review" | "view";
-  fetchKey: number;
+  refreshedQueryOptions: RefreshedQueryOptions;
 }
 
 interface Callbacks {
   onChange: (dto: PCRDto) => void;
   onSave: (dto: PCRDto, link: ILinkInfo) => void;
+  refresh: () => void;
 }
 
 const PCRReasoningComponentLoader = (
@@ -77,19 +77,9 @@ const PCRReasoningComponentLoader = (
 const PCRReasoningWorkflowComponent = (
   props: BaseProps & ProjectChangeRequestPrepareReasoningParams & ResolvedData & Callbacks,
 ) => {
-  const { editor, documentsEditor, projectId, mode, pcrId, routes } = props;
+  const { editor, documentsEditor, projectId, mode, pcrId, routes, refreshedQueryOptions } = props;
 
-  const [refreshedQueryOptions, refresh] = useRefreshQuery(pcrReasoningWorkflowQuery, {
-    projectId: props.projectId,
-    pcrId: props.pcrId,
-  });
-
-  const { project, pcr, documents, editableItemTypes } = usePcrReasoningQuery(
-    projectId,
-    pcrId,
-    props.fetchKey,
-    refreshedQueryOptions,
-  );
+  const { project, pcr, documents, editableItemTypes } = usePcrReasoningQuery(projectId, pcrId, refreshedQueryOptions);
 
   return (
     <Page
@@ -103,7 +93,7 @@ const PCRReasoningWorkflowComponent = (
       {!!props.step && <Messages messages={props.messages} />}
       {props.mode === "prepare" &&
         !!props.step &&
-        renderStep(props.step, pcr, editor, documentsEditor, { documents, refresh, ...props })}
+        renderStep(props.step, pcr, editor, documentsEditor, { documents, ...props })}
       {!props.step && (
         <PCRReasoningSummary
           {...props}
@@ -251,9 +241,13 @@ const findStepByName = (stepName: IReasoningWorkflowMetadata["stepName"]) => {
 const PCRReasoningWorkflowContainer = (
   props: ProjectChangeRequestPrepareReasoningParams & BaseProps & { mode: "prepare" | "review" | "view" },
 ) => {
-  const [fetchKey, setFetchKey] = useState(0);
   const navigate = useNavigate();
   const stores = useStores();
+
+  const [refreshedQueryOptions, refresh] = useRefreshQuery(pcrReasoningWorkflowQuery, {
+    projectId: props.projectId,
+    pcrId: props.pcrId,
+  });
 
   return (
     <PCRReasoningComponentLoader
@@ -272,7 +266,7 @@ const PCRReasoningWorkflowContainer = (
           dto,
           message: undefined,
           onComplete: () => {
-            setFetchKey(s => s + 1);
+            refresh();
             navigate(link.path);
           },
         });
@@ -286,7 +280,8 @@ const PCRReasoningWorkflowContainer = (
           dto,
         });
       }}
-      fetchKey={fetchKey}
+      refresh={refresh}
+      refreshedQueryOptions={refreshedQueryOptions}
     />
   );
 };

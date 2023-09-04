@@ -114,7 +114,7 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
     return mapToPcrItemType(node?.RecordType?.Name?.value ?? "Unknown");
   },
   typeName(node) {
-    return node?.RecordType?.Name?.label ?? "Unknown";
+    return node?.RecordType?.Name?.value ?? "Unknown";
   },
   typeOfAid(node, additionalData) {
     /* possible to be passed in as TypeofAid enum from project mapper or as string from salesforce */
