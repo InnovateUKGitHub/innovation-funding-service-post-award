@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<39ec64376d3143b0dc382a78ecf268b1>>
+ * @generated SignedSource<<3d1de625b503803cccb3079ce1552e10>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -78,6 +78,7 @@ export type PcrReasoningWorkflowQuery$data = {
                     readonly LinkedEntityId: {
                       readonly value: string | null;
                     } | null;
+                    readonly isFeedAttachment: boolean;
                   } | null;
                 } | null> | null;
               } | null;
@@ -376,6 +377,13 @@ v6 = [
                                       {
                                         "alias": null,
                                         "args": null,
+                                        "kind": "ScalarField",
+                                        "name": "isFeedAttachment",
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
                                         "concreteType": "ContentDocument",
                                         "kind": "LinkedField",
                                         "name": "ContentDocument",
@@ -630,16 +638,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "8b8b672ee814bc37894682b71a187d8f",
+    "cacheID": "051b7c5c3e63b160a851ef62ff95658f",
     "id": null,
     "metadata": {},
     "name": "PcrReasoningWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrReasoningWorkflowQuery(\n  $projectId: ID\n  $pcrId: ID\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Reasoning__c {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n              }\n              ContentDocumentLinks(first: 2000) {\n                edges {\n                  node {\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Username {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrReasoningWorkflowQuery(\n  $projectId: ID\n  $pcrId: ID\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Reasoning__c {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n              }\n              ContentDocumentLinks(first: 2000) {\n                edges {\n                  node {\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Username {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "2bc935034e336ca64dcb1543d68cb9be";
+(node as any).hash = "006e9835c4f2c84bd1113311b6875b21";
 
 export default node;
