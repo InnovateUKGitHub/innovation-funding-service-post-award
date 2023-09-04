@@ -29,6 +29,7 @@ import { usePcrReasoningQuery } from "./pcrReasoningWorkflow.logic";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { RefreshedQueryOptions, useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { pcrReasoningWorkflowQuery } from "./PcrReasoningWorkflow.query";
+import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: ProjectId;
@@ -80,6 +81,7 @@ const PCRReasoningWorkflowComponent = (
   const { editor, documentsEditor, projectId, mode, pcrId, routes, refreshedQueryOptions } = props;
 
   const { project, pcr, documents, editableItemTypes } = usePcrReasoningQuery(projectId, pcrId, refreshedQueryOptions);
+  const getPcrTypeName = useGetPcrTypeName();
 
   return (
     <Page
@@ -93,7 +95,7 @@ const PCRReasoningWorkflowComponent = (
       {!!props.step && <Messages messages={props.messages} />}
       {props.mode === "prepare" &&
         !!props.step &&
-        renderStep(props.step, pcr, editor, documentsEditor, { documents, ...props })}
+        renderStep(props.step, pcr, editor, documentsEditor, { documents, ...props }, getPcrTypeName)}
       {!props.step && (
         <PCRReasoningSummary
           {...props}
@@ -148,8 +150,10 @@ const renderStep = (
     ProjectChangeRequestPrepareReasoningParams &
     ResolvedData &
     Callbacks & { documents: DocumentSummaryDto[]; refresh: () => void },
+  getPcrTypeName: (name: string) => string,
 ) => {
   const step = findStepByNumber(stepNumber);
+
   return (
     <>
       <Section>
@@ -157,7 +161,7 @@ const renderStep = (
           <SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
           <SummaryListItem
             label={x => x.pcrLabels.types}
-            content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
+            content={<LineBreakList items={pcr.items.map(x => getPcrTypeName(x.shortName))} />}
             qa="typesRow"
           />
         </SummaryList>

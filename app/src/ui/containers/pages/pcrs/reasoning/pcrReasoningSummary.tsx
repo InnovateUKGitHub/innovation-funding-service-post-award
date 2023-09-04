@@ -15,6 +15,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
 
 export interface Props {
   projectId: ProjectId;
@@ -35,6 +36,8 @@ const PCRForm = createTypedForm<PCRDto>();
 
 export const PCRReasoningSummary = (props: BaseProps & Props) => {
   const { editor, getStepLink, mode, pcr, documents, editableItemTypes } = props;
+  const getPcrTypeName = useGetPcrTypeName();
+
   return (
     <Section qa="reasoning-save-and-return">
       <Section>
@@ -42,7 +45,7 @@ export const PCRReasoningSummary = (props: BaseProps & Props) => {
           <SummaryListItem label={x => x.pcrLabels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
           <SummaryListItem
             label={x => x.pcrLabels.types}
-            content={<LineBreakList items={pcr.items.map(x => x.shortName)} />}
+            content={<LineBreakList items={pcr.items.map(x => getPcrTypeName(x.shortName))} />}
             qa="typesRow"
           />
           <SummaryListItem
