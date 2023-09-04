@@ -46,6 +46,7 @@ type CheckboxListProps<TFormValues extends FieldValues> = {
   register: UseFormRegister<TFormValues>;
   inline?: boolean;
   children: ReactNode;
+  hasError?: boolean;
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 const CheckboxList = <TFormValues extends FieldValues>({
@@ -54,6 +55,9 @@ const CheckboxList = <TFormValues extends FieldValues>({
   children,
   name,
   register,
+  // TODO: Stop using cloneElement for field inputs!
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hasError,
   ...props
 }: CheckboxListProps<TFormValues>) => {
   return (
