@@ -236,9 +236,9 @@ export class PCRDtoValidator extends Results<PCRDto> {
           Validation.maxLength(
             this,
             this.model.reasoningComments,
-            PCRDtoValidator.maxCommentsLength,
+            PCRDtoValidator.maxSalesforceFieldLength,
             this.getContent(x =>
-              x.validation.pcrDtoValidator.reasoningLengthTooLarge({ count: PCRDtoValidator.maxCommentsLength }),
+              x.validation.pcrDtoValidator.reasoningLengthTooLarge({ count: PCRDtoValidator.maxSalesforceFieldLength }),
             ),
           ),
       );
