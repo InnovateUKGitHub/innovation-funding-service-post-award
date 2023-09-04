@@ -104,6 +104,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   projectRole(node) {
     return mapFromSalesforcePCRProjectRole(node?.Acc_ProjectRole__c?.value ?? "");
   },
+  /**
+   * alias of typeName in current configuration
+   */
   shortName(node) {
     return node?.RecordType?.Name?.value ?? "Unknown";
   },
@@ -113,6 +116,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   type(node) {
     return mapToPcrItemType(node?.RecordType?.Name?.value ?? "Unknown");
   },
+  /**
+   * alias of shortName in current configuration
+   */
   typeName(node) {
     return node?.RecordType?.Name?.value ?? "Unknown";
   },
