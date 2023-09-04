@@ -77,12 +77,14 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
 
   it("Should delete the file and display the correct validation message", () => {
     cy.getByQA("button_delete-qa").contains("Remove").click();
-    cy.getByQA("validation-message-content").contains("Your document has been removed.");
+    cy.getByQA("validation-message-content").contains("has been deleted");
   });
 
   it("Should upload another file and click 'Save and continue'", () => {
     cy.fileInput("testfile.doc");
-    cy.getByQA("button_uploadFileAndContinue-qa").contains("Save and continue").click();
+    cy.button("Upload documents").click();
+    cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+    cy.button("Save and continue").click();
   });
 
   it("Should display a summary of changes", summaryOfChanges);
