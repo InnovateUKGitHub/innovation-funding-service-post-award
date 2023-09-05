@@ -63,7 +63,7 @@ const PCRDeletePage = ({ projectId, pcrId, ...props }: BaseProps & PCRDeletePara
 
       <Section>
         <Form data-qa="pcrDelete" onSubmit={handleSubmit(data => onDelete({ data }))}>
-          <Button type="submit" name="button_delete" warning disabled={isFetching}>
+          <Button type="submit" name="button_delete" disabled={isFetching}>
             {getContent(x => x.pages.pcrDelete.button)}
           </Button>
         </Form>
