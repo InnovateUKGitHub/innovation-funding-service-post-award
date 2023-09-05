@@ -39,20 +39,18 @@ export const usePcrReasoningQuery = (
 
   if (!pcr) throw new Error(`Could not find pcr matching ${pcrId}`);
 
-  const documents = pcrGql
-    .filter(x => x?.node?.RecordType?.Name?.value === "Request Header")
-    .flatMap(x =>
-      mapToProjectDocumentSummaryDtoArray(
-        x?.node?.ContentDocumentLinks?.edges ?? [],
-        ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
-        {
-          projectId,
-          currentUser: { email: data?.currentUser?.email ?? "unknown email" },
-          type: "pcr",
-          pcrId,
-        },
-      ),
-    );
+  const documents = (data?.salesforce?.uiapi?.query?.PcrHeader?.edges ?? []).flatMap(x =>
+    mapToProjectDocumentSummaryDtoArray(
+      x?.node?.ContentDocumentLinks?.edges ?? [],
+      ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
+      {
+        projectId,
+        currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+        type: "pcr",
+        pcrId,
+      },
+    ),
+  );
 
   const editableItemTypes = getEditableItemTypes(pcr);
   return {

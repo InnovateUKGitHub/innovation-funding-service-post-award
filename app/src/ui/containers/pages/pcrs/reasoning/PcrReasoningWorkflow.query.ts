@@ -8,34 +8,10 @@ const pcrReasoningWorkflowQuery = graphql`
     salesforce {
       uiapi {
         query {
-          Acc_ProjectChangeRequest__c(
-            where: { or: [{ Id: { eq: $pcrId } }, { Acc_RequestHeader__c: { eq: $pcrId } }] }
-            first: 2000
-          ) {
+          PcrHeader: Acc_ProjectChangeRequest__c(where: { Id: { eq: $pcrId } }, first: 1) {
             edges {
               node {
                 Id
-                Acc_Status__c {
-                  value
-                }
-                Acc_RequestHeader__c {
-                  value
-                }
-                Acc_RequestNumber__c {
-                  value
-                }
-                Acc_Reasoning__c {
-                  value
-                }
-                Acc_Project__c {
-                  value
-                }
-                RecordType {
-                  Name {
-                    value
-                    label
-                  }
-                }
                 ContentDocumentLinks(first: 2000) {
                   edges {
                     node {
@@ -78,6 +54,37 @@ const pcrReasoningWorkflowQuery = graphql`
                         }
                       }
                     }
+                  }
+                }
+              }
+            }
+          }
+          Acc_ProjectChangeRequest__c(
+            where: { or: [{ Id: { eq: $pcrId } }, { Acc_RequestHeader__c: { eq: $pcrId } }] }
+            first: 2000
+          ) {
+            edges {
+              node {
+                Id
+                Acc_Status__c {
+                  value
+                }
+                Acc_RequestHeader__c {
+                  value
+                }
+                Acc_RequestNumber__c {
+                  value
+                }
+                Acc_Reasoning__c {
+                  value
+                }
+                Acc_Project__c {
+                  value
+                }
+                RecordType {
+                  Name {
+                    value
+                    label
                   }
                 }
               }
