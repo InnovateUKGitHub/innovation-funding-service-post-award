@@ -27,19 +27,28 @@ export const useOnDelete = <
       stores.messages.clearMessages();
 
       const { documentId, projectId, form } = props;
-      if (form === FormTypes.ProjectLevelDelete) {
-        return clientsideApiClient.documents.deleteProjectDocument({ documentId, projectId });
-      } else if (form === FormTypes.PartnerLevelDelete) {
-        const { partnerId } = props;
-        return clientsideApiClient.documents.deletePartnerDocument({ documentId, partnerId, projectId });
-      } else if (form === FormTypes.ClaimLevelDelete) {
-        const { partnerId, periodId } = props;
-        return clientsideApiClient.documents.deleteClaimDocument({
-          documentId,
-          claimKey: { partnerId, periodId, projectId },
-        });
-      } else {
-        return Promise.reject();
+
+      switch (form) {
+        case FormTypes.ProjectLevelDelete: {
+          return clientsideApiClient.documents.deleteProjectDocument({ documentId, projectId });
+        }
+
+        case FormTypes.ClaimLevelDelete: {
+          const { partnerId } = props;
+          return clientsideApiClient.documents.deletePartnerDocument({ documentId, partnerId, projectId });
+        }
+
+        case FormTypes.ClaimLevelDelete: {
+          const { partnerId, periodId } = props;
+          return clientsideApiClient.documents.deleteClaimDocument({
+            documentId,
+            claimKey: { partnerId, periodId, projectId },
+          });
+        }
+
+        default:
+          // Invalid form
+          return Promise.reject();
       }
     },
     onSuccess(input, _, ctx) {

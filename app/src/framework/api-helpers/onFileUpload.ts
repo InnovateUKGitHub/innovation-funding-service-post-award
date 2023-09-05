@@ -26,37 +26,42 @@ export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType
 
       const { projectId, partnerId, description, files, form } = data;
 
-      if (form === FormTypes.ClaimLevelUpload) {
-        const { periodId } = data;
-        return clientsideApiClient.documents.uploadClaimDocuments({
-          claimKey: { projectId, partnerId, periodId },
-          documents: {
-            files,
-            description,
-          },
-        });
-      } else if (form === FormTypes.ProjectLevelUpload) {
-        if (partnerId) {
-          return clientsideApiClient.documents.uploadPartnerDocument({
-            projectId,
-            partnerId,
-            documents: {
-              files,
-              description,
-            },
-          });
-        } else {
-          return clientsideApiClient.documents.uploadProjectDocument({
-            projectId,
+      switch (form) {
+        case FormTypes.ClaimLevelUpload: {
+          const { periodId } = data;
+          return clientsideApiClient.documents.uploadClaimDocuments({
+            claimKey: { projectId, partnerId, periodId },
             documents: {
               files,
               description,
             },
           });
         }
-      } else {
-        // Invalid form
-        return Promise.reject();
+
+        case FormTypes.ProjectLevelUpload: {
+          if (partnerId) {
+            return clientsideApiClient.documents.uploadPartnerDocument({
+              projectId,
+              partnerId,
+              documents: {
+                files,
+                description,
+              },
+            });
+          } else {
+            return clientsideApiClient.documents.uploadProjectDocument({
+              projectId,
+              documents: {
+                files,
+                description,
+              },
+            });
+          }
+        }
+
+        default:
+          // Invalid form
+          return Promise.reject();
       }
     },
     onSuccess(data, res, ctx) {
