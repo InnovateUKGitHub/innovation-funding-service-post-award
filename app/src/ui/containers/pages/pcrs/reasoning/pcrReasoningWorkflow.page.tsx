@@ -30,6 +30,7 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { RefreshedQueryOptions, useRefreshQuery } from "@gql/hooks/useRefreshQuery";
 import { pcrReasoningWorkflowQuery } from "./PcrReasoningWorkflow.query";
 import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
+import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: ProjectId;
@@ -79,6 +80,8 @@ const PCRReasoningWorkflowComponent = (
   props: BaseProps & ProjectChangeRequestPrepareReasoningParams & ResolvedData & Callbacks,
 ) => {
   const { editor, documentsEditor, projectId, mode, pcrId, routes, refreshedQueryOptions } = props;
+
+  useScrollToTopSmoothly([props.step]);
 
   const { project, pcr, documents, editableItemTypes } = usePcrReasoningQuery(projectId, pcrId, refreshedQueryOptions);
   const getPcrTypeName = useGetPcrTypeName();

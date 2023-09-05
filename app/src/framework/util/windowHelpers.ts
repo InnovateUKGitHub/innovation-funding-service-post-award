@@ -1,4 +1,5 @@
 import { Logger } from "@shared/developmentLogger";
+import { useEffect } from "react";
 
 const logger = new Logger("Window Helpers");
 
@@ -18,4 +19,10 @@ export const scrollToTheTagSmoothly = (tag: string) => {
       logger.error("Failed to find element to scroll to", tag, element);
     }
   });
+};
+
+export const useScrollToTopSmoothly = (dependencies: unknown[]) => {
+  useEffect(() => {
+    scrollToTheTopSmoothly();
+  }, dependencies);
 };

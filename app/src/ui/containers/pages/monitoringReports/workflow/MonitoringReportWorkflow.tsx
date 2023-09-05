@@ -5,9 +5,9 @@ import { MonitoringReportWorkflowBackLink } from "./MonitoringReportWorkflowBack
 import { MonitoringReportWorkflowParams } from "./MonitoringReportWorkflowProps";
 import { MonitoringReportWorkflowPrepare } from "./prepare/MonitoringReportWorkflowPrepare";
 import { MonitoringReportWorkflowView } from "./view/MonitoringReportWorkflowView";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
-import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
+import { useScrollToTopSmoothly } from "@framework/util/windowHelpers";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
@@ -60,9 +60,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
   const { project, report, statusChanges } = useMonitoringReportWorkflowQuery(props.projectId, props.id, fetchKey);
   const { getContent } = useContent();
 
-  useEffect(() => {
-    scrollToTheTopSmoothly();
-  }, [props.step]);
+  useScrollToTopSmoothly([props.step]);
 
   const workflow = MonitoringReportWorkflowDef.getWorkflow(report, props.step);
   const urlMode = props.mode;
