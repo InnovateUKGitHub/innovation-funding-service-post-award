@@ -110,9 +110,9 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
 
   // Disable completing the form if impact management and not received PCF
   const impMgmtPcfNotSubmittedForFinalClaim =
-    project.impactManagementParticipation === ImpactManagementParticipation.Yes
-      ? claim.isFinalClaim && claim.pcfStatus !== "Received"
-      : false;
+    project.impactManagementParticipation === ImpactManagementParticipation.Yes &&
+    claim.isFinalClaim &&
+    claim.pcfStatus !== "Received";
 
   return (
     <Page

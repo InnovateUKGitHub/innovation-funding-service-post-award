@@ -10,20 +10,20 @@ const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-export const ValidationError = ({ error }: Props) => {
-  const mapErrors = (error: TValidationError, mappedErrors: string[] = []) => {
-    if (error) {
-      if ("message" in error && typeof error.message === "string") {
-        mappedErrors.push(error?.message ?? "");
-        return mappedErrors;
-      } else {
-        Object.values(error).forEach(e => mapErrors(e, mappedErrors));
-      }
+const mapErrors = (error: TValidationError, mappedErrors: string[] = []) => {
+  if (error) {
+    if ("message" in error && typeof error.message === "string") {
+      mappedErrors.push(error?.message ?? "");
+      return mappedErrors;
+    } else {
+      Object.values(error).forEach(e => mapErrors(e, mappedErrors));
     }
+  }
 
-    return mappedErrors;
-  };
+  return mappedErrors;
+};
 
+export const ValidationError = ({ error }: Props) => {
   if (!error) {
     return null;
   }
