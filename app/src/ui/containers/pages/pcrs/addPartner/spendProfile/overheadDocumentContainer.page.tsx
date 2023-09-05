@@ -21,6 +21,7 @@ import { Messages } from "@ui/components/atomicDesign/molecules/Messages/message
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useStores } from "@ui/redux/storesProvider";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface OverheadDocumentsPageParams {
   projectId: ProjectId;
@@ -173,6 +174,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
 
 const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProps) => {
   const stores = useStores();
+  const { getContent } = useContent();
 
   return (
     <OverheadDocumentsComponent
@@ -212,7 +214,7 @@ const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProp
           props.itemId,
           dto,
           document,
-          "Your document has been removed.",
+          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
         );
       }}
     />

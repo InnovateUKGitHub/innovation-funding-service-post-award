@@ -360,8 +360,7 @@
       "guidanceMessage": "We need you to upload a redacted bank statement for your organisation. This must be dated within 90 days of the upload date.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n* company name\n* account number\n* sort code",
       "buttonSubmit": "Submit bank statement",
       "buttonReturn": "Return to set up your project",
-      "backLink": "Back to set up your project",
-      "documentRemovedMessage": "Your document has been removed."
+      "backLink": "Back to set up your project"
     },
     "projectSetupBankDetailsVerify": {
       "title": "Confirm your bank details",
@@ -413,8 +412,7 @@
       "loanDeclaration": "By submitting this drawdown request I confirm that the amount requested is in line with forecast eligible project costs and that this has been approved by an authorised signatory of the business. I understand and accept that if I knowingly submit a drawdown request without appropriate approvals or provide false or misleading information, this may result in my drawdown being rejected, termination of the loan, recovery of loan proceeds and outstanding interest, civil action and where there is evidence of fraud, criminal prosecution.",
       "loanSubmitButton": "Accept and send",
       "loanDocumentsUploaded_one": "{{firstFileName}} file has been uploaded",
-      "loanDocumentsUploaded_other": "{{count}} files have been uploaded",
-      "loanDocumentsRemoved": "{{fileName}} has been removed."
+      "loanDocumentsUploaded_other": "{{count}} files have been uploaded"
     },
     "financeSummary": {
       "title": "Finance summary",
@@ -464,7 +462,7 @@
       "descriptionLabel": "Description"
     },
     "claimDetailDocuments": {
-      "title": "Upload and removed documents"
+      "title": "Upload and remove documents"
     },
     "claimDetails": {
       "title": {

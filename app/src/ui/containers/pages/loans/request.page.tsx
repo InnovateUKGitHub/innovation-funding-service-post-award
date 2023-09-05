@@ -218,7 +218,7 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
           }}
           onDocsDelete={(dto, document) => {
             const removedMessage = getContent(x =>
-              x.pages.loansRequest.loanDocumentsRemoved({ fileName: document.fileName }),
+              x.documentMessages.deletedDocument({ deletedFileName: document.fileName }),
             );
 
             stores.loanDocuments.deleteLoanDocument(props.projectId, props.loanId, dto, document, removedMessage);

@@ -9,6 +9,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { useStores } from "@ui/redux/storesProvider";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { BaseProps } from "@ui/containers/containerBase";
+import { useContent } from "@ui/hooks/content.hook";
 
 const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
@@ -78,6 +79,7 @@ export const PCRPrepareReasoningFilesStep = (
   props: ReasoningStepProps & { documents: InnerProps["documents"]; refresh: () => void },
 ) => {
   const stores = useStores();
+  const { getContent } = useContent();
 
   return (
     <PrepareReasoningFilesStepComponent
@@ -113,7 +115,7 @@ export const PCRPrepareReasoningFilesStep = (
           props.pcrId,
           dto,
           document,
-          "Your document has been removed.",
+          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
           () => {
             props.refresh();
           },

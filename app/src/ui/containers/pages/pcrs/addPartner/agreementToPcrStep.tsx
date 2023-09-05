@@ -14,6 +14,7 @@ import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/sim
 import { useStores } from "@ui/redux/storesProvider";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { Loader } from "@ui/components/bjss/loading";
+import { useContent } from "@ui/hooks/content.hook";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -109,6 +110,7 @@ export const AgreementToPCRStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
   const stores = useStores();
+  const { getContent } = useContent();
 
   return (
     <Loader
@@ -157,7 +159,7 @@ export const AgreementToPCRStep = (
               props.pcrItem.id,
               dto,
               document,
-              "Your document has been removed.",
+              getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
             );
           }}
         />

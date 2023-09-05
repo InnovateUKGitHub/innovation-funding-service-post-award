@@ -151,6 +151,8 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
 
 export const JeSStep = (props: BasePcrProps) => {
   const stores = useStores();
+  const { getContent } = useContent();
+
   const pendingPayload = stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id);
 
   return (
@@ -200,7 +202,7 @@ export const JeSStep = (props: BasePcrProps) => {
               props.pcrItem.id,
               dto,
               document,
-              "Your document has been removed.",
+              getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
             );
           }}
         />

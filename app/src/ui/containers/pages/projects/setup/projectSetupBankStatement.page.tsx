@@ -193,7 +193,7 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
           props.partnerId,
           dto,
           document,
-          getContent(x => x.pages.projectSetupBankStatement.documentRemovedMessage),
+          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
         );
       }}
       editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {

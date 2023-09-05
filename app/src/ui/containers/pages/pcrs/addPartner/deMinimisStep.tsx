@@ -12,6 +12,7 @@ import { LinksList } from "@ui/components/atomicDesign/atoms/LinksList/linksList
 import { useStores } from "@ui/redux/storesProvider";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { Loader } from "@ui/components/bjss/loading";
+import { useContent } from "@ui/hooks/content.hook";
 
 interface DeMinimisStepUiProps {
   documents: DocumentSummaryDto[];
@@ -129,6 +130,7 @@ export const DeMinimisStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
   const stores = useStores();
+  const { getContent } = useContent();
 
   return (
     <Loader
@@ -177,7 +179,7 @@ export const DeMinimisStep = (
               props.pcrItem.id,
               dto,
               document,
-              "Your document has been removed.",
+              getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
             );
           }}
         />
