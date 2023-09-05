@@ -5,6 +5,20 @@ let financeContactEmail = "s.shuang@irc.trde.org.uk.test";
 let pmEmail = "james.black@euimeabs.test";
 let moEmail = "testman2@testing.com";
 
+const costCategories = [
+  "labour",
+  "overheads",
+  "materials",
+  "capital usage",
+  "subcontracting",
+  "travel and subsistence",
+  "other costs",
+  "other costs 2",
+  "other costs 3",
+  "other costs 4",
+  "other costs 5",
+] as const;
+
 describe("Forecast > Forecast guidance", () => {
   before(() => {
     visitApp({ asUser: financeContactEmail });
@@ -36,19 +50,7 @@ describe("Forecast > Forecast guidance", () => {
       "Please amend your forecast costs to be in line with the grant offer letter.",
     ].forEach(message => {
       cy.getByQA("forecasts-warning-fc-content").contains(message);
-      [
-        "labour",
-        "overheads",
-        "materials",
-        "capital usage",
-        "subcontracting",
-        "travel and subsistence",
-        "other costs",
-        "other costs 2",
-        "other costs 3",
-        "other costs 4",
-        "other costs 5",
-      ].forEach(costCat => {
+      costCategories.forEach(costCat => {
         cy.getByQA("forecasts-warning-fc-content").within(() => {
           cy.list(costCat);
         });
@@ -71,7 +73,7 @@ describe("Forecast > Forecast guidance", () => {
     cy.get("#user-switcher-manual-input").should("have.value", pmEmail);
   });
 
-  it("Should navigate to the corect project", () => {
+  it("Should navigate to the correct project", () => {
     cy.navigateToProject("879546");
     cy.heading("Project overview");
   });
@@ -98,19 +100,7 @@ describe("Forecast > Forecast guidance", () => {
     cy.getByQA("forecasts-warning-mo-pm-content").contains(
       "The amount you are requesting differs from the agreed costs for:",
     );
-    [
-      "labour",
-      "overheads",
-      "materials",
-      "capital usage",
-      "subcontracting",
-      "travel and subsistence",
-      "other costs",
-      "other costs 2",
-      "other costs 3",
-      "other costs 4",
-      "other costs 5",
-    ].forEach(costCat => {
+    costCategories.forEach(costCat => {
       cy.getByQA("forecasts-warning-mo-pm-content").within(() => {
         cy.list(costCat);
       });
@@ -157,19 +147,7 @@ describe("Forecast > Forecast guidance", () => {
     cy.getByQA("forecasts-warning-mo-pm-content").contains(
       "The amount you are requesting differs from the agreed costs for:",
     );
-    [
-      "labour",
-      "overheads",
-      "materials",
-      "capital usage",
-      "subcontracting",
-      "travel and subsistence",
-      "other costs",
-      "other costs 2",
-      "other costs 3",
-      "other costs 4",
-      "other costs 5",
-    ].forEach(costCat => {
+    costCategories.forEach(costCat => {
       cy.getByQA("forecasts-warning-mo-pm-content").within(() => {
         cy.list(costCat);
       });
