@@ -21,7 +21,7 @@ import { Select } from "@ui/components/atomicDesign/atoms/form/Select/Select";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { allowedClaimDocuments, useValidDocumentDropdownOptions } from "@framework/constants/documentDescription";
+import { allowedClaimDocuments } from "@framework/constants/documentDescription";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
@@ -36,6 +36,7 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
 import { z } from "zod";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useValidDocumentDropdownOptions } from "@ui/hooks/useValidDocumentDropdownOptions.hook";
 
 export interface ClaimDocumentsPageParams {
   projectId: ProjectId;

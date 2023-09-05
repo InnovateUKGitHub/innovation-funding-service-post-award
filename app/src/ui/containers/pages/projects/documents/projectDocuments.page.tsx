@@ -1,8 +1,5 @@
 import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
-import {
-  allowedProjectLevelDocuments,
-  useValidDocumentDropdownOptions,
-} from "@framework/constants/documentDescription";
+import { allowedProjectLevelDocuments } from "@framework/constants/documentDescription";
 import { DocumentSummaryDto, PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
@@ -42,6 +39,7 @@ import { useOnUpload } from "@framework/api-helpers/onFileUpload";
 import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
 import { z } from "zod";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useValidDocumentDropdownOptions } from "@ui/hooks/useValidDocumentDropdownOptions.hook";
 
 export interface ProjectDocumentPageParams {
   projectId: ProjectId;

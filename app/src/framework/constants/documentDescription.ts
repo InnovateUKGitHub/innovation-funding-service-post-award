@@ -1,6 +1,4 @@
 import type { ContentSelector } from "@copy/type";
-import { DropdownListOption } from "@ui/components/bjss/inputs/dropdownList";
-import { useContent } from "@ui/hooks/content.hook";
 
 export enum DocumentDescription {
   IAR = 10,
@@ -94,27 +92,6 @@ const getDocumentDescriptionContentSelector = (type: DocumentDescription | null 
     default:
       return x => x.documentLabels.description.unknown;
   }
-};
-
-export const useValidDocumentDropdownOptions = (documents: DocumentDescription[]) => {
-  const { getContent } = useContent();
-
-  const documentDropdownOptions: DropdownListOption[] = [
-    {
-      id: "none",
-      value: "",
-      displayName: getContent(x => x.documentLabels.descriptionPlaceholder),
-      qa: "document-description-null",
-    },
-    ...documents.map(x => ({
-      id: String(x),
-      value: x,
-      displayName: getContent(getDocumentDescriptionContentSelector(x)),
-      qa: `document-description-${x}`,
-    })),
-  ];
-
-  return documentDropdownOptions;
 };
 
 export const allowedProjectLevelDocuments: DocumentDescription[] = [
