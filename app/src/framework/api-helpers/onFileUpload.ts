@@ -12,9 +12,9 @@ import type { z } from "zod";
 import type { ProjectLevelUploadSchemaType, ClaimLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
 
 export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType | ClaimLevelUploadSchemaType>>({
-  refresh,
+  onSuccess,
 }: {
-  refresh: () => void;
+  onSuccess: () => void;
 }) => {
   const store = useStore<RootState>();
   const stores = useStores();
@@ -69,7 +69,7 @@ export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType
       store.dispatch(removeMessages());
       store.dispatch(messageSuccess(successMessage));
       scrollToTheTopSmoothly();
-      refresh();
+      onSuccess();
     },
   });
 };

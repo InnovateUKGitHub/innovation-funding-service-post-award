@@ -75,7 +75,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     apiError: onUploadApiError,
     isFetching: onUploadFetching,
   } = useOnUpload({
-    refresh() {
+    onSuccess() {
       refresh();
       reset();
     },
@@ -84,7 +84,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     onUpdate: onDeleteUpdate,
     apiError: onDeleteApiError,
     isFetching: onDeleteFetching,
-  } = useOnDelete({ refresh });
+  } = useOnDelete({ onSuccess: refresh });
 
   const isFetching = onUploadFetching || onDeleteFetching;
 

@@ -14,9 +14,9 @@ import type { claimLevelDelete, partnerLevelDelete, projectLevelDelete } from "@
 export const useOnDelete = <
   Inputs extends z.output<typeof projectLevelDelete | typeof partnerLevelDelete | typeof claimLevelDelete>,
 >({
-  refresh,
+  onSuccess,
 }: {
-  refresh: () => void;
+  onSuccess: () => void;
 }) => {
   const store = useStore<RootState>();
   const stores = useStores();
@@ -56,7 +56,7 @@ export const useOnDelete = <
       store.dispatch(removeMessages());
       store.dispatch(messageSuccess(successMessage));
       scrollToTheTopSmoothly();
-      refresh();
+      onSuccess();
     },
   });
 };

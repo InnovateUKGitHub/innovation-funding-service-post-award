@@ -71,7 +71,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
     apiError: onUploadApiError,
     isFetching: onUploadFetching,
   } = useOnUpload({
-    refresh() {
+    onSuccess() {
       refresh();
       reset();
     },
@@ -80,7 +80,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
     onUpdate: onDeleteUpdate,
     apiError: onDeleteApiError,
     isFetching: onDeleteFetching,
-  } = useOnDelete({ refresh });
+  } = useOnDelete({ onSuccess: refresh });
 
   const isFetching = onUploadFetching || onDeleteFetching;
 
