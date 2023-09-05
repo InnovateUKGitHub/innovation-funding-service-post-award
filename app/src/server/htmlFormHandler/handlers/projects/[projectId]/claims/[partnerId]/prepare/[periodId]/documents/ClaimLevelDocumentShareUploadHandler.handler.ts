@@ -23,7 +23,7 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
     });
   }
 
-  acceptFiles = true;
+  public readonly acceptFiles = true;
 
   protected async mapToZod({
     input,

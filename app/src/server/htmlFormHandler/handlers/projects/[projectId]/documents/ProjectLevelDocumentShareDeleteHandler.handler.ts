@@ -26,7 +26,7 @@ class ProjectLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     });
   }
 
-  acceptFiles = true;
+  public readonly acceptFiles = false;
 
   protected async mapToZod({
     input,

@@ -25,7 +25,7 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     });
   }
 
-  acceptFiles = true;
+  public readonly acceptFiles = false;
 
   protected async mapToZod({
     input,
@@ -35,11 +35,9 @@ class ClaimLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     params: ClaimDocumentsPageParams;
   }): Promise<z.input<typeof claimLevelDelete>> {
     return {
-      form: FormTypes.ClaimLevelDelete,
+      ...params,
       documentId: input.documentId ?? input.button_documentId,
-      projectId: params.projectId,
-      partnerId: params.partnerId,
-      periodId: params.periodId,
+      form: FormTypes.ClaimLevelDelete,
     };
   }
 
