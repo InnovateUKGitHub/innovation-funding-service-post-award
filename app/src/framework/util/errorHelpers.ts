@@ -154,10 +154,21 @@ export function convertErrorFormatFromRhfForErrorSummary(
     return validationErrors;
   } else if (Array.isArray(errors)) {
     errors.forEach((e, i) => {
-      if (e === null) {
-        validationErrors.push({ key: path ? `${path}_${i}` : `${i}`, message: null });
+      let key: string;
+
+      // Special case: If key is `files`, have no index, as there is only 1 file <input> element.
+      if (path === "files") {
+        key = "files";
+      } else if (path) {
+        key = `${path}_${i}`;
+      } else {
+        key = `${i}`;
       }
-      convertErrorFormatFromRhfForErrorSummary(e, path ? `${path}_${i}` : `${i}`, validationErrors);
+
+      if (e === null) {
+        validationErrors.push({ key, message: null });
+      }
+      convertErrorFormatFromRhfForErrorSummary(e, key, validationErrors);
     });
   } else {
     Object.entries(errors).forEach(([key, value]) =>
