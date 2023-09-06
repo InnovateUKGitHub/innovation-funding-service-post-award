@@ -80,8 +80,6 @@ export const standardFormHandlers = [
   new MonitoringReportPrepareFormHandler(),
   new OverheadDocumentsDeleteHandler(),
   new LoanRequestFormHandler(),
-  // new ProjectChangeRequestAddTypeFormHandler(),
-  // new ProjectChangeRequestCreateFormHandler(),
   new ProjectChangeRequestDeleteFormHandler(),
   // ProjectChangeRequestReasoningUpdateHandler should be before ProjectChangeRequestItemUpdateHandler
   new ProjectChangeRequestReasoningUpdateHandler(),
