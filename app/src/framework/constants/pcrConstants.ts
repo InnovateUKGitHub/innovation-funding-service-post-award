@@ -84,35 +84,6 @@ export const enum PCRItemTypeName {
   LoanDrawdownExtension = "LoanDrawdownExtension",
 }
 
-export const convertTypeToName = (type: PCRItemType) => {
-  switch (type) {
-    case PCRItemType.Unknown:
-      return PCRItemTypeName.Unknown;
-    case PCRItemType.AccountNameChange:
-      return PCRItemTypeName.AccountNameChange;
-    case PCRItemType.PartnerAddition:
-      return PCRItemTypeName.PartnerAddition;
-    case PCRItemType.PartnerWithdrawal:
-      return PCRItemTypeName.PartnerWithdrawal;
-    case PCRItemType.ProjectSuspension:
-      return PCRItemTypeName.ProjectSuspension;
-    case PCRItemType.ProjectTermination:
-      return PCRItemTypeName.ProjectTermination;
-    case PCRItemType.MultiplePartnerFinancialVirement:
-      return PCRItemTypeName.MultiplePartnerFinancialVirement;
-    case PCRItemType.ScopeChange:
-      return PCRItemTypeName.ScopeChange;
-    case PCRItemType.TimeExtension:
-      return PCRItemTypeName.TimeExtension;
-    case PCRItemType.PeriodLengthChange:
-      return PCRItemTypeName.PeriodLengthChange;
-    case PCRItemType.LoanDrawdownChange:
-      return PCRItemTypeName.LoanDrawdownChange;
-    case PCRItemType.LoanDrawdownExtension:
-      return PCRItemTypeName.LoanDrawdownExtension;
-  }
-};
-
 export const enum PCRStepId {
   // Base PCR Steps
   none = "",

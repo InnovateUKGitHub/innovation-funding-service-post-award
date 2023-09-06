@@ -23,8 +23,7 @@ export const scrollToTheParentFieldsetSmoothly = (tag: string) => {
     return null;
   };
 
-  // Wait for the next animation frame before starting,
-  // just in case the error message hasn't been rendered yet.
+  // Wait for the next animation frame before scrolling
   requestAnimationFrame(() => {
     // Find the first instance of the NAME or ID
     const [nameTag] = [...document.getElementsByName(tag), document.getElementById(tag)];
