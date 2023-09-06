@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b4af05712c1740d3103d8b8c21c7bd93>>
+ * @generated SignedSource<<28f49e24ebe29d68e897257a1283d102>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -134,43 +134,48 @@ v1 = {
   "kind": "LocalArgument",
   "name": "projectId"
 },
-v2 = [
+v2 = {
+  "kind": "Literal",
+  "name": "first",
+  "value": 1
+},
+v3 = [
   {
     "kind": "Variable",
     "name": "eq",
     "variableName": "pcrId"
   }
 ],
-v3 = [
+v4 = [
   {
-    "fields": (v2/*: any*/),
+    "fields": (v3/*: any*/),
     "kind": "ObjectValue",
     "name": "Id"
   }
 ],
-v4 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
-v5 = {
+v6 = {
   "kind": "Literal",
   "name": "first",
   "value": 2000
 },
-v6 = {
+v7 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "value",
   "storageKey": null
 },
-v7 = [
-  (v6/*: any*/)
-],
 v8 = [
+  (v7/*: any*/)
+],
+v9 = [
   {
     "alias": null,
     "args": null,
@@ -216,13 +221,9 @@ v8 = [
               {
                 "alias": "PcrHeader",
                 "args": [
+                  (v2/*: any*/),
                   {
-                    "kind": "Literal",
-                    "name": "first",
-                    "value": 1
-                  },
-                  {
-                    "fields": (v3/*: any*/),
+                    "fields": (v4/*: any*/),
                     "kind": "ObjectValue",
                     "name": "where"
                   }
@@ -248,11 +249,22 @@ v8 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v4/*: any*/),
+                          (v5/*: any*/),
                           {
                             "alias": null,
                             "args": [
-                              (v5/*: any*/)
+                              (v6/*: any*/),
+                              {
+                                "kind": "Literal",
+                                "name": "orderBy",
+                                "value": {
+                                  "ContentDocument": {
+                                    "CreatedDate": {
+                                      "order": "DESC"
+                                    }
+                                  }
+                                }
+                              }
                             ],
                             "concreteType": "ContentDocumentLinkConnection",
                             "kind": "LinkedField",
@@ -282,7 +294,7 @@ v8 = [
                                         "kind": "LinkedField",
                                         "name": "LinkedEntityId",
                                         "plural": false,
-                                        "selections": (v7/*: any*/),
+                                        "selections": (v8/*: any*/),
                                         "storageKey": null
                                       },
                                       {
@@ -300,7 +312,7 @@ v8 = [
                                         "name": "ContentDocument",
                                         "plural": false,
                                         "selections": [
-                                          (v4/*: any*/),
+                                          (v5/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
@@ -316,7 +328,7 @@ v8 = [
                                                 "kind": "LinkedField",
                                                 "name": "ContactId",
                                                 "plural": false,
-                                                "selections": (v7/*: any*/),
+                                                "selections": (v8/*: any*/),
                                                 "storageKey": null
                                               }
                                             ],
@@ -329,7 +341,7 @@ v8 = [
                                             "kind": "LinkedField",
                                             "name": "Description",
                                             "plural": false,
-                                            "selections": (v7/*: any*/),
+                                            "selections": (v8/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -339,7 +351,7 @@ v8 = [
                                             "kind": "LinkedField",
                                             "name": "CreatedDate",
                                             "plural": false,
-                                            "selections": (v7/*: any*/),
+                                            "selections": (v8/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -349,7 +361,7 @@ v8 = [
                                             "kind": "LinkedField",
                                             "name": "LatestPublishedVersionId",
                                             "plural": false,
-                                            "selections": (v7/*: any*/),
+                                            "selections": (v8/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -359,7 +371,7 @@ v8 = [
                                             "kind": "LinkedField",
                                             "name": "FileExtension",
                                             "plural": false,
-                                            "selections": (v7/*: any*/),
+                                            "selections": (v8/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -369,7 +381,7 @@ v8 = [
                                             "kind": "LinkedField",
                                             "name": "Title",
                                             "plural": false,
-                                            "selections": (v7/*: any*/),
+                                            "selections": (v8/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -379,7 +391,7 @@ v8 = [
                                             "kind": "LinkedField",
                                             "name": "ContentSize",
                                             "plural": false,
-                                            "selections": (v7/*: any*/),
+                                            "selections": (v8/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -397,7 +409,7 @@ v8 = [
                                                 "kind": "LinkedField",
                                                 "name": "Name",
                                                 "plural": false,
-                                                "selections": (v7/*: any*/),
+                                                "selections": (v8/*: any*/),
                                                 "storageKey": null
                                               },
                                               {
@@ -407,7 +419,7 @@ v8 = [
                                                 "kind": "LinkedField",
                                                 "name": "Username",
                                                 "plural": false,
-                                                "selections": (v7/*: any*/),
+                                                "selections": (v8/*: any*/),
                                                 "storageKey": null
                                               }
                                             ],
@@ -423,7 +435,7 @@ v8 = [
                                 "storageKey": null
                               }
                             ],
-                            "storageKey": "ContentDocumentLinks(first:2000)"
+                            "storageKey": "ContentDocumentLinks(first:2000,orderBy:{\"ContentDocument\":{\"CreatedDate\":{\"order\":\"DESC\"}}})"
                           }
                         ],
                         "storageKey": null
@@ -437,20 +449,20 @@ v8 = [
               {
                 "alias": null,
                 "args": [
-                  (v5/*: any*/),
+                  (v6/*: any*/),
                   {
                     "fields": [
                       {
                         "items": [
                           {
-                            "fields": (v3/*: any*/),
+                            "fields": (v4/*: any*/),
                             "kind": "ObjectValue",
                             "name": "or.0"
                           },
                           {
                             "fields": [
                               {
-                                "fields": (v2/*: any*/),
+                                "fields": (v3/*: any*/),
                                 "kind": "ObjectValue",
                                 "name": "Acc_RequestHeader__c"
                               }
@@ -488,7 +500,7 @@ v8 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v4/*: any*/),
+                          (v5/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -496,7 +508,7 @@ v8 = [
                             "kind": "LinkedField",
                             "name": "Acc_Status__c",
                             "plural": false,
-                            "selections": (v7/*: any*/),
+                            "selections": (v8/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -506,7 +518,7 @@ v8 = [
                             "kind": "LinkedField",
                             "name": "Acc_RequestHeader__c",
                             "plural": false,
-                            "selections": (v7/*: any*/),
+                            "selections": (v8/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -516,7 +528,7 @@ v8 = [
                             "kind": "LinkedField",
                             "name": "Acc_RequestNumber__c",
                             "plural": false,
-                            "selections": (v7/*: any*/),
+                            "selections": (v8/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -526,7 +538,7 @@ v8 = [
                             "kind": "LinkedField",
                             "name": "Acc_Reasoning__c",
                             "plural": false,
-                            "selections": (v7/*: any*/),
+                            "selections": (v8/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -536,7 +548,7 @@ v8 = [
                             "kind": "LinkedField",
                             "name": "Acc_Project__c",
                             "plural": false,
-                            "selections": (v7/*: any*/),
+                            "selections": (v8/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -555,7 +567,7 @@ v8 = [
                                 "name": "Name",
                                 "plural": false,
                                 "selections": [
-                                  (v6/*: any*/),
+                                  (v7/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -581,6 +593,7 @@ v8 = [
               {
                 "alias": null,
                 "args": [
+                  (v2/*: any*/),
                   {
                     "fields": [
                       {
@@ -627,7 +640,7 @@ v8 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectNumber__c",
                             "plural": false,
-                            "selections": (v7/*: any*/),
+                            "selections": (v8/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -637,7 +650,7 @@ v8 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectTitle__c",
                             "plural": false,
-                            "selections": (v7/*: any*/),
+                            "selections": (v8/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -647,7 +660,7 @@ v8 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectStatus__c",
                             "plural": false,
-                            "selections": (v7/*: any*/),
+                            "selections": (v8/*: any*/),
                             "storageKey": null
                           }
                         ],
@@ -678,7 +691,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "PcrReasoningWorkflowQuery",
-    "selections": (v8/*: any*/),
+    "selections": (v9/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -690,19 +703,19 @@ return {
     ],
     "kind": "Operation",
     "name": "PcrReasoningWorkflowQuery",
-    "selections": (v8/*: any*/)
+    "selections": (v9/*: any*/)
   },
   "params": {
-    "cacheID": "4ab0e43276db897ec2a614e4a5a7a604",
+    "cacheID": "96d50dee6c8fae4d064a03bdf11b021c",
     "id": null,
     "metadata": {},
     "name": "PcrReasoningWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrReasoningWorkflowQuery(\n  $projectId: ID\n  $pcrId: ID\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        PcrHeader: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Id\n              ContentDocumentLinks(first: 2000) {\n                edges {\n                  node {\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Username {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Reasoning__c {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrReasoningWorkflowQuery(\n  $projectId: ID\n  $pcrId: ID\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        PcrHeader: Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrId}}, first: 1) {\n          edges {\n            node {\n              Id\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Username {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_Status__c {\n                value\n              }\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_RequestNumber__c {\n                value\n              }\n              Acc_Reasoning__c {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3a30ac8a2e76df6f805611577e6d6a16";
+(node as any).hash = "28dd0e4ef8dfd7aa08bf17c30a8088e7";
 
 export default node;

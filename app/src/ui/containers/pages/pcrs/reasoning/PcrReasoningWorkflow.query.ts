@@ -12,7 +12,7 @@ const pcrReasoningWorkflowQuery = graphql`
             edges {
               node {
                 Id
-                ContentDocumentLinks(first: 2000) {
+                ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { CreatedDate: { order: DESC } } }) {
                   edges {
                     node {
                       LinkedEntityId {
@@ -90,7 +90,7 @@ const pcrReasoningWorkflowQuery = graphql`
               }
             }
           }
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+          Acc_Project__c(first: 1, where: { Id: { eq: $projectId } }) {
             edges {
               node {
                 Acc_ProjectNumber__c {
