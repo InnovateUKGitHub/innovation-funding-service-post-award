@@ -1,4 +1,4 @@
-import { scrollToTheTagSmoothly } from "@framework/util/windowHelpers";
+import { scrollToTheParentFieldsetSmoothly } from "@framework/util/windowHelpers";
 import { Result } from "@ui/validation/result";
 import { useNavigate } from "react-router-dom";
 
@@ -39,7 +39,7 @@ export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[
           <a
             onClick={e => {
               e.preventDefault();
-              scrollToTheTagSmoothly(x.key);
+              scrollToTheParentFieldsetSmoothly(x.key);
               navigate(`#${x.key}`, { replace: true });
             }}
             href={`#${x.key}`}

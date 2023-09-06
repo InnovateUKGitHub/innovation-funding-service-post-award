@@ -1,7 +1,7 @@
 import { createPCRSummaryDto } from "@framework/util/stubDtos";
 import { PCRItemType, getPcrItemsSingleInstanceInAnyPcrViolations, PCRStatus } from "./pcrConstants";
 
-describe("getUnavailablePcrItemsMatrix()", () => {
+describe("getPcrItemsSingleInstanceInAnyPcrViolations()", () => {
   const stubItemType = (type: PCRItemType) => ({ type, typeName: "stub-typeName", shortName: "stub-shortName" });
 
   describe("should never return a value", () => {
