@@ -45,42 +45,58 @@ export const displayForecastTable = () => {
   });
 };
 
+/**
+ * TODO: Restore after project details setup has been merged.
+ */
 export const fillOrgInformation = () => {
-  cy.get("legend").contains("Organisation information");
-  cy.paragraph("EUI Small Ent Health");
-  cy.getByLabel("Company number");
-  cy.get("#hint-for-companyNumber").contains("This is the registered organisation number.");
-  cy.get("#companyNumber").type("12345678910");
+  cy.log("Has been removed - to be completed after setup details gql migration");
+  //cy.get("legend").contains("Organisation information");
+  //cy.paragraph("EUI Small Ent Health");
+  //cy.getByLabel("Company number");
+  //cy.get("#hint-for-companyNumber").contains("This is the registered organisation number.");
+  //cy.get("#companyNumber").type("12345678910");
 };
 
+/**
+ * TODO: Restore after project details setup has been merged.
+ */
 export const fillAccountInformation = () => {
-  cy.get("legend").contains("Account details");
-  cy.getByLabel("Sort code");
-  cy.get("#hint-for-sortCode").contains("Must be 6 digits long, for example: 311212.");
-  cy.get("#sortCode").type("654321");
-  cy.getByLabel("Account number");
-  cy.get("#hint-for-accountNumber").contains("Must be between 6 and 8 digits long, for example: 15481965.");
-  cy.get("#accountNumber").type("12345678");
+  cy.log("Has been removed - to be completed after setup details gql migration");
+  //cy.get("legend").contains("Account details");
+  //cy.getByLabel("Sort code");
+  //cy.get("#hint-for-sortCode").contains("Must be 6 digits long, for example: 311212.");
+  //cy.get("#sortCode").type("654321");
+  //cy.getByLabel("Account number");
+  //cy.get("#hint-for-accountNumber").contains("Must be between 6 and 8 digits long, for example: 15481965.");
+  //cy.get("#accountNumber").type("12345678");
 };
 
+/**
+ * TODO: Restore after project details setup has been merged.
+ */
 export const fillAddressInformation = () => {
-  cy.get("legend").contains("Billing address");
-  cy.paragraph("This is the billing address connected to this bank account. This is not the address of the bank.");
-  cy.getByLabel("Building").type("Polaris House");
-  cy.getByLabel("Street").type("North Star Avenue");
-  cy.getByLabel("Locality").type("Off Great Western Way");
-  cy.getByLabel("Town or city").type("Swindon");
-  cy.getByLabel("Postcode").type("SN2 1FL");
+  cy.log("Has been removed - to be completed after setup details gql migration");
+  //cy.get("legend").contains("Billing address");
+  //cy.paragraph("This is the billing address connected to this bank account. This is not the address of the bank.");
+  //cy.getByLabel("Building").type("Polaris House");
+  //cy.getByLabel("Street").type("North Star Avenue");
+  //cy.getByLabel("Locality").type("Off Great Western Way");
+  //cy.getByLabel("Town or city").type("Swindon");
+  //cy.getByLabel("Postcode").type("SN2 1FL");
 };
 
+/**
+ * TODO: Restore after project details setup has been merged.
+ */
 export const newLocation = () => {
-  cy.getByLabel("New location");
-  cy.get("#hint-for-new-postcode").contains("Enter the postcode.");
-  cy.get("#new-postcode").type("SN123456788");
-  cy.submitButton("Save and return to project setup").click();
-  cy.validationMessage("Your location entry must be no more than 10 characters.");
-  cy.get("#new-postcode").clear().type("SN2 1FL");
-  cy.submitButton("Save and return to project setup").click();
+  cy.log("Has been removed - to be completed after setup details gql migration");
+  //cy.getByLabel("New location");
+  //cy.get("#hint-for-new-postcode").contains("Enter the postcode.");
+  //cy.get("#new-postcode").type("SN123456788");
+  //cy.submitButton("Save and return to project setup").click();
+  //cy.validationMessage("Your location entry must be no more than 10 characters.");
+  //cy.get("#new-postcode").clear().type("SN2 1FL");
+  //cy.submitButton("Save and return to project setup").click();
 };
 
 export const giveUsInformation = () => {
@@ -97,15 +113,19 @@ export const giveUsInformation = () => {
   cy.get("h2").contains("Give us information");
 };
 
+/**
+ * TODO: Restore after project details setup has been merged.
+ */
 export const partnerValidation = () => {
-  cy.getByQA("partner-information").contains(partners[0]).click();
-  cy.get("a").contains("Edit").click();
-  cy.get("#new-postcode").clear().type("SN123456789");
-  cy.submitButton("Save and return to partner information").click();
-  cy.validationMessage("Your location entry must be no more than 10 characters.");
-  cy.get("#new-postcode").clear().type("SN2");
-  cy.submitButton("Save and return to partner information").click();
-  cy.backLink("Back to project details").click();
+  cy.log("Has been removed - to be completed after setup details gql migration");
+  //cy.getByQA("partner-information").contains(partners[0]).click();
+  //cy.get("a").contains("Edit").click();
+  //cy.get("#new-postcode").clear().type("SN123456789");
+  //cy.submitButton("Save and return to partner information").click();
+  //cy.validationMessage("Your location entry must be no more than 10 characters.");
+  //cy.get("#new-postcode").clear().type("SN2");
+  //cy.submitButton("Save and return to partner information").click();
+  //cy.backLink("Back to project details").click();
 };
 
 export const bankDetailsValidation = () => {
