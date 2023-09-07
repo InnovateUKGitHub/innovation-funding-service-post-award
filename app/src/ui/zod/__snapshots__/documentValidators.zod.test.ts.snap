@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`documentValidators partnerLevelDelete accept normal input 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "documentId": "string",
     "form": "partnerLevelDelete",
     "partnerId": "a0D project participant id",
@@ -13,7 +13,7 @@ Object {
 `;
 
 exports[`documentValidators partnerLevelDelete decline empty form 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_type",
@@ -48,7 +48,7 @@ Object {
 `;
 
 exports[`documentValidators partnerLevelDelete decline empty object 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_literal",
@@ -91,7 +91,7 @@ Object {
 `;
 
 exports[`documentValidators partnerLevelDelete decline incorrect form 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "received": "claimLevelUpload",
@@ -108,7 +108,7 @@ Object {
 `;
 
 exports[`documentValidators partnerLevelDelete decline incorrect projectId prefix 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_string",
@@ -126,7 +126,7 @@ Object {
 `;
 
 exports[`documentValidators partnerLevelDelete decline missing partner id 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_type",
@@ -143,8 +143,8 @@ Object {
 `;
 
 exports[`documentValidators projectLevelDelete accept normal input 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "documentId": "string",
     "form": "projectLevelDelete",
     "projectId": "a0E project id",
@@ -154,7 +154,7 @@ Object {
 `;
 
 exports[`documentValidators projectLevelDelete decline empty form 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_type",
@@ -180,7 +180,7 @@ Object {
 `;
 
 exports[`documentValidators projectLevelDelete decline empty object 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_literal",
@@ -214,7 +214,7 @@ Object {
 `;
 
 exports[`documentValidators projectLevelDelete decline incorrect form 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "received": "claimLevelUpload",
@@ -231,7 +231,7 @@ Object {
 `;
 
 exports[`documentValidators projectLevelDelete decline incorrect projectId prefix 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_string",

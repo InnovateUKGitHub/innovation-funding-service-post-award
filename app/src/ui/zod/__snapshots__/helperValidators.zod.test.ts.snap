@@ -1,21 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`helperValidators emptyStringToUndefinedValidation accept empty string 1`] = `
-Object {
+{
   "data": undefined,
   "success": true,
 }
 `;
 
 exports[`helperValidators emptyStringToUndefinedValidation accept undefined 1`] = `
-Object {
+{
   "data": undefined,
   "success": true,
 }
 `;
 
 exports[`helperValidators emptyStringToUndefinedValidation decline filled string 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -28,7 +28,7 @@ Object {
 `;
 
 exports[`helperValidators emptyStringToUndefinedValidation decline number 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_type",
@@ -43,7 +43,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation .docm 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -59,7 +59,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation .tar.gz 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -75,7 +75,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation .webm 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -91,7 +91,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation Linux/UNIX hidden file 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -115,7 +115,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation crazy characters file 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -131,7 +131,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation no basename file 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -155,7 +155,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation no prefix file 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -179,8 +179,8 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation standard file 1`] = `
-Object {
-  "data": Object {
+{
+  "data": {
     "fileName": "awoo.png",
     "size": 120,
   },
@@ -189,7 +189,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation very big sized file 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -206,7 +206,7 @@ Object {
 `;
 
 exports[`helperValidators getSingleFileValidation zero sized file 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "custom",
@@ -222,14 +222,14 @@ Object {
 `;
 
 exports[`helperValidators partnerIdValidation accept project participant id 1`] = `
-Object {
+{
   "data": "a0D2600000zXrAIEA0",
   "success": true,
 }
 `;
 
 exports[`helperValidators partnerIdValidation decline account id 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_string",
@@ -245,7 +245,7 @@ Object {
 `;
 
 exports[`helperValidators partnerIdValidation decline empty string 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_string",
@@ -261,7 +261,7 @@ Object {
 `;
 
 exports[`helperValidators partnerIdValidation decline project id 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_string",
@@ -277,42 +277,42 @@ Object {
 `;
 
 exports[`helperValidators periodIdValidation accept 1 1`] = `
-Object {
+{
   "data": 1,
   "success": true,
 }
 `;
 
 exports[`helperValidators periodIdValidation accept 2 1`] = `
-Object {
+{
   "data": 2,
   "success": true,
 }
 `;
 
 exports[`helperValidators periodIdValidation accept 3 1`] = `
-Object {
+{
   "data": 3,
   "success": true,
 }
 `;
 
 exports[`helperValidators periodIdValidation accept 5 1`] = `
-Object {
+{
   "data": 5,
   "success": true,
 }
 `;
 
 exports[`helperValidators periodIdValidation accept string int 1`] = `
-Object {
+{
   "data": 4,
   "success": true,
 }
 `;
 
 exports[`helperValidators periodIdValidation decline 0 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "too_small",
@@ -329,7 +329,7 @@ Object {
 `;
 
 exports[`helperValidators periodIdValidation decline absurd number 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "too_big",
@@ -346,7 +346,7 @@ Object {
 `;
 
 exports[`helperValidators periodIdValidation decline decimal 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_type",
@@ -361,7 +361,7 @@ Object {
 `;
 
 exports[`helperValidators periodIdValidation decline infinity 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_type",
@@ -385,14 +385,14 @@ Object {
 `;
 
 exports[`helperValidators projectIdValidation accept project id 1`] = `
-Object {
+{
   "data": "a0E2600000olswLEAQ",
   "success": true,
 }
 `;
 
 exports[`helperValidators projectIdValidation decline account id 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_string",
@@ -408,7 +408,7 @@ Object {
 `;
 
 exports[`helperValidators projectIdValidation decline empty string 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_string",
@@ -424,7 +424,7 @@ Object {
 `;
 
 exports[`helperValidators projectIdValidation decline project participant id 1`] = `
-Object {
+{
   "error": [ZodError: [
   {
     "code": "invalid_string",
