@@ -40,7 +40,7 @@ describe("claims > documents upload screen", () => {
   it("should allow you to upload a file", claimsDocUpload);
 
   it("Should display a document upload validation message", () => {
-    cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+    cy.validationNotification("Your document has been uploaded.");
   });
 
   it("Should display the Files uploaded heading", () => {
@@ -62,7 +62,7 @@ describe("claims > documents upload screen", () => {
   });
 
   it("Should display a document removal validation message", () => {
-    cy.getByQA("validation-message-content").contains("has been deleted.");
+    cy.validationNotification("has been deleted.");
   });
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);

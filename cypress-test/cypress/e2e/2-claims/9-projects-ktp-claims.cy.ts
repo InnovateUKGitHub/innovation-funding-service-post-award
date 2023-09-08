@@ -61,11 +61,7 @@ describe("claims > KTP", () => {
   });
 
   it("Should display correct messaging", () => {
-    cy.getByQA("validation-message-content").contains(
-      "This project does not follow the normal grant calculation rules",
-    );
-    cy.getByQA("validation-message-content").contains(
-      "The project and any partner may have one or more cost categories",
-    );
+    cy.validationNotification("This project does not follow the normal grant calculation rules");
+    cy.validationNotification("The project and any partner may have one or more cost categories");
   });
 });

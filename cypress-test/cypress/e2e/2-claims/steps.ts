@@ -389,8 +389,8 @@ export const ktpAssociateEmployment = () => {
 
 export const ktpHeadings = () => {
   cy.heading("Associate Employment");
-  cy.getByQA("validation-message-content").contains("This project does not follow the normal grant calculation rules");
-  cy.getByQA("validation-message-content").contains(
+  cy.validationNotification("This project does not follow the normal grant calculation rules");
+  cy.validationNotification(
     "The project and any partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
   );
 
@@ -399,8 +399,8 @@ export const ktpHeadings = () => {
 
 export const ktpCostsToClaim = () => {
   cy.heading("Costs to be claimed");
-  cy.getByQA("validation-message-content").contains("This project does not follow the normal grant calculation rules");
-  cy.getByQA("validation-message-content").contains("The project and any partner may have one or more cost categories");
+  cy.validationNotification("This project does not follow the normal grant calculation rules");
+  cy.validationNotification("The project and any partner may have one or more cost categories");
 };
 
 export const ktpCorrectCats = () => {
@@ -881,7 +881,7 @@ export const claimReviewUploadDocument = () => {
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Invoice");
   cy.submitButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+  cy.validationNotification("Your document has been uploaded");
 };
 
 export const claimReviewCheckForNewDoc = () => {
@@ -918,5 +918,9 @@ export const claimReviewDeleteDoc = () => {
         cy.getByQA("button_delete-qa").contains("Remove").click();
       });
   });
+<<<<<<< HEAD
   cy.getByRole("alert").contains("has been deleted");
+=======
+  cy.validationNotification("has been deleted");
+>>>>>>> 150871678 (ACC=10036: (cy) Added a list of test documents so we can quickly refer to them while uploading and asserting for messaging.)
 };

@@ -139,6 +139,10 @@ const validationMessage = (message: string) => {
   cy.getByQA("validation-summary").contains(message);
 };
 
+const validationNotification = (message: string) => {
+  cy.getByQA("validation-message-content").contains(message);
+};
+
 const heading = (title: string) => {
   cy.log("**heading**");
   cy.get("h1").contains(title);
@@ -184,3 +188,4 @@ Cypress.Commands.add("button", button);
 Cypress.Commands.add("paragraph", paragraph);
 Cypress.Commands.add("list", list);
 Cypress.Commands.add("fileInput", fileInput);
+Cypress.Commands.add("validationNotification", validationNotification);

@@ -43,7 +43,7 @@ describe("PCR > Add partner > Edit PCR", () => {
   });
 
   it("Should have a validation message stating 'You cannot change this information...", () => {
-    cy.getByQA("validation-message-content").contains("You cannot change this information after you continue.");
+    cy.validationNotification("You cannot change this information after you continue.");
   });
 
   it(

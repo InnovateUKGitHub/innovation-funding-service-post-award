@@ -8,7 +8,7 @@ export const fileTidyUp = (name: string) => {
     if ($body.text().includes(name)) {
       cy.log(`Deleting existing ${name} document`);
       cy.tableCell(name).siblings().contains("button", "Remove").click({ force: true });
-      cy.validationMessage("has been deleted");
+      cy.validationMessage(`'${name}' has been deleted`);
     } else {
       cy.get("h2").contains("Files uploaded");
     }

@@ -1,4 +1,5 @@
 import { fileTidyUp } from "common/filetidyup";
+import { testFile } from "common/testfileNames";
 
 const euiFC = "this'is'a'test@innovateuk.gov.uk.bjssdev";
 const drgFC = "contact77@test.co.uk";
@@ -71,13 +72,13 @@ export const navigateToDRGClaims = () => {
 export const validatePage = () => {
   cy.get("h2").contains("Period 1");
   shouldShowCostCatTable;
-  cy.getByQA("validation-message-content").contains(finalClaimMessage);
+  cy.validationNotification(finalClaimMessage);
 };
 
 export const proceedToDocuments = () => {
   cy.button("Continue to claims documents").click();
   cy.heading("Claim documents");
-  cy.getByQA("validation-message-content").contains(pcfNotReceivedMessage);
+  cy.validationNotification(pcfNotReceivedMessage);
   cy.getByQA("validation-message").contains(finalClaimMessage);
 };
 
@@ -88,25 +89,29 @@ export const proceedToDRGDocuments = () => {
 };
 
 export const summaryPageValidation = () => {
-  cy.getByQA("validation-message-content").contains(finalClaimMessage);
-  cy.getByQA("validation-message-content").contains(pcfNotReceivedMessage);
-  cy.getByQA("validation-message-content").contains(
-    "You must upload a supporting document before you can submit this claim.",
-  );
+  cy.validationNotification(finalClaimMessage);
+  cy.validationNotification(pcfNotReceivedMessage);
+  cy.validationNotification("You must upload a supporting document before you can submit this claim.");
 };
 
 export const drgSummaryPageValidation = () => {
-  cy.getByQA("validation-message-content").contains(finalClaimMessage);
+  cy.validationNotification(finalClaimMessage);
   cy.getByQA("validation-message-content").should("not.have.text", pcfNotReceivedMessage);
 };
 
 export const pcfClaimsDocUpload = () => {
   fileTidyUp("Neil O'Reilly");
-  cy.fileInput("testfile.doc");
+  cy.fileInput(testFile);
   cy.uploadButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+  cy.validationNotification("Your document has been uploaded.");
   cy.reload();
+<<<<<<< Updated upstream
   cy.getByQA("validation-message-content").contains(pcfNotReceivedMessage);
-  cy.getByQA("button_delete-qa").contains("Remove").click();
+  cy.button("Remove").click();
   cy.getByQA("validation-message-content").contains("has been deleted.");
+=======
+  cy.validationNotification(pcfNotReceivedMessage);
+  cy.getByQA("button_delete-qa").contains("Remove").click();
+  cy.validationNotification(`'${testFile}' has been deleted.`);
+>>>>>>> Stashed changes
 };

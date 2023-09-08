@@ -42,7 +42,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should upload a file", addPartnerDocUpload);
 
   it("Should save and continue", () => {
-    cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+    cy.validationNotification("Your document has been uploaded");
     cy.submitButton("Save and continue").click();
   });
 

@@ -117,7 +117,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should upload a file", addPartnerDocUpload);
 
   it("Should display a document upload success message", () => {
-    cy.getByQA("validation-message-content").contains("Your document has been uploaded");
+    cy.validationNotification("Your document has been uploaded");
   });
 
   it("Should display a file upload table once document is uploaded", pcrFileTable);

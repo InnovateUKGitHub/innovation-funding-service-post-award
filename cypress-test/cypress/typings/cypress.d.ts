@@ -126,6 +126,12 @@ declare global {
        */
 
       fileInput(fileName: string): Chainable<Element>;
+
+      /**
+       * Finds the notification text when uploading or deleting a document
+       */
+
+      validationNotification(message: string): Chainable<Element>;
     }
   }
 }

@@ -38,7 +38,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   });
 
   it("Should contain a 'last chance to change the forecast' message", () => {
-    cy.getByQA("validation-message-content").contains("last chance");
+    cy.validationNotification("last chance");
   });
 
   it("Should display the Period, IAR and Month rows correctly", topThreeRows);

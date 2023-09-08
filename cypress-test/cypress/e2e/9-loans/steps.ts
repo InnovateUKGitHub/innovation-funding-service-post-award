@@ -132,7 +132,7 @@ export const uploadApprovalGuidance = () => {
 export const drawdownFileUpload = () => {
   cy.fileInput("testfile.doc");
   cy.submitButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("file has been uploaded");
+  cy.validationNotification("file has been uploaded");
 };
 
 export const fcFileUploadedSection = () => {
@@ -157,7 +157,7 @@ export const pmFileUploadedSection = () => {
 
 export const deleteFile = () => {
   cy.getByQA("button_delete-qa").contains("Remove").click({ multiple: true });
-  cy.getByQA("validation-message").contains("has been removed.");
+  cy.getByQA("validation-message").contains("has been deleted.");
 };
 
 export const additionalInfo = () => {

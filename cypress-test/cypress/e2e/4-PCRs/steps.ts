@@ -103,13 +103,13 @@ export const learnFiles = () => {
 export const pcrDocUpload = () => {
   cy.fileInput("testfile.doc");
   cy.uploadButton("Upload documents").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+  cy.validationNotification("Your document has been uploaded.");
 };
 
 export const addPartnerDocUpload = () => {
   cy.fileInput("testfile.doc");
   cy.uploadButton("Upload").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+  cy.validationNotification("Your document has been uploaded.");
 };
 
 export const pcrFileTable = () => {
@@ -821,7 +821,7 @@ export const correctKtpMessaging = () => {
     "This project does not follow the normal grant calculation rules",
     "The project and any partner may have one or more cost categories",
   ].forEach(validation => {
-    cy.getByQA("validation-message-content").contains(validation);
+    cy.validationNotification(validation);
   });
   [
     "The knowledge base partner may vire funds between the 'Travel and subsistence' and 'Consumables' cost categories",
@@ -950,7 +950,7 @@ export const saveContinueProceed = () => {
 export const uploadNameChange = () => {
   cy.fileInput("testfile.doc");
   cy.submitButton("Upload").click();
-  cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
+  cy.validationNotification("Your document has been uploaded.");
 };
 
 export const showUploadedFiles = () => {
@@ -1248,7 +1248,7 @@ export const verifyDeletePageLoads = () => {
 };
 
 export const deletionWarningMessage = () => {
-  cy.getByQA("validation-message-content").contains("All the information will be permanently deleted.");
+  cy.validationNotification("All the information will be permanently deleted.");
 };
 
 export const validateTable = () => {
