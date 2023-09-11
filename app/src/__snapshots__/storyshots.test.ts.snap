@@ -2358,6 +2358,7 @@ exports[`Storyshots IUK Components/Message Box Alert 1`] = `
   id="root"
 >
   <div
+    aria-label="alert message"
     className="govuk-warning-text acc-message acc-message__alert"
     data-qa="validation-message"
     data-qa-type="alert"
@@ -2395,6 +2396,7 @@ exports[`Storyshots IUK Components/Message Box Error 1`] = `
   id="root"
 >
   <div
+    aria-label="error message"
     className="govuk-warning-text acc-message acc-message__error"
     data-qa="validation-message"
     data-qa-type="error"
@@ -2431,6 +2433,7 @@ exports[`Storyshots IUK Components/Message Box Info 1`] = `
   id="root"
 >
   <div
+    aria-label="info message"
     className="govuk-warning-text acc-message acc-message__info"
     data-qa="validation-message"
     data-qa-type="info"
@@ -2467,6 +2470,7 @@ exports[`Storyshots IUK Components/Message Box Markdown 1`] = `
   id="root"
 >
   <div
+    aria-label="info message"
     className="govuk-warning-text acc-message acc-message__info"
     data-qa="validation-message"
     data-qa-type="info"
@@ -2512,6 +2516,7 @@ exports[`Storyshots IUK Components/Message Box Primary 1`] = `
   id="root"
 >
   <div
+    aria-label="info message"
     className="govuk-warning-text acc-message acc-message__info"
     data-qa="validation-message"
     data-qa-type="info"
@@ -2548,6 +2553,7 @@ exports[`Storyshots IUK Components/Message Box Success 1`] = `
   id="root"
 >
   <div
+    aria-label="success message"
     className="govuk-warning-text acc-message acc-message__success"
     data-qa="validation-message"
     data-qa-type="success"
@@ -2585,6 +2591,7 @@ exports[`Storyshots IUK Components/Message Box Warning 1`] = `
   id="root"
 >
   <div
+    aria-label="warning message"
     className="govuk-warning-text acc-message acc-message__warning"
     data-qa="validation-message"
     data-qa-type="warning"

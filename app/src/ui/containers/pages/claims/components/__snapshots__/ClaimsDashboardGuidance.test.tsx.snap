@@ -2,6 +2,7 @@
 
 exports[`<ClaimsDashboardGuidance /> @renders when overdue claim 1`] = `
 <div
+  aria-label="info message"
   class="govuk-warning-text acc-message acc-message__info"
   data-qa="guidance-message"
   data-qa-type="info"
