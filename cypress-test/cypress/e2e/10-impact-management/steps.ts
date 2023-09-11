@@ -105,13 +105,7 @@ export const pcfClaimsDocUpload = () => {
   cy.uploadButton("Upload documents").click();
   cy.validationNotification("Your document has been uploaded.");
   cy.reload();
-<<<<<<< Updated upstream
-  cy.getByQA("validation-message-content").contains(pcfNotReceivedMessage);
-  cy.button("Remove").click();
-  cy.getByQA("validation-message-content").contains("has been deleted.");
-=======
   cy.validationNotification(pcfNotReceivedMessage);
-  cy.getByQA("button_delete-qa").contains("Remove").click();
+  cy.button("Remove").click();
   cy.validationNotification(`'${testFile}' has been deleted.`);
->>>>>>> Stashed changes
 };
