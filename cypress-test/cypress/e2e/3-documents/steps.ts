@@ -97,7 +97,6 @@ export const learnAboutFiles = () => {
 };
 
 export const uploadToMO = () => {
-  cy.switchUserTo(mo);
   cy.fileInput(testFile);
   cy.get("select#partnerId.govuk-select").select("Innovate UK and MO only");
   cy.get("select#description.govuk-select").select("Plans");
@@ -105,6 +104,7 @@ export const uploadToMO = () => {
 };
 
 export const displayMOFile = () => {
+  cy.reload();
   cy.get("h3").contains("Documents shared with Innovate UK and Monitoring Officer");
   cy.reload();
   cy.getByQA("project-documents-container").within(() => {
@@ -143,6 +143,7 @@ export const pmUploadToEUI = () => {
 };
 
 export const displayEUIFile = () => {
+  cy.reload();
   cy.get("h3").contains("Documents shared with Innovate UK and partners");
   cy.reload();
   cy.getByQA("partner-documents-container").within(() => {
@@ -164,6 +165,7 @@ export const uploadToAB = () => {
 };
 
 export const displayABFile = () => {
+  cy.reload();
   cy.get("h3").contains("Innovate UK and partners");
   cy.reload();
   cy.getByQA("partner-documents-container").within(() => {
@@ -185,6 +187,7 @@ export const uploadToEUIMed = () => {
 };
 
 export const displayEUIMedFile = () => {
+  cy.reload();
   cy.get("h3").contains("Innovate UK and partners");
   cy.wait(500);
   cy.reload();
@@ -199,7 +202,7 @@ export const displayEUIMedFile = () => {
 
 export const manyPartnerUpload = () => {
   partnersList.forEach(selection => {
-    cy.get("input#attachment.govuk-file-upload").wait(500).selectFile("cypress/documents/testfile.doc");
+    cy.fileInput("testfile.doc");
     cy.get("select#partnerId.govuk-select").select(`Innovate UK, MO and ${selection}`);
     cy.wait(500);
     cy.get("select#description.govuk-select").select("Plans");
@@ -215,7 +218,8 @@ export const manyPartnerDocDelete = () => {
   partnersList.forEach(partner => {
     cy.get("td:nth-child(6)").contains(partner).siblings().contains("Remove").click();
     cy.validationNotification(`'${testFile}' has been deleted.`);
-    cy.wait(800);
+    cy.wait(500);
+    cy.reload();
   });
 };
 
@@ -276,6 +280,7 @@ export const uploadSingleChar = () => {
 };
 
 export const deleteSingleChar = () => {
+  cy.reload();
   cy.get("tr")
     .eq(1)
     .within(() => {
@@ -310,8 +315,8 @@ export const uploadFileTooLarge = () => {
 export const uploadFileNameTooShort = () => {
   cy.fileInput(noFileName);
   cy.button("Upload").click();
-  cy.validationLink(`You cannot upload '${noFileName}' because the file must have a name.`);
-  cy.get("p").contains(`You cannot upload '${noFileName}' because the file must have a name.`);
+  cy.validationLink(`You cannot upload '${noFileName}' because it is the wrong file type.`);
+  cy.get("p").contains(`You cannot upload '${noFileName}' because it is the wrong file type.`);
   cy.reload();
 };
 

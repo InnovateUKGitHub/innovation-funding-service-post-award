@@ -22,17 +22,20 @@ import {
   uploadFileTooLarge,
   uploadFileNameTooShort,
 } from "./steps";
+import { fileTidyUp } from "common/filetidyup";
 
 const docname = "";
 
 describe("Project Documents page", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/documents" });
+    visitApp({ asUser: "testman2@testing.com", path: "projects/a0E2600000kSotUEAS/documents" });
+    fileTidyUp("testfile.doc");
     createTestFile("bigger_test", 33);
   });
 
   after(() => {
     deleteTestFile("bigger_test");
+    fileTidyUp("testfile.doc");
   });
 
   it("Should show back to project link", () => {
@@ -85,7 +88,7 @@ describe("Project Documents page", () => {
    */
   it("Should allow for a file to be uploaded under Innovate UK, MO and EUI Small Ent Health", uploadToEUI);
 
-  it("Should display the file just uploaded under the Innovate UK and MO section", displayEUIFile);
+  it("Should display the file just uploaded under the Innovate UK and EUI section", displayEUIFile);
 
   it("Should show the correct partner it is shared with (EUI Small Ent Health)", () => {
     cy.get("tr.govuk-table__row").contains("EUI Small Ent Health");
@@ -98,7 +101,7 @@ describe("Project Documents page", () => {
    */
   it("Should allow for a file to be uploaded under Innovate UK, MO and A B Cad Services", uploadToAB);
 
-  it("Should display the file just uploaded under the Innovate UK and MO section", displayABFile);
+  it("Should display the file just uploaded under the Innovate UK and A B Cad section", displayABFile);
 
   it("Should show the correct partner it is shared with (A B Cad Services)", () => {
     cy.get("tr.govuk-table__row").contains("A B Cad Services");
@@ -111,7 +114,7 @@ describe("Project Documents page", () => {
    */
   it("Should allow for a file to be uploaded under Innovate UK, MO and ABS EUI Medium Enterprise", uploadToEUIMed);
 
-  it("Should display the file just uploaded under the Innovate UK and MO section", displayEUIMedFile);
+  it("Should display the file just uploaded under the Innovate UK and ABS section", displayEUIMedFile);
 
   it("Should show the correct partner it is shared with (ABS EUI Medium Enterprise)", () => {
     cy.get("tr.govuk-table__row").contains("ABS EUI Medium Enterprise");

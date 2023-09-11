@@ -1,9 +1,15 @@
+import { fileTidyUp } from "common/filetidyup";
 import { visitApp } from "../../common/visit";
 import { manyPartnerDocDelete, manyPartnerUpload, shouldShowProjectTitle } from "./steps";
 
 describe("Project Documents page > Uploading to many partners", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kTirsEAC/documents" });
+    fileTidyUp("testfile.doc");
+  });
+
+  after(() => {
+    fileTidyUp("testfile.doc");
   });
 
   it("Should display correct project name", shouldShowProjectTitle);

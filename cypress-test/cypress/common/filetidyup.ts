@@ -4,15 +4,24 @@
  * It also means that if there is a file uploaded by a different user for any reason it won't try and remove that one
  */
 export const fileTidyUp = (name: string) => {
-  cy.get("body").then($body => {
-    if ($body.text().includes(name)) {
-      cy.log(`Deleting existing ${name} document`);
-      cy.tableCell(name).siblings().contains("button", "Remove").click({ force: true });
-      cy.validationMessage(`'${name}' has been deleted`);
-    } else {
-      cy.get("h2").contains("Files uploaded");
-    }
-  });
+  cy.wait(500);
+  cy.reload();
+  for (let i = 1; i < 10; i++) {
+    cy.get("body").then($body => {
+      if ($body.text().includes(name)) {
+        cy.log(`Deleting existing ${name} document`);
+        cy.get("tr")
+          .eq(1)
+          .within(() => {
+            cy.tableCell("Remove").scrollIntoView().click();
+          });
+        cy.validationNotification("has been deleted");
+        cy.reload();
+      } else {
+        cy.get("h2").contains("Files uploaded");
+      }
+    });
+  }
 };
 
 export const claimReviewFileTidyUp = (name: string) => {
