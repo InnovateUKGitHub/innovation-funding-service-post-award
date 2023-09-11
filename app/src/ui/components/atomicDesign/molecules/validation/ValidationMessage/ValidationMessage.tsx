@@ -85,6 +85,7 @@ export const ValidationMessage = ({
       className={cx("govuk-warning-text", "acc-message", ui.className)}
       data-qa={qa}
       data-qa-type={messageType}
+      aria-label={`${messageType} message`}
       style={ui.styles}
     >
       <span data-qa={`${qa}-assistive`} className="govuk-warning-text__assistive">
