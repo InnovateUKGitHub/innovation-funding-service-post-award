@@ -10,7 +10,12 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
     return storeKeys.getClaimDetailKey(partnerId, periodId, costCategoryId);
   }
 
-  public getClaimDetailDocuments(projectId: ProjectId, partnerId: PartnerId, periodId: number, costCategoryId: CostCategoryId) {
+  public getClaimDetailDocuments(
+    projectId: ProjectId,
+    partnerId: PartnerId,
+    periodId: number,
+    costCategoryId: CostCategoryId,
+  ) {
     return this.getData("documents", this.getKey(partnerId, periodId, costCategoryId), p =>
       apiClient.documents.getClaimDetailDocuments({
         claimDetailKey: { projectId, partnerId, periodId, costCategoryId },

@@ -6,6 +6,7 @@ export type RegisterButton<TFormValues> = (value: PathValue<TFormValues, Path<TF
 };
 
 /**
+ * @template {object} TFormValues
  * @returns a function that is called with the value and will register the button for
  * use with discriminated unions in zod handlers for forms with two or more submit buttons.
  * @param {UseFormSetValue<TFormValues>} setValue is the setValue function from react-hook-form useForm.

@@ -52,7 +52,9 @@ class Controller extends ControllerBase<"server", ForecastDetailsDTO> implements
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<"server", { partnerId: PartnerId; periodId: number; costCategoryId: CostCategoryId }>) {
+  public async get(
+    params: ApiParams<"server", { partnerId: PartnerId; periodId: number; costCategoryId: CostCategoryId }>,
+  ) {
     const query = new GetForecastDetailQuery(params.partnerId, params.periodId, params.costCategoryId);
     return contextProvider.start(params).runQuery(query);
   }

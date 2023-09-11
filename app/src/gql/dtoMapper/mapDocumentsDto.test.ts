@@ -1,4 +1,8 @@
-import { mapToPartnerDocumentSummaryDtoArray, mapToProjectDocumentSummaryDtoArray } from "./mapDocumentsDto";
+import {
+  DocumentSummaryNode,
+  mapToPartnerDocumentSummaryDtoArray,
+  mapToProjectDocumentSummaryDtoArray,
+} from "./mapDocumentsDto";
 
 const data = {
   currentUser: {
@@ -2180,9 +2184,17 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
               },
             },
           },
-        ] as any,
+        ] as unknown as readonly DocumentSummaryNode[],
         ["id"],
-        {} as any,
+        {
+          projectId: "12345" as ProjectId,
+          partnerId: "1234" as PartnerId,
+          periodId: 1 as PeriodId,
+          costCategoryId: "12345",
+          pcrId: undefined,
+          type: "claim details",
+          currentUser: { email: "myemail@test.com" },
+        },
       ),
     ).toEqual([{ id: "good" }]);
   });

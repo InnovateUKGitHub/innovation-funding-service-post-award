@@ -19,7 +19,7 @@ export function isContentSolution(content: unknown): content is ContentSelector 
 /**
  * type guard to help evaluate whether field is a valid content selector
  *
- * @param {unknown} item
+ * @param {unknown} item item to be queried for whether it is a content selector
  * @returns {boolean} whether is ContentSelector type
  */
 export function isContentSelector(item: unknown): item is ContentSelector {
