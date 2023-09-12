@@ -5,8 +5,7 @@
  */
 export const fileTidyUp = (name: string) => {
   cy.wait(500);
-  cy.reload();
-  for (let i = 1; i < 10; i++) {
+  for (let i = 1; i < 25; i++) {
     cy.get("body").then($body => {
       if ($body.text().includes(name)) {
         cy.log(`Deleting existing ${name} document`);
@@ -17,6 +16,7 @@ export const fileTidyUp = (name: string) => {
           });
         cy.validationNotification("has been deleted");
         cy.reload();
+        cy.wait(500);
       } else {
         cy.get("h2").contains("Files uploaded");
       }

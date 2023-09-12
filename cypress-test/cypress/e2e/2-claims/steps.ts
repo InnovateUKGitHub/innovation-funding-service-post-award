@@ -710,7 +710,7 @@ export const saveAndReturnToPrepare = () => {
 };
 
 export const capPotMessageDoesExist = () => {
-  cy.getByRole("alert").contains(
+  cy.validationNotification(
     "Please be aware, approval of this claim will cause a percentage of your grant to be retained.",
   );
 };
@@ -918,9 +918,5 @@ export const claimReviewDeleteDoc = () => {
         cy.getByQA("button_delete-qa").contains("Remove").click();
       });
   });
-<<<<<<< HEAD
-  cy.getByRole("alert").contains("has been deleted");
-=======
   cy.validationNotification("has been deleted");
->>>>>>> 150871678 (ACC=10036: (cy) Added a list of test documents so we can quickly refer to them while uploading and asserting for messaging.)
 };

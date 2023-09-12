@@ -5,6 +5,7 @@ import {
   rejectElevenDocsAndShowError,
   documents as uploadDocuments,
 } from "./steps";
+import { fileTidyUp } from "common/filetidyup";
 
 const fcEmail = "s.shuang@irc.trde.org.uk.test";
 
@@ -16,6 +17,10 @@ describe("Claims > Cost category document uploads", () => {
   before(() => {
     visitApp({ asUser: fcEmail });
     cy.navigateToProject("328407");
+  });
+
+  after(() => {
+    fileTidyUp("Sarah Shuang");
   });
 
   it("Should click the claims tile and access the 'Exceptions - Staff' cost category", () => {
@@ -30,6 +35,7 @@ describe("Claims > Cost category document uploads", () => {
   it("Should click the upload and remove documents button ", () => {
     cy.button("Upload and remove documents").click();
     cy.heading("Exceptions - Staff documents");
+    fileTidyUp("Sarah Shuang");
   });
 
   it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
@@ -39,8 +45,6 @@ describe("Claims > Cost category document uploads", () => {
   it("Should see a success message for '10 documents have been uploaded'", { retries: 2 }, () => {
     cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
   });
-
-  it("should filter the document list using the search bar");
 
   it("Should ensure all uploaded documents are displayed correctly", () => {
     cy.reload();

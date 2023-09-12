@@ -10,6 +10,8 @@ import {
   doNotUploadSpecialChar,
   uploadFileNameTooShort,
 } from "e2e/3-documents/steps";
+import { fileTidyUp } from "common/filetidyup";
+import { testFile } from "common/testfileNames";
 const pmEmail = "james.black@euimeabs.test";
 
 describe("claims > documents upload screen", () => {
@@ -17,6 +19,7 @@ describe("claims > documents upload screen", () => {
     cy.intercept("POST", "/api/documents/claim-details/*").as("uploadDocument");
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
     createTestFile("bigger_test", 33);
+    fileTidyUp(testFile);
   });
 
   after(() => {
