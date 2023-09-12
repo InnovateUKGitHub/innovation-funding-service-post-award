@@ -19,10 +19,6 @@ describe("Claims > Cost category document uploads", () => {
     cy.navigateToProject("328407");
   });
 
-  after(() => {
-    fileTidyUp("Sarah Shuang");
-  });
-
   it("Should click the claims tile and access the 'Exceptions - Staff' cost category", () => {
     cy.selectTile("Claims");
     cy.heading("Claims");

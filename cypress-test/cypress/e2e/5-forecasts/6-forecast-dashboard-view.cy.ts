@@ -25,11 +25,19 @@ describe("Forecast > Partner table as PM/MO before navigating to forecast", () =
    * This will be testable only when table cell is blank.
    */
   it("Should display a blank field beneath 'Date of last update'", () => {
-    cy.get("tr:nth-child(1) > td:nth-child(5)").contains("Never");
+    cy.get("tr")
+      .eq(2)
+      .within(() => {
+        cy.get("td:nth-child(5)").contains("Never");
+      });
   });
 
   it("Should switch to MO and repeat the check", () => {
     cy.switchUserTo(moEmail);
-    cy.get("tr:nth-child(1) > td:nth-child(5)").contains("Never");
+    cy.get("tr")
+      .eq(2)
+      .within(() => {
+        cy.get("td:nth-child(5)").contains("Never");
+      });
   });
 });

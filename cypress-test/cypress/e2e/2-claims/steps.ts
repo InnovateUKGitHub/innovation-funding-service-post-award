@@ -147,7 +147,7 @@ export const newCostCatLineItem = () => {
 export const allowFileUpload = () => {
   cy.fileInput("testfile.doc");
   cy.submitButton("Upload documents").click();
-  cy.getByRole("alert").contains("Your document has been uploaded.");
+  cy.validationNotification("Your document has been uploaded.");
 };
 
 export const documents = [
@@ -595,6 +595,7 @@ export const queryTheClaim = () => {
   cy.paragraph("I am satisfied that the costs claimed appear to comply");
   cy.getByQA("cr&d-reminder").contains("You must submit a monitoring report");
   cy.submitButton("Send query").click();
+  cy.heading("Claims");
 };
 
 export const navigateBackToDash = () => {

@@ -1333,7 +1333,7 @@ export const createChangeScope = () => {
 export const populateCommentsAndSave = () => {
   cy.get("textarea").clear().type(standardComments);
   cy.wait(500);
-  cy.get(`button[name="button_return"]`).contains("Save and return to requests").click();
+  cy.button("Save and return to requests").click();
   cy.heading("Project change requests");
 };
 

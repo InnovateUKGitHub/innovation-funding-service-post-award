@@ -7,7 +7,7 @@ const config = {
   files: ["cypress/results/*.json"],
 };
 
-cypress.run({ browser: "chromium" }).then(
+cypress.run({ browser: "chrome" }).then(
   () => {
     generateReport(config);
   },

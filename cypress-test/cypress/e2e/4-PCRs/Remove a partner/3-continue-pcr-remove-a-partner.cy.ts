@@ -24,6 +24,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should click the 'Create request' button", () => {
     cy.get("a").contains("Create request").click();
+    cy.wait(500);
   });
 
   it("Should select 'Remove a partner' checkbox", () => {
