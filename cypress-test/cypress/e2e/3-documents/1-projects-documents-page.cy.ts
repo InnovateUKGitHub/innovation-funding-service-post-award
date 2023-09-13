@@ -35,7 +35,6 @@ describe("Project Documents page", () => {
 
   after(() => {
     deleteTestFile("bigger_test");
-    fileTidyUp("testfile.doc");
   });
 
   it("Should show back to project link", () => {

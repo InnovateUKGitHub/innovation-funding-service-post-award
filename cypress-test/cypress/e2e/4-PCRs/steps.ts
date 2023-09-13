@@ -1,3 +1,4 @@
+import { testFile } from "common/testfileNames";
 import { PcrType } from "typings/pcr";
 
 let date = new Date();
@@ -112,11 +113,17 @@ export const addPartnerDocUpload = () => {
   cy.validationNotification("Your document has been uploaded.");
 };
 
-export const pcrFileTable = () => {
-  cy.tableHeader("File name");
-  cy.tableHeader("Type");
-  cy.tableHeader("Date uploaded");
-  cy.tableHeader("Uploaded by");
+export const pcrFileTable = (fileType: string, user: string) => {
+  [
+    ["File name", testFile],
+    ["Type", fileType],
+    ["Date uploaded", "2023"],
+    ["Size", "0KB"],
+    ["Uploaded by", user],
+  ].forEach(([head, row], column = 0) => {
+    cy.get(`th:nth-child(${column + 1})`).contains(head);
+    cy.get(`td:nth-child(${column + 1})`).contains(row);
+  });
 };
 
 export const learnOrganisations = () => {
@@ -951,17 +958,6 @@ export const uploadNameChange = () => {
   cy.fileInput("testfile.doc");
   cy.submitButton("Upload").click();
   cy.validationNotification("Your document has been uploaded.");
-};
-
-export const showUploadedFiles = () => {
-  cy.get("td").contains(year);
-  cy.get("h2").contains("Files uploaded");
-  ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach(header => {
-    cy.tableHeader(header);
-  });
-  ["testfile.doc", "Certificate of name change", "0KB", "James Black", "Remove"].forEach(cell => {
-    cy.tableCell(cell);
-  });
 };
 
 export const summaryOfChanges = () => {

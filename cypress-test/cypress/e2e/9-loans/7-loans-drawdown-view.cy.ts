@@ -33,7 +33,7 @@ describe("Loans project > Drawdown view", () => {
 
   it("Should switch back to the FC and delete the file", () => {
     cy.switchUserTo(fcEmail);
-    deleteFile;
+    deleteFile();
   });
 
   it(

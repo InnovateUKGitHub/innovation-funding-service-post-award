@@ -61,11 +61,11 @@ describe("claims > documents upload screen", () => {
   });
 
   it("Should allow you to delete the document that was just uploaded", () => {
-    cy.getByQA("button_documentId-qa").contains("Remove").click();
+    cy.button("Remove").click();
   });
 
   it("Should display a document removal validation message", () => {
-    cy.validationNotification("has been deleted.");
+    cy.validationNotification(`'${testFile}' has been deleted.`);
   });
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);

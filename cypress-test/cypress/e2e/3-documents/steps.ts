@@ -104,6 +104,7 @@ export const uploadToMO = () => {
 };
 
 export const displayMOFile = () => {
+  cy.wait(500);
   cy.reload();
   cy.get("h3").contains("Documents shared with Innovate UK and Monitoring Officer");
   cy.reload();
@@ -113,6 +114,7 @@ export const displayMOFile = () => {
 };
 
 export const deleteDocFromArea = () => {
+  cy.wait(500);
   cy.button("Remove").click();
   cy.validationNotification(`'${testFile}' has been deleted.`);
 };
@@ -315,8 +317,8 @@ export const uploadFileTooLarge = () => {
 export const uploadFileNameTooShort = () => {
   cy.fileInput(noFileName);
   cy.button("Upload").click();
-  cy.validationLink(`You cannot upload '${noFileName}' because it is the wrong file type.`);
-  cy.get("p").contains(`You cannot upload '${noFileName}' because it is the wrong file type.`);
+  cy.validationLink(`You cannot upload '${noFileName}' because the file must have a name.`);
+  cy.get("p").contains(`You cannot upload '${noFileName}' because the file must have a name.`);
   cy.reload();
 };
 

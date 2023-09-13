@@ -3,6 +3,8 @@ const fcEmail = "wed.addams@test.test.co.uk";
 const hybridEmail = "s.shuang@irc.trde.org.uk.test";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
+import { fileTidyUp } from "common/filetidyup";
+import { testFile } from "common/testfileNames";
 import { visitApp } from "common/visit";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
@@ -148,7 +150,7 @@ export const fcFileUploadedSection = () => {
 export const pmFileUploadedSection = () => {
   cy.get("h2").contains("Files uploaded");
   cy.paragraph("All documents uploaded will be shown here.");
-  ["File name", "Type", "Date uploaded", "Size", "Uploaded by", "Remove", "testfile.doc", "Drawdown approval"].forEach(
+  ["File name", "Type", "Date uploaded", "Size", "Uploaded by", "testfile.doc", "Drawdown approval"].forEach(
     docTableItem => {
       cy.getByQA("loan-documents-viewer-container").contains(docTableItem);
     },
@@ -156,8 +158,8 @@ export const pmFileUploadedSection = () => {
 };
 
 export const deleteFile = () => {
-  cy.getByQA("button_delete-qa").contains("Remove").click({ multiple: true });
-  cy.getByQA("validation-message").contains("has been deleted.");
+  cy.button("Remove").click({ multiple: true });
+  cy.validationNotification(`'${testFile}' has been deleted.`);
 };
 
 export const additionalInfo = () => {
@@ -393,9 +395,10 @@ export const assertForMissingPcr = () => {
 
 export const fcAndPmFileAssertion = () => {
   cy.switchUserTo(fcEmail);
-  drawdownFileUpload;
+  fileTidyUp("Wednesday Addams");
+  drawdownFileUpload();
   cy.switchUserTo(pmEmail);
-  pmFileUploadedSection;
+  pmFileUploadedSection();
 };
 
 export const hybridButtonAssertion = () => {

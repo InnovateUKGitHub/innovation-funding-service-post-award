@@ -8,10 +8,6 @@ describe("Project Documents page > Uploading to many partners", () => {
     fileTidyUp("testfile.doc");
   });
 
-  after(() => {
-    fileTidyUp("testfile.doc");
-  });
-
   it("Should display correct project name", shouldShowProjectTitle);
 
   /**The below asserts both the drop-down box for the partners and that they can each have docs uploaded */

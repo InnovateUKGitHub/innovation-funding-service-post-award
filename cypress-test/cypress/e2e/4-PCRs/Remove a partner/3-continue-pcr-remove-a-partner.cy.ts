@@ -1,3 +1,4 @@
+import { testFile } from "common/testfileNames";
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
@@ -71,7 +72,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
     cy.get("p.govuk-body").contains("uploaded");
   });
 
-  it("Should show a table of information", pcrFileTable);
+  it("Should show a table of information", () => pcrFileTable("Withdrawal of partner certificate", "Innovate UK"));
 
   it("Should show the file that's just been uploaded", () => {
     cy.get("a.govuk-link").contains("testfile.doc");
@@ -79,7 +80,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should allow you to delete the document that was just uploaded", () => {
     cy.getByQA("button_delete-qa").contains("Remove").click();
-    cy.validationNotification("has been deleted.");
+    cy.validationNotification(`'${testFile}' has been deleted.`);
   });
 
   it("Should have a 'Save and continue' button", () => {

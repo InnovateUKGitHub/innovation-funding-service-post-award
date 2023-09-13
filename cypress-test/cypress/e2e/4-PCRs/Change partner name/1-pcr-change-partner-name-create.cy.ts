@@ -8,13 +8,14 @@ import {
   tickEachPartner,
   saveContinueProceed,
   uploadNameChange,
-  showUploadedFiles,
   summaryOfChanges,
   assertChangeNamePage,
   completeChangeName,
   changeNameHeadings,
   validateChangeName,
+  pcrFileTable,
 } from "../steps";
+import { testFile } from "common/testfileNames";
 
 const projectManager = "james.black@euimeabs.test";
 
@@ -73,11 +74,11 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
 
   it("Should upload a file", uploadNameChange);
 
-  it("Should now show the files uploaded", showUploadedFiles);
+  it("Should now show the files uploaded", () => pcrFileTable("Certificate of name change", "James Black"));
 
   it("Should delete the file and display the correct validation message", () => {
     cy.getByQA("button_delete-qa").contains("Remove").click();
-    cy.validationNotification("has been deleted");
+    cy.validationNotification(`'${testFile}' has been deleted`);
   });
 
   it("Should upload another file and click 'Save and continue'", () => {

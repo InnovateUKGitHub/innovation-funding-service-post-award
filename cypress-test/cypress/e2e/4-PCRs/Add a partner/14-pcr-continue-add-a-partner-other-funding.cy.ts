@@ -1,3 +1,4 @@
+import { testFile } from "common/testfileNames";
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
@@ -120,7 +121,13 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.validationNotification("Your document has been uploaded");
   });
 
-  it("Should display a file upload table once document is uploaded", pcrFileTable);
+  it("Should display a file upload table once document is uploaded", () =>
+    pcrFileTable("Agreement to PCR", "Innovate UK"));
+
+  it("Should allow the file to be deleted", () => {
+    cy.button("Remove").click();
+    cy.validationNotification(`'${testFile}' has been deleted.`);
+  });
 
   it("Should click 'Save and continue'", () => {
     cy.submitButton("Save and return to summary");
