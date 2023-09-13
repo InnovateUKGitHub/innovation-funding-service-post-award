@@ -12,6 +12,7 @@ import { ProjectStatus } from "@framework/constants/project";
 import { IAppError } from "@framework/types/IAppError";
 import { Results, CombinedResultsValidator } from "@ui/validation/results";
 import { GovWidthContainer } from "../../atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
+import { FragmentContext } from "@gql/fragmentContextHook";
 
 export const usePageValidationMessage = (projectStatus?: ProjectStatus, partnerStatus?: PartnerStatus) => {
   const { getContent } = useContent();
@@ -59,6 +60,7 @@ export interface PageProps {
   partnerStatus?: PartnerStatus;
   qa?: string;
   className?: string;
+  fragmentRef?: unknown;
 }
 
 /**
@@ -76,6 +78,7 @@ export function Page({
   className,
   projectStatus,
   partnerStatus,
+  fragmentRef,
 }: PageProps) {
   const validation = Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;
@@ -89,39 +92,41 @@ export function Page({
   const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;
 
   return (
-    <GovWidthContainer qa={qa} className={className}>
-      {backLink && (
-        <div className="govuk-grid-row">
-          <div className="govuk-grid-column-full" data-qa="page-backlink">
-            {backLink}
+    <FragmentContext.Provider value={fragmentRef}>
+      <GovWidthContainer qa={qa} className={className}>
+        {backLink && (
+          <div className="govuk-grid-row">
+            <div className="govuk-grid-column-full" data-qa="page-backlink">
+              {backLink}
+            </div>
           </div>
-        </div>
-      )}
-
-      <main className="govuk-main-wrapper" id="main-content" role="main">
-        {displayActiveUi ? (
-          <>
-            {displayAriaLive && (
-              <AriaLive>
-                {error && <ErrorSummary {...error} />}
-                {validation && <ValidationSummary validation={validation} compressed={false} />}
-              </AriaLive>
-            )}
-
-            {pageTitle}
-
-            {pageErrorMessage && (
-              <Section>
-                <ValidationMessage messageType="info" qa="on-hold-info-message" message={pageErrorMessage} />
-              </Section>
-            )}
-
-            {children}
-          </>
-        ) : (
-          <ProjectInactive />
         )}
-      </main>
-    </GovWidthContainer>
+
+        <main className="govuk-main-wrapper" id="main-content" role="main">
+          {displayActiveUi ? (
+            <>
+              {displayAriaLive && (
+                <AriaLive>
+                  {error && <ErrorSummary {...error} />}
+                  {validation && <ValidationSummary validation={validation} compressed={false} />}
+                </AriaLive>
+              )}
+
+              {pageTitle}
+
+              {pageErrorMessage && (
+                <Section>
+                  <ValidationMessage messageType="info" qa="on-hold-info-message" message={pageErrorMessage} />
+                </Section>
+              )}
+
+              {children}
+            </>
+          ) : (
+            <ProjectInactive />
+          )}
+        </main>
+      </GovWidthContainer>
+    </FragmentContext.Provider>
   );
 }
