@@ -13,6 +13,7 @@ import { ErrorSummary } from "@ui/components/atomicDesign/molecules/ErrorSummary
 import { ProjectInactive } from "@ui/components/atomicDesign/molecules/ProjectInactive/ProjectInactive";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
+import { FragmentContext } from "@gql/fragmentContextHook";
 
 export const useInactiveMessage = (projectStatus?: ProjectStatus, partnerStatus?: PartnerStatus) => {
   const { getContent } = useContent();
@@ -44,6 +45,7 @@ export interface PageProps {
   qa?: string;
   className?: string;
   bailoutErrorNavigation?: boolean;
+  fragmentRef?: unknown;
 }
 
 /**
@@ -59,6 +61,7 @@ export function Page({
   className,
   projectStatus,
   partnerStatus,
+  fragmentRef,
 }: PageProps) {
   const displayAriaLive: boolean = !!apiError || !!validationErrors;
 
@@ -75,39 +78,41 @@ export function Page({
   }, [apiError, validationErrorSize]);
 
   return (
-    <GovWidthContainer qa={qa} className={className}>
-      {backLink && (
-        <div className="govuk-grid-row">
-          <div className="govuk-grid-column-full" data-qa="page-backlink">
-            {backLink}
+    <FragmentContext.Provider value={fragmentRef}>
+      <GovWidthContainer qa={qa} className={className}>
+        {backLink && (
+          <div className="govuk-grid-row">
+            <div className="govuk-grid-column-full" data-qa="page-backlink">
+              {backLink}
+            </div>
           </div>
-        </div>
-      )}
-
-      <main className="govuk-main-wrapper" id="main-content" role="main">
-        {displayActiveUi ? (
-          <>
-            {displayAriaLive && (
-              <AriaLive>
-                {apiError && <ErrorSummary {...apiError} />}
-                {validationErrors && <ValidationSummary validationErrors={validationErrors} />}
-              </AriaLive>
-            )}
-
-            {pageTitle}
-
-            {inactiveMessage && (
-              <Section>
-                <ValidationMessage messageType="info" qa="on-hold-info-message" message={inactiveMessage} />
-              </Section>
-            )}
-
-            {children}
-          </>
-        ) : (
-          <ProjectInactive />
         )}
-      </main>
-    </GovWidthContainer>
+
+        <main className="govuk-main-wrapper" id="main-content" role="main">
+          {displayActiveUi ? (
+            <>
+              {displayAriaLive && (
+                <AriaLive>
+                  {apiError && <ErrorSummary {...apiError} />}
+                  {validationErrors && <ValidationSummary validationErrors={validationErrors} />}
+                </AriaLive>
+              )}
+
+              {pageTitle}
+
+              {inactiveMessage && (
+                <Section>
+                  <ValidationMessage messageType="info" qa="on-hold-info-message" message={inactiveMessage} />
+                </Section>
+              )}
+
+              {children}
+            </>
+          ) : (
+            <ProjectInactive />
+          )}
+        </main>
+      </GovWidthContainer>
+    </FragmentContext.Provider>
   );
 }
