@@ -116,7 +116,7 @@ export const displayMOFile = () => {
 export const deleteDocFromArea = () => {
   cy.wait(500);
   cy.button("Remove").click();
-  cy.validationNotification(`'${testFile}' has been deleted.`);
+  cy.validationNotification(`'${testFile}' has been removed.`);
 };
 
 export const uploadToEUI = () => {
@@ -219,7 +219,7 @@ export const manyPartnerUpload = () => {
 export const manyPartnerDocDelete = () => {
   partnersList.forEach(partner => {
     cy.get("td:nth-child(6)").contains(partner).siblings().contains("Remove").click();
-    cy.validationNotification(`'${testFile}' has been deleted.`);
+    cy.validationNotification(`'${testFile}' has been removed.`);
     cy.wait(500);
     cy.reload();
   });
@@ -231,7 +231,7 @@ export const fcLoginDelete = () => {
   cy.heading("Project documents");
   cy.get("td").contains(testFileEUIFinance);
   cy.get("td").contains("Wednesday Addams of EUI Small Ent Health").siblings().contains("Remove").click();
-  cy.validationNotification(`'${testFileEUIFinance}' has been deleted.`);
+  cy.validationNotification(`'${testFileEUIFinance}' has been removed.`);
 };
 
 export const pmLoginViewFile = () => {
@@ -251,7 +251,7 @@ export const pmLoginDelete = () => {
   cy.switchUserTo(pm);
   cy.get("td").contains(testfileEUIProjectManager);
   cy.get("td").contains("James Black of EUI Small Ent Health").siblings().contains("Remove").click();
-  cy.validationNotification(`'${testfileEUIProjectManager}' has been deleted.`);
+  cy.validationNotification(`'${testfileEUIProjectManager}' has been removed.`);
 };
 
 export const moLoginViewFile = () => {
@@ -288,7 +288,7 @@ export const deleteSingleChar = () => {
     .within(() => {
       cy.tableCell("Remove").scrollIntoView().click();
     });
-  cy.validationNotification(`'${singleCharFile}' has been deleted.`);
+  cy.validationNotification(`'${singleCharFile}' has been removed.`);
 };
 
 export const validateExcessiveFileName = () => {
@@ -348,5 +348,5 @@ export const abCadFcDelete = () => {
   cy.heading("Project documents");
   cy.get("td").contains(testFileABCad);
   cy.get("td").contains("ken Charles of A B Cad Services").siblings().contains("Remove").click();
-  cy.validationNotification(`'${testFileABCad}' has been deleted.`);
+  cy.validationNotification(`'${testFileABCad}' has been removed.`);
 };

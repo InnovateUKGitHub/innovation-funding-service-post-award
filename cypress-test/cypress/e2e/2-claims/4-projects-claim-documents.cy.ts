@@ -65,7 +65,7 @@ describe("claims > documents upload screen", () => {
   });
 
   it("Should display a document removal validation message", () => {
-    cy.validationNotification(`'${testFile}' has been deleted.`);
+    cy.validationNotification(`'${testFile}' has been removed.`);
   });
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);

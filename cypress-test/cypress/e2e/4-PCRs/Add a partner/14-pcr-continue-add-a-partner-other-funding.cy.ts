@@ -126,7 +126,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should allow the file to be deleted", () => {
     cy.button("Remove").click();
-    cy.validationNotification(`'${testFile}' has been deleted.`);
+    cy.validationNotification(`'${testFile}' has been removed.`);
   });
 
   it("Should click 'Save and continue'", () => {

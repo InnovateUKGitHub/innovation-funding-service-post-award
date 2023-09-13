@@ -78,7 +78,7 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
 
   it("Should delete the file and display the correct validation message", () => {
     cy.getByQA("button_delete-qa").contains("Remove").click();
-    cy.validationNotification(`'${testFile}' has been deleted`);
+    cy.validationNotification(`'${testFile}' has been removed.`);
   });
 
   it("Should upload another file and click 'Save and continue'", () => {

@@ -107,5 +107,5 @@ export const pcfClaimsDocUpload = () => {
   cy.reload();
   cy.validationNotification(pcfNotReceivedMessage);
   cy.button("Remove").click();
-  cy.validationNotification(`'${testFile}' has been deleted.`);
+  cy.validationNotification(`'${testFile}' has been removed.`);
 };

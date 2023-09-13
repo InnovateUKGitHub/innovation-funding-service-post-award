@@ -7,7 +7,9 @@ const config = {
   files: ["cypress/results/*.json"],
 };
 
-cypress.run({ browser: "chrome" }).then(
+const browser = /localhost/.test(process.env?.NODE_ENV ?? "") ? "chrome" : "chromium";
+
+cypress.run({ browser }).then(
   () => {
     generateReport(config);
   },

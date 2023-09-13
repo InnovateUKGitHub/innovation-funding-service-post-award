@@ -14,7 +14,7 @@ export const fileTidyUp = (name: string) => {
           .within(() => {
             cy.tableCell("Remove").scrollIntoView().click();
           });
-        cy.validationNotification("has been deleted");
+        cy.validationNotification("has been removed.");
         cy.reload();
         cy.wait(500);
       } else {

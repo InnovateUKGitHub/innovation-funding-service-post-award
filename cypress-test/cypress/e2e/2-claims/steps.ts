@@ -182,7 +182,7 @@ export const deleteClaimDocument = (document: string) => {
     if ($tr.text().includes(document)) {
       cy.log(`Deleting existing ${document} document`);
       cy.tableCell(document).parent().siblings().contains("button", "Remove").click({ force: true });
-      cy.getByAriaLabel("success message").contains(`'${document}' has been deleted.`);
+      cy.getByAriaLabel("success message").contains(`'${document}' has been removed.`);
     }
   });
 };
@@ -919,5 +919,5 @@ export const claimReviewDeleteDoc = () => {
         cy.getByQA("button_delete-qa").contains("Remove").click();
       });
   });
-  cy.validationNotification("has been deleted");
+  cy.validationNotification("has been removed.");
 };

@@ -159,7 +159,7 @@ export const pmFileUploadedSection = () => {
 
 export const deleteFile = () => {
   cy.button("Remove").click({ multiple: true });
-  cy.validationNotification(`'${testFile}' has been deleted.`);
+  cy.validationNotification(`'${testFile}' has been removed.`);
 };
 
 export const additionalInfo = () => {
