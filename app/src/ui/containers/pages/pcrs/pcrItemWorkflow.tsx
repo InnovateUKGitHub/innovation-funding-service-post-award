@@ -17,20 +17,21 @@ import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTit
 import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { EditorStatus } from "@ui/redux/constants/enums";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { GrantMovingOverFinancialYearForm } from "@ui/containers/pages/pcrs/financialVirements/financialVirementsSummary";
 import { NavigationArrowsForPCRs } from "@ui/containers/pages/pcrs/navigationArrows";
 import { PcrStepProps, PcrWorkflow, WorkflowPcrType } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { IStores, useStores } from "@ui/redux/storesProvider";
-import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { PCRWorkflowValidator } from "@ui/validation/validators/pcrWorkflowValidator";
 import { useNavigate } from "react-router-dom";
 import { PcrSummaryConsumer, PcrSummaryProvider } from "./components/PcrSummary/PcrSummary";
+import { createContext, useContext } from "react";
+import { Result } from "@ui/validation/result";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: ProjectId;
@@ -57,403 +58,318 @@ interface Callbacks {
   onSave: (props: { dto: PCRDto; pcrStepId?: PCRStepId; link: ILinkInfo }) => void;
 }
 
+type PcrItemProps = Data & Callbacks & ProjectChangeRequestPrepareItemParams & BaseProps;
+
+const PcrItemContext = createContext<PcrItemProps & { workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>> }>(
+  null as unknown as PcrItemProps & { workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>> },
+);
+
 const PCRForm = createTypedForm<PCRItemDto>();
 
-class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParams, Data, Callbacks> {
-  render() {
-    const {
-      project,
-      partners,
-      virement,
-      editableItemTypes,
-      editor,
-      documentsEditor,
-      pcr,
-      pcrItem,
-      pcrItemType,
-    }: {
-      project: ProjectDto;
-      partners: PartnerDto[];
-      virement: FinancialVirementDto;
-      editor: IEditorStore<PCRDto, PCRDtoValidator>;
-      documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
-      pcr: PCRDto;
-      pcrItem: PCRItemDto;
-      pcrItemType: PCRItemTypeDto;
-      editableItemTypes: PCRItemType[];
-    } = this.props;
+const PCRItemWorkflow = (props: BaseProps & Callbacks & Data & ProjectChangeRequestPrepareItemParams) => {
+  const { project, partners, virement, editor, documentsEditor, pcrItem, step } = props;
 
-    const workflow = PcrWorkflow.getWorkflow(pcrItem as WorkflowPcrType, this.props.step);
-    const validation = workflow
-      ? workflow.getValidation(new PCRWorkflowValidator(editor.validator, documentsEditor.validator))
-      : [editor.validator, documentsEditor.validator];
+  const workflow = PcrWorkflow.getWorkflow(pcrItem as WorkflowPcrType, step);
 
-    return (
-      // TODO: Raise ticket to move this provider closer to 'financialVirementsSummary.tsx'
+  if (!workflow) {
+    throw new Error("missing a workflow in pcrItemWorkflow");
+  }
+  const validation = workflow
+    ? workflow.getValidation(new PCRWorkflowValidator(editor.validator, documentsEditor.validator))
+    : [editor.validator, documentsEditor.validator];
+
+  return (
+    <PcrItemContext.Provider value={{ ...props, workflow }}>
       <PcrSummaryProvider type={pcrItem.type} partners={partners} virement={virement}>
         <Page
-          backLink={this.getBackLink()}
-          pageTitle={<Title {...project} />}
-          project={project}
+          backLink={<PcrBackLink />}
+          pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
           projectStatus={project.status}
           validator={validation}
           error={editor.error || documentsEditor.error}
         >
-          <Messages messages={this.props.messages} />
+          <Messages messages={props.messages} />
 
-          {workflow &&
-            this.renderWorkflow(
-              workflow,
-              project,
-              pcr,
-              pcrItem,
-              pcrItemType,
-              editor,
-              documentsEditor,
-              editableItemTypes,
-            )}
+          <Workflow />
         </Page>
       </PcrSummaryProvider>
-    );
+    </PcrItemContext.Provider>
+  );
+};
+
+const Workflow = () => {
+  const { mode, step, pcrItem, workflow } = useContext(PcrItemContext);
+  const isPrepareMode = mode === "prepare";
+  const isFirstStep = step === 1;
+
+  const displayGuidance = isPrepareMode && isFirstStep;
+  return (
+    <>
+      {displayGuidance && renderGuidanceSection(pcrItem)}
+
+      {workflow?.isOnSummary() ? <SummarySection /> : <WorkflowStep />}
+    </>
+  );
+};
+
+const SummarySection = () => {
+  const { mode, workflow, routes, editableItemTypes, pcrItem, pcr } = useContext(PcrItemContext);
+  const isPrepareMode = mode === "prepare";
+  const isReviewing = mode === "review";
+  const displayNavigationArrows = mode === "review" || mode === "view";
+
+  return (
+    <WithScrollToTopOnPropChange propToScrollOn={workflow?.getCurrentStepName()}>
+      <PcrSummaryConsumer>
+        {summaryContext => {
+          const displayCompleteForm = isPrepareMode && summaryContext.isSummaryValid;
+
+          return (
+            <Section qa="item-save-and-return">
+              <Summary />
+              {displayCompleteForm && <WorkflowItemForm allowSubmit={summaryContext.allowSubmit} />}
+
+              {displayNavigationArrows && (
+                <NavigationArrowsForPCRs
+                  pcr={pcr}
+                  currentItem={pcrItem}
+                  isReviewing={isReviewing}
+                  editableItemTypes={editableItemTypes}
+                  routes={routes}
+                />
+              )}
+            </Section>
+          );
+        }}
+      </PcrSummaryConsumer>
+    </WithScrollToTopOnPropChange>
+  );
+};
+
+const Summary = () => {
+  const {
+    editor,
+    itemId,
+    workflow,
+    projectId,
+    pcrId,
+    project,
+    pcr,
+    onSave,
+    mode,
+    config,
+    messages,
+    routes,
+    currentRoute,
+  } = useContext(PcrItemContext);
+  const pcrItem = editor.data.items.find(x => x.id === itemId);
+  if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
+  const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id);
+  if (!validator) throw new Error(`Cannot find validator matching itemId ${itemId}`);
+
+  const workflowSummary = workflow?.getSummary();
+
+  // TODO: This should throw and Error and stop the UI from crashing
+  if (!workflowSummary) return null;
+
+  return workflowSummary.summaryRender({
+    projectId,
+    validator,
+    pcrItem,
+    project,
+    pcr,
+    onSave: () => handleSave(workflow, editor.data, itemId, projectId, pcrId, onSave, routes, false),
+    getStepLink: stepName => getStepLink(workflow, stepName, routes, projectId, pcrId, itemId),
+    getEditLink: (stepName, validation) => <EditLink stepName={stepName} validation={validation} />,
+    getViewLink: stepName => <ViewLink stepName={stepName} />,
+    mode,
+    config,
+    messages,
+    routes,
+    currentRoute,
+  });
+};
+
+const renderGuidanceSection = (pcrItem: PCRItemDto) => {
+  if (!pcrItem.guidance) return null;
+
+  return (
+    <Section qa="guidance">
+      <Markdown trusted value={pcrItem.guidance} />
+    </Section>
+  );
+};
+
+const PcrBackLink = () => {
+  const { mode, routes, projectId, pcrId } = useContext(PcrItemContext);
+  if (mode === "review") {
+    return <BackLink route={routes.pcrReview.getLink({ projectId, pcrId })}>Back to request</BackLink>;
   }
-
-  private getStepLink(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, stepName: string) {
-    return this.props.routes.pcrPrepareItem.getLink({
-      projectId: this.props.projectId,
-      pcrId: this.props.pcrId,
-      itemId: this.props.itemId,
-      step: workflow && workflow.findStepNumberByName(stepName),
-    });
+  if (mode === "prepare") {
+    return <BackLink route={routes.pcrPrepare.getLink({ projectId, pcrId })}>Back to request</BackLink>;
   }
+  return <BackLink route={routes.pcrDetails.getLink({ projectId, pcrId })}>Back to request</BackLink>;
+};
 
-  private getStepReviewLink(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, stepName: string) {
-    return this.props.routes.pcrReviewItem.getLink({
-      projectId: this.props.projectId,
-      pcrId: this.props.pcrId,
-      itemId: this.props.itemId,
-      step: workflow && workflow.findStepNumberByName(stepName),
-    });
-  }
+const ViewLink = ({ stepName }: { stepName: PCRStepId }) => {
+  const { mode, workflow, routes, projectId, pcrId, itemId } = useContext(PcrItemContext);
+  if (mode !== "review") return null;
 
-  private getEditLink(
-    workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
-    stepName: string,
-    validation: Result | null,
-  ) {
-    if (this.props.mode !== "prepare") return null;
+  return (
+    <Link replace route={getStepReviewLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
+      View
+    </Link>
+  );
+};
 
-    return (
-      <Link id={validation ? validation.key : undefined} replace route={this.getStepLink(workflow, stepName)}>
-        Edit
-      </Link>
-    );
-  }
+const EditLink = ({ stepName, validation }: { stepName: PCRStepId; validation: Result | null }) => {
+  const { mode, workflow, routes, projectId, pcrId, itemId } = useContext(PcrItemContext);
 
-  private getViewLink(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, stepName: string) {
-    if (this.props.mode !== "review") return null;
+  if (mode !== "prepare") return null;
 
-    return (
-      <Link replace route={this.getStepReviewLink(workflow, stepName)}>
-        View
-      </Link>
-    );
-  }
+  return (
+    <Link
+      id={validation ? validation.key : undefined}
+      replace
+      route={getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}
+    >
+      Edit
+    </Link>
+  );
+};
 
-  private getBackLink() {
-    if (this.props.mode === "review") {
+const getStepLink = (
+  workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
+  stepName: string,
+  routes: BaseProps["routes"],
+  projectId: ProjectId,
+  pcrId: PcrId,
+  itemId: PcrItemId,
+) => {
+  return routes.pcrPrepareItem.getLink({
+    projectId,
+    pcrId,
+    itemId,
+    step: workflow && workflow.findStepNumberByName(stepName),
+  });
+};
+
+const getStepReviewLink = (
+  workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
+  stepName: string,
+  routes: BaseProps["routes"],
+  projectId: ProjectId,
+  pcrId: PcrId,
+  itemId: PcrItemId,
+) => {
+  return routes.pcrReviewItem.getLink({
+    projectId,
+    pcrId,
+    itemId,
+    step: workflow && workflow.findStepNumberByName(stepName),
+  });
+};
+
+const WorkflowStep = () => {
+  const {
+    editor,
+    mode,
+    itemId,
+    projectId,
+    pcrId,
+    pcrItem,
+    workflow,
+    pcr,
+    pcrItemType,
+    documentsEditor,
+    project,
+    routes,
+    onChange,
+    onSave,
+  } = useContext(PcrItemContext);
+  const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id);
+  if (!validator) throw new Error(`Cannot find validator matching itemId ${itemId}`);
+  const status = editor.status || EditorStatus.Editing;
+
+  const currentStep = workflow.getCurrentStepInfo();
+
+  if (!currentStep) throw Error("PCR step does not exist on this workflow.");
+
+  const props: PcrStepProps<PCRItemDto, typeof validator> = {
+    pcr,
+    pcrItem,
+    pcrItemType,
+    documentsEditor,
+    project,
+    validator,
+    status,
+    routes,
+    mode,
+    onChange: itemDto => handleChange(workflow, editor.data, itemDto, itemId, onChange),
+    onSave: skipToSummary => handleSave(workflow, editor.data, itemId, projectId, pcrId, onSave, routes, skipToSummary),
+    getRequiredToCompleteMessage: function RequiredToCompleteMessage(message) {
+      const standardMessage = "This is required to complete this request.";
+
+      if (!message) return standardMessage;
+
       return (
-        <BackLink
-          route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
-        >
-          Back to request
-        </BackLink>
+        <span>
+          {message}
+          <br />
+          {standardMessage}
+        </span>
       );
-    }
-    if (this.props.mode === "prepare") {
-      return (
-        <BackLink
-          route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
-        >
-          Back to request
-        </BackLink>
-      );
-    }
-    return (
-      <BackLink
-        route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
-      >
-        Back to request
-      </BackLink>
-    );
-  }
-
-  private renderWorkflow(
-    workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
-    project: ProjectDto,
-    pcr: PCRDto,
-    pcrItem: PCRItemDto,
-    pcrItemType: PCRItemTypeDto,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-    editableItemTypes: PCRItemType[],
-  ) {
-    const isPrepareMode = this.props.mode === "prepare";
-    const isFirstStep = this.props.step === 1;
-
-    const displayGuidance = isPrepareMode && isFirstStep;
-
-    return (
-      <>
-        {displayGuidance && this.renderGuidanceSection(pcrItem)}
-
-        {workflow.isOnSummary()
-          ? this.renderSummarySection(workflow, project, pcr, pcrItem, editor, editableItemTypes)
-          : this.renderStep(workflow, project, pcr, pcrItem, pcrItemType, editor, documentsEditor)}
-      </>
-    );
-  }
-
-  private renderGuidanceSection(pcrItem: PCRItemDto) {
-    if (!pcrItem.guidance) return null;
-
-    return (
-      <Section qa="guidance">
-        <Markdown trusted value={pcrItem.guidance} />
-      </Section>
-    );
-  }
-
-  private renderStep(
-    workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
-    project: ProjectDto,
-    pcr: PCRDto,
-    pcrItem: PCRItemDto,
-    pcrItemType: PCRItemTypeDto,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-  ) {
-    const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id);
-    if (!validator) throw new Error(`Cannot find validator matching itemId ${this.props.itemId}`);
-    const status = editor.status || EditorStatus.Editing;
-    const { mode } = this.props;
-
-    const currentStep = workflow.getCurrentStepInfo();
-
-    if (!currentStep) throw Error("PCR step does not exist on this workflow.");
-
-    const props: PcrStepProps<PCRItemDto, typeof validator> = {
-      pcr,
-      pcrItem,
-      pcrItemType,
-      documentsEditor,
-      project,
-      validator,
-      status,
-      routes: this.props.routes,
-      mode,
-      onChange: itemDto => this.onChange(workflow, editor.data, itemDto),
-      onSave: skipToSummary => this.onSave(workflow, editor.data, skipToSummary),
-      getRequiredToCompleteMessage: function RequiredToCompleteMessage(message) {
-        const standardMessage = "This is required to complete this request.";
-
-        if (!message) return standardMessage;
-
-        return (
-          <span>
-            {message}
-            <br />
-            {standardMessage}
-          </span>
-        );
-      },
-    };
-
-    if (mode === "review") {
-      // When reviewing a pcr, the MO should only be able to visit pages which support read only.
-      if (!currentStep.readonlyStepRender) throw new ForbiddenError();
-      const ReadonlyCurrentStep = currentStep.readonlyStepRender;
-      return <ReadonlyCurrentStep {...props} />;
-    }
-
-    const CurrentStep = currentStep.stepRender;
-    return (
-      <WithScrollToTopOnPropChange propToScrollOn={workflow.getCurrentStepName()}>
-        <CurrentStep {...props} />
-      </WithScrollToTopOnPropChange>
-    );
-  }
-
-  private renderSummary(
-    workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
-    project: ProjectDto,
-    pcr: PCRDto,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-  ) {
-    const pcrItem = editor.data.items.find(x => x.id === this.props.itemId);
-    if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${this.props.itemId}`);
-    const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id);
-    if (!validator) throw new Error(`Cannot find validator matching itemId ${this.props.itemId}`);
-    const { projectId, mode } = this.props;
-    const workflowSummary = workflow.getSummary();
-
-    // TODO: This should throw and Error and stop the UI from crashing
-    if (!workflowSummary) return null;
-
-    return workflowSummary.summaryRender({
-      projectId,
-      validator,
-      pcrItem,
-      project,
-      pcr,
-      onSave: () => this.onSave(workflow, editor.data),
-      getStepLink: stepName => this.getStepLink(workflow, stepName),
-      getEditLink: (stepName, validation) => this.getEditLink(workflow, stepName, validation),
-      getViewLink: stepName => this.getViewLink(workflow, stepName),
-      mode,
-      config: this.props.config,
-      messages: this.props.messages,
-      routes: this.props.routes,
-      currentRoute: this.props.currentRoute,
-    });
-  }
-
-  private renderCompleteForm(
-    workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    config: {
-      allowSubmit: boolean;
     },
-  ) {
-    const pcrItem = editor.data.items.find(x => x.id === this.props.itemId);
-    if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${this.props.itemId}`);
-    const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
+  };
 
-    const options: SelectOption[] = [{ id: "true", value: "I agree with this change." }];
-
-    return (
-      <PCRForm.Form
-        qa="pcr_complete_item_form"
-        data={pcrItem}
-        onChange={dto => this.onChange(workflow, editor.data, dto)}
-        onSubmit={() => this.onSave(workflow, editor.data)}
-        isSaving={editor.status === EditorStatus.Saving}
-      >
-        {canReallocatePcr && <GrantMovingOverFinancialYearForm form={PCRForm} editor={editor} />}
-
-        <PCRForm.Fieldset heading="Mark as complete">
-          <PCRForm.Checkboxes
-            name="itemStatus"
-            options={options}
-            value={x => (x.status === PCRItemStatus.Complete ? options : [])}
-            update={(x, value) =>
-              (x.status = value && value.some(y => y.id === "true") ? PCRItemStatus.Complete : PCRItemStatus.Incomplete)
-            }
-          />
-
-          {config.allowSubmit && <PCRForm.Submit>Save and return to request</PCRForm.Submit>}
-        </PCRForm.Fieldset>
-      </PCRForm.Form>
-    );
+  if (mode === "review") {
+    // When reviewing a pcr, the MO should only be able to visit pages which support read only.
+    if (!currentStep.readonlyStepRender) throw new ForbiddenError();
+    const ReadonlyCurrentStep = currentStep.readonlyStepRender;
+    return <ReadonlyCurrentStep {...props} />;
   }
 
-  private renderSummarySection(
-    workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
-    project: ProjectDto,
-    pcr: PCRDto,
-    pcrItem: PCRItemDto,
-    editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    editableItemTypes: PCRItemType[],
-  ) {
-    const { mode } = this.props;
-    const isPrepareMode = mode === "prepare";
-    const isReviewing = mode === "review";
-    const displayNavigationArrows = mode === "review" || mode === "view";
+  const CurrentStep = currentStep.stepRender;
+  return (
+    <WithScrollToTopOnPropChange propToScrollOn={workflow.getCurrentStepName()}>
+      <CurrentStep {...props} />
+    </WithScrollToTopOnPropChange>
+  );
+};
 
-    return (
-      <WithScrollToTopOnPropChange propToScrollOn={workflow.getCurrentStepName()}>
-        <PcrSummaryConsumer>
-          {summaryContext => {
-            const displayCompleteForm = isPrepareMode && summaryContext.isSummaryValid;
+const WorkflowItemForm = ({ allowSubmit }: { allowSubmit: boolean }) => {
+  const { editor, itemId, workflow, onChange, onSave, projectId, pcrId, routes } = useContext(PcrItemContext);
+  const pcrItem = editor.data.items.find(x => x.id === itemId);
+  if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
+  const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
 
-            return (
-              <Section qa="item-save-and-return">
-                {this.renderSummary(workflow, project, pcr, editor)}
+  const options: SelectOption[] = [{ id: "true", value: "I agree with this change." }];
 
-                {displayCompleteForm &&
-                  this.renderCompleteForm(workflow, editor, {
-                    allowSubmit: summaryContext.allowSubmit,
-                  })}
+  return (
+    <PCRForm.Form
+      qa="pcr_complete_item_form"
+      data={pcrItem}
+      onChange={dto => handleChange(workflow, editor.data, dto, itemId, onChange)}
+      onSubmit={() => handleSave(workflow, editor.data, itemId, projectId, pcrId, onSave, routes, false)}
+      isSaving={editor.status === EditorStatus.Saving}
+    >
+      {canReallocatePcr && <GrantMovingOverFinancialYearForm form={PCRForm} editor={editor} />}
 
-                {displayNavigationArrows && (
-                  <NavigationArrowsForPCRs
-                    pcr={pcr}
-                    currentItem={pcrItem}
-                    isReviewing={isReviewing}
-                    editableItemTypes={editableItemTypes}
-                    routes={this.props.routes}
-                  />
-                )}
-              </Section>
-            );
-          }}
-        </PcrSummaryConsumer>
-      </WithScrollToTopOnPropChange>
-    );
-  }
+      <PCRForm.Fieldset heading="Mark as complete">
+        <PCRForm.Checkboxes
+          name="itemStatus"
+          options={options}
+          value={x => (x.status === PCRItemStatus.Complete ? options : [])}
+          update={(x, value) =>
+            (x.status = value && value.some(y => y.id === "true") ? PCRItemStatus.Complete : PCRItemStatus.Incomplete)
+          }
+        />
 
-  private onChange(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, itemDto: PCRItemDto): void {
-    const index = dto.items.findIndex(x => x.id === this.props.itemId);
-    dto.items[index] = itemDto;
-    this.props.onChange({ dto, pcrStepId: workflow.getCurrentStepName() });
-  }
-
-  private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, skipToSummary = false) {
-    const item = dto.items.find(x => x.id === this.props.itemId);
-    if (!item) throw new Error(`Cannot find item matching ${this.props.itemId}`);
-
-    if (workflow.isOnSummary()) {
-      // If submitting from the summary set the status to "Incomplete" only if it's in "To do" (i.e. if it's set to "Complete" then leave it as it is)
-      if (item?.status === PCRItemStatus.ToDo) item.status = PCRItemStatus.Incomplete;
-      // submit and go back to the prepare page
-      return this.props.onSave({
-        dto,
-        pcrStepId: workflow.getCurrentStepName(),
-        link: this.props.routes.pcrPrepare.getLink({
-          projectId: this.props.projectId,
-          pcrId: this.props.pcrId,
-        }),
-      });
-    }
-
-    // If submitting from a step set the status to incomplete
-    item.status = PCRItemStatus.Incomplete;
-
-    if (skipToSummary) {
-      return this.props.onSave({
-        dto,
-        pcrStepId: workflow.getCurrentStepName(),
-        link: this.props.routes.pcrPrepareItem.getLink({
-          projectId: this.props.projectId,
-          pcrId: this.props.pcrId,
-          itemId: this.props.itemId,
-        }),
-      });
-    }
-
-    const nextStep = workflow.getNextStepInfo();
-
-    return this.props.onSave({
-      dto,
-      pcrStepId: workflow.getCurrentStepName(),
-      link: this.props.routes.pcrPrepareItem.getLink({
-        projectId: this.props.projectId,
-        pcrId: this.props.pcrId,
-        itemId: this.props.itemId,
-        step: nextStep?.stepNumber,
-      }),
-    });
-  }
-}
+        {allowSubmit && <PCRForm.Submit>Save and return to request</PCRForm.Submit>}
+      </PCRForm.Fieldset>
+    </PCRForm.Form>
+  );
+};
 
 const PCRItemContainer = (
   props: ProjectChangeRequestPrepareItemParams & BaseProps & { mode: "prepare" | "review" | "view" },
@@ -516,6 +432,74 @@ const getTitle = (defaultTitle: string, params: ProjectChangeRequestPrepareItemP
     htmlTitle: typeName ? `${typeName}` : defaultTitle,
     displayTitle: typeName ? `${typeName}` : defaultTitle,
   };
+};
+
+const handleChange = (
+  workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
+  dto: PCRDto,
+  itemDto: PCRItemDto,
+  itemId: PcrItemId,
+  onChange: Callbacks["onChange"],
+) => {
+  const index = dto.items.findIndex(x => x.id === itemId);
+  dto.items[index] = itemDto;
+  onChange({ dto, pcrStepId: workflow.getCurrentStepName() });
+};
+
+const handleSave = (
+  workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
+  dto: PCRDto,
+  itemId: PcrItemId,
+  projectId: ProjectId,
+  pcrId: PcrId,
+  onSave: Callbacks["onSave"],
+  routes: BaseProps["routes"],
+  skipToSummary = false,
+) => {
+  const item = dto.items.find(x => x.id === itemId);
+  if (!item) throw new Error(`Cannot find item matching ${itemId}`);
+
+  if (workflow.isOnSummary()) {
+    // If submitting from the summary set the status to "Incomplete" only if it's in "To do" (i.e. if it's set to "Complete" then leave it as it is)
+    if (item?.status === PCRItemStatus.ToDo) item.status = PCRItemStatus.Incomplete;
+    // submit and go back to the prepare page
+    return onSave({
+      dto,
+      pcrStepId: workflow.getCurrentStepName(),
+      link: routes.pcrPrepare.getLink({
+        projectId,
+        pcrId,
+      }),
+    });
+  }
+
+  // If submitting from a step set the status to incomplete
+  item.status = PCRItemStatus.Incomplete;
+
+  if (skipToSummary) {
+    return onSave({
+      dto,
+      pcrStepId: workflow.getCurrentStepName(),
+      link: routes.pcrPrepareItem.getLink({
+        projectId,
+        pcrId,
+        itemId,
+      }),
+    });
+  }
+
+  const nextStep = workflow.getNextStepInfo();
+
+  return onSave({
+    dto,
+    pcrStepId: workflow.getCurrentStepName(),
+    link: routes.pcrPrepareItem.getLink({
+      projectId,
+      pcrId,
+      itemId,
+      step: nextStep?.stepNumber,
+    }),
+  });
 };
 
 export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
