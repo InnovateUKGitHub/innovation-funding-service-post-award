@@ -1258,7 +1258,7 @@
     "documentTitle": "List of documents",
     "infoTitle": "What file types can I upload?",
     "infoContent": "You can upload these file types:\n\n* PDF ({{pdfTypes}})\n* text ({{textTypes}})\n* presentation ({{presentationTypes}})\n* spreadsheet ({{spreadsheetTypes}})\n* image ({{imageTypes}})",
-    "deletedDocument": "'{{deletedFileName}}' has been deleted.",
+    "deletedDocument": "'{{deletedFileName}}' has been removed.",
     "uploadedDocuments_one": "Your document has been uploaded.",
     "uploadedDocuments_other": "{{count}} documents have been uploaded.",
     "noDocumentsUploaded": "No documents uploaded.",
@@ -1888,7 +1888,7 @@
         "messages": {
           "uploadedDocuments_one": "Your document has been uploaded.",
           "uploadedDocuments_other": "{{count}} documents have been uploaded.",
-          "deletedDocument": "'{{deletedFileName}}' has been deleted."
+          "deletedDocument": "'{{deletedFileName}}' has been removed."
         },
         "errors": {
           "file_name_too_small": "You cannot upload '{{ input.fileName }}' because the file must have a name.",
