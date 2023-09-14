@@ -47,7 +47,7 @@ export class BankCheckService {
 
   public async validate(sortcode: string, accountNumber: string): Promise<BankCheckValidationResult> {
     this.checkForUnmaskedInput(sortcode, accountNumber);
-    return await this.fetchBankQuery<BankDetails, BankCheckValidationResult>("/experianValidate", {
+    return await this.fetchBankQuery<BankDetails, BankCheckValidationResult>("/bank/validate", {
       sortcode,
       accountNumber,
     });
@@ -55,7 +55,7 @@ export class BankCheckService {
 
   public async verify(accountDetails: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult> {
     this.checkForUnmaskedInput(accountDetails.sortcode, accountDetails.accountNumber);
-    return await this.fetchBankQuery<AccountDetails, BankCheckVerificationResult>("/experianVerify", accountDetails);
+    return await this.fetchBankQuery<AccountDetails, BankCheckVerificationResult>("/bank/verify", accountDetails);
   }
 
   private async fetchBankQuery<T extends BankDetails | AccountDetails, U extends BankCheckResult>(
@@ -83,8 +83,13 @@ export class BankCheckService {
     if (request.ok) {
       return await request.json();
     } else {
-      this.logger.debug("Failed querying Experian via SIL", `${bankCheckUrl}${path}`, payload, await request.json());
-      throw Error("Failed querying Experian via SIL");
+      this.logger.debug(
+        "Failed querying Experian via Integration Platform",
+        `${bankCheckUrl}${path}`,
+        payload,
+        await request.json(),
+      );
+      throw Error("Failed querying Experian via Integration Platform");
     }
   }
 }
