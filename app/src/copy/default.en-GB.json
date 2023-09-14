@@ -1848,6 +1848,11 @@
             "errors": {
               "custom": "Enter a score for {{input.title, lowercase}}."
             }
+          },
+          "comments": {
+            "errors": {
+              "too_big": "Maximum of 32,000 characters"
+            }
           }
         }
       }
