@@ -26,13 +26,10 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
   if (pcrItemInfo) {
     return validation
       .superRefine((val, ctx) => {
-        const validOptions = pcrItemInfo.map(x => x.type);
         const currentOption = pcrItemInfo.find(x => x.type === val);
 
         const createIssue = (i18n: string): z.IssueData => ({
           code: z.ZodIssueCode.custom,
-          options: validOptions,
-          received: val,
           fatal: true,
           params: {
             i18n,

@@ -4,9 +4,9 @@
  * @param input An array to filter null/undefined results out of.
  * @returns An array with only defined results. If all inputs are null/undefined, returns an empty array.
  */
-const toArray = (input: any): any[] => {
+const toArray = <T>(input: T | T[] | null): T[] => {
   if (Array.isArray(input)) return input;
-  if (isNaN(input) || input === null) return [];
+  if (isNaN(input as number) || input === null) return [];
   return [input];
 };
 

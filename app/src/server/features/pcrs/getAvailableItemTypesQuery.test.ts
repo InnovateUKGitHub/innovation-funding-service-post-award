@@ -2,7 +2,6 @@ import { PCRItemType, recordTypeMetaValues } from "@framework/constants/pcrConst
 import { ProjectRole } from "@framework/constants/project";
 import { Authorisation } from "@framework/types/authorisation";
 import { GetAvailableItemTypesQuery } from "@server/features/pcrs/getAvailableItemTypesQuery";
-import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetAvailableItemTypesQuery", () => {

@@ -1,12 +1,10 @@
 import { IMetaValue, PCRItemDisabledReason } from "@framework/constants/pcrConstants";
-import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
 import { UL } from "@ui/components/atomicDesign/atoms/List/list";
 import { Bold } from "@ui/components/atomicDesign/atoms/Bold/bold";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
 import { ReactNode, useMemo } from "react";
-import { usePcrItemName } from "../../utils/getPcrItemName";
 
 /**
  * Display the information unto why a specific PCR type is unavailable for
@@ -20,7 +18,6 @@ const PcrDisabledReasoning = ({
   items: { item: IMetaValue; disabled: boolean; disabledReason: PCRItemDisabledReason }[];
 }) => {
   const { getContent } = useContent();
-  const { getPcrItemContent } = usePcrItemName();
 
   const list = useMemo<ReactNode[]>(() => {
     const returnList: ReactNode[] = [];
@@ -81,7 +78,7 @@ const PcrDisabledReasoning = ({
     }
 
     return returnList;
-  }, [items, getContent, getPcrItemContent]);
+  }, [items, getContent]);
 
   if (list.length === 0) return null;
 

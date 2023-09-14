@@ -1,6 +1,5 @@
 import { PCRStatus, PCRItemType, recordTypeMetaValues } from "@framework/constants/pcrConstants";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
-import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { DateTime } from "luxon";
 

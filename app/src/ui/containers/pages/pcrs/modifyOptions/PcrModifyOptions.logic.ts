@@ -21,7 +21,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { pcrModifyOptionsQuery } from "./PcrModifyOptions.query";
-import { PcrModifyOptionsQuery, PcrModifyOptionsQuery$data } from "./__generated__/PcrModifyOptionsQuery.graphql";
+import { PcrModifyOptionsQuery } from "./__generated__/PcrModifyOptionsQuery.graphql";
 
 const usePcrItemsForThisCategory = (
   competitionType: SalesforceCompetitionTypes,
@@ -61,14 +61,13 @@ const usePcrItemsForThisCategory = (
   });
 };
 
-type ProjectGQL = GQL.NodeSelector<PcrModifyOptionsQuery$data, "Acc_Project__c">;
 const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
   const data = useLazyLoadQuery<PcrModifyOptionsQuery>(
     pcrModifyOptionsQuery,
     { projectId },
     { fetchPolicy: "network-only" },
   );
-  const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce.uiapi.query.Acc_Project__c?.edges);
+  const { node: projectNode } = getFirstEdge(data?.salesforce.uiapi.query.Acc_Project__c?.edges);
   const project = mapToProjectDto(projectNode, ["id", "competitionType", "title", "projectNumber"]);
   const pcrs = mapToPcrDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges ?? [],
