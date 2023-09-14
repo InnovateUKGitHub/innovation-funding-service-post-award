@@ -12,7 +12,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
       z
         .object({
           optionId: z.string(),
-          comments: z.string().max(5000),
+          comments: z.string().max(32_000),
           title: z.string(),
         })
         .superRefine((data, ctx) => {
@@ -45,7 +45,7 @@ export const monitoringReportSummarySchema = z.discriminatedUnion("button_submit
     questions: z.array(
       z.object({
         optionId: z.string().optional(),
-        comments: z.string().max(5000).optional(),
+        comments: z.string().max(32_000).optional(),
       }),
     ),
     periodId: z.number(),

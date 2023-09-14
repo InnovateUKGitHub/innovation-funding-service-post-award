@@ -99,7 +99,6 @@ export const useOnMonitoringReportUpdateWorkflow = (
   const navigate = useNavigate();
   return useOnUpdate<FormValues, Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">>({
     req: data => {
-      console.log("data", data);
       const isFinalSubmit = data["button_submit"] === "submit";
       if (isFinalSubmit || hasFormChanged(data, report.questions)) {
         return clientsideApiClient.monitoringReports.saveMonitoringReport({
