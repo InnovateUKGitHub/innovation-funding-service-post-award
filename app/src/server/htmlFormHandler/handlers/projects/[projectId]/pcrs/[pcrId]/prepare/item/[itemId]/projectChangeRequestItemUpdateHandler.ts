@@ -36,7 +36,10 @@ import { BadRequestError } from "@shared/appError";
 import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
 import { accountNameChangeStepNames } from "@ui/containers/pages/pcrs/nameChange/accountNameChangeWorkflow";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
-import { ProjectChangeRequestPrepareItemParams, PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflow";
+import {
+  ProjectChangeRequestPrepareItemParams,
+  PCRPrepareItemRoute,
+} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { PcrWorkflow, WorkflowPcrType } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pages/pcrs/removePartner/removePartnerWorkflow";
 import { scopeChangeStepNames } from "@ui/containers/pages/pcrs/scopeChange/scopeChangeWorkflow";

@@ -15,7 +15,10 @@ import { noop } from "lodash";
 
 export class SaveMonitoringReport extends CommandBase<boolean> {
   constructor(
-    private readonly monitoringReportDto: PickAndPart<MonitoringReportDto, "projectId" | "periodId" | "headerId">,
+    private readonly monitoringReportDto: PickRequiredFromPartial<
+      MonitoringReportDto,
+      "projectId" | "periodId" | "headerId"
+    >,
     private readonly submit: boolean,
   ) {
     super();

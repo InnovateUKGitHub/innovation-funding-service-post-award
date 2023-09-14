@@ -13,7 +13,7 @@ import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { LoanDrawdownChangeWorkflow } from "./loanDrawdownChange/LoanDrawdownChangeWorkflow";
 import { loanExtensionItemWorkflow } from "./loanDrawdownExtension/loanDrawdownExtensionWorkflow";
 import { PCRStepId, PCRItemType } from "@framework/constants/pcrConstants";
-import { PCRDto, PCRItemTypeDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
@@ -52,7 +52,7 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   getViewLink: (stepName: TStepNames) => React.ReactNode;
 }
 
-export type IPCRWorkflow<T, TVal extends Results<AnyObject>> = IWorkflow<
+export type IPCRWorkflow<T, TVal extends Results<AnyObject> | null> = IWorkflow<
   PCRStepId,
   PcrStepProps<T, TVal>,
   PcrSummaryProps<T, TVal, PCRStepId>,
@@ -61,7 +61,7 @@ export type IPCRWorkflow<T, TVal extends Results<AnyObject>> = IWorkflow<
 
 export type WorkflowPcrType = AddPartnerWorkflowItem & { type: PCRItemType };
 
-export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends WorkflowBase<
+export class PcrWorkflow<T extends AnyObject, TVal extends Results<T> | null> extends WorkflowBase<
   PCRStepId,
   PcrStepProps<T, TVal>,
   PcrSummaryProps<T, TVal, PCRStepId>,
@@ -98,13 +98,10 @@ export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends W
     }
   }
 
-  public static getWorkflow(
-    pcrItem: WorkflowPcrType | undefined,
-    step: number | undefined,
-  ): PcrWorkflow<PCRItemDto, Results<PCRItemDto>> | null {
+  public static getWorkflow(pcrItem: WorkflowPcrType | undefined, step: number | undefined) {
     if (!pcrItem) {
       return null;
     }
-    return this.getWorkflowType(pcrItem, step) as PcrWorkflow<PCRItemDto, Results<PCRItemDto>>;
+    return this.getWorkflowType(pcrItem, step);
   }
 }

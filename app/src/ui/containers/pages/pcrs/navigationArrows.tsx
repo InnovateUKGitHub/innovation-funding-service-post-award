@@ -7,7 +7,7 @@ export type PCRTypeForNavigationArrows = Pick<Omit<PCRDto, "items">, "projectId"
   items: Pick<FullPCRItemDto, "type" | "typeName" | "id">[];
 };
 
-interface Props {
+export interface Props {
   currentItem: Pick<FullPCRItemDto, "id"> | null;
   pcr: PCRTypeForNavigationArrows;
   isReviewing: boolean;

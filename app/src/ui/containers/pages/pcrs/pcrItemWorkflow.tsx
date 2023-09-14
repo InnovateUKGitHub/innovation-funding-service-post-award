@@ -1,5 +1,4 @@
 import { PCRItemStatus, PCRItemType, PCRStepId } from "@framework/constants/pcrConstants";
-import { ProjectRole } from "@framework/constants/project";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { FinancialVirementDto } from "@framework/dtos/financialVirementDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
@@ -7,38 +6,28 @@ import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { ForbiddenError } from "@shared/appError";
-import { Pending } from "@shared/pending";
 import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { EditorStatus } from "@ui/redux/constants/enums";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps } from "@ui/containers/containerBase";
 import { GrantMovingOverFinancialYearForm } from "@ui/containers/pages/pcrs/financialVirements/financialVirementsSummary";
 import { NavigationArrowsForPCRs } from "@ui/containers/pages/pcrs/navigationArrows";
 import { PcrStepProps, PcrWorkflow, WorkflowPcrType } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { IStores, useStores } from "@ui/redux/storesProvider";
 import { Results } from "@ui/validation/results";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { PCRWorkflowValidator } from "@ui/validation/validators/pcrWorkflowValidator";
-import { useNavigate } from "react-router-dom";
 import { PcrSummaryConsumer, PcrSummaryProvider } from "./components/PcrSummary/PcrSummary";
-import { createContext, useContext } from "react";
+import { createContext, isValidElement, useContext } from "react";
 import { Result } from "@ui/validation/result";
-
-export interface ProjectChangeRequestPrepareItemParams {
-  projectId: ProjectId;
-  pcrId: PcrId;
-  itemId: PcrItemId;
-  step?: number;
-}
+import { ProjectChangeRequestPrepareItemParams } from "./pcrItemWorkflowContainer";
 
 interface Data {
   virement: FinancialVirementDto;
@@ -66,10 +55,13 @@ const PcrItemContext = createContext<PcrItemProps & { workflow: PcrWorkflow<PCRI
 
 const PCRForm = createTypedForm<PCRItemDto>();
 
-const PCRItemWorkflow = (props: BaseProps & Callbacks & Data & ProjectChangeRequestPrepareItemParams) => {
+export const PCRItemWorkflow = (props: BaseProps & Callbacks & Data & ProjectChangeRequestPrepareItemParams) => {
   const { project, partners, virement, editor, documentsEditor, pcrItem, step } = props;
 
-  const workflow = PcrWorkflow.getWorkflow(pcrItem as WorkflowPcrType, step);
+  const workflow = PcrWorkflow.getWorkflow(pcrItem as WorkflowPcrType, step) as unknown as PcrWorkflow<
+    PCRItemDto,
+    Results<PCRItemDto>
+  >;
 
   if (!workflow) {
     throw new Error("missing a workflow in pcrItemWorkflow");
@@ -171,6 +163,9 @@ const Summary = () => {
 
   // TODO: This should throw and Error and stop the UI from crashing
   if (!workflowSummary) return null;
+  if (!workflowSummary.summaryRender) {
+    throw new Error(`pcr item workflow ${workflow.getCurrentStepName()} is missing a summaryRender method`);
+  }
 
   return workflowSummary.summaryRender({
     projectId,
@@ -329,7 +324,16 @@ const WorkflowStep = () => {
     return <ReadonlyCurrentStep {...props} />;
   }
 
+  if (!currentStep.stepRender) {
+    throw new Error("component is still using the original stepRender which is not found in the workflow config");
+  }
+
   const CurrentStep = currentStep.stepRender;
+
+  if (!isValidElement(CurrentStep)) {
+    throw new Error("CurrentStep is not a valid react element");
+  }
+
   return (
     <WithScrollToTopOnPropChange propToScrollOn={workflow.getCurrentStepName()}>
       <CurrentStep {...props} />
@@ -369,69 +373,6 @@ const WorkflowItemForm = ({ allowSubmit }: { allowSubmit: boolean }) => {
       </PCRForm.Fieldset>
     </PCRForm.Form>
   );
-};
-
-const PCRItemContainer = (
-  props: ProjectChangeRequestPrepareItemParams & BaseProps & { mode: "prepare" | "review" | "view" },
-) => {
-  const stores = useStores();
-  const navigate = useNavigate();
-
-  const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partners: stores.partners.getPartnersForProject(props.projectId),
-    virement: stores.financialVirements.get(props.projectId, props.pcrId, props.itemId),
-    pcr: stores.projectChangeRequests.getById(props.projectId, props.pcrId),
-    pcrItem: stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId),
-    pcrItemType: stores.projectChangeRequests.getPcrTypeForItem(props.projectId, props.pcrId, props.itemId),
-    editor: stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId),
-    documentsEditor: stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId),
-    editableItemTypes: stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId),
-  });
-
-  const onSave = ({
-    dto,
-    pcrStepId = PCRStepId.none,
-    link,
-  }: {
-    dto: PCRDto;
-    pcrStepId?: PCRStepId;
-    link: ILinkInfo;
-  }) => {
-    stores.messages.clearMessages();
-    stores.projectChangeRequests.updatePcrEditor({
-      saving: true,
-      projectId: props.projectId,
-      pcrStepId,
-      dto,
-      onComplete: () => {
-        navigate(link.path);
-      },
-    });
-  };
-
-  const onChange = ({ dto, pcrStepId = PCRStepId.none }: { dto: PCRDto; pcrStepId?: PCRStepId }) => {
-    stores.messages.clearMessages();
-    stores.projectChangeRequests.updatePcrEditor({ saving: false, projectId: props.projectId, pcrStepId, dto });
-  };
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={x => <PCRItemWorkflow onChange={onChange} onSave={onSave} {...props} {...x} />}
-    />
-  );
-};
-
-const getTitle = (defaultTitle: string, params: ProjectChangeRequestPrepareItemParams, stores: IStores) => {
-  const typeName = stores.projectChangeRequests
-    .getItemById(params.projectId, params.pcrId, params.itemId)
-    .then(x => x.typeName).data;
-
-  return {
-    htmlTitle: typeName ? `${typeName}` : defaultTitle,
-    displayTitle: typeName ? `${typeName}` : defaultTitle,
-  };
 };
 
 const handleChange = (
@@ -501,59 +442,3 @@ const handleSave = (
     }),
   });
 };
-
-export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
-  allowRouteInActiveAccess: true,
-  routeName: "pcrViewItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
-  getParams: route => ({
-    projectId: route.params.projectId as ProjectId,
-    itemId: route.params.itemId as PcrItemId,
-    pcrId: route.params.pcrId as PcrId,
-  }),
-  container: function PCRViewItemContainer(props) {
-    return <PCRItemContainer {...props} mode="view" />;
-  },
-  getTitle: ({ params, stores }) => getTitle("View project change request item", params, stores),
-  accessControl: (auth, { projectId }) =>
-    auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
-});
-
-export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
-  routeName: "pcrReviewItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
-  routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId?:step",
-  container: function PCRReviewItemContainer(props) {
-    return <PCRItemContainer {...props} mode="review" />;
-  },
-  getParams: route => ({
-    projectId: route.params.projectId as ProjectId,
-    itemId: route.params.itemId as PcrItemId,
-    pcrId: route.params.pcrId as PcrId,
-    step: parseInt(route.params.step, 10),
-  }),
-  getTitle: ({ params, stores }) => getTitle("Review project change request item", params, stores),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
-});
-
-export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
-  routeName: "pcrPrepareItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
-  routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step",
-  container: function PCRPrepareItemContainer(props) {
-    return <PCRItemContainer {...props} mode="prepare" />;
-  },
-  getParams: route => ({
-    projectId: route.params.projectId as ProjectId,
-    pcrId: route.params.pcrId as PcrId,
-    itemId: route.params.itemId as PcrItemId,
-    step: parseInt(route.params.step, 10),
-  }),
-  getTitle: ({ params, stores, content }) =>
-    getTitle(
-      content.getCopyString(x => x.pages.pcrPrepareItem.title),
-      params,
-      stores,
-    ),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
-});

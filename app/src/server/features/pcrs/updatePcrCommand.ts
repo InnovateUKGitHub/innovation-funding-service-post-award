@@ -6,7 +6,7 @@ import { mapToPcrDto } from "./mapToPCRDto";
 import { CostCategoryType } from "@framework/constants/enums";
 import { PCRStepId, PCRStatus, PCRItemType, PCRItemTypeName } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
-import { PCRDto, PCRItemForPartnerAdditionDto, PCRItemDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemForPartnerAdditionDto, PCRItemDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import {
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
@@ -23,11 +23,13 @@ import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "./getPCRByIdQuery";
 import { mergePcrData } from "@framework/util/pcrHelper";
 
-type PcrData = PickAndPart<PCRDto, "projectId" | "id">;
+type PcrData = PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
+  items?: PickRequiredFromPartial<FullPCRItemDto, "id">[];
+};
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   private readonly projectId: ProjectId;
-  private readonly projectChangeRequestId: PcrId;
+  private readonly projectChangeRequestId: PcrId | PcrItemId;
   private readonly pcr: PcrData;
   private readonly pcrStepId: PCRStepId;
 
@@ -38,7 +40,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     pcrStepId = PCRStepId.none,
   }: {
     projectId: ProjectId;
-    projectChangeRequestId: PcrId;
+    projectChangeRequestId: PcrId | PcrItemId;
     pcr: PcrData;
     pcrStepId?: PCRStepId;
   }) {

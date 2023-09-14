@@ -1,0 +1,66 @@
+import { graphql } from "relay-hooks";
+
+export const pcrItemWorkflowQuery = graphql`
+  query PcrItemWorkflowQuery($projectId: ID!, $pcrId: ID!, $pcrItemId: ID!) {
+    salesforce {
+      uiapi {
+        ...TitleFragment
+        ...NavigationArrowsFragment
+        query {
+          Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
+            edges {
+              node {
+                Id
+                Acc_CompetitionId__r {
+                  Acc_TypeofAid__c {
+                    value
+                  }
+                }
+                Acc_ProjectStatus__c {
+                  value
+                }
+                Project_Change_Requests__r(
+                  first: 2000
+                  where: { and: [{ Id: { eq: $pcrItemId } }, { Acc_RequestHeader__c: { eq: $pcrId } }] }
+                ) {
+                  edges {
+                    node {
+                      Id
+                      Acc_RequestHeader__c {
+                        value
+                      }
+                      Acc_RequestNumber__c {
+                        value
+                      }
+                      Acc_ProjectRole__c {
+                        value
+                      }
+                      Acc_ParticipantType__c {
+                        value
+                      }
+                      Acc_CommercialWork__c {
+                        value
+                      }
+                      Acc_OtherFunding__c {
+                        value
+                      }
+                      Acc_MarkedasComplete__c {
+                        value
+                      }
+                      RecordType {
+                        Name {
+                          value
+                          label
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;

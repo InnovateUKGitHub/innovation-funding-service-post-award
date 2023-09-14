@@ -13,7 +13,10 @@ import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQ
 
 export class CreateMonitoringReportCommand extends CommandBase<string> {
   constructor(
-    private readonly monitoringReportDto: PickAndPart<MonitoringReportDto, "periodId" | "projectId" | "status">,
+    private readonly monitoringReportDto: PickRequiredFromPartial<
+      MonitoringReportDto,
+      "periodId" | "projectId" | "status"
+    >,
     private readonly submit: boolean,
   ) {
     super();

@@ -224,6 +224,7 @@ export type FullPCRItemDto = {
   id: PcrItemId;
   isCommercialWork: boolean | null;
   isProjectRoleAndPartnerTypeRequired?: boolean;
+  lastUpdated: Date;
   numberOfEmployees: number | null;
   offsetMonths: number;
   organisationName: string | null;
@@ -236,6 +237,7 @@ export type FullPCRItemDto = {
   partnerTypeLabel: string | null;
   projectCity: string | null;
   projectDurationSnapshot: number;
+  projectId: ProjectId;
   projectLocation: PCRProjectLocation;
   projectLocationLabel: string | null;
   projectPostcode: string | null;
@@ -251,8 +253,10 @@ export type FullPCRItemDto = {
   removalPeriod: number | null;
   repaymentPeriod: number | null;
   repaymentPeriodChange: number | null;
+  requestNumber: number;
   shortName: string;
   spendProfile: PcrSpendProfileDto;
+  started: Date;
   status: PCRItemStatus;
   statusName: string;
   suspensionEndDate: Date | null;

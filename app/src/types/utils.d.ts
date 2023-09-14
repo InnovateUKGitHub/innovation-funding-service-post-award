@@ -132,4 +132,12 @@ declare type RhfErrors =
   | null
   | undefined;
 
-declare type PickAndPart<Dto extends AnyObject, PickList extends keyof Dto> = Partial<Dto> & Pick<Dto, PickList>;
+/**
+ * this type allows a Partial Dto with a subset of required fields
+ *
+ * @example
+ * PickRequiredFromPartial<{fruit: string; animal: string; count: number}, "fruit"|"count>
+ * // -> { fruit: string; animal?: string | undefined; count: number }
+ */
+declare type PickRequiredFromPartial<Dto extends AnyObject, PickList extends keyof Dto> = Partial<Dto> &
+  Pick<Dto, PickList>;

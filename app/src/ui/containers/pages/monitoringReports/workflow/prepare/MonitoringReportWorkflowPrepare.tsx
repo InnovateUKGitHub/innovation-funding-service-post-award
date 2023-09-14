@@ -11,6 +11,9 @@ const MonitoringReportWorkflowPrepare = (
   const { workflow, report, mode } = props;
 
   const step = workflow.getCurrentStepInfo();
+  if (!step?.stepRender) {
+    throw new Error("There is no stepRender method");
+  }
   return (
     <>
       {step &&

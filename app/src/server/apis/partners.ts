@@ -16,7 +16,7 @@ export interface IPartnersApi<Context extends "client" | "server"> {
       Context,
       {
         partnerId: PartnerId;
-        partnerDto: PickAndPart<PartnerDto, "id" | "projectId">;
+        partnerDto: PickRequiredFromPartial<PartnerDto, "id" | "projectId">;
         validateBankDetails?: boolean;
         verifyBankDetails?: boolean;
       }
@@ -72,7 +72,7 @@ class Controller extends ControllerBase<"server", PartnerDto> implements IPartne
       "server",
       {
         partnerId: PartnerId;
-        partnerDto: PickAndPart<PartnerDto, "id" | "projectId">;
+        partnerDto: PickRequiredFromPartial<PartnerDto, "id" | "projectId">;
         validateBankDetails?: boolean;
         verifyBankDetails?: boolean;
       }
