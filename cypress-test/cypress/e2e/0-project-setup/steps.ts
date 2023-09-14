@@ -1,47 +1,33 @@
+import { revertSpendTableZero } from "common/spend-table-edit";
+
 const partners = ["EUI Small Ent Health", "ABS EUI Medium Enterprise", "A B Cad Services"] as const;
 
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
 
-export const displayForecastTable = () => {
+export const correctSpendProfileTotals = () => {
   [
-    "Period",
-    "IAR Due",
-    "Month",
-    "Labour",
-    "Overheads",
-    "Materials",
-    "Capital usage",
-    "Subcontracting",
-    "Travel and subsistence",
-    "Other costs",
-    "Other costs 2",
-    "Other costs 3",
-    "Other costs 4",
-    "Other costs 5",
-    "Total",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "10",
-    "11",
-    "12",
-    "No",
-    "Forecast",
-    "Total",
-    "Total eligible costs",
-    "Difference",
-    "£0.00",
-    "0.00%",
-  ].forEach(tableItem => {
-    cy.getByQA("forecast-table").contains(tableItem);
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£7,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£35,000.00", "0.00%"],
+    ["£0.00", "£357,000.00", "0.00%"],
+  ].forEach(([total, totalEligible, difference], index) => {
+    cy.get("tr")
+      .eq(index + 4)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(total);
+        cy.get("td:nth-child(15)").contains(totalEligible);
+        cy.get("td:nth-child(16)").contains(difference);
+      });
   });
 };
 
@@ -137,10 +123,75 @@ export const bankDetailsValidation = () => {
   cy.reload();
 };
 
-export const spendProfileValidation = () => {
+export const spendProfileNullValidation = () => {
   cy.getByAriaLabel("Labour Period 1").clear();
   cy.wait(500);
   cy.submitButton("Save and return to project setup").click();
   cy.validationMessage("Forecast is required");
   cy.getByAriaLabel("Labour Period 1").type("0");
+};
+
+export const saveAndValidate = () => {
+  cy.get("h2").contains("Mark as complete");
+  cy.clickCheckBox("This is ready to submit");
+  cy.submitButton("Save and return to project setup").click;
+  [
+    "The total forecasts for labour must be the same as the total eligible costs",
+    "The total forecasts for overheads must be the same as the total eligible costs",
+    "The total forecasts for materials must be the same as the total eligible costs",
+    "The total forecasts for capital usage must be the same as the total eligible costs",
+    "The total forecasts for subcontracting must be the same as the total eligible costs",
+    "The total forecasts for travel and subsistence must be the same as the total eligible costs",
+    "The total forecasts for other costs must be the same as the total eligible costs",
+    "The total forecasts for other costs 2 must be the same as the total eligible costs",
+    "The total forecasts for other costs 3 must be the same as the total eligible costs",
+    "The total forecasts for other costs 4 must be the same as the total eligible costs",
+    "The total forecasts for other costs 5 must be the same as the total eligible costs",
+  ].forEach(validationMessage => {
+    cy.validationLink(validationMessage);
+  });
+};
+
+export const saveAndRemoveValidationMsg = () => {
+  [
+    "The total forecasts for labour must be the same as the total eligible costs",
+    "The total forecasts for overheads must be the same as the total eligible costs",
+    "The total forecasts for materials must be the same as the total eligible costs",
+    "The total forecasts for capital usage must be the same as the total eligible costs",
+    "The total forecasts for subcontracting must be the same as the total eligible costs",
+    "The total forecasts for travel and subsistence must be the same as the total eligible costs",
+    "The total forecasts for other costs must be the same as the total eligible costs",
+    "The total forecasts for other costs 2 must be the same as the total eligible costs",
+    "The total forecasts for other costs 3 must be the same as the total eligible costs",
+    "The total forecasts for other costs 4 must be the same as the total eligible costs",
+    "The total forecasts for other costs 5 must be the same as the total eligible costs",
+  ].forEach(validationMessage => {
+    cy.get("body").should("not.contain", validationMessage);
+  });
+};
+
+export const spendTableTidyUp = () => {
+  cy.get("table").then($table => {
+    if ($table.text().includes("£1,200.00")) {
+      cy.wait(500);
+      revertSpendTableZero();
+    }
+  });
+};
+
+export const submitComplete = () => {
+  cy.button("Save and return to project setup").click();
+  cy.heading("Project setup");
+  cy.get("li").eq(4).contains("Complete");
+};
+
+export const reaccessSpendProfile = () => {
+  cy.get("a").contains("Set spend profile").click();
+  cy.heading("Spend Profile");
+};
+
+export const checkSpendProfileIncomplete = () => {
+  cy.backLink("Back to set up your project").click();
+  cy.heading("Project setup");
+  cy.get("li").eq(4).contains("Incomplete");
 };
