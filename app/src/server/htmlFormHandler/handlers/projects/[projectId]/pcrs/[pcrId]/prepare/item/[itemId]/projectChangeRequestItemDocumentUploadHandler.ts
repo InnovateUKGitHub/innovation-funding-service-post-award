@@ -5,7 +5,10 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { configuration } from "@server/features/common/config";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
-import { ProjectChangeRequestPrepareItemParams, PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflow";
+import {
+  ProjectChangeRequestPrepareItemParams,
+  PCRPrepareItemRoute,
+} from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 

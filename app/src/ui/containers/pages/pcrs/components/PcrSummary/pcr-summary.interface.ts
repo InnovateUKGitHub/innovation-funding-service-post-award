@@ -1,6 +1,6 @@
+import { PCRItemType } from "@framework/constants/pcrConstants";
 import { PartnerVirementsDto, FinancialVirementDto } from "@framework/dtos/financialVirementDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { PCRItemDto } from "@framework/dtos/pcrDtos";
 
 /**
  * Available PCR Summary Payloads - Consumable via context (due to split workflow UI's)
@@ -41,5 +41,5 @@ export interface SummaryLogicProps {
 }
 
 export interface PcrSummaryProps extends SummaryLogicProps {
-  type: PCRItemDto["type"];
+  type: PCRItemType;
 }

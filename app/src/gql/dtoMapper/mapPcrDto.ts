@@ -9,6 +9,7 @@ import {
   mapFromSalesforcePCRPartnerType,
   mapToPcrItemType,
 } from "@framework/mappers/pcr";
+import { pcrRecordTypeMetaValues } from "@framework/mappers/pcrRecordTypeMetaData";
 import { Clock } from "@framework/util/clock";
 
 // on Project_Change_Requests__r
@@ -18,10 +19,12 @@ const clock = new Clock();
 export type PcrNode = Readonly<
   Partial<{
     Id: string;
+    Acc_AdditionalNumberofMonths__c: GQL.Value<number>;
     Acc_Comments__c: GQL.Value<string>;
     Acc_ExistingPartnerName__c: GQL.Value<string>;
     Acc_OtherFunding__c: GQL.Value<boolean>;
     Acc_CommercialWork__c: GQL.Value<boolean>;
+    Acc_ExistingProjectDuration__c: GQL.Value<number>;
     Acc_NewOrganisationName__c: GQL.Value<string>;
     Acc_Reasoning__c: GQL.Value<string>;
     Acc_RequestHeader__c: GQL.Value<string>;
@@ -29,6 +32,7 @@ export type PcrNode = Readonly<
     Acc_MarkedasComplete__c: GQL.Value<string>;
     Acc_OrganisationName__c: GQL.Value<string>;
     Acc_ParticipantType__c: GQL.Value<string>;
+
     CreatedDate: GQL.Value<string>;
     Acc_Status__c: GQL.Value<string>;
     Acc_Project__c: GQL.Value<string>;
@@ -61,13 +65,21 @@ export type PcrItemDtoMapping = Pick<
   | "hasOtherFunding"
   | "id"
   | "isCommercialWork"
+  | "guidance"
+  | "lastUpdated"
+  | "offsetMonths"
   | "organisationName"
   | "organisationType"
   | "partnerNameSnapshot"
   | "partnerType"
+  | "projectDurationSnapshot"
+  | "projectId"
   | "projectRole"
+  | "requestNumber"
   | "shortName"
+  | "started"
   | "status"
+  | "statusName"
   | "type"
   | "typeName"
   | "typeOfAid"
@@ -89,6 +101,21 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   isCommercialWork(node) {
     return node?.Acc_CommercialWork__c?.value ?? null;
   },
+  guidance(node, additionalData) {
+    const metaValues = pcrRecordTypeMetaValues.find(x => x.type === itemMapper.type(node, additionalData));
+    if (!!metaValues && "guidance" in metaValues) {
+      return metaValues.guidance;
+    }
+    return "";
+  },
+  lastUpdated(node) {
+    return node?.LastModifiedDate?.value
+      ? clock.parseRequiredSalesforceDateTime(node?.LastModifiedDate?.value)
+      : new Date();
+  },
+  offsetMonths(node) {
+    return node?.Acc_AdditionalNumberofMonths__c?.value ?? 0;
+  },
   organisationName(node) {
     return node?.Acc_OrganisationName__c?.value ?? null;
   },
@@ -101,14 +128,29 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   partnerType(node) {
     return mapFromSalesforcePCRPartnerType(node?.Acc_ParticipantType__c?.value ?? "");
   },
+  projectDurationSnapshot(node) {
+    return node?.Acc_ExistingProjectDuration__c?.value ?? 0;
+  },
+  projectId(node) {
+    return (node?.Acc_Project__c?.value ?? "unknown-project-id") as ProjectId;
+  },
   projectRole(node) {
     return mapFromSalesforcePCRProjectRole(node?.Acc_ProjectRole__c?.value ?? "");
+  },
+  requestNumber(node) {
+    return node?.Acc_RequestNumber__c?.value ?? 0;
   },
   shortName(node) {
     return node?.RecordType?.Name?.value ?? "Unknown";
   },
+  started(node) {
+    return node?.CreatedDate?.value ? clock.parseRequiredSalesforceDateTime(node?.CreatedDate?.value) : new Date();
+  },
   status(node) {
     return mapToPCRItemStatus(node?.Acc_MarkedasComplete__c?.value ?? "");
+  },
+  statusName(node) {
+    return node?.Acc_Status__c?.value || "Unknown";
   },
   type(node) {
     return mapToPcrItemType(node?.RecordType?.Name?.value ?? "Unknown");
@@ -180,6 +222,20 @@ type PcrAdditionalData<TPickList extends string> = AdditionalDataType<
     ["typeOfAid", "typeOfAid", string | TypeOfAid], // get from Acc_CompetitionId__r { Acc_TypeofAid__c {value}} or from project.typeOfAid
   ]
 >;
+
+/**
+ * maps for a single pcr item
+ */
+export function mapPcrItemDto<T extends PcrNode, PickList extends keyof PcrItemDtoMapping>(
+  node: T,
+  pickList: PickList[],
+  additionalData: PcrAdditionalData<PickList>,
+): Pick<PcrItemDtoMapping, PickList> {
+  return pickList.reduce((dto, field) => {
+    dto[field] = itemMapper[field](node, additionalData);
+    return dto;
+  }, {} as Pick<PcrItemDtoMapping, PickList>);
+}
 
 /**
  * maps the attached child PCR items to the dto pattern

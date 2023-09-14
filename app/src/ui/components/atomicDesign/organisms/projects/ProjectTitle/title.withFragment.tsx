@@ -9,8 +9,8 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
 export const Title = ({ heading }: { heading?: string }) => {
   const fragmentRef = useFragmentContext();
-  if (!isValidFragmentKey<TitleFragment$key>(fragmentRef, "ProjectTitleFragment")) {
-    throw new Error("Title is missing a ProjectTitleFragment reference");
+  if (!isValidFragmentKey<TitleFragment$key>(fragmentRef, "TitleFragment")) {
+    throw new Error("Title is missing a TitleFragment reference");
   }
 
   const fragment: TitleFragment$data = useFragment(titleFragment, fragmentRef);

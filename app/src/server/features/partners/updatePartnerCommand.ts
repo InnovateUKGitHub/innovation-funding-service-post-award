@@ -29,7 +29,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   private mergedPartner: PartnerDto | null = null;
 
   constructor(
-    private readonly partner: PickAndPart<PartnerDto, "id" | "projectId">,
+    private readonly partner: PickRequiredFromPartial<PartnerDto, "id" | "projectId">,
     private readonly validateBankDetails?: boolean,
     private readonly verifyBankDetails?: boolean,
   ) {

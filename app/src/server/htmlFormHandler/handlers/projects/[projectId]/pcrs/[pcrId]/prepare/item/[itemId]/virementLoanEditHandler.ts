@@ -7,7 +7,7 @@ import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/htmlFor
 import { BadRequestError } from "@shared/appError";
 import { VirementCostsParams } from "@ui/containers/pages/pcrs/financialVirements/editPage";
 import { FinancialVirementParams } from "@ui/containers/pages/pcrs/financialVirements/editPartnerLevel.page";
-import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflow";
+import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialLoanVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 

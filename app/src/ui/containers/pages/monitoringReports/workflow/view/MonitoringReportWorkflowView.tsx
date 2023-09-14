@@ -19,6 +19,9 @@ const MonitoringReportWorkflowView = (
 ) => {
   const { workflow, projectId, id, mode, routes, report, statusChanges, ...rest } = props;
   const summary = workflow.getSummary();
+  if (!summary?.summaryRender) {
+    throw new Error("monitoring report workflow missing a summaryRender method");
+  }
   return (
     <>
       {summary &&

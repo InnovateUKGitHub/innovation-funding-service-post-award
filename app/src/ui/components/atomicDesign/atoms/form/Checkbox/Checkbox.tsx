@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, HTMLAttributes, InputHTMLAttributes, ReactNode, createContext, useContext } from "react";
+import { ReactNode, createContext, useContext, ComponentPropsWithoutRef } from "react";
 import cx from "classnames";
 import { FieldValues, UseFormRegister } from "react-hook-form";
 
@@ -17,7 +17,7 @@ const useCheckboxListContext = () => {
   return context;
 };
 
-type CheckboxInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
+type CheckboxInputProps = ComponentPropsWithoutRef<"input"> & {
   "data-qa"?: string;
   label: string | ReactNode;
   id: string;
@@ -47,7 +47,7 @@ type CheckboxListProps<TFormValues extends FieldValues> = {
   inline?: boolean;
   children: ReactNode;
   hasError?: boolean;
-} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
+} & ComponentPropsWithoutRef<"input">;
 
 const CheckboxList = <TFormValues extends FieldValues>({
   inline,

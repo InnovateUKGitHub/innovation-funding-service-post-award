@@ -9,6 +9,7 @@ import {
 import { Option } from "@framework/dtos/option";
 import {
   CreatePcrDto,
+  FullPCRItemDto,
   PCRDto,
   PCRItemTypeDto,
   PCRSummaryDto,
@@ -44,7 +45,16 @@ export interface IPCRsApi<Context extends "client" | "server"> {
   getAvailableTypes: (params: ApiParams<Context, { projectId: ProjectId; pcrId?: PcrId }>) => Promise<PCRItemTypeDto[]>;
   getTimeExtensionOptions: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<PCRTimeExtensionOption[]>;
   update: (
-    params: ApiParams<Context, { projectId: ProjectId; id: PcrId; pcr: PickAndPart<PCRDto, "projectId" | "id"> }>,
+    params: ApiParams<
+      Context,
+      {
+        projectId: ProjectId;
+        id: PcrId;
+        pcr: PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
+          items?: PickRequiredFromPartial<FullPCRItemDto, "id">[];
+        };
+      }
+    >,
   ) => Promise<PCRDto>;
   delete: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<boolean>;
   getStatusChanges: (
@@ -135,9 +145,19 @@ class Controller extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRD
   }
 
   async update(
-    params: ApiParams<"server", { projectId: ProjectId; id: PcrId; pcr: PickAndPart<PCRDto, "projectId" | "id"> }>,
+    params: ApiParams<
+      "server",
+      {
+        projectId: ProjectId;
+        id: PcrId | PcrItemId;
+        pcr: PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
+          items?: PickRequiredFromPartial<FullPCRItemDto, "id">[];
+        };
+      }
+    >,
   ): Promise<PCRDto> {
     const context = contextProvider.start(params);
+
     await context.runCommand(
       new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.id, pcr: params.pcr }),
     );

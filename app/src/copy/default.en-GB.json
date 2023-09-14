@@ -740,6 +740,12 @@
       "submitRequest": "Submit request",
       "addComments": "Add comments"
     },
+    "pcrWorkflowSummary": {
+      "agreeToChangeLabel": "I agree with this change.",
+      "buttonSaveAndReturn": "Save and return to request",
+      "reallocateGrantHint": "The financial year ends on 31 March.",
+      "markAsCompleteLabel": "Mark as complete"
+    },
     "pcrSpendProfileCostsSummary": {
       "title": "Add partner",
       "sectionTitleCosts": "{{costCategoryName}}",

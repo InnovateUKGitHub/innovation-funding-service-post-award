@@ -36,7 +36,7 @@ import {
   FinancialVirementDtoValidator,
 } from "@ui/validation/validators/financialVirementDtoValidator";
 import { useNavigate } from "react-router-dom";
-import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
+import { PCRPrepareItemRoute } from "../pcrItemWorkflowContainer";
 
 /**
  * hook to return edit page content

@@ -29,7 +29,7 @@ export interface IMonitoringReportsApi<Context extends "client" | "server"> {
   saveMonitoringReport: (
     params: ApiParams<
       Context,
-      { monitoringReportDto: PickAndPart<MonitoringReportDto, "projectId" | "headerId">; submit: boolean }
+      { monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "headerId">; submit: boolean }
     >,
   ) => Promise<MonitoringReportDto>;
   deleteMonitoringReport: (
@@ -94,7 +94,7 @@ class Controller
   public async saveMonitoringReport(
     params: ApiParams<
       "server",
-      { monitoringReportDto: PickAndPart<MonitoringReportDto, "projectId" | "headerId">; submit: boolean }
+      { monitoringReportDto: PickRequiredFromPartial<MonitoringReportDto, "projectId" | "headerId">; submit: boolean }
     >,
   ) {
     const { monitoringReportDto, submit } = params;

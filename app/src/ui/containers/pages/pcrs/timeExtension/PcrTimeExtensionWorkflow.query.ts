@@ -1,50 +1,58 @@
 import { graphql } from "relay-hooks";
 
-export const pcrItemWorkflowQuery = graphql`
-  query PcrItemWorkflowQuery($projectId: ID!, $pcrId: ID!, $pcrItemId: ID!) {
+export const pcrTimeExtensionWorkflowQuery = graphql`
+  query PcrTimeExtensionWorkflowQuery($projectId: ID!, $pcrItemId: ID!) {
     salesforce {
       uiapi {
-        ...TitleFragment
-        ...NavigationArrowsFragment
         query {
           Acc_Project__c(where: { Id: { eq: $projectId } }) {
             edges {
               node {
                 Id
-                Acc_CompetitionId__r {
-                  Acc_TypeofAid__c {
-                    value
-                  }
+                Acc_ProjectNumber__c {
+                  value
                 }
                 Acc_ProjectStatus__c {
                   value
                 }
-                Project_Change_Requests__r(
-                  first: 2000
-                  where: { and: [{ Id: { eq: $pcrItemId } }, { Acc_RequestHeader__c: { eq: $pcrId } }] }
-                ) {
+                Acc_ProjectTitle__c {
+                  value
+                }
+                Acc_EndDate__c {
+                  value
+                }
+                Acc_StartDate__c {
+                  value
+                }
+                Project_Change_Requests__r(first: 2000, where: { Id: { eq: $pcrItemId } }) {
                   edges {
                     node {
                       Id
+                      Acc_AdditionalNumberofMonths__c {
+                        value
+                      }
+                      Acc_ExistingProjectDuration__c {
+                        value
+                      }
+                      Acc_Project__c {
+                        value
+                      }
+                      Acc_MarkedasComplete__c {
+                        value
+                      }
                       Acc_RequestHeader__c {
                         value
                       }
                       Acc_RequestNumber__c {
                         value
                       }
-                      Acc_ProjectRole__c {
+                      Acc_Status__c {
                         value
                       }
-                      Acc_ParticipantType__c {
+                      CreatedDate {
                         value
                       }
-                      Acc_CommercialWork__c {
-                        value
-                      }
-                      Acc_OtherFunding__c {
-                        value
-                      }
-                      Acc_MarkedasComplete__c {
+                      LastModifiedDate {
                         value
                       }
                       RecordType {

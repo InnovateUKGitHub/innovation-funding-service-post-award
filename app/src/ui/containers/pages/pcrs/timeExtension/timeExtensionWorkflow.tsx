@@ -1,24 +1,22 @@
 import { PCRStepId } from "@framework/constants/pcrConstants";
 import { PCRItemForTimeExtensionDto } from "@framework/dtos/pcrDtos";
-import { PCRTimeExtensionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { IPCRWorkflow } from "../pcrWorkflow";
-import { TimeExtensionStepContainer } from "./timeExtensionStep";
+import { TimeExtensionStep } from "./timeExtensionStep";
 import { TimeExtensionSummary } from "./timeExtensionSummary";
 
 export type TimeExtensionStepNames = PCRStepId.timeExtension;
 
-export const timeExtensionItemWorkflow: IPCRWorkflow<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator> = {
+export const timeExtensionItemWorkflow: IPCRWorkflow<PCRItemForTimeExtensionDto, null> = {
   steps: [
     {
       stepName: PCRStepId.timeExtension,
       displayName: "Time extension",
       stepNumber: 1,
-      validation: val => val.pcr,
-      stepRender: TimeExtensionStepContainer,
+      migratedStepRender: TimeExtensionStep,
     },
   ],
-  summary: {
-    validation: val => val,
-    summaryRender: TimeExtensionSummary,
+  migratedSummary: {
+    migratedSummaryRender: TimeExtensionSummary,
   },
+  isMigratedToGql: true,
 };

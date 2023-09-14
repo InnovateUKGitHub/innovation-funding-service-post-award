@@ -34,7 +34,7 @@ import {
   PcrEditSpendProfileCostParams,
   PCRSpendProfileEditCostRoute,
 } from "@ui/containers/pages/pcrs/addPartner/spendProfile/spendProfilePrepareCost.page";
-import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflow";
+import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";

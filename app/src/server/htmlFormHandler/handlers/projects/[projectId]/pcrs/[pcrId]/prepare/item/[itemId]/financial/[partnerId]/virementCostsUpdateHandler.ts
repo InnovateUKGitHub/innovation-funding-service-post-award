@@ -9,7 +9,7 @@ import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { StandardFormHandlerBase, IFormButton, IFormBody } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
 import { VirementCostsParams, FinancialVirementEditRoute } from "@ui/containers/pages/pcrs/financialVirements/editPage";
-import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflow";
+import { PCRPrepareItemRoute } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
 
