@@ -189,7 +189,7 @@ const AccountNumber = ({
         id="accountNumber"
         hint={c(x => x.partnerLabels.accountNumberHint)}
         label={c(x => x.partnerLabels.accountNumber)}
-        error={error}
+        error={error as RhfError}
       >
         <TextInput hasError={!!error} {...register("accountNumber", { required: true })} inputWidth="one-third" />
       </Field>
