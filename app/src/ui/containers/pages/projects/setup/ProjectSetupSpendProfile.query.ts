@@ -115,6 +115,40 @@ export const projectSetupSpendProfileQuery = graphql`
               }
             }
           }
+          ClaimsForIarDue: Acc_Claims__c(
+            where: {
+              and: [
+                { Acc_ProjectID__c: { eq: $projectIdStr } }
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                {
+                  or: [
+                    { RecordType: { Name: { eq: "Total Project Period" } } }
+                    { RecordType: { Name: { eq: "Claims Detail" } } }
+                  ]
+                }
+              ]
+            }
+            first: 2000
+          ) {
+            edges {
+              node {
+                RecordType {
+                  Name {
+                    value
+                  }
+                }
+                Acc_IAR_Status__c {
+                  value
+                }
+                Acc_IARRequired__c {
+                  value
+                }
+                Acc_ProjectPeriodNumber__c {
+                  value
+                }
+              }
+            }
+          }
           Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {

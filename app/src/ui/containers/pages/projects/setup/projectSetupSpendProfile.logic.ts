@@ -7,6 +7,7 @@ import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
+import { getIARDueOnClaimPeriods } from "@gql/dtoMapper/mapIarDue";
 
 export const useSetupSpendProfileData = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ProjectSetupSpendProfileQuery>(
@@ -54,6 +55,9 @@ export const useSetupSpendProfileData = (projectId: ProjectId, partnerId: Partne
     "value",
   ]);
 
+  // IAR DUE ON CLAIM PERIODS
+  const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(data?.salesforce?.uiapi?.query?.ClaimsForIarDue?.edges ?? []);
+
   const forecastData = {
     golCosts,
     forecastDetails,
@@ -64,6 +68,7 @@ export const useSetupSpendProfileData = (projectId: ProjectId, partnerId: Partne
     claim: null,
     claims: [],
     claimDetails: [],
+    IARDueOnClaimPeriods,
   };
 
   return forecastData;

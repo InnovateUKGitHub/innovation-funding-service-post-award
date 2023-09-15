@@ -17,12 +17,8 @@ import { useContent } from "@ui/hooks/content.hook";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useStores } from "@ui/redux/storesProvider";
 import { IForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
-import {
-  ForecastDataForTableLayout,
-  ForecastTable,
-} from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { ProjectDto } from "@framework/dtos/projectDto";
 import { useSetupSpendProfileData } from "./projectSetupSpendProfile.logic";
 
 export interface ProjectSetupSpendProfileParams {
@@ -31,12 +27,6 @@ export interface ProjectSetupSpendProfileParams {
 }
 
 interface Data {
-  data: ForecastDataForTableLayout & {
-    project: {
-      title: ProjectDto["title"];
-      projectNumber: ProjectDto["projectNumber"];
-    };
-  };
   editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
   partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
@@ -49,7 +39,10 @@ interface Callbacks {
 const Form = createTypedForm<ForecastDetailsDTO[]>();
 
 const ProjectSetupSpendProfile = (props: BaseProps & ProjectSetupSpendProfileParams & Data & Callbacks) => {
-  const { data, editor, partnerEditor } = props;
+  const { editor, partnerEditor } = props;
+
+  const data = useSetupSpendProfileData(props.projectId, props.partnerId);
+
   const readyToSubmitMessage = <Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
 
   const options: SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
@@ -126,8 +119,6 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
     navigate(props.routes.projectSetup.getLink(projectSetupParams).path);
   };
 
-  const data = useSetupSpendProfileData(props.projectId, props.partnerId);
-
   const editor = stores.forecastDetails.getInitialForecastEditor(props.partnerId);
 
   const partnerEditor = stores.partners.getPartnerEditor(props.projectId, props.partnerId);
@@ -153,9 +144,7 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
   return (
     <PageLoader
       pending={combined}
-      render={x => (
-        <ProjectSetupSpendProfile data={data} onChange={onChange} onChangePartner={onChangePartner} {...props} {...x} />
-      )}
+      render={x => <ProjectSetupSpendProfile onChange={onChange} onChangePartner={onChangePartner} {...props} {...x} />}
     />
   );
 };
