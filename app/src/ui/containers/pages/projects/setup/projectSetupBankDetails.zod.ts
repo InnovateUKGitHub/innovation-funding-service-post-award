@@ -8,7 +8,7 @@ export const projectSetupBankDetailsSchema = z
     sortCode: z
       .string()
       .min(1)
-      .regex(/\d{6}|\d\d-\d\d-\d\d/),
+      .regex(/^\d\d-?\d\d-?\d\d$/),
     accountNumber: z
       .string()
       .min(1)
