@@ -619,12 +619,12 @@ export const editSection5WithTooMuchCopy = () => {
   cy.get("textarea").type("{moveToEnd}");
   cy.wait(500);
   cy.get("textarea").type(".");
-  cy.paragraph("You have 32,001 characters");
+  cy.paragraph("You have 32001 characters");
 };
 
 export const reflectSection5Changes = () => {
   cy.get("h3").contains("Risk management");
-  ["Score", "Comments", "1 - Unacceptable", "Edit", "LoremTest1", "MundiTest2", "NeTest3"].forEach(section5Item => {
+  ["Score", "Comments", "1 - Unacceptable", "Pippin's", "office", "Swindon", "lovely"].forEach(section5Item => {
     cy.getByQA("summary-question-5").contains(section5Item);
   });
 };
@@ -703,5 +703,5 @@ export const deleteUsingCorrectDeleteButton = () => {
 
 export const editSection5WithCorrectCopy = () => {
   cy.get("textarea").type("{moveToEnd}{backSpace}");
-  cy.paragraph("You have 5000 characters");
+  cy.paragraph("You have 32000 characters");
 };
