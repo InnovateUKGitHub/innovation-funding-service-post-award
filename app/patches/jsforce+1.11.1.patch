@@ -1,8 +1,8 @@
 diff --git a/node_modules/jsforce/lib/connection.js b/node_modules/jsforce/lib/connection.js
-index e833b5a..9d38384 100644
+index e833b5a..4d3a1d2 100644
 --- a/node_modules/jsforce/lib/connection.js
 +++ b/node_modules/jsforce/lib/connection.js
-@@ -394,7 +393,8 @@ Connection.prototype.requestPost = function(url, body, options, callback) {
+@@ -394,7 +394,8 @@ Connection.prototype.requestPost = function(url, body, options, callback) {
      method: "POST",
      url: url,
      body: JSON.stringify(body),
@@ -12,7 +12,7 @@ index e833b5a..9d38384 100644
    };
    return this.request(request, options, callback);
  };
-@@ -779,7 +779,8 @@ Connection.prototype._createSingle = function(type, record, options) {
+@@ -779,7 +780,8 @@ Connection.prototype._createSingle = function(type, record, options) {
      body : JSON.stringify(record),
      headers : _.defaults(options.headers || {}, {
        "Content-Type" : "application/json"
@@ -22,7 +22,7 @@ index e833b5a..9d38384 100644
    });
  };
  
-@@ -837,7 +838,8 @@ Connection.prototype._createMany = function(type, records, options) {
+@@ -837,7 +839,8 @@ Connection.prototype._createMany = function(type, records, options) {
      }),
      headers : _.defaults(options.headers || {}, {
        "Content-Type" : "application/json"
