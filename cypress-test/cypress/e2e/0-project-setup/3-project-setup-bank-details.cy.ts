@@ -1,10 +1,12 @@
 import { visitApp } from "../../common/visit";
 import {
   bankDetailsValidation,
+  fillAccountInfoInvalid,
   fillAccountInformation,
   fillAddressInformation,
   fillOrgInformation,
   shouldShowProjectTitle,
+  validateInvalidAccDetails,
 } from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
@@ -40,11 +42,21 @@ describe("Project setup > Provide your bank details", () => {
 
   it("Should have an 'Organisation information' section and populate 'Company number'", fillOrgInformation);
 
+  it("Should enter invalid account information and attempt to submit", fillAccountInfoInvalid);
+
+  it("Should display a validation error due to invalid account information.", validateInvalidAccDetails);
+
   it("Should have an 'Account details' section and populate 'Sort code'", fillAccountInformation);
+
+  it("Should no longer display the validation message", () => {
+    cy.getByQA("validation-summary").should("not.exist");
+  });
 
   it("Should have a 'Billing address' section and populate the address", fillAddressInformation);
 
-  it("Should have a 'Submit bank details' button", () => {
-    cy.submitButton("Submit bank details");
+  it("Should click 'Submit bank details' button and generate an error", () => {
+    cy.submitButton("Submit bank details").click();
+    cy.get("h2").contains("There is a problem");
+    cy.validationLink("Check your sort code and account number.");
   });
 });

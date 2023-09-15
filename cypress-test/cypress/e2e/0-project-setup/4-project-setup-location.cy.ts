@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { newLocation, shouldShowProjectTitle } from "./steps";
+import { enterInvalidPostcode, enterValidPostcode, newLocation, shouldShowProjectTitle } from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -18,11 +18,11 @@ describe("Project setup > Provide your project location postcode", () => {
     cy.backLink("Back to set up your project");
   });
 
-  it("Should show the project title", shouldShowProjectTitle);
+  it("Should show the project title.", shouldShowProjectTitle);
 
-  it("Should show 'New location' with guidance information and complete form while validating.", newLocation);
+  it("Should show 'New location' information.", newLocation);
 
-  it("Should have a 'Save and return to project setup' button", () => {
-    cy.submitButton("Save and return to project setup").click();
-  });
+  it("Should enter an invalid postcode and validate.", enterInvalidPostcode);
+
+  it("Should enter a valid postcode and proceed to save and retun to project setup screen.", enterValidPostcode);
 });
