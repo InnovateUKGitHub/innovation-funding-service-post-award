@@ -122,14 +122,17 @@ describe("MO report > Complete all sections, navigate sections", () => {
 
   it("Should reflect the Section 4 changes on the Summary page", reflectSection4Changes);
 
-  it("Should access Section 5 'Risk management' and update the text with 5001 characters", editSection5WithTooMuchCopy);
+  it(
+    "Should access Section 5 'Risk management' and update the text with 32,001 characters",
+    editSection5WithTooMuchCopy,
+  );
 
-  it("Should validate that you are over the allowed character limit of 5000", () => {
+  it("Should validate that you are over the allowed character limit of 32,000", () => {
     cy.button("Save and return to summary").click();
-    cy.validationLink("Maximum of 5000 characters");
+    cy.validationLink("Maximum of 32,000 characters");
   });
 
-  it("Should backspace a single character to bring the text to 5000 characters", editSection5WithCorrectCopy);
+  it("Should backspace a single character to bring the text to 32,000 characters", editSection5WithCorrectCopy);
 
   it("Should now correctly save and continue to the summary page", () => {
     cy.button("Save and return to summary").click();

@@ -1,5 +1,6 @@
 import { visitApp } from "../../common/visit";
 import { moReportTidyup } from "common/mo-report-tidyup";
+import { loremIpsum32k } from "common/lorem";
 
 const section1Comments = "Section 1 // *&^%";
 const section2Comments = "Section 2 // *&^%";
@@ -434,9 +435,6 @@ export const q6ScoreChoice = () => {
   });
 };
 
-export const loremIpsumWithLineBreaksOver =
-  "LoremTest1 ipsum dolor sit amet, agam saperet electram mea ea. Has no munere reprimique. \nIus an magna movet mediocrem, at mea dicit laudem. Mei id mutat dolorem nostrum, sed no integre accusamus, ius ut mandamus deseruisse. \nMundiTest2 postea mea te, enim detraxit scriptorem te vis. Sea melius fuisset splendide in. Ut per soluta laoreet. No mea eleifend sapientem persequeris. \nEa ubique eligendi nam, vim cu putent sententiae incorrupte. Cu qui voluptua voluptaria liberavisse. Duo ne aeterno graecis, cum duis splendide ei, vis ludus vocent rationibus id. \nEu dicit ullamcorper mea. Scripserit referrentur consectetuer ad est, vix an commodo dolorem conceptam, his no tollit apeirian insolens. \nComplectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. \nNe nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. \nPri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. Ne odio minim eam, recteque concludaturque ex usu, an sed epicurei perpetua abhorreant. \nLorem ipsum dolor sit amet, agam saperet electram mea ea. Has no munere reprimique. \nIus an magna movet mediocrem, at mea dicit laudem. Mei id mutat dolorem nostrum, sed no integre accusamus, ius ut mandamus deseruisse. \nMundi postea mea te, enim detraxit scriptorem te vis. Sea melius fuisset splendide in. Ut per soluta laoreet. No mea eleifend sapientem persequeris. \nEa ubique eligendi nam, vim cu putent sententiae incorrupte. Cu qui voluptua voluptaria liberavisse. Duo ne aeterno graecis, cum duis splendide ei, vis ludus vocent rationibus id. \nEu dicit ullamcorper mea. Scripserit referrentur consectetuer ad est, vix an commodo dolorem conceptam, his no tollit apeirian insolens. \nComplectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. \nNe nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. \nPri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. Ne odio minim eam, recteque concludaturque ex usu, an sed epicurei perpetua abhorreant. \nComplectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. Ne nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. Pri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. Ne odio minim eam, recteque concludaturque ex usu, an sed epicurei perpetua abhorreant.Complectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. Ne nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. Pri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. Ne odio minim eam, recteque concludaturque ex usu, an sed epicurei perpetua abhorreant.Complectitur intellegebat interpretaris est ad, est aeque inermis eloquentiam ex. Admodum cotidieque ad sea. Et his debet cetero, sea feugait mediocrem an. Eu nonumes fastidii mediocritatem has, stet vitae laudem ne vel, at usu percipit accommodare. Ne nam dicunt principes, sed ad amet admodum mediocrem. Graeci possit democritum eam an. Ut odio tibique ancillae vis. Pri at accusata democritum, per eius postulant salutatus te. Pri eu oportere torquatos assueverit, ne impedit albucius nam, oratio tritani vivendo ius cu. Possit disputationi nec eu. Persius eruditi constituam no vim, adhuc graeco ea mei. Ut pri sonet offendit expetendis. NeTest3 odio minim eam, recteque concludaturq";
-
 export const section1Summary = () => {
   cy.get("h3").contains("Scope");
   [
@@ -616,8 +614,12 @@ export const reflectSection4Changes = () => {
 export const editSection5WithTooMuchCopy = () => {
   cy.getByQA("summary-question-5").contains("Edit").click();
   cy.get("legend").contains("Risk management");
-  cy.get("textarea").clear().type(loremIpsumWithLineBreaksOver);
-  cy.paragraph("You have 5001 characters");
+  cy.get("textarea").clear();
+  cy.get("textarea").invoke("val", loremIpsum32k);
+  cy.get("textarea").type("{moveToEnd}");
+  cy.wait(500);
+  cy.get("textarea").type(".");
+  cy.paragraph("You have 32,001 characters");
 };
 
 export const reflectSection5Changes = () => {
