@@ -48,7 +48,7 @@ describe("PCR > Project Change Request front page", () => {
   it("Should display a 'before you submit' message", beforeYouSubmit);
 
   it("Should contain Select request types heading", () => {
-    cy.get("h2").contains("Select request types");
+    cy.get("legend").contains("Select request types");
   });
 
   it("Should have guidance with each PCR type", pcrCheckboxesWithHint);

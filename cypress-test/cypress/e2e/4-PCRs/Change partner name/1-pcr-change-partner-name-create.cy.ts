@@ -82,7 +82,7 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
   });
 
   it("Should upload another file and click 'Save and continue'", () => {
-    cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+    cy.fileInput("testfile.doc");
     cy.button("Upload documents").click();
     cy.validationNotification("Your document has been uploaded");
     cy.button("Save and continue").click();
