@@ -95,6 +95,12 @@ export const enterInvalidPostcode = () => {
   cy.validationMessage("Your location entry must be no more than 10 characters.");
 };
 
+export const enterNullPostcode = () => {
+  cy.get("#new-postcode").clear();
+  cy.submitButton("Save and return to project setup").click();
+  cy.validationMessage("You must provide your project location postcode.");
+};
+
 export const enterValidPostcode = () => {
   cy.get("#new-postcode").clear().type("SN2 1FL");
   cy.submitButton("Save and return to project setup").click();

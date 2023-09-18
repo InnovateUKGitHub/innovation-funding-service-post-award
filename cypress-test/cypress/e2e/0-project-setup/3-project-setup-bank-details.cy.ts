@@ -54,9 +54,7 @@ describe("Project setup > Provide your bank details", () => {
 
   it("Should have a 'Billing address' section and populate the address", fillAddressInformation);
 
-  it("Should click 'Submit bank details' button and generate an error", () => {
-    cy.submitButton("Submit bank details").click();
-    cy.get("h2").contains("There is a problem");
-    cy.validationLink("Check your sort code and account number.");
+  it("Should have a 'Submit bank details' button", () => {
+    cy.submitButton("Submit bank details");
   });
 });

@@ -1,5 +1,11 @@
 import { visitApp } from "../../common/visit";
-import { enterInvalidPostcode, enterValidPostcode, newLocation, shouldShowProjectTitle } from "./steps";
+import {
+  enterInvalidPostcode,
+  enterNullPostcode,
+  enterValidPostcode,
+  newLocation,
+  shouldShowProjectTitle,
+} from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -23,6 +29,8 @@ describe("Project setup > Provide your project location postcode", () => {
   it("Should show 'New location' information.", newLocation);
 
   it("Should enter an invalid postcode and validate.", enterInvalidPostcode);
+
+  it("Should clear the post code and attempt to submit with a null field, triggering validation", enterNullPostcode);
 
   it("Should enter a valid postcode and proceed to save and retun to project setup screen.", enterValidPostcode);
 });
