@@ -25,7 +25,7 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/do
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { PCRWorkflowValidator } from "@ui/validation/validators/pcrWorkflowValidator";
 import { PcrSummaryConsumer, PcrSummaryProvider } from "./components/PcrSummary/PcrSummary";
-import { createContext, isValidElement, useContext } from "react";
+import { JSXElementConstructor, createContext, useContext } from "react";
 import { Result } from "@ui/validation/result";
 import { ProjectChangeRequestPrepareItemParams } from "./pcrItemWorkflowContainer";
 
@@ -328,11 +328,8 @@ const WorkflowStep = () => {
     throw new Error("component is still using the original stepRender which is not found in the workflow config");
   }
 
-  const CurrentStep = currentStep.stepRender;
-
-  if (!isValidElement(CurrentStep)) {
-    throw new Error("CurrentStep is not a valid react element");
-  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const CurrentStep = currentStep.stepRender as unknown as JSXElementConstructor<any>;
 
   return (
     <WithScrollToTopOnPropChange propToScrollOn={workflow.getCurrentStepName()}>

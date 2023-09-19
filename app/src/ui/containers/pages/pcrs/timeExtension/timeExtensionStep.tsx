@@ -43,6 +43,7 @@ export const TimeExtensionStep = () => {
   const proposedProjectHeading = getContent(x => x.pages.pcrTimeExtensionStep.proposedProjectHeading);
   const saveAndContinue = getContent(x => x.pages.pcrTimeExtensionStep.saveAndContinue);
   const currentProjectEndDate = getContent(x => x.pages.pcrTimeExtensionStep.currentProjectEndDate);
+  const timeExtensionSelectLabel = getContent(x => x.pages.pcrTimeExtensionStep.timeExtensionSelectLabel);
 
   const timeExtensionDropdownOptions = React.useMemo(
     () =>
@@ -80,7 +81,7 @@ export const TimeExtensionStep = () => {
       </Section>
 
       <Section>
-        <H3>{existingProjectHeading}</H3>
+        <H3 as="h2">{existingProjectHeading}</H3>
         <Label htmlFor="existing-dates">{dateLabel}</Label>
         <P id="existing-dates">
           <ShortDateRangeFromDuration startDate={project.startDate} months={pcrItem.projectDurationSnapshot} />
@@ -99,7 +100,7 @@ export const TimeExtensionStep = () => {
         <Fieldset>
           <Legend>{proposedProjectHeading}</Legend>
           <FormGroup>
-            <Label htmlFor="time-extension">Please select a new date from the available list</Label>
+            <Label htmlFor="time-extension">{timeExtensionSelectLabel}</Label>
             <DropdownSelect
               id="time-extension"
               options={timeExtensionDropdownOptions}
@@ -118,7 +119,7 @@ export const TimeExtensionStep = () => {
               <ShortDateRangeFromDuration startDate={project.startDate} months={newProjectDuration} />
             </P>
 
-            <Label htmlFor="proposed-duration">{dateLabel}</Label>
+            <Label htmlFor="proposed-duration">{durationLabel}</Label>
             <P id="proposed-duration">
               <Months months={newProjectDuration} />
             </P>
