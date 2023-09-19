@@ -150,7 +150,7 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
     return mapToPCRItemStatus(node?.Acc_MarkedasComplete__c?.value ?? "");
   },
   statusName(node) {
-    return node?.Acc_Status__c?.value || "Unknown";
+    return node?.Acc_MarkedasComplete__c?.value || "Unknown";
   },
   type(node) {
     return mapToPcrItemType(node?.RecordType?.Name?.value ?? "Unknown");

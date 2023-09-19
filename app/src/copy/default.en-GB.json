@@ -815,6 +815,7 @@
       "existingProjectHeading": "Existing project details",
       "dateLabel": "Start and end date",
       "durationLabel": "Duration",
+      "timeExtensionSelectLabel": "Please select a new date from the available list",
       "proposedProjectHeading": "Proposed project details",
       "changeProjectDurationHint": "Use this page to request an extension or reduction to your project’s duration. Values are set by month.\n\nSelect the new project end date you require.\nProject durations cannot be reduced beyond the current month.",
       "loadingTimeExtensionOptions": "Loading duration options...",

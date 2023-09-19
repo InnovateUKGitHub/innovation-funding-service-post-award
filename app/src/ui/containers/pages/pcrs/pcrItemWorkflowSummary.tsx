@@ -142,7 +142,7 @@ const WorkflowItemForm = ({ allowSubmit }: { allowSubmit: boolean }) => {
         onSave({
           data: {
             status:
-              data.itemStatus === "mark-as-complete"
+              data.itemStatus === "marked-as-complete"
                 ? PCRItemStatus.Complete
                 : pcrItem.status === PCRItemStatus.ToDo
                 ? PCRItemStatus.Incomplete
@@ -170,7 +170,7 @@ const WorkflowItemForm = ({ allowSubmit }: { allowSubmit: boolean }) => {
         <Legend>{getContent(x => x.pages.pcrWorkflowSummary.markAsCompleteLabel)}</Legend>
         <FormGroup>
           <CheckboxList name="itemStatus" register={register} disabled={isFetching}>
-            <Checkbox id="mark-as-complete" label={getContent(x => x.pages.pcrWorkflowSummary.agreeToChangeLabel)} />
+            <Checkbox id="marked-as-complete" label={getContent(x => x.pages.pcrWorkflowSummary.agreeToChangeLabel)} />
           </CheckboxList>
         </FormGroup>
 
