@@ -98,7 +98,8 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
   const validationErrors = useRhfErrors(formState.errors);
   const commentsCharacterCount = watch("comments").length;
 
-  const disabled = impMgmtPcfNotSubmittedForFinalClaim || isFetching;
+  const disabled =
+    impMgmtPcfNotSubmittedForFinalClaim || isFetching || (data.claim.isIarRequired && !data.documents.length);
 
   return (
     <Page
