@@ -1256,3 +1256,67 @@ export const uploadProjectCompletionForm = () => {
   cy.button("Upload documents").click();
   cy.validationNotification("has been uploaded.");
 };
+
+export const navigateToClaimsTile = () => {
+  cy.selectTile("Claims");
+  cy.get("a").contains("Edit").click();
+  cy.heading("Costs to be claimed");
+};
+
+export const finalClaimGuidance = () => {
+  cy.paragraph("You need to complete our short survey about the project before we can make your final payment:");
+  ["Complete our survey.", "Download a copy of your completed survey and upload it on this page."].forEach(task => {
+    cy.list(task);
+  });
+  cy.paragraph(
+    "An Independent Accountant's Report (IAR) must be uploaded to support the claim before it can be submitted to Innovate UK. If your total grant value is £50,000 or under, a Statement of Expenditure (SoE) may be sufficient. Your monitoring officer will be able to confirm which document is needed.",
+  );
+  cy.paragraph(
+    "Upload your IAR or SoE in the claim documents, selecting the IAR document type (for both) and then proceed to submit your claim.",
+  );
+};
+
+export const editClaimDocUploadRandomFiles = () => {
+  cy.get("a").contains("Edit claim documents").click();
+  cy.heading("Claim documents");
+  [
+    "Invoice",
+    "Claim evidence",
+    "Project completion form",
+    "Statement of expenditure",
+    "LMC documents",
+    "Schedule 3",
+  ].forEach(fileType => {
+    cy.fileInput(testFile);
+    cy.get("#description").select(fileType);
+    cy.button("Upload documents").click();
+    cy.validationNotification("Your document has been uploaded.");
+  });
+};
+
+export const editClaimDocUploadIAR = () => {
+  cy.get("a").contains("Edit claim documents").click();
+  cy.heading("Claim documents");
+  cy.fileInput(testFile);
+  cy.get("#description").select("Independent accountant’s report");
+  cy.button("Upload documents").click();
+  cy.validationNotification("Your document has been uploaded.");
+};
+
+export const submitButtonEnabled = () => {
+  cy.get("a").contains("Continue to summary").click();
+  cy.heading("Claim summary");
+  cy.button("Submit claim").should("not.have.attr", "disabled");
+};
+
+export const submitButtonDisabled = () => {
+  cy.get("a").contains("Continue to summary").click();
+  cy.heading("Claim summary");
+  cy.button("Submit claim").should("have.attr", "disabled");
+};
+
+export const removeIAR = () => {
+  cy.backLink("Back to claim documents").click();
+  cy.heading("Claim documents");
+  fileTidyUp("Neil O'Reilly");
+};
