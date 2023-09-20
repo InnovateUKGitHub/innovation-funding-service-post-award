@@ -1333,8 +1333,8 @@
     "multiplePartnerFinancialVirement": "Reallocate project costs",
     "scopeChange": "Change project scope",
     "timeExtension": "Change project duration",
-    "loanDrawdownChange": "Loan drawdown change",
-    "loanDrawdownExtension": "Change loans duration"
+    "loanDrawdownChange": "Loan Drawdown Change",
+    "loanDrawdownExtension": "Change Loans Duration"
   },
   "pcrAddPartnerLabels": {
     "roleHeading": "Project role",
