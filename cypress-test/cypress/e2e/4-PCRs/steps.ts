@@ -1338,3 +1338,48 @@ export const accessPcrCheckForComments = () => {
   cy.heading("Request");
   cy.get("textarea").contains(standardComments);
 };
+
+export const backOutToProjOverview = () => {
+  cy.backLink("Back to project change requests").click();
+  cy.heading("Start a new request");
+  cy.backLink("Back to project").click();
+  cy.heading("Project overview");
+};
+
+export const switchToFc = () => {
+  let fcEmail = "contact77@test.co.uk";
+  cy.wait(500);
+  cy.switchUserTo(fcEmail);
+  cy.reload();
+  cy.get("#user-switcher-manual-input").should("have.value", fcEmail);
+};
+
+export const correctPcrHeaders = () => {
+  let col = 1;
+  ["Request number", "Types", "Started", "Status", "Last updated"].forEach(heading => {
+    cy.get("tr")
+      .eq(0)
+      .within(() => {
+        cy.get(`th:nth-child(${col})`).contains(heading);
+        col++;
+      });
+  });
+};
+
+export const existingPcrTable = () => {
+  [
+    ["1421", "Remove a partner", "27 Feb 2023", "Submitted to Monitoring Officer", "27 Feb 2023"],
+    ["1419", "Remove a partner", "27 Feb 2023", "Queried by Monitoring Officer", "27 Feb 2023"],
+  ].forEach(([reqNo, types, started, status, lastUpdated], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get(`td:nth-child(1)`).contains(reqNo);
+        cy.get(`td:nth-child(2)`).contains(types);
+        cy.get(`td:nth-child(3)`).contains(started);
+        cy.get(`td:nth-child(4)`).contains(status);
+        cy.get(`td:nth-child(5)`).contains(lastUpdated);
+        index++;
+      });
+  });
+};

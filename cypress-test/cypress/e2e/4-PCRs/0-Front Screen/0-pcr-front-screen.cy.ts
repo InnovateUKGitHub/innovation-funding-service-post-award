@@ -6,11 +6,21 @@ import {
   pcrCheckBoxes,
   shouldShowAllAccordion,
   shouldShowProjectTitle,
+  backOutToProjOverview,
+  switchToFc,
+  correctPcrHeaders,
+  existingPcrTable,
 } from ".././steps";
+const pmEmail = "james.black@euimeabs.test";
 
 describe("PCR > Project Change Request front page", () => {
   before(() => {
-    visitApp({ path: "/projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: pmEmail });
+    cy.navigateToProject("328407");
+  });
+
+  it("Should access the Project change request tile", () => {
+    cy.selectTile("Project change requests");
   });
 
   it("Should have a back option", () => {
@@ -65,5 +75,34 @@ describe("PCR > Project Change Request front page", () => {
 
   it("Has a Cancel button", () => {
     cy.get("a.govuk-button--secondary").contains("Cancel");
+  });
+
+  it("Should back out to the Project overview.", backOutToProjOverview);
+
+  it("Should switch user to FC", switchToFc);
+
+  it("Should access PCRs as FC", () => {
+    cy.selectTile("Project change requests");
+    cy.heading("Project change requests");
+  });
+
+  it("Should have correct PCR table headers", correctPcrHeaders);
+
+  it("Should have a number of existing PCRs", existingPcrTable);
+
+  it("Should have no buttons next to the PCRs for an FC", () => {
+    ["Edit", "View"].forEach(button => {
+      cy.get("a").contains(button).should("not.exist");
+    });
+  });
+
+  it("Should have a 'Past requests' section", () => {
+    cy.get(`[aria-expanded="false"]`);
+    cy.button("Past requests").click();
+  });
+
+  it("Should display the accordion as open", () => {
+    cy.get(`[aria-expanded="true"]`);
+    cy.paragraph("You have no past requests.");
   });
 });
