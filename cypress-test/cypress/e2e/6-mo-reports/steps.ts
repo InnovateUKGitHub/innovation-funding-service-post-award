@@ -705,3 +705,15 @@ export const editSection5WithCorrectCopy = () => {
   cy.get("textarea").type("{moveToEnd}{backSpace}");
   cy.paragraph("You have 32000 characters");
 };
+
+export const saveCommentsAndReturn = () => {
+  cy.get("textarea").clear().type(standardComments);
+  cy.button("Save and return to project").click();
+  cy.heading("Monitoring reports");
+};
+
+export const checkCommentsSaved = () => {
+  cy.get("a").contains("Edit").click();
+  cy.heading("Monitoring report");
+  cy.get("textarea").should("have.text", standardComments);
+};
