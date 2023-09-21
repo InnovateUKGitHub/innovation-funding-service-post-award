@@ -601,6 +601,142 @@ exports[`Storyshots GOV.UK Components/Footer Primary 1`] = `
 </div>
 `;
 
+exports[`Storyshots GOV.UK Components/Form/Validation Error Bad Input 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-form-group"
+  >
+    <label
+      className="govuk-label"
+      htmlFor="input"
+    >
+      This is an input
+    </label>
+    <p
+      className="govuk-error-message"
+      id="Val:0"
+      style={
+        {
+          "textAlign": "left",
+        }
+      }
+    >
+      This message should appear
+    </p>
+    <div
+      className="govuk-input__wrapper"
+    >
+      <input
+        className="govuk-input govuk-!-width-one-third"
+        id="input"
+        type="text"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Form/Validation Error Good Input 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-form-group"
+  >
+    <label
+      className="govuk-label"
+      htmlFor="input"
+    >
+      This is an input
+    </label>
+    <div
+      className="govuk-input__wrapper"
+    >
+      <input
+        className="govuk-input govuk-!-width-one-third"
+        id="input"
+        type="text"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots GOV.UK Components/Form/Validation Error Very Bad Story 1`] = `
+<div
+  className="govuk-template__body"
+  id="root"
+>
+  <div
+    className="govuk-form-group"
+  >
+    <label
+      className="govuk-label"
+      htmlFor="input"
+    >
+      This is an input
+    </label>
+    <p
+      className="govuk-error-message"
+      id="Val:0"
+      style={
+        {
+          "textAlign": "left",
+        }
+      }
+    >
+      Child Validation Error 1
+    </p>
+    <p
+      className="govuk-error-message"
+      id="Val:0"
+      style={
+        {
+          "textAlign": "left",
+        }
+      }
+    >
+      Child Validation Error 2
+    </p>
+    <p
+      className="govuk-error-message"
+      id="Val:0"
+      style={
+        {
+          "textAlign": "left",
+        }
+      }
+    >
+      List Validation Error
+    </p>
+    <p
+      className="govuk-error-message"
+      id="Val:0"
+      style={
+        {
+          "textAlign": "left",
+        }
+      }
+    >
+      List Validation Error
+    </p>
+    <div
+      className="govuk-input__wrapper"
+    >
+      <input
+        className="govuk-input govuk-!-width-one-third"
+        id="input"
+        type="text"
+      />
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots GOV.UK Components/Tag Blue 1`] = `
 <div
   className="govuk-template__body"
@@ -892,12 +1028,9 @@ exports[`Storyshots GOV.UK Patterns/Task list Validation 1`] = `
       <ul
         className="govuk-list govuk-list--bullet app-task-list__items"
       >
-        <a
-          aria-hidden="true"
-          id="Val:0"
-        />
         <p
           className="govuk-error-message"
+          id="Val:0"
           style={
             {
               "textAlign": "left",
