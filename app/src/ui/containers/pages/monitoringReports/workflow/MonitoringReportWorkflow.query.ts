@@ -82,13 +82,13 @@ export const monitoringReportWorkflowQuery = graphql`
                 Acc_ProjectPeriodNumber__c {
                   value
                 }
-                Acc_AddComments__c {
-                  value
-                }
                 Acc_PeriodStartDate__c {
                   value
                 }
                 Acc_PeriodEndDate__c {
+                  value
+                }
+                Acc_AddComments__c {
                   value
                 }
               }
