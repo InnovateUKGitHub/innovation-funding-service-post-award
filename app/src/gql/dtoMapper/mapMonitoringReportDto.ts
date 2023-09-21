@@ -212,6 +212,7 @@ export function mapToFullMonitoringReport<
     throw new Error("statusName is a required field for fetching the full monitoring report");
   }
   const headerGql = edges && edges.length > 1 && edges.find(x => x?.node?.RecordType?.Name?.value === HEADER);
+
   if (!headerGql) throw new Error("Invalid Monitoring Report Request - no matching Header");
   const header = mapToMonitoringReportDto(headerGql.node, pickList);
 

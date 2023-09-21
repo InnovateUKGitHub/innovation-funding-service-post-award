@@ -58,6 +58,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
   const [fetchKey, setFetchKey] = useState(0);
 
   const { project, report, statusChanges } = useMonitoringReportWorkflowQuery(props.projectId, props.id, fetchKey);
+
   const { getContent } = useContent();
 
   useScrollToTopSmoothly([props.step]);

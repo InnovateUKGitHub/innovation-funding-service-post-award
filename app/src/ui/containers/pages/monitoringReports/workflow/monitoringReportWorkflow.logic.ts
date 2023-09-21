@@ -46,9 +46,9 @@ export const useMonitoringReportWorkflowQuery = (
       "startDate",
       "statusName",
       "projectId",
+      "questions",
       "status",
       "addComments",
-      "questions",
     ],
     { questions },
   );
@@ -68,7 +68,12 @@ export type FormValues = {
   button_submit: "save-continue" | "save-return" | "submit" | "saveAndReturnToSummary";
 };
 
-const hasFormChanged = (data: FormValues, questions: MonitoringReportQuestionDto[]) =>
+const hasFormChanged = (
+  data: FormValues,
+  questions: MonitoringReportQuestionDto[],
+  addComments: string | null | undefined,
+) =>
+  data?.addComments !== addComments ||
   questions.some(
     (question, i) =>
       (question.comments ?? "") !== (data.questions[i].comments ?? "") ||
@@ -86,11 +91,10 @@ export const useOnMonitoringReportUpdateWorkflow = (
     | "lastUpdated"
     | "periodId"
     | "startDate"
-    | "statusName"
     | "projectId"
+    | "questions"
     | "status"
     | "addComments"
-    | "questions"
   >,
   workflow: MonitoringReportWorkflowDef,
   routes: IRoutes,
@@ -100,10 +104,11 @@ export const useOnMonitoringReportUpdateWorkflow = (
   return useOnUpdate<FormValues, Pick<MonitoringReportDto, "periodId" | "projectId" | "status" | "headerId">>({
     req: data => {
       const isFinalSubmit = data["button_submit"] === "submit";
-      if (isFinalSubmit || hasFormChanged(data, report.questions)) {
+      if (isFinalSubmit || hasFormChanged(data, report.questions, report.addComments)) {
         return clientsideApiClient.monitoringReports.saveMonitoringReport({
           monitoringReportDto: {
             ...report,
+            addComments: data.addComments || report.addComments,
             questions: report.questions.map((question, index) => Object.assign({}, question, data?.questions?.[index])),
           },
           submit: isFinalSubmit,
@@ -122,7 +127,7 @@ export const useOnMonitoringReportUpdateWorkflow = (
         routes,
         workflow,
       });
-      if (hasFormChanged(data, report.questions)) {
+      if (hasFormChanged(data, report.questions, report.addComments)) {
         // fetch new gql data if there is a change made
         setFetchKey(s => s + 1);
       }
