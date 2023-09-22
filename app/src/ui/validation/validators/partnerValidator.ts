@@ -114,8 +114,8 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     Validation.isTrue(
       this,
       this.model.partnerStatus !== PartnerStatus.Active || !!this.model.postcode?.length,
-      this.getContent(x => x.forms.partnerDetailsEdit["new-postcode"].errors.too_small),
-      "new-postcode",
+      this.getContent(x => x.forms.partnerDetailsEdit["postcode"].errors.too_small),
+      "postcode",
     ),
   );
 
@@ -126,8 +126,8 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         ? Validation.isTrue(
             this,
             this.model.partnerStatus !== PartnerStatus.Active || !!this.model.postcode?.length,
-            this.getContent(x => x.forms.partnerDetailsEdit["new-postcode"].errors.too_small),
-            "new-postcode",
+            this.getContent(x => x.forms.partnerDetailsEdit["postcode"].errors.too_small),
+            "postcode",
           )
         : Validation.valid(this),
     () =>
@@ -135,8 +135,8 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         this,
         this.model.postcode,
         10,
-        this.getContent(x => x.forms.partnerDetailsEdit["new-postcode"].errors.too_big({ count: 10 })),
-        "new-postcode",
+        this.getContent(x => x.forms.partnerDetailsEdit["postcode"].errors.too_big({ count: 10 })),
+        "postcode",
       ),
   );
 

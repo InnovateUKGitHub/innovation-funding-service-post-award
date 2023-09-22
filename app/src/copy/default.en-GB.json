@@ -1788,7 +1788,7 @@
       "invalid_literal": "A Zod 'z.literal(\"\")' was not passed into this form."
     },
     "partnerDetailsEdit": {
-      "new-postcode": {
+      "postcode": {
         "errors": {
           "too_small": "You must provide your project location postcode.",
           "too_big": "Your location entry must be no more than {{ count }} characters."

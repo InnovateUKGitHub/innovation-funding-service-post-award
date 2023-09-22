@@ -24,7 +24,7 @@ export class PartnerDetailsEditFormHandler extends StandardFormHandlerBase<Partn
     body: IFormBody,
   ): Promise<PartnerDto> {
     const dto = await context.runQuery(new GetByIdQuery(params.partnerId));
-    const newPostcode = "new-postcode";
+    const newPostcode = "postcode";
     dto.postcode = body[newPostcode];
 
     return dto;

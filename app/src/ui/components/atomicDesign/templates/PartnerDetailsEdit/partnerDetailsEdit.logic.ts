@@ -33,7 +33,7 @@ export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: Part
 };
 
 export type FormValues = {
-  "new-postcode": string;
+  postcode: string;
   partnerStatus: PartnerStatus;
 };
 
@@ -48,7 +48,12 @@ export const useOnUpdatePartnerDetails = (
     req: data =>
       clientsideApiClient.partners.updatePartner({
         partnerId,
-        partnerDto: { ...partner, ...data, postcode: data["new-postcode"], id: partnerId, projectId },
+        partnerDto: {
+          ...partner,
+          postcode: data.postcode,
+          id: partnerId,
+          projectId,
+        },
       }),
     onSuccess: () => navigate(navigateTo),
   });

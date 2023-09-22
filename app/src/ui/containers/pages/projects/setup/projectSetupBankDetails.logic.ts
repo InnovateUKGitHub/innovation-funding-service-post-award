@@ -94,8 +94,8 @@ export const useOnUpdateProjectSetupBankDetails = (
         },
         validateBankDetails: true,
       }),
-    onSuccess: (_, resp) => {
-      if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
+    onSuccess: (_, response) => {
+      if (response.bankCheckStatus === BankCheckStatus.ValidationFailed) {
         navigate(
           routes.failedBankCheckConfirmation.getLink({
             projectId,

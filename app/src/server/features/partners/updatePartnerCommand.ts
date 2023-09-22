@@ -22,6 +22,7 @@ import { CommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { isBoolean } from "@framework/util/booleanHelper";
 import { isNumber } from "@framework/util/numberHelper";
+import { merge } from "lodash";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
 export class UpdatePartnerCommand extends CommandBase<boolean> {
@@ -51,32 +52,36 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id),
     );
 
+    const mergedPartner = merge(originalDto, this.partner);
+
     this.validateRequest(originalDto, partnerDocuments);
 
     const update: PartnerUpdatable = {
       Id: this.partner.id,
     };
 
-    if (this.partner.partnerStatus === PartnerStatus.Pending) {
-      if (this.partner.bankCheckStatus === BankCheckStatus.NotValidated && this.validateBankDetails) {
+    if (mergedPartner.partnerStatus === PartnerStatus.Pending) {
+      if (mergedPartner.bankCheckStatus === BankCheckStatus.NotValidated && this.validateBankDetails) {
         await this.bankCheckValidate(originalDto, partnerDocuments, update, context);
       }
 
-      if (this.partner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.validateBankDetails) {
+      if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.validateBankDetails) {
         await this.updateBankDetails(update);
       }
 
-      if (this.partner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.verifyBankDetails) {
+      if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.verifyBankDetails) {
         await this.bankCheckVerify(update, context);
       }
     }
 
     await context.repositories.partners.update({
       ...update,
-      Acc_Postcode__c: this.partner.postcode ?? undefined,
-      Acc_NewForecastNeeded__c: isBoolean(this.partner.newForecastNeeded) ? this.partner.newForecastNeeded : undefined,
-      Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(this.partner.partnerStatus),
-      Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(this.partner.bankDetailsTaskStatus),
+      Acc_Postcode__c: mergedPartner.postcode ?? undefined,
+      Acc_NewForecastNeeded__c: isBoolean(mergedPartner.newForecastNeeded)
+        ? mergedPartner.newForecastNeeded
+        : undefined,
+      Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(mergedPartner.partnerStatus),
+      Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(mergedPartner.bankDetailsTaskStatus),
     });
 
     return true;
@@ -100,7 +105,8 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     update: PartnerUpdatable,
     context: IContext,
   ) {
-    const { bankDetails } = this.partner;
+    const mergedPartner = merge(originalDto, this.partner);
+    const { bankDetails } = mergedPartner;
     if (!bankDetails.sortCode || !bankDetails.accountNumber) {
       throw new BadRequestError("Sort code or account number not provided");
     }
@@ -110,8 +116,10 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       bankDetails.accountNumber,
     );
 
+    console.log("update partner command bank check validate result", ValidationResult);
+
     if (!ValidationResult.checkPassed) {
-      if (this.partner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
+      if (mergedPartner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
         throw new ValidationError(
           new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
             showValidationErrors: true,

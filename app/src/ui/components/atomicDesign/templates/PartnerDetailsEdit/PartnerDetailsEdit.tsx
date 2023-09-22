@@ -64,7 +64,7 @@ export function PartnerDetailsEditComponent({
 
   const { register, handleSubmit, formState } = useForm<FormValues>({
     defaultValues: {
-      "new-postcode": partner.postcode ?? "",
+      postcode: partner.postcode ?? "",
       partnerStatus: partner.partnerStatus,
     },
     resolver: zodResolver(getZodResolver(isSetup, partner.postcodeStatus), { errorMap: partnerDetailsEditErrorMap }),
@@ -74,7 +74,7 @@ export function PartnerDetailsEditComponent({
 
   const validatorErrors = useRhfErrors<FormValues>(formState.errors);
 
-  const postcodeError = validatorErrors?.["new-postcode"] as RhfErrors;
+  const postcodeError = validatorErrors?.postcode as RhfErrors;
   return (
     <Page
       backLink={backLink}
@@ -95,7 +95,7 @@ export function PartnerDetailsEditComponent({
             </FormGroup>
           )}
           <FormGroup hasError={!!postcodeError}>
-            <Label htmlFor="new-postcode">{getContent(x => x.pages.partnerDetailsEdit.labelNewPostcode)}</Label>
+            <Label htmlFor="postcode">{getContent(x => x.pages.partnerDetailsEdit.labelNewPostcode)}</Label>
             <Hint id="hint-for-new-postcode" className="govuk-hint">
               {getContent(x => x.pages.partnerDetailsEdit.hintNewPostcode)}
             </Hint>
@@ -103,10 +103,10 @@ export function PartnerDetailsEditComponent({
             <TextInput
               defaultValue={partner.postcode ?? ""}
               inputWidth="one-quarter"
-              id="new-postcode"
+              id="postcode"
               hasError={!!postcodeError}
               aria-describedby="hint-for-new-postcode"
-              {...register("new-postcode")}
+              {...register("postcode")}
             ></TextInput>
           </FormGroup>
         </Fieldset>

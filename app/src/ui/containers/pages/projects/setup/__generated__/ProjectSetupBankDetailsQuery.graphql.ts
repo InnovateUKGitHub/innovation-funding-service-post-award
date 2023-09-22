@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<924f2042052dfea3e3d1d21914ed906b>>
+ * @generated SignedSource<<5a4ca689a30ff9d5863f999426c3014c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -31,6 +31,9 @@ export type ProjectSetupBankDetailsQuery$data = {
                         readonly value: string | null;
                       } | null;
                     } | null;
+                    readonly Acc_AccountNumber__c: {
+                      readonly value: string | null;
+                    } | null;
                     readonly Acc_AddressBuildingName__c: {
                       readonly value: string | null;
                     } | null;
@@ -54,12 +57,6 @@ export type ProjectSetupBankDetailsQuery$data = {
                       readonly label: string | null;
                       readonly value: string | null;
                     } | null;
-                    readonly Acc_FirstName__c: {
-                      readonly value: string | null;
-                    } | null;
-                    readonly Acc_LastName__c: {
-                      readonly value: string | null;
-                    } | null;
                     readonly Acc_ParticipantStatus__c: {
                       readonly value: string | null;
                     } | null;
@@ -67,6 +64,9 @@ export type ProjectSetupBankDetailsQuery$data = {
                       readonly value: string | null;
                     } | null;
                     readonly Acc_RegistrationNumber__c: {
+                      readonly value: string | null;
+                    } | null;
+                    readonly Acc_SortCode__c: {
                       readonly value: string | null;
                     } | null;
                     readonly Id: string;
@@ -334,26 +334,6 @@ v6 = [
                                         "args": null,
                                         "concreteType": "StringValue",
                                         "kind": "LinkedField",
-                                        "name": "Acc_FirstName__c",
-                                        "plural": false,
-                                        "selections": (v4/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "StringValue",
-                                        "kind": "LinkedField",
-                                        "name": "Acc_LastName__c",
-                                        "plural": false,
-                                        "selections": (v4/*: any*/),
-                                        "storageKey": null
-                                      },
-                                      {
-                                        "alias": null,
-                                        "args": null,
-                                        "concreteType": "StringValue",
-                                        "kind": "LinkedField",
                                         "name": "Acc_AddressPostcode__c",
                                         "plural": false,
                                         "selections": (v4/*: any*/),
@@ -395,6 +375,26 @@ v6 = [
                                         "concreteType": "StringValue",
                                         "kind": "LinkedField",
                                         "name": "Acc_AddressTown__c",
+                                        "plural": false,
+                                        "selections": (v4/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "EncryptedStringValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_AccountNumber__c",
+                                        "plural": false,
+                                        "selections": (v4/*: any*/),
+                                        "storageKey": null
+                                      },
+                                      {
+                                        "alias": null,
+                                        "args": null,
+                                        "concreteType": "EncryptedStringValue",
+                                        "kind": "LinkedField",
+                                        "name": "Acc_SortCode__c",
                                         "plural": false,
                                         "selections": (v4/*: any*/),
                                         "storageKey": null
@@ -451,16 +451,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "d10d1a7f7aed97ef4ae6669956398812",
+    "cacheID": "21361dd0b1583d055eb2d76a5ebd346d",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupBankDetailsQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupBankDetailsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectId__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_RegistrationNumber__c {\n                      value\n                    }\n                    Acc_FirstName__c {\n                      value\n                    }\n                    Acc_LastName__c {\n                      value\n                    }\n                    Acc_AddressPostcode__c {\n                      value\n                    }\n                    Acc_AddressStreet__c {\n                      value\n                    }\n                    Acc_AddressBuildingName__c {\n                      value\n                    }\n                    Acc_AddressLocality__c {\n                      value\n                    }\n                    Acc_AddressTown__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupBankDetailsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectId__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_BankCheckState__c {\n                      value\n                      label\n                    }\n                    Acc_BankCheckCompleted__c {\n                      value\n                      label\n                    }\n                    Acc_RegistrationNumber__c {\n                      value\n                    }\n                    Acc_AddressPostcode__c {\n                      value\n                    }\n                    Acc_AddressStreet__c {\n                      value\n                    }\n                    Acc_AddressBuildingName__c {\n                      value\n                    }\n                    Acc_AddressLocality__c {\n                      value\n                    }\n                    Acc_AddressTown__c {\n                      value\n                    }\n                    Acc_AccountNumber__c {\n                      value\n                    }\n                    Acc_SortCode__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f5ce2e3cea976ab3de68064293334452";
+(node as any).hash = "4ba336d3b7ce23063f07ad8aa0862af7";
 
 export default node;

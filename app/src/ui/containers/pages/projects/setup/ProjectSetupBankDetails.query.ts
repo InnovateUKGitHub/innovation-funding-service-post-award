@@ -41,12 +41,6 @@ export const projectSetupBankDetailsQuery = graphql`
                       Acc_RegistrationNumber__c {
                         value
                       }
-                      Acc_FirstName__c {
-                        value
-                      }
-                      Acc_LastName__c {
-                        value
-                      }
                       Acc_AddressPostcode__c {
                         value
                       }
@@ -60,6 +54,12 @@ export const projectSetupBankDetailsQuery = graphql`
                         value
                       }
                       Acc_AddressTown__c {
+                        value
+                      }
+                      Acc_AccountNumber__c {
+                        value
+                      }
+                      Acc_SortCode__c {
                         value
                       }
                     }

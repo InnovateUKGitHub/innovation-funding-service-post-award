@@ -249,10 +249,10 @@ export const editEachPartner = () => {
       cy.getByQA("partner-details").contains(partnerName),
       cy.get("a").contains("Edit").click(),
       cy
-        .get("#new-postcode")
+        .get("#postcode")
         .clear()
         .type("SN" + index),
-      cy.get("#hint-for-new-postcode").contains("Enter the postcode."),
+      cy.get("#hint-for-postcode").contains("Enter the postcode."),
       cy.submitButton("Save and return to partner information").click(),
       cy.getByQA("partner-name"),
       cy.backLink("Back to project details").click();
@@ -273,7 +273,7 @@ export const clearAndRevertPostodes = () => {
     cy.getByQA("partner-information").contains(partnerName).click(),
       cy.getByQA("partner-details").contains(partnerName),
       cy.get("a").contains("Edit").click(),
-      cy.get("#new-postcode").clear().type("SN5"),
+      cy.get("#postcode").clear().type("SN5"),
       cy.submitButton("Save and return to partner information").click(),
       cy.getByQA("partner-name"),
       cy.backLink("Back to project details").click();

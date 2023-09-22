@@ -20,7 +20,7 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
-import { projectSetupBankDetailsSchema, projectSetupBankDetailsErrorMap } from "./projectSetupBankDetails.zod";
+import { getProjectSetupBankDetailsSchema, projectSetupBankDetailsErrorMap } from "./projectSetupBankDetails.zod";
 import {
   useOnUpdateProjectSetupBankDetails,
   useProjectSetupBankDetailsQuery,
@@ -49,7 +49,9 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
       accountTownOrCity: partner.bankDetails.address.accountTownOrCity ?? "",
       accountPostcode: partner.bankDetails.address.accountPostcode ?? "",
     },
-    resolver: zodResolver(projectSetupBankDetailsSchema, { errorMap: projectSetupBankDetailsErrorMap }),
+    resolver: zodResolver(getProjectSetupBankDetailsSchema(partner.bankCheckStatus), {
+      errorMap: projectSetupBankDetailsErrorMap,
+    }),
   });
 
   const { onUpdate, apiError } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, partner);
@@ -167,8 +169,8 @@ const SortCode = ({
   return (
     <FormGroup>
       <Label htmlFor="sortCode">{c(x => x.partnerLabels.sortCode)}</Label>
-      <P>{partner.bankDetails.sortCode ?? ""}</P>
-      <TextInput id="sortCode" name="sortCode" inputWidth="one-third"></TextInput>
+      <P>{partner.bankDetails.sortCode}</P>
+      <input type="hidden" id="sortCode" name="sortCode" />
     </FormGroup>
   );
 };
@@ -198,8 +200,8 @@ const AccountNumber = ({
   return (
     <FormGroup>
       <Label htmlFor="accountNumber">{c(x => x.partnerLabels.accountNumber)}</Label>
-      <P>{partner.bankDetails.accountNumber ?? ""}</P>
-      <TextInput id="accountNumber" name="accountNumber" inputWidth="one-third"></TextInput>
+      <P>{partner.bankDetails.accountNumber}</P>
+      <input type="hidden" id="accountNumber" name="accountNumber" />
     </FormGroup>
   );
 };
