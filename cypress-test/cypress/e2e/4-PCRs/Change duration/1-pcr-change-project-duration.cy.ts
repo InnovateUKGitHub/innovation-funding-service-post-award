@@ -59,7 +59,7 @@ describe("PCR >  Change project duration > Create PCR", () => {
   it("Should contain existing project details heading and information", existingProjectDetails);
 
   it("Should contain Proposed project details", () => {
-    cy.get("h2").contains("Proposed project details");
+    cy.get("legend").contains("Proposed project details");
     cy.getByLabel("Please select a new date from the available list");
   });
 
