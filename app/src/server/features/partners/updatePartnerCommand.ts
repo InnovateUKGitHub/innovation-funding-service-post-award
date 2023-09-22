@@ -9,7 +9,7 @@ import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummaryQuery";
-import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";
+import { BankCheckCondition, MatchFlag } from "@framework/types/bankCheck";
 import { GetBankVerificationDetailsByIdQuery } from "./getBankVerificationDetailsByIdQuery";
 import { PartnerStatus, BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
@@ -21,7 +21,7 @@ import { InActiveProjectError, BadRequestError, ValidationError } from "../commo
 import { CommandBase } from "../common/commandBase";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { isBoolean } from "@framework/util/booleanHelper";
-import { isNumber } from "@framework/util/numberHelper";
+import { isNumber, parseNumber } from "@framework/util/numberHelper";
 import { merge } from "lodash";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
@@ -118,7 +118,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       throw new BadRequestError("Sort code or account number not provided");
     }
 
-    const { ValidationResult } = await context.resources.bankCheckService.validate(
+    const ValidationResult = await context.resources.bankCheckService.validate(
       bankDetails.sortCode,
       bankDetails.accountNumber,
     );
@@ -144,9 +144,10 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     update.Acc_SortCode__c = bankDetails.sortCode;
 
     if (ValidationResult.conditions) {
-      update.Acc_ValidationConditionsSeverity__c = ValidationResult.conditions.severity;
-      update.Acc_ValidationConditionsCode__c = ValidationResult.conditions.code?.toString() || "";
-      update.Acc_ValidationConditionsDesc__c = ValidationResult.conditions.description;
+      const { severity, code, description } = this.collapseConditions(ValidationResult.conditions);
+      update.Acc_ValidationConditionsSeverity__c = severity;
+      update.Acc_ValidationConditionsCode__c = code;
+      update.Acc_ValidationConditionsDesc__c = description;
     }
 
     this.updateBankDetails(update);
@@ -177,7 +178,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     const { bankDetails } = unmaskedPartnerDto;
 
     // Run a verification against the bank details that we have re-obtained from Salesforce.
-    const bankCheckVerifyResult = await context.resources.bankCheckService.verify({
+    const VerificationResult = await context.resources.bankCheckService.verify({
       companyName: this.mergedPartner.name,
       registrationNumber: bankDetails.companyNumber ?? "",
       sortcode: bankDetails.sortCode ?? "",
@@ -196,9 +197,12 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
         postcode: bankDetails.address?.accountPostcode ?? "",
       },
     });
-    const { VerificationResult } = bankCheckVerifyResult;
 
-    if (!this.validateVerifyResponse(VerificationResult, context)) {
+    const addressScore = parseNumber(VerificationResult.addressScore);
+    const companyNameScore = parseNumber(VerificationResult.companyNameScore);
+    const personalDetailsScore = parseNumber(VerificationResult.personalDetailsScore);
+
+    if (!this.validateVerifyResponse(addressScore, companyNameScore, VerificationResult.regNumberScore, context)) {
       // If we have failed the test, mark the verification as failed.
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationFailed);
     } else {
@@ -208,31 +212,37 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     }
 
     // Save the Experian verification score to Salesforce
-    update.Acc_AddressScore__c = VerificationResult.addressScore ?? undefined;
-    update.Acc_CompanyNameScore__c = VerificationResult.companyNameScore ?? undefined;
-    update.Acc_PersonalDetailsScore__c = VerificationResult.personalDetailsScore ?? undefined;
+    update.Acc_AddressScore__c = addressScore ?? undefined;
+    update.Acc_CompanyNameScore__c = companyNameScore ?? undefined;
+    update.Acc_PersonalDetailsScore__c = personalDetailsScore ?? undefined;
     update.Acc_RegNumberScore__c = VerificationResult.regNumberScore ?? undefined;
 
     // Save Experian errors and warnings to Salesforce
     if (VerificationResult.conditions) {
-      update.Acc_VerificationConditionsSeverity__c = VerificationResult.conditions.severity;
-      update.Acc_VerificationConditionsCode__c = VerificationResult.conditions.code?.toString() || "";
-      update.Acc_VerificationConditionsDesc__c = VerificationResult.conditions.description;
+      const { severity, code, description } = this.collapseConditions(VerificationResult.conditions);
+      update.Acc_ValidationConditionsSeverity__c = severity;
+      update.Acc_ValidationConditionsCode__c = code;
+      update.Acc_ValidationConditionsDesc__c = description;
     }
   }
 
-  private validateVerifyResponse(verificationResult: BankCheckVerificationResultFields, context: IContext) {
+  private validateVerifyResponse(
+    addressScore: number | null,
+    companyNameScore: number | null,
+    regNumberScore: MatchFlag,
+    context: IContext,
+  ) {
     // Only checking against address and company name scores as personal details score will always fail.
     if (
-      !isNumber(verificationResult.addressScore) ||
-      verificationResult.addressScore < context.config.options.bankCheckAddressScorePass ||
-      !isNumber(verificationResult.companyNameScore) ||
-      verificationResult.companyNameScore < context.config.options.bankCheckCompanyNameScorePass
+      !isNumber(addressScore) ||
+      addressScore < context.config.options.bankCheckAddressScorePass ||
+      !isNumber(companyNameScore) ||
+      companyNameScore < context.config.options.bankCheckCompanyNameScorePass
     ) {
       return false;
     }
     if (this.partner.organisationType === "Industrial") {
-      return verificationResult.regNumberScore && verificationResult.regNumberScore === "Match";
+      return regNumberScore === "Match";
     }
     return true;
   }
@@ -254,5 +264,33 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }
+  }
+
+  private collapseConditions(conditions: BankCheckCondition[]): Record<keyof BankCheckCondition, string> {
+    const collapsedConditions: Record<keyof BankCheckCondition, string> = {
+      code: "",
+      description: "",
+      severity: "",
+    };
+
+    if (conditions && conditions.length > 0) {
+      let shouldAddComma = false;
+
+      for (const condition of conditions) {
+        if (shouldAddComma) {
+          collapsedConditions.severity += ", ";
+          collapsedConditions.code += ", ";
+          collapsedConditions.description += ", ";
+        }
+
+        collapsedConditions.severity += condition.severity;
+        collapsedConditions.code += condition.code?.toString() || "N/A";
+        collapsedConditions.description += condition.description;
+
+        shouldAddComma = true;
+      }
+    }
+
+    return collapsedConditions;
   }
 }
