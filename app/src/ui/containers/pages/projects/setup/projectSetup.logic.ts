@@ -50,7 +50,7 @@ export const useOnUpdateProjectSetup = (
     req: data =>
       clientsideApiClient.partners.updatePartner({
         partnerId,
-        partnerDto: { ...partner, ...data },
+        partnerDto: { ...partner, projectId, id: partnerId, ...data },
       }),
     onSuccess: () => navigate(navigateTo),
   });

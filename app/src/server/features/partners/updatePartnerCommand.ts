@@ -26,8 +26,10 @@ import { merge } from "lodash";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
 export class UpdatePartnerCommand extends CommandBase<boolean> {
+  private mergedPartner: PartnerDto | null = null;
+
   constructor(
-    private readonly partner: PartnerDto,
+    private readonly partner: PickAndPart<PartnerDto, "id" | "projectId">,
     private readonly validateBankDetails?: boolean,
     private readonly verifyBankDetails?: boolean,
   ) {
@@ -52,8 +54,8 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id),
     );
 
-    const mergedPartner = merge(originalDto, this.partner);
-
+    const mergedPartner: PartnerDto = merge(originalDto, this.partner);
+    this.mergedPartner = mergedPartner;
     this.validateRequest(originalDto, partnerDocuments);
 
     const update: PartnerUpdatable = {
@@ -88,7 +90,10 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   }
 
   private async updateBankDetails(update: PartnerUpdatable) {
-    const { bankDetails } = this.partner;
+    if (!this.mergedPartner) {
+      throw new Error("attempting to update bank details without bank details present");
+    }
+    const { bankDetails } = this.mergedPartner;
     update.Acc_RegistrationNumber__c = bankDetails.companyNumber ?? undefined;
     update.Acc_FirstName__c = bankDetails.firstName ?? undefined;
     update.Acc_LastName__c = bankDetails.lastName ?? undefined;
@@ -105,8 +110,10 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     update: PartnerUpdatable,
     context: IContext,
   ) {
-    const mergedPartner = merge(originalDto, this.partner);
-    const { bankDetails } = mergedPartner;
+    if (!this.mergedPartner) {
+      throw new Error("attempting to validate bank details without bank details present");
+    }
+    const { bankDetails } = this.mergedPartner;
     if (!bankDetails.sortCode || !bankDetails.accountNumber) {
       throw new BadRequestError("Sort code or account number not provided");
     }
@@ -119,9 +126,9 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     console.log("update partner command bank check validate result", ValidationResult);
 
     if (!ValidationResult.checkPassed) {
-      if (mergedPartner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
+      if (this.mergedPartner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
         throw new ValidationError(
-          new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
+          new PartnerDtoValidator(this.mergedPartner, originalDto, partnerDocuments, {
             showValidationErrors: true,
             validateBankDetails: true,
             failBankValidation: true,
@@ -164,12 +171,16 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       .asBankDetailsValidationUser()
       .runQuery(new GetBankVerificationDetailsByIdQuery(this.partner.id));
 
+    if (!this.mergedPartner) {
+      throw new Error("attempting to verify bank details without bank details present");
+    }
+
     // Grab the bank details from the unmasked partner.
     const { bankDetails } = unmaskedPartnerDto;
 
     // Run a verification against the bank details that we have re-obtained from Salesforce.
     const bankCheckVerifyResult = await context.resources.bankCheckService.verify({
-      companyName: this.partner.name,
+      companyName: this.mergedPartner.name,
       registrationNumber: bankDetails.companyNumber ?? "",
       sortcode: bankDetails.sortCode ?? "",
       accountNumber: bankDetails.accountNumber ?? "",
@@ -229,7 +240,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   }
 
   private validateRequest(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[]) {
-    if (!this.partner) {
+    if (!this.mergedPartner) {
       throw new BadRequestError("Request is missing required fields");
     }
 
@@ -237,7 +248,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       throw new BadRequestError("Cannot validate bank details for an active partner");
     }
 
-    const validationResult = new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
+    const validationResult = new PartnerDtoValidator(this.mergedPartner, originalDto, partnerDocuments, {
       showValidationErrors: true,
       validateBankDetails: this.validateBankDetails || this.verifyBankDetails,
     });

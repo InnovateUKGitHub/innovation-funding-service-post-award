@@ -77,6 +77,7 @@ export const useOnUpdateProjectSetupBankDetails = (
         partnerId,
         partnerDto: {
           ...partner,
+          projectId,
           bankDetails: {
             accountNumber: data.accountNumber,
             address: {
