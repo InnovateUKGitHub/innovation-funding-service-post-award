@@ -31,7 +31,7 @@ describe("Forecast > front page as FC", () => {
   });
 
   it("Should have forecast advice text", () => {
-    cy.paragraph(
+    cy.getByQA("forecastClaimAdvice").contains(
       "You can now amend your forecasted costs at any time (as long as the related period's claim has not yet been approved).",
     );
   });
