@@ -8,7 +8,7 @@
     "start": "npm run cypress -- open",
     "local": "cross-env TEST_URL=http://localhost:8080 npm run cypress -- open",
     "test": "node launch.js",
-    "test:local": "cross-env TEST_URL=http://localhost:8080 cross-env NODE_ENV=develop node launch.js",
+    "test:local": "cross-env TEST_URL=http://localhost:8080 node launch.js",
     "pretest": "npm run delete:reports",
     "pretest:local": "npm run delete:reports",
     "test:headed": "npm run cypress -- run --headed",
@@ -31,6 +31,7 @@
     "rimraf": "^4.1.2"
   },
   "devDependencies": {
+    "@types/node": "^20.6.5",
     "@typescript-eslint/eslint-plugin": "^5.47.0",
     "@typescript-eslint/parser": "^5.47.0",
     "cross-env": "^7.0.3",

@@ -1,13 +1,13 @@
 // @ts-check
 const cypress = require("cypress");
 const { merge } = require("mochawesome-merge");
-const marge =require("mochawesome-report-generator");
+const marge = require("mochawesome-report-generator");
 
 const config = {
   files: ["cypress/results/*.json"],
 };
 
-const browser = /localhost/.test(process.env?.NODE_ENV ?? "") ? "chrome" : "chromium";
+const browser = process.env.TEST_BROWSER ?? "chrome";
 
 cypress.run({ browser }).then(
   () => {
@@ -21,10 +21,10 @@ cypress.run({ browser }).then(
 );
 
 /**
- * 
+ *
  * combines the generated json reports into a single json file and then creates an html report from this, and puts it into
  * a `mochawesome-report.html` file
- * @param {typeof config} options 
+ * @param {typeof config} options
  * @returns {Promise<void>} create
  */
 function generateReport(options) {
