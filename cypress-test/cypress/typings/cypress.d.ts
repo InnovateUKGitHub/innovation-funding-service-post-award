@@ -83,6 +83,18 @@ declare global {
       tableHeader(name: string): Chainable<Element>;
 
       /**
+       * Gets table row with matching row name
+       */
+      getTableRow<T extends string>(name: T): Chainable<Element>;
+
+      /**
+       * Gets table cell from the header label and the row.
+       * @example
+       * getCellFromHeaderAndRow("Forecast for period", "Labour");
+       */
+      getCellFromHeaderAndRow<T extends string, U extends string>(header: T, row: U): Chainable<Element>;
+
+      /**
        * Clicks checkbox with matching label, scrolls into view and waits before checking
        */
       clickCheckBox<T extends string = string>(label: T, uncheck?: boolean): void;

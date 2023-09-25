@@ -96,6 +96,17 @@ const tableHeader = (name: string) => {
   cy.get("th").contains(name);
 };
 
+const getTableRow = <T extends string>(category: T) => {
+  cy.get("table tr").contains(category).parent();
+};
+
+const getCellFromHeaderAndRow = <T extends string, U extends string>(header: T, row: U) => {
+  cy.log(`**getCellFromHeaderAndRow header: ${header}; row: ${row} **`);
+  cy.contains("table thead th", header)
+    .invoke("index")
+    .then(columnIndex => cy.contains("tbody tr", row).find("td").eq(columnIndex));
+};
+
 const assertPcrCompletionStatus = (pcrType: string, status: string) => {
   cy.log("**assertPcrCompletionStatus**");
   cy.get("li").contains(pcrType).get("strong").contains(status);
@@ -199,6 +210,8 @@ Cypress.Commands.add("submitButton", submitButton);
 Cypress.Commands.add("uploadButton", uploadButton);
 Cypress.Commands.add("tableCell", tableCell);
 Cypress.Commands.add("tableHeader", tableHeader);
+Cypress.Commands.add("getTableRow", getTableRow);
+Cypress.Commands.add("getCellFromHeaderAndRow", getCellFromHeaderAndRow);
 Cypress.Commands.add("assertPcrCompletionStatus", assertPcrCompletionStatus);
 Cypress.Commands.add("clickCheckBox", clickCheckBox);
 Cypress.Commands.add("navigateToProject", navigateToProject);

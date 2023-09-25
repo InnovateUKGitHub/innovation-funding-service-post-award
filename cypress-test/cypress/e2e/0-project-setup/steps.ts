@@ -80,11 +80,11 @@ export const fillAddressInformation = () => {
 
 export const newLocation = () => {
   cy.getByLabel("New location");
-  cy.get("#hint-for-new-postcode").contains("Enter the postcode.");
+  cy.get("#hint-for-postcode").contains("Enter the postcode.");
 };
 
 export const clearAndSubmit = () => {
-  cy.get("#postcode").clear();
+  cy.getByLabel("New location").clear();
   cy.submitButton("Save and return to project setup").click();
   cy.validationMessage("You must provide your project location postcode.");
 };
@@ -102,7 +102,7 @@ export const enterNullPostcode = () => {
 };
 
 export const enterValidPostcode = () => {
-  cy.get("#postcode").clear().type("SN2 1FL");
+  cy.getByLabel("New location").clear().type("SN2 1FL");
   cy.submitButton("Save and return to project setup").click();
   cy.heading("Project setup");
 };

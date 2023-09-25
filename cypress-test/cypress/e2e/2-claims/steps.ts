@@ -3,6 +3,20 @@ import { claimReviewFileTidyUp, fileTidyUp } from "common/filetidyup";
 let date = new Date();
 let comments = JSON.stringify(date);
 
+export const costCategories = [
+  "Labour",
+  "Overheads",
+  "Materials",
+  "Capital usage",
+  "Subcontracting",
+  "Travel and subsistence",
+  "Other costs",
+  "Other costs 2",
+  "Other costs 3",
+  "Other costs 4",
+  "Other costs 5",
+] as const;
+
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -560,8 +574,8 @@ export const projectTitleAndSubheaders = () => {
 
 export const submittedCostCats = () => {
   ["Category", "Forecast for period", "Costs claimed this period", "Difference (£)", "Difference (%)"].forEach(
-    tablehead => {
-      cy.tableHeader(tablehead);
+    tableHead => {
+      cy.tableHeader(tableHead);
     },
   );
 
@@ -853,19 +867,7 @@ export const claimReviewExistingEvidence = () => {
 
 export const claimReviewCostCat = () => {
   cy.getByQA("forecast-table").within(() => {
-    [
-      "Labour",
-      "Overheads",
-      "Materials",
-      "Capital usage",
-      "Subcontracting",
-      "Travel and subsistence",
-      "Other costs",
-      "Other costs 2",
-      "Other costs 3",
-      "Other costs 4",
-      "Other costs 5",
-    ].forEach(forecastCostCat => {
+    costCategories.forEach(forecastCostCat => {
       cy.tableCell(forecastCostCat);
     });
     cy.tableHeader("Total");
