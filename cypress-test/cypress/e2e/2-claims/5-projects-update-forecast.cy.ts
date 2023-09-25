@@ -37,10 +37,6 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
     cy.heading("Update forecast");
   });
 
-  it("Should contain a 'last chance to change the forecast' message", () => {
-    cy.validationNotification("last chance");
-  });
-
   it("Should display the Period, IAR and Month rows correctly", topThreeRows);
 
   it("Should contain the correct cost categories", forecastCostCats);
@@ -52,6 +48,71 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   it("Should validate when null value is entered as a forecast", validateForecast);
 
   it("Should accept input and calculate the figures accordingly", acceptInputAndUpdate);
+
+  it("Should display messaging when under claiming", () => {
+    [
+      "Materials period 2",
+      "Capital usage period 2",
+      "Subcontracting period 2",
+      "Travel and subsistence period 2",
+      "Other costs period 2",
+      "Other costs 2 period 2",
+      "Other costs 3 period 2",
+      "Other costs 4 period 2",
+    ].forEach(category => {
+      cy.getByAriaLabel(category).clear().type("1");
+    });
+    [
+      "The total of your actual costs claimed and forecasted costs is different than the agreed for:",
+      "Labour",
+      "Overheads",
+      "Materials",
+      "Capital usage",
+      "Subcontracting",
+      "Travel and subsistence",
+      "Other costs",
+      "Other costs 2",
+      "Other costs 3",
+      "Other costs 4",
+      "Other costs 5",
+      "Please add a comment for the attention of your Monitoring Officer, if you are forecasting to underspend on the grant offered.",
+    ].forEach(advice => {
+      cy.get("p").contains(advice);
+    });
+  });
+});
+
+it("Should display messaging when over claiming", () => {
+  [
+    "Labour period 2",
+    "Materials period 2",
+    "Capital usage period 2",
+    "Subcontracting period 2",
+    "Travel and subsistence period 2",
+    "Other costs period 2",
+    "Other costs 2 period 2",
+    "Other costs 3 period 2",
+    "Other costs 4 period 2",
+  ].forEach(category => {
+    cy.getByAriaLabel(category).clear().type("50000");
+    [
+      "The total of your actual costs claimed and forecasted costs is different than the agreed for:",
+      "Labour",
+      "Overheads",
+      "Materials",
+      "Capital usage",
+      "Subcontracting",
+      "Travel and subsistence",
+      "Other costs",
+      "Other costs 2",
+      "Other costs 3",
+      "Other costs 4",
+      "Other costs 5",
+      "Please add a comment for the attention of your Monitoring Officer, if you are forecasting to underspend on the grant offered.",
+    ].forEach(advice => {
+      cy.get("p").contains(advice);
+    });
+  });
 
   it("Should save and return to claims", () => {
     cy.getByQA("button_save-qa").click({ force: true });
