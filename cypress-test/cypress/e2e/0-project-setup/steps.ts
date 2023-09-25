@@ -84,25 +84,25 @@ export const newLocation = () => {
 };
 
 export const clearAndSubmit = () => {
-  cy.get("#new-postcode").clear();
+  cy.get("#postcode").clear();
   cy.submitButton("Save and return to project setup").click();
   cy.validationMessage("You must provide your project location postcode.");
 };
 
 export const enterInvalidPostcode = () => {
-  cy.get("#new-postcode").type("SN123456789");
+  cy.get("#postcode").type("SN123456789");
   cy.submitButton("Save and return to project setup").click();
   cy.validationMessage("Your location entry must be no more than 10 characters.");
 };
 
 export const enterNullPostcode = () => {
-  cy.get("#new-postcode").clear();
+  cy.get("#postcode").clear();
   cy.submitButton("Save and return to project setup").click();
   cy.validationMessage("You must provide your project location postcode.");
 };
 
 export const enterValidPostcode = () => {
-  cy.get("#new-postcode").clear().type("SN2 1FL");
+  cy.get("#postcode").clear().type("SN2 1FL");
   cy.submitButton("Save and return to project setup").click();
   cy.heading("Project setup");
 };

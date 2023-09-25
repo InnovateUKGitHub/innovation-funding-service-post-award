@@ -9,7 +9,18 @@ const config = {
 
 const browser = process.env.TEST_BROWSER ?? "chrome";
 
-cypress.run({ browser }).then(
+//cypress.run({ browser }).then(
+//  () => {
+//    generateReport(config);
+//  },
+//  error => {
+//    generateReport(config);
+//    console.error(error);
+//    process.exit(1);
+//  },
+//);
+
+cypress.run({ browser: "electron" }).then(
   () => {
     generateReport(config);
   },
