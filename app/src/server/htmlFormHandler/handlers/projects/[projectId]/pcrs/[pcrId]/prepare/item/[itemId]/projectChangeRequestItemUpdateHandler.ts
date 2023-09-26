@@ -161,18 +161,14 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
 
     if (body.timeExtension) {
-      if (body.timeExtension === "Current project end date") {
-        item.offsetMonths = 0;
-      } else {
-        const timeExtensionOptions = generateOptions(
-          project.endDate,
-          context.config.features.futureTimeExtensionInYears,
-        );
+      /**
+       * default to zero will mean that failure to find the current extension because it has had its copy changed will mean no change to offset
+       */
+      const timeExtensionOptions = generateOptions(project.endDate, context.config.features.futureTimeExtensionInYears);
 
-        const calculatedOffsetMonths = timeExtensionOptions.find(x => x.label === body.timeExtension)?.offset ?? 0;
+      const calculatedOffsetMonths = timeExtensionOptions.find(x => x.label === body.timeExtension)?.offset ?? 0;
 
-        item.offsetMonths = calculatedOffsetMonths;
-      }
+      item.offsetMonths = calculatedOffsetMonths;
     }
   }
 
