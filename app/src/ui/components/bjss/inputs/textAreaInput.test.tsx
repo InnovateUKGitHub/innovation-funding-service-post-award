@@ -2,6 +2,7 @@ import { render, fireEvent } from "@testing-library/react";
 
 import { TextAreaInput, TextAreaInputProps } from "@ui/components/bjss/inputs/textAreaInput";
 import { defaultInputDebounceTimeout } from "@ui/components/bjss/inputs/input-utils";
+import TestBed from "@shared/TestBed";
 
 describe("TextAreaInput", () => {
   const defaultProps: TextAreaInputProps = {
@@ -10,7 +11,11 @@ describe("TextAreaInput", () => {
   };
 
   const setup = (props?: Partial<TextAreaInputProps>) => {
-    const rtl = render(<TextAreaInput {...defaultProps} {...props} />);
+    const rtl = render(
+      <TestBed>
+        <TextAreaInput {...defaultProps} {...props} />
+      </TestBed>,
+    );
 
     const textarea = rtl.container.querySelector("textarea");
     if (!textarea) throw Error("No textarea was found");
