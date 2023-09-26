@@ -24,7 +24,11 @@ export const PCRPrepareReasoningStep = (props: BaseProps & ReasoningStepProps) =
             value={m => m.reasoningComments}
             update={(m, v) => (m.reasoningComments = v || "")}
             validation={editor.validator.reasoningComments}
-            characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxSalesforceFieldLength }}
+            characterCountOptions={{
+              type: "descending",
+              maxValue: PCRDtoValidator.maxSalesforceFieldLength,
+              warnValue: PCRDtoValidator.maxSalesforceFieldLength - 2000,
+            }}
             rows={15}
           />
         </PCRForm.Fieldset>
