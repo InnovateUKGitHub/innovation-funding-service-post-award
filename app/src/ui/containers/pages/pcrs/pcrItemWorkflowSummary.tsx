@@ -27,12 +27,14 @@ export const SummarySection = () => {
   const displayCompleteForm = isPrepareMode;
   const allowSubmit = true;
 
-  // Will need to handle various features previously handled by PCRSummaryContext.
-  // preferably the data for these should be obtained by the relevant Workflow Summary page rather than at
-  // the global PCR summary stage
-
-  // features that may be relevant are `displayCompleteForm` and `allowSubmit`
-  // @see `usePcrSummary` hook
+  /**
+   * Will need to handle various features previously handled by PCRSummaryContext.
+   * preferably the data for these should be obtained by the relevant Workflow Summary page rather than at
+   * the global PCR summary stage
+   *
+   * features that may be relevant are `displayCompleteForm` and `allowSubmit`
+   * @see `usePcrSummary` hook
+   */
 
   return (
     <WithScrollToTopOnPropChange propToScrollOn={workflow?.getCurrentStepName()}>

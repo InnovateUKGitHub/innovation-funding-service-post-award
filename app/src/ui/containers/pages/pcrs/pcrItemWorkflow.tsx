@@ -325,7 +325,7 @@ const WorkflowStep = () => {
   }
 
   if (!currentStep.stepRender) {
-    console.log("this component is still using the original stepRender which is not found in the workflow config");
+    throw new Error("component is still using the original stepRender which is not found in the workflow config");
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

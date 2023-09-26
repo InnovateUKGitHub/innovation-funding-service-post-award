@@ -14,6 +14,7 @@ import { WorkflowStep } from "./pcrItemWorkflowStep";
 import { SummarySection } from "./pcrItemWorkflowSummary";
 import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { useContent } from "@ui/hooks/content.hook";
 
 type Data = {
   project: Pick<ProjectDto, "status">;
@@ -118,12 +119,25 @@ const renderGuidanceSection = (pcrItem: Pick<PCRItemDto, "guidance">) => {
 
 const PcrBackLink = () => {
   const { mode, routes, projectId, pcrId } = usePcrWorkflowContext();
+  const { getContent } = useContent();
 
   if (mode === "review") {
-    return <BackLink route={routes.pcrReview.getLink({ projectId, pcrId })}>Back to request</BackLink>;
+    return (
+      <BackLink route={routes.pcrReview.getLink({ projectId, pcrId })}>
+        {getContent(x => x.pages.pcrItemWorkflow.backToRequest)}
+      </BackLink>
+    );
   }
   if (mode === "prepare") {
-    return <BackLink route={routes.pcrPrepare.getLink({ projectId, pcrId })}>Back to request</BackLink>;
+    return (
+      <BackLink route={routes.pcrPrepare.getLink({ projectId, pcrId })}>
+        {getContent(x => x.pages.pcrItemWorkflow.backToRequest)}
+      </BackLink>
+    );
   }
-  return <BackLink route={routes.pcrDetails.getLink({ projectId, pcrId })}>Back to request</BackLink>;
+  return (
+    <BackLink route={routes.pcrDetails.getLink({ projectId, pcrId })}>
+      {getContent(x => x.pages.pcrItemWorkflow.backToRequest)}
+    </BackLink>
+  );
 };
