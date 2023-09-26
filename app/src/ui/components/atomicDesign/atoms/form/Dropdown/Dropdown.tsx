@@ -12,7 +12,9 @@ const DropdownSelect = forwardRef<HTMLSelectElement, DropdownProps>(
         {hasEmptyOption && <option data-qa="placeholder-option">{placeholder}</option>}
 
         {options.map(item => (
-          <option key={item.id}>{item.title ?? item.value}</option>
+          <option key={item.id} value={item.id}>
+            {item.value}
+          </option>
         ))}
       </select>
     );

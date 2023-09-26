@@ -65,12 +65,12 @@ export const TimeExtensionStep = () => {
 
   const { register, handleSubmit, watch } = useForm<{ timeExtension: string; offsetMonths: number }>({
     defaultValues: {
-      timeExtension: defaultExtensionOption?.value,
+      timeExtension: defaultExtensionOption?.id,
       offsetMonths: pcrItem.offsetMonths,
     },
   });
 
-  const newOffset = Number(timeExtensionDropdownOptions?.find(x => x.value === watch("timeExtension"))?.id ?? "0");
+  const newOffset = Number(watch("timeExtension"));
 
   const newProjectDuration = (newOffset ?? 0) + pcrItem.projectDurationSnapshot;
 
