@@ -989,18 +989,17 @@ export const completeChangeName = () => {
 
 export const existingProjectDetails = () => {
   cy.get("h2").contains("Existing project details");
-  cy.getByLabel("Start and end date");
   ["2023", "2024"].forEach(date => {
-    cy.get("#existing-dates").contains(date);
+    cy.getByLabel("Start and end date").contains(date);
+    cy.getByLabel("Duration");
+    cy.getByLabel("Duration").contains("12 months");
   });
-  cy.getByLabel("Duration");
-  cy.get("#existing-duration").contains("12 months");
 };
 
 export const selectDateDropdown = () => {
-  cy.get("#time-extension").select("March 2024");
+  cy.getByLabel("Please select a new date from the available list").select("March 2024");
   cy.getByLabel("Duration");
-  cy.get("#proposed-duration").contains("13 months");
+  cy.getByLabel("Duration").contains("12 months");
 };
 
 export const existingSubheadings = () => {
