@@ -754,6 +754,14 @@ p.govuk-body--multiline {
   max-width: 1020px;
 }
 
+.acc-height-container {
+  max-height: 50vh;
+}
+
+.acc-vertical-scrollbar {
+  overflow-y: auto;
+}
+
 :root {
   --govukBorderColour: #b1b4b6;
   --govukColourBlack: #0b0c0c;

@@ -50,7 +50,11 @@ export const PCRReasoningSummary = (props: BaseProps & Props) => {
           />
           <SummaryListItem
             label={x => x.pcrReasoningLabels.comments}
-            content={<SimpleString multiline>{pcr.reasoningComments}</SimpleString>}
+            content={
+              <SimpleString multiline verticalScrollbar>
+                {pcr.reasoningComments}
+              </SimpleString>
+            }
             qa="comments"
             validation={editor.validator.reasoningComments}
             action={
