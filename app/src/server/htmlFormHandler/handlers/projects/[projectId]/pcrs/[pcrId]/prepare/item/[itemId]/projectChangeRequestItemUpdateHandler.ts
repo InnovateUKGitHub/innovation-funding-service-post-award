@@ -47,7 +47,6 @@ import { SuspendProjectSteps } from "@ui/containers/pages/pcrs/suspendProject/wo
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { DateTime } from "luxon";
-import { generateOptions } from "@ui/containers/pages/pcrs/timeExtension/timeExtension.logic";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareItemParams,
@@ -79,7 +78,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
 
     switch (item.type) {
       case PCRItemType.TimeExtension:
-        await this.updateTimeExtension(item, body, context, params);
+        await this.updateTimeExtension(item, body);
         break;
       case PCRItemType.ScopeChange:
         this.updateScopeChange(item, body, stepName as scopeChangeStepNames);
@@ -152,23 +151,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  private async updateTimeExtension(
-    item: PCRItemForTimeExtensionDto,
-    body: IFormBody,
-    context: IContext,
-    params: ProjectChangeRequestPrepareItemParams,
-  ) {
-    const project = await context.runQuery(new GetByIdQuery(params.projectId));
-
+  private async updateTimeExtension(item: PCRItemForTimeExtensionDto, body: IFormBody) {
     if (body.timeExtension) {
-      /**
-       * default to zero will mean that failure to find the current extension because it has had its copy changed will mean no change to offset
-       */
-      const timeExtensionOptions = generateOptions(project.endDate, context.config.features.futureTimeExtensionInYears);
-
-      const calculatedOffsetMonths = timeExtensionOptions.find(x => x.label === body.timeExtension)?.offset ?? 0;
-
-      item.offsetMonths = calculatedOffsetMonths;
+      item.offsetMonths = Number(body.timeExtension);
     }
   }
 
