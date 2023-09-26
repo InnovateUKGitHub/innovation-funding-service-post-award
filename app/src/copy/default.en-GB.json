@@ -1565,7 +1565,7 @@
       "commentReadOnly": "Cannot update comments.",
       "reasoningRequired": "Enter reasoning for the request.",
       "reasoningLengthTooLarge_one": "Reasoning can be a maximum of {{ count }} character.",
-      "reasoningLengthTooLarge_other": "Reasoning can be a maximum of {{ count }} character.",
+      "reasoningLengthTooLarge_other": "Reasoning can be a maximum of {{ count }} characters.",
       "reasoningReadOnly": "Cannot update reasoning.",
       "statusInvalid": "Set a valid status.",
       "reasoningStatusRequired": "Invalid reasoning status.",

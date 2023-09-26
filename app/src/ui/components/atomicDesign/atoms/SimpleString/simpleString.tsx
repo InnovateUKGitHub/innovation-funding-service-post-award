@@ -5,6 +5,7 @@ interface SimpleStringProps {
   as?: "p" | "span" | "div";
   qa?: string;
   multiline?: boolean;
+  verticalScrollbar?: boolean;
   bold?: boolean;
   children: React.ReactNode;
   className?: string;
@@ -20,6 +21,7 @@ export function SimpleString({
   qa,
   className,
   multiline,
+  verticalScrollbar,
   bold,
   children,
   style,
@@ -30,6 +32,7 @@ export function SimpleString({
       className={classNames(className, "govuk-body", {
         "govuk-body--multiline": multiline,
         "govuk-!-font-weight-bold": bold,
+        "acc-height-container acc-vertical-scrollbar": verticalScrollbar,
       })}
       style={style}
     >
