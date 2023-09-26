@@ -760,6 +760,7 @@ p.govuk-body--multiline {
 
 .acc-vertical-scrollbar {
   overflow-y: auto;
+  padding-right: 1em;
 }
 
 :root {
