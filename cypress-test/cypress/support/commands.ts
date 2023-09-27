@@ -41,36 +41,26 @@ const getByAriaLabel = (label: string) => {
   cy.get(`[aria-label="${label}"]`);
 };
 
-const userSwitcher = (payload: Record<string, string>, goHome: boolean = false) => {
-  if (goHome) {
-    payload.button_home = "";
-  } else {
-    payload.button_stay = "";
-  }
-
-  cy.request({
-    method: "POST",
-    url: "/developer/userSwitcher",
-    form: true,
-    body: payload,
-    auth: {
-      username,
-      password,
-    },
-  }).then(res => {
-    //
-    res.redirectedToUrl ? cy.visit(res.redirectedToUrl, { auth: { username, password } }) : cy.reload();
+const userSwitcher = (email: string = "", newPath: string) => {
+  // Intercept all future web requests, and inject our UserSwitcher(TM) header
+  cy.intercept(Cypress.config().baseUrl + "/**", req => {
+    req.headers["x-acc-userswitcher"] = email;
+    req.continue();
   });
+
+  // Capture all i18n requests so we can wait for them later
+  cy.intercept("/internationalisation/**").as("i18n");
+
+  // Visit the new page
+  cy.visit(newPath, { auth: { username, password } });
+
+  // Wait for i18n requests to complete before continuing
+  cy.wait(["@i18n"]);
 };
 
-const switchUserTo = (email: string, goHome: boolean = false) => {
+const switchUserTo = (email: string, newPath?: string) => {
   cy.log(`**switchUserTo:${email}**`);
-  userSwitcher({ user: email }, goHome);
-};
-
-const resetUser = (goHome: boolean = false) => {
-  cy.log("**resetUser**");
-  userSwitcher({ reset: "" }, goHome);
+  userSwitcher(email, newPath);
 };
 
 const backLink = (name: string) => {
@@ -228,7 +218,6 @@ Cypress.Commands.add("getByPageQA", getByPageQA);
 Cypress.Commands.add("getByRole", getByRole);
 Cypress.Commands.add("getByAriaLabel", getByAriaLabel);
 Cypress.Commands.add("switchUserTo", switchUserTo);
-Cypress.Commands.add("resetUser", resetUser);
 Cypress.Commands.add("backLink", backLink);
 Cypress.Commands.add("submitButton", submitButton);
 Cypress.Commands.add("uploadButton", uploadButton);

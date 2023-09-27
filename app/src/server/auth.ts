@@ -99,7 +99,17 @@ router.use((req, res, next) => {
     // if user not logged in but we aren't using sso then set default user
     req.session ??= {};
     req.session.user ??= {};
-    req.session.user.email ??= salesforceServiceUser.serviceUsername;
+
+    // Allow overriding the username with HTTP header
+    // for testing purposes.
+    const userSwitcher = req.header("x-acc-userswitcher");
+
+    if (userSwitcher) {
+      req.session.user.email = userSwitcher;
+    } else {
+      req.session.user.email ??= salesforceServiceUser.serviceUsername;
+    }
+
     return next();
   }
 

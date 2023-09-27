@@ -59,7 +59,7 @@ export default defineConfig({
   video: isTrue(process.env.VIDEOS),
   e2e: {
     baseUrl,
-    setupNodeEvents(on, config) {
+    setupNodeEvents(on) {
       on("task", {
         deleteFile(path) {
           fs.unlinkSync(path);

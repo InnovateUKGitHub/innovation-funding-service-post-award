@@ -50,12 +50,7 @@ declare global {
        * to enable testing with different access rights.
        * It appears to be more stable if done from the home page, before navigating away
        */
-      switchUserTo(email: string, goHome?: boolean): void;
-
-      /**
-       * Uses dev tools to reset user to system user
-       */
-      resetUser(goHome?: boolean): void;
+      switchUserTo(email: string, newPath: string): void;
 
       /**
        * Gets the back link element
