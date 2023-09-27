@@ -6,13 +6,14 @@ import { AccessibilityText } from "../../AccessibilityText/AccessibilityText";
 interface Props {
   error: TValidationError;
   id?: string;
+  "data-qa"?: string;
 }
 
 const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-export const ValidationError = ({ error, id }: Props) => {
+export const ValidationError = ({ error, id, "data-qa": qa }: Props) => {
   const { getContent } = useContent();
 
   if (!error) {
@@ -26,6 +27,7 @@ export const ValidationError = ({ error, id }: Props) => {
       {errorMap.map((message, index) => (
         <p
           id={id ? `${id}-${index}` : undefined}
+          data-qa={qa ? `${qa}-${index}` : undefined}
           key={message}
           style={alignTextLeftStyle}
           className="govuk-error-message"

@@ -3,6 +3,7 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 type FieldProps = {
   hint?: string;
@@ -29,17 +30,18 @@ const Field = ({ hint, label, legend, labelBold, id, error, children, ...props }
           {label}
         </Label>
       )}
-      {!!hint && (
-        <Hint id={`hint-for-${id}`} data-qa={props["data-qa"] ? `${props["data-qa"]}-hint` : ""}>
-          {hint}
-        </Hint>
-      )}
 
       {!!hint && (
         <Hint id={`hint-for-${id}`} data-qa={props["data-qa"] ? `${props["data-qa"]}-hint` : ""}>
           {hint}
         </Hint>
       )}
+
+      <ValidationError
+        id={`error-for-${id}`}
+        data-qa={props["data-qa"] ? `${props["data-qa"]}-hint` : ""}
+        error={error}
+      />
 
       {React.cloneElement(children, { hasError: !!error, id })}
     </FormGroup>
