@@ -5,6 +5,17 @@ import {
   rejectElevenDocsAndShowError,
   documents as uploadDocuments,
 } from "./steps";
+
+import {
+  validateFileUpload,
+  uploadFileTooLarge,
+  validateExcessiveFileName,
+  doNotUploadSpecialChar,
+  uploadFileNameTooShort,
+} from "e2e/3-documents/steps";
+
+import { createTestFile, deleteTestFile } from "common/createTestFile";
+
 import { fileTidyUp } from "common/filetidyup";
 
 const fcEmail = "s.shuang@irc.trde.org.uk.test";
@@ -17,6 +28,11 @@ describe("Claims > Cost category document uploads", () => {
   before(() => {
     visitApp({ asUser: fcEmail });
     cy.navigateToProject("328407");
+    createTestFile("bigger_test", 33);
+  });
+
+  after(() => {
+    deleteTestFile("bigger_test");
   });
 
   it("Should click the claims tile and access the 'Exceptions - Staff' cost category", () => {
@@ -35,6 +51,16 @@ describe("Claims > Cost category document uploads", () => {
   });
 
   it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
+
+  it("Should validate when uploading without choosing a file.", validateFileUpload);
+
+  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+
+  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
+
+  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+
+  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
 
   it("Should upload a batch of 10 documents", { retries: 0 }, allowBatchFileUpload);
 

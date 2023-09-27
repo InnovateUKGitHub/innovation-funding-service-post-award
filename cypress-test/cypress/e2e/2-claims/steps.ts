@@ -698,17 +698,18 @@ export const capPotMessageNotExist = () => {
 };
 
 export const triggerCapPot = () => {
-  cy.get("a").contains("Labour").click();
-  cy.heading("Labour");
-  cy.get("a").contains("Add a cost").click();
-  cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
-  cy.getByAriaLabel("value of claim line item 1").clear().type("200").wait(800);
+  ["Labour", "Materials", "Subcontracting"].forEach(costCat => {
+    cy.get("a").contains(costCat).click();
+    cy.heading(costCat);
+    cy.get("a").contains("Add a cost").click();
+    cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
+    cy.getByAriaLabel("value of claim line item 1").clear().type("5000").wait(800);
+    cy.submitButton("Save and return to claims").click();
+    cy.heading("Costs to be claimed");
+  });
 };
 
-export const saveAndReturnToPrepare = () => {
-  cy.submitButton("Save and return to claims").click();
-  cy.heading("Costs to be claimed");
-};
+export const saveAndReturnToPrepare = () => {};
 
 export const capPotMessageDoesExist = () => {
   cy.validationNotification(
@@ -717,10 +718,13 @@ export const capPotMessageDoesExist = () => {
 };
 
 export const clearCostCatReturn = () => {
-  cy.get("a").contains("Labour").click();
-  cy.get("a").contains("Remove").click();
-  cy.get("button").contains("Save and return to claims").click();
-  cy.get("h1").contains("Costs to be claimed");
+  ["Labour", "Materials", "Subcontracting"].forEach(costCat => {
+    cy.get("a").contains(costCat).click();
+    cy.heading(costCat);
+    cy.get("a").contains("Remove").click();
+    cy.get("button").contains("Save and return to claims").click();
+    cy.get("h1").contains("Costs to be claimed");
+  });
 };
 
 export const acceptInputAndUpdate = () => {

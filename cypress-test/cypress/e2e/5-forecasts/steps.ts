@@ -485,7 +485,7 @@ export const correctForecastTotals = () => {
 export const forecastPartnerTable = () => {
   [
     ["EUI Small Ent Health (Lead)", "£350,000.00", "£349,939.05", "£350,000.00"],
-    ["A B Cad Services", "£50,000.00", "£42,400.00", "£50,000.00"],
+    ["A B Cad Services", "£82,000.00", "£59,400.00", "£82,000.00"],
     ["ABS EUI Medium Enterprise", "£101,000.00", "£17,900.00", "£101,000.00"],
     ["Deep Rock Galactic", "£350,000.00", "£54,667.46", "£350,000.00"],
   ].forEach(([partner, totalEligible, forecasts, underspend], index) => {

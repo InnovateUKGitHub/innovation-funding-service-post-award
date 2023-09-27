@@ -22,9 +22,10 @@ describe("claims > Trigger Cap Pot Message", () => {
     capPotMessageNotExist,
   );
 
-  it("Should enter costs value in the Labour category which will trigger the Cap Pot messaging", triggerCapPot);
-
-  it("Should save and return to the first claims screen", saveAndReturnToPrepare);
+  it(
+    "Should enter costs value in the Labour, Materials and Subcontracting category which will trigger the Cap Pot messaging",
+    triggerCapPot,
+  );
 
   it("Should show validation messaging around the project cap", capPotMessageDoesExist);
 

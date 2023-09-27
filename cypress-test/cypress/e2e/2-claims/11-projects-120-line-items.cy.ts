@@ -4,7 +4,7 @@ import { add120Lines, beginEditing, removeLineItems, saveLineItems } from "./ste
 describe("claims > Add 120 line items", () => {
   before(() => {
     visitApp({ asUser: "contact77@test.co.uk" });
-    cy.navigateToProject("879546");
+    cy.navigateToProject("154870");
     cy.selectTile("Claims");
   });
 
