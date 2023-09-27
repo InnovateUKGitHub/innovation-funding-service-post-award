@@ -131,7 +131,7 @@ const WorkflowItemForm = ({ allowSubmit }: { allowSubmit: boolean }) => {
 
   const { register, handleSubmit } = useForm<SummaryFormValues>({
     defaultValues: {
-      itemStatus: "",
+      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "",
       grantMovingOverFinancialYear: undefined,
     },
   });
