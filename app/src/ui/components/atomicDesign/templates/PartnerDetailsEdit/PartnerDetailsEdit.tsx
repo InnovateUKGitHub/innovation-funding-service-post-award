@@ -96,7 +96,7 @@ export function PartnerDetailsEditComponent({
           )}
           <FormGroup hasError={!!postcodeError}>
             <Label htmlFor="postcode">{getContent(x => x.pages.partnerDetailsEdit.labelNewPostcode)}</Label>
-            <Hint id="hint-for-new-postcode" className="govuk-hint">
+            <Hint id="hint-for-postcode" className="govuk-hint">
               {getContent(x => x.pages.partnerDetailsEdit.hintNewPostcode)}
             </Hint>
             <ValidationError error={postcodeError as RhfErrors} />
@@ -105,7 +105,7 @@ export function PartnerDetailsEditComponent({
               inputWidth="one-quarter"
               id="postcode"
               hasError={!!postcodeError}
-              aria-describedby="hint-for-new-postcode"
+              aria-describedby="hint-for-postcode"
               {...register("postcode")}
             ></TextInput>
           </FormGroup>
