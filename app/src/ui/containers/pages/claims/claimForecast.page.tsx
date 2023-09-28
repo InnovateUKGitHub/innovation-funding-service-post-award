@@ -139,10 +139,6 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
                 qa="period-change-warning"
               />
             )}
-            <ValidationMessage
-              messageType="info"
-              message={x => x.claimsMessages.lastChanceToChangeForecast({ periodId: lastChanceToEditPeriod })}
-            />
           </AriaLive>
           <Warning {...combined} editor={editor} />
           {this.renderOverheadsRate(combined.partner.overheadRate)}
