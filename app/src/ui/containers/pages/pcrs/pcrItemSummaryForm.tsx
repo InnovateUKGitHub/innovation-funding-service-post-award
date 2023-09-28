@@ -59,7 +59,11 @@ export const PcrItemSummaryForm = <FormValues extends { itemStatus: "marked-as-c
         <Legend>{getContent(x => x.pages.pcrWorkflowSummary.markAsCompleteLabel)}</Legend>
         <FormGroup>
           <CheckboxList name="itemStatus" register={register} disabled={isFetching}>
-            <Checkbox id="marked-as-complete" label={getContent(x => x.pages.pcrWorkflowSummary.agreeToChangeLabel)} />
+            <Checkbox
+              defaultChecked={pcrItem.status === PCRItemStatus.Complete}
+              id="marked-as-complete"
+              label={getContent(x => x.pages.pcrWorkflowSummary.agreeToChangeLabel)}
+            />
           </CheckboxList>
         </FormGroup>
 
