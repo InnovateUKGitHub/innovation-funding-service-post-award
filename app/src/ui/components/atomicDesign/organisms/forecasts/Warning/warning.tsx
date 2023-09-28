@@ -54,7 +54,7 @@ const renderWarningMessage = ({
 
     total = roundCurrency(total);
 
-    if (gol && gol.value < total) {
+    if (gol && roundCurrency(gol.value) !== total) {
       categories.push(category.name);
     }
   });

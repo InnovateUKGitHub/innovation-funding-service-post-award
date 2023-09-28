@@ -35,7 +35,9 @@
     }
   },
   "components": {
-    "amountRequestMessage": "The amount you are requesting is more than the maximum contract value offered for:",
+    "amountRequestMessage": "The total of your actual costs claimed and forecasted costs is different than the agreed for:",
+    "contactMessage": "Please add a comment for the attention of your Monitoring Officer, if you are forecasting to underspend on the contract value offered.",
+    "contactMessage_InternalAssurance": "Please add a comment for the attention of Innovate UK, if you are forecasting to underspend on the contract value offered.",
     "advisoryMoPmMessage": "The partner is requesting an amount more than the maximum contract value offered for:"
   }
 }
