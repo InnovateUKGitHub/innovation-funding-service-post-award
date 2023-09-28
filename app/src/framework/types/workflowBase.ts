@@ -8,6 +8,8 @@ export type MigratedSummaryProps = {
   getStepLink: (stepName: PCRStepId) => ILinkInfo;
   getEditLink: (stepName: PCRStepId) => React.ReactElement;
   getViewLink: (stepName: PCRStepId) => React.ReactElement;
+  allowSubmit: boolean;
+  displayCompleteForm: boolean;
 };
 
 export type IStepProps = AnyObject;

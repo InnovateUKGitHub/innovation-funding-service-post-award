@@ -749,6 +749,7 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
                   this,
                   offsetMonths !== 0,
                   this.getContent(x => x.validation.pcrTimeExtensionItemDtoValidator.offsetMonthsTooSmall),
+                  "timeExtension",
                 ),
             )
           : Validation.valid(this),

@@ -38,6 +38,7 @@ export const usePcrTimeExtensionWorkflowQuery = (projectId: ProjectId, pcrItemId
       "statusName",
       "offsetMonths",
       "projectDurationSnapshot",
+      "type",
     ],
     {},
   );
