@@ -255,9 +255,8 @@
     "projectsDashboard": {
       "title": "Dashboard",
       "projectsTitle": "Projects",
-      "searchTitle": "Search",
       "searchHint": "Project number, project or lead partner",
-      "searchLabel": "TEST",
+      "searchLabel": "Search",
       "noLiveProjectsMessage": "You do not have any live projects.",
       "noLiveMatchingMessage": "There are no matching live projects.",
       "upcomingTitle": "Upcoming",
