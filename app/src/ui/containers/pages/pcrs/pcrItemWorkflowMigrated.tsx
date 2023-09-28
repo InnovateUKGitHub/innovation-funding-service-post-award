@@ -32,6 +32,7 @@ type Data = {
     | "organisationType"
     | "hasOtherFunding"
     | "status"
+    | "typeName"
   >;
   mode: Mode;
   fragmentRef: unknown;
@@ -112,7 +113,7 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
     >
       <Page
         backLink={<PcrBackLink />}
-        pageTitle={<Title />}
+        pageTitle={<Title heading={props.pcrItem.typeName} />}
         projectStatus={props.project.status}
         fragmentRef={props.fragmentRef}
         validationErrors={pcrValidationErrors}

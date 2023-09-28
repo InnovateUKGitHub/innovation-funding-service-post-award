@@ -39,6 +39,7 @@ export const usePcrItemWorkflowQuery = (projectId: ProjectId, pcrId: PcrId, pcrI
       "hasOtherFunding",
       "guidance",
       "status",
+      "typeName",
     ],
     { typeOfAid: project.typeOfAid },
   );

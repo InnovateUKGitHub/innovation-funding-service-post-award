@@ -12,7 +12,6 @@ import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { errorMap, pcrTimeExtensionSchema } from "./timeExtension.zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
-// import { useEffect } from "react";
 
 type FormValues = {
   timeExtension: string;
