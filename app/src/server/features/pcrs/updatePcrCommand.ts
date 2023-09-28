@@ -13,7 +13,7 @@ import {
 } from "@framework/entities/projectChangeRequest";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
-import { sumBy } from "@framework/util/numberHelper";
+import { isNumber, sumBy } from "@framework/util/numberHelper";
 import { BadRequestError, InActiveProjectError, ValidationError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../projects/getDetailsByIdQuery";
@@ -315,12 +315,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
       case PCRItemType.LoanDrawdownExtension: {
         if (
-          dto.availabilityPeriod &&
-          dto.availabilityPeriodChange &&
-          dto.extensionPeriod &&
-          dto.extensionPeriodChange &&
-          dto.repaymentPeriod &&
-          dto.repaymentPeriodChange
+          isNumber(dto.availabilityPeriod) &&
+          isNumber(dto.availabilityPeriodChange) &&
+          isNumber(dto.extensionPeriod) &&
+          isNumber(dto.extensionPeriodChange) &&
+          isNumber(dto.repaymentPeriod) &&
+          isNumber(dto.repaymentPeriodChange)
         ) {
           return {
             ...init,
