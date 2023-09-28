@@ -4,3 +4,4 @@ kind: Kustomization
 
 bases:
   - ../../env-base
+  - ../../../components/acc-ui/acc-ui-route
