@@ -1,5 +1,5 @@
 # See https://ukri.atlassian.net/wiki/spaces/ACC/pages/194019456
-FROM registry.hub.docker.com/library/node:18.16.0
+FROM registry.hub.docker.com/library/node:18.18.0
 
 WORKDIR /app
 
