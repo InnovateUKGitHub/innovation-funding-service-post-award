@@ -1026,7 +1026,6 @@ export const proposedSubheadings = () => {
 export const markAsCompleteSave = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.button("Save and return to request").click();
-  cy.get("strong").contains("Complete");
 };
 
 export const populateDateFields = () => {

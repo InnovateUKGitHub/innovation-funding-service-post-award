@@ -77,4 +77,15 @@ describe("PCR >  Change project duration > Create PCR", () => {
   it("Should show 'Proposed' subheadings from the previous page and display a summary", proposedSubheadings);
 
   it("Should mark as complete and then click 'Save and return to request'", markAsCompleteSave);
+
+  it("Should display the status of the Change project duration PCR as 'Complete'", () => {
+    cy.heading("Request");
+    cy.get("strong").contains("Complete");
+  });
+
+  it("Should re-access the PCR and assert that the tick box is populated", () => {
+    cy.get("a").contains("Change project duration").click();
+    cy.heading("Change project duration");
+    cy.get("#marked-as-complete").should("have.value", "marked-as-complete");
+  });
 });
