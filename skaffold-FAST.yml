@@ -40,6 +40,27 @@ profiles:
         paths:
           - kustomize/env/stub/custom
 
+  - name: at
+    build:
+      local:
+        useDockerCLI: false
+        useBuildkit: false
+        tryImportMissing: true
+        push: true
+      tagPolicy:
+        envTemplate:
+          template: "{{.TAG_ID}}"
+      artifacts: []
+    deploy:
+      kubeContext: at
+      kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
+        paths:
+          - kustomize/env/aws/at
+
   - name: sysint
     build:
       local:
