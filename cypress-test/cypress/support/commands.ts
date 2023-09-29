@@ -16,6 +16,11 @@ const getByLabel = (label: string) => {
     });
 };
 
+const getListItemFromKey = (label: string) => {
+  cy.log("**getListItemFromKey**");
+  cy.contains("dt", label).siblings().get("dd");
+};
+
 const getByQA = (tag: string, options?: CommandOptions) => {
   cy.log("**getByQA**");
   cy.get(`[data-qa="${tag}"]`, options ?? { timeout: 15000 });
@@ -210,6 +215,7 @@ const createPcr = (pcr: PcrType) => {
 };
 
 Cypress.Commands.add("getByLabel", getByLabel);
+Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
 Cypress.Commands.add("getByRole", getByRole);

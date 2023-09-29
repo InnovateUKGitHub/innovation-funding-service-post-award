@@ -1,13 +1,12 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { clickCreateRequestButtonProceed, shouldShowProjectTitle } from "./steps";
-import { loremIpsum32k } from "common/lorem";
+import { baseLorem, loremIpsum2k, loremIpsum32k, loremIpsum30k } from "common/lorem";
 import { testFile } from "common/testfileNames";
-import { deletePcr } from "e2e/9-loans/steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("PCR > Save and return to requests", () => {
+describe("PCR > Reasoning section", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard", asUser: pmEmail });
     pcrTidyUp("Draft");
@@ -46,8 +45,34 @@ describe("PCR > Save and return to requests", () => {
     );
   });
 
-  it("Should populate the comments box with 32,000 characters", () => {
-    cy.get("textarea").invoke("val", loremIpsum32k);
+  it("Should type 'hello' and display the number of characters used", () => {
+    cy.get("textarea").clear().type("hello");
+    cy.get("p").contains("You have 5 characters").should("not.exist");
+  });
+
+  it("Should populate the comments box with 30000 characters and prompt the character counter to appear", () => {
+    cy.get("textarea").clear().invoke("val", loremIpsum30k).trigger("input");
+    cy.get("textarea").type("{moveToEnd}").type("t");
+    cy.get("textarea").type("{backSpace}");
+    cy.get("p").contains("You have 2000 characters remaining");
+  });
+
+  it("Should populate the comments box with 32,001 characters", () => {
+    cy.get("textarea").clear().invoke("val", loremIpsum32k).trigger("input");
+    cy.get("textarea").type("{moveToEnd}").type("t");
+  });
+
+  it("Should display remaining characters as one too many", () => {
+    cy.paragraph("You have 1 character too many");
+  });
+
+  it("Should not let you save and continue due to character limit and validate with a message", () => {
+    cy.button("Save and continue").click();
+    cy.validationLink("Reasoning can be a maximum of 32000 characters");
+  });
+
+  it("Should reduce the characters by 1", () => {
+    cy.get("textarea").type("{moveToEnd}").type("{backspace}");
   });
 
   it("Should display the number of remaining characters", () => {
@@ -71,8 +96,7 @@ describe("PCR > Save and return to requests", () => {
   });
 
   it("Should display the comments entered in the previous comments box", () => {
-    cy.getByQA("comments").contains(loremIpsum32k);
-    cy.getByQA("files").contains(testFile);
+    cy.getListItemFromKey("Comments").contains("Swindon");
   });
 
   it("Should mark as complete and 'Save and return to request'", () => {
@@ -81,12 +105,65 @@ describe("PCR > Save and return to requests", () => {
   });
 
   it("Should show the reasoning section as complete", () => {
-    cy.get("#reasoningStatus").eq(5).contains("Complete");
+    cy.get("li").contains("Complete");
   });
 
   it("Should re-access the reasoning section and assert that the comments have saved", () => {
-    cy.get("a").contains("Provide reasoning to Innovate UK").click();
-    cy.heading("Provide reasoning to Innovate UK");
-    cy.getByQA("comments").contains(loremIpsum32k);
+    cy.get("a").contains("Provide reasons to Innovate UK").click();
+    cy.heading("Provide reasons to Innovate UK");
+    cy.get("p").contains("Swindon");
+  });
+
+  it("Should click the Edit button against the comments and open the freetext box", () => {
+    cy.getListItemFromKey("Comments").contains("Edit").click();
+    cy.get("#reasoningComments-hint").contains(
+      "You must explain each change. Be brief and write clearly. If you are requesting a reallocation of project costs, you must justify each change to your costs.",
+    );
+    cy.get("textarea").contains("Swindon");
+  });
+
+  it("Should have a character count that dynamically changes", () => {
+    cy.paragraph("You have 0 characters remaining");
+    cy.get("textarea").type("{moveToEnd}").type("a");
+    cy.paragraph("You have 1 character too many");
+  });
+
+  it("Should type 'hello' and ensure the character counter does NOT exist", () => {
+    cy.get("textarea").clear().type("hello");
+    cy.get("p").contains("You have 5 characters").should("not.exist");
+  });
+
+  it("Should populate the comments box with 30000 characters and prompt the character counter to appear", () => {
+    cy.get("textarea").clear().invoke("val", loremIpsum30k).trigger("input");
+    cy.get("textarea").type("{moveToEnd}").type("t");
+    cy.get("textarea").type("{backSpace}");
+    cy.get("p").contains("You have 2000 characters remaining");
+  });
+
+  it("Should populate the comments box with 32,001 characters", () => {
+    cy.get("textarea").clear().invoke("val", loremIpsum32k).trigger("input");
+    cy.get("textarea").type("{moveToEnd}").type("t");
+  });
+
+  it("Should display remaining characters as one too many", () => {
+    cy.paragraph("You have 1 character too many");
+  });
+
+  it("Should validate that this is too many characters when you click save", () => {
+    cy.button("Save and continue").click();
+    cy.validationLink("Reasoning can be a maximum of 32000 characters");
+  });
+
+  it("Should reduce the characters by 1", () => {
+    cy.get("textarea").type("{moveToEnd}").type("{backspace}");
+  });
+
+  it("Should display the number of remaining characters", () => {
+    cy.paragraph("You have 0 characters remaining");
+  });
+
+  it("Should save the comments and proceed", () => {
+    cy.button("Save and continue").click();
+    cy.get("h2").contains("Upload documents");
   });
 });

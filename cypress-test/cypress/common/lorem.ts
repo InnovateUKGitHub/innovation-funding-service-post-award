@@ -15,4 +15,5 @@ const getLorem = (chars: number): string => {
 
 export const loremIpsum2k = getLorem(2_000);
 export const loremIpsum10k = getLorem(10_000);
+export const loremIpsum30k = getLorem(30_000);
 export const loremIpsum32k = getLorem(32_000);

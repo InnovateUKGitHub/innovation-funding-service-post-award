@@ -36,6 +36,11 @@ declare global {
       getByAriaLabel(label: string): Chainable<Element>;
 
       /**
+       * Get a list item from its key
+       */
+      getListItemFromKey(label: string): Chainable<Element>;
+
+      /**
        * Gets an element based on the role
        */
       getByRole(role: string): Chainable<Element>;
