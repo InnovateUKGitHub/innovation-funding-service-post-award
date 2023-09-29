@@ -8,6 +8,7 @@ export const claimDetailsQuery = graphql`
       uiapi {
         ...StatusChangesLogsFragment
         ...ForecastTableFragment
+        ...TitleFragment
         query {
           Acc_Profile__c(
             where: {
@@ -244,12 +245,6 @@ export const claimDetailsQuery = graphql`
                     isPm
                     partnerId
                   }
-                }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
                 }
                 Acc_ProjectStatus__c {
                   value

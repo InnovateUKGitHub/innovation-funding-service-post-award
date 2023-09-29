@@ -24,14 +24,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
   return useMemo(() => {
-    const project = mapToProjectDto(projectNode, [
-      "competitionType",
-      "id",
-      "partnerRoles",
-      "projectNumber",
-      "roles",
-      "title",
-    ]);
+    const project = mapToProjectDto(projectNode, ["competitionType", "id", "partnerRoles", "roles"]);
 
     const partner = mapToPartnerDto(
       partnerNode,

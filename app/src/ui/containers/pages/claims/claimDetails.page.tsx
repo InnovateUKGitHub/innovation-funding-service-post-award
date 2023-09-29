@@ -22,7 +22,7 @@ import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTa
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/bjss/Page/page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { TypedDetails, DualDetails } from "@ui/components/bjss/details/details";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useClaimDetailsPageData } from "./claimDetails.logic";
@@ -102,7 +102,7 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
           <Content value={x => x.pages.claimDetails.backLink} />
         </BackLink>
       }
-      pageTitle={<Title title={data.project.title} projectNumber={data.project.projectNumber} />}
+      pageTitle={<Title />}
       partnerStatus={data.partner.partnerStatus}
       fragmentRef={data?.fragmentRef}
     >

@@ -28,7 +28,7 @@ import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/C
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { createTypedForm, DropdownOption } from "@ui/components/bjss/form/form";
 import { PageLoader } from "@ui/components/bjss/loading";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -124,7 +124,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
       backLink={backLinkElement}
       apiError={apiError}
       validationErrors={Object.assign({}, validatorErrors, documentValidatorErrors) as RhfErrors}
-      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
+      pageTitle={<Title />}
       fragmentRef={data.fragmentRef}
     >
       <Messages messages={props.messages} />

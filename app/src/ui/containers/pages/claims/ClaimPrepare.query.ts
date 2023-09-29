@@ -7,6 +7,7 @@ export const claimPrepareQuery = graphql`
     salesforce {
       uiapi {
         ...StatusChangesLogsFragment
+        ...TitleFragment
         query {
           Acc_Profile__c(
             where: {
@@ -245,13 +246,7 @@ export const claimPrepareQuery = graphql`
                 Acc_CurrentPeriodNumber__c {
                   value
                 }
-                Acc_ProjectNumber__c {
-                  value
-                }
                 Acc_ClaimsUnderQuery__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
                   value
                 }
                 Acc_ProjectStatus__c {
