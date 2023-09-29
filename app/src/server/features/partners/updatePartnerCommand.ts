@@ -123,8 +123,6 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       bankDetails.accountNumber,
     );
 
-    console.log("update partner command bank check validate result", ValidationResult);
-
     if (!ValidationResult.checkPassed) {
       if (this.mergedPartner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
         throw new ValidationError(

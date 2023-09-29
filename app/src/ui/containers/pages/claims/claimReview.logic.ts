@@ -13,7 +13,6 @@ import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/d
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
-import { getIARDueOnClaimPeriods } from "@gql/dtoMapper/mapIarDue";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
@@ -42,20 +41,10 @@ export const useClaimReviewPageData = (
 
   return useMemo(() => {
     const project = mapToProjectDto(projectNode, [
-      "claimedPercentage",
-      "claimFrequency",
-      "claimFrequencyName",
-      "claimsOverdue",
-      "claimsToReview",
-      "claimsWithParticipant",
       "competitionName",
       "competitionType",
-      "costsClaimedToDate",
       "id",
-      "impactManagementParticipation",
-      "numberOfPeriods",
       "partnerRoles",
-      "periodId",
       "projectNumber",
       "roles",
       "title",
@@ -83,25 +72,8 @@ export const useClaimReviewPageData = (
 
     const claims = mapToClaimDtoArray(
       data?.salesforce?.uiapi?.query?.AllClaimsForPartner?.edges ?? [],
-      [
-        "comments",
-        "id",
-        "isApproved",
-        "isFinalClaim",
-        "paidDate",
-        "partnerId",
-        "pcfStatus",
-        "periodCostsToBePaid",
-        "periodEndDate",
-        "periodId",
-        "periodStartDate",
-        "status",
-        "statusLabel",
-        "totalCostsApproved",
-        "totalCostsSubmitted",
-        "totalDeferredAmount",
-      ],
-      { competitionType: project.competitionType },
+      ["isFinalClaim", "periodEndDate", "periodId", "periodStartDate"],
+      {},
     );
 
     const costCategoriesOrder = costCategories.map(y => y.id);
@@ -147,21 +119,6 @@ export const useClaimReviewPageData = (
       "value",
     ]);
 
-    // IAR DUE ON CLAIM PERIODS
-    const IARDueOnClaimPeriods = getIARDueOnClaimPeriods(data?.salesforce?.uiapi?.query?.ClaimsForIarDue?.edges ?? []);
-
-    const forecastData = {
-      golCosts,
-      forecastDetails,
-      claimDetails,
-      costCategories,
-      project,
-      partner,
-      claim,
-      claims,
-      IARDueOnClaimPeriods,
-    };
-
     const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
       [
@@ -185,10 +142,8 @@ export const useClaimReviewPageData = (
       partner,
       costCategories,
       claim,
-      forecastData,
       claimDetails: costsSummaryForPeriod,
       documents,
-      IARDueOnClaimPeriods,
       fragmentRef: data?.salesforce?.uiapi,
     };
   }, [totalDocumentsLength]);
