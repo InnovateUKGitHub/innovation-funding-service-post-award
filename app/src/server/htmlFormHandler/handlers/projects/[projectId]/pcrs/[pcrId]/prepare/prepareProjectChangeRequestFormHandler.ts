@@ -7,13 +7,13 @@ import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
-import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
 import {
   ProjectChangeRequestPrepareParams,
   ProjectChangeRequestPrepareRoute,
 } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
+import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
 
 export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareParams,
@@ -56,14 +56,12 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
 
   protected async run(
     context: IContext,
-    params: ProjectChangeRequestPrepareParams,
+    { projectId, pcrId }: ProjectChangeRequestPrepareParams,
     button: IFormButton,
     dto: PCRDto,
   ): Promise<ILinkInfo> {
-    await context.runCommand(
-      new UpdatePCRCommand({ projectId: params.projectId, projectChangeRequestId: params.pcrId, pcr: dto }),
-    );
-    return PCRsDashboardRoute.getLink({ projectId: params.projectId });
+    await context.runCommand(new UpdatePCRCommand({ projectId, projectChangeRequestId: pcrId, pcr: dto }));
+    return ProjectChangeRequestSubmittedForReviewRoute.getLink({ projectId, pcrId });
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareParams) {
