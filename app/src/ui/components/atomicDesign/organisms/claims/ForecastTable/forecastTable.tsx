@@ -68,7 +68,7 @@ interface Index {
   row: number;
 }
 
-interface Props {
+export interface Props {
   hideValidation?: boolean;
   data: ForecastDataForTableLayout;
   editor?: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
