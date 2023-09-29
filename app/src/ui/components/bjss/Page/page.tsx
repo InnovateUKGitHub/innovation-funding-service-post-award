@@ -12,7 +12,7 @@ import { ProjectStatus } from "@framework/constants/project";
 import { IAppError } from "@framework/types/IAppError";
 import { Results, CombinedResultsValidator } from "@ui/validation/results";
 import { GovWidthContainer } from "../../atomicDesign/atoms/GovWidthContainer/GovWidthContainer";
-import { FragmentContext } from "@gql/fragmentContextHook";
+import { FragmentContext } from "@gql/utils/fragmentContextHook";
 
 export const usePageValidationMessage = (projectStatus?: ProjectStatus, partnerStatus?: PartnerStatus) => {
   const { getContent } = useContent();

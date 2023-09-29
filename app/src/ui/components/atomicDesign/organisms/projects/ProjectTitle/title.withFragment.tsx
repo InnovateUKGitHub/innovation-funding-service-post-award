@@ -1,6 +1,6 @@
-import { useFragmentContext } from "@gql/fragmentContextHook";
+import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 import { Title as TitleComponent } from "./title";
-import { isValidFragmentKey } from "@gql/isValidFragmentKey";
+import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
 import { TitleFragment$data, TitleFragment$key } from "./__generated__/TitleFragment.graphql";
 import { useFragment } from "react-relay";
 import { titleFragment } from "./Title.fragment";

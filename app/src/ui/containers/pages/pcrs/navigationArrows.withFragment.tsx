@@ -1,7 +1,7 @@
 import { useFragment } from "react-relay";
 import { NavigationArrowsForPCRs as NavigationArrowsForPcrsComponent, Props } from "./navigationArrows";
-import { useFragmentContext } from "@gql/fragmentContextHook";
-import { isValidFragmentKey } from "@gql/isValidFragmentKey";
+import { useFragmentContext } from "@gql/utils/fragmentContextHook";
+import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
 import {
   NavigationArrowsFragment$data,
   NavigationArrowsFragment$key,
