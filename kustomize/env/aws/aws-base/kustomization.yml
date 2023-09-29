@@ -4,6 +4,3 @@ kind: Kustomization
 
 bases:
   - ../../env-base
-
-resources:
-  - acc-ui-route.yml

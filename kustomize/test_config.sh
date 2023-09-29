@@ -10,8 +10,7 @@ kustomize build env/aws/preprod --enable-alpha-plugins=true --enable-exec=true >
 kustomize build env/aws/prod --enable-alpha-plugins=true --enable-exec=true > /dev/null || echo 'xxx error on aws prod'
 kustomize build env/aws/sysint --enable-alpha-plugins=true --enable-exec=true > /dev/null || echo 'xxx error on aws sysint'
 kustomize build env/aws/uat --enable-alpha-plugins=true --enable-exec=true > /dev/null || echo 'xxx error on aws uat'
+kustomize build env/aws/at --enable-alpha-plugins=true --enable-exec=true > /dev/null || echo 'xxx error on aws at'
 
-kustomize build env/stub/at --enable-alpha-plugins=true --enable-exec=true > /dev/null || echo 'xxx error on aws at'
 kustomize build env/stub/custom --enable-alpha-plugins=true --enable-exec=true > /dev/null || echo 'xxx error on aws custom'
 kustomize build env/stub/local/dev --enable-alpha-plugins=true --enable-exec=true > /dev/null || echo 'xxx error on local dev'
-
