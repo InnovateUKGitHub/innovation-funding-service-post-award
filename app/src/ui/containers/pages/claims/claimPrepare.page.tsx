@@ -12,7 +12,7 @@ import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
 import { Page } from "@ui/components/bjss/Page/page";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useNavigate } from "react-router-dom";
@@ -52,7 +52,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
           <Content value={x => x.pages.claimPrepare.backLink} />
         </BackLink>
       }
-      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
+      pageTitle={<Title />}
       fragmentRef={data?.fragmentRef}
     >
       <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />

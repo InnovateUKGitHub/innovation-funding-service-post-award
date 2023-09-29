@@ -28,8 +28,6 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       "roles",
       "partnerRoles",
       "id",
-      "projectNumber",
-      "title",
       "isNonFec",
       "competitionType",
       "status",
