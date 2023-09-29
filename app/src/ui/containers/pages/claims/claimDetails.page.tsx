@@ -28,8 +28,8 @@ import { Page } from "@ui/components/bjss/Page/page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { TypedDetails, DualDetails } from "@ui/components/bjss/details/details";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { useClaimReviewPageData } from "./claimReview.logic";
-import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs";
+import { useClaimDetailsPageData } from "./claimDetails.logic";
+import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
 
 interface Params {
   projectId: ProjectId;
@@ -91,10 +91,11 @@ interface ClaimData {
     | "offerTotal"
     | "remainingOfferCosts"
   >[];
+  fragmentRef?: unknown;
 }
 
 export const ClaimsDetailsPage = (props: Params & BaseProps) => {
-  const data = useClaimReviewPageData(props.projectId, props.partnerId, props.periodId);
+  const data = useClaimDetailsPageData(props.projectId, props.partnerId, props.periodId);
   const { isPmOrMo, isFc } = getAuthRoles(data.project.roles);
   const backLink = isPmOrMo
     ? props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })
@@ -109,6 +110,7 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
       }
       pageTitle={<Title title={data.project.title} projectNumber={data.project.projectNumber} />}
       partnerStatus={data.partner.partnerStatus}
+      fragmentRef={data?.fragmentRef}
     >
       {/* If the partner is not withdrawn, and it's the final claim, show message. */}
       {!data.partner.isWithdrawn && data.claim?.isFinalClaim && (
@@ -132,7 +134,7 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
       </Section>
 
       <Section>
-        <AccordionSection data={data} forecastData={data.forecastData} statusChanges={data.statusChanges} />
+        <AccordionSection data={data} forecastData={data.forecastData} />
       </Section>
 
       <CommentsFromFC project={data.project} claim={data.claim} />
@@ -200,7 +202,6 @@ const CostsAndGrantSummary = ({
 const AccordionSection = ({
   data,
   forecastData,
-  statusChanges,
 }: {
   data: {
     claim: Pick<ClaimData["claim"], "status">;
@@ -208,7 +209,6 @@ const AccordionSection = ({
     documents: ClaimData["documents"];
   };
   forecastData: ClaimData["forecastData"];
-  statusChanges: ClaimData["statusChanges"];
 }) => {
   const isArchived =
     data.claim.status === ClaimStatus.PAID ||
@@ -225,7 +225,7 @@ const AccordionSection = ({
       )}
 
       <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
-        <Logs qa="claim-status-change-table" data={statusChanges} />
+        <Logs qa="claim-status-change-table" />
       </AccordionItem>
 
       {isMo && (

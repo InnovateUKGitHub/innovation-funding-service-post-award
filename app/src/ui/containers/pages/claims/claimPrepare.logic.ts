@@ -11,7 +11,6 @@ import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
-import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusChange";
 import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 
 export const useClaimPreparePageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
@@ -109,12 +108,6 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       },
     );
 
-    const statusChanges = mapToClaimStatusChangeDtoArray(
-      data?.salesforce?.uiapi?.query?.Acc_StatusChange__c?.edges ?? [],
-      ["comments", "createdBy", "createdDate", "newStatusLabel"],
-      { roles: project.roles, competitionType: project.competitionType },
-    );
-
     const claimOverrides = mapToClaimOverrides(data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? []);
 
     return {
@@ -123,8 +116,8 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       costCategories,
       claim,
       claimDetails: costsSummaryForPeriod,
-      statusChanges,
       claimOverrides,
+      fragmentRef: data?.salesforce?.uiapi,
     };
   }, []);
 };

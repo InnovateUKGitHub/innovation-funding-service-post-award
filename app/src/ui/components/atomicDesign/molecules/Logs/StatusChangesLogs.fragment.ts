@@ -1,7 +1,7 @@
 import { graphql } from "react-relay";
 
 export const statusChangesLogsFragment = graphql`
-  fragment StatusChangesLogsFragment on UIAPI {
+  fragment StatusChangesLogsFragment on UIAPI @argumentDefinitions(allPeriods: { type: Boolean, defaultValue: false }) {
     query {
       StatusChanges_Project: Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
         edges {
@@ -18,32 +18,65 @@ export const statusChangesLogsFragment = graphql`
           }
         }
       }
-      StatusChanges_StatusChanges: Acc_StatusChange__c(
-        where: {
-          Acc_Claim__r: {
-            and: [{ Acc_ProjectParticipant__c: { eq: $partnerId } }, { Acc_ProjectPeriodNumber__c: { eq: $periodId } }]
+      ... @include(if: $allPeriods) {
+        StatusChanges_StatusChanges: Acc_StatusChange__c(
+          where: { Acc_Claim__r: { Acc_ProjectParticipant__c: { eq: $partnerId } } }
+          orderBy: { CreatedDate: { order: DESC } }
+          first: 2000
+        ) {
+          edges {
+            node {
+              Id
+              Acc_NewClaimStatus__c {
+                value
+              }
+              Acc_ExternalComment__c {
+                value
+              }
+              Acc_ParticipantVisibility__c {
+                value
+              }
+              Acc_CreatedByAlias__c {
+                value
+              }
+              CreatedDate {
+                value
+              }
+            }
           }
         }
-        orderBy: { CreatedDate: { order: DESC } }
-        first: 2000
-      ) {
-        edges {
-          node {
-            Id
-            Acc_NewClaimStatus__c {
-              value
+      }
+      ... @skip(if: $allPeriods) {
+        StatusChanges_StatusChanges: Acc_StatusChange__c(
+          where: {
+            Acc_Claim__r: {
+              and: [
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
+              ]
             }
-            Acc_ExternalComment__c {
-              value
-            }
-            Acc_ParticipantVisibility__c {
-              value
-            }
-            Acc_CreatedByAlias__c {
-              value
-            }
-            CreatedDate {
-              value
+          }
+          orderBy: { CreatedDate: { order: DESC } }
+          first: 2000
+        ) {
+          edges {
+            node {
+              Id
+              Acc_NewClaimStatus__c {
+                value
+              }
+              Acc_ExternalComment__c {
+                value
+              }
+              Acc_ParticipantVisibility__c {
+                value
+              }
+              Acc_CreatedByAlias__c {
+                value
+              }
+              CreatedDate {
+                value
+              }
             }
           }
         }

@@ -12,12 +12,11 @@ import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
-import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusChange";
 
 export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
   const data = useLazyLoadQuery<ClaimDetailsQuery>(
     claimDetailsQuery,
-    { projectId, projectIdStr: projectId, partnerId },
+    { projectId, projectIdStr: projectId, partnerId, periodId },
     { fetchPolicy: "network-only" },
   );
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
@@ -166,12 +165,6 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
       },
     );
 
-    const statusChanges = mapToClaimStatusChangeDtoArray(
-      data?.salesforce?.uiapi?.query?.Acc_StatusChange__c?.edges ?? [],
-      ["comments", "createdBy", "createdDate", "newStatusLabel"],
-      { roles: project.roles, competitionType: project.competitionType },
-    );
-
     return {
       project,
       partner,
@@ -179,8 +172,8 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
       claim,
       forecastData,
       claimDetails: costsSummaryForPeriod,
-      statusChanges,
       documents,
+      fragmentRef: data?.salesforce?.uiapi,
     };
   }, []);
 };
