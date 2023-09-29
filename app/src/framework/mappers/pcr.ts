@@ -118,8 +118,52 @@ export const mapFromSalesforcePCRPartnerType = (partnerType: string | null) => {
   }
 };
 
-export const mapToPcrItemType = (shortName: string) => {
-  switch (shortName.toLowerCase()) {
+export const mapToPcrItemType = (developerName: string) => {
+  switch (developerName) {
+    case "Loan_LoanDrawdownChange":
+    case "Loan_ParticipantVirementForLoanDrawdown":
+    case "Loan_PeriodVirementForLoanDrawdown":
+      return PCRItemType.LoanDrawdownChange;
+    case "Loan_ChangeLoansDuration":
+      return PCRItemType.LoanDrawdownExtension;
+    case "Acc_AccountNameChange":
+    case "Acc_ChangeAPartnersName":
+      return PCRItemType.AccountNameChange;
+    case "Acc_PartnerAddition":
+    case "Acc_AddAPartner":
+      return PCRItemType.PartnerAddition;
+    case "Acc_ProjectSuspension":
+    case "Acc_PutProjectOnHold":
+      return PCRItemType.ProjectSuspension;
+    case "Acc_TimeExtension":
+    case "Acc_ChangeProjectDuration":
+      return PCRItemType.TimeExtension;
+    case "Acc_ChangeProjectScope":
+      return PCRItemType.ScopeChange;
+    case "Acc_ProjectTermination":
+    case "Acc_EndTheProjectEarly":
+      return PCRItemType.ProjectTermination;
+    case "Acc_FinancialVirement":
+    case "Acc_MultiplePartnerFinancialVirement":
+    case "Acc_ReallocateOnePartnersProjectCosts":
+    case "Acc_ReallocateSeveralPartnersProjectCost":
+    case "Acc_SinglePartnerFinancialVirement":
+    case "Acc_BetweenPartnerFinancialVirement":
+      return PCRItemType.MultiplePartnerFinancialVirement;
+    case "Acc_RemoveAPartner":
+    case "Acc_PartnerWithdrawal":
+      return PCRItemType.PartnerWithdrawal;
+    case "Acc_ChangePeriodLength":
+      return PCRItemType.PeriodLengthChange;
+    // Request header
+    case "Acc_ProjectChangeRequests":
+      return PCRItemType.Unknown;
+  }
+
+  /**
+   * TODO: Remove and replace with `DeveloperName`
+   */
+  switch (developerName.toLowerCase()) {
     case "partner addition":
     case "add a partner":
       return PCRItemType.PartnerAddition;

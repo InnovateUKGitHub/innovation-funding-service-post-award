@@ -8,7 +8,7 @@ import { Markdown } from "../../atoms/Markdown/markdown";
 export interface SummaryListProps {
   children: React.ReactNode;
   noBorders?: boolean;
-  qa: string;
+  qa?: string;
   className?: never;
 }
 
@@ -29,7 +29,7 @@ interface SummaryListItemProps {
   label: string | ContentSelector;
   action?: React.ReactNode;
   validation?: Result;
-  qa: string;
+  qa?: string;
   hasError?: boolean;
   id?: string;
 }

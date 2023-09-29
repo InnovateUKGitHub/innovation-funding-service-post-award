@@ -127,7 +127,7 @@ export const useOnUpdatePcrPrepare = (
       return clientsideApiClient.pcrs.update(payload);
     },
     onSuccess() {
-      navigate(routes.pcrsDashboard.getLink({ projectId }).path);
+      navigate(routes.projectChangeRequestSubmittedForReview.getLink({ projectId, pcrId }).path);
     },
   });
 };

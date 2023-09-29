@@ -984,6 +984,14 @@
       "backLink": "Back to project change requests",
       "alertMessage": "All the information will be permanently deleted.",
       "button": "Delete request"
+    },
+    "pcrSubmittedForReview": {
+      "title": "Project change request submitted",
+      "backLink": "Back to project change requests",
+      "submittedMessage": "Your project change request has been submitted.",
+      "submittedSubmessage": "Please note there is a 30-day Service Level Target from submission of your request to Innovate UK, through to approval of the change(s).",
+      "reviewLink": "Review request",
+      "backButton": "Return to project change requests"
     }
   },
   "claimsMessages": {
@@ -1404,6 +1412,10 @@
   },
   "pcrLabels": {
     "requestNumber": "Request number",
+    "requestType": "Request type",
+    "requestStarted": "Request started",
+    "requestLastUpdated": "Request last updated",
+    "requestStatus": "Request status",
     "types": "Types",
     "started": "Started",
     "status": "Status",

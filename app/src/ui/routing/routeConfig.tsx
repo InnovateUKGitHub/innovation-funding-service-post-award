@@ -68,6 +68,7 @@ import { ClaimsDetailsRoute } from "@ui/containers/pages/claims/claimDetails.pag
 import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page";
 import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview.page";
 import { PCRDeleteRoute } from "@ui/containers/pages/pcrs/pcrDelete.page";
+import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -103,6 +104,7 @@ export const routeConfig = {
   loansSummary: LoansSummaryRoute,
   loansRequest: LoansRequestRoute,
   projectChangeRequestAddType: ProjectChangeRequestAddTypeRoute,
+  projectChangeRequestSubmittedForReview: ProjectChangeRequestSubmittedForReviewRoute,
   pcrCreate: PCRCreateRoute,
   pcrDetails: PCRDetailsRoute,
   pcrDelete: PCRDeleteRoute,
