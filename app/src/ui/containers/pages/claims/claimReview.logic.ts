@@ -12,7 +12,6 @@ import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
-import { mapToClaimStatusChangeDtoArray } from "@gql/dtoMapper/mapClaimStatusChange";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { getIARDueOnClaimPeriods } from "@gql/dtoMapper/mapIarDue";
 import { useNavigate } from "react-router-dom";
@@ -181,12 +180,6 @@ export const useClaimReviewPageData = (
       },
     );
 
-    const statusChanges = mapToClaimStatusChangeDtoArray(
-      data?.salesforce?.uiapi?.query?.Acc_StatusChange__c?.edges ?? [],
-      ["comments", "createdBy", "createdDate", "newStatusLabel"],
-      { roles: project.roles, competitionType: project.competitionType },
-    );
-
     return {
       project,
       partner,
@@ -194,9 +187,9 @@ export const useClaimReviewPageData = (
       claim,
       forecastData,
       claimDetails: costsSummaryForPeriod,
-      statusChanges,
       documents,
       IARDueOnClaimPeriods,
+      fragmentRef: data?.salesforce?.uiapi,
     };
   }, [totalDocumentsLength]);
 };

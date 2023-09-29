@@ -5,7 +5,7 @@ import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/Accor
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs";
+import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
@@ -53,6 +53,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
         </BackLink>
       }
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
+      fragmentRef={data?.fragmentRef}
     >
       <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />
       {isNonEditable && (
@@ -79,7 +80,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
 
         <Accordion>
           <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="status-and-comments-log">
-            <Logs qa="claim-status-change-table" data={data.statusChanges} />
+            <Logs qa="claim-status-change-table" />
           </AccordionItem>
         </Accordion>
 

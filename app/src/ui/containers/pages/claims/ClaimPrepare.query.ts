@@ -6,6 +6,7 @@ export const claimPrepareQuery = graphql`
     }
     salesforce {
       uiapi {
+        ...StatusChangesLogsFragment
         query {
           Acc_Profile__c(
             where: {
@@ -63,39 +64,6 @@ export const claimPrepareQuery = graphql`
                   Name {
                     value
                   }
-                }
-              }
-            }
-          }
-          Acc_StatusChange__c(
-            where: {
-              Acc_Claim__r: {
-                and: [
-                  { Acc_ProjectParticipant__c: { eq: $partnerId } }
-                  { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
-                ]
-              }
-            }
-            orderBy: { CreatedDate: { order: DESC } }
-            first: 2000
-          ) {
-            edges {
-              node {
-                Id
-                Acc_NewClaimStatus__c {
-                  value
-                }
-                Acc_ExternalComment__c {
-                  value
-                }
-                Acc_ParticipantVisibility__c {
-                  value
-                }
-                Acc_CreatedByAlias__c {
-                  value
-                }
-                CreatedDate {
-                  value
                 }
               }
             }

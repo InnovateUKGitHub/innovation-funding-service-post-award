@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5230c58e2e5010a7f796725d248035bb>>
+ * @generated SignedSource<<ffb170e428aa77e747e22c697df0ff8a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -27,7 +27,7 @@ export type StatusChangesLogsFragment$data = {
         } | null;
       } | null> | null;
     } | null;
-    readonly StatusChanges_StatusChanges: {
+    readonly StatusChanges_StatusChanges?: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CreatedByAlias__c: {
@@ -73,9 +73,116 @@ v1 = [
     "name": "value",
     "storageKey": null
   }
+],
+v2 = {
+  "kind": "Literal",
+  "name": "first",
+  "value": 2000
+},
+v3 = {
+  "kind": "Literal",
+  "name": "orderBy",
+  "value": {
+    "CreatedDate": {
+      "order": "DESC"
+    }
+  }
+},
+v4 = [
+  {
+    "fields": [
+      {
+        "kind": "Variable",
+        "name": "eq",
+        "variableName": "partnerId"
+      }
+    ],
+    "kind": "ObjectValue",
+    "name": "Acc_ProjectParticipant__c"
+  }
+],
+v5 = [
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "Acc_StatusChange__cEdge",
+    "kind": "LinkedField",
+    "name": "edges",
+    "plural": true,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "Acc_StatusChange__c",
+        "kind": "LinkedField",
+        "name": "node",
+        "plural": false,
+        "selections": [
+          (v0/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "TextAreaValue",
+            "kind": "LinkedField",
+            "name": "Acc_NewClaimStatus__c",
+            "plural": false,
+            "selections": (v1/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "LongTextAreaValue",
+            "kind": "LinkedField",
+            "name": "Acc_ExternalComment__c",
+            "plural": false,
+            "selections": (v1/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "BooleanValue",
+            "kind": "LinkedField",
+            "name": "Acc_ParticipantVisibility__c",
+            "plural": false,
+            "selections": (v1/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "StringValue",
+            "kind": "LinkedField",
+            "name": "Acc_CreatedByAlias__c",
+            "plural": false,
+            "selections": (v1/*: any*/),
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "DateTimeValue",
+            "kind": "LinkedField",
+            "name": "CreatedDate",
+            "plural": false,
+            "selections": (v1/*: any*/),
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
 ];
 return {
   "argumentDefinitions": [
+    {
+      "defaultValue": false,
+      "kind": "LocalArgument",
+      "name": "allPeriods"
+    },
     {
       "kind": "RootArgument",
       "name": "partnerId"
@@ -201,155 +308,95 @@ return {
           "storageKey": null
         },
         {
-          "alias": "StatusChanges_StatusChanges",
-          "args": [
+          "condition": "allPeriods",
+          "kind": "Condition",
+          "passingValue": true,
+          "selections": [
             {
-              "kind": "Literal",
-              "name": "first",
-              "value": 2000
-            },
-            {
-              "kind": "Literal",
-              "name": "orderBy",
-              "value": {
-                "CreatedDate": {
-                  "order": "DESC"
-                }
-              }
-            },
-            {
-              "fields": [
+              "alias": "StatusChanges_StatusChanges",
+              "args": [
+                (v2/*: any*/),
+                (v3/*: any*/),
                 {
                   "fields": [
                     {
-                      "items": [
-                        {
-                          "fields": [
-                            {
-                              "fields": [
-                                {
-                                  "kind": "Variable",
-                                  "name": "eq",
-                                  "variableName": "partnerId"
-                                }
-                              ],
-                              "kind": "ObjectValue",
-                              "name": "Acc_ProjectParticipant__c"
-                            }
-                          ],
-                          "kind": "ObjectValue",
-                          "name": "and.0"
-                        },
-                        {
-                          "fields": [
-                            {
-                              "fields": [
-                                {
-                                  "kind": "Variable",
-                                  "name": "eq",
-                                  "variableName": "periodId"
-                                }
-                              ],
-                              "kind": "ObjectValue",
-                              "name": "Acc_ProjectPeriodNumber__c"
-                            }
-                          ],
-                          "kind": "ObjectValue",
-                          "name": "and.1"
-                        }
-                      ],
-                      "kind": "ListValue",
-                      "name": "and"
+                      "fields": (v4/*: any*/),
+                      "kind": "ObjectValue",
+                      "name": "Acc_Claim__r"
                     }
                   ],
                   "kind": "ObjectValue",
-                  "name": "Acc_Claim__r"
+                  "name": "where"
                 }
               ],
-              "kind": "ObjectValue",
-              "name": "where"
-            }
-          ],
-          "concreteType": "Acc_StatusChange__cConnection",
-          "kind": "LinkedField",
-          "name": "Acc_StatusChange__c",
-          "plural": false,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "Acc_StatusChange__cEdge",
+              "concreteType": "Acc_StatusChange__cConnection",
               "kind": "LinkedField",
-              "name": "edges",
-              "plural": true,
-              "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "Acc_StatusChange__c",
-                  "kind": "LinkedField",
-                  "name": "node",
-                  "plural": false,
-                  "selections": [
-                    (v0/*: any*/),
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "TextAreaValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_NewClaimStatus__c",
-                      "plural": false,
-                      "selections": (v1/*: any*/),
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "LongTextAreaValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_ExternalComment__c",
-                      "plural": false,
-                      "selections": (v1/*: any*/),
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "BooleanValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_ParticipantVisibility__c",
-                      "plural": false,
-                      "selections": (v1/*: any*/),
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "StringValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_CreatedByAlias__c",
-                      "plural": false,
-                      "selections": (v1/*: any*/),
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "DateTimeValue",
-                      "kind": "LinkedField",
-                      "name": "CreatedDate",
-                      "plural": false,
-                      "selections": (v1/*: any*/),
-                      "storageKey": null
-                    }
-                  ],
-                  "storageKey": null
-                }
-              ],
+              "name": "Acc_StatusChange__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
               "storageKey": null
             }
-          ],
-          "storageKey": null
+          ]
+        },
+        {
+          "condition": "allPeriods",
+          "kind": "Condition",
+          "passingValue": false,
+          "selections": [
+            {
+              "alias": "StatusChanges_StatusChanges",
+              "args": [
+                (v2/*: any*/),
+                (v3/*: any*/),
+                {
+                  "fields": [
+                    {
+                      "fields": [
+                        {
+                          "items": [
+                            {
+                              "fields": (v4/*: any*/),
+                              "kind": "ObjectValue",
+                              "name": "and.0"
+                            },
+                            {
+                              "fields": [
+                                {
+                                  "fields": [
+                                    {
+                                      "kind": "Variable",
+                                      "name": "eq",
+                                      "variableName": "periodId"
+                                    }
+                                  ],
+                                  "kind": "ObjectValue",
+                                  "name": "Acc_ProjectPeriodNumber__c"
+                                }
+                              ],
+                              "kind": "ObjectValue",
+                              "name": "and.1"
+                            }
+                          ],
+                          "kind": "ListValue",
+                          "name": "and"
+                        }
+                      ],
+                      "kind": "ObjectValue",
+                      "name": "Acc_Claim__r"
+                    }
+                  ],
+                  "kind": "ObjectValue",
+                  "name": "where"
+                }
+              ],
+              "concreteType": "Acc_StatusChange__cConnection",
+              "kind": "LinkedField",
+              "name": "Acc_StatusChange__c",
+              "plural": false,
+              "selections": (v5/*: any*/),
+              "storageKey": null
+            }
+          ]
         }
       ],
       "storageKey": null
@@ -360,6 +407,6 @@ return {
 };
 })();
 
-(node as any).hash = "29ca05e682dbee3e04656b3dd44e6eca";
+(node as any).hash = "be2588b8f4e6dc06f3c3209b117c2ea4";
 
 export default node;

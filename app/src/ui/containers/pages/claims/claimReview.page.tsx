@@ -19,7 +19,7 @@ import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs";
+import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
@@ -125,6 +125,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
       apiError={apiError}
       validationErrors={Object.assign({}, validatorErrors, documentValidatorErrors) as RhfErrors}
       pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
+      fragmentRef={data.fragmentRef}
     >
       <Messages messages={props.messages} />
 
@@ -186,7 +187,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
           </AccordionItem>
 
           <AccordionItem title={content.accordionTitleClaimLog} qa="log-accordion">
-            <Logs qa="claim-status-change-table" data={data.statusChanges} />
+            <Logs qa="claim-status-change-table" />
           </AccordionItem>
 
           <AccordionItem

@@ -1,11 +1,12 @@
 import { graphql } from "react-relay";
 export const claimDetailsQuery = graphql`
-  query ClaimDetailsQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!) {
+  query ClaimDetailsQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     currentUser {
       userId
     }
     salesforce {
       uiapi {
+        ...StatusChangesLogsFragment
         query {
           Acc_Profile__c(
             where: {
@@ -47,32 +48,6 @@ export const claimDetailsQuery = graphql`
                   Name {
                     value
                   }
-                }
-              }
-            }
-          }
-          Acc_StatusChange__c(
-            where: { Acc_Claim__r: { Acc_ProjectParticipant__c: { eq: $partnerId } } }
-            orderBy: { CreatedDate: { order: DESC } }
-            first: 2000
-          ) {
-            edges {
-              node {
-                Id
-                Acc_NewClaimStatus__c {
-                  value
-                }
-                Acc_ExternalComment__c {
-                  value
-                }
-                Acc_ParticipantVisibility__c {
-                  value
-                }
-                Acc_CreatedByAlias__c {
-                  value
-                }
-                CreatedDate {
-                  value
                 }
               }
             }
