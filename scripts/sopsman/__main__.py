@@ -22,6 +22,7 @@ environment_map = {
     "preprod": Environment(pgp=pgp_map["named"], folder="env/aws/preprod/"),
     "sysint": Environment(pgp=pgp_map["named"], folder="env/aws/sysint/"),
     "uat": Environment(pgp=pgp_map["named"], folder="env/aws/uat/"),
+    "at": Environment(pgp=pgp_map["named"], folder="env/aws/at/"),
     # Local Environments
     "local": Environment(pgp=pgp_map["local"], folder="env/local/"),
 }

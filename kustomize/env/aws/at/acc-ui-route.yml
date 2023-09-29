@@ -1,0 +1,6 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: acc-ui-route
+spec:
+  host: www-acc-at.apps.ocp4.innovateuk.ukri.org

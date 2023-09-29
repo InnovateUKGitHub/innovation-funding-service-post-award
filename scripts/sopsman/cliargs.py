@@ -38,6 +38,7 @@ _parser.add_argument(
         "uat",
         "local",
         "custom",
+        "at"
     ],
     dest="environments",
 )
