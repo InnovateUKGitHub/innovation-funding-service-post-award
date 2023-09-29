@@ -7,6 +7,7 @@ export const claimDetailsQuery = graphql`
     salesforce {
       uiapi {
         ...StatusChangesLogsFragment
+        ...ForecastTableFragment
         query {
           Acc_Profile__c(
             where: {
@@ -56,12 +57,7 @@ export const claimDetailsQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectID__c: { eq: $projectIdStr } }
-                {
-                  or: [
-                    { RecordType: { Name: { eq: "Total Project Period" } } }
-                    { RecordType: { Name: { eq: "Claims Detail" } } }
-                  ]
-                }
+                { RecordType: { Name: { eq: "Total Project Period" } } }
                 { Acc_ClaimStatus__c: { ne: "New" } }
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
               ]
@@ -93,9 +89,6 @@ export const claimDetailsQuery = graphql`
                 Acc_ClaimStatus__c {
                   value
                   label
-                }
-                Acc_PaidDate__c {
-                  value
                 }
                 Acc_ProjectParticipant__r {
                   Id
@@ -252,16 +245,7 @@ export const claimDetailsQuery = graphql`
                     partnerId
                   }
                 }
-                Acc_NumberofPeriods__c {
-                  value
-                }
-                Acc_CurrentPeriodNumber__c {
-                  value
-                }
                 Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ClaimsUnderQuery__c {
                   value
                 }
                 Acc_ProjectTitle__c {
@@ -271,15 +255,6 @@ export const claimDetailsQuery = graphql`
                   value
                 }
                 Acc_CompetitionType__c {
-                  value
-                }
-                Acc_ClaimFrequency__c {
-                  value
-                }
-                Acc_GOLTotalCostAwarded__c {
-                  value
-                }
-                Acc_ClaimsOverdue__c {
                   value
                 }
               }

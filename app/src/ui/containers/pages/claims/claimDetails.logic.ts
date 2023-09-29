@@ -25,18 +25,9 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
 
   return useMemo(() => {
     const project = mapToProjectDto(projectNode, [
-      "claimedPercentage",
-      "claimFrequency",
-      "claimFrequencyName",
-      "claimsOverdue",
-      "claimsToReview",
-      "claimsWithParticipant",
       "competitionType",
-      "costsClaimedToDate",
       "id",
-      "numberOfPeriods",
       "partnerRoles",
-      "periodId",
       "projectNumber",
       "roles",
       "title",
@@ -72,17 +63,15 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
         "isApproved",
         "periodId",
         "isFinalClaim",
-        "paidDate",
         "periodEndDate",
         "periodStartDate",
         "status",
-        "statusLabel",
         "totalCostsSubmitted",
         "totalCostsApproved",
         "totalDeferredAmount",
         "periodCostsToBePaid",
       ],
-      { competitionType: project.competitionType },
+      {},
     );
 
     // GOL COSTS
@@ -113,13 +102,6 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
 
     const claim = claims.find(claim => claim.periodId === periodId);
 
-    // CLAIM DETAILS
-    const claimDetails = mapToClaimDetailsDtoArray(
-      claimsGql,
-      ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
-      {},
-    );
-
     if (!claim) throw new Error(" there is no matching claim");
     const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [
       "id",
@@ -129,17 +111,6 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
       "periodId",
       "value",
     ]);
-
-    const forecastData = {
-      golCosts,
-      forecastDetails,
-      claimDetails,
-      costCategories,
-      project,
-      partner,
-      claim,
-      claims,
-    };
 
     const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
       claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
@@ -170,7 +141,6 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
       partner,
       costCategories,
       claim,
-      forecastData,
       claimDetails: costsSummaryForPeriod,
       documents,
       fragmentRef: data?.salesforce?.uiapi,

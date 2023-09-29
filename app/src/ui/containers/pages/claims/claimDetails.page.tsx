@@ -1,6 +1,6 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectRole } from "@framework/constants/project";
-import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -19,10 +19,7 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
 import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
-import {
-  ForecastDataForTableLayout,
-  ForecastTable,
-} from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
@@ -78,9 +75,6 @@ interface ClaimData {
     "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner"
   >[];
 
-  forecastData: ForecastDataForTableLayout | null;
-  statusChanges: Pick<ClaimStatusChangeDto, "newStatusLabel" | "createdBy" | "createdDate" | "comments">[];
-
   // strangely misnamed dto field that the claims table expects
   claimDetails: Pick<
     CostsSummaryForPeriodDto,
@@ -134,7 +128,7 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
       </Section>
 
       <Section>
-        <AccordionSection data={data} forecastData={data.forecastData} />
+        <AccordionSection data={data} periodId={props.periodId} />
       </Section>
 
       <CommentsFromFC project={data.project} claim={data.claim} />
@@ -201,26 +195,26 @@ const CostsAndGrantSummary = ({
 
 const AccordionSection = ({
   data,
-  forecastData,
+  periodId,
 }: {
   data: {
     claim: Pick<ClaimData["claim"], "status">;
     project: Pick<ClaimData["project"], "roles">;
     documents: ClaimData["documents"];
   };
-  forecastData: ClaimData["forecastData"];
+  periodId: PeriodId;
 }) => {
   const isArchived =
     data.claim.status === ClaimStatus.PAID ||
     data.claim.status === ClaimStatus.APPROVED ||
     ClaimStatus.PAYMENT_REQUESTED;
   const { isMo } = getAuthRoles(data.project.roles);
-  const showForecast = forecastData && !(isArchived && isMo);
+  const showForecast = !(isArchived && isMo);
   return (
     <Accordion>
       {showForecast && (
         <AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
-          <ForecastTable data={forecastData} hideValidation />
+          <ForecastTable periodId={periodId} hideValidation />
         </AccordionItem>
       )}
 

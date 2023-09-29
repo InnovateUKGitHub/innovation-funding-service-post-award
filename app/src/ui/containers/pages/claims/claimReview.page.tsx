@@ -25,7 +25,7 @@ import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
@@ -173,17 +173,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
       <Section>
         <Accordion>
           <AccordionItem qa="forecast-accordion" title={content.accordionTitleForecast}>
-            <ForecastTable
-              hideValidation
-              data={{
-                ...data.forecastData,
-                project: data.project,
-                partner: data.partner,
-                claim: data.claim,
-                costCategories: data.costCategories,
-                IARDueOnClaimPeriods: data.IARDueOnClaimPeriods,
-              }}
-            />
+            <ForecastTable hideValidation periodId={props.periodId} />
           </AccordionItem>
 
           <AccordionItem title={content.accordionTitleClaimLog} qa="log-accordion">

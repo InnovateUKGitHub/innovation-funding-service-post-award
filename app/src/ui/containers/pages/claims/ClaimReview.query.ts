@@ -7,6 +7,7 @@ export const claimReviewQuery = graphql`
     salesforce {
       uiapi {
         ...StatusChangesLogsFragment
+        ...ForecastTableFragment
         query {
           Acc_Profile__c(
             where: {
@@ -71,25 +72,7 @@ export const claimReviewQuery = graphql`
                   }
                 }
                 Id
-                Acc_ReasonForDifference__c {
-                  value
-                }
-                Acc_ClaimStatus__c {
-                  value
-                }
                 Acc_FinalClaim__c {
-                  value
-                }
-                Acc_PaidDate__c {
-                  value
-                }
-                Acc_ProjectParticipant__r {
-                  Id
-                }
-                Acc_PCF_Status__c {
-                  value
-                }
-                Acc_PeriodCoststobePaid__c {
                   value
                 }
                 Acc_ProjectPeriodEndDate__c {
@@ -99,15 +82,6 @@ export const claimReviewQuery = graphql`
                   value
                 }
                 Acc_ProjectPeriodStartDate__c {
-                  value
-                }
-                Acc_TotalCostsApproved__c {
-                  value
-                }
-                Acc_TotalCostsSubmitted__c {
-                  value
-                }
-                Acc_TotalDeferredAmount__c {
                   value
                 }
               }
@@ -148,40 +122,6 @@ export const claimReviewQuery = graphql`
                   value
                 }
                 Acc_ProjectPeriodStartDate__c {
-                  value
-                }
-              }
-            }
-          }
-          ClaimsForIarDue: Acc_Claims__c(
-            where: {
-              and: [
-                { Acc_ProjectID__c: { eq: $projectIdStr } }
-                { Acc_ProjectParticipant__c: { eq: $partnerId } }
-                {
-                  or: [
-                    { RecordType: { Name: { eq: "Total Project Period" } } }
-                    { RecordType: { Name: { eq: "Claims Detail" } } }
-                  ]
-                }
-              ]
-            }
-            first: 2000
-          ) {
-            edges {
-              node {
-                RecordType {
-                  Name {
-                    value
-                  }
-                }
-                Acc_IAR_Status__c {
-                  value
-                }
-                Acc_IARRequired__c {
-                  value
-                }
-                Acc_ProjectPeriodNumber__c {
                   value
                 }
               }
@@ -342,40 +282,16 @@ export const claimReviewQuery = graphql`
                     value
                   }
                 }
-                Impact_Management_Participation__c {
-                  value
-                }
                 Acc_CompetitionType__c {
                   value
                 }
-                Acc_NumberofPeriods__c {
-                  value
-                }
-                Acc_CurrentPeriodNumber__c {
-                  value
-                }
                 Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ClaimsUnderQuery__c {
                   value
                 }
                 Acc_ProjectTitle__c {
                   value
                 }
                 Acc_ProjectStatus__c {
-                  value
-                }
-                Acc_CompetitionType__c {
-                  value
-                }
-                Acc_ClaimFrequency__c {
-                  value
-                }
-                Acc_GOLTotalCostAwarded__c {
-                  value
-                }
-                Acc_ClaimsOverdue__c {
                   value
                 }
               }
