@@ -4,7 +4,7 @@ import {
   PCRItemType,
   PCRSpendProfileCapitalUsageType,
   PCRSpendProfileOverheadRate,
-  PCRStepId,
+  PCRStepType,
 } from "@framework/constants/pcrConstants";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
@@ -159,7 +159,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
   private getSpendProfileStep(context: IContext, pcrItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined);
     if (!workflow) return null;
-    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
+    const stepName: AddPartnerStepNames = PCRStepType.spendProfileStep;
     return workflow.findStepNumberByName(stepName);
   }
 
@@ -174,7 +174,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
         projectId: params.projectId,
         projectChangeRequestId: params.pcrId,
         pcr: dto,
-        pcrStepId: PCRStepId.spendProfileStep,
+        pcrStepType: PCRStepType.spendProfileStep,
       }),
     );
 

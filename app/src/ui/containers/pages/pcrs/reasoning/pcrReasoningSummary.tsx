@@ -3,7 +3,7 @@ import { NavigationArrowsForPCRs } from "@ui/containers/pages/pcrs/navigationArr
 import { IReasoningWorkflowMetadata } from "@ui/containers/pages/pcrs/reasoning/workflowMetadata";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { BaseProps } from "../../../containerBase";
-import { PCRItemType, PCRStepId, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRStepType, PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
@@ -55,7 +55,7 @@ export const PCRReasoningSummary = (props: BaseProps & Props) => {
             validation={editor.validator.reasoningComments}
             action={
               mode === "prepare" && (
-                <Link id={editor.validator.reasoningComments.key} route={getStepLink(PCRStepId.reasoningStep)}>
+                <Link id={editor.validator.reasoningComments.key} route={getStepLink(PCRStepType.reasoningStep)}>
                   <Content value={x => x.pages.pcrReasoningSummary.edit} />
                 </Link>
               )
@@ -73,7 +73,7 @@ export const PCRReasoningSummary = (props: BaseProps & Props) => {
             qa="files"
             action={
               mode === "prepare" && (
-                <Link route={getStepLink(PCRStepId.filesStep)}>
+                <Link route={getStepLink(PCRStepType.filesStep)}>
                   <Content value={x => x.pages.pcrReasoningSummary.edit} />
                 </Link>
               )

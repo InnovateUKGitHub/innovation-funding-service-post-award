@@ -1,4 +1,4 @@
-import { PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
@@ -77,7 +77,7 @@ export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardF
         projectId: params.projectId,
         projectChangeRequestId: params.pcrId,
         pcr: dto,
-        pcrStepId: PCRStepId.spendProfileStep,
+        pcrStepType: PCRStepType.spendProfileStep,
       }),
     );
 
@@ -97,7 +97,7 @@ export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardF
     return new PCRDtoValidator({
       model: dto,
       original: dto,
-      pcrStepId: PCRStepId.spendProfileStep,
+      pcrStepType: PCRStepType.spendProfileStep,
     });
   }
 }

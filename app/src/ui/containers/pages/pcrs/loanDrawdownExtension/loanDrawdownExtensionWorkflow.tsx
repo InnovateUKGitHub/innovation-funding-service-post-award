@@ -1,11 +1,11 @@
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos/pcrDtos";
 import { LoanDrawdownExtensionStepContainer } from "@ui/containers/pages/pcrs/loanDrawdownExtension/loanDrawdownExtensionStep";
 import { IPCRWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { PCRLoanExtensionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { loanDrawdownExtensionStepSummary } from "./loanDrawdownExtensionStepSummary";
 
-export type LoanExtensionStepNames = PCRStepId.loanExtension;
+export type LoanExtensionStepNames = PCRStepType.loanExtension;
 
 export const loanExtensionItemWorkflow: IPCRWorkflow<
   PCRItemForLoanDrawdownExtensionDto,
@@ -13,7 +13,7 @@ export const loanExtensionItemWorkflow: IPCRWorkflow<
 > = {
   steps: [
     {
-      stepName: PCRStepId.loanExtension,
+      stepName: PCRStepType.loanExtension,
       displayName: "Loan extension",
       stepNumber: 1,
       validation: val => val.pcr,

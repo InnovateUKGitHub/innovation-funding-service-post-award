@@ -2,7 +2,7 @@ import { CostCategoryType } from "@framework/constants/enums";
 import {
   PCRItemStatus,
   PCRItemType,
-  PCRStepId,
+  PCRStepType,
   getPCROrganisationType,
   PCROrganisationType,
   PCRParticipantSize,
@@ -116,7 +116,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: SuspendProjectSteps,
   ) {
-    if (stepName === PCRStepId.details) {
+    if (stepName === PCRStepType.details) {
       if (body.suspensionStartDate_month || body.suspensionStartDate_year) {
         const suspensionStartDate = DateTime.fromFormat(
           `${body.suspensionStartDate_month}/${body.suspensionStartDate_year}`,
@@ -143,11 +143,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateScopeChange(item: PCRItemForScopeChangeDto, body: IFormBody, stepName: scopeChangeStepNames) {
-    if (stepName === PCRStepId.publicDescriptionStep) {
+    if (stepName === PCRStepType.publicDescriptionStep) {
       item.publicDescription = body.description;
     }
 
-    if (stepName === PCRStepId.projectSummaryStep) {
+    if (stepName === PCRStepType.projectSummaryStep) {
       item.projectSummary = body.summary;
     }
   }
@@ -206,7 +206,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       new UpdatePCRCommand({
         projectId: params.projectId,
         projectChangeRequestId: params.pcrId,
-        pcrStepId: workflow?.getCurrentStepName(),
+        pcrStepType: workflow?.getCurrentStepName(),
         pcr: dto,
       }),
     );
@@ -238,7 +238,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: accountNameChangeStepNames | null,
   ) {
-    if (stepName === PCRStepId.partnerNameStep) {
+    if (stepName === PCRStepType.partnerNameStep) {
       item.partnerId = body.partnerId;
       item.accountName = body.accountName;
     }
@@ -260,7 +260,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: removePartnerStepNames | null,
   ) {
-    if (stepName === PCRStepId.removalPeriodStep) {
+    if (stepName === PCRStepType.removalPeriodStep) {
       item.removalPeriod = Number(body.removalPeriod);
       item.partnerId = body.partnerId;
     }
@@ -273,7 +273,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     body: IFormBody,
     stepName: AddPartnerStepNames | null,
   ) {
-    if (stepName === PCRStepId.roleAndOrganisationStep) {
+    if (stepName === PCRStepType.roleAndOrganisationStep) {
       item.projectRole = parseInt(body.projectRole, 10);
       item.partnerType = parseInt(body.partnerType, 10);
       const organisationType = getPCROrganisationType(item.partnerType);
@@ -284,14 +284,14 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.isCommercialWork =
         body.isCommercialWork === "true" ? true : body.isCommercialWork === "false" ? false : null;
     }
-    if (stepName === PCRStepId.academicOrganisationStep) {
+    if (stepName === PCRStepType.academicOrganisationStep) {
       item.organisationName = body.organisationName;
     }
-    if (stepName === PCRStepId.organisationDetailsStep) {
+    if (stepName === PCRStepType.organisationDetailsStep) {
       item.participantSize = parseInt(body.participantSize, 10);
       item.numberOfEmployees = parseInt(body.numberOfEmployees, 10);
     }
-    if (stepName === PCRStepId.financeDetailsStep) {
+    if (stepName === PCRStepType.financeDetailsStep) {
       item.financialYearEndDate =
         body.financialYearEndDate_month && body.financialYearEndDate_year
           ? DateTime.fromFormat(`${body.financialYearEndDate_month}/${body.financialYearEndDate_year}`, "M/yyyy")
@@ -301,29 +301,29 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
           : null;
       item.financialYearEndTurnover = Number(body.financialYearEndTurnover);
     }
-    if (stepName === PCRStepId.projectLocationStep) {
+    if (stepName === PCRStepType.projectLocationStep) {
       item.projectLocation = parseInt(body.projectLocation, 10);
       item.projectCity = body.projectCity;
       item.projectPostcode = body.projectPostcode;
     }
-    if (stepName === PCRStepId.financeContactStep) {
+    if (stepName === PCRStepType.financeContactStep) {
       item.contact1ProjectRole = parseInt(body.contact1ProjectRole, 10);
       item.contact1Forename = body.contact1Forename;
       item.contact1Surname = body.contact1Surname;
       item.contact1Phone = body.contact1Phone;
       item.contact1Email = body.contact1Email;
     }
-    if (stepName === PCRStepId.projectManagerDetailsStep) {
+    if (stepName === PCRStepType.projectManagerDetailsStep) {
       item.contact2ProjectRole = parseInt(body.contact2ProjectRole, 10);
       item.contact2Forename = body.contact2Forename;
       item.contact2Surname = body.contact2Surname;
       item.contact2Phone = body.contact2Phone;
       item.contact2Email = body.contact2Email;
     }
-    if (stepName === PCRStepId.awardRateStep) {
+    if (stepName === PCRStepType.awardRateStep) {
       item.awardRate = parseNumber(body.awardRate);
     }
-    if (stepName === PCRStepId.academicCostsStep) {
+    if (stepName === PCRStepType.academicCostsStep) {
       item.tsbReference = body.tsbReference;
 
       const relevantCostCategories = costCategories.filter(
@@ -348,10 +348,10 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         }
       });
     }
-    if (stepName === PCRStepId.otherFundingStep) {
+    if (stepName === PCRStepType.otherFundingStep) {
       item.hasOtherFunding = body.hasOtherFunding === "true" ? true : body.hasOtherFunding === "false" ? false : null;
     }
-    if (stepName === PCRStepId.otherFundingSourcesStep) {
+    if (stepName === PCRStepType.otherFundingSourcesStep) {
       const otherFundingCostCategory = costCategories.find(
         x => x.type === CostCategoryType.Other_Public_Sector_Funding,
       );
@@ -380,7 +380,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateLoanExtension(item: PCRItemForLoanDrawdownExtensionDto, body: IFormBody, stepName: string | undefined) {
-    if (stepName === PCRStepId.loanExtension) {
+    if (stepName === PCRStepType.loanExtension) {
       item.availabilityPeriodChange = Number(body.availabilityPeriodChange);
       item.extensionPeriodChange = Number(body.extensionPeriodChange);
       item.repaymentPeriodChange = Number(body.repaymentPeriodChange);

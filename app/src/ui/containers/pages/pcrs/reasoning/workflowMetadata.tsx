@@ -2,7 +2,7 @@ import { PCRPrepareReasoningStep } from "@ui/containers/pages/pcrs/reasoning/pre
 import { PCRPrepareReasoningFilesStep } from "@ui/containers/pages/pcrs/reasoning/prepareFilesStep";
 import { BaseProps } from "@ui/containers/containerBase";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
@@ -21,14 +21,14 @@ export interface ReasoningStepProps extends BaseProps {
 }
 
 export interface IReasoningWorkflowMetadata {
-  stepName: PCRStepId.reasoningStep | PCRStepId.filesStep;
+  stepName: PCRStepType.reasoningStep | PCRStepType.filesStep;
   stepNumber: 1 | 2;
   stepRender: (props: ReasoningStepProps) => React.ReactNode;
 }
 
 export const reasoningWorkflowSteps: IReasoningWorkflowMetadata[] = [
   {
-    stepName: PCRStepId.reasoningStep,
+    stepName: PCRStepType.reasoningStep,
     stepNumber: 1,
     stepRender: function PCRReasoningWorkflowReasoningStep(props: ReasoningStepProps) {
       return (
@@ -41,7 +41,7 @@ export const reasoningWorkflowSteps: IReasoningWorkflowMetadata[] = [
     },
   },
   {
-    stepName: PCRStepId.filesStep,
+    stepName: PCRStepType.filesStep,
     stepNumber: 2,
     stepRender: function PCRReasoningWorkflowFilesStep(props: ReasoningStepProps) {
       return <PCRPrepareReasoningFilesStep {...props} onSave={(dto: PCRDto) => props.onSave(dto)} />;

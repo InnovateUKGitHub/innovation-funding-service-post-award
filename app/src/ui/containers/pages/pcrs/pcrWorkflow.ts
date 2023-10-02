@@ -12,7 +12,7 @@ import { suspendProjectWorkflow } from "./suspendProject/workflow";
 import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { LoanDrawdownChangeWorkflow } from "./loanDrawdownChange/LoanDrawdownChangeWorkflow";
 import { loanExtensionItemWorkflow } from "./loanDrawdownExtension/loanDrawdownExtensionWorkflow";
-import { PCRStepId, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRStepType, PCRItemType } from "@framework/constants/pcrConstants";
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
@@ -52,19 +52,19 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   getViewLink: (stepName: TStepNames) => React.ReactNode;
 }
 
-export type IPCRWorkflow<T, TVal extends Results<AnyObject> | null> = IWorkflow<
-  PCRStepId,
+export type IPCRWorkflow<T, TVal extends Results<AnyObject>> = IWorkflow<
+  PCRStepType,
   PcrStepProps<T, TVal>,
-  PcrSummaryProps<T, TVal, PCRStepId>,
+  PcrSummaryProps<T, TVal, PCRStepType>,
   PCRWorkflowValidator
 >;
 
 export type WorkflowPcrType = AddPartnerWorkflowItem & { type: PCRItemType };
 
-export class PcrWorkflow<T extends AnyObject, TVal extends Results<T> | null> extends WorkflowBase<
-  PCRStepId,
+export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends WorkflowBase<
+  PCRStepType,
   PcrStepProps<T, TVal>,
-  PcrSummaryProps<T, TVal, PCRStepId>,
+  PcrSummaryProps<T, TVal, PCRStepType>,
   PCRWorkflowValidator
 > {
   public constructor(definition: IPCRWorkflow<T, TVal>, stepNumber: number | undefined) {

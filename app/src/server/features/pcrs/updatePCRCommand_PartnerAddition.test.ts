@@ -13,7 +13,7 @@ import {
   PCRParticipantSize,
   PCRStatus,
   PCRItemType,
-  PCRStepId,
+  PCRStepType,
   recordTypeMetaValues,
 } from "@framework/constants/pcrConstants";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
@@ -416,7 +416,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
         new UpdatePCRCommand({
           projectId: project.Id,
           projectChangeRequestId: projectChangeRequest.id,
-          pcrStepId: PCRStepId.projectLocationStep,
+          pcrStepType: PCRStepType.projectLocationStep,
           pcr: dto,
         }),
       ),
@@ -429,7 +429,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
         new UpdatePCRCommand({
           projectId: project.Id,
           projectChangeRequestId: projectChangeRequest.id,
-          pcrStepId: PCRStepId.projectLocationStep,
+          pcrStepType: PCRStepType.projectLocationStep,
           pcr: dto,
         }),
       ),

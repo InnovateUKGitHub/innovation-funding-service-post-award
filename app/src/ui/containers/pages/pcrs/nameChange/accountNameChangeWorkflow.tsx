@@ -1,4 +1,4 @@
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
 import { NameChangeStep } from "@ui/containers/pages/pcrs/nameChange/nameChangeStep";
 import { PCRPrepareItemFilesStep } from "@ui/containers/pages/pcrs/nameChange/prepareItemFilesStep";
@@ -6,7 +6,7 @@ import { NameChangeSummary } from "@ui/containers/pages/pcrs/nameChange/summary"
 import { IPCRWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
-export type accountNameChangeStepNames = PCRStepId.partnerNameStep | PCRStepId.filesStep;
+export type accountNameChangeStepNames = PCRStepType.partnerNameStep | PCRStepType.filesStep;
 
 export const accountNameChangeWorkflow: IPCRWorkflow<
   PCRItemForAccountNameChangeDto,
@@ -14,14 +14,14 @@ export const accountNameChangeWorkflow: IPCRWorkflow<
 > = {
   steps: [
     {
-      stepName: PCRStepId.partnerNameStep,
+      stepName: PCRStepType.partnerNameStep,
       displayName: "Partner details",
       stepNumber: 1,
       validation: val => val.pcr,
       stepRender: NameChangeStep,
     },
     {
-      stepName: PCRStepId.filesStep,
+      stepName: PCRStepType.filesStep,
       displayName: "Upload change of name certificate",
       stepNumber: 2,
       validation: val => val,

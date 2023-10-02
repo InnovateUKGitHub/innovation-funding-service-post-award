@@ -84,7 +84,7 @@ export const enum PCRItemTypeName {
   LoanDrawdownExtension = "LoanDrawdownExtension",
 }
 
-export const enum PCRStepId {
+export const enum PCRStepType {
   // Base PCR Steps
   none = "",
   reasoningStep = "reasoningStep",

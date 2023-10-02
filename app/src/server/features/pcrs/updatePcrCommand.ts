@@ -4,7 +4,7 @@ import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { CostCategoryType } from "@framework/constants/enums";
-import { PCRStepId, PCRStatus, PCRItemType, PCRItemTypeName } from "@framework/constants/pcrConstants";
+import { PCRStepType, PCRStatus, PCRItemType, PCRItemTypeName } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { PCRDto, PCRItemForPartnerAdditionDto, PCRItemDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import {
@@ -31,24 +31,24 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   private readonly projectId: ProjectId;
   private readonly projectChangeRequestId: PcrId | PcrItemId;
   private readonly pcr: PcrData;
-  private readonly pcrStepId: PCRStepId;
+  private readonly pcrStepType: PCRStepType;
 
   constructor({
     projectId,
     projectChangeRequestId,
     pcr,
-    pcrStepId = PCRStepId.none,
+    pcrStepType = PCRStepType.none,
   }: {
     projectId: ProjectId;
     projectChangeRequestId: PcrId | PcrItemId;
     pcr: PcrData;
-    pcrStepId?: PCRStepId;
+    pcrStepType?: PCRStepType;
   }) {
     super();
     this.projectId = projectId;
     this.projectChangeRequestId = projectChangeRequestId;
     this.pcr = pcr;
-    this.pcrStepId = pcrStepId;
+    this.pcrStepType = pcrStepType;
   }
 
   protected async accessControl(auth: Authorisation) {
@@ -110,7 +110,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       original: originalDto,
       partners: partners,
       projectPcrs: allPcrs,
-      pcrStepId: this.pcrStepId,
+      pcrStepType: this.pcrStepType,
     });
 
     if (!validationResult.isValid) throw new ValidationError(validationResult);

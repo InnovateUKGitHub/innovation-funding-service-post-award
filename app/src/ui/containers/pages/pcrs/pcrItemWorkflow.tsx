@@ -1,4 +1,4 @@
-import { PCRItemStatus, PCRItemType, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { FinancialVirementDto } from "@framework/dtos/financialVirementDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
@@ -43,8 +43,8 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (props: { dto: PCRDto; pcrStepId?: PCRStepId }) => void;
-  onSave: (props: { dto: PCRDto; pcrStepId?: PCRStepId; link: ILinkInfo }) => void;
+  onChange: (props: { dto: PCRDto; pcrStepType?: PCRStepType }) => void;
+  onSave: (props: { dto: PCRDto; pcrStepType?: PCRStepType; link: ILinkInfo }) => void;
 }
 
 type PcrItemProps = Data & Callbacks & ProjectChangeRequestPrepareItemParams & BaseProps;

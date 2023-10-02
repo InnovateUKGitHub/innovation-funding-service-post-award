@@ -8,7 +8,7 @@ import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPar
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import classNames from "classnames";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { PCRItemType, PCRStepId, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRStepType, PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { CostCategoryList, CostCategoryItem } from "@framework/types/CostCategory";
@@ -249,7 +249,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     // allowing me to find the step name and get the workflow with the correct step
     const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!summaryWorkflow) return null;
-    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
+    const stepName: AddPartnerStepNames = PCRStepType.spendProfileStep;
     const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
     return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep);
   }
@@ -274,7 +274,7 @@ const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryPara
         stores.projectChangeRequests.updatePcrEditor({
           saving: true,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.spendProfileStep,
+          pcrStepType: PCRStepType.spendProfileStep,
           dto,
           message: undefined,
           onComplete: () => navigate(link.path),
@@ -285,7 +285,7 @@ const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryPara
         stores.projectChangeRequests.updatePcrEditor({
           saving: false,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.spendProfileStep,
+          pcrStepType: PCRStepType.spendProfileStep,
           dto,
         });
       }}

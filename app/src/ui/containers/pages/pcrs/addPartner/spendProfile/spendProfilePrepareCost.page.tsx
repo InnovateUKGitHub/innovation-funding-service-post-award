@@ -1,5 +1,5 @@
 import { CostCategoryGroupType, CostCategoryType } from "@framework/constants/enums";
-import { PCRItemStatus, PCRItemType, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
@@ -188,7 +188,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private getSpendProfileStep(addPartnerItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!workflow) return null;
-    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
+    const stepName: AddPartnerStepNames = PCRStepType.spendProfileStep;
     return workflow.findStepNumberByName(stepName);
   }
 
@@ -286,7 +286,7 @@ const onSave = (stores: IStores, dto: PCRDto, projectId: ProjectId, link: ILinkI
   stores.projectChangeRequests.updatePcrEditor({
     saving: true,
     projectId,
-    pcrStepId: PCRStepId.spendProfileStep,
+    pcrStepType: PCRStepType.spendProfileStep,
     dto,
     message: undefined,
     onComplete: () => navigate(link.path),
@@ -331,7 +331,7 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
         stores.projectChangeRequests.updatePcrEditor({
           saving: false,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.spendProfileStep,
+          pcrStepType: PCRStepType.spendProfileStep,
           dto,
         });
       }}
@@ -365,7 +365,7 @@ const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => {
         stores.projectChangeRequests.updatePcrEditor({
           saving: false,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.spendProfileStep,
+          pcrStepType: PCRStepType.spendProfileStep,
           dto,
         });
       }}

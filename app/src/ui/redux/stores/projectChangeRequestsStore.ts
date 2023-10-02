@@ -3,7 +3,7 @@ import {
   PCRItemType,
   PCRStatus,
   PCRItemStatus,
-  PCRStepId,
+  PCRStepType,
   PCRContactRole,
   PCRProjectRole,
   PCRPartnerType,
@@ -164,7 +164,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           items: [],
         }),
       init,
-      dto => this.getValidator({ projectId, dto, pcrStepId: PCRStepId.none, showErrors: false }),
+      dto => this.getValidator({ projectId, dto, pcrStepType: PCRStepType.none, showErrors: false }),
     );
   }
 
@@ -174,7 +174,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId, pcrId),
       () => this.getById(projectId, pcrId),
       init,
-      dto => this.getValidator({ projectId, dto, pcrStepId: PCRStepId.none, showErrors: false }),
+      dto => this.getValidator({ projectId, dto, pcrStepType: PCRStepType.none, showErrors: false }),
     );
   }
 
@@ -220,14 +220,14 @@ export class ProjectChangeRequestStore extends StoreBase {
   public updatePcrEditor({
     saving,
     projectId,
-    pcrStepId,
+    pcrStepType,
     dto,
     message,
     onComplete,
   }: {
     saving: boolean;
     projectId: ProjectId;
-    pcrStepId?: PCRStepId;
+    pcrStepType?: PCRStepType;
     dto: PCRDto;
     message?: string;
     onComplete?: (result: PCRDto) => void;
@@ -237,7 +237,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       "pcr",
       this.getKeyForRequest(projectId, dto.id),
       dto,
-      showErrors => this.getValidator({ projectId, dto, pcrStepId, showErrors }),
+      showErrors => this.getValidator({ projectId, dto, pcrStepType, showErrors }),
       p =>
         dto.id
           ? apiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p })
@@ -385,12 +385,12 @@ export class ProjectChangeRequestStore extends StoreBase {
   private getValidator({
     projectId,
     dto,
-    pcrStepId,
+    pcrStepType,
     showErrors,
   }: {
     projectId: ProjectId;
     dto: PCRDto;
-    pcrStepId?: PCRStepId;
+    pcrStepType?: PCRStepType;
     showErrors: boolean;
   }) {
     return Pending.combine({
@@ -409,7 +409,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           project: x.project,
           original: x.original,
           partners: x.partners,
-          pcrStepId: pcrStepId,
+          pcrStepType: pcrStepType,
         }),
     );
   }
@@ -427,7 +427,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       "pcr",
       this.getKeyForRequest(projectId, pcrId),
       dto,
-      () => this.getValidator({ projectId, dto, pcrStepId: PCRStepId.none, showErrors: false }),
+      () => this.getValidator({ projectId, dto, pcrStepType: PCRStepType.none, showErrors: false }),
       p => apiClient.pcrs.delete({ projectId, id: pcrId, ...p }),
       () => {
         if (message) {

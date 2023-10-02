@@ -3,7 +3,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { useProjectParticipants } from "@ui/components/atomicDesign/atoms/providers/ProjectParticipants/project-participants";
 import { ProjectReallocationCosts } from "../components/PcrSummary/pcr-summary.interface";
-import { PCRStepId, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRStepType, PCRItemType } from "@framework/constants/pcrConstants";
 import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos/financialVirementDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { PCRItemForMultiplePartnerFinancialVirementDto, PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
@@ -34,7 +34,7 @@ export interface FinancialVirementSummaryProps
   extends PcrSummaryProps<
     PCRItemForMultiplePartnerFinancialVirementDto,
     MultiplePartnerFinancialVirementDtoValidator,
-    PCRStepId.none
+    PCRStepType.none
   > {
   virement: Pending<FinancialVirementDto>;
 }
@@ -338,7 +338,7 @@ export const GrantMovingOverFinancialYearForm = ({ form: Form, editor }: GrantMo
 export type FinancialVirementSummaryContainerProps = PcrSummaryProps<
   PCRItemForMultiplePartnerFinancialVirementDto,
   MultiplePartnerFinancialVirementDtoValidator,
-  PCRStepId.none
+  PCRStepType.none
 >;
 
 export const FinancialVirementSummary = (props: FinancialVirementSummaryContainerProps) => {

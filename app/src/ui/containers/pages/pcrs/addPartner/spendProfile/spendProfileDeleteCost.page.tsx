@@ -14,7 +14,7 @@ import {
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost.page";
 import { CostCategoryGroupType } from "@framework/constants/enums";
-import { PCRItemType, PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { CostCategoryList } from "@framework/types/CostCategory";
@@ -190,7 +190,7 @@ const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams 
         stores.projectChangeRequests.updatePcrEditor({
           saving: true,
           projectId,
-          pcrStepId: PCRStepId.spendProfileStep,
+          pcrStepType: PCRStepType.spendProfileStep,
           dto,
           message: "You have deleted a cost",
           onComplete: () =>

@@ -1,4 +1,4 @@
-import { PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
@@ -269,7 +269,7 @@ const PCRReasoningWorkflowContainer = (
         stores.projectChangeRequests.updatePcrEditor({
           saving: true,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.reasoningStep,
+          pcrStepType: PCRStepType.reasoningStep,
           dto,
           message: undefined,
           onComplete: () => {
@@ -283,7 +283,7 @@ const PCRReasoningWorkflowContainer = (
         stores.projectChangeRequests.updatePcrEditor({
           saving: false,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.reasoningStep,
+          pcrStepType: PCRStepType.reasoningStep,
           dto,
         });
       }}

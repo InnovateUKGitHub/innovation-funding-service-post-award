@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { LoanDrawdownChangeStepName } from "./LoanDrawdownChangeWorkflow";
 import { LoanEditTable } from "./LoanEditTable";
-import { PCRStepId, PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PCRStepType, PCRItemStatus } from "@framework/constants/pcrConstants";
 import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
 import { PCRItemForLoanDrawdownChangeDto } from "@framework/dtos/pcrDtos";
 import { ValidationSummary } from "@ui/components/atomicDesign/molecules/validation/ValidationSummary/validationSummary";
@@ -40,7 +40,7 @@ export const LoanDrawdownChangeUI = ({
     <>
       {isClient && <ValidationSummary validation={editor.validator} compressed={false} />}
 
-      <LoanEditTable {...editor} mode="view" onEditLink={props.getEditLink(PCRStepId.loanDrawdownChange, null)} />
+      <LoanEditTable {...editor} mode="view" onEditLink={props.getEditLink(PCRStepType.loanDrawdownChange, null)} />
     </>
   );
 };
