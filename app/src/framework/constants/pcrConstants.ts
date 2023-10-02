@@ -299,6 +299,29 @@ You must not:
 You should not increase the overhead percentage rate.
 `;
 
+export interface IPcrStatusMetaValue {
+  status: PCRStatus;
+  i18nName: ContentSelector;
+}
+
+export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
+  { status: PCRStatus.Unknown, i18nName: x => x.pcrStatus.Unknown },
+  { status: PCRStatus.Draft, i18nName: x => x.pcrStatus.Draft },
+  { status: PCRStatus.SubmittedToMonitoringOfficer, i18nName: x => x.pcrStatus.SubmittedToMonitoringOfficer },
+  { status: PCRStatus.QueriedByMonitoringOfficer, i18nName: x => x.pcrStatus.QueriedByMonitoringOfficer },
+  { status: PCRStatus.SubmittedToInnovationLead, i18nName: x => x.pcrStatus.SubmittedToInnovationLead },
+  { status: PCRStatus.QueriedByInnovateUK, i18nName: x => x.pcrStatus.QueriedByInnovateUK },
+  { status: PCRStatus.InExternalReview, i18nName: x => x.pcrStatus.InExternalReview },
+  { status: PCRStatus.InReviewWithInnovateUK, i18nName: x => x.pcrStatus.InReviewWithInnovateUK },
+  { status: PCRStatus.Rejected, i18nName: x => x.pcrStatus.Rejected },
+  { status: PCRStatus.Withdrawn, i18nName: x => x.pcrStatus.Withdrawn },
+  { status: PCRStatus.Approved, i18nName: x => x.pcrStatus.Approved },
+  { status: PCRStatus.Actioned, i18nName: x => x.pcrStatus.Actioned },
+  { status: PCRStatus.SubmittedToInnovateUK, i18nName: x => x.pcrStatus.SubmittedToInnovateUK },
+  { status: PCRStatus.QueriedByInnovationLead, i18nName: x => x.pcrStatus.QueriedByInnovationLead },
+  { status: PCRStatus.InReviewWithProjectFinance, i18nName: x => x.pcrStatus.InReviewWithProjectFinance },
+] as const;
+
 export interface IMetaValue {
   ignoredCompetitions: string[];
   type: PCRItemType;
