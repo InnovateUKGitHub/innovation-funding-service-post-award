@@ -43,8 +43,8 @@ interface Data {
 }
 
 interface Callbacks {
-  onChange: (props: { dto: PCRDto; pcrStepType?: PCRStepType }) => void;
-  onSave: (props: { dto: PCRDto; pcrStepType?: PCRStepType; link: ILinkInfo }) => void;
+  onChange: (props: { dto: PCRDto; pcrStepType?: PCRStepType; pcrStepId?: PcrItemId }) => void;
+  onSave: (props: { dto: PCRDto; pcrStepType?: PCRStepType; pcrStepId?: PcrItemId; link: ILinkInfo }) => void;
 }
 
 type PcrItemProps = Data & Callbacks & ProjectChangeRequestPrepareItemParams & BaseProps;

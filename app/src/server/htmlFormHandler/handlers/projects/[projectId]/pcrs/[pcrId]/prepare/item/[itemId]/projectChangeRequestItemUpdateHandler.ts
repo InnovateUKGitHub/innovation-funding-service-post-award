@@ -395,6 +395,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     return new PCRDtoValidator({
       model: dto,
       original: dto,
+      pcrStepId: params.itemId,
     });
   }
 }

@@ -281,12 +281,20 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 }
 
-const onSave = (stores: IStores, dto: PCRDto, projectId: ProjectId, link: ILinkInfo, navigate: NavigateFunction) => {
+const onSave = (
+  stores: IStores,
+  dto: PCRDto,
+  projectId: ProjectId,
+  itemId: PcrItemId,
+  link: ILinkInfo,
+  navigate: NavigateFunction,
+) => {
   stores.messages.clearMessages();
   stores.projectChangeRequests.updatePcrEditor({
     saving: true,
     projectId,
     pcrStepType: PCRStepType.spendProfileStep,
+    pcrStepId: itemId,
     dto,
     message: undefined,
     onComplete: () => navigate(link.path),
@@ -325,7 +333,7 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
         props.itemId,
         costCategoryPending,
       )}
-      onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}
+      onSave={(dto, link) => onSave(stores, dto, props.projectId, props.itemId, link, navigate)}
       onChange={dto => {
         stores.messages.clearMessages();
         stores.projectChangeRequests.updatePcrEditor({
@@ -359,7 +367,7 @@ const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => {
         return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId) as PCRSpendProfileCostDto;
       })}
       validator={stores.projectChangeRequests.getSpendProfileCostValidator(editorPending, props.itemId, props.costId)}
-      onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}
+      onSave={(dto, link) => onSave(stores, dto, props.projectId, props.itemId, link, navigate)}
       onChange={dto => {
         stores.messages.clearMessages();
         stores.projectChangeRequests.updatePcrEditor({

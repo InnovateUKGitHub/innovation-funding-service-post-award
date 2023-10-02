@@ -274,6 +274,7 @@ const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryPara
         stores.projectChangeRequests.updatePcrEditor({
           saving: true,
           projectId: props.projectId,
+          pcrStepId: props.itemId,
           pcrStepType: PCRStepType.spendProfileStep,
           dto,
           message: undefined,
@@ -285,6 +286,7 @@ const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryPara
         stores.projectChangeRequests.updatePcrEditor({
           saving: false,
           projectId: props.projectId,
+          pcrStepId: props.itemId,
           pcrStepType: PCRStepType.spendProfileStep,
           dto,
         });

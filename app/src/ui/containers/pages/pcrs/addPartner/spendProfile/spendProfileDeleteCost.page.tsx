@@ -191,6 +191,7 @@ const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams 
           saving: true,
           projectId,
           pcrStepType: PCRStepType.spendProfileStep,
+          pcrStepId: props.itemId,
           dto,
           message: "You have deleted a cost",
           onComplete: () =>

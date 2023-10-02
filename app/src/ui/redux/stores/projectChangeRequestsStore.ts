@@ -221,6 +221,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     saving,
     projectId,
     pcrStepType,
+    pcrStepId,
     dto,
     message,
     onComplete,
@@ -228,6 +229,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     saving: boolean;
     projectId: ProjectId;
     pcrStepType?: PCRStepType;
+    pcrStepId?: PcrItemId;
     dto: PCRDto;
     message?: string;
     onComplete?: (result: PCRDto) => void;
@@ -237,7 +239,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       "pcr",
       this.getKeyForRequest(projectId, dto.id),
       dto,
-      showErrors => this.getValidator({ projectId, dto, pcrStepType, showErrors }),
+      showErrors => this.getValidator({ projectId, dto, pcrStepType, pcrStepId, showErrors }),
       p =>
         dto.id
           ? apiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p })
@@ -386,11 +388,13 @@ export class ProjectChangeRequestStore extends StoreBase {
     projectId,
     dto,
     pcrStepType,
+    pcrStepId,
     showErrors,
   }: {
     projectId: ProjectId;
     dto: PCRDto;
     pcrStepType?: PCRStepType;
+    pcrStepId?: PcrItemId;
     showErrors: boolean;
   }) {
     return Pending.combine({
@@ -409,7 +413,8 @@ export class ProjectChangeRequestStore extends StoreBase {
           project: x.project,
           original: x.original,
           partners: x.partners,
-          pcrStepType: pcrStepType,
+          pcrStepType,
+          pcrStepId,
         }),
     );
   }
