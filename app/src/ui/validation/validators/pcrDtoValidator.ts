@@ -657,8 +657,13 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
     return Validation.required(this, value, message);
   }
 
-  protected requiredIfStepId(state: PcrItemId | undefined, value: Validation.ValidatableValue, message?: string) {
-    if (state === undefined || this.model.id !== state) {
+  protected requiredIfStepId(
+    type: PCRStepType,
+    id: PcrItemId | undefined,
+    value: Validation.ValidatableValue,
+    message?: string,
+  ) {
+    if (this.pcrStepType !== type || id === undefined || this.model.id !== id) {
       return Validation.valid(this);
     }
     return Validation.required(this, value, message);
@@ -1556,6 +1561,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     this,
     () =>
       this.requiredIfStepId(
+        PCRStepType.projectLocationStep,
         this.pcrStepId,
         this.model.projectLocation || null,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectLocationRequired),
