@@ -1,5 +1,6 @@
 import { Profile } from "@framework/constants/recordTypes";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { equalityIfDefined } from "./equalityIfDefined";
 
 // on Acc_Profile__c with DeveloperName "Total_Cost_Category"
 type GolCostNode = GQL.PartialNode<{
@@ -71,7 +72,7 @@ export function mapToGolCostDtoArray<
 ): Pick<GolCostDtoMapping, PickList>[] {
   return (
     edges
-      ?.filter(x => x?.node?.RecordType?.DeveloperName?.value === Profile.totalCostCategory)
+      ?.filter(x => equalityIfDefined(x?.node?.RecordType?.DeveloperName?.value, Profile.totalCostCategory))
       ?.map(node => {
         return mapToGolCostDto(node?.node ?? null, pickList, { costCategories });
       }) ?? []
