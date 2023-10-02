@@ -500,6 +500,38 @@ export const navigateToPartnerPerson = () => {
   cy.submitButton("Save and continue").click();
 };
 
+export const completeAddPartnerForMulti = () => {
+  cy.getByLabel("Collaborator").click();
+  cy.getByLabel("Yes").click();
+  cy.getByLabel("Business").click();
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("State aid eligibility");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Search companies house");
+  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
+  cy.get("h2").contains("Companies house search results");
+  cy.get(`input[type="radio"]`).click();
+  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
+  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
+  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Organisation details");
+  cy.getByLabel("Large").click();
+  cy.get(`input[id="numberOfEmployees"]`).type("1000");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Financial details");
+  cy.get(`input[id="financialYearEndDate_month"]`).type("03");
+  cy.get(`input[id="financialYearEndDate_year"]`).type("2022");
+  cy.get(`input[id="financialYearEndTurnover"]`).type("1000000");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Project location");
+  cy.get(`input[id="projectLocation_10"]`).click();
+  cy.get(`input[id="projectCity"]`).type("Swindon");
+  cy.get(`input[id="projectPostcode"]`).type("SN5");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Add person to organisation");
+};
+
 export const navigateToPartnerCosts = () => {
   cy.clickCheckBox("Add a partner");
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
@@ -1162,23 +1194,33 @@ export const validatePcrDurationPage = () => {
   cy.reload();
 };
 
+export enum PcrItemType {
+  ReallocateProjectCosts = "Reallocate project costs",
+  RemoveAPartner = "Remove a partner",
+  AddAPartner = "Add a partner",
+  ChangeProjectScope = "Change project scope",
+  ChangeProjectDuration = "Change project duration",
+  ChangeAPartnerName = "Change a partner's name",
+  PutAProjectOnHold = "Put project on hold",
+}
+
 const pcrArray = [
-  "Reallocate project costs",
-  "Remove a partner",
-  "Add a partner",
-  "Change project scope",
-  "Change project duration",
-  "Change a partner's name",
-  "Put project on hold",
+  PcrItemType.ReallocateProjectCosts,
+  PcrItemType.RemoveAPartner,
+  PcrItemType.AddAPartner,
+  PcrItemType.ChangeProjectScope,
+  PcrItemType.ChangeProjectDuration,
+  PcrItemType.ChangeAPartnerName,
+  PcrItemType.PutAProjectOnHold,
 ];
 
-const multiPcrArray = [
-  "Reallocate project costs",
-  "Add a partner",
-  "Change project scope",
-  "Change project duration",
-  "Change a partner's name",
-  "Put project on hold",
+export const multiPcrArray = [
+  PcrItemType.ReallocateProjectCosts,
+  PcrItemType.AddAPartner,
+  PcrItemType.ChangeProjectScope,
+  PcrItemType.ChangeProjectDuration,
+  PcrItemType.ChangeAPartnerName,
+  PcrItemType.PutAProjectOnHold,
 ];
 
 export const selectEachPcr = () => {
