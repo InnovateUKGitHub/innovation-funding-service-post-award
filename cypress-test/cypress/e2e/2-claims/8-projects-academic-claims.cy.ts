@@ -5,7 +5,6 @@ import {
   shouldShowProjectTitle,
   newCostCatLineItem,
   correctTableHeaders,
-  academicCosts,
   updateAcademicCosts,
   academicForecastNavigate,
 } from "./steps";
@@ -62,4 +61,11 @@ describe("claims > edit claims as FC", () => {
   it("Should navigate to the claims forecast page", academicForecastNavigate);
 
   it("Should display the correct cost category forecast and update figures", updateAcademicCosts);
+
+  it("Should enter an overspend and assert for correct copy", () => {
+    cy.getByAriaLabel("Directly incurred - Staff Period 3").clear().type("1000000");
+    cy.validationNotification("The partner is requesting an amount more than the agreed value for:").contains(
+      "Directly incurred - Staff",
+    );
+  });
 });

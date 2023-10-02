@@ -51,6 +51,11 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
    */
   it("Should validate when null value is entered as a forecast", validateForecast);
 
+  it("Should enter an overspend and assert for correct copy", () => {
+    cy.getByAriaLabel("Labour Period 2").clear().type("1000000");
+    cy.validationNotification("The partner is requesting an amount more than the agreed value for:").contains("Labour");
+  });
+
   it("Should accept input and calculate the figures accordingly", acceptInputAndUpdate);
 
   it("Should save and return to claims", () => {

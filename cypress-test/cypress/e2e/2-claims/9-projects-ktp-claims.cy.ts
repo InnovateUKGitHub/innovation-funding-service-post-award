@@ -55,6 +55,13 @@ describe("claims > KTP", () => {
     ktpAssociateEmployment,
   );
 
+  it("Should enter an overspend and assert for correct copy", () => {
+    cy.getByAriaLabel("Associate Employment Period 2").clear().type("1000000");
+    cy.validationNotification("The partner is requesting an amount more than the agreed value for:").contains(
+      "Associate Employment",
+    );
+  });
+
   it("Should continue to summary and display the correct messaging", () => {
     cy.button("Continue to summary").click({ force: true });
     cy.heading("Claim summary");
