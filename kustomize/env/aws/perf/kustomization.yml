@@ -9,4 +9,5 @@ resources:
   - ../../../config-mgmt/env/aws/perf
 
 patchesStrategicMerge:
+  - acc-ui-deployment.yml
   - acc-ui-route.yml
