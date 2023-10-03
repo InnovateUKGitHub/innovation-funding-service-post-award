@@ -10,7 +10,7 @@ import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { PCRItemStatus, PCRItemType, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
 import { PcrWorkflow } from "./pcrWorkflow";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { BaseProps } from "@ui/containers/containerBase";
@@ -68,7 +68,7 @@ const Summary = () => {
   });
 };
 
-const ViewLink = ({ stepName }: { stepName: PCRStepId }) => {
+const ViewLink = ({ stepName }: { stepName: PCRStepType }) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
   if (mode !== "review") return null;
 
@@ -79,7 +79,7 @@ const ViewLink = ({ stepName }: { stepName: PCRStepId }) => {
   );
 };
 
-const EditLink = ({ stepName }: { stepName: PCRStepId }) => {
+const EditLink = ({ stepName }: { stepName: PCRStepType }) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
 
   if (mode !== "prepare") return null;

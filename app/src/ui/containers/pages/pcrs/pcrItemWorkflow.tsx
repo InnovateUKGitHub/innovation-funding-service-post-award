@@ -206,7 +206,7 @@ const PcrBackLink = () => {
   return <BackLink route={routes.pcrDetails.getLink({ projectId, pcrId })}>Back to request</BackLink>;
 };
 
-const ViewLink = ({ stepName }: { stepName: PCRStepId }) => {
+const ViewLink = ({ stepName }: { stepName: PCRStepType }) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = useContext(PcrItemContext);
   if (mode !== "review") return null;
 
@@ -217,7 +217,7 @@ const ViewLink = ({ stepName }: { stepName: PCRStepId }) => {
   );
 };
 
-const EditLink = ({ stepName, validation }: { stepName: PCRStepId; validation: Result | null }) => {
+const EditLink = ({ stepName, validation }: { stepName: PCRStepType; validation: Result | null }) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = useContext(PcrItemContext);
 
   if (mode !== "prepare") return null;
@@ -381,7 +381,7 @@ const handleChange = (
 ) => {
   const index = dto.items.findIndex(x => x.id === itemId);
   dto.items[index] = itemDto;
-  onChange({ dto, pcrStepId: workflow.getCurrentStepName() });
+  onChange({ dto, pcrStepType: workflow.getCurrentStepName() });
 };
 
 const handleSave = (
@@ -403,7 +403,7 @@ const handleSave = (
     // submit and go back to the prepare page
     return onSave({
       dto,
-      pcrStepId: workflow.getCurrentStepName(),
+      pcrStepType: workflow.getCurrentStepName(),
       link: routes.pcrPrepare.getLink({
         projectId,
         pcrId,
@@ -417,7 +417,7 @@ const handleSave = (
   if (skipToSummary) {
     return onSave({
       dto,
-      pcrStepId: workflow.getCurrentStepName(),
+      pcrStepType: workflow.getCurrentStepName(),
       link: routes.pcrPrepareItem.getLink({
         projectId,
         pcrId,
@@ -430,7 +430,7 @@ const handleSave = (
 
   return onSave({
     dto,
-    pcrStepId: workflow.getCurrentStepName(),
+    pcrStepType: workflow.getCurrentStepName(),
     link: routes.pcrPrepareItem.getLink({
       projectId,
       pcrId,

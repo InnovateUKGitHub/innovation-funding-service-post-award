@@ -1,13 +1,13 @@
 import React from "react";
 import { ILinkInfo } from "./ILinkInfo";
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { numberComparator } from "@framework/util/comparator";
 import { Results } from "@ui/validation/results";
 
 export type MigratedSummaryProps = {
-  getStepLink: (stepName: PCRStepId) => ILinkInfo;
-  getEditLink: (stepName: PCRStepId) => React.ReactElement;
-  getViewLink: (stepName: PCRStepId) => React.ReactElement;
+  getStepLink: (stepName: PCRStepType) => ILinkInfo;
+  getEditLink: (stepName: PCRStepType) => React.ReactElement;
+  getViewLink: (stepName: PCRStepType) => React.ReactElement;
 };
 
 export type IStepProps = AnyObject;
