@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acc-ui
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+        - name: acc-ui
+          resources:
+            limits:
+              memory: 1024Mi
