@@ -1,6 +1,7 @@
 import { validCurrencyRegex } from "@framework/util/numberHelper";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
+import { DetailedHTMLProps, InputHTMLAttributes } from "react";
 import { Control, Controller } from "react-hook-form";
 import { z } from "zod";
 
@@ -20,7 +21,8 @@ const ForecastTableCurrencyInput = ({
   control,
   defaultValue,
   disabled,
-}: ForecastTableCurrencyInputProps) => {
+  ...props
+}: ForecastTableCurrencyInputProps & DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>) => {
   return (
     <Controller
       name={`profile.${profileId}`}
@@ -28,6 +30,7 @@ const ForecastTableCurrencyInput = ({
       defaultValue={defaultValue}
       render={({ field: { onChange, onBlur, value, name, ref }, fieldState: { invalid } }) => (
         <NumberInput
+          {...props}
           id={`profile_${profileId}`}
           data-qa={`profile_${costCategoryId}_period-${periodId}`}
           className="govuk-!-font-size-16"

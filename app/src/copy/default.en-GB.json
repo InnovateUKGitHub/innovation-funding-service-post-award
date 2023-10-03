@@ -97,7 +97,10 @@
       "differenceHeader": "Difference",
       "periodHeader": "Period",
       "iarDueHeader": "IAR Due",
-      "costCategoriesHeader": "Cost categories"
+      "iarDue": "Yes",
+      "iarNotDue": "No",
+      "costCategoriesHeader": "Cost categories",
+      "inputLabel": "{{ costCategoryName }} Period {{ period }}"
     },
     "reportForm": {
       "reportMessage": "Each report refers to a period of the project. You may have more than one report per period.",
