@@ -1280,6 +1280,7 @@ export const switchUserCheckForComments = () => {
 export const enterCommentsSubmit = () => {
   cy.get("textarea").clear().type(comments);
   cy.button("Submit request").click();
+  cy.heading("Project change request submitted");
 };
 
 /**

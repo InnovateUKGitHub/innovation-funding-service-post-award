@@ -11,6 +11,8 @@ export const pcrStatusChange = (status: string) => {
       cy.get("textarea").clear().type(comments);
       cy.get("button").contains("Submit request").click();
       cy.get("h1").contains("Project change request submitted");
+      cy.button("Return to project change requests").click();
+      cy.heading("Project change requests");
     } else {
       cy.get("h1").contains("Project change requests");
     }
