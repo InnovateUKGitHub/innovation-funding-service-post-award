@@ -4,3 +4,14 @@ metadata:
   name: acc-ui
 spec:
   replicas: 2
+  template:
+    spec:
+      containers:
+        - name: acc-ui
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 500m
+            limits:
+              memory: 1024Mi
+              cpu: 1000m
