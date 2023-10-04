@@ -2,7 +2,7 @@ import { graphql } from "react-relay";
 export const claimReviewQuery = graphql`
   query ClaimReviewQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     currentUser {
-      email
+      userId
     }
     salesforce {
       uiapi {
@@ -277,9 +277,7 @@ export const claimReviewQuery = graphql`
                           Name {
                             value
                           }
-                          Username {
-                            value
-                          }
+                          Id
                         }
                       }
                     }

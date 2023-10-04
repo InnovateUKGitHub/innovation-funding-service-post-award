@@ -7,6 +7,7 @@ import {
 const data = {
   currentUser: {
     email: "iuk.accproject@bjss.com.bjssdev",
+    userId: "001-sf-user-bamboo-user",
   },
   salesforce: {
     uiapi: {
@@ -68,9 +69,7 @@ const data = {
                             value: "2023-05-17T14:11:40.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "ken Charles",
                             },
@@ -117,9 +116,7 @@ const data = {
                             value: "2023-05-17T14:06:51.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "ken Charles",
                             },
@@ -166,9 +163,7 @@ const data = {
                             value: "2023-05-17T14:05:41.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "ken Charles",
                             },
@@ -215,9 +210,7 @@ const data = {
                             value: "2023-02-22T16:48:34.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -284,9 +277,7 @@ const data = {
                             value: "2023-05-22T12:52:07.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: "s.shuang@irc.trde.org.uk.test",
-                            },
+                            Id: "001-sf-user-sarah-shuang",
                             Name: {
                               value: "Sarah Shuang",
                             },
@@ -333,9 +324,7 @@ const data = {
                             value: "2023-05-22T12:52:07.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: "s.shuang@irc.trde.org.uk.test",
-                            },
+                            Id: "001-sf-user-sarah-shuang",
                             Name: {
                               value: "Sarah Shuang",
                             },
@@ -382,9 +371,7 @@ const data = {
                             value: "2023-05-22T12:51:12.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: "s.shuang@irc.trde.org.uk.test",
-                            },
+                            Id: "001-sf-user-sarah-shuang",
                             Name: {
                               value: "Sarah Shuang",
                             },
@@ -431,9 +418,7 @@ const data = {
                             value: "2023-05-22T11:02:25.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: "s.shuang@irc.trde.org.uk.test",
-                            },
+                            Id: "001-sf-user-sarah-shuang",
                             Name: {
                               value: "Sarah Shuang",
                             },
@@ -480,9 +465,7 @@ const data = {
                             value: "2023-05-22T10:58:22.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: "s.shuang@irc.trde.org.uk.test",
-                            },
+                            Id: "001-sf-user-sarah-shuang",
                             Name: {
                               value: "Sarah Shuang",
                             },
@@ -549,9 +532,7 @@ const data = {
                             value: "2023-02-24T15:43:31.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "James Black",
                             },
@@ -598,9 +579,7 @@ const data = {
                             value: "2022-12-06T16:30:23.000Z",
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "James Black",
                             },
@@ -694,9 +673,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Leondro Lio",
                             },
@@ -743,9 +720,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Leondro Lio",
                             },
@@ -792,9 +767,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Javier Baez",
                             },
@@ -841,9 +814,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -890,9 +861,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -939,9 +908,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -988,9 +955,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1037,9 +1002,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1086,9 +1049,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1135,9 +1096,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1184,9 +1143,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1233,9 +1190,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1282,9 +1237,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1331,9 +1284,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1380,9 +1331,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1429,9 +1378,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1478,9 +1425,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1527,9 +1472,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1576,9 +1519,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1625,9 +1566,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1674,9 +1613,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1723,9 +1660,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1772,9 +1707,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1821,9 +1754,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1870,9 +1801,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1919,9 +1848,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -1968,9 +1895,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -2017,9 +1942,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -2066,9 +1989,7 @@ const data = {
                             },
                           },
                           CreatedBy: {
-                            Username: {
-                              value: null,
-                            },
+                            Id: null,
                             Name: {
                               value: "Bamboo - User",
                             },
@@ -2094,7 +2015,7 @@ describe("mapToProjectDocumentSummaryDtoArray", () => {
         data.salesforce.uiapi.query.Acc_Project__c.edges[0].node.ContentDocumentLinks.edges,
         ["id", "fileName", "fileSize", "link", "description", "dateCreated", "uploadedBy", "isOwner"],
         {
-          currentUser: (data?.currentUser as { email: string }) ?? { email: "unknown user" },
+          currentUser: { userId: data.currentUser.userId },
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
           type: "projects",
         },
@@ -2124,7 +2045,7 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
         {
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
           currentUser: {
-            email: "test@testman.com",
+            userId: "001-sf-user-test@testman.com",
           },
           partnerRoles: data.salesforce.uiapi.query.Acc_Project__c.edges[0].node.roles
             .partnerRoles as unknown as SfPartnerRoles[],
@@ -2154,7 +2075,7 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
         {
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
           currentUser: {
-            email: "james.black@euimeabs.test",
+            userId: "001-sf-user-james-black",
           },
           partnerRoles: data.salesforce.uiapi.query.Acc_Project__c.edges[0].node.roles
             .partnerRoles as unknown as SfPartnerRoles[],
@@ -2193,7 +2114,7 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
           costCategoryId: "12345",
           pcrId: undefined,
           type: "claim details",
-          currentUser: { email: "myemail@test.com" },
+          currentUser: { userId: "001-sf-user-bamboo-user" },
         },
       ),
     ).toEqual([{ id: "good" }]);

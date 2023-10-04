@@ -13,7 +13,7 @@ export type DocumentSummaryNode = {
       readonly ContentSize: GQL.Value<number>;
       readonly CreatedBy: {
         readonly Name: GQL.Value<string>;
-        readonly Username: GQL.Value<string>;
+        readonly Id: string | null;
       } | null;
       readonly CreatedDate: GQL.Value<string>;
       readonly Description: GQL.Value<string>;
@@ -44,7 +44,7 @@ const mapper: GQL.DtoMapper<
   DocumentSummaryNode,
   {
     projectId: ProjectId;
-    currentUser: { email: string };
+    currentUser: { userId: string | null };
     partnerName: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
@@ -100,10 +100,8 @@ const mapper: GQL.DtoMapper<
     return `${node?.node?.ContentDocument?.CreatedBy?.Name?.value ?? ""}${partnerName ? " of " + partnerName : ""}`;
   },
   isOwner(node, { currentUser }) {
-    return (
-      typeof node?.node?.ContentDocument?.CreatedBy?.Username?.value === "string" &&
-      node?.node?.ContentDocument?.CreatedBy?.Username?.value?.toLowerCase() === currentUser?.email?.toLowerCase()
-    );
+    if (currentUser.userId === null) return false;
+    return currentUser.userId === node?.node?.ContentDocument?.CreatedBy?.Id;
   },
   partnerId(node, { partnerId }) {
     return partnerId as PartnerId;
@@ -128,7 +126,7 @@ export function mapToDocumentSummaryDto<
   pickList: PickList[],
   additionalData: {
     projectId: ProjectId;
-    currentUser: { email: string };
+    currentUser: { userId: string | null };
     partnerName: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
@@ -156,7 +154,7 @@ export function mapToPartnerDocumentSummaryDtoArray<
   pickList: PickList,
   additionalData: {
     projectId: ProjectId;
-    currentUser: { email: string };
+    currentUser: { userId: string | null };
     currentUserRoles: SfRoles;
     partnerRoles: SfPartnerRoles[];
   },
@@ -201,7 +199,7 @@ export function mapToProjectDocumentSummaryDtoArray<
   pickList: PickList[],
   additionalData: {
     projectId: ProjectId;
-    currentUser: { email: string };
+    currentUser: { userId: string | null };
     partnerId?: PartnerId;
     periodId?: PeriodId;
     costCategoryId?: string;

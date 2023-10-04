@@ -3,7 +3,7 @@ import { graphql } from "react-relay";
 export const claimDocumentsQuery = graphql`
   query ClaimDocumentsQuery($projectId: ID!, $partnerId: ID!, $periodId: Double) {
     currentUser {
-      email
+      userId
     }
     salesforce {
       uiapi {
@@ -73,9 +73,7 @@ export const claimDocumentsQuery = graphql`
                           value
                         }
                         CreatedBy {
-                          Username {
-                            value
-                          }
+                          Id
                           Name {
                             value
                           }
