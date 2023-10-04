@@ -105,7 +105,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
       ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner"],
       {
         projectId,
-        currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+        currentUser: { userId: data.currentUser.userId },
         type: "claims",
         partnerId,
         periodId,

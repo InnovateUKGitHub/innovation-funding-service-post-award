@@ -8,7 +8,7 @@ export const claimLineItemsQuery = graphql`
     $costCategoryId: ID!
   ) {
     currentUser {
-      email
+      userId
     }
     salesforce {
       uiapi {
@@ -137,9 +137,7 @@ export const claimLineItemsQuery = graphql`
                           Name {
                             value
                           }
-                          Username {
-                            value
-                          }
+                          Id
                         }
                       }
                     }

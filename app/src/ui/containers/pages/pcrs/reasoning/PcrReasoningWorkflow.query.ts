@@ -3,7 +3,7 @@ import { graphql } from "react-relay";
 const pcrReasoningWorkflowQuery = graphql`
   query PcrReasoningWorkflowQuery($projectId: ID, $pcrId: ID) {
     currentUser {
-      email
+      userId
     }
     salesforce {
       uiapi {
@@ -48,9 +48,7 @@ const pcrReasoningWorkflowQuery = graphql`
                           Name {
                             value
                           }
-                          Username {
-                            value
-                          }
+                          Id
                         }
                       }
                     }

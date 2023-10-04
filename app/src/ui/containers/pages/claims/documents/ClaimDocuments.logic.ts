@@ -44,7 +44,7 @@ export const useClaimDocumentsQuery = (
     claimNode?.ContentDocumentLinks?.edges ?? [],
     ["id", "fileName", "fileSize", "link", "description", "dateCreated", "uploadedBy", "isOwner"],
     {
-      currentUser: (data?.currentUser as { email: string }) ?? { email: "unknown user" },
+      currentUser: { userId: data.currentUser.userId },
       projectId,
       partnerId,
       periodId: periodId as PeriodId,

@@ -8,7 +8,7 @@ export const editClaimLineItemsQuery = graphql`
     $costCategoryId: ID!
   ) {
     currentUser {
-      email
+      userId
       isSystemUser
     }
     salesforce {
@@ -146,9 +146,7 @@ export const editClaimLineItemsQuery = graphql`
                           Name {
                             value
                           }
-                          Username {
-                            value
-                          }
+                          Id
                         }
                       }
                     }

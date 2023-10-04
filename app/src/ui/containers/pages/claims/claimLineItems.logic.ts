@@ -46,7 +46,7 @@ export const useClaimLineItemsData = (
         ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
         {
           projectId,
-          currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+          currentUser: { userId: data.currentUser.userId },
           type: "claim details",
           periodId,
           partnerId,

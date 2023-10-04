@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6058db66174414d03a622408ad467e71>>
+ * @generated SignedSource<<6a83a6b1e13a32b97473d3dd409d1f9f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,7 @@ export type ClaimDocumentsQuery$variables = {
 };
 export type ClaimDocumentsQuery$data = {
   readonly currentUser: {
-    readonly email: string | null;
+    readonly userId: string | null;
   };
   readonly salesforce: {
     readonly uiapi: {
@@ -41,10 +41,8 @@ export type ClaimDocumentsQuery$data = {
                         readonly value: number | null;
                       } | null;
                       readonly CreatedBy: {
+                        readonly Id: string;
                         readonly Name: {
-                          readonly value: string | null;
-                        } | null;
-                        readonly Username: {
                           readonly value: string | null;
                         } | null;
                       } | null;
@@ -213,7 +211,7 @@ v10 = [
         "alias": null,
         "args": null,
         "kind": "ScalarField",
-        "name": "email",
+        "name": "userId",
         "storageKey": null
       }
     ],
@@ -514,16 +512,7 @@ v10 = [
                                             "name": "CreatedBy",
                                             "plural": false,
                                             "selections": [
-                                              {
-                                                "alias": null,
-                                                "args": null,
-                                                "concreteType": "StringValue",
-                                                "kind": "LinkedField",
-                                                "name": "Username",
-                                                "plural": false,
-                                                "selections": (v5/*: any*/),
-                                                "storageKey": null
-                                              },
+                                              (v4/*: any*/),
                                               {
                                                 "alias": null,
                                                 "args": null,
@@ -723,16 +712,16 @@ return {
     "selections": (v10/*: any*/)
   },
   "params": {
-    "cacheID": "8f4e473d85e2e02adeda9af08ffea64f",
+    "cacheID": "043a7b543ae376cb0d15c3cca54a96a9",
     "id": null,
     "metadata": {},
     "name": "ClaimDocumentsQuery",
     "operationKind": "query",
-    "text": "query ClaimDocumentsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $periodId: Double\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, Acc_ProjectPeriodNumber__c: {eq: $periodId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_PCF_Status__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    isFeedAttachment\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Username {\n                          value\n                        }\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ClaimDocumentsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $periodId: Double\n) {\n  currentUser {\n    userId\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, Acc_ProjectPeriodNumber__c: {eq: $periodId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_PCF_Status__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    isFeedAttachment\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5cb97f7d058100160922b9ab266f6461";
+(node as any).hash = "6786c40f443c87f8283905111645486a";
 
 export default node;

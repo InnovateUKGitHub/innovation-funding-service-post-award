@@ -45,7 +45,7 @@ export const usePcrReasoningQuery = (
       ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
       {
         projectId,
-        currentUser: { email: data?.currentUser?.email ?? "unknown email" },
+        currentUser: { userId: data.currentUser.userId },
         type: "pcr",
         pcrId,
       },

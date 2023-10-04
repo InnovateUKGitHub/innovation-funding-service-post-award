@@ -11,6 +11,7 @@ interface UserData {
 interface ContactData {
   attributes: unknown;
   Username: string;
+  Id: string;
   Account: {
     Id: string; // AccountId
   };
@@ -29,7 +30,7 @@ interface ContactData {
 const getUserContactDataLoader = (ctx: PartialGraphQLContext) => {
   return new DataLoader<string, ContactData | null>(async usernames => {
     const data = await ctx.api.executeSOQL<UserData>({
-      query: `SELECT Username, Account.Id, Contact.Id FROM user WHERE username in ('${usernames
+      query: `SELECT Username, Id, Account.Id, Contact.Id FROM user WHERE username in ('${usernames
         .map(sss)
         .join("','")}')`,
     });
