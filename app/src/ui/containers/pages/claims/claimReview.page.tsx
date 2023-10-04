@@ -43,10 +43,11 @@ import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { useForm } from "react-hook-form";
-import { FormValues, useClaimReviewPageData, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
+import { useClaimReviewPageData, useOnUpdateClaimReview, useReviewContent } from "./claimReview.logic";
 import { claimReviewQuery } from "./ClaimReview.query";
 import { claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
 import { EnumDocuments } from "./components/EnumDocuments";
+import { z } from "zod";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -75,10 +76,12 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
 
   const data = useClaimReviewPageData(props.projectId, props.partnerId, props.periodId, props.refreshedQueryOptions);
 
-  const { register, formState, handleSubmit, watch } = useForm<FormValues>({
+  const { register, formState, handleSubmit, watch } = useForm<z.output<typeof claimReviewSchema>>({
     defaultValues: {
       status: undefined,
       comments: "",
+      partnerId: props.partnerId,
+      periodId: props.periodId,
     },
     resolver: zodResolver(claimReviewSchema, { errorMap: claimReviewErrorMap }),
   });
@@ -91,7 +94,7 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
     data.claim,
   );
 
-  const validatorErrors = useRhfErrors<FormValues>(formState.errors);
+  const validatorErrors = useRhfErrors<z.output<typeof claimReviewSchema>>(formState.errors);
   const documentValidatorErrors = props.documentsEditor?.validator?.showValidationErrors
     ? convertResultErrorsToReactHookFormFormat(props.documentsEditor?.validator?.errors)
     : [];
@@ -241,6 +244,9 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
       </Section>
 
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="review-form">
+        <input type="hidden" {...register("partnerId")} value={props.partnerId} />
+        <input type="hidden" {...register("periodId")} value={props.periodId} />
+
         <Fieldset>
           <Legend>{content.sectionTitleHowToProceed}</Legend>
           <FormGroup>
