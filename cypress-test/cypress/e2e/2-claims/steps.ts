@@ -670,7 +670,7 @@ export const validateLineItem = () => {
 
 export const validateForecast = () => {
   cy.getByAriaLabel("Labour Period 2").clear().wait(500);
-  cy.getByQA("button_save-qa").click();
+  cy.button("Save and return to claims").click();
   cy.validationLink("Forecast is required");
 };
 

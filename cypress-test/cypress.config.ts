@@ -19,7 +19,8 @@ const fs = require("fs");
  * To run against local host:
  * `npm run local`
  */
-let accDevUrl = `https://www-acc-custom-development${(process.env.ACC ?? "").trim()}.apps.ocp4.innovateuk.ukri.org`;
+//let accDevUrl = `https://www-acc-dev${(process.env.ACC ?? "").trim()}.apps.ocp4.innovateuk.ukri.org`;
+let accDevUrl = `https://www-acc-custom-${(process.env.ACC ?? "").trim()}.apps.ocp4.innovateuk.ukri.org`;
 
 /**
  * By default Cypress will run all tests in the e2e folder.
