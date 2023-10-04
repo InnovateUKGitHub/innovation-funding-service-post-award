@@ -25,6 +25,7 @@ describe("PCR > Change project scope", () => {
 
   it("Should select 'Change project scope", () => {
     cy.clickCheckBox("Change project scope");
+    cy.wait(500);
   });
 
   it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);

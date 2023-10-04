@@ -696,7 +696,7 @@ export const assertSectionCommentsAndScore = (title: string, section: number) =>
 export const deleteUsingCorrectDeleteButton = () => {
   cy.button("Save and return to project").click();
   cy.getByQA("deleteLink").contains("Delete report").click();
-  cy.button("Delete report").should("have.css", "background-color").and("eq", "rgb(212, 53, 28)");
+  cy.button("Delete report").should("have.css", "background-color").and("eq", "rgb(0, 112, 60)");
   cy.button("Delete report").click();
   cy.getByQA("deleteLink").should("not.exist");
 };

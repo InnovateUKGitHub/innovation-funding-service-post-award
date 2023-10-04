@@ -252,7 +252,7 @@ export const editEachPartner = () => {
         .get("#postcode")
         .clear()
         .type("SN" + index),
-      cy.get("#hint-for-new-postcode").contains("Enter the postcode."),
+      cy.get("#hint-for-postcode").contains("Enter the postcode."),
       cy.submitButton("Save and return to partner information").click(),
       cy.getByQA("partner-name"),
       cy.backLink("Back to project details").click();
