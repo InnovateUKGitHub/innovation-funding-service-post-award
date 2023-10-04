@@ -17,8 +17,9 @@ import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { ClaimDto } from "@framework/dtos/claimDto";
-import { ClaimStatus } from "@framework/constants/claimStatus";
 import { useContent } from "@ui/hooks/content.hook";
+import { claimReviewSchema } from "./claimReview.zod";
+import { z } from "zod";
 
 type QueryOptions = RefreshedQueryOptions | { fetchPolicy: "network-only" };
 export const useClaimReviewPageData = (
@@ -141,8 +142,6 @@ export const useClaimReviewPageData = (
   }, [totalDocumentsLength]);
 };
 
-export type FormValues = { status: ClaimStatus; comments: string };
-
 export const useOnUpdateClaimReview = (
   partnerId: PartnerId,
   projectId: ProjectId,
@@ -151,7 +150,7 @@ export const useOnUpdateClaimReview = (
   claim: Partial<ClaimDto>,
 ) => {
   const navigate = useNavigate();
-  return useOnUpdate<FormValues, Pick<ClaimDto, "status" | "comments" | "partnerId">>({
+  return useOnUpdate<z.output<typeof claimReviewSchema>, Pick<ClaimDto, "status" | "comments" | "partnerId">>({
     req(data) {
       return clientsideApiClient.claims.update({
         partnerId,
