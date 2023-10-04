@@ -14,6 +14,7 @@ import {
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
+import { PCRsDashboardRoute } from "@ui/containers/pages/pcrs/dashboard/PCRDashboard.page";
 
 export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerBase<
   ProjectChangeRequestPrepareParams,
@@ -61,7 +62,12 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
     dto: PCRDto,
   ): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand({ projectId, projectChangeRequestId: pcrId, pcr: dto }));
-    return ProjectChangeRequestSubmittedForReviewRoute.getLink({ projectId, pcrId });
+
+    if (button.value === "submit") {
+      return ProjectChangeRequestSubmittedForReviewRoute.getLink({ projectId, pcrId });
+    } else {
+      return PCRsDashboardRoute.getLink({ projectId });
+    }
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareParams) {
