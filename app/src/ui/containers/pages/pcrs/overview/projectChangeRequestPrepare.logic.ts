@@ -121,13 +121,19 @@ export const useOnUpdatePcrPrepare = (
       const payload = {
         projectId,
         id: pcrId,
-        pcr: getPayload(data["button_submit"] === "submit", project, pcr, data),
+        pcr: getPayload(data.button_submit === "submit", project, pcr, data),
       };
 
       return clientsideApiClient.pcrs.update(payload);
     },
-    onSuccess() {
-      navigate(routes.projectChangeRequestSubmittedForReview.getLink({ projectId, pcrId }).path);
+    onSuccess(data) {
+      if (data.button_submit === "submit") {
+        navigate(routes.projectChangeRequestSubmittedForReview.getLink({ projectId, pcrId }).path);
+      }
+
+      if (data.button_submit === "save-and-return") {
+        navigate(routes.pcrsDashboard.getLink({ projectId }).path);
+      }
     },
   });
 };
