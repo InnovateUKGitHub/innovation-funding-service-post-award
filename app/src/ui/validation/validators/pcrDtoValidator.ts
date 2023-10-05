@@ -490,7 +490,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
                 this.partners?.length
                   ? items.filter(x => x.type === PCRItemType.AccountNameChange).length <= this.partners.length
                   : true,
-              this.getContent(x => x.validation.pcrDtoValidator.notEnoughPartnersToRename),
+              this.getContent(x => x.forms.pcrModify.types.errors.not_enough_partners_to_rename),
             ),
           () =>
             children.isTrue(
@@ -508,7 +508,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
                 // Otherwise, fail validation if we have too many partners
                 return items.filter(x => x.type === PCRItemType.PartnerWithdrawal).length <= maxDeletes;
               },
-              this.getContent(x => x.validation.pcrDtoValidator.notEnoughPartnersToRemove),
+              this.getContent(x => x.forms.pcrModify.types.errors.not_enough_partners_to_remove),
             ),
           () => {
             if (!this.projectPcrs?.length) return children.valid();

@@ -254,24 +254,34 @@ export const getPcrItemsTooManyViolations = (
 ): PCRItemType[] => {
   if (!currentPcr) return [];
 
-  const { items } = currentPcr;
-  const bannedTypes: PCRItemType[] = [];
+  const bannedTypes = new Set<PCRItemType>();
 
-  // If we already have `n` renames, disallow adding an `n+1`th rename.
-  if (items.filter(x => x.type === PCRItemType.AccountNameChange).length >= numberOfPartners)
-    bannedTypes.push(PCRItemType.AccountNameChange);
+  let numberOfAdditions = 0;
+  let numberOfRenames = 0;
+  let numberOfRemoves = 0;
 
-  const hasAnyAdditions = items.some(x => x.type === PCRItemType.PartnerAddition);
+  for (const item of currentPcr.items ?? []) {
+    if (item.type === PCRItemType.PartnerAddition) numberOfAdditions += 1;
+    if (item.type === PCRItemType.PartnerWithdrawal) numberOfRemoves += 1;
+    if (item.type === PCRItemType.AccountNameChange) numberOfRenames += 1;
+  }
 
-  // Maximum number of deletes allowed.
-  // `n`   You can delete all partners if we have any additions
-  // `n-1` You cannot delete all partners if there are no additions
-  const maxDeletes = hasAnyAdditions ? numberOfPartners : numberOfPartners - 1;
+  const maxNumberOfRemoves = numberOfAdditions === 0 ? numberOfPartners : numberOfPartners + 1;
+  const maxNumberOfRenames = numberOfPartners;
+  const maxNumberOfBoth = numberOfPartners;
 
-  if (items.filter(x => x.type === PCRItemType.PartnerWithdrawal).length > maxDeletes)
-    bannedTypes.push(PCRItemType.PartnerWithdrawal);
+  if (numberOfRenames > maxNumberOfRenames) {
+    bannedTypes.add(PCRItemType.AccountNameChange);
+  }
+  if (numberOfRemoves > maxNumberOfRemoves) {
+    bannedTypes.add(PCRItemType.PartnerWithdrawal);
+  }
+  if (numberOfRenames + numberOfRemoves > maxNumberOfBoth) {
+    bannedTypes.add(PCRItemType.AccountNameChange);
+    bannedTypes.add(PCRItemType.PartnerWithdrawal);
+  }
 
-  return bannedTypes;
+  return [...bannedTypes.values()];
 };
 
 const scopeChangeGuidance = `Your public description is published in line with government practice on openness and transparency of public-funded activities. It should describe your project in a way that will be easy for a non-specialist to understand. Do not include any information that is confidential, for example, intellectual property or patent details.
