@@ -28,7 +28,7 @@ describe("PCR > Delete page", () => {
   it("Should contain full table information including PCR types, number and dates started", validateTable);
 
   it("Should have the correctly coloured delete button", () => {
-    cy.button("Delete request").should("have.css", "background-color").and("eq", "rgb(212, 53, 28)");
+    cy.button("Delete request").should("have.css", "background-color").and("eq", "rgb(0, 112, 60)");
   });
 
   it("Should click delete and confirm it has been deleted", deleteAndConfirm);

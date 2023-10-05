@@ -1,5 +1,6 @@
 import "@testing-library/cypress/add-commands";
 import { visitApp } from "common/visit";
+import { PcrType } from "typings/pcr";
 import { Tile } from "typings/tiles";
 
 const [username, password] = Cypress.env("BASIC_AUTH").split(":");
@@ -138,6 +139,7 @@ const deletePcr = (projectId: string) => {
   cy.selectTile("Project change requests");
   cy.getByQA("pcrDeleteLink").contains("Delete").click();
   cy.get("button").contains("Delete request").click({ force: true });
+  cy.heading("Project change requests");
 };
 
 const validationLink = (message: string) => {
@@ -198,6 +200,15 @@ const downloadFile = (href: string): ReturnType<Cypress.Chainable["downloadFile"
   });
 };
 
+const createPcr = (pcr: PcrType) => {
+  cy.wait(500);
+  cy.clickCheckBox(pcr);
+  cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
+  cy.wait(500);
+  cy.button("Create request").click();
+  cy.wait("@pcrPrepare");
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
@@ -226,3 +237,4 @@ Cypress.Commands.add("list", list);
 Cypress.Commands.add("fileInput", fileInput);
 Cypress.Commands.add("validationNotification", validationNotification);
 Cypress.Commands.add("downloadFile", downloadFile);
+Cypress.Commands.add("createPcr", createPcr);

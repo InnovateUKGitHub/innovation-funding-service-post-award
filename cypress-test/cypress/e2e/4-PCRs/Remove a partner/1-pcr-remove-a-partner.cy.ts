@@ -4,7 +4,6 @@ import {
   shouldShowAllAccordion,
   pcrCommentBox,
   characterCount,
-  clickCreateRequestButtonProceed,
   requestHeadingDetailsHeading,
   removePartnerPcrType,
   removePartnerGiveInfoTodo,
@@ -28,11 +27,9 @@ describe("PCR > Remove partner > Creating PCR", () => {
     cy.get("a").contains("Create request").click();
   });
 
-  it("Should select 'Remove a partner' checkbox", () => {
-    cy.clickCheckBox("Remove a partner");
+  it("Should create a Remove partner PCR", () => {
+    cy.createPcr("Remove a partner");
   });
-
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should have a back option", () => {
     cy.backLink("Back to project change requests");

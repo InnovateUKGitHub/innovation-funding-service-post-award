@@ -642,6 +642,7 @@ export const add120Lines = () => {
     }
   });
   cy.wait(500);
+  cy.get("a").contains("Add a cost").should("not.exist");
 };
 
 export const saveLineItems = () => {

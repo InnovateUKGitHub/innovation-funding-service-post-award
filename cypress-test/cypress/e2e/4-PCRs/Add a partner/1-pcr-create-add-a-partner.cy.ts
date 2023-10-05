@@ -4,7 +4,6 @@ import {
   shouldShowAllAccordion,
   pcrCommentBox,
   characterCount,
-  clickCreateRequestButtonProceed,
   requestHeadingDetailsHeading,
   correctPcrType,
   giveUsInfoTodo,
@@ -22,11 +21,9 @@ describe("PCR >  Add a partner > Create PCR", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should select 'Add a partner' checkbox", () => {
-    cy.clickCheckBox("Add a partner");
+  it("Should create an Add partner PCR", () => {
+    cy.createPcr("Add a partner");
   });
-
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should have a back option", () => {
     cy.backLink("Back to project change requests");

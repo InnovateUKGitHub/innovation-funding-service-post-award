@@ -24,9 +24,16 @@ describe("PCR >  Change project duration > Create PCR", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should select the correct tick box and start a new 'Change project duration' PCR", () => {
-    cy.clickCheckBox("Change project duration");
-    cy.get("button").contains("Create request").click();
+  it("Should display the create PCR heading", () => {
+    cy.heading("Start a new request");
+  });
+
+  it("Should create a Change project duration PCR", () => {
+    cy.createPcr("Change project duration");
+  });
+
+  it("Should display the request heading", () => {
+    cy.heading("Request");
   });
 
   it("Should have a back option", () => {

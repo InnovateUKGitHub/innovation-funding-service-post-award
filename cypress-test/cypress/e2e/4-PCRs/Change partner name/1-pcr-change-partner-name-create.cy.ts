@@ -29,10 +29,8 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should select the correct tick box and start a new 'Change a partner's name' PCR", () => {
-    cy.clickCheckBox("Change a partner's name");
-    cy.wait(500);
-    cy.get("button").contains("Create request").click();
+  it("Should create a Change partner name PCR", () => {
+    cy.createPcr("Change a partner's name");
   });
 
   it("Should show the project title", shouldShowProjectTitle);
