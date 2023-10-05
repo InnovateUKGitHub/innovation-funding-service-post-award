@@ -2107,9 +2107,9 @@
     "forecastTable": {
       "profile": {
         "errors": {
-          "too_small": "Enter a forecast for period {{issue.path.1, lookup(within: profiles; from: id; to: periodId)}} for the cost category '{{issue.path.1, lookup(within: profiles; from: id; to: costCategoryId), lookup(within: costCategories; from: costCategoryId; to: costCategoryName) }}'",
+          "too_small": "Forecast is required.",
           "invalid_string": {
-            "regex": "Enter a valid forecast for period {{issue.path.1, lookup(within: profiles; from: id; to: periodId)}} for the cost category '{{issue.path.1, lookup(within: profiles; from: id; to: costCategoryId), lookup(within: costCategories; from: costCategoryId; to: costCategoryName) }}'"
+            "regex": "Forecast must be no more than 2 decimal places."
           }
         }
       },
