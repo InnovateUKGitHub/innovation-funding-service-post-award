@@ -1,7 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
   characterCount,
-  clickCreateRequestButtonProceed,
   explainChangesReasoning,
   pcrCommentBox,
   reallocateCostsGiveInfoTodo,
@@ -23,11 +22,9 @@ describe("PCR > Reallocate Costs > Creating  PCR", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should select 'Reallocate project costs' checkbox", () => {
-    cy.clickCheckBox("Reallocate project costs");
+  it("Should create a Reallocate Partner costs PCR", () => {
+    cy.createPcr("Reallocate project costs");
   });
-
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should have a back option", () => {
     cy.backLink("Back to project");

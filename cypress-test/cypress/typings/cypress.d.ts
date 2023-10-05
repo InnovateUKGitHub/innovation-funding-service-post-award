@@ -1,3 +1,4 @@
+import { PcrType } from "./pcr";
 import { Tile } from "./tiles";
 
 /* eslint-disable no-unused-vars */
@@ -158,6 +159,12 @@ declare global {
         url: string;
         base64: string;
       }>;
+
+      /**
+       * Creates a PCR from the PCR requests screen by passing in a correct PCR name
+       */
+
+      createPcr(pcr: PcrType): Chainable<Element>;
     }
   }
 }

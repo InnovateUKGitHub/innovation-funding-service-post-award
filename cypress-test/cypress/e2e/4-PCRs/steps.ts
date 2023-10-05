@@ -170,13 +170,6 @@ export const completeNewPartnerInfoNonAid = () => {
   cy.submitButton("Save and continue").click();
 };
 
-export const clickCreateRequestButtonProceed = () => {
-  cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.submitButton("Create request").click();
-  cy.wait("@pcrPrepare");
-  cy.heading("Request");
-};
-
 export const requestHeadingDetailsHeading = () => {
   cy.heading("Request");
   cy.get("h2").contains("Details");
