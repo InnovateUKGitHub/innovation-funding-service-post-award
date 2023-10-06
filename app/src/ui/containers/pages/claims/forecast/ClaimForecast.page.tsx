@@ -79,10 +79,10 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
         <input {...register("partnerId")} value={partnerId} type="hidden" />
 
         <Section>
-          {periodId < project.numberOfPeriods && (
+          {periodId + 1 < project.numberOfPeriods && (
             <ValidationMessage
               messageType="info"
-              message={getContent(x => x.claimsMessages.lastChanceToChangeForecast({ periodId }))}
+              message={getContent(x => x.claimsMessages.lastChanceToChangeForecast({ periodId: periodId + 1 }))}
             />
           )}
           <ForecastAgreedCostWarning
