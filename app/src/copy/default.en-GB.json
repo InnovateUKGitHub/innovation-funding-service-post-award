@@ -485,7 +485,7 @@
       "backLink": "Back to claims documents",
       "buttonSaveAndReturn": "Save and return to claims",
       "buttonContinueToSummary": "Continue to summary",
-      "overheadsCosts": "Overheads costs: "
+      "overheadsCosts": "Overheads costs: {{ percentage, round(dp: 2) }}%"
     },
     "claimSummary": {
       "title": "Claim summary"

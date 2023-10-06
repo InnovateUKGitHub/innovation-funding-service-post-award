@@ -28,6 +28,12 @@ const registerIntlFormatter = () => {
     if (typeof value === "string") return bytes(value);
     return value;
   });
+
+  i18next.services.formatter?.add("round", (value, _, options) => {
+    const { dp } = options ?? {};
+    if (typeof value === "number") return value.toFixed(Number(dp));
+    return value;
+  });
 };
 
 /**
