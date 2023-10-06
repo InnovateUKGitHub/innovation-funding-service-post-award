@@ -6,6 +6,7 @@ import { useOnUpdate } from "./onUpdate";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { useNavigate } from "react-router-dom";
 import { useRoutes } from "@ui/redux/routesProvider";
+import { validCurrencyRegex } from "@framework/util/numberHelper";
 
 interface OnForecastSubmitProps {
   periodId: PeriodId;
@@ -22,10 +23,14 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
       const { projectId, partnerId, profile } = data;
 
       if (profile) {
-        const forecasts: Pick<ForecastDetailsDTO, "id" | "value">[] = Object.entries(profile).map(([id, forecast]) => ({
-          id,
-          value: parseFloat(forecast),
-        }));
+        const forecasts: Pick<ForecastDetailsDTO, "id" | "value">[] = Object.entries(profile).map(([id, forecast]) => {
+          const numberComponent = validCurrencyRegex.exec(forecast)?.[1] ?? "";
+
+          return {
+            id,
+            value: parseFloat(numberComponent),
+          };
+        });
 
         await clientsideApiClient.forecastDetails.update({
           projectId,

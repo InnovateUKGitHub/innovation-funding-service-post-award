@@ -16,7 +16,11 @@ const useClaimForecastData = ({
   projectParticipantId: PartnerId;
   projectId: ProjectId;
 }) => {
-  const data = useLazyLoadQuery<ClaimForecastQuery>(claimForecastQuery, { projectParticipantId, projectId });
+  const data = useLazyLoadQuery<ClaimForecastQuery>(
+    claimForecastQuery,
+    { projectParticipantId, projectId },
+    { fetchPolicy: "network-only" },
+  );
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);

@@ -35,7 +35,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
     projectId,
     projectParticipantId: partnerId,
   });
-  const { project } = data;
+  const { project, partner } = data;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
 
@@ -89,6 +89,9 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
             isFc={project.roles.isFc}
             costCategories={tableData.costCategories.filter(x => x.difference > 0).map(x => x.costCategoryName)}
           />
+          {partner.overheadRate !== null && (
+            <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
+          )}
           <ForecastTable tableData={tableData} control={control} getFieldState={getFieldState} disabled={isFetching} />
           <P>
             {getContent(x => x.components.claimLastModified.message)}

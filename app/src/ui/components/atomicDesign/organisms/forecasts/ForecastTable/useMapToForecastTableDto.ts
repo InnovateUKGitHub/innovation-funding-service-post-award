@@ -2,7 +2,7 @@ import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
-import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
+import { roundCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { useMemo } from "react";
 import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderContent";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
@@ -204,19 +204,21 @@ const mapToForecastTableDto = ({
         if (costCategory.type === CostCategoryType.Overheads && labourProfile && partner.overheadRate !== null) {
           if (clientProfiles) {
             const clientProfile: string | undefined = clientProfiles?.[labourProfile.id];
-            value = roundCurrency(parseFloat(clientProfile) * (partner.overheadRate / 100));
-            displayValue = String(value);
+            const numberComponent = validCurrencyRegex.exec(clientProfile)?.[1] ?? "";
+            value = roundCurrency(parseFloat(numberComponent) * (partner.overheadRate / 100));
+            displayValue = isNaN(value) ? "" : String(value);
             profileId = forecastProfile.id;
             stubCurrencyInputMode = true;
           } else {
-            value = roundCurrency(labourProfile.value);
+            value = roundCurrency(labourProfile.value * (partner.overheadRate / 100));
             displayValue = String(value);
             profileId = forecastProfile.id;
           }
         } else {
           if (clientProfiles) {
             const clientProfile: string | undefined = clientProfiles?.[forecastProfile.id];
-            value = parseFloat(clientProfile);
+            const numberComponent = validCurrencyRegex.exec(clientProfile)?.[1] ?? "";
+            value = parseFloat(numberComponent);
             displayValue = clientProfile;
             profileId = forecastProfile.id;
           } else {

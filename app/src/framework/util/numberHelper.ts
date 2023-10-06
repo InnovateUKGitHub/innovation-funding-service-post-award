@@ -62,18 +62,6 @@ export function parseNumber(x?: string | number | null) {
 }
 
 /**
- * @description Converts a currency string to a number whereever possible.
- * - Strips out all instances of "£" to make sure there aren't any loose characters when parsing later.
- * - Disallows more than 2-decimal places.
- * @param x The string based representation of a number to convert to a number
- * @returns A number, unless invalid, in which case, null is returned.
- */
-export function parseCurrency(x?: string | number | null) {
-  if (typeof x === "string") return parseNumber(x.replace(/£/g, ""));
-  return parseNumber(x);
-}
-
-/**
  * _sumBy_
  *
  * Takes an array of values as first argument, and a reducer function for second.
