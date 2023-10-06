@@ -1226,6 +1226,16 @@ export const multiPcrArray = [
   PcrItemType.PutAProjectOnHold,
 ];
 
+const addTypeArray = ["Remove a partner", "Add a partner", "Change a partner's name"];
+
+export const addPcrTypes = (button: string) => {
+  addTypeArray.forEach(pcr => {
+    cy.clickCheckBox(pcr);
+  });
+  cy.submitButton(button).click();
+  cy.get("h1").contains("Request", { timeout: 60000 });
+};
+
 export const selectEachPcr = () => {
   pcrArray.forEach(pcr => {
     cy.clickCheckBox(pcr);
@@ -1259,16 +1269,17 @@ export const backOutCreateNewPcr = () => {
   cy.heading("Start a new request");
 };
 
-export const showMultiplePcrInfo = () => {
-  cy.clickCheckBox(pcrArray[1]);
-  cy.clickCheckBox(pcrArray[2]);
-  cy.clickCheckBox(pcrArray[5]);
-  cy.clickCheckBox(pcrArray[6]);
+export const assertForMissingPcrTypes = () => {
+  cy.get("a").contains("Add types").click();
+  cy.heading("Add types");
   cy.get("span").contains("Learn about why some PCR types are missing").click();
   cy.get("details").should("have.attr", "open");
-  cy.list(pcrArray[4]);
-  cy.list(pcrArray[0]);
-  cy.list(pcrArray[3]);
+  [pcrArray[0], pcrArray[1], pcrArray[3], pcrArray[4], pcrArray[5], pcrArray[6]].forEach(pcr => {
+    cy.list(pcr);
+  });
+  [pcrArray[0], pcrArray[1], pcrArray[3], pcrArray[4], pcrArray[5], pcrArray[6]].forEach(pcr => {
+    cy.getByLabel(pcr).should("not.exist");
+  });
   cy.get("a").contains("Cancel").click();
   cy.heading("Project change requests");
 };

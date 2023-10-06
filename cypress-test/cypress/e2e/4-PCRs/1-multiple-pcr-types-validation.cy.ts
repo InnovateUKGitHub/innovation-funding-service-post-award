@@ -1,10 +1,11 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
+  addPcrTypes,
   backOutCreateNewPcr,
   confirmPcrsAdded,
   selectEachPcr,
-  showMultiplePcrInfo,
+  assertForMissingPcrTypes,
   submitWithoutCompleting,
 } from "./steps";
 
@@ -26,7 +27,24 @@ describe("PCR > Multiple add types", () => {
     submitWithoutCompleting,
   );
 
+  it("Should add 3 more types", () => {
+    cy.get("a").contains("Add types").click();
+    cy.heading("Add types");
+    addPcrTypes("Add to request");
+  });
+
+  it("Should again add 3 more types", () => {
+    cy.get("a").contains("Add types").click();
+    cy.heading("Add types");
+    addPcrTypes("Add to request");
+  });
+
+  it(
+    "Should access 'Add types' one more time and assert that some PCRs can no longer be added",
+    assertForMissingPcrTypes,
+  );
+
   it("Should back out and begin creating another PCR", backOutCreateNewPcr);
 
-  it("Should assert that certain PCR types cannot be created more than once", showMultiplePcrInfo);
+  it("Should assert that certain PCR types cannot be created more than once", assertForMissingPcrTypes);
 });
