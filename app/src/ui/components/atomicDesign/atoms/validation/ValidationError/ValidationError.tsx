@@ -32,7 +32,8 @@ export const ValidationError = ({ error, id, "data-qa": qa }: Props) => {
           style={alignTextLeftStyle}
           className="govuk-error-message"
         >
-          <AccessibilityText>{getContent(x => x.components.validationError.prefix)}</AccessibilityText> {message}
+          <AccessibilityText as="span">{getContent(x => x.components.validationError.prefix)}</AccessibilityText>{" "}
+          {message}
         </p>
       ))}
     </>
