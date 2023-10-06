@@ -1604,9 +1604,7 @@
       "typeRequired": "You must select at least one of the types.",
       "duplicateNotAllowed": "A duplicate PCR of this type is not allowed",
       "samePartnerRemovedTwice": "You cannot select the same partner to remove more than once in a single PCR",
-      "samePartnerRenamedTwice": "You cannot select the same partner to rename more than once in a single PCR",
-      "notEnoughPartnersToRename": "You cannot select ‘Change a partner’s name’ because you do not have enough partners to action these.",
-      "notEnoughPartnersToRemove": "You cannot select ‘Remove a partner’ because you do not have enough partners to action these."
+      "samePartnerRenamedTwice": "You cannot select the same partner to rename more than once in a single PCR"
     },
     "pcrBaseItemDtoValidator": {
       "itemInvalid": "Not a valid project change request item.",
@@ -1918,7 +1916,8 @@
           "invalid_enum_value": "You can only select from the list of available types.",
           "another_pcr_already_has_this": "You can only have one '{{ type }}' change in progress in any PCR at a time.",
           "this_pcr_already_has_this_type": "You can only have one '{{ type }}' change in progress in this PCR at a time.",
-          "not_enough_partners_to_action_this_type": "You cannot select '{{ type }}' because you do not have enough partners to action these."
+          "not_enough_partners_to_rename": "You cannot select ‘Change a partner’s name’ because you do not have enough partners to action these.",
+          "not_enough_partners_to_remove": "You cannot select ‘Remove a partner’ because you do not have enough partners to action these."
         }
       }
     },

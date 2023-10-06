@@ -23,76 +23,98 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
     })
     .transform(x => x as PCRItemType);
 
-  if (pcrItemInfo) {
-    return validation
-      .superRefine((val, ctx) => {
-        const currentOption = pcrItemInfo.find(x => x.type === val);
+  const createIssue = (
+    i18n: string,
+    { type, path }: { type?: string; path?: (string | number)[] } = {},
+  ): z.IssueData => ({
+    code: z.ZodIssueCode.custom,
+    fatal: true,
+    params: {
+      i18n,
+      type,
+    },
+    path,
+  });
 
-        const createIssue = (i18n: string): z.IssueData => ({
-          code: z.ZodIssueCode.custom,
-          fatal: true,
-          params: {
-            i18n,
-            type: currentOption?.displayName,
-          },
-        });
+  return z
+    .array(
+      validation
+        .superRefine((val, ctx) => {
+          const currentOption = pcrItemInfo.find(x => x.type === val);
 
-        if (currentOption) {
-          if (currentOption?.type === PCRItemType.PartnerWithdrawal) {
-            // Special rules for partner withdrawal :)
-            // If there are `n` partners, you cannot add `n` removals,
-            // ...unless there is also at least 1 addition, in which you can.
-
-            let numberOfAdditions = 0;
-            let numberOfWithdrawls = 1; // Starting from 1, because we're including the one we're about to execute
-
-            for (const item of currentPcrItems) {
-              if (item.type === PCRItemType.PartnerAddition) numberOfAdditions += 1;
-              if (item.type === PCRItemType.PartnerWithdrawal) numberOfWithdrawls += 1;
-            }
-
-            const maxNumberOfWithdrawls = numberOfAdditions === 0 ? numberOfPartners - 1 : numberOfPartners;
-
-            if (numberOfWithdrawls > maxNumberOfWithdrawls) {
-              ctx.addIssue(createIssue("errors.not_enough_partners_to_action_this_type"));
-            }
-          } else if (currentOption) {
+          if (currentOption) {
             switch (currentOption.disabledReason) {
               case PCRItemDisabledReason.AnotherPcrAlreadyHasThisType:
-                ctx.addIssue(createIssue("errors.another_pcr_already_has_this_type"));
+                ctx.addIssue(
+                  createIssue("errors.another_pcr_already_has_this_type", { type: currentOption.displayName }),
+                );
                 break;
               case PCRItemDisabledReason.ThisPcrAlreadyHasThisType:
-                ctx.addIssue(createIssue("errors.this_pcr_already_has_this_type"));
+                ctx.addIssue(createIssue("errors.this_pcr_already_has_this_type", { type: currentOption.displayName }));
                 break;
               case PCRItemDisabledReason.NotEnoughPartnersToActionThisType:
-                ctx.addIssue(createIssue("errors.not_enough_partners_to_action_this_type"));
+                ctx.addIssue(
+                  createIssue("errors.not_enough_partners_to_action_this_type", { type: currentOption.displayName }),
+                );
                 break;
             }
           }
-        }
-      })
-      .refine(
-        x =>
-          !pcrItemInfo.some(
-            y => x === y.type && y.disabledReason === PCRItemDisabledReason.AnotherPcrAlreadyHasThisType,
-          ),
-      )
-      .refine(
-        x =>
-          !pcrItemInfo.some(
-            y => x === y.type && y.disabledReason === PCRItemDisabledReason.NotEnoughPartnersToActionThisType,
-          ),
-      );
-  }
+        })
+        .refine(
+          x =>
+            !pcrItemInfo.some(
+              y => x === y.type && y.disabledReason === PCRItemDisabledReason.AnotherPcrAlreadyHasThisType,
+            ),
+        )
+        .refine(
+          x =>
+            !pcrItemInfo.some(
+              y => x === y.type && y.disabledReason === PCRItemDisabledReason.NotEnoughPartnersToActionThisType,
+            ),
+        ),
+    )
+    .min(1)
+    .superRefine((vals, ctx) => {
+      const renamePos = vals.indexOf(PCRItemType.AccountNameChange);
+      const removePos = vals.indexOf(PCRItemType.PartnerWithdrawal);
 
-  return validation;
+      const renameSelected = renamePos >= 0;
+      const removeSelected = removePos >= 0;
+
+      let numberOfAdditions = 0;
+      let numberOfRenames = renameSelected ? 1 : 0;
+      let numberOfRemoves = removeSelected ? 1 : 0;
+
+      for (const item of currentPcrItems) {
+        if (item.type === PCRItemType.PartnerAddition) numberOfAdditions += 1;
+        if (item.type === PCRItemType.PartnerWithdrawal) numberOfRemoves += 1;
+        if (item.type === PCRItemType.AccountNameChange) numberOfRenames += 1;
+      }
+
+      const maxNumberOfRemoves = numberOfAdditions === 0 ? numberOfPartners - 1 : numberOfPartners;
+      const maxNumberOfRenames = numberOfPartners;
+      const maxNumberOfBoth = numberOfPartners;
+
+      if (numberOfRenames + numberOfRemoves > maxNumberOfBoth) {
+        if (removeSelected) {
+          ctx.addIssue(createIssue("errors.not_enough_partners_to_remove"));
+        }
+        if (renameSelected) {
+          ctx.addIssue(createIssue("errors.not_enough_partners_to_rename"));
+        }
+      } else if (renameSelected && numberOfRenames > maxNumberOfRenames) {
+        ctx.addIssue(createIssue("errors.not_enough_partners_to_rename"));
+      } else if (removeSelected && numberOfRemoves > maxNumberOfRemoves) {
+        ctx.addIssue(createIssue("errors.not_enough_partners_to_remove"));
+      }
+    });
 };
 
 export const getPcrCreateSchema = (props: PCRValidatorExtraProps) =>
   z.object({
     form: z.literal(FormTypes.ProjectChangeRequestCreate),
     projectId: projectIdValidation,
-    types: z.array(getPcrTypeValidation(props)).min(1),
+    types: getPcrTypeValidation(props),
   });
 export type PcrCreateSchemaType = ReturnType<typeof getPcrCreateSchema>;
 
@@ -101,7 +123,7 @@ export const getPcrUpdateTypesSchema = (props: PCRValidatorExtraProps) =>
     form: z.literal(FormTypes.ProjectChangeRequestUpdateTypes),
     projectId: projectIdValidation,
     pcrId: pcrIdValidation,
-    types: z.array(getPcrTypeValidation(props)).min(1),
+    types: getPcrTypeValidation(props),
   });
 export type PcrUpdateTypesSchemaType = ReturnType<typeof getPcrUpdateTypesSchema>;
 
