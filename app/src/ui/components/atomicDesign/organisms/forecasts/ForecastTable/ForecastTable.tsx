@@ -132,7 +132,9 @@ const ForecastTable = (props: ForecastTableProps) => {
                     key={profile.periodId}
                     className={mkcol(profile.rhc)}
                   >
-                    {control && profile.forecast ? (
+                    {profile.stubCurrencyInputMode ? (
+                      <Currency value={profile.value} aria-label={ariaLabel} />
+                    ) : control && profile.forecastMode ? (
                       <ForecastTableCurrencyInput
                         costCategoryId={costCategory.costCategoryId}
                         periodId={profile.periodId}

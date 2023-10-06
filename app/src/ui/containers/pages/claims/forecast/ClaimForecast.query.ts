@@ -32,6 +32,9 @@ const claimForecastQuery = graphql`
                 Acc_ForecastLastModifiedDate__c {
                   value
                 }
+                Acc_OverheadRate__c {
+                  value
+                }
               }
             }
           }

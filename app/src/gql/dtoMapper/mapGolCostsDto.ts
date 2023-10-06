@@ -1,6 +1,7 @@
 import { Profile } from "@framework/constants/recordTypes";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { equalityIfDefined } from "./equalityIfDefined";
+import { CostCategoryList } from "@framework/types/CostCategory";
 
 // on Acc_Profile__c with DeveloperName "Total_Cost_Category"
 type GolCostNode = GQL.PartialNode<{
@@ -16,7 +17,7 @@ type GolCostNode = GQL.PartialNode<{
   }>;
 }>;
 
-type GolCostDtoMapping = Pick<GOLCostDto, "costCategoryId" | "costCategoryName" | "value">;
+type GolCostDtoMapping = Pick<GOLCostDto, "costCategoryId" | "costCategoryName" | "value" | "type">;
 
 const mapper: GQL.DtoMapper<
   GolCostDtoMapping,
@@ -37,6 +38,9 @@ const mapper: GQL.DtoMapper<
   },
   value: function (node) {
     return node?.Acc_CostCategoryGOLCost__c?.value ?? 0;
+  },
+  type: function (node, additionalData) {
+    return new CostCategoryList().fromName(mapper.costCategoryName(node, additionalData)).id;
   },
 };
 

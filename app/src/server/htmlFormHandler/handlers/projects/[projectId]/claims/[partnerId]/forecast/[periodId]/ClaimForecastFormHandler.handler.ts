@@ -5,8 +5,9 @@ import { GetAllForPartnerQuery } from "@server/features/claims/getAllForPartnerQ
 import { GetAllForecastsGOLCostsQuery } from "@server/features/claims/getAllForecastGOLCostsQuery";
 import { GetAllForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllForecastsForPartnerQuery";
 import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails/updateForecastDetailsCommand";
+import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
-import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
+import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/dashboard.page";
@@ -32,18 +33,20 @@ class ClaimForecastFormHandler extends ZodFormHandlerBase<ForecastTableSchemaTyp
   public readonly acceptFiles = false;
 
   async getZodSchema({ context, params }: { context: IContext; params: ClaimForecastFormHandlerParams }) {
-    const projectPromise = context.runQuery(new GetByIdQuery(params.projectId));
+    const projectPromise = context.runQuery(new GetProjectByIdQuery(params.projectId));
     const claimDetailsPromise = context.runQuery(new GetAllClaimDetailsByPartner(params.partnerId));
     const claimsPromise = context.runQuery(new GetAllForPartnerQuery(params.partnerId));
     const costCategoriesPromise = context.runQuery(new GetAllForecastsGOLCostsQuery(params.partnerId));
     const profilesPromise = context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
+    const partnerPromise = context.runQuery(new GetPartnerByIdQuery(params.partnerId));
 
-    const [project, claimDetails, claims, costCategories, profiles] = await Promise.all([
+    const [project, claimDetails, claims, costCategories, profiles, partner] = await Promise.all([
       projectPromise,
       claimDetailsPromise,
       claimsPromise,
       costCategoriesPromise,
       profilesPromise,
+      partnerPromise,
     ]);
 
     return getForecastTableValidation({
@@ -52,6 +55,7 @@ class ClaimForecastFormHandler extends ZodFormHandlerBase<ForecastTableSchemaTyp
       costCategories,
       profiles,
       project,
+      partner,
     });
   }
 

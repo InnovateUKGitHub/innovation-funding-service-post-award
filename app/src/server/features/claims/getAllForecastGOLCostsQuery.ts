@@ -2,6 +2,7 @@ import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { IContext } from "@framework/types/IContext";
 import { QueryBase } from "../common/queryBase";
 import { GetUnfilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
+import { CostCategoryList } from "@framework/types/CostCategory";
 
 export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
   constructor(private readonly partnerId: PartnerId) {
@@ -13,13 +14,20 @@ export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
     const costCategoriesOrder = costCategories.map(y => y.id);
 
     const results = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
-    const mapped = results.map<GOLCostDto>(x => ({
-      costCategoryId: x.Acc_CostCategory__c as CostCategoryId,
-      costCategoryName: costCategories
+    const mapped = results.map<GOLCostDto>(x => {
+      const costCategoryName = costCategories
         .filter(costCategory => costCategory.id === x.Acc_CostCategory__c)
-        .map(costCategory => costCategory.name)[0],
-      value: x.Acc_CostCategoryGOLCost__c,
-    }));
+        .map(costCategory => costCategory.name)[0];
+
+      const type = new CostCategoryList().fromName(costCategoryName).id;
+
+      return {
+        costCategoryId: x.Acc_CostCategory__c as CostCategoryId,
+        costCategoryName,
+        value: x.Acc_CostCategoryGOLCost__c,
+        type,
+      };
+    });
 
     return mapped.sort(
       (x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId),

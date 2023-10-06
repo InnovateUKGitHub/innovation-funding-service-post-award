@@ -22,7 +22,7 @@ const useClaimForecastData = ({
   const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
 
   const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles"]);
-  const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate"], {});
+  const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate"], {});
   const claims = mapToClaimsDtoArray(
     data.salesforce.uiapi.query.Acc_Claims__c?.edges ?? [],
     ["periodId", "status", "iarStatus", "isIarRequired", "isApproved", "periodEndDate", "isFinalClaim"],
@@ -35,7 +35,7 @@ const useClaimForecastData = ({
   );
   const costCategories = mapToProfileTotalCostCategoryDtoArray(
     data.salesforce.uiapi.query.ProfileTotalCostCategory?.edges ?? [],
-    ["value", "costCategoryId", "costCategoryName"],
+    ["value", "costCategoryId", "costCategoryName", "type"],
   );
   const profiles = mapToForecastDetailsDtoArray(data.salesforce.uiapi.query.ProfileDetails?.edges ?? [], [
     "value",

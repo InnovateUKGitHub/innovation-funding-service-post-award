@@ -2,16 +2,19 @@ import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
-import { roundCurrency } from "@framework/util/numberHelper";
+import { parseCurrency, roundCurrency } from "@framework/util/numberHelper";
 import { useMemo } from "react";
 import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderContent";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
+import { PartnerDtoGql } from "@framework/dtos/partnerDto";
+import { CostCategoryType } from "@framework/constants/enums";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
 
 export interface TablecraftProps {
   project: Pick<ProjectDto, "numberOfPeriods">;
+  partner: Pick<PartnerDtoGql, "overheadRate">;
   claims: Pick<
     ClaimDto,
     "periodId" | "iarStatus" | "isIarRequired" | "isApproved" | "status" | "periodEndDate" | "isFinalClaim"
@@ -35,7 +38,8 @@ interface StatusCell {
 }
 
 interface CostCategoryCellData extends BaseCellData {
-  forecast: boolean;
+  forecastMode: boolean;
+  stubCurrencyInputMode: boolean;
   displayValue: string;
   profileId: string;
 }
@@ -71,6 +75,7 @@ export interface ForecastTableDto {
 
 const mapToForecastTableDto = ({
   project,
+  partner,
   claims,
   claimDetails,
   costCategories,
@@ -85,13 +90,32 @@ const mapToForecastTableDto = ({
 
   let grandTotal = 0;
   let grandGolValue = 0;
+
   let currentStatusCell: StatusCell | undefined = undefined;
+
+  /**
+   * Calculate the COLSPAN of each status cell.
+   * For each period in our project, if the status of this claim is the same
+   * as the status of the next claim, we can increase the colspan by 1.
+   *
+   * If the status of the next claim is not the same as the status of the
+   * next claim. we shall create a new cell to represent the group of statuses.
+   *
+   * Should look something like this...
+   *
+   * ```
+   * | P1  | P2  | P3       | P4  | P5  |
+   * | Claimed   | Claiming | Forecast  |
+   * ```
+   */
 
   for (let i = 1; i <= project.numberOfPeriods; i++) {
     const claim = claims.find(x => x.periodId === i);
     const nextClaim = claims.find(x => x.periodId === i + 1);
     let drawRhc = false;
 
+    // If we haven't got a "current status cell",
+    // initialise it with the status of our first claim.
     if (!currentStatusCell && claim) {
       currentStatusCell = {
         colSpan: 1,
@@ -100,15 +124,22 @@ const mapToForecastTableDto = ({
       };
     }
 
+    // If we have a previous status cell
     if (currentStatusCell) {
+      // And a next claim exists,
       if (nextClaim) {
         const nextClaimGroup = getClaimStatusGroup(nextClaim.status);
+
+        // If it's a part of the same claim, we should extend the colspan of the column.
         if (currentStatusCell.group === nextClaimGroup) {
           currentStatusCell.colSpan += 1;
         } else {
+          // If it's not a part of the same claim, we should mark it as requiring a right-hand-column
           currentStatusCell.rhc = true;
           drawRhc = true;
           statusCells.push(currentStatusCell);
+
+          // Create a new status cell with the status of the next claim
           currentStatusCell = {
             colSpan: 1,
             rhc: false,
@@ -116,10 +147,13 @@ const mapToForecastTableDto = ({
           };
         }
       } else {
+        // If there is no next claim, we should push the
+        // current claim status colspan to the array.
         statusCells.push(currentStatusCell);
       }
     }
 
+    // Initialise the period total for periodId `i`
     periodTotals.push({
       periodId: i,
       value: 0,
@@ -129,48 +163,85 @@ const mapToForecastTableDto = ({
     });
   }
 
+  const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour);
+
   for (const costCategory of costCategories) {
     const costCategoryProfiles: CostCategoryCellData[] = [];
     let total = 0;
 
     for (let i = 1; i <= project.numberOfPeriods; i++) {
       const forecastProfile = profiles.find(x => x.periodId === i && x.costCategoryId === costCategory.costCategoryId);
+      const labourProfile = labourCostCategory
+        ? profiles.find(x => x.periodId === i && x.costCategoryId === labourCostCategory.costCategoryId)
+        : undefined;
       const claimProfile = claimDetails.find(x => x.periodId === i && x.costCategoryId === costCategory.costCategoryId);
       const claim = claims.find(x => x.periodId === i);
 
       const forecast =
         !finalClaim && !!claim && [ClaimStatusGroup.FORECAST].includes(getClaimStatusGroup(claim.status));
 
-      let value: number;
-      let displayValue: string;
+      /**
+       * Case A:
+       *  If overheads is enabled, multiply the overheads rate by the labour profile value.
+       * Case B:
+       *  If forecasting is enabled, and the client has modified the profile,
+       *  populate the value of the table with the client's value.
+       * Case C:
+       *  If forecasting is enabled, and the client has not modified the value,
+       *  populate the value with the forecast value.
+       * Case D:
+       *  If forecasting is disabled, populate the value with the claim value
+       * Case E:
+       *  Populate the field with "0".
+       *  This should never happen.
+       */
+      let value: number = 0;
+      let displayValue: string = "";
       let profileId = "";
+      let stubCurrencyInputMode = false;
 
-      if (forecast && clientProfiles && forecastProfile) {
-        const clientProfile: string | undefined = clientProfiles?.[forecastProfile.id];
-        value = parseFloat(clientProfile);
-        displayValue = clientProfile;
-        profileId = forecastProfile.id;
-      } else if (forecast && forecastProfile) {
-        value = roundCurrency(forecastProfile.value);
-        displayValue = String(value);
-        profileId = forecastProfile.id;
-      } else if (!forecast && claimProfile) {
+      if (forecast && forecastProfile) {
+        if (costCategory.type === CostCategoryType.Overheads && labourProfile && partner.overheadRate !== null) {
+          if (clientProfiles) {
+            const clientProfile: string | undefined = clientProfiles?.[labourProfile.id];
+            value = roundCurrency(parseFloat(clientProfile) * (partner.overheadRate / 100));
+            displayValue = String(value);
+            profileId = forecastProfile.id;
+            stubCurrencyInputMode = true;
+          } else {
+            value = roundCurrency(labourProfile.value);
+            displayValue = String(value);
+            profileId = forecastProfile.id;
+          }
+        } else {
+          if (clientProfiles) {
+            const clientProfile: string | undefined = clientProfiles?.[forecastProfile.id];
+            value = parseFloat(clientProfile);
+            displayValue = clientProfile;
+            profileId = forecastProfile.id;
+          } else {
+            value = roundCurrency(forecastProfile.value);
+            displayValue = String(value);
+            profileId = forecastProfile.id;
+          }
+        }
+      } else if (claimProfile) {
         value = roundCurrency(claimProfile.value);
         displayValue = String(value);
-      } else {
-        value = 0;
-        displayValue = "";
       }
 
       costCategoryProfiles.push({
         periodId: i,
         value,
         displayValue,
-        forecast,
+        forecastMode: forecast,
+        stubCurrencyInputMode,
         profileId,
         rhc: periodTotals[i - 1].rhc,
       });
 
+      // If our current value for this cell exists,
+      // fill up our period total/cost category total/grand total
       if (isFinite(value) && !isNaN(value)) {
         periodTotals[i - 1].value = roundCurrency(value + periodTotals[i - 1].value);
         grandTotal = roundCurrency(value + grandTotal);

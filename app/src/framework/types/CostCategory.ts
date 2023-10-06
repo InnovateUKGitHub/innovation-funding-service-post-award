@@ -347,8 +347,6 @@ const items: ICostCategoryTypeCompetitionOverridable[] = [
 /**
  * A class for finding a CostCategory based on either its Salesforce name
  * or the internal CostCategoryType.
- *
- * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  */
 class CostCategoryList {
   private readonly unknownCostCategory = new CostCategoryItem({
