@@ -76,22 +76,24 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
       costCategories,
     ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
 
-    const documentsGql =
-      (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? []).find(
-        x => x?.node?.Acc_ProjectPeriodNumber__c?.value === periodId,
-      )?.node?.ContentDocumentLinks?.edges ?? [];
+    const documentsGql = data?.salesforce?.uiapi?.query?.ClaimsByPeriodForDocuments?.edges ?? [];
 
-    const documents = mapToProjectDocumentSummaryDtoArray(
-      documentsGql as DocumentSummaryNode[],
-      ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner"],
-      {
-        projectId,
-        currentUser: { userId: data.currentUser.userId },
-        type: "claims",
-        partnerId,
-        periodId,
-      },
-    );
+    const documents = documentsGql
+      .map(docs =>
+        mapToProjectDocumentSummaryDtoArray(
+          docs?.node?.ContentDocumentLinks?.edges ?? ([] as DocumentSummaryNode[]),
+          ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
+          {
+            projectId,
+            currentUser: { userId: data.currentUser.userId },
+            type: docs?.node?.RecordType?.Name?.value === "Claims Detail" ? "claim details" : "claims",
+            partnerId,
+            periodId,
+            costCategoryId: docs?.node?.Acc_CostCategory__c?.value ?? "",
+          },
+        ),
+      )
+      .flat();
 
     const claim = claims.find(claim => claim.periodId === periodId);
 
@@ -105,9 +107,9 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
       "value",
     ]);
 
-    const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
-      claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
-      ["costCategoryId", "periodId", "value"],
+    const claimDetails = mapToClaimDetailsDtoArray(
+      data?.salesforce?.uiapi?.query?.ClaimDetails?.edges ?? [],
+      ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
       {},
     );
 
@@ -122,7 +124,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
         "remainingOfferCosts",
       ],
       {
-        claimDetails: claimDetailsAllPeriods,
+        claimDetails,
         forecastDetails,
         periodId,
         golCosts,
