@@ -51,7 +51,7 @@ export const Accordion = ({ qa, children }: AccordionProps) => {
     <div className="govuk-accordion" data-qa={qaValue}>
       {isClient ? (
         <>
-          <AccordionControls isOpen={isAllNodesOpen} onClick={toggleAllNodes} />
+          {accordionItems.length !== 1 && <AccordionControls isOpen={isAllNodesOpen} onClick={toggleAllNodes} />}
 
           {React.Children.map(accordionItems, (node, nodeIndex) => {
             const isOpen = state.get(nodeIndex);

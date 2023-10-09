@@ -68,8 +68,20 @@ describe("<Accordion />", () => {
     });
 
     describe("with condition controls (when mounting)", () => {
-      test("should be available when on the client", () => {
-        const { queryByTestId } = setup();
+      test("should be unavailable when on the client with one child", () => {
+        const { queryByTestId } = setup({
+          children: [createAccordionItem("poland")],
+        });
+
+        const toggleElement = queryByTestId("all-accordion-toggle");
+
+        expect(toggleElement).not.toBeInTheDocument();
+      });
+
+      test("should be available when on the client with multiple children", () => {
+        const { queryByTestId } = setup({
+          children: [createAccordionItem("new zealand"), createAccordionItem("old zealand")],
+        });
 
         const toggleElement = queryByTestId("all-accordion-toggle");
 
