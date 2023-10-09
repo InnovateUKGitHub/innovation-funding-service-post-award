@@ -1,4 +1,2 @@
 app/node_modules
 app/dist
-app/storybook-static
-app/.storybook
