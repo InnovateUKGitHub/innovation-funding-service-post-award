@@ -32,23 +32,27 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   private readonly projectChangeRequestId: PcrId | PcrItemId;
   private readonly pcr: PcrData;
   private readonly pcrStepType: PCRStepType;
+  private readonly pcrStepId?: PcrItemId;
 
   constructor({
     projectId,
     projectChangeRequestId,
     pcr,
     pcrStepType = PCRStepType.none,
+    pcrStepId,
   }: {
     projectId: ProjectId;
     projectChangeRequestId: PcrId | PcrItemId;
     pcr: PcrData;
     pcrStepType?: PCRStepType;
+    pcrStepId?: PcrItemId;
   }) {
     super();
     this.projectId = projectId;
     this.projectChangeRequestId = projectChangeRequestId;
     this.pcr = pcr;
     this.pcrStepType = pcrStepType;
+    this.pcrStepId = pcrStepId;
   }
 
   protected async accessControl(auth: Authorisation) {
@@ -111,6 +115,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       partners: partners,
       projectPcrs: allPcrs,
       pcrStepType: this.pcrStepType,
+      pcrStepId: this.pcrStepId,
     });
 
     if (!validationResult.isValid) throw new ValidationError(validationResult);
