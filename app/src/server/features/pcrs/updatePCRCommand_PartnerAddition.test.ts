@@ -401,6 +401,13 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const partnerAddditionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
 
     const recordType = recordTypes.find(x => x.type === partnerAddditionType?.typeName);
+
+    // Create two PCR tiems of "PartnerAddition"
+    // Second one should not affect the PCRDtoValidator of the first one
+    context.testData.createPCRItem(projectChangeRequest, recordType, {
+      status: PCRItemStatus.ToDo,
+      projectLocation: undefined,
+    });
     context.testData.createPCRItem(projectChangeRequest, recordType, {
       status: PCRItemStatus.ToDo,
       projectLocation: undefined,
@@ -409,7 +416,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
 
-    // Ensure that the project location fails if we pass in nothing
+    // Ensure that the project location fails if we pass in nothing for the specific item we are on
     item.projectLocation = PCRProjectLocation.Unknown;
     await expect(
       context.runCommand(
@@ -417,6 +424,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
           projectId: project.Id,
           projectChangeRequestId: projectChangeRequest.id,
           pcrStepType: PCRStepType.projectLocationStep,
+          pcrStepId: item.id,
           pcr: dto,
         }),
       ),
@@ -430,6 +438,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
           projectId: project.Id,
           projectChangeRequestId: projectChangeRequest.id,
           pcrStepType: PCRStepType.projectLocationStep,
+          pcrStepId: item.id,
           pcr: dto,
         }),
       ),
