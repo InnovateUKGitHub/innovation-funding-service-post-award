@@ -85,6 +85,12 @@ export const claimReviewQuery = graphql`
                 Acc_ProjectPeriodStartDate__c {
                   value
                 }
+                Acc_ProjectParticipant__c {
+                  value
+                }
+                Acc_ClaimStatus__c {
+                  value
+                }
               }
             }
           }

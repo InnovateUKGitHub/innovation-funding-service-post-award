@@ -80,8 +80,6 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
     defaultValues: {
       status: undefined,
       comments: "",
-      partnerId: props.partnerId,
-      periodId: props.periodId,
     },
     resolver: zodResolver(claimReviewSchema, { errorMap: claimReviewErrorMap }),
   });
@@ -118,7 +116,6 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
 
   const isValidStatus = validSubmittedClaimStatus.includes(watchedStatus);
   const isInteractive = isClient && !watchedStatus;
-
   const displayAdditionalInformationForm = isValidStatus || !isInteractive;
   const submitLabel = watchedStatus === ClaimStatus.MO_QUERIED ? content.buttonSendQuery : content.buttonSubmit;
 
@@ -244,9 +241,6 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
       </Section>
 
       <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="review-form">
-        <input type="hidden" {...register("partnerId")} value={props.partnerId} />
-        <input type="hidden" {...register("periodId")} value={props.periodId} />
-
         <Fieldset>
           <Legend>{content.sectionTitleHowToProceed}</Legend>
           <FormGroup>

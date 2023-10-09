@@ -65,7 +65,7 @@ export const useClaimReviewPageData = (
 
     const claims = mapToClaimDtoArray(
       data?.salesforce?.uiapi?.query?.AllClaimsForPartner?.edges ?? [],
-      ["isFinalClaim", "periodEndDate", "periodId", "periodStartDate"],
+      ["id", "isFinalClaim", "periodEndDate", "periodId", "periodStartDate", "partnerId", "status"],
       {},
     );
 
@@ -147,7 +147,7 @@ export const useOnUpdateClaimReview = (
   projectId: ProjectId,
   periodId: PeriodId,
   navigateTo: string,
-  claim: Partial<ClaimDto>,
+  claim: PickRequiredFromPartial<ClaimDto, "id" | "partnerId">,
 ) => {
   const navigate = useNavigate();
   return useOnUpdate<z.output<typeof claimReviewSchema>, Pick<ClaimDto, "status" | "comments" | "partnerId">>({

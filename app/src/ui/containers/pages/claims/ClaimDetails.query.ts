@@ -54,6 +54,115 @@ export const claimDetailsQuery = graphql`
               }
             }
           }
+          ClaimsByPeriodForDocuments: Acc_Claims__c(
+            where: {
+              and: [
+                { Acc_ProjectID__c: { eq: $projectIdStr } }
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
+              ]
+            }
+            first: 2000
+            orderBy: { Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } } }
+          ) {
+            edges {
+              node {
+                RecordType {
+                  Name {
+                    value
+                  }
+                }
+                Acc_CostCategory__c {
+                  value
+                }
+                ContentDocumentLinks(first: 2000, orderBy: { ContentDocument: { CreatedDate: { order: DESC } } }) {
+                  edges {
+                    node {
+                      Id
+                      LinkedEntityId {
+                        value
+                      }
+                      isFeedAttachment
+                      ContentDocument {
+                        Id
+                        LastModifiedBy {
+                          ContactId {
+                            value
+                          }
+                        }
+                        Description {
+                          value
+                        }
+                        CreatedDate {
+                          value
+                        }
+                        LatestPublishedVersionId {
+                          value
+                        }
+                        FileExtension {
+                          value
+                        }
+                        Title {
+                          value
+                        }
+                        ContentSize {
+                          value
+                        }
+                        CreatedBy {
+                          Name {
+                            value
+                          }
+                          Username {
+                            value
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          ClaimDetails: Acc_Claims__c(
+            where: {
+              and: [
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                { RecordType: { Name: { eq: "Claims Detail" } } }
+                { Acc_ClaimStatus__c: { ne: "New" } }
+                { Acc_CostCategory__c: { ne: null } }
+              ]
+            }
+            first: 2000
+            orderBy: { Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } } }
+          ) {
+            edges {
+              node {
+                RecordType {
+                  Name {
+                    value
+                  }
+                }
+                Acc_ClaimStatus__c {
+                  value
+                }
+                Acc_CostCategory__c {
+                  value
+                }
+                Acc_PeriodCostCategoryTotal__c {
+                  value
+                }
+                Acc_ProjectPeriodEndDate__c {
+                  value
+                }
+                Acc_ProjectPeriodNumber__c {
+                  value
+                }
+                Acc_ProjectPeriodStartDate__c {
+                  value
+                }
+              }
+            }
+          }
           Acc_Claims__c(
             where: {
               and: [
@@ -80,6 +189,9 @@ export const claimDetailsQuery = graphql`
                       value
                     }
                   }
+                }
+                Acc_PeriodCostCategoryTotal__c {
+                  value
                 }
                 LastModifiedDate {
                   value
@@ -120,46 +232,6 @@ export const claimDetailsQuery = graphql`
                 }
                 Acc_CostCategory__c {
                   value
-                }
-                ContentDocumentLinks(first: 2000) {
-                  edges {
-                    node {
-                      Id
-                      LinkedEntityId {
-                        value
-                      }
-                      isFeedAttachment
-                      ContentDocument {
-                        Id
-                        LastModifiedBy {
-                          ContactId {
-                            value
-                          }
-                        }
-                        CreatedDate {
-                          value
-                        }
-                        LatestPublishedVersionId {
-                          value
-                        }
-                        FileExtension {
-                          value
-                        }
-                        Title {
-                          value
-                        }
-                        ContentSize {
-                          value
-                        }
-                        CreatedBy {
-                          Name {
-                            value
-                          }
-                          Id
-                        }
-                      }
-                    }
-                  }
                 }
               }
             }

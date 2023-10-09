@@ -37,6 +37,7 @@ type ClaimNode = Readonly<
     Acc_ProjectParticipant__r: {
       Id: GQL.Maybe<string>;
     } | null;
+    Acc_ProjectParticipant__c: GQL.Value<string>;
     Acc_ProjectPeriodCost__c: GQL.Value<number>;
     Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
@@ -141,7 +142,9 @@ const mapper: GQL.DtoMapper<
     return !!node?.Acc_PaidDate__c?.value ? clock.parse(node?.Acc_PaidDate__c?.value, salesforceDateFormat) : null;
   },
   partnerId(node) {
-    return (node?.Acc_ProjectParticipant__r?.Id ?? "") as PartnerId;
+    return (node?.Acc_ProjectParticipant__r?.Id ??
+      node?.Acc_ProjectParticipant__c?.value ??
+      "unknown-partner-id") as PartnerId;
   },
   pcfStatus(node) {
     return mapToReceivedStatus(node?.Acc_PCF_Status__c?.value ?? "");
