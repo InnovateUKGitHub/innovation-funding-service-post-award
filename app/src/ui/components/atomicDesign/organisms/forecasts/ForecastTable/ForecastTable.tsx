@@ -29,7 +29,8 @@ const ForecastTable = (props: ForecastTableProps) => {
 
   useEffect(forecastTableResize, [props.tableData]);
 
-  const mkcol = (x: boolean | undefined = true) => classNames({ "ifspa-forecast-table-border-right": x });
+  const mkcol = (x: boolean | undefined = true, className?: string) =>
+    classNames({ "ifspa-forecast-table-border-right": x }, className);
   const mkstickcol = (pos: "left" | "right", i: number) =>
     classNames(
       "ifspa-forecast-table-sticky-col",
@@ -94,9 +95,9 @@ const ForecastTable = (props: ForecastTableProps) => {
             </TH>
           </TR>
           <TR>
-            <TH className={mkstickcol("left", 1)}>Month</TH>
+            <TH className={mkstickcol("left", 1)}>{getContent(x => x.components.forecastTable.month)}</TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={mkcol(profile.rhc)}>
+              <TH key={profile.periodId} className={mkcol(profile.rhc, "ifspa-forecast-nowrap")}>
                 <ShortMonthYear value={profile.month} />
               </TH>
             ))}

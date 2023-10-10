@@ -19,6 +19,10 @@ $govuk-breakpoints: (
   overflow-x: scroll;
 }
 
+.ifspa-forecast-nowrap {
+  white-space: nowrap;
+}
+
 .ifspa-forecast-table tbody tr:last-of-type td,
 .ifspa-forecast-table tbody tr:last-of-type th {
   border-bottom: 2px solid black;

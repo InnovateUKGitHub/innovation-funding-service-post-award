@@ -99,6 +99,7 @@
       "iarDueHeader": "IAR Due",
       "iarDue": "Yes",
       "iarNotDue": "No",
+      "month": "Month",
       "costCategoriesHeader": "Cost categories",
       "inputLabel": "{{ costCategoryName }} Period {{ period }}"
     },

@@ -89,6 +89,15 @@ export function calcPercentage(total: Nullable<number>, amount: number) {
   return (100 * (amount || 0)) / total;
 }
 
-export function countDecimalDigitsInString(number: string) {
-  return number.split(".")?.[1]?.length || 0;
+/**
+ * Calculate a percentage of a currency value.
+ *
+ * @param amount The amount of money to get the percentage of
+ * @param percentage The percentage
+ * @param extraDigits The number of additional digits to include in the total
+ * @returns A proportion of the total amount
+ */
+export function multiplyCurrency(amount: number, percentage: number, extraDigits = 0) {
+  const multiplier = Math.pow(10, extraDigits);
+  return Math.floor(multiplier * roundCurrency(amount) * percentage) / (100 * multiplier);
 }

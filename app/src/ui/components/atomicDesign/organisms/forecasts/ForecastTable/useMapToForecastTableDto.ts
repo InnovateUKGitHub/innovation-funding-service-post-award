@@ -2,7 +2,7 @@ import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
-import { roundCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
+import { multiplyCurrency, roundCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { useMemo } from "react";
 import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderContent";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
@@ -202,15 +202,18 @@ const mapToForecastTableDto = ({
 
       if (forecast && forecastProfile) {
         if (costCategory.type === CostCategoryType.Overheads && labourProfile && partner.overheadRate !== null) {
+          // TODO: Round the values in a way that is agreed by the business.
+          // We shouldn't be having weird rounding here.
+
           if (clientProfiles) {
             const clientProfile: string | undefined = clientProfiles?.[labourProfile.id];
             const numberComponent = validCurrencyRegex.exec(clientProfile)?.[1] ?? "";
-            value = roundCurrency(parseFloat(numberComponent) * (partner.overheadRate / 100));
+            value = multiplyCurrency(parseFloat(numberComponent), partner.overheadRate, 1);
             displayValue = isNaN(value) ? "" : String(value);
             profileId = forecastProfile.id;
             stubCurrencyInputMode = true;
           } else {
-            value = roundCurrency(labourProfile.value * (partner.overheadRate / 100));
+            value = multiplyCurrency(labourProfile.value, partner.overheadRate, 1);
             displayValue = String(value);
             profileId = forecastProfile.id;
           }
