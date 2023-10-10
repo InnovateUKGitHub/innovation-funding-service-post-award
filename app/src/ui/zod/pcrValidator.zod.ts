@@ -75,13 +75,17 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
     )
     .min(1)
     .superRefine((vals, ctx) => {
-      const renamePos = vals.indexOf(PCRItemType.AccountNameChange);
-      const removePos = vals.indexOf(PCRItemType.PartnerWithdrawal);
+      let additionSelected = false;
+      let renameSelected = false;
+      let removeSelected = false;
 
-      const renameSelected = renamePos >= 0;
-      const removeSelected = removePos >= 0;
+      for (const selectedVal of vals) {
+        if (selectedVal === PCRItemType.PartnerAddition) additionSelected = true;
+        if (selectedVal === PCRItemType.AccountNameChange) renameSelected = true;
+        if (selectedVal === PCRItemType.PartnerWithdrawal) removeSelected = true;
+      }
 
-      let numberOfAdditions = 0;
+      let numberOfAdditions = additionSelected ? 1 : 0;
       let numberOfRenames = renameSelected ? 1 : 0;
       let numberOfRemoves = removeSelected ? 1 : 0;
 
@@ -96,10 +100,11 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
       const maxNumberOfBoth = numberOfPartners;
 
       if (numberOfRenames + numberOfRemoves > maxNumberOfBoth) {
-        if (removeSelected) {
+        if (removeSelected && renameSelected) {
+          ctx.addIssue(createIssue("errors.not_enough_partners_to_rename_and_remove"));
+        } else if (removeSelected) {
           ctx.addIssue(createIssue("errors.not_enough_partners_to_remove"));
-        }
-        if (renameSelected) {
+        } else if (renameSelected) {
           ctx.addIssue(createIssue("errors.not_enough_partners_to_rename"));
         }
       } else if (renameSelected && numberOfRenames > maxNumberOfRenames) {
