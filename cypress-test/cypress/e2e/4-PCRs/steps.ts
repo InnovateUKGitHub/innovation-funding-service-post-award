@@ -17,8 +17,18 @@ export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
 
-export const shouldShowAllAccordion = () => {
-  cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click();
+export const shouldShowPastRequestsAccordion = () => {
+  cy.get("span").should("not.have.text", "Show all sections");
+  cy.get("span").contains("Show");
+  cy.button("Past requests").click();
+  cy.get("span").contains("Hide");
+};
+
+export const statusAndCommentsAccordion = () => {
+  cy.get("span").should("not.have.text", "Show all sections");
+  cy.get("span").contains("Show");
+  cy.button("Status and comments log").click();
+  cy.get("span").contains("Hide");
 };
 
 export const createRequestButton = () => {

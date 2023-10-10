@@ -6,8 +6,8 @@ import {
   reallocateCostsGiveInfoTodo,
   reallocateCostsPcrType,
   requestHeadingDetailsHeading,
-  shouldShowAllAccordion,
   shouldShowProjectTitle,
+  statusAndCommentsAccordion,
 } from "../steps";
 
 import { pcrTidyUp } from "common/pcrtidyup";
@@ -58,7 +58,7 @@ describe("PCR > Reallocate Costs > Creating  PCR", () => {
     explainChangesReasoning,
   );
 
-  it("Should display accordions", shouldShowAllAccordion);
+  it("Should display accordions", statusAndCommentsAccordion);
 
   it("Should have comments box at the bottom of the page and allow text to be entered", pcrCommentBox);
 

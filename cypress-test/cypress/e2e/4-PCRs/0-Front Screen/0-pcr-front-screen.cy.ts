@@ -4,7 +4,7 @@ import {
   beforeYouSubmit,
   pcrCheckboxesWithHint,
   pcrCheckBoxes,
-  shouldShowAllAccordion,
+  shouldShowPastRequestsAccordion,
   shouldShowProjectTitle,
   backOutToProjOverview,
   switchToFc,
@@ -39,7 +39,7 @@ describe("PCR > Project Change Request front page", () => {
     });
   });
 
-  it("Should click accordions", shouldShowAllAccordion);
+  it("Should click accordions", shouldShowPastRequestsAccordion);
 
   it("Should have a past requests message", () => {
     cy.paragraph("You have no past requests.");

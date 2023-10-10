@@ -1,13 +1,13 @@
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
-  shouldShowAllAccordion,
   pcrCommentBox,
   characterCount,
   requestHeadingDetailsHeading,
   removePartnerPcrType,
   removePartnerGiveInfoTodo,
   explainChangesReasoning,
+  statusAndCommentsAccordion,
 } from "../steps";
 
 describe("PCR > Remove partner > Creating PCR", () => {
@@ -63,7 +63,7 @@ describe("PCR > Remove partner > Creating PCR", () => {
     explainChangesReasoning,
   );
 
-  it("Should display accordions", shouldShowAllAccordion);
+  it("Should display accordions", statusAndCommentsAccordion);
 
   it("Should have comments box at the bottom of the page and allow text to be entered", pcrCommentBox);
 
