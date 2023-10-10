@@ -3,21 +3,10 @@ import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
-import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { PCRItemStatus, PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PcrWorkflow } from "./pcrWorkflow";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { BaseProps } from "@ui/containers/containerBase";
-import { SummaryFormValues } from "./pcrItemWorkflowTypes";
-import { useForm } from "react-hook-form";
-import { useContent } from "@ui/hooks/content.hook";
-import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 
 export const SummarySection = () => {
   const { mode, workflow, routes, pcrItem } = usePcrWorkflowContext();
@@ -39,8 +28,7 @@ export const SummarySection = () => {
   return (
     <WithScrollToTopOnPropChange propToScrollOn={workflow?.getCurrentStepName()}>
       <Section qa="item-save-and-return">
-        <Summary />
-        {displayCompleteForm && <WorkflowItemForm allowSubmit={allowSubmit} />}
+        <Summary allowSubmit={allowSubmit} displayCompleteForm={displayCompleteForm} />
 
         {displayNavigationArrows && (
           <NavigationArrowsForPCRs currentItem={pcrItem} isReviewing={isReviewing} routes={routes} />
@@ -50,7 +38,7 @@ export const SummarySection = () => {
   );
 };
 
-const Summary = () => {
+const Summary = ({ allowSubmit, displayCompleteForm }: { allowSubmit: boolean; displayCompleteForm: boolean }) => {
   const { pcrItem, itemId, workflow, projectId, pcrId, routes } = usePcrWorkflowContext();
   if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
 
@@ -62,6 +50,8 @@ const Summary = () => {
     throw new Error(`pcr item workflow for ${workflow.getCurrentStepName()} is missing a migratedStepRender method`);
   }
   return workflowSummary.migratedSummaryRender({
+    allowSubmit,
+    displayCompleteForm,
     getStepLink: stepName => getStepLink(workflow, stepName, routes, projectId, pcrId, itemId),
     getEditLink: stepName => <EditLink stepName={stepName} />,
     getViewLink: stepName => <ViewLink stepName={stepName} />,
@@ -121,69 +111,4 @@ const getStepReviewLink = (
     itemId,
     step: workflow && workflow.findStepNumberByName(stepName),
   });
-};
-
-const WorkflowItemForm = ({ allowSubmit }: { allowSubmit: boolean }) => {
-  const { itemId, onSave, pcrItem, isFetching, routes, projectId, pcrId } = usePcrWorkflowContext();
-  if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
-
-  const { getContent } = useContent();
-
-  const { register, handleSubmit } = useForm<SummaryFormValues>({
-    defaultValues: {
-      itemStatus: "",
-      grantMovingOverFinancialYear: undefined,
-    },
-  });
-
-  const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
-
-  return (
-    <Form
-      onSubmit={handleSubmit(data =>
-        onSave({
-          data: {
-            status:
-              data.itemStatus === "marked-as-complete"
-                ? PCRItemStatus.Complete
-                : pcrItem.status === PCRItemStatus.ToDo
-                ? PCRItemStatus.Incomplete
-                : pcrItem.status,
-          },
-          context: {
-            link: routes.pcrPrepare.getLink({
-              projectId,
-              pcrId,
-            }),
-          },
-        }),
-      )}
-    >
-      {canReallocatePcr && (
-        <Fieldset>
-          <Hint id="hint-for-grantMovingOverFinancialYear">
-            {getContent(x => x.pages.pcrWorkflowSummary.reallocateGrantHint)}
-          </Hint>
-          <NumberInput id="grantMovingOverFinancialYear" name="grantMovingOverFinancialYear" width={10} />
-        </Fieldset>
-      )}
-
-      <Fieldset>
-        <Legend>{getContent(x => x.pages.pcrWorkflowSummary.markAsCompleteLabel)}</Legend>
-        <FormGroup>
-          <CheckboxList name="itemStatus" register={register} disabled={isFetching}>
-            <Checkbox id="marked-as-complete" label={getContent(x => x.pages.pcrWorkflowSummary.agreeToChangeLabel)} />
-          </CheckboxList>
-        </FormGroup>
-
-        {allowSubmit && (
-          <FormGroup>
-            <Button type="submit" disabled={isFetching}>
-              {getContent(x => x.pages.pcrWorkflowSummary.buttonSaveAndReturn)}
-            </Button>
-          </FormGroup>
-        )}
-      </Fieldset>
-    </Form>
-  );
 };

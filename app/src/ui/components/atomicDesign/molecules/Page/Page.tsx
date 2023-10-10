@@ -13,7 +13,7 @@ import { ErrorSummary } from "@ui/components/atomicDesign/molecules/ErrorSummary
 import { ProjectInactive } from "@ui/components/atomicDesign/molecules/ProjectInactive/ProjectInactive";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { FragmentContext } from "@gql/fragmentContextHook";
+import { FragmentContext } from "@gql/utils/fragmentContextHook";
 
 export const useInactiveMessage = (projectStatus?: ProjectStatus, partnerStatus?: PartnerStatus) => {
   const { getContent } = useContent();

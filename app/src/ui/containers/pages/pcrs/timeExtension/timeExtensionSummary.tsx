@@ -1,19 +1,50 @@
-import { PCRStepType } from "@framework/constants/pcrConstants";
-import { PCRItemForTimeExtensionDto } from "@framework/dtos/pcrDtos";
+import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
+import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ShortDateRangeFromDuration, Months } from "@ui/components/atomicDesign/atoms/Date";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { usePcrTimeExtensionWorkflowQuery } from "./timeExtension.logic";
+import { useForm } from "react-hook-form";
+import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { errorMap, pcrTimeExtensionSchema } from "./timeExtension.zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 
-export const TimeExtensionSummary = (props: { getEditLink: (pcrStep: PCRStepType) => React.ReactElement }) => {
-  const { projectId, itemId, fetchKey } = usePcrWorkflowContext();
+type FormValues = {
+  timeExtension: string;
+  itemStatus: "marked-as-complete" | "" | false;
+};
+
+export const TimeExtensionSummary = ({
+  getEditLink,
+  displayCompleteForm,
+  allowSubmit,
+}: {
+  getEditLink: (pcrStep: PCRStepType) => React.ReactElement;
+  displayCompleteForm: boolean;
+  allowSubmit: boolean;
+}) => {
+  const { projectId, itemId, fetchKey, useSetPcrValidationErrors } = usePcrWorkflowContext();
 
   const { project, pcrItem } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
 
-  const newProjectDuration = (x: Pick<PCRItemForTimeExtensionDto, "offsetMonths" | "projectDurationSnapshot">) =>
+  const newProjectDuration = (x: Pick<FullPCRItemDto, "offsetMonths" | "projectDurationSnapshot">) =>
     !!x.offsetMonths || x.offsetMonths === 0 ? x.offsetMonths + x.projectDurationSnapshot : null;
+
+  const { register, handleSubmit, formState } = useForm<FormValues>({
+    defaultValues: {
+      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "",
+      timeExtension: String(pcrItem.offsetMonths ?? 0),
+    },
+    resolver: zodResolver(pcrTimeExtensionSchema, {
+      errorMap,
+    }),
+  });
+
+  const validationErrors = useRhfErrors(formState?.errors);
+
+  useSetPcrValidationErrors(validationErrors);
 
   return (
     <>
@@ -40,7 +71,7 @@ export const TimeExtensionSummary = (props: { getEditLink: (pcrStep: PCRStepType
             label="Start and end date"
             content={<ShortDateRangeFromDuration startDate={project.startDate} months={newProjectDuration(pcrItem)} />}
             qa="newStartToEndDate"
-            action={props.getEditLink(PCRStepType.timeExtension)}
+            action={getEditLink(PCRStepType.timeExtension)}
           />
           <SummaryListItem
             label="Duration"
@@ -49,6 +80,15 @@ export const TimeExtensionSummary = (props: { getEditLink: (pcrStep: PCRStepType
           />
         </SummaryList>
       </Section>
+
+      {displayCompleteForm && (
+        <PcrItemSummaryForm<FormValues>
+          register={register}
+          allowSubmit={allowSubmit}
+          handleSubmit={handleSubmit}
+          pcrItem={pcrItem}
+        />
+      )}
     </>
   );
 };

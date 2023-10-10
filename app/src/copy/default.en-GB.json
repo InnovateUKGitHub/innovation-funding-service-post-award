@@ -1964,6 +1964,13 @@
         }
       }
     },
+    "pcrTimeExtension": {
+      "timeExtension": {
+        "errors": {
+          "custom": "You must either increase or decrease the project duration. You cannot select your current end date."
+        }
+      }
+    },
     "projectSetupBankDetails": {
       "accountNumber": {
         "errors": {
