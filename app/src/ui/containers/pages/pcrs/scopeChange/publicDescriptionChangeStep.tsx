@@ -1,53 +1,61 @@
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { PCRScopeChangeItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useForm } from "react-hook-form";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { useContent } from "@ui/hooks/content.hook";
+import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 
-const Form = createTypedForm<PCRItemForScopeChangeDto>();
+export const PublicDescriptionChangeStep = () => {
+  const { projectId, itemId, fetchKey, isFetching, getRequiredToCompleteMessage, onSave } = usePcrWorkflowContext();
+  const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
+  const { getContent } = useContent();
+  const { register, handleSubmit, watch } = useForm<{ publicDescription: string }>({
+    defaultValues: {
+      publicDescription: "",
+    },
+  });
 
-export const PublicDescriptionChangeStep = (
-  props: PcrStepProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator>,
-) => {
+  const hint = getRequiredToCompleteMessage();
+
   return (
-    <Section qa="newDescriptionSection">
-      <Form.Form
-        data={props.pcrItem}
-        isSaving={props.status === EditorStatus.Saving}
-        onChange={dto => props.onChange(dto)}
-        onSubmit={() => props.onSave(false)}
+    <Section data-qa="newDescriptionSection">
+      <Form
+        onSubmit={handleSubmit(data => {
+          onSave({ data });
+        })}
       >
-        <Form.Fieldset heading={x => x.pages.pcrScopeChangePublicDescriptionChange.headingPublicDescription}>
+        <Fieldset>
+          <Legend>{getContent(x => x.pages.pcrScopeChangePublicDescriptionChange.headingPublicDescription)}</Legend>
           <Info summary={<Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.publishedDescription} />}>
             <SimpleString multiline>
-              {props.pcrItem.publicDescriptionSnapshot || (
+              {pcrItem.publicDescriptionSnapshot || (
                 <Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.noAvailableDescription} />
               )}
             </SimpleString>
           </Info>
-          <Form.MultilineString
-            name="description"
-            hint={props.getRequiredToCompleteMessage()}
-            value={m => m.publicDescription}
-            update={(m, v) => (m.publicDescription = v)}
-            validation={props.validator.publicDescription}
-            qa="newDescription"
+          <TextAreaField
+            {...register("publicDescription")}
+            id="description"
+            hint={hint}
+            disabled={isFetching}
+            characterCount={watch("publicDescription")?.length ?? 0}
+            data-qa="newDescription"
+            characterCountType="descending"
             rows={15}
-            maxLength={32_000}
-            characterCountOptions={{
-              type: "descending",
-              maxValue: 32_000,
-            }}
+            characterCountMax={32_000}
           />
-        </Form.Fieldset>
-        <Form.Submit>
+        </Fieldset>
+        <Button type="submit">
           <Content value={x => x.pcrItem.submitButton} />
-        </Form.Submit>
-      </Form.Form>
+        </Button>
+      </Form>
     </Section>
   );
 };

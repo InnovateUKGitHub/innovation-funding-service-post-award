@@ -29,6 +29,29 @@ export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
 
   const workflow = PcrWorkflow.getWorkflow(data.pcrItem as WorkflowPcrType, props.step);
 
+  if (workflow?.isMigratedToGql) {
+    return (
+      <PCRItemWorkflowMigratedForGql
+        project={data.project}
+        pcrItem={data.pcrItem}
+        fragmentRef={data.fragmentRef}
+        {...props}
+      />
+    );
+  }
+
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    partners: stores.partners.getPartnersForProject(props.projectId),
+    virement: stores.financialVirements.get(props.projectId, props.pcrId, props.itemId),
+    pcr: stores.projectChangeRequests.getById(props.projectId, props.pcrId),
+    pcrItem: stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId),
+    pcrItemType: stores.projectChangeRequests.getPcrTypeForItem(props.projectId, props.pcrId, props.itemId),
+    editor: stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId),
+    documentsEditor: stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId),
+    editableItemTypes: stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId),
+  });
+
   const onSave = ({
     dto,
     pcrStepType = PCRStepType.none,
@@ -61,29 +84,6 @@ export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
       dto,
     });
   };
-
-  if (workflow?.isMigratedToGql) {
-    return (
-      <PCRItemWorkflowMigratedForGql
-        project={data.project}
-        pcrItem={data.pcrItem}
-        fragmentRef={data.fragmentRef}
-        {...props}
-      />
-    );
-  }
-
-  const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partners: stores.partners.getPartnersForProject(props.projectId),
-    virement: stores.financialVirements.get(props.projectId, props.pcrId, props.itemId),
-    pcr: stores.projectChangeRequests.getById(props.projectId, props.pcrId),
-    pcrItem: stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId),
-    pcrItemType: stores.projectChangeRequests.getPcrTypeForItem(props.projectId, props.pcrId, props.itemId),
-    editor: stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId),
-    documentsEditor: stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId),
-    editableItemTypes: stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId),
-  });
 
   return (
     <PageLoader

@@ -1,16 +1,15 @@
 import { PCRStepType } from "@framework/constants/pcrConstants";
-import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { scopeChangeStepNames } from "@ui/containers/pages/pcrs/scopeChange/scopeChangeWorkflow";
-import { PCRScopeChangeItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 
-export const ScopeChangeSummary = (
-  props: PcrSummaryProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator, scopeChangeStepNames>,
-) => {
-  const { pcrItem, validator } = props;
+export const ScopeChangeSummary = (props: { getEditLink: (pcrStep: PCRStepType) => React.ReactElement }) => {
+  const { projectId, itemId, fetchKey } = usePcrWorkflowContext();
+
+  const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
+
   return (
     <Section qa="scope-change-summary">
       <SummaryList qa="scope-change-summary-list">
@@ -23,8 +22,7 @@ export const ScopeChangeSummary = (
           label={x => x.pcrScopeChangeLabels.newDescription}
           content={<SimpleString multiline>{pcrItem.publicDescription}</SimpleString>}
           qa="newPublicDescription"
-          validation={validator.publicDescription}
-          action={props.getEditLink(PCRStepType.publicDescriptionStep, validator.publicDescription)}
+          action={props.getEditLink(PCRStepType.publicDescriptionStep)}
         />
         <SummaryListItem
           label={x => x.pcrScopeChangeLabels.existingSummary}
@@ -35,8 +33,7 @@ export const ScopeChangeSummary = (
           label={x => x.pcrScopeChangeLabels.newSummary}
           content={<SimpleString multiline>{pcrItem.projectSummary}</SimpleString>}
           qa="newProjectSummary"
-          validation={validator.projectSummary}
-          action={props.getEditLink(PCRStepType.projectSummaryStep, validator.projectSummary)}
+          action={props.getEditLink(PCRStepType.projectSummaryStep)}
         />
       </SummaryList>
     </Section>

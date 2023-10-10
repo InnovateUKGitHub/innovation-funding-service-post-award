@@ -12,7 +12,7 @@ type TextAreaRef = Ref<HTMLTextAreaElement>;
 type TextAreaFieldProps = DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement> & {
   error?: RhfError;
   disabled?: boolean;
-  hint?: string;
+  hint?: string | JSX.Element;
   label?: string;
   id: string;
   name: string;

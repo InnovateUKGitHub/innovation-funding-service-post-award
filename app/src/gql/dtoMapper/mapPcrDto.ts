@@ -33,7 +33,10 @@ export type PcrNode = Readonly<
     Acc_MarkedasComplete__c: GQL.Value<string>;
     Acc_OrganisationName__c: GQL.Value<string>;
     Acc_ParticipantType__c: GQL.Value<string>;
-
+    Acc_PublicDescriptionSnapshot__c: GQL.Value<string>;
+    Acc_NewPublicDescription__c: GQL.Value<string>;
+    Acc_NewProjectSummary__c: GQL.Value<string>;
+    Acc_ProjectSummarySnapshot__c: GQL.Value<string>;
     CreatedDate: GQL.Value<string>;
     Acc_Status__c: GQL.Value<string>;
     Acc_Project__c: GQL.Value<string>;
@@ -75,8 +78,12 @@ export type PcrItemDtoMapping = Pick<
   | "partnerNameSnapshot"
   | "partnerType"
   | "projectDurationSnapshot"
+  | "projectSummary"
+  | "projectSummarySnapshot"
   | "projectId"
   | "projectRole"
+  | "publicDescription"
+  | "publicDescriptionSnapshot"
   | "requestNumber"
   | "shortName"
   | "started"
@@ -138,6 +145,18 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   projectRole(node) {
     return mapFromSalesforcePCRProjectRole(node?.Acc_ProjectRole__c?.value ?? "");
+  },
+  projectSummary(node) {
+    return node?.Acc_NewProjectSummary__c?.value ?? "";
+  },
+  projectSummarySnapshot(node) {
+    return node?.Acc_ProjectSummarySnapshot__c?.value ?? "";
+  },
+  publicDescription(node) {
+    return node?.Acc_NewPublicDescription__c?.value ?? "";
+  },
+  publicDescriptionSnapshot(node) {
+    return node?.Acc_PublicDescriptionSnapshot__c?.value ?? "";
   },
   requestNumber(node) {
     return node?.Acc_RequestNumber__c?.value ?? 0;

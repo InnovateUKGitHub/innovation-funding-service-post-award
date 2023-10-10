@@ -38,6 +38,25 @@ type Data = {
   fragmentRef: unknown;
 };
 
+/**
+ * returns the standard required to complete message with any additional message parts
+ * @param {string} [message] additional message
+ * @returns {JSX.Element | "This is required to complete this request."} message block
+ */
+function getRequiredToCompleteMessage(message?: string) {
+  const standardMessage = "This is required to complete this request.";
+
+  if (!message) return standardMessage;
+
+  return (
+    <span>
+      {message}
+      <br />
+      {standardMessage}
+    </span>
+  );
+}
+
 type PcrWorkflowContextProps = Data &
   ProjectChangeRequestPrepareItemParams &
   Pick<BaseProps, "config" | "messages" | "routes" | "currentRoute"> & {
@@ -49,6 +68,7 @@ type PcrWorkflowContextProps = Data &
     pcrValidationErrors: RhfErrors;
     useSetPcrValidationErrors: (validationErrors: RhfErrors) => void;
     useClearPcrValidationError: (errorField: string, shouldClear: boolean) => void;
+    getRequiredToCompleteMessage: (message?: string) => JSX.Element | "This is required to complete this request.";
   };
 
 const PcrWorkflowContext = createContext<PcrWorkflowContextProps>(null as unknown as PcrWorkflowContextProps);
@@ -109,6 +129,7 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
         onSave,
         isFetching,
         fetchKey,
+        getRequiredToCompleteMessage,
       }}
     >
       <Page

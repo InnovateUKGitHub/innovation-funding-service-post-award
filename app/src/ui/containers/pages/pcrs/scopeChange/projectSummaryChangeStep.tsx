@@ -1,53 +1,70 @@
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { PCRScopeChangeItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useContent } from "@ui/hooks/content.hook";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 
-const Form = createTypedForm<PCRItemForScopeChangeDto>();
+import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
+import { useForm } from "react-hook-form";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 
-export const ProjectSummaryChangeStep = (
-  props: PcrStepProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator>,
-) => {
+// projectSummary: string | null;
+// projectSummarySnapshot: string | null;
+// publicDescription: string | null;
+// publicDescriptionSnapshot: string | null;
+// type: PCRItemType.ScopeChange;
+
+export const ProjectSummaryChangeStep = () => {
+  const { getContent } = useContent();
+
+  const { projectId, itemId, onSave, isFetching, fetchKey, getRequiredToCompleteMessage } = usePcrWorkflowContext();
+
+  const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
+
+  const { register, handleSubmit, watch } = useForm<{ projectSummary: string }>({
+    defaultValues: {
+      projectSummary: "",
+    },
+  });
+
+  const hint = getRequiredToCompleteMessage();
+
   return (
-    <Section qa="newSummarySection">
-      <Form.Form
-        data={props.pcrItem}
-        isSaving={props.status === EditorStatus.Saving}
-        onChange={dto => props.onChange(dto)}
-        onSubmit={() => props.onSave(false)}
+    <Section data-qa="newSummarySection">
+      <Form
+        onSubmit={handleSubmit(data => {
+          onSave({ data });
+        })}
       >
-        <Form.Fieldset heading={x => x.pages.pcrScopeChangeProjectSummaryChange.headingProjectSummary}>
-          <Info summary={<Content value={x => x.pages.pcrScopeChangeProjectSummaryChange.publishedSummary} />}>
+        <Fieldset>
+          <Legend>{getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.headingProjectSummary)}</Legend>
+          <Info summary={getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.publishedSummary)}>
             <SimpleString multiline>
-              {props.pcrItem.projectSummarySnapshot || (
-                <Content value={x => x.pages.pcrScopeChangeProjectSummaryChange.noAvailableSummary} />
-              )}
+              {pcrItem.projectSummarySnapshot ||
+                getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.noAvailableSummary)}
             </SimpleString>
           </Info>
-          <Form.MultilineString
-            name="summary"
-            hint={props.getRequiredToCompleteMessage()}
-            value={m => m.projectSummary}
-            update={(m, v) => (m.projectSummary = v)}
-            validation={props.validator.projectSummary}
-            qa="newSummary"
+          <TextAreaField
+            {...register("projectSummary")}
+            id="summary"
+            hint={hint}
+            disabled={isFetching}
+            characterCount={watch("projectSummary")?.length ?? 0}
+            data-qa="newSummary"
+            characterCountType="descending"
             rows={15}
-            maxLength={32_000}
-            characterCountOptions={{
-              type: "descending",
-              maxValue: 32_000,
-            }}
+            characterCountMax={32_000}
           />
-        </Form.Fieldset>
-        <Form.Submit>
+        </Fieldset>
+        <Button type="submit">
           <Content value={x => x.pcrItem.submitButton} />
-        </Form.Submit>
-      </Form.Form>
+        </Button>
+      </Form>
     </Section>
   );
 };
