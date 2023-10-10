@@ -19,7 +19,7 @@ export interface ProjectChangeRequestPrepareItemParams {
   step?: number;
 }
 
-export type Mode = "prepare" | "review" | "view";
+export type Mode = "prepare" | "review" | "view" | "print";
 
 export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & BaseProps & { mode: Mode }) => {
   const stores = useStores();
@@ -103,6 +103,23 @@ const getTitle = (defaultTitle: string, params: ProjectChangeRequestPrepareItemP
     displayTitle: typeName ? `${typeName}` : defaultTitle,
   };
 };
+
+export const PCRPrintItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
+  allowRouteInActiveAccess: true,
+  routeName: "pcrViewItem",
+  routePath: "/projects/:projectId/pcrs/:pcrId/print/item/:itemId",
+  getParams: route => ({
+    projectId: route.params.projectId as ProjectId,
+    itemId: route.params.itemId as PcrItemId,
+    pcrId: route.params.pcrId as PcrId,
+  }),
+  container: function PCRViewItemContainer(props) {
+    return <PCRItemContainer {...props} mode="print" />;
+  },
+  getTitle: ({ params, stores }) => getTitle("Print project change request item", params, stores),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+});
 
 export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
   allowRouteInActiveAccess: true,

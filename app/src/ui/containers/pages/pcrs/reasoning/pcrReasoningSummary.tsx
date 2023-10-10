@@ -16,6 +16,7 @@ import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { useGetPcrTypeName } from "../utils/useGetPcrTypeName";
+import { Mode } from "../pcrItemWorkflowContainer";
 
 export interface Props {
   projectId: ProjectId;
@@ -24,10 +25,10 @@ export interface Props {
     items: Pick<FullPCRItemDto, "shortName" | "id" | "type" | "typeName">[];
   };
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
-  mode: "review" | "view" | "prepare";
+  mode: Mode;
   onChange: (dto: PCRDto) => void;
   onSave: (dto: PCRDto) => void;
-  getStepLink: (stepName: IReasoningWorkflowMetadata["stepName"]) => ILinkInfo;
+  getStepLink?: (stepName: IReasoningWorkflowMetadata["stepName"]) => ILinkInfo;
   editableItemTypes: PCRItemType[];
   documents: DocumentSummaryDto[];
 }
@@ -58,7 +59,8 @@ export const PCRReasoningSummary = (props: BaseProps & Props) => {
             qa="comments"
             validation={editor.validator.reasoningComments}
             action={
-              mode === "prepare" && (
+              mode === "prepare" &&
+              getStepLink && (
                 <Link id={editor.validator.reasoningComments.key} route={getStepLink(PCRStepType.reasoningStep)}>
                   <Content value={x => x.pages.pcrReasoningSummary.edit} />
                 </Link>
@@ -76,7 +78,8 @@ export const PCRReasoningSummary = (props: BaseProps & Props) => {
             }
             qa="files"
             action={
-              mode === "prepare" && (
+              mode === "prepare" &&
+              getStepLink && (
                 <Link route={getStepLink(PCRStepType.filesStep)}>
                   <Content value={x => x.pages.pcrReasoningSummary.edit} />
                 </Link>

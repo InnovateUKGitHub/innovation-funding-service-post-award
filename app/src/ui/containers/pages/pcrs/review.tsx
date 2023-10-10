@@ -13,7 +13,7 @@ import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Loader, PageLoader } from "@ui/components/bjss/loading";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
@@ -22,6 +22,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { TaskListSection, Task } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { useStores } from "@ui/redux/storesProvider";
+import { PCRPrintRoute } from "./overview/projectChangeRequestPrint.page";
 
 export interface PCRReviewParams {
   projectId: ProjectId;
@@ -81,6 +82,13 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}
         {this.renderLog()}
         {this.renderForm(editor)}
+
+        <Link
+          className="govuk-body"
+          route={PCRPrintRoute.getLink({ projectId: project.id, pcrId: projectChangeRequest.id, backMode: "review" })}
+        >
+          Access a printable version of this PCR
+        </Link>
       </Page>
     );
   }

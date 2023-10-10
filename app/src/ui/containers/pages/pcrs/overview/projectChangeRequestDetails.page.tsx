@@ -5,9 +5,10 @@ import { ProjectChangeRequestOverviewTasks } from "./ProjectChangeRequestOvervie
 import { usePCRDetailsQuery } from "./projectChangeRequestDetails.logic";
 import { ProjectRole } from "@framework/constants/project";
 import { Page } from "@ui/components/bjss/Page/page";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { useContent } from "@ui/hooks/content.hook";
+import { PCRPrintRoute } from "./projectChangeRequestPrint.page";
 
 export interface ProjectChangeRequestDetailsParams {
   projectId: ProjectId;
@@ -35,6 +36,13 @@ const PCRDetailsPage = (props: BaseProps & ProjectChangeRequestDetailsParams) =>
         mode="details"
       />
       <ProjectChangeRequestOverviewLog statusChanges={statusChanges} />
+
+      <Link
+        className="govuk-body"
+        route={PCRPrintRoute.getLink({ projectId: props.projectId, pcrId: props.pcrId, backMode: "details" })}
+      >
+        Access a printable version of this PCR
+      </Link>
     </Page>
   );
 };

@@ -23,6 +23,7 @@ import { Results } from "@ui/validation/results";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { accountNameChangeWorkflow } from "./nameChange/accountNameChangeWorkflow";
 import { removePartnerWorkflow } from "./removePartner/removePartnerWorkflow";
+import { Mode } from "./pcrItemWorkflowContainer";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;
@@ -36,7 +37,7 @@ export interface PcrStepProps<TDto, TVal> extends IStepProps {
   onSave: (skipToSummary: boolean) => void;
   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
   routes: IRoutes;
-  mode: "prepare" | "review" | "view";
+  mode: Mode;
 }
 
 export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, BaseProps {
@@ -45,7 +46,7 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   pcrItem: TDto;
   project: ProjectDto;
   validator: TVal;
-  mode: "prepare" | "review" | "view";
+  mode: Mode;
   onSave: () => void;
   getStepLink: (stepName: TStepNames) => ILinkInfo;
   getEditLink: (stepName: TStepNames, validation: Result | null) => React.ReactNode;

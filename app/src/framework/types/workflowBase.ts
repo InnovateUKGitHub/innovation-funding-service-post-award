@@ -78,7 +78,7 @@ export abstract class WorkflowBase<
   TVal extends Results<ResultBase> | undefined,
 > implements ICallableWorkflow<TStepProps, TSummaryProps, TVal>
 {
-  private readonly steps: IStep<TStepNames, TStepProps, TVal>[];
+  public readonly steps: IStep<TStepNames, TStepProps, TVal>[];
   public readonly isMigratedToGql?: boolean;
   private readonly summary?: ISummary<TSummaryProps, TVal>;
   private readonly migratedSummary?: ISummary<MigratedSummaryProps, undefined> | undefined;

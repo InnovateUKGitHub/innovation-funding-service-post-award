@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 
 export interface StyledButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  styling: "Link" | "Secondary" | "Primary" | "Warning";
+  styling: "Link" | "Secondary" | "Primary" | "Warning" | "White";
   className?: string;
   style?: CSSProperties;
   qa?: string;
@@ -20,6 +20,7 @@ export const Button = ({ className, styling, qa, ...props }: StyledButtonProps) 
       Secondary: `${govukButton} govuk-button--secondary`,
       Warning: `${govukButton} govuk-button--warning`,
       Link: "govuk-link",
+      White: `${govukButton} acc-button__print govuk-body-s`,
     };
 
     return buttonTypeMap[type] || govukButton;

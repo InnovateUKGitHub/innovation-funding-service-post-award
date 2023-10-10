@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
@@ -23,6 +23,7 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { usePcrItemName } from "../utils/getPcrItemName";
+import { PCRPrintRoute } from "./projectChangeRequestPrint.page";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -108,6 +109,13 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
           <SubmitButton disabled={isFetching} secondary {...registerButton("save-and-return")}>
             {getContent(x => x.pages.pcrOverview.saveAndReturn)}
           </SubmitButton>
+
+          <Link
+            className="govuk-body"
+            route={PCRPrintRoute.getLink({ projectId: props.projectId, pcrId: props.pcrId, backMode: "prepare" })}
+          >
+            Access a printable version of this PCR
+          </Link>
         </Fieldset>
       </Form>
     </Page>

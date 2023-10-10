@@ -41,6 +41,7 @@ import { PCRDetailsRoute } from "@ui/containers/pages/pcrs/overview/projectChang
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
   PCRPrepareItemRoute,
+  PCRPrintItemRoute,
   PCRReviewItemRoute,
   PCRViewItemRoute,
 } from "@ui/containers/pages/pcrs/pcrItemWorkflowContainer";
@@ -69,6 +70,7 @@ import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page
 import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview.page";
 import { PCRDeleteRoute } from "@ui/containers/pages/pcrs/pcrDelete.page";
 import { ProjectChangeRequestSubmittedForReviewRoute } from "@ui/containers/pages/pcrs/submitSuccess/ProjectChangeRequestSubmittedForReview.page";
+import { PCRPrintRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrint.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -124,6 +126,8 @@ export const routeConfig = {
   pcrReviewItem: PCRReviewItemRoute,
   pcrReviewReasoning: PCRReviewReasoningRoute,
   pcrViewItem: PCRViewItemRoute,
+  pcrPrintItem: PCRPrintItemRoute,
+  pcrPrint: PCRPrintRoute,
   pcrViewReasoning: PCRViewReasoningRoute,
   pcrsDashboard: PCRsDashboardRoute,
   projectDashboard: ProjectDashboardRoute,

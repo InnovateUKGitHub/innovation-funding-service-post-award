@@ -27,7 +27,7 @@ import { PCRWorkflowValidator } from "@ui/validation/validators/pcrWorkflowValid
 import { PcrSummaryConsumer, PcrSummaryProvider } from "./components/PcrSummary/PcrSummary";
 import { JSXElementConstructor, createContext, useContext } from "react";
 import { Result } from "@ui/validation/result";
-import { ProjectChangeRequestPrepareItemParams } from "./pcrItemWorkflowContainer";
+import { Mode, ProjectChangeRequestPrepareItemParams } from "./pcrItemWorkflowContainer";
 
 interface Data {
   virement: FinancialVirementDto;
@@ -39,7 +39,7 @@ interface Data {
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   editableItemTypes: PCRItemType[];
-  mode: "prepare" | "review" | "view";
+  mode: Mode;
 }
 
 interface Callbacks {
@@ -49,9 +49,60 @@ interface Callbacks {
 
 type PcrItemProps = Data & Callbacks & ProjectChangeRequestPrepareItemParams & BaseProps;
 
-const PcrItemContext = createContext<PcrItemProps & { workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>> }>(
+export const PcrItemContext = createContext<PcrItemProps & { workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>> }>(
   null as unknown as PcrItemProps & { workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>> },
 );
+
+const usePcrItemProps = () => {
+  const {
+    editor,
+    mode,
+    itemId,
+    projectId,
+    pcrId,
+    pcrItem,
+    workflow,
+    pcr,
+    pcrItemType,
+    documentsEditor,
+    project,
+    routes,
+    onChange,
+    onSave,
+  } = useContext(PcrItemContext);
+  const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id);
+  if (!validator) throw new Error(`Cannot find validator matching itemId ${itemId}`);
+  const status = editor.status || EditorStatus.Editing;
+
+  const props: PcrStepProps<PCRItemDto, typeof validator> = {
+    pcr,
+    pcrItem,
+    pcrItemType,
+    documentsEditor,
+    project,
+    validator,
+    status,
+    routes,
+    mode,
+    onChange: itemDto => handleChange(workflow, editor.data, itemDto, itemId, onChange),
+    onSave: skipToSummary => handleSave(workflow, editor.data, itemId, projectId, pcrId, onSave, routes, skipToSummary),
+    getRequiredToCompleteMessage: function RequiredToCompleteMessage(message) {
+      const standardMessage = "This is required to complete this request.";
+
+      if (!message) return standardMessage;
+
+      return (
+        <span>
+          {message}
+          <br />
+          {standardMessage}
+        </span>
+      );
+    },
+  };
+
+  return { props, mode, workflow };
+};
 
 const PCRForm = createTypedForm<PCRItemDto>();
 
@@ -92,19 +143,35 @@ export const PCRItemWorkflow = (props: BaseProps & Callbacks & Data & ProjectCha
 const Workflow = () => {
   const { mode, step, pcrItem, workflow } = useContext(PcrItemContext);
   const isPrepareMode = mode === "prepare";
+  const isPrintMode = mode === "print";
   const isFirstStep = step === 1;
+
+  const { props } = usePcrItemProps();
 
   const displayGuidance = isPrepareMode && isFirstStep;
   return (
     <>
       {displayGuidance && renderGuidanceSection(pcrItem)}
 
-      {workflow?.isOnSummary() ? <SummarySection /> : <WorkflowStep />}
+      {isPrintMode ? (
+        <>
+          <SummarySection />
+          {workflow.steps
+            .map(x => x.stepRender)
+            .map((Component, i) => (
+              <Component {...props} key={i} />
+            ))}
+        </>
+      ) : workflow?.isOnSummary() ? (
+        <SummarySection />
+      ) : (
+        <WorkflowStep />
+      )}
     </>
   );
 };
 
-const SummarySection = () => {
+export const SummarySection = () => {
   const { mode, workflow, routes, editableItemTypes, pcrItem, pcr } = useContext(PcrItemContext);
   const isPrepareMode = mode === "prepare";
   const isReviewing = mode === "review";
@@ -266,56 +333,9 @@ const getStepReviewLink = (
 };
 
 const WorkflowStep = () => {
-  const {
-    editor,
-    mode,
-    itemId,
-    projectId,
-    pcrId,
-    pcrItem,
-    workflow,
-    pcr,
-    pcrItemType,
-    documentsEditor,
-    project,
-    routes,
-    onChange,
-    onSave,
-  } = useContext(PcrItemContext);
-  const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id);
-  if (!validator) throw new Error(`Cannot find validator matching itemId ${itemId}`);
-  const status = editor.status || EditorStatus.Editing;
-
+  const { props, workflow, mode } = usePcrItemProps();
   const currentStep = workflow.getCurrentStepInfo();
-
   if (!currentStep) throw Error("PCR step does not exist on this workflow.");
-
-  const props: PcrStepProps<PCRItemDto, typeof validator> = {
-    pcr,
-    pcrItem,
-    pcrItemType,
-    documentsEditor,
-    project,
-    validator,
-    status,
-    routes,
-    mode,
-    onChange: itemDto => handleChange(workflow, editor.data, itemDto, itemId, onChange),
-    onSave: skipToSummary => handleSave(workflow, editor.data, itemId, projectId, pcrId, onSave, routes, skipToSummary),
-    getRequiredToCompleteMessage: function RequiredToCompleteMessage(message) {
-      const standardMessage = "This is required to complete this request.";
-
-      if (!message) return standardMessage;
-
-      return (
-        <span>
-          {message}
-          <br />
-          {standardMessage}
-        </span>
-      );
-    },
-  };
 
   if (mode === "review") {
     // When reviewing a pcr, the MO should only be able to visit pages which support read only.

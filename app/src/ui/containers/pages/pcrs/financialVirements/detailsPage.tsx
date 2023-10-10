@@ -20,7 +20,7 @@ import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Ta
 import { useStores } from "@ui/redux/storesProvider";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
 
-type Mode = "review" | "view";
+type Mode = "review" | "view" | "print";
 
 interface Params {
   projectId: ProjectId;
