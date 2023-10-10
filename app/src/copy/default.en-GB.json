@@ -1917,7 +1917,8 @@
           "another_pcr_already_has_this": "You can only have one '{{ type }}' change in progress in any PCR at a time.",
           "this_pcr_already_has_this_type": "You can only have one '{{ type }}' change in progress in this PCR at a time.",
           "not_enough_partners_to_rename": "You cannot select ‘Change a partner’s name’ because you do not have enough partners to action these.",
-          "not_enough_partners_to_remove": "You cannot select ‘Remove a partner’ because you do not have enough partners to action these."
+          "not_enough_partners_to_remove": "You cannot select ‘Remove a partner’ because you do not have enough partners to action these.",
+          "not_enough_partners_to_rename_and_remove": "You cannot select ‘Remove a partner’ and ‘Change a partner’s name’ because you do not have enough partners to action these."
         }
       }
     },
