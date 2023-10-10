@@ -270,13 +270,13 @@ export const getPcrItemsTooManyViolations = (
   const maxNumberOfRenames = numberOfPartners;
   const maxNumberOfBoth = numberOfPartners;
 
-  if (numberOfRenames > maxNumberOfRenames) {
+  if (numberOfRenames >= maxNumberOfRenames) {
     bannedTypes.add(PCRItemType.AccountNameChange);
   }
-  if (numberOfRemoves > maxNumberOfRemoves) {
+  if (numberOfRemoves >= maxNumberOfRemoves) {
     bannedTypes.add(PCRItemType.PartnerWithdrawal);
   }
-  if (numberOfRenames + numberOfRemoves > maxNumberOfBoth) {
+  if (numberOfRenames + numberOfRemoves >= maxNumberOfBoth) {
     bannedTypes.add(PCRItemType.AccountNameChange);
     bannedTypes.add(PCRItemType.PartnerWithdrawal);
   }
