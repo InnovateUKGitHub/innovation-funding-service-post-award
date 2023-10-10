@@ -12,7 +12,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
 import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
 
-export const PcrItemSummaryForm = <FormValues extends { itemStatus: "marked-as-complete" | "" | false }>({
+export const PcrItemSummaryForm = <FormValues extends { itemStatus: "marked-as-complete" | string }>({
   allowSubmit,
   register,
   pcrItem,

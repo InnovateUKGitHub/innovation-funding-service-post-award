@@ -13,7 +13,7 @@ import { useRhfErrors } from "@framework/util/errorHelpers";
 
 type FormValues = {
   timeExtension: string;
-  itemStatus: "marked-as-complete" | "" | false;
+  itemStatus: "marked-as-complete" | "false" | "";
 };
 
 export const TimeExtensionSummary = ({
@@ -34,7 +34,7 @@ export const TimeExtensionSummary = ({
 
   const { register, handleSubmit, formState } = useForm<FormValues>({
     defaultValues: {
-      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "",
+      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "false",
       timeExtension: String(pcrItem.offsetMonths ?? 0),
     },
     resolver: zodResolver(pcrTimeExtensionSchema, {

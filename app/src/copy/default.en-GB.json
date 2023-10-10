@@ -1973,6 +1973,22 @@
         }
       }
     },
+    "pcrScopeChange": {
+      "publicDescription": {
+        "errors": {
+          "too_big": "Public description can be a maximum of {{ count }} characters",
+          "too_small": "Enter a public description",
+          "readonly": "Public description cannot be changed."
+        }
+      },
+      "projectSummary": {
+        "errors": {
+          "too_big": "Project summary can be a maximum of {{ count }} characters",
+          "too_small": "Enter a project summary",
+          "readonly": "Project summary cannot be changed."
+        }
+      }
+    },
     "projectSetupBankDetails": {
       "accountNumber": {
         "errors": {

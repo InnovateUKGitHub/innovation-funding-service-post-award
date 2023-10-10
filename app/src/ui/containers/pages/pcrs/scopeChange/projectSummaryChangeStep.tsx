@@ -13,24 +13,31 @@ import { useForm } from "react-hook-form";
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 
-// projectSummary: string | null;
-// projectSummarySnapshot: string | null;
-// publicDescription: string | null;
-// publicDescriptionSnapshot: string | null;
-// type: PCRItemType.ScopeChange;
-
 export const ProjectSummaryChangeStep = () => {
   const { getContent } = useContent();
 
-  const { projectId, itemId, onSave, isFetching, fetchKey, getRequiredToCompleteMessage } = usePcrWorkflowContext();
+  const {
+    projectId,
+    itemId,
+    onSave,
+    isFetching,
+    fetchKey,
+    getRequiredToCompleteMessage,
+    useClearPcrValidationError,
+    pcrValidationErrors,
+  } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
 
   const { register, handleSubmit, watch } = useForm<{ projectSummary: string }>({
     defaultValues: {
-      projectSummary: "",
+      projectSummary: pcrItem.projectSummary ?? "",
     },
   });
+
+  const projectSummaryLength = watch("projectSummary")?.length ?? 0;
+
+  useClearPcrValidationError("projectSummary", projectSummaryLength > 0);
 
   const hint = getRequiredToCompleteMessage();
 
@@ -51,10 +58,11 @@ export const ProjectSummaryChangeStep = () => {
           </Info>
           <TextAreaField
             {...register("projectSummary")}
+            error={pcrValidationErrors?.projectSummary as RhfError}
             id="summary"
             hint={hint}
             disabled={isFetching}
-            characterCount={watch("projectSummary")?.length ?? 0}
+            characterCount={projectSummaryLength}
             data-qa="newSummary"
             characterCountType="descending"
             rows={15}

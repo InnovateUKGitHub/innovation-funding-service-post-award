@@ -13,16 +13,29 @@ import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFi
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 
 export const PublicDescriptionChangeStep = () => {
-  const { projectId, itemId, fetchKey, isFetching, getRequiredToCompleteMessage, onSave } = usePcrWorkflowContext();
+  const {
+    projectId,
+    itemId,
+    fetchKey,
+    isFetching,
+    getRequiredToCompleteMessage,
+    onSave,
+    useClearPcrValidationError,
+    pcrValidationErrors,
+  } = usePcrWorkflowContext();
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
   const { getContent } = useContent();
   const { register, handleSubmit, watch } = useForm<{ publicDescription: string }>({
     defaultValues: {
-      publicDescription: "",
+      publicDescription: pcrItem.publicDescription ?? "",
     },
   });
 
   const hint = getRequiredToCompleteMessage();
+
+  const publicDescriptionLength = watch("publicDescription")?.length ?? 0;
+
+  useClearPcrValidationError("publicDescription", publicDescriptionLength > 0);
 
   return (
     <Section data-qa="newDescriptionSection">
@@ -43,9 +56,10 @@ export const PublicDescriptionChangeStep = () => {
           <TextAreaField
             {...register("publicDescription")}
             id="description"
+            error={pcrValidationErrors?.publicDescription as RhfError}
             hint={hint}
             disabled={isFetching}
-            characterCount={watch("publicDescription")?.length ?? 0}
+            characterCount={publicDescriptionLength}
             data-qa="newDescription"
             characterCountType="descending"
             rows={15}

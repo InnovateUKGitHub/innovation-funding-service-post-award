@@ -38,6 +38,7 @@ export const useScopeChangeWorkflowQuery = (projectId: ProjectId, pcrItemId: Pcr
       "projectSummarySnapshot",
       "publicDescription",
       "publicDescriptionSnapshot",
+      "type",
     ],
     {},
   );
