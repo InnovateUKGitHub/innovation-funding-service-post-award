@@ -16,12 +16,26 @@ import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 export const TimeExtensionStep = () => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
 
-  const { projectId, pcrId, itemId, onSave, config, isFetching, routes, workflow, fetchKey } = usePcrWorkflowContext();
+  const {
+    projectId,
+    pcrId,
+    itemId,
+    onSave,
+    config,
+    isFetching,
+    routes,
+    workflow,
+    fetchKey,
+    pcrValidationErrors,
+    useClearPcrValidationError,
+  } = usePcrWorkflowContext();
 
   const { pcrItem, project } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -61,18 +75,24 @@ export const TimeExtensionStep = () => {
     throw new Error("You are not able to change the project duration");
   }
 
-  const defaultExtensionOption = timeExtensionDropdownOptions.find(x => x.id === String(pcrItem.offsetMonths));
-
-  const { register, handleSubmit, watch } = useForm<{ timeExtension: string; offsetMonths: number }>({
+  const { register, handleSubmit, watch } = useForm<{
+    timeExtension: string;
+    offsetMonths: number;
+    itemStatus: string;
+  }>({
     defaultValues: {
-      timeExtension: defaultExtensionOption?.value,
+      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "",
+      timeExtension: String(pcrItem.offsetMonths),
       offsetMonths: pcrItem.offsetMonths,
     },
   });
 
-  const newOffset = Number(timeExtensionDropdownOptions?.find(x => x.value === watch("timeExtension"))?.id ?? "0");
+  const newOffset = Number(watch("timeExtension"));
+  const newOffsetIsNotZero = newOffset !== 0;
 
   const newProjectDuration = (newOffset ?? 0) + pcrItem.projectDurationSnapshot;
+
+  useClearPcrValidationError("timeExtension", newOffsetIsNotZero);
 
   return (
     <>
@@ -94,18 +114,19 @@ export const TimeExtensionStep = () => {
 
       <Form
         onSubmit={handleSubmit(() => {
-          onSave({ data: { offsetMonths: newOffset }, context: { link: nextLink } });
+          onSave({ data: { offsetMonths: newOffset, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
         })}
       >
         <Fieldset>
           <Legend>{proposedProjectHeading}</Legend>
-          <FormGroup>
-            <Label htmlFor="time-extension">{timeExtensionSelectLabel}</Label>
+          <FormGroup hasError={!!pcrValidationErrors?.timeExtension}>
+            <Label htmlFor="timeExtension">{timeExtensionSelectLabel}</Label>
+            <ValidationError error={pcrValidationErrors?.timeExtension as RhfError} />
             <DropdownSelect
-              id="time-extension"
+              id="timeExtension"
               options={timeExtensionDropdownOptions}
               placeholder="-- Select end date --"
-              defaultValue={defaultExtensionOption?.value}
+              defaultValue={String(pcrItem.offsetMonths)}
               disabled={isFetching}
               {...register("timeExtension")}
             />
