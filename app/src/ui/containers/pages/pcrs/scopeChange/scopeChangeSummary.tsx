@@ -1,4 +1,4 @@
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
@@ -24,7 +24,7 @@ export const ScopeChangeSummary = (
           content={<SimpleString multiline>{pcrItem.publicDescription}</SimpleString>}
           qa="newPublicDescription"
           validation={validator.publicDescription}
-          action={props.getEditLink(PCRStepId.publicDescriptionStep, validator.publicDescription)}
+          action={props.getEditLink(PCRStepType.publicDescriptionStep, validator.publicDescription)}
         />
         <SummaryListItem
           label={x => x.pcrScopeChangeLabels.existingSummary}
@@ -36,7 +36,7 @@ export const ScopeChangeSummary = (
           content={<SimpleString multiline>{pcrItem.projectSummary}</SimpleString>}
           qa="newProjectSummary"
           validation={validator.projectSummary}
-          action={props.getEditLink(PCRStepId.projectSummaryStep, validator.projectSummary)}
+          action={props.getEditLink(PCRStepType.projectSummaryStep, validator.projectSummary)}
         />
       </SummaryList>
     </Section>

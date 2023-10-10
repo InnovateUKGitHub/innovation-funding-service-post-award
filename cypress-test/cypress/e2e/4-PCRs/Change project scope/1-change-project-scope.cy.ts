@@ -1,6 +1,5 @@
 import { visitApp } from "../../../common/visit";
 import {
-  clickCreateRequestButtonProceed,
   headingAndGuidance,
   newDescriptionEntry,
   newSummaryEntry,
@@ -23,11 +22,9 @@ describe("PCR > Change project scope", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should select 'Change project scope", () => {
-    cy.clickCheckBox("Change project scope");
+  it("Should create a Change project scope PCR", () => {
+    cy.createPcr("Change project scope");
   });
-
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should then click into the Change project scope section of the PCR", () => {
     cy.get("a").contains("Change project scope").click();

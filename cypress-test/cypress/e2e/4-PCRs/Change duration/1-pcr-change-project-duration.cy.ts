@@ -24,9 +24,16 @@ describe("PCR >  Change project duration > Create PCR", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should select the correct tick box and start a new 'Change project duration' PCR", () => {
-    cy.clickCheckBox("Change project duration");
-    cy.get("button").contains("Create request").click();
+  it("Should display the create PCR heading", () => {
+    cy.heading("Start a new request");
+  });
+
+  it("Should create a Change project duration PCR", () => {
+    cy.createPcr("Change project duration");
+  });
+
+  it("Should display the request heading", () => {
+    cy.heading("Request");
   });
 
   it("Should have a back option", () => {
@@ -59,7 +66,7 @@ describe("PCR >  Change project duration > Create PCR", () => {
   it("Should contain existing project details heading and information", existingProjectDetails);
 
   it("Should contain Proposed project details", () => {
-    cy.get("h2").contains("Proposed project details");
+    cy.get("legend").contains("Proposed project details");
     cy.getByLabel("Please select a new date from the available list");
   });
 
@@ -77,4 +84,15 @@ describe("PCR >  Change project duration > Create PCR", () => {
   it("Should show 'Proposed' subheadings from the previous page and display a summary", proposedSubheadings);
 
   it("Should mark as complete and then click 'Save and return to request'", markAsCompleteSave);
+
+  it("Should display the status of the Change project duration PCR as 'Complete'", () => {
+    cy.heading("Request");
+    cy.get("strong").contains("Complete");
+  });
+
+  it("Should re-access the PCR and assert that the tick box is populated", () => {
+    cy.get("a").contains("Change project duration").click();
+    cy.heading("Change project duration");
+    cy.get("#marked-as-complete").should("have.value", "marked-as-complete");
+  });
 });

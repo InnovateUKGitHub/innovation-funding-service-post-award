@@ -2,17 +2,17 @@ import { IPCRWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { ScopeChangeSummary } from "./scopeChangeSummary";
 import { ProjectSummaryChangeStep } from "./projectSummaryChangeStep";
 import { PublicDescriptionChangeStep } from "./publicDescriptionChangeStep";
-import { PCRStepId, PCRItemType } from "@framework/constants/pcrConstants";
+import { PCRStepType, PCRItemType } from "@framework/constants/pcrConstants";
 import { PCRItemForScopeChangeDto } from "@framework/dtos/pcrDtos";
 import { CombinedResultValidator } from "@ui/validation/results";
 import { PCRScopeChangeItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
-export type scopeChangeStepNames = PCRStepId.publicDescriptionStep | PCRStepId.projectSummaryStep;
+export type scopeChangeStepNames = PCRStepType.publicDescriptionStep | PCRStepType.projectSummaryStep;
 
 export const scopeChangeWorkflow: IPCRWorkflow<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator> = {
   steps: [
     {
-      stepName: PCRStepId.publicDescriptionStep,
+      stepName: PCRStepType.publicDescriptionStep,
       displayName: "Proposed public description",
       stepNumber: 1,
       validation: val => {
@@ -24,7 +24,7 @@ export const scopeChangeWorkflow: IPCRWorkflow<PCRItemForScopeChangeDto, PCRScop
       stepRender: PublicDescriptionChangeStep,
     },
     {
-      stepName: PCRStepId.projectSummaryStep,
+      stepName: PCRStepType.projectSummaryStep,
       displayName: "Proposed project summary",
       stepNumber: 2,
       validation: val => {

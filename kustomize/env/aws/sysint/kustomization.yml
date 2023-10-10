@@ -1,0 +1,12 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: sysint
+
+bases:
+  - ../aws-base
+
+resources:
+  - ../../../config-mgmt/env/aws/sysint
+
+patchesStrategicMerge:
+  - acc-ui-route.yml

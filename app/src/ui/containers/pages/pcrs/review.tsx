@@ -4,7 +4,7 @@ import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framew
 import { PCRDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 import { getPcrItemTaskStatus } from "./utils/getPcrItemTaskStatus";
-import { PCRItemType, PCRStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
@@ -243,7 +243,7 @@ const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => {
         stores.projectChangeRequests.updatePcrEditor({
           saving: save,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.spendProfileStep,
+          pcrStepType: PCRStepType.spendProfileStep,
           dto,
           onComplete: () => {
             navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path);

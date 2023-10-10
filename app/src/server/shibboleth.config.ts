@@ -1,4 +1,3 @@
-import fs from "fs";
 import { SamlConfig, Strategy, VerifiedCallback } from "passport-saml";
 
 import { configuration } from "@server/features/common/config";
@@ -38,7 +37,7 @@ const baseShibbolethConfig: SamlConfig = {
 const expectedShibbolethConfig: Partial<SamlConfig> = {
   identifierFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:persistent",
   disableRequestedAuthnContext: true,
-  decryptionPvk: fs.readFileSync(configuration.certificates.shibboleth, "utf-8"),
+  decryptionPvk: configuration.certificates.shibboleth,
   acceptedClockSkewMs: -1,
 };
 

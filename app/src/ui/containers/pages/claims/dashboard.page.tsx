@@ -152,7 +152,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
       <GetProjectStatus>
         {projectStatus => (
           <ClaimTable.Table
-            data={data}
+            data={data.sort((a, b) => a.periodId - b.periodId)}
             bodyRowFlag={claim => (projectStatus.isActive ? this.hasBodyRowFlag(claim, project, partner) : null)}
             qa={tableQa}
             caption={tableCaption}

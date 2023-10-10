@@ -3,7 +3,7 @@ import { IStores, useStores } from "@ui/redux/storesProvider";
 import { useNavigate } from "react-router-dom";
 import { usePcrItemWorkflowQuery } from "./pcrItemWorkflow.logic";
 import { PcrWorkflow, WorkflowPcrType } from "./pcrWorkflow";
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Pending } from "@shared/pending";
@@ -31,18 +31,19 @@ export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
 
   const onSave = ({
     dto,
-    pcrStepId = PCRStepId.none,
+    pcrStepType = PCRStepType.none,
     link,
   }: {
     dto: PCRDto;
-    pcrStepId?: PCRStepId;
+    pcrStepType?: PCRStepType;
     link: ILinkInfo;
   }) => {
     stores.messages.clearMessages();
     stores.projectChangeRequests.updatePcrEditor({
       saving: true,
       projectId: props.projectId,
-      pcrStepId,
+      pcrStepType,
+      pcrStepId: props.itemId,
       dto,
       onComplete: () => {
         navigate(link.path);
@@ -50,9 +51,15 @@ export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
     });
   };
 
-  const onChange = ({ dto, pcrStepId = PCRStepId.none }: { dto: PCRDto; pcrStepId?: PCRStepId }) => {
+  const onChange = ({ dto, pcrStepType = PCRStepType.none }: { dto: PCRDto; pcrStepType?: PCRStepType }) => {
     stores.messages.clearMessages();
-    stores.projectChangeRequests.updatePcrEditor({ saving: false, projectId: props.projectId, pcrStepId, dto });
+    stores.projectChangeRequests.updatePcrEditor({
+      saving: false,
+      projectId: props.projectId,
+      pcrStepType,
+      pcrStepId: props.itemId,
+      dto,
+    });
   };
 
   if (workflow?.isMigratedToGql) {

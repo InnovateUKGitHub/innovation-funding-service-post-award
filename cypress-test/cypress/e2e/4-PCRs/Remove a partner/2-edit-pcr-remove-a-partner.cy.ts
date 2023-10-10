@@ -1,5 +1,5 @@
 import { visitApp } from "../../../common/visit";
-import { clickCreateRequestButtonProceed, shouldShowProjectTitle, showPartners } from "../steps";
+import { shouldShowProjectTitle, showPartners } from "../steps";
 
 describe("PCR > Remove partner > Begin editing the Remove a partner section", () => {
   before(() => {
@@ -18,11 +18,9 @@ describe("PCR > Remove partner > Begin editing the Remove a partner section", ()
     cy.get("a").contains("Create request").click();
   });
 
-  it("Should select 'Remove a partner' checkbox", () => {
-    cy.clickCheckBox("Remove a partner");
+  it("Should create a Remove partner PCR", () => {
+    cy.createPcr("Remove a partner");
   });
-
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should click the Remove partner link to begin editing the PCR", () => {
     cy.get("a").contains("Remove a partner").click();

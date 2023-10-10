@@ -1,4 +1,4 @@
-import { PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
@@ -53,7 +53,7 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
         projectId: params.projectId,
         projectChangeRequestId: params.pcrId,
         pcr: dto,
-        pcrStepId: PCRStepId.spendProfileStep,
+        pcrStepType: PCRStepType.spendProfileStep,
       }),
     );
 
@@ -61,7 +61,7 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
 
     const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!summaryWorkflow) throw new Error("summary workflow is null");
-    const spendProfileS = summaryWorkflow.findStepNumberByName(PCRStepId.spendProfileStep);
+    const spendProfileS = summaryWorkflow.findStepNumberByName(PCRStepType.spendProfileStep);
     const addPartnerWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, spendProfileS);
     const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
 
@@ -81,7 +81,7 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
     return new PCRDtoValidator({
       model: dto,
       original: dto,
-      pcrStepId: PCRStepId.spendProfileStep,
+      pcrStepType: PCRStepType.spendProfileStep,
     });
   }
 }

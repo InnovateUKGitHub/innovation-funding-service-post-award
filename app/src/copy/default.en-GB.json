@@ -255,9 +255,8 @@
     "projectsDashboard": {
       "title": "Dashboard",
       "projectsTitle": "Projects",
-      "searchTitle": "Search",
       "searchHint": "Project number, project or lead partner",
-      "searchLabel": "TEST",
+      "searchLabel": "Search",
       "noLiveProjectsMessage": "You do not have any live projects.",
       "noLiveMatchingMessage": "There are no matching live projects.",
       "upcomingTitle": "Upcoming",
@@ -985,6 +984,14 @@
       "backLink": "Back to project change requests",
       "alertMessage": "All the information will be permanently deleted.",
       "button": "Delete request"
+    },
+    "pcrSubmittedForReview": {
+      "title": "Project change request submitted",
+      "backLink": "Back to project change requests",
+      "submittedMessage": "Your project change request has been submitted.",
+      "submittedSubmessage": "Please note there is a 30-day Service Level Target from submission of your request to Innovate UK, through to approval of the change(s).",
+      "reviewLink": "Review request",
+      "backButton": "Return to project change requests"
     }
   },
   "claimsMessages": {
@@ -1123,6 +1130,23 @@
     "additionalCommentsGuidance": "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
     "additionalCommentsGuidance_InternalAssurance": "If you want to explain anything to Innovate UK, add it here.",
     "submittingGuidance": "By submitting this request, you confirm that all project partners have approved these changes."
+  },
+  "pcrStatus": {
+    "Unknown": "Unknown",
+    "Draft": "Draft",
+    "SubmittedToMonitoringOfficer": "Submitted to Monitoring Officer",
+    "QueriedByMonitoringOfficer": "Queried by Monitoring Officer",
+    "SubmittedToInnovationLead": "Submitted to Innovation Lead",
+    "QueriedByInnovateUK": "Queried by Innovate UK",
+    "InExternalReview": "In External Review",
+    "InReviewWithInnovateUK": "In Review with Innovate UK",
+    "Rejected": "Rejected",
+    "Withdrawn": "Withdrawn",
+    "Approved": "Approved",
+    "Actioned": "Actioned",
+    "SubmittedToInnovateUK": "Submitted to Innovate UK",
+    "QueriedByInnovationLead": "Queried by Innovation Lead",
+    "InReviewWithProjectFinance": "In Review with Project Finance"
   },
   "spendProfileMessages": {
     "costGuidanceLabour": "The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.\nThey can include the following labour costs, based on PAYE records:\n\n* gross salary\n* National Insurance\n* company pension contribution\n* life insurance\n* other non-discretionary package costs\n\nYou cannot include:\n\n* discretionary bonuses\n* performance related payments of any kind\n\nYou may include the total number of working days for staff but do not include:\n\n* sick days\n* waiting time\n* training days\n* non-productive time\n\nList the total days worked by all categories of staff on the project. Describe their roles.\n\nWe will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.",
@@ -1405,6 +1429,10 @@
   },
   "pcrLabels": {
     "requestNumber": "Request number",
+    "requestType": "Request type",
+    "requestStarted": "Request started",
+    "requestLastUpdated": "Request last updated",
+    "requestStatus": "Request status",
     "types": "Types",
     "started": "Started",
     "status": "Status",
@@ -1566,7 +1594,7 @@
       "commentReadOnly": "Cannot update comments.",
       "reasoningRequired": "Enter reasoning for the request.",
       "reasoningLengthTooLarge_one": "Reasoning can be a maximum of {{ count }} character.",
-      "reasoningLengthTooLarge_other": "Reasoning can be a maximum of {{ count }} character.",
+      "reasoningLengthTooLarge_other": "Reasoning can be a maximum of {{ count }} characters.",
       "reasoningReadOnly": "Cannot update reasoning.",
       "statusInvalid": "Set a valid status.",
       "reasoningStatusRequired": "Invalid reasoning status.",

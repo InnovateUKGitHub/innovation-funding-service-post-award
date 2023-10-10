@@ -1,0 +1,37 @@
+apiVersion: skaffold/v4beta5
+kind: Config
+metadata:
+  name: acc-ui
+build:
+  artifacts:
+    - image: acc-ui
+      docker:
+        dockerfile: Dockerfile
+manifests:
+  kustomize:
+    buildArgs:
+      # Enable KSOPS to add plugins/execute
+      - "--enable-alpha-plugins=true"
+      - "--enable-exec=true"
+    paths:
+      - kustomize/env/stub/local/dev
+
+profiles:
+  - name: local
+    manifests:
+      kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
+        paths:
+          - kustomize/env/stub/local/dev
+  - name: custom
+    manifests:
+      kustomize:
+        buildArgs:
+          # Enable KSOPS to add plugins/execute
+          - "--enable-alpha-plugins=true"
+          - "--enable-exec=true"
+        paths:
+          - kustomize/env/stub/custom

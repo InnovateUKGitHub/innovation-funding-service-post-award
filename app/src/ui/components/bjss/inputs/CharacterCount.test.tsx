@@ -1,6 +1,15 @@
+import TestBed from "@shared/TestBed";
 import { render } from "@testing-library/react";
 
 import { CharacterCount, CharacterCountProps } from "@ui/components/bjss/inputs/CharacterCount";
+
+const renderCount = (props: CharacterCountProps) => {
+  return render(
+    <TestBed>
+      <CharacterCount {...props} />
+    </TestBed>,
+  );
+};
 
 describe("<CharacterCount />", () => {
   const hasStyleQuery = (queryContainer: Element, hasError: boolean) => {
@@ -19,7 +28,7 @@ describe("<CharacterCount />", () => {
       test("with singular spelling", () => {
         const ascendingProps = { ...ascendingBaseProps, count: 1 };
 
-        const { queryByText } = render(<CharacterCount {...ascendingProps} />);
+        const { queryByText } = renderCount(ascendingProps);
 
         const singluarMessage = queryByText("You have 1 character");
 
@@ -29,7 +38,7 @@ describe("<CharacterCount />", () => {
       test("with plural spelling", () => {
         const ascendingProps = { ...ascendingBaseProps, count: 2 };
 
-        const { queryByText } = render(<CharacterCount {...ascendingProps} />);
+        const { queryByText } = renderCount(ascendingProps);
 
         const pluralMessage = queryByText("You have 2 characters");
 
@@ -39,7 +48,7 @@ describe("<CharacterCount />", () => {
       test("with default count (without limit)", () => {
         const ascendingProps = { ...ascendingBaseProps, count: 0 };
 
-        const { queryByText } = render(<CharacterCount {...ascendingProps} />);
+        const { queryByText } = renderCount(ascendingProps);
 
         const startingCountMessage = queryByText("You have 0 characters");
 
@@ -57,7 +66,7 @@ describe("<CharacterCount />", () => {
         `("$name", ({ count, minValue, expectedHasError }) => {
           const ascendingProps = { ...ascendingBaseProps, count, minValue };
 
-          const { container } = render(<CharacterCount {...ascendingProps} />);
+          const { container } = renderCount(ascendingProps);
 
           const uiState = hasStyleQuery(container, expectedHasError);
 
@@ -70,7 +79,7 @@ describe("<CharacterCount />", () => {
           const stubCount = 10;
           const ascendingProps = { ...ascendingBaseProps, count: 0, minValue: stubCount };
 
-          const { queryByText } = render(<CharacterCount {...ascendingProps} />);
+          const { queryByText } = renderCount(ascendingProps);
 
           const startingCountMessage = queryByText(`You have ${stubCount} characters required`);
 
@@ -83,7 +92,7 @@ describe("<CharacterCount />", () => {
 
           const ascendingProps = { ...ascendingBaseProps, count: stubCount, minValue: stubCount };
 
-          const { queryByText } = render(<CharacterCount {...ascendingProps} />);
+          const { queryByText } = renderCount(ascendingProps);
 
           const startingCountMessage = queryByText(`You have ${stubCount} characters`);
 
@@ -96,7 +105,7 @@ describe("<CharacterCount />", () => {
 
           const ascendingProps = { ...ascendingBaseProps, count: stubCount, minValue: stubCount };
 
-          const { queryByText } = render(<CharacterCount {...ascendingProps} />);
+          const { queryByText } = renderCount(ascendingProps);
 
           const startingCountMessage = queryByText(`You have ${stubMinValue - stubCount} characters`);
 
@@ -116,7 +125,7 @@ describe("<CharacterCount />", () => {
       test("with singular spelling", () => {
         const descendingProps = { ...descendingBaseProps, count: 1, maxValue: 2 };
 
-        const { queryByText } = render(<CharacterCount {...descendingProps} />);
+        const { queryByText } = renderCount(descendingProps);
 
         const singluarMessage = queryByText("You have 1 character remaining");
 
@@ -126,7 +135,7 @@ describe("<CharacterCount />", () => {
       test("with plural spelling", () => {
         const descendingProps = { ...descendingBaseProps, count: 2, maxValue: 4 };
 
-        const { queryByText } = render(<CharacterCount {...descendingProps} />);
+        const { queryByText } = renderCount(descendingProps);
 
         const pluralMessage = queryByText("You have 2 characters remaining");
 
@@ -136,7 +145,7 @@ describe("<CharacterCount />", () => {
       test("with single starting maximum count", () => {
         const descendingProps = { ...descendingBaseProps, count: 0, maxValue: 1 };
 
-        const { queryByText, container } = render(<CharacterCount {...descendingProps} />);
+        const { queryByText, container } = renderCount(descendingProps);
 
         const defaultStyle = hasStyleQuery(container, false);
         const startingCountMessage = queryByText("You have 1 character remaining");
@@ -148,7 +157,7 @@ describe("<CharacterCount />", () => {
       test("with plural starting maximum count", () => {
         const descendingProps = { ...descendingBaseProps, count: 0, maxValue: 2 };
 
-        const { queryByText, container } = render(<CharacterCount {...descendingProps} />);
+        const { queryByText, container } = renderCount(descendingProps);
 
         const defaultStyle = hasStyleQuery(container, false);
         const startingCountMessage = queryByText("You have 2 characters remaining");
@@ -166,7 +175,7 @@ describe("<CharacterCount />", () => {
         `("$name", ({ count, maxValue, expectedHasError }) => {
           const ascendingProps = { ...descendingBaseProps, count, maxValue };
 
-          const { container } = render(<CharacterCount {...ascendingProps} />);
+          const { container } = renderCount(ascendingProps);
 
           const uiState = hasStyleQuery(container, expectedHasError);
 
@@ -179,7 +188,7 @@ describe("<CharacterCount />", () => {
           const stubMaxValue = 15;
           const descendingProps = { ...descendingBaseProps, count: 0, maxValue: stubMaxValue };
 
-          const { queryByText } = render(<CharacterCount {...descendingProps} />);
+          const { queryByText } = renderCount(descendingProps);
 
           const startingCountMessage = queryByText("You have 15 characters remaining");
 
@@ -190,7 +199,7 @@ describe("<CharacterCount />", () => {
           const stubCount = 10;
           const descendingProps = { ...descendingBaseProps, count: stubCount, maxValue: stubCount };
 
-          const { queryByText } = render(<CharacterCount {...descendingProps} />);
+          const { queryByText } = renderCount(descendingProps);
 
           const startingCountMessage = queryByText("You have 0 characters remaining");
 
@@ -203,7 +212,7 @@ describe("<CharacterCount />", () => {
 
           const descendingProps = { ...descendingBaseProps, count: stubCount, maxValue: stubMaxValue };
 
-          const { queryByText } = render(<CharacterCount {...descendingProps} />);
+          const { queryByText } = renderCount(descendingProps);
 
           const startingCountMessage = queryByText("You have 1 character too many");
 
@@ -216,7 +225,7 @@ describe("<CharacterCount />", () => {
 
           const descendingProps = { ...descendingBaseProps, count: stubCount, maxValue: stubMaxValue };
 
-          const { queryByText } = render(<CharacterCount {...descendingProps} />);
+          const { queryByText } = renderCount(descendingProps);
 
           const startingCountMessage = queryByText("You have 2 characters too many");
 

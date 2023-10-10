@@ -2,7 +2,7 @@ import React from "react";
 import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pages/pcrs/removePartner/removePartnerWorkflow";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos/pcrDtos";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
@@ -30,20 +30,20 @@ class Component extends React.Component<
             content={pcrItem.partnerNameSnapshot}
             validation={validator.partnerId}
             qa="partnerToRemove"
-            action={this.props.getEditLink(PCRStepId.removalPeriodStep, validator.partnerId)}
+            action={this.props.getEditLink(PCRStepType.removalPeriodStep, validator.partnerId)}
           />
           <SummaryListItem
             label={x => x.pcrRemovePartnerLabels.lastPeriod}
             content={pcrItem.removalPeriod}
             validation={validator.removalPeriod}
             qa="removalPeriod"
-            action={this.props.getEditLink(PCRStepId.removalPeriodStep, validator.removalPeriod)}
+            action={this.props.getEditLink(PCRStepType.removalPeriodStep, validator.removalPeriod)}
           />
           <SummaryListItem
             label={x => x.pcrRemovePartnerLabels.documents}
             content={this.renderDocuments(documents)}
             qa="supportingDocuments"
-            action={this.props.getEditLink(PCRStepId.filesStep, null)}
+            action={this.props.getEditLink(PCRStepType.filesStep, null)}
           />
         </SummaryList>
       </Section>

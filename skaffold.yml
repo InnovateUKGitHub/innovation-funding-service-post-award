@@ -1,0 +1,31 @@
+apiVersion: skaffold/v2beta11
+kind: Config
+metadata:
+  name: innovation-funding-service
+build:
+  artifacts:
+    - image: acc-ui
+      context: .
+      docker:
+        dockerfile: Dockerfile
+  local:
+    useDockerCLI: true
+    useBuildkit: false
+    tryImportMissing: true
+    push: false
+deploy:
+  statusCheckDeadlineSeconds: 600
+  kustomize:
+    buildArgs:
+      # Enable KSOPS to add plugins/execute
+      - "--enable-alpha-plugins=true"
+      - "--enable-exec=true"
+    paths:
+      - kustomize/env/stub/local/dev
+
+portForward:
+  - resourceType: Service
+    resourceName: acc-ui-service
+    namespace: default
+    port: 8080
+    localPort: 8080

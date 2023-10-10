@@ -1,16 +1,10 @@
-/* eslint-disable jsx-a11y/anchor-has-content */
-// TODO: This should be a button since we supply no href
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
-import { NestedResult } from "@ui/validation/nestedResult";
-import { Results } from "@ui/validation/results";
 import React from "react";
-import { v4 as uuid } from "uuid";
-import { Result } from "../../../../../validation/result";
+import { Result } from "@ui/validation/result";
+import { Results } from "@ui/validation/results";
+import { NestedResult } from "@ui/validation/nestedResult";
 
 interface Props {
   error: Result | null | undefined;
-  hideMessage?: boolean;
   overrideMessage?: string;
 }
 
@@ -18,32 +12,37 @@ const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-const prepareMessage = (
-  overrideMessage: string | null | undefined,
-  errorMessage: string | null | undefined,
-): React.ReactNode => {
-  if (overrideMessage) {
-    return overrideMessage;
-  }
+/**
+ * Render a string, replacing all newline characters `\n` with HTML line breaks `<br />`
+ * @returns React component with HTML line breaks injected
+ */
+const NewlineToBreak = ({ message }: { message: string | null }) => {
+  if (message) {
+    if (message.indexOf("\n") === 0) return <>{message}</>;
 
-  if (errorMessage && errorMessage.indexOf("\n") === 0) {
-    return errorMessage;
-  }
-
-  if (errorMessage) {
-    return errorMessage.split("\n").reduce<React.ReactNode[]>((result, current, index) => {
-      if (index > 0) {
-        result.push(<br />);
-      }
-      result.push(current);
-      return result;
-    }, []);
+    return (
+      <>
+        {message.split("\n").reduce<React.ReactNode[]>((result, current, index) => {
+          if (index > 0) {
+            result.push(<br key={index} />);
+          }
+          result.push(current);
+          return result;
+        }, [])}
+      </>
+    );
   }
 
   return null;
 };
 
-export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMessage = false, overrideMessage }) => {
+const ValidationErrorMessage = ({ id, message }: { id: string; message: string | null }) => (
+  <p id={id} style={alignTextLeftStyle} className="govuk-error-message">
+    <NewlineToBreak message={message} />
+  </p>
+);
+
+export const ValidationError = ({ error, overrideMessage }: Props) => {
   if (!error || error.isValid || !error.showValidationErrors) {
     return null;
   }
@@ -65,20 +64,13 @@ export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMes
 
   return (
     <>
-      {validations.map(r => (
-        <ValidationErrorAnchor key={uuid()} result={r} />
-      ))}
-
-      {!hideMessage && (
-        <p style={alignTextLeftStyle} className="govuk-error-message">
-          {prepareMessage(overrideMessage, error.errorMessage)}
-        </p>
+      {overrideMessage ? (
+        <ValidationErrorMessage id={error.key} message={overrideMessage} />
+      ) : (
+        validations
+          .filter(result => result.errorMessage)
+          .map((result, index) => <ValidationErrorMessage key={index} id={result.key} message={result.errorMessage} />)
       )}
     </>
   );
-};
-
-const ValidationErrorAnchor: React.FunctionComponent<{ result: Result }> = ({ result }) => {
-  // TODO: this shouldn't be an anchor without an href, a styled button will do
-  return <a id={result.key} aria-hidden="true" />;
 };

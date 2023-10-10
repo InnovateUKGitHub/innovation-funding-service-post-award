@@ -2,7 +2,6 @@ import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
   completeNewPartnerInfoAsResearch,
-  clickCreateRequestButtonProceed,
   stateAidAddPartnerHeading,
   saveContinueSaveSummary,
 } from "../steps";
@@ -18,11 +17,9 @@ describe("PCR > Add partner >  Continuing editing PCR as research", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should select 'Add a partner' checkbox", () => {
-    cy.clickCheckBox("Add a partner");
+  it("Should create an Add partner PCR", () => {
+    cy.createPcr("Add a partner");
   });
-
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should let you click 'Add a partner' and continue to the next screen", () => {
     cy.get("a").contains("Add a partner").click();

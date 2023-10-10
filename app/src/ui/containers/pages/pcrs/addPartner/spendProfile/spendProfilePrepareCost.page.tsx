@@ -1,5 +1,5 @@
 import { CostCategoryGroupType, CostCategoryType } from "@framework/constants/enums";
-import { PCRItemStatus, PCRItemType, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType, PCRStepType } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
@@ -188,7 +188,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private getSpendProfileStep(addPartnerItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!workflow) return null;
-    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
+    const stepName: AddPartnerStepNames = PCRStepType.spendProfileStep;
     return workflow.findStepNumberByName(stepName);
   }
 
@@ -281,12 +281,20 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 }
 
-const onSave = (stores: IStores, dto: PCRDto, projectId: ProjectId, link: ILinkInfo, navigate: NavigateFunction) => {
+const onSave = (
+  stores: IStores,
+  dto: PCRDto,
+  projectId: ProjectId,
+  itemId: PcrItemId,
+  link: ILinkInfo,
+  navigate: NavigateFunction,
+) => {
   stores.messages.clearMessages();
   stores.projectChangeRequests.updatePcrEditor({
     saving: true,
     projectId,
-    pcrStepId: PCRStepId.spendProfileStep,
+    pcrStepType: PCRStepType.spendProfileStep,
+    pcrStepId: itemId,
     dto,
     message: undefined,
     onComplete: () => navigate(link.path),
@@ -325,13 +333,13 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
         props.itemId,
         costCategoryPending,
       )}
-      onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}
+      onSave={(dto, link) => onSave(stores, dto, props.projectId, props.itemId, link, navigate)}
       onChange={dto => {
         stores.messages.clearMessages();
         stores.projectChangeRequests.updatePcrEditor({
           saving: false,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.spendProfileStep,
+          pcrStepType: PCRStepType.spendProfileStep,
           dto,
         });
       }}
@@ -359,13 +367,13 @@ const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => {
         return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId) as PCRSpendProfileCostDto;
       })}
       validator={stores.projectChangeRequests.getSpendProfileCostValidator(editorPending, props.itemId, props.costId)}
-      onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}
+      onSave={(dto, link) => onSave(stores, dto, props.projectId, props.itemId, link, navigate)}
       onChange={dto => {
         stores.messages.clearMessages();
         stores.projectChangeRequests.updatePcrEditor({
           saving: false,
           projectId: props.projectId,
-          pcrStepId: PCRStepId.spendProfileStep,
+          pcrStepType: PCRStepType.spendProfileStep,
           dto,
         });
       }}

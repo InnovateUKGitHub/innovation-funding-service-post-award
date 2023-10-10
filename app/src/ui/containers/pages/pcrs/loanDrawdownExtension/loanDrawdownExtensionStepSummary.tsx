@@ -1,7 +1,7 @@
 import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { LoanExtensionStepNames } from "./loanDrawdownExtensionWorkflow";
 import { LoanChangeDurationTable } from "./LoanChangeDurationTable";
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos/pcrDtos";
 import { PCRLoanExtensionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
@@ -21,7 +21,7 @@ export const loanDrawdownExtensionStepSummary = (props: BaseProps) => {
     <LoanChangeDurationTable
       formData={props.pcrItem}
       validator={props.validator}
-      editLink={props.getEditLink(PCRStepId.loanExtension, null)}
+      editLink={props.getEditLink(PCRStepType.loanExtension, null)}
     />
   );
 };

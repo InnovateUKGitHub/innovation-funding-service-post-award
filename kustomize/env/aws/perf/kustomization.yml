@@ -1,0 +1,13 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: perf
+
+bases:
+  - ../aws-base
+
+resources:
+  - ../../../config-mgmt/env/aws/perf
+
+patchesStrategicMerge:
+  - acc-ui-deployment.yml
+  - acc-ui-route.yml

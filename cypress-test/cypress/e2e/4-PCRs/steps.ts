@@ -170,13 +170,6 @@ export const completeNewPartnerInfoNonAid = () => {
   cy.submitButton("Save and continue").click();
 };
 
-export const clickCreateRequestButtonProceed = () => {
-  cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.submitButton("Create request").click();
-  cy.wait("@pcrPrepare");
-  cy.heading("Request");
-};
-
 export const requestHeadingDetailsHeading = () => {
   cy.heading("Request");
   cy.get("h2").contains("Details");
@@ -498,6 +491,38 @@ export const navigateToPartnerPerson = () => {
   cy.get(`input[id="projectCity"]`).type("Swindon");
   cy.get(`input[id="projectPostcode"]`).type("SN5");
   cy.submitButton("Save and continue").click();
+};
+
+export const completeAddPartnerForMulti = () => {
+  cy.getByLabel("Collaborator").click();
+  cy.getByLabel("Yes").click();
+  cy.getByLabel("Business").click();
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("State aid eligibility");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Search companies house");
+  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
+  cy.get("h2").contains("Companies house search results");
+  cy.get(`input[type="radio"]`).click();
+  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
+  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
+  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Organisation details");
+  cy.getByLabel("Large").click();
+  cy.get(`input[id="numberOfEmployees"]`).type("1000");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Financial details");
+  cy.get(`input[id="financialYearEndDate_month"]`).type("03");
+  cy.get(`input[id="financialYearEndDate_year"]`).type("2022");
+  cy.get(`input[id="financialYearEndTurnover"]`).type("1000000");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Project location");
+  cy.get(`input[id="projectLocation_10"]`).click();
+  cy.get(`input[id="projectCity"]`).type("Swindon");
+  cy.get(`input[id="projectPostcode"]`).type("SN5");
+  cy.submitButton("Save and continue").click();
+  cy.get("h2").contains("Add person to organisation");
 };
 
 export const navigateToPartnerCosts = () => {
@@ -989,19 +1014,17 @@ export const completeChangeName = () => {
 
 export const existingProjectDetails = () => {
   cy.get("h2").contains("Existing project details");
-  ["Start and end date", "2023"].forEach(dates => {
-    cy.getByQA("field-currentDates").contains(dates);
-  });
-  ["Duration", "12 months"].forEach(duration => {
-    cy.getByQA("field-currentDuration").contains(duration);
+  ["2023", "2024"].forEach(date => {
+    cy.getByLabel("Start and end date").contains(date);
+    cy.getByLabel("Duration");
+    cy.getByLabel("Duration").contains("12 months");
   });
 };
 
 export const selectDateDropdown = () => {
-  cy.get(`select[id="timeExtension"]`).select("March 2024");
-  ["Duration", "13 months"].forEach(duration => {
-    cy.getByQA("field-proposedDuration").contains(duration);
-  });
+  cy.getByLabel("Please select a new date from the available list").select("March 2024");
+  cy.getByLabel("Duration");
+  cy.getByLabel("Duration").contains("12 months");
 };
 
 export const existingSubheadings = () => {
@@ -1028,7 +1051,6 @@ export const proposedSubheadings = () => {
 export const markAsCompleteSave = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.button("Save and return to request").click();
-  cy.get("strong").contains("Complete");
 };
 
 export const populateDateFields = () => {
@@ -1165,23 +1187,33 @@ export const validatePcrDurationPage = () => {
   cy.reload();
 };
 
+export enum PcrItemType {
+  ReallocateProjectCosts = "Reallocate project costs",
+  RemoveAPartner = "Remove a partner",
+  AddAPartner = "Add a partner",
+  ChangeProjectScope = "Change project scope",
+  ChangeProjectDuration = "Change project duration",
+  ChangeAPartnerName = "Change a partner's name",
+  PutAProjectOnHold = "Put project on hold",
+}
+
 const pcrArray = [
-  "Reallocate project costs",
-  "Remove a partner",
-  "Add a partner",
-  "Change project scope",
-  "Change project duration",
-  "Change a partner's name",
-  "Put project on hold",
+  PcrItemType.ReallocateProjectCosts,
+  PcrItemType.RemoveAPartner,
+  PcrItemType.AddAPartner,
+  PcrItemType.ChangeProjectScope,
+  PcrItemType.ChangeProjectDuration,
+  PcrItemType.ChangeAPartnerName,
+  PcrItemType.PutAProjectOnHold,
 ];
 
-const multiPcrArray = [
-  "Reallocate project costs",
-  "Add a partner",
-  "Change project scope",
-  "Change project duration",
-  "Change a partner's name",
-  "Put project on hold",
+export const multiPcrArray = [
+  PcrItemType.ReallocateProjectCosts,
+  PcrItemType.AddAPartner,
+  PcrItemType.ChangeProjectScope,
+  PcrItemType.ChangeProjectDuration,
+  PcrItemType.ChangeAPartnerName,
+  PcrItemType.PutAProjectOnHold,
 ];
 
 export const selectEachPcr = () => {
@@ -1290,7 +1322,7 @@ export const switchUserCheckForComments = () => {
 export const enterCommentsSubmit = () => {
   cy.get("textarea").clear().type(comments);
   cy.button("Submit request").click();
-  cy.get("h1").contains("Project change requests");
+  cy.heading("Project change request submitted");
 };
 
 /**

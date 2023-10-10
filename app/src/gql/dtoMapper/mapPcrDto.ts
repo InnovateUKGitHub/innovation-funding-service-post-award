@@ -39,6 +39,7 @@ export type PcrNode = Readonly<
     Acc_ProjectRole__c: GQL.Value<string>;
     LastModifiedDate: GQL.Value<string>;
     RecordType: {
+      DeveloperName?: GQL.Value<string>;
       Name?: GQL.ValueAndLabel<string>;
       Id?: string | null;
     } | null;
@@ -153,7 +154,7 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
     return node?.Acc_MarkedasComplete__c?.value || "Unknown";
   },
   type(node) {
-    return mapToPcrItemType(node?.RecordType?.Name?.value ?? "Unknown");
+    return mapToPcrItemType(node?.RecordType?.DeveloperName?.value ?? node?.RecordType?.Name?.value ?? "Unknown");
   },
   typeName(node) {
     return node?.RecordType?.Name?.value ?? "Unknown";

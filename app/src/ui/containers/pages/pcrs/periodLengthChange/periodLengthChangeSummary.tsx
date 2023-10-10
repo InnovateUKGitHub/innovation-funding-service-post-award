@@ -1,5 +1,5 @@
 import { ClaimFrequency } from "@framework/constants/enums";
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForPeriodLengthChangeDto } from "@framework/dtos/pcrDtos";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { ReadonlyLabel } from "@ui/components/atomicDesign/atoms/ReadOnlyLabel/readonlyLabel";
@@ -9,7 +9,7 @@ import { PCRPeriodLengthChangeItemDtoValidator } from "@ui/validation/validators
 import { PcrSummaryProps } from "../pcrWorkflow";
 
 export const PeriodLengthChangeSummary = (
-  props: PcrSummaryProps<PCRItemForPeriodLengthChangeDto, PCRPeriodLengthChangeItemDtoValidator, PCRStepId.none>,
+  props: PcrSummaryProps<PCRItemForPeriodLengthChangeDto, PCRPeriodLengthChangeItemDtoValidator, PCRStepType.none>,
 ) => {
   const monthlyContent = <Content value={x => x.pages.pcrPeriodLengthChange.periodLengthMonthly} />;
   const quarterlyContent = <Content value={x => x.pages.pcrPeriodLengthChange.periodLengthQuarterly} />;

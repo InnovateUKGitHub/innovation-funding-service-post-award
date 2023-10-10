@@ -1,17 +1,10 @@
 import { visitApp } from "../../../common/visit";
-import {
-  clickCreateRequestButtonProceed,
-  correctKtpMessaging,
-  ktpCostsTable,
-  ktpUpdateVirement,
-  saveAndReturn,
-} from "../steps";
+import { correctKtpMessaging, ktpCostsTable, ktpUpdateVirement, saveAndReturn } from "../steps";
 
 import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
   before(() => {
-    // cy.intercept("POST", "/projects/*/pcrs/*/prepare").as("pcrPrepare");
     visitApp({ path: "projects/a0E2600000kTfqTEAS/pcrs/dashboard" });
     pcrTidyUp("Reallocate project costs");
   });
@@ -20,11 +13,9 @@ describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
     cy.deletePcr("271316");
   });
 
-  it("Should select 'Reallocate project costs' checkbox", () => {
-    cy.clickCheckBox("Reallocate project costs");
+  it("Should create a Reallocate project costs PCR", () => {
+    cy.createPcr("Reallocate project costs");
   });
-
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should click 'Reallocate project costs' and continue to the next page", () => {
     cy.get("a").contains("Reallocate project costs").click();

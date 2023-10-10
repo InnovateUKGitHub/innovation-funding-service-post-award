@@ -1,6 +1,5 @@
 import { visitApp } from "../../../common/visit";
 import {
-  clickCreateRequestButtonProceed,
   reallocateCostsGiveUsInfoContinue,
   markAsComplete,
   reallocateCostsAndPartner,
@@ -21,11 +20,9 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
     cy.deletePcr("328407");
   });
 
-  it("Should select 'Reallocate project costs' checkbox", () => {
-    cy.clickCheckBox("Reallocate project costs");
+  it("Should create a Reallocate Partner costs PCR", () => {
+    cy.createPcr("Reallocate project costs");
   });
-
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
 
   it("Should show select 'Give us information' and continue to the next page", reallocateCostsGiveUsInfoContinue);
 

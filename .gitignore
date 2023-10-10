@@ -13,6 +13,9 @@ provision.sh
 app/security
 .env
 .sfdx
+render-acc-ui-*
+acc-ui-docker-image.json
+__pycache__
 
 # Mac OS X files
 .DS_Store

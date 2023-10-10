@@ -1,4 +1,4 @@
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForProjectSuspensionDto } from "@framework/dtos/pcrDtos";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ShortDate } from "@ui/components/atomicDesign/atoms/Date";
@@ -24,7 +24,7 @@ export const SuspendProjectSummary = (
           label={x => x.pages.pcrSuspendProjectDetails.firstDayOfPauseTitle}
           validation={props.validator.suspensionStartDate}
           content={<ShortDate value={props.pcrItem.suspensionStartDate} />}
-          action={props.getEditLink(PCRStepId.details, props.validator.suspensionStartDate)}
+          action={props.getEditLink(PCRStepType.details, props.validator.suspensionStartDate)}
         />
 
         <SummaryListItem
@@ -32,7 +32,7 @@ export const SuspendProjectSummary = (
           label={x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseTitle}
           validation={props.validator.suspensionEndDate}
           content={lastDayContent}
-          action={props.getEditLink(PCRStepId.details, props.validator.suspensionEndDate)}
+          action={props.getEditLink(PCRStepType.details, props.validator.suspensionEndDate)}
         />
       </SummaryList>
     </Section>

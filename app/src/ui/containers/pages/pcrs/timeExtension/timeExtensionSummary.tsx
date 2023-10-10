@@ -1,4 +1,4 @@
-import { PCRItemStatus, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ShortDateRangeFromDuration, Months } from "@ui/components/atomicDesign/atoms/Date";
@@ -23,7 +23,7 @@ export const TimeExtensionSummary = ({
   displayCompleteForm,
   allowSubmit,
 }: {
-  getEditLink: (pcrStep: PCRStepId) => React.ReactElement;
+  getEditLink: (pcrStep: PCRStepType) => React.ReactElement;
   displayCompleteForm: boolean;
   allowSubmit: boolean;
 }) => {
@@ -73,7 +73,7 @@ export const TimeExtensionSummary = ({
             label="Start and end date"
             content={<ShortDateRangeFromDuration startDate={project.startDate} months={newProjectDuration(pcrItem)} />}
             qa="newStartToEndDate"
-            action={getEditLink(PCRStepId.timeExtension)}
+            action={getEditLink(PCRStepType.timeExtension)}
           />
           <SummaryListItem
             label="Duration"

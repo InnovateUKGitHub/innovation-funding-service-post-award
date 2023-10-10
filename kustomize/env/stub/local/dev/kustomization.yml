@@ -1,0 +1,13 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: local
+
+bases:
+  - ../../../env-base
+
+resources:
+  - ../../../../config-mgmt/env/local
+  - ../../../../secrets-mgmt/env/local
+
+patchesStrategicMerge:
+  - acc-ui-route.yml

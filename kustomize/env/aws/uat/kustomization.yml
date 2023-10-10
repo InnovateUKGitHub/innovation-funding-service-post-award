@@ -1,0 +1,12 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: uat
+
+bases:
+  - ../aws-base
+
+resources:
+  - ../../../config-mgmt/env/aws/uat
+
+patchesStrategicMerge:
+  - acc-ui-route.yml

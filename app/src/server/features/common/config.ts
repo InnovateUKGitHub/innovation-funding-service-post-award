@@ -3,8 +3,41 @@ import { parseLogLevel } from "@framework/types/logLevel";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFeatureFlags } from "@framework/types/IFeaturesFlags";
 import { LogLevel } from "@framework/constants/enums";
+import { readFileSync } from "fs";
 
 const defaultCacheTimeout = 720;
+
+const envExists = (env: string): boolean => typeof process.env[env] === "string";
+const getEnvValue = (env: string, { defaultValue }: { defaultValue?: string } = {}): string => {
+  const value = process.env[env];
+
+  if (typeof value !== "string") {
+    if (defaultValue) {
+      return defaultValue;
+    }
+
+    throw new Error(`Failed to read environment variable: ${env}`);
+  }
+
+  return value;
+};
+
+const getCertificate = (type: "SHIBBOLETH" | "SALESFORCE", defaultValue?: string): string => {
+  if (envExists(`${type}_PRIVATE_KEY`)) {
+    return getEnvValue(`${type}_PRIVATE_KEY`);
+  }
+  if (envExists(`${type}_PRIVATE_KEY_FILE`)) {
+    return readFileSync(getEnvValue(`${type}_PRIVATE_KEY_FILE`), { encoding: "utf-8" });
+  }
+  if (typeof defaultValue === "string") {
+    return defaultValue;
+  }
+  if (process.env.NODE_ENV?.toLowerCase() === "test") {
+    return "";
+  }
+
+  throw new Error(`Could not find the private key: ${type}`);
+};
 
 const getFeatureFlagValue = (value: string | undefined, defaultValue: boolean) => {
   return value === "true" ?? defaultValue;
@@ -47,8 +80,6 @@ export interface IConfig {
   readonly logLevel: LogLevel;
 
   readonly options: IAppOptions;
-
-  readonly prettyLogs: boolean;
 
   readonly salesforceServiceUser: SalesforceUserConfig;
   readonly bankDetailsValidationUser: SalesforceUserConfig;
@@ -107,8 +138,8 @@ const timeouts = {
 };
 
 const certificates = {
-  salesforce: process.env.SALESFORCE_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
-  shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
+  salesforce: getCertificate("SALESFORCE"),
+  shibboleth: getCertificate("SHIBBOLETH", ""),
 };
 
 const disableCsp = getFeatureFlagValue(process.env.DISABLE_CSP, false);
@@ -120,13 +151,12 @@ const features: IFeatureFlags = {
   futureTimeExtensionInYears: Number(process.env.FUTURE_TIME_EXTENSION_IN_YEARS) || 5,
 };
 
-const logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
-const prettyLogs = process.env.PRETTY_LOGS === "true";
+const logLevel = parseLogLevel(process.env.LOG_LEVEL ?? "ERROR");
 
 const salesforceServiceUser = {
   clientId: process.env.SALESFORCE_CLIENT_ID ?? "",
   connectionUrl: process.env.SALESFORCE_CONNECTION_URL ?? "",
-  serviceUsername: (process.env.SALESFORCE_USERNAME || process.env.SALESFORCEUSERNAME) ?? "",
+  serviceUsername: process.env.SALESFORCE_USERNAME ?? "",
 };
 
 const bankDetailsValidationUser = {
@@ -236,7 +266,6 @@ export const configuration: IConfig = {
   features,
   logLevel,
   options,
-  prettyLogs,
   salesforceServiceUser,
   bankDetailsValidationUser,
   serverUrl,

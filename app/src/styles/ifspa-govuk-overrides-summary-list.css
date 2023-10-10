@@ -1,0 +1,9 @@
+@media (min-width: 40.0625em) {
+  .govuk-summary-list__key {
+    width: 20%;
+  }
+
+  .govuk-summary-list__actions {
+    width: 8%;
+  }
+}

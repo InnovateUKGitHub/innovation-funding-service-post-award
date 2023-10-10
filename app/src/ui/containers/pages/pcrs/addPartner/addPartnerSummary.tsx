@@ -1,6 +1,6 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { CostCategoryType } from "@framework/constants/enums";
-import { PCROrganisationType, PCRProjectRole, PCRStepId } from "@framework/constants/pcrConstants";
+import { PCROrganisationType, PCRProjectRole, PCRStepType } from "@framework/constants/pcrConstants";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { sumBy } from "@framework/util/numberHelper";
@@ -40,7 +40,7 @@ class SummaryComponent extends React.Component<
               label={x => x.pcrAddPartnerLabels.agreementToPcrHeading}
               content={this.renderDocuments(documents, DocumentDescription.AgreementToPCR)}
               qa="agreementToPcrDocument"
-              action={this.props.getEditLink(PCRStepId.agreementToPcrStep, null)}
+              action={this.props.getEditLink(PCRStepType.agreementToPcrStep, null)}
             />
           </SummaryList>
         </Section>
@@ -87,7 +87,7 @@ class SummaryComponent extends React.Component<
             label={x => x.pcrAddPartnerLabels.aidEligibilityDeclaration}
             content={this.renderDocuments(documents, DocumentDescription.DeMinimisDeclarationForm)}
             qa="supportingDocumentsAidEligibility"
-            action={this.props.getEditLink(PCRStepId.aidEligibilityStep, null)}
+            action={this.props.getEditLink(PCRStepType.aidEligibilityStep, null)}
           />
           {!isIndustrial && (
             <SummaryListItem
@@ -95,7 +95,7 @@ class SummaryComponent extends React.Component<
               content={pcrItem.organisationName}
               validation={validator.organisationName}
               qa="organisationName"
-              action={this.props.getEditLink(PCRStepId.academicOrganisationStep, validator.organisationName)}
+              action={this.props.getEditLink(PCRStepType.academicOrganisationStep, validator.organisationName)}
             />
           )}
           {isIndustrial && (
@@ -104,7 +104,7 @@ class SummaryComponent extends React.Component<
               content={pcrItem.organisationName}
               validation={validator.companyHouseOrganisationName}
               qa="organisationName"
-              action={this.props.getEditLink(PCRStepId.companiesHouseStep, validator.companyHouseOrganisationName)}
+              action={this.props.getEditLink(PCRStepType.companiesHouseStep, validator.companyHouseOrganisationName)}
             />
           )}
           {isIndustrial && (
@@ -113,7 +113,7 @@ class SummaryComponent extends React.Component<
               content={pcrItem.registrationNumber}
               validation={validator.registrationNumber}
               qa="registrationNumber"
-              action={this.props.getEditLink(PCRStepId.companiesHouseStep, validator.registrationNumber)}
+              action={this.props.getEditLink(PCRStepType.companiesHouseStep, validator.registrationNumber)}
             />
           )}
           {isIndustrial && (
@@ -122,7 +122,7 @@ class SummaryComponent extends React.Component<
               content={pcrItem.registeredAddress}
               validation={validator.registeredAddress}
               qa="registeredAddress"
-              action={this.props.getEditLink(PCRStepId.companiesHouseStep, validator.registeredAddress)}
+              action={this.props.getEditLink(PCRStepType.companiesHouseStep, validator.registeredAddress)}
             />
           )}
           <SummaryListItem
@@ -131,7 +131,9 @@ class SummaryComponent extends React.Component<
             validation={validator.participantSize}
             qa="participantSize"
             action={
-              isIndustrial ? this.props.getEditLink(PCRStepId.organisationDetailsStep, validator.participantSize) : null
+              isIndustrial
+                ? this.props.getEditLink(PCRStepType.organisationDetailsStep, validator.participantSize)
+                : null
             }
           />
           {isIndustrial && (
@@ -140,7 +142,7 @@ class SummaryComponent extends React.Component<
               content={pcrItem.numberOfEmployees}
               validation={validator.numberOfEmployees}
               qa="numberOfEmployees"
-              action={this.props.getEditLink(PCRStepId.organisationDetailsStep, validator.numberOfEmployees)}
+              action={this.props.getEditLink(PCRStepType.organisationDetailsStep, validator.numberOfEmployees)}
             />
           )}
           {isIndustrial && (
@@ -149,7 +151,7 @@ class SummaryComponent extends React.Component<
               content={<MonthYear value={pcrItem.financialYearEndDate} />}
               validation={validator.financialYearEndDate}
               qa="financialYearEndDate"
-              action={this.props.getEditLink(PCRStepId.financeDetailsStep, validator.financialYearEndDate)}
+              action={this.props.getEditLink(PCRStepType.financeDetailsStep, validator.financialYearEndDate)}
             />
           )}
           {isIndustrial && (
@@ -158,7 +160,7 @@ class SummaryComponent extends React.Component<
               content={<Currency value={pcrItem.financialYearEndTurnover} />}
               validation={validator.financialYearEndTurnover}
               qa="financialYearEndTurnover"
-              action={this.props.getEditLink(PCRStepId.financeDetailsStep, validator.financialYearEndTurnover)}
+              action={this.props.getEditLink(PCRStepType.financeDetailsStep, validator.financialYearEndTurnover)}
             />
           )}
           <SummaryListItem
@@ -166,21 +168,21 @@ class SummaryComponent extends React.Component<
             content={pcrItem.projectLocationLabel}
             validation={validator.projectLocation}
             qa="projectLocation"
-            action={this.props.getEditLink(PCRStepId.projectLocationStep, validator.projectLocation)}
+            action={this.props.getEditLink(PCRStepType.projectLocationStep, validator.projectLocation)}
           />
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.townOrCityHeading}
             content={pcrItem.projectCity}
             validation={validator.projectCity}
             qa="projectCity"
-            action={this.props.getEditLink(PCRStepId.projectLocationStep, validator.projectCity)}
+            action={this.props.getEditLink(PCRStepType.projectLocationStep, validator.projectCity)}
           />
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.postcodeHeading}
             content={pcrItem.projectPostcode}
             validation={validator.projectPostcode}
             qa="projectPostcode"
-            action={this.props.getEditLink(PCRStepId.projectLocationStep, validator.projectPostcode)}
+            action={this.props.getEditLink(PCRStepType.projectLocationStep, validator.projectPostcode)}
           />
         </SummaryList>
       </Section>
@@ -197,28 +199,28 @@ class SummaryComponent extends React.Component<
               content={pcrItem.contact1Forename}
               validation={validator.contact1Forename}
               qa="contact1Forename"
-              action={this.props.getEditLink(PCRStepId.financeContactStep, validator.contact1Forename)}
+              action={this.props.getEditLink(PCRStepType.financeContactStep, validator.contact1Forename)}
             />
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.contactLastNameHeading}
               content={pcrItem.contact1Surname}
               validation={validator.contact1Surname}
               qa="contact1Surname"
-              action={this.props.getEditLink(PCRStepId.financeContactStep, validator.contact1Surname)}
+              action={this.props.getEditLink(PCRStepType.financeContactStep, validator.contact1Surname)}
             />
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.contactPhoneNumberHeading}
               content={pcrItem.contact1Phone}
               validation={validator.contact1Phone}
               qa="contact1Phone"
-              action={this.props.getEditLink(PCRStepId.financeContactStep, validator.contact1Phone)}
+              action={this.props.getEditLink(PCRStepType.financeContactStep, validator.contact1Phone)}
             />
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.contactEmailHeading}
               content={pcrItem.contact1Email}
               validation={validator.contact1Email}
               qa="contact1Email"
-              action={this.props.getEditLink(PCRStepId.financeContactStep, validator.contact1Email)}
+              action={this.props.getEditLink(PCRStepType.financeContactStep, validator.contact1Email)}
             />
           </SummaryList>
         </Section>
@@ -230,28 +232,28 @@ class SummaryComponent extends React.Component<
                 content={pcrItem.contact2Forename}
                 validation={validator.contact2Forename}
                 qa="contact2Forename"
-                action={this.props.getEditLink(PCRStepId.projectManagerDetailsStep, validator.contact2Forename)}
+                action={this.props.getEditLink(PCRStepType.projectManagerDetailsStep, validator.contact2Forename)}
               />
               <SummaryListItem
                 label={x => x.pcrAddPartnerLabels.contactLastNameHeading}
                 content={pcrItem.contact2Surname}
                 validation={validator.contact2Surname}
                 qa="contact2Surname"
-                action={this.props.getEditLink(PCRStepId.projectManagerDetailsStep, validator.contact2Surname)}
+                action={this.props.getEditLink(PCRStepType.projectManagerDetailsStep, validator.contact2Surname)}
               />
               <SummaryListItem
                 label={x => x.pcrAddPartnerLabels.contactPhoneNumberHeading}
                 content={pcrItem.contact2Phone}
                 validation={validator.contact2Phone}
                 qa="contact2Phone"
-                action={this.props.getEditLink(PCRStepId.projectManagerDetailsStep, validator.contact2Phone)}
+                action={this.props.getEditLink(PCRStepType.projectManagerDetailsStep, validator.contact2Phone)}
               />
               <SummaryListItem
                 label={x => x.pcrAddPartnerLabels.contactEmailHeading}
                 content={pcrItem.contact2Email}
                 validation={validator.contact2Email}
                 qa="contact2Email"
-                action={this.props.getEditLink(PCRStepId.projectManagerDetailsStep, validator.contact2Email)}
+                action={this.props.getEditLink(PCRStepType.projectManagerDetailsStep, validator.contact2Email)}
               />
             </SummaryList>
           </Section>
@@ -281,7 +283,7 @@ class SummaryComponent extends React.Component<
               label={x => x.pcrAddPartnerLabels.jesHeading}
               content={this.renderDocuments(documents, DocumentDescription.JeSForm)}
               qa="supportingDocumentsJes"
-              action={this.props.getEditLink(PCRStepId.jeSStep, null)}
+              action={this.props.getEditLink(PCRStepType.jeSStep, null)}
             />
           )}
           {!isIndustrial && (
@@ -290,7 +292,7 @@ class SummaryComponent extends React.Component<
               content={pcrItem.tsbReference}
               validation={validator.tsbReference}
               qa="tsbReference"
-              action={this.props.getEditLink(PCRStepId.academicCostsStep, validator.tsbReference)}
+              action={this.props.getEditLink(PCRStepType.academicCostsStep, validator.tsbReference)}
             />
           )}
           {isIndustrial && (
@@ -300,8 +302,8 @@ class SummaryComponent extends React.Component<
               qa="projectCosts"
               action={
                 this.props.mode === "prepare"
-                  ? this.props.getEditLink(PCRStepId.spendProfileStep, null)
-                  : this.props.getViewLink(PCRStepId.spendProfileStep)
+                  ? this.props.getEditLink(PCRStepType.spendProfileStep, null)
+                  : this.props.getViewLink(PCRStepType.spendProfileStep)
               }
             />
           )}
@@ -312,8 +314,8 @@ class SummaryComponent extends React.Component<
               qa="projectCosts"
               action={
                 this.props.mode === "prepare"
-                  ? this.props.getEditLink(PCRStepId.academicCostsStep, null)
-                  : this.props.getViewLink(PCRStepId.academicCostsStep)
+                  ? this.props.getEditLink(PCRStepType.academicCostsStep, null)
+                  : this.props.getViewLink(PCRStepType.academicCostsStep)
               }
             />
           )}
@@ -328,14 +330,14 @@ class SummaryComponent extends React.Component<
             }
             validation={validator.hasOtherFunding}
             qa="hasOtherFunding"
-            action={this.props.getEditLink(PCRStepId.otherFundingStep, validator.hasOtherFunding)}
+            action={this.props.getEditLink(PCRStepType.otherFundingStep, validator.hasOtherFunding)}
           />
           {pcrItem.hasOtherFunding && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.amountOfOtherFundingHeading}
               content={<Currency value={totalOtherFunding} />}
               qa="amountOfOtherFunding"
-              action={this.props.getEditLink(PCRStepId.otherFundingSourcesStep, null)}
+              action={this.props.getEditLink(PCRStepType.otherFundingSourcesStep, null)}
             />
           )}
           <SummaryListItem
@@ -343,7 +345,7 @@ class SummaryComponent extends React.Component<
             content={<Percentage value={pcrItem.awardRate} />}
             validation={validator.awardRate}
             qa="fundingLevel"
-            action={this.props.getEditLink(PCRStepId.awardRateStep, validator.awardRate)}
+            action={this.props.getEditLink(PCRStepType.awardRateStep, validator.awardRate)}
           />
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.fundingSoughtHeading}

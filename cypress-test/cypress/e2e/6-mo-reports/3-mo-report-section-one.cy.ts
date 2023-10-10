@@ -11,7 +11,8 @@ import {
   standardComments,
   deleteMoReport,
   saveSectionOneAndCheckSummary,
-  continueNoScore,
+  saveCommentsAndReturn,
+  checkCommentsSaved,
 } from "./steps";
 
 const moContactEmail = "testman2@testing.com";
@@ -64,11 +65,6 @@ describe("MO report > section 1 - can continue a report", () => {
 
   it("Should have a number of score options", q1ScoreChoice);
 
-  it(
-    "Should enter some sample text and attempt to 'Continue' without selecting a radio button to trigger validation",
-    continueNoScore,
-  );
-
   it("Should be able to select each radio button in turn", q1SelectEachRadioButton);
 
   it("Should have a subheading above the comment box", () => {
@@ -88,4 +84,8 @@ describe("MO report > section 1 - can continue a report", () => {
     "Should click 'Save and return to summary' and assert the completed section appears in the summary correctly",
     saveSectionOneAndCheckSummary,
   );
+
+  it("Should enter comments into the Comments box and click Save and return", saveCommentsAndReturn);
+
+  it("Should check that the comments correctly saved", checkCommentsSaved);
 });

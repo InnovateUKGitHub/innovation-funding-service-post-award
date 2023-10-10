@@ -1,5 +1,5 @@
 import {
-  PCRStepId,
+  PCRStepType,
   PCRStatus,
   PCRItemStatus,
   PCRItemType,
@@ -45,7 +45,8 @@ interface PCRBaseDtoValidationProps<T> {
   showValidationErrors?: boolean;
   project?: ProjectDto;
   partners?: PartnerDto[];
-  pcrStepId?: PCRStepId;
+  pcrStepType?: PCRStepType;
+  pcrStepId?: PcrItemId;
 }
 
 interface PCRBaseDtoHeaderValidatorProps extends PCRBaseDtoValidationProps<PCRDto> {
@@ -64,7 +65,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private readonly original?: PCRDto;
   private readonly partners?: PartnerDto[];
   private readonly projectPcrs?: PCRSummaryDto[];
-  private readonly pcrStepId: PCRStepId;
+  private readonly pcrStepType: PCRStepType;
+  private readonly pcrStepId?: PcrItemId;
 
   private readonly projectManagerCanEdit: boolean;
   private readonly monitoringOfficerCanEdit: boolean;
@@ -96,7 +98,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
     original,
     partners,
     projectPcrs,
-    pcrStepId = PCRStepId.none,
+    pcrStepType = PCRStepType.none,
+    pcrStepId,
   }: PCRBaseDtoHeaderValidatorProps) {
     super({ model, showValidationErrors });
     this.role = role;
@@ -105,6 +108,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     this.original = original;
     this.partners = partners;
     this.projectPcrs = projectPcrs;
+    this.pcrStepType = pcrStepType;
     this.pcrStepId = pcrStepId;
 
     this.projectManagerCanEdit = !this.original || !!this.projectManagerPermittedStatus.get(this.original.status);
@@ -232,9 +236,9 @@ export class PCRDtoValidator extends Results<PCRDto> {
           Validation.maxLength(
             this,
             this.model.reasoningComments,
-            PCRDtoValidator.maxCommentsLength,
+            PCRDtoValidator.maxSalesforceFieldLength,
             this.getContent(x =>
-              x.validation.pcrDtoValidator.reasoningLengthTooLarge({ count: PCRDtoValidator.maxCommentsLength }),
+              x.validation.pcrDtoValidator.reasoningLengthTooLarge({ count: PCRDtoValidator.maxSalesforceFieldLength }),
             ),
           ),
       );
@@ -330,6 +334,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       original: originalItem,
       partners: this.partners,
       project: this.project,
+      pcrStepType: this.pcrStepType,
       pcrStepId: this.pcrStepId,
     };
 
@@ -530,7 +535,8 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
   protected readonly original?: T;
   protected readonly project?: ProjectDto;
   protected readonly partners?: PartnerDto[];
-  protected readonly pcrStepId?: PCRStepId;
+  protected readonly pcrStepType?: PCRStepType;
+  protected readonly pcrStepId?: PcrItemId;
   public status: Result;
   public type: Result;
 
@@ -544,6 +550,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
     showValidationErrors = false,
     project,
     partners,
+    pcrStepType,
     pcrStepId,
   }: PCRBaseItemDtoValidatorProps<T>) {
     super({ model, showValidationErrors });
@@ -556,6 +563,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
     this.original = original;
     this.project = project;
     this.partners = partners;
+    this.pcrStepType = pcrStepType;
     this.pcrStepId = pcrStepId;
 
     // Use above assigned data to validate dto
@@ -642,8 +650,20 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
     );
   }
 
-  protected requiredIfStep(state: PCRStepId, value: Validation.ValidatableValue, message?: string) {
-    if (this.pcrStepId !== state) {
+  protected requiredIfStep(state: PCRStepType, value: Validation.ValidatableValue, message?: string) {
+    if (this.pcrStepType !== state) {
+      return Validation.valid(this);
+    }
+    return Validation.required(this, value, message);
+  }
+
+  protected requiredIfStepId(
+    type: PCRStepType,
+    id: PcrItemId | undefined,
+    value: Validation.ValidatableValue,
+    message?: string,
+  ) {
+    if (this.pcrStepType !== type || id === undefined || this.model.id !== id) {
       return Validation.valid(this);
     }
     return Validation.required(this, value, message);
@@ -1541,8 +1561,9 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   projectLocation = Validation.all(
     this,
     () =>
-      this.requiredIfStep(
-        PCRStepId.projectLocationStep,
+      this.requiredIfStepId(
+        PCRStepType.projectLocationStep,
+        this.pcrStepId,
         this.model.projectLocation || null,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.projectLocationRequired),
       ),

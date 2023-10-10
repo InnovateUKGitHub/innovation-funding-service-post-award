@@ -2,7 +2,6 @@ import jsforce from "jsforce";
 import jwt, { SignOptions } from "jsonwebtoken";
 import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";
-import { readFile } from "@framework/util/fileSystemHelper";
 import { configuration } from "@server/features/common/config";
 
 interface ISalesforceTokenPayload {
@@ -40,7 +39,7 @@ export interface ITokenInfo {
 export const tokenCache = new Cache<ITokenInfo>(configuration.timeouts.token);
 
 export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails): Promise<ITokenInfo> => {
-  const privateKey = readFile(configuration.certificates.salesforce);
+  const privateKey = configuration.certificates.salesforce;
   const jwtPayload = { prn: config.currentUsername };
   const jwtOptions: SignOptions = {
     issuer: config.clientId,

@@ -1,7 +1,7 @@
 import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { Pending } from "@shared/pending";
-import { PCRStepId } from "@framework/constants/pcrConstants";
+import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
@@ -21,7 +21,7 @@ const NameChangeSummaryContainer = (
   props: PcrSummaryProps<
     PCRItemForAccountNameChangeDto,
     PCRAccountNameChangeItemDtoValidator,
-    PCRStepId.partnerNameStep | PCRStepId.filesStep
+    PCRStepType.partnerNameStep | PCRStepType.filesStep
   > &
     InnerProps,
 ) => {
@@ -36,14 +36,14 @@ const NameChangeSummaryContainer = (
           content={pcrItem.partnerNameSnapshot}
           validation={validator.partnerId}
           qa="currentPartnerName"
-          action={multiplePartnerProject && getEditLink(PCRStepId.partnerNameStep, validator.partnerId)}
+          action={multiplePartnerProject && getEditLink(PCRStepType.partnerNameStep, validator.partnerId)}
         />
         <SummaryListItem
           label={x => x.pcrNameChangeLabels.proposedName}
           content={pcrItem.accountName}
           validation={validator.accountName}
           qa="newPartnerName"
-          action={getEditLink(PCRStepId.partnerNameStep, validator.accountName)}
+          action={getEditLink(PCRStepType.partnerNameStep, validator.accountName)}
         />
         <SummaryListItem
           label={x => x.pcrNameChangeLabels.certificate}
@@ -55,7 +55,7 @@ const NameChangeSummaryContainer = (
             )
           }
           qa="supportingDocuments"
-          action={getEditLink(PCRStepId.filesStep, null)}
+          action={getEditLink(PCRStepType.filesStep, null)}
         />
       </SummaryList>
     </Section>
@@ -66,7 +66,7 @@ export const NameChangeSummary = (
   props: PcrSummaryProps<
     PCRItemForAccountNameChangeDto,
     PCRAccountNameChangeItemDtoValidator,
-    PCRStepId.partnerNameStep | PCRStepId.filesStep
+    PCRStepType.partnerNameStep | PCRStepType.filesStep
   >,
 ) => {
   const { projectChangeRequestDocuments, partners } = useStores();

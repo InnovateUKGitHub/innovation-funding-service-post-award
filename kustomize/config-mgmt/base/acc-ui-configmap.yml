@@ -1,0 +1,20 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: acc-ui-configmap
+data:
+  # Shared configuration
+  BANK_CHECK_VALIDATION_RETRIES: "3"
+  PROJ_ROLES_TIMEOUT_MINUTES: "0.1"
+  GQL_SCHEMA_DIR: ../../../etc/gqlschema
+  NEW_RELIC_LOG: stdout
+  NEW_RELIC_LOGGING: info
+  NEW_RELIC_ENABLED: "true"
+
+  # Values to overwrite per environment
+  USE_SSO: "true"
+  PORT: "8080"
+  NODE_ENV: production
+  LOG_LEVEL: INFO
+  ACC_ENVIRONMENT: base
+  SERVER_URL: http://localhost:8080

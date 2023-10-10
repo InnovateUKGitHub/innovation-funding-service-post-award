@@ -642,6 +642,7 @@ export const add120Lines = () => {
     }
   });
   cy.wait(500);
+  cy.get("a").contains("Add a cost").should("not.exist");
 };
 
 export const saveLineItems = () => {
@@ -670,7 +671,7 @@ export const validateLineItem = () => {
 
 export const validateForecast = () => {
   cy.getByAriaLabel("Labour Period 2").clear().wait(500);
-  cy.getByQA("button_save-qa").click();
+  cy.button("Save and return to claims").click();
   cy.validationLink("Forecast is required");
 };
 

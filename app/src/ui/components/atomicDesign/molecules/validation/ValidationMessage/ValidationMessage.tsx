@@ -63,6 +63,7 @@ const validationStyles: {
 export interface IValidationMessageProps {
   message: React.ReactChild | ContentSelector;
   messageType: MessageType;
+  subMessage?: string | ContentSelector;
   qa?: string;
   markdown?: boolean;
 }
@@ -71,6 +72,7 @@ export const ValidationMessage = ({
   markdown,
   message,
   messageType,
+  subMessage,
   qa = "validation-message",
 }: IValidationMessageProps) => {
   if (typeof message === "string" && !message.length) return null;
@@ -101,6 +103,12 @@ export const ValidationMessage = ({
           message
         )}
       </SimpleString>
+
+      {subMessage && (
+        <SimpleString qa={`${qa}-subcontent`}>
+          {isContentSolution(subMessage) ? <Content styles={ui.styles} value={subMessage} /> : subMessage}
+        </SimpleString>
+      )}
     </div>
   );
 };

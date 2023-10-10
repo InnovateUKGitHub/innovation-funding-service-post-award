@@ -2,7 +2,7 @@ import { CostCategoryGroupType, CostCategoryType } from "@framework/constants/en
 import {
   PCRSpendProfileOverheadRate,
   PCRSpendProfileCapitalUsageType,
-  PCRStepId,
+  PCRStepType,
   PCRItemType,
   PCRItemStatus,
 } from "@framework/constants/pcrConstants";
@@ -208,7 +208,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
   private getSpendProfileStep(context: IContext, pcrItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined);
     if (!workflow) return null;
-    const stepName: AddPartnerStepNames = PCRStepId.spendProfileStep;
+    const stepName: AddPartnerStepNames = PCRStepType.spendProfileStep;
     return workflow.findStepNumberByName(stepName);
   }
 
@@ -223,7 +223,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
         projectId: params.projectId,
         projectChangeRequestId: params.pcrId,
         pcr: dto,
-        pcrStepId: PCRStepId.spendProfileStep,
+        pcrStepType: PCRStepType.spendProfileStep,
       }),
     );
 
@@ -266,7 +266,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     return new PCRDtoValidator({
       model: dto,
       original: dto,
-      pcrStepId: PCRStepId.spendProfileStep,
+      pcrStepType: PCRStepType.spendProfileStep,
     });
   }
 }

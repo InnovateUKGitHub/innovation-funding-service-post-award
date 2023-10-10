@@ -29,18 +29,17 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should select the correct tick box and start a new 'Change a partner's name' PCR", () => {
-    cy.clickCheckBox("Change a partner's name");
-    cy.get("button").contains("Create request").click();
-  });
-
-  it("Should have a back option", () => {
-    cy.backLink("Back to project change requests");
+  it("Should create a Change partner name PCR", () => {
+    cy.createPcr("Change a partner's name");
   });
 
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should display a 'Request' heading and 'Details' heading", requestHeadingDetailsHeading);
+
+  it("Should have a back option", () => {
+    cy.backLink("Back to project change requests");
+  });
 
   it("Should show the Request number", () => {
     cy.get("dt.govuk-summary-list__key").contains("Request number");
