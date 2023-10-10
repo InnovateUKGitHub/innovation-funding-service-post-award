@@ -184,6 +184,7 @@ export const rejectElevenDocsAndShowError = () => {
   cy.get(`input[type="file"]`).selectFile(tooManyDocuments);
   cy.submitButton("Upload documents").click();
   cy.getByRole("alert").contains("You can only select up to 10 files at the same time.");
+  cy.reload();
 };
 
 export const allowBatchFileUpload = () => {

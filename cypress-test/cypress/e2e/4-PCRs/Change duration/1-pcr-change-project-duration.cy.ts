@@ -70,6 +70,21 @@ describe("PCR >  Change project duration > Create PCR", () => {
     cy.getByLabel("Please select a new date from the available list");
   });
 
+  it("Should attempt to 'Save and continue' with the current end date and prompt error message", () => {
+    cy.button("Save and continue").click();
+    cy.getByLabel("I agree with this change").click();
+    cy.button("Save and return to request").click();
+    cy.getByQA("validation-summary").contains(
+      "You must either increase or decrease the project duration. You cannot select your current end date.",
+    );
+  });
+
+  it("Should deselect I agree with this change and re-access the PCR", () => {
+    cy.getByLabel("I agree with this change").click();
+    cy.get("a").contains("Edit").click();
+    cy.heading("Change project duration");
+  });
+
   it("Should select March 2024 from the dropdown box", selectDateDropdown);
 
   it("Should then click 'Save and continue' to proceed to the summary page", () => {
