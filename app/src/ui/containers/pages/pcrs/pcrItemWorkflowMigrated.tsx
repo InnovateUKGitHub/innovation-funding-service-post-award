@@ -8,13 +8,14 @@ import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useContext, useEffect, useRef, useState } from "react";
 import { Mode, ProjectChangeRequestPrepareItemParams } from "./pcrItemWorkflowContainer";
 import { WorkflowStep } from "./pcrItemWorkflowStep";
 import { SummarySection } from "./pcrItemWorkflowSummary";
 import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { useContent } from "@ui/hooks/content.hook";
+import { isEqual } from "lodash";
 
 type Data = {
   project: Pick<ProjectDto, "status">;
@@ -31,6 +32,7 @@ type Data = {
     | "organisationType"
     | "hasOtherFunding"
     | "status"
+    | "typeName"
   >;
   mode: Mode;
   fragmentRef: unknown;
@@ -44,6 +46,9 @@ type PcrWorkflowContextProps = Data &
     workflow: PcrWorkflow<Partial<FullPCRItemDto>, null>;
     fetchKey: number;
     setPcrValidationErrors: Dispatch<SetStateAction<RhfErrors>>;
+    pcrValidationErrors: RhfErrors;
+    useSetPcrValidationErrors: (validationErrors: RhfErrors) => void;
+    useClearPcrValidationError: (errorField: string, shouldClear: boolean) => void;
   };
 
 const PcrWorkflowContext = createContext<PcrWorkflowContextProps>(null as unknown as PcrWorkflowContextProps);
@@ -74,11 +79,41 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
 
   const [pcrValidationErrors, setPcrValidationErrors] = useState<RhfErrors>(undefined);
 
+  const useSetPcrValidationErrors = (validationErrors: RhfErrors) => {
+    const lastErrors = useRef<RhfErrors>(undefined);
+
+    const hasValidationErrorsChanged = isEqual(lastErrors.current, validationErrors);
+    useEffect(() => {
+      setPcrValidationErrors(validationErrors);
+      lastErrors.current = validationErrors;
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [hasValidationErrorsChanged, setPcrValidationErrors]);
+  };
+
+  const useClearPcrValidationError = (errorField: string, shouldClear: boolean) => {
+    useEffect(() => {
+      setPcrValidationErrors(s => (shouldClear ? { ...s, [errorField]: undefined } : s));
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [errorField, setPcrValidationErrors, shouldClear]);
+  };
+
   return (
-    <PcrWorkflowContext.Provider value={{ ...props, workflow, setPcrValidationErrors, onSave, isFetching, fetchKey }}>
+    <PcrWorkflowContext.Provider
+      value={{
+        ...props,
+        workflow,
+        pcrValidationErrors,
+        setPcrValidationErrors,
+        useSetPcrValidationErrors,
+        useClearPcrValidationError,
+        onSave,
+        isFetching,
+        fetchKey,
+      }}
+    >
       <Page
         backLink={<PcrBackLink />}
-        pageTitle={<Title />}
+        pageTitle={<Title heading={props.pcrItem.typeName} />}
         projectStatus={props.project.status}
         fragmentRef={props.fragmentRef}
         validationErrors={pcrValidationErrors}
