@@ -1,7 +1,7 @@
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
-  shouldShowAllAccordion,
+  statusAndCommentsAccordion,
   pcrCommentBox,
   characterCount,
   requestHeadingDetailsHeading,
@@ -53,7 +53,7 @@ describe("PCR >  Add a partner > Create PCR", () => {
     explainChangesReasoning,
   );
 
-  it("Should display accordions", shouldShowAllAccordion);
+  it("Should display accordions", statusAndCommentsAccordion);
 
   it("Should have comments box at the bottom of the page and allow text to be entered", pcrCommentBox);
 
