@@ -32,18 +32,19 @@ const goToProjectOverview = (ctx: SirtestalotContext) => {
   }
 
   cy.selectProjectCard(ctx.userInfo.project.number);
-  cy.waitForPageHeading("Project overview");
+  cy.waitForPageHeading("Project overview").should("exist");
 };
 
 const goToMspDocumentShare = (ctx: SirtestalotContext) => {
   cy.goToProjectOverview(ctx);
   cy.selectTile("Documents");
-  cy.waitForPageHeading("Project documents");
+  cy.waitForPageHeading("Project documents").should("exist");
 };
 
 const goToBroadcastPage = () => {
   cy.goToProjectsDashboard();
-  cy.get("a").contains("Read me").click();
+  cy.get("a").contains("Read more").click();
+  cy.waitForPageHeading("Cypress broadcast message").should("exist");
 };
 
 const goToCommands = {

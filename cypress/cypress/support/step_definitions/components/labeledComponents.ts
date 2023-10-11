@@ -1,7 +1,6 @@
-import { When } from "@badeball/cypress-cucumber-preprocessor";
-import { Given } from "@badeball/cypress-cucumber-preprocessor";
+import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
-Given("the user can see the {string} area", function (title: string) {
+Given("the user sees the {string} area", function (title: string) {
   cy.getByLabel(title);
 });
 

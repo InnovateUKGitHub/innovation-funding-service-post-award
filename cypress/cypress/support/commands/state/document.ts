@@ -5,7 +5,7 @@ const computeSha256 = async (file: ArrayBuffer | Uint8Array): Promise<string> =>
 };
 
 const downloadFile = (href: string) => {
-  return cy.url().then(async path => {
+  return cy.url().then({ timeout: Cypress.env("SALESFORCE_TIMEOUT") }, async path => {
     const pathToFetch = new URL(path);
     if (href.startsWith("/")) pathToFetch.pathname = href;
 

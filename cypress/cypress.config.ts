@@ -28,7 +28,7 @@ const makeUrl = (): string => {
   }
 
   if (ACC && SANDBOX) {
-    return `https://www-acc-custom-${ACC}-${SANDBOX}.apps.ocp4.innovateuk.ukri.org`;
+    return `https://www-acc-custom-${SANDBOX}-${ACC}.apps.ocp4.innovateuk.ukri.org`;
   }
 
   if (ACC) {
@@ -39,7 +39,7 @@ const makeUrl = (): string => {
     return `https://www-acc-${SANDBOX}.apps.ocp4.innovateuk.ukri.org`;
   }
 
-  return "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org/";
+  return "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org";
 };
 
 const config: Cypress.ConfigOptions = {

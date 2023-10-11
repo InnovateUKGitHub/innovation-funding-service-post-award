@@ -1,0 +1,10 @@
+{
+  "html": {
+    "enabled": true,
+    "output": "reports/report.html"
+  },
+  "json": {
+    "enabled": true,
+    "output": "reports/report.json"
+  }
+}
