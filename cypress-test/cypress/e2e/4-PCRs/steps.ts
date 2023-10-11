@@ -1236,6 +1236,19 @@ export const addPcrTypes = (button: string) => {
   cy.get("h1").contains("Request", { timeout: 60000 });
 };
 
+export const addTypesForValidation = (button: string) => {
+  addTypeArray.forEach(pcr => {
+    cy.clickCheckBox(pcr);
+  });
+  cy.submitButton(button).click();
+  cy.validationLink(
+    "You cannot select ‘Remove a partner’ and ‘Change a partner’s name’ because you do not have enough partners to action these.",
+  );
+  cy.paragraph(
+    "You cannot select ‘Remove a partner’ and ‘Change a partner’s name’ because you do not have enough partners to action these.",
+  );
+};
+
 export const selectEachPcr = () => {
   pcrArray.forEach(pcr => {
     cy.clickCheckBox(pcr);
@@ -1274,14 +1287,69 @@ export const assertForMissingPcrTypes = () => {
   cy.heading("Add types");
   cy.get("span").contains("Learn about why some PCR types are missing").click();
   cy.get("details").should("have.attr", "open");
-  [pcrArray[0], pcrArray[1], pcrArray[3], pcrArray[4], pcrArray[5], pcrArray[6]].forEach(pcr => {
+  [
+    PcrItemType.ReallocateProjectCosts,
+    PcrItemType.RemoveAPartner,
+    PcrItemType.ChangeProjectScope,
+    PcrItemType.ChangeProjectDuration,
+    PcrItemType.ChangeAPartnerName,
+    PcrItemType.PutAProjectOnHold,
+  ].forEach(pcr => {
     cy.list(pcr);
   });
-  [pcrArray[0], pcrArray[1], pcrArray[3], pcrArray[4], pcrArray[5], pcrArray[6]].forEach(pcr => {
-    cy.getByLabel(pcr).should("not.exist");
+  [
+    PcrItemType.ReallocateProjectCosts,
+    PcrItemType.RemoveAPartner,
+    PcrItemType.ChangeProjectScope,
+    PcrItemType.ChangeProjectDuration,
+    PcrItemType.ChangeAPartnerName,
+    PcrItemType.PutAProjectOnHold,
+  ].forEach(pcr => {
+    cy.get("label").should("not.have.text", pcr);
   });
   cy.get("a").contains("Cancel").click();
-  cy.heading("Project change requests");
+  cy.heading("Request");
+};
+
+export const assertForMissingTypesNewPcr = () => {
+  cy.get("span").contains("Learn about why some PCR types are missing").click();
+  cy.get("details").should("have.attr", "open");
+  [PcrItemType.ReallocateProjectCosts, PcrItemType.ChangeProjectScope, PcrItemType.ChangeProjectDuration].forEach(
+    pcr => {
+      cy.list(pcr);
+    },
+  );
+  [PcrItemType.ReallocateProjectCosts, PcrItemType.ChangeProjectScope, PcrItemType.ChangeProjectDuration].forEach(
+    pcr => {
+      cy.get("label").should("not.have.text", pcr);
+    },
+  );
+};
+
+export const assertForMissingTypesReaccessed = () => {
+  cy.get("span").contains("Learn about why some PCR types are missing").click();
+  cy.get("details").should("have.attr", "open");
+  cy.paragraph("Some types are unavailable because you have reached the maximum number of this type in a single PCR.");
+  cy.paragraph("Some types are unavailable because they have already been added to this PCR.");
+  [
+    PcrItemType.ReallocateProjectCosts,
+    PcrItemType.RemoveAPartner,
+    PcrItemType.ChangeProjectScope,
+    PcrItemType.ChangeAPartnerName,
+    PcrItemType.PutAProjectOnHold,
+  ].forEach(pcr => {
+    cy.list(pcr);
+  });
+  [
+    PcrItemType.ReallocateProjectCosts,
+    PcrItemType.RemoveAPartner,
+    PcrItemType.ChangeProjectScope,
+    PcrItemType.ChangeAPartnerName,
+    PcrItemType.PutAProjectOnHold,
+  ].forEach(pcr => {
+    cy.get("label").should("not.have.text", pcr);
+  });
+  cy.clickCheckBox("Add a partner");
 };
 
 export const backOutAndDelete = () => {
