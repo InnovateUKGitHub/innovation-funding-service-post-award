@@ -8,4 +8,5 @@ data:
   IFS_ROOT: https://apply-for-innovation-funding.service.gov.uk
   NEW_RELIC_APP_NAME: acc-prod
   NEW_RELIC_ENABLED: "true"
-  USE_SSO: false
+  SSO_PROVIDER_URL: https://auth.apply-for-innovation-funding.service.gov.uk/idp/profile/SAML2/Redirect/SSO
+  SSO_SIGNOUT_URL: https://apply-for-innovation-funding.service.gov.uk/Logout/
