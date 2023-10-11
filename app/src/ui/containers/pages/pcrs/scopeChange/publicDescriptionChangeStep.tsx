@@ -21,6 +21,7 @@ export const PublicDescriptionChangeStep = () => {
     getRequiredToCompleteMessage,
     onSave,
     useClearPcrValidationError,
+    useErrorSubset,
     pcrValidationErrors,
   } = usePcrWorkflowContext();
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
@@ -35,6 +36,7 @@ export const PublicDescriptionChangeStep = () => {
 
   const publicDescriptionLength = watch("publicDescription")?.length ?? 0;
 
+  useErrorSubset(["publicDescription"]);
   useClearPcrValidationError("publicDescription", publicDescriptionLength > 0);
 
   return (
@@ -66,7 +68,7 @@ export const PublicDescriptionChangeStep = () => {
             characterCountMax={32_000}
           />
         </Fieldset>
-        <Button type="submit">
+        <Button type="submit" disabled={isFetching}>
           <Content value={x => x.pcrItem.submitButton} />
         </Button>
       </Form>

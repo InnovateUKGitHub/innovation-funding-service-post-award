@@ -25,6 +25,7 @@ export const ProjectSummaryChangeStep = () => {
     getRequiredToCompleteMessage,
     useClearPcrValidationError,
     pcrValidationErrors,
+    useErrorSubset,
   } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
@@ -37,6 +38,7 @@ export const ProjectSummaryChangeStep = () => {
 
   const projectSummaryLength = watch("projectSummary")?.length ?? 0;
 
+  useErrorSubset(["projectSummary"]);
   useClearPcrValidationError("projectSummary", projectSummaryLength > 0);
 
   const hint = getRequiredToCompleteMessage();
@@ -69,7 +71,7 @@ export const ProjectSummaryChangeStep = () => {
             characterCountMax={32_000}
           />
         </Fieldset>
-        <Button type="submit">
+        <Button type="submit" disabled={isFetching}>
           <Content value={x => x.pcrItem.submitButton} />
         </Button>
       </Form>

@@ -2,11 +2,7 @@ import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-chan
 import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
-import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PCRStepType } from "@framework/constants/pcrConstants";
-import { PcrWorkflow } from "./pcrWorkflow";
-import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
-import { BaseProps } from "@ui/containers/containerBase";
+import { EditLink, ViewLink, getStepLink } from "./pcrItemSummaryLinks";
 
 export const SummarySection = () => {
   const { mode, workflow, routes, pcrItem } = usePcrWorkflowContext();
@@ -49,66 +45,18 @@ const Summary = ({ allowSubmit, displayCompleteForm }: { allowSubmit: boolean; d
   if (!workflowSummary.migratedSummaryRender) {
     throw new Error(`pcr item workflow for ${workflow.getCurrentStepName()} is missing a migratedStepRender method`);
   }
-  return workflowSummary.migratedSummaryRender({
-    allowSubmit,
-    displayCompleteForm,
-    getStepLink: stepName => getStepLink(workflow, stepName, routes, projectId, pcrId, itemId),
-    getEditLink: stepName => <EditLink stepName={stepName} />,
-    getViewLink: stepName => <ViewLink stepName={stepName} />,
-  });
-};
 
-const ViewLink = ({ stepName }: { stepName: PCRStepType }) => {
-  const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
-  if (mode !== "review") return null;
+  const SummaryComponent = workflowSummary.migratedSummaryRender;
 
   return (
-    <Link replace route={getStepReviewLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
-      View
-    </Link>
+    <SummaryComponent
+      allowSubmit={allowSubmit}
+      displayCompleteForm={displayCompleteForm}
+      getEditLink={stepName => <EditLink stepName={stepName} />}
+      getStepLink={stepName => getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}
+      getViewLink={stepName => <ViewLink stepName={stepName} />}
+    />
   );
-};
 
-const EditLink = ({ stepName }: { stepName: PCRStepType }) => {
-  const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
-
-  if (mode !== "prepare") return null;
-
-  return (
-    <Link replace route={getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
-      Edit
-    </Link>
-  );
-};
-
-const getStepLink = (
-  workflow: Pick<PcrWorkflow<Partial<FullPCRItemDto>, null>, "findStepNumberByName">,
-  stepName: string,
-  routes: BaseProps["routes"],
-  projectId: ProjectId,
-  pcrId: PcrId,
-  itemId: PcrItemId,
-) => {
-  return routes.pcrPrepareItem.getLink({
-    projectId,
-    pcrId,
-    itemId,
-    step: workflow && workflow.findStepNumberByName(stepName),
-  });
-};
-
-const getStepReviewLink = (
-  workflow: Pick<PcrWorkflow<Partial<FullPCRItemDto>, null>, "findStepNumberByName">,
-  stepName: string,
-  routes: BaseProps["routes"],
-  projectId: ProjectId,
-  pcrId: PcrId,
-  itemId: PcrItemId,
-) => {
-  return routes.pcrReviewItem.getLink({
-    projectId,
-    pcrId,
-    itemId,
-    step: workflow && workflow.findStepNumberByName(stepName),
-  });
+  // });
 };

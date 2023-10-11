@@ -68,6 +68,7 @@ type PcrWorkflowContextProps = Data &
     pcrValidationErrors: RhfErrors;
     useSetPcrValidationErrors: (validationErrors: RhfErrors) => void;
     useClearPcrValidationError: (errorField: string, shouldClear: boolean) => void;
+    useErrorSubset: (errorFields: string[]) => void;
     getRequiredToCompleteMessage: (message?: string) => JSX.Element | "This is required to complete this request.";
   };
 
@@ -99,6 +100,9 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
 
   const [pcrValidationErrors, setPcrValidationErrors] = useState<RhfErrors>(undefined);
 
+  /**
+   * this hook will allow a workflow component to set validation errors on the page
+   */
   const useSetPcrValidationErrors = (validationErrors: RhfErrors) => {
     const lastErrors = useRef<RhfErrors>(undefined);
 
@@ -110,6 +114,18 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
     }, [hasValidationErrorsChanged, setPcrValidationErrors]);
   };
 
+  /**
+   * this hook will remove any errors not in the array of error fields from the page.
+   */
+  const useErrorSubset = (errorFields: string[]) => {
+    useEffect(() => {
+      setPcrValidationErrors(s => errorFields.reduce((acc, cur) => ({ ...acc, [cur]: s?.[cur] }), {}));
+    }, []);
+  };
+
+  /**
+   * this hook will remove the indicated error
+   */
   const useClearPcrValidationError = (errorField: string, shouldClear: boolean) => {
     useEffect(() => {
       setPcrValidationErrors(s => (shouldClear ? { ...s, [errorField]: undefined } : s));
@@ -126,6 +142,7 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
         setPcrValidationErrors,
         useSetPcrValidationErrors,
         useClearPcrValidationError,
+        useErrorSubset,
         onSave,
         isFetching,
         fetchKey,

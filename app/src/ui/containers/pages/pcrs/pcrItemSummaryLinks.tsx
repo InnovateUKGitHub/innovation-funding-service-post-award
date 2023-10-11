@@ -1,0 +1,61 @@
+import { PCRStepType } from "@framework/constants/pcrConstants";
+import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
+import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
+import { PcrWorkflow } from "./pcrWorkflow";
+import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
+import { BaseProps } from "@ui/containers/containerBase";
+
+export const ViewLink = ({ stepName }: { stepName: PCRStepType }) => {
+  const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
+  if (mode !== "review") return null;
+
+  return (
+    <Link replace route={getStepReviewLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
+      View
+    </Link>
+  );
+};
+
+export const EditLink = ({ stepName }: { stepName: PCRStepType }) => {
+  const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
+
+  if (mode !== "prepare") return null;
+
+  return (
+    <Link replace route={getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
+      Edit
+    </Link>
+  );
+};
+
+export const getStepLink = (
+  workflow: Pick<PcrWorkflow<Partial<FullPCRItemDto>, null>, "findStepNumberByName">,
+  stepName: string,
+  routes: BaseProps["routes"],
+  projectId: ProjectId,
+  pcrId: PcrId,
+  itemId: PcrItemId,
+) => {
+  return routes.pcrPrepareItem.getLink({
+    projectId,
+    pcrId,
+    itemId,
+    step: workflow && workflow.findStepNumberByName(stepName),
+  });
+};
+
+export const getStepReviewLink = (
+  workflow: Pick<PcrWorkflow<Partial<FullPCRItemDto>, null>, "findStepNumberByName">,
+  stepName: string,
+  routes: BaseProps["routes"],
+  projectId: ProjectId,
+  pcrId: PcrId,
+  itemId: PcrItemId,
+) => {
+  return routes.pcrReviewItem.getLink({
+    projectId,
+    pcrId,
+    itemId,
+    step: workflow && workflow.findStepNumberByName(stepName),
+  });
+};

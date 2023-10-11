@@ -9,13 +9,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangeSchema, errorMap, PcrScopeChangeSchemaType } from "./scopeChange.zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
+import { EditLink } from "../pcrItemSummaryLinks";
 
 export const ScopeChangeSummary = ({
-  getEditLink,
   displayCompleteForm,
   allowSubmit,
 }: {
-  getEditLink: (pcrStep: PCRStepType) => React.ReactElement;
   displayCompleteForm: boolean;
   allowSubmit: boolean;
 }) => {
@@ -51,7 +50,7 @@ export const ScopeChangeSummary = ({
             label={x => x.pcrScopeChangeLabels.newDescription}
             content={<SimpleString multiline>{pcrItem.publicDescription}</SimpleString>}
             qa="newPublicDescription"
-            action={getEditLink(PCRStepType.publicDescriptionStep)}
+            action={<EditLink stepName={PCRStepType.publicDescriptionStep} />}
             hasError={!!validationErrors?.publicDescription}
           />
           <SummaryListItem
@@ -63,7 +62,7 @@ export const ScopeChangeSummary = ({
             label={x => x.pcrScopeChangeLabels.newSummary}
             content={<SimpleString multiline>{pcrItem.projectSummary}</SimpleString>}
             qa="newProjectSummary"
-            action={getEditLink(PCRStepType.projectSummaryStep)}
+            action={<EditLink stepName={PCRStepType.projectSummaryStep} />}
             hasError={!!validationErrors?.projectSummary}
           />
         </SummaryList>

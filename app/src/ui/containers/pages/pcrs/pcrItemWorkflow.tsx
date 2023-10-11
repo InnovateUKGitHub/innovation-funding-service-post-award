@@ -29,6 +29,10 @@ import { JSXElementConstructor, createContext, useContext } from "react";
 import { Result } from "@ui/validation/result";
 import { ProjectChangeRequestPrepareItemParams } from "./pcrItemWorkflowContainer";
 
+/**
+ * pcrItemWorkflow file is for handling the un-migrated PCR workflows
+ */
+
 interface Data {
   virement: FinancialVirementDto;
   project: ProjectDto;
