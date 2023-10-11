@@ -1,12 +1,14 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
-  addPcrTypes,
+  addTypesForValidation,
   backOutCreateNewPcr,
   confirmPcrsAdded,
   selectEachPcr,
   assertForMissingPcrTypes,
   submitWithoutCompleting,
+  assertForMissingTypesNewPcr,
+  assertForMissingTypesReaccessed,
 } from "./steps";
 
 describe("PCR > Multiple add types", () => {
@@ -27,16 +29,16 @@ describe("PCR > Multiple add types", () => {
     submitWithoutCompleting,
   );
 
-  it("Should add 3 more types", () => {
+  it("Should attempt to add 3 more types and prompt validation", () => {
     cy.get("a").contains("Add types").click();
     cy.heading("Add types");
-    addPcrTypes("Add to request");
+    addTypesForValidation("Add to request");
   });
 
-  it("Should again add 3 more types", () => {
-    cy.get("a").contains("Add types").click();
-    cy.heading("Add types");
-    addPcrTypes("Add to request");
+  it("Should allow you to add a remove partner ", () => {
+    cy.getByLabel("Change a partner's name").uncheck();
+    cy.button("Add to request").click();
+    cy.heading("Request");
   });
 
   it(
@@ -46,5 +48,19 @@ describe("PCR > Multiple add types", () => {
 
   it("Should back out and begin creating another PCR", backOutCreateNewPcr);
 
-  it("Should assert that certain PCR types cannot be created more than once", assertForMissingPcrTypes);
+  it("Should validate that some PCRs cannot be added", assertForMissingTypesNewPcr);
+
+  it("Should cancel and re-access the PCR previously created", () => {
+    cy.get("a").contains("Cancel").click();
+    cy.heading("Project change requests");
+    cy.get("a").contains("Edit").click();
+    cy.heading("Request");
+  });
+
+  it("Should navigate to the Add types screen again", () => {
+    cy.get("a").contains("Add types").click();
+    cy.heading("Add types");
+  });
+
+  it("Should show that only one type can now be added to the PCR", assertForMissingTypesReaccessed);
 });
