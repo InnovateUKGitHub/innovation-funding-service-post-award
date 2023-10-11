@@ -11,14 +11,8 @@ import { pcrScopeChangeSchema, errorMap, PcrScopeChangeSchemaType } from "./scop
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { EditLink } from "../pcrItemSummaryLinks";
 
-export const ScopeChangeSummary = ({
-  displayCompleteForm,
-  allowSubmit,
-}: {
-  displayCompleteForm: boolean;
-  allowSubmit: boolean;
-}) => {
-  const { projectId, itemId, fetchKey, useSetPcrValidationErrors } = usePcrWorkflowContext();
+export const ScopeChangeSummary = () => {
+  const { projectId, itemId, fetchKey, useSetPcrValidationErrors, displayCompleteForm } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -71,7 +65,6 @@ export const ScopeChangeSummary = ({
       {displayCompleteForm && (
         <PcrItemSummaryForm<PcrScopeChangeSchemaType>
           register={register}
-          allowSubmit={allowSubmit}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
         />

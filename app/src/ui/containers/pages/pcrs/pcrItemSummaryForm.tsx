@@ -13,17 +13,15 @@ import { UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
 import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
 
 export const PcrItemSummaryForm = <FormValues extends { itemStatus: "marked-as-complete" | string }>({
-  allowSubmit,
   register,
   pcrItem,
   handleSubmit,
 }: {
   pcrItem: Pick<FullPCRItemDto, "type" | "status">;
   register: UseFormRegister<FormValues>;
-  allowSubmit: boolean;
   handleSubmit: UseFormHandleSubmit<FormValues>;
 }) => {
-  const { itemId, routes, projectId, pcrId, isFetching, onSave } = usePcrWorkflowContext();
+  const { itemId, routes, projectId, pcrId, isFetching, onSave, allowSubmit } = usePcrWorkflowContext();
   if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
 
   const { getContent } = useContent();

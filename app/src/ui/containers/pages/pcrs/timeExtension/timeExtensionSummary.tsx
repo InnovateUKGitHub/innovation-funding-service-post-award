@@ -17,14 +17,8 @@ type FormValues = {
   itemStatus: "marked-as-complete" | "false" | "";
 };
 
-export const TimeExtensionSummary = ({
-  displayCompleteForm,
-  allowSubmit,
-}: {
-  displayCompleteForm: boolean;
-  allowSubmit: boolean;
-}) => {
-  const { projectId, itemId, fetchKey, useSetPcrValidationErrors } = usePcrWorkflowContext();
+export const TimeExtensionSummary = () => {
+  const { projectId, itemId, fetchKey, useSetPcrValidationErrors, displayCompleteForm } = usePcrWorkflowContext();
 
   const { project, pcrItem } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -81,12 +75,7 @@ export const TimeExtensionSummary = ({
       </Section>
 
       {displayCompleteForm && (
-        <PcrItemSummaryForm<FormValues>
-          register={register}
-          allowSubmit={allowSubmit}
-          handleSubmit={handleSubmit}
-          pcrItem={pcrItem}
-        />
+        <PcrItemSummaryForm<FormValues> register={register} handleSubmit={handleSubmit} pcrItem={pcrItem} />
       )}
     </>
   );

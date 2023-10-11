@@ -6,11 +6,8 @@ import { EditLink, ViewLink, getStepLink } from "./pcrItemSummaryLinks";
 
 export const SummarySection = () => {
   const { mode, workflow, routes, pcrItem } = usePcrWorkflowContext();
-  const isPrepareMode = mode === "prepare";
   const isReviewing = mode === "review";
   const displayNavigationArrows = mode === "review" || mode === "view";
-  const displayCompleteForm = isPrepareMode;
-  const allowSubmit = true;
 
   /**
    * Will need to handle various features previously handled by PCRSummaryContext.
@@ -24,7 +21,7 @@ export const SummarySection = () => {
   return (
     <WithScrollToTopOnPropChange propToScrollOn={workflow?.getCurrentStepName()}>
       <Section qa="item-save-and-return">
-        <Summary allowSubmit={allowSubmit} displayCompleteForm={displayCompleteForm} />
+        <Summary />
 
         {displayNavigationArrows && (
           <NavigationArrowsForPCRs currentItem={pcrItem} isReviewing={isReviewing} routes={routes} />
@@ -34,7 +31,7 @@ export const SummarySection = () => {
   );
 };
 
-const Summary = ({ allowSubmit, displayCompleteForm }: { allowSubmit: boolean; displayCompleteForm: boolean }) => {
+const Summary = () => {
   const { pcrItem, itemId, workflow, projectId, pcrId, routes } = usePcrWorkflowContext();
   if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
 
@@ -50,8 +47,6 @@ const Summary = ({ allowSubmit, displayCompleteForm }: { allowSubmit: boolean; d
 
   return (
     <SummaryComponent
-      allowSubmit={allowSubmit}
-      displayCompleteForm={displayCompleteForm}
       getEditLink={stepName => <EditLink stepName={stepName} />}
       getStepLink={stepName => getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}
       getViewLink={stepName => <ViewLink stepName={stepName} />}

@@ -66,6 +66,8 @@ type PcrWorkflowContextProps = Data &
     fetchKey: number;
     setPcrValidationErrors: Dispatch<SetStateAction<RhfErrors>>;
     pcrValidationErrors: RhfErrors;
+    displayCompleteForm: boolean;
+    allowSubmit: boolean;
     useSetPcrValidationErrors: (validationErrors: RhfErrors) => void;
     useClearPcrValidationError: (errorField: string, shouldClear: boolean) => void;
     useErrorSubset: (errorFields: string[]) => void;
@@ -133,6 +135,9 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
     }, [errorField, setPcrValidationErrors, shouldClear]);
   };
 
+  const displayCompleteForm = props.mode === "prepare";
+  const allowSubmit = true; // this will not necessarily be true after all pcrs have been migrated
+
   return (
     <PcrWorkflowContext.Provider
       value={{
@@ -147,6 +152,8 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
         isFetching,
         fetchKey,
         getRequiredToCompleteMessage,
+        displayCompleteForm,
+        allowSubmit,
       }}
     >
       <Page
