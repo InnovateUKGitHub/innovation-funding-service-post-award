@@ -72,6 +72,7 @@ export default defineConfig({
     specPattern: getSpecPatternArray(specPattern),
     env: {
       BASIC_AUTH: process.env.BASIC_AUTH,
+      ITEM_PREFIX: process.env.ITEM_PREFIX,
     },
     testIsolation: false,
   },
