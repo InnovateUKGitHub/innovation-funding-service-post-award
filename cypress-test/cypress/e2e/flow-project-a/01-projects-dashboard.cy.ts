@@ -1,9 +1,5 @@
 import { visitApp } from "../../common/visit";
-import {
-  shouldDisplayTwoProjectCards,
-  shouldNavigateToProjectDashboard,
-  shouldShowAListOfProjectCards,
-} from "../1-projects-dashboard/steps";
+import { shouldDisplayTwoProjectCards, shouldNavigateToProjectDashboard } from "../1-projects-dashboard/steps";
 
 describe("projects dashboard > general", () => {
   before(() => {
@@ -14,5 +10,7 @@ describe("projects dashboard > general", () => {
 
   it('should navigate to project dashboard when the "Projects" card is selected', shouldNavigateToProjectDashboard);
 
-  it("should show a list of project cards", shouldShowAListOfProjectCards);
+  it("should show our project", () => {
+    cy.get('[data-qa="pending-and-open-projects"] .acc-list-item').contains("ACC-9810 / KTP Project");
+  });
 });
