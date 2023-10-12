@@ -112,9 +112,7 @@ export const claimDetailsQuery = graphql`
                           Name {
                             value
                           }
-                          Username {
-                            value
-                          }
+                          Id
                         }
                       }
                     }
