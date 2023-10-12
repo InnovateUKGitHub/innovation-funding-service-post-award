@@ -54,7 +54,7 @@ export function Currency({ qa, value, fractionDigits = 2, className, ...props }:
             // Inject ZWSP after commas as a word wrap hint.
             <Fragment key={i}>
               {x}
-              {shouldWordWrap && i < a.length - 1 && (
+              {i < a.length - 1 && (
                 <>
                   ,
                   <wbr />

@@ -86,5 +86,9 @@ const renderWarningMessage = ({
     </>
   );
 
-  return <ValidationMessage messageType="info" qa={qaValue} message={warningContent} />;
+  return (
+    <AriaLive>
+      <ValidationMessage messageType="info" qa={qaValue} message={warningContent} />
+    </AriaLive>
+  );
 };

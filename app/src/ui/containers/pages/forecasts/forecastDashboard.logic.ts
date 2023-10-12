@@ -24,7 +24,7 @@ export const useForecastDashboardData = (projectId: ProjectId) => {
   const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   return useMemo(() => {
-    const project = mapToProjectDto(projectNode, ["id", "title", "projectNumber", "roles", "status"]);
+    const project = mapToProjectDto(projectNode, ["id", "roles", "status"]);
 
     const partners = mapToPartnerDtoArray(
       projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [],
@@ -32,6 +32,6 @@ export const useForecastDashboardData = (projectId: ProjectId) => {
       {},
     );
 
-    return { project, partners: sortPartnersLeadFirst(partners) };
+    return { project, partners: sortPartnersLeadFirst(partners), fragmentRef: data?.salesforce?.uiapi };
   }, []);
 };

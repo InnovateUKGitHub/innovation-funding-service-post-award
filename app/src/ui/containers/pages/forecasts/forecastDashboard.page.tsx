@@ -7,7 +7,7 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
@@ -18,14 +18,15 @@ interface Params {
 
 const Table = createTypedTable<Partner>();
 const ForecastDashboardPage = (props: Params & BaseProps) => {
-  const { project, partners } = useForecastDashboardData(props.projectId);
+  const { project, partners, fragmentRef } = useForecastDashboardData(props.projectId);
   const { getContent } = useContent();
 
   return (
     <Page
-      pageTitle={<Title {...project} />}
+      pageTitle={<Title />}
       backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
       projectStatus={project.status}
+      fragmentRef={fragmentRef}
     >
       <Section qa="project-forecasts">
         <Table.Table data={partners} qa="partner-table">
