@@ -12,6 +12,9 @@ import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFi
 import { useForm } from "react-hook-form";
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { pcrScopeChangeProjectSummarySchema, errorMap } from "./scopeChange.zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 
 export const ProjectSummaryChangeStep = () => {
   const { getContent } = useContent();
@@ -24,17 +27,25 @@ export const ProjectSummaryChangeStep = () => {
     fetchKey,
     getRequiredToCompleteMessage,
     useClearPcrValidationError,
+    setPcrValidationErrors,
     pcrValidationErrors,
     useErrorSubset,
   } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, watch } = useForm<{ projectSummary: string }>({
+  const { register, handleSubmit, watch, formState } = useForm<{ projectSummary: string }>({
     defaultValues: {
       projectSummary: pcrItem.projectSummary ?? "",
     },
+    resolver: zodResolver(pcrScopeChangeProjectSummarySchema, {
+      errorMap,
+    }),
   });
+
+  const validationErrors = useRhfErrors(formState?.errors);
+
+  setPcrValidationErrors(validationErrors);
 
   const projectSummaryLength = watch("projectSummary")?.length ?? 0;
 

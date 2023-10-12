@@ -11,6 +11,9 @@ import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { useContent } from "@ui/hooks/content.hook";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { pcrScopeChangePublicDescriptionSchema, errorMap } from "./scopeChange.zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 
 export const PublicDescriptionChangeStep = () => {
   const {
@@ -21,20 +24,28 @@ export const PublicDescriptionChangeStep = () => {
     getRequiredToCompleteMessage,
     onSave,
     useClearPcrValidationError,
+    useSetPcrValidationErrors,
     useErrorSubset,
     pcrValidationErrors,
   } = usePcrWorkflowContext();
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
   const { getContent } = useContent();
-  const { register, handleSubmit, watch } = useForm<{ publicDescription: string }>({
+  const { register, handleSubmit, watch, formState } = useForm<{ publicDescription: string }>({
     defaultValues: {
       publicDescription: pcrItem.publicDescription ?? "",
     },
+    resolver: zodResolver(pcrScopeChangePublicDescriptionSchema, {
+      errorMap,
+    }),
   });
+
+  const validationErrors = useRhfErrors(formState?.errors);
 
   const hint = getRequiredToCompleteMessage();
 
   const publicDescriptionLength = watch("publicDescription")?.length ?? 0;
+
+  useSetPcrValidationErrors(validationErrors);
 
   useErrorSubset(["publicDescription"]);
   useClearPcrValidationError("publicDescription", publicDescriptionLength > 0);

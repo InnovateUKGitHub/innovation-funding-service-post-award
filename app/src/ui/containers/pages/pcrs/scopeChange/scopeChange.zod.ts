@@ -34,4 +34,13 @@ export const pcrScopeChangeSchema = z
       }
     }
   });
+
+export const pcrScopeChangeProjectSummarySchema = z.object({
+  projectSummary: z.string().max(32_000).optional(),
+});
+
+export const pcrScopeChangePublicDescriptionSchema = z.object({
+  publicDescription: z.string().max(32_000).optional(),
+});
+
 export type PcrScopeChangeSchemaType = z.infer<typeof pcrScopeChangeSchema>;
