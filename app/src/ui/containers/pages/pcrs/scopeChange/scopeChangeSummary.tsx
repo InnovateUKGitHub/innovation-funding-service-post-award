@@ -8,7 +8,6 @@ import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangeSchema, errorMap, PcrScopeChangeSchemaType } from "./scopeChange.zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { EditLink } from "../pcrItemSummaryLinks";
 
 export const ScopeChangeSummary = () => {
@@ -27,9 +26,7 @@ export const ScopeChangeSummary = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState?.errors);
-
-  useSetPcrValidationErrors(validationErrors);
+  useSetPcrValidationErrors(formState.errors, true);
 
   return (
     <>
@@ -45,7 +42,7 @@ export const ScopeChangeSummary = () => {
             content={<SimpleString multiline>{pcrItem.publicDescription}</SimpleString>}
             qa="newPublicDescription"
             action={<EditLink stepName={PCRStepType.publicDescriptionStep} />}
-            hasError={!!validationErrors?.publicDescription}
+            hasError={!!formState?.errors?.publicDescription}
           />
           <SummaryListItem
             label={x => x.pcrScopeChangeLabels.existingSummary}
@@ -57,7 +54,7 @@ export const ScopeChangeSummary = () => {
             content={<SimpleString multiline>{pcrItem.projectSummary}</SimpleString>}
             qa="newProjectSummary"
             action={<EditLink stepName={PCRStepType.projectSummaryStep} />}
-            hasError={!!validationErrors?.projectSummary}
+            hasError={!!formState?.errors?.projectSummary}
           />
         </SummaryList>
       </Section>

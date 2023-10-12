@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { errorMap, pcrTimeExtensionSchema } from "./timeExtension.zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
 import { EditLink } from "../pcrItemSummaryLinks";
 
 type FormValues = {
@@ -35,9 +34,7 @@ export const TimeExtensionSummary = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState?.errors);
-
-  useSetPcrValidationErrors(validationErrors);
+  useSetPcrValidationErrors(formState?.errors, true);
 
   return (
     <>
@@ -65,6 +62,7 @@ export const TimeExtensionSummary = () => {
             content={<ShortDateRangeFromDuration startDate={project.startDate} months={newProjectDuration(pcrItem)} />}
             qa="newStartToEndDate"
             action={<EditLink stepName={PCRStepType.timeExtension} />}
+            hasError={!!formState?.errors?.timeExtension}
           />
           <SummaryListItem
             label="Duration"

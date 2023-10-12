@@ -8,14 +8,15 @@ import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { Dispatch, SetStateAction, createContext, useContext, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
 import { Mode, ProjectChangeRequestPrepareItemParams } from "./pcrItemWorkflowContainer";
 import { WorkflowStep } from "./pcrItemWorkflowStep";
 import { SummarySection } from "./pcrItemWorkflowSummary";
 import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { useContent } from "@ui/hooks/content.hook";
-import { isEqual } from "lodash";
+import { FieldErrors } from "react-hook-form";
+import { usePcrItemWorkflowHooks } from "./pcrItemWorkflowHooks";
 
 type Data = {
   project: Pick<ProjectDto, "status">;
@@ -68,7 +69,15 @@ type PcrWorkflowContextProps = Data &
     pcrValidationErrors: RhfErrors;
     displayCompleteForm: boolean;
     allowSubmit: boolean;
-    useSetPcrValidationErrors: (validationErrors: RhfErrors) => void;
+    usePcrErrors: <TFormValues extends AnyObject>(pcrErrorConfig: {
+      errors: FieldErrors<TFormValues>;
+      errorSubset: string[];
+      clearErrors: Record<string, boolean>;
+    }) => void;
+    useSetPcrValidationErrors: <TFormValues extends AnyObject>(
+      formStateErrors: FieldErrors<TFormValues>,
+      isSummary?: boolean,
+    ) => void;
     useClearPcrValidationError: (errorField: string, shouldClear: boolean) => void;
     useErrorSubset: (errorFields: string[]) => void;
     getRequiredToCompleteMessage: (message?: string) => JSX.Element | "This is required to complete this request.";
@@ -100,40 +109,14 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
     isFetching,
   } = useOnSavePcrItem(props.projectId, props.pcrId, props.itemId, setFetchKey);
 
-  const [pcrValidationErrors, setPcrValidationErrors] = useState<RhfErrors>(undefined);
-
-  /**
-   * this hook will allow a workflow component to set validation errors on the page
-   */
-  const useSetPcrValidationErrors = (validationErrors: RhfErrors) => {
-    const lastErrors = useRef<RhfErrors>(undefined);
-
-    const hasValidationErrorsChanged = isEqual(lastErrors.current, validationErrors);
-    useEffect(() => {
-      setPcrValidationErrors(validationErrors);
-      lastErrors.current = validationErrors;
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [hasValidationErrorsChanged, setPcrValidationErrors]);
-  };
-
-  /**
-   * this hook will remove any errors not in the array of error fields from the page.
-   */
-  const useErrorSubset = (errorFields: string[]) => {
-    useEffect(() => {
-      setPcrValidationErrors(s => errorFields.reduce((acc, cur) => ({ ...acc, [cur]: s?.[cur] }), {}));
-    }, []);
-  };
-
-  /**
-   * this hook will remove the indicated error
-   */
-  const useClearPcrValidationError = (errorField: string, shouldClear: boolean) => {
-    useEffect(() => {
-      setPcrValidationErrors(s => (shouldClear ? { ...s, [errorField]: undefined } : s));
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [errorField, setPcrValidationErrors, shouldClear]);
-  };
+  const {
+    useSetPcrValidationErrors,
+    useClearPcrValidationError,
+    useErrorSubset,
+    usePcrErrors,
+    setPcrValidationErrors,
+    pcrValidationErrors,
+  } = usePcrItemWorkflowHooks();
 
   const displayCompleteForm = props.mode === "prepare";
   const allowSubmit = true; // this will not necessarily be true after all pcrs have been migrated
@@ -147,6 +130,7 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
         setPcrValidationErrors,
         useSetPcrValidationErrors,
         useClearPcrValidationError,
+        usePcrErrors,
         useErrorSubset,
         onSave,
         isFetching,

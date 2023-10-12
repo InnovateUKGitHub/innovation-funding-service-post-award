@@ -14,7 +14,7 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangeProjectSummarySchema, errorMap } from "./scopeChange.zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export const ProjectSummaryChangeStep = () => {
   const { getContent } = useContent();
@@ -27,7 +27,7 @@ export const ProjectSummaryChangeStep = () => {
     fetchKey,
     getRequiredToCompleteMessage,
     useClearPcrValidationError,
-    setPcrValidationErrors,
+    useSetPcrValidationErrors,
     pcrValidationErrors,
     useErrorSubset,
   } = usePcrWorkflowContext();
@@ -43,12 +43,9 @@ export const ProjectSummaryChangeStep = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState?.errors);
-
-  setPcrValidationErrors(validationErrors);
-
   const projectSummaryLength = watch("projectSummary")?.length ?? 0;
 
+  useSetPcrValidationErrors(formState.errors);
   useErrorSubset(["projectSummary"]);
   useClearPcrValidationError("projectSummary", projectSummaryLength > 0);
 
@@ -58,7 +55,7 @@ export const ProjectSummaryChangeStep = () => {
     <Section data-qa="newSummarySection">
       <Form
         onSubmit={handleSubmit(data => {
-          onSave({ data });
+          onSave({ data: { ...data, status: PCRItemStatus.Incomplete } });
         })}
       >
         <Fieldset>

@@ -13,7 +13,7 @@ import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFi
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangePublicDescriptionSchema, errorMap } from "./scopeChange.zod";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 export const PublicDescriptionChangeStep = () => {
   const {
@@ -39,14 +39,11 @@ export const PublicDescriptionChangeStep = () => {
     }),
   });
 
-  const validationErrors = useRhfErrors(formState?.errors);
-
   const hint = getRequiredToCompleteMessage();
 
   const publicDescriptionLength = watch("publicDescription")?.length ?? 0;
 
-  useSetPcrValidationErrors(validationErrors);
-
+  useSetPcrValidationErrors(formState.errors);
   useErrorSubset(["publicDescription"]);
   useClearPcrValidationError("publicDescription", publicDescriptionLength > 0);
 
@@ -54,7 +51,7 @@ export const PublicDescriptionChangeStep = () => {
     <Section data-qa="newDescriptionSection">
       <Form
         onSubmit={handleSubmit(data => {
-          onSave({ data });
+          onSave({ data: { ...data, status: PCRItemStatus.Incomplete } });
         })}
       >
         <Fieldset>
