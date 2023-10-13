@@ -1,7 +1,7 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
-import { clickCreateRequestButtonProceed, shouldShowProjectTitle } from "./steps";
-import { baseLorem, loremIpsum2k, loremIpsum32k, loremIpsum30k } from "common/lorem";
+import { shouldShowProjectTitle } from "./steps";
+import { loremIpsum32k, loremIpsum30k } from "common/lorem";
 import { testFile } from "common/testfileNames";
 
 const pmEmail = "james.black@euimeabs.test";
@@ -20,7 +20,10 @@ describe("PCR > Reasoning section", () => {
     cy.clickCheckBox("Add a partner");
   });
 
-  it("Will click Create request button and proceed to next page", clickCreateRequestButtonProceed);
+  it("Will click Create request button and proceed to next page", () => {
+    cy.button("Create request").click();
+    cy.heading("Request");
+  });
 
   it("Should click into the Reasoning section", () => {
     cy.get("a").contains("Provide reasons to Innovate UK").click();
