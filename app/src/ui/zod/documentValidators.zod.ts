@@ -1,5 +1,6 @@
 import {
   allowedClaimDocuments,
+  allowedImpactManagementClaimDocuments,
   allowedProjectLevelDocuments,
   DocumentDescription,
 } from "@framework/constants/documentDescription";
@@ -13,6 +14,8 @@ import {
   getMultiFileValidation,
   periodIdValidation,
 } from "./helperValidators.zod";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 type ProjectLevelUploadSchemaType = ReturnType<typeof getProjectLevelUpload>;
 const getProjectLevelUpload = (config: IAppOptions) =>
@@ -31,8 +34,13 @@ const getProjectLevelUpload = (config: IAppOptions) =>
     files: getMultiFileValidation(config),
   });
 
+interface ClaimLevelUploadSchemaExtraProps {
+  config: IAppOptions;
+  project: Pick<ProjectDto, "impactManagementParticipation">;
+}
+
 type ClaimLevelUploadSchemaType = ReturnType<typeof getClaimLevelUpload>;
-const getClaimLevelUpload = (config: IAppOptions) =>
+const getClaimLevelUpload = ({ config, project }: ClaimLevelUploadSchemaExtraProps) =>
   z.object({
     form: z.literal(FormTypes.ClaimLevelUpload),
     projectId: projectIdValidation,
@@ -41,7 +49,12 @@ const getClaimLevelUpload = (config: IAppOptions) =>
       emptyStringToUndefinedValidation,
       z.coerce
         .number()
-        .refine(x => allowedClaimDocuments.includes(x))
+        .refine(x =>
+          (project.impactManagementParticipation === ImpactManagementParticipation.Yes
+            ? allowedImpactManagementClaimDocuments
+            : allowedClaimDocuments
+          ).includes(x),
+        )
         .optional()
         .transform(x => x as DocumentDescription),
     ]),

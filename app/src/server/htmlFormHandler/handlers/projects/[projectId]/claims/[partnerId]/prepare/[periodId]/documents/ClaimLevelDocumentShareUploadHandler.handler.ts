@@ -6,13 +6,17 @@ import { ClaimLevelUploadSchemaType, getClaimLevelUpload } from "@ui/zod/documen
 import express from "express";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
-import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
+import {
+  ClaimDocumentsPageParams,
+  ClaimDocumentsRoute,
+} from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 
 class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   ClaimLevelUploadSchemaType,
-  { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId }
+  ClaimDocumentsPageParams
 > {
   constructor() {
     super({
@@ -24,8 +28,10 @@ class ClaimLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
 
   public readonly acceptFiles = true;
 
-  protected async getZodSchema() {
-    return getClaimLevelUpload(configuration.options);
+  protected async getZodSchema({ params, context }: { params: ClaimDocumentsPageParams; context: IContext }) {
+    const project = await context.runQuery(new GetByIdQuery(params.projectId));
+
+    return getClaimLevelUpload({ config: configuration.options, project });
   }
 
   protected async mapToZod({
