@@ -2,7 +2,6 @@ import { testFile } from "common/testfileNames";
 import { PcrType } from "typings/pcr";
 
 let date = new Date();
-let year = date.getFullYear();
 let createdDay = date.getDate();
 let comments = JSON.stringify(date);
 

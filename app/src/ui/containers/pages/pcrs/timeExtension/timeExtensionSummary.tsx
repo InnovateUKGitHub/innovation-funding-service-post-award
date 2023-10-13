@@ -13,7 +13,7 @@ import { EditLink } from "../pcrItemSummaryLinks";
 
 type FormValues = {
   timeExtension: string;
-  itemStatus: "marked-as-complete" | "false" | "";
+  itemStatus: "marked-as-complete" | "";
 };
 
 export const TimeExtensionSummary = () => {
@@ -26,7 +26,7 @@ export const TimeExtensionSummary = () => {
 
   const { register, handleSubmit, formState } = useForm<FormValues>({
     defaultValues: {
-      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "false",
+      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "",
       timeExtension: String(pcrItem.offsetMonths ?? 0),
     },
     resolver: zodResolver(pcrTimeExtensionSchema, {
