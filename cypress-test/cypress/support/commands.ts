@@ -41,7 +41,7 @@ const getByAriaLabel = (label: string) => {
   cy.get(`[aria-label="${label}"]`);
 };
 
-const userSwitcher = (email: string = "", newPath: string) => {
+const userSwitcher = (email: string = "", newPath: string = "") => {
   // Intercept all future web requests, and inject our UserSwitcher(TM) header
   cy.intercept(Cypress.config().baseUrl + "/**", req => {
     req.headers["x-acc-userswitcher"] = email;
