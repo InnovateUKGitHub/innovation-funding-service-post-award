@@ -15,6 +15,7 @@ import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangeProjectSummarySchema, errorMap } from "./scopeChange.zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { useNextLink } from "../utils/useNextLink";
 
 export const ProjectSummaryChangeStep = () => {
   const { getContent } = useContent();
@@ -51,11 +52,13 @@ export const ProjectSummaryChangeStep = () => {
 
   const hint = getRequiredToCompleteMessage();
 
+  const nextLink = useNextLink();
+
   return (
     <Section data-qa="newSummarySection">
       <Form
         onSubmit={handleSubmit(data => {
-          onSave({ data: { ...data, status: PCRItemStatus.Incomplete } });
+          onSave({ data: { ...data, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
         })}
       >
         <Fieldset>
@@ -77,6 +80,7 @@ export const ProjectSummaryChangeStep = () => {
             characterCountType="descending"
             rows={15}
             characterCountMax={32_000}
+            defaultValue={pcrItem.projectSummary ?? ""}
           />
         </Fieldset>
         <Button type="submit" disabled={isFetching}>

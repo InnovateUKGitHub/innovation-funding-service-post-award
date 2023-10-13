@@ -4,7 +4,7 @@ import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { ShortDateRangeFromDuration, Months } from "@ui/components/atomicDesign/atoms/Date";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
-import React, { useMemo } from "react";
+import React from "react";
 import { usePcrTimeExtensionWorkflowQuery, generateOptions } from "./timeExtension.logic";
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
@@ -18,37 +18,18 @@ import { useForm } from "react-hook-form";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { useNextLink } from "../utils/useNextLink";
 
 export const TimeExtensionStep = () => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
 
-  const {
-    projectId,
-    pcrId,
-    itemId,
-    onSave,
-    config,
-    isFetching,
-    routes,
-    workflow,
-    fetchKey,
-    pcrValidationErrors,
-    useClearPcrValidationError,
-  } = usePcrWorkflowContext();
+  const { projectId, itemId, onSave, config, isFetching, fetchKey, pcrValidationErrors, useClearPcrValidationError } =
+    usePcrWorkflowContext();
 
   const { pcrItem, project } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
 
-  const nextLink = useMemo(() => {
-    const nextStep = workflow.getNextStepInfo();
-
-    return routes.pcrPrepareItem.getLink({
-      projectId,
-      pcrId,
-      itemId,
-      step: nextStep?.stepNumber,
-    });
-  }, [projectId, pcrId, itemId, routes, workflow]);
+  const nextLink = useNextLink();
 
   const timeExtensionOptions = generateOptions(project.endDate, config.features.futureTimeExtensionInYears);
   const existingProjectHeading = getContent(x => x.pages.pcrTimeExtensionStep.existingProjectHeading);

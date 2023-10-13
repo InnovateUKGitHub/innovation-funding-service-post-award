@@ -14,6 +14,7 @@ import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangePublicDescriptionSchema, errorMap } from "./scopeChange.zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { useNextLink } from "../utils/useNextLink";
 
 export const PublicDescriptionChangeStep = () => {
   const {
@@ -47,11 +48,13 @@ export const PublicDescriptionChangeStep = () => {
   useErrorSubset(["publicDescription"]);
   useClearPcrValidationError("publicDescription", publicDescriptionLength > 0);
 
+  const nextLink = useNextLink();
+
   return (
     <Section data-qa="newDescriptionSection">
       <Form
         onSubmit={handleSubmit(data => {
-          onSave({ data: { ...data, status: PCRItemStatus.Incomplete } });
+          onSave({ data: { ...data, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
         })}
       >
         <Fieldset>
@@ -74,6 +77,7 @@ export const PublicDescriptionChangeStep = () => {
             characterCountType="descending"
             rows={15}
             characterCountMax={32_000}
+            defaultValue={pcrItem.publicDescription ?? ""}
           />
         </Fieldset>
         <Button type="submit" disabled={isFetching}>
