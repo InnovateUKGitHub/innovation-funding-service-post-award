@@ -21,7 +21,7 @@ import { Select } from "@ui/components/atomicDesign/atoms/form/Select/Select";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { allowedClaimDocuments } from "@framework/constants/documentDescription";
+import { allowedClaimDocuments, allowedImpactManagementClaimDocuments } from "@framework/constants/documentDescription";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
@@ -65,7 +65,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<
     z.output<ClaimLevelUploadSchemaType>
   >({
-    resolver: zodResolver(getClaimLevelUpload(config.options), {
+    resolver: zodResolver(getClaimLevelUpload({ config: config.options, project }), {
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
   });
@@ -106,7 +106,12 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     });
   };
 
-  const documentDropdownOptions = useValidDocumentDropdownOptions(allowedClaimDocuments);
+  // If Impact Management is enabled, change the set of document upload options
+  const documentDropdownOptions = useValidDocumentDropdownOptions(
+    project.impactManagementParticipation === ImpactManagementParticipation.Yes
+      ? allowedImpactManagementClaimDocuments
+      : allowedClaimDocuments,
+  );
 
   // Disable completing the form if impact management and not received PCF
   const impMgmtPcfNotSubmittedForFinalClaim =

@@ -115,4 +115,13 @@ export const allowedClaimDocuments = [
   DocumentDescription.ScheduleThree,
 ];
 
+export const allowedImpactManagementClaimDocuments = [
+  DocumentDescription.Invoice,
+  DocumentDescription.IAR,
+  DocumentDescription.Evidence,
+  DocumentDescription.StatementOfExpenditure,
+  DocumentDescription.LMCMinutes,
+  DocumentDescription.ScheduleThree,
+];
+
 export { getDocumentDescriptionContentSelector };

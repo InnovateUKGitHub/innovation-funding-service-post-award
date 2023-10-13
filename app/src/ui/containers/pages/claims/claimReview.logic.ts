@@ -42,7 +42,14 @@ export const useClaimReviewPageData = (
   const totalDocumentsLength = documentsGql.map(x => x?.node?.ContentDocumentLinks?.edges ?? []).flat().length ?? 0;
 
   return useMemo(() => {
-    const project = mapToProjectDto(projectNode, ["competitionName", "competitionType", "id", "partnerRoles", "roles"]);
+    const project = mapToProjectDto(projectNode, [
+      "competitionName",
+      "competitionType",
+      "id",
+      "partnerRoles",
+      "roles",
+      "impactManagementParticipation",
+    ]);
 
     const partner = mapToPartnerDto(
       partnerNode,

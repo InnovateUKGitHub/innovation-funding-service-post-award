@@ -295,6 +295,12 @@ export const claimReviewQuery = graphql`
                 Acc_ProjectStatus__c {
                   value
                 }
+                Impact_Management_Participation__c {
+                  value
+                }
+                Impact_Management_Participation__c {
+                  value
+                }
               }
             }
           }
