@@ -9,51 +9,9 @@ export const claimDetailsQuery = graphql`
         ...StatusChangesLogsFragment
         ...ForecastTableFragment
         ...TitleFragment
+        ...ClaimTableFragment
+        ...ClaimPeriodDateFragment
         query {
-          Acc_Profile__c(
-            where: {
-              and: [
-                { Acc_ProjectParticipant__c: { eq: $partnerId } }
-                {
-                  or: [
-                    { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
-                    { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
-                  ]
-                }
-                { Acc_CostCategory__c: { ne: null } }
-              ]
-            }
-            first: 2000
-          ) {
-            edges {
-              node {
-                Id
-                Acc_CostCategory__c {
-                  value
-                }
-                Acc_CostCategoryGOLCost__c {
-                  value
-                }
-                Acc_ProjectPeriodNumber__c {
-                  value
-                }
-                Acc_ProjectPeriodStartDate__c {
-                  value
-                }
-                Acc_ProjectPeriodEndDate__c {
-                  value
-                }
-                Acc_LatestForecastCost__c {
-                  value
-                }
-                RecordType {
-                  DeveloperName {
-                    value
-                  }
-                }
-              }
-            }
-          }
           ClaimsByPeriodForDocuments: Acc_Claims__c(
             where: {
               and: [
@@ -121,46 +79,6 @@ export const claimDetailsQuery = graphql`
               }
             }
           }
-          ClaimDetails: Acc_Claims__c(
-            where: {
-              and: [
-                { Acc_ProjectParticipant__c: { eq: $partnerId } }
-                { RecordType: { DeveloperName: { eq: "Claims_Detail" } } }
-                { Acc_ClaimStatus__c: { ne: "New" } }
-                { Acc_CostCategory__c: { ne: null } }
-              ]
-            }
-            first: 2000
-            orderBy: { Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } } }
-          ) {
-            edges {
-              node {
-                RecordType {
-                  DeveloperName {
-                    value
-                  }
-                }
-                Acc_ClaimStatus__c {
-                  value
-                }
-                Acc_CostCategory__c {
-                  value
-                }
-                Acc_PeriodCostCategoryTotal__c {
-                  value
-                }
-                Acc_ProjectPeriodEndDate__c {
-                  value
-                }
-                Acc_ProjectPeriodNumber__c {
-                  value
-                }
-                Acc_ProjectPeriodStartDate__c {
-                  value
-                }
-              }
-            }
-          }
           Acc_Claims__c(
             where: {
               and: [
@@ -191,9 +109,6 @@ export const claimDetailsQuery = graphql`
                 Acc_PeriodCostCategoryTotal__c {
                   value
                 }
-                LastModifiedDate {
-                  value
-                }
                 Acc_ApprovedDate__c {
                   value
                 }
@@ -203,12 +118,6 @@ export const claimDetailsQuery = graphql`
                 }
                 Acc_ProjectParticipant__r {
                   Id
-                }
-                Acc_ProjectPeriodEndDate__c {
-                  value
-                }
-                Acc_ProjectPeriodStartDate__c {
-                  value
                 }
                 Acc_ProjectPeriodNumber__c {
                   value
@@ -228,28 +137,6 @@ export const claimDetailsQuery = graphql`
                 Acc_FinalClaim__c {
                   value
                 }
-                Acc_CostCategory__c {
-                  value
-                }
-              }
-            }
-          }
-          Acc_CostCategory__c(first: 2000) {
-            edges {
-              node {
-                Id
-                Acc_CostCategoryName__c {
-                  value
-                }
-                Acc_DisplayOrder__c {
-                  value
-                }
-                Acc_OrganisationType__c {
-                  value
-                }
-                Acc_CompetitionType__c {
-                  value
-                }
               }
             }
           }
@@ -267,34 +154,10 @@ export const claimDetailsQuery = graphql`
                 Acc_AccountId__c {
                   value
                 }
-                Acc_TotalParticipantGrant__c {
-                  value
-                }
                 Acc_ProjectRole__c {
                   value
                 }
-                Acc_ForecastLastModifiedDate__c {
-                  value
-                }
-                Acc_OrganisationType__c {
-                  value
-                }
                 Acc_ParticipantStatus__c {
-                  value
-                }
-                Acc_TotalFutureForecastsForParticipant__c {
-                  value
-                }
-                Acc_TotalParticipantCosts__c {
-                  value
-                }
-                Acc_TotalCostsSubmitted__c {
-                  value
-                }
-                Acc_Overdue_Project__c {
-                  value
-                }
-                Acc_OverheadRate__c {
                   value
                 }
               }
@@ -315,12 +178,6 @@ export const claimDetailsQuery = graphql`
                     isPm
                     partnerId
                   }
-                }
-                Acc_ProjectStatus__c {
-                  value
-                }
-                Acc_CompetitionType__c {
-                  value
                 }
               }
             }

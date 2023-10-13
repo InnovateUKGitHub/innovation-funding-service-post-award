@@ -1,11 +1,9 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
+import { ProjectDto, ProjectDtoGql } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
@@ -16,9 +14,9 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SectionPanel } from "@ui/components/atomicDesign/molecules/SectionPanel/sectionPanel";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
-import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
+import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate.withFragment";
+import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable.withFragment";
+import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable.withFragment";
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/bjss/Page/page";
@@ -32,60 +30,6 @@ interface Params {
   projectId: ProjectId;
   partnerId: PartnerId;
   periodId: PeriodId;
-}
-
-interface ClaimData {
-  project: Pick<
-    ProjectDto,
-    | "claimedPercentage"
-    | "claimFrequency"
-    | "claimFrequencyName"
-    | "claimsToReview"
-    | "claimsWithParticipant"
-    | "competitionType"
-    | "costsClaimedToDate"
-    | "id"
-    | "numberOfPeriods"
-    | "periodId"
-    | "projectNumber"
-    | "roles"
-    | "title"
-  >;
-  partner: Pick<
-    PartnerDto,
-    "id" | "partnerStatus" | "isWithdrawn" | "isLead" | "name" | "roles" | "organisationType" | "overheadRate"
-  >;
-  costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
-  claim: Pick<
-    ClaimDto,
-    | "comments"
-    | "isApproved"
-    | "isFinalClaim"
-    | "periodCostsToBePaid"
-    | "periodEndDate"
-    | "periodId"
-    | "periodStartDate"
-    | "status"
-    | "totalCostsApproved"
-    | "totalCostsSubmitted"
-    | "totalDeferredAmount"
-  >;
-  documents: Pick<
-    DocumentSummaryDto,
-    "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner"
-  >[];
-
-  // strangely misnamed dto field that the claims table expects
-  claimDetails: Pick<
-    CostsSummaryForPeriodDto,
-    | "costsClaimedToDate"
-    | "costCategoryId"
-    | "costsClaimedThisPeriod"
-    | "forecastThisPeriod"
-    | "offerTotal"
-    | "remainingOfferCosts"
-  >[];
-  fragmentRef?: unknown;
 }
 
 export const ClaimsDetailsPage = (props: Params & BaseProps) => {
@@ -110,7 +54,7 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
       {!data.partner.isWithdrawn && data.claim?.isFinalClaim && (
         <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
       )}
-      <Section title={<ClaimPeriodDate claim={data.claim} partner={data.partner} />} />
+      <Section title={<ClaimPeriodDate />} />
 
       <Section>
         <CostsAndGrantSummary claim={data.claim} project={data.project} />
@@ -118,11 +62,14 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
 
       <Section>
         {isFc ? (
-          <ClaimTable getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)} {...data} />
+          <ClaimTable
+            periodId={props.periodId}
+            getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
+          />
         ) : (
           <ClaimReviewTable
+            periodId={props.periodId}
             getLink={x => getLink(x, data.project, data.partner, props.periodId, props.routes)}
-            {...data}
           />
         )}
       </Section>
@@ -198,9 +145,12 @@ const AccordionSection = ({
   periodId,
 }: {
   data: {
-    claim: Pick<ClaimData["claim"], "status">;
-    project: Pick<ClaimData["project"], "roles">;
-    documents: ClaimData["documents"];
+    claim: Pick<ClaimDto, "status">;
+    project: Pick<ProjectDtoGql, "roles">;
+    documents: Pick<
+      DocumentSummaryDto,
+      "id" | "dateCreated" | "fileSize" | "fileName" | "link" | "uploadedBy" | "isOwner"
+    >[];
   };
   periodId: PeriodId;
 }) => {

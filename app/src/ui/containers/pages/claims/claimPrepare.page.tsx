@@ -8,9 +8,9 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
-import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
-import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
+import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
+import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate.withFragment";
+import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable.withFragment";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -20,7 +20,7 @@ import { useClaimPreparePageData } from "./claimPrepare.logic";
 import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
 import { getClaimDetailsStatusType } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
 import { useContent } from "@ui/hooks/content.hook";
-import { ClaimRetentionMessage } from "@ui/components/atomicDesign/organisms/claims/ClaimRetentionMessage/ClaimRetentionMessage";
+import { ClaimRetentionMessage } from "@ui/components/atomicDesign/organisms/claims/ClaimRetentionMessage/ClaimRetentionMessage.withFragment";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 
 export interface PrepareClaimParams {
@@ -55,17 +55,20 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
       pageTitle={<Title />}
       fragmentRef={data?.fragmentRef}
     >
-      <ClaimRetentionMessage claimDetails={data.claimDetails} partner={data.partner} />
+      <ClaimRetentionMessage periodId={props.periodId} />
+
       {isNonEditable && (
         <ValidationMessage message={getContent(x => x.pages.claimPrepare.readonlyMessage)} messageType="info" />
       )}
-      <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
+
+      <AwardRateOverridesMessage />
+
       {data.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
 
-      <Section title={<ClaimPeriodDate claim={data.claim} />}>
+      <Section title={<ClaimPeriodDate />}>
         <ClaimTable
           disabled={isNonEditable}
-          {...data}
+          periodId={props.periodId}
           getLink={costCategoryId =>
             props.routes.prepareClaimLineItems.getLink({
               partnerId: props.partnerId,

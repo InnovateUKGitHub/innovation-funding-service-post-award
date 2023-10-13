@@ -4,14 +4,8 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { claimReviewQuery } from "./ClaimReview.query";
 import { ClaimReviewQuery } from "./__generated__/ClaimReviewQuery.graphql";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
-import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
-import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
-import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
-import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
-import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
@@ -35,55 +29,19 @@ export const useClaimReviewPageData = (
     queryOptions,
   );
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
-  const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
 
   const documentsGql = data?.salesforce?.uiapi?.query?.ClaimsByPeriodForDocuments?.edges ?? [];
 
   const totalDocumentsLength = documentsGql.map(x => x?.node?.ContentDocumentLinks?.edges ?? []).flat().length ?? 0;
 
   return useMemo(() => {
-    const project = mapToProjectDto(projectNode, [
-      "competitionName",
-      "competitionType",
-      "id",
-      "partnerRoles",
-      "roles",
-      "impactManagementParticipation",
-    ]);
-
-    const partner = mapToPartnerDto(
-      partnerNode,
-      ["id", "partnerStatus", "isWithdrawn", "isLead", "name", "roles", "organisationType", "overheadRate"],
-      {
-        roles: project.partnerRoles.find(x => x.partnerId === partnerNode?.Id) ?? {
-          isFc: false,
-          isMo: false,
-          isPm: false,
-        },
-      },
-    );
-
-    const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
-
-    const costCategories = mapToRequiredSortedCostCategoryDtoArray(
-      data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
-      ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
-      profileGql,
-    );
+    const project = mapToProjectDto(projectNode, ["competitionName", "competitionType", "id", "roles"]);
 
     const claims = mapToClaimDtoArray(
       data?.salesforce?.uiapi?.query?.AllClaimsForPartner?.edges ?? [],
-      ["id", "isFinalClaim", "periodEndDate", "periodId", "periodStartDate", "partnerId", "status"],
+      ["id", "isFinalClaim", "periodId", "partnerId"],
       {},
     );
-
-    const costCategoriesOrder = costCategories.map(y => y.id);
-
-    const golCosts = mapToGolCostDtoArray(
-      profileGql,
-      ["costCategoryId", "costCategoryName", "value"],
-      costCategories,
-    ).sort((x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
 
     const documents = documentsGql
       .map(docs =>
@@ -104,46 +62,11 @@ export const useClaimReviewPageData = (
 
     const claim = claims.find(claim => claim.periodId === periodId);
 
-    const claimDetails = mapToClaimDetailsDtoArray(
-      data?.salesforce?.uiapi?.query?.ClaimDetails?.edges ?? [],
-      ["costCategoryId", "periodEnd", "periodStart", "periodId", "value"],
-      {},
-    );
-
-    if (!claim) throw new Error(" there is no matching claim");
-    const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [
-      "id",
-      "costCategoryId",
-      "periodEnd",
-      "periodStart",
-      "periodId",
-      "value",
-    ]);
-
-    const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(
-      data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
-      [
-        "costCategoryId",
-        "costsClaimedThisPeriod",
-        "costsClaimedToDate",
-        "forecastThisPeriod",
-        "offerTotal",
-        "remainingOfferCosts",
-      ],
-      {
-        claimDetails,
-        forecastDetails,
-        periodId,
-        golCosts,
-      },
-    );
+    if (!claim) throw new Error("unable to find matching claim");
 
     return {
       project,
-      partner,
-      costCategories,
       claim,
-      claimDetails: costsSummaryForPeriod,
       documents,
       fragmentRef: data?.salesforce?.uiapi,
     };
