@@ -412,6 +412,9 @@ export const claimReviewQuery = graphql`
                 Acc_ClaimsOverdue__c {
                   value
                 }
+                Impact_Management_Participation__c {
+                  value
+                }
               }
             }
           }

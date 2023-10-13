@@ -1,5 +1,5 @@
 import { ClaimStatus } from "@framework/constants/claimStatus";
-import { allowedClaimDocuments } from "@framework/constants/documentDescription";
+import { allowedClaimDocuments, allowedImpactManagementClaimDocuments } from "@framework/constants/documentDescription";
 import { ProjectRole } from "@framework/constants/project";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -47,6 +47,7 @@ import { FormValues, useClaimReviewPageData, useOnUpdateClaimReview, useReviewCo
 import { claimReviewQuery } from "./ClaimReview.query";
 import { claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
 import { EnumDocuments } from "./components/EnumDocuments";
+import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;
@@ -193,7 +194,13 @@ const ClaimReviewPage = (props: ReviewClaimParams & BaseProps & ReviewClaimConta
             title={content.accordionTitleSupportingDocumentsForm}
             qa="upload-supporting-documents-form-accordion"
           >
-            <EnumDocuments documentsToCheck={allowedClaimDocuments}>
+            <EnumDocuments
+              documentsToCheck={
+                data.project.impactManagementParticipation === ImpactManagementParticipation.Yes
+                  ? allowedImpactManagementClaimDocuments
+                  : allowedClaimDocuments
+              }
+            >
               {docs => (
                 <>
                   <UploadForm.Form
