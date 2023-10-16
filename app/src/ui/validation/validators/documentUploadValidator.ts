@@ -13,6 +13,10 @@ import { NestedResult } from "@ui/validation/nestedResult";
 
 export const validDocumentFilenameCharacters = /^[\w\d\s\\.\-()]+$/;
 
+const basenameTooLongMessage = <T extends Results<ResultBase>>(results: T, name: string, count: number) => {
+  return results.getContent(x => x.validation.documentValidator.fileBasenameTooLong({ name, count }));
+};
+
 const invalidCharacterInFileName = <T extends Results<ResultBase>>(results: T, fileName: string) => {
   return results.getContent(x => x.validation.documentValidator.nameInvalidCharacters({ name: fileName }));
 };
@@ -57,7 +61,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
           model && model.file && model.file.fileName,
           this.getContent(x => x.validation.documentValidator.fileRequired),
         ),
-      () => validateFileName(this, model && model.file),
+      () => validateFileName(this, model && model.file, config.maxFileBasenameLength),
       () =>
         Validation.required(
           this,
@@ -184,7 +188,11 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
 
 export class FileDtoValidator extends Results<IFileWrapper> {
   // TODO: when this branch is merged with the odg branch, we should take in one config options instead of maxFileSize/permittedFileTypes
-  constructor(file: IFileWrapper, { maxFileSize, permittedFileTypes }: IAppOptions, showValidationErrors: boolean) {
+  constructor(
+    file: IFileWrapper,
+    { maxFileSize, maxFileBasenameLength, permittedFileTypes }: IAppOptions,
+    showValidationErrors: boolean,
+  ) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -199,7 +207,7 @@ export class FileDtoValidator extends Results<IFileWrapper> {
           file.fileName,
           this.getContent(x => x.validation.documentValidator.fileRequired),
         ),
-      () => validateFileName(this, file),
+      () => validateFileName(this, file, maxFileBasenameLength),
       () => Validation.isTrue(this, file.size <= maxFileSize, fileTooBigErrorMessage(this, file, maxFileSize)),
       () => Validation.isFalse(this, file.size === 0, fileEmptyErrorMessage(this, file)),
       () => validateFileExtension(this, file, permittedFileTypes),
@@ -228,7 +236,11 @@ function validateFileExtension<T extends Results<ResultBase>>(
 /**
  * validates file name
  */
-function validateFileName<T extends Results<ResultBase>>(results: T, file: IFileWrapper | null): Result {
+function validateFileName<T extends Results<ResultBase>>(
+  results: T,
+  file: IFileWrapper | null,
+  maxFileBasenameLength: number,
+): Result {
   if (!file) {
     return Validation.inValid(
       results,
@@ -239,6 +251,15 @@ function validateFileName<T extends Results<ResultBase>>(results: T, file: IFile
     const name = getFileName(fileName);
 
     const hasValidName: boolean = validDocumentFilenameCharacters.test(name);
-    return Validation.isTrue(results, hasValidName, invalidCharacterInFileName(results, fileName));
+    return Validation.all(
+      results,
+      () =>
+        Validation.isTrue(
+          results,
+          name.length <= maxFileBasenameLength,
+          basenameTooLongMessage(results, fileName, maxFileBasenameLength),
+        ),
+      () => Validation.isTrue(results, hasValidName, invalidCharacterInFileName(results, fileName)),
+    );
   }
 }

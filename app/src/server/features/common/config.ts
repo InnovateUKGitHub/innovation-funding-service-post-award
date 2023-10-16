@@ -231,6 +231,7 @@ const options: IAppOptions = {
   },
   maxUploadFileCount: parseInt(process.env.MAX_UPLOAD_FILE_COUNT ?? "", 10) || 10,
   maxFileSize: parseInt(process.env.MAX_FILE_SIZE_IN_BYTES ?? "", 10) || bytes("32MB"),
+  maxFileBasenameLength: parseInt(process.env.MAX_FILE_BASENAME_LENGTH ?? "", 10) || 80,
   standardOverheadRate: parseFloat(process.env.STANDARD_OVERHEAD_RATE ?? "") || 20,
   numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS ?? "", 10) || 3,
   maxClaimLineItems: maxClaimLineItems(),
