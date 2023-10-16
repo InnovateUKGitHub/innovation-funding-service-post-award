@@ -7,3 +7,4 @@ data:
   SERVER_URL: https://www-openshiftEnvKey.openshiftEnvUrl
   USE_SSO: "false"
   NEW_RELIC_ENABLED: "false"
+  LOG_LEVEL: VERBOSE

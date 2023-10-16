@@ -3,8 +3,11 @@ import { Authorisation } from "@framework/types/authorisation";
 import { ClaimKey } from "@framework/types/ClaimKey";
 import { IContext } from "@framework/types/IContext";
 import { CommandBase } from "../common/commandBase";
+import { Logger } from "@shared/developmentLogger";
 
 export class DeleteClaimDocumentCommand extends CommandBase<void> {
+  private readonly logger: Logger = new Logger("DeleteClaimDocumentCommand");
+
   constructor(private readonly documentId: string, private readonly claimKey: ClaimKey) {
     super();
   }
@@ -16,11 +19,21 @@ export class DeleteClaimDocumentCommand extends CommandBase<void> {
       this.claimKey.periodId,
     );
 
-    if (!claim) return false;
+    if (!claim) {
+      this.logger.debug("Failing DeleteClaimDocumentCommand because the claim was not found", this.claimKey);
+      return false;
+    }
 
     const documentExists = await context.repositories.documents.isExistingDocument(this.documentId, claim.Id);
 
-    if (!documentExists) return false;
+    if (!documentExists) {
+      this.logger.debug(
+        "Failing DeleteClaimDocumentCommand because the document does not exist",
+        this.documentId,
+        this.claimKey,
+      );
+      return false;
+    }
 
     // If a project prole (e.g. MO or PM) is used for auth then the claim needs to be looked up by projectId as well as partner & period
     return (
