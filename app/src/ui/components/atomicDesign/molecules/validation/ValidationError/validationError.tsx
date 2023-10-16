@@ -51,16 +51,20 @@ export const ValidationError = ({ error, overrideMessage }: Props) => {
   // if nested there are the results and summary errors to add as well
   const children = error instanceof NestedResult ? (error as NestedResult<Results<ResultBase>>).results : [];
   const associated = error instanceof NestedResult ? (error as NestedResult<Results<ResultBase>>).listValidation : null;
-  const validations = children
-    .filter(x => !x.isValid && x.showValidationErrors)
-    .map(x => x.errors)
-    .reduce((a, b) => a.concat(b), []);
+  const validations: Result[] = [];
 
-  if (associated && !associated.isValid && associated.showValidationErrors) {
+  if (children && children.length > 0) {
+    validations.push(
+      ...children
+        .filter(x => !x.isValid && x.showValidationErrors)
+        .map(x => x.errors)
+        .reduce((a, b) => a.concat(b), []),
+    );
+  } else if (associated && !associated.isValid && associated.showValidationErrors) {
     validations.push(associated);
+  } else {
+    validations.push(error);
   }
-
-  validations.push(error);
 
   return (
     <>
