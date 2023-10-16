@@ -48,7 +48,7 @@ exports[`helperValidators getSingleFileValidation .docm 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_invalid_type"
+      "i18n": "errors.file_extension_invalid_type"
     },
     "path": [],
     "message": "Invalid input"
@@ -64,7 +64,7 @@ exports[`helperValidators getSingleFileValidation .tar.gz 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_invalid_type"
+      "i18n": "errors.file_extension_invalid_type"
     },
     "path": [],
     "message": "Invalid input"
@@ -80,7 +80,7 @@ exports[`helperValidators getSingleFileValidation .webm 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_invalid_type"
+      "i18n": "errors.file_extension_invalid_type"
     },
     "path": [],
     "message": "Invalid input"
@@ -96,7 +96,7 @@ exports[`helperValidators getSingleFileValidation Linux/UNIX hidden file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_too_small"
+      "i18n": "errors.file_basename_too_small"
     },
     "path": [],
     "message": "Invalid input"
@@ -104,7 +104,7 @@ exports[`helperValidators getSingleFileValidation Linux/UNIX hidden file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_invalid_type"
+      "i18n": "errors.file_extension_invalid_type"
     },
     "path": [],
     "message": "Invalid input"
@@ -136,7 +136,7 @@ exports[`helperValidators getSingleFileValidation no basename file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_too_small"
+      "i18n": "errors.file_basename_too_small"
     },
     "path": [],
     "message": "Invalid input"
@@ -144,7 +144,7 @@ exports[`helperValidators getSingleFileValidation no basename file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_invalid_type"
+      "i18n": "errors.file_extension_invalid_type"
     },
     "path": [],
     "message": "Invalid input"
@@ -160,7 +160,7 @@ exports[`helperValidators getSingleFileValidation no prefix file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_too_small"
+      "i18n": "errors.file_basename_too_small"
     },
     "path": [],
     "message": "Invalid input"
@@ -168,7 +168,7 @@ exports[`helperValidators getSingleFileValidation no prefix file 1`] = `
   {
     "code": "custom",
     "params": {
-      "i18n": "errors.file_name_invalid_type"
+      "i18n": "errors.file_extension_invalid_type"
     },
     "path": [],
     "message": "Invalid input"

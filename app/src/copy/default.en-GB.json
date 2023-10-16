@@ -1937,9 +1937,9 @@
         },
         "errors": {
           "file_name_invalid_characters": "Your document '{{ input.fileName }}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.",
-          "file_name_invalid_type": "You cannot upload '{{ input.fileName }}' because it is the wrong file type.",
-          "file_name_too_small": "You cannot upload this file because the file has no name.",
-          "file_name_too_large": "You cannot upload '{{ input.fileName }}' because the name of the file must be shorter than {{ count }} characters.",
+          "file_extension_invalid_type": "You cannot upload '{{ input.fileName }}' because it is the wrong file type.",
+          "file_basename_too_small": "You cannot upload this file because the file has no name.",
+          "file_basename_too_big": "You cannot upload '{{ input.fileName }}' because the name of the file must be shorter than {{ count }} characters.",
           "file_size_too_small": "You cannot upload '{{ input.fileName }}' because it is empty.",
           "file_size_too_large": "You cannot upload '{{ input.fileName }}' because it must be smaller than {{ size, bytes }}.",
           "too_small": "Choose a file to upload.",

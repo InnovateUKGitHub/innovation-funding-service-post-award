@@ -47,7 +47,7 @@ const getSingleFileValidation = (options: IAppOptions) => {
       ctx.addIssue({
         code: ZodIssueCode.custom,
         params: {
-          i18n: "errors.file_name_too_small",
+          i18n: "errors.file_basename_too_small",
         },
       });
     }
@@ -56,7 +56,7 @@ const getSingleFileValidation = (options: IAppOptions) => {
       ctx.addIssue({
         code: ZodIssueCode.custom,
         params: {
-          i18n: "errors.file_name_too_large",
+          i18n: "errors.file_basename_too_big",
           count: options.maxFileBasenameLength,
         },
       });
@@ -75,7 +75,7 @@ const getSingleFileValidation = (options: IAppOptions) => {
       ctx.addIssue({
         code: ZodIssueCode.custom,
         params: {
-          i18n: "errors.file_name_invalid_type",
+          i18n: "errors.file_extension_invalid_type",
         },
       });
     }
