@@ -1518,6 +1518,7 @@
       "fileSizeTooLarge": "You cannot upload '{{ name }}' because it must be smaller than {{ size }}.",
       "fileBasenameTooLong": "You cannot upload '{{ name }}' because the name of the file must be shorter than {{ count }} characters.",
       "fileSizeEmpty": "You cannot upload '{{ name }}' because it is empty.",
+      "fileNameEmpty": "You cannot upload this file because the file has no name.",
       "fileRequired": "Choose a file to upload",
       "fileDescriptionInvalid": "Not a valid description",
       "fileCountTooLarge_one": "You can only select one file at a time.",

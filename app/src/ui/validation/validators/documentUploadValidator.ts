@@ -225,6 +225,15 @@ function validateFileExtension<T extends Results<ResultBase>>(
   permittedFileTypes: Readonly<string[]>,
 ): Result {
   const fileName = file ? file.fileName : "";
+  const extension = getFileExtension(fileName);
+
+  if (extension.length === 0) {
+    return Validation.inValid(
+      results,
+      results.getContent(x => x.validation.documentValidator.fileNameEmpty),
+    );
+  }
+
   return Validation.permittedValues(
     results,
     getFileExtension(fileName),
@@ -249,6 +258,13 @@ function validateFileName<T extends Results<ResultBase>>(
   } else {
     const fileName = file.fileName;
     const name = getFileName(fileName);
+
+    if (name.length === 0) {
+      return Validation.inValid(
+        results,
+        results.getContent(x => x.validation.documentValidator.fileNameEmpty),
+      );
+    }
 
     const hasValidName: boolean = validDocumentFilenameCharacters.test(name);
     return Validation.all(
