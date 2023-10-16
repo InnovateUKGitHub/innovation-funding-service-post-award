@@ -26,8 +26,8 @@ export class Logs extends React.Component<Props> {
     }
 
     return (
-      <div data-qa={this.props.qa} style={{ overflowX: "auto" }}>
-        <table className={"govuk-table"}>
+      <div data-qa={this.props.qa} className="acc-logs-container">
+        <table className="govuk-table acc-logs-container-table">
           <colgroup>
             <col key="0" data-qa="col-created-date" />
             <col key="1" data-qa="col-status-update" />
@@ -81,9 +81,7 @@ export class Logs extends React.Component<Props> {
     return (
       <tr className={"govuk-table__row"} key={`${index}_b`}>
         <td className="govuk-table__cell govuk-!-padding-top-1" key="0" colSpan={3}>
-          <div className="govuk-inset-text govuk-!-margin-top-0" style={{ whiteSpace: "pre-wrap" }}>
-            {item.comments}
-          </div>
+          <div className="govuk-inset-text govuk-!-margin-top-0 acc-logs-text">{item.comments}</div>
         </td>
       </tr>
     );

@@ -1,0 +1,13 @@
+.acc-logs-container {
+  width: 100%;
+}
+
+.acc-logs-container .acc-logs-container-table {
+  table-layout: fixed;
+}
+
+.acc-logs-container .acc-logs-text {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
