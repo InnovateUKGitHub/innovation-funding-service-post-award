@@ -702,28 +702,6 @@ exports[`Storyshots GOV.UK Components/Form/Validation Error Very Bad Story 1`] =
     >
       Child Validation Error 2
     </p>
-    <p
-      className="govuk-error-message"
-      id="Val:0"
-      style={
-        {
-          "textAlign": "left",
-        }
-      }
-    >
-      List Validation Error
-    </p>
-    <p
-      className="govuk-error-message"
-      id="Val:0"
-      style={
-        {
-          "textAlign": "left",
-        }
-      }
-    >
-      List Validation Error
-    </p>
     <div
       className="govuk-input__wrapper"
     >
