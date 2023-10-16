@@ -64,6 +64,7 @@ export function TestBed({
     options: {
       maxFileSize: 33554432,
       maxUploadFileCount: 10,
+      maxFileBasenameLength: 80,
       permittedFileTypes: [
         "pdf",
         "xps",

@@ -1516,6 +1516,7 @@
       "nameInvalidCharacters": "Your document '{{ name }}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.",
       "fileTypeInvalid": "You cannot upload '{{ name }}' because it is the wrong file type.",
       "fileSizeTooLarge": "You cannot upload '{{ name }}' because it must be smaller than {{ size }}.",
+      "fileBasenameTooLong": "You cannot upload '{{ name }}' because the name of the file must be shorter than {{ count }} characters.",
       "fileSizeEmpty": "You cannot upload '{{ name }}' because it is empty.",
       "fileRequired": "Choose a file to upload",
       "fileDescriptionInvalid": "Not a valid description",

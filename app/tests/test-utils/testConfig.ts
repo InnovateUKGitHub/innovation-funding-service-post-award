@@ -37,6 +37,7 @@ export class TestConfig implements IConfig {
   public options = {
     maxFileSize: 100000,
     maxUploadFileCount: 10,
+    maxFileBasenameLength: 80,
     permittedFileTypes: [
       "pdf",
       "xps",

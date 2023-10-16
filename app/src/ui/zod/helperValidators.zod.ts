@@ -52,12 +52,12 @@ const getSingleFileValidation = (options: IAppOptions) => {
       });
     }
 
-    if (!(file.fileName.length <= 80)) {
+    if (!(file.fileName.length <= options.maxFileBasenameLength)) {
       ctx.addIssue({
         code: ZodIssueCode.custom,
         params: {
           i18n: "errors.file_name_too_large",
-          count: 80,
+          count: options.maxFileBasenameLength,
         },
       });
     }
