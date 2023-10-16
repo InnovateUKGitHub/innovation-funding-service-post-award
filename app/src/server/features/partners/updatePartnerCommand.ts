@@ -23,10 +23,12 @@ import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { isBoolean } from "@framework/util/booleanHelper";
 import { isNumber, parseNumber } from "@framework/util/numberHelper";
 import { merge } from "lodash";
+import { Logger } from "@shared/developmentLogger";
 
 type PartnerUpdatable = Updatable<ISalesforcePartner>;
 export class UpdatePartnerCommand extends CommandBase<boolean> {
   private mergedPartner: PartnerDto | null = null;
+  private readonly logger: Logger = new Logger("UpdatePartnerCommand");
 
   constructor(
     private readonly partner: PickRequiredFromPartial<PartnerDto, "id" | "projectId">,
@@ -268,26 +270,15 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
   private collapseConditions(conditions: BankCheckCondition[]): Record<keyof BankCheckCondition, string> {
     const collapsedConditions: Record<keyof BankCheckCondition, string> = {
-      code: "",
-      description: "",
-      severity: "",
+      code: JSON.stringify(conditions.map(x => x.code)),
+      description: JSON.stringify(conditions.map(x => x.description)),
+      severity: JSON.stringify(conditions.map(x => x.severity)),
     };
 
-    if (conditions && conditions.length > 0) {
-      let shouldAddComma = false;
-
-      for (const condition of conditions) {
-        if (shouldAddComma) {
-          collapsedConditions.severity += ", ";
-          collapsedConditions.code += ", ";
-          collapsedConditions.description += ", ";
-        }
-
-        collapsedConditions.severity += condition.severity;
-        collapsedConditions.code += condition.code?.toString() || "N/A";
-        collapsedConditions.description += condition.description;
-
-        shouldAddComma = true;
+    for (const key of ["code", "description", "severity"] as const) {
+      if (collapsedConditions[key].length > 255) {
+        this.logger.warn(`Collapsed SIL conditions ${key} would be longer than Salesforce limit.`);
+        collapsedConditions[key] = "null";
       }
     }
 
