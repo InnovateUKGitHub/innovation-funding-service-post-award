@@ -212,7 +212,12 @@ export class Context implements IContext {
     try {
       if (runnable.accessControl) {
         const authorisation = await this.getAuthorisation();
-        if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
+        const accessControlPass = await runnable.accessControl(authorisation, this);
+        if (!accessControlPass) {
+          this.logger.error(`Access control failed for ${runnable.constructor.name}`);
+          this.logger.debug(`Access control authorisation: `, authorisation.permissions);
+          throw new ForbiddenError(`Access control failed for ${runnable.constructor.name}`);
+        }
       }
       // await the run because of the finally
       return await runnable.run(this);
