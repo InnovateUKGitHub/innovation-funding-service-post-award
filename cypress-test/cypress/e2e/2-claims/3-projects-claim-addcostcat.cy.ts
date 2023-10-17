@@ -95,7 +95,7 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   it("Should return you to the cost category page", returnToCostCatPage);
 
   it("Should show accordions", () => {
-    cy.get("span").contains("Show all sections").click();
+    cy.get("span").contains("Status and comments log").click();
     cy.paragraph("There are no changes");
   });
 });

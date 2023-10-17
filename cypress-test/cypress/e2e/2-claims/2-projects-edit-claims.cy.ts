@@ -33,7 +33,7 @@ describe("claims > edit claims as FC", () => {
   });
 
   it("Should show accordions", () => {
-    cy.get("span").contains("Show all sections").click();
+    cy.get("span").contains("Status and comments log").click();
     cy.paragraph("There are no changes");
   });
 
