@@ -75,7 +75,7 @@ export default defineConfig({
     },
     testIsolation: false,
   },
-  retries: 1,
+  retries: { openMode: null, runMode: 1 },
   experimentalWebKitSupport: true,
 });
 
