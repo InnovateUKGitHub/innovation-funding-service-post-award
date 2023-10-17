@@ -30,6 +30,7 @@ import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadP
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ApiParams, ControllerBase } from "./controllerBase";
+import { DocumentUploadEventEmitter } from "@server/eventEmitter";
 
 export interface IDocumentsApi<Context extends "client" | "server"> {
   getClaimDocuments: (
@@ -78,6 +79,9 @@ export interface IDocumentsApi<Context extends "client" | "server"> {
   uploadProjectDocument: (
     params: ApiParams<Context, { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
   ) => Promise<{ documentIds: string[] }>;
+  subscribeToUploadProjectDocument: (
+    params: ApiParams<Context, { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
+  ) => DocumentUploadEventEmitter;
   uploadPartnerDocument: (
     params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; documents: MultipleDocumentUploadDto }>,
   ) => Promise<{ documentIds: string[] }>;
@@ -280,7 +284,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
 
     this.postAttachments(
       "/projects/:projectId",
-      p => ({ projectId: p.projectId }),
+      p => ({ projectId: p.projectId, ws: p.ws }),
       p => this.uploadProjectDocument(p),
     );
 
@@ -474,6 +478,21 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
     const insertedIDs = await contextProvider.start(params).runCommand(command);
 
     return { documentIds: insertedIDs };
+  }
+
+  public subscribeToUploadProjectDocument(
+    params: ApiParams<"server", { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
+  ) {
+    const eventEmitter = new DocumentUploadEventEmitter();
+
+    const command = new UploadProjectDocumentCommand(params.projectId, params.documents, eventEmitter);
+    contextProvider.start(params).runCommand(command);
+
+    eventEmitter.on("documentUploaded", data => {
+      console.log(data);
+    });
+
+    return eventEmitter;
   }
 
   public async uploadPartnerDocument(
