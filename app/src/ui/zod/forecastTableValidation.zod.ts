@@ -5,7 +5,7 @@ import {
 } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/getForecastHeaderContent";
 import {
   mapToForecastTableDto,
-  TablecraftProps,
+  MapToForecastTableProps,
 } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useMapToForecastTableDto";
 import { z, ZodIssueCode } from "zod";
 import { FormTypes } from "./FormTypes";
@@ -17,7 +17,7 @@ import {
 } from "./helperValidators.zod";
 
 type ForecastTableSchemaType = ReturnType<typeof getForecastTableValidation>["schema"];
-const getForecastTableValidation = (data: Omit<TablecraftProps, "clientProfiles">) => {
+const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientProfiles">) => {
   const errorMap = makeZodI18nMap({ keyPrefix: ["forecastTable"], context: data });
 
   const schema = z

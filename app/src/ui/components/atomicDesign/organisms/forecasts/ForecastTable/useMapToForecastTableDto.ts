@@ -12,7 +12,7 @@ import { CostCategoryType } from "@framework/constants/enums";
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
 
-export interface TablecraftProps {
+export interface MapToForecastTableProps {
   project: Pick<ProjectDto, "numberOfPeriods">;
   partner: Pick<PartnerDtoGql, "overheadRate">;
   claims: Pick<
@@ -81,7 +81,7 @@ const mapToForecastTableDto = ({
   costCategories,
   profiles,
   clientProfiles,
-}: TablecraftProps): ForecastTableDto => {
+}: MapToForecastTableProps): ForecastTableDto => {
   const costCatAccum: CostCategoryRow[] = [];
   const periodTotals: TotalCellData[] = [];
   const statusCells: StatusCell[] = [];
@@ -285,7 +285,7 @@ const mapToForecastTableDto = ({
   };
 };
 
-const useMapToForecastTableDto = (props: TablecraftProps): ForecastTableDto => {
+const useMapToForecastTableDto = (props: MapToForecastTableProps): ForecastTableDto => {
   // Memoise our data...
   // With so much calculation, it's probably a good idea.
   return useMemo(() => mapToForecastTableDto(props), [props]);

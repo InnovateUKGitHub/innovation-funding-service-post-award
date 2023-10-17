@@ -10,7 +10,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { claimPeriodDateFragment } from "./ClaimPeriodDate.fragment";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { head } from "lodash";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 
 export const ClaimPeriodDate = () => {
   const fragmentRef = useFragmentContext();
@@ -24,7 +24,7 @@ export const ClaimPeriodDate = () => {
 
   const partner = mapToPartnerDto(partnerNode, ["isLead", "isWithdrawn", "name"], {});
   const claim = head(
-    mapToClaimDtoArray(
+    mapToClaimsDtoArray(
       fragment?.query?.ClaimPeriodDate_Claims?.edges ?? [],
       ["periodEndDate", "periodId", "periodStartDate"],
       {},
