@@ -122,7 +122,7 @@ describe("PCR > Reasoning section", () => {
     cy.get("#reasoningComments-hint").contains(
       "You must explain each change. Be brief and write clearly. If you are requesting a reallocation of project costs, you must justify each change to your costs.",
     );
-    cy.get("textarea").contains("Swindon");
+    cy.get("textarea").should("have.value", "Swindon");
   });
 
   it("Should have a character count that dynamically changes", () => {

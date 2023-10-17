@@ -1150,11 +1150,11 @@ export const validateChangeName = () => {
 };
 
 export const clearAndValidate = () => {
-  cy.get("textarea").contains("Hello! I am the public description for this Cypress project.").clear();
+  cy.get("textarea").should("have.value", "Hello! I am the public description for this Cypress project. \\").clear();
   cy.wait(500);
   cy.submitButton("Save and continue").click();
   cy.heading("Change project scope");
-  cy.get("textarea").contains("Howdy! I am the public summary for this Cypress project.").clear();
+  cy.get("textarea").should("have.value", "Howdy! I am the public summary for this Cypress project. \\").clear();
   cy.wait(500);
   cy.submitButton("Save and continue").click();
   cy.get("h2").contains("Mark as complete");
@@ -1457,7 +1457,7 @@ export const populateCommentsAndSave = () => {
 export const accessPcrCheckForComments = () => {
   cy.tableCell("Draft").siblings().contains("Edit").click();
   cy.heading("Request");
-  cy.get("textarea").contains(standardComments);
+  cy.get("textarea").should("have.value", standardComments);
 };
 
 export const backOutToProjOverview = () => {

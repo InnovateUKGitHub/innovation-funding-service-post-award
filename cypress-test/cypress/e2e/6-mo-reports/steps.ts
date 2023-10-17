@@ -683,14 +683,14 @@ export const saveSectionOneAndCheckSummary = () => {
 export const assertSection7Comments = () => {
   cy.backLink("Back to summary").click();
   cy.get("legend").contains("Summary");
-  cy.get("textarea").contains(section7Comments);
+  cy.get("textarea").should("have.value", section7Comments);
 };
 
 export const assertSectionCommentsAndScore = (title: string, section: number) => {
   cy.backLink(`Back to ${title.toLowerCase()}`).click();
   cy.get("legend").contains(title);
   cy.getByQA(`question-${String(section)}-score-1`).should("have.attr", "checked");
-  cy.get("textarea").contains(`Section ${String(section)} // *&^%`);
+  cy.get("textarea").should("have.value", `Section ${String(section)} // *&^%`);
 };
 
 export const deleteUsingCorrectDeleteButton = () => {
@@ -715,5 +715,5 @@ export const saveCommentsAndReturn = () => {
 export const checkCommentsSaved = () => {
   cy.get("a").contains("Edit").click();
   cy.heading("Monitoring report");
-  cy.get("textarea").should("have.text", standardComments);
+  cy.get("textarea").should("have.value", standardComments);
 };
