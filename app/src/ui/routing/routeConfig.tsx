@@ -6,7 +6,7 @@ import { ClaimForecastRoute } from "@ui/containers/pages/claims/claimForecast.pa
 import { ClaimLineItemsRoute, ReviewClaimLineItemsRoute } from "@ui/containers/pages/claims/claimLineItems.page";
 import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/dashboard.page";
 import { EditClaimLineItemsRoute } from "@ui/containers/pages/claims/editClaimLineItems.page";
-import { ClaimSummaryRoute } from "@ui/containers/pages/claims/summary.page";
+import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
 import { DeveloperHomePage } from "@ui/containers/pages/developer/home.page";
 import { DeveloperPageCrasherPage } from "@ui/containers/pages/developer/PageCrasher.page";
 import { DeveloperPageCrasherForbiddenPage } from "@ui/containers/pages/developer/PageCrasherForbidden.page";

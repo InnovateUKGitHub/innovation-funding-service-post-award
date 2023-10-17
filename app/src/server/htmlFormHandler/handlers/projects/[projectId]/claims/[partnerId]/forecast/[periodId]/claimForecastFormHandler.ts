@@ -14,7 +14,7 @@ import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProje
 import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ClaimForecastParams, ClaimForecastRoute } from "@ui/containers/pages/claims/claimForecast.page";
 import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/dashboard.page";
-import { ClaimSummaryRoute } from "@ui/containers/pages/claims/summary.page";
+import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 
 export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForecastParams, "forecastDetails"> {
