@@ -29,56 +29,48 @@ class TestCompaniesHouse implements ICompaniesHouseBase {
   }
 }
 
-type Score = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | null;
+type Score = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | null;
 type MatchFlag = "Match" | "No Match" | null;
 
 class TestBankCheckService implements IBankCheckService {
-  private readonly passConditions: BankCheckCondition = {
+  private readonly passCondition: BankCheckCondition = {
     severity: "warning",
     code: 2,
     description: "description",
   };
 
-  private readonly failConditions: BankCheckCondition = {
+  private readonly failCondition: BankCheckCondition = {
     severity: "error",
     code: 3,
     description: "error description",
   };
 
   private readonly passValidation = {
-    ValidationResult: {
-      checkPassed: true,
-      iban: "123456",
-      conditions: this.passConditions,
-    },
+    checkPassed: true,
+    iban: "123456",
+    conditions: [this.passCondition],
   };
 
   private readonly failValidation = {
-    ValidationResult: {
-      checkPassed: false,
-      iban: null,
-      conditions: this.failConditions,
-    },
+    checkPassed: false,
+    iban: null,
+    conditions: [this.failCondition],
   };
 
   private readonly passVerify = {
-    VerificationResult: {
-      addressScore: 7 as Score,
-      companyNameScore: 8 as Score,
-      personalDetailsScore: 7 as Score,
-      regNumberScore: "Match" as MatchFlag,
-      conditions: this.passConditions,
-    },
+    addressScore: "7" as Score,
+    companyNameScore: "8" as Score,
+    personalDetailsScore: "7" as Score,
+    regNumberScore: "Match" as MatchFlag,
+    conditions: [this.passCondition],
   };
 
   private readonly failVerify = {
-    VerificationResult: {
-      addressScore: 0 as Score,
-      companyNameScore: 1 as Score,
-      personalDetailsScore: 2 as Score,
-      regNumberScore: "No Match" as MatchFlag,
-      conditions: this.failConditions,
-    },
+    addressScore: "0" as Score,
+    companyNameScore: "1" as Score,
+    personalDetailsScore: "2" as Score,
+    regNumberScore: "No Match" as MatchFlag,
+    conditions: [this.failCondition],
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

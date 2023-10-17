@@ -222,9 +222,9 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     // Save Experian errors and warnings to Salesforce
     if (VerificationResult.conditions) {
       const { severity, code, description } = this.collapseConditions(VerificationResult.conditions);
-      update.Acc_ValidationConditionsSeverity__c = severity;
-      update.Acc_ValidationConditionsCode__c = code;
-      update.Acc_ValidationConditionsDesc__c = description;
+      update.Acc_VerificationConditionsSeverity__c = severity;
+      update.Acc_VerificationConditionsCode__c = code;
+      update.Acc_VerificationConditionsDesc__c = description;
     }
   }
 
