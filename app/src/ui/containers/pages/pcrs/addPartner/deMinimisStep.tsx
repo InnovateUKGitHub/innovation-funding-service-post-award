@@ -31,6 +31,8 @@ const DeMinimisStepUi = ({
   onSave,
   ...props
 }: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & DeMinimisStepUiProps) => {
+  const { getContent } = useContent();
+
   const renderTemplateLinks = (itemType: PCRItemTypeDto) => {
     if (!itemType.files || !itemType.files.length) {
       return null;
@@ -42,7 +44,7 @@ const DeMinimisStepUi = ({
           openNewWindow
           links={itemType.files.map(x => ({
             url: x.relativeUrl,
-            text: x => x.pcrAddPartnerLabels.deMinimisDeclarationForm,
+            text: getContent(x => x.pcrAddPartnerLabels.deMinimisDeclarationForm),
           }))}
         />
       </Section>

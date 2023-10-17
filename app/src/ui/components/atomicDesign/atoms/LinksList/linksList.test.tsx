@@ -29,8 +29,8 @@ describe("<LinksList />", () => {
       if (!expectedLink) throw Error("Link not found :(");
 
       expect(expectedLink.getAttribute("href")).toBe(oneLink.url);
-      expect(expectedLink.getAttribute("target")).toBe("");
-      expect(expectedLink.getAttribute("rel")).toBe("");
+      expect(expectedLink.getAttribute("target")).toBeNull();
+      expect(expectedLink.getAttribute("rel")).toBeNull();
       expect(expectedLink.classList.item(0)).toBe("govuk-link");
       expect(expectedLink.classList.item(1)).toBe("govuk-!-font-size-19");
       expect(expectedLink.innerHTML).toBe(oneLink.text);
@@ -51,8 +51,8 @@ describe("<LinksList />", () => {
 
       queriedLinks.forEach((link, i) => {
         expect(link.getAttribute("href")).toBe(stubLinks[i].url);
-        expect(link.getAttribute("target")).toBe("");
-        expect(link.getAttribute("rel")).toBe("");
+        expect(link.getAttribute("target")).toBeNull();
+        expect(link.getAttribute("rel")).toBeNull();
         expect(link.classList.item(0)).toBe("govuk-link");
         expect(link.classList.item(1)).toBe("govuk-!-font-size-19");
         expect(link.innerHTML).toBe(stubLinks[i].text);

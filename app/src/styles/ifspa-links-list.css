@@ -1,0 +1,12 @@
+.acc-links-list {
+  padding: 0;
+  list-style: none;
+}
+
+.acc-links-list .acc-links-list-item {
+  margin-bottom: 0.5em;
+}
+
+.acc-links-list .acc-links-list-item:last-child {
+  margin: 0;
+}
