@@ -42,6 +42,9 @@ export const pcrDeleteQuery = graphql`
                           value
                           label
                         }
+                        DeveloperName {
+                          value
+                        }
                       }
                     }
                   }
