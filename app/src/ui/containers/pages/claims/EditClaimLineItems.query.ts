@@ -19,7 +19,7 @@ export const editClaimLineItemsQuery = graphql`
               and: [
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
                 { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
-                { RecordType: { Name: { eq: "Profile Detail" } } }
+                { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
                 { Acc_CostCategory__c: { eq: $costCategoryId } }
               ]
             }
@@ -47,7 +47,7 @@ export const editClaimLineItemsQuery = graphql`
                   value
                 }
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -63,8 +63,8 @@ export const editClaimLineItemsQuery = graphql`
                 { Acc_CostCategory__c: { eq: $costCategoryId } }
                 {
                   or: [
-                    { RecordType: { Name: { eq: "Claims Detail" } } }
-                    { RecordType: { Name: { eq: "Claims Line Item" } } }
+                    { RecordType: { DeveloperName: { eq: "Claims_Detail" } } }
+                    { RecordType: { DeveloperName: { eq: "Claims_Line_Item" } } }
                   ]
                 }
                 { Acc_ClaimStatus__c: { ne: "New" } }
@@ -77,7 +77,7 @@ export const editClaimLineItemsQuery = graphql`
               node {
                 Id
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }

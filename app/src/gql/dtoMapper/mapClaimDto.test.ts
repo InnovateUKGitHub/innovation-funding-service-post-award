@@ -6,8 +6,8 @@ describe("mapToClaimDtoArray", () => {
       node: {
         Id: "a0526000009Mc2aAAC",
         RecordType: {
-          Name: {
-            value: "Total Project Period",
+          DeveloperName: {
+            value: "Total_Project_Period",
           },
         },
         LastModifiedDate: {
@@ -44,8 +44,8 @@ describe("mapToClaimDtoArray", () => {
       node: {
         Id: "a0526000009Mc1OAAS",
         RecordType: {
-          Name: {
-            value: "Total Project Period",
+          DeveloperName: {
+            value: "Total_Project_Period",
           },
         },
         LastModifiedDate: {
@@ -82,8 +82,8 @@ describe("mapToClaimDtoArray", () => {
       node: {
         Id: "a0526000009Mc2RAAS",
         RecordType: {
-          Name: {
-            value: "Total Project Period",
+          DeveloperName: {
+            value: "Total_Project_Period",
           },
         },
         LastModifiedDate: {
@@ -120,8 +120,8 @@ describe("mapToClaimDtoArray", () => {
       node: {
         Id: "a0526000009Mc2QAAS",
         RecordType: {
-          Name: {
-            value: "Total Project Period",
+          DeveloperName: {
+            value: "Total_Project_Period",
           },
         },
         LastModifiedDate: {
@@ -172,8 +172,8 @@ describe("mapToClaimDtoArray", () => {
         },
         Impact_Management_Participation__c: { value: "Yes" },
         RecordType: {
-          Name: {
-            value: "Total Project Period",
+          DeveloperName: {
+            value: "Total_Project_Period",
           },
         },
         LastModifiedDate: {
@@ -193,8 +193,8 @@ describe("mapToClaimDtoArray", () => {
         Acc_ClaimStatus__c: null,
         Impact_Management_Participation__c: null,
         RecordType: {
-          Name: {
-            value: "Total Project Period",
+          DeveloperName: {
+            value: "Total_Project_Period",
           },
         },
       },
@@ -213,8 +213,8 @@ describe("mapToClaimDtoArray", () => {
         },
         Impact_Management_Participation__c: { value: "No" },
         RecordType: {
-          Name: {
-            value: "Total Project Period",
+          DeveloperName: {
+            value: "Total_Project_Period",
           },
         },
         Acc_ClaimStatus__c: {

@@ -9,7 +9,7 @@ export const claimPeriodDateFragment = graphql`
             { Acc_ProjectID__c: { eq: $projectIdStr } }
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
             { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
-            { RecordType: { Name: { eq: "Total Project Period" } } }
+            { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
           ]
         }
         first: 2000
@@ -19,7 +19,7 @@ export const claimPeriodDateFragment = graphql`
           node {
             Id
             RecordType {
-              Name {
+              DeveloperName {
                 value
               }
             }

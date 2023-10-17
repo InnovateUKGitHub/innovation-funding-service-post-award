@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0a47e4150e30dcebbee4b69c9c60933a>>
+ * @generated SignedSource<<dcedce59dd29cd8260c6daefbbe08ad6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,7 +23,7 @@ export type ForecastTableFragment$data = {
           } | null;
           readonly Id: string;
           readonly RecordType: {
-            readonly Name: {
+            readonly DeveloperName: {
               readonly value: string | null;
             } | null;
           } | null;
@@ -52,7 +52,7 @@ export type ForecastTableFragment$data = {
             readonly value: string | null;
           } | null;
           readonly RecordType: {
-            readonly Name: {
+            readonly DeveloperName: {
               readonly value: string | null;
             } | null;
           } | null;
@@ -72,7 +72,7 @@ export type ForecastTableFragment$data = {
             readonly value: number | null;
           } | null;
           readonly RecordType: {
-            readonly Name: {
+            readonly DeveloperName: {
               readonly value: string | null;
             } | null;
           } | null;
@@ -118,7 +118,7 @@ export type ForecastTableFragment$data = {
           } | null;
           readonly Id: string;
           readonly RecordType: {
-            readonly Name: {
+            readonly DeveloperName: {
               readonly value: string | null;
             } | null;
           } | null;
@@ -136,7 +136,7 @@ export type ForecastTableFragment$data = {
           } | null;
           readonly Id: string;
           readonly RecordType: {
-            readonly Name: {
+            readonly DeveloperName: {
               readonly value: string | null;
             } | null;
           } | null;
@@ -251,8 +251,8 @@ v6 = [
             "name": "and.1",
             "value": {
               "RecordType": {
-                "Name": {
-                  "eq": "Profile Detail"
+                "DeveloperName": {
+                  "eq": "Profile_Detail"
                 }
               }
             }
@@ -323,36 +323,35 @@ v12 = {
   "selections": (v8/*: any*/),
   "storageKey": null
 },
-v13 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "StringValue",
-    "kind": "LinkedField",
-    "name": "Name",
-    "plural": false,
-    "selections": (v8/*: any*/),
-    "storageKey": null
-  }
-],
-v14 = {
+v13 = {
   "alias": null,
   "args": null,
   "concreteType": "RecordType",
   "kind": "LinkedField",
   "name": "RecordType",
   "plural": false,
-  "selections": (v13/*: any*/),
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "StringValue",
+      "kind": "LinkedField",
+      "name": "DeveloperName",
+      "plural": false,
+      "selections": (v8/*: any*/),
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 },
-v15 = {
+v14 = {
   "RecordType": {
-    "Name": {
-      "eq": "Total Project Period"
+    "DeveloperName": {
+      "eq": "Total_Project_Period"
     }
   }
 },
-v16 = {
+v15 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -362,14 +361,7 @@ v16 = {
   "selections": (v8/*: any*/),
   "storageKey": null
 },
-v17 = {
-  "RecordType": {
-    "Name": {
-      "eq": "Claims Detail"
-    }
-  }
-},
-v18 = [
+v16 = [
   {
     "kind": "Variable",
     "name": "eq",
@@ -477,7 +469,7 @@ return {
                       "selections": (v8/*: any*/),
                       "storageKey": null
                     },
-                    (v14/*: any*/)
+                    (v13/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -501,8 +493,8 @@ return {
                       "name": "and.1",
                       "value": {
                         "RecordType": {
-                          "Name": {
-                            "eq": "Total Cost Category"
+                          "DeveloperName": {
+                            "eq": "Total_Cost_Category"
                           }
                         }
                       }
@@ -550,7 +542,7 @@ return {
                       "selections": (v8/*: any*/),
                       "storageKey": null
                     },
-                    (v14/*: any*/)
+                    (v13/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -572,7 +564,7 @@ return {
                     {
                       "kind": "Literal",
                       "name": "and.1",
-                      "value": (v15/*: any*/)
+                      "value": (v14/*: any*/)
                     },
                     {
                       "kind": "Literal",
@@ -622,9 +614,9 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v14/*: any*/),
+                    (v13/*: any*/),
                     (v7/*: any*/),
-                    (v16/*: any*/),
+                    (v15/*: any*/),
                     (v10/*: any*/)
                   ],
                   "storageKey": null
@@ -660,7 +652,13 @@ return {
                     {
                       "kind": "Literal",
                       "name": "and.1",
-                      "value": (v17/*: any*/)
+                      "value": {
+                        "RecordType": {
+                          "Name": {
+                            "eq": "Claims Detail"
+                          }
+                        }
+                      }
                     },
                     {
                       "kind": "Literal",
@@ -706,9 +704,9 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v14/*: any*/),
+                    (v13/*: any*/),
                     (v9/*: any*/),
-                    (v16/*: any*/),
+                    (v15/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -766,8 +764,14 @@ return {
                       "name": "and.2",
                       "value": {
                         "or": [
-                          (v15/*: any*/),
-                          (v17/*: any*/)
+                          (v14/*: any*/),
+                          {
+                            "RecordType": {
+                              "DeveloperName": {
+                                "eq": "Claims_Detail"
+                              }
+                            }
+                          }
                         ]
                       }
                     }
@@ -801,7 +805,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v14/*: any*/),
+                    (v13/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -919,7 +923,7 @@ return {
                     {
                       "fields": [
                         {
-                          "fields": (v18/*: any*/),
+                          "fields": (v16/*: any*/),
                           "kind": "ObjectValue",
                           "name": "Acc_ProjectId__c"
                         }
@@ -976,7 +980,18 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_AccountId__r",
                       "plural": false,
-                      "selections": (v13/*: any*/),
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "StringValue",
+                          "kind": "LinkedField",
+                          "name": "Name",
+                          "plural": false,
+                          "selections": (v8/*: any*/),
+                          "storageKey": null
+                        }
+                      ],
                       "storageKey": null
                     },
                     {
@@ -1039,7 +1054,7 @@ return {
             {
               "fields": [
                 {
-                  "fields": (v18/*: any*/),
+                  "fields": (v16/*: any*/),
                   "kind": "ObjectValue",
                   "name": "Id"
                 }
@@ -1128,6 +1143,6 @@ return {
 };
 })();
 
-(node as any).hash = "d5190c4f75ecef0ad158c36459365e28";
+(node as any).hash = "b5f0ccc3ec68c4038c7a8e851db2553d";
 
 export default node;

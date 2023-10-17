@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d87a35065c09f560fa37f7542204ea09>>
+ * @generated SignedSource<<6b97154622d0ae6da6df1dc780a99fa4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -49,6 +49,9 @@ export type PCRDashboardQuery$data = {
                       readonly value: string | null;
                     } | null;
                     readonly RecordType: {
+                      readonly DeveloperName: {
+                        readonly value: string | null;
+                      } | null;
                       readonly Name: {
                         readonly label: string | null;
                         readonly value: string | null;
@@ -353,6 +356,16 @@ v4 = [
                                               }
                                             ],
                                             "storageKey": null
+                                          },
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "StringValue",
+                                            "kind": "LinkedField",
+                                            "name": "DeveloperName",
+                                            "plural": false,
+                                            "selections": (v3/*: any*/),
+                                            "storageKey": null
                                           }
                                         ],
                                         "storageKey": null
@@ -403,16 +416,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "52318cf89a5ecb97a8adc1a926fc337c",
+    "cacheID": "5935e534f474eb37ddec05fffadf4d64",
     "id": null,
     "metadata": {},
     "name": "PCRDashboardQuery",
     "operationKind": "query",
-    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PCRDashboardQuery(\n  $projectId: ID\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, orderBy: {Acc_RequestNumber__c: {order: DESC}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ea615a9ec064cdc27139f6a4d9c5fe22";
+(node as any).hash = "102762040c3b4dfcf167784701f87037";
 
 export default node;

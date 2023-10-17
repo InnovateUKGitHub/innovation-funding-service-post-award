@@ -15,8 +15,8 @@ export const claimPrepareQuery = graphql`
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
                 {
                   or: [
-                    { RecordType: { Name: { eq: "Profile Detail" } } }
-                    { RecordType: { Name: { eq: "Total Cost Category" } } }
+                    { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
+                    { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
                   ]
                 }
                 { Acc_CostCategory__c: { ne: null } }
@@ -28,7 +28,7 @@ export const claimPrepareQuery = graphql`
               node {
                 Id
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -61,11 +61,6 @@ export const claimPrepareQuery = graphql`
                 Acc_LatestForecastCost__c {
                   value
                 }
-                RecordType {
-                  Name {
-                    value
-                  }
-                }
               }
             }
           }
@@ -76,8 +71,8 @@ export const claimPrepareQuery = graphql`
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
                 {
                   or: [
-                    { RecordType: { Name: { eq: "Total Project Period" } } }
-                    { RecordType: { Name: { eq: "Claims Detail" } } }
+                    { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
+                    { RecordType: { DeveloperName: { eq: "Claims_Detail" } } }
                   ]
                 }
                 { Acc_ClaimStatus__c: { ne: "New" } }
@@ -91,7 +86,7 @@ export const claimPrepareQuery = graphql`
               node {
                 Id
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }

@@ -23,8 +23,8 @@ describe("mapToClaimDetailsArray", () => {
           value: "Current",
         },
         RecordType: {
-          Name: {
-            value: "Claims Detail",
+          DeveloperName: {
+            value: "Claims_Detail",
           },
         },
       },
@@ -50,8 +50,8 @@ describe("mapToClaimDetailsArray", () => {
           value: "Current",
         },
         RecordType: {
-          Name: {
-            value: "Claims Detail",
+          DeveloperName: {
+            value: "Claims_Detail",
           },
         },
       },
@@ -69,8 +69,8 @@ describe("mapToClaimDetailsArray", () => {
           value: "Current",
         },
         RecordType: {
-          Name: {
-            value: "Claims Detail",
+          DeveloperName: {
+            value: "Claims_Detail",
           },
         },
       },
@@ -88,8 +88,8 @@ describe("mapToClaimDetailsArray", () => {
           value: "Current",
         },
         RecordType: {
-          Name: {
-            value: "Claims Detail",
+          DeveloperName: {
+            value: "Claims_Detail",
           },
         },
       },
@@ -115,8 +115,8 @@ describe("mapToClaimDetailsArray", () => {
           value: "New",
         },
         RecordType: {
-          Name: {
-            value: "Claims Detail",
+          DeveloperName: {
+            value: "Claims_Detail",
           },
         },
       },
@@ -142,7 +142,7 @@ describe("mapToClaimDetailsArray", () => {
           value: "Current",
         },
         RecordType: {
-          Name: {
+          DeveloperName: {
             value: "Random",
           },
         },

@@ -9,7 +9,6 @@ import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsD
 import { editClaimLineItemsQuery } from "./EditClaimLineItems.query";
 import { EditClaimLineItemsQuery } from "./__generated__/EditClaimLineItemsQuery.graphql";
 import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
-// import { mapToClaimLineItemDtoArray } from "@gql/dtoMapper/mapClaimLineItemDto";
 
 export const useEditClaimLineItemsData = (
   projectId: ProjectId,

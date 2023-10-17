@@ -1,3 +1,4 @@
+import { Profile } from "@framework/constants/recordTypes";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { Clock, salesforceDateFormat } from "@framework/util/clock";
 
@@ -12,7 +13,7 @@ type ForecastDetailsNode = Readonly<
     Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
     Acc_ProjectPeriodNumber__c: GQL.Value<number>;
     RecordType: {
-      Name: GQL.Value<string>;
+      DeveloperName: GQL.Value<string>;
     } | null;
   }>
 > | null;
@@ -63,7 +64,7 @@ export function mapToForecastDetailsDtoArray<
 >(edges: T, pickList: PickList[]): Pick<ForecastDetailsDtoMapping, PickList>[] {
   return (
     edges
-      ?.filter(x => x?.node?.RecordType?.Name?.value === "Profile Detail")
+      ?.filter(x => x?.node?.RecordType?.DeveloperName?.value === Profile.profileDetails)
       ?.map(node => {
         return mapToForecastDetailsDto(node?.node ?? null, pickList);
       }) ?? []

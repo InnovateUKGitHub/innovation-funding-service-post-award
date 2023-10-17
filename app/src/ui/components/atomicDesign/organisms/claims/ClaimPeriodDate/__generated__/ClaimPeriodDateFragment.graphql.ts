@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1f82692541f8d0497135c0af4a0f85d6>>
+ * @generated SignedSource<<a6ccbb4dc2d13380c6bb8fff2c90b383>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,7 +26,7 @@ export type ClaimPeriodDateFragment$data = {
           } | null;
           readonly Id: string;
           readonly RecordType: {
-            readonly Name: {
+            readonly DeveloperName: {
               readonly value: string | null;
             } | null;
           } | null;
@@ -85,18 +85,6 @@ v3 = [
     "args": null,
     "kind": "ScalarField",
     "name": "value",
-    "storageKey": null
-  }
-],
-v4 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "StringValue",
-    "kind": "LinkedField",
-    "name": "Name",
-    "plural": false,
-    "selections": (v3/*: any*/),
     "storageKey": null
   }
 ];
@@ -202,8 +190,8 @@ return {
                       "name": "and.3",
                       "value": {
                         "RecordType": {
-                          "Name": {
-                            "eq": "Total Project Period"
+                          "DeveloperName": {
+                            "eq": "Total_Project_Period"
                           }
                         }
                       }
@@ -246,7 +234,18 @@ return {
                       "kind": "LinkedField",
                       "name": "RecordType",
                       "plural": false,
-                      "selections": (v4/*: any*/),
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "StringValue",
+                          "kind": "LinkedField",
+                          "name": "DeveloperName",
+                          "plural": false,
+                          "selections": (v3/*: any*/),
+                          "storageKey": null
+                        }
+                      ],
                       "storageKey": null
                     },
                     {
@@ -362,7 +361,18 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_AccountId__r",
                       "plural": false,
-                      "selections": (v4/*: any*/),
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "StringValue",
+                          "kind": "LinkedField",
+                          "name": "Name",
+                          "plural": false,
+                          "selections": (v3/*: any*/),
+                          "storageKey": null
+                        }
+                      ],
                       "storageKey": null
                     },
                     {
@@ -403,6 +413,6 @@ return {
 };
 })();
 
-(node as any).hash = "61deaadf698fe0e4edd2d9c28b17a3b0";
+(node as any).hash = "011839ba3feea3d0cb2e4748c3307116";
 
 export default node;

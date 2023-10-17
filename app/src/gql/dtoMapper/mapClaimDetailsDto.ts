@@ -6,6 +6,7 @@ import {
   ClaimLineItemDtoMapping,
   mapToClaimLineItemDtoArray,
 } from "./mapClaimLineItemDto";
+import { Claims } from "@framework/constants/recordTypes";
 
 const clock = new Clock();
 
@@ -24,7 +25,7 @@ type ClaimDetailsNode = Readonly<
       Email?: GQL.Value<string>;
     } | null;
     RecordType: {
-      Name: GQL.Value<string>;
+      DeveloperName: GQL.Value<string>;
     } | null;
   }>
 > | null;
@@ -115,7 +116,7 @@ export function mapToClaimDetailsDtoArray<
     edges
       ?.filter(
         x =>
-          x?.node?.RecordType?.Name?.value === "Claims Detail" &&
+          x?.node?.RecordType?.DeveloperName?.value === Claims.claimsDetail &&
           x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
           x?.node?.Acc_CostCategory__c?.value !== null,
       )
@@ -143,7 +144,7 @@ export function mapToClaimDetailsWithLineItemsDtoArray<
   const claimDetailsEdges =
     edges?.filter(
       x =>
-        x?.node?.RecordType?.Name?.value === "Claims Detail" &&
+        x?.node?.RecordType?.DeveloperName?.value === Claims.claimsDetail &&
         x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
         x?.node?.Acc_CostCategory__c?.value !== null,
     ) || null;
@@ -152,7 +153,9 @@ export function mapToClaimDetailsWithLineItemsDtoArray<
 
   const claimLineItemsEdges =
     edges?.filter(
-      x => x?.node?.RecordType?.Name?.value === "Claims Line Item" && x?.node?.Acc_CostCategory__c?.value !== null,
+      x =>
+        x?.node?.RecordType?.DeveloperName?.value === Claims.claimsLineItem &&
+        x?.node?.Acc_CostCategory__c?.value !== null,
     ) || null;
 
   const claimLineItems = mapToClaimLineItemDtoArray(

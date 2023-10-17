@@ -1,4 +1,5 @@
 import { TypeOfAid } from "@framework/constants/project";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { PCRDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import {
   getPCROrganisationType,
@@ -300,7 +301,7 @@ export function mapToPcrDtoArray<
 
   for (const pcr of pcrs) {
     if (typeof pcr === null) continue;
-    if (pcr?.node?.RecordType?.Name?.value === "Request Header") {
+    if (pcr?.node?.RecordType?.DeveloperName?.value === ProjectChangeRequest.requestHeader) {
       const childPcrs = [];
 
       for (const childPcr of pcrs) {

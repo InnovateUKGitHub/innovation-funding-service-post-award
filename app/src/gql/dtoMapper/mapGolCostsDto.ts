@@ -1,3 +1,4 @@
+import { Profile } from "@framework/constants/recordTypes";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 
 type GolCostNode = Readonly<
@@ -6,7 +7,7 @@ type GolCostNode = Readonly<
     Acc_CostCategory__c: GQL.Value<string>;
     Acc_CostCategoryGOLCost__c: GQL.Value<number>;
     RecordType: {
-      Name: GQL.Value<string>;
+      DeveloperName?: GQL.Value<string>;
     } | null;
   }>
 > | null;
@@ -63,7 +64,7 @@ export function mapToGolCostDtoArray<
 ): Pick<GolCostDtoMapping, PickList>[] {
   return (
     edges
-      ?.filter(x => x?.node?.RecordType?.Name?.value === "Total Cost Category")
+      ?.filter(x => x?.node?.RecordType?.DeveloperName?.value === Profile.totalCostCategory)
       ?.map(node => {
         return mapToGolCostDto(node?.node ?? null, pickList, { costCategories });
       }) ?? []

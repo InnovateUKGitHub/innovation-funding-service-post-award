@@ -11,8 +11,8 @@ export const updateForecastQuery = graphql`
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
                 {
                   or: [
-                    { RecordType: { Name: { eq: "Profile Detail" } } }
-                    { RecordType: { Name: { eq: "Total Cost Category" } } }
+                    { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
+                    { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
                   ]
                 }
                 { Acc_CostCategory__c: { ne: null } }
@@ -42,7 +42,7 @@ export const updateForecastQuery = graphql`
                   value
                 }
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -108,7 +108,7 @@ export const updateForecastQuery = graphql`
                   value
                 }
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }

@@ -51,6 +51,9 @@ const pcrDashboardQuery = graphql`
                           value
                           label
                         }
+                        DeveloperName {
+                          value
+                        }
                       }
                     }
                   }

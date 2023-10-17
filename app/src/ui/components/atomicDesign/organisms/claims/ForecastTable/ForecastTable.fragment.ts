@@ -7,7 +7,7 @@ export const forecastTableFragment = graphql`
         where: {
           and: [
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
-            { RecordType: { Name: { eq: "Profile Detail" } } }
+            { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
             { Acc_CostCategory__c: { ne: null } }
           ]
         }
@@ -26,7 +26,7 @@ export const forecastTableFragment = graphql`
         where: {
           and: [
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
-            { RecordType: { Name: { eq: "Profile Detail" } } }
+            { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
             { Acc_CostCategory__c: { ne: null } }
           ]
         }
@@ -51,7 +51,7 @@ export const forecastTableFragment = graphql`
               value
             }
             RecordType {
-              Name {
+              DeveloperName {
                 value
               }
             }
@@ -63,7 +63,7 @@ export const forecastTableFragment = graphql`
         where: {
           and: [
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
-            { RecordType: { Name: { eq: "Total Cost Category" } } }
+            { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
             { Acc_CostCategory__c: { ne: null } }
           ]
         }
@@ -79,7 +79,7 @@ export const forecastTableFragment = graphql`
               value
             }
             RecordType {
-              Name {
+              DeveloperName {
                 value
               }
             }
@@ -91,7 +91,7 @@ export const forecastTableFragment = graphql`
         where: {
           and: [
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
-            { RecordType: { Name: { eq: "Total Project Period" } } }
+            { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
             { Acc_ClaimStatus__c: { ne: "New " } }
             { Acc_ClaimStatus__c: { ne: "Not used" } }
           ]
@@ -101,7 +101,7 @@ export const forecastTableFragment = graphql`
         edges {
           node {
             RecordType {
-              Name {
+              DeveloperName {
                 value
               }
             }
@@ -130,7 +130,7 @@ export const forecastTableFragment = graphql`
         edges {
           node {
             RecordType {
-              Name {
+              DeveloperName {
                 value
               }
             }
@@ -162,8 +162,8 @@ export const forecastTableFragment = graphql`
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
             {
               or: [
-                { RecordType: { Name: { eq: "Total Project Period" } } }
-                { RecordType: { Name: { eq: "Claims Detail" } } }
+                { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
+                { RecordType: { DeveloperName: { eq: "Claims_Detail" } } }
               ]
             }
           ]
@@ -173,7 +173,7 @@ export const forecastTableFragment = graphql`
         edges {
           node {
             RecordType {
-              Name {
+              DeveloperName {
                 value
               }
             }

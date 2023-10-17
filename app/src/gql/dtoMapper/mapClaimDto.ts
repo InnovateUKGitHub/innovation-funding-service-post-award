@@ -5,6 +5,7 @@ import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ReceivedStatus } from "@framework/entities/received-status";
 import { Clock, salesforceDateFormat } from "@framework/util/clock";
+import { Claims } from "@framework/constants/recordTypes";
 
 const clock = new Clock();
 
@@ -51,7 +52,7 @@ type ClaimNode = Readonly<
     Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
     Acc_IARRequired__c: GQL.Value<boolean>;
     RecordType: {
-      Name: GQL.Value<string>;
+      DeveloperName: GQL.Value<string>;
     } | null;
   }>
 > | null;
@@ -223,7 +224,7 @@ export function mapToClaimDtoArray<
     edges
       ?.filter(
         x =>
-          x?.node?.RecordType?.Name?.value === "Total Project Period" &&
+          x?.node?.RecordType?.DeveloperName?.value === Claims.totalProjectPeriod &&
           x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
           x?.node?.Acc_ClaimStatus__c?.value !== "Not used",
       )

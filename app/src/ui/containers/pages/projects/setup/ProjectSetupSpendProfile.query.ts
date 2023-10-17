@@ -11,7 +11,7 @@ export const projectSetupSpendProfileQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectID__c: { eq: $projectIdStr } }
-                { RecordType: { Name: { eq: "Total Cost Category" } } }
+                { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
                 { Acc_CostCategory__c: { ne: null } }
               ]
             }
@@ -27,7 +27,7 @@ export const projectSetupSpendProfileQuery = graphql`
                   value
                 }
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -38,7 +38,7 @@ export const projectSetupSpendProfileQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
-                { RecordType: { Name: { eq: "Profile Detail" } } }
+                { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
                 { Acc_CostCategory__c: { ne: null } }
               ]
             }
@@ -48,7 +48,7 @@ export const projectSetupSpendProfileQuery = graphql`
               node {
                 Id
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -122,8 +122,8 @@ export const projectSetupSpendProfileQuery = graphql`
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
                 {
                   or: [
-                    { RecordType: { Name: { eq: "Total Project Period" } } }
-                    { RecordType: { Name: { eq: "Claims Detail" } } }
+                    { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
+                    { RecordType: { DeveloperName: { eq: "Claims_Detail" } } }
                   ]
                 }
               ]
@@ -133,7 +133,7 @@ export const projectSetupSpendProfileQuery = graphql`
             edges {
               node {
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }

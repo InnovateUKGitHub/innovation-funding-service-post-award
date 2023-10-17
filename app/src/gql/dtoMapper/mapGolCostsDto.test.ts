@@ -8,8 +8,8 @@ describe("mapToGolCostDtoArray", () => {
         Acc_CostCategory__c: { value: "0" },
         Acc_CostCategoryGOLCost__c: { value: 1000 },
         RecordType: {
-          Name: {
-            value: "Total Cost Category",
+          DeveloperName: {
+            value: "Total_Cost_Category",
           },
         },
       },
@@ -20,8 +20,8 @@ describe("mapToGolCostDtoArray", () => {
         Acc_CostCategory__c: { value: "2" },
         Acc_CostCategoryGOLCost__c: { value: 1000 },
         RecordType: {
-          Name: {
-            value: "Total Cost Category",
+          DeveloperName: {
+            value: "Total_Cost_Category",
           },
         },
       },
@@ -32,8 +32,8 @@ describe("mapToGolCostDtoArray", () => {
         Acc_CostCategory__c: null,
         Acc_CostCategoryGOLCost__c: null,
         RecordType: {
-          Name: {
-            value: "Total Cost Category",
+          DeveloperName: {
+            value: "Total_Cost_Category",
           },
         },
       },
@@ -44,7 +44,7 @@ describe("mapToGolCostDtoArray", () => {
         Acc_CostCategory__c: { value: "Kickbacks" },
         Acc_CostCategoryGOLCost__c: { value: 1000 },
         RecordType: {
-          Name: {
+          DeveloperName: {
             value: "blah",
           },
         },

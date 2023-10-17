@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a57fcb8ff9c83d7f9a427184a5b075cd>>
+ * @generated SignedSource<<a54aee639c46aaa2cbc0bb697622eac9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -96,7 +96,7 @@ export type ProjectSetupSpendProfileQuery$data = {
                 readonly value: number | null;
               } | null;
               readonly RecordType: {
-                readonly Name: {
+                readonly DeveloperName: {
                   readonly value: string | null;
                 } | null;
               } | null;
@@ -126,7 +126,7 @@ export type ProjectSetupSpendProfileQuery$data = {
               } | null;
               readonly Id: string;
               readonly RecordType: {
-                readonly Name: {
+                readonly DeveloperName: {
                   readonly value: string | null;
                 } | null;
               } | null;
@@ -144,7 +144,7 @@ export type ProjectSetupSpendProfileQuery$data = {
               } | null;
               readonly Id: string;
               readonly RecordType: {
-                readonly Name: {
+                readonly DeveloperName: {
                   readonly value: string | null;
                 } | null;
               } | null;
@@ -233,43 +233,42 @@ v8 = {
   "selections": (v7/*: any*/),
   "storageKey": null
 },
-v9 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "StringValue",
-    "kind": "LinkedField",
-    "name": "Name",
-    "plural": false,
-    "selections": (v7/*: any*/),
-    "storageKey": null
-  }
-],
-v10 = {
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "RecordType",
   "kind": "LinkedField",
   "name": "RecordType",
   "plural": false,
-  "selections": (v9/*: any*/),
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "StringValue",
+      "kind": "LinkedField",
+      "name": "DeveloperName",
+      "plural": false,
+      "selections": (v7/*: any*/),
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 },
-v11 = [
+v10 = [
   {
     "kind": "Variable",
     "name": "eq",
     "variableName": "partnerId"
   }
 ],
-v12 = [
+v11 = [
   {
-    "fields": (v11/*: any*/),
+    "fields": (v10/*: any*/),
     "kind": "ObjectValue",
     "name": "Acc_ProjectParticipant__c"
   }
 ],
-v13 = {
+v12 = {
   "alias": null,
   "args": null,
   "concreteType": "DoubleValue",
@@ -279,14 +278,14 @@ v13 = {
   "selections": (v7/*: any*/),
   "storageKey": null
 },
-v14 = [
+v13 = [
   {
     "kind": "Variable",
     "name": "eq",
     "variableName": "projectId"
   }
 ],
-v15 = [
+v14 = [
   {
     "alias": null,
     "args": null,
@@ -343,8 +342,8 @@ v15 = [
                             "name": "and.1",
                             "value": {
                               "RecordType": {
-                                "Name": {
-                                  "eq": "Total Cost Category"
+                                "DeveloperName": {
+                                  "eq": "Total_Cost_Category"
                                 }
                               }
                             }
@@ -392,7 +391,7 @@ v15 = [
                             "selections": (v7/*: any*/),
                             "storageKey": null
                           },
-                          (v10/*: any*/)
+                          (v9/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -411,7 +410,7 @@ v15 = [
                       {
                         "items": [
                           {
-                            "fields": (v12/*: any*/),
+                            "fields": (v11/*: any*/),
                             "kind": "ObjectValue",
                             "name": "and.0"
                           },
@@ -420,8 +419,8 @@ v15 = [
                             "name": "and.1",
                             "value": {
                               "RecordType": {
-                                "Name": {
-                                  "eq": "Profile Detail"
+                                "DeveloperName": {
+                                  "eq": "Profile_Detail"
                                 }
                               }
                             }
@@ -458,9 +457,9 @@ v15 = [
                         "plural": false,
                         "selections": [
                           (v6/*: any*/),
-                          (v10/*: any*/),
+                          (v9/*: any*/),
                           (v8/*: any*/),
-                          (v13/*: any*/),
+                          (v12/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -596,7 +595,7 @@ v15 = [
                           {
                             "fields": [
                               {
-                                "fields": (v14/*: any*/),
+                                "fields": (v13/*: any*/),
                                 "kind": "ObjectValue",
                                 "name": "Acc_ProjectId__c"
                               }
@@ -607,7 +606,7 @@ v15 = [
                           {
                             "fields": [
                               {
-                                "fields": (v11/*: any*/),
+                                "fields": (v10/*: any*/),
                                 "kind": "ObjectValue",
                                 "name": "Id"
                               }
@@ -653,7 +652,18 @@ v15 = [
                             "kind": "LinkedField",
                             "name": "Acc_AccountId__r",
                             "plural": false,
-                            "selections": (v9/*: any*/),
+                            "selections": [
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "Name",
+                                "plural": false,
+                                "selections": (v7/*: any*/),
+                                "storageKey": null
+                              }
+                            ],
                             "storageKey": null
                           },
                           {
@@ -705,7 +715,7 @@ v15 = [
                         "items": [
                           (v4/*: any*/),
                           {
-                            "fields": (v12/*: any*/),
+                            "fields": (v11/*: any*/),
                             "kind": "ObjectValue",
                             "name": "and.1"
                           },
@@ -716,15 +726,15 @@ v15 = [
                               "or": [
                                 {
                                   "RecordType": {
-                                    "Name": {
-                                      "eq": "Total Project Period"
+                                    "DeveloperName": {
+                                      "eq": "Total_Project_Period"
                                     }
                                   }
                                 },
                                 {
                                   "RecordType": {
-                                    "Name": {
-                                      "eq": "Claims Detail"
+                                    "DeveloperName": {
+                                      "eq": "Claims_Detail"
                                     }
                                   }
                                 }
@@ -761,7 +771,7 @@ v15 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v10/*: any*/),
+                          (v9/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -782,7 +792,7 @@ v15 = [
                             "selections": (v7/*: any*/),
                             "storageKey": null
                           },
-                          (v13/*: any*/)
+                          (v12/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -803,7 +813,7 @@ v15 = [
                   {
                     "fields": [
                       {
-                        "fields": (v14/*: any*/),
+                        "fields": (v13/*: any*/),
                         "kind": "ObjectValue",
                         "name": "Id"
                       }
@@ -913,7 +923,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ProjectSetupSpendProfileQuery",
-    "selections": (v15/*: any*/),
+    "selections": (v14/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -926,19 +936,19 @@ return {
     ],
     "kind": "Operation",
     "name": "ProjectSetupSpendProfileQuery",
-    "selections": (v15/*: any*/)
+    "selections": (v14/*: any*/)
   },
   "params": {
-    "cacheID": "9048fae1df25b7562f29b73443d048ee",
+    "cacheID": "ec5f8346321e867392f6b1b99b6c7f88",
     "id": null,
     "metadata": {},
     "name": "ProjectSetupSpendProfileQuery",
     "operationKind": "query",
-    "text": "query ProjectSetupSpendProfileQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $projectIdStr: String\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        GolCostProfile: Acc_Profile__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {RecordType: {Name: {eq: \"Total Cost Category\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_CostCategoryGOLCost__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                }\n              }\n            }\n          }\n        }\n        ForecastDetails: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {Name: {eq: \"Profile Detail\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_LatestForecastCost__c {\n                value\n              }\n              Acc_InitialForecastCost__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_CostCategory__c(first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {and: [{Acc_ProjectId__c: {eq: $projectId}}, {Id: {eq: $partnerId}}]}) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_OverheadRate__c {\n                value\n              }\n            }\n          }\n        }\n        ClaimsForIarDue: Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {or: [{RecordType: {Name: {eq: \"Total Project Period\"}}}, {RecordType: {Name: {eq: \"Claims Detail\"}}}]}]}, first: 2000) {\n          edges {\n            node {\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_IAR_Status__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectSetupSpendProfileQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $projectIdStr: String\n) {\n  currentUser {\n    email\n  }\n  salesforce {\n    uiapi {\n      query {\n        GolCostProfile: Acc_Profile__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_CostCategoryGOLCost__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        ForecastDetails: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_LatestForecastCost__c {\n                value\n              }\n              Acc_InitialForecastCost__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_CostCategory__c(first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {and: [{Acc_ProjectId__c: {eq: $projectId}}, {Id: {eq: $partnerId}}]}) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_OverheadRate__c {\n                value\n              }\n            }\n          }\n        }\n        ClaimsForIarDue: Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {or: [{RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {RecordType: {DeveloperName: {eq: \"Claims_Detail\"}}}]}]}, first: 2000) {\n          edges {\n            node {\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_IAR_Status__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "e6e1b87b4702b983a1ee5d008f268685";
+(node as any).hash = "b8b1b66c0ed641c25aa33abd7ed7e029";
 
 export default node;

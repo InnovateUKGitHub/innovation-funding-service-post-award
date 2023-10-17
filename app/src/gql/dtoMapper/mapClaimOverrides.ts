@@ -1,4 +1,5 @@
 import { AwardRateOverrideTarget, AwardRateOverrideType } from "@framework/constants/awardRateOverride";
+import { Profile } from "@framework/constants/recordTypes";
 import {
   CostCategoryClaimOverrideRate,
   PeriodClaimOverrideRate,
@@ -14,7 +15,7 @@ import {
 type ClaimOverrideNode = Readonly<Partial<{
   Id: string;
   RecordType: {
-    Name?: GQL.Value<string>;
+    DeveloperName?: GQL.Value<string>;
   } | null;
   Acc_OverrideAwardRate__c: GQL.Value<number>;
   Acc_CostCategoryName__c: GQL.Value<string>;
@@ -31,8 +32,9 @@ type ClaimOverrideNode = Readonly<Partial<{
  */
 export function mapToClaimOverrides<T extends ReadonlyArray<{ node: ClaimOverrideNode } | null> | null>(edges: T) {
   const allTotalCostCategory =
-    edges?.filter(node => node?.node?.RecordType?.Name?.value === "Total Cost Category") ?? [];
-  const allTotalPeriod = edges?.filter(node => node?.node?.RecordType?.Name?.value === "Total Project Period") ?? [];
+    edges?.filter(node => node?.node?.RecordType?.DeveloperName?.value === Profile.totalCostCategory) ?? [];
+  const allTotalPeriod =
+    edges?.filter(node => node?.node?.RecordType?.DeveloperName?.value === Profile.totalProjectPeriod) ?? [];
 
   const costCategoryOverrides: CostCategoryClaimOverrideRate[] = [];
   const periodOverrides: PeriodClaimOverrideRate[] = [];

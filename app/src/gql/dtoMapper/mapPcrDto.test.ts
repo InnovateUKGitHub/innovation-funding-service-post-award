@@ -51,6 +51,9 @@ const edges = [
           value: "Request Header",
           label: "Request Header",
         },
+        DeveloperName: {
+          value: "Acc_RequestHeader",
+        },
       },
     },
   },
@@ -103,6 +106,9 @@ const edges = [
         Name: {
           value: "Add a partner",
           label: "Add a partner",
+        },
+        DeveloperName: {
+          value: "Acc_AddAPartner",
         },
       },
     },
@@ -157,6 +163,9 @@ const edges = [
           value: "Request Header",
           label: "Request Header",
         },
+        DeveloperName: {
+          value: "Acc_RequestHeader",
+        },
       },
     },
   },
@@ -209,6 +218,9 @@ const edges = [
         Name: {
           value: "Change project scope",
           label: "Change project scope",
+        },
+        DeveloperName: {
+          value: "Acc_ChangeProjectScope",
         },
       },
     },
@@ -263,6 +275,9 @@ const edges = [
           value: "Request Header",
           label: "Request Header",
         },
+        DeveloperName: {
+          value: "Acc_RequestHeader",
+        },
       },
     },
   },
@@ -315,6 +330,9 @@ const edges = [
         Name: {
           value: "Change project duration",
           label: "Change project duration",
+        },
+        DeveloperName: {
+          value: "Acc_ChangeProjectDuration",
         },
       },
     },
@@ -369,6 +387,9 @@ const edges = [
           value: "Request Header",
           label: "Request Header",
         },
+        DeveloperName: {
+          value: "Acc_RequestHeader",
+        },
       },
     },
   },
@@ -421,6 +442,9 @@ const edges = [
         Name: {
           value: "Add a partner",
           label: "Add a partner",
+        },
+        DeveloperName: {
+          value: "Acc_AddAPartner",
         },
       },
     },
@@ -475,6 +499,9 @@ const edges = [
           value: "Add a partner",
           label: "Add a partner",
         },
+        DeveloperName: {
+          value: "Acc_AddAPartner",
+        },
       },
     },
   },
@@ -527,6 +554,9 @@ const edges = [
         Name: {
           value: "Add a partner",
           label: "Add a partner",
+        },
+        DeveloperName: {
+          value: "Acc_AddAPartner",
         },
       },
     },
@@ -581,6 +611,9 @@ const edges = [
           value: "Remove a partner",
           label: "Remove a partner",
         },
+        DeveloperName: {
+          value: "Acc_RemoveAPartner",
+        },
       },
     },
   },
@@ -633,6 +666,9 @@ const edges = [
         Name: {
           value: "Request Header",
           label: "Request Header",
+        },
+        DeveloperName: {
+          value: "Acc_RequestHeader",
         },
       },
     },
@@ -687,6 +723,9 @@ const edges = [
           value: "Reallocate several partners' project cost",
           label: "Reallocate several partners' project cost",
         },
+        DeveloperName: {
+          value: "Acc_ReallocateSeveralPartnersProjectCost",
+        },
       },
     },
   },
@@ -740,6 +779,9 @@ const edges = [
           value: "Request Header",
           label: "Request Header",
         },
+        DeveloperName: {
+          value: "Acc_RequestHeader",
+        },
       },
     },
   },
@@ -792,6 +834,9 @@ const edges = [
         Name: {
           value: "Add a partner",
           label: "Add a partner",
+        },
+        DeveloperName: {
+          value: "Acc_AddAPartner",
         },
       },
     },

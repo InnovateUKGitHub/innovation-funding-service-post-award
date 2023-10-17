@@ -11,8 +11,8 @@ describe("mapToForecastDetailsDtoArray", () => {
         Acc_ProjectPeriodNumber__c: { value: 3 },
         Acc_LatestForecastCost__c: { value: 1000 },
         RecordType: {
-          Name: {
-            value: "Profile Detail",
+          DeveloperName: {
+            value: "Profile_Detail",
           },
         },
       },
@@ -26,8 +26,8 @@ describe("mapToForecastDetailsDtoArray", () => {
         Acc_ProjectPeriodNumber__c: { value: 2 },
         Acc_LatestForecastCost__c: { value: 1000 },
         RecordType: {
-          Name: {
-            value: "Profile Detail",
+          DeveloperName: {
+            value: "Profile_Detail",
           },
         },
       },
@@ -41,8 +41,8 @@ describe("mapToForecastDetailsDtoArray", () => {
         Acc_ProjectPeriodNumber__c: null,
         Acc_LatestForecastCost__c: null,
         RecordType: {
-          Name: {
-            value: "Profile Detail",
+          DeveloperName: {
+            value: "Profile_Detail",
           },
         },
       },
@@ -56,7 +56,7 @@ describe("mapToForecastDetailsDtoArray", () => {
         Acc_ProjectPeriodNumber__c: { value: 7 },
         Acc_LatestForecastCost__c: { value: 1000 },
         RecordType: {
-          Name: {
+          DeveloperName: {
             value: "blah",
           },
         },

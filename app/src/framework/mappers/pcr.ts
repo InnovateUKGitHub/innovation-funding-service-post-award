@@ -7,6 +7,7 @@ import {
   PCRItemType,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
+import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 
 export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisationType => {
   if (partnerType === PCRPartnerType.Research) {
@@ -120,43 +121,44 @@ export const mapFromSalesforcePCRPartnerType = (partnerType: string | null) => {
 
 export const mapToPcrItemType = (developerName: string) => {
   switch (developerName) {
-    case "Loan_LoanDrawdownChange":
-    case "Loan_ParticipantVirementForLoanDrawdown":
-    case "Loan_PeriodVirementForLoanDrawdown":
+    case ProjectChangeRequest.loanDrawdownChange:
+    case ProjectChangeRequest.participantVirementForLoanDrawdown:
+    case ProjectChangeRequest.periodVirementForLoanDrawdown:
       return PCRItemType.LoanDrawdownChange;
-    case "Loan_ChangeLoansDuration":
+    case ProjectChangeRequest.changeLoansDuration:
       return PCRItemType.LoanDrawdownExtension;
-    case "Acc_AccountNameChange":
-    case "Acc_ChangeAPartnersName":
+    case ProjectChangeRequest.accountNameChange:
+    case ProjectChangeRequest.changeAPartnersName:
       return PCRItemType.AccountNameChange;
-    case "Acc_PartnerAddition":
-    case "Acc_AddAPartner":
+    case ProjectChangeRequest.partnerAddition:
+    case ProjectChangeRequest.addAPartner:
       return PCRItemType.PartnerAddition;
-    case "Acc_ProjectSuspension":
-    case "Acc_PutProjectOnHold":
+    case ProjectChangeRequest.projectSuspension:
+    case ProjectChangeRequest.putProjectOnHold:
       return PCRItemType.ProjectSuspension;
-    case "Acc_TimeExtension":
-    case "Acc_ChangeProjectDuration":
+    case ProjectChangeRequest.timeExtension:
+    case ProjectChangeRequest.changeProjectDuration:
       return PCRItemType.TimeExtension;
-    case "Acc_ChangeProjectScope":
+    case ProjectChangeRequest.changeProjectScope:
       return PCRItemType.ScopeChange;
-    case "Acc_ProjectTermination":
-    case "Acc_EndTheProjectEarly":
+    case ProjectChangeRequest.projectTermination:
+    case ProjectChangeRequest.endProjectEarly:
       return PCRItemType.ProjectTermination;
-    case "Acc_FinancialVirement":
-    case "Acc_MultiplePartnerFinancialVirement":
-    case "Acc_ReallocateOnePartnersProjectCosts":
-    case "Acc_ReallocateSeveralPartnersProjectCost":
-    case "Acc_SinglePartnerFinancialVirement":
-    case "Acc_BetweenPartnerFinancialVirement":
+    case ProjectChangeRequest.financialVirement:
+    case ProjectChangeRequest.multiplePartnerFinancialVirement:
+    case ProjectChangeRequest.reallocateOnePartnersProjectCosts:
+    case ProjectChangeRequest.reallocateSeveralPartnersProjectCost:
+    case ProjectChangeRequest.singlePartnerFinancialVirement:
+    case ProjectChangeRequest.betweenPartnerFinancialVirement:
       return PCRItemType.MultiplePartnerFinancialVirement;
-    case "Acc_RemoveAPartner":
-    case "Acc_PartnerWithdrawal":
+    case ProjectChangeRequest.removeAPartner:
+    case ProjectChangeRequest.partnerWithdrawal:
       return PCRItemType.PartnerWithdrawal;
-    case "Acc_ChangePeriodLength":
+    case ProjectChangeRequest.changePeriodLength:
       return PCRItemType.PeriodLengthChange;
     // Request header
-    case "Acc_ProjectChangeRequests":
+    case ProjectChangeRequest.requestHeader:
+    case ProjectChangeRequest.projectChangeRequests:
       return PCRItemType.Unknown;
   }
 

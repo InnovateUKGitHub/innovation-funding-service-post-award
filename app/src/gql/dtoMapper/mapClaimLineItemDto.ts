@@ -1,3 +1,4 @@
+import { Claims } from "@framework/constants/recordTypes";
 import type { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
 
 import { Clock } from "@framework/util/clock";
@@ -19,7 +20,7 @@ type ClaimLineItemNode = Readonly<
       Email?: GQL.Value<string>;
     } | null;
     RecordType: {
-      Name: GQL.Value<string>;
+      DeveloperName: GQL.Value<string>;
     } | null;
   }>
 > | null;
@@ -100,7 +101,9 @@ export function mapToClaimLineItemDtoArray<
   return (
     edges
       ?.filter(
-        x => x?.node?.RecordType?.Name?.value === "Claims Line Item" && x?.node?.Acc_CostCategory__c?.value !== null,
+        x =>
+          x?.node?.RecordType?.DeveloperName?.value === Claims.claimsLineItem &&
+          x?.node?.Acc_CostCategory__c?.value !== null,
       )
       ?.map(node => {
         return mapToClaimLineItemDto(node?.node ?? null, pickList, additionalData);

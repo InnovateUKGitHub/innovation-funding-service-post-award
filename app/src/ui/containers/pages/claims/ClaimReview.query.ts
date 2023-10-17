@@ -16,8 +16,8 @@ export const claimReviewQuery = graphql`
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
                 {
                   or: [
-                    { RecordType: { Name: { eq: "Profile Detail" } } }
-                    { RecordType: { Name: { eq: "Total Cost Category" } } }
+                    { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
+                    { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
                   ]
                 }
                 { Acc_CostCategory__c: { ne: null } }
@@ -47,7 +47,7 @@ export const claimReviewQuery = graphql`
                   value
                 }
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -58,7 +58,7 @@ export const claimReviewQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
-                { RecordType: { Name: { eq: "Total Project Period" } } }
+                { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
                 { Acc_ClaimStatus__c: { ne: "New " } }
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
               ]
@@ -68,7 +68,7 @@ export const claimReviewQuery = graphql`
             edges {
               node {
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -98,7 +98,7 @@ export const claimReviewQuery = graphql`
             where: {
               and: [
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
-                { RecordType: { Name: { eq: "Claims Detail" } } }
+                { RecordType: { DeveloperName: { eq: "Claims_Detail" } } }
                 { Acc_ClaimStatus__c: { ne: "New" } }
                 { Acc_CostCategory__c: { ne: null } }
               ]
@@ -109,7 +109,7 @@ export const claimReviewQuery = graphql`
             edges {
               node {
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -148,7 +148,7 @@ export const claimReviewQuery = graphql`
             edges {
               node {
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }

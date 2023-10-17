@@ -20,6 +20,7 @@ import { ClaimDto } from "@framework/dtos/claimDto";
 import { useContent } from "@ui/hooks/content.hook";
 import { claimReviewSchema } from "./claimReview.zod";
 import { z } from "zod";
+import { Claims } from "@framework/constants/recordTypes";
 
 type QueryOptions = RefreshedQueryOptions | { fetchPolicy: "network-only" };
 export const useClaimReviewPageData = (
@@ -85,7 +86,7 @@ export const useClaimReviewPageData = (
           {
             projectId,
             currentUser: { userId: data?.currentUser?.userId ?? null },
-            type: docs?.node?.RecordType?.Name?.value === "Claims Detail" ? "claim details" : "claims",
+            type: docs?.node?.RecordType?.DeveloperName?.value === Claims.claimsDetail ? "claim details" : "claims",
             partnerId,
             periodId,
             costCategoryId: docs?.node?.Acc_CostCategory__c?.value ?? "",

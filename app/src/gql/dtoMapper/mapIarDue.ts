@@ -1,9 +1,11 @@
+import { Claims } from "@framework/constants/recordTypes";
+
 type IARClaimNode = Readonly<{
   Acc_IAR_Status__c: GQL.Value<string>;
   Acc_IARRequired__c: GQL.Value<boolean>;
   Acc_ProjectPeriodNumber__c: GQL.Value<number>;
   RecordType: {
-    Name: GQL.Value<string>;
+    DeveloperName: GQL.Value<string>;
   } | null;
 }> | null;
 
@@ -14,7 +16,7 @@ type IARClaimNode = Readonly<{
  */
 export const getIARDueOnClaimPeriods = (claimsGql: ReadonlyArray<{ node: IARClaimNode | null } | null>) =>
   claimsGql
-    .filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period")
+    .filter(x => x?.node?.RecordType?.DeveloperName?.value === Claims.totalProjectPeriod)
     .reduce((iarPeriods: string[], cur) => {
       if (cur?.node?.Acc_IAR_Status__c?.value === "Not Received" && !!cur?.node?.Acc_IARRequired__c?.value) {
         iarPeriods.push((cur?.node?.Acc_ProjectPeriodNumber__c?.value ?? 0).toString());

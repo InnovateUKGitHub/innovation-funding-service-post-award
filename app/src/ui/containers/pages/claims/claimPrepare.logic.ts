@@ -12,6 +12,7 @@ import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
+import { Claims } from "@framework/constants/recordTypes";
 
 export const useClaimPreparePageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
   const data = useLazyLoadQuery<ClaimPrepareQuery>(
@@ -57,7 +58,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
     );
 
     const claims = mapToClaimDtoArray(
-      claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
+      claimsGql.filter(x => x?.node?.RecordType?.DeveloperName?.value === Claims.totalProjectPeriod),
       [
         "id",
         "periodId",
@@ -80,7 +81,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
     const claim = claims.find(claim => claim.periodId === periodId);
 
     const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
-      claimsGql?.filter(x => x?.node?.RecordType?.Name?.value === "Claims Detail"),
+      claimsGql?.filter(x => x?.node?.RecordType?.DeveloperName?.value === Claims.claimsDetail),
       ["costCategoryId", "periodId", "value", "grantPaidToDate"],
       {},
     );

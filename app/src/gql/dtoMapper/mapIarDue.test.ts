@@ -5,7 +5,7 @@ describe("getIARDueOnClaimPeriods", () => {
     {
       node: {
         RecordType: {
-          Name: { value: "Total Project Period" },
+          DeveloperName: { value: "Total_Project_Period" },
         },
         Acc_IAR_Status__c: { value: "Not Received" },
         Acc_IARRequired__c: { value: true },
@@ -15,7 +15,7 @@ describe("getIARDueOnClaimPeriods", () => {
     {
       node: {
         RecordType: {
-          Name: { value: "Total Project Period" },
+          DeveloperName: { value: "Total_Project_Period" },
         },
         Acc_IAR_Status__c: { value: "Not Received" },
         Acc_IARRequired__c: { value: true },
@@ -25,7 +25,7 @@ describe("getIARDueOnClaimPeriods", () => {
     {
       node: {
         RecordType: {
-          Name: { value: "Total Project Period" },
+          DeveloperName: { value: "Total_Project_Period" },
         },
         Acc_IAR_Status__c: { value: "Not Received" },
         Acc_IARRequired__c: { value: false },
@@ -35,7 +35,7 @@ describe("getIARDueOnClaimPeriods", () => {
     {
       node: {
         RecordType: {
-          Name: { value: "Unwanted Record Type" },
+          DeveloperName: { value: "Unwanted_Record_Type" },
         },
         Acc_IAR_Status__c: { value: "Received" },
         Acc_IARRequired__c: { value: true },
@@ -45,7 +45,7 @@ describe("getIARDueOnClaimPeriods", () => {
     {
       node: {
         RecordType: {
-          Name: { value: "Total Project Period" },
+          DeveloperName: { value: "Total_Project_Period" },
         },
         Acc_IAR_Status__c: { value: "Received" },
         Acc_IARRequired__c: { value: true },

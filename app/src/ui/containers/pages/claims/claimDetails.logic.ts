@@ -12,6 +12,7 @@ import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
+import { Claims } from "@framework/constants/recordTypes";
 
 export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId) => {
   const data = useLazyLoadQuery<ClaimDetailsQuery>(
@@ -49,7 +50,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
 
     // CLAIMS
     const claims = mapToClaimDtoArray(
-      claimsGql.filter(x => x?.node?.RecordType?.Name?.value === "Total Project Period"),
+      claimsGql.filter(x => x?.node?.RecordType?.DeveloperName?.value === Claims.totalProjectPeriod),
       [
         "comments",
         "id",
@@ -86,7 +87,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
           {
             projectId,
             currentUser: { userId: data.currentUser.userId },
-            type: docs?.node?.RecordType?.Name?.value === "Claims Detail" ? "claim details" : "claims",
+            type: docs?.node?.RecordType?.DeveloperName?.value === Claims.claimsDetail ? "claim details" : "claims",
             partnerId,
             periodId,
             costCategoryId: docs?.node?.Acc_CostCategory__c?.value ?? "",
