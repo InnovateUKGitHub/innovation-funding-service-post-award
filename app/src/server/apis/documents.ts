@@ -1,6 +1,6 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { DocumentSummaryDto, AllPartnerDocumentSummaryDto, DocumentDto } from "@framework/dtos/documentDto";
-import { MultipleDocumentUploadDto, DocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
 import { ClaimKey } from "@framework/types/ClaimKey";
 import { contextProvider } from "@server/features/common/contextProvider";
@@ -24,7 +24,6 @@ import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@ser
 import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
 import { GetProjectDocumentSummaryQuery } from "@server/features/documents/getProjectDocumentSummaryQuery";
 import { UploadClaimDetailDocumentCommand } from "@server/features/documents/uploadClaimDetailDocument";
-import { UploadClaimDocumentCommand } from "@server/features/documents/uploadClaimDocument";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { UploadLoanDocumentsCommand } from "@server/features/documents/uploadLoanDocument";
 import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
@@ -63,9 +62,6 @@ export interface IDocumentsApi<Context extends "client" | "server"> {
   uploadClaimDetailDocuments: (
     params: ApiParams<Context, { claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>,
   ) => Promise<{ documentIds: string[] }>;
-  uploadClaimDocument: (
-    params: ApiParams<Context, { claimKey: ClaimKey; document: DocumentUploadDto }>,
-  ) => Promise<{ documentId: string }>;
   uploadClaimDocuments: (
     params: ApiParams<Context, { claimKey: ClaimKey; documents: MultipleDocumentUploadDto }>,
   ) => Promise<{ documentIds: string[] }>;
@@ -276,12 +272,6 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       p => this.uploadClaimDetailDocuments(p),
     );
 
-    this.postAttachment(
-      "/claims/:projectId/:partnerId/:periodId",
-      p => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
-      p => this.uploadClaimDocument(p),
-    );
-
     this.postAttachments(
       "/claimDocuments/:projectId/:partnerId/:periodId",
       p => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
@@ -446,13 +436,6 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, documents);
     const insertedIDs = await contextProvider.start(params).runCommand(command);
     return { documentIds: insertedIDs };
-  }
-
-  public async uploadClaimDocument(params: ApiParams<"server", { claimKey: ClaimKey; document: DocumentUploadDto }>) {
-    const { claimKey, document } = params;
-    const command = new UploadClaimDocumentCommand(claimKey, document);
-    const insertedID = await contextProvider.start(params).runCommand(command);
-    return { documentId: insertedID };
   }
 
   public async uploadClaimDocuments(

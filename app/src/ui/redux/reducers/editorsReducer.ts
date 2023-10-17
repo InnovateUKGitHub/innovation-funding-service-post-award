@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { EditorStatus } from "@ui/redux/constants/enums";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { ErrorCode } from "@framework/constants/enums";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
@@ -15,10 +15,7 @@ import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 import { ClaimDetailsValidator } from "@ui/validation/validators/claimDetailsValidator";
 import { ClaimDtoValidator } from "@ui/validation/validators/claimDtoValidator";
-import {
-  DocumentUploadDtoValidator,
-  MultipleDocumentUploadDtoValidator,
-} from "@ui/validation/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import {
   FinancialVirementDtoValidator,
   FinancialLoanVirementDtoValidator,
@@ -145,7 +142,6 @@ const reducers = {
   financialLoanVirement: editorsReducer<FinancialLoanVirementDto, FinancialLoanVirementDtoValidator>(
     "financialLoanVirement",
   ),
-  documents: editorsReducer<DocumentUploadDto, DocumentUploadDtoValidator>("documents"),
   multipleDocuments: editorsReducer<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>("multipleDocuments"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
   monitoringReport: editorsReducer<MonitoringReportDto, MonitoringReportDtoValidator>("monitoringReport"),

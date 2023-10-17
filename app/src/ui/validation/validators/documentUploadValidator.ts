@@ -3,7 +3,7 @@ import { Result } from "../result";
 import * as Validation from "./common";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { getFileSize, getFileExtension, getFileName } from "@framework/util/files";
@@ -42,51 +42,6 @@ const fileEmptyErrorMessage = <T extends Results<ResultBase>>(results: T, file: 
 
 // TODO: investigate better solution to passing in null to supers, preferably by passing in the model.
 // Avoided as part of ACC-8996 because wishing to avoid actual code changes in this PR
-
-export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
-  public readonly description: Result;
-  public readonly file: Result;
-  constructor(model: DocumentUploadDto, config: IAppOptions, showValidationErrors: boolean) {
-    // file is deliberately not a private field so it isn't logged....
-    // model is empty object for this reason
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore-next-line
-    super({ model: null, showValidationErrors });
-
-    this.file = Validation.all(
-      this,
-      () =>
-        Validation.required(
-          this,
-          model && model.file && model.file.fileName,
-          this.getContent(x => x.validation.documentValidator.fileRequired),
-        ),
-      () => validateFileName(this, model && model.file, config.maxFileBasenameLength),
-      () =>
-        Validation.required(
-          this,
-          model && model.file && model.file.fileName,
-          this.getContent(x => x.validation.documentValidator.fileRequired),
-        ),
-      () =>
-        Validation.isTrue(
-          this,
-          (model.file?.size ?? 0) <= config.maxFileSize,
-          fileTooBigErrorMessage(this, model?.file, config.maxFileSize),
-        ),
-      () => Validation.isFalse(this, model?.file?.size === 0, fileEmptyErrorMessage(this, model?.file)),
-      () => validateFileExtension(this, model.file, config.permittedFileTypes),
-    );
-    this.description = model.description
-      ? Validation.permittedValues(
-          this,
-          model.description,
-          getAllNumericalEnumValues(DocumentDescription),
-          this.getContent(x => x.validation.documentValidator.fileDescriptionInvalid),
-        )
-      : Validation.valid(this);
-  }
-}
 
 export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocumentUploadDto> {
   public readonly description: Result;
