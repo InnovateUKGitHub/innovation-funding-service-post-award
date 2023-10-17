@@ -1388,7 +1388,7 @@ export const deleteAndConfirm = () => {
 export const switchUserMoReviewPcr = () => {
   cy.switchUserTo(moEmail);
   cy.get("a").contains("Review").click();
-  cy.get("h1").contains("Request");
+  cy.heading("Request");
 };
 
 export const leaveCommentQuery = () => {

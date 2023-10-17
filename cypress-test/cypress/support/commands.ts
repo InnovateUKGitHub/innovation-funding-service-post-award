@@ -163,7 +163,7 @@ const validationNotification = (message: string) => {
 
 const heading = (title: string) => {
   cy.log("**heading**");
-  cy.get("h1").contains(title);
+  cy.get("h1").contains(title, { timeout: 50000 });
 };
 
 const paragraph = (content: string) => {
