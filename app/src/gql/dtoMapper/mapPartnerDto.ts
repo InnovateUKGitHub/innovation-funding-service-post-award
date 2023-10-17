@@ -124,6 +124,7 @@ type PartnerDtoMapping = Pick<
   | "spendProfileStatus"
   | "spendProfileStatusLabel"
   | "totalCostsSubmitted"
+  | "totalFutureForecastsForParticipants"
   | "totalGrantApproved"
   | "totalParticipantCostsClaimed"
   | "totalParticipantGrant"
@@ -274,6 +275,9 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
   },
   totalCostsSubmitted(node) {
     return node?.Acc_TotalCostsSubmitted__c?.value ?? null;
+  },
+  totalFutureForecastsForParticipants(node) {
+    return node?.Acc_TotalFutureForecastsForParticipant__c?.value ?? null;
   },
   totalGrantApproved(node) {
     return node?.Acc_TotalGrantApproved__c?.value ?? null;

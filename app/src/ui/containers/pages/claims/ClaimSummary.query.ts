@@ -7,9 +7,10 @@ export const claimSummaryQuery = graphql`
     }
     salesforce {
       uiapi {
+        ...AwardRateOverridesMessageFragment
         ...StatusChangesLogsFragment
-        ...ForecastTableFragment
         ...TitleFragment
+        ...TotalCostsClaimedFragment
         query {
           Acc_Profile__c(
             where: {
@@ -55,10 +56,11 @@ export const claimSummaryQuery = graphql`
               }
             }
           }
-          AllClaimsForPartner: Acc_Claims__c(
+          ClaimForPartner: Acc_Claims__c(
             where: {
               and: [
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
                 { RecordType: { Name: { eq: "Total Project Period" } } }
                 { Acc_ClaimStatus__c: { ne: "New " } }
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
@@ -69,12 +71,21 @@ export const claimSummaryQuery = graphql`
             edges {
               node {
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
                 Id
+                Acc_ClaimStatus__c {
+                  value
+                }
                 Acc_FinalClaim__c {
+                  value
+                }
+                Acc_IARRequired__c {
+                  value
+                }
+                Acc_PCF_Status__c {
                   value
                 }
                 Acc_ProjectPeriodEndDate__c {
@@ -89,7 +100,10 @@ export const claimSummaryQuery = graphql`
                 Acc_ProjectParticipant__c {
                   value
                 }
-                Acc_ClaimStatus__c {
+                Acc_ReasonForDifference__c {
+                  value
+                }
+                Acc_ProjectPeriodCost__c {
                   value
                 }
               }
@@ -105,12 +119,15 @@ export const claimSummaryQuery = graphql`
               ]
             }
             first: 2000
-            orderBy: { Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } } }
+            orderBy: {
+              Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } }
+              Acc_ProjectPeriodNumber__c: { order: ASC }
+            }
           ) {
             edges {
               node {
                 RecordType {
-                  Name {
+                  DeveloperName {
                     value
                   }
                 }
@@ -150,6 +167,9 @@ export const claimSummaryQuery = graphql`
               node {
                 RecordType {
                   Name {
+                    value
+                  }
+                  DeveloperName {
                     value
                   }
                 }
@@ -228,42 +248,19 @@ export const claimSummaryQuery = graphql`
             edges {
               node {
                 Id
-                Acc_AccountId__r {
-                  Name {
-                    value
-                  }
-                }
-                Acc_AccountId__c {
+                Acc_Award_Rate__c {
                   value
                 }
                 Acc_TotalParticipantGrant__c {
                   value
                 }
-                Acc_ProjectRole__c {
-                  value
-                }
-                Acc_ForecastLastModifiedDate__c {
-                  value
-                }
-                Acc_OrganisationType__c {
-                  value
-                }
-                Acc_ParticipantStatus__c {
-                  value
-                }
                 Acc_TotalFutureForecastsForParticipant__c {
                   value
                 }
+                Acc_TotalApprovedCosts__c {
+                  value
+                }
                 Acc_TotalParticipantCosts__c {
-                  value
-                }
-                Acc_TotalCostsSubmitted__c {
-                  value
-                }
-                Acc_Overdue_Project__c {
-                  value
-                }
-                Acc_OverheadRate__c {
                   value
                 }
               }
@@ -285,15 +282,17 @@ export const claimSummaryQuery = graphql`
                     partnerId
                   }
                 }
-                Acc_CompetitionId__r {
-                  Name {
-                    value
-                  }
+
+                Impact_Management_Participation__c {
+                  value
+                }
+                Acc_NonFEC__c {
+                  value
                 }
                 Acc_CompetitionType__c {
                   value
                 }
-                Acc_ProjectStatus__c {
+                Acc_MonitoringLevel__c {
                   value
                 }
               }

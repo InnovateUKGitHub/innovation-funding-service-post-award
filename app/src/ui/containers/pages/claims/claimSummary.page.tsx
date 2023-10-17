@@ -6,18 +6,15 @@ import { ClaimDtoValidator, claimCommentsMaxLength } from "@ui/validation/valida
 import { Pending } from "@shared/pending";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { TotalCosts } from "@framework/constants/claims";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectMonitoringLevel, ProjectRole } from "@framework/constants/project";
-import { ClaimDto, ClaimStatusChangeDto } from "@framework/dtos/claimDto";
-// import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
-// import { CostsSummaryForPeriodDto } from "@framework/dtos/costsSummaryForPeriodDto";
+import { ClaimDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { roundCurrency } from "@framework/util/numberHelper";
-// import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
+import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
 import { DocumentsUnavailable } from "@ui/components/atomicDesign/organisms/documents/DocumentsUnavailable/DocumentsUnavailable";
@@ -26,7 +23,7 @@ import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { PageLoader } from "@ui/components/bjss/loading";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
@@ -35,7 +32,7 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { useStores } from "@ui/redux/storesProvider";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { checkImpactManagementPcfNotSubmittedForFinalClaim } from "@ui/helpers/checkImpPcfNotSubmittedForFinalClaim";
-import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { useClaimSummaryData } from "./claimSummary.logic";
 
 export interface ClaimSummaryParams {
   projectId: ProjectId;
@@ -46,44 +43,7 @@ export interface ClaimSummaryParams {
 type OnUpdate = (saving: boolean, dto: Pick<ClaimDto, "comments">, link: ILinkInfo, isSubmitting: boolean) => void;
 
 interface CombinedData {
-  project: Pick<
-    ProjectDto,
-    | "id"
-    | "competitionType"
-    | "roles"
-    | "impactManagementParticipation"
-    | "projectNumber"
-    | "title"
-    | "isNonFec"
-    | "monitoringLevel"
-  >;
-  partner: Pick<
-    PartnerDto,
-    | "id"
-    | "awardRate"
-    | "totalParticipantGrant"
-    | "totalFutureForecastsForParticipants"
-    | "totalParticipantCostsClaimed"
-  >;
-  claim: Pick<
-    ClaimDto,
-    | "id"
-    | "isFinalClaim"
-    | "pcfStatus"
-    | "periodEndDate"
-    | "periodId"
-    | "periodStartDate"
-    | "isIarRequired"
-    | "comments"
-    | "totalCost"
-    | "status"
-  >;
-  //   claimOverrides: Pick<ClaimOverrideRateDto, "">;
-  //   claimDetails: Pick<CostsSummaryForPeriodDto, "">[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
-  statusChanges: ClaimStatusChangeDto[];
-  documents: DocumentSummaryDto[];
-  totalCosts: TotalCosts;
 }
 
 type LinkProps = {
@@ -101,7 +61,8 @@ const ClaimSummaryComponent = (
       onUpdate: OnUpdate;
     },
 ) => {
-  const { isLoans } = checkProjectCompetition(props.project.competitionType);
+  const data = useClaimSummaryData(props.projectId, props.partnerId, props.periodId);
+  const { isLoans } = checkProjectCompetition(data.project.competitionType);
 
   const linkProps: LinkProps = {
     projectId: props.projectId,
@@ -109,20 +70,17 @@ const ClaimSummaryComponent = (
     periodId: props.periodId,
   };
 
-  const { isMo } = getAuthRoles(props.project.roles);
+  const { isMo } = getAuthRoles(data.project.roles);
 
   // Disable completing the form if impact management and not received PCF
-  const impMgmtPcfNotSubmittedForFinalClaim =
-    props.project.impactManagementParticipation === ImpactManagementParticipation.Yes
-      ? props.claim.isFinalClaim && props.claim.pcfStatus !== "Received"
-      : false;
+  const impMgmtPcfNotSubmittedForFinalClaim = checkImpactManagementPcfNotSubmittedForFinalClaim(data.claim);
 
   return (
     <Page
       backLink={
         <BackLink
           route={
-            props.claim.isFinalClaim
+            data.claim.isFinalClaim
               ? props.routes.claimDocuments.getLink(linkProps)
               : props.routes.claimForecast.getLink(linkProps)
           }
@@ -132,9 +90,10 @@ const ClaimSummaryComponent = (
       }
       error={props.editor.error}
       validator={props.editor.validator}
-      pageTitle={<Title projectNumber={props.project.projectNumber} title={props.project.title} />}
+      pageTitle={<Title />}
+      fragmentRef={data.fragmentRef}
     >
-      {props.totalCosts.totalCostsClaimed < 0 && (
+      {data.totalCosts.totalCostsClaimed < 0 && (
         <ValidationMessage
           qa="summary-warning"
           messageType="info"
@@ -142,7 +101,7 @@ const ClaimSummaryComponent = (
         />
       )}
 
-      <Section qa="claimSummaryForm" title={<ClaimPeriodDate claim={props.claim} />}>
+      <Section qa="claimSummaryForm" title={<ClaimPeriodDate claim={data.claim} />}>
         {impMgmtPcfNotSubmittedForFinalClaim &&
           (isMo ? (
             <ValidationMessage
@@ -155,7 +114,7 @@ const ClaimSummaryComponent = (
               message={<Content value={x => x.claimsMessages.applicantIarPcfMissingFinalClaim} markdown />}
             />
           ))}
-        {props.claim.isFinalClaim && (
+        {data.claim.isFinalClaim && (
           <ValidationMessage messageType="info" message={<Content value={x => x.claimsMessages.finalClaim} />} />
         )}
 
@@ -163,24 +122,24 @@ const ClaimSummaryComponent = (
           title={<Content value={x => x.pages.claimPrepareSummary.costsTitle} />}
           qa="costs-to-be-claimed-summary"
         >
-          {/* <AwardRateOverridesMessage claimOverrides={props.claimOverrides} isNonFec={props.project.isNonFec} /> */}
+          <AwardRateOverridesMessage />
           <SummaryList qa="costs-to-be-claimed-summary-list">
             <SummaryListItem
               label={x => x.pages.claimPrepareSummary.costsClaimedLabel}
-              content={<Currency value={props.totalCosts.totalCostsClaimed} />}
+              content={<Currency value={data.totalCosts.totalCostsClaimed} />}
               qa="totalCostsClaimed"
             />
 
             <SummaryListItem
               label={x => x.pages.claimPrepareSummary.fundingLevelLabel}
-              content={<Percentage value={props.partner.awardRate} />}
+              content={<Percentage value={data.partner.awardRate} />}
               qa="fundingLevel"
             />
 
             {!isLoans && (
               <SummaryListItem
                 label={x => x.pages.claimPrepareSummary.costsToBePaidLabel}
-                content={<Currency value={props.totalCosts.totalCostsPaid} />}
+                content={<Currency value={data.totalCosts.totalCostsPaid} />}
                 qa="totalCostsPaid"
               />
             )}
@@ -197,12 +156,12 @@ const ClaimSummaryComponent = (
           title={<Content value={x => x.pages.claimPrepareSummary.claimDocumentsTitle} />}
           qa="claim-documents-summary"
         >
-          <DocumentValidation {...props} linkProps={linkProps} />
+          <DocumentValidation {...props} {...data} linkProps={linkProps} />
         </Section>
 
-        {!props.claim.isFinalClaim && <ForecastSummary linkProps={linkProps} {...props} />}
+        {!data.claim.isFinalClaim && <ForecastSummary linkProps={linkProps} {...props} {...data} />}
 
-        <ClaimForm {...props} disabled={impMgmtPcfNotSubmittedForFinalClaim} />
+        <ClaimForm {...props} {...data} disabled={impMgmtPcfNotSubmittedForFinalClaim} />
       </Section>
     </Page>
   );
@@ -420,15 +379,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
   const claimSubmittedMessage = getContent(x => x.claimsMessages.claimSubmittedMessage);
 
   const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partner: stores.partners.getById(props.partnerId),
-    claim: stores.claims.get(props.partnerId, props.periodId),
-    // claimOverrides: stores.claimOverrides.getAllByPartner(props.partnerId),
-    // claimDetails: stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId), // costsSummaryForPeriod
-    statusChanges: stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId),
-    documents: stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId),
     editor: stores.claims.getClaimEditor(true, props.projectId, props.partnerId, props.periodId),
-    totalCosts: stores.claims.getTotalCosts(props.projectId, props.partnerId, props.periodId),
   });
 
   const onUpdate = (saving: boolean, dto: Pick<ClaimDto, "comments">, link: ILinkInfo, isSubmitting: boolean) =>
@@ -444,10 +395,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
     );
 
   return (
-    <PageLoader
-      pending={combined}
-      render={data => <ClaimSummaryComponent {...data} onUpdate={onUpdate} {...props} />}
-    />
+    <PageLoader pending={combined} render={x => <ClaimSummaryComponent {...x} onUpdate={onUpdate} {...props} />} />
   );
 };
 
