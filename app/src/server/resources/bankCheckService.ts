@@ -83,11 +83,11 @@ export class BankCheckService {
     if (request.ok) {
       return await request.json();
     } else {
-      this.logger.debug(
+      this.logger.error(
         "Failed querying Experian via Integration Platform",
         `${bankCheckUrl}${path}`,
-        payload,
-        await request.json(),
+        await request.text(),
+        request.status,
       );
       throw Error("Failed querying Experian via Integration Platform");
     }
