@@ -5,6 +5,10 @@ import { useState } from "react";
 import { Logger } from "@shared/developmentLogger";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 
+export enum Propegation {
+  STOP,
+}
+
 /**
  * ### useOnUpdate
  * Takes an update api call and an optional onSuccess and onError callback.
@@ -23,7 +27,7 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
 }: {
   req: (data: TFormValues, context?: TContext) => Promise<TResponse>;
   onSuccess?: (data: TFormValues, res: TResponse, context?: TContext) => void;
-  onError?: (e: unknown) => void;
+  onError?: (e: unknown) => Propegation | void;
 }) => {
   const serverRenderedApiError = useApiErrorContext();
   const [apiError, setApiError] = useState(serverRenderedApiError);
@@ -41,15 +45,18 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
     } catch (e: unknown) {
       const logger = new Logger("onUpdate");
 
-      if (isApiError(e)) {
-        setApiError(e);
-        scrollToTheTopSmoothly();
-      }
-
       setIsFetching(false);
 
       logger.error("request error", e);
-      onError(e);
+
+      // Check if we want to cancel the `setApiError` call
+      const propegation = onError(e);
+
+      // If not cancelled and is an api error...
+      if (propegation !== Propegation.STOP && isApiError(e)) {
+        setApiError(e);
+        scrollToTheTopSmoothly();
+      }
     }
   };
 
