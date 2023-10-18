@@ -710,7 +710,9 @@ export const period2AbCad = () => {
 };
 
 export const capPotMessageNotExist = () => {
-  cy.getByQA("validation-message-content").should("not.exist");
+  cy.validationNotification(
+    "Please be aware, approval of this claim will cause a percentage of your grant to be retained.",
+  ).should("not.exist");
 };
 
 export const triggerCapPot = () => {
