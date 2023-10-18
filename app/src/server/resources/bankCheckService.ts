@@ -62,13 +62,13 @@ export class BankCheckService {
     path: string,
     payload: T,
   ): Promise<U> {
-    const { bankCheckUrl } = configuration.sil;
+    const { sil } = configuration;
 
-    if (!bankCheckUrl) {
+    if (!sil.url) {
       throw new ConfigurationError("Bank checking service not configured");
     }
 
-    const request = await fetch(`${bankCheckUrl}${path}`, {
+    const request = await fetch(`${sil.url}${path}`, {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       compress: false, // Note: This allows 'Accept-Encoding' to be overridden, SIL only allows 'zip'
@@ -85,7 +85,7 @@ export class BankCheckService {
     } else {
       this.logger.error(
         "Failed querying Experian via Integration Platform",
-        `${bankCheckUrl}${path}`,
+        `${sil.url}${path}`,
         await request.text(),
         request.status,
       );
