@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Logger } from "@shared/developmentLogger";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 
-export enum Propegation {
+export enum Propagation {
   STOP,
 }
 
@@ -27,7 +27,7 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
 }: {
   req: (data: TFormValues, context?: TContext) => Promise<TResponse>;
   onSuccess?: (data: TFormValues, res: TResponse, context?: TContext) => void;
-  onError?: (e: unknown) => Propegation | void;
+  onError?: (e: unknown) => Propagation | void;
 }) => {
   const serverRenderedApiError = useApiErrorContext();
   const [apiError, setApiError] = useState(serverRenderedApiError);
@@ -50,10 +50,10 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
       logger.error("request error", e);
 
       // Check if we want to cancel the `setApiError` call
-      const propegation = onError(e);
+      const propagation = onError(e);
 
       // If not cancelled and is an api error...
-      if (propegation !== Propegation.STOP && isApiError(e)) {
+      if (propagation !== Propagation.STOP && isApiError(e)) {
         setApiError(e);
         scrollToTheTopSmoothly();
       }
