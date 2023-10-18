@@ -4,12 +4,17 @@ import { ProjectSetupBankDetailsQuery } from "./__generated__/ProjectSetupBankDe
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { useOnUpdate } from "@framework/api-helpers/onUpdate";
+import { Propegation, useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { useNavigate } from "react-router-dom";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { BankCheckStatus } from "@framework/constants/partner";
+import { ErrorCode } from "@framework/constants/enums";
+import { ValidationError } from "@shared/appError";
+import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
+import { UseFormSetError } from "react-hook-form";
+import { useContent } from "@ui/hooks/content.hook";
 
 export type FormValues = {
   companyNumber: string;
@@ -51,25 +56,15 @@ export const useProjectSetupBankDetailsQuery = (projectId: ProjectId, partnerId:
   return { project, partner };
 };
 
-type BankCheckValidationError = {
-  results: {
-    bankCheckValidation: {
-      isValid: boolean;
-    };
-  };
-};
-
-const isBankCheckValidationError = (e: unknown): e is BankCheckValidationError => {
-  return (e as BankCheckValidationError)?.results?.bankCheckValidation?.isValid;
-};
-
 export const useOnUpdateProjectSetupBankDetails = (
   projectId: ProjectId,
   partnerId: PartnerId,
   partner: Pick<PartnerDto, "bankDetails" | "bankCheckRetryAttempts" | "id" | "projectId">,
+  { setError }: { setError: UseFormSetError<FormValues> },
 ) => {
   const navigate = useNavigate();
   const routes = useRoutes();
+  const { getContent } = useContent();
 
   return useOnUpdate<FormValues, { bankCheckStatus: BankCheckStatus }>({
     req: data =>
@@ -113,8 +108,22 @@ export const useOnUpdateProjectSetupBankDetails = (
       }
     },
     onError: e => {
-      if (isBankCheckValidationError(e)) {
-        partner.bankCheckRetryAttempts += 1;
+      if (typeof e === "object" && e !== null && "code" in e && e.code === ErrorCode.VALIDATION_ERROR) {
+        const error = e as ValidationError<PartnerDtoValidator>;
+
+        // If we have a bank checking error...
+        const bankCheckValidation = error.results?.bankCheckValidation;
+        if (!bankCheckValidation?.isValid) {
+          partner.bankCheckRetryAttempts += 1;
+
+          // Display the error message in React Hook Form
+          const message = getContent(x => x.validation.partnerDtoValidator.bankChecksFailed);
+          setError("sortCode", { message });
+          setError("accountNumber", { message });
+
+          // Stop the API Error box from appearing
+          return Propegation.STOP;
+        }
       }
     },
   });

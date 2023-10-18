@@ -3,8 +3,8 @@ import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 import { ZodError } from "zod";
 
-export class AppError extends Error implements IAppError {
-  public results: Results<ResultBase> | null = null;
+export class AppError<T extends Results<ResultBase> = Results<ResultBase>> extends Error implements IAppError<T> {
+  public results: T | null = null;
 
   constructor(public code: ErrorCode, public message: string, public original?: Error) {
     super();
@@ -55,8 +55,8 @@ export class BadRequestError extends AppError {
   }
 }
 
-export class ValidationError extends AppError {
-  constructor(results: Results<ResultBase>, readonly original?: Error) {
+export class ValidationError<T extends Results<ResultBase> = Results<ResultBase>> extends AppError<T> {
+  constructor(results: T, readonly original?: Error) {
     super(ErrorCode.VALIDATION_ERROR, "Validation Error", original);
     this.results = results;
   }

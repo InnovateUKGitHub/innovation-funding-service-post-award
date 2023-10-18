@@ -38,7 +38,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
   const { getContent: c } = useContent();
   const { project, partner } = useProjectSetupBankDetailsQuery(props.projectId, props.partnerId);
 
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+  const { register, handleSubmit, formState, setError } = useForm<FormValues>({
     defaultValues: {
       companyNumber: partner.bankDetails.companyNumber ?? "",
       sortCode: partner.bankDetails.sortCode ?? "",
@@ -54,7 +54,9 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
     }),
   });
 
-  const { onUpdate, apiError } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, partner);
+  const { onUpdate, apiError } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, partner, {
+    setError,
+  });
 
   const validationErrors = useRhfErrors<FormValues>(formState.errors);
 
