@@ -94,8 +94,7 @@ export class TestConfig implements IConfig {
   };
 
   public sil = {
-    bankCheckUrl: "",
-    bankCheckPort: undefined,
+    url: "",
   };
 
   public companiesHouse = {

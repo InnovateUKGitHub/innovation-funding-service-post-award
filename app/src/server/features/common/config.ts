@@ -98,7 +98,7 @@ export interface IConfig {
   };
 
   readonly sil: {
-    bankCheckUrl: string;
+    url: string;
   };
 
   readonly urls: {
@@ -247,7 +247,7 @@ const s3Account = {
 };
 
 const sil = {
-  bankCheckUrl: process.env.SIL_EXPERIAN_URL ?? "",
+  url: process.env.SIL_HYDRA_URL ?? "",
 };
 
 const companiesHouse = {
