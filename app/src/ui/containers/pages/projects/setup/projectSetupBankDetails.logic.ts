@@ -19,6 +19,7 @@ import { useContent } from "@ui/hooks/content.hook";
 export type FormValues = {
   companyNumber: string;
   sortCode: string;
+  accountDetails: undefined;
   accountNumber: string;
   accountBuilding: string;
   accountStreet: string;
@@ -118,8 +119,7 @@ export const useOnUpdateProjectSetupBankDetails = (
 
           // Display the error message in React Hook Form
           const message = getContent(x => x.validation.partnerDtoValidator.bankChecksFailed);
-          setError("sortCode", { message });
-          setError("accountNumber", { message });
+          setError("accountDetails", { message, types: { deps: ["sortCode", "accountNumber"] } });
 
           // Stop the API Error box from appearing
           return Propegation.STOP;
