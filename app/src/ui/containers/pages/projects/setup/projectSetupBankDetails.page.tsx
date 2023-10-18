@@ -91,12 +91,20 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
             </FormGroup>
           </Fieldset>
 
-          <Fieldset>
+          <Fieldset id="accountDetails">
             <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleAccountDetails)}</Legend>
 
-            <SortCode partner={partner} register={register} error={validationErrors?.sortCode as RhfErrors} />
+            <SortCode
+              partner={partner}
+              register={register}
+              error={(validationErrors?.accountDetails as RhfErrors) ?? (validationErrors?.sortCode as RhfErrors)}
+            />
 
-            <AccountNumber partner={partner} register={register} error={validationErrors?.accountNumber as RhfErrors} />
+            <AccountNumber
+              partner={partner}
+              register={register}
+              error={(validationErrors?.accountDetails as RhfErrors) ?? (validationErrors?.accountNumber as RhfErrors)}
+            />
           </Fieldset>
 
           <Fieldset>
