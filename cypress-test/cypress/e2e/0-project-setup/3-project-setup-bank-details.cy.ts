@@ -1,6 +1,8 @@
 import { visitApp } from "../../common/visit";
 import {
   bankDetailsValidation,
+  correctSyntaxInvalidDetails,
+  correctSyntaxValidation,
   fillAccountInfoInvalid,
   fillAccountInformation,
   fillAddressInformation,
@@ -42,9 +44,13 @@ describe("Project setup > Provide your bank details", () => {
 
   it("Should have an 'Organisation information' section and populate 'Company number'", fillOrgInformation);
 
-  it("Should enter invalid account information and attempt to submit", fillAccountInfoInvalid);
+  it("Should enter invalid syntax account information and attempt to submit", fillAccountInfoInvalid);
 
   it("Should display a validation error due to invalid account information.", validateInvalidAccDetails);
+
+  it("Should enter valid syntax but invalid account information and attempt to submit.", correctSyntaxInvalidDetails);
+
+  it("Should display a validation error caused by the invalid account information", correctSyntaxValidation);
 
   it("Should have an 'Account details' section and populate 'Sort code'", fillAccountInformation);
 

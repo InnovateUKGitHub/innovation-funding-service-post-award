@@ -50,6 +50,16 @@ export const fillAccountInfoInvalid = () => {
   cy.button("Submit bank details").click();
 };
 
+export const correctSyntaxInvalidDetails = () => {
+  cy.get("#sortCode").clear().type("123321");
+  cy.get("#accountNumber").clear().type("12332123");
+  cy.button("Submit bank details").click();
+};
+
+export const correctSyntaxValidation = () => {
+  cy.validationLink("Check your sort code and account number.");
+};
+
 export const validateInvalidAccDetails = () => {
   cy.get("h2").contains("There is a problem");
   cy.validationLink("Enter a valid sort code.");
