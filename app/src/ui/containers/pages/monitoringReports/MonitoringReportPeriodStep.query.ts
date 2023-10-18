@@ -17,6 +17,9 @@ export const monitoringReportPeriodStepQuery = graphql`
                   Name {
                     value
                   }
+                  DeveloperName {
+                    value
+                  }
                 }
                 Acc_ProjectPeriodNumber__c {
                   value

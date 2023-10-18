@@ -126,6 +126,9 @@ export const pcrPrepareQuery = graphql`
                           value
                           label
                         }
+                        DeveloperName {
+                          value
+                        }
                       }
                     }
                   }

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3cf111ea444d445e012f391be01ecbdf>>
+ * @generated SignedSource<<6f03579bc968a0c73a49b0f049954466>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -68,6 +68,9 @@ export type PcrTimeExtensionWorkflowQuery$data = {
                       readonly value: string | null;
                     } | null;
                     readonly RecordType: {
+                      readonly DeveloperName: {
+                        readonly value: string | null;
+                      } | null;
                       readonly Name: {
                         readonly label: string | null;
                         readonly value: string | null;
@@ -398,6 +401,16 @@ v5 = [
                                               }
                                             ],
                                             "storageKey": null
+                                          },
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "StringValue",
+                                            "kind": "LinkedField",
+                                            "name": "DeveloperName",
+                                            "plural": false,
+                                            "selections": (v4/*: any*/),
+                                            "storageKey": null
                                           }
                                         ],
                                         "storageKey": null
@@ -454,16 +467,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "b358d8c3614a84814a4f686c6e74ccf8",
+    "cacheID": "da5ed08b8a5102cfa5a436426fd15604",
     "id": null,
     "metadata": {},
     "name": "PcrTimeExtensionWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrTimeExtensionWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {Id: {eq: $pcrItemId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AdditionalNumberofMonths__c {\n                      value\n                    }\n                    Acc_ExistingProjectDuration__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrTimeExtensionWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {Id: {eq: $pcrItemId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AdditionalNumberofMonths__c {\n                      value\n                    }\n                    Acc_ExistingProjectDuration__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4fdf4839eeee19866a40ca8d3f0fde49";
+(node as any).hash = "3aca27537dd53b7c3df4d5d4dce10cfb";
 
 export default node;

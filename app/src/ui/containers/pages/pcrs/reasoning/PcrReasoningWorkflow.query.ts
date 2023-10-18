@@ -84,6 +84,9 @@ const pcrReasoningWorkflowQuery = graphql`
                     value
                     label
                   }
+                  DeveloperName {
+                    value
+                  }
                 }
               }
             }

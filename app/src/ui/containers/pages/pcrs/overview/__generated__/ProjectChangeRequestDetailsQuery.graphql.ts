@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f506df3eef4d924b40655ad2ddf3e351>>
+ * @generated SignedSource<<aa389159f95b55c3cc02d42577c536d2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -73,6 +73,9 @@ export type ProjectChangeRequestDetailsQuery$data = {
                     } | null;
                     readonly Id: string;
                     readonly RecordType: {
+                      readonly DeveloperName: {
+                        readonly value: string | null;
+                      } | null;
                       readonly Name: {
                         readonly label: string | null;
                         readonly value: string | null;
@@ -635,6 +638,16 @@ v7 = [
                                               }
                                             ],
                                             "storageKey": null
+                                          },
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "StringValue",
+                                            "kind": "LinkedField",
+                                            "name": "DeveloperName",
+                                            "plural": false,
+                                            "selections": (v6/*: any*/),
+                                            "storageKey": null
                                           }
                                         ],
                                         "storageKey": null
@@ -691,16 +704,16 @@ return {
     "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "a6a5034a15c66518fe850917b0aa06ce",
+    "cacheID": "ac6a007f8a892f1512edf2eb68da3f8c",
     "id": null,
     "metadata": {},
     "name": "ProjectChangeRequestDetailsQuery",
     "operationKind": "query",
-    "text": "query ProjectChangeRequestDetailsQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_StatusChange__c(where: {and: [{Acc_ProjectChangeRequest__r: {Acc_Project__c: {eq: $projectId}}}, {Acc_ProjectChangeRequest__c: {eq: $pcrId}}]}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_PreviousProjectChangeRequestStatus__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              Acc_NewProjectChangeRequestStatus__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_ParticipantVisibility__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isFc\n                isMo\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_NewOrganisationName__c {\n                      value\n                    }\n                    Acc_OtherFunding__c {\n                      value\n                    }\n                    Acc_CommercialWork__c {\n                      value\n                    }\n                    Acc_OrganisationName__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ExistingPartnerName__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectChangeRequestDetailsQuery(\n  $projectId: ID!\n  $pcrId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_StatusChange__c(where: {and: [{Acc_ProjectChangeRequest__r: {Acc_Project__c: {eq: $projectId}}}, {Acc_ProjectChangeRequest__c: {eq: $pcrId}}]}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ProjectChangeRequest__c {\n                value\n              }\n              Acc_PreviousProjectChangeRequestStatus__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              Acc_NewProjectChangeRequestStatus__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_ParticipantVisibility__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isFc\n                isMo\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000) {\n                edges {\n                  node {\n                    Id\n                    Acc_Status__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_NewOrganisationName__c {\n                      value\n                    }\n                    Acc_OtherFunding__c {\n                      value\n                    }\n                    Acc_CommercialWork__c {\n                      value\n                    }\n                    Acc_OrganisationName__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ExistingPartnerName__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1b71d4390c3cf22258cb7bbaf5e741f5";
+(node as any).hash = "f0fd7c37719a5617c82947ec3682ff9a";
 
 export default node;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b19da3fa1ee584ebbea46c601bca7cef>>
+ * @generated SignedSource<<862ffe54e8285ff30ede836d2ae48086>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -57,6 +57,9 @@ export type PcrItemWorkflowQuery$data = {
                     } | null;
                     readonly Id: string;
                     readonly RecordType: {
+                      readonly DeveloperName: {
+                        readonly value: string | null;
+                      } | null;
                       readonly Name: {
                         readonly label: string | null;
                         readonly value: string | null;
@@ -189,6 +192,16 @@ v11 = {
           "storageKey": null
         }
       ],
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "StringValue",
+      "kind": "LinkedField",
+      "name": "DeveloperName",
+      "plural": false,
+      "selections": (v6/*: any*/),
       "storageKey": null
     }
   ],
@@ -626,16 +639,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "91d44f2237e0d2d10ea5571995896dd8",
+    "cacheID": "c84579db156a20d141fcc65953e19159",
     "id": null,
     "metadata": {},
     "name": "PcrItemWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrItemWorkflowQuery(\n  $projectId: ID!\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...TitleFragment\n      ...NavigationArrowsFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {and: [{Id: {eq: $pcrItemId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}) {\n                edges {\n                  node {\n                    Id\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_CommercialWork__c {\n                      value\n                    }\n                    Acc_OtherFunding__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment NavigationArrowsFragment on UIAPI {\n  query {\n    NavigationArrows_ProjectChangeRequest: Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_Project__c {\n            value\n          }\n          Acc_RequestHeader__c {\n            value\n          }\n          RecordType {\n            Name {\n              value\n              label\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment TitleFragment on UIAPI {\n  query {\n    Title_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrItemWorkflowQuery(\n  $projectId: ID!\n  $pcrId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...TitleFragment\n      ...NavigationArrowsFragment\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionId__r {\n                Acc_TypeofAid__c {\n                  value\n                }\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {and: [{Id: {eq: $pcrItemId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}) {\n                edges {\n                  node {\n                    Id\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_CommercialWork__c {\n                      value\n                    }\n                    Acc_OtherFunding__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment NavigationArrowsFragment on UIAPI {\n  query {\n    NavigationArrows_ProjectChangeRequest: Acc_ProjectChangeRequest__c(where: {or: [{Id: {eq: $pcrId}}, {Acc_RequestHeader__c: {eq: $pcrId}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_Project__c {\n            value\n          }\n          Acc_RequestHeader__c {\n            value\n          }\n          RecordType {\n            Name {\n              value\n              label\n            }\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment TitleFragment on UIAPI {\n  query {\n    Title_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "944fe751f0df09c152d359cba97cc38e";
+(node as any).hash = "6cc21224e39396832536057e6536f5a3";
 
 export default node;

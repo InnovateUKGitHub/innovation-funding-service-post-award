@@ -39,6 +39,9 @@ const pcrModifyOptionsQuery = graphql`
                     value
                     label
                   }
+                  DeveloperName {
+                    value
+                  }
                   Id
                 }
               }

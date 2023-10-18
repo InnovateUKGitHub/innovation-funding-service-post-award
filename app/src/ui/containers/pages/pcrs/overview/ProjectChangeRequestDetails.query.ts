@@ -111,6 +111,9 @@ const pcrDetailsQuery = graphql`
                           value
                           label
                         }
+                        DeveloperName {
+                          value
+                        }
                       }
                     }
                   }

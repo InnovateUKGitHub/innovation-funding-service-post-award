@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6a60474c9e90ef0f2dbe7c747dae5954>>
+ * @generated SignedSource<<c204ada799dac9d268a1fc80b6a6fe9f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,6 +23,9 @@ export type NavigationArrowsFragment$data = {
           } | null;
           readonly Id: string;
           readonly RecordType: {
+            readonly DeveloperName: {
+              readonly value: string | null;
+            } | null;
             readonly Name: {
               readonly label: string | null;
               readonly value: string | null;
@@ -193,6 +196,16 @@ return {
                             }
                           ],
                           "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "StringValue",
+                          "kind": "LinkedField",
+                          "name": "DeveloperName",
+                          "plural": false,
+                          "selections": (v2/*: any*/),
+                          "storageKey": null
                         }
                       ],
                       "storageKey": null
@@ -215,6 +228,6 @@ return {
 };
 })();
 
-(node as any).hash = "1a278f29b9f2cfd82943fba53427ed3f";
+(node as any).hash = "9ae769e6cee020059faea0f0f89e25a8";
 
 export default node;

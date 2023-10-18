@@ -56,6 +56,9 @@ export const monitoringReportWorkflowQuery = graphql`
                   Name {
                     value
                   }
+                  DeveloperName {
+                    value
+                  }
                 }
                 Acc_MonitoringHeader__c {
                   value

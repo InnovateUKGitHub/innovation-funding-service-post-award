@@ -21,6 +21,9 @@ export const navigationArrowsFragment = graphql`
                 value
                 label
               }
+              DeveloperName {
+                value
+              }
             }
           }
         }

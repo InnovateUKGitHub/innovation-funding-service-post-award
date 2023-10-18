@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<85a2827c02373b3c0d3f01c3218fd2b7>>
+ * @generated SignedSource<<de49060805aca160b8ec050c8416a167>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -27,6 +27,9 @@ export type PcrModifyOptionsQuery$data = {
               } | null;
               readonly Id: string;
               readonly RecordType: {
+                readonly DeveloperName: {
+                  readonly value: string | null;
+                } | null;
                 readonly Id: string;
                 readonly Name: {
                   readonly label: string | null;
@@ -323,6 +326,16 @@ v6 = [
                                 ],
                                 "storageKey": null
                               },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "DeveloperName",
+                                "plural": false,
+                                "selections": (v4/*: any*/),
+                                "storageKey": null
+                              },
                               (v2/*: any*/)
                             ],
                             "storageKey": null
@@ -364,16 +377,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "5a4243b0860f9e6e45d437aac922461e",
+    "cacheID": "5f7c2614031f506100e2e029967e80e3",
     "id": null,
     "metadata": {},
     "name": "PcrModifyOptionsQuery",
     "operationKind": "query",
-    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrModifyOptionsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, first: 2000) {\n          totalCount\n        }\n        Acc_ProjectChangeRequest__c(where: {Acc_Project__c: {eq: $projectId}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_RequestHeader__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n                Id\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5ff3b4341a81ce2fee9bb069f3eda93e";
+(node as any).hash = "54392237b6db2ff9a64b49fa34db5369";
 
 export default node;

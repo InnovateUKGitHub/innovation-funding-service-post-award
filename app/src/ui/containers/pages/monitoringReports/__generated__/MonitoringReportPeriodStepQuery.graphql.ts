@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7a26395b4fb429285b592f8a24d8aac3>>
+ * @generated SignedSource<<c123e8e611cad4fdf5b4f1002454240e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -25,6 +25,9 @@ export type MonitoringReportPeriodStepQuery$data = {
               } | null;
               readonly Id: string;
               readonly RecordType: {
+                readonly DeveloperName: {
+                  readonly value: string | null;
+                } | null;
                 readonly Name: {
                   readonly value: string | null;
                 } | null;
@@ -183,6 +186,16 @@ v4 = [
                                 "plural": false,
                                 "selections": (v3/*: any*/),
                                 "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "StringValue",
+                                "kind": "LinkedField",
+                                "name": "DeveloperName",
+                                "plural": false,
+                                "selections": (v3/*: any*/),
+                                "storageKey": null
                               }
                             ],
                             "storageKey": null
@@ -327,16 +340,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "ba42491e85f5c0a8cc5a0d884b4ff526",
+    "cacheID": "991c31d359df18042b02b4c4a445796d",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportPeriodStepQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportPeriodStepQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {Id: {eq: $monitoringReportId}}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportPeriodStepQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {Id: {eq: $monitoringReportId}}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "cedbe47e6178631abf006ae1227908b1";
+(node as any).hash = "67573f908781443225bac104437f8ba6";
 
 export default node;

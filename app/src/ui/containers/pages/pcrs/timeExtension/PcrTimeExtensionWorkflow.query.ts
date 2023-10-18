@@ -60,6 +60,9 @@ export const pcrTimeExtensionWorkflowQuery = graphql`
                           value
                           label
                         }
+                        DeveloperName {
+                          value
+                        }
                       }
                     }
                   }
