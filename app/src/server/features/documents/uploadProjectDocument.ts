@@ -5,8 +5,7 @@ import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
 import { CommandMultipleDocumentBase } from "../common/commandBase";
 import { ValidationError } from "../common/appError";
-import { DocumentUploadEventEmitter } from "@server/eventEmitter";
-
+import { AccEventEmitter, WebRequestEventMap } from "@server/eventEmitter";
 export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<string[]> {
   protected filesRequired = true;
   protected showValidationErrors = true;
@@ -14,7 +13,7 @@ export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<st
   constructor(
     private readonly projectId: ProjectId,
     protected readonly documents: MultipleDocumentUploadDto,
-    protected readonly documentUploadEventEmitter?: DocumentUploadEventEmitter,
+    protected readonly documentUploadEventEmitter?: AccEventEmitter<WebRequestEventMap>,
   ) {
     super();
   }
@@ -82,9 +81,11 @@ export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<st
       if (document.fileName && document.size) {
         const id = await context.repositories.documents.insertDocument(document, recordId, this.documents.description);
         results.push(id);
-        this.documentUploadEventEmitter?.emit("documentUploaded", id);
+        this.documentUploadEventEmitter?.emit("chunk", id);
       }
     }
+
+    this.documentUploadEventEmitter?.emit("done", undefined);
 
     return results;
   }

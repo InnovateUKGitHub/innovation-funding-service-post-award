@@ -4,6 +4,7 @@ import { IApiClient } from "@server/apis";
 import { processResponse } from "@shared/processResponse";
 import { removeUndefinedString } from "@shared/string-helpers";
 import { ClientFileWrapper } from "../clientFileWrapper";
+import { AccEventEmitter, WebRequestEventMap } from "@server/eventEmitter";
 
 const clientApi: IApiClient<"client"> = {
   accounts: {
@@ -104,6 +105,8 @@ const clientApi: IApiClient<"client"> = {
       ajaxPostFiles(`/api/documents/projectChangeRequests/${projectId}/${projectChangeRequestIdOrItemId}`, documents),
     uploadProjectDocument: ({ projectId, documents }) =>
       ajaxPostFiles(`/api/documents/projects/${projectId}`, documents),
+    subscribeToUploadProjectDocument: ({ projectId, documents }) =>
+      subscribePostFiles(`/api/documents/projects/${projectId}/subscribe`, documents),
     uploadPartnerDocument: ({ projectId, partnerId, documents }) =>
       ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}`, documents),
   },
@@ -210,11 +213,66 @@ const getJsonHeaders = () => {
   return headers;
 };
 
+/**
+ * Subscribe to a process.
+ * @returns An event emitter, which should emit a "chunk" when work is done.
+ */
+const subscribe = (rawQueryUrl: string, opts?: RequestInit): AccEventEmitter<WebRequestEventMap> => {
+  const options: RequestInit = { credentials: "same-origin" as RequestCredentials, ...opts };
+  const queryUrl = removeUndefinedString(rawQueryUrl);
+  const eventEmitter = new AccEventEmitter<WebRequestEventMap>();
+
+  const request = async () => {
+    const response = await fetch(queryUrl, options);
+
+    if (!response.body) {
+      throw new Error("Failed to find request body :((");
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder("utf-8");
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      const text = decoder.decode(value);
+      eventEmitter.emit("chunk", text);
+    }
+
+    eventEmitter.emit("done", undefined);
+  };
+
+  request();
+
+  return eventEmitter;
+};
+
+const subscribePostFormData = (url: string, formData: FormData, opts?: RequestInit) => {
+  const options: RequestInit = Object.assign({}, opts, {
+    method: "POST",
+    body: formData,
+  });
+  return subscribe(url, options);
+};
+
+const subscribePostFiles = (url: string, documents: MultipleDocumentUploadDto) => {
+  const formData = new FormData();
+  documents.files.forEach(file => {
+    formData.append("attachment", (file as ClientFileWrapper).file);
+  });
+  if (documents.description) {
+    formData.append("description", documents.description.toString());
+  }
+  if (documents.partnerId) {
+    formData.append("partnerId", documents.partnerId);
+  }
+  return subscribePostFormData(url, formData);
+};
+
 const ajax = <T>(rawQueryUrl: string, opts?: RequestInit): Promise<T> => {
   const options = { credentials: "same-origin" as RequestCredentials, ...opts };
-
   const queryUrl = removeUndefinedString(rawQueryUrl);
-
   const request = fetch(queryUrl, options);
 
   return request.then(response => {

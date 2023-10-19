@@ -30,7 +30,7 @@ import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadP
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ApiParams, ControllerBase } from "./controllerBase";
-import { DocumentUploadEventEmitter } from "@server/eventEmitter";
+import { AccEventEmitter, WebRequestEventMap } from "@server/eventEmitter";
 
 export interface IDocumentsApi<Context extends "client" | "server"> {
   getClaimDocuments: (
@@ -81,7 +81,7 @@ export interface IDocumentsApi<Context extends "client" | "server"> {
   ) => Promise<{ documentIds: string[] }>;
   subscribeToUploadProjectDocument: (
     params: ApiParams<Context, { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
-  ) => DocumentUploadEventEmitter;
+  ) => AccEventEmitter<WebRequestEventMap>;
   uploadPartnerDocument: (
     params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; documents: MultipleDocumentUploadDto }>,
   ) => Promise<{ documentIds: string[] }>;
@@ -289,6 +289,12 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
     );
 
     this.postAttachments(
+      "/projects/:projectId/subscribe",
+      p => ({ projectId: p.projectId, ws: p.ws }),
+      p => this.subscribeToUploadProjectDocument(p),
+    );
+
+    this.postAttachments(
       "/partners/:projectId/:partnerId",
       p => ({ projectId: p.projectId, partnerId: p.partnerId }),
       p => this.uploadPartnerDocument(p),
@@ -483,12 +489,12 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   public subscribeToUploadProjectDocument(
     params: ApiParams<"server", { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
   ) {
-    const eventEmitter = new DocumentUploadEventEmitter();
+    const eventEmitter = new AccEventEmitter<WebRequestEventMap>();
 
     const command = new UploadProjectDocumentCommand(params.projectId, params.documents, eventEmitter);
     contextProvider.start(params).runCommand(command);
 
-    eventEmitter.on("documentUploaded", data => {
+    eventEmitter.on("chunk", data => {
       console.log(data);
     });
 

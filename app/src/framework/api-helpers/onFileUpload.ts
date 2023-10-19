@@ -49,12 +49,23 @@ export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType
               },
             });
           } else {
-            return clientsideApiClient.documents.uploadProjectDocument({
-              projectId,
-              documents: {
-                files,
-                description,
-              },
+            return new Promise<void>(resolve => {
+              const upload = clientsideApiClient.documents.subscribeToUploadProjectDocument({
+                projectId,
+                documents: {
+                  files,
+                  description,
+                },
+              });
+
+              upload.on("chunk", data => {
+                console.log("Hello", data);
+              });
+
+              upload.on("done", () => {
+                console.log("Done!");
+                resolve();
+              });
             });
           }
         }

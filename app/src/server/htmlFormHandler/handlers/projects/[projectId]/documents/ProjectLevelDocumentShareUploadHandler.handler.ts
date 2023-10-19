@@ -9,6 +9,7 @@ import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import { ProjectDocumentsRoute } from "@ui/containers/pages/projects/documents/projectDocuments.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { configuration } from "@server/features/common/config";
+import { AccEventEmitter, WebRequestEventMap } from "@server/eventEmitter";
 
 class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   ProjectLevelUploadSchemaType,
@@ -53,7 +54,19 @@ class ProjectLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
     input: z.output<ProjectLevelUploadSchemaType>;
     context: IContext;
   }): Promise<void> {
-    await context.runCommand(new UploadProjectDocumentCommand(input.projectId, input));
+    const eventEmitter = new AccEventEmitter<WebRequestEventMap>();
+
+    await context.runCommand(new UploadProjectDocumentCommand(input.projectId, input, eventEmitter));
+
+    await new Promise<void>(resolve => {
+      eventEmitter.on("chunk", () => {
+        res.write(" ");
+      });
+
+      eventEmitter.on("done", () => {
+        resolve();
+      });
+    });
 
     // TODO: Actually use Redux instead of a temporary array
     res.locals.preloadedReduxActions.push(

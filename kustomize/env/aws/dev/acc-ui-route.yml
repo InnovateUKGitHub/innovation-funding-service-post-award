@@ -2,7 +2,5 @@ kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
   name: acc-ui-route
-  annotations:
-    haproxy.router.openshift.io/timeout: 50s
 spec:
   host: www-acc-dev.apps.ocp4.innovateuk.ukri.org

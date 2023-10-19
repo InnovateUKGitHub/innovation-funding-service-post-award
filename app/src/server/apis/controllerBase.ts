@@ -10,6 +10,7 @@ import { IFileWrapper } from "@framework/types/fileWapper";
 import { IAppError } from "@framework/types/IAppError";
 import { ISessionUser } from "@framework/types/IUser";
 import { configuration } from "@server/features/common/config";
+import { AccEventEmitter, WebRequestEventMap } from "@server/eventEmitter";
 
 export class ServerFileWrapper implements IFileWrapper {
   constructor(file: Express.Multer.File) {
@@ -49,6 +50,9 @@ type GetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body?:
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type InnerGetParams<T> = (params: RequestUrlParams, query: RequestQueryParams, body: any, req: Express.Request) => T;
 type Run<Context extends "client" | "server", T, TR> = (params: ApiParams<Context, T>) => Promise<TR>;
+type RunSubscription<Context extends "client" | "server", T> = (
+  params: ApiParams<Context, T>,
+) => AccEventEmitter<WebRequestEventMap>;
 
 export abstract class ControllerBaseWithSummary<Context extends "client" | "server", TSummaryDto, TDto> {
   public readonly router: express.Router;
@@ -88,7 +92,9 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
   protected postAttachments<TParams>(
     path: string,
     getParams: GetParams<TParams>,
-    run: Run<Context, TParams & { documents: MultipleDocumentUploadDto }, { documentIds: string[] }>,
+    run:
+      | RunSubscription<Context, TParams & { documents: MultipleDocumentUploadDto }>
+      | Run<Context, TParams & { documents: MultipleDocumentUploadDto }, { documentIds: string[] }>,
   ) {
     const wrappedGetParams: InnerGetParams<TParams & { documents: MultipleDocumentUploadDto }> = (
       params,
@@ -161,7 +167,7 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
   private executeMethod<TParams, TResponse>(
     successStatus: number,
     getParams: InnerGetParams<TParams>,
-    run: Run<Context, TParams, TResponse | null>,
+    run: Run<Context, TParams, TResponse | null> | RunSubscription<Context, TParams>,
     allowNulls: boolean,
   ) {
     return async (req: Request, resp: Response) => {
@@ -172,14 +178,26 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
         getParams((req.params || {}) as RequestUrlParams, (req.query as RequestQueryParams) || {}, req.body || {}, req),
       ) as ApiParams<Context, TParams>;
 
-      run(p)
-        .then(result => {
-          if ((result === null || result === undefined) && allowNulls === false) {
-            throw new NotFoundError();
-          }
-          resp.status(successStatus).send(result);
-        })
-        .catch((e: IAppError) => this.handleError(resp, e));
+      const response = run(p);
+
+      if (response instanceof AccEventEmitter) {
+        response.on("chunk", data => {
+          resp.write(`${JSON.stringify({ id: data })}\r\n`);
+        });
+
+        response.on("done", () => {
+          resp.end();
+        });
+      } else {
+        Promise.resolve(response)
+          .then(result => {
+            if ((result === null || result === undefined) && allowNulls === false) {
+              throw new NotFoundError();
+            }
+            resp.status(successStatus).send(result);
+          })
+          .catch((e: IAppError) => this.handleError(resp, e));
+      }
     };
   }
 
