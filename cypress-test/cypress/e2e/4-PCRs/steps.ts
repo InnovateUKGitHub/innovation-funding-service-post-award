@@ -821,7 +821,7 @@ export const headingAndGuidance = () => {
 };
 
 export const proposedDescription = () => {
-  cy.get("h2").contains("Proposed public description");
+  cy.get("legend").contains("Proposed public description");
   cy.get("span").contains("Published public description").click();
   cy.paragraph("Hello! I am the public description for this Cypress project.");
 };
@@ -832,7 +832,7 @@ export const newDescriptionEntry = () => {
 };
 
 export const proposedSummary = () => {
-  cy.get("h2").contains("Proposed project summary");
+  cy.get("legend").contains("Proposed project summary");
   cy.get("span").contains("Published project summary").click();
   cy.paragraph("Howdy! I am the public summary for this Cypress project.");
 };
@@ -1157,7 +1157,7 @@ export const clearAndValidate = () => {
   cy.get("textarea").should("have.value", "Howdy! I am the public summary for this Cypress project. \\").clear();
   cy.wait(500);
   cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Mark as complete");
+  cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
   cy.validationLink("Enter a project summary");

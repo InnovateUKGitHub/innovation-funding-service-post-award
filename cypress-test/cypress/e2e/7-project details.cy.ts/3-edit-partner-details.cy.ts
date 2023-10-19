@@ -8,7 +8,7 @@ import {
   shouldShowProjectTitle,
   showUpdatedPostcodes,
 } from "./steps";
-import { partnerValidation } from "e2e/0-project-setup/steps";
+import { partnerValidation } from "./steps";
 
 describe("Project details > Edit partner information", () => {
   before(() => {

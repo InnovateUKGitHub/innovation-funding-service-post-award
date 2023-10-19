@@ -55,6 +55,7 @@ describe("Project setup > Provide your bank details", () => {
   it("Should have an 'Account details' section and populate 'Sort code'", fillAccountInformation);
 
   it("Should no longer display the validation message", () => {
+    cy.reload();
     cy.getByQA("validation-summary").should("not.exist");
   });
 

@@ -36,23 +36,23 @@ export const fillOrgInformation = () => {
   cy.paragraph("EUI Small Ent Health");
   cy.getByLabel("Company number");
   cy.get("#hint-for-companyNumber").contains("This is the registered organisation number.");
-  cy.get("#companyNumber").type("12345678910");
+  cy.getByLabel("Company number").clear().type("12345678910");
 };
 
 export const fillAccountInfoInvalid = () => {
   cy.get("legend").contains("Account details");
   cy.getByLabel("Sort code");
   cy.get("#hint-for-sortCode").contains("Must be 6 digits long, for example: 311212.");
-  cy.get("#sortCode").clear().type("654321654321");
+  cy.getByLabel("Sort code").clear().type("654321654321");
   cy.getByLabel("Account number");
   cy.get("#hint-for-accountNumber").contains("Must be between 6 and 8 digits long, for example: 15481965.");
-  cy.get("#accountNumber").clear().type("1234567887654321");
+  cy.getByLabel("Account number").clear().type("1234567887654321");
   cy.button("Submit bank details").click();
 };
 
 export const correctSyntaxInvalidDetails = () => {
-  cy.get("#sortCode").clear().type("123321");
-  cy.get("#accountNumber").clear().type("12332123");
+  cy.getByLabel("Sort code").clear().type("123321");
+  cy.getByLabel("Account number").clear().type("12332123");
   cy.button("Submit bank details").click();
 };
 
@@ -72,10 +72,10 @@ export const fillAccountInformation = () => {
   cy.get("legend").contains("Account details");
   cy.getByLabel("Sort code");
   cy.get("#hint-for-sortCode").contains("Must be 6 digits long, for example: 311212.");
-  cy.get("#sortCode").clear().type("654321");
+  cy.getByLabel("Sort code").clear().type("654321");
   cy.getByLabel("Account number");
   cy.get("#hint-for-accountNumber").contains("Must be between 6 and 8 digits long, for example: 15481965.");
-  cy.get("#accountNumber").clear().type("12345678");
+  cy.getByLabel("Account number").clear().type("12345678");
 };
 
 export const fillAddressInformation = () => {
@@ -129,17 +129,6 @@ export const giveUsInformation = () => {
     listNumber++;
   });
   cy.get("h2").contains("Give us information");
-};
-
-export const partnerValidation = () => {
-  cy.getByQA("partner-information").contains(partners[0]).click();
-  cy.get("a").contains("Edit").click();
-  cy.get("#postcode").clear().type("SN123456789");
-  cy.submitButton("Save and return to partner information").click();
-  cy.validationMessage("Your location entry must be no more than 10 characters.");
-  cy.get("#postcode").clear().type("SN2");
-  cy.submitButton("Save and return to partner information").click();
-  cy.backLink("Back to project details").click();
 };
 
 export const bankDetailsValidation = () => {
