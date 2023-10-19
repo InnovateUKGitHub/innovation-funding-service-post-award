@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ad3bbe5ab03b1cdf9a6287ffb9b37142>>
+ * @generated SignedSource<<a4a8a5ff4255159bac8869929dd70c9e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -133,9 +133,408 @@ const node: ReaderFragment = (function () {
     v3 = {
       fields: [
         {
-          fields: v2 /*: any*/,
-          kind: "ObjectValue",
+          alias: "TotalCostsClaimed_ClaimDetails",
+          args: [
+            v0 /*: any*/,
+            {
+              kind: "Literal",
+              name: "orderBy",
+              value: {
+                Acc_ProjectParticipant__r: {
+                  Acc_AccountId__r: {
+                    Name: v1 /*: any*/,
+                  },
+                },
+                Acc_ProjectPeriodNumber__c: v1 /*: any*/,
+              },
+            },
+            {
+              fields: [
+                {
+                  items: [
+                    v3 /*: any*/,
+                    {
+                      kind: "Literal",
+                      name: "and.1",
+                      value: {
+                        RecordType: {
+                          DeveloperName: {
+                            eq: "Claims_Detail",
+                          },
+                        },
+                      },
+                    },
+                    {
+                      kind: "Literal",
+                      name: "and.2",
+                      value: {
+                        Acc_ClaimStatus__c: {
+                          ne: "New",
+                        },
+                      },
+                    },
+                    {
+                      kind: "Literal",
+                      name: "and.3",
+                      value: v4 /*: any*/,
+                    },
+                  ],
+                  kind: "ListValue",
+                  name: "and",
+                },
+              ],
+              kind: "ObjectValue",
+              name: "where",
+            },
+          ],
+          concreteType: "Acc_Claims__cConnection",
+          kind: "LinkedField",
+          name: "Acc_Claims__c",
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: "Acc_Claims__cEdge",
+              kind: "LinkedField",
+              name: "edges",
+              plural: true,
+              selections: [
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: "Acc_Claims__c",
+                  kind: "LinkedField",
+                  name: "node",
+                  plural: false,
+                  selections: [
+                    v6 /*: any*/,
+                    v7 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "CurrencyValue",
+                      kind: "LinkedField",
+                      name: "Acc_PeriodCostCategoryTotal__c",
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                    v8 /*: any*/,
+                  ],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+          ],
+          storageKey: null,
+        },
+        {
+          alias: "TotalCostsClaimed_ClaimOverrides",
+          args: [
+            v0 /*: any*/,
+            {
+              fields: [
+                {
+                  items: [
+                    v3 /*: any*/,
+                    {
+                      kind: "Literal",
+                      name: "and.1",
+                      value: {
+                        RecordType: {
+                          DeveloperName: {
+                            eq: "Total_Cost_Category",
+                          },
+                        },
+                      },
+                    },
+                    {
+                      kind: "Literal",
+                      name: "and.2",
+                      value: v4 /*: any*/,
+                    },
+                  ],
+                  kind: "ListValue",
+                  name: "and",
+                },
+              ],
+              kind: "ObjectValue",
+              name: "where",
+            },
+          ],
+          concreteType: "Acc_Profile__cConnection",
+          kind: "LinkedField",
+          name: "Acc_Profile__c",
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: "Acc_Profile__cEdge",
+              kind: "LinkedField",
+              name: "edges",
+              plural: true,
+              selections: [
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: "Acc_Profile__c",
+                  kind: "LinkedField",
+                  name: "node",
+                  plural: false,
+                  selections: [
+                    v9 /*: any*/,
+                    v6 /*: any*/,
+                    v7 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "Acc_CostCategory__c",
+                      kind: "LinkedField",
+                      name: "Acc_CostCategory__r",
+                      plural: false,
+                      selections: [v10 /*: any*/],
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "CurrencyValue",
+                      kind: "LinkedField",
+                      name: "Acc_CostCategoryGOLCost__c",
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                    v11 /*: any*/,
+                    v8 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "PercentValue",
+                      kind: "LinkedField",
+                      name: "Acc_ProfileOverrideAwardRate__c",
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                  ],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+          ],
+          storageKey: null,
+        },
+        {
+          alias: "TotalCostsClaimed_CostCategory",
+          args: [v0 /*: any*/],
+          concreteType: "Acc_CostCategory__cConnection",
+          kind: "LinkedField",
+          name: "Acc_CostCategory__c",
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: "Acc_CostCategory__cEdge",
+              kind: "LinkedField",
+              name: "edges",
+              plural: true,
+              selections: [
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: "Acc_CostCategory__c",
+                  kind: "LinkedField",
+                  name: "node",
+                  plural: false,
+                  selections: [
+                    v9 /*: any*/,
+                    v10 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "DoubleValue",
+                      kind: "LinkedField",
+                      name: "Acc_DisplayOrder__c",
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "StringValue",
+                      kind: "LinkedField",
+                      name: "Acc_OrganisationType__c",
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "PicklistValue",
+                      kind: "LinkedField",
+                      name: "Acc_CompetitionType__c",
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                    v11 /*: any*/,
+                  ],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+          ],
+          storageKey: "Acc_CostCategory__c(first:2000)",
+        },
+        {
+          alias: "TotalCostsClaimed_Partner",
+          args: [
+            v0 /*: any*/,
+            {
+              fields: [
+                {
+                  items: [
+                    {
+                      fields: [
+                        {
+                          fields: v12 /*: any*/,
+                          kind: "ObjectValue",
+                          name: "Acc_ProjectId__c",
+                        },
+                      ],
+                      kind: "ObjectValue",
+                      name: "and.0",
+                    },
+                    {
+                      fields: [
+                        {
+                          fields: v2 /*: any*/,
+                          kind: "ObjectValue",
+                          name: "Id",
+                        },
+                      ],
+                      kind: "ObjectValue",
+                      name: "and.1",
+                    },
+                  ],
+                  kind: "ListValue",
+                  name: "and",
+                },
+              ],
+              kind: "ObjectValue",
+              name: "where",
+            },
+          ],
+          concreteType: "Acc_ProjectParticipant__cConnection",
+          kind: "LinkedField",
           name: "Acc_ProjectParticipant__c",
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: "Acc_ProjectParticipant__cEdge",
+              kind: "LinkedField",
+              name: "edges",
+              plural: true,
+              selections: [
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: "Acc_ProjectParticipant__c",
+                  kind: "LinkedField",
+                  name: "node",
+                  plural: false,
+                  selections: [
+                    v9 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "PercentValue",
+                      kind: "LinkedField",
+                      name: "Acc_Award_Rate__c",
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                  ],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+          ],
+          storageKey: null,
+        },
+        {
+          alias: "TotalCostsClaimed_Project",
+          args: [
+            {
+              kind: "Literal",
+              name: "first",
+              value: 1,
+            },
+            {
+              fields: [
+                {
+                  fields: v12 /*: any*/,
+                  kind: "ObjectValue",
+                  name: "Id",
+                },
+              ],
+              kind: "ObjectValue",
+              name: "where",
+            },
+          ],
+          concreteType: "Acc_Project__cConnection",
+          kind: "LinkedField",
+          name: "Acc_Project__c",
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: "Acc_Project__cEdge",
+              kind: "LinkedField",
+              name: "edges",
+              plural: true,
+              selections: [
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: "Acc_Project__c",
+                  kind: "LinkedField",
+                  name: "node",
+                  plural: false,
+                  selections: [
+                    v9 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: "BooleanValue",
+                      kind: "LinkedField",
+                      name: "Acc_NonFEC__c",
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                  ],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+          ],
+          storageKey: null,
         },
       ],
       kind: "ObjectValue",
@@ -666,6 +1065,6 @@ const node: ReaderFragment = (function () {
   };
 })();
 
-(node as any).hash = "37312b3b433689ecfaaa7524adbce0b2";
+(node as any).hash = "fc69bcf52004a549f4ca337527c690d8";
 
 export default node;

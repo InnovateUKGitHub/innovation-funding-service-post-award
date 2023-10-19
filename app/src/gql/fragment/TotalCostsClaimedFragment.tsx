@@ -7,7 +7,7 @@ export const totalCostsClaimedFragment = graphql`
         where: {
           and: [
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
-            { RecordType: { Name: { eq: "Claims Detail" } } }
+            { RecordType: { DeveloperName: { eq: "Claims_Detail" } } }
             { Acc_ClaimStatus__c: { ne: "New" } }
             { Acc_CostCategory__c: { ne: null } }
           ]
@@ -41,7 +41,7 @@ export const totalCostsClaimedFragment = graphql`
         where: {
           and: [
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
-            { RecordType: { Name: { eq: "Total Cost Category" } } }
+            { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
             { Acc_CostCategory__c: { ne: null } }
           ]
         }

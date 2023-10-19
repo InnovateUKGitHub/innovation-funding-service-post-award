@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ac94b57d0773f8636096f49e4298caa8>>
+ * @generated SignedSource<<1a446f40a9b2b77cdba10901e98b54dc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -46,7 +46,7 @@ export type AwardRateOverridesMessageFragment$data = {
           } | null;
           readonly Id: string;
           readonly RecordType: {
-            readonly Name: {
+            readonly DeveloperName: {
               readonly value: string | null;
             } | null;
           } | null;
@@ -205,15 +205,15 @@ return {
                         "or": [
                           {
                             "RecordType": {
-                              "Name": {
-                                "eq": "Profile Detail"
+                              "DeveloperName": {
+                                "eq": "Total_Project_Period"
                               }
                             }
                           },
                           {
                             "RecordType": {
-                              "Name": {
-                                "eq": "Total Cost Category"
+                              "DeveloperName": {
+                                "eq": "Total_Cost_Category"
                               }
                             }
                           }
@@ -264,27 +264,6 @@ return {
                       "args": null,
                       "kind": "ScalarField",
                       "name": "Id",
-                      "storageKey": null
-                    },
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "RecordType",
-                      "kind": "LinkedField",
-                      "name": "RecordType",
-                      "plural": false,
-                      "selections": [
-                        {
-                          "alias": null,
-                          "args": null,
-                          "concreteType": "StringValue",
-                          "kind": "LinkedField",
-                          "name": "Name",
-                          "plural": false,
-                          "selections": (v0/*: any*/),
-                          "storageKey": null
-                        }
-                      ],
                       "storageKey": null
                     },
                     {
@@ -387,6 +366,27 @@ return {
                       "plural": false,
                       "selections": (v0/*: any*/),
                       "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "RecordType",
+                      "kind": "LinkedField",
+                      "name": "RecordType",
+                      "plural": false,
+                      "selections": [
+                        {
+                          "alias": null,
+                          "args": null,
+                          "concreteType": "StringValue",
+                          "kind": "LinkedField",
+                          "name": "DeveloperName",
+                          "plural": false,
+                          "selections": (v0/*: any*/),
+                          "storageKey": null
+                        }
+                      ],
+                      "storageKey": null
                     }
                   ],
                   "storageKey": null
@@ -406,6 +406,6 @@ return {
 };
 })();
 
-(node as any).hash = "9af664973aeb7110bbea0b9e20e3b13e";
+(node as any).hash = "9ebe04ec37326617f3f1314908d76993";
 
 export default node;

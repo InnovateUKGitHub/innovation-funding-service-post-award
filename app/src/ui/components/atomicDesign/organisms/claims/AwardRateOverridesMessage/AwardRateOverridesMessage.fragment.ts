@@ -18,8 +18,8 @@ export const awardRateOverridesMessageFragment = graphql`
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
             {
               or: [
-                { RecordType: { Name: { eq: "Profile Detail" } } }
-                { RecordType: { Name: { eq: "Total Cost Category" } } }
+                { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
+                { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
               ]
             }
             { Acc_CostCategory__c: { ne: null } }
@@ -30,11 +30,6 @@ export const awardRateOverridesMessageFragment = graphql`
         edges {
           node {
             Id
-            RecordType {
-              Name {
-                value
-              }
-            }
             Acc_CostCategory__c {
               value
             }
@@ -65,7 +60,7 @@ export const awardRateOverridesMessageFragment = graphql`
               value
             }
             RecordType {
-              Name {
+              DeveloperName {
                 value
               }
             }
