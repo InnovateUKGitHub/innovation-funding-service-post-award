@@ -1,0 +1,34 @@
+apiVersion: skaffold/v4beta4
+kind: Config
+metadata:
+  name: acc-ui
+profiles:
+  - name: buildonly
+    build:
+      artifacts:
+        - image: acc-cypress
+          context: cypress-test
+          docker:
+            dockerfile: Dockerfile
+      tagPolicy:
+        envTemplate:
+          template: "{{.TAG_ID}}"
+      local:
+        push: true
+        useBuildkit: false
+  - name: at
+    build:
+      tagPolicy:
+        envTemplate:
+          template: "{{.TAG_ID}}"
+      local:
+        push: true
+        tryImportMissing: true
+        useBuildkit: false
+    manifests:
+      kustomize:
+        paths:
+          - kustomize/env/stub/at
+    deploy:
+      kubectl: {}
+      kubeContext: at

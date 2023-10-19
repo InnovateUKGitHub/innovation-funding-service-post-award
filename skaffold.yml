@@ -1,7 +1,7 @@
 apiVersion: skaffold/v2beta11
 kind: Config
 metadata:
-  name: innovation-funding-service
+  name: acc-ui
 build:
   artifacts:
     - image: acc-ui
