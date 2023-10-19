@@ -72,6 +72,9 @@ export const pcrScopeChangeWorkflowQuery = graphql`
                           value
                           label
                         }
+                        DeveloperName {
+                          value
+                        }
                       }
                     }
                   }

@@ -48,6 +48,7 @@ import { claimReviewQuery } from "./ClaimReview.query";
 import { claimReviewErrorMap, claimReviewSchema } from "./claimReview.zod";
 import { EnumDocuments } from "./components/EnumDocuments";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
+import { z } from "zod";
 
 export interface ReviewClaimParams {
   projectId: ProjectId;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<785f316bf2883ee4adac1af57f2cb30c>>
+ * @generated SignedSource<<b5b16d224ee3790ed27a56b149ed9432>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -80,6 +80,9 @@ export type PcrScopeChangeWorkflowQuery$data = {
                       readonly value: string | null;
                     } | null;
                     readonly RecordType: {
+                      readonly DeveloperName: {
+                        readonly value: string | null;
+                      } | null;
                       readonly Name: {
                         readonly label: string | null;
                         readonly value: string | null;
@@ -450,6 +453,16 @@ v5 = [
                                               }
                                             ],
                                             "storageKey": null
+                                          },
+                                          {
+                                            "alias": null,
+                                            "args": null,
+                                            "concreteType": "StringValue",
+                                            "kind": "LinkedField",
+                                            "name": "DeveloperName",
+                                            "plural": false,
+                                            "selections": (v4/*: any*/),
+                                            "storageKey": null
                                           }
                                         ],
                                         "storageKey": null
@@ -506,16 +519,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "b7eba00a4dc871ed3dcb2298ffb56466",
+    "cacheID": "19ff48253076af3b5e883d57042011bf",
     "id": null,
     "metadata": {},
     "name": "PcrScopeChangeWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrScopeChangeWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {Id: {eq: $pcrItemId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AdditionalNumberofMonths__c {\n                      value\n                    }\n                    Acc_ExistingProjectDuration__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_PublicDescriptionSnapshot__c {\n                      value\n                    }\n                    Acc_NewPublicDescription__c {\n                      value\n                    }\n                    Acc_NewProjectSummary__c {\n                      value\n                    }\n                    Acc_ProjectSummarySnapshot__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrScopeChangeWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Project_Change_Requests__r(first: 2000, where: {Id: {eq: $pcrItemId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AdditionalNumberofMonths__c {\n                      value\n                    }\n                    Acc_ExistingProjectDuration__c {\n                      value\n                    }\n                    Acc_Project__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_PublicDescriptionSnapshot__c {\n                      value\n                    }\n                    Acc_NewPublicDescription__c {\n                      value\n                    }\n                    Acc_NewProjectSummary__c {\n                      value\n                    }\n                    Acc_ProjectSummarySnapshot__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ff8d7840404d82a3c86ed5481383f9f1";
+(node as any).hash = "70ab4fdadec2d06e9203d6a0ca6e44b3";
 
 export default node;
