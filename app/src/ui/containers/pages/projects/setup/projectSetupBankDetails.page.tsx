@@ -52,6 +52,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
     resolver: zodResolver(getProjectSetupBankDetailsSchema(partner.bankCheckStatus), {
       errorMap: projectSetupBankDetailsErrorMap,
     }),
+    reValidateMode: "onBlur",
   });
 
   const { onUpdate, apiError } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, partner, {
