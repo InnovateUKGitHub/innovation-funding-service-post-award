@@ -30,10 +30,10 @@ export interface ProjectSetupBankStatementParams {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
-  documents: Pending<DocumentSummaryDto[]>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
+  project: ProjectDto;
+  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
+  documents: DocumentSummaryDto[];
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   onFileChange: (isSaving: boolean, dto: MultipleDocumentUploadDto) => void;
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
@@ -45,28 +45,8 @@ interface Callbacks {
 const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 const BankStatementForm = createTypedForm<PartnerDto>();
 class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankStatementParams, Data, Callbacks> {
-  public render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      editor: this.props.editor,
-      documents: this.props.documents,
-      documentsEditor: this.props.documentsEditor,
-    });
-
-    return (
-      <PageLoader
-        pending={combined}
-        render={x => this.renderContents(x.project, x.documents, x.editor, x.documentsEditor)}
-      />
-    );
-  }
-
-  public renderContents(
-    project: ProjectDto,
-    documents: DocumentSummaryDto[],
-    editor: IEditorStore<PartnerDto, PartnerDtoValidator>,
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-  ) {
+  render() {
+    const { project, documents, editor, documentsEditor } = this.props;
     const projectSetupParams = { projectId: this.props.projectId, partnerId: this.props.partnerId };
     const projectSetupRoute = this.props.routes.projectSetup.getLink(projectSetupParams);
 
@@ -168,46 +148,59 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
   const { getContent } = useContent();
   const navigate = useNavigate();
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
+      dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
+    }),
+    documents: stores.partnerDocuments.getPartnerDocuments(props.projectId, props.partnerId),
+    documentsEditor: stores.partnerDocuments.getPartnerDocumentEditor(props.partnerId),
+  });
+
+  const onFileChange = (isSaving: boolean, dto: MultipleDocumentUploadDto) => {
+    stores.messages.clearMessages();
+    // show message if remaining on page
+    const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }));
+    stores.partnerDocuments.updatePartnerDocumentsEditor(
+      isSaving,
+      props.projectId,
+      props.partnerId,
+      dto,
+      successMessage,
+    );
+  };
+
+  const onFileDelete = (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => {
+    stores.messages.clearMessages();
+    stores.partnerDocuments.deletePartnerDocumentsEditor(
+      props.projectId,
+      props.partnerId,
+      dto,
+      document,
+      getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
+    );
+  };
+
+  const onChange = (submit: boolean, dto: PartnerDto) => {
+    stores.partners.updatePartner(submit, props.partnerId, dto, {
+      onComplete: () => {
+        navigate(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path);
+      },
+    });
+  };
+
   return (
-    <ProjectSetupBankStatementComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      documents={stores.partnerDocuments.getPartnerDocuments(props.projectId, props.partnerId)}
-      documentsEditor={stores.partnerDocuments.getPartnerDocumentEditor(props.partnerId)}
-      onFileChange={(isSaving, dto) => {
-        stores.messages.clearMessages();
-        // show message if remaining on page
-        const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }));
-        stores.partnerDocuments.updatePartnerDocumentsEditor(
-          isSaving,
-          props.projectId,
-          props.partnerId,
-          dto,
-          successMessage,
-        );
-      }}
-      onFileDelete={(dto, document) => {
-        stores.messages.clearMessages();
-        stores.partnerDocuments.deletePartnerDocumentsEditor(
-          props.projectId,
-          props.partnerId,
-          dto,
-          document,
-          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
-        );
-      }}
-      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
-        dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
-      })}
-      onChange={(submit, dto) => {
-        stores.partners.updatePartner(submit, props.partnerId, dto, {
-          onComplete: () => {
-            navigate(
-              props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path,
-            );
-          },
-        });
-      }}
+    <PageLoader
+      pending={combined}
+      render={x => (
+        <ProjectSetupBankStatementComponent
+          {...props}
+          {...x}
+          onFileChange={onFileChange}
+          onFileDelete={onFileDelete}
+          onChange={onChange}
+        />
+      )}
     />
   );
 };
