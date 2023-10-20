@@ -1,59 +1,54 @@
-import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { Pending } from "@shared/pending";
-import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
-import { BankCheckStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
-import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
+import {
+  useOnUpdateSetupBankDetailsVerify,
+  useSetupBankDetailsVerifyData,
+} from "./projectSetupBankDetailsVerify.logic";
+import { useForm } from "react-hook-form";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 
 export interface ProjectSetupBankDetailsVerifyParams {
   projectId: ProjectId;
   partnerId: PartnerId;
 }
 
-interface Data {
-  project: Pick<ProjectDto, "projectNumber" | "title">;
-  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
-}
+const ProjectSetupBankDetailsVerifyComponent = ({
+  projectId,
+  partnerId,
+  ...props
+}: BaseProps & ProjectSetupBankDetailsVerifyParams) => {
+  const { partner, fragmentRef } = useSetupBankDetailsVerifyData(projectId, partnerId);
+  const { bankDetails } = partner;
 
-interface Callbacks {
-  onChange: (submit: boolean, dto: PartnerDto) => void;
-}
+  const { handleSubmit } = useForm({
+    defaultValues: {},
+  });
 
-const Form = createTypedForm<PartnerDto>();
-
-const ProjectSetupBankDetailsVerifyComponent = (
-  props: BaseProps & Data & Callbacks & ProjectSetupBankDetailsVerifyParams,
-) => {
-  const { project, editor } = props;
-  const { bankDetails } = editor.data;
+  const { onUpdate, isFetching, apiError } = useOnUpdateSetupBankDetailsVerify(projectId, partnerId, partner);
 
   return (
     <Page
       backLink={
         <BackLink
           route={props.routes.projectSetup.getLink({
-            projectId: props.projectId,
-            partnerId: props.partnerId,
+            projectId,
+            partnerId,
           })}
         >
           <Content value={x => x.pages.projectSetupBankDetailsVerify.backLink} />
         </BackLink>
       }
-      error={editor.error}
-      validator={editor.validator}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
+      apiError={apiError}
+      pageTitle={<Title />}
+      fragmentRef={fragmentRef}
     >
       <Section qa={"guidance"}>
         <Content markdown value={x => x.pages.projectSetupBankDetailsVerify.guidanceMessage} />
@@ -63,7 +58,7 @@ const ProjectSetupBankDetailsVerifyComponent = (
         <SummaryList qa="bank-details-summary">
           <SummaryListItem
             label={x => x.partnerLabels.organisationName}
-            content={editor.data.name}
+            content={partner.name}
             qa={"organisationName"}
           />
           <SummaryListItem
@@ -77,9 +72,6 @@ const ProjectSetupBankDetailsVerifyComponent = (
             content={bankDetails.accountNumber}
             qa={"accountNumber"}
           />
-          {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
-          {/* <SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
-            <SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/> */}
           <SummaryListItem
             label={x => x.partnerLabels.accountBuilding}
             content={bankDetails.address.accountBuilding}
@@ -108,68 +100,31 @@ const ProjectSetupBankDetailsVerifyComponent = (
         </SummaryList>
       </Section>
       <Section qa="bank-details-verify-section">
-        <Form.Form
-          editor={editor}
-          onChange={() => props.onChange(false, editor.data)}
-          onSubmit={() => props.onChange(true, editor.data)}
-          qa="bank-details-form"
-        >
-          <Form.Fieldset>
-            <Form.Submit>
+        <Form data-qa="bank-details-form" onSubmit={handleSubmit(data => onUpdate({ data }))}>
+          <Fieldset>
+            <Button disabled={isFetching} type="submit">
               <Content value={x => x.pages.projectSetupBankDetailsVerify.submitButton} />
-            </Form.Submit>
+            </Button>
             <Link
               styling="SecondaryButton"
               route={props.routes.projectSetupBankDetails.getLink({
-                projectId: props.projectId,
-                partnerId: props.partnerId,
+                projectId,
+                partnerId,
               })}
             >
               <Content value={x => x.pages.projectSetupBankDetailsVerify.changeButton} />
             </Link>
-          </Form.Fieldset>
-        </Form.Form>
+          </Fieldset>
+        </Form>
       </Section>
     </Page>
-  );
-};
-
-const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVerifyParams & BaseProps) => {
-  const stores = useStores();
-  const navigate = useNavigate();
-
-  const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId),
-  });
-
-  const onChange = (submit: boolean, dto: PartnerDto) => {
-    stores.partners.updatePartner(submit, props.partnerId, dto, {
-      verifyBankDetails: submit,
-      onComplete: (resp: PartnerDto) =>
-        resp.bankCheckStatus === BankCheckStatus.VerificationPassed
-          ? navigate(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path)
-          : navigate(
-              props.routes.failedBankCheckConfirmation.getLink({
-                projectId: props.projectId,
-                partnerId: props.partnerId,
-              }).path,
-            ),
-    });
-  };
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={x => <ProjectSetupBankDetailsVerifyComponent {...props} {...x} onChange={onChange} />}
-    />
   );
 };
 
 export const ProjectSetupBankDetailsVerifyRoute = defineRoute({
   routeName: "ProjectSetupBankDetailsVerify",
   routePath: "/projects/:projectId/setup/:partnerId/bank-details-verify",
-  container: ProjectSetupBankDetailsVerifyContainer,
+  container: ProjectSetupBankDetailsVerifyComponent,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
