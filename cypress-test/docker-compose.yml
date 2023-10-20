@@ -1,0 +1,6 @@
+version: "3"
+
+services:
+  cypress:
+    platform: linux/amd64
+    build: .
