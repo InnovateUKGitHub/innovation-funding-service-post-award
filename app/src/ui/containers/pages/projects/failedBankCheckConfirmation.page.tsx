@@ -1,24 +1,16 @@
 import { ProjectRole } from "@framework/constants/project";
-import { ProjectDto } from "@framework/dtos/projectDto";
-import { Pending } from "@shared/pending";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Loader } from "@ui/components/bjss/loading";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { useContent } from "@ui/hooks/content.hook";
-import { useStores } from "@ui/redux/storesProvider";
 import { BaseProps, defineRoute } from "../../containerBase";
+import { useFailedBankCheckConfirmationData } from "./failedBankCheckConfirmation.logic";
 
 export interface FailedBankCheckConfirmationParams {
   projectId: ProjectId;
   partnerId: PartnerId;
-}
-
-interface FailedBankCheckConfirmationProps extends BaseProps, FailedBankCheckConfirmationParams {
-  projectId: ProjectId;
-  project: Pending<ProjectDto>;
 }
 
 /**
@@ -26,43 +18,33 @@ interface FailedBankCheckConfirmationProps extends BaseProps, FailedBankCheckCon
  *
  * React Component Page when bank check confirmation failed
  */
-function FailedBankCheckConfirmation({ projectId, partnerId, routes, ...props }: FailedBankCheckConfirmationProps) {
+function FailedBankCheckConfirmation({ projectId, partnerId, routes }: BaseProps & FailedBankCheckConfirmationParams) {
   const { getContent } = useContent();
 
-  const renderContents = (project: ProjectDto) => {
-    const projectSetupRoute = routes.projectSetup.getLink({ projectId, partnerId });
+  const { fragmentRef, project } = useFailedBankCheckConfirmationData(projectId);
 
-    const failedConfirmationBackLink = getContent(x => x.pages.failedBankCheckConfirmation.backLink);
-    const backLink = <BackLink route={projectSetupRoute}>{failedConfirmationBackLink}</BackLink>;
-    const pageTitle = <Title {...project} />;
+  const projectSetupRoute = routes.projectSetup.getLink({ projectId, partnerId });
 
-    return (
-      <Page backLink={backLink} pageTitle={pageTitle} project={project}>
-        <Section qa="guidance">
-          <Content markdown value={x => x.pages.failedBankCheckConfirmation.guidance} />
-        </Section>
+  const failedConfirmationBackLink = getContent(x => x.pages.failedBankCheckConfirmation.backLink);
 
-        <Section qa="return-to-setup-button">
-          <Link styling="PrimaryButton" route={projectSetupRoute}>
-            {getContent(x => x.pages.failedBankCheckConfirmation.returnToSetup)}
-          </Link>
-        </Section>
-      </Page>
-    );
-  };
+  return (
+    <Page
+      backLink={<BackLink route={projectSetupRoute}>{failedConfirmationBackLink}</BackLink>}
+      pageTitle={<Title />}
+      projectStatus={project.status}
+      fragmentRef={fragmentRef}
+    >
+      <Section qa="guidance">
+        <Content markdown value={x => x.pages.failedBankCheckConfirmation.guidance} />
+      </Section>
 
-  return <Loader pending={props.project} render={x => renderContents(x)} />;
-}
-
-/**
- * ### FailedBankCheckConfirmationContainer
- *
- * React Page Container for when bank check confirmation failed
- */
-function FailedBankCheckConfirmationContainer(props: FailedBankCheckConfirmationParams & BaseProps) {
-  const { projects } = useStores();
-
-  return <FailedBankCheckConfirmation {...props} project={projects.getById(props.projectId)} />;
+      <Section qa="return-to-setup-button">
+        <Link styling="PrimaryButton" route={projectSetupRoute}>
+          {getContent(x => x.pages.failedBankCheckConfirmation.returnToSetup)}
+        </Link>
+      </Section>
+    </Page>
+  );
 }
 
 export const FailedBankCheckConfirmationRoute = defineRoute<FailedBankCheckConfirmationParams>({
@@ -72,7 +54,7 @@ export const FailedBankCheckConfirmationRoute = defineRoute<FailedBankCheckConfi
     projectId: r.params.projectId as ProjectId,
     partnerId: r.params.partnerId as PartnerId,
   }),
-  container: FailedBankCheckConfirmationContainer,
+  container: FailedBankCheckConfirmation,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
   getTitle: x => x.content.getTitleCopy(x => x.pages.failedBankCheckConfirmation.title),
 });
