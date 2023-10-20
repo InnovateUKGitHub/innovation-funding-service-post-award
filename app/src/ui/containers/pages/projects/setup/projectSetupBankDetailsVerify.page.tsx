@@ -23,8 +23,8 @@ export interface ProjectSetupBankDetailsVerifyParams {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
-  editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
+  project: ProjectDto;
+  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
 interface Callbacks {
@@ -38,10 +38,7 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<
   Callbacks
 > {
   public render() {
-    const combined = Pending.combine({ project: this.props.project, editor: this.props.editor });
-    return <PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
-  }
-  public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
+    const { project, editor } = this.props;
     const { bankDetails } = editor.data;
 
     return (
@@ -149,27 +146,30 @@ const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVe
   const stores = useStores();
   const navigate = useNavigate();
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    editor: stores.partners.getPartnerEditor(props.projectId, props.partnerId),
+  });
+
+  const onChange = (submit: boolean, dto: PartnerDto) => {
+    stores.partners.updatePartner(submit, props.partnerId, dto, {
+      verifyBankDetails: submit,
+      onComplete: (resp: PartnerDto) =>
+        resp.bankCheckStatus === BankCheckStatus.VerificationPassed
+          ? navigate(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path)
+          : navigate(
+              props.routes.failedBankCheckConfirmation.getLink({
+                projectId: props.projectId,
+                partnerId: props.partnerId,
+              }).path,
+            ),
+    });
+  };
+
   return (
-    <ProjectSetupBankDetailsVerifyComponent
-      {...props}
-      project={stores.projects.getById(props.projectId)}
-      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-      onChange={(submit, dto) => {
-        stores.partners.updatePartner(submit, props.partnerId, dto, {
-          verifyBankDetails: submit,
-          onComplete: (resp: PartnerDto) =>
-            resp.bankCheckStatus === BankCheckStatus.VerificationPassed
-              ? navigate(
-                  props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path,
-                )
-              : navigate(
-                  props.routes.failedBankCheckConfirmation.getLink({
-                    projectId: props.projectId,
-                    partnerId: props.partnerId,
-                  }).path,
-                ),
-        });
-      }}
+    <PageLoader
+      pending={combined}
+      render={x => <ProjectSetupBankDetailsVerifyComponent {...props} {...x} onChange={onChange} />}
     />
   );
 };
