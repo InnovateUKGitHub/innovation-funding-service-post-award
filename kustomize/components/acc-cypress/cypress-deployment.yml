@@ -19,11 +19,11 @@ spec:
           image: acc-cypress
           resources:
             requests:
-              memory: 256Mi
-              cpu: 100m
+              memory: 768Mi
+              cpu: 250m
             limits:
-              memory: 512Mi
-              cpu: 200m
+              memory: 1024Mi
+              cpu: 1000m
           ports:
             - containerPort: 8080
           envFrom:
