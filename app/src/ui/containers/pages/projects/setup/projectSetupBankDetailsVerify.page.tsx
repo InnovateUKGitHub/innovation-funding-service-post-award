@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { Pending } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
 import { BankCheckStatus } from "@framework/constants/partner";
@@ -23,7 +23,7 @@ export interface ProjectSetupBankDetailsVerifyParams {
 }
 
 interface Data {
-  project: ProjectDto;
+  project: Pick<ProjectDto, "projectNumber" | "title">;
   editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
@@ -32,115 +32,107 @@ interface Callbacks {
 }
 
 const Form = createTypedForm<PartnerDto>();
-class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<
-  ProjectSetupBankDetailsVerifyParams,
-  Data,
-  Callbacks
-> {
-  public render() {
-    const { project, editor } = this.props;
-    const { bankDetails } = editor.data;
 
-    return (
-      <Page
-        backLink={
-          <BackLink
-            route={this.props.routes.projectSetup.getLink({
-              projectId: this.props.projectId,
-              partnerId: this.props.partnerId,
-            })}
-          >
-            <Content value={x => x.pages.projectSetupBankDetailsVerify.backLink} />
-          </BackLink>
-        }
-        error={editor.error}
-        validator={editor.validator}
-        pageTitle={<Title {...project} />}
-      >
-        {this.renderGuidance()}
-        <Section>
-          <SummaryList qa="bank-details-summary">
-            <SummaryListItem
-              label={x => x.partnerLabels.organisationName}
-              content={editor.data.name}
-              qa={"organisationName"}
-            />
-            <SummaryListItem
-              label={x => x.partnerLabels.companyNumber}
-              content={bankDetails.companyNumber}
-              qa={"companyNumber"}
-            />
-            <SummaryListItem label={x => x.partnerLabels.sortCode} content={bankDetails.sortCode} qa={"sortCode"} />
-            <SummaryListItem
-              label={x => x.partnerLabels.accountNumber}
-              content={bankDetails.accountNumber}
-              qa={"accountNumber"}
-            />
-            {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
-            {/* <SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
-            <SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/> */}
-            <SummaryListItem
-              label={x => x.partnerLabels.accountBuilding}
-              content={bankDetails.address.accountBuilding}
-              qa={"accountBuilding"}
-            />
-            <SummaryListItem
-              label={x => x.partnerLabels.accountStreet}
-              content={bankDetails.address.accountStreet}
-              qa={"accountStreet"}
-            />
-            <SummaryListItem
-              label={x => x.partnerLabels.accountLocality}
-              content={bankDetails.address.accountLocality}
-              qa={"accountLocality"}
-            />
-            <SummaryListItem
-              label={x => x.partnerLabels.accountTownOrCity}
-              content={bankDetails.address.accountTownOrCity}
-              qa={"accountTownOrCity"}
-            />
-            <SummaryListItem
-              label={x => x.partnerLabels.accountPostcode}
-              content={bankDetails.address.accountPostcode}
-              qa={"accountPostcode"}
-            />
-          </SummaryList>
-        </Section>
-        <Section qa="bank-details-verify-section">
-          <Form.Form
-            editor={editor}
-            onChange={() => this.props.onChange(false, editor.data)}
-            onSubmit={() => this.props.onChange(true, editor.data)}
-            qa="bank-details-form"
-          >
-            <Form.Fieldset>
-              <Form.Submit>
-                <Content value={x => x.pages.projectSetupBankDetailsVerify.submitButton} />
-              </Form.Submit>
-              <Link
-                styling="SecondaryButton"
-                route={this.props.routes.projectSetupBankDetails.getLink({
-                  projectId: this.props.projectId,
-                  partnerId: this.props.partnerId,
-                })}
-              >
-                <Content value={x => x.pages.projectSetupBankDetailsVerify.changeButton} />
-              </Link>
-            </Form.Fieldset>
-          </Form.Form>
-        </Section>
-      </Page>
-    );
-  }
+const ProjectSetupBankDetailsVerifyComponent = (
+  props: BaseProps & Data & Callbacks & ProjectSetupBankDetailsVerifyParams,
+) => {
+  const { project, editor } = props;
+  const { bankDetails } = editor.data;
 
-  private renderGuidance() {
-    return (
+  return (
+    <Page
+      backLink={
+        <BackLink
+          route={props.routes.projectSetup.getLink({
+            projectId: props.projectId,
+            partnerId: props.partnerId,
+          })}
+        >
+          <Content value={x => x.pages.projectSetupBankDetailsVerify.backLink} />
+        </BackLink>
+      }
+      error={editor.error}
+      validator={editor.validator}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
+    >
       <Section qa={"guidance"}>
         <Content markdown value={x => x.pages.projectSetupBankDetailsVerify.guidanceMessage} />
       </Section>
-    );
-  }
-}
+
+      <Section>
+        <SummaryList qa="bank-details-summary">
+          <SummaryListItem
+            label={x => x.partnerLabels.organisationName}
+            content={editor.data.name}
+            qa={"organisationName"}
+          />
+          <SummaryListItem
+            label={x => x.partnerLabels.companyNumber}
+            content={bankDetails.companyNumber}
+            qa={"companyNumber"}
+          />
+          <SummaryListItem label={x => x.partnerLabels.sortCode} content={bankDetails.sortCode} qa={"sortCode"} />
+          <SummaryListItem
+            label={x => x.partnerLabels.accountNumber}
+            content={bankDetails.accountNumber}
+            qa={"accountNumber"}
+          />
+          {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
+          {/* <SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
+            <SummaryListItem label={x => x.pages.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/> */}
+          <SummaryListItem
+            label={x => x.partnerLabels.accountBuilding}
+            content={bankDetails.address.accountBuilding}
+            qa={"accountBuilding"}
+          />
+          <SummaryListItem
+            label={x => x.partnerLabels.accountStreet}
+            content={bankDetails.address.accountStreet}
+            qa={"accountStreet"}
+          />
+          <SummaryListItem
+            label={x => x.partnerLabels.accountLocality}
+            content={bankDetails.address.accountLocality}
+            qa={"accountLocality"}
+          />
+          <SummaryListItem
+            label={x => x.partnerLabels.accountTownOrCity}
+            content={bankDetails.address.accountTownOrCity}
+            qa={"accountTownOrCity"}
+          />
+          <SummaryListItem
+            label={x => x.partnerLabels.accountPostcode}
+            content={bankDetails.address.accountPostcode}
+            qa={"accountPostcode"}
+          />
+        </SummaryList>
+      </Section>
+      <Section qa="bank-details-verify-section">
+        <Form.Form
+          editor={editor}
+          onChange={() => props.onChange(false, editor.data)}
+          onSubmit={() => props.onChange(true, editor.data)}
+          qa="bank-details-form"
+        >
+          <Form.Fieldset>
+            <Form.Submit>
+              <Content value={x => x.pages.projectSetupBankDetailsVerify.submitButton} />
+            </Form.Submit>
+            <Link
+              styling="SecondaryButton"
+              route={props.routes.projectSetupBankDetails.getLink({
+                projectId: props.projectId,
+                partnerId: props.partnerId,
+              })}
+            >
+              <Content value={x => x.pages.projectSetupBankDetailsVerify.changeButton} />
+            </Link>
+          </Form.Fieldset>
+        </Form.Form>
+      </Section>
+    </Page>
+  );
+};
 
 const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVerifyParams & BaseProps) => {
   const stores = useStores();
