@@ -1,6 +1,9 @@
 import { DateTime } from "luxon";
 import { mapToClaimStatus, mapToClaimStatusLabel } from "@framework/mappers/claimStatus";
-import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
+import {
+  mapImpactManagementParticipationToEnum,
+  mapImpactManagementPhasedStageToEnum,
+} from "@framework/mappers/impactManagementParticipation";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ReceivedStatus } from "@framework/entities/received-status";
@@ -51,6 +54,8 @@ type ClaimNode = Readonly<
     Impact_Management_Participation__c: GQL.Value<string>;
     Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
     Acc_IARRequired__c: GQL.Value<boolean>;
+    IM_PhasedCompetition__c: GQL.Value<boolean>;
+    IM_PhasedCompetitionStage__c: GQL.Value<string>;
     RecordType: {
       DeveloperName: GQL.Value<string>;
     } | null;
@@ -80,6 +85,8 @@ type ClaimDtoMapping = Pick<
   | "statusLabel"
   | "totalCost"
   | "impactManagementParticipation"
+  | "impactManagementPhasedCompetition"
+  | "impactManagementPhasedCompetitionStage"
   | "totalCostsSubmitted"
   | "totalCostsApproved"
   | "totalDeferredAmount"
@@ -122,6 +129,12 @@ const mapper: GQL.DtoMapper<
   },
   impactManagementParticipation(node) {
     return mapImpactManagementParticipationToEnum(node?.Impact_Management_Participation__c?.value);
+  },
+  impactManagementPhasedCompetition(node) {
+    return !!node?.IM_PhasedCompetition__c?.value;
+  },
+  impactManagementPhasedCompetitionStage(node) {
+    return mapImpactManagementPhasedStageToEnum(node?.IM_PhasedCompetitionStage__c?.value);
   },
   isApproved(node) {
     const claimStatus = mapToClaimStatus(node?.Acc_ClaimStatus__c?.value ?? "unknown claim status");

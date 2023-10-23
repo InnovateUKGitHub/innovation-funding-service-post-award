@@ -12,8 +12,6 @@ import { sumBy, roundCurrency } from "@framework/util/numberHelper";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { useFragment } from "react-relay";
-import { useFragmentContext } from "@gql/utils/fragmentContextHook";
-import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
 import {
   TotalCostsClaimedFragment$data,
   TotalCostsClaimedFragment$key,

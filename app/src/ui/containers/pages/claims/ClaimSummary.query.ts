@@ -109,6 +109,15 @@ export const claimSummaryQuery = graphql`
                 Acc_ProjectPeriodCost__c {
                   value
                 }
+                IM_PhasedCompetition__c {
+                  value
+                }
+                IM_PhasedCompetitionStage__c {
+                  value
+                }
+                Impact_Management_Participation__c {
+                  value
+                }
               }
             }
           }

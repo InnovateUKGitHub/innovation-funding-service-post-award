@@ -78,6 +78,9 @@ export const useClaimSummaryData = (
       "comments",
       "totalCost",
       "status",
+      "impactManagementParticipation",
+      "impactManagementPhasedCompetition",
+      "impactManagementPhasedCompetitionStage",
     ],
     {},
   );
