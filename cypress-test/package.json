@@ -4,7 +4,7 @@
   "description": "cypress test package",
   "main": "index.js",
   "scripts": {
-    "cypress": "cross-env ELECTRON_EXTRA_LAUNCH_ARGS=--no-sandbox cypress",
+    "cypress": "cypress",
     "start": "npm run cypress -- open",
     "local": "cross-env TEST_URL=http://localhost:8080 npm run cypress -- open",
     "test": "node launch.js",
