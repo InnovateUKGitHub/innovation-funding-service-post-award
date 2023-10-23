@@ -1,5 +1,5 @@
 import { claimReviewFileTidyUp, fileTidyUp } from "common/filetidyup";
-
+import { loremIpsum1k } from "common/lorem";
 let date = new Date();
 let comments = JSON.stringify(date);
 
@@ -253,6 +253,7 @@ export const claimsDocUpload = () => {
   cy.validationLink("Choose a file to upload");
   cy.fileInput("testfile.doc");
   cy.uploadButton("Upload documents").click();
+  cy.validationNotification("has been uploaded.");
 };
 
 export const claimsFileTable = () => {
@@ -323,14 +324,18 @@ export const accessABSOpenClaim = () => {
 
 export const forecastView = () => {
   cy.get("h3").contains("Forecast");
-  cy.get("dt.govuk-summary-list__key").contains("Total eligible costs");
-  cy.get("dt.govuk-summary-list__key").contains("Total of forecasts and costs");
-  cy.get("dt.govuk-summary-list__key").contains("Difference");
+  [
+    ["Total eligible costs", "£350,000.00"],
+    ["Total of forecasts and costs", "£280,040.00"],
+    ["Difference", "£69,960.00 (19.99%)"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key).contains(item);
+  });
 };
 
 export const claimCommentBox = () => {
   cy.get("h2").contains("Add comments");
-  cy.getByQA("info-text-area").clear().type(standardComments);
+  cy.paragraph("You have 1000 characters remaining");
 };
 
 export const learnFiles = () => {
@@ -930,4 +935,58 @@ export const claimReviewDeleteDoc = () => {
       });
   });
   cy.validationNotification("has been removed.");
+};
+
+export const summaryTotalCostsList = () => {
+  [
+    ["Total costs to be claimed", "£280,000.00"],
+    ["Funding level", "65.00%"],
+    ["Total costs to be paid", "£182,000.00"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key).contains(item);
+  });
+};
+
+export const summaryCommentsAdd = () => {
+  cy.get("textarea").clear().invoke("val", loremIpsum1k).trigger("input");
+  cy.get("textarea").type("{moveToEnd}").type("t");
+  cy.get("textarea").type("{backSpace}");
+  cy.paragraph("You have 0 characters remaining");
+};
+
+export const summaryCommentsTooMany = () => {
+  cy.get("textarea").type("{moveToEnd}").type("t");
+  cy.paragraph("You have 1 character too many");
+  cy.button("Save and return to claims").click();
+  cy.validationLink("Comments must be a maximum of 1000 characters");
+};
+
+export const summaryCommentsDeleteOne = () => {
+  cy.get("textarea").type("{moveToEnd}");
+  cy.get("textarea").type("{backSpace}");
+  cy.paragraph("You have 0 characters remaining");
+};
+
+export const summaryReaccessClaim = () => {
+  cy.get("a").contains("Edit").click();
+  cy.heading("Costs to be claimed");
+  cy.button("Continue to claims documents").click();
+  cy.heading("Claim documents");
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
+  cy.get("textarea").should("have.value", loremIpsum1k);
+};
+
+export const summaryAccessDocsDelete = () => {
+  cy.get("a").contains("Edit claim documents").click();
+  cy.heading("Claim documents");
+  fileTidyUp("James Black");
+};
+
+export const summaryClearCommentsSave = () => {
+  cy.get("textarea").clear();
+  cy.button("Save and return to claims").click();
+  cy.heading("Claims");
 };

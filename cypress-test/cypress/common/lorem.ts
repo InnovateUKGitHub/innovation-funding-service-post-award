@@ -13,6 +13,7 @@ const getLorem = (chars: number): string => {
   return baseLorem.repeat(repeats) + baseLorem.substring(0, leftOver);
 };
 
+export const loremIpsum1k = getLorem(1_000);
 export const loremIpsum2k = getLorem(2_000);
 export const loremIpsum10k = getLorem(10_000);
 export const loremIpsum30k = getLorem(30_000);
