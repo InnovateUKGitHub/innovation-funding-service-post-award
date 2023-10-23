@@ -395,9 +395,11 @@ export const assertForMissingPcr = () => {
 
 export const fcAndPmFileAssertion = () => {
   cy.switchUserTo(fcEmail);
+  cy.wait(500);
   fileTidyUp("Wednesday Addams");
   drawdownFileUpload();
   cy.switchUserTo(pmEmail);
+  cy.wait(500);
   pmFileUploadedSection();
 };
 
