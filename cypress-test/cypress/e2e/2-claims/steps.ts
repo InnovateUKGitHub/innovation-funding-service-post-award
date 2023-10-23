@@ -883,6 +883,58 @@ export const claimReviewCostCat = () => {
   });
 };
 
+export const claimReviewForecastCostsClaiming = () => {
+  cy.getByQA("forecast-table").within(() => {
+    let i = 4;
+    [
+      "£2,000.00",
+      "£100.00",
+      "£200.00",
+      "£3,000.00",
+      "£1,500.00",
+      "£1,600.00",
+      "£1,700.00",
+      "£1,800.00",
+      "£1,900.00",
+      "£2,000.00",
+      "£2,100.00",
+      "£17,900.00",
+    ].forEach(cost => {
+      cy.get("tr")
+        .eq(i++)
+        .within(() => {
+          cy.get("td:nth-child(2)").contains(cost);
+        });
+    });
+  });
+};
+
+export const claimReviewForecastTotals = () => {
+  [
+    ["£2,000.00", "£10,000.00", "-80.00%"],
+    ["£100.00", "£1,000.00", "-90.00%"],
+    ["£200.00", "£10,000.00", "-98.00%"],
+    ["£3,000.00", "£10,000.00", "-70.00%"],
+    ["£3,500.00", "£10,000.00", "-65.00%"],
+    ["£5,600.00", "£10,000.00", "-44.00%"],
+    ["£1,700.00", "£10,000.00", "-83.00%"],
+    ["£1,800.00", "£10,000.00", "-82.00%"],
+    ["£1,900.00", "£10,000.00", "-81.00%"],
+    ["£2,000.00", "£10,000.00", "-80.00%"],
+    ["£2,100.00", "£10,000.00", "-79.00%"],
+  ].forEach((cols, index) => {
+    cy.getByQA("forecast-table").within(() => {
+      cy.get("tr")
+        .eq(index + 4)
+        .within(() => {
+          for (let i = 0; i < cols.length; i++) {
+            cy.get(`td:nth-child(${i + 14})`).contains(cols[i]);
+          }
+        });
+    });
+  });
+};
+
 export const openAccordions = () => {
   cy.button("Show all sections").click();
   ["forecast-accordion", "log-accordion", "upload-supporting-documents-form-accordion"].forEach(accordion => {

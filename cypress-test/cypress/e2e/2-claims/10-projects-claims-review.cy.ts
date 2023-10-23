@@ -21,6 +21,8 @@ import {
   claimReviewTopThreeRows,
   claimReviewCostCat,
   openAccordions,
+  claimReviewForecastCostsClaiming,
+  claimReviewForecastTotals,
 } from "./steps";
 
 describe("Claims > Review as MO", () => {
@@ -59,6 +61,10 @@ describe("Claims > Review as MO", () => {
   it("Should display the correct top three rows of forecast table", claimReviewTopThreeRows);
 
   it("Should display correct forecast cost categories", claimReviewCostCat);
+
+  it("Should display correct 'Costs you are claiming' in the forecast table", claimReviewForecastCostsClaiming);
+
+  it("Should display the correct forecast totals", claimReviewForecastTotals);
 
   it("Should have a documents area with correct copy", claimReviewDocArea);
 
