@@ -20,8 +20,6 @@ import {
   claimQueriedCheckForDoc,
   claimReviewTopThreeRows,
   claimReviewCostCat,
-  topThreeRows,
-  forecastCostCats,
   openAccordions,
 } from "./steps";
 
@@ -56,9 +54,11 @@ describe("Claims > Review as MO", () => {
 
   it("Should have more than 10 status changes recorded", claimStatusTable);
 
-  it("Should click the Show all sections", () => {
-    cy.button("Show all sections").click();
-  });
+  it("Should click the Show all sections", openAccordions);
+
+  it("Should display the correct top three rows of forecast table", claimReviewTopThreeRows);
+
+  it("Should display correct forecast cost categories", claimReviewCostCat);
 
   it("Should have a documents area with correct copy", claimReviewDocArea);
 
