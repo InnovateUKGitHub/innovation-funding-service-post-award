@@ -34,6 +34,23 @@ const getProjectLevelUpload = (config: IAppOptions) =>
     files: getMultiFileValidation(config),
   });
 
+type UploadBankStatementSchemaType = ReturnType<typeof getBankStatementUpload>;
+const getBankStatementUpload = (config: IAppOptions) =>
+  z.object({
+    form: z.literal(FormTypes.ProjectLevelUpload),
+    projectId: projectIdValidation,
+    partnerId: z.union([emptyStringToUndefinedValidation, partnerIdValidation]),
+    description: z.union([
+      emptyStringToUndefinedValidation,
+      z.coerce
+        .number()
+        .refine(x => [DocumentDescription.BankStatement].includes(x))
+        .optional()
+        .transform(x => x as DocumentDescription),
+    ]),
+    files: getMultiFileValidation(config),
+  });
+
 interface ClaimLevelUploadSchemaExtraProps {
   config: IAppOptions;
   project: Pick<ProjectDto, "impactManagementParticipation">;
@@ -92,5 +109,6 @@ export {
   getClaimLevelUpload,
   claimLevelDelete,
   projectOrPartnerLevelDelete,
+  getBankStatementUpload,
 };
-export type { ProjectLevelUploadSchemaType, ClaimLevelUploadSchemaType };
+export type { ProjectLevelUploadSchemaType, ClaimLevelUploadSchemaType, UploadBankStatementSchemaType };
