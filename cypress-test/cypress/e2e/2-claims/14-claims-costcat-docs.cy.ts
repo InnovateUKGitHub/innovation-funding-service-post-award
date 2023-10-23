@@ -104,7 +104,7 @@ describe("Claims > Cost category document uploads", () => {
     });
   });
 
-  it("Should navigate back to the documents section and delete all files", { retries: 0 }, async () => {
+  it("Should navigate back to the documents section and delete all files", { retries: 0 }, () => {
     cy.button("Upload and remove documents").click();
     cy.heading("Exceptions - Staff documents");
 
