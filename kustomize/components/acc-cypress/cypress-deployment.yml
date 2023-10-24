@@ -35,12 +35,6 @@ spec:
             - mountPath: /tmp
               name: acc-cypress-temp-store
               subPath: tmp
-            - mountPath: /run
-              name: acc-cypress-temp-store
-              subPath: run
-            - mountPath: /run/lock
-              name: acc-cypress-temp-store
-              subPath: run-lock
       volumes:
         - name: acc-cypress-temp-store
           emptyDir:

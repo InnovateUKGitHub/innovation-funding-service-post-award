@@ -12,5 +12,8 @@ resources:
   - ../../../../config-mgmt/env/local
   - ../../../../secrets-mgmt/env/local
 
+components:
+  - ../../../../components/acc-cypress
+
 patchesStrategicMerge:
   - acc-ui-route.yml

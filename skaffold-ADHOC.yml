@@ -7,14 +7,10 @@ build:
     - image: acc-ui
       docker:
         dockerfile: Dockerfile
-manifests:
-  kustomize:
-    buildArgs:
-      # Enable KSOPS to add plugins/execute
-      - "--enable-alpha-plugins=true"
-      - "--enable-exec=true"
-    paths:
-      - kustomize/env/stub/local/dev
+    - image: acc-cypress
+      context: cypress-test
+      docker:
+        dockerfile: Dockerfile
 
 profiles:
   - name: local
@@ -26,7 +22,7 @@ profiles:
           - "--enable-exec=true"
         paths:
           - kustomize/env/stub/local/dev
-  - name: custom
+  - name: at
     manifests:
       kustomize:
         buildArgs:
@@ -34,4 +30,4 @@ profiles:
           - "--enable-alpha-plugins=true"
           - "--enable-exec=true"
         paths:
-          - kustomize/env/stub/custom
+          - kustomize/env/stub/local/at
