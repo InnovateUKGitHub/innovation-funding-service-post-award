@@ -1,28 +1,23 @@
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { clientsideApiClient } from "@ui/apiClient";
 import { useContent } from "@ui/hooks/content.hook";
-import { removeMessages, messageSuccess } from "@ui/redux/actions/common/messageActions";
-import { RootState } from "@ui/redux/reducers/rootReducer";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { useStore } from "react-redux";
 import { useOnUpdate } from "./onUpdate";
-import { useStores } from "@ui/redux/storesProvider";
 import type { z } from "zod";
 import type { ProjectLevelUploadSchemaType, ClaimLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
+import { useMessages } from "./useMessages";
 
 export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType | ClaimLevelUploadSchemaType>>({
   onSuccess,
 }: {
   onSuccess: () => void;
 }) => {
-  const store = useStore<RootState>();
-  const stores = useStores();
   const { getContent } = useContent();
+  const { clearMessages, setSuccessMessage } = useMessages();
 
   return useOnUpdate<Inputs, unknown, MultipleDocumentUploadDto>({
     req(data) {
-      stores.messages.clearMessages();
+      clearMessages();
 
       const { projectId, partnerId, description, files, form } = data;
 
@@ -66,9 +61,7 @@ export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType
     },
     onSuccess(data, res, ctx) {
       const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: ctx?.files.length }));
-      store.dispatch(removeMessages());
-      store.dispatch(messageSuccess(successMessage));
-      scrollToTheTopSmoothly();
+      setSuccessMessage(successMessage);
       onSuccess();
     },
   });

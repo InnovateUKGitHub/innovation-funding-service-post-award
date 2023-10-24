@@ -1,14 +1,13 @@
 import { Logger } from "@shared/developmentLogger";
-import { useStores } from "@ui/redux/storesProvider";
 import { SyntheticEvent, FocusEvent, ChangeEvent } from "react";
+import { useMessages } from "./useMessages";
 
 const logger = new Logger("RHF Message Clearer");
 
 type Elements = HTMLFormElement | HTMLInputElement | HTMLSelectElement | HTMLOptionElement | HTMLButtonElement;
 
 const useClearMessagesOnBlurOrChange = () => {
-  const stores = useStores();
-
+  const { clearMessages } = useMessages();
   const onBlurOrChange = (e: SyntheticEvent<Elements>) => {
     switch (e.type) {
       case "blur":
@@ -19,7 +18,7 @@ const useClearMessagesOnBlurOrChange = () => {
 
           if (inputNode.type === "file") {
             // If a blur event happened on a file input, clear messages.
-            stores.messages.clearMessages();
+            clearMessages();
           }
         }
         break;
@@ -32,11 +31,11 @@ const useClearMessagesOnBlurOrChange = () => {
 
           if (inputNode.type !== "file") {
             // If a change event happened on a non-file input, clear messages.
-            stores.messages.clearMessages();
+            clearMessages();
           }
         } else if (changeEvent.target.nodeName !== "BUTTON") {
           // If a change event happened on a non-button, clear messages.
-          stores.messages.clearMessages();
+          clearMessages();
         }
         break;
 
