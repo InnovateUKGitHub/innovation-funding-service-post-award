@@ -9,6 +9,8 @@ import {
   dateChangeSummary,
   markAsCompleteSave,
   validateDateRequired,
+  validatePartialDate,
+  validateFutureStartDate,
 } from "../steps";
 const projectManager = "james.black@euimeabs.test";
 
@@ -56,7 +58,27 @@ describe("PCR >  Put project on hold > Create PCR", () => {
     });
   });
 
+  it("Should continue with empty fields onto the next page", () => {
+    cy.submitButton("Save and continue").click();
+    cy.backLink("Back to request");
+  });
+
+  it("Should mark as complete and attempt to save, prompting validation", () => {
+    cy.getByLabel("I agree with this change").click();
+    cy.button("Save and return to request").click();
+    cy.validationLink("Enter a project suspension start date");
+  });
+
+  it("Should return to editing the request", () => {
+    cy.getListItemFromKey("First day of pause").contains("Edit").click();
+    cy.get("h2").contains("First day of pause");
+  });
+
   it("Should validate that numbers and a date are required", validateDateRequired);
+
+  it("Should validate partially populated fields", validatePartialDate);
+
+  it("Should validate a start date that occurs after the end date", validateFutureStartDate);
 
   it("Should populate the date fields", populateDateFields);
 

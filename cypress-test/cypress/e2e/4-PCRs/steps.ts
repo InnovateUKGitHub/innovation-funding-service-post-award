@@ -1171,11 +1171,55 @@ export const validateDateRequired = () => {
     "#suspensionEndDate_month",
     "#suspensionEndDate_year",
   ].forEach(input => {
-    cy.get(input).type("Error");
+    cy.get(input).clear().type("Error");
   });
   cy.submitButton("Save and continue").click();
   cy.validationLink("Enter a valid project suspension start date.");
   cy.validationLink("Enter a project suspension end date.");
+  cy.paragraph("Enter a valid project suspension start date.");
+  cy.paragraph("Enter a project suspension end date.");
+  cy.wait(500);
+  [
+    "#suspensionStartDate_month",
+    "#suspensionStartDate_year",
+    "#suspensionEndDate_month",
+    "#suspensionEndDate_year",
+  ].forEach(input => {
+    cy.get(input).clear().type("200");
+  });
+  cy.submitButton("Save and continue").click();
+  cy.validationLink("Enter a valid project suspension start date.");
+  cy.validationLink("Enter a project suspension end date.");
+  cy.paragraph("Enter a valid project suspension start date.");
+  cy.paragraph("Enter a project suspension end date.");
+  cy.wait(500);
+  [
+    "#suspensionStartDate_month",
+    "#suspensionStartDate_year",
+    "#suspensionEndDate_month",
+    "#suspensionEndDate_year",
+  ].forEach(input => {
+    cy.get(input).clear().type("-200");
+  });
+  cy.submitButton("Save and continue").click();
+  cy.validationLink("Enter a valid project suspension start date.");
+  cy.validationLink("Enter a project suspension end date.");
+  cy.paragraph("Enter a valid project suspension start date.");
+  cy.paragraph("Enter a project suspension end date.");
+  cy.wait(500);
+  [
+    "#suspensionStartDate_month",
+    "#suspensionStartDate_year",
+    "#suspensionEndDate_month",
+    "#suspensionEndDate_year",
+  ].forEach(input => {
+    cy.get(input).clear().type("%^&*");
+  });
+  cy.submitButton("Save and continue").click();
+  cy.validationLink("Enter a valid project suspension start date.");
+  cy.validationLink("Enter a project suspension end date.");
+  cy.paragraph("Enter a valid project suspension start date.");
+  cy.paragraph("Enter a project suspension end date.");
 };
 
 export const validateGrantMoving = () => {
@@ -1502,4 +1546,33 @@ export const existingPcrTable = () => {
         index++;
       });
   });
+};
+
+/**
+ * Note the '.each' below is necessary because cypress concatenates all elements and looks for the contents.
+ * We must therefore look at each element separately to assert this text does not exist against each rather than across all elements
+ */
+export const validatePartialDate = () => {
+  cy.get("#suspensionStartDate_month").clear().type("Error");
+  cy.get("#suspensionStartDate_year").clear().type("2023");
+  cy.get("#suspensionEndDate_month").clear().type("03");
+  cy.get("#suspensionEndDate_year").clear().type("2024");
+  cy.submitButton("Save and continue").click();
+  cy.validationLink("Enter a valid project suspension start date.");
+  cy.get("a").each($a => {
+    cy.wrap($a).should("not.have.text", "The last day of pause cannot be before the first day of pause.");
+  });
+  cy.paragraph("Enter a valid project suspension start date.");
+  cy.get("a").each($p => {
+    cy.wrap($p).should("not.have.text", "The last day of pause cannot be before the first day of pause.");
+  });
+};
+
+export const validateFutureStartDate = () => {
+  cy.get("#suspensionStartDate_month").clear().type("12");
+  cy.get("#suspensionStartDate_year").clear().type("2024");
+  cy.get("#suspensionEndDate_month").clear().type("03");
+  cy.get("#suspensionEndDate_year").clear().type("2023");
+  cy.button("Save and continue").click();
+  cy.validationLink("The last day of pause cannot be before the first day of pause.");
 };
