@@ -1,5 +1,5 @@
 export const visitApp = ({
-  path = "",
+  path = "/",
   asUser = "iuk.accproject@bjss.com.bjssdev",
 }: {
   path?: string;

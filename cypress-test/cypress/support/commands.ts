@@ -41,7 +41,7 @@ const getByAriaLabel = (label: string) => {
   cy.get(`[aria-label="${label}"]`);
 };
 
-const userSwitcher = (email: string = "", newPath: string = "") => {
+const userSwitcher = (email: string, newPath?: string) => {
   // Intercept all future web requests, and inject our UserSwitcher(TM) header
   cy.intercept(Cypress.config().baseUrl + "/**", req => {
     req.headers["x-acc-userswitcher"] = email;
@@ -51,8 +51,12 @@ const userSwitcher = (email: string = "", newPath: string = "") => {
   // Capture all i18n requests so we can wait for them later
   cy.intercept("/internationalisation/**").as("i18n");
 
-  // Visit the new page
-  cy.visit(newPath, { auth: { username, password } });
+  if (newPath) {
+    // Visit the new page
+    cy.visit(newPath, { auth: { username, password } });
+  } else {
+    cy.reload();
+  }
 
   // Wait for i18n requests to complete before continuing
   cy.wait(["@i18n"]);
