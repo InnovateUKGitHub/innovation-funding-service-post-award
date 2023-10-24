@@ -29,8 +29,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: acc-ui-configmap
-            - secretRef:
-                name: acc-ui-secrets
           volumeMounts:
             - mountPath: /tmp
               name: acc-cypress-temp-store

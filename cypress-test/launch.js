@@ -9,7 +9,7 @@ const config = {
 
 const browser = process.env.TEST_BROWSER ?? "chrome";
 
-cypress.run({ browser }).then(
+cypress.run({ browser, headless: true }).then(
   () => {
     generateReport(config);
   },

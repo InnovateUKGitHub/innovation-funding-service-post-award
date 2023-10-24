@@ -1,4 +1,4 @@
-FROM cypress/browsers
+FROM --platform=linux/amd64 cypress/browsers
 WORKDIR /cypress
 ADD . .
 RUN npm ci
