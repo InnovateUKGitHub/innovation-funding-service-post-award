@@ -1,6 +1,7 @@
 import { FullPCRItemDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
@@ -45,7 +46,8 @@ type Data = {
  * @returns {JSX.Element | "This is required to complete this request."} message block
  */
 function getRequiredToCompleteMessage(message?: string) {
-  const standardMessage = "This is required to complete this request.";
+  // const standardMessage = "This is required to complete this request.";
+  const standardMessage = <Content value={x => x.pcrLabels.requiredToComplete} />;
 
   if (!message) return standardMessage;
 

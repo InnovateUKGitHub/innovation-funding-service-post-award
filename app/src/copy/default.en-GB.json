@@ -1444,7 +1444,8 @@
     "delete": "Delete",
     "addTypes": "Add types",
     "details": "Details",
-    "statusAndCommentsLog": "Status and comments log"
+    "statusAndCommentsLog": "Status and comments log",
+    "requiredToComplete": "This is required to complete this request."
   },
   "pcrReasoningLabels": {
     "comments": "Comments",

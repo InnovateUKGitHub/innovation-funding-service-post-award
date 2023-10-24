@@ -5,7 +5,7 @@ export const pcrScopeChangeWorkflowQuery = graphql`
     salesforce {
       uiapi {
         query {
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+          Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
                 Id

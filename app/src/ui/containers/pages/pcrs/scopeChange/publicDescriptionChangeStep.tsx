@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangePublicDescriptionSchema, errorMap } from "./scopeChange.zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { useNextLink } from "../utils/useNextLink";
+import { z } from "zod";
 
 export const PublicDescriptionChangeStep = () => {
   const {
@@ -31,7 +32,7 @@ export const PublicDescriptionChangeStep = () => {
   } = usePcrWorkflowContext();
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
   const { getContent } = useContent();
-  const { register, handleSubmit, watch, formState } = useForm<{ publicDescription: string }>({
+  const { register, handleSubmit, watch, formState } = useForm<z.output<typeof pcrScopeChangePublicDescriptionSchema>>({
     defaultValues: {
       publicDescription: pcrItem.publicDescription ?? "",
     },

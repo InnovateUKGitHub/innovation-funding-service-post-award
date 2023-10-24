@@ -4,26 +4,29 @@ import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { PcrWorkflow } from "./pcrWorkflow";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { BaseProps } from "@ui/containers/containerBase";
+import { useContent } from "@ui/hooks/content.hook";
 
 export const ViewLink = ({ stepName }: { stepName: PCRStepType }) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
+  const { getContent } = useContent();
   if (mode !== "review") return null;
 
   return (
     <Link replace route={getStepReviewLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
-      View
+      {getContent(x => x.pcrLabels.view)}
     </Link>
   );
 };
 
 export const EditLink = ({ stepName }: { stepName: PCRStepType }) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
+  const { getContent } = useContent();
 
   if (mode !== "prepare") return null;
 
   return (
     <Link replace route={getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
-      Edit
+      {getContent(x => x.pcrLabels.edit)}
     </Link>
   );
 };
