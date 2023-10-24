@@ -109,7 +109,7 @@ export const useClaimReviewPageData = (
       {},
     );
 
-    if (!claim) throw new Error(" there is no matching claim");
+    if (!claim) throw new Error("There is no matching claim");
     const forecastDetails = mapToForecastDetailsDtoArray(profileGql, [
       "id",
       "costCategoryId",

@@ -86,7 +86,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
       {},
     );
 
-    if (!claim) throw new Error(" there is no matching claim");
+    if (!claim) throw new Error("There is no matching claim");
     const forecastDetails = mapToForecastDetailsDtoArray(profileGql, ["costCategoryId", "value"]);
 
     const costsSummaryForPeriod = mapToCostSummaryForPeriodDtoArray(

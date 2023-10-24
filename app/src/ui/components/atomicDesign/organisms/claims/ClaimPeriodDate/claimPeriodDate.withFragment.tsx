@@ -31,7 +31,7 @@ export const ClaimPeriodDate = () => {
     ),
   );
 
-  if (!claim) throw new Error(" there is no matching claim");
+  if (!claim) throw new Error("There is no matching claim");
 
   return <ClaimPeriodDateComponent claim={claim} partner={partner} />;
 };
