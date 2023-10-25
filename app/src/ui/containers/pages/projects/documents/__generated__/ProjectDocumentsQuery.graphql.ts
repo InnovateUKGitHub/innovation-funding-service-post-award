@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f07188aa3b19401fa14733ad56157dea>>
+ * @generated SignedSource<<eac8d5f1905853bf960ce809a071ffd3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,9 +13,6 @@ export type ProjectDocumentsQuery$variables = {
   projectId: string;
 };
 export type ProjectDocumentsQuery$data = {
-  readonly currentUser: {
-    readonly userId: string | null;
-  };
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
@@ -79,6 +76,7 @@ export type ProjectDocumentsQuery$data = {
                       readonly value: string | null;
                     } | null;
                     readonly isFeedAttachment: boolean;
+                    readonly isOwner: boolean;
                   } | null;
                 } | null> | null;
               } | null;
@@ -141,6 +139,7 @@ export type ProjectDocumentsQuery$data = {
                     } | null;
                     readonly Id: string;
                     readonly isFeedAttachment: boolean;
+                    readonly isOwner: boolean;
                   } | null;
                 } | null> | null;
               } | null;
@@ -235,6 +234,13 @@ v6 = {
   "storageKey": null
 },
 v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isOwner",
+  "storageKey": null
+},
+v8 = {
   "alias": null,
   "args": null,
   "concreteType": "ContentDocument",
@@ -360,46 +366,28 @@ v7 = {
   ],
   "storageKey": null
 },
-v8 = {
+v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isMo",
   "storageKey": null
 },
-v9 = {
+v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isFc",
   "storageKey": null
 },
-v10 = {
+v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v11 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "CurrentUserObject",
-    "kind": "LinkedField",
-    "name": "currentUser",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "userId",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  },
+v12 = [
   {
     "alias": null,
     "args": null,
@@ -545,7 +533,8 @@ v11 = [
                                         "storageKey": null
                                       },
                                       (v6/*: any*/),
-                                      (v7/*: any*/)
+                                      (v7/*: any*/),
+                                      (v8/*: any*/)
                                     ],
                                     "storageKey": null
                                   }
@@ -614,9 +603,9 @@ v11 = [
                             "name": "roles",
                             "plural": false,
                             "selections": [
-                              (v8/*: any*/),
                               (v9/*: any*/),
                               (v10/*: any*/),
+                              (v11/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -625,9 +614,9 @@ v11 = [
                                 "name": "partnerRoles",
                                 "plural": true,
                                 "selections": [
-                                  (v9/*: any*/),
-                                  (v8/*: any*/),
                                   (v10/*: any*/),
+                                  (v9/*: any*/),
+                                  (v11/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -697,7 +686,8 @@ v11 = [
                                     "selections": [
                                       (v2/*: any*/),
                                       (v6/*: any*/),
-                                      (v7/*: any*/)
+                                      (v7/*: any*/),
+                                      (v8/*: any*/)
                                     ],
                                     "storageKey": null
                                   }
@@ -732,7 +722,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ProjectDocumentsQuery",
-    "selections": (v11/*: any*/),
+    "selections": (v12/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -741,19 +731,19 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "ProjectDocumentsQuery",
-    "selections": (v11/*: any*/)
+    "selections": (v12/*: any*/)
   },
   "params": {
-    "cacheID": "c0e8c770c6b8f96601e19091f330bb23",
+    "cacheID": "e61c3d81b0ad685db1d891565f73f408",
     "id": null,
     "metadata": {},
     "name": "ProjectDocumentsQuery",
     "operationKind": "query",
-    "text": "query ProjectDocumentsQuery(\n  $projectId: ID!\n) {\n  currentUser {\n    userId\n  }\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    isFeedAttachment\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ProjectDocumentsQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 200) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__c {\n                value\n              }\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b36c82530038ba15e42d0f31ed67c9ac";
+(node as any).hash = "9de5f793cc333cc334ba8e0660dc3392";
 
 export default node;

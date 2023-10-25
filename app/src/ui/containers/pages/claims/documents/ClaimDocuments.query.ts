@@ -2,9 +2,6 @@ import { graphql } from "react-relay";
 
 export const claimDocumentsQuery = graphql`
   query ClaimDocumentsQuery($projectId: ID!, $partnerId: ID!, $periodId: Double) {
-    currentUser {
-      userId
-    }
     salesforce {
       uiapi {
         query {
@@ -38,6 +35,7 @@ export const claimDocumentsQuery = graphql`
                   edges {
                     node {
                       isFeedAttachment
+                      isOwner
                       LinkedEntityId {
                         value
                       }

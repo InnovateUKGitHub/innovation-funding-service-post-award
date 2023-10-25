@@ -2,9 +2,6 @@ import { graphql } from "react-relay";
 
 const pcrReasoningWorkflowQuery = graphql`
   query PcrReasoningWorkflowQuery($projectId: ID, $pcrId: ID) {
-    currentUser {
-      userId
-    }
     salesforce {
       uiapi {
         query {
@@ -19,6 +16,7 @@ const pcrReasoningWorkflowQuery = graphql`
                         value
                       }
                       isFeedAttachment
+                      isOwner
                       ContentDocument {
                         Id
                         LastModifiedBy {

@@ -2,7 +2,7 @@ import { DocumentDescription } from "@framework/constants/documentDescription";
 import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
-import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
+import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/ProjectDocumentView.withFragment";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
@@ -47,7 +47,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
 
   const onBlurOrChange = useClearMessagesOnBlurOrChange();
 
-  const { fragmentRef, documents } = useSetupBankStatementData(projectId, partnerId, refreshedQueryOptions);
+  const { fragmentRef } = useSetupBankStatementData(projectId, partnerId, refreshedQueryOptions);
 
   const { register, reset, getFieldState, handleSubmit, setError, formState } = useForm<
     z.output<UploadBankStatementSchemaType>
@@ -122,7 +122,6 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
           hideSubtitle
           qa="setup-bank-statement-documents"
           onRemove={onDelete}
-          documents={documents}
           formType={FormTypes.ProjectLevelDelete}
           disabled={isFetching}
         />

@@ -8,7 +8,6 @@ export const editClaimLineItemsQuery = graphql`
     $costCategoryId: ID!
   ) {
     currentUser {
-      userId
       isSystemUser
     }
     salesforce {
@@ -117,6 +116,7 @@ export const editClaimLineItemsQuery = graphql`
                         value
                       }
                       isFeedAttachment
+                      isOwner
                       ContentDocument {
                         Id
                         LastModifiedBy {

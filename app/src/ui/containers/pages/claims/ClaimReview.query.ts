@@ -1,9 +1,6 @@
 import { graphql } from "react-relay";
 export const claimReviewQuery = graphql`
   query ClaimReviewQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
-    currentUser {
-      userId
-    }
     salesforce {
       uiapi {
         ...StatusChangesLogsFragment
@@ -163,6 +160,7 @@ export const claimReviewQuery = graphql`
                         value
                       }
                       isFeedAttachment
+                      isOwner
                       ContentDocument {
                         Id
                         LastModifiedBy {

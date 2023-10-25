@@ -1,9 +1,6 @@
 import { graphql } from "react-relay";
 export const claimPrepareQuery = graphql`
   query ClaimPrepareQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
-    currentUser {
-      email
-    }
     salesforce {
       uiapi {
         ...StatusChangesLogsFragment

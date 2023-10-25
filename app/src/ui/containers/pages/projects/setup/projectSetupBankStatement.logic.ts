@@ -1,10 +1,7 @@
 import { useLazyLoadQuery } from "react-relay";
 import { projectSetupBankStatementQuery } from "./ProjectSetupBankStatement.query";
 import { ProjectSetupBankStatementQuery } from "./__generated__/ProjectSetupBankStatementQuery.graphql";
-import { getFirstEdge } from "@gql/selectors/edges";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
-import { mapToPartnerDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { z } from "zod";
 import { UploadBankStatementSchemaType } from "@ui/zod/documentValidators.zod";
 import { DocumentSummaryDto, PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
@@ -24,34 +21,7 @@ export const useSetupBankStatementData = (
     refreshedQueryOptions,
   );
 
-  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges ?? []);
-
-  const project = mapToProjectDto(projectNode, ["roles", "partnerRoles"]);
-
-  const documents = mapToPartnerDocumentSummaryDtoArray(
-    data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges ?? [],
-    [
-      "partnerId",
-      "id",
-      "fileName",
-      "fileSize",
-      "description",
-      "dateCreated",
-      "uploadedBy",
-      "link",
-      "isOwner",
-      "partnerName",
-      "linkedEntityId",
-    ],
-    {
-      projectId,
-      currentUser: { userId: data.currentUser.userId },
-      currentUserRoles: project.roles,
-      partnerRoles: project.partnerRoles,
-    },
-  );
-
-  return { fragmentRef: data?.salesforce?.uiapi, documents };
+  return { fragmentRef: data?.salesforce?.uiapi, userId: data?.currentUser?.userId ?? "unknown" };
 };
 
 export const useSetupBankStatementActions = (

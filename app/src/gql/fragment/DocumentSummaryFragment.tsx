@@ -6,6 +6,7 @@ export const documentSummaryFragment = graphql`
       node {
         Id
         isFeedAttachment
+        isOwner
         ContentDocument {
           Id
           LatestPublishedVersionId {

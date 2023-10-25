@@ -5,6 +5,7 @@ export type DocumentSummaryNode = {
   readonly node: {
     readonly LinkedEntityId?: GQL.Value<string>;
     readonly isFeedAttachment: boolean;
+    readonly isOwner: boolean;
     readonly ContentDocument: {
       readonly Id: string | null;
       readonly LastModifiedBy: {
@@ -44,7 +45,6 @@ const mapper: GQL.DtoMapper<
   DocumentSummaryNode,
   {
     projectId: ProjectId;
-    currentUser: { userId: string | null };
     partnerName: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
@@ -99,9 +99,8 @@ const mapper: GQL.DtoMapper<
     }
     return `${node?.node?.ContentDocument?.CreatedBy?.Name?.value ?? ""}${partnerName ? " of " + partnerName : ""}`;
   },
-  isOwner(node, { currentUser }) {
-    if (currentUser.userId === null) return false;
-    return currentUser.userId === node?.node?.ContentDocument?.CreatedBy?.Id;
+  isOwner(node) {
+    return !!node?.node?.isOwner;
   },
   partnerId(node, { partnerId }) {
     return partnerId as PartnerId;
@@ -126,7 +125,6 @@ export function mapToDocumentSummaryDto<
   pickList: PickList[],
   additionalData: {
     projectId: ProjectId;
-    currentUser: { userId: string | null };
     partnerName: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
@@ -154,7 +152,6 @@ export function mapToPartnerDocumentSummaryDtoArray<
   pickList: PickList,
   additionalData: {
     projectId: ProjectId;
-    currentUser: { userId: string | null };
     currentUserRoles: SfRoles;
     partnerRoles: SfPartnerRoles[];
   },
@@ -199,7 +196,6 @@ export function mapToProjectDocumentSummaryDtoArray<
   pickList: PickList[],
   additionalData: {
     projectId: ProjectId;
-    currentUser: { userId: string | null };
     partnerId?: PartnerId;
     periodId?: PeriodId;
     costCategoryId?: string;

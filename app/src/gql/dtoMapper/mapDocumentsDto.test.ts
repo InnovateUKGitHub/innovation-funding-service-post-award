@@ -36,6 +36,7 @@ const data = {
                           value: "a0D2600000z6KthEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -83,6 +84,7 @@ const data = {
                           value: "a0D2600000z6KthEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -130,6 +132,7 @@ const data = {
                           value: "a0D2600000z6KthEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -177,6 +180,7 @@ const data = {
                           value: "a0D2600000z6KthEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -244,6 +248,7 @@ const data = {
                           value: "a0D2600000z6KtgEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -291,6 +296,7 @@ const data = {
                           value: "a0D2600000z6KtgEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -338,6 +344,7 @@ const data = {
                           value: "a0D2600000z6KtgEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -385,6 +392,7 @@ const data = {
                           value: "a0D2600000z6KtgEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -432,6 +440,7 @@ const data = {
                           value: "a0D2600000z6KtgEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -499,6 +508,7 @@ const data = {
                           value: "a0D2600000z6KtfEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -546,6 +556,7 @@ const data = {
                           value: "a0D2600000z6KtfEAE",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           LastModifiedBy: {
                             ContactId: {
@@ -640,6 +651,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001UyMLAA0",
 
@@ -687,6 +699,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001Y1jjAAC",
 
@@ -734,6 +747,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001Y1tZAAS",
 
@@ -781,6 +795,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iE0MAAU",
 
@@ -828,6 +843,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iE0WAAU",
 
@@ -875,6 +891,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iE0bAAE",
 
@@ -922,6 +939,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iE0lAAE",
 
@@ -969,6 +987,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iE0vAAE",
 
@@ -1016,6 +1035,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iE1jAAE",
 
@@ -1063,6 +1083,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iE1oAAE",
 
@@ -1110,6 +1131,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iP8qAAE",
 
@@ -1157,6 +1179,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iP9UAAU",
 
@@ -1204,6 +1227,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iPAXAA2",
 
@@ -1251,6 +1275,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iQ4uAAE",
 
@@ -1298,6 +1323,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iQUxAAM",
 
@@ -1345,6 +1371,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001iQYLAA2",
 
@@ -1392,6 +1419,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001icV4AAI",
 
@@ -1439,6 +1467,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001icVTAAY",
 
@@ -1486,6 +1515,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001icaYAAQ",
 
@@ -1533,6 +1563,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001icbCAAQ",
 
@@ -1580,6 +1611,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001icbHAAQ",
 
@@ -1627,6 +1659,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001ifFYAAY",
 
@@ -1674,6 +1707,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001ifFdAAI",
 
@@ -1721,6 +1755,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001igHzAAI",
 
@@ -1768,6 +1803,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001igJlAAI",
 
@@ -1815,6 +1851,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001igJvAAI",
 
@@ -1862,6 +1899,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001igK0AAI",
 
@@ -1909,6 +1947,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "06926000001igK5AAI",
 
@@ -1956,6 +1995,7 @@ const data = {
                           value: "a0E2600000kSp3gEAC",
                         },
                         isFeedAttachment: false,
+                        isOwner: false,
                         ContentDocument: {
                           Id: "069260000024WnpAAE",
 
@@ -2015,7 +2055,6 @@ describe("mapToProjectDocumentSummaryDtoArray", () => {
         data.salesforce.uiapi.query.Acc_Project__c.edges[0].node.ContentDocumentLinks.edges,
         ["id", "fileName", "fileSize", "link", "description", "dateCreated", "uploadedBy", "isOwner"],
         {
-          currentUser: { userId: data.currentUser.userId },
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
           type: "projects",
         },
@@ -2044,9 +2083,6 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
         ],
         {
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
-          currentUser: {
-            userId: "001-sf-user-test@testman.com",
-          },
           partnerRoles: data.salesforce.uiapi.query.Acc_Project__c.edges[0].node.roles
             .partnerRoles as unknown as SfPartnerRoles[],
           currentUserRoles: { isMo: true, isFc: false, isPm: false },
@@ -2074,9 +2110,6 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
         ],
         {
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
-          currentUser: {
-            userId: "001-sf-user-james-black",
-          },
           partnerRoles: data.salesforce.uiapi.query.Acc_Project__c.edges[0].node.roles
             .partnerRoles as unknown as SfPartnerRoles[],
           currentUserRoles: { isMo: false, isFc: true, isPm: false },
@@ -2092,6 +2125,7 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
           {
             node: {
               isFeedAttachment: false,
+              isOwner: true,
               ContentDocument: {
                 Id: "good",
               },
@@ -2114,7 +2148,6 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
           costCategoryId: "12345",
           pcrId: undefined,
           type: "claim details",
-          currentUser: { userId: "001-sf-user-bamboo-user" },
         },
       ),
     ).toEqual([{ id: "good" }]);

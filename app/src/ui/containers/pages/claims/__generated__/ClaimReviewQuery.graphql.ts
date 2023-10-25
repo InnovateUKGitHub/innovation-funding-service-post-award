@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3bf0c9afff1ea86e975626a71672433f>>
+ * @generated SignedSource<<e5888381a54dd7d339b5d2085fd82a32>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,9 +17,6 @@ export type ClaimReviewQuery$variables = {
   projectIdStr?: string | null;
 };
 export type ClaimReviewQuery$data = {
-  readonly currentUser: {
-    readonly userId: string | null;
-  };
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
@@ -255,6 +252,7 @@ export type ClaimReviewQuery$data = {
                       readonly value: string | null;
                     } | null;
                     readonly isFeedAttachment: boolean;
+                    readonly isOwner: boolean;
                   } | null;
                 } | null> | null;
               } | null;
@@ -298,79 +296,61 @@ v3 = {
   "name": "projectIdStr"
 },
 v4 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "CurrentUserObject",
-  "kind": "LinkedField",
-  "name": "currentUser",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "userId",
-      "storageKey": null
-    }
-  ],
-  "storageKey": null
-},
-v5 = {
   "kind": "Literal",
   "name": "first",
   "value": 2000
 },
-v6 = [
+v5 = [
   {
     "kind": "Variable",
     "name": "eq",
     "variableName": "partnerId"
   }
 ],
-v7 = [
+v6 = [
   {
-    "fields": (v6/*: any*/),
+    "fields": (v5/*: any*/),
     "kind": "ObjectValue",
     "name": "Acc_ProjectParticipant__c"
   }
 ],
-v8 = {
-  "fields": (v7/*: any*/),
+v7 = {
+  "fields": (v6/*: any*/),
   "kind": "ObjectValue",
   "name": "and.0"
 },
-v9 = {
+v8 = {
   "RecordType": {
     "DeveloperName": {
       "eq": "Profile_Detail"
     }
   }
 },
-v10 = {
+v9 = {
   "RecordType": {
     "DeveloperName": {
       "eq": "Total_Cost_Category"
     }
   }
 },
-v11 = {
+v10 = {
   "Acc_CostCategory__c": {
     "ne": null
   }
 },
-v12 = {
+v11 = {
   "kind": "Literal",
   "name": "and.2",
-  "value": (v11/*: any*/)
+  "value": (v10/*: any*/)
 },
-v13 = {
+v12 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
-v14 = [
+v13 = [
   {
     "alias": null,
     "args": null,
@@ -379,34 +359,44 @@ v14 = [
     "storageKey": null
   }
 ],
-v15 = {
+v14 = {
   "alias": null,
   "args": null,
   "concreteType": "IDValue",
   "kind": "LinkedField",
   "name": "Acc_CostCategory__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v16 = {
+v15 = {
   "alias": null,
   "args": null,
   "concreteType": "CurrencyValue",
   "kind": "LinkedField",
   "name": "Acc_CostCategoryGOLCost__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v17 = {
+v16 = {
   "alias": null,
   "args": null,
   "concreteType": "DoubleValue",
   "kind": "LinkedField",
   "name": "Acc_ProjectPeriodNumber__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
+  "storageKey": null
+},
+v17 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "DateValue",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectPeriodStartDate__c",
+  "plural": false,
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
 v18 = {
@@ -414,32 +404,22 @@ v18 = {
   "args": null,
   "concreteType": "DateValue",
   "kind": "LinkedField",
-  "name": "Acc_ProjectPeriodStartDate__c",
+  "name": "Acc_ProjectPeriodEndDate__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
 v19 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "DateValue",
-  "kind": "LinkedField",
-  "name": "Acc_ProjectPeriodEndDate__c",
-  "plural": false,
-  "selections": (v14/*: any*/),
-  "storageKey": null
-},
-v20 = {
   "alias": null,
   "args": null,
   "concreteType": "CurrencyValue",
   "kind": "LinkedField",
   "name": "Acc_LatestForecastCost__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v21 = {
+v20 = {
   "alias": null,
   "args": null,
   "concreteType": "RecordType",
@@ -454,32 +434,32 @@ v21 = {
       "kind": "LinkedField",
       "name": "DeveloperName",
       "plural": false,
-      "selections": (v14/*: any*/),
+      "selections": (v13/*: any*/),
       "storageKey": null
     }
   ],
   "storageKey": null
 },
-v22 = {
+v21 = {
   "alias": null,
   "args": [
-    (v5/*: any*/),
+    (v4/*: any*/),
     {
       "fields": [
         {
           "items": [
-            (v8/*: any*/),
+            (v7/*: any*/),
             {
               "kind": "Literal",
               "name": "and.1",
               "value": {
                 "or": [
-                  (v9/*: any*/),
-                  (v10/*: any*/)
+                  (v8/*: any*/),
+                  (v9/*: any*/)
                 ]
               }
             },
-            (v12/*: any*/)
+            (v11/*: any*/)
           ],
           "kind": "ListValue",
           "name": "and"
@@ -510,14 +490,14 @@ v22 = {
           "name": "node",
           "plural": false,
           "selections": [
-            (v13/*: any*/),
+            (v12/*: any*/),
+            (v14/*: any*/),
             (v15/*: any*/),
             (v16/*: any*/),
             (v17/*: any*/),
             (v18/*: any*/),
             (v19/*: any*/),
-            (v20/*: any*/),
-            (v21/*: any*/)
+            (v20/*: any*/)
           ],
           "storageKey": null
         }
@@ -527,24 +507,24 @@ v22 = {
   ],
   "storageKey": null
 },
-v23 = {
+v22 = {
   "RecordType": {
     "DeveloperName": {
       "eq": "Total_Project_Period"
     }
   }
 },
-v24 = [
-  (v5/*: any*/),
+v23 = [
+  (v4/*: any*/),
   {
     "fields": [
       {
         "items": [
-          (v8/*: any*/),
+          (v7/*: any*/),
           {
             "kind": "Literal",
             "name": "and.1",
-            "value": (v23/*: any*/)
+            "value": (v22/*: any*/)
           },
           {
             "kind": "Literal",
@@ -573,19 +553,19 @@ v24 = [
     "name": "where"
   }
 ],
-v25 = {
+v24 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
   "kind": "LinkedField",
   "name": "Acc_ClaimStatus__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v26 = {
+v25 = {
   "alias": "AllClaimsForPartner",
-  "args": (v24/*: any*/),
+  "args": (v23/*: any*/),
   "concreteType": "Acc_Claims__cConnection",
   "kind": "LinkedField",
   "name": "Acc_Claims__c",
@@ -607,8 +587,8 @@ v26 = {
           "name": "node",
           "plural": false,
           "selections": [
-            (v21/*: any*/),
-            (v13/*: any*/),
+            (v20/*: any*/),
+            (v12/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -616,12 +596,12 @@ v26 = {
               "kind": "LinkedField",
               "name": "Acc_FinalClaim__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
-            (v19/*: any*/),
-            (v17/*: any*/),
             (v18/*: any*/),
+            (v16/*: any*/),
+            (v17/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -629,10 +609,10 @@ v26 = {
               "kind": "LinkedField",
               "name": "Acc_ProjectParticipant__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
-            (v25/*: any*/)
+            (v24/*: any*/)
           ],
           "storageKey": null
         }
@@ -642,7 +622,7 @@ v26 = {
   ],
   "storageKey": null
 },
-v27 = {
+v26 = {
   "kind": "Literal",
   "name": "orderBy",
   "value": {
@@ -655,14 +635,14 @@ v27 = {
     }
   }
 },
-v28 = {
+v27 = {
   "RecordType": {
     "DeveloperName": {
       "eq": "Claims_Detail"
     }
   }
 },
-v29 = {
+v28 = {
   "kind": "Literal",
   "name": "and.2",
   "value": {
@@ -671,38 +651,38 @@ v29 = {
     }
   }
 },
-v30 = {
+v29 = {
   "kind": "Literal",
   "name": "and.3",
-  "value": (v11/*: any*/)
+  "value": (v10/*: any*/)
 },
-v31 = {
+v30 = {
   "alias": null,
   "args": null,
   "concreteType": "CurrencyValue",
   "kind": "LinkedField",
   "name": "Acc_PeriodCostCategoryTotal__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v32 = {
+v31 = {
   "alias": "ClaimDetails",
   "args": [
-    (v5/*: any*/),
-    (v27/*: any*/),
+    (v4/*: any*/),
+    (v26/*: any*/),
     {
       "fields": [
         {
           "items": [
-            (v8/*: any*/),
+            (v7/*: any*/),
             {
               "kind": "Literal",
               "name": "and.1",
-              "value": (v28/*: any*/)
+              "value": (v27/*: any*/)
             },
-            (v29/*: any*/),
-            (v30/*: any*/)
+            (v28/*: any*/),
+            (v29/*: any*/)
           ],
           "kind": "ListValue",
           "name": "and"
@@ -733,13 +713,13 @@ v32 = {
           "name": "node",
           "plural": false,
           "selections": [
-            (v21/*: any*/),
-            (v25/*: any*/),
-            (v15/*: any*/),
-            (v31/*: any*/),
-            (v19/*: any*/),
-            (v17/*: any*/),
-            (v18/*: any*/)
+            (v20/*: any*/),
+            (v24/*: any*/),
+            (v14/*: any*/),
+            (v30/*: any*/),
+            (v18/*: any*/),
+            (v16/*: any*/),
+            (v17/*: any*/)
           ],
           "storageKey": null
         }
@@ -749,7 +729,7 @@ v32 = {
   ],
   "storageKey": null
 },
-v33 = {
+v32 = {
   "fields": [
     {
       "fields": [
@@ -766,12 +746,12 @@ v33 = {
   "kind": "ObjectValue",
   "name": "and.0"
 },
-v34 = {
-  "fields": (v7/*: any*/),
+v33 = {
+  "fields": (v6/*: any*/),
   "kind": "ObjectValue",
   "name": "and.1"
 },
-v35 = [
+v34 = [
   {
     "fields": [
       {
@@ -784,44 +764,44 @@ v35 = [
     "name": "Acc_ProjectPeriodNumber__c"
   }
 ],
-v36 = {
+v35 = {
   "CreatedDate": {
     "order": "DESC"
   }
 },
-v37 = {
+v36 = {
   "alias": null,
   "args": null,
   "concreteType": "DateTimeValue",
   "kind": "LinkedField",
   "name": "CreatedDate",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v38 = {
+v37 = {
   "alias": null,
   "args": null,
   "concreteType": "StringValue",
   "kind": "LinkedField",
   "name": "Name",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v39 = {
+v38 = {
   "alias": "ClaimsByPeriodForDocuments",
   "args": [
-    (v5/*: any*/),
-    (v27/*: any*/),
+    (v4/*: any*/),
+    (v26/*: any*/),
     {
       "fields": [
         {
           "items": [
+            (v32/*: any*/),
             (v33/*: any*/),
-            (v34/*: any*/),
             {
-              "fields": (v35/*: any*/),
+              "fields": (v34/*: any*/),
               "kind": "ObjectValue",
               "name": "and.2"
             }
@@ -855,17 +835,17 @@ v39 = {
           "name": "node",
           "plural": false,
           "selections": [
-            (v21/*: any*/),
-            (v15/*: any*/),
+            (v20/*: any*/),
+            (v14/*: any*/),
             {
               "alias": null,
               "args": [
-                (v5/*: any*/),
+                (v4/*: any*/),
                 {
                   "kind": "Literal",
                   "name": "orderBy",
                   "value": {
-                    "ContentDocument": (v36/*: any*/)
+                    "ContentDocument": (v35/*: any*/)
                   }
                 }
               ],
@@ -890,7 +870,7 @@ v39 = {
                       "name": "node",
                       "plural": false,
                       "selections": [
-                        (v13/*: any*/),
+                        (v12/*: any*/),
                         {
                           "alias": null,
                           "args": null,
@@ -898,7 +878,7 @@ v39 = {
                           "kind": "LinkedField",
                           "name": "LinkedEntityId",
                           "plural": false,
-                          "selections": (v14/*: any*/),
+                          "selections": (v13/*: any*/),
                           "storageKey": null
                         },
                         {
@@ -911,12 +891,19 @@ v39 = {
                         {
                           "alias": null,
                           "args": null,
+                          "kind": "ScalarField",
+                          "name": "isOwner",
+                          "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
                           "concreteType": "ContentDocument",
                           "kind": "LinkedField",
                           "name": "ContentDocument",
                           "plural": false,
                           "selections": [
-                            (v13/*: any*/),
+                            (v12/*: any*/),
                             {
                               "alias": null,
                               "args": null,
@@ -932,7 +919,7 @@ v39 = {
                                   "kind": "LinkedField",
                                   "name": "ContactId",
                                   "plural": false,
-                                  "selections": (v14/*: any*/),
+                                  "selections": (v13/*: any*/),
                                   "storageKey": null
                                 }
                               ],
@@ -945,10 +932,10 @@ v39 = {
                               "kind": "LinkedField",
                               "name": "Description",
                               "plural": false,
-                              "selections": (v14/*: any*/),
+                              "selections": (v13/*: any*/),
                               "storageKey": null
                             },
-                            (v37/*: any*/),
+                            (v36/*: any*/),
                             {
                               "alias": null,
                               "args": null,
@@ -956,7 +943,7 @@ v39 = {
                               "kind": "LinkedField",
                               "name": "LatestPublishedVersionId",
                               "plural": false,
-                              "selections": (v14/*: any*/),
+                              "selections": (v13/*: any*/),
                               "storageKey": null
                             },
                             {
@@ -966,7 +953,7 @@ v39 = {
                               "kind": "LinkedField",
                               "name": "FileExtension",
                               "plural": false,
-                              "selections": (v14/*: any*/),
+                              "selections": (v13/*: any*/),
                               "storageKey": null
                             },
                             {
@@ -976,7 +963,7 @@ v39 = {
                               "kind": "LinkedField",
                               "name": "Title",
                               "plural": false,
-                              "selections": (v14/*: any*/),
+                              "selections": (v13/*: any*/),
                               "storageKey": null
                             },
                             {
@@ -986,7 +973,7 @@ v39 = {
                               "kind": "LinkedField",
                               "name": "ContentSize",
                               "plural": false,
-                              "selections": (v14/*: any*/),
+                              "selections": (v13/*: any*/),
                               "storageKey": null
                             },
                             {
@@ -997,8 +984,8 @@ v39 = {
                               "name": "CreatedBy",
                               "plural": false,
                               "selections": [
-                                (v38/*: any*/),
-                                (v13/*: any*/)
+                                (v37/*: any*/),
+                                (v12/*: any*/)
                               ],
                               "storageKey": null
                             }
@@ -1023,10 +1010,10 @@ v39 = {
   ],
   "storageKey": null
 },
-v40 = [
-  (v5/*: any*/)
+v39 = [
+  (v4/*: any*/)
 ],
-v41 = [
+v40 = [
   {
     "alias": null,
     "args": null,
@@ -1043,7 +1030,7 @@ v41 = [
         "name": "node",
         "plural": false,
         "selections": [
-          (v13/*: any*/),
+          (v12/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -1051,7 +1038,7 @@ v41 = [
             "kind": "LinkedField",
             "name": "Acc_CostCategoryName__c",
             "plural": false,
-            "selections": (v14/*: any*/),
+            "selections": (v13/*: any*/),
             "storageKey": null
           },
           {
@@ -1061,7 +1048,7 @@ v41 = [
             "kind": "LinkedField",
             "name": "Acc_DisplayOrder__c",
             "plural": false,
-            "selections": (v14/*: any*/),
+            "selections": (v13/*: any*/),
             "storageKey": null
           },
           {
@@ -1071,7 +1058,7 @@ v41 = [
             "kind": "LinkedField",
             "name": "Acc_OrganisationType__c",
             "plural": false,
-            "selections": (v14/*: any*/),
+            "selections": (v13/*: any*/),
             "storageKey": null
           },
           {
@@ -1081,7 +1068,7 @@ v41 = [
             "kind": "LinkedField",
             "name": "Acc_CompetitionType__c",
             "plural": false,
-            "selections": (v14/*: any*/),
+            "selections": (v13/*: any*/),
             "storageKey": null
           }
         ],
@@ -1091,25 +1078,25 @@ v41 = [
     "storageKey": null
   }
 ],
-v42 = {
+v41 = {
   "alias": null,
-  "args": (v40/*: any*/),
+  "args": (v39/*: any*/),
   "concreteType": "Acc_CostCategory__cConnection",
   "kind": "LinkedField",
   "name": "Acc_CostCategory__c",
   "plural": false,
-  "selections": (v41/*: any*/),
+  "selections": (v40/*: any*/),
   "storageKey": "Acc_CostCategory__c(first:2000)"
 },
-v43 = [
+v42 = [
   {
     "kind": "Variable",
     "name": "eq",
     "variableName": "projectId"
   }
 ],
-v44 = [
-  (v5/*: any*/),
+v43 = [
+  (v4/*: any*/),
   {
     "fields": [
       {
@@ -1117,7 +1104,7 @@ v44 = [
           {
             "fields": [
               {
-                "fields": (v43/*: any*/),
+                "fields": (v42/*: any*/),
                 "kind": "ObjectValue",
                 "name": "Acc_ProjectId__c"
               }
@@ -1128,7 +1115,7 @@ v44 = [
           {
             "fields": [
               {
-                "fields": (v6/*: any*/),
+                "fields": (v5/*: any*/),
                 "kind": "ObjectValue",
                 "name": "Id"
               }
@@ -1145,17 +1132,27 @@ v44 = [
     "name": "where"
   }
 ],
-v45 = [
-  (v38/*: any*/)
+v44 = [
+  (v37/*: any*/)
 ],
-v46 = {
+v45 = {
   "alias": null,
   "args": null,
   "concreteType": "Account",
   "kind": "LinkedField",
   "name": "Acc_AccountId__r",
   "plural": false,
-  "selections": (v45/*: any*/),
+  "selections": (v44/*: any*/),
+  "storageKey": null
+},
+v46 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "PicklistValue",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectRole__c",
+  "plural": false,
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
 v47 = {
@@ -1163,9 +1160,9 @@ v47 = {
   "args": null,
   "concreteType": "PicklistValue",
   "kind": "LinkedField",
-  "name": "Acc_ProjectRole__c",
+  "name": "Acc_OrganisationType__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
 v48 = {
@@ -1173,34 +1170,24 @@ v48 = {
   "args": null,
   "concreteType": "PicklistValue",
   "kind": "LinkedField",
-  "name": "Acc_OrganisationType__c",
+  "name": "Acc_ParticipantStatus__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
 v49 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "PicklistValue",
-  "kind": "LinkedField",
-  "name": "Acc_ParticipantStatus__c",
-  "plural": false,
-  "selections": (v14/*: any*/),
-  "storageKey": null
-},
-v50 = {
   "alias": null,
   "args": null,
   "concreteType": "PercentValue",
   "kind": "LinkedField",
   "name": "Acc_OverheadRate__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v51 = {
+v50 = {
   "alias": null,
-  "args": (v44/*: any*/),
+  "args": (v43/*: any*/),
   "concreteType": "Acc_ProjectParticipant__cConnection",
   "kind": "LinkedField",
   "name": "Acc_ProjectParticipant__c",
@@ -1222,8 +1209,8 @@ v51 = {
           "name": "node",
           "plural": false,
           "selections": [
-            (v13/*: any*/),
-            (v46/*: any*/),
+            (v12/*: any*/),
+            (v45/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -1231,7 +1218,7 @@ v51 = {
               "kind": "LinkedField",
               "name": "Acc_AccountId__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
             {
@@ -1241,10 +1228,10 @@ v51 = {
               "kind": "LinkedField",
               "name": "Acc_TotalParticipantGrant__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
-            (v47/*: any*/),
+            (v46/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -1252,11 +1239,11 @@ v51 = {
               "kind": "LinkedField",
               "name": "Acc_ForecastLastModifiedDate__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
+            (v47/*: any*/),
             (v48/*: any*/),
-            (v49/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -1264,7 +1251,7 @@ v51 = {
               "kind": "LinkedField",
               "name": "Acc_TotalFutureForecastsForParticipant__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
             {
@@ -1274,7 +1261,7 @@ v51 = {
               "kind": "LinkedField",
               "name": "Acc_TotalParticipantCosts__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
             {
@@ -1284,7 +1271,7 @@ v51 = {
               "kind": "LinkedField",
               "name": "Acc_TotalCostsSubmitted__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
             {
@@ -1294,10 +1281,10 @@ v51 = {
               "kind": "LinkedField",
               "name": "Acc_Overdue_Project__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
-            (v50/*: any*/)
+            (v49/*: any*/)
           ],
           "storageKey": null
         }
@@ -1307,7 +1294,7 @@ v51 = {
   ],
   "storageKey": null
 },
-v52 = [
+v51 = [
   {
     "kind": "Literal",
     "name": "first",
@@ -1316,7 +1303,7 @@ v52 = [
   {
     "fields": [
       {
-        "fields": (v43/*: any*/),
+        "fields": (v42/*: any*/),
         "kind": "ObjectValue",
         "name": "Id"
       }
@@ -1325,40 +1312,40 @@ v52 = [
     "name": "where"
   }
 ],
-v53 = {
+v52 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isMo",
   "storageKey": null
 },
-v54 = {
+v53 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isFc",
   "storageKey": null
 },
-v55 = {
+v54 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v56 = {
+v55 = {
   "alias": null,
   "args": null,
   "concreteType": "StringValue",
   "kind": "LinkedField",
   "name": "Acc_CompetitionType__c",
   "plural": false,
-  "selections": (v14/*: any*/),
+  "selections": (v13/*: any*/),
   "storageKey": null
 },
-v57 = {
+v56 = {
   "alias": null,
-  "args": (v52/*: any*/),
+  "args": (v51/*: any*/),
   "concreteType": "Acc_Project__cConnection",
   "kind": "LinkedField",
   "name": "Acc_Project__c",
@@ -1380,7 +1367,7 @@ v57 = {
           "name": "node",
           "plural": false,
           "selections": [
-            (v13/*: any*/),
+            (v12/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -1396,9 +1383,9 @@ v57 = {
               "name": "roles",
               "plural": false,
               "selections": [
+                (v52/*: any*/),
                 (v53/*: any*/),
                 (v54/*: any*/),
-                (v55/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -1407,9 +1394,9 @@ v57 = {
                   "name": "partnerRoles",
                   "plural": true,
                   "selections": [
+                    (v52/*: any*/),
                     (v53/*: any*/),
                     (v54/*: any*/),
-                    (v55/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -1430,10 +1417,10 @@ v57 = {
               "kind": "LinkedField",
               "name": "Acc_CompetitionId__r",
               "plural": false,
-              "selections": (v45/*: any*/),
+              "selections": (v44/*: any*/),
               "storageKey": null
             },
-            (v56/*: any*/),
+            (v55/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -1441,7 +1428,7 @@ v57 = {
               "kind": "LinkedField",
               "name": "Acc_ProjectStatus__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             },
             {
@@ -1451,7 +1438,7 @@ v57 = {
               "kind": "LinkedField",
               "name": "Impact_Management_Participation__c",
               "plural": false,
-              "selections": (v14/*: any*/),
+              "selections": (v13/*: any*/),
               "storageKey": null
             }
           ],
@@ -1463,19 +1450,19 @@ v57 = {
   ],
   "storageKey": null
 },
-v58 = [
-  (v5/*: any*/),
+v57 = [
+  (v4/*: any*/),
   {
     "fields": [
       {
         "items": [
-          (v8/*: any*/),
+          (v7/*: any*/),
           {
             "kind": "Literal",
             "name": "and.1",
-            "value": (v9/*: any*/)
+            "value": (v8/*: any*/)
           },
-          (v12/*: any*/)
+          (v11/*: any*/)
         ],
         "kind": "ListValue",
         "name": "and"
@@ -1497,7 +1484,6 @@ return {
     "metadata": null,
     "name": "ClaimReviewQuery",
     "selections": [
-      (v4/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -1537,13 +1523,13 @@ return {
                 "name": "query",
                 "plural": false,
                 "selections": [
-                  (v22/*: any*/),
-                  (v26/*: any*/),
-                  (v32/*: any*/),
-                  (v39/*: any*/),
-                  (v42/*: any*/),
-                  (v51/*: any*/),
-                  (v57/*: any*/)
+                  (v21/*: any*/),
+                  (v25/*: any*/),
+                  (v31/*: any*/),
+                  (v38/*: any*/),
+                  (v41/*: any*/),
+                  (v50/*: any*/),
+                  (v56/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1568,7 +1554,6 @@ return {
     "kind": "Operation",
     "name": "ClaimReviewQuery",
     "selections": [
-      (v4/*: any*/),
       {
         "alias": null,
         "args": null,
@@ -1595,7 +1580,7 @@ return {
                 "selections": [
                   {
                     "alias": "StatusChanges_Project",
-                    "args": (v52/*: any*/),
+                    "args": (v51/*: any*/),
                     "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Project__c",
@@ -1617,8 +1602,8 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v13/*: any*/),
-                              (v56/*: any*/),
+                              (v12/*: any*/),
+                              (v55/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -1627,9 +1612,9 @@ return {
                                 "name": "roles",
                                 "plural": false,
                                 "selections": [
+                                  (v53/*: any*/),
                                   (v54/*: any*/),
-                                  (v55/*: any*/),
-                                  (v53/*: any*/)
+                                  (v52/*: any*/)
                                 ],
                                 "storageKey": null
                               }
@@ -1645,11 +1630,11 @@ return {
                   {
                     "alias": "StatusChanges_StatusChanges",
                     "args": [
-                      (v5/*: any*/),
+                      (v4/*: any*/),
                       {
                         "kind": "Literal",
                         "name": "orderBy",
-                        "value": (v36/*: any*/)
+                        "value": (v35/*: any*/)
                       },
                       {
                         "fields": [
@@ -1657,9 +1642,9 @@ return {
                             "fields": [
                               {
                                 "items": [
-                                  (v8/*: any*/),
+                                  (v7/*: any*/),
                                   {
-                                    "fields": (v35/*: any*/),
+                                    "fields": (v34/*: any*/),
                                     "kind": "ObjectValue",
                                     "name": "and.1"
                                   }
@@ -1697,7 +1682,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v13/*: any*/),
+                              (v12/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -1705,7 +1690,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_NewClaimStatus__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -1715,7 +1700,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ExternalComment__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -1725,7 +1710,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ParticipantVisibility__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -1735,10 +1720,10 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_CreatedByAlias__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
-                              (v37/*: any*/)
+                              (v36/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -1750,7 +1735,7 @@ return {
                   },
                   {
                     "alias": "ForecastTable_ProfileForCostCategory",
-                    "args": (v58/*: any*/),
+                    "args": (v57/*: any*/),
                     "concreteType": "Acc_Profile__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Profile__c",
@@ -1772,8 +1757,8 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v13/*: any*/),
-                              (v15/*: any*/)
+                              (v12/*: any*/),
+                              (v14/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -1785,7 +1770,7 @@ return {
                   },
                   {
                     "alias": "ForecastTable_ForecastDetails",
-                    "args": (v58/*: any*/),
+                    "args": (v57/*: any*/),
                     "concreteType": "Acc_Profile__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Profile__c",
@@ -1807,13 +1792,13 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v13/*: any*/),
-                              (v15/*: any*/),
+                              (v12/*: any*/),
+                              (v14/*: any*/),
+                              (v16/*: any*/),
                               (v17/*: any*/),
                               (v18/*: any*/),
                               (v19/*: any*/),
-                              (v20/*: any*/),
-                              (v21/*: any*/)
+                              (v20/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -1826,18 +1811,18 @@ return {
                   {
                     "alias": "ForecastTable_GolCosts",
                     "args": [
-                      (v5/*: any*/),
+                      (v4/*: any*/),
                       {
                         "fields": [
                           {
                             "items": [
-                              (v8/*: any*/),
+                              (v7/*: any*/),
                               {
                                 "kind": "Literal",
                                 "name": "and.1",
-                                "value": (v10/*: any*/)
+                                "value": (v9/*: any*/)
                               },
-                              (v12/*: any*/)
+                              (v11/*: any*/)
                             ],
                             "kind": "ListValue",
                             "name": "and"
@@ -1868,10 +1853,10 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v13/*: any*/),
+                              (v12/*: any*/),
+                              (v14/*: any*/),
                               (v15/*: any*/),
-                              (v16/*: any*/),
-                              (v21/*: any*/)
+                              (v20/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -1883,7 +1868,7 @@ return {
                   },
                   {
                     "alias": "ForecastTable_AllClaimsForPartner",
-                    "args": (v24/*: any*/),
+                    "args": (v23/*: any*/),
                     "concreteType": "Acc_Claims__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Claims__c",
@@ -1905,10 +1890,10 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v21/*: any*/),
-                              (v13/*: any*/),
-                              (v25/*: any*/),
-                              (v17/*: any*/)
+                              (v20/*: any*/),
+                              (v12/*: any*/),
+                              (v24/*: any*/),
+                              (v16/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -1921,13 +1906,13 @@ return {
                   {
                     "alias": "ForecastTable_ClaimDetails",
                     "args": [
-                      (v5/*: any*/),
-                      (v27/*: any*/),
+                      (v4/*: any*/),
+                      (v26/*: any*/),
                       {
                         "fields": [
                           {
                             "items": [
-                              (v8/*: any*/),
+                              (v7/*: any*/),
                               {
                                 "kind": "Literal",
                                 "name": "and.1",
@@ -1939,8 +1924,8 @@ return {
                                   }
                                 }
                               },
-                              (v29/*: any*/),
-                              (v30/*: any*/)
+                              (v28/*: any*/),
+                              (v29/*: any*/)
                             ],
                             "kind": "ListValue",
                             "name": "and"
@@ -1971,13 +1956,13 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v21/*: any*/),
-                              (v15/*: any*/),
-                              (v25/*: any*/),
-                              (v31/*: any*/),
-                              (v19/*: any*/),
-                              (v17/*: any*/),
-                              (v18/*: any*/)
+                              (v20/*: any*/),
+                              (v14/*: any*/),
+                              (v24/*: any*/),
+                              (v30/*: any*/),
+                              (v18/*: any*/),
+                              (v16/*: any*/),
+                              (v17/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -1990,20 +1975,20 @@ return {
                   {
                     "alias": "ForecastTable_ClaimsForIarDue",
                     "args": [
-                      (v5/*: any*/),
+                      (v4/*: any*/),
                       {
                         "fields": [
                           {
                             "items": [
+                              (v32/*: any*/),
                               (v33/*: any*/),
-                              (v34/*: any*/),
                               {
                                 "kind": "Literal",
                                 "name": "and.2",
                                 "value": {
                                   "or": [
-                                    (v23/*: any*/),
-                                    (v28/*: any*/)
+                                    (v22/*: any*/),
+                                    (v27/*: any*/)
                                   ]
                                 }
                               }
@@ -2037,7 +2022,7 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v21/*: any*/),
+                              (v20/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -2045,7 +2030,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_IAR_Status__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -2055,10 +2040,10 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_IARRequired__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
-                              (v17/*: any*/)
+                              (v16/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -2070,17 +2055,17 @@ return {
                   },
                   {
                     "alias": "ForecastTable_CostCategory",
-                    "args": (v40/*: any*/),
+                    "args": (v39/*: any*/),
                     "concreteType": "Acc_CostCategory__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_CostCategory__c",
                     "plural": false,
-                    "selections": (v41/*: any*/),
+                    "selections": (v40/*: any*/),
                     "storageKey": "Acc_CostCategory__c(first:2000)"
                   },
                   {
                     "alias": "ForecastTable_Partner",
-                    "args": (v44/*: any*/),
+                    "args": (v43/*: any*/),
                     "concreteType": "Acc_ProjectParticipant__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_ProjectParticipant__c",
@@ -2102,12 +2087,12 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v13/*: any*/),
+                              (v12/*: any*/),
+                              (v45/*: any*/),
                               (v46/*: any*/),
                               (v47/*: any*/),
                               (v48/*: any*/),
-                              (v49/*: any*/),
-                              (v50/*: any*/)
+                              (v49/*: any*/)
                             ],
                             "storageKey": null
                           }
@@ -2119,7 +2104,7 @@ return {
                   },
                   {
                     "alias": "ForecastTable_Project",
-                    "args": (v52/*: any*/),
+                    "args": (v51/*: any*/),
                     "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Project__c",
@@ -2141,8 +2126,8 @@ return {
                             "name": "node",
                             "plural": false,
                             "selections": [
-                              (v13/*: any*/),
-                              (v56/*: any*/),
+                              (v12/*: any*/),
+                              (v55/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -2150,7 +2135,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_NumberofPeriods__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -2160,7 +2145,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ClaimFrequency__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -2170,7 +2155,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_CurrentPeriodNumber__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               }
                             ],
@@ -2184,7 +2169,7 @@ return {
                   },
                   {
                     "alias": "Title_Project",
-                    "args": (v52/*: any*/),
+                    "args": (v51/*: any*/),
                     "concreteType": "Acc_Project__cConnection",
                     "kind": "LinkedField",
                     "name": "Acc_Project__c",
@@ -2213,7 +2198,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectNumber__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               },
                               {
@@ -2223,7 +2208,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectTitle__c",
                                 "plural": false,
-                                "selections": (v14/*: any*/),
+                                "selections": (v13/*: any*/),
                                 "storageKey": null
                               }
                             ],
@@ -2235,13 +2220,13 @@ return {
                     ],
                     "storageKey": null
                   },
-                  (v22/*: any*/),
-                  (v26/*: any*/),
-                  (v32/*: any*/),
-                  (v39/*: any*/),
-                  (v42/*: any*/),
-                  (v51/*: any*/),
-                  (v57/*: any*/)
+                  (v21/*: any*/),
+                  (v25/*: any*/),
+                  (v31/*: any*/),
+                  (v38/*: any*/),
+                  (v41/*: any*/),
+                  (v50/*: any*/),
+                  (v56/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -2254,16 +2239,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "823d274cb2969967c3b7faaf3b708b70",
+    "cacheID": "472c3bef593f5dc520c28535dd1b9e0a",
     "id": null,
     "metadata": {},
     "name": "ClaimReviewQuery",
     "operationKind": "query",
-    "text": "query ClaimReviewQuery(\n  $projectId: ID!\n  $projectIdStr: String\n  $partnerId: ID!\n  $periodId: Double!\n) {\n  currentUser {\n    userId\n  }\n  salesforce {\n    uiapi {\n      ...StatusChangesLogsFragment\n      ...ForecastTableFragment\n      ...TitleFragment\n      query {\n        Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {or: [{RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}]}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_CostCategoryGOLCost__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_LatestForecastCost__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        AllClaimsForPartner: Acc_Claims__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {Acc_ClaimStatus__c: {ne: \"New \"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000) {\n          edges {\n            node {\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Id\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ClaimStatus__c {\n                value\n              }\n            }\n          }\n        }\n        ClaimDetails: Acc_Claims__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Claims_Detail\"}}}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}}) {\n          edges {\n            node {\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_ClaimStatus__c {\n                value\n              }\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_PeriodCostCategoryTotal__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n            }\n          }\n        }\n        ClaimsByPeriodForDocuments: Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {Acc_ProjectPeriodNumber__c: {eq: $periodId}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}}) {\n          edges {\n            node {\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_CostCategory__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_CostCategory__c(first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {and: [{Acc_ProjectId__c: {eq: $projectId}}, {Id: {eq: $partnerId}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_AccountId__c {\n                value\n              }\n              Acc_TotalParticipantGrant__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ForecastLastModifiedDate__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_TotalFutureForecastsForParticipant__c {\n                value\n              }\n              Acc_TotalParticipantCosts__c {\n                value\n              }\n              Acc_TotalCostsSubmitted__c {\n                value\n              }\n              Acc_Overdue_Project__c {\n                value\n              }\n              Acc_OverheadRate__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isMo\n                  isFc\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_CompetitionId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ForecastTableFragment on UIAPI {\n  query {\n    ForecastTable_ProfileForCostCategory: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategory__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ForecastDetails: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_ProjectPeriodStartDate__c {\n            value\n          }\n          Acc_ProjectPeriodEndDate__c {\n            value\n          }\n          Acc_LatestForecastCost__c {\n            value\n          }\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n    ForecastTable_GolCosts: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_CostCategoryGOLCost__c {\n            value\n          }\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n    ForecastTable_AllClaimsForPartner: Acc_Claims__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {Acc_ClaimStatus__c: {ne: \"New \"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000) {\n      edges {\n        node {\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n          Id\n          Acc_ClaimStatus__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ClaimDetails: Acc_Claims__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {Name: {eq: \"Claims Detail\"}}}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}}) {\n      edges {\n        node {\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_ClaimStatus__c {\n            value\n          }\n          Acc_PeriodCostCategoryTotal__c {\n            value\n          }\n          Acc_ProjectPeriodEndDate__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_ProjectPeriodStartDate__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ClaimsForIarDue: Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {or: [{RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {RecordType: {DeveloperName: {eq: \"Claims_Detail\"}}}]}]}, first: 2000) {\n      edges {\n        node {\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n          Acc_IAR_Status__c {\n            value\n          }\n          Acc_IARRequired__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_CostCategory: Acc_CostCategory__c(first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategoryName__c {\n            value\n          }\n          Acc_DisplayOrder__c {\n            value\n          }\n          Acc_OrganisationType__c {\n            value\n          }\n          Acc_CompetitionType__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_Partner: Acc_ProjectParticipant__c(where: {and: [{Acc_ProjectId__c: {eq: $projectId}}, {Id: {eq: $partnerId}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_AccountId__r {\n            Name {\n              value\n            }\n          }\n          Acc_ProjectRole__c {\n            value\n          }\n          Acc_OrganisationType__c {\n            value\n          }\n          Acc_ParticipantStatus__c {\n            value\n          }\n          Acc_OverheadRate__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_CompetitionType__c {\n            value\n          }\n          Acc_NumberofPeriods__c {\n            value\n          }\n          Acc_ClaimFrequency__c {\n            value\n          }\n          Acc_CurrentPeriodNumber__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment StatusChangesLogsFragment on UIAPI {\n  query {\n    StatusChanges_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_CompetitionType__c {\n            value\n          }\n          roles {\n            isFc\n            isPm\n            isMo\n          }\n        }\n      }\n    }\n    StatusChanges_StatusChanges: Acc_StatusChange__c(where: {Acc_Claim__r: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {Acc_ProjectPeriodNumber__c: {eq: $periodId}}]}}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_NewClaimStatus__c {\n            value\n          }\n          Acc_ExternalComment__c {\n            value\n          }\n          Acc_ParticipantVisibility__c {\n            value\n          }\n          Acc_CreatedByAlias__c {\n            value\n          }\n          CreatedDate {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment TitleFragment on UIAPI {\n  query {\n    Title_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ClaimReviewQuery(\n  $projectId: ID!\n  $projectIdStr: String\n  $partnerId: ID!\n  $periodId: Double!\n) {\n  salesforce {\n    uiapi {\n      ...StatusChangesLogsFragment\n      ...ForecastTableFragment\n      ...TitleFragment\n      query {\n        Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {or: [{RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}]}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_CostCategoryGOLCost__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_LatestForecastCost__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        AllClaimsForPartner: Acc_Claims__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {Acc_ClaimStatus__c: {ne: \"New \"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000) {\n          edges {\n            node {\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Id\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n              Acc_ProjectParticipant__c {\n                value\n              }\n              Acc_ClaimStatus__c {\n                value\n              }\n            }\n          }\n        }\n        ClaimDetails: Acc_Claims__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Claims_Detail\"}}}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}}) {\n          edges {\n            node {\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_ClaimStatus__c {\n                value\n              }\n              Acc_CostCategory__c {\n                value\n              }\n              Acc_PeriodCostCategoryTotal__c {\n                value\n              }\n              Acc_ProjectPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_ProjectPeriodStartDate__c {\n                value\n              }\n            }\n          }\n        }\n        ClaimsByPeriodForDocuments: Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {Acc_ProjectPeriodNumber__c: {eq: $periodId}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}}) {\n          edges {\n            node {\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_CostCategory__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_CostCategory__c(first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {and: [{Acc_ProjectId__c: {eq: $projectId}}, {Id: {eq: $partnerId}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_AccountId__c {\n                value\n              }\n              Acc_TotalParticipantGrant__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ForecastLastModifiedDate__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_TotalFutureForecastsForParticipant__c {\n                value\n              }\n              Acc_TotalParticipantCosts__c {\n                value\n              }\n              Acc_TotalCostsSubmitted__c {\n                value\n              }\n              Acc_Overdue_Project__c {\n                value\n              }\n              Acc_OverheadRate__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isMo\n                  isFc\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_CompetitionId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ForecastTableFragment on UIAPI {\n  query {\n    ForecastTable_ProfileForCostCategory: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategory__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ForecastDetails: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_ProjectPeriodStartDate__c {\n            value\n          }\n          Acc_ProjectPeriodEndDate__c {\n            value\n          }\n          Acc_LatestForecastCost__c {\n            value\n          }\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n    ForecastTable_GolCosts: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_CostCategoryGOLCost__c {\n            value\n          }\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n    ForecastTable_AllClaimsForPartner: Acc_Claims__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {Acc_ClaimStatus__c: {ne: \"New \"}}, {Acc_ClaimStatus__c: {ne: \"Not used\"}}]}, first: 2000) {\n      edges {\n        node {\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n          Id\n          Acc_ClaimStatus__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ClaimDetails: Acc_Claims__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {Name: {eq: \"Claims Detail\"}}}, {Acc_ClaimStatus__c: {ne: \"New\"}}, {Acc_CostCategory__c: {ne: null}}]}, first: 2000, orderBy: {Acc_ProjectParticipant__r: {Acc_AccountId__r: {Name: {order: ASC}}}}) {\n      edges {\n        node {\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_ClaimStatus__c {\n            value\n          }\n          Acc_PeriodCostCategoryTotal__c {\n            value\n          }\n          Acc_ProjectPeriodEndDate__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_ProjectPeriodStartDate__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_ClaimsForIarDue: Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {or: [{RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, {RecordType: {DeveloperName: {eq: \"Claims_Detail\"}}}]}]}, first: 2000) {\n      edges {\n        node {\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n          Acc_IAR_Status__c {\n            value\n          }\n          Acc_IARRequired__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_CostCategory: Acc_CostCategory__c(first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategoryName__c {\n            value\n          }\n          Acc_DisplayOrder__c {\n            value\n          }\n          Acc_OrganisationType__c {\n            value\n          }\n          Acc_CompetitionType__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_Partner: Acc_ProjectParticipant__c(where: {and: [{Acc_ProjectId__c: {eq: $projectId}}, {Id: {eq: $partnerId}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_AccountId__r {\n            Name {\n              value\n            }\n          }\n          Acc_ProjectRole__c {\n            value\n          }\n          Acc_OrganisationType__c {\n            value\n          }\n          Acc_ParticipantStatus__c {\n            value\n          }\n          Acc_OverheadRate__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastTable_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_CompetitionType__c {\n            value\n          }\n          Acc_NumberofPeriods__c {\n            value\n          }\n          Acc_ClaimFrequency__c {\n            value\n          }\n          Acc_CurrentPeriodNumber__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment StatusChangesLogsFragment on UIAPI {\n  query {\n    StatusChanges_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Id\n          Acc_CompetitionType__c {\n            value\n          }\n          roles {\n            isFc\n            isPm\n            isMo\n          }\n        }\n      }\n    }\n    StatusChanges_StatusChanges: Acc_StatusChange__c(where: {Acc_Claim__r: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {Acc_ProjectPeriodNumber__c: {eq: $periodId}}]}}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_NewClaimStatus__c {\n            value\n          }\n          Acc_ExternalComment__c {\n            value\n          }\n          Acc_ParticipantVisibility__c {\n            value\n          }\n          Acc_CreatedByAlias__c {\n            value\n          }\n          CreatedDate {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment TitleFragment on UIAPI {\n  query {\n    Title_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "565e9571f53d725837f022625dabc747";
+(node as any).hash = "7a6e4a0c1f2a1edee8231bc1dc15ec96";
 
 export default node;

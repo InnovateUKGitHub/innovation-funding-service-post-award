@@ -7,9 +7,6 @@ export const claimLineItemsQuery = graphql`
     $periodId: Double!
     $costCategoryId: ID!
   ) {
-    currentUser {
-      userId
-    }
     salesforce {
       uiapi {
         query {
@@ -108,6 +105,7 @@ export const claimLineItemsQuery = graphql`
                         value
                       }
                       isFeedAttachment
+                      isOwner
                       ContentDocument {
                         Id
                         LastModifiedBy {

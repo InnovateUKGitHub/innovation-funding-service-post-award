@@ -86,7 +86,6 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
           ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
           {
             projectId,
-            currentUser: { userId: data.currentUser.userId },
             type: docs?.node?.RecordType?.DeveloperName?.value === Claims.claimsDetail ? "claim details" : "claims",
             partnerId,
             periodId,

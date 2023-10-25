@@ -2,9 +2,6 @@ import { graphql } from "react-relay";
 
 export const projectDocumentsQuery = graphql`
   query ProjectDocumentsQuery($projectId: ID!) {
-    currentUser {
-      userId
-    }
     salesforce {
       uiapi {
         query {
@@ -35,6 +32,7 @@ export const projectDocumentsQuery = graphql`
                         value
                       }
                       isFeedAttachment
+                      isOwner
                       ContentDocument {
                         Id
                         LastModifiedBy {
@@ -108,6 +106,7 @@ export const projectDocumentsQuery = graphql`
                     node {
                       Id
                       isFeedAttachment
+                      isOwner
                       ContentDocument {
                         Id
                         LastModifiedBy {

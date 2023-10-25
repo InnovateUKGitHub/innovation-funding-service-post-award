@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fdf28cf40ab68cfeccfb6cbe8b59faca>>
+ * @generated SignedSource<<3462eee8f0a6a408274b82954871bde7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -50,6 +50,7 @@ export type DocumentSummaryFragment$data = {
       } | null;
       readonly Id: string;
       readonly isFeedAttachment: boolean;
+      readonly isOwner: boolean;
     } | null;
   } | null> | null;
   readonly " $fragmentType": "DocumentSummaryFragment";
@@ -104,6 +105,13 @@ return {
               "args": null,
               "kind": "ScalarField",
               "name": "isFeedAttachment",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "isOwner",
               "storageKey": null
             },
             {
@@ -241,6 +249,6 @@ return {
 };
 })();
 
-(node as any).hash = "36859f4cca95257e9dd2e1640c750c11";
+(node as any).hash = "1f2ed160e4fa02bf0f31b161209e37c7";
 
 export default node;
