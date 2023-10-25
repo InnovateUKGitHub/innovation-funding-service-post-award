@@ -66,6 +66,10 @@ export const claimSummaryQuery = graphql`
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
               ]
             }
+            orderBy: {
+              Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } }
+              Acc_ProjectPeriodNumber__c: { order: ASC }
+            }
             first: 2000
           ) {
             edges {
