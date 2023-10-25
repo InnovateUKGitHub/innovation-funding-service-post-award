@@ -100,15 +100,15 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
   return (
     <Page
       backLink={
-        <BackLink
-          route={
-            data.claim.isFinalClaim
-              ? props.routes.claimDocuments.getLink(linkProps)
-              : props.routes.claimForecast.getLink(linkProps)
-          }
-        >
-          <Content value={x => x.pages.claimPrepareSummary.backToDocuments} />
-        </BackLink>
+        data.claim.isFinalClaim ? (
+          <BackLink route={props.routes.claimDocuments.getLink(linkProps)}>
+            <Content value={x => x.pages.claimPrepareSummary.backToDocuments} />
+          </BackLink>
+        ) : (
+          <BackLink route={props.routes.claimForecast.getLink(linkProps)}>
+            <Content value={x => x.pages.claimPrepareSummary.backToForecast} />
+          </BackLink>
+        )
       }
       apiError={apiError}
       pageTitle={<Title />}
