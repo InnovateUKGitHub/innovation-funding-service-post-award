@@ -1,3 +1,4 @@
+import { euiCostCleanUp } from "common/euiCostCleanUp";
 import { visitApp } from "../../common/visit";
 import {
   claimCommentBox,
@@ -17,7 +18,15 @@ const fc = "james.black@euimeabs.test";
 
 describe("claims > Claim summary", () => {
   before(() => {
-    visitApp({ asUser: fc, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
+    visitApp({ asUser: fc, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
+  });
+
+  before(() => {
+    euiCostCleanUp;
+  });
+
+  it("Should navigate to the claims document page", () => {
+    cy.button("Continue to claims documents").click();
   });
 
   it("Should upload a document", claimsDocUpload);

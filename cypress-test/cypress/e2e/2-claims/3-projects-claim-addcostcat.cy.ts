@@ -1,4 +1,5 @@
 import { testEach } from "support/methods";
+import { euiCostCleanUp } from "common/euiCostCleanUp";
 import { visitApp } from "../../common/visit";
 import {
   additionalInformationHeading,
@@ -24,6 +25,8 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   it("Should have a back option", () => {
     cy.backLink("Back to claims");
   });
+
+  it("Should check whether cost categories are correct", euiCostCleanUp);
 
   testEach([
     "Category",

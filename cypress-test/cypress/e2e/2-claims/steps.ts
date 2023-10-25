@@ -1,3 +1,4 @@
+import { euiCostCleanUp } from "common/euiCostCleanUp";
 import { claimReviewFileTidyUp, fileTidyUp } from "common/filetidyup";
 import { loremIpsum1k } from "common/lorem";
 let date = new Date();
@@ -334,7 +335,7 @@ export const forecastView = () => {
 };
 
 export const claimCommentBox = () => {
-  cy.get("h2").contains("Add comments");
+  cy.get("legend").contains("Add comments");
   cy.paragraph("You have 1000 characters remaining");
 };
 

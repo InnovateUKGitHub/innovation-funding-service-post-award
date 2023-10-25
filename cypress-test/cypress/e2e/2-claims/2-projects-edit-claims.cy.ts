@@ -1,4 +1,5 @@
 import { visitApp } from "../../common/visit";
+import { euiCostCleanUp } from "common/euiCostCleanUp";
 import { accessEUIOpenClaim, shouldShowCostCatTable, shouldShowProjectTitle } from "./steps";
 
 describe("claims > edit claims as FC", () => {
@@ -21,6 +22,8 @@ describe("claims > edit claims as FC", () => {
   it("Displays the period information", () => {
     cy.get("h2").should("contain.text", "Period");
   });
+
+  it("Should check whether cost categories are correct", euiCostCleanUp);
 
   it("Displays the cost category table", shouldShowCostCatTable);
 
