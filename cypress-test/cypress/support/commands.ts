@@ -53,7 +53,7 @@ const userSwitcher = (email: string, newPath?: string) => {
 
   if (newPath) {
     // Visit the new page
-    cy.visit(newPath, { auth: { username, password } });
+    cy.visit(newPath, { auth: { username, password }, headers: { "x-acc-userswitcher": email } });
   } else {
     cy.reload();
   }

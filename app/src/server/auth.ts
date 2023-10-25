@@ -89,12 +89,6 @@ router.use((req, res, next) => {
     return res.redirect("/projects/dashboard");
   }
 
-  if (req?.session?.user?.email) {
-    req.session.last_reset = getCookieTimestamp();
-    // Note: Proceed on as the user has been logged in
-    return next();
-  }
-
   if (!sso.enabled) {
     // if user not logged in but we aren't using sso then set default user
     req.session ??= {};
@@ -104,12 +98,22 @@ router.use((req, res, next) => {
     // for testing purposes.
     const userSwitcher = req.header("x-acc-userswitcher");
 
+    // If we are userSwitching, switch to that user.
     if (userSwitcher) {
       req.session.user.email = userSwitcher;
-    } else {
+    }
+
+    // If not logged in, reset to the Salesforce System User
+    if (req?.session?.user?.email === undefined) {
       req.session.user.email ??= salesforceServiceUser.serviceUsername;
     }
 
+    return next();
+  }
+
+  if (req?.session?.user?.email) {
+    req.session.last_reset = getCookieTimestamp();
+    // Note: Proceed on as the user has been logged in
     return next();
   }
 

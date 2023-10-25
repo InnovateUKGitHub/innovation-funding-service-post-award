@@ -17,7 +17,7 @@ const fcEmail = "wed.addams@test.test.co.uk";
 
 describe("Documents visibility between roles", () => {
   before(() => {
-    visitApp({ asUser: fcEmail, path: "projects/a0E2600000kSvOGEA0/documents" });
+    visitApp({ asUser: fcEmail, path: "/projects/a0E2600000kSvOGEA0/documents" });
   });
 
   it("Should upload a document against EUI Small Ent Health from the FC", fcUploadToEUI);
