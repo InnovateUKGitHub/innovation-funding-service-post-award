@@ -6,12 +6,15 @@ import {
   forecastView,
   shouldShowProjectTitle,
   summaryAccessDocsDelete,
+  summaryCheckForCostRemoval,
   summaryClearCommentsSave,
+  summaryClearCostCats,
   summaryCommentsAdd,
   summaryCommentsDeleteOne,
   summaryCommentsTooMany,
   summaryReaccessClaim,
   summaryTotalCostsList,
+  summaryUpdateCostsClaimed,
 } from "./steps";
 
 const fc = "james.black@euimeabs.test";
@@ -19,10 +22,7 @@ const fc = "james.black@euimeabs.test";
 describe("claims > Claim summary", () => {
   before(() => {
     visitApp({ asUser: fc, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
-  });
-
-  before(() => {
-    euiCostCleanUp;
+    euiCostCleanUp();
   });
 
   it("Should navigate to the claims document page", () => {
@@ -141,6 +141,12 @@ describe("claims > Claim summary", () => {
     cy.go("back");
     cy.heading("Claim summary");
   });
+
+  it("Should update costs claimed and ensure it updates correctly on Summary page.", summaryUpdateCostsClaimed);
+
+  it("Should go back in and clear up the cost category", summaryClearCostCats);
+
+  it("Should navigate to Summary page again and check for the removal of the costs", summaryCheckForCostRemoval);
 
   it("Should clear the comments box and save and return to claims", summaryClearCommentsSave);
 });

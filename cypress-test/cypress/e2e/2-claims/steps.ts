@@ -336,6 +336,7 @@ export const forecastView = () => {
 
 export const claimCommentBox = () => {
   cy.get("legend").contains("Add comments");
+  cy.get("textarea").clear();
   cy.paragraph("You have 1000 characters remaining");
 };
 
@@ -1042,4 +1043,46 @@ export const summaryClearCommentsSave = () => {
   cy.get("textarea").clear();
   cy.button("Save and return to claims").click();
   cy.heading("Claims");
+};
+
+export const summaryUpdateCostsClaimed = () => {
+  cy.get("a").contains("Edit costs to be claimed").click();
+  cy.heading("Costs to be claimed");
+  cy.get("a").contains("Labour").click();
+  cy.heading("Labour");
+  cy.get("a").contains("Add a cost").click();
+  cy.get("#description0").type("Test cost");
+  cy.get("#value0").type("1000");
+  cy.wait(500);
+  cy.button("Save and return to claims").click();
+  cy.heading("Costs to be claimed");
+  cy.button("Continue to claims documents").click();
+  cy.heading("Claim documents");
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
+  cy.getListItemFromKey("Total costs to be claimed").contains("£281,200.00");
+};
+
+export const summaryClearCostCats = () => {
+  cy.get("a").contains("Edit costs to be claimed").click();
+  cy.heading("Costs to be claimed");
+  cy.get("a").contains("Labour").click();
+  cy.heading("Labour");
+  cy.get("a").contains("Remove").click();
+  cy.button("Save and return to claims").click();
+  cy.heading("Costs to be claimed");
+  cy.get("a").contains("Overheads").click();
+  cy.get("a").contains("Remove").click();
+  cy.button("Save and return to claims").click();
+};
+
+export const summaryCheckForCostRemoval = () => {
+  cy.button("Continue to claims documents").click();
+  cy.heading("Claim documents");
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
 };
