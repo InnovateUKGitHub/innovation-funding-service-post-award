@@ -212,7 +212,9 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     } else {
       // Otherwise, mark as passed and move the partner onto the "complete" stage.
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationPassed);
-      this.partner.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
+      update.Acc_BankCheckCompleted__c = new BankDetailsTaskStatusMapper().mapToSalesforce(
+        BankDetailsTaskStatus.Complete,
+      );
     }
 
     // Save the Experian verification score to Salesforce
