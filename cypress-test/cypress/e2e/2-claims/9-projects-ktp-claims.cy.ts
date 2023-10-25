@@ -64,4 +64,11 @@ describe("claims > KTP", () => {
     cy.validationNotification("This project does not follow the normal grant calculation rules");
     cy.validationNotification("The project and any partner may have one or more cost categories");
   });
+
+  it("Should have a Supporting statement", () => {
+    cy.get("h2").contains("Supporting statement");
+    cy.get("#comments-hint").contains(
+      "You must write a supporting statement for your claim. All supporting information for your monitoring officer and Innovate UK must be included here.",
+    );
+  });
 });
