@@ -28,7 +28,6 @@ const Checkbox = ({ label, ...props }: CheckboxInputProps) => {
   return (
     <div className="govuk-checkboxes__item">
       <input
-        value={props.id}
         className={cx("govuk-checkboxes__input", props.className)}
         type="checkbox"
         {...props}

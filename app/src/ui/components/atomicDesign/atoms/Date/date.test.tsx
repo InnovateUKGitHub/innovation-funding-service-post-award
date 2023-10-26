@@ -13,6 +13,9 @@ import {
   ShortDateRange,
   ShortDateRangeFromDuration,
   ShortDateTime,
+  getMonth,
+  getYear,
+  combineDate,
 } from "@ui/components/atomicDesign/atoms/Date";
 
 import { findByTextContent } from "../../../../../../tests/test-utils/rtl-helpers";
@@ -384,5 +387,45 @@ describe("ShortDateRangeFromDuration", () => {
     const expectedDate = await findByTextContent("1 Sep to 31 Dec 2012");
 
     expect(expectedDate).toBeInTheDocument();
+  });
+});
+
+describe("getMonth", () => {
+  it("should return an empty string if null", () => {
+    expect(getMonth(null)).toEqual("");
+  });
+
+  it("should return the month number as string", () => {
+    expect(getMonth(new Date("2012/01/1"))).toEqual("1");
+    expect(getMonth(new Date("2012/12/1"))).toEqual("12");
+  });
+});
+
+describe("getYear", () => {
+  it("should return an empty string if null", () => {
+    expect(getYear(null)).toEqual("");
+  });
+
+  it("should return the year number as string", () => {
+    expect(getYear(new Date("2012/09/1"))).toEqual("2012");
+  });
+});
+
+describe("combineDate", () => {
+  it("should combine month and year to form a date with the day at start of month", () => {
+    expect(combineDate("2", "2012", true)).toMatchInlineSnapshot(`2012-02-01T12:00:00.000Z`);
+  });
+
+  it("should combine month and year to form a date with the day at end of month", () => {
+    expect(combineDate("2", "2012", false)).toMatchInlineSnapshot(`2012-02-29T12:00:00.000Z`);
+  });
+
+  it("should return null if month and year is missing", () => {
+    expect(combineDate(null, null, false)).toEqual(null);
+    expect(combineDate(null, null, false)).toEqual(null);
+  });
+
+  it("should throw if one value is missing", () => {
+    expect(() => combineDate(null, "2012", false)).toThrow("the date is invalid");
   });
 });

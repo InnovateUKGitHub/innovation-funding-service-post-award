@@ -39,6 +39,8 @@ export type PcrNode = Readonly<
     Acc_ProjectSummarySnapshot__c: GQL.Value<string>;
     CreatedDate: GQL.Value<string>;
     Acc_Status__c: GQL.Value<string>;
+    Acc_SuspensionStarts__c: GQL.Value<string>;
+    Acc_SuspensionEnds__c: GQL.Value<string>;
     Acc_Project__c: GQL.Value<string>;
     Acc_ProjectRole__c: GQL.Value<string>;
     LastModifiedDate: GQL.Value<string>;
@@ -89,6 +91,8 @@ export type PcrItemDtoMapping = Pick<
   | "started"
   | "status"
   | "statusName"
+  | "suspensionEndDate"
+  | "suspensionStartDate"
   | "type"
   | "typeName"
   | "typeOfAid"
@@ -172,6 +176,12 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   statusName(node) {
     return node?.Acc_MarkedasComplete__c?.value || "Unknown";
+  },
+  suspensionEndDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Acc_SuspensionEnds__c?.value ?? null);
+  },
+  suspensionStartDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Acc_SuspensionStarts__c?.value ?? null);
   },
   type(node) {
     return mapToPcrItemType(node?.RecordType?.DeveloperName?.value ?? node?.RecordType?.Name?.value ?? "Unknown");

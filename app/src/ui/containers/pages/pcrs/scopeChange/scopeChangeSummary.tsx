@@ -15,9 +15,9 @@ export const ScopeChangeSummary = () => {
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, formState } = useForm<PcrScopeChangeSchemaType>({
+  const { register, handleSubmit, formState, watch } = useForm<PcrScopeChangeSchemaType>({
     defaultValues: {
-      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "",
+      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       projectSummary: pcrItem.projectSummary ?? "",
       publicDescription: pcrItem.publicDescription ?? "",
     },
@@ -62,6 +62,7 @@ export const ScopeChangeSummary = () => {
       {displayCompleteForm && (
         <PcrItemSummaryForm<PcrScopeChangeSchemaType>
           register={register}
+          watch={watch}
           handleSubmit={handleSubmit}
           pcrItem={pcrItem}
         />

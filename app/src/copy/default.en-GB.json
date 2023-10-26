@@ -208,6 +208,10 @@
       "status": "Status",
       "request": "Request",
       "view": "View"
+    },
+    "dateInput": {
+      "month": "Month",
+      "year": "Year"
     }
   },
 
@@ -2002,6 +2006,23 @@
           "too_small": "Enter a project summary",
           "invalid_type": "Enter a project summary",
           "readonly": "Project summary cannot be changed."
+        }
+      }
+    },
+    "pcrProjectSuspension": {
+      "suspensionStartDate": {
+        "errors": {
+          "invalid_type": "Enter a valid project suspension start date.",
+          "custom": "Enter a valid project suspension start date.",
+          "readonly": "Project suspension start date cannot be changed."
+        }
+      },
+      "suspensionEndDate": {
+        "errors": {
+          "invalid_type": "Enter a valid project suspension end date.",
+          "too_small": "The last day of pause cannot be before the first day of pause.",
+          "custom": "Enter a valid project suspension end date.",
+          "readonly": "Project suspension end date cannot be changed."
         }
       }
     },

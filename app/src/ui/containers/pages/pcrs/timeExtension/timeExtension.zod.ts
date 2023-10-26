@@ -7,14 +7,16 @@ z.setErrorMap(errorMap);
 
 export const pcrTimeExtensionSchema = z
   .object({
-    itemStatus: z.coerce.string(),
+    markedAsComplete: z.boolean(),
     timeExtension: z.string(),
   })
   .superRefine((data, ctx) => {
-    if (data.timeExtension === "0" && data.itemStatus === "marked-as-complete") {
+    if (data.timeExtension === "0" && data.markedAsComplete) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["timeExtension"],
       });
     }
   });
+
+export type TimeExtensionSchemaType = z.infer<typeof pcrTimeExtensionSchema>;

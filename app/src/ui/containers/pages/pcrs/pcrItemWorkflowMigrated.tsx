@@ -16,8 +16,9 @@ import { SummarySection } from "./pcrItemWorkflowSummary";
 import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { useContent } from "@ui/hooks/content.hook";
-import { FieldErrors } from "react-hook-form";
+import { FieldErrors, UseFormTrigger } from "react-hook-form";
 import { usePcrItemWorkflowHooks } from "./pcrItemWorkflowHooks";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
 
 type Data = {
   project: Pick<ProjectDto, "status">;
@@ -83,6 +84,9 @@ type PcrWorkflowContextProps = Data &
     useClearPcrValidationError: (errorField: string, shouldClear: boolean) => void;
     useErrorSubset: (errorFields: string[]) => void;
     getRequiredToCompleteMessage: (message?: string) => JSX.Element | "This is required to complete this request.";
+    markedAsCompleteHasBeenChecked: boolean;
+    setMarkedAsCompleteHasBeenChecked: Dispatch<SetStateAction<boolean>>;
+    useFormRevalidate: <TFormValues extends AnyObject>(trigger: UseFormTrigger<TFormValues>) => void;
   };
 
 const PcrWorkflowContext = createContext<PcrWorkflowContextProps>(null as unknown as PcrWorkflowContextProps);
@@ -104,6 +108,9 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
   }
 
   const [fetchKey, setFetchKey] = useState<number>(0);
+  const [markedAsCompleteHasBeenChecked, setMarkedAsCompleteHasBeenChecked] = useState(
+    props.pcrItem.status === PCRItemStatus.Complete,
+  );
 
   const {
     onUpdate: onSave,
@@ -111,14 +118,7 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
     isFetching,
   } = useOnSavePcrItem(props.projectId, props.pcrId, props.itemId, setFetchKey);
 
-  const {
-    useSetPcrValidationErrors,
-    useClearPcrValidationError,
-    useErrorSubset,
-    usePcrErrors,
-    setPcrValidationErrors,
-    pcrValidationErrors,
-  } = usePcrItemWorkflowHooks();
+  const { pcrValidationErrors, ...workflowHooks } = usePcrItemWorkflowHooks();
 
   const displayCompleteForm = props.mode === "prepare";
   const allowSubmit = true; // this will not necessarily be true after all pcrs have been migrated
@@ -129,17 +129,15 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
         ...props,
         workflow,
         pcrValidationErrors,
-        setPcrValidationErrors,
-        useSetPcrValidationErrors,
-        useClearPcrValidationError,
-        usePcrErrors,
-        useErrorSubset,
         onSave,
+        ...workflowHooks,
         isFetching,
         fetchKey,
         getRequiredToCompleteMessage,
         displayCompleteForm,
         allowSubmit,
+        markedAsCompleteHasBeenChecked,
+        setMarkedAsCompleteHasBeenChecked,
       }}
     >
       <Page

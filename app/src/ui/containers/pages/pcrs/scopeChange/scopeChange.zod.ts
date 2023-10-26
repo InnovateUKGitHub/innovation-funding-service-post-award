@@ -7,12 +7,12 @@ z.setErrorMap(errorMap);
 
 export const pcrScopeChangeSchema = z
   .object({
-    itemStatus: z.coerce.string(),
+    markedAsComplete: z.boolean(),
     projectSummary: z.string().max(32_000).optional(),
     publicDescription: z.string().max(32_000).optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.itemStatus === "marked-as-complete") {
+    if (!!data.markedAsComplete) {
       if (!data.projectSummary) {
         ctx.addIssue({
           type: "string",

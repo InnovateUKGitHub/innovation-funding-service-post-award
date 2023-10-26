@@ -2,7 +2,7 @@ import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForProjectSuspensionDto } from "@framework/dtos/pcrDtos";
 import { PCRProjectSuspensionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { IPCRWorkflow } from "../pcrWorkflow";
-import { SuspendProjectDetails } from "./suspendProjectDetails";
+import { SuspendProjectStep } from "./suspendProjectStep";
 import { SuspendProjectSummary } from "./suspendProjectSummary";
 
 export type SuspendProjectSteps = PCRStepType.details;
@@ -16,12 +16,11 @@ export const suspendProjectWorkflow: IPCRWorkflow<
       stepName: PCRStepType.details,
       displayName: "Suspension details",
       stepNumber: 1,
-      validation: val => val.pcr,
-      stepRender: SuspendProjectDetails,
+      migratedStepRender: SuspendProjectStep,
     },
   ],
-  summary: {
-    validation: val => val,
-    summaryRender: SuspendProjectSummary,
+  migratedSummary: {
+    migratedSummaryRender: SuspendProjectSummary,
   },
+  isMigratedToGql: true,
 };

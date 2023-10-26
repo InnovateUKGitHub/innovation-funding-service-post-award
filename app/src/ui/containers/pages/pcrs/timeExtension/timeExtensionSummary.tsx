@@ -8,13 +8,8 @@ import { usePcrTimeExtensionWorkflowQuery } from "./timeExtension.logic";
 import { useForm } from "react-hook-form";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { errorMap, pcrTimeExtensionSchema } from "./timeExtension.zod";
+import { TimeExtensionSchemaType, errorMap, pcrTimeExtensionSchema } from "./timeExtension.zod";
 import { EditLink } from "../pcrItemSummaryLinks";
-
-type FormValues = {
-  timeExtension: string;
-  itemStatus: "marked-as-complete" | "";
-};
 
 export const TimeExtensionSummary = () => {
   const { projectId, itemId, fetchKey, useSetPcrValidationErrors, displayCompleteForm } = usePcrWorkflowContext();
@@ -24,9 +19,9 @@ export const TimeExtensionSummary = () => {
   const newProjectDuration = (x: Pick<FullPCRItemDto, "offsetMonths" | "projectDurationSnapshot">) =>
     !!x.offsetMonths || x.offsetMonths === 0 ? x.offsetMonths + x.projectDurationSnapshot : null;
 
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+  const { register, handleSubmit, formState, watch } = useForm<TimeExtensionSchemaType>({
     defaultValues: {
-      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "",
+      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       timeExtension: String(pcrItem.offsetMonths ?? 0),
     },
     resolver: zodResolver(pcrTimeExtensionSchema, {
@@ -73,7 +68,12 @@ export const TimeExtensionSummary = () => {
       </Section>
 
       {displayCompleteForm && (
-        <PcrItemSummaryForm<FormValues> register={register} handleSubmit={handleSubmit} pcrItem={pcrItem} />
+        <PcrItemSummaryForm<TimeExtensionSchemaType>
+          register={register}
+          watch={watch}
+          handleSubmit={handleSubmit}
+          pcrItem={pcrItem}
+        />
       )}
     </>
   );

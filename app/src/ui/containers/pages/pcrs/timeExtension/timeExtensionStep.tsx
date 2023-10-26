@@ -59,10 +59,10 @@ export const TimeExtensionStep = () => {
   const { register, handleSubmit, watch } = useForm<{
     timeExtension: string;
     offsetMonths: number;
-    itemStatus: string;
+    markedAsComplete: boolean;
   }>({
     defaultValues: {
-      itemStatus: pcrItem.status === PCRItemStatus.Complete ? "marked-as-complete" : "",
+      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       timeExtension: String(pcrItem.offsetMonths),
       offsetMonths: pcrItem.offsetMonths,
     },

@@ -8,7 +8,7 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { periodLengthChangeWorkflow } from "@ui/containers/pages/pcrs/periodLengthChange/periodLengthChangeWorkflow";
 import { BaseProps } from "../../containerBase";
 import { financialVirementWorkflow } from "./financialVirements/workflow";
-import { suspendProjectWorkflow } from "./suspendProject/workflow";
+import { suspendProjectWorkflow } from "./suspendProject/suspendProjectWorkflow";
 import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { LoanDrawdownChangeWorkflow } from "./loanDrawdownChange/LoanDrawdownChangeWorkflow";
 import { loanExtensionItemWorkflow } from "./loanDrawdownExtension/loanDrawdownExtensionWorkflow";

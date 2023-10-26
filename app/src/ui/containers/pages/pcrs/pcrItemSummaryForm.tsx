@@ -9,31 +9,36 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { useContent } from "@ui/hooks/content.hook";
-import { UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
+import { UseFormHandleSubmit, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
 
-export const PcrItemSummaryForm = <FormValues extends { itemStatus: "marked-as-complete" | string }>({
+export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolean }>({
   register,
   pcrItem,
   handleSubmit,
+  watch,
 }: {
   pcrItem: Pick<FullPCRItemDto, "type" | "status">;
   register: UseFormRegister<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
+  watch: UseFormWatch<FormValues>;
 }) => {
-  const { itemId, routes, projectId, pcrId, isFetching, onSave, allowSubmit } = usePcrWorkflowContext();
+  const { itemId, routes, projectId, pcrId, isFetching, onSave, allowSubmit, setMarkedAsCompleteHasBeenChecked } =
+    usePcrWorkflowContext();
   if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
 
   const { getContent } = useContent();
 
   const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
 
+  const watchedCheckbox = watch().markedAsComplete;
+
   return (
     <Form
       onSubmit={handleSubmit((data: FormValues) => {
         return onSave({
           data: {
-            status: data.itemStatus === "marked-as-complete" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
+            status: data.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
           },
           context: {
             link: routes.pcrPrepare.getLink({
@@ -56,7 +61,7 @@ export const PcrItemSummaryForm = <FormValues extends { itemStatus: "marked-as-c
       <Fieldset>
         <Legend>{getContent(x => x.pages.pcrWorkflowSummary.markAsCompleteLabel)}</Legend>
         <FormGroup>
-          <CheckboxList name="itemStatus" register={register} disabled={isFetching}>
+          <CheckboxList name="markedAsComplete" register={register} disabled={isFetching}>
             <Checkbox
               defaultChecked={pcrItem.status === PCRItemStatus.Complete}
               id="marked-as-complete"
@@ -67,7 +72,11 @@ export const PcrItemSummaryForm = <FormValues extends { itemStatus: "marked-as-c
 
         {allowSubmit && (
           <FormGroup>
-            <Button type="submit" disabled={isFetching}>
+            <Button
+              type="submit"
+              disabled={isFetching}
+              onClick={() => setMarkedAsCompleteHasBeenChecked(watchedCheckbox)}
+            >
               {getContent(x => x.pages.pcrWorkflowSummary.buttonSaveAndReturn)}
             </Button>
           </FormGroup>

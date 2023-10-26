@@ -127,3 +127,50 @@ export const ShortDateRangeFromDuration = (props: { startDate: DateConvertible; 
       : null;
   return <ShortDateRange start={props.startDate} end={endDate} />;
 };
+
+/**
+ * Combines nullable month and year input strings into a date object
+ */
+export const combineDate = (month: Nullable<string>, year: Nullable<string>, fromStart: boolean) => {
+  // set date to null if the fields are empty
+  if (!month && !year) return null;
+  let date = DateTime.local(Number(year), Number(month));
+  // set date to start of month
+  if (fromStart) {
+    date = date.startOf("month");
+  } else {
+    date = date.endOf("month");
+  }
+
+  // Set our time to mid-day
+  date = date.set({
+    hour: 12,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
+
+  if (date.isValid) {
+    return date.toJSDate();
+  } else {
+    throw new Error("the date is invalid");
+  }
+};
+
+/**
+ * returns the month from a date object as string
+ */
+export const getMonth = (date: Date | null) => {
+  if (!date) return "";
+
+  return String(DateTime.fromJSDate(date).month);
+};
+
+/**
+ * returns the year from a date object as string
+ */
+export const getYear = (date: Date | null) => {
+  if (!date) return "";
+
+  return String(DateTime.fromJSDate(date).year);
+};

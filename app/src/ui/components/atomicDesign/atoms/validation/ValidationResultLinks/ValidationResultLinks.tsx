@@ -32,6 +32,7 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
  */
 export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[] }) => {
   const navigate = useNavigate();
+  const search = window.location.search ?? "";
   return (
     <>
       {results.map((x, i) => (
@@ -40,7 +41,7 @@ export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[
             onClick={e => {
               e.preventDefault();
               scrollToTheParentFieldsetSmoothly(x.key);
-              navigate(`#${x.key}`, { replace: true });
+              navigate(`${search}#${x.key}`, { replace: true });
             }}
             href={`#${x.key}`}
           >

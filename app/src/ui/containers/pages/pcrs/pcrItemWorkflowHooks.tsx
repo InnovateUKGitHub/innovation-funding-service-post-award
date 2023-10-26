@@ -1,7 +1,8 @@
 import { useRhfErrors } from "@framework/util/errorHelpers";
-import { isEmpty, isEqual } from "lodash";
+import { isEmpty, isEqual, noop } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import { FieldErrors } from "react-hook-form";
+import { FieldErrors, UseFormTrigger } from "react-hook-form";
+import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
 
 /**
  * Hook returns a suite of hooks for handling errors on the migrated workflow pages
@@ -130,6 +131,31 @@ export const usePcrItemWorkflowHooks = () => {
     }, clearErrorValues);
   };
 
+  /**
+   * Hook enables revalidation and initial validation if marked_as_complete has been checked
+   * @param trigger react hook form trigger function
+   */
+  const useFormRevalidate = <TFormValues extends AnyObject>(trigger: UseFormTrigger<TFormValues>) => {
+    const { markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
+    // ref prevents revalidating until after the submit event has been triggered once unless pcr marked as complete
+    const hasSubmitted = useRef(markedAsCompleteHasBeenChecked);
+    useEffect(() => {
+      if (markedAsCompleteHasBeenChecked) {
+        // we need to revalidate the form immediately if marked as complete
+        trigger();
+      }
+      // sets the hasSubmitted to true on the event
+      window.addEventListener("submit", () => (hasSubmitted.current = true));
+      // triggers reevaluation on keypress
+      window.addEventListener("keyup", () => (hasSubmitted.current ? trigger() : noop()));
+      // cleans up event listeners on unmount
+      return () => {
+        window.removeEventListener("submit", () => (hasSubmitted.current = true));
+        window.removeEventListener("keyup", () => (hasSubmitted.current ? trigger() : noop()));
+      };
+    }, [trigger]);
+  };
+
   return {
     pcrValidationErrors,
     setPcrValidationErrors,
@@ -137,5 +163,6 @@ export const usePcrItemWorkflowHooks = () => {
     useErrorSubset,
     usePcrErrors,
     useSetPcrValidationErrors,
+    useFormRevalidate,
   };
 };

@@ -1,40 +1,65 @@
-import { PCRStepType } from "@framework/constants/pcrConstants";
-import { PCRItemForProjectSuspensionDto } from "@framework/dtos/pcrDtos";
+import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ShortDate } from "@ui/components/atomicDesign/atoms/Date";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { PCRProjectSuspensionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { SuspendProjectSteps } from "./workflow";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { usePcrSuspendProjectWorkflowQuery } from "./suspendProject.logic";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { pcrProjectSuspensionSummarySchema, errorMap, ProjectSuspensionSummarySchemaType } from "./suspendProject.zod";
+import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
+import { EditLink } from "../pcrItemSummaryLinks";
 
-export const SuspendProjectSummary = (
-  props: PcrSummaryProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator, SuspendProjectSteps>,
-) => {
-  const lastDayContent = props.pcrItem.suspensionEndDate ? (
-    <ShortDate value={props.pcrItem.suspensionEndDate} />
-  ) : (
-    "Not set"
-  );
+export const SuspendProjectSummary = () => {
+  const { projectId, itemId, fetchKey, useSetPcrValidationErrors, displayCompleteForm } = usePcrWorkflowContext();
+
+  const { pcrItem } = usePcrSuspendProjectWorkflowQuery(projectId, itemId, fetchKey);
+
+  const { register, handleSubmit, formState, watch } = useForm<ProjectSuspensionSummarySchemaType>({
+    defaultValues: {
+      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
+      suspensionStartDate: pcrItem.suspensionStartDate,
+    },
+    resolver: zodResolver(pcrProjectSuspensionSummarySchema, {
+      errorMap,
+    }),
+  });
+
+  useSetPcrValidationErrors(formState.errors, true);
+
+  const lastDayContent = pcrItem.suspensionEndDate ? <ShortDate value={pcrItem.suspensionEndDate} /> : "Not set";
 
   return (
-    <Section>
-      <SummaryList qa="projectSuspension">
-        <SummaryListItem
-          qa="startDate"
-          label={x => x.pages.pcrSuspendProjectDetails.firstDayOfPauseTitle}
-          validation={props.validator.suspensionStartDate}
-          content={<ShortDate value={props.pcrItem.suspensionStartDate} />}
-          action={props.getEditLink(PCRStepType.details, props.validator.suspensionStartDate)}
-        />
+    <>
+      <Section>
+        <SummaryList qa="projectSuspension">
+          <SummaryListItem
+            qa="startDate"
+            id="suspensionStartDate"
+            label={x => x.pages.pcrSuspendProjectDetails.firstDayOfPauseTitle}
+            content={<ShortDate value={pcrItem.suspensionStartDate} />}
+            action={<EditLink stepName={PCRStepType.details} />}
+            hasError={!!formState?.errors?.suspensionStartDate}
+          />
 
-        <SummaryListItem
-          qa="endDate"
-          label={x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseTitle}
-          validation={props.validator.suspensionEndDate}
-          content={lastDayContent}
-          action={props.getEditLink(PCRStepType.details, props.validator.suspensionEndDate)}
+          <SummaryListItem
+            qa="endDate"
+            id="suspensionEndDate"
+            label={x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseTitle}
+            content={lastDayContent}
+            action={<EditLink stepName={PCRStepType.details} />}
+          />
+        </SummaryList>
+      </Section>
+
+      {displayCompleteForm && (
+        <PcrItemSummaryForm<ProjectSuspensionSummarySchemaType>
+          register={register}
+          watch={watch}
+          handleSubmit={handleSubmit}
+          pcrItem={pcrItem}
         />
-      </SummaryList>
-    </Section>
+      )}
+    </>
   );
 };
