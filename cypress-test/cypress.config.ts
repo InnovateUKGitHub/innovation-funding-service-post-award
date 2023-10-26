@@ -21,7 +21,22 @@ const fs = require("fs");
  */
 
 const acc = process.env.ACC;
-let accDevUrl = `https://www-acc-${(acc ? `custom-${acc}` : "dev").trim()}.apps.ocp4.innovateuk.ukri.org`;
+const sfEnv = process.env.SALESFORCE_ENVIRONMENT;
+
+let accDevUrl: string;
+
+if (acc && sfEnv) {
+  accDevUrl = `https://www-acc-custom-${(sfEnv === "dev"
+    ? acc
+    : `${sfEnv}-${acc}`
+  ).trim()}.apps.ocp4.innovateuk.ukri.org`;
+} else if (acc) {
+  accDevUrl = `https://www-acc-custom-${acc.trim()}.apps.ocp4.innovateuk.ukri.org`;
+} else if (sfEnv) {
+  accDevUrl = `https://www-acc-${sfEnv.trim()}.apps.ocp4.innovateuk.ukri.org`;
+} else {
+  accDevUrl = `https://www-acc-dev.apps.ocp4.innovateuk.ukri.org`;
+}
 
 /**
  * By default Cypress will run all tests in the e2e folder.
