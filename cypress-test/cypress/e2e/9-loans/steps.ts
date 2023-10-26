@@ -30,11 +30,15 @@ export const shouldFindMatchingProjectCard = (projectCard: string) => {
 export const learnFiles = () => {
   cy.get("span").contains("Learn more about files you can upload").click();
   [
-    "You can upload up to 10 documents",
-    "There is no limit",
+    "You can upload up to 10 documents at a time. Each document must:",
+    "There is no limit to the number of files you can upload in total.",
+    "You can upload these file types:",
+  ].forEach(para => {
+    cy.paragraph(para);
+  });
+  [
     "be less than 32MB",
     "have a unique file name",
-    "You can upload these file types",
     "PDF",
     "(pdf, xps)",
     "(doc, docx, rtf, txt, csv, odt)",
@@ -46,11 +50,8 @@ export const learnFiles = () => {
     "images",
     "(jpg, jpeg, png, odg)",
   ].forEach(fileInfo => {
-    cy.getByQA("loanDocumentsForm").contains(fileInfo);
+    cy.get("li").contains(fileInfo);
   });
-
-  cy.paragraph("You can upload up to 10 documents");
-  cy.paragraph("There is no limit");
 };
 
 export const drawdownCard = () => {
@@ -137,6 +138,12 @@ export const drawdownFileUpload = () => {
   cy.validationNotification("file has been uploaded");
 };
 
+export const projCostsFileUpload = () => {
+  cy.fileInput("testfile.doc");
+  cy.submitButton("Upload documents").click();
+  cy.validationNotification("document has been uploaded");
+};
+
 export const fcFileUploadedSection = () => {
   cy.get("h2").contains("Files uploaded");
   cy.paragraph("All documents uploaded will be shown here.");
@@ -145,6 +152,40 @@ export const fcFileUploadedSection = () => {
       cy.getByQA("loan-documents-editor-container").contains(docTableItem);
     },
   );
+};
+
+export const projCostsSelectFileDescription = () => {
+  [
+    "Invoice",
+    "Independent accountant’s report",
+    "Claim evidence",
+    "Statement of expenditure",
+    "LMC documents",
+    "Schedule 3",
+  ].forEach(fileDescription => {
+    cy.get("select#description.govuk-select").select(fileDescription);
+  });
+};
+
+export const projCostsUploadedSection = () => {
+  cy.get("h2").contains("Files uploaded");
+  cy.paragraph("All documents uploaded will be shown here.");
+  let i = 1;
+  ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach(header => {
+    cy.get("thead").within(() => {
+      cy.get(`th:nth-child(${i})`).contains(header);
+      i++;
+    });
+  });
+  let a = 1;
+  ["testfile.doc", "Schedule 3", "2023", "0KB", "Sarah Shuang", "Remove"].forEach(docTableItem => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get(`td:nth-child(${a})`).contains(docTableItem);
+        a++;
+      });
+  });
 };
 
 export const pmFileUploadedSection = () => {
@@ -410,4 +451,295 @@ export const hybridButtonAssertion = () => {
     .contains(/^Request$/)
     .click();
   cy.heading("Drawdown");
+};
+
+export const projCostsDownload = () => {
+  cy.readFile("cypress/documents/testfile.doc", "base64").then((base64: string) => {
+    cy.get("a")
+      .contains("testfile.doc")
+      .invoke("attr", "href")
+      .then(href => cy.downloadFile(href))
+      .should(obj => {
+        expect(obj.headers["content-disposition"] ?? "").to.include("testfile.doc");
+        expect(obj.redirected).to.eq(false);
+        expect(obj.status).to.eq(200);
+        expect(obj.ok).to.eq(true);
+        expect(obj.base64).to.eq(base64);
+      });
+  });
+};
+
+export const projCostsPeriodTable = () => {
+  let thnth = 1;
+  [
+    "Partner",
+    "Forecast costs for period",
+    "Actual costs for period",
+    "Difference",
+    "Status",
+    "Date of last update",
+  ].forEach(header => {
+    cy.get(`th:nth-child(${thnth++})`).contains(header);
+  });
+  let tdnth = 1;
+  ["EUI Small Ent Health (Lead)", "£115,000.00", "£115,000.00", "£0.00", "Draft", "2023", "Edit"].forEach(row => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get(`td:nth-child(${tdnth++})`).contains(row);
+      });
+  });
+};
+
+export const projCostsCostHeaders = () => {
+  let i = 1;
+  [
+    "Category",
+    "Total eligible costs",
+    "Eligible costs to date",
+    "Eligible costs this period",
+    "Remaining eligible costs",
+  ].forEach(header => {
+    cy.getByQA("cost-cat").within(() => {
+      cy.get("thead").within(() => {
+        cy.get(`th:nth-child(${i})`).contains(header);
+        i++;
+      });
+    });
+  });
+};
+
+export const costCatTable = () => {
+  [
+    ["Loans costs for Industrial participants", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Overheads", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Materials", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Subcontracting", "£0.00", "£0.00", "£0.00", "£0.00"],
+    ["Capital usage", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Travel and subsistence", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Other costs", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Other costs 2", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Other costs 3", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Other costs 4", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Other costs 5", "£11,500.00", "£0.00", "£11,500.00", "£0.00"],
+    ["Total", "£115,000.00", "£0.00", "£115,000.00", "£0.00"],
+  ].forEach((cols, index) => {
+    cy.getByQA("cost-cat").within(() => {
+      cy.get("tr")
+        .eq(index + 1)
+        .within(() => {
+          for (let i = 0; i < cols.length; i++) cy.get(`td:nth-child(${i + 1})`).contains(cols[i]);
+        });
+    });
+  });
+};
+
+export const projCostsDrawdownTable = () => {
+  let i = 1;
+  [
+    "Current drawdown",
+    "Total loan amount",
+    "Drawdowns to date",
+    "Drawdown this period",
+    "Remaining loan amount",
+  ].forEach(header => {
+    cy.getByQA("period-loan-table").within(() => {
+      cy.get("thead").within(() => {
+        cy.get(`th:nth-child(${i})`).contains(header);
+        i++;
+      });
+    });
+  });
+  let a = 1;
+  ["1", "£115,000.00", "£0.00", "£10,000.00", "£105,000.00"].forEach(rowItem => {
+    cy.getByQA("period-loan-table").within(() => {
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get(`td:nth-child(${a})`).contains(rowItem);
+          a++;
+        });
+    });
+  });
+};
+
+export const projCostsStatusSection = () => {
+  cy.button("Status and comments log");
+  cy.button("Show").click();
+  cy.button("Hide");
+  cy.paragraph("There are no changes.");
+};
+
+export const loansForecastNavigate = () => {
+  cy.selectTile("Project Costs");
+  cy.heading("Project costs");
+  cy.get("a").contains("Edit").click();
+  cy.heading("Costs for this period");
+  cy.button("Continue to costs documents").click();
+  cy.heading("Supporting evidence");
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
+};
+
+export const projCostsForecastTopThreeRows = () => {
+  [
+    ["Period", "1", "2", "3", "4", "5", "6", "7"],
+    ["IAR Due", "Yes", "No", "No", "No", "Yes", "No", "No", "Yes"],
+    [
+      "Month",
+      "Feb to Apr 2023",
+      "May to Jul 2023",
+      "Aug to Oct 2023",
+      "Nov 2023 to Jan 2024",
+      "Feb to Apr 2024",
+      "May to Jul 2024",
+      "Aug to Oct 2024",
+      "Nov 2024 to Jan 2025",
+    ],
+  ].forEach((cols, rowNumber = 0) => {
+    cy.get("tr")
+      .eq(rowNumber + 1)
+      .within(() => {
+        for (let i = 0; i < cols.length; i++) {
+          cy.get(`th:nth-child(${i + 1})`).contains(cols[i]);
+        }
+      });
+  });
+};
+
+export const loansForecastLockedCols = () => {
+  (
+    [
+      ["Loans costs for Industrial participants", "£11,500.00"],
+      ["Overheads", "£11,500.00"],
+      ["Materials", "£11,500.00"],
+      ["Subcontracting", "£0.00"],
+      ["Capital usage", "£11,500.00"],
+      ["Travel and subsistence", "£11,500.00"],
+      ["Other costs ", "£11,500.00"],
+      ["Other costs 2", "£11,500.00"],
+      ["Other costs 3", "£11,500.00"],
+      ["Other costs 4", "£11,500.00"],
+      ["Other costs 5", "£11,500.00"],
+    ] as const
+  ).forEach(([costcat, value]) => {
+    cy.get("td:nth-child(1)").contains(costcat);
+    cy.get("td:nth-child(2)").contains(value);
+  });
+  cy.get("tr")
+    .eq(15)
+    .within(() => {
+      cy.get("th:nth-child(1)").contains("Total");
+      cy.get("td:nth-child(2)").contains("£115,000.00");
+    });
+};
+
+export const updateLoansProjCostsForecast = () => {
+  let totalCell = (rowNum: number, value: string) => {
+    cy.get("tr")
+      .eq(rowNum)
+      .within(() => {
+        cy.get("td:nth-child(10)").contains(value);
+      });
+  };
+
+  for (let inputNum = 2; inputNum < 9; inputNum++) {
+    let baseTotal = 11500 + inputNum * 100 - 100;
+    let subcontractingTotal = 0 + inputNum * 100 - 100;
+    let totalString = baseTotal.toLocaleString("en-UK");
+    let subcontractingString = subcontractingTotal.toLocaleString("en-GB");
+
+    [
+      [`Loans costs for Industrial participants Period ${inputNum}`, "4", `£${totalString}.00`],
+      [`Overheads Period ${inputNum}`, "5", `£${totalString}.00`],
+      [`Materials Period ${inputNum}`, "6", `£${totalString}.00`],
+      [`Subcontracting Period ${inputNum}`, "7", `£${subcontractingString}.00`],
+      [`Capital usage Period ${inputNum}`, "8", `£${totalString}.00`],
+      [`Travel and subsistence Period ${inputNum}`, "9", `£${totalString}.00`],
+      [`Other costs Period ${inputNum}`, "10", `£${totalString}.00`],
+      [`Other costs 2 Period ${inputNum}`, "11", `£${totalString}.00`],
+      [`Other costs 3 Period ${inputNum}`, "12", `£${totalString}.00`],
+      [`Other costs 4 Period ${inputNum}`, "13", `£${totalString}.00`],
+      [`Other costs 5 Period ${inputNum}`, "14", `£${totalString}.00`],
+    ].forEach(([costCat, row, total]) => {
+      cy.getByAriaLabel(costCat).clear().type("100");
+      cy.wait(200);
+      totalCell(Number(row), total);
+    });
+  }
+  const percentages = [
+    "6.09%",
+    "6.09%",
+    "6.09%",
+    "0.00%",
+    "6.09%",
+    "6.09%",
+    "6.09%",
+    "6.09%",
+    "6.09%",
+    "6.09%",
+    "6.09%",
+  ];
+  let percentage = 0;
+  for (let i = 4; i < 12; i++) {
+    cy.get("tr")
+      .eq(i)
+      .within(() => {
+        cy.get("td:nth-child(12)").contains(percentages[percentage]);
+        percentage += 1;
+      });
+  }
+};
+
+export const loansForecastValidation = () => {
+  [
+    "loans costs for industrial participants",
+    "overheads",
+    "materials",
+    "subcontracting",
+    "capital usage",
+    "travel and subsistence",
+    "other costs",
+    "other costs 2",
+    "other costs 3",
+    "other costs 4",
+    "other costs 5",
+  ].forEach(warning => {
+    cy.get("li").contains(warning);
+  });
+  cy.getByQA("forecasts-warning-fc-content").contains(
+    "The amount you are requesting is more than the agreed costs for:",
+  );
+  cy.getByQA("forecasts-warning-fc-content").contains(
+    "Your Monitoring Officer will let you know if they have any concerns.",
+  );
+};
+
+export const loansForecastDecimals = () => {
+  [100.66, 66.66, 333.33, 21.66, 33.66].forEach(input => {
+    cy.getByAriaLabel("Loans costs for Industrial participants Period 2").clear().type(input.toString());
+    cy.getByAriaLabel("Loans costs for Industrial participants Period 2").should("have.value", input);
+  });
+};
+
+export const loansForecastEmptyCell = () => {
+  cy.getByAriaLabel("Loans costs for Industrial participants Period 2").clear();
+  cy.wait(500);
+  cy.button("Continue to summary").click();
+  cy.validationLink("Forecast is required.");
+};
+
+/**
+ * Note that a true copy and paste test doesn't exist for cypress.
+ * If testing manually, you would get the result 'Forecast must be a number.'
+ * For cypress this is the best we can do to ensure it never sames
+ */
+export const loansForecastCopyPaste = () => {
+  cy.getByAriaLabel("Loans costs for Industrial participants Period 2")
+    .clear()
+    .invoke("val", "noWordsAllowed")
+    .trigger("input");
+  cy.wait(200);
+  cy.button("Continue to summary").click();
+  cy.validationLink("Forecast is required.");
 };

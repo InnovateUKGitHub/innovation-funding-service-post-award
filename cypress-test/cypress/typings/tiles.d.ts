@@ -7,4 +7,5 @@ export type Tile =
   | "Forecast"
   | "Documents"
   | "Project details"
+  | "Project Costs"
   | "Finance summary";
