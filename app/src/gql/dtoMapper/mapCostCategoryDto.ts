@@ -6,25 +6,27 @@ import { numberComparator } from "@framework/util/comparator";
 /**
  * from the root `Acc_CostCategory__c` node
  */
-type CostCategoryNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_CompetitionType__c: GQL.Value<string>;
-    Acc_CostCategoryName__c: GQL.Value<string>;
-    Acc_HintText__c: GQL.Value<string>;
-    Acc_DisplayOrder__c: GQL.Value<number>;
-    Acc_OrganisationType__c: GQL.Value<string>;
-  }>
-> | null;
+type CostCategoryNode = GQL.PartialNode<{
+  Id: string;
+  Acc_CompetitionType__c: GQL.Value<string>;
+  Acc_CostCategoryName__c: GQL.Value<string>;
+  Acc_HintText__c: GQL.Value<string>;
+  Acc_DisplayOrder__c: GQL.Value<number>;
+  Acc_OrganisationType__c: GQL.Value<string>;
+}>;
 
 /**
  * from the root `Acc_Profile__c` node
  */
-type ProfileNodeForRequiredCostCategories = ReadonlyArray<{
-  node: {
-    Acc_CostCategory__c: GQL.Value<string>;
-  } | null;
-} | null> | null;
+type ProfileNodeForRequiredCostCategories = GQL.Maybe<
+  ReadonlyArray<
+    GQL.Maybe<{
+      node: GQL.Maybe<{
+        Acc_CostCategory__c: GQL.Value<string>;
+      }>;
+    }>
+  >
+>;
 
 type CostCategoryDtoMapping = Pick<
   CostCategoryDto,
@@ -79,7 +81,7 @@ export function mapToCostCategoryDto<T extends CostCategoryNode, PickList extend
  * Maps CostCategory Edge to array of Cost Category DTOs.
  */
 export function mapToCostCategoryDtoArray<
-  T extends ReadonlyArray<{ node: CostCategoryNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: CostCategoryNode }>> | null,
   PickList extends keyof CostCategoryDtoMapping,
 >(edges: T, pickList: PickList[]): Pick<CostCategoryDtoMapping, PickList>[] {
   return (
@@ -97,7 +99,7 @@ export function mapToCostCategoryDtoArray<
  * This also requires the `Acc_Profile__c` root node containing `Acc_CostCategory__c`
  */
 export function mapToRequiredSortedCostCategoryDtoArray<
-  T extends ReadonlyArray<{ node: CostCategoryNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: CostCategoryNode }>> | null,
   PickList extends keyof CostCategoryDtoMapping,
 >(
   edges: T,

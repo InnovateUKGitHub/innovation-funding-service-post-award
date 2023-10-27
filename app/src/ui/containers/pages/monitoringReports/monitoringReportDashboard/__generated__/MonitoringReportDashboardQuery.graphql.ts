@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b90f66d23128c944938932f12d7ca6d3>>
+ * @generated SignedSource<<064a79af427c4a1379a1398164d8ad37>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,52 +20,52 @@ export type MonitoringReportDashboardQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_AddComments__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_MonitoringReportStatus__c: {
-                readonly label: string | null;
-                readonly value: string | null;
-              } | null;
+                readonly label: string | null | undefined;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_PeriodEndDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_PeriodStartDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_Project__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly LastModifiedDate: {
-                readonly value: string | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly roles: {
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
               };
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

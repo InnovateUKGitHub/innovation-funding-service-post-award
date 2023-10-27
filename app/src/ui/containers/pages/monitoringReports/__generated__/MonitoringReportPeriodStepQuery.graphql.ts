@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c123e8e611cad4fdf5b4f1002454240e>>
+ * @generated SignedSource<<53ebba0dc180d98ae32890d6355fa6af>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,36 +21,36 @@ export type MonitoringReportPeriodStepQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly RecordType: {
                 readonly DeveloperName: {
-                  readonly value: string | null;
-                } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
                 readonly Name: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CurrentPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

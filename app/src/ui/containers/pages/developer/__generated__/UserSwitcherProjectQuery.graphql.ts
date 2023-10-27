@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b61fc33c7d9a8665400c5c7c4030c6c0>>
+ * @generated SignedSource<<e7170ff523fdf74b4aa1485fbdf7b12d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,7 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type UserSwitcherProjectQuery$variables = {
-  projectId?: string | null;
+  projectId?: string | null | undefined;
 };
 export type UserSwitcherProjectQuery$data = {
   readonly salesforce: {
@@ -20,35 +20,35 @@ export type UserSwitcherProjectQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Project_Contact_Links__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_ContactId__r: {
                       readonly Id: string;
                       readonly Name: {
-                        readonly value: string | null;
-                      } | null;
-                      readonly username: string | null;
-                    } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                      readonly username: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_Role__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_UserId__r: {
                       readonly Name: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Username: {
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
-                  } | null;
-                } | null> | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

@@ -23,12 +23,13 @@ declare namespace GQL {
     ? NodeValue<T[Field]>
     : never;
 
-  type Maybe<T> = T | null;
+  type Maybe<T> = T | null | undefined;
 
   type Value<T> = Maybe<{ value: Maybe<T> }>;
 
   type ValueAndLabel<T> = Maybe<{ value?: Maybe<T>; label?: Maybe<string> }>;
 
+  type PartialNode<T> = Readonly<Maybe<Partial<T>>>;
   type DtoMapper<Dto, Node, AdditionalData = undefined> = AdditionalData extends undefined
     ? {
         [Key in keyof Dto]: (node: Node) => Dto[Key];

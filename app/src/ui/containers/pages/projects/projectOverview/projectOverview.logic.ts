@@ -2,7 +2,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { getLeadPartner, sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { projectOverviewQuery } from "./ProjectOverview.query";
-import { ProjectOverviewQuery, ProjectOverviewQuery$data } from "./__generated__/ProjectOverviewQuery.graphql";
+import { ProjectOverviewQuery } from "./__generated__/ProjectOverviewQuery.graphql";
 import { IAccessControlOptions } from "@framework/types/IAccessControlOptions";
 import { convertRolesToPermissionsValue } from "@framework/util/rolesToPermissions";
 import { ProjectStatus } from "@framework/constants/project";
@@ -12,8 +12,6 @@ import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
-
-type ProjectGql = GQL.NodeSelector<ProjectOverviewQuery$data, "Acc_Project__c">;
 
 export type Project = Pick<
   ProjectDtoGql,
@@ -93,7 +91,7 @@ export const useProjectOverviewData = (projectId: string) => {
     projectId,
   });
 
-  const { node: projectNode } = getFirstEdge<ProjectGql>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   const partnerRoles = getPartnerRoles(projectNode?.roles ?? null);
 

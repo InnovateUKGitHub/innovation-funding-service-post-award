@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7bbe64799bef810c5e2be6a4533eb8cb>>
+ * @generated SignedSource<<87933c006142a25bfed1478501fb8cfe>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,120 +22,120 @@ export type ProjectChangeRequestPrepareQuery$data = {
             readonly node: {
               readonly Acc_CompetitionId__r: {
                 readonly Acc_TypeofAid__c: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
               readonly Acc_MonitoringLevel__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectParticipantsProject__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Id: string;
-                  } | null;
-                } | null> | null;
-              } | null;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Project_Change_Requests__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_Comments__c: {
-                      readonly value: any | null;
-                    } | null;
+                      readonly value: any | null | undefined;
+                    } | null | undefined;
                     readonly Acc_CommercialWork__c: {
-                      readonly value: boolean | null;
-                    } | null;
+                      readonly value: boolean | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ExistingPartnerName__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_MarkedasComplete__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_NewOrganisationName__c: {
-                      readonly value: any | null;
-                    } | null;
+                      readonly value: any | null | undefined;
+                    } | null | undefined;
                     readonly Acc_OrganisationName__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_OtherFunding__c: {
-                      readonly value: boolean | null;
-                    } | null;
+                      readonly value: boolean | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ParticipantType__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ProjectRole__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_Project__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_RequestHeader__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_RequestNumber__c: {
-                      readonly value: number | null;
-                    } | null;
+                      readonly value: number | null | undefined;
+                    } | null | undefined;
                     readonly Acc_Status__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Id: string;
                     readonly RecordType: {
                       readonly DeveloperName: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Name: {
-                        readonly label: string | null;
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
-                  } | null;
-                } | null> | null;
-              } | null;
+                        readonly label: string | null | undefined;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly roles: {
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
               };
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_StatusChange__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CreatedByAlias__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ExternalComment__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_NewProjectChangeRequestStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ParticipantVisibility__c: {
-                readonly value: boolean | null;
-              } | null;
+                readonly value: boolean | null | undefined;
+              } | null | undefined;
               readonly Acc_PreviousProjectChangeRequestStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectChangeRequest__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly CreatedDate: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

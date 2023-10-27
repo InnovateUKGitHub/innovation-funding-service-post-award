@@ -1,42 +1,42 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 
-export type DocumentSummaryNode = {
-  readonly node: {
+export type DocumentSummaryNode = GQL.PartialNode<{
+  readonly node: GQL.Maybe<{
     readonly LinkedEntityId?: GQL.Value<string>;
     readonly isFeedAttachment: boolean;
     readonly isOwner: boolean;
-    readonly ContentDocument: {
-      readonly Id: string | null;
-      readonly LastModifiedBy: {
+    readonly ContentDocument: GQL.Maybe<{
+      readonly Id: GQL.Maybe<string>;
+      readonly LastModifiedBy: GQL.Maybe<{
         ContactId: GQL.Value<string>;
-      } | null;
+      }>;
       readonly ContentSize: GQL.Value<number>;
-      readonly CreatedBy: {
+      readonly CreatedBy: GQL.Maybe<{
         readonly Name: GQL.Value<string>;
         readonly Id: string | null;
-      } | null;
+      }>;
       readonly CreatedDate: GQL.Value<string>;
       readonly Description: GQL.Value<string>;
       readonly LatestPublishedVersionId: GQL.Value<string>;
       readonly FileExtension: GQL.Value<string>;
       readonly Title: GQL.Value<string>;
-    } | null;
-  } | null;
-} | null;
+    }>;
+  }>;
+}>;
 
-type PartnerDocumentsArrayNode = {
-  readonly node: {
+type PartnerDocumentsArrayNode = GQL.Maybe<{
+  readonly node: GQL.Maybe<{
     readonly Id: string | null;
-    readonly Acc_AccountId__r: {
+    readonly Acc_AccountId__r: GQL.Maybe<{
       readonly Name: GQL.Value<string>;
-    } | null;
+    }>;
     readonly Acc_AccountId__c: GQL.Value<string>;
-    readonly ContentDocumentLinks: {
-      readonly edges: ReadonlyArray<DocumentSummaryNode | null> | null;
-    } | null;
-  } | null;
-} | null;
+    readonly ContentDocumentLinks: GQL.Maybe<{
+      readonly edges: GQL.Maybe<ReadonlyArray<GQL.Maybe<DocumentSummaryNode>>>;
+    }>;
+  }>;
+}>;
 
 type DocumentSummaryDtoMapping = PartnerDocumentSummaryDtoGql;
 
@@ -189,7 +189,7 @@ export function mapToPartnerDocumentSummaryDtoArray<
  * it requires `projectId` and `currentUser` to be passed in as third arg
  */
 export function mapToProjectDocumentSummaryDtoArray<
-  T extends ReadonlyArray<DocumentSummaryNode | null> | null,
+  T extends GQL.Maybe<ReadonlyArray<GQL.Maybe<DocumentSummaryNode>>>,
   PickList extends keyof Omit<PartnerDocumentSummaryDtoGql, "linkedEntityId">,
 >(
   edges: T,

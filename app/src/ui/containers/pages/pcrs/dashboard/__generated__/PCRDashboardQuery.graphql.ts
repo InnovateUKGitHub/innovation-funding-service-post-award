@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6b97154622d0ae6da6df1dc780a99fa4>>
+ * @generated SignedSource<<a911c4976b913e6d356489bb0d35db82>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,7 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type PCRDashboardQuery$variables = {
-  projectId?: string | null;
+  projectId?: string | null | undefined;
 };
 export type PCRDashboardQuery$data = {
   readonly salesforce: {
@@ -20,55 +20,55 @@ export type PCRDashboardQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Project_Change_Requests__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_Project__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_RequestHeader__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_RequestNumber__c: {
-                      readonly value: number | null;
-                    } | null;
+                      readonly value: number | null | undefined;
+                    } | null | undefined;
                     readonly Acc_Status__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly CreatedDate: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Id: string;
                     readonly LastModifiedDate: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly RecordType: {
                       readonly DeveloperName: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Name: {
-                        readonly label: string | null;
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
-                  } | null;
-                } | null> | null;
-              } | null;
+                        readonly label: string | null | undefined;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly isActive: boolean;
               readonly roles: {
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
               };
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

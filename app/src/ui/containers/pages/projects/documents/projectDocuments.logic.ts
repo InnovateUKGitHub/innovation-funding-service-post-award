@@ -13,14 +13,12 @@ import { DropdownListOption } from "@ui/components/bjss/inputs/dropdownList";
 import { useContent } from "@ui/hooks/content.hook";
 import { useLazyLoadQuery } from "react-relay";
 import { projectDocumentsQuery } from "./ProjectDocuments.query";
-import { ProjectDocumentsQuery, ProjectDocumentsQuery$data } from "./__generated__/ProjectDocumentsQuery.graphql";
-
-type ProjectGQL = GQL.NodeSelector<ProjectDocumentsQuery$data, "Acc_Project__c">;
+import { ProjectDocumentsQuery } from "./__generated__/ProjectDocumentsQuery.graphql";
 
 export const useProjectDocumentsQuery = (projectId: ProjectId, refreshedQueryOptions: RefreshedQueryOptions) => {
   const data = useLazyLoadQuery<ProjectDocumentsQuery>(projectDocumentsQuery, { projectId }, refreshedQueryOptions);
 
-  const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   const partnerRoles = getPartnerRoles(projectNode?.roles ?? null);
 

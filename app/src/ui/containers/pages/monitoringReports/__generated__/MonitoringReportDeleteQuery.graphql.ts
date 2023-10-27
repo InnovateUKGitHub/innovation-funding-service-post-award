@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fd3c25a7ffe2733c88aec281f7ea01e0>>
+ * @generated SignedSource<<590cc39a3187fba636198b11f0c53c81>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,15 +20,15 @@ export type MonitoringReportDeleteQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

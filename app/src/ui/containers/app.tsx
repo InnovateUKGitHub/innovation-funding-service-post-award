@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { Store, Dispatch } from "redux";
 import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
-import { RelayEnvironmentProvider } from "relay-hooks";
+import { RelayEnvironmentProvider } from "react-relay";
 import { IRouteDefinition } from "@ui/containers/containerBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { BaseProps } from "@ui/containers/containerBase";

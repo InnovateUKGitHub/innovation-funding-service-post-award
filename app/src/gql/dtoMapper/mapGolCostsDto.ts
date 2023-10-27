@@ -2,16 +2,14 @@ import { Profile } from "@framework/constants/recordTypes";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 
 // on Acc_Profile__c with DeveloperName "Total_Cost_Category"
-type GolCostNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_CostCategory__c: GQL.Value<string>;
-    Acc_CostCategoryGOLCost__c: GQL.Value<number>;
-    RecordType: {
-      DeveloperName?: GQL.Value<string>;
-    } | null;
-  }>
-> | null;
+type GolCostNode = GQL.PartialNode<{
+  Id: string;
+  Acc_CostCategory__c: GQL.Value<string>;
+  Acc_CostCategoryGOLCost__c: GQL.Value<number>;
+  RecordType: GQL.Maybe<{
+    DeveloperName?: GQL.Value<string>;
+  }>;
+}>;
 
 type GolCostDtoMapping = Pick<GOLCostDto, "costCategoryId" | "costCategoryName" | "value">;
 
@@ -56,7 +54,7 @@ export function mapToGolCostDto<
  * requires cost categories array to be passed in
  */
 export function mapToGolCostDtoArray<
-  T extends ReadonlyArray<{ node: GolCostNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: GolCostNode }>> | null,
   PickList extends keyof GolCostDtoMapping,
 >(
   edges: T,

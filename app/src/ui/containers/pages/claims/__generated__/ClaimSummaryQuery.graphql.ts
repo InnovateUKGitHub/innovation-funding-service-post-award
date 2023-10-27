@@ -8,13 +8,13 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Query } from 'relay-runtime';
+import { ConcreteRequest, Query } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type ClaimSummaryQuery$variables = {
   partnerId: string;
   periodId: number;
   projectId: string;
-  projectIdStr?: string | null;
+  projectIdStr?: string | null | undefined;
 };
 export type ClaimSummaryQuery$data = {
   readonly salesforce: {
@@ -265,7 +265,12 @@ export type ClaimSummaryQuery$data = {
           } | null> | null;
         } | null;
       };
-      readonly " $fragmentSpreads": FragmentRefs<"AwardRateOverridesMessageFragment" | "StatusChangesLogsFragment" | "TitleFragment" | "TotalCostsClaimedFragment">;
+      readonly " $fragmentSpreads": FragmentRefs<
+        | "AwardRateOverridesMessageFragment"
+        | "StatusChangesLogsFragment"
+        | "TitleFragment"
+        | "TotalCostsClaimedFragment"
+      >;
     };
   };
 };
@@ -863,8 +868,24 @@ v36 = {
         "Acc_ProjectParticipant__r": (v23/*: any*/)
       }
     },
-    {
-      "fields": [
+    v2 = {
+      defaultValue: null,
+      kind: "LocalArgument",
+      name: "projectId",
+    },
+    v3 = {
+      defaultValue: null,
+      kind: "LocalArgument",
+      name: "projectIdStr",
+    },
+    v4 = {
+      alias: null,
+      args: null,
+      concreteType: "CurrentUserObject",
+      kind: "LinkedField",
+      name: "currentUser",
+      plural: false,
+      selections: [
         {
           "items": [
             {
@@ -899,31 +920,151 @@ v36 = {
           "name": "and"
         }
       ],
-      "kind": "ObjectValue",
-      "name": "where"
-    }
-  ],
-  "concreteType": "Acc_Claims__cConnection",
-  "kind": "LinkedField",
-  "name": "Acc_Claims__c",
-  "plural": false,
-  "selections": [
-    {
-      "alias": null,
-      "args": null,
-      "concreteType": "Acc_Claims__cEdge",
-      "kind": "LinkedField",
-      "name": "edges",
-      "plural": true,
-      "selections": [
+      storageKey: null,
+    },
+    v5 = {
+      kind: "Literal",
+      name: "first",
+      value: 2000,
+    },
+    v6 = [
+      {
+        kind: "Variable",
+        name: "eq",
+        variableName: "partnerId",
+      },
+    ],
+    v7 = [
+      {
+        fields: v6 /*: any*/,
+        kind: "ObjectValue",
+        name: "Acc_ProjectParticipant__c",
+      },
+    ],
+    v8 = {
+      fields: v7 /*: any*/,
+      kind: "ObjectValue",
+      name: "and.0",
+    },
+    v9 = {
+      RecordType: {
+        DeveloperName: {
+          eq: "Total_Cost_Category",
+        },
+      },
+    },
+    v10 = {
+      Acc_CostCategory__c: {
+        ne: null,
+      },
+    },
+    v11 = {
+      kind: "Literal",
+      name: "and.2",
+      value: v10 /*: any*/,
+    },
+    v12 = {
+      alias: null,
+      args: null,
+      kind: "ScalarField",
+      name: "Id",
+      storageKey: null,
+    },
+    v13 = [
+      {
+        alias: null,
+        args: null,
+        kind: "ScalarField",
+        name: "value",
+        storageKey: null,
+      },
+    ],
+    v14 = {
+      alias: null,
+      args: null,
+      concreteType: "IDValue",
+      kind: "LinkedField",
+      name: "Acc_CostCategory__c",
+      plural: false,
+      selections: v13 /*: any*/,
+      storageKey: null,
+    },
+    v15 = {
+      alias: null,
+      args: null,
+      concreteType: "CurrencyValue",
+      kind: "LinkedField",
+      name: "Acc_CostCategoryGOLCost__c",
+      plural: false,
+      selections: v13 /*: any*/,
+      storageKey: null,
+    },
+    v16 = {
+      alias: null,
+      args: null,
+      concreteType: "DoubleValue",
+      kind: "LinkedField",
+      name: "Acc_ProjectPeriodNumber__c",
+      plural: false,
+      selections: v13 /*: any*/,
+      storageKey: null,
+    },
+    v17 = {
+      alias: null,
+      args: null,
+      concreteType: "DateValue",
+      kind: "LinkedField",
+      name: "Acc_ProjectPeriodStartDate__c",
+      plural: false,
+      selections: v13 /*: any*/,
+      storageKey: null,
+    },
+    v18 = {
+      alias: null,
+      args: null,
+      concreteType: "DateValue",
+      kind: "LinkedField",
+      name: "Acc_ProjectPeriodEndDate__c",
+      plural: false,
+      selections: v13 /*: any*/,
+      storageKey: null,
+    },
+    v19 = {
+      alias: null,
+      args: null,
+      concreteType: "CurrencyValue",
+      kind: "LinkedField",
+      name: "Acc_LatestForecastCost__c",
+      plural: false,
+      selections: v13 /*: any*/,
+      storageKey: null,
+    },
+    v20 = {
+      alias: null,
+      args: null,
+      concreteType: "StringValue",
+      kind: "LinkedField",
+      name: "DeveloperName",
+      plural: false,
+      selections: v13 /*: any*/,
+      storageKey: null,
+    },
+    v21 = {
+      alias: null,
+      args: null,
+      concreteType: "RecordType",
+      kind: "LinkedField",
+      name: "RecordType",
+      plural: false,
+      selections: [v20 /*: any*/],
+      storageKey: null,
+    },
+    v22 = {
+      alias: null,
+      args: [
+        v5 /*: any*/,
         {
-          "alias": null,
-          "args": null,
-          "concreteType": "Acc_Claims__c",
-          "kind": "LinkedField",
-          "name": "node",
-          "plural": false,
-          "selections": [
+          fields: [
             {
               "alias": null,
               "args": null,

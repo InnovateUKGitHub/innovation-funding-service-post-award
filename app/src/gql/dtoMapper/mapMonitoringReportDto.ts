@@ -6,28 +6,23 @@ import {
 import { groupBy } from "lodash";
 import { mapMonitoringReportStatus } from "@framework/util/monitoringReportStatus";
 
-type MonitoringReportNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_AddComments__c: GQL.Value<string>;
-    Acc_FinalMonitoringReport__c: GQL.Value<boolean>;
-    Acc_MonitoringHeader__c: GQL.Value<string>;
-    Acc_MonitoringReportStatus__c: {
-      value: string | null;
-      label: string | null;
-    } | null;
-    Acc_PeriodEndDate__c: GQL.Value<string>;
-    Acc_PeriodStartDate__c: GQL.Value<string>;
-    Acc_Project__c: GQL.Value<string>;
-    Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-    Acc_Question__c: GQL.Value<string>;
-    Acc_QuestionComments__c: GQL.Value<string>;
-    LastModifiedDate: GQL.Value<string>;
-    RecordType: {
-      Name: GQL.Value<string>;
-    } | null;
-  }>
-> | null;
+type MonitoringReportNode = GQL.PartialNode<{
+  Id: string;
+  Acc_AddComments__c: GQL.Value<string>;
+  Acc_FinalMonitoringReport__c: GQL.Value<boolean>;
+  Acc_MonitoringHeader__c: GQL.Value<string>;
+  Acc_MonitoringReportStatus__c: GQL.ValueAndLabel<string>;
+  Acc_PeriodEndDate__c: GQL.Value<string>;
+  Acc_PeriodStartDate__c: GQL.Value<string>;
+  Acc_Project__c: GQL.Value<string>;
+  Acc_ProjectPeriodNumber__c: GQL.Value<number>;
+  Acc_Question__c: GQL.Value<string>;
+  Acc_QuestionComments__c: GQL.Value<string>;
+  LastModifiedDate: GQL.Value<string>;
+  RecordType: GQL.Maybe<{
+    Name: GQL.Value<string>;
+  }>;
+}>;
 
 type MonitoringReportDtoMapping = Pick<
   MonitoringReportDto,
@@ -104,7 +99,7 @@ export function mapToMonitoringReportDto<
  * Maps edges to array of MonitoringReport DTOs.
  */
 export function mapToMonitoringReportDtoArray<
-  T extends ReadonlyArray<{ node: MonitoringReportNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: MonitoringReportNode }>> | null,
   TPickList extends keyof MonitoringReportDtoMapping,
 >(edges: T, pickList: TPickList[]): Pick<MonitoringReportDtoMapping, TPickList>[] {
   return (
@@ -120,7 +115,7 @@ export function mapToMonitoringReportDtoArray<
  */
 function getQuestions(
   header: Pick<MonitoringReportDto, "statusName">,
-  results: ({ node: MonitoringReportNode | null } | null)[],
+  results: GQL.Maybe<{ node: MonitoringReportNode }>[],
   questions: Pick<
     MonitoringReportQuestionGqlDto,
     "isActive" | "title" | "displayOrder" | "id" | "isScored" | "description" | "options"
@@ -175,7 +170,7 @@ function getQuestions(
  */
 function populateAnswer<T extends Pick<MonitoringReportQuestionDto, "options">>(
   question: T,
-  results: ({ node: MonitoringReportNode | null } | null)[],
+  results: GQL.Maybe<{ node: MonitoringReportNode }>[],
 ): T {
   const options = question.options.map(o => o.id);
   // if there are no options get it from the preselected answer as its a non-option question
@@ -196,7 +191,7 @@ function populateAnswer<T extends Pick<MonitoringReportQuestionDto, "options">>(
  * maps monitoring report data to the header and linked questions
  */
 export function mapToFullMonitoringReport<
-  T extends ReadonlyArray<{ node: MonitoringReportNode } | null> | null,
+  T extends GQL.Maybe<ReadonlyArray<GQL.Maybe<{ node: MonitoringReportNode }>>>,
   TPickList extends keyof MonitoringReportDtoMapping,
 >(
   edges: T,

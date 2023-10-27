@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<071aaab33a8636437348d078e15daec0>>
+ * @generated SignedSource<<a3a0317976b3fb25cbf92644b8b85eba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,8 +12,8 @@ import { Fragment, ReaderFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type ProjectStatusFragment$data = {
   readonly Acc_ProjectStatus__c: {
-    readonly value: string | null;
-  } | null;
+    readonly value: string | null | undefined;
+  } | null | undefined;
   readonly " $fragmentType": "ProjectStatusFragment";
 };
 export type ProjectStatusFragment$key = {

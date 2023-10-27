@@ -1,11 +1,9 @@
 // on Acc_Profile__c WHERE Acc_ProjectID__c=ProjectID AND RecordType.Name="Total Project Period"
-type ProfilePeriodDetailsNode = Readonly<
-  Partial<{
-    Acc_PeriodLatestForecastCost__c: GQL.Value<number>;
-    Acc_ProjectParticipant__c?: GQL.Value<string>;
-    Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-  }>
-> | null;
+type ProfilePeriodDetailsNode = GQL.PartialNode<{
+  Acc_PeriodLatestForecastCost__c: GQL.Value<number>;
+  Acc_ProjectParticipant__c?: GQL.Value<string>;
+  Acc_ProjectPeriodNumber__c: GQL.Value<number>;
+}>;
 
 type ProfilePeriodDetailsDtoMapping = { partnerId: PartnerId; forecastCost: number; periodId: number };
 
@@ -39,7 +37,7 @@ export function mapToProfilePeriodDetailsDto<
  * Maps ProfilePeriodDetails Edge to array of Loan DTOs.
  */
 export function mapToProfilePeriodDetailsDtoArray<
-  T extends ReadonlyArray<{ node: ProfilePeriodDetailsNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ProfilePeriodDetailsNode }>> | null,
   PickList extends keyof ProfilePeriodDetailsDtoMapping,
 >(edges: T, pickList: PickList[]): Pick<ProfilePeriodDetailsDtoMapping, PickList>[] {
   return (

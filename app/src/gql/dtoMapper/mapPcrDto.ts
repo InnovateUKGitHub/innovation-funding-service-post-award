@@ -17,41 +17,39 @@ import { Clock } from "@framework/util/clock";
 
 const clock = new Clock();
 
-export type PcrNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_AdditionalNumberofMonths__c: GQL.Value<number>;
-    Acc_Comments__c: GQL.Value<string>;
-    Acc_ExistingPartnerName__c: GQL.Value<string>;
-    Acc_OtherFunding__c: GQL.Value<boolean>;
-    Acc_CommercialWork__c: GQL.Value<boolean>;
-    Acc_ExistingProjectDuration__c: GQL.Value<number>;
-    Acc_NewOrganisationName__c: GQL.Value<string>;
-    Acc_Reasoning__c: GQL.Value<string>;
-    Acc_RequestHeader__c: GQL.Value<string>;
-    Acc_RequestNumber__c: GQL.Value<number>;
-    Acc_MarkedasComplete__c: GQL.Value<string>;
-    Acc_OrganisationName__c: GQL.Value<string>;
-    Acc_Project_Participant__c: GQL.Value<string>;
-    Acc_ParticipantType__c: GQL.Value<string>;
-    Acc_PublicDescriptionSnapshot__c: GQL.Value<string>;
-    Acc_NewPublicDescription__c: GQL.Value<string>;
-    Acc_NewProjectSummary__c: GQL.Value<string>;
-    Acc_ProjectSummarySnapshot__c: GQL.Value<string>;
-    CreatedDate: GQL.Value<string>;
-    Acc_Status__c: GQL.Value<string>;
-    Acc_SuspensionStarts__c: GQL.Value<string>;
-    Acc_SuspensionEnds__c: GQL.Value<string>;
-    Acc_Project__c: GQL.Value<string>;
-    Acc_ProjectRole__c: GQL.Value<string>;
-    LastModifiedDate: GQL.Value<string>;
-    RecordType: {
-      DeveloperName?: GQL.Value<string>;
-      Name?: GQL.ValueAndLabel<string>;
-      Id?: string | null;
-    } | null;
-  }>
-> | null;
+export type PcrNode = GQL.PartialNode<{
+  Id: GQL.Maybe<string>;
+  Acc_AdditionalNumberofMonths__c: GQL.Value<number>;
+  Acc_Comments__c: GQL.Value<string>;
+  Acc_ExistingPartnerName__c: GQL.Value<string>;
+  Acc_OtherFunding__c: GQL.Value<boolean>;
+  Acc_CommercialWork__c: GQL.Value<boolean>;
+  Acc_ExistingProjectDuration__c: GQL.Value<number>;
+  Acc_NewOrganisationName__c: GQL.Value<string>;
+  Acc_Reasoning__c: GQL.Value<string>;
+  Acc_RequestHeader__c: GQL.Value<string>;
+  Acc_RequestNumber__c: GQL.Value<number>;
+  Acc_MarkedasComplete__c: GQL.Value<string>;
+  Acc_OrganisationName__c: GQL.Value<string>;
+  Acc_Project_Participant__c: GQL.Value<string>;
+  Acc_ParticipantType__c: GQL.Value<string>;
+  Acc_PublicDescriptionSnapshot__c: GQL.Value<string>;
+  Acc_NewPublicDescription__c: GQL.Value<string>;
+  Acc_NewProjectSummary__c: GQL.Value<string>;
+  Acc_ProjectSummarySnapshot__c: GQL.Value<string>;
+  CreatedDate: GQL.Value<string>;
+  Acc_Status__c: GQL.Value<string>;
+  Acc_SuspensionStarts__c: GQL.Value<string>;
+  Acc_SuspensionEnds__c: GQL.Value<string>;
+  Acc_Project__c: GQL.Value<string>;
+  Acc_ProjectRole__c: GQL.Value<string>;
+  LastModifiedDate: GQL.Value<string>;
+  RecordType: GQL.Maybe<{
+    DeveloperName?: GQL.Value<string>;
+    Name?: GQL.ValueAndLabel<string>;
+    Id?: GQL.Maybe<string>;
+  }>;
+}>;
 
 type PcrDtoMapping = Pick<
   PCRDto,
@@ -324,7 +322,7 @@ export function mapToPcrDtoArray<
   PickList extends keyof PcrDtoMapping,
   ItemPickList extends keyof PcrItemDtoMapping,
 >(
-  pcrs: ReadonlyArray<Readonly<{ node: T | null }> | null>,
+  pcrs: ReadonlyArray<Readonly<GQL.Maybe<{ node: T | null }>>>,
   pickList: PickList[],
   itemsPickList: ItemPickList[],
   additionalData: PcrAdditionalData<ItemPickList>,

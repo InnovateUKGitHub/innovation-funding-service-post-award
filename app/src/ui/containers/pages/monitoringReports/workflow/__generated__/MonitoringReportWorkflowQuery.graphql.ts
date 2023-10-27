@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<aa0b793b4f6cf825551f1b5297fdcbdb>>
+ * @generated SignedSource<<fe029e29ea0850acfbbf753cc8bf6b81>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,122 +21,122 @@ export type MonitoringReportWorkflowQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_AddComments__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_MonitoringHeader__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_MonitoringReportStatus__c: {
-                readonly label: string | null;
-                readonly value: string | null;
-              } | null;
+                readonly label: string | null | undefined;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_PeriodEndDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_PeriodStartDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_Project__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_QuestionComments__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_QuestionName__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_Question__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly LastModifiedDate: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly RecordType: {
                 readonly DeveloperName: {
-                  readonly value: string | null;
-                } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
                 readonly Name: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_MonitoringQuestion__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ActiveFlag__c: {
-                readonly value: boolean | null;
-              } | null;
+                readonly value: boolean | null | undefined;
+              } | null | undefined;
               readonly Acc_DisplayOrder__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_QuestionDescription__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_QuestionName__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_QuestionScore__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_QuestionText__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ScoredQuestion__c: {
-                readonly value: boolean | null;
-              } | null;
+                readonly value: boolean | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly roles: {
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
               };
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_StatusChange__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CreatedByAlias__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ExternalComment__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_MonitoringReport__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_NewMonitoringReportStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_PreviousMonitoringReportStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly CreatedDate: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

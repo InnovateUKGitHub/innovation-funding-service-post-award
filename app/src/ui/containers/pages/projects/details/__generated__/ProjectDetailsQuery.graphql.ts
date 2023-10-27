@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7b9db01096cdc3b497928872409b79c7>>
+ * @generated SignedSource<<ac1e3b55c8551c5cdff7e2ee4e5ed2b8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,126 +21,126 @@ export type ProjectDetailsQuery$data = {
             readonly node: {
               readonly Acc_CompetitionId__r: {
                 readonly Name: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
               readonly Acc_CompetitionType__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_CurrentPeriodEndDate__c: {
-                readonly displayValue: string | null;
-                readonly value: string | null;
-              } | null;
+                readonly displayValue: string | null | undefined;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_CurrentPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_CurrentPeriodStartDate__c: {
-                readonly displayValue: string | null;
-                readonly value: string | null;
-              } | null;
+                readonly displayValue: string | null | undefined;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_Duration__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_EndDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_LeadParticipantID__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_MonitoringLevel__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_NumberofPeriods__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectParticipantsProject__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_AccountId__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_AccountId__r: {
                       readonly Name: {
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
                     readonly Acc_NonfundedParticipant__c: {
-                      readonly value: boolean | null;
-                    } | null;
+                      readonly value: boolean | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ParticipantStatus__c: {
-                      readonly label: string | null;
-                      readonly value: string | null;
-                    } | null;
+                      readonly label: string | null | undefined;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ParticipantType__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_Postcode__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ProjectRole__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Id: string;
-                  } | null;
-                } | null> | null;
-              } | null;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectSummary__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_StartDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Loan_LoanAvailabilityPeriodLength__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Loan_LoanEndDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Loan_LoanExtensionPeriodLength__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Loan_LoanRepaymentPeriodLength__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Project_Contact_Links__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_AccountId__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ContactId__r: {
                       readonly Name: {
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
                     readonly Acc_EmailOfSFContact__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ProjectId__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_Role__c: {
-                      readonly label: string | null;
-                      readonly value: string | null;
-                    } | null;
+                      readonly label: string | null | undefined;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_UserId__r: {
                       readonly Name: {
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
-                  } | null;
-                } | null> | null;
-              } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly isActive: boolean;
               readonly roles: {
                 readonly isFc: boolean;
@@ -154,9 +154,9 @@ export type ProjectDetailsQuery$data = {
                   readonly partnerId: string;
                 }>;
               };
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

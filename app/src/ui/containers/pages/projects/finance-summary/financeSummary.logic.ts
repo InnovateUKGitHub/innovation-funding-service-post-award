@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { financeSummaryQuery } from "./FinanceSummary.query";
-import { FinanceSummaryQuery, FinanceSummaryQuery$data } from "./__generated__/FinanceSummaryQuery.graphql";
+import { FinanceSummaryQuery } from "./__generated__/FinanceSummaryQuery.graphql";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
@@ -35,8 +35,6 @@ export const useFinanceSummaryContent = () => {
   return content;
 };
 
-export type Project = GQL.NodeSelector<FinanceSummaryQuery$data, "Acc_Project__c">;
-
 export type Partner = {
   id: PartnerId;
   name: string;
@@ -59,7 +57,7 @@ export const useFinanceSummaryData = (projectId: ProjectId) => {
     projectId,
   });
 
-  const { node } = getFirstEdge<Project>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   const project = mapToProjectDto(node, [
     "id",

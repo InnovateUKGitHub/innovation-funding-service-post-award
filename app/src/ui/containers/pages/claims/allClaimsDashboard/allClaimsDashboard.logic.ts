@@ -2,14 +2,12 @@ import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { allClaimsDashboardQuery } from "./AllClaimsDashboard.query";
-import { AllClaimsDashboardQuery, AllClaimsDashboardQuery$data } from "./__generated__/AllClaimsDashboardQuery.graphql";
+import { AllClaimsDashboardQuery } from "./__generated__/AllClaimsDashboardQuery.graphql";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToProfilePeriodDetailsDtoArray } from "@gql/dtoMapper/mapProfilePeriodDetail";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
-
-type ProjectGQL = GQL.NodeSelector<AllClaimsDashboardQuery$data, "Acc_Project__c">;
 
 export const useAllClaimsDashboardData = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<AllClaimsDashboardQuery>(
@@ -17,7 +15,7 @@ export const useAllClaimsDashboardData = (projectId: ProjectId) => {
     { projectId, projectIdStr: projectId },
     { fetchPolicy: "network-only" },
   );
-  const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
   const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
 

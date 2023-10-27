@@ -6,18 +6,16 @@ const clock = new Clock();
 
 // on Acc_StatusChange__c
 
-type PcrStatusNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_ProjectChangeRequest__c: GQL.Value<string>;
-    Acc_PreviousProjectChangeRequestStatus__c: GQL.Value<string>;
-    Acc_NewProjectChangeRequestStatus__c: GQL.Value<string>;
-    CreatedDate: GQL.Value<string>;
-    Acc_ExternalComment__c: GQL.Value<string>;
-    Acc_CreatedByAlias__c: GQL.Value<string>;
-    Acc_ParticipantVisibility__c: GQL.Value<boolean>;
-  }>
-> | null;
+type PcrStatusNode = GQL.PartialNode<{
+  Id: string;
+  Acc_ProjectChangeRequest__c: GQL.Value<string>;
+  Acc_PreviousProjectChangeRequestStatus__c: GQL.Value<string>;
+  Acc_NewProjectChangeRequestStatus__c: GQL.Value<string>;
+  CreatedDate: GQL.Value<string>;
+  Acc_ExternalComment__c: GQL.Value<string>;
+  Acc_CreatedByAlias__c: GQL.Value<string>;
+  Acc_ParticipantVisibility__c: GQL.Value<boolean>;
+}>;
 
 type PcrStatusDtoMapping = ProjectChangeRequestStatusChangeDto & { pcrId: PcrId };
 
@@ -93,7 +91,7 @@ export function mapToPcrStatusDto<T extends PcrStatusNode, PickList extends keyo
  * Maps PcrStatus Edge to array of PcrStatus dtos.
  */
 export function mapToPcrStatusDtoArray<
-  T extends ReadonlyArray<{ node: PcrStatusNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: PcrStatusNode }>> | null,
   PickList extends keyof PcrStatusDtoMapping,
 >(
   edges: T,

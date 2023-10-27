@@ -35,55 +35,53 @@ function parseSalesForceWarningFlagUI(flagAsImageString: string): boolean {
   return flagImageOptions.has("ACC_Red_Flag");
 }
 
-type PartnerNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_AccountId__c: GQL.Value<string>;
-    Acc_AccountId__r: {
-      Name: GQL.Value<string>;
-      Id?: string | null;
-    } | null;
-    Acc_AddressBuildingName__c: GQL.Value<string>;
-    Acc_AddressLocality__c: GQL.Value<string>;
-    Acc_AccountNumber__c: GQL.Value<string>;
-    Acc_AddressPostcode__c: GQL.Value<string>;
-    Acc_AddressStreet__c: GQL.Value<string>;
-    Acc_AddressTown__c: GQL.Value<string>;
-    Acc_AuditReportFrequency__c: GQL.Value<string>;
-    Acc_Award_Rate__c: GQL.Value<number>;
-    Acc_BankCheckCompleted__c: GQL.ValueAndLabel<string>;
-    Acc_BankCheckState__c: GQL.ValueAndLabel<string>;
-    Acc_Cap_Limit__c: GQL.Value<number>;
-    Acc_CapLimitDeferredAmount__c: GQL.Value<number>;
-    Acc_CapLimitDeferredGrant__c: GQL.Value<number>;
-    Acc_StaticCapLimitGrant__c: GQL.Value<number>;
-    Acc_FirstName__c: GQL.Value<string>;
-    Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
-    Acc_LastName__c: GQL.Value<string>;
-    Acc_NewForecastNeeded__c: GQL.Value<boolean>;
-    Acc_NonfundedParticipant__c: GQL.Value<boolean>;
-    Acc_OpenClaimStatus__c: GQL.Value<string>;
-    Acc_OrganisationType__c: GQL.Value<string>;
-    Acc_Overdue_Project__c: GQL.Value<string>;
-    Acc_OverheadRate__c: GQL.Value<number>;
-    Acc_ParticipantStatus__c: GQL.ValueAndLabel<string>;
-    Acc_ParticipantType__c: GQL.Value<string>;
-    Acc_Postcode__c: GQL.Value<string>;
-    Acc_ProjectId__c: GQL.Value<string>;
-    Acc_ProjectRole__c: GQL.Value<string>;
-    Acc_RegistrationNumber__c: GQL.Value<string>;
-    Acc_RemainingParticipantGrant__c: GQL.Value<number>;
-    Acc_SortCode__c: GQL.Value<string>;
-    Acc_SpendProfileCompleted__c: GQL.ValueAndLabel<string>;
-    Acc_TotalApprovedCosts__c: GQL.Value<number>;
-    Acc_TotalCostsSubmitted__c: GQL.Value<number>;
-    Acc_TotalFutureForecastsForParticipant__c: GQL.Value<number>;
-    Acc_TotalGrantApproved__c: GQL.Value<number>;
-    Acc_TotalParticipantCosts__c: GQL.Value<number>;
-    Acc_TotalPrepayment__c: GQL.Value<number>;
-    Acc_TrackingClaims__c: GQL.Value<string>;
-  }>
-> | null;
+type PartnerNode = GQL.PartialNode<{
+  Id: string;
+  Acc_AccountId__c: GQL.Value<string>;
+  Acc_AccountId__r: GQL.Maybe<{
+    Name: GQL.Value<string>;
+    Id?: string | null;
+  }>;
+  Acc_AddressBuildingName__c: GQL.Value<string>;
+  Acc_AddressLocality__c: GQL.Value<string>;
+  Acc_AccountNumber__c: GQL.Value<string>;
+  Acc_AddressPostcode__c: GQL.Value<string>;
+  Acc_AddressStreet__c: GQL.Value<string>;
+  Acc_AddressTown__c: GQL.Value<string>;
+  Acc_AuditReportFrequency__c: GQL.Value<string>;
+  Acc_Award_Rate__c: GQL.Value<number>;
+  Acc_BankCheckCompleted__c: GQL.ValueAndLabel<string>;
+  Acc_BankCheckState__c: GQL.ValueAndLabel<string>;
+  Acc_Cap_Limit__c: GQL.Value<number>;
+  Acc_CapLimitDeferredAmount__c: GQL.Value<number>;
+  Acc_CapLimitDeferredGrant__c: GQL.Value<number>;
+  Acc_StaticCapLimitGrant__c: GQL.Value<number>;
+  Acc_FirstName__c: GQL.Value<string>;
+  Acc_ForecastLastModifiedDate__c: GQL.Value<string>;
+  Acc_LastName__c: GQL.Value<string>;
+  Acc_NewForecastNeeded__c: GQL.Value<boolean>;
+  Acc_NonfundedParticipant__c: GQL.Value<boolean>;
+  Acc_OpenClaimStatus__c: GQL.Value<string>;
+  Acc_OrganisationType__c: GQL.Value<string>;
+  Acc_Overdue_Project__c: GQL.Value<string>;
+  Acc_OverheadRate__c: GQL.Value<number>;
+  Acc_ParticipantStatus__c: GQL.ValueAndLabel<string>;
+  Acc_ParticipantType__c: GQL.Value<string>;
+  Acc_Postcode__c: GQL.Value<string>;
+  Acc_ProjectId__c: GQL.Value<string>;
+  Acc_ProjectRole__c: GQL.Value<string>;
+  Acc_RegistrationNumber__c: GQL.Value<string>;
+  Acc_RemainingParticipantGrant__c: GQL.Value<number>;
+  Acc_SortCode__c: GQL.Value<string>;
+  Acc_SpendProfileCompleted__c: GQL.ValueAndLabel<string>;
+  Acc_TotalApprovedCosts__c: GQL.Value<number>;
+  Acc_TotalCostsSubmitted__c: GQL.Value<number>;
+  Acc_TotalFutureForecastsForParticipant__c: GQL.Value<number>;
+  Acc_TotalGrantApproved__c: GQL.Value<number>;
+  Acc_TotalParticipantCosts__c: GQL.Value<number>;
+  Acc_TotalPrepayment__c: GQL.Value<number>;
+  Acc_TrackingClaims__c: GQL.Value<string>;
+}>;
 
 type PartnerDtoMapping = Pick<
   PartnerDtoGql,
@@ -322,7 +320,7 @@ export function mapToPartnerDto<TNode extends PartnerNode, TPickList extends key
  * PartnerRoles object must be supplied as separate argument
  */
 export function mapToPartnerDtoArray<
-  TNode extends ReadonlyArray<{ node: PartnerNode } | null> | null,
+  TNode extends ReadonlyArray<GQL.Maybe<{ node: PartnerNode }>> | null,
   TPickList extends keyof PartnerDtoMapping,
 >(
   partnerEdges: TNode,

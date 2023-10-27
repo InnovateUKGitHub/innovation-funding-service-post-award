@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a6ccbb4dc2d13380c6bb8fff2c90b383>>
+ * @generated SignedSource<<ae07ed1807d39bbf1e7f5e3085e9bd08>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,41 +16,41 @@ export type ClaimPeriodDateFragment$data = {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_ProjectPeriodEndDate__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodStartDate__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ClaimPeriodDate_ProjectParticipant: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_AccountId__r: {
             readonly Name: {
-              readonly value: string | null;
-            } | null;
-          } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
           readonly Acc_ParticipantStatus__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectRole__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentType": "ClaimPeriodDateFragment";
 };

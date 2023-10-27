@@ -1,10 +1,7 @@
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { monitoringReportDashboardQuery } from "./MonitoringReportDashboard.query";
-import {
-  MonitoringReportDashboardQuery,
-  MonitoringReportDashboardQuery$data,
-} from "./__generated__/MonitoringReportDashboardQuery.graphql";
+import { MonitoringReportDashboardQuery } from "./__generated__/MonitoringReportDashboardQuery.graphql";
 import { useMemo } from "react";
 import { MonitoringReportStatus } from "@framework/constants/monitoringReportStatus";
 import { ProjectStatus } from "@framework/constants/project";
@@ -17,8 +14,6 @@ const currentStatuses = [
   MonitoringReportStatus.Queried,
   MonitoringReportStatus.AwaitingApproval,
 ];
-
-type ProjectGql = GQL.NodeSelector<MonitoringReportDashboardQuery$data, "Acc_Project__c">;
 
 export type Project = {
   id: ProjectId;
@@ -50,7 +45,7 @@ export const useMonitoringReportDashboardQuery = (projectId: ProjectId) => {
   );
 
   return useMemo(() => {
-    const { node: projectNode } = getFirstEdge<ProjectGql>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+    const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
     const project = mapToProjectDto(projectNode, ["id", "projectNumber", "title", "status"]);
 

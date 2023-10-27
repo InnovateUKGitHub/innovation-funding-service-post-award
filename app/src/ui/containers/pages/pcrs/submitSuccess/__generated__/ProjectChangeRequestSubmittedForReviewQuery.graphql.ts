@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a52bbdfb16e93841eb097a4960e58942>>
+ * @generated SignedSource<<37e35058bd08d27798b3127cb732c085>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,7 @@ export type ProjectChangeRequestSubmittedForReviewQuery$variables = {
 };
 export type ProjectChangeRequestSubmittedForReviewQuery$data = {
   readonly currentUser: {
-    readonly email: string | null;
+    readonly email: string | null | undefined;
     readonly isSystemUser: boolean;
   };
   readonly salesforce: {
@@ -25,47 +25,47 @@ export type ProjectChangeRequestSubmittedForReviewQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_LastUpdated__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_Project_Change_Requests__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Id: string;
                     readonly RecordType: {
                       readonly DeveloperName: {
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
-                  } | null;
-                } | null> | null;
-              } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly Acc_RequestNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_Status__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly CreatedDate: {
-                readonly value: string | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_NumberofPeriods__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

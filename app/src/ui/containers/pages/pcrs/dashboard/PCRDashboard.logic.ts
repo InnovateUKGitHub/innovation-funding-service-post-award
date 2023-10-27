@@ -9,8 +9,6 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 type Project = ProjectTypeSelector<PCRDashboardQuery$data>;
 type ProjectChangeRequest = ProjectChangeRequestTypeSelector<Project>;
 
-type ProjectGQL = GQL.NodeSelector<PCRDashboardQuery$data, "Acc_Project__c">;
-
 export const usePcrDashboardQuery = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<PCRDashboardQuery>(
     pcrDashboardQuery,
@@ -25,7 +23,7 @@ export const usePcrDashboardQuery = (projectId: ProjectId) => {
     },
   );
 
-  const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   const project = mapToProjectDto(projectNode, ["id", "projectNumber", "roles", "title", "status"]);
 

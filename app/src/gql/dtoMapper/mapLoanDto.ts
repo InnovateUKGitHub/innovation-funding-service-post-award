@@ -15,16 +15,14 @@ const loanStatusFromSfMap = (fieldValue: string): LoanStatus => {
   return statusValueMatch || LoanStatus.UNKNOWN;
 };
 
-type LoanNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_PeriodNumber__c: GQL.Value<number>;
-    Loan_DrawdownStatus__c: GQL.Value<string>;
-    Loan_LatestForecastDrawdown__c: GQL.Value<number>;
-    Loan_UserComments__c: GQL.Value<string>;
-    Loan_PlannedDateForDrawdown__c: GQL.Value<string>;
-  }>
-> | null;
+type LoanNode = GQL.PartialNode<{
+  Id: string;
+  Acc_PeriodNumber__c: GQL.Value<number>;
+  Loan_DrawdownStatus__c: GQL.Value<string>;
+  Loan_LatestForecastDrawdown__c: GQL.Value<number>;
+  Loan_UserComments__c: GQL.Value<string>;
+  Loan_PlannedDateForDrawdown__c: GQL.Value<string>;
+}>;
 
 type LoanDtoMapping = Pick<LoanDto, "id" | "period" | "status" | "forecastAmount" | "comments" | "requestDate">;
 
@@ -67,7 +65,7 @@ export function mapToLoanDto<T extends LoanNode, PickList extends keyof LoanDtoM
  * Maps Loan Edge to array of Loan DTOs.
  */
 export function mapToLoanDtoArray<
-  T extends ReadonlyArray<{ node: LoanNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: LoanNode }>> | null,
   PickList extends keyof LoanDtoMapping,
 >(loanEdges: T, pickList: PickList[]): Pick<LoanDtoMapping, PickList>[] {
   return (

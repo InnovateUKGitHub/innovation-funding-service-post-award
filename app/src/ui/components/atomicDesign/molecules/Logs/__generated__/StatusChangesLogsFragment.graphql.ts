@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ffb170e428aa77e747e22c697df0ff8a>>
+ * @generated SignedSource<<c974b775cf5336e8d87e313f7e3bbb43>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,39 +16,39 @@ export type StatusChangesLogsFragment$data = {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CompetitionType__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly roles: {
             readonly isFc: boolean;
             readonly isMo: boolean;
             readonly isPm: boolean;
           };
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly StatusChanges_StatusChanges?: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CreatedByAlias__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ExternalComment__c: {
-            readonly value: any | null;
-          } | null;
+            readonly value: any | null | undefined;
+          } | null | undefined;
           readonly Acc_NewClaimStatus__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ParticipantVisibility__c: {
-            readonly value: boolean | null;
-          } | null;
+            readonly value: boolean | null | undefined;
+          } | null | undefined;
           readonly CreatedDate: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentType": "StatusChangesLogsFragment";
 };

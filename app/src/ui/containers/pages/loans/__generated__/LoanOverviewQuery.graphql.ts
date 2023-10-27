@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1237928c64920c9c611edbca70248926>>
+ * @generated SignedSource<<7fed08049951dbd4e4e71b6b7c798da4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,33 +20,33 @@ export type LoanOverviewQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_PeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Loan_DrawdownStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Loan_LatestForecastDrawdown__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Loan_PlannedDateForDrawdown__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Loan_UserComments__c: {
-                readonly value: any | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly isActive: boolean;
               readonly roles: {
@@ -54,9 +54,9 @@ export type LoanOverviewQuery$data = {
                 readonly isMo: boolean;
                 readonly isPm: boolean;
               };
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

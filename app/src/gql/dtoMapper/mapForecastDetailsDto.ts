@@ -4,19 +4,17 @@ import { Clock, salesforceDateFormat } from "@framework/util/clock";
 
 const clock = new Clock();
 
-type ForecastDetailsNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_CostCategory__c: GQL.Value<string>;
-    Acc_LatestForecastCost__c: GQL.Value<number>;
-    Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
-    Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
-    Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-    RecordType: {
-      DeveloperName: GQL.Value<string>;
-    } | null;
-  }>
-> | null;
+type ForecastDetailsNode = GQL.PartialNode<{
+  Id: string;
+  Acc_CostCategory__c: GQL.Value<string>;
+  Acc_LatestForecastCost__c: GQL.Value<number>;
+  Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
+  Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
+  Acc_ProjectPeriodNumber__c: GQL.Value<number>;
+  RecordType: GQL.Maybe<{
+    DeveloperName: GQL.Value<string>;
+  }>;
+}>;
 
 type ForecastDetailsDtoMapping = ForecastDetailsDTO;
 
@@ -59,7 +57,7 @@ export function mapToForecastDetailsDto<
  * Maps ForecastDetails Edge to array of Loan DTOs.
  */
 export function mapToForecastDetailsDtoArray<
-  T extends ReadonlyArray<{ node: ForecastDetailsNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ForecastDetailsNode }>> | null,
   PickList extends keyof ForecastDetailsDtoMapping,
 >(edges: T, pickList: PickList[]): Pick<ForecastDetailsDtoMapping, PickList>[] {
   return (

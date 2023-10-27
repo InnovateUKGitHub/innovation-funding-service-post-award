@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1f891395e2a1b0e2ddcb81eba8d4db12>>
+ * @generated SignedSource<<0ac36bed637fe383ea1d5b8e774fc69b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,42 +21,42 @@ export type ProjectSetupQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectParticipantsProject__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_BankCheckCompleted__c: {
-                      readonly label: string | null;
-                      readonly value: string | null;
-                    } | null;
+                      readonly label: string | null | undefined;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_BankCheckState__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ParticipantStatus__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_Postcode__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_SpendProfileCompleted__c: {
-                      readonly label: string | null;
-                      readonly value: string | null;
-                    } | null;
+                      readonly label: string | null | undefined;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Id: string;
-                  } | null;
-                } | null> | null;
-              } | null;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

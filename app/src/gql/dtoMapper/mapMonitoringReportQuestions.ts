@@ -1,17 +1,15 @@
 import { MonitoringReportQuestionGqlDto, MonitoringReportOptionDto } from "@framework/dtos/monitoringReportDto";
 
-type MonitoringReportQuestionNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_QuestionName__c: GQL.Value<string>;
-    Acc_DisplayOrder__c: GQL.Value<number>;
-    Acc_QuestionScore__c: GQL.Value<number>;
-    Acc_QuestionText__c: GQL.Value<string>;
-    Acc_QuestionDescription__c: GQL.Value<string>;
-    Acc_ActiveFlag__c: GQL.Value<boolean>;
-    Acc_ScoredQuestion__c: GQL.Value<boolean>;
-  }>
-> | null;
+type MonitoringReportQuestionNode = GQL.PartialNode<{
+  Id: string;
+  Acc_QuestionName__c: GQL.Value<string>;
+  Acc_DisplayOrder__c: GQL.Value<number>;
+  Acc_QuestionScore__c: GQL.Value<number>;
+  Acc_QuestionText__c: GQL.Value<string>;
+  Acc_QuestionDescription__c: GQL.Value<string>;
+  Acc_ActiveFlag__c: GQL.Value<boolean>;
+  Acc_ScoredQuestion__c: GQL.Value<boolean>;
+}>;
 
 type MonitoringReportQuestionMapping = Pick<
   MonitoringReportQuestionGqlDto,
@@ -66,7 +64,7 @@ export function mapToMonitoringReportQuestionDto<
  * Maps monitoring report edges to array of MonitoringReport DTOs.
  */
 export function mapToMonitoringReportQuestionDtoArray<
-  T extends ReadonlyArray<{ node: MonitoringReportQuestionNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: MonitoringReportQuestionNode }>> | null,
   PickList extends keyof MonitoringReportQuestionMapping,
 >(edges: T, pickList: PickList[]): Pick<MonitoringReportQuestionMapping, PickList>[] {
   return (

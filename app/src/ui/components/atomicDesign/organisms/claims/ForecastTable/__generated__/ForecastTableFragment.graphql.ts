@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dcedce59dd29cd8260c6daefbbe08ad6>>
+ * @generated SignedSource<<3d5c805242d2d2196f5adfa369ce51b0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,186 +16,186 @@ export type ForecastTableFragment$data = {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_ClaimStatus__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastTable_ClaimDetails: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_ClaimStatus__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_CostCategory__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_PeriodCostCategoryTotal__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodEndDate__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodStartDate__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastTable_ClaimsForIarDue: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_IARRequired__c: {
-            readonly value: boolean | null;
-          } | null;
+            readonly value: boolean | null | undefined;
+          } | null | undefined;
           readonly Acc_IAR_Status__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastTable_CostCategory: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CompetitionType__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_CostCategoryName__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_DisplayOrder__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_OrganisationType__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastTable_ForecastDetails: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CostCategory__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_LatestForecastCost__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodEndDate__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodStartDate__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastTable_GolCosts: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CostCategoryGOLCost__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_CostCategory__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastTable_Partner: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_AccountId__r: {
             readonly Name: {
-              readonly value: string | null;
-            } | null;
-          } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
           readonly Acc_OrganisationType__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_OverheadRate__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ParticipantStatus__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectRole__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastTable_ProfileForCostCategory: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CostCategory__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastTable_Project: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_ClaimFrequency__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_CompetitionType__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_CurrentPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_NumberofPeriods__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Id: string;
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentType": "ForecastTableFragment";
 };

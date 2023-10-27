@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9a2766a0b83680f45824866c18a22c13>>
+ * @generated SignedSource<<f46e9d35bc3acaa913e1554f8f993450>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,18 +20,18 @@ export type MonitoringReportCreateQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CurrentPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

@@ -10,25 +10,23 @@ import { Claims } from "@framework/constants/recordTypes";
 
 const clock = new Clock();
 
-type ClaimDetailsNode = Readonly<
-  Partial<{
-    Acc_ClaimStatus__c: GQL.Value<string>;
-    Acc_CostCategory__c: GQL.Value<string>;
-    Acc_PeriodCostCategoryTotal__c: GQL.Value<number>;
-    Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
-    Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-    Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
-    Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
-    Acc_ReasonForDifference__c: GQL.Value<string>;
-    Impact_Management_Participation__c: GQL.Value<string>;
-    Owner: {
-      Email?: GQL.Value<string>;
-    } | null;
-    RecordType: {
-      DeveloperName: GQL.Value<string>;
-    } | null;
-  }>
-> | null;
+type ClaimDetailsNode = GQL.PartialNode<{
+  Acc_ClaimStatus__c: GQL.Value<string>;
+  Acc_CostCategory__c: GQL.Value<string>;
+  Acc_PeriodCostCategoryTotal__c: GQL.Value<number>;
+  Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
+  Acc_ProjectPeriodNumber__c: GQL.Value<number>;
+  Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
+  Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
+  Acc_ReasonForDifference__c: GQL.Value<string>;
+  Impact_Management_Participation__c: GQL.Value<string>;
+  Owner: GQL.Maybe<{
+    Email?: GQL.Value<string>;
+  }>;
+  RecordType: GQL.Maybe<{
+    DeveloperName: GQL.Value<string>;
+  }>;
+}>;
 
 type ClaimDetailsDtoMapping = Pick<
   ClaimDetailsDto,
@@ -105,7 +103,7 @@ export function mapToClaimDetailsDto<T extends ClaimDetailsNode, PickList extend
  * It is filtered for correct Record Type of "Claim Detail"
  */
 export function mapToClaimDetailsDtoArray<
-  T extends ReadonlyArray<{ node: ClaimDetailsNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ClaimDetailsNode }>> | null,
   PickList extends keyof ClaimDetailsDtoMapping,
 >(
   edges: T,
@@ -130,7 +128,7 @@ export function mapToClaimDetailsDtoArray<
  * handler for combined claim details with line items
  */
 export function mapToClaimDetailsWithLineItemsDtoArray<
-  T extends ReadonlyArray<{ node: ClaimDetailsNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ClaimDetailsNode }>> | null,
   PickList extends keyof ClaimDetailsDtoMapping,
   ItemsPickList extends keyof ClaimLineItemDtoMapping,
 >(

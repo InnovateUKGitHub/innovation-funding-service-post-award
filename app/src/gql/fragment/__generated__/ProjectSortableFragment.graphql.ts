@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b77e4b9b432d489ef9eef5ee7c0403c1>>
+ * @generated SignedSource<<ffeaeaae3c03234a76fe75df302932a9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,14 +12,14 @@ import { InlineFragment, ReaderInlineDataFragment } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type ProjectSortableFragment$data = {
   readonly Acc_ClaimsForReview__c: {
-    readonly value: number | null;
-  } | null;
+    readonly value: number | null | undefined;
+  } | null | undefined;
   readonly Acc_PCRsForReview__c: {
-    readonly value: number | null;
-  } | null;
+    readonly value: number | null | undefined;
+  } | null | undefined;
   readonly Acc_PCRsUnderQuery__c: {
-    readonly value: number | null;
-  } | null;
+    readonly value: number | null | undefined;
+  } | null | undefined;
   readonly " $fragmentType": "ProjectSortableFragment";
 };
 export type ProjectSortableFragment$key = {

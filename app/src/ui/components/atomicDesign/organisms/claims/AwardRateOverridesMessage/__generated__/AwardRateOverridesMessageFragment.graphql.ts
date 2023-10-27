@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1a446f40a9b2b77cdba10901e98b54dc>>
+ * @generated SignedSource<<acf210eb19bc320151aab72a393de807>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,52 +16,52 @@ export type AwardRateOverridesMessageFragment$data = {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CostCategoryGOLCost__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_CostCategory__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_CostCategory__r: {
             readonly Acc_CostCategoryName__c: {
-              readonly value: string | null;
-            } | null;
-          } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
           readonly Acc_LatestForecastCost__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_OverrideAwardRate__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProfileOverrideAwardRate__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodEndDate__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodStartDate__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly AwardRateOverridesMessage_Project: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_NonFEC__c: {
-            readonly value: boolean | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+            readonly value: boolean | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentType": "AwardRateOverridesMessageFragment";
 };

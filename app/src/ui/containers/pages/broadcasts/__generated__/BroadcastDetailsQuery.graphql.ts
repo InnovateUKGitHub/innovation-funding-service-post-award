@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9f9139f01188020ff5c88904f6eda61a>>
+ * @generated SignedSource<<f8144fe543e8533ea10acf6885702277>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,19 +20,19 @@ export type BroadcastDetailsQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_EndDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_Message__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_StartDate__c: {
-                readonly value: string | null;
-              } | null;
-              readonly DisplayValue: string | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly DisplayValue: string | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

@@ -5,7 +5,7 @@ import { Clock } from "@framework/util/clock";
 const clock = new Clock();
 
 // on Acc_StatusChange__c
-type ClaimStatusChangeNode = Readonly<Partial<{
+type ClaimStatusChangeNode = GQL.PartialNode<{
   Id: string;
   Acc_Claim__c: GQL.Value<string>;
   Acc_PreviousClaimStatus__c: GQL.Value<string>;
@@ -14,7 +14,7 @@ type ClaimStatusChangeNode = Readonly<Partial<{
   Acc_ParticipantVisibility__c: GQL.Value<boolean>;
   Acc_CreatedByAlias__c: GQL.Value<string>;
   CreatedDate: GQL.Value<string>;
-}> | null> | null;
+}>;
 
 const mapper: GQL.DtoMapper<
   ClaimStatusChangeDto,
@@ -86,7 +86,7 @@ export function mapToClaimStatusChangeDto<T extends ClaimStatusChangeNode, PickL
  * Maps ClaimStatusChanged Edge to array of ClaimStatusChange DTOs.
  */
 export function mapToClaimStatusChangeDtoArray<
-  T extends ReadonlyArray<{ node: ClaimStatusChangeNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ClaimStatusChangeNode }>> | null,
   PickList extends keyof ClaimStatusChangeDto,
 >(
   edges: T,

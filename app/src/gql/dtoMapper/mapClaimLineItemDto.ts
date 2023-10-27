@@ -7,23 +7,21 @@ const clock = new Clock();
 
 // on Acc_Claims__c
 
-type ClaimLineItemNode = Readonly<
-  Partial<{
-    Id: string | null;
-    Acc_LineItemDescription__c: GQL.Value<string>;
-    Acc_LineItemCost__c: GQL.Value<number>;
-    Acc_ProjectParticipant__c: GQL.Value<string>;
-    Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-    Acc_CostCategory__c: GQL.Value<string>;
-    LastModifiedDate: GQL.Value<string>;
-    Owner: {
-      Email?: GQL.Value<string>;
-    } | null;
-    RecordType: {
-      DeveloperName: GQL.Value<string>;
-    } | null;
-  }>
-> | null;
+type ClaimLineItemNode = GQL.PartialNode<{
+  Id: string | null;
+  Acc_LineItemDescription__c: GQL.Value<string>;
+  Acc_LineItemCost__c: GQL.Value<number>;
+  Acc_ProjectParticipant__c: GQL.Value<string>;
+  Acc_ProjectPeriodNumber__c: GQL.Value<number>;
+  Acc_CostCategory__c: GQL.Value<string>;
+  LastModifiedDate: GQL.Value<string>;
+  Owner: GQL.Maybe<{
+    Email?: GQL.Value<string>;
+  }>;
+  RecordType: GQL.Maybe<{
+    DeveloperName: GQL.Value<string>;
+  }>;
+}>;
 
 export type ClaimLineItemDtoMapping = Pick<
   ClaimLineItemDto,
@@ -91,7 +89,7 @@ export function mapToClaimLineItemDto<T extends ClaimLineItemNode, PickList exte
  * It is filtered for correct Record Type of "Claim Detail"
  */
 export function mapToClaimLineItemDtoArray<
-  T extends ReadonlyArray<{ node: ClaimLineItemNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ClaimLineItemNode }>> | null,
   PickList extends keyof ClaimLineItemDtoMapping,
 >(
   edges: T,

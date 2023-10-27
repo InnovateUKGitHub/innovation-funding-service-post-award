@@ -6,10 +6,7 @@ import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { claimDocumentsQuery } from "./ClaimDocuments.query";
-import { ClaimDocumentsQuery, ClaimDocumentsQuery$data } from "./__generated__/ClaimDocumentsQuery.graphql";
-
-type ProjectGQL = GQL.NodeSelector<ClaimDocumentsQuery$data, "Acc_Project__c">;
-type ClaimGQL = GQL.NodeSelector<ClaimDocumentsQuery$data, "Acc_Claims__c">;
+import { ClaimDocumentsQuery } from "./__generated__/ClaimDocumentsQuery.graphql";
 
 export const useClaimDocumentsQuery = (
   { projectId, partnerId, periodId }: ClaimKey,
@@ -21,8 +18,8 @@ export const useClaimDocumentsQuery = (
     refreshedQueryOptions,
   );
 
-  const { node: projectNode } = getFirstEdge<ProjectGQL>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
-  const { node: claimNode } = getFirstEdge<ClaimGQL>(data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges);
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: claimNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges);
 
   const project = mapToProjectDto(projectNode, [
     "id",

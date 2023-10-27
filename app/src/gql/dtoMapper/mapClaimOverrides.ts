@@ -12,25 +12,25 @@ import {
 // NAME period type = "Total Project Period"
 
 // on Acc_Profile__c
-type ClaimOverrideNode = Readonly<Partial<{
+type ClaimOverrideNode = GQL.PartialNode<{
   Id: string;
-  RecordType: {
+  RecordType: GQL.Maybe<{
     DeveloperName?: GQL.Value<string>;
-  } | null;
+  }>;
   Acc_OverrideAwardRate__c: GQL.Value<number>;
   Acc_CostCategoryName__c: GQL.Value<string>;
   Acc_ProfileOverrideAwardRate__c: GQL.Value<number>;
   Acc_CostCategory__c: GQL.Value<string>;
-  Acc_CostCategory__r: {
+  Acc_CostCategory__r: GQL.Maybe<{
     Acc_CostCategoryName__c?: GQL.Value<string>;
-  } | null;
+  }>;
   Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-}> | null> | null;
+}>;
 
 /**
  * Maps ClaimOverride Edge to array of ClaimOverride DTOs.
  */
-export function mapToClaimOverrides<T extends ReadonlyArray<{ node: ClaimOverrideNode } | null> | null>(edges: T) {
+export function mapToClaimOverrides<T extends ReadonlyArray<GQL.Maybe<{ node: ClaimOverrideNode }>> | null>(edges: T) {
   const allTotalCostCategory =
     edges?.filter(node => node?.node?.RecordType?.DeveloperName?.value === Profile.totalCostCategory) ?? [];
   const allTotalPeriod =

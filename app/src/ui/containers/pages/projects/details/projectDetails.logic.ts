@@ -1,12 +1,10 @@
 import { useLazyLoadQuery } from "react-relay";
 import { projectDetailsQuery } from "./ProjectDetails.query";
-import { ProjectDetailsQuery, ProjectDetailsQuery$data } from "./__generated__/ProjectDetailsQuery.graphql";
+import { ProjectDetailsQuery } from "./__generated__/ProjectDetailsQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToContactDtoArray } from "@gql/dtoMapper/mapContactDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-
-type ProjectGql = GQL.NodeSelector<ProjectDetailsQuery$data, "Acc_Project__c">;
 
 export const useProjectDetailsQuery = (projectId: ProjectId) => {
   const data = useLazyLoadQuery<ProjectDetailsQuery>(
@@ -17,7 +15,7 @@ export const useProjectDetailsQuery = (projectId: ProjectId) => {
     },
   );
 
-  const { node: projectNode } = getFirstEdge<ProjectGql>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
   const partnersGql = projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? [];
   const contactsGql = projectNode?.Project_Contact_Links__r?.edges ?? [];

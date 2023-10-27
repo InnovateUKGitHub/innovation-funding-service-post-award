@@ -32,50 +32,48 @@ const mapClaimFrequencyToEnum = (freq: string): ClaimFrequency => {
   }
 };
 
-type ProjectNode = Readonly<
-  Partial<{
-    Id: string;
-    roles: SfRoles & {
-      isSalesforceSystemUser?: boolean | null;
-      partnerRoles?: ReadonlyArray<SfRoles & { partnerId: string }>;
-    };
-    isActive: boolean;
-    Acc_ClaimFrequency__c: GQL.Value<string>;
-    Acc_ClaimsForReview__c: GQL.Value<number>;
-    Acc_ClaimsOverdue__c: GQL.Value<number>;
-    Acc_ClaimsUnderQuery__c: GQL.Value<number>;
-    Acc_CompetitionType__c: GQL.Value<string>;
-    Acc_CompetitionId__r: {
-      Name?: GQL.Value<string>;
-      Acc_TypeofAid__c?: GQL.Value<string>;
-    } | null;
-    Acc_CurrentPeriodEndDate__c: GQL.Value<string>;
-    Acc_CurrentPeriodNumber__c: GQL.Value<number>;
-    Acc_CurrentPeriodStartDate__c: GQL.Value<string>;
-    Acc_Duration__c: GQL.Value<number>;
-    Acc_EndDate__c: GQL.Value<string>;
-    Acc_GOLTotalCostAwarded__c: GQL.Value<number>;
-    Acc_LeadParticipantID__c: GQL.Value<string>;
-    Acc_LeadParticipantName__c: GQL.Value<string>;
-    Acc_NonFEC__c: GQL.Value<boolean>;
-    Acc_NumberOfOpenClaims__c: GQL.Value<number>;
-    Acc_NumberofPeriods__c: GQL.Value<number>;
-    Acc_PCRsForReview__c: GQL.Value<number>;
-    Acc_PCRsUnderQuery__c: GQL.Value<number>;
-    Acc_ProjectNumber__c: GQL.Value<string>;
-    Acc_ProjectStatus__c: GQL.ValueAndLabel<string>;
-    Acc_ProjectSummary__c: GQL.Value<string>;
-    Acc_ProjectTitle__c: GQL.Value<string>;
-    Acc_StartDate__c: GQL.Value<string>;
-    Acc_TotalProjectCosts__c: GQL.Value<number>;
-    Acc_MonitoringLevel__c: GQL.Value<string>;
-    Loan_LoanAvailabilityPeriodLength__c: GQL.Value<number>;
-    Loan_LoanEndDate__c: GQL.Value<string>;
-    Loan_LoanExtensionPeriodLength__c: GQL.Value<number>;
-    Loan_LoanRepaymentPeriodLength__c: GQL.Value<number>;
-    Impact_Management_Participation__c: GQL.Value<string>;
-  }>
-> | null;
+type ProjectNode = GQL.PartialNode<{
+  Id: string;
+  roles: SfRoles & {
+    isSalesforceSystemUser?: boolean | null;
+    partnerRoles?: ReadonlyArray<SfRoles & { partnerId: string }>;
+  };
+  isActive: boolean;
+  Acc_ClaimFrequency__c: GQL.Value<string>;
+  Acc_ClaimsForReview__c: GQL.Value<number>;
+  Acc_ClaimsOverdue__c: GQL.Value<number>;
+  Acc_ClaimsUnderQuery__c: GQL.Value<number>;
+  Acc_CompetitionType__c: GQL.Value<string>;
+  Acc_CompetitionId__r: GQL.Maybe<{
+    Name?: GQL.Value<string>;
+    Acc_TypeofAid__c?: GQL.Value<string>;
+  }>;
+  Acc_CurrentPeriodEndDate__c: GQL.Value<string>;
+  Acc_CurrentPeriodNumber__c: GQL.Value<number>;
+  Acc_CurrentPeriodStartDate__c: GQL.Value<string>;
+  Acc_Duration__c: GQL.Value<number>;
+  Acc_EndDate__c: GQL.Value<string>;
+  Acc_GOLTotalCostAwarded__c: GQL.Value<number>;
+  Acc_LeadParticipantID__c: GQL.Value<string>;
+  Acc_LeadParticipantName__c: GQL.Value<string>;
+  Acc_NonFEC__c: GQL.Value<boolean>;
+  Acc_NumberOfOpenClaims__c: GQL.Value<number>;
+  Acc_NumberofPeriods__c: GQL.Value<number>;
+  Acc_PCRsForReview__c: GQL.Value<number>;
+  Acc_PCRsUnderQuery__c: GQL.Value<number>;
+  Acc_ProjectNumber__c: GQL.Value<string>;
+  Acc_ProjectStatus__c: GQL.ValueAndLabel<string>;
+  Acc_ProjectSummary__c: GQL.Value<string>;
+  Acc_ProjectTitle__c: GQL.Value<string>;
+  Acc_StartDate__c: GQL.Value<string>;
+  Acc_TotalProjectCosts__c: GQL.Value<number>;
+  Acc_MonitoringLevel__c: GQL.Value<string>;
+  Loan_LoanAvailabilityPeriodLength__c: GQL.Value<number>;
+  Loan_LoanEndDate__c: GQL.Value<string>;
+  Loan_LoanExtensionPeriodLength__c: GQL.Value<number>;
+  Loan_LoanRepaymentPeriodLength__c: GQL.Value<number>;
+  Impact_Management_Participation__c: GQL.Value<string>;
+}>;
 
 type ProjectDtoMapping = Pick<
   ProjectDtoGql,

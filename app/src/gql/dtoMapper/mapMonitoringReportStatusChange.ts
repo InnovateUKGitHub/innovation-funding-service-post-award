@@ -6,7 +6,7 @@ import { Clock } from "@framework/util/clock";
 const clock = new Clock();
 
 // on Acc_StatusChange__c
-type MonitoringReportStatusChangeNode = Readonly<Partial<{
+type MonitoringReportStatusChangeNode = GQL.PartialNode<{
   Id: string;
   Acc_MonitoringReport__c: GQL.Value<string>;
   Acc_NewMonitoringReportStatus__c: GQL.Value<string>;
@@ -14,7 +14,7 @@ type MonitoringReportStatusChangeNode = Readonly<Partial<{
   Acc_ExternalComment__c: GQL.Value<string>;
   Acc_CreatedByAlias__c: GQL.Value<string>;
   CreatedDate: GQL.Value<string>;
-}> | null> | null;
+}>;
 
 const mapper: GQL.DtoMapper<MonitoringReportStatusChangeDto, MonitoringReportStatusChangeNode> = {
   id(node) {
@@ -64,7 +64,7 @@ export function mapToMonitoringReportStatusChangeDto<
  * Maps MonitoringReportStatusChanged Edge to array of MonitoringReportStatusChange DTOs.
  */
 export function mapToMonitoringReportStatusChangeDtoArray<
-  T extends ReadonlyArray<{ node: MonitoringReportStatusChangeNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: MonitoringReportStatusChangeNode }>> | null,
   PickList extends keyof MonitoringReportStatusChangeDto,
 >(edges: T, pickList: PickList[]): Pick<MonitoringReportStatusChangeDto, PickList>[] {
   return (

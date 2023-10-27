@@ -1,9 +1,6 @@
 import { useLazyLoadQuery } from "react-relay";
 import { partnerDetailsEditQuery } from "./PartnerDetailsEdit.query";
-import {
-  PartnerDetailsEditQuery,
-  PartnerDetailsEditQuery$data,
-} from "../../../../components/atomicDesign/templates/PartnerDetailsEdit/__generated__/PartnerDetailsEditQuery.graphql";
+import { PartnerDetailsEditQuery } from "../../../../components/atomicDesign/templates/PartnerDetailsEdit/__generated__/PartnerDetailsEditQuery.graphql";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
@@ -13,8 +10,6 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 
-type ProjectGql = GQL.NodeSelector<PartnerDetailsEditQuery$data, "Acc_Project__c">;
-
 export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<PartnerDetailsEditQuery>(
     partnerDetailsEditQuery,
@@ -22,7 +17,7 @@ export const usePartnerDetailsEditQuery = (projectId: ProjectId, partnerId: Part
     { fetchPolicy: "network-only" },
   );
 
-  const { node: projectNode } = getFirstEdge<ProjectGql>(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: partnerNode } = getFirstEdge(projectNode?.Acc_ProjectParticipantsProject__r?.edges);
 
   const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title"]);

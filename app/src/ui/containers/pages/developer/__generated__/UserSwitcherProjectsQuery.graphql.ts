@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<07a861d0db8dcc63b725ce2119f8ffb6>>
+ * @generated SignedSource<<ae2a1f540f76bcfc4273c998d8cf3848>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,7 +10,7 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type UserSwitcherProjectsQuery$variables = {
-  search?: string | null;
+  search?: string | null | undefined;
 };
 export type UserSwitcherProjectsQuery$data = {
   readonly salesforce: {
@@ -21,20 +21,20 @@ export type UserSwitcherProjectsQuery$data = {
             readonly node: {
               readonly Acc_CompetitionId__r: {
                 readonly Acc_CompetitionType__c: {
-                  readonly displayValue: string | null;
-                } | null;
-              } | null;
+                  readonly displayValue: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectTitle__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
           readonly totalCount: number;
-        } | null;
+        } | null | undefined;
       };
     };
   };

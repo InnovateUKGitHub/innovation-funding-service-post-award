@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3b2678a926bb6aef38fc7d4f5613b154>>
+ * @generated SignedSource<<96d719b8e36514ba0e787d4ff08de377>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,10 +9,10 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type UserSwitcherCurrentUserQuery$variables = {};
+export type UserSwitcherCurrentUserQuery$variables = Record<PropertyKey, never>;
 export type UserSwitcherCurrentUserQuery$data = {
   readonly currentUser: {
-    readonly email: string | null;
+    readonly email: string | null | undefined;
     readonly isSystemUser: boolean;
   };
 };

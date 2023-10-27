@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<862ffe54e8285ff30ede836d2ae48086>>
+ * @generated SignedSource<<9789b818df8443cc2fae3102450ac6f1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -24,53 +24,53 @@ export type PcrItemWorkflowQuery$data = {
             readonly node: {
               readonly Acc_CompetitionId__r: {
                 readonly Acc_TypeofAid__c: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Project_Change_Requests__r: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly Acc_CommercialWork__c: {
-                      readonly value: boolean | null;
-                    } | null;
+                      readonly value: boolean | null | undefined;
+                    } | null | undefined;
                     readonly Acc_MarkedasComplete__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_OtherFunding__c: {
-                      readonly value: boolean | null;
-                    } | null;
+                      readonly value: boolean | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ParticipantType__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_ProjectRole__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_RequestHeader__c: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly Acc_RequestNumber__c: {
-                      readonly value: number | null;
-                    } | null;
+                      readonly value: number | null | undefined;
+                    } | null | undefined;
                     readonly Id: string;
                     readonly RecordType: {
                       readonly DeveloperName: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Name: {
-                        readonly label: string | null;
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
-                  } | null;
-                } | null> | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                        readonly label: string | null | undefined;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
       readonly " $fragmentSpreads": FragmentRefs<"NavigationArrowsFragment" | "TitleFragment">;
     };

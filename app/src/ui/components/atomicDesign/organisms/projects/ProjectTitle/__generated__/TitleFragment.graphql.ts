@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<715acdbf31d4f2592b696033886ad20a>>
+ * @generated SignedSource<<90cd217f14ac033484b5539e29a67418>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,14 +16,14 @@ export type TitleFragment$data = {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_ProjectNumber__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectTitle__c: {
-            readonly value: string | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentType": "TitleFragment";
 };

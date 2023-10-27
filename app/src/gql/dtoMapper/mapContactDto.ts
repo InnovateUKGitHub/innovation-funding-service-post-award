@@ -1,18 +1,18 @@
 import { ProjectContactDto, ProjectRoleName } from "@framework/dtos/projectContactDto";
 
-type ContactNode = Readonly<Partial<{
+type ContactNode = GQL.PartialNode<{
   Id: string;
   Acc_Role__c: GQL.ValueAndLabel<string>;
-  Acc_ContactId__r: {
+  Acc_ContactId__r: GQL.Maybe<{
     Name: GQL.Value<string>;
-  } | null;
-  Acc_UserId__r: {
+  }>;
+  Acc_UserId__r: GQL.Maybe<{
     Name: GQL.Value<string>;
-  } | null;
+  }>;
   Acc_EmailOfSFContact__c: GQL.Value<string>;
   Acc_AccountId__c: GQL.Value<string>;
   Acc_ProjectId__c: GQL.Value<string>;
-}> | null> | null;
+}>;
 
 type ContactDtoMapping = Pick<
   ProjectContactDto,
@@ -67,7 +67,7 @@ export function mapToContactDto<T extends ContactNode, PickList extends keyof Co
  * Maps Contact Edge to array of Contact DTOs.
  */
 export function mapToContactDtoArray<
-  T extends ReadonlyArray<{ node: ContactNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ContactNode }>> | null,
   PickList extends keyof ContactDtoMapping,
 >(edges: T, pickList: PickList[]): Pick<ContactDtoMapping, PickList>[] {
   return (

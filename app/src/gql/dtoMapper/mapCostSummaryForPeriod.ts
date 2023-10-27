@@ -4,10 +4,10 @@ import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 
 // on Acc_CostCategory__C
-type CostsSummaryForPeriodNode = Readonly<Partial<{
-  Id: string;
+type CostsSummaryForPeriodNode = GQL.PartialNode<{
+  Id: GQL.Maybe<string>;
   Acc_OverrideAwardRate__c: GQL.Value<number>;
-}> | null> | null;
+}>;
 
 const mapper: GQL.DtoMapper<
   CostsSummaryForPeriodDto,
@@ -97,7 +97,7 @@ export function mapToCostSummaryForPeriodDto<
  * Maps CostSummaryForPeriod Edge to array of CostSummaryForPeriod DTOs.
  */
 export function mapToCostSummaryForPeriodDtoArray<
-  T extends ReadonlyArray<{ node: CostsSummaryForPeriodNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: CostsSummaryForPeriodNode }>> | null,
   PickList extends keyof CostsSummaryForPeriodDto,
 >(
   edges: T,
