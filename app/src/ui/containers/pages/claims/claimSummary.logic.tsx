@@ -84,7 +84,6 @@ export const useClaimSummaryData = (
     ],
     {},
   );
-  console.log("claim", claim);
 
   const costCategoriesOrder = costCategories.map(y => y.id);
 

@@ -13,13 +13,11 @@ export const totalCostsClaimedFragment = graphql`
           ]
         }
         first: 2000
-        orderBy: {
-          Acc_ProjectParticipant__r: { Acc_AccountId__r: { Name: { order: ASC } } }
-          Acc_ProjectPeriodNumber__c: { order: ASC }
-        }
+        orderBy: { Acc_CostCategory__c: { order: ASC }, Acc_ProjectPeriodNumber__c: { order: ASC } }
       ) {
         edges {
           node {
+            Id
             RecordType {
               DeveloperName {
                 value
