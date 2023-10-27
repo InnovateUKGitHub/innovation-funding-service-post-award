@@ -1,5 +1,5 @@
 import { testEach } from "support/methods";
-import { euiCostCleanUp } from "common/euiCostCleanUp";
+import { euiCostCleanUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
   additionalInformationHeading,

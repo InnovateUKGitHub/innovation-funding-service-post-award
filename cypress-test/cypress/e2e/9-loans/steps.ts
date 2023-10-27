@@ -743,3 +743,97 @@ export const loansForecastCopyPaste = () => {
   cy.button("Continue to summary").click();
   cy.validationLink("Forecast is required.");
 };
+
+export const loansCostsPageNavigate = () => {
+  cy.selectTile("Project Costs");
+  cy.heading("Project costs");
+  cy.get("a").contains("Edit").click();
+  cy.heading("Costs for this period");
+};
+
+export const navigateToSummary = () => {
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
+  cy.button("Continue to summary").click();
+  cy.heading("Costs summary");
+};
+
+export const workingBackLink = () => {
+  cy.backLink("Back to update forecast").click();
+  cy.heading("Update forecast");
+  cy.button("Continue to summary").click();
+  cy.heading("Costs summary");
+};
+
+export const correctCostListforPeriod = () => {
+  [
+    ["Total costs for period", "£115,000.00"],
+    ["Funding level", "65.00%"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key).contains(item);
+  });
+};
+
+export const loansForecastCosts = () => {
+  cy.get("h3").contains("Forecast");
+  [
+    ["Total eligible costs", "£115,000.00"],
+    ["Total of forecasts and costs", "£115,000.00"],
+    ["Difference", "£0.00 (0.00%)"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key).contains(item);
+  });
+};
+
+export const updateLoansCosts = () => {
+  cy.get("a").contains("Loans costs for Industrial participants").click();
+  cy.heading("Loans costs for Industrial participants");
+  cy.get("#description0").clear().type("Stuff");
+  cy.get("#value0").clear().type("11400");
+  cy.wait(500);
+  cy.button("Save and return to project costs").click();
+  cy.heading("Costs for this period");
+};
+
+export const navigateCheckForUpdatedValues = () => {
+  cy.button("Continue to costs documents").click();
+  cy.heading("Supporting evidence");
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
+  cy.button("Continue to summary").click();
+  cy.heading("Costs summary");
+  [["Total costs for period", "£114,900.00"]].forEach(([key, item]) => {
+    cy.getListItemFromKey(key).contains(item);
+  });
+  [
+    ["Total of forecasts and costs", "£114,900.00"],
+    ["Difference", "£100.00 (0.09%)"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key).contains(item);
+  });
+};
+
+export const supportingEvidence = () => {
+  cy.get("h3").contains("Supporting evidence");
+  cy.paragraph("You must upload a supporting document before you can submit this claim.");
+  cy.get("a").contains("Edit supporting evidence");
+};
+
+export const resetCosts = () => {
+  cy.get("a").contains("Edit").click();
+  cy.heading("Costs for this period");
+  cy.get("a").contains("Loans costs for Industrial participants").click();
+  cy.heading("Loans costs for Industrial participants");
+  cy.get("#description0").clear().type("Stuff");
+  cy.get("#value0").clear().type("11500");
+  cy.wait(500);
+  cy.button("Save and return to project costs").click();
+  cy.heading("Costs for this period");
+};
+
+export const navigateDocDelete = () => {
+  cy.button("Continue to costs documents").click();
+  cy.heading("Supporting evidence");
+  cy.button("Remove").click();
+  cy.validationNotification("has been removed.");
+};

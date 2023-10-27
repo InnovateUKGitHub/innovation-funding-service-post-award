@@ -1,4 +1,4 @@
-import { euiCostCleanUp } from "common/euiCostCleanUp";
+import { euiCostCleanUp } from "common/costCleanUp";
 import { claimReviewFileTidyUp, fileTidyUp } from "common/filetidyup";
 import { loremIpsum1k } from "common/lorem";
 let date = new Date();
@@ -887,7 +887,6 @@ export const claimReviewCostCat = () => {
 
 export const claimReviewForecastCostsClaiming = () => {
   cy.getByQA("forecast-table").within(() => {
-    let i = 4;
     [
       "£2,000.00",
       "£100.00",
@@ -901,9 +900,9 @@ export const claimReviewForecastCostsClaiming = () => {
       "£2,000.00",
       "£2,100.00",
       "£17,900.00",
-    ].forEach(cost => {
+    ].forEach((cost, index) => {
       cy.get("tr")
-        .eq(i++)
+        .eq(index + 4)
         .within(() => {
           cy.get("td:nth-child(2)").contains(cost);
         });
@@ -1011,7 +1010,7 @@ export const summaryCommentsAdd = () => {
 export const summaryCommentsTooMany = () => {
   cy.get("textarea").type("{moveToEnd}").type("t");
   cy.paragraph("You have 1 character too many");
-  cy.button("Save and return to claims").click();
+  cy.button("Save and return").click();
   cy.validationLink("Comments must be a maximum of 1000 characters");
 };
 
@@ -1085,4 +1084,109 @@ export const summaryCheckForCostRemoval = () => {
   cy.heading("Update forecast");
   cy.button("Continue to summary").click();
   cy.heading("Claim summary");
+};
+
+export const accessABCadClaim = () => {
+  cy.selectTile("Claims");
+  cy.heading("Claims");
+  cy.get("a").contains("Edit").click();
+  cy.heading("Costs to be claimed");
+};
+
+export const grantRetentionMessage = () => {
+  cy.validationNotification(
+    "Please be aware, approval of this claim will cause a percentage of your grant to be retained. Innovate UK will retain a portion of the grant value due for this project until the project is completed (as per the terms & conditions of your grant offer letter). To check your current retained balance, please see the financial summary area of your project dashboard.",
+  );
+  cy.validationNotification("This is the final claim.");
+};
+
+export const sbriCostCats = () => {
+  [
+    "Labour",
+    "Overheads",
+    "Materials",
+    "Capital usage",
+    "Subcontracting",
+    "Travel and subsistence",
+    "Other costs",
+    "VAT",
+  ].forEach((costCat, index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(costCat);
+      });
+  });
+};
+
+export const sbriDocGuidance = () => {
+  cy.paragraph("You need to upload the following documents here:");
+  cy.paragraph("Contact your monitoring officer for more information about what you need to provide.");
+  [
+    "VAT invoices with every claim by partners registered for value-added tax (VAT)",
+    "non-VAT invoices with every claim by partners not registered for VAT",
+    "any documents requested by your monitoring officer to support a claim",
+  ].forEach(list => {
+    cy.get("li").contains(list);
+  });
+};
+
+export const sbriFinalDocGuidance = () => {
+  [
+    "You need to complete our short survey about the project before we can make your final payment:",
+    "You need to upload the following documents here:",
+    "Contact your monitoring officer for more information about what you need to provide.",
+  ].forEach(paragraph => {
+    cy.paragraph(paragraph);
+  });
+  [
+    "Complete our survey",
+    "Download a copy of your completed survey and upload it on this page.",
+    "VAT invoices with every claim by partners registered for value-added tax (VAT)",
+    "non-VAT invoices with every claim by partners not registered for VAT",
+    "any documents requested by your monitoring officer to support a claim",
+  ].forEach(list => {
+    cy.get("li").contains(list);
+  });
+};
+
+export const correctClaimGuidance = () => {
+  cy.paragraph(
+    "In order to submit your final claim you need to submit your Project Impact questions. An email has been sent to the Finance Contact on the Project with a link to review and update the Project Impact questions.",
+  );
+  cy.paragraph(
+    "If you need more information or help to complete your Project Impact questions, see the Project Impact guidance in the ",
+  );
+  cy.paragraph(". Alternatively, you can contact our customer support service by calling 0300 321 4357 or email ");
+  cy.get("a").contains("Innovate UK Guidance for applicants");
+  cy.get("a").contains("support@iuk.ukri.org");
+};
+
+export const sbriAccessABSClaim = () => {
+  cy.selectTile("Claims");
+  cy.heading("Claims");
+  cy.paragraph(
+    "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT).",
+  );
+  cy.get("a").contains("Edit").click();
+  cy.heading("Costs to be claimed");
+};
+
+export const sbriCorrectForecastCostCat = () => {
+  [
+    "Labour",
+    "Overheads",
+    "Materials",
+    "Capital usage",
+    "Subcontracting",
+    "Travel and subsistence",
+    "Other costs",
+    "VAT",
+  ].forEach((costCat, index) => {
+    cy.get("tr")
+      .eq(index + 4)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(costCat);
+      });
+  });
 };

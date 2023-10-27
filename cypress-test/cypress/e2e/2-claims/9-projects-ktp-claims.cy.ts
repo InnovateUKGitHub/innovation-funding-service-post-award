@@ -66,8 +66,8 @@ describe("claims > KTP", () => {
   });
 
   it("Should have a Supporting statement", () => {
-    cy.get("h2").contains("Supporting statement");
-    cy.get("#comments-hint").contains(
+    cy.get("legend").contains("Supporting statement");
+    cy.get("#hint-for-comments").contains(
       "You must write a supporting statement for your claim. All supporting information for your monitoring officer and Innovate UK must be included here.",
     );
   });

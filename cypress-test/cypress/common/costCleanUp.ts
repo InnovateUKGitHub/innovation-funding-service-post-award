@@ -33,3 +33,21 @@ export const euiCostCleanUp = () => {
       }
     });
 };
+
+export const loansProjCostCleanUp = () => {
+  cy.get("tr")
+    .eq(1)
+    .then($row1 => {
+      if ($row1.text().includes("£11,400.00")) {
+        cy.log("**Clearing cost category**");
+        cy.get("a").contains("Loans costs for Industrial participants").click();
+        cy.heading("Loans costs for Industrial participants");
+        cy.get("#value0").clear().type("11500");
+        cy.wait(500);
+        cy.button("Save and return to project costs").click();
+        cy.heading("Costs for this period");
+      } else {
+        cy.heading("Costs for this period");
+      }
+    });
+};

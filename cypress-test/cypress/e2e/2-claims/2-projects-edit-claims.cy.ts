@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { euiCostCleanUp } from "common/euiCostCleanUp";
+import { euiCostCleanUp } from "common/costCleanUp";
 import { accessEUIOpenClaim, shouldShowCostCatTable, shouldShowProjectTitle } from "./steps";
 
 describe("claims > edit claims as FC", () => {
