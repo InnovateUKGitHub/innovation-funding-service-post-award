@@ -1,5 +1,5 @@
-# See https://ukri.atlassian.net/wiki/spaces/ACC/pages/194019456
-FROM docker-ifs.devops.innovateuk.org/acc/node:18.18.0
+# See https://ukri.atlassian.net/wiki/spaces/ACC/pages/64192524 - How to upgrade NodeJS
+FROM docker-ifs.devops.innovateuk.org/acc/node:18.18.2
 
 WORKDIR /app
 
