@@ -1231,3 +1231,30 @@ export const iarProceedToSummary = () => {
   cy.button("Continue to summary").click();
   cy.heading("Claim summary");
 };
+
+export const finalClaimPcfGuidance = () => {
+  cy.validationNotification("This is the final claim.");
+  cy.paragraph("You need to complete our short survey about the project before we can make your final payment:");
+  ["Complete our survey.", "Download a copy of your completed survey and upload it on this page."].forEach(li => {
+    cy.get("li").contains(li);
+  });
+};
+
+export const impactGuidance = () => {
+  cy.paragraph(
+    "In order to submit your final claim you need to submit your Project Impact questions. An email has been sent to the Finance Contact on the Project with a link to review and update the Project Impact questions.",
+  );
+  cy.paragraph(
+    "If you need more information or help to complete your Project Impact questions, see the Project Impact guidance in the ",
+  );
+  cy.paragraph(". Alternatively, you can contact our customer support service by calling 0300 321 4357 or email ");
+  cy.get("a").contains("Innovate UK Guidance for applicants");
+  cy.get("a").contains("support@iuk.ukri.org");
+};
+
+export const uploadProjectCompletionForm = () => {
+  cy.get("select#description.govuk-select").select("Project completion form");
+  cy.fileInput(testFile);
+  cy.button("Upload documents").click();
+  cy.validationNotification("has been uploaded.");
+};
