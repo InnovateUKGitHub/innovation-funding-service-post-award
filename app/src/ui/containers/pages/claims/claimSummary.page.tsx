@@ -86,6 +86,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
       status: data.claim.status,
       comments: data.claim.comments ?? "",
       button_submit: "submit",
+      documents: data.documents,
     },
     resolver: zodResolver(claimSummarySchema, { errorMap: claimSummaryErrorMap }),
   });
