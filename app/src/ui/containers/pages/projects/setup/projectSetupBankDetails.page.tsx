@@ -55,9 +55,14 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
     reValidateMode: "onBlur",
   });
 
-  const { onUpdate, apiError } = useOnUpdateProjectSetupBankDetails(props.projectId, props.partnerId, partner, {
-    setError,
-  });
+  const { onUpdate, apiError, isFetching } = useOnUpdateProjectSetupBankDetails(
+    props.projectId,
+    props.partnerId,
+    partner,
+    {
+      setError,
+    },
+  );
 
   const validationErrors = useRhfErrors<FormValues>(formState.errors);
 
@@ -88,7 +93,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
             <FormGroup>
               <Label htmlFor="companyNumber">{c(x => x.partnerLabels.companyNumber)}</Label>
               <Hint id="hint-for-companyNumber">{c(x => x.partnerLabels.companyNumberHint)}</Hint>
-              <TextInput inputWidth="one-third" {...register("companyNumber")} />
+              <TextInput disabled={isFetching} inputWidth="one-third" {...register("companyNumber")} />
             </FormGroup>
           </Fieldset>
 
@@ -97,12 +102,14 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
 
             <SortCode
               partner={partner}
+              disabled={isFetching}
               register={register}
               error={(validationErrors?.accountDetails as RhfErrors) ?? (validationErrors?.sortCode as RhfErrors)}
             />
 
             <AccountNumber
               partner={partner}
+              disabled={isFetching}
               register={register}
               error={(validationErrors?.accountDetails as RhfErrors) ?? (validationErrors?.accountNumber as RhfErrors)}
             />
@@ -115,32 +122,34 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
 
             <FormGroup>
               <Label htmlFor="accountBuilding">{c(x => x.partnerLabels.accountBuilding)}</Label>
-              <TextInput inputWidth="one-third" {...register("accountBuilding")}></TextInput>
+              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountBuilding")}></TextInput>
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="accountStreet">{c(x => x.partnerLabels.accountStreet)}</Label>
-              <TextInput inputWidth="one-third" {...register("accountStreet")}></TextInput>
+              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountStreet")}></TextInput>
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="accountLocality">{c(x => x.partnerLabels.accountLocality)}</Label>
-              <TextInput inputWidth="one-third" {...register("accountLocality")}></TextInput>
+              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountLocality")}></TextInput>
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="accountTownOrCity">{c(x => x.partnerLabels.accountTownOrCity)}</Label>
-              <TextInput inputWidth="one-third" {...register("accountTownOrCity")}></TextInput>
+              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountTownOrCity")}></TextInput>
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="accountPostcode">{c(x => x.partnerLabels.accountPostcode)}</Label>
-              <TextInput inputWidth="one-third" {...register("accountPostcode")}></TextInput>
+              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountPostcode")}></TextInput>
             </FormGroup>
           </Fieldset>
 
           <Fieldset>
-            <Button type="submit">{c(x => x.pages.projectSetupBankDetails.submitButton)}</Button>
+            <Button disabled={isFetching} type="submit">
+              {c(x => x.pages.projectSetupBankDetails.submitButton)}
+            </Button>
           </Fieldset>
         </Form>
       </Section>
@@ -160,10 +169,12 @@ const SortCode = ({
   partner,
   register,
   error,
+  disabled,
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
   register: UseFormRegister<FormValues>;
   error?: RhfErrors;
+  disabled: boolean;
 }) => {
   const { getContent: c } = useContent();
   if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
@@ -172,7 +183,12 @@ const SortCode = ({
         <Label htmlFor="sortCode">{c(x => x.partnerLabels.sortCode)}</Label>
         <Hint id="hint-for-sortCode">{c(x => x.partnerLabels.sortCodeHint)}</Hint>
         <ValidationError error={error} />
-        <TextInput hasError={!!error} inputWidth="one-third" {...register("sortCode", { required: true })}></TextInput>
+        <TextInput
+          disabled={disabled}
+          hasError={!!error}
+          inputWidth="one-third"
+          {...register("sortCode", { required: true })}
+        ></TextInput>
       </FormGroup>
     );
   }
@@ -190,9 +206,11 @@ const AccountNumber = ({
   partner,
   register,
   error,
+  disabled,
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
   register: UseFormRegister<FormValues>;
+  disabled: boolean;
   error?: RhfErrors;
 }) => {
   const { getContent: c } = useContent();
@@ -204,7 +222,12 @@ const AccountNumber = ({
         label={c(x => x.partnerLabels.accountNumber)}
         error={error as RhfError}
       >
-        <TextInput hasError={!!error} {...register("accountNumber", { required: true })} inputWidth="one-third" />
+        <TextInput
+          disabled={disabled}
+          hasError={!!error}
+          {...register("accountNumber", { required: true })}
+          inputWidth="one-third"
+        />
       </Field>
     );
   }
