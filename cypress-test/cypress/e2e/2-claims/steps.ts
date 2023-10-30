@@ -1,6 +1,6 @@
-import { euiCostCleanUp } from "common/costCleanUp";
 import { claimReviewFileTidyUp, fileTidyUp } from "common/filetidyup";
 import { loremIpsum1k } from "common/lorem";
+import { testFile } from "common/testfileNames";
 let date = new Date();
 let comments = JSON.stringify(date);
 
@@ -817,7 +817,7 @@ export const claimReviewTopThreeRows = () => {
   cy.getByQA("forecast-table").within(() => {
     [
       ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-      ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
+      ["IAR Due", "Yes", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
       [
         "Month",
         "Feb 2023",
@@ -864,7 +864,7 @@ export const claimReviewExistingEvidence = () => {
   ].forEach(([claimDoc, type, date, size, uploadBy], rowNumber = 1) => {
     cy.getByQA("claim-supporting-documents-container").within(() => {
       cy.get("tr")
-        .eq(rowNumber + 1)
+        .eq(rowNumber + 2)
         .within(() => {
           cy.get("td:nth-child(1)").contains(claimDoc);
           cy.get("td:nth-child(2)").contains(type);
@@ -1189,4 +1189,45 @@ export const sbriCorrectForecastCostCat = () => {
         cy.get("td:nth-child(1)").contains(costCat);
       });
   });
+};
+
+export const iarProceedToDocs = () => {
+  cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
+  cy.selectTile("Claims");
+  cy.get("td").contains("Period 1").siblings().contains("a", "Edit").click();
+  cy.heading("Costs to be claimed");
+  cy.button("Continue to claims documents").click();
+  cy.heading("Claim documents");
+};
+
+export const iarGuidance = () => {
+  cy.paragraph(
+    "An Independent Accountant's Report (IAR) must be uploaded to support the claim before it can be submitted to Innovate UK. If your total grant value is £50,000 or under, a Statement of Expenditure (SoE) may be sufficient. Your monitoring officer will be able to confirm which document is needed.",
+  );
+  cy.paragraph(
+    "Upload your IAR or SoE in the claim documents, selecting the IAR document type (for both) and then proceed to submit your claim.",
+  );
+};
+
+export const iarSubmitValidate = () => {
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
+  cy.button("Submit claim").click();
+  cy.validationLink("You must upload an independent accountant's report before you can submit this claim.");
+};
+
+export const uploadIAR = () => {
+  cy.get("select#description.govuk-select").select("Independent accountant’s report");
+  cy.fileInput(testFile);
+  cy.button("Upload documents").click();
+  cy.validationNotification("has been uploaded.");
+};
+
+export const iarProceedToSummary = () => {
+  cy.get("a").contains("Continue to update forecast").click();
+  cy.heading("Update forecast");
+  cy.button("Continue to summary").click();
+  cy.heading("Claim summary");
 };

@@ -6,8 +6,8 @@
 export const fileTidyUp = (name: string) => {
   cy.wait(500);
   for (let i = 1; i < 25; i++) {
-    cy.get("body").then($body => {
-      if ($body.text().includes(name)) {
+    cy.get("main").then($main => {
+      if ($main.text().includes(name)) {
         cy.log(`Deleting existing ${name} document`);
         cy.get("tr")
           .eq(1)
