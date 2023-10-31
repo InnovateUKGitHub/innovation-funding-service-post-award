@@ -2,22 +2,25 @@ import { PartnerStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { ClaimLastModified } from "@ui/components/atomicDesign/organisms/claims/ClaimLastModified/claimLastModified";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warning";
+import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warning.withFragment";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { BaseProps, defineRoute } from "../../containerBase";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
-import { Data, useViewForecastData } from "./viewForecast.logic";
+import { useViewForecastData } from "./viewForecast.logic";
 import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page";
+import { ClaimDto } from "@framework/dtos/claimDto";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { PartnerDto } from "@framework/dtos/partnerDto";
 
 interface ViewForecastParams {
   projectId: ProjectId;
@@ -59,10 +62,11 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
 
   return (
     <Page
-      pageTitle={<Title title={data.project.title} projectNumber={data.project.projectNumber} />}
+      pageTitle={<Title />}
       projectStatus={data.project.status}
       partnerStatus={data.partner.partnerStatus}
       backLink={<BackLink route={backLink}>{backText}</BackLink>}
+      fragmentRef={data.fragmentRef}
     >
       {!data.partner.isWithdrawn && (
         <>
@@ -74,7 +78,7 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
       <Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
         <Messages messages={props.messages} />
 
-        <Warning {...data} />
+        <Warning />
 
         {isPartnerFc && data.partner.newForecastNeeded && (
           <ValidationMessage
@@ -91,7 +95,7 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
           </SimpleString>
         )}
 
-        <ForecastTable data={data} hideValidation={isProjectPmOrMo} />
+        <ForecastTable selectCurrentClaimByApprovedStatus hideValidation={isProjectPmOrMo} />
       </Section>
 
       <Section qa="viewForecastUpdate">
@@ -109,7 +113,17 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
   );
 };
 
-const FinalClaimMessage = ({ data, isFc }: { data: Data; isFc: boolean }) => {
+const FinalClaimMessage = ({
+  data,
+  isFc,
+}: {
+  data: {
+    claims: Pick<ClaimDto, "isFinalClaim" | "isApproved" | "paidDate">[];
+    project: Pick<ProjectDto, "id" | "periodId">;
+    partner: Pick<PartnerDto, "id" | "isWithdrawn">;
+  };
+  isFc: boolean;
+}) => {
   const finalClaim = data.claims.find(x => x.isFinalClaim);
 
   if (!finalClaim) return null;

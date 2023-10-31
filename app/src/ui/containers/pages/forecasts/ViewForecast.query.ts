@@ -4,73 +4,17 @@ export const viewForecastQuery = graphql`
   query ViewForecastQuery($projectIdStr: String!, $projectId: ID!, $partnerId: ID!) {
     salesforce {
       uiapi {
+        ...ForecastWarningFragment
+        ...TitleFragment
+        ...ForecastTableFragment
         query {
-          Acc_Profile__c(
-            where: {
-              and: [
-                { Acc_ProjectParticipant__c: { eq: $partnerId } }
-                {
-                  or: [
-                    { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
-                    { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
-                  ]
-                }
-                { Acc_CostCategory__c: { ne: null } }
-              ]
-            }
-            first: 1000
-          ) {
-            edges {
-              node {
-                Id
-                Acc_CostCategory__c {
-                  value
-                }
-                Acc_CostCategoryGOLCost__c {
-                  value
-                }
-                Acc_ProjectPeriodNumber__c {
-                  value
-                }
-                Acc_ProjectPeriodStartDate__c {
-                  value
-                }
-                Acc_ProjectPeriodEndDate__c {
-                  value
-                }
-                Acc_LatestForecastCost__c {
-                  value
-                }
-                RecordType {
-                  DeveloperName {
-                    value
-                  }
-                }
-              }
-            }
-          }
-          Acc_CostCategory__c(first: 2000) {
-            edges {
-              node {
-                Id
-                Acc_CostCategoryName__c {
-                  value
-                }
-                Acc_DisplayOrder__c {
-                  value
-                }
-                Acc_OrganisationType__c {
-                  value
-                }
-                Acc_CompetitionType__c {
-                  value
-                }
-              }
-            }
-          }
           Acc_Claims__c(
             where: {
-              and: [{ Acc_ProjectID__c: { eq: $projectIdStr } }, { Acc_ProjectParticipant__c: { eq: $partnerId } }]
+              and: [
+                { Acc_ProjectID__c: { eq: $projectIdStr } }
+                { Acc_ProjectParticipant__c: { eq: $partnerId } }
+                { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
+              ]
             }
             first: 2000
           ) {
@@ -80,22 +24,7 @@ export const viewForecastQuery = graphql`
                 Acc_ClaimStatus__c {
                   value
                 }
-                Acc_ProjectID__c {
-                  value
-                }
-                Acc_ProjectParticipant__r {
-                  Id
-                  Acc_OverheadRate__c {
-                    value
-                  }
-                }
                 Acc_ProjectPeriodNumber__c {
-                  value
-                }
-                Acc_ProjectPeriodStartDate__c {
-                  value
-                }
-                Acc_ProjectPeriodEndDate__c {
                   value
                 }
                 Acc_FinalClaim__c {
@@ -104,22 +33,10 @@ export const viewForecastQuery = graphql`
                 Acc_PaidDate__c {
                   value
                 }
-                Acc_CostCategory__c {
-                  value
-                }
                 RecordType {
                   DeveloperName {
                     value
                   }
-                }
-                Acc_IAR_Status__c {
-                  value
-                }
-                Acc_IARRequired__c {
-                  value
-                }
-                Acc_PeriodCostCategoryTotal__c {
-                  value
                 }
               }
             }
@@ -133,7 +50,6 @@ export const viewForecastQuery = graphql`
                   isMo
                   isFc
                   isPm
-                  isSalesforceSystemUser
                   partnerRoles {
                     isFc
                     isMo
@@ -141,22 +57,10 @@ export const viewForecastQuery = graphql`
                     partnerId
                   }
                 }
-                Acc_ProjectNumber__c {
-                  value
-                }
-                Acc_ProjectTitle__c {
-                  value
-                }
                 Acc_ProjectStatus__c {
                   value
                 }
                 Acc_CurrentPeriodNumber__c {
-                  value
-                }
-                Acc_NumberofPeriods__c {
-                  value
-                }
-                Acc_CompetitionType__c {
                   value
                 }
                 Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }, first: 500) {
@@ -178,9 +82,6 @@ export const viewForecastQuery = graphql`
                         value
                       }
                       Acc_OverheadRate__c {
-                        value
-                      }
-                      Acc_OrganisationType__c {
                         value
                       }
                       Acc_ForecastLastModifiedDate__c {
