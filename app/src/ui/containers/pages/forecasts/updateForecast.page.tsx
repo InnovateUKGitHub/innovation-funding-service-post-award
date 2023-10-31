@@ -13,7 +13,7 @@ import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { PageLoader } from "@ui/components/bjss/loading";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
@@ -22,8 +22,8 @@ import { useStores } from "@ui/redux/storesProvider";
 import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
 import { isNumber } from "@framework/util/numberHelper";
 import { ClaimLastModified } from "@ui/components/atomicDesign/organisms/claims/ClaimLastModified/claimLastModified";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
-import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warning";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
+import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warning.withFragment";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -80,14 +80,15 @@ const UpdateForecastComponent = ({
       }
       error={editor.error}
       validator={editor.validator}
-      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
+      pageTitle={<Title />}
+      fragmentRef={data.fragmentRef}
     >
       <ForecastClaimAdvice isFc={isFc} />
       {data.claim && data.claim.isFinalClaim && (
         <ValidationMessage messageType="info" message={x => x.forecastsMessages.finalClaim} />
       )}
       <Section title="" qa="partner-forecast">
-        <Warning {...data} editor={editor} />
+        <Warning editor={editor} />
         {renderOverheadsRate(data.partner.overheadRate)}
         <Form.Form
           editor={editor}
@@ -99,7 +100,12 @@ const UpdateForecastComponent = ({
             name="forecastTable"
             update={() => null}
             value={({ onChange }) => (
-              <ForecastTable onChange={onChange} data={data} editor={editor} allowRetroactiveForecastEdit />
+              <ForecastTable
+                onChange={onChange}
+                selectCurrentClaimByApprovedStatus
+                editor={editor}
+                allowRetroactiveForecastEdit
+              />
             )}
           />
           <Form.Fieldset>
