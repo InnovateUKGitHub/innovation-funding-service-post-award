@@ -176,9 +176,16 @@ const list = (title: string) => {
   cy.get("li").contains(title);
 };
 
-const fileInput = (fileName: string) => {
+const fileInput = (path: string, fileName?: string) => {
   cy.log("*fileInput**");
-  cy.get(`input[type="file"]`).wait(300).selectFile(`cypress/documents/${fileName}`);
+  cy.readFile(`cypress/documents/${path}`, null).then((contents: typeof Cypress.Buffer) => {
+    cy.get(`input[type="file"]`)
+      .wait(300)
+      .selectFile({
+        fileName: fileName ?? path,
+        contents,
+      });
+  });
   cy.wait(300);
 };
 

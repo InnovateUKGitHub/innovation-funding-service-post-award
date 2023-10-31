@@ -331,7 +331,7 @@ export const validateExcessiveFileName = () => {
 };
 
 export const doNotUploadSpecialChar = () => {
-  cy.fileInput(specialCharFile);
+  cy.fileInput(testFile, specialCharFile);
   cy.button("Upload documents").click();
   cy.validationLink(
     `Your document '${specialCharFile}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`,

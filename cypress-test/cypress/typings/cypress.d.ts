@@ -143,7 +143,7 @@ declare global {
        * Will access the input of type file and pass in file name to files stored in 'cypress-test/cypress/documents/'
        */
 
-      fileInput(fileName: string): Chainable<Element>;
+      fileInput(path: string, fileName?: string): Chainable<Element>;
 
       /**
        * Finds the notification text when uploading or deleting a document
