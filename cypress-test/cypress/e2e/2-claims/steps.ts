@@ -817,7 +817,7 @@ export const claimReviewTopThreeRows = () => {
   cy.getByQA("forecast-table").within(() => {
     [
       ["Period", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
-      ["IAR Due", "Yes", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
+      ["IAR Due", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes", "No", "No", "Yes"],
       [
         "Month",
         "Feb 2023",

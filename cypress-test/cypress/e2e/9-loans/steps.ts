@@ -110,6 +110,9 @@ export const pmDrawdownGuidance = () => {
   cy.get("a").contains("change drawdown");
 };
 
+/**
+ * This needs updating to assert more accurately each cell and not just contents of the row.
+ */
 export const drawdownRequestTable = () => {
   [
     "Drawdown",
@@ -119,11 +122,17 @@ export const drawdownRequestTable = () => {
     "Drawdown to date",
     "Drawdown amount",
     "Remaining loan",
-    "1",
-    "£10,000",
-    "-£10,000",
-  ].forEach(requestCat => {
-    cy.getByQA("drawdown-request").contains(requestCat);
+  ].forEach((requestCat, index) => {
+    cy.get("thead").within(() => {
+      cy.get(`th:nth-child(${index + 1})`).contains(requestCat);
+    });
+    ["1", "2021", "£10,000", "£115,000", "£0", "£10,000", "£105,000"].forEach((value, index) => {
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get(`td:nth-child(${index + 1})`).contains(value);
+        });
+    });
   });
 };
 
