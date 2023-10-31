@@ -54,7 +54,7 @@ describe("PCR >  Put project on hold > Create PCR", () => {
 
   it("Should have subheadings for 'first day' and 'last day' of pause", () => {
     ["First day of pause", "Last day of pause (if known)"].forEach(subheading => {
-      cy.get("h2").contains(subheading);
+      cy.get("legend").contains(subheading);
     });
   });
 
