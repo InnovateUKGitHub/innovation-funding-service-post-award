@@ -1,6 +1,7 @@
 import { Profile } from "@framework/constants/recordTypes";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 
+// on Acc_Profile__c with DeveloperName "Total_Cost_Category"
 type GolCostNode = Readonly<
   Partial<{
     Id: string;

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3aa5e76958f826c996ea2bae5e9b0c41>>
+ * @generated SignedSource<<d21eba8635b856e40515cd3ef3dfca8a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,9 @@ export type ForecastWarningFragment$data = {
     readonly ForecastWarning_Claims: {
       readonly edges: ReadonlyArray<{
         readonly node: {
+          readonly Acc_ClaimStatus__c: {
+            readonly value: string | null;
+          } | null;
           readonly Acc_CostCategory__c: {
             readonly value: string | null;
           } | null;
@@ -427,6 +430,17 @@ return {
                       "fields": (v1/*: any*/),
                       "kind": "ObjectValue",
                       "name": "and.1"
+                    },
+                    {
+                      "kind": "Literal",
+                      "name": "and.2",
+                      "value": {
+                        "RecordType": {
+                          "DeveloperName": {
+                            "eq": "Total_Project_Period"
+                          }
+                        }
+                      }
                     }
                   ],
                   "kind": "ListValue",
@@ -461,6 +475,16 @@ return {
                     (v2/*: any*/),
                     (v5/*: any*/),
                     (v4/*: any*/),
+                    {
+                      "alias": null,
+                      "args": null,
+                      "concreteType": "PicklistValue",
+                      "kind": "LinkedField",
+                      "name": "Acc_ClaimStatus__c",
+                      "plural": false,
+                      "selections": (v3/*: any*/),
+                      "storageKey": null
+                    },
                     (v6/*: any*/),
                     {
                       "alias": null,
@@ -638,6 +662,6 @@ return {
 };
 })();
 
-(node as any).hash = "c2b05b8515176c3c72fbd673772fd1d5";
+(node as any).hash = "b453691f44de50c4bebaf53fc0ba1ed7";
 
 export default node;

@@ -25,9 +25,7 @@ interface Props {
   editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
 }
 
-export const Warning = (props: Props) => <AriaLive>{renderWarningMessage(props)}</AriaLive>;
-
-const renderWarningMessage = ({
+export const Warning = ({
   costCategories,
   claims,
   editor,
@@ -53,6 +51,16 @@ const renderWarningMessage = ({
     forecasts.forEach(x => (total += x.costCategoryId === category.id && x.periodId > currentPeriod ? x.value : 0));
 
     total = roundCurrency(total);
+
+    if (category.name === "Labour") {
+      console.log({
+        costCategory: category.name,
+        costCategoryId: category.id,
+        gol: gol?.value,
+        total,
+        push: gol && gol.value < total,
+      });
+    }
 
     if (gol && gol.value < total) {
       categories.push(category.name);
@@ -86,5 +94,9 @@ const renderWarningMessage = ({
     </>
   );
 
-  return <ValidationMessage messageType="info" qa={qaValue} message={warningContent} />;
+  return (
+    <AriaLive>
+      <ValidationMessage messageType="info" qa={qaValue} message={warningContent} />
+    </AriaLive>
+  );
 };

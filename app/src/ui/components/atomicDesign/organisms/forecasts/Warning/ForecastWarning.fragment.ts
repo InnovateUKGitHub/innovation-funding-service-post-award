@@ -55,7 +55,13 @@ export const forecastWarningFragment = graphql`
         }
       }
       ForecastWarning_Claims: Acc_Claims__c(
-        where: { and: [{ Acc_ProjectID__c: { eq: $projectIdStr } }, { Acc_ProjectParticipant__c: { eq: $partnerId } }] }
+        where: {
+          and: [
+            { Acc_ProjectID__c: { eq: $projectIdStr } }
+            { Acc_ProjectParticipant__c: { eq: $partnerId } }
+            { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
+          ]
+        }
         first: 2000
       ) {
         edges {
@@ -65,6 +71,9 @@ export const forecastWarningFragment = graphql`
               value
             }
             Acc_CostCategory__c {
+              value
+            }
+            Acc_ClaimStatus__c {
               value
             }
             RecordType {
