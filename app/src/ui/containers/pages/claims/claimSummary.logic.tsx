@@ -17,7 +17,7 @@ import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { clientsideApiClient } from "@ui/apiClient";
 import { ClaimDto } from "@framework/dtos/claimDto";
 
-import { claimSummarySchema } from "./claimSummary.zod";
+import { getClaimSummarySchema } from "./claimSummary.zod";
 import { z } from "zod";
 import { useGetTotalCostsClaimed } from "@framework/mappers/totalCostsClaimed";
 import { ClaimStatus } from "@framework/constants/claimStatus";
@@ -186,7 +186,7 @@ export const useOnUpdateClaimSummary = (
 ) => {
   const navigate = useNavigate();
   return useOnUpdate<
-    z.output<typeof claimSummarySchema>,
+    z.output<ReturnType<typeof getClaimSummarySchema>>,
     Pick<ClaimDto, "status" | "comments" | "partnerId">,
     { updateLink: ILinkInfo }
   >({
@@ -196,8 +196,6 @@ export const useOnUpdateClaimSummary = (
         nextStatus = getNextStatus(claim.status, monitoringLevel);
       }
 
-      console.log("status", claim.status);
-      console.log("nextStatus", nextStatus);
       return clientsideApiClient.claims.update({
         partnerId,
         projectId,

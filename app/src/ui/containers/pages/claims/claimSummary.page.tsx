@@ -33,7 +33,7 @@ import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFi
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { claimSummaryErrorMap, claimSummarySchema } from "./claimSummary.zod";
+import { claimSummaryErrorMap, getClaimSummarySchema } from "./claimSummary.zod";
 import { z } from "zod";
 import { createRegisterButton } from "@framework/util/registerButton";
 
@@ -81,14 +81,16 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
     data.project.monitoringLevel,
   );
 
-  const { register, formState, handleSubmit, watch, setValue } = useForm<z.output<typeof claimSummarySchema>>({
+  const { register, formState, handleSubmit, watch, setValue } = useForm<
+    z.output<ReturnType<typeof getClaimSummarySchema>>
+  >({
     defaultValues: {
       status: data.claim.status,
       comments: data.claim.comments ?? "",
       button_submit: "submit",
       documents: data.documents,
     },
-    resolver: zodResolver(claimSummarySchema, { errorMap: claimSummaryErrorMap }),
+    resolver: zodResolver(getClaimSummarySchema(data.claim.isIarRequired), { errorMap: claimSummaryErrorMap }),
   });
 
   const registerButton = createRegisterButton(setValue, "button_submit");
