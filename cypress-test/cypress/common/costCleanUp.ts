@@ -34,6 +34,22 @@ export const euiCostCleanUp = () => {
     });
 };
 
+export const overheadsTidyUp = () => {
+  cy.get("tr")
+    .eq(2)
+    .then($tr2 => {
+      if ($tr2.text().includes("£200.00")) {
+        cy.get("a").contains("Overheads").click();
+        cy.heading("Overheads");
+        cy.get("a").contains("Remove").click();
+        cy.button("Save and return to claims").click();
+        cy.heading("Costs to be claimed");
+      } else {
+        cy.heading("Costs to be claimed");
+      }
+    });
+};
+
 export const loansProjCostCleanUp = () => {
   cy.get("tr")
     .eq(1)

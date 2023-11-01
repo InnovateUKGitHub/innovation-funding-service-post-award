@@ -12,7 +12,7 @@ export const fileTidyUp = (name: string) => {
         cy.get("tr")
           .eq(1)
           .within(() => {
-            cy.tableCell("Remove").scrollIntoView().wait(200).click();
+            cy.tableCell("Remove").wait(200).click();
           });
         cy.validationNotification("has been removed.");
         cy.reload();

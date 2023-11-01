@@ -1,5 +1,5 @@
 import { testEach } from "support/methods";
-import { euiCostCleanUp } from "common/costCleanUp";
+import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
   additionalInformationHeading,
@@ -27,6 +27,8 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   });
 
   it("Should check whether cost categories are correct", euiCostCleanUp);
+
+  it("Should check that Overheads cost category is correct and if not, correct it", overheadsTidyUp);
 
   testEach([
     "Category",

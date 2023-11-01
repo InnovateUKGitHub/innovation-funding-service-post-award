@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { euiCostCleanUp } from "common/costCleanUp";
+import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { accessEUIOpenClaim, shouldShowCostCatTable, shouldShowProjectTitle } from "./steps";
 
 describe("claims > edit claims as FC", () => {
@@ -23,7 +23,9 @@ describe("claims > edit claims as FC", () => {
     cy.get("h2").should("contain.text", "Period");
   });
 
-  it("Should check whether cost categories are correct", euiCostCleanUp);
+  it("Should check that Labour cost category is correct and if not, correct it.", euiCostCleanUp);
+
+  it("Should check that Overheads cost category is correct and if not, correct it", overheadsTidyUp);
 
   it("Displays the cost category table", shouldShowCostCatTable);
 

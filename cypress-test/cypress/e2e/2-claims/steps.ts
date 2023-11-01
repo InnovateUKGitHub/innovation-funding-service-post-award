@@ -249,7 +249,6 @@ export const selectFileDescription = () => {
 };
 
 export const claimsDocUpload = () => {
-  fileTidyUp("James Black");
   cy.uploadButton("Upload documents").click();
   cy.validationLink("Choose a file to upload");
   cy.fileInput("testfile.doc");

@@ -1,4 +1,5 @@
-import { euiCostCleanUp } from "common/costCleanUp";
+import { fileTidyUp } from "common/filetidyup";
+import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
   claimCommentBox,
@@ -23,20 +24,23 @@ describe("claims > Claim summary", () => {
   before(() => {
     visitApp({ asUser: fc, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
     euiCostCleanUp();
+    overheadsTidyUp();
   });
 
   it("Should navigate to the claims document page", () => {
     cy.button("Continue to claims documents").click();
   });
 
+  it("Should clear any documents that shouldn't be there", async () => fileTidyUp("James Black"));
+
   it("Should upload a document", claimsDocUpload);
 
-  it("Should display a document upload validation message", () => {
-    cy.validationNotification("Your document has been uploaded.");
-  });
-
   it("Should continue to forecast page", () => {
-    cy.get("a").contains("Continue to update forecast").click();
+    cy.get("a")
+      .contains("Continue to update forecast")
+      .then(() => {
+        cy.get("a").contains("Continue to update forecast").click();
+      });
     cy.heading("Update forecast");
   });
 

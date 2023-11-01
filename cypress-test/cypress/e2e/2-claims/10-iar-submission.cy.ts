@@ -1,7 +1,6 @@
 import { visitApp } from "common/visit";
 import { fcClaimTidyUp } from "common/claimtidyup";
 import { fileTidyUp } from "common/filetidyup";
-import { testFile } from "common/testfileNames";
 import { iarGuidance, iarProceedToDocs, iarProceedToSummary, iarSubmitValidate, uploadIAR } from "./steps";
 describe("Claims > IAR Required - Submission", () => {
   before(() => {
