@@ -1,0 +1,23 @@
+{
+  "name": "acc-cypress",
+  "private": true,
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cypress": "cypress",
+    "start": "cypress open",
+    "open": "cypress open",
+    "test": "cypress run",
+    "run": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^18.0.6",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.0",
+    "cypress": "^13.2.0",
+    "typescript": "^5.2.2"
+  }
+}
