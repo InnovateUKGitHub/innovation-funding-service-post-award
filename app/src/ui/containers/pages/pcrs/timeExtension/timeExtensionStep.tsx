@@ -19,12 +19,16 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useNextLink } from "../utils/useNextLink";
+import { PcrPage } from "../pcrPage";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { pcrTimeExtensionSchema, errorMap } from "./timeExtension.zod";
 
 export const TimeExtensionStep = () => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
 
-  const { projectId, itemId, onSave, config, isFetching, fetchKey, pcrValidationErrors, useClearPcrValidationError } =
+  const { projectId, itemId, onSave, config, isFetching, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate } =
     usePcrWorkflowContext();
 
   const { pcrItem, project } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
@@ -56,27 +60,31 @@ export const TimeExtensionStep = () => {
     throw new Error("You are not able to change the project duration");
   }
 
-  const { register, handleSubmit, watch } = useForm<{
+  const { register, handleSubmit, watch, formState, trigger } = useForm<{
     timeExtension: string;
     offsetMonths: number;
     markedAsComplete: boolean;
   }>({
     defaultValues: {
-      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       timeExtension: String(pcrItem.offsetMonths),
       offsetMonths: pcrItem.offsetMonths,
     },
+    resolver: zodResolver(pcrTimeExtensionSchema, {
+      errorMap,
+    }),
   });
 
   const newOffset = Number(watch("timeExtension"));
-  const newOffsetIsNotZero = newOffset !== 0;
+
+  useFormValidate(trigger);
 
   const newProjectDuration = (newOffset ?? 0) + pcrItem.projectDurationSnapshot;
 
-  useClearPcrValidationError("timeExtension", newOffsetIsNotZero);
+  const validationErrors = useRhfErrors(formState.errors);
 
   return (
-    <>
+    <PcrPage validationErrors={validationErrors}>
       <Section>
         <Content markdown value={x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint} />
       </Section>
@@ -100,9 +108,9 @@ export const TimeExtensionStep = () => {
       >
         <Fieldset>
           <Legend>{proposedProjectHeading}</Legend>
-          <FormGroup hasError={!!pcrValidationErrors?.timeExtension}>
+          <FormGroup hasError={!!validationErrors?.timeExtension}>
             <Label htmlFor="timeExtension">{timeExtensionSelectLabel}</Label>
-            <ValidationError error={pcrValidationErrors?.timeExtension as RhfError} />
+            <ValidationError error={validationErrors?.timeExtension as RhfError} />
             <DropdownSelect
               id="timeExtension"
               options={timeExtensionDropdownOptions}
@@ -136,6 +144,6 @@ export const TimeExtensionStep = () => {
           </FormGroup>
         </Fieldset>
       </Form>
-    </>
+    </PcrPage>
   );
 };

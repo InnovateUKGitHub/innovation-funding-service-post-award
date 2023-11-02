@@ -1,6 +1,5 @@
 import { useFragment } from "react-relay";
 import { NavigationArrowsForPCRs as NavigationArrowsForPcrsComponent, Props } from "./navigationArrows";
-import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
 import {
   NavigationArrowsFragment$data,
@@ -10,6 +9,7 @@ import { navigationArrowsFragment } from "./NavigationArrows.fragment";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
 import { head } from "lodash";
+import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 
 export const NavigationArrowsForPCRs = (props: Omit<Props, "pcr" | "editableItemTypes">) => {
   const fragmentRef = useFragmentContext();

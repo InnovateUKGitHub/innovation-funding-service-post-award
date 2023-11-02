@@ -11,6 +11,7 @@ import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/
 import { useContent } from "@ui/hooks/content.hook";
 import { UseFormHandleSubmit, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
+import { useEffect } from "react";
 
 export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolean }>({
   register,
@@ -32,6 +33,10 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
   const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
 
   const watchedCheckbox = watch().markedAsComplete;
+
+  useEffect(() => {
+    setMarkedAsCompleteHasBeenChecked(watchedCheckbox);
+  }, [watchedCheckbox]);
 
   return (
     <Form
@@ -72,11 +77,7 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
 
         {allowSubmit && (
           <FormGroup>
-            <Button
-              type="submit"
-              disabled={isFetching}
-              onClick={() => setMarkedAsCompleteHasBeenChecked(watchedCheckbox)}
-            >
+            <Button type="submit" disabled={isFetching}>
               {getContent(x => x.pages.pcrWorkflowSummary.buttonSaveAndReturn)}
             </Button>
           </FormGroup>

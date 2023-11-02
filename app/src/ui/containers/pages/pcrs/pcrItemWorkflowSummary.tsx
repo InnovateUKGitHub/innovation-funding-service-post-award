@@ -1,13 +1,10 @@
 import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
 import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
 import { EditLink, ViewLink, getStepLink } from "./pcrItemSummaryLinks";
 
 export const SummarySection = () => {
-  const { mode, workflow, routes, pcrItem } = usePcrWorkflowContext();
-  const isReviewing = mode === "review";
-  const displayNavigationArrows = mode === "review" || mode === "view";
+  const { workflow } = usePcrWorkflowContext();
 
   /**
    * Will need to handle various features previously handled by PCRSummaryContext.
@@ -22,10 +19,6 @@ export const SummarySection = () => {
     <WithScrollToTopOnPropChange propToScrollOn={workflow?.getCurrentStepName()}>
       <Section qa="item-save-and-return">
         <Summary />
-
-        {displayNavigationArrows && (
-          <NavigationArrowsForPCRs currentItem={pcrItem} isReviewing={isReviewing} routes={routes} />
-        )}
       </Section>
     </WithScrollToTopOnPropChange>
   );

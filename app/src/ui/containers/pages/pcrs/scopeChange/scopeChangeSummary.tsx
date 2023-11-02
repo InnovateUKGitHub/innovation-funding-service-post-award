@@ -9,9 +9,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangeSchema, errorMap, PcrScopeChangeSchemaType } from "./scopeChange.zod";
 import { EditLink } from "../pcrItemSummaryLinks";
+import { PcrPage } from "../pcrPage";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 
 export const ScopeChangeSummary = () => {
-  const { projectId, itemId, fetchKey, useSetPcrValidationErrors, displayCompleteForm } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -26,10 +28,10 @@ export const ScopeChangeSummary = () => {
     }),
   });
 
-  useSetPcrValidationErrors(formState.errors, true);
+  const validationErrors = useRhfErrors(formState.errors);
 
   return (
-    <>
+    <PcrPage validationErrors={validationErrors}>
       <Section qa="scope-change-summary">
         <SummaryList qa="scope-change-summary-list">
           <SummaryListItem
@@ -67,6 +69,6 @@ export const ScopeChangeSummary = () => {
           pcrItem={pcrItem}
         />
       )}
-    </>
+    </PcrPage>
   );
 };

@@ -16,6 +16,8 @@ import { pcrScopeChangePublicDescriptionSchema, errorMap } from "./scopeChange.z
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { useNextLink } from "../utils/useNextLink";
 import { z } from "zod";
+import { PcrPage } from "../pcrPage";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 
 export const PublicDescriptionChangeStep = () => {
   const {
@@ -25,15 +27,16 @@ export const PublicDescriptionChangeStep = () => {
     isFetching,
     getRequiredToCompleteMessage,
     onSave,
-    useClearPcrValidationError,
-    useSetPcrValidationErrors,
-    useErrorSubset,
-    pcrValidationErrors,
+    markedAsCompleteHasBeenChecked,
+    useFormValidate,
   } = usePcrWorkflowContext();
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
   const { getContent } = useContent();
-  const { register, handleSubmit, watch, formState } = useForm<z.output<typeof pcrScopeChangePublicDescriptionSchema>>({
+  const { register, handleSubmit, watch, formState, trigger } = useForm<
+    z.output<typeof pcrScopeChangePublicDescriptionSchema>
+  >({
     defaultValues: {
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       publicDescription: pcrItem.publicDescription ?? "",
     },
     resolver: zodResolver(pcrScopeChangePublicDescriptionSchema, {
@@ -44,47 +47,47 @@ export const PublicDescriptionChangeStep = () => {
   const hint = getRequiredToCompleteMessage();
 
   const publicDescriptionLength = watch("publicDescription")?.length ?? 0;
-
-  useSetPcrValidationErrors(formState.errors);
-  useErrorSubset(["publicDescription"]);
-  useClearPcrValidationError("publicDescription", publicDescriptionLength > 0);
-
+  const validationErrors = useRhfErrors(formState.errors);
   const nextLink = useNextLink();
 
+  useFormValidate(trigger);
+
   return (
-    <Section data-qa="newDescriptionSection">
-      <Form
-        onSubmit={handleSubmit(data => {
-          onSave({ data: { ...data, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
-        })}
-      >
-        <Fieldset>
-          <Legend>{getContent(x => x.pages.pcrScopeChangePublicDescriptionChange.headingPublicDescription)}</Legend>
-          <Info summary={<Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.publishedDescription} />}>
-            <SimpleString multiline>
-              {pcrItem.publicDescriptionSnapshot || (
-                <Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.noAvailableDescription} />
-              )}
-            </SimpleString>
-          </Info>
-          <TextAreaField
-            {...register("publicDescription")}
-            id="description"
-            error={pcrValidationErrors?.publicDescription as RhfError}
-            hint={hint}
-            disabled={isFetching}
-            characterCount={publicDescriptionLength}
-            data-qa="newDescription"
-            characterCountType="descending"
-            rows={15}
-            characterCountMax={32_000}
-            defaultValue={pcrItem.publicDescription ?? ""}
-          />
-        </Fieldset>
-        <Button type="submit" disabled={isFetching}>
-          <Content value={x => x.pcrItem.submitButton} />
-        </Button>
-      </Form>
-    </Section>
+    <PcrPage validationErrors={validationErrors}>
+      <Section data-qa="newDescriptionSection">
+        <Form
+          onSubmit={handleSubmit(data => {
+            onSave({ data: { ...data, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
+          })}
+        >
+          <Fieldset>
+            <Legend>{getContent(x => x.pages.pcrScopeChangePublicDescriptionChange.headingPublicDescription)}</Legend>
+            <Info summary={<Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.publishedDescription} />}>
+              <SimpleString multiline>
+                {pcrItem.publicDescriptionSnapshot || (
+                  <Content value={x => x.pages.pcrScopeChangePublicDescriptionChange.noAvailableDescription} />
+                )}
+              </SimpleString>
+            </Info>
+            <TextAreaField
+              {...register("publicDescription")}
+              id="description"
+              error={validationErrors?.publicDescription as RhfError}
+              hint={hint}
+              disabled={isFetching}
+              characterCount={publicDescriptionLength}
+              data-qa="newDescription"
+              characterCountType="descending"
+              rows={15}
+              characterCountMax={32_000}
+              defaultValue={pcrItem.publicDescription ?? ""}
+            />
+          </Fieldset>
+          <Button type="submit" disabled={isFetching}>
+            <Content value={x => x.pcrItem.submitButton} />
+          </Button>
+        </Form>
+      </Section>
+    </PcrPage>
   );
 };

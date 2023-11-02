@@ -17,6 +17,8 @@ import { pcrScopeChangeProjectSummarySchema, errorMap } from "./scopeChange.zod"
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { useNextLink } from "../utils/useNextLink";
 import { z } from "zod";
+import { PcrPage } from "../pcrPage";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 
 export const ProjectSummaryChangeStep = () => {
   const { getContent } = useContent();
@@ -28,16 +30,17 @@ export const ProjectSummaryChangeStep = () => {
     isFetching,
     fetchKey,
     getRequiredToCompleteMessage,
-    useClearPcrValidationError,
-    useSetPcrValidationErrors,
-    pcrValidationErrors,
-    useErrorSubset,
+    markedAsCompleteHasBeenChecked,
+    useFormValidate,
   } = usePcrWorkflowContext();
 
   const { pcrItem } = useScopeChangeWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, watch, formState } = useForm<z.output<typeof pcrScopeChangeProjectSummarySchema>>({
+  const { register, handleSubmit, watch, formState, trigger } = useForm<
+    z.output<typeof pcrScopeChangeProjectSummarySchema>
+  >({
     defaultValues: {
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       projectSummary: pcrItem.projectSummary ?? "",
     },
     resolver: zodResolver(pcrScopeChangeProjectSummarySchema, {
@@ -47,47 +50,48 @@ export const ProjectSummaryChangeStep = () => {
 
   const projectSummaryLength = watch("projectSummary")?.length ?? 0;
 
-  useSetPcrValidationErrors(formState.errors);
-  useErrorSubset(["projectSummary"]);
-  useClearPcrValidationError("projectSummary", projectSummaryLength > 0);
+  const validationErrors = useRhfErrors(formState.errors);
 
+  useFormValidate(trigger);
   const hint = getRequiredToCompleteMessage();
 
   const nextLink = useNextLink();
 
   return (
-    <Section data-qa="newSummarySection">
-      <Form
-        onSubmit={handleSubmit(data => {
-          onSave({ data: { ...data, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
-        })}
-      >
-        <Fieldset>
-          <Legend>{getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.headingProjectSummary)}</Legend>
-          <Info summary={getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.publishedSummary)}>
-            <SimpleString multiline>
-              {pcrItem.projectSummarySnapshot ||
-                getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.noAvailableSummary)}
-            </SimpleString>
-          </Info>
-          <TextAreaField
-            {...register("projectSummary")}
-            error={pcrValidationErrors?.projectSummary as RhfError}
-            id="summary"
-            hint={hint}
-            disabled={isFetching}
-            characterCount={projectSummaryLength}
-            data-qa="newSummary"
-            characterCountType="descending"
-            rows={15}
-            characterCountMax={32_000}
-            defaultValue={pcrItem.projectSummary ?? ""}
-          />
-        </Fieldset>
-        <Button type="submit" disabled={isFetching}>
-          <Content value={x => x.pcrItem.submitButton} />
-        </Button>
-      </Form>
-    </Section>
+    <PcrPage validationErrors={validationErrors}>
+      <Section data-qa="newSummarySection">
+        <Form
+          onSubmit={handleSubmit(data => {
+            onSave({ data: { ...data, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
+          })}
+        >
+          <Fieldset>
+            <Legend>{getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.headingProjectSummary)}</Legend>
+            <Info summary={getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.publishedSummary)}>
+              <SimpleString multiline>
+                {pcrItem.projectSummarySnapshot ||
+                  getContent(x => x.pages.pcrScopeChangeProjectSummaryChange.noAvailableSummary)}
+              </SimpleString>
+            </Info>
+            <TextAreaField
+              {...register("projectSummary")}
+              error={validationErrors?.projectSummary as RhfError}
+              id="summary"
+              hint={hint}
+              disabled={isFetching}
+              characterCount={projectSummaryLength}
+              data-qa="newSummary"
+              characterCountType="descending"
+              rows={15}
+              characterCountMax={32_000}
+              defaultValue={pcrItem.projectSummary ?? ""}
+            />
+          </Fieldset>
+          <Button type="submit" disabled={isFetching}>
+            <Content value={x => x.pcrItem.submitButton} />
+          </Button>
+        </Form>
+      </Section>
+    </PcrPage>
   );
 };

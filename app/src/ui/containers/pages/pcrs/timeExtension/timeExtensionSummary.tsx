@@ -10,9 +10,11 @@ import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TimeExtensionSchemaType, errorMap, pcrTimeExtensionSchema } from "./timeExtension.zod";
 import { EditLink } from "../pcrItemSummaryLinks";
+import { PcrPage } from "../pcrPage";
+import { useRhfErrors } from "@framework/util/errorHelpers";
 
 export const TimeExtensionSummary = () => {
-  const { projectId, itemId, fetchKey, useSetPcrValidationErrors, displayCompleteForm } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
 
   const { project, pcrItem } = usePcrTimeExtensionWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -29,10 +31,10 @@ export const TimeExtensionSummary = () => {
     }),
   });
 
-  useSetPcrValidationErrors(formState?.errors, true);
+  const validationErrors = useRhfErrors(formState?.errors);
 
   return (
-    <>
+    <PcrPage validationErrors={validationErrors}>
       <Section title="Existing project details">
         <SummaryList qa="existingProjectDetails">
           <SummaryListItem
@@ -75,6 +77,6 @@ export const TimeExtensionSummary = () => {
           pcrItem={pcrItem}
         />
       )}
-    </>
+    </PcrPage>
   );
 };
