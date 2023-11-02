@@ -59,10 +59,10 @@ export const SuspendProjectStep = () => {
     resolver: zodResolver(pcrProjectSuspensionSchema, {
       errorMap,
     }),
+    mode: markedAsCompleteHasBeenChecked ? "onChange" : "onSubmit",
   });
 
   const validationErrors = useRhfErrors(formState.errors);
-
   useFormValidate(trigger);
 
   return (
