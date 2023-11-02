@@ -13,6 +13,7 @@ import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 
 export const NavigationArrowsForPCRs = (props: Omit<Props, "pcr" | "editableItemTypes">) => {
   const fragmentRef = useFragmentContext();
+
   if (!isValidFragmentKey<NavigationArrowsFragment$key>(fragmentRef, "NavigationArrowsFragment")) {
     throw new Error("NavigationArrows is missing a NavigationArrowsFragment reference");
   }
