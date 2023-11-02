@@ -1,5 +1,5 @@
 import { Then } from "@badeball/cypress-cucumber-preprocessor";
 
-Then("they should see the projects dashboard", () => {
-  cy.get("h1").should("have.text", "Dashboard");
+Then("the user sees the projects dashboard", () => {
+  cy.waitForPageHeading("Dashboard").should("exist");
 });

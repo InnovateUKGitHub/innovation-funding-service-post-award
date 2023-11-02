@@ -1,26 +1,17 @@
 import { Given } from "@badeball/cypress-cucumber-preprocessor";
 
-const navigateToPage = (page: string) => {
-  cy.intercept("/internationalisation/**").as("i18n");
-
-  cy.visit(Cypress.config().baseUrl + page, {
-    auth: {
-      username: Cypress.env("USERNAME"),
-      password: Cypress.env("PASSWORD"),
-    },
-  });
-
-  cy.wait(["@i18n"]);
-};
-
-Given("they are on the developer homepage", () => {
-  navigateToPage("/");
+Given("the user is on the developer homepage", function () {
+  cy.goToDeveloperHomepage();
 });
 
-Given("they are on the projects dashboard", () => {
-  navigateToPage("/projects/dashboard");
+Given("the user is on the projects dashboard", () => {
+  cy.goToProjectsDashboard();
 });
 
-Given("they are on the project overview", () => {
-  navigateToPage("/projects/dashboard");
+Given("the user is on the project overview", () => {
+  cy.goToProjectOverview(this);
+});
+
+Given("the user is on the MSP document share", function () {
+  cy.goToMspDocumentShare(this);
 });
