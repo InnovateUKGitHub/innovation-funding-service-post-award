@@ -1,9 +1,10 @@
 /**
- * Yeilds the HTML element with the specified label
- * @param label The value of the HTML `label=` property
+ * Yeilds the HTML element labelled by the specified text
+ * @param label The contents of the LABEL element
  */
 const getByLabel = (label: string) => {
-  cy.contains("label", label)
+  return cy
+    .contains("label", label)
     .invoke("attr", "for")
     .then(id => {
       cy.get("#" + id);
@@ -11,11 +12,19 @@ const getByLabel = (label: string) => {
 };
 
 /**
+ * Yeilds the LABEL HTML element with the specified content
+ * @param label The contents of the LABEL element
+ */
+const getLabel = (label: string) => {
+  return cy.contains("label", label);
+};
+
+/**
  * Yeilds the DD elements within a DT element with the specified label
  * @param label The text within the DT label
  */
 const getListItemFromKey = (label: string) => {
-  cy.contains("dt", label).siblings().get("dd");
+  return cy.contains("dt", label).siblings().get("dd");
 };
 
 /**
@@ -24,7 +33,7 @@ const getListItemFromKey = (label: string) => {
  */
 const getByQA = (tag: string) => {
   cy.log("**getByQA**");
-  cy.get(`[data-qa="${tag}"]`);
+  return cy.get(`[data-qa="${tag}"]`);
 };
 
 /**
@@ -33,7 +42,7 @@ const getByQA = (tag: string) => {
  */
 const getByRole = (role: string) => {
   cy.log("**getByRole**");
-  cy.get(`[role="${role}"]`);
+  return cy.get(`[role="${role}"]`);
 };
 
 /**
@@ -42,7 +51,7 @@ const getByRole = (role: string) => {
  */
 const getByPageQA = (tag: string) => {
   cy.log("**getByQA**");
-  cy.get(`[data-page-qa="${tag}"]`);
+  return cy.get(`[data-page-qa="${tag}"]`);
 };
 
 /**
@@ -51,7 +60,7 @@ const getByPageQA = (tag: string) => {
  */
 const getByAriaLabel = (label: string) => {
   cy.log("**getByAriaLabel**");
-  cy.get(`[aria-label="${label}"]`);
+  return cy.get(`[aria-label="${label}"]`);
 };
 
 /**
@@ -60,7 +69,7 @@ const getByAriaLabel = (label: string) => {
  */
 const getBackLink = (contents: string) => {
   cy.log("**getBackLink**");
-  cy.get("a.govuk-back-link").contains(contents);
+  return cy.get("a.govuk-back-link").contains(contents);
 };
 
 /**
@@ -69,7 +78,7 @@ const getBackLink = (contents: string) => {
  */
 const getSubmitButton = (contents: string) => {
   cy.log("**getSubmitButton**");
-  cy.get('button[type="submit"]').contains(contents);
+  return cy.get('button[type="submit"]').contains(contents);
 };
 
 /**
@@ -77,28 +86,37 @@ const getSubmitButton = (contents: string) => {
  * @param contents The contents of the button
  */
 const getButton = (contents: string) => {
-  cy.get("button").contains(contents);
+  return cy.get("button").contains(contents);
 };
 
 const getTableCell = (name: string) => {
-  cy.get("td").contains(name);
+  return cy.get("td").contains(name);
 };
 
 const getTableHeader = (name: string) => {
-  cy.get("th").contains(name);
+  return cy.get("th").contains(name);
 };
 
 const getTableRow = (category: string) => {
-  cy.get("table tr").contains(category).parent();
+  return cy.get("table tr").contains(category).parent();
 };
 
 /**
  * Yeilds the H1 HTML element with the specified content
  * @param title The contents of the H1 element
  */
+const getPageHeading = (title: string, options?: Partial<Cypress.Timeoutable>) => {
+  cy.log("**getPageHeading**");
+  return cy.get("h1", options).contains(title, options);
+};
+
+/**
+ * Yeilds the H2/H3/H4/H5/H6 HTML element with the specified content
+ * @param title The contents of the H1 element
+ */
 const getHeading = (title: string) => {
-  cy.log("**heading**");
-  cy.get("h1").contains(title);
+  cy.log("**getHeading**");
+  return cy.get("h2,h3,h4,h5,h6").contains(title);
 };
 
 /**
@@ -107,7 +125,7 @@ const getHeading = (title: string) => {
  */
 const getParagraph = (content: string) => {
   cy.log("**paragraph**");
-  cy.get("p").contains(content);
+  return cy.get("p").contains(content);
 };
 
 /**
@@ -116,11 +134,12 @@ const getParagraph = (content: string) => {
  */
 const getList = (title: string) => {
   cy.log("**list**");
-  cy.get("li").contains(title);
+  return cy.get("li").contains(title);
 };
 
 const getCommands = {
   getByLabel,
+  getLabel,
   getListItemFromKey,
   getByQA,
   getByRole,
@@ -132,6 +151,7 @@ const getCommands = {
   getTableCell,
   getTableHeader,
   getTableRow,
+  getPageHeading,
   getHeading,
   getParagraph,
   getList,

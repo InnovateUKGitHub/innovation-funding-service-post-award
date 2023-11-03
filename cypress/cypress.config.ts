@@ -22,6 +22,7 @@ async function setupNodeEvents(
 
 const makeUrl = (): string => {
   const { ACC, SANDBOX } = process.env;
+
   if (ACC === "local") {
     return "http://127.0.0.1:3000";
   }
@@ -47,6 +48,9 @@ const config: Cypress.ConfigOptions = {
     specPattern: "cypress/e2e/**/*.{spec.ts,feature}",
     setupNodeEvents,
     reporter: require.resolve("@badeball/cypress-cucumber-preprocessor/pretty-reporter"),
+    env: {
+      SALESFORCE_TIMEOUT: 60_000,
+    },
   },
 };
 
