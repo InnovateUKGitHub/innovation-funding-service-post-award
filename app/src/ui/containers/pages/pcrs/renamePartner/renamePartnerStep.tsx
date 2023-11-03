@@ -16,7 +16,7 @@ interface InnerProps {
 
 const Form = createTypedForm<PCRItemForAccountNameChangeDto>();
 
-const InnerContainer = (
+const RenamePartnerStepComponent = (
   props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps,
 ) => {
   const partnerOptions: SelectOption[] = props.partners
@@ -77,7 +77,7 @@ const InnerContainer = (
   );
 };
 
-export const NameChangeStep = (
+export const RenamePartnerStep = (
   props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator>,
 ) => {
   const stores = useStores();
@@ -85,7 +85,7 @@ export const NameChangeStep = (
   return (
     <Loader
       pending={stores.partners.getPartnersForProject(props.project.id)}
-      render={x => <InnerContainer {...props} partners={x} />}
+      render={x => <RenamePartnerStepComponent {...props} partners={x} />}
     />
   );
 };

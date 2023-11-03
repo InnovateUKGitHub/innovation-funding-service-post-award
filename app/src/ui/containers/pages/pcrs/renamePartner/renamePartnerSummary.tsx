@@ -17,7 +17,7 @@ interface InnerProps {
   projectPartners: PartnerDto[];
 }
 
-const NameChangeSummaryContainer = (
+const RenamePartnerSummaryContainer = (
   props: PcrSummaryProps<
     PCRItemForAccountNameChangeDto,
     PCRAccountNameChangeItemDtoValidator,
@@ -62,7 +62,7 @@ const NameChangeSummaryContainer = (
   );
 };
 
-export const NameChangeSummary = (
+export const RenamePartnerSummary = (
   props: PcrSummaryProps<
     PCRItemForAccountNameChangeDto,
     PCRAccountNameChangeItemDtoValidator,
@@ -77,5 +77,5 @@ export const NameChangeSummary = (
     documents,
     projectPartners,
   });
-  return <Loader pending={combined} render={pending => <NameChangeSummaryContainer {...props} {...pending} />} />;
+  return <Loader pending={combined} render={pending => <RenamePartnerSummaryContainer {...props} {...pending} />} />;
 };

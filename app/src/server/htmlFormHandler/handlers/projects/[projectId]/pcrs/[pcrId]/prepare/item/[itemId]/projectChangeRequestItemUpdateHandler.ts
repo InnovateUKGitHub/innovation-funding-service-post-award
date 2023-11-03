@@ -34,7 +34,7 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/htmlFormHandler/formHandlerBase";
 import { BadRequestError } from "@shared/appError";
 import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
-import { accountNameChangeStepNames } from "@ui/containers/pages/pcrs/nameChange/accountNameChangeWorkflow";
+import { accountNameChangeStepNames } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerWorkflow";
 import { ProjectChangeRequestPrepareRoute } from "@ui/containers/pages/pcrs/overview/projectChangeRequestPrepare.page";
 import {
   ProjectChangeRequestPrepareItemParams,

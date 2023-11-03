@@ -1,8 +1,8 @@
 import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
-import { NameChangeStep } from "@ui/containers/pages/pcrs/nameChange/nameChangeStep";
-import { PCRPrepareItemFilesStep } from "@ui/containers/pages/pcrs/nameChange/prepareItemFilesStep";
-import { NameChangeSummary } from "@ui/containers/pages/pcrs/nameChange/summary";
+import { RenamePartnerStep } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerStep";
+import { PCRPrepareItemFilesStep } from "@ui/containers/pages/pcrs/renamePartner/prepareItemFilesStep";
+import { RenamePartnerSummary } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerSummary";
 import { IPCRWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 
@@ -18,7 +18,7 @@ export const accountNameChangeWorkflow: IPCRWorkflow<
       displayName: "Partner details",
       stepNumber: 1,
       validation: val => val.pcr,
-      stepRender: NameChangeStep,
+      stepRender: RenamePartnerStep,
     },
     {
       stepName: PCRStepType.filesStep,
@@ -30,6 +30,6 @@ export const accountNameChangeWorkflow: IPCRWorkflow<
   ],
   summary: {
     validation: val => val,
-    summaryRender: NameChangeSummary,
+    summaryRender: RenamePartnerSummary,
   },
 };

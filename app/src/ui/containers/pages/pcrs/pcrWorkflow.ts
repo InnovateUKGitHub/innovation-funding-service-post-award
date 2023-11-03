@@ -21,7 +21,7 @@ import { IRoutes } from "@ui/routing/routeConfig";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
-import { accountNameChangeWorkflow } from "./nameChange/accountNameChangeWorkflow";
+import { accountNameChangeWorkflow } from "./renamePartner/renamePartnerWorkflow";
 import { removePartnerWorkflow } from "./removePartner/removePartnerWorkflow";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
