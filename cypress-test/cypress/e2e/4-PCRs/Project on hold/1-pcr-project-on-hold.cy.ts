@@ -66,12 +66,21 @@ describe("PCR >  Put project on hold > Create PCR", () => {
   it("Should mark as complete and attempt to save, prompting validation", () => {
     cy.getByLabel("I agree with this change").click();
     cy.button("Save and return to request").click();
-    cy.validationLink("Enter a project suspension start date");
+    cy.validationLink("Enter a valid project suspension start date.");
   });
 
   it("Should return to editing the request", () => {
     cy.getListItemFromKey("First day of pause").contains("Edit").click();
-    cy.get("h2").contains("First day of pause");
+    cy.get("legend").contains("First day of pause");
+  });
+
+  it("Should enter a valid start date and the validation message should dynamically be removed", () => {
+    cy.get("#suspensionStartDate_month").clear().type("12");
+    cy.get("#suspensionStartDate_year").clear().type("2024");
+    cy.get("#suspensionEndDate_month").clear();
+    cy.get("a").each($a => {
+      cy.wrap($a).should("not.have.text", "Enter a valid project suspension start date.");
+    });
   });
 
   it("Should validate that numbers and a date are required", validateDateRequired);

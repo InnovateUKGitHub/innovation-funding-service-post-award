@@ -1175,9 +1175,9 @@ export const validateDateRequired = () => {
   });
   cy.submitButton("Save and continue").click();
   cy.validationLink("Enter a valid project suspension start date.");
-  cy.validationLink("Enter a project suspension end date.");
+  cy.validationLink("Enter a valid project suspension end date.");
   cy.paragraph("Enter a valid project suspension start date.");
-  cy.paragraph("Enter a project suspension end date.");
+  cy.paragraph("Enter a valid project suspension end date.");
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1189,9 +1189,9 @@ export const validateDateRequired = () => {
   });
   cy.submitButton("Save and continue").click();
   cy.validationLink("Enter a valid project suspension start date.");
-  cy.validationLink("Enter a project suspension end date.");
+  cy.validationLink("Enter a valid project suspension end date.");
   cy.paragraph("Enter a valid project suspension start date.");
-  cy.paragraph("Enter a project suspension end date.");
+  cy.paragraph("Enter a valid project suspension end date.");
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1203,9 +1203,9 @@ export const validateDateRequired = () => {
   });
   cy.submitButton("Save and continue").click();
   cy.validationLink("Enter a valid project suspension start date.");
-  cy.validationLink("Enter a project suspension end date.");
+  cy.validationLink("Enter a valid project suspension end date.");
   cy.paragraph("Enter a valid project suspension start date.");
-  cy.paragraph("Enter a project suspension end date.");
+  cy.paragraph("Enter a valid project suspension end date.");
   cy.wait(500);
   [
     "#suspensionStartDate_month",
@@ -1217,9 +1217,9 @@ export const validateDateRequired = () => {
   });
   cy.submitButton("Save and continue").click();
   cy.validationLink("Enter a valid project suspension start date.");
-  cy.validationLink("Enter a project suspension end date.");
+  cy.validationLink("Enter a valid project suspension end date.");
   cy.paragraph("Enter a valid project suspension start date.");
-  cy.paragraph("Enter a project suspension end date.");
+  cy.paragraph("Enter a valid project suspension end date.");
 };
 
 export const validateGrantMoving = () => {
