@@ -2,7 +2,14 @@ Feature: MSP Document Share
   Scenario: Uploading a document
     Given the user is an FC of a single partner KTP project
     And the user is on the MSP document share
-    When the user uploads "README.md" renamed as "very silly fc file.txt" as type "Collaboration agreement"
+    When the user uploads a small file named "very silly fc file.txt" as type "Collaboration agreement"
+    Then the file "very silly fc file.txt" can be downloaded from the user's partner documents
+    And the file matches "README.md" on disk
+
+  Scenario: Uploading a document
+    Given the user is an FC of a single partner KTP project
+    And the user is on the MSP document share
+    When the user uploads a small file named "very silly fc file.txt" as type "Collaboration agreement"
     Then the file "very silly fc file.txt" can be downloaded from the user's partner documents
     And the file matches "README.md" on disk
 
