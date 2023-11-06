@@ -29,6 +29,7 @@ describe("claims > Claim summary", () => {
 
   it("Should navigate to the claims document page", () => {
     cy.button("Continue to claims documents").click();
+    cy.heading("Claim documents");
   });
 
   it("Should clear any documents that shouldn't be there", async () => fileTidyUp("James Black"));

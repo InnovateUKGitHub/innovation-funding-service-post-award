@@ -189,7 +189,8 @@ export const rejectElevenDocsAndShowError = () => {
 };
 
 export const allowBatchFileUpload = () => {
-  cy.get(`input[type="file"]`).selectFile(documentPaths);
+  const tenFiles = [...documentPaths];
+  cy.get(`input[type="file"]`).selectFile(tenFiles);
   cy.submitButton("Upload documents").click();
 };
 
@@ -249,10 +250,10 @@ export const selectFileDescription = () => {
 };
 
 export const claimsDocUpload = () => {
-  cy.uploadButton("Upload documents").click();
+  cy.button("Upload documents").click();
   cy.validationLink("Choose a file to upload");
   cy.fileInput("testfile.doc");
-  cy.uploadButton("Upload documents").click();
+  cy.button("Upload documents").click();
   cy.validationNotification("has been uploaded.");
 };
 
