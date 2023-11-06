@@ -1,20 +1,26 @@
 Feature: MSP Document Share
   Scenario: Uploading a document
-    Given the user is an FC of a single partner KTP project
+    Given the user is an FC
     And the user is on the MSP document share
-    When the user uploads a small file named "very silly fc file.txt" as type "Collaboration agreement"
-    Then the file "very silly fc file.txt" can be downloaded from the user's partner documents
-    And the file matches "README.md" on disk
+    When the user uploads a file named "very silly fc file.txt" with no type
+    Then the file can be downloaded from the user's partner documents
+    And the file matches what was uploaded
 
-  Scenario: Uploading a document
-    Given the user is an FC of a single partner KTP project
+  Scenario Outline: Invalid file names
+    Given the user is an FC
     And the user is on the MSP document share
-    When the user uploads a small file named "very silly fc file.txt" as type "Collaboration agreement"
-    Then the file "very silly fc file.txt" can be downloaded from the user's partner documents
-    And the file matches "README.md" on disk
+    When the user uploads a file named <filename> with no type
+    Then the file is rejected because <reasoning>
+
+    Examples:
+      | filename                                                                                                 | reasoning                   |
+      | "aksdjhjadhshdsakhkadshjkadshjkdashjhdakhkdshjkahdshdsakjhdsjkhdasjkhdajskhjksdhjkdsahjkdashjkhads.pptx" | it is too long              |
+      | "Yoshi Commits Tax Fraud.nds"                                                                            | it has the wrong extension  |
+      | "James May: Cheese.pptx"                                                                                 | it has forbidden characters |
+      | ".pptx"                                                                                                  | it has no name              |
 
   Scenario Outline: Role visibility
-    Given the user is <role> of a single partner KTP project
+    Given the user is <role>
     And the user is on the MSP document share
     Then the user <can-or-cannot> see the "Access Control" input
     And the user can see <documents>

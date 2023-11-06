@@ -13,7 +13,7 @@ const goToPage = (page: string) => {
 };
 
 const waitForPageHeading = (title: string) => {
-  cy.getPageHeading(title, { timeout: Cypress.env("SALESFORCE_TIMEOUT") });
+  return cy.getPageHeading(title, { timeout: Cypress.env("SALESFORCE_TIMEOUT") });
 };
 
 const goToDeveloperHomepage = () => {

@@ -3,7 +3,7 @@ import { tileCommands } from "./components/tile";
 import { formCommands } from "./components/form";
 import { getCommands } from "./get";
 import { goToCommands } from "./state/navigate";
-import { accMessageCommands } from "./components/accMessage";
+import { messageCommands } from "./components/messaging";
 import { documentCommands } from "./state/document";
 
 const commands = {
@@ -12,7 +12,7 @@ const commands = {
   ...goToCommands,
   ...projectCardCommands,
   ...tileCommands,
-  ...accMessageCommands,
+  ...messageCommands,
   ...documentCommands,
 
   clickOnTile(label: string) {

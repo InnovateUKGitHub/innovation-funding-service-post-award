@@ -32,9 +32,30 @@ const computeSha256FromDisk = (path: string) => {
   });
 };
 
+const setFileFromDisk = (path: string, fileName?: string) => {
+  cy.log("**setFileFromDisk**");
+  return cy.readFile(`cypress/documents/${path}`, null).then((contents: BufferType) => {
+    cy.getFileInput().selectFile({
+      fileName,
+      contents: contents,
+    });
+  });
+};
+
+const setFile = (contents: string, fileName: string) => {
+  cy.log("**setFileFromString**");
+
+  cy.getFileInput().selectFile({
+    fileName,
+    contents: Cypress.Buffer.from(contents),
+  });
+};
+
 const documentCommands = {
   downloadFile,
   computeSha256FromDisk,
+  setFileFromDisk,
+  setFile,
 };
 
 export { documentCommands };

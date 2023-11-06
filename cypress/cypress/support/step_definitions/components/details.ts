@@ -1,5 +1,5 @@
 import { When } from "@badeball/cypress-cucumber-preprocessor";
 
-When("I select the {string} details dropdown", (label: string) => {
+When("the user opens the {string} dropdown", (label: string) => {
   cy.clickOnDetails(label);
 });

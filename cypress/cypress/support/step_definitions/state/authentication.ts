@@ -27,7 +27,7 @@ const changeUser = (info: LoginInfo): Parameters<typeof Given>[1] => {
   };
 
   Given(
-    "the user is a PMFC Hybrid of a single partner KTP project",
+    "the user is a PMFC Hybrid",
     changeUser({
       username: lowercasePrefix + "autoimport.austria@innovateuk.gov.uk",
       project,
@@ -36,7 +36,7 @@ const changeUser = (info: LoginInfo): Parameters<typeof Given>[1] => {
   );
 
   Given(
-    "the user is an FC of a single partner KTP project",
+    "the user is an FC",
     changeUser({
       username: lowercasePrefix + "autoimport.belgium@innovateuk.gov.uk",
       project,
@@ -45,7 +45,7 @@ const changeUser = (info: LoginInfo): Parameters<typeof Given>[1] => {
   );
 
   Given(
-    "the user is an MO of a single partner KTP project",
+    "the user is an MO",
     changeUser({
       username: lowercasePrefix + "autoimport.denmark@innovateuk.gov.uk",
       project,

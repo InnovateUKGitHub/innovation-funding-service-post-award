@@ -1,5 +1,5 @@
 import { Then } from "@badeball/cypress-cucumber-preprocessor";
 
-Then("the file matches {string} on disk", function (path: string) {
-  cy.computeSha256FromDisk(path).should("eq", this.previousFileSha256);
+Then("the file matches what was uploaded", function () {
+  cy.computeSha256FromDisk(this.localFileInfo.path).should("eq", this.remoteSha256);
 });

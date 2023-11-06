@@ -9,9 +9,19 @@ interface LoginInfo {
   } | null;
 }
 
+interface FileInfo {
+  name: string;
+  type?: string;
+}
+
+interface LocalFileInfo extends FileInfo {
+  path: string;
+}
+
 interface SirtestalotContext {
   userInfo?: LoginInfo;
-  previousFileSha256?: string;
+  localFileInfo?: LocalFileInfo;
+  remoteSha256?: string;
 }
 
 declare namespace Mocha {
