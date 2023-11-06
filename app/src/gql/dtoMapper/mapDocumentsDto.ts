@@ -45,7 +45,7 @@ const mapper: GQL.DtoMapper<
   DocumentSummaryNode,
   {
     projectId: ProjectId;
-    partnerName: string;
+    partnerName?: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
     costCategoryId?: string;
@@ -109,7 +109,7 @@ const mapper: GQL.DtoMapper<
     return (node?.node?.LinkedEntityId?.value ?? "unknown-linked-entity-id") as LinkedEntityId;
   },
   partnerName(node, { partnerName }) {
-    return partnerName;
+    return partnerName ?? "";
   },
 };
 
@@ -125,7 +125,7 @@ export function mapToDocumentSummaryDto<
   pickList: PickList[],
   additionalData: {
     projectId: ProjectId;
-    partnerName: string;
+    partnerName?: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
     pcrId?: PcrId;

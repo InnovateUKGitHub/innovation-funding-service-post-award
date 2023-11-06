@@ -7,24 +7,33 @@ import { RootState } from "@ui/redux/reducers/rootReducer";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useStore } from "react-redux";
 import { useOnUpdate } from "./onUpdate";
-import { useStores } from "@ui/redux/storesProvider";
 import type { z } from "zod";
-import type { claimLevelDelete, partnerLevelDelete, projectLevelDelete } from "@ui/zod/documentValidators.zod";
+import type {
+  claimLevelDelete,
+  partnerLevelDelete,
+  projectLevelDelete,
+  pcrLevelDelete,
+} from "@ui/zod/documentValidators.zod";
+import { useMessages } from "./useMessages";
 
 export const useOnDelete = <
-  Inputs extends z.output<typeof projectLevelDelete | typeof partnerLevelDelete | typeof claimLevelDelete>,
+  Inputs extends z.output<
+    typeof projectLevelDelete | typeof partnerLevelDelete | typeof claimLevelDelete | typeof pcrLevelDelete
+  >,
 >({
   onSuccess,
 }: {
   onSuccess: () => void;
 }) => {
   const store = useStore<RootState>();
-  const stores = useStores();
+
   const { getContent } = useContent();
+
+  const { clearMessages } = useMessages();
 
   return useOnUpdate<Inputs, unknown, DocumentSummaryDto>({
     req(props) {
-      stores.messages.clearMessages();
+      clearMessages();
 
       const { documentId, projectId, form } = props;
 
@@ -43,6 +52,16 @@ export const useOnDelete = <
           return clientsideApiClient.documents.deleteClaimDocument({
             documentId,
             claimKey: { partnerId, periodId, projectId },
+          });
+        }
+
+        case FormTypes.PcrLevelDelete: {
+          const { projectId, projectChangeRequestIdOrItemId } = props;
+
+          return clientsideApiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({
+            documentId,
+            projectChangeRequestIdOrItemId,
+            projectId,
           });
         }
 

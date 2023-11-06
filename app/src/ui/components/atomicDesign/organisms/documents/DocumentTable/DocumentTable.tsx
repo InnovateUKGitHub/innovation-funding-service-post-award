@@ -77,7 +77,7 @@ export interface DocumentTableWithDeleteProps<T extends DocumentSummaryDto> exte
   hideRemove?: (d: T) => boolean;
   onRemove: (d: T) => void;
   disabled?: boolean;
-  formType?: FormTypes.ProjectLevelDelete | FormTypes.ClaimLevelDelete;
+  formType?: FormTypes.ProjectLevelDelete | FormTypes.ClaimLevelDelete | FormTypes.PcrLevelDelete;
 }
 
 export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithDeleteProps<DocumentSummaryDto>> = ({

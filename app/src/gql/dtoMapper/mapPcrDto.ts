@@ -32,6 +32,7 @@ export type PcrNode = Readonly<
     Acc_RequestNumber__c: GQL.Value<number>;
     Acc_MarkedasComplete__c: GQL.Value<string>;
     Acc_OrganisationName__c: GQL.Value<string>;
+    Acc_Project_Participant__c: GQL.Value<string>;
     Acc_ParticipantType__c: GQL.Value<string>;
     Acc_PublicDescriptionSnapshot__c: GQL.Value<string>;
     Acc_NewPublicDescription__c: GQL.Value<string>;
@@ -77,6 +78,7 @@ export type PcrItemDtoMapping = Pick<
   | "offsetMonths"
   | "organisationName"
   | "organisationType"
+  | "partnerId"
   | "partnerNameSnapshot"
   | "partnerType"
   | "projectDurationSnapshot"
@@ -134,6 +136,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   organisationType(node) {
     return getPCROrganisationType(mapFromSalesforcePCRPartnerType(node?.Acc_ParticipantType__c?.value ?? ""));
+  },
+  partnerId(node) {
+    return (node?.Acc_Project_Participant__c?.value ?? "unknown-partner") as PartnerId;
   },
   partnerNameSnapshot(node) {
     return node?.Acc_ExistingPartnerName__c?.value ?? null;

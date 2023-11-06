@@ -18,14 +18,14 @@ export const ViewLink = ({ stepName }: { stepName: PCRStepType }) => {
   );
 };
 
-export const EditLink = ({ stepName }: { stepName: PCRStepType }) => {
+export const EditLink = ({ stepName, disabled }: { stepName: PCRStepType; disabled?: boolean }) => {
   const { mode, workflow, routes, projectId, pcrId, itemId } = usePcrWorkflowContext();
   const { getContent } = useContent();
 
   if (mode !== "prepare") return null;
 
   return (
-    <Link replace route={getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
+    <Link disabled={disabled} replace route={getStepLink(workflow, stepName, routes, projectId, pcrId, itemId)}>
       {getContent(x => x.pcrLabels.edit)}
     </Link>
   );

@@ -3,6 +3,7 @@ import {
   allowedImpactManagementClaimDocuments,
   allowedProjectLevelDocuments,
   DocumentDescription,
+  allowedPcrLevelDocuments,
 } from "@framework/constants/documentDescription";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { z } from "zod";
@@ -13,6 +14,7 @@ import {
   partnerIdValidation,
   getMultiFileValidation,
   periodIdValidation,
+  pcrItemIdValidation,
 } from "./helperValidators.zod";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
@@ -79,6 +81,24 @@ const getClaimLevelUpload = ({ config, project }: ClaimLevelUploadSchemaExtraPro
     files: getMultiFileValidation(config),
   });
 
+const getPcrLevelUpload = ({ config }: { config: IAppOptions }) =>
+  z.object({
+    form: z.literal(FormTypes.PcrLevelUpload),
+    projectId: projectIdValidation,
+    projectChangeRequestIdOrItemId: pcrItemIdValidation,
+    description: z.union([
+      emptyStringToUndefinedValidation,
+      z.coerce
+        .number()
+        .refine(x => allowedPcrLevelDocuments.includes(x))
+        .optional()
+        .transform(x => x as DocumentDescription),
+    ]),
+    files: getMultiFileValidation(config),
+  });
+
+type PcrLevelUploadSchemaType = ReturnType<typeof getPcrLevelUpload>;
+
 const projectLevelDelete = z.object({
   form: z.literal(FormTypes.ProjectLevelDelete),
   projectId: projectIdValidation,
@@ -100,15 +120,29 @@ const claimLevelDelete = z.object({
   documentId: z.string(),
 });
 
+const pcrLevelDelete = z.object({
+  form: z.literal(FormTypes.PcrLevelDelete),
+  projectId: projectIdValidation,
+  projectChangeRequestIdOrItemId: pcrItemIdValidation,
+  documentId: z.string(),
+});
+
 const projectOrPartnerLevelDelete = z.discriminatedUnion("form", [partnerLevelDelete, projectLevelDelete]);
 
 export {
+  getPcrLevelUpload,
   getProjectLevelUpload,
   projectLevelDelete,
   partnerLevelDelete,
   getClaimLevelUpload,
   claimLevelDelete,
+  pcrLevelDelete,
   projectOrPartnerLevelDelete,
   getBankStatementUpload,
 };
-export type { ProjectLevelUploadSchemaType, ClaimLevelUploadSchemaType, UploadBankStatementSchemaType };
+export type {
+  ProjectLevelUploadSchemaType,
+  ClaimLevelUploadSchemaType,
+  UploadBankStatementSchemaType,
+  PcrLevelUploadSchemaType,
+};

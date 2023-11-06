@@ -17,6 +17,11 @@ const pcrIdValidation = z
   .startsWith(SalesforcePrefixes.Acc_ProjectChangeRequest__c)
   .transform(x => x as PcrId);
 
+const pcrItemIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_ProjectChangeRequest__c)
+  .transform(x => x as PcrItemId);
+
 const partnerIdValidation = z
   .string()
   .startsWith(SalesforcePrefixes.Acc_ProjectParticipant__c)
@@ -112,6 +117,7 @@ const getMultiFileValidation = (options: IAppOptions) =>
 export {
   projectIdValidation,
   pcrIdValidation,
+  pcrItemIdValidation,
   partnerIdValidation,
   periodIdValidation,
   emptyStringToUndefinedValidation,

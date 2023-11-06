@@ -11,6 +11,9 @@ enum FormTypes {
   // Project Change Requests
   ProjectChangeRequestCreate = "projectChangeRequestCreate",
   ProjectChangeRequestUpdateTypes = "projectChangeRequestUpdateTypes",
+
+  PcrLevelDelete = "pcrLevelDelete",
+  PcrLevelUpload = "pcrLevelUpload",
 }
 
 export { FormTypes };

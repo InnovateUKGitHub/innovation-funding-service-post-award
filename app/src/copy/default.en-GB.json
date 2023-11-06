@@ -2009,6 +2009,14 @@
         }
       }
     },
+    "pcrRenamePartner": {
+      "accountName": {
+        "errors": {
+          "custom": "The proposed name of the partner must be different to the existing one.",
+          "too_small": "Enter a new partner name."
+        }
+      }
+    },
     "pcrProjectSuspension": {
       "suspensionStartDate": {
         "errors": {

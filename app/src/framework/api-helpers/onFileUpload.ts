@@ -4,14 +4,28 @@ import { useContent } from "@ui/hooks/content.hook";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useOnUpdate } from "./onUpdate";
 import type { z } from "zod";
-import type { ProjectLevelUploadSchemaType, ClaimLevelUploadSchemaType } from "@ui/zod/documentValidators.zod";
+import type {
+  ProjectLevelUploadSchemaType,
+  ClaimLevelUploadSchemaType,
+  PcrLevelUploadSchemaType,
+} from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
 
-export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType | ClaimLevelUploadSchemaType>>({
-  onSuccess,
-}: {
-  onSuccess: () => void;
-}) => {
+type InputOptions =
+  | ({ form: FormTypes.ProjectLevelUpload } & z.output<ProjectLevelUploadSchemaType>)
+  | ({ form: FormTypes.ClaimLevelUpload } & z.output<ClaimLevelUploadSchemaType>)
+  | ({ form: FormTypes.PcrLevelUpload } & z.output<PcrLevelUploadSchemaType>);
+
+const isProjectLevelUpload = (data: InputOptions): data is z.output<ProjectLevelUploadSchemaType> =>
+  data.form === FormTypes.ProjectLevelUpload;
+
+const isClaimLevelUpload = (data: InputOptions): data is z.output<ClaimLevelUploadSchemaType> =>
+  data.form === FormTypes.ClaimLevelUpload;
+
+const isPcrLevelUpload = (data: InputOptions): data is z.output<PcrLevelUploadSchemaType> =>
+  data.form === FormTypes.PcrLevelUpload;
+
+export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void }) => {
   const { getContent } = useContent();
   const { clearMessages, setSuccessMessage } = useMessages();
 
@@ -19,44 +33,47 @@ export const useOnUpload = <Inputs extends z.output<ProjectLevelUploadSchemaType
     req(data) {
       clearMessages();
 
-      const { projectId, partnerId, description, files, form } = data;
+      const { files, description, projectId } = data;
 
-      switch (form) {
-        case FormTypes.ClaimLevelUpload: {
-          const { periodId } = data;
-          return clientsideApiClient.documents.uploadClaimDocuments({
-            claimKey: { projectId, partnerId, periodId },
+      if (isClaimLevelUpload(data)) {
+        return clientsideApiClient.documents.uploadClaimDocuments({
+          claimKey: { projectId, partnerId: data.partnerId, periodId: data.periodId },
+          documents: {
+            files,
+            description,
+          },
+        });
+      } else if (isPcrLevelUpload(data)) {
+        return clientsideApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({
+          projectId,
+          projectChangeRequestIdOrItemId: data.projectChangeRequestIdOrItemId,
+          documents: {
+            files,
+            description,
+          },
+        });
+      } else if (isProjectLevelUpload(data)) {
+        if (data.partnerId) {
+          return clientsideApiClient.documents.uploadPartnerDocument({
+            projectId: data.projectId,
+            partnerId: data.partnerId,
+            documents: {
+              files,
+              description,
+            },
+          });
+        } else {
+          return clientsideApiClient.documents.uploadProjectDocument({
+            projectId: data.projectId,
             documents: {
               files,
               description,
             },
           });
         }
-
-        case FormTypes.ProjectLevelUpload: {
-          if (partnerId) {
-            return clientsideApiClient.documents.uploadPartnerDocument({
-              projectId,
-              partnerId,
-              documents: {
-                files,
-                description,
-              },
-            });
-          } else {
-            return clientsideApiClient.documents.uploadProjectDocument({
-              projectId,
-              documents: {
-                files,
-                description,
-              },
-            });
-          }
-        }
-
-        default:
-          // Invalid form
-          return Promise.reject();
+      } else {
+        // Invalid form
+        return Promise.reject();
       }
     },
     onSuccess(data, res, ctx) {

@@ -2,9 +2,6 @@ import { graphql } from "react-relay";
 
 export const claimSummaryQuery = graphql`
   query ClaimSummaryQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
-    currentUser {
-      userId
-    }
     salesforce {
       uiapi {
         ...AwardRateOverridesMessageFragment
