@@ -1,5 +1,5 @@
-let date = new Date();
-let comments = JSON.stringify(date);
+let date = new Date().toUTCString();
+let comments = date;
 
 export const moClaimTidyUp = (claimType: string) => {
   cy.contains("td", "ABS EUI Medium Enterprise")
