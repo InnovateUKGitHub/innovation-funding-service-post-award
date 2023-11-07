@@ -1,4 +1,4 @@
-import { SamlConfig, Strategy, VerifiedCallback } from "passport-saml";
+import { SamlConfig, Strategy, VerifiedCallback } from "@node-saml/passport-saml";
 
 import { configuration } from "@server/features/common/config";
 
@@ -27,27 +27,27 @@ export type ShibbolethPayload = expectedUrnResponse & {
   email: string;
 };
 
-const baseShibbolethConfig: SamlConfig = {
+const shibbolethConfig: SamlConfig = {
+  callbackUrl: configuration.serverUrl + successfulValidationRoute,
   entryPoint: configuration.sso.providerUrl,
   issuer: configuration.serverUrl,
-  callbackUrl: configuration.serverUrl + successfulValidationRoute,
-};
-
-// the info we're asking for
-const expectedShibbolethConfig: Partial<SamlConfig> = {
+  privateKey: configuration.certificates.shibboleth.decryptionPvk,
+  cert: configuration.certificates.shibboleth.cert,
+  decryptionPvk: configuration.certificates.shibboleth.decryptionPvk,
   identifierFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:persistent",
+  authnRequestBinding: "HTTP-REDIRECT",
+  signatureAlgorithm: "sha512",
   disableRequestedAuthnContext: true,
-  decryptionPvk: configuration.certificates.shibboleth,
   acceptedClockSkewMs: -1,
 };
 
-const shibbolethConfig: SamlConfig = {
-  ...baseShibbolethConfig,
-  ...expectedShibbolethConfig,
-};
-
 // Note: Configure passport to use shibboleth configured saml
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const shibbolethStrategy = new Strategy(shibbolethConfig, (payload: any, onSuccess: VerifiedCallback) =>
-  onSuccess(null, payload, {}),
+export const shibbolethStrategy = new Strategy(
+  shibbolethConfig,
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (payload: any, onSuccess: VerifiedCallback) => onSuccess(null, payload, {}),
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (payload: any, onSuccess: VerifiedCallback) => onSuccess(null, payload, {}),
 );

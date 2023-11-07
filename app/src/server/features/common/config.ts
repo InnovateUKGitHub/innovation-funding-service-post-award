@@ -23,12 +23,15 @@ const getEnvValue = (env: string, { defaultValue }: { defaultValue?: string } = 
   return value;
 };
 
-const getCertificate = (type: "SHIBBOLETH" | "SALESFORCE", defaultValue?: string): string => {
-  if (envExists(`${type}_PRIVATE_KEY`)) {
-    return getEnvValue(`${type}_PRIVATE_KEY`);
+const getCertificate = (
+  type: "SHIBBOLETH_PRIVATE_KEY" | "SALESFORCE_PRIVATE_KEY" | "SHIBBOLETH_PUBLIC_KEY",
+  defaultValue?: string,
+): string => {
+  if (envExists(type)) {
+    return getEnvValue(type);
   }
-  if (envExists(`${type}_PRIVATE_KEY_FILE`)) {
-    return readFileSync(getEnvValue(`${type}_PRIVATE_KEY_FILE`), { encoding: "utf-8" });
+  if (envExists(`${type}_FILE`)) {
+    return readFileSync(getEnvValue(`${type}_FILE`), { encoding: "utf-8" });
   }
   if (typeof defaultValue === "string") {
     return defaultValue;
@@ -74,7 +77,10 @@ export interface IConfig {
 
   readonly certificates: {
     salesforce: string;
-    shibboleth: string;
+    shibboleth: {
+      cert: string;
+      decryptionPvk: string;
+    };
   };
 
   readonly features: IFeatureFlags;
@@ -140,8 +146,11 @@ const timeouts = {
 };
 
 const certificates = {
-  salesforce: getCertificate("SALESFORCE"),
-  shibboleth: getCertificate("SHIBBOLETH", ""),
+  salesforce: getCertificate("SALESFORCE_PRIVATE_KEY"),
+  shibboleth: {
+    decryptionPvk: getCertificate("SHIBBOLETH_PRIVATE_KEY", ""),
+    cert: getCertificate("SHIBBOLETH_PUBLIC_KEY", ""),
+  },
 };
 
 const disableCsp = getFeatureFlagValue(process.env.DISABLE_CSP, false);
