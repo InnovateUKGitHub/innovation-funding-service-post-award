@@ -1137,11 +1137,11 @@
   },
   "pcrStatus": {
     "Unknown": "Unknown",
-    "Draft": "Draft",
+    "Draft": "Draft with Project Manager",
     "SubmittedToMonitoringOfficer": "Submitted to Monitoring Officer",
     "QueriedByMonitoringOfficer": "Queried by Monitoring Officer",
     "SubmittedToInnovationLead": "Submitted to Innovation Lead",
-    "QueriedByInnovateUK": "Queried by Innovate UK",
+    "QueriedByInnovateUK": "Queried to Project Manager",
     "InExternalReview": "In External Review",
     "InReviewWithInnovateUK": "In Review with Innovate UK",
     "Rejected": "Rejected",
