@@ -1576,3 +1576,50 @@ export const validateFutureStartDate = () => {
   cy.button("Save and continue").click();
   cy.validationLink("The last day of pause cannot be before the first day of pause.");
 };
+
+export const backToPcrs = () => {
+  cy.backLink("Back to project change requests").click();
+  cy.heading("Project change requests");
+  cy.go("back");
+  cy.heading("Request");
+};
+
+export const onHoldDetails = () => {
+  cy.get("h2").contains("Details");
+  cy.getListItemFromKey("Request number").contains("2");
+  cy.getListItemFromKey("Types").contains("Put project on hold");
+};
+
+export const onHoldGiveUsInfo = () => {
+  cy.get("h2").contains("Give us information");
+  cy.get("a").contains("Put project on hold");
+  cy.get("strong").contains("Complete");
+};
+
+export const backToRequest = () => {
+  cy.backLink("Back to request").click();
+  cy.heading("Request");
+};
+
+export const workingNextArrow = () => {
+  cy.getByQA("arrow-left").contains("Next");
+  cy.getByQA("arrow-left").contains("Reasoning").click();
+  cy.heading("Reasons for Innovate UK");
+};
+
+export const onHoldRequestDetails = () => {
+  [
+    ["Request number", "2"],
+    ["Types", "Put project on hold"],
+    ["Comments", "These are test comments for Put project on hold."],
+    ["Files", "testfile.doc"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key).contains(item);
+  });
+};
+
+export const workingPreviousArrow = () => {
+  cy.getByQA("arrow-right").contains("Previous");
+  cy.getByQA("arrow-right").contains("Put project on hold").click();
+  cy.heading("Put project on hold");
+};
