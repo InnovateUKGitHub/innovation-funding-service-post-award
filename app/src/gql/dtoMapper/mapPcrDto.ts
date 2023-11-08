@@ -138,7 +138,7 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
     return getPCROrganisationType(mapFromSalesforcePCRPartnerType(node?.Acc_ParticipantType__c?.value ?? ""));
   },
   partnerId(node) {
-    return (node?.Acc_Project_Participant__c?.value ?? "unknown-partner") as PartnerId;
+    return (node?.Acc_Project_Participant__c?.value as PartnerId) ?? null;
   },
   partnerNameSnapshot(node) {
     return node?.Acc_ExistingPartnerName__c?.value ?? null;

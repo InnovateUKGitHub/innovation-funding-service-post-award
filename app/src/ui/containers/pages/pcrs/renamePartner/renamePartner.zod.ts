@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { PartnerDto } from "@framework/dtos/partnerDto";
-import { partnerIdValidation } from "@ui/zod/helperValidators.zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcrRenamePartner"] });
 
@@ -12,7 +11,10 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
     .object({
       markedAsComplete: z.boolean(),
       accountName: z.string().optional(),
-      partnerId: partnerIdValidation,
+      partnerId: z
+        .string()
+        .transform(x => x as PartnerId)
+        .nullable(),
     })
     .superRefine((data, ctx) => {
       if (data.partnerId) {
@@ -25,6 +27,15 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
         }
       }
       if (data.markedAsComplete) {
+        if (!data.partnerId) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.too_small,
+            minimum: 1,
+            inclusive: true,
+            type: "string",
+            path: ["partnerId"],
+          });
+        }
         if (!data.accountName) {
           ctx.addIssue({
             code: z.ZodIssueCode.too_small,

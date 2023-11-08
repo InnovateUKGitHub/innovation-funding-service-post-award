@@ -1,7 +1,7 @@
 import { PCRStepType } from "@framework/constants/pcrConstants";
 import { PCRItemForAccountNameChangeDto } from "@framework/dtos/pcrDtos";
 import { RenamePartnerStep } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerStep";
-import { RemovePartnerFilesStep } from "@ui/containers/pages/pcrs/renamePartner/removePartnerFilesStep";
+import { RenamePartnerFilesStep } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerFilesStep";
 import { RenamePartnerSummary } from "@ui/containers/pages/pcrs/renamePartner/renamePartnerSummary";
 import { IPCRWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
@@ -17,19 +17,16 @@ export const accountNameChangeWorkflow: IPCRWorkflow<
       stepName: PCRStepType.partnerNameStep,
       displayName: "Partner details",
       stepNumber: 1,
-      // validation: val => val.pcr,
       migratedStepRender: RenamePartnerStep,
     },
     {
       stepName: PCRStepType.filesStep,
       displayName: "Upload change of name certificate",
       stepNumber: 2,
-      // validation: val => val,
-      migratedStepRender: RemovePartnerFilesStep,
+      migratedStepRender: RenamePartnerFilesStep,
     },
   ],
   migratedSummary: {
-    // validation: val => val,
     migratedSummaryRender: RenamePartnerSummary,
   },
   isMigratedToGql: true,

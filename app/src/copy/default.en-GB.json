@@ -2010,6 +2010,11 @@
       }
     },
     "pcrRenamePartner": {
+      "partnerId": {
+        "errors": {
+          "too_small": "Select partner to change."
+        }
+      },
       "accountName": {
         "errors": {
           "custom": "The proposed name of the partner must be different to the existing one.",
@@ -2035,7 +2040,7 @@
       }
     },
     "projectSetupBankDetails": {
-      "accountNumber": {
+      "accountName": {
         "errors": {
           "too_small": "Account number cannot be empty.",
           "invalid_string": {
