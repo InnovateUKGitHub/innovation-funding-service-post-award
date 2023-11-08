@@ -14,7 +14,6 @@ import { ForecastTableCurrencyInput } from "./ForecastTableCurrencyInput";
 import { forecastTableResize } from "./forecastTableResize";
 import { getForecastHeaderContent } from "./getForecastHeaderContent";
 import { ForecastTableDto } from "./useMapToForecastTableDto";
-import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 
 export interface ForecastTableProps {
   control?: Control<z.output<ForecastTableSchemaType>>;
@@ -134,15 +133,7 @@ const ForecastTable = (props: ForecastTableProps) => {
                     key={profile.periodId}
                     className={mkcol(profile.rhc)}
                   >
-                    {profile.stubCurrencyInputMode ? (
-                      <NumberInput
-                        disabled={disabled}
-                        value={profile.displayValue}
-                        className="govuk-!-font-size-16"
-                        aria-label={ariaLabel}
-                        readOnly
-                      />
-                    ) : control && profile.forecastMode ? (
+                    {control && profile.forecastMode && !profile.calculatedField ? (
                       <ForecastTableCurrencyInput
                         costCategoryId={costCategory.costCategoryId}
                         periodId={profile.periodId}

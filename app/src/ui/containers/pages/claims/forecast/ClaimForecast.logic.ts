@@ -1,5 +1,5 @@
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
-import { mapToClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
@@ -27,7 +27,7 @@ const useClaimForecastData = ({
 
   const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles"]);
   const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate"], {});
-  const claims = mapToClaimsDtoArray(
+  const claims = mapToClaimDtoArray(
     data.salesforce.uiapi.query.Acc_Claims__c?.edges ?? [],
     ["periodId", "status", "iarStatus", "isIarRequired", "isApproved", "periodEndDate", "isFinalClaim"],
     {},

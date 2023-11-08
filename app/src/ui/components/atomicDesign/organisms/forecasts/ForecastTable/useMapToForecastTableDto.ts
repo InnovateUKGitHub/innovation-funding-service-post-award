@@ -39,7 +39,7 @@ interface StatusCell {
 
 interface CostCategoryCellData extends BaseCellData {
   forecastMode: boolean;
-  stubCurrencyInputMode: boolean;
+  calculatedField: boolean;
   displayValue: string;
   profileId: string;
 }
@@ -198,7 +198,7 @@ const mapToForecastTableDto = ({
       let value: number = 0;
       let displayValue: string = "";
       let profileId = "";
-      let stubCurrencyInputMode = false;
+      let calculatedField = false;
 
       if (forecast && forecastProfile) {
         if (costCategory.type === CostCategoryType.Overheads && labourProfile && partner.overheadRate !== null) {
@@ -211,7 +211,7 @@ const mapToForecastTableDto = ({
             value = multiplyCurrency(parseFloat(numberComponent), partner.overheadRate, 1);
             displayValue = isNaN(value) ? "" : String(value);
             profileId = forecastProfile.id;
-            stubCurrencyInputMode = true;
+            calculatedField = true;
           } else {
             value = multiplyCurrency(labourProfile.value, partner.overheadRate, 1);
             displayValue = String(value);
@@ -240,7 +240,7 @@ const mapToForecastTableDto = ({
         value,
         displayValue,
         forecastMode: forecast,
-        stubCurrencyInputMode,
+        calculatedField,
         profileId,
         rhc: periodTotals[i - 1].rhc,
       });

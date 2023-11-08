@@ -11,6 +11,7 @@ import {
 import {
   ProjectSetupBankDetailsSchemaType,
   getProjectSetupBankDetailsSchema,
+  projectSetupBankDetailsErrorMap,
 } from "@ui/containers/pages/projects/setup/projectSetupBankDetails.zod";
 import { ProjectSetupBankDetailsVerifyRoute } from "@ui/containers/pages/projects/setup/projectSetupBankDetailsVerify.page";
 import { FormTypes } from "@ui/zod/FormTypes";
@@ -24,7 +25,6 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
     super({
       route: ProjectSetupBankDetailsRoute,
       forms: [FormTypes.ProjectSetupBankDetails],
-      formIntlKeyPrefix: ["projectSetupBankDetails"],
     });
   }
 
@@ -33,7 +33,10 @@ export class ProjectSetupBankDetailsHandler extends ZodFormHandlerBase<
   protected async getZodSchema({ params, context }: { params: ProjectSetupBankDetailsParams; context: IContext }) {
     const partner = await context.runQuery(new GetByIdQuery(params.partnerId));
 
-    return getProjectSetupBankDetailsSchema(partner.bankCheckStatus);
+    return {
+      schema: getProjectSetupBankDetailsSchema(partner.bankCheckStatus),
+      errorMap: projectSetupBankDetailsErrorMap,
+    };
   }
 
   protected async mapToZod({

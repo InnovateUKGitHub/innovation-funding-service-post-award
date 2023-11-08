@@ -11,7 +11,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { getPartnerRoles } from "@gql/dtoMapper/getPartnerRoles";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
@@ -45,7 +45,7 @@ export const Warning = ({ editor }: { editor?: IEditorStore<ForecastDetailsDTO[]
   });
 
   // CLAIMS
-  const claims = mapToClaimDtoArray(claimsGql, ["periodId"], {});
+  const claims = mapToCurrentClaimsDtoArray(claimsGql, ["periodId"], {});
 
   // COST CATEGORIES
   const costCategories = mapToRequiredSortedCostCategoryDtoArray(

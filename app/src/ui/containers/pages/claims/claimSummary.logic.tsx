@@ -8,7 +8,7 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
-import { DocumentSummaryNode, mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
+import { mapToProjectDocumentSummaryDtoArray } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToClaimDto } from "@gql/dtoMapper/mapClaimDto";
@@ -96,7 +96,7 @@ export const useClaimSummaryData = (
   const documents = documentsGql
     .map(docs =>
       mapToProjectDocumentSummaryDtoArray(
-        docs?.node?.ContentDocumentLinks?.edges ?? ([] as DocumentSummaryNode[]),
+        docs?.node?.ContentDocumentLinks?.edges ?? [],
         ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
         {
           projectId,

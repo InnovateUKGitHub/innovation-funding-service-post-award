@@ -8,7 +8,7 @@ import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToRequiredSortedCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
-import { mapToClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
+import { mapToCurrentClaimsDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
@@ -43,7 +43,7 @@ export const ForecastTable = ({
 
   const partner = mapToPartnerDto(partnerNode, ["id", "partnerStatus", "name", "organisationType", "overheadRate"], {});
 
-  const claims = mapToClaimsDtoArray(
+  const claims = mapToCurrentClaimsDtoArray(
     fragment?.query?.ForecastTable_AllClaimsForPartner?.edges ?? [],
     ["isApproved", "periodId"],
     {},

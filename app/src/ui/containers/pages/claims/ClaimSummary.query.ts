@@ -294,7 +294,6 @@ export const claimSummaryQuery = graphql`
                     partnerId
                   }
                 }
-
                 Impact_Management_Participation__c {
                   value
                 }

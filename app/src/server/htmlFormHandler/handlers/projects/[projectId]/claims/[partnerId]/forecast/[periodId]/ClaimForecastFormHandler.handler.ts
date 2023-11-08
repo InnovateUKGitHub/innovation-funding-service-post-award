@@ -10,9 +10,9 @@ import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProje
 import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
-import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/dashboard.page";
+import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
 import { ClaimForecastRoute } from "@ui/containers/pages/claims/forecast/ClaimForecast.page";
-import { ClaimSummaryRoute } from "@ui/containers/pages/claims/summary.page";
+import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { z } from "zod";

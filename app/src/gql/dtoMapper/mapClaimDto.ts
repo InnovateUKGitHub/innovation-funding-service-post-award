@@ -29,40 +29,42 @@ const mapToReceivedStatus = (status: string): ReceivedStatus => {
  * On Acc_Claims__c
  */
 
-type ClaimNode = Readonly<
-  Partial<{
-    Id: string;
-    Acc_ApprovedDate__c: GQL.Value<string>;
-    Acc_ClaimStatus__c: GQL.ValueAndLabel<string>;
-    Acc_FinalClaim__c: GQL.Value<boolean>;
-    Acc_IAR_Status__c: GQL.Value<string>;
-    Acc_OverheadRate__c: GQL.Value<number>;
-    Acc_PaidDate__c: GQL.Value<string>;
-    Acc_PCF_Status__c: GQL.Value<string>;
-    Acc_PeriodCoststobePaid__c: GQL.Value<number>;
-    Acc_ProjectParticipant__r: GQL.Maybe<{
-      Id: GQL.Maybe<string>;
-    }>;
-    Acc_ProjectParticipant__c: GQL.Value<string>;
-    Acc_ProjectPeriodCost__c: GQL.Value<number>;
-    Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
-    Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-    Acc_ProjectPeriodStartDate__c: GQL.Value<string>;
-    Acc_ReasonForDifference__c: GQL.Value<string>;
-    Acc_TotalDeferredAmount__c: GQL.Value<number>;
-    Acc_TotalCostsApproved__c: GQL.Value<number>;
-    Acc_TotalCostsSubmitted__c: GQL.Value<number>;
-    LastModifiedDate: GQL.Value<string>;
-    Impact_Management_Participation__c: GQL.Value<string>;
-    Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
-    Acc_IARRequired__c: GQL.Value<boolean>;
-    IM_PhasedCompetition__c: GQL.Value<boolean>;
-    IM_PhasedCompetitionStage__c: GQL.Value<string>;
-    RecordType: GQL.Maybe<{
-      DeveloperName: GQL.Value<string>;
-    }>;
-  }>
-> | null;
+type ClaimNode = GQL.Maybe<
+  Readonly<
+    Partial<{
+      Id: string;
+      Acc_ApprovedDate__c: GQL.Value<string>;
+      Acc_ClaimStatus__c: GQL.ValueAndLabel<string>;
+      Acc_FinalClaim__c: GQL.Value<boolean>;
+      Acc_IAR_Status__c: GQL.Value<string>;
+      Acc_OverheadRate__c: GQL.Value<number>;
+      Acc_PaidDate__c: GQL.Value<string>;
+      Acc_PCF_Status__c: GQL.Value<string>;
+      Acc_PeriodCoststobePaid__c: GQL.Value<number>;
+      Acc_ProjectParticipant__r: GQL.Maybe<{
+        Id: GQL.Maybe<string>;
+      }>;
+      Acc_ProjectParticipant__c: GQL.Value<string>;
+      Acc_ProjectPeriodCost__c: GQL.Value<number>;
+      Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
+      Acc_ProjectPeriodNumber__c: GQL.Value<number>;
+      Acc_ProjectPeriodStartDate__c: GQL.Value<string>;
+      Acc_ReasonForDifference__c: GQL.Value<string>;
+      Acc_TotalDeferredAmount__c: GQL.Value<number>;
+      Acc_TotalCostsApproved__c: GQL.Value<number>;
+      Acc_TotalCostsSubmitted__c: GQL.Value<number>;
+      LastModifiedDate: GQL.Value<string>;
+      Impact_Management_Participation__c: GQL.Value<string>;
+      Acc_Grant_Paid_To_Date__c: GQL.Value<number>;
+      Acc_IARRequired__c: GQL.Value<boolean>;
+      IM_PhasedCompetition__c: GQL.Value<boolean>;
+      IM_PhasedCompetitionStage__c: GQL.Value<string>;
+      RecordType: GQL.Maybe<{
+        DeveloperName: GQL.Value<string>;
+      }>;
+    }>
+  >
+>;
 
 type ClaimDtoMapping = Pick<
   ClaimDto,
@@ -236,20 +238,13 @@ export function mapToClaimDto<T extends ClaimNode, PickList extends keyof ClaimD
  * Maps claim edges to array of Claim DTOs.
  */
 export function mapToClaimDtoArray<
-  T extends ReadonlyArray<{ node: ClaimNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ClaimNode }>> | null,
   PickList extends keyof ClaimDtoMapping,
 >(edges: T, pickList: PickList[], additionalData: ClaimsAdditionalData<PickList>): Pick<ClaimDtoMapping, PickList>[] {
   return (
-    edges
-      ?.filter(
-        x =>
-          x?.node?.RecordType?.DeveloperName?.value === Claims.totalProjectPeriod &&
-          x?.node?.Acc_ClaimStatus__c?.value !== "New" &&
-          x?.node?.Acc_ClaimStatus__c?.value !== "Not used",
-      )
-      ?.map(x => {
-        return mapToClaimDto(x?.node ?? null, pickList, additionalData);
-      }) ?? []
+    edges?.map(x => {
+      return mapToClaimDto(x?.node ?? null, pickList, additionalData);
+    }) ?? []
   );
 }
 
@@ -258,13 +253,13 @@ export function mapToClaimDtoArray<
  * Only processes edges that are not "New" and "Not used"
  */
 export function mapToCurrentClaimsDtoArray<
-  T extends ReadonlyArray<{ node: ClaimNode } | null> | null,
+  T extends ReadonlyArray<GQL.Maybe<{ node: ClaimNode }>> | null,
   PickList extends keyof ClaimDtoMapping,
 >(edges: T, pickList: PickList[], additionalData: ClaimsAdditionalData<PickList>): Pick<ClaimDtoMapping, PickList>[] {
-  return mapToClaimsDtoArray(
+  return mapToClaimDtoArray(
     edges?.filter(
       x =>
-        equalityIfDefined(x?.node?.RecordType?.DeveloperName?.value, "Total Project Period") &&
+        equalityIfDefined(x?.node?.RecordType?.DeveloperName?.value, Claims.totalProjectPeriod) &&
         inequalityIfDefined(x?.node?.Acc_ClaimStatus__c?.value, "New") &&
         inequalityIfDefined(x?.node?.Acc_ClaimStatus__c?.value, "Not used"),
     ) || [],
