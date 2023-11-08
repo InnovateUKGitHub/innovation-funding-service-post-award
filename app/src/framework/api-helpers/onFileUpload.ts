@@ -76,8 +76,8 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
         return Promise.reject();
       }
     },
-    onSuccess(data, res, ctx) {
-      const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: ctx?.files.length }));
+    onSuccess(data) {
+      const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: data.files.length }));
       setSuccessMessage(successMessage);
       onSuccess();
     },
