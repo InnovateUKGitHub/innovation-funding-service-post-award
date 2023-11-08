@@ -7,7 +7,7 @@ import { ClientFileWrapper } from "../clientFileWrapper";
 
 const clientApi: IApiClient<"client"> = {
   accounts: {
-    getAllByJesName: params => ajaxJson(`/api/jes-accounts?search=${params.searchString}`),
+    getAllByJesName: params => ajaxJson(`/api/jes-accounts?search=${encodeURIComponent(params.searchString ?? "")}`),
   },
   claims: {
     getAllByProjectId: params => ajaxJson(`/api/claims/?projectId=${params.projectId}`),
@@ -26,7 +26,9 @@ const clientApi: IApiClient<"client"> = {
   companies: {
     searchCompany: params =>
       ajaxJson(
-        `/api/companies?searchString=${params.searchString}&itemsPerPage=${params.itemsPerPage}&startIndex=${params.startIndex}`,
+        `/api/companies?searchString=${encodeURIComponent(params.searchString)}&itemsPerPage=${
+          params.itemsPerPage
+        }&startIndex=${params.startIndex}`,
       ),
   },
   costsSummary: {
