@@ -90,12 +90,12 @@ export class ContentVersionRepository
     });
   }
 
-  public insertDocument(document: ServerFileWrapper, description?: string | null) {
+  public async insertDocument(document: ServerFileWrapper, description?: string | null) {
     return super.insertItem({
       ReasonForChange: "First Upload",
       PathOnClient: document.fileName,
       ContentLocation: "S",
-      VersionData: document.read(),
+      VersionData: await document.read(),
       Description: description,
     });
   }

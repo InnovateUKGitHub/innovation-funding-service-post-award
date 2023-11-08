@@ -5,22 +5,34 @@ import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { upload } from "../htmlFormHandler/diskStorage";
-import { readFileSync } from "fs";
 import { IFileWrapper } from "@framework/types/fileWapper";
 import { IAppError } from "@framework/types/IAppError";
 import { ISessionUser } from "@framework/types/IUser";
 import { configuration } from "@server/features/common/config";
+import { rm, readFile } from "fs/promises";
 
 export class ServerFileWrapper implements IFileWrapper {
-  constructor(file: Express.Multer.File) {
-    this.fileName = file.originalname;
-    this.size = file.size;
-    this.read = () => readFileSync(file.path, { encoding: "base64" });
+  constructor(private readonly file: Express.Multer.File) {}
+
+  get fileName() {
+    return this.file.originalname;
+  }
+  get size() {
+    return this.file.size;
   }
 
-  public readonly fileName: string;
-  public readonly size: number;
-  public readonly read: () => string;
+  /**
+   * Read the file from disk.
+   * After reading, the file is deleted to preserve space on our disk.
+   *
+   * @returns The Base64 encoded contents of the file.
+   */
+  async read(): Promise<string> {
+    const b64 = await readFile(this.file.path, { encoding: "base64" });
+    await rm(this.file.path);
+
+    return b64;
+  }
 }
 
 // this is the information extracted from an express request / session and stored in the redux store
