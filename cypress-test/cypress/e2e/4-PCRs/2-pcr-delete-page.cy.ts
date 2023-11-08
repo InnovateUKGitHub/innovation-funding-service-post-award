@@ -19,6 +19,10 @@ describe("PCR > Delete page", () => {
 
   it("Should select all available PCR types and create a new request", selectEachPcr);
 
+  it("Should wait to allow Salesforce to finish creating the PCR in the back-end", () => {
+    cy.wait(5000);
+  });
+
   it("Should back out of the PCR and then click the delete button", backOutAndDelete);
 
   it("Should verify that the delete page loaded correctly and validate the table", verifyDeletePageLoads);

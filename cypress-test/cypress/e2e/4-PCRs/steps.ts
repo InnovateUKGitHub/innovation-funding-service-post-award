@@ -1417,6 +1417,7 @@ export const validateTable = () => {
   cy.get("dt").contains("Last updated").siblings().contains(createdDay);
   pcrArray.forEach(type => {
     cy.getByQA("types").contains(type);
+    cy.wait(500);
   });
 };
 

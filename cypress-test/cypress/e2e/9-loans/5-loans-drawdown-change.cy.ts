@@ -1,26 +1,23 @@
 import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "../../common/visit";
-import {
-  deletePcr,
-  loansEditTable,
-  updateLoansValue,
-  amendLoansTable,
-  changeFirstValue,
-  markAndContinue,
-} from "./steps";
+import { loansEditTable, updateLoansValue, amendLoansTable, changeFirstValue, markAndContinue } from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
 describe("Loans project > Loan Drawdown Change", () => {
   before(() => {
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
-    pcrTidyUp("Loan Drawdown Change");
+    pcrTidyUp("Draft");
   });
 
-  after(deletePcr);
+  after(() => {
+    cy.deletePcr("191431");
+  });
 
   it("Should click the 'Loan Drawdown Change' checkbox and create the PCR", () => {
+    cy.heading("Start a new request");
     cy.clickCheckBox("Loan Drawdown Change");
+    cy.wait(1000);
     cy.submitButton("Create request").click();
   });
 
@@ -58,6 +55,7 @@ describe("Loans project > Loan Drawdown Change", () => {
 
   it("Should click 'Continue to summary'", () => {
     cy.submitButton("Continue to summary").click();
+    //cy.heading("Summary");
   });
 
   it("Should have a 'Mark as complete' subheading with 'I agree with this change.' check box", () => {

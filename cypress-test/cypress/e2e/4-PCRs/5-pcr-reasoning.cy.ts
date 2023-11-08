@@ -18,6 +18,7 @@ describe("PCR > Reasoning section", () => {
 
   it("Should select 'Add a partner' checkbox", () => {
     cy.clickCheckBox("Add a partner");
+    cy.wait(500);
   });
 
   it("Will click Create request button and proceed to next page", () => {
@@ -25,9 +26,14 @@ describe("PCR > Reasoning section", () => {
     cy.heading("Request");
   });
 
+  it("Should allow Salesforce time to build the PCR", () => {
+    cy.wait(5000);
+  });
+
   it("Should click into the Reasoning section", () => {
     cy.get("a").contains("Provide reasons to Innovate UK").click();
     cy.heading("Provide reasons to Innovate UK");
+    cy.reload();
   });
 
   it("Should have a back option", () => {

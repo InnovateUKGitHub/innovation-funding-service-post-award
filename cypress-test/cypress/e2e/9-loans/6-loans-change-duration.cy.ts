@@ -2,7 +2,6 @@ import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "../../common/visit";
 import {
   currentLoanTable,
-  deletePcr,
   loanDurationGuidance,
   markAndReturn,
   newLoanDurationTable,
@@ -14,13 +13,17 @@ const pmEmail = "james.black@euimeabs.test";
 describe("Loans project > Change Loans Duration", () => {
   before(() => {
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kTcmIEAS/pcrs/dashboard" });
-    pcrTidyUp("Change Loans Duration");
+    pcrTidyUp("Draft");
   });
 
-  after(deletePcr);
+  after(() => {
+    cy.deletePcr("191431");
+  });
 
   it("Should click the 'Change Loans Duration' checkbox and create the PCR", () => {
+    cy.heading("Start a new request");
     cy.clickCheckBox("Change Loans Duration");
+    cy.wait(1000);
     cy.submitButton("Create request").click();
   });
 
