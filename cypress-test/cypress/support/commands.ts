@@ -16,9 +16,9 @@ const getByLabel = (label: string) => {
     });
 };
 
-const getListItemFromKey = (label: string) => {
+const getListItemFromKey = (label: string, item: string) => {
   cy.log("**getListItemFromKey**");
-  cy.contains("dt", label).siblings().get("dd");
+  cy.contains("dt", label).siblings().contains(item);
 };
 
 const getByQA = (tag: string, options?: CommandOptions) => {
@@ -173,6 +173,7 @@ const list = (title: string) => {
 const fileInput = (path: string, fileName?: string) => {
   cy.log("*fileInput**");
   cy.readFile(`cypress/documents/${path}`, null).then((contents: typeof Cypress.Buffer) => {
+    cy.wait(200);
     cy.get(`input[type="file"]`)
       .wait(300)
       .selectFile({

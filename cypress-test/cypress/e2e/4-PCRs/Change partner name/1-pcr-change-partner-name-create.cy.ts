@@ -14,19 +14,32 @@ import {
   changeNameHeadings,
   validateChangeName,
   pcrFileTable,
+  changeNameListItems,
+  changeNameClickEachEdit,
 } from "../steps";
 import { testFile } from "common/testfileNames";
-
+import {
+  validateFileUpload,
+  uploadFileTooLarge,
+  uploadSingleChar,
+  deleteSingleChar,
+  uploadFileNameTooShort,
+  validateExcessiveFileName,
+  doNotUploadSpecialChar,
+} from "e2e/3-documents/steps";
+import { createTestFile, deleteTestFile } from "common/createTestFile";
 const projectManager = "james.black@euimeabs.test";
 
 describe("PCR >  Change a partner's name > Create PCR", () => {
   before(() => {
     visitApp({ asUser: projectManager, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Change a partner's name");
+    createTestFile("bigger_test", 33);
   });
 
   after(() => {
     cy.deletePcr("328407");
+    deleteTestFile("bigger_test");
   });
 
   it("Should create a Change partner name PCR", () => {
@@ -53,13 +66,32 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
 
   it("Should contain the PCR title, correct project title and back button", changeNameHeadings);
 
+  it(
+    "Should continue without selecting a partner and without entering a new name, validating that both are required.",
+    validateChangeName,
+  );
+
   it("Should contain guidance information and tick each list item of partners", tickEachPartner);
 
-  it("Should continue without entering a new name and validate that name is required on next page", validateChangeName);
+  /**
+   * The following block will need to be defined and refined once ticket 10368 has been opened and ready for dev
+   * Making sure that we validate the acceptance of 256 (if that's what we want).
+   *  */
+
+  //it("Should attempt to enter a name that is too long and receive a validation message", () => {
+  //  cy.get("#accountName")
+  //    .wait(500)
+  //    .type(
+  //      "Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, Super long name, ",
+  //    );
+  //  cy.button("Save and continue").click();
+  //  cy.validationNotification("SOMETHING");
+  //  cy.paragraph("SOMETHING");
+  //});
 
   it("Should allow you to enter the new name", () => {
-    cy.get("h2").contains("Enter new name");
-    cy.get('input[id="accountName"]').wait(500).type("Munce Inc");
+    cy.get("legend").contains("Enter new name");
+    cy.get("#accountName").wait(500).type("*$%^& Munce Inc");
   });
 
   it("Should click the save and continue button to proceed", saveContinueProceed);
@@ -71,12 +103,26 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
     cy.paragraph("No documents uploaded.");
   });
 
+  it("Should validate when uploading without choosing a file.", validateFileUpload);
+
+  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+
+  it("Should upload a file with a single character as the name", uploadSingleChar);
+
+  it("Should delete the file with the very short file name", deleteSingleChar);
+
+  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
+
+  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
+
+  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+
   it("Should upload a file", uploadNameChange);
 
   it("Should now show the files uploaded", () => pcrFileTable("Certificate of name change", "James Black"));
 
   it("Should delete the file and display the correct validation message", () => {
-    cy.getByQA("button_delete-qa").contains("Remove").click();
+    cy.button("Remove").click();
     cy.validationNotification(`'${testFile}' has been removed.`);
   });
 
@@ -92,4 +138,19 @@ describe("PCR >  Change a partner's name > Create PCR", () => {
   it("Should again display the PCR title, correct project title and back button", assertChangeNamePage);
 
   it("Should have a mark as complete section and click the tick box before saving and returning", completeChangeName);
+
+  it("Should navigate back into 'Change a partner's name'", () => {
+    cy.get("a").contains("Change a partner's name (*$%^& Munce Inc)").click();
+    cy.heading("Change a partner's name");
+  });
+
+  it("Should present the list items of the PCR including 'Edit buttons'", changeNameListItems);
+
+  it("Should click into each 'Edit' button in turn", changeNameClickEachEdit);
+
+  it("Should save and return to request to display the section now as 'Incomplete'", () => {
+    cy.button("Save and return to request").click();
+    cy.heading("Request");
+    cy.get("strong").contains("Incomplete");
+  });
 });

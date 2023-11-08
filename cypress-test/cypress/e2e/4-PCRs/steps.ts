@@ -975,7 +975,7 @@ export const projectOnHoldHeadings = () => {
 
 export const tickEachPartner = () => {
   cy.paragraph("This will change the partner's name in all projects");
-  cy.get("h2").contains("Select partner");
+  cy.get("legend").contains("Select partner");
   cy.getByLabel("EUI Small Ent Health").click();
   cy.getByLabel("A B Cad Services").wait(500).click();
   cy.getByLabel("ABS EUI Medium Enterprise").wait(500).click({ force: true });
@@ -983,7 +983,7 @@ export const tickEachPartner = () => {
 
 export const saveContinueProceed = () => {
   cy.button("Save and continue").click();
-  cy.get("h2").contains("Upload change of name certificate");
+  cy.get("legend").contains("Upload change of name certificate");
   shouldShowProjectTitle;
   cy.heading("Change a partner's name");
 };
@@ -1000,7 +1000,7 @@ export const summaryOfChanges = () => {
     "Proposed name",
     "Change of name certificate",
     "ABS EUI Medium Enterprise",
-    "Munce Inc",
+    "*$%^& Munce Inc",
     "testfile.doc",
     "Edit",
   ].forEach(item => {
@@ -1015,7 +1015,7 @@ export const assertChangeNamePage = () => {
 };
 
 export const completeChangeName = () => {
-  cy.get("h2").contains("Mark as complete");
+  cy.get("legend").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
   cy.button("Save and return to request").click();
   cy.get("strong").contains("Complete");
@@ -1136,12 +1136,13 @@ export const townAndPostcodeFields = () => {
 
 export const validateChangeName = () => {
   cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Upload change of name certificate");
+  cy.get("legend").contains("Upload change of name certificate");
   cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Mark as complete");
+  cy.get("legend").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
   cy.button("Save and return to request").click();
-  cy.validationLink("Enter a new partner name");
+  cy.validationLink("Enter a new partner name.");
+  cy.validationLink("Select partner to change.");
   cy.backLink("Back to request").click();
   cy.heading("Request");
   cy.get("a").contains("Change a partner's name").click();
@@ -1588,8 +1589,8 @@ export const backToPcrs = () => {
 
 export const onHoldDetails = () => {
   cy.get("h2").contains("Details");
-  cy.getListItemFromKey("Request number").contains("2");
-  cy.getListItemFromKey("Types").contains("Put project on hold");
+  cy.getListItemFromKey("Request number", "2");
+  cy.getListItemFromKey("Types", "Put project on hold");
 };
 
 export const onHoldGiveUsInfo = () => {
@@ -1616,12 +1617,44 @@ export const onHoldRequestDetails = () => {
     ["Comments", "These are test comments for Put project on hold."],
     ["Files", "testfile.doc"],
   ].forEach(([key, item]) => {
-    cy.getListItemFromKey(key).contains(item);
+    cy.getListItemFromKey(key, item);
   });
 };
 
-export const workingPreviousArrow = () => {
+export const workingPreviousArrow = (name: string) => {
   cy.getByQA("arrow-right").contains("Previous");
-  cy.getByQA("arrow-right").contains("Put project on hold").click();
-  cy.heading("Put project on hold");
+  cy.getByQA("arrow-right").contains(name).click();
+  cy.heading(name);
+};
+
+export const changeNameListItems = () => {
+  [
+    ["Existing name", "ABS EUI Medium Enterprise", "Edit"],
+    ["Proposed name", "*$%^& Munce Inc", "Edit"],
+    ["Change of name certificate", "testfile.doc", "Edit"],
+  ].forEach(([key, item, edit]) => {
+    cy.contains("dt", key).siblings().contains(item);
+    cy.contains("dt", key).siblings().contains(edit);
+  });
+};
+
+export const changeNameClickEachEdit = () => {
+  [
+    ["Existing name", "Edit"],
+    ["Proposed name", "Edit"],
+  ].forEach(([key, edit]) => {
+    cy.contains("dt", key).siblings().contains(edit).click();
+    cy.heading("Change a partner's name");
+    cy.go("back");
+    cy.heading("Request");
+    cy.get("a").contains("Change a partner's name").click();
+    cy.heading("Change a partner's name");
+  });
+  cy.contains("dt", "Change of name certificate").siblings().contains("Edit").click();
+  cy.heading("Change a partner's name");
+  cy.get("legend").contains("Upload change of name certificate");
+  cy.go("back");
+  cy.heading("Request");
+  cy.get("a").contains("Change a partner's name").click();
+  cy.heading("Change a partner's name");
 };

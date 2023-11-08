@@ -330,7 +330,7 @@ export const forecastView = () => {
     ["Total of forecasts and costs", "£280,040.00"],
     ["Difference", "£69,960.00 (19.99%)"],
   ].forEach(([key, item]) => {
-    cy.getListItemFromKey(key).contains(item);
+    cy.getListItemFromKey(key, item);
   });
 };
 
@@ -994,7 +994,7 @@ export const summaryTotalCostsList = () => {
     ["Funding level", "65.00%"],
     ["Total costs to be paid", "£182,000.00"],
   ].forEach(([key, item]) => {
-    cy.getListItemFromKey(key).contains(item);
+    cy.getListItemFromKey(key, item);
   });
 };
 
@@ -1059,7 +1059,7 @@ export const summaryUpdateCostsClaimed = () => {
   cy.heading("Update forecast");
   cy.button("Continue to summary").click();
   cy.heading("Claim summary");
-  cy.getListItemFromKey("Total costs to be claimed").contains("£281,200.00");
+  cy.getListItemFromKey("Total costs to be claimed", "£281,200.00");
 };
 
 export const summaryClearCostCats = () => {

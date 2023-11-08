@@ -10,6 +10,7 @@ import {
 } from "../steps";
 
 const monitoringOfficer = "testman2@testing.com";
+
 describe("PCR >  Put project on hold > Review PCR", () => {
   before(() => {
     visitApp({ asUser: monitoringOfficer });
@@ -22,7 +23,11 @@ describe("PCR >  Put project on hold > Review PCR", () => {
   });
 
   it("Should access the PCR as Monitoring Officer", () => {
-    cy.get("a").contains("Review").click();
+    cy.get("tr")
+      .eq(2)
+      .within(() => {
+        cy.get("a").contains("Review").click();
+      });
     cy.heading("Request");
   });
 
@@ -58,8 +63,8 @@ describe("PCR >  Put project on hold > Review PCR", () => {
   });
 
   it("Should display the details of the request", () => {
-    cy.getListItemFromKey("First day of pause").contains("1 Sep 2024");
-    cy.getListItemFromKey("Last day of pause (if known)").contains("31 Oct 2024");
+    cy.getListItemFromKey("First day of pause", "1 Sep 2024");
+    cy.getListItemFromKey("Last day of pause (if known)", "31 Oct 2024");
   });
 
   it("Should have a 'Next' arrow which takes the user to the reasoning section", workingNextArrow);
@@ -81,5 +86,5 @@ describe("PCR >  Put project on hold > Review PCR", () => {
     cy.downloadFile("/api/documents/projectChangeRequests/a0E2600000omEFHEA2/a0G26000007wictEAA/06826000002bq9QAAQ/");
   });
 
-  it("Should have a working 'Previous' arrow link", workingPreviousArrow);
+  it("Should have a working 'Previous' arrow link", () => workingPreviousArrow("Put project on hold"));
 });

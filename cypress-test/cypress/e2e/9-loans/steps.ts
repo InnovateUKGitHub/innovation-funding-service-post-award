@@ -779,7 +779,7 @@ export const correctCostListforPeriod = () => {
     ["Total costs for period", "£115,000.00"],
     ["Funding level", "65.00%"],
   ].forEach(([key, item]) => {
-    cy.getListItemFromKey(key).contains(item);
+    cy.getListItemFromKey(key, item);
   });
 };
 
@@ -790,7 +790,7 @@ export const loansForecastCosts = () => {
     ["Total of forecasts and costs", "£115,000.00"],
     ["Difference", "£0.00 (0.00%)"],
   ].forEach(([key, item]) => {
-    cy.getListItemFromKey(key).contains(item);
+    cy.getListItemFromKey(key, item);
   });
 };
 
@@ -812,13 +812,13 @@ export const navigateCheckForUpdatedValues = () => {
   cy.button("Continue to summary").click();
   cy.heading("Costs summary");
   [["Total costs for period", "£114,900.00"]].forEach(([key, item]) => {
-    cy.getListItemFromKey(key).contains(item);
+    cy.getListItemFromKey(key, item);
   });
   [
     ["Total of forecasts and costs", "£114,900.00"],
     ["Difference", "£100.00 (0.09%)"],
   ].forEach(([key, item]) => {
-    cy.getListItemFromKey(key).contains(item);
+    cy.getListItemFromKey(key, item);
   });
 };
 

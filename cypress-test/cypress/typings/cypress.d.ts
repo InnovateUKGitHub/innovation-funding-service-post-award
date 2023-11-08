@@ -38,7 +38,7 @@ declare global {
       /**
        * Get a list item from its key
        */
-      getListItemFromKey(label: string): Chainable<Element>;
+      getListItemFromKey(label: string, item: string): Chainable<Element>;
 
       /**
        * Gets an element based on the role

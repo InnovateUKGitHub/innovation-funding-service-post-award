@@ -102,7 +102,7 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should display the comments entered in the previous comments box", () => {
-    cy.getListItemFromKey("Comments").contains("Swindon");
+    cy.getListItemFromKey("Comments", "Swindon");
   });
 
   it("Should mark as complete and 'Save and return to request'", () => {
@@ -121,7 +121,7 @@ describe("PCR > Reasoning section", () => {
   });
 
   it("Should click the Edit button against the comments and open the freetext box", () => {
-    cy.getListItemFromKey("Comments").contains("Edit").click();
+    cy.getListItemFromKey("Comments", "Edit").click();
     cy.get("#reasoningComments-hint").contains(
       "You must explain each change. Be brief and write clearly. If you are requesting a reallocation of project costs, you must justify each change to your costs.",
     );
