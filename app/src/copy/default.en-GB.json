@@ -1499,10 +1499,12 @@
   },
   "validation": {
     "claimDetailsValidator": {
-      "claimLineItemsInvalid": "There are invalid claim line items."
+      "claimLineItemsInvalid": "There are invalid claim line items.",
+      "comments_too_big": "Comment can be a maximum of {{ count }} characters."
     },
     "claimLineItemDtoValidator": {
       "descriptionRequired": "Enter a description.",
+      "description_too_big": "Description can be a maximum of {{ count }} characters.",
       "costRequired": "Enter a cost.",
       "costMustBeCurrency": "Costs must be a number."
     },

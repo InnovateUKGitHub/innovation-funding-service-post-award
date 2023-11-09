@@ -10,7 +10,11 @@ import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms
 import { EditorStatus } from "@ui/redux/constants/enums";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validation/validators/claimDetailsValidator";
+import {
+  ClaimDetailsValidator,
+  ClaimLineItemDtoValidator,
+  claimDetailsCommentsMaxLength,
+} from "@ui/validation/validators/claimDetailsValidator";
 import { useNavigate } from "react-router-dom";
 import { CostCategoryType } from "@framework/constants/enums";
 import { ProjectRole } from "@framework/constants/project";
@@ -324,7 +328,9 @@ const getCompetitionRenderCalculatedDocumentSection = (
             name="comments"
             value={() => editor.data.comments}
             update={(dto, v) => (dto.comments = v)}
+            characterCountOptions={{ type: "descending", maxValue: claimDetailsCommentsMaxLength }}
             qa="info-text-area"
+            validation={editor.validator.comments}
           />
         </LineItemForm.Fieldset>
       </>
@@ -360,7 +366,9 @@ const getCompetitionRenderTableDocumentContent = (
             name="comments"
             value={() => editor.data.comments}
             update={(data, v) => (editor.data.comments = v)}
+            characterCountOptions={{ type: "descending", maxValue: claimDetailsCommentsMaxLength }}
             qa="info-text-area"
+            validation={editor.validator.comments}
           />
         </LineItemForm.Fieldset>
       </>
