@@ -1,4 +1,4 @@
-import { graphql } from "relay-hooks";
+import { graphql } from "react-relay";
 
 const projectStatusFragment = graphql`
   fragment ProjectStatusFragment on Acc_Project__c {

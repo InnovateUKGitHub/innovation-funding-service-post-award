@@ -1,4 +1,4 @@
-import { graphql } from "relay-hooks";
+import { graphql } from "react-relay";
 
 export const pcrDeleteQuery = graphql`
   query PcrDeleteQuery($projectId: ID!, $pcrId: ID!) {

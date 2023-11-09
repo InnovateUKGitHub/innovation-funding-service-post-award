@@ -14,7 +14,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { useStores } from "@ui/redux/storesProvider";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useQuery } from "relay-hooks";
+import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
 import {
   userSwitcherCurrentUserQuery,

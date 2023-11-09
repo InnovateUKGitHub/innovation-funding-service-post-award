@@ -6,7 +6,7 @@ import { IAppError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks/content.hook";
 import { ErrorSummary } from "@ui/components/atomicDesign/molecules/ErrorSummary/ErrorSummary";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { useQuery } from "relay-hooks";
+import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { OperationType } from "relay-runtime";
 import { ErrorCode, LoadingStatus } from "@framework/constants/enums";
 import { ErrorContainer } from "../atomicDesign/organisms/ErrorContainer/ErrorContainer";

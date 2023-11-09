@@ -1,4 +1,4 @@
-import { graphql } from "relay-hooks";
+import { graphql } from "react-relay";
 
 export const pcrScopeChangeWorkflowQuery = graphql`
   query PcrScopeChangeWorkflowQuery($projectId: ID!, $pcrItemId: ID!) {

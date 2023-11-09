@@ -1,7 +1,7 @@
 import { projectStatusFragment } from "@gql/fragment/ProjectStatusFragment";
 import { ProjectStatusFragment$key } from "@gql/fragment/__generated__/ProjectStatusFragment.graphql";
 import { useContent } from "@ui/hooks/content.hook";
-import { useFragment } from "relay-hooks";
+import { useFragment } from "react-relay";
 import { Section } from "../../../molecules/Section/section";
 import { ValidationMessage } from "../../../molecules/validation/ValidationMessage/ValidationMessage";
 

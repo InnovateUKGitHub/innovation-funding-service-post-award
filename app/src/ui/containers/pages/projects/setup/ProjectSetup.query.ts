@@ -1,4 +1,4 @@
-import { graphql } from "relay-hooks";
+import { graphql } from "react-relay";
 
 export const projectSetupQuery = graphql`
   query ProjectSetupQuery($projectId: ID!, $partnerId: ID!) {

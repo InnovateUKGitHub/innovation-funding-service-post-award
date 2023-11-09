@@ -105,7 +105,6 @@
     "redux-thunk": "^2.3.0",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.11",
-    "relay-hooks": "^7.2.0",
     "relay-runtime": "^16.0.0",
     "sanitize-filename": "^1.6.3",
     "type-graphql": "^2.0.0-beta.1",

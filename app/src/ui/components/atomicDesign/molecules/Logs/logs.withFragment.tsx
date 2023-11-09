@@ -1,4 +1,4 @@
-import { useFragment } from "relay-hooks";
+import { useFragment } from "react-relay";
 import { Logs as LogsComponent } from "./logs";
 import { statusChangesLogsFragment } from "./StatusChangesLogs.fragment";
 import { useFragmentContext } from "@gql/utils/fragmentContextHook";

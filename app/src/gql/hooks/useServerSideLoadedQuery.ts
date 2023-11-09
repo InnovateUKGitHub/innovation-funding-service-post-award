@@ -1,5 +1,5 @@
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { useQuery } from "relay-hooks";
+import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { OperationType } from "relay-runtime";
 
 const useServerSideLoadedQuery = <TOperationType extends OperationType = OperationType>(
