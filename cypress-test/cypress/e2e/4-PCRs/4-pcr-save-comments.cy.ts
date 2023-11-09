@@ -1,6 +1,6 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
-import { accessPcrCheckForComments, createChangeScope, populateCommentsAndSave, standardComments } from "./steps";
+import { accessPcrCheckForComments, createChangeScope, populateCommentsAndSave } from "./steps";
 
 const pmEmail = "james.black@euimeabs.test";
 

@@ -216,7 +216,6 @@ export const manyPartnerUpload = () => {
     cy.wait(500);
     cy.get("select#description.govuk-select").select("Plans");
     cy.submitButton("Upload documents").click();
-    //cy.wait(500);
     cy.getByQA("validation-summary").should("not.exist");
     cy.validationNotification(`Your document has been uploaded`);
   });

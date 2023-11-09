@@ -1298,6 +1298,7 @@ export const selectEachPcr = () => {
   });
   cy.submitButton("Create request").click();
   cy.get("h1").contains("Request", { timeout: 60000 });
+  cy.wait(5000);
 };
 
 export const confirmPcrsAdded = () => {

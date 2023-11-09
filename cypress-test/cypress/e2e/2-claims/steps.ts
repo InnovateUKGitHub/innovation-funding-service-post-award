@@ -717,9 +717,7 @@ export const period2AbCad = () => {
 };
 
 export const capPotMessageNotExist = () => {
-  cy.validationNotification(
-    "Please be aware, approval of this claim will cause a percentage of your grant to be retained.",
-  ).should("not.exist");
+  cy.getByQA("validation-message-content").should("not.exist");
 };
 
 export const triggerCapPot = () => {
@@ -728,7 +726,7 @@ export const triggerCapPot = () => {
     cy.heading(costCat);
     cy.get("a").contains("Add a cost").click();
     cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
-    cy.getByAriaLabel("value of claim line item 1").clear().type("5000").wait(800);
+    cy.getByAriaLabel("value of claim line item 1").clear().type("5001").wait(800);
     cy.submitButton("Save and return to claims").click();
     cy.heading("Costs to be claimed");
   });

@@ -24,9 +24,6 @@ describe("PCR > Reasoning section", () => {
   it("Will click Create request button and proceed to next page", () => {
     cy.button("Create request").click();
     cy.heading("Request");
-  });
-
-  it("Should allow Salesforce time to build the PCR", () => {
     cy.wait(5000);
   });
 

@@ -4,9 +4,9 @@ import {
   capPotMessageNotExist,
   clearCostCatReturn,
   period2AbCad,
-  saveAndReturnToPrepare,
   triggerCapPot,
 } from "./steps";
+import { retentionTidyUp } from "common/costCleanUp";
 
 const fcEmail = "contact77@test.co.uk";
 
@@ -16,6 +16,8 @@ describe("claims > Trigger Cap Pot Message", () => {
   });
 
   it("Should navigate to claims and open the Period 2 claim for AB Cad Services", period2AbCad);
+
+  it("Should clear the cost categories first to ensure the claim is in the correct state", () => retentionTidyUp());
 
   it(
     "Should not display any cap pot messaging until costs are added to tip the total value over the cap limit",
