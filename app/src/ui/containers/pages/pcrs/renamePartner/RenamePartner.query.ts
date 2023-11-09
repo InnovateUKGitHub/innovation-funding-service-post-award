@@ -1,4 +1,4 @@
-import { graphql } from "relay-hooks";
+import { graphql } from "react-relay";
 
 export const renamePartnerWorkflowQuery = graphql`
   query RenamePartnerWorkflowQuery($projectId: ID!, $pcrItemId: ID!) {

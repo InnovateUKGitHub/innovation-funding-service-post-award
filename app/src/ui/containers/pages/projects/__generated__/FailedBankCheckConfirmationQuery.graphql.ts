@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0c0d1b2caaf3d1ea11f0faf51081f58a>>
+ * @generated SignedSource<<6fecf0a6225a5326d674502394ccc003>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,11 +21,11 @@ export type FailedBankCheckConfirmationQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ProjectStatus__c: {
-                readonly value: string | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
       readonly " $fragmentSpreads": FragmentRefs<"TitleFragment">;
     };

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<932b9afa71c670add1a3cf1a0342a9dc>>
+ * @generated SignedSource<<f7c468e4f09c3967595ae83d186b49cf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,72 +16,72 @@ export type ProjectDocumentViewFragment$data = {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_AccountId__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_AccountId__r: {
             readonly Name: {
-              readonly value: string | null;
-            } | null;
-          } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
           readonly ContentDocumentLinks: {
             readonly edges: ReadonlyArray<{
               readonly node: {
                 readonly ContentDocument: {
                   readonly ContentSize: {
-                    readonly value: number | null;
-                  } | null;
+                    readonly value: number | null | undefined;
+                  } | null | undefined;
                   readonly CreatedBy: {
                     readonly Id: string;
                     readonly Name: {
-                      readonly value: string | null;
-                    } | null;
-                  } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
                   readonly CreatedDate: {
-                    readonly value: string | null;
-                  } | null;
+                    readonly value: string | null | undefined;
+                  } | null | undefined;
                   readonly Description: {
-                    readonly value: any | null;
-                  } | null;
+                    readonly value: any | null | undefined;
+                  } | null | undefined;
                   readonly FileExtension: {
-                    readonly value: string | null;
-                  } | null;
+                    readonly value: string | null | undefined;
+                  } | null | undefined;
                   readonly FileType: {
-                    readonly value: string | null;
-                  } | null;
+                    readonly value: string | null | undefined;
+                  } | null | undefined;
                   readonly Id: string;
                   readonly LastModifiedBy: {
                     readonly ContactId: {
-                      readonly value: string | null;
-                    } | null;
-                  } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
+                  } | null | undefined;
                   readonly LastModifiedDate: {
-                    readonly value: string | null;
-                  } | null;
+                    readonly value: string | null | undefined;
+                  } | null | undefined;
                   readonly LatestPublishedVersionId: {
-                    readonly value: string | null;
-                  } | null;
+                    readonly value: string | null | undefined;
+                  } | null | undefined;
                   readonly Title: {
-                    readonly value: string | null;
-                  } | null;
-                } | null;
+                    readonly value: string | null | undefined;
+                  } | null | undefined;
+                } | null | undefined;
                 readonly LinkedEntityId: {
-                  readonly value: string | null;
-                } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
                 readonly isFeedAttachment: boolean;
                 readonly isOwner: boolean;
-              } | null;
-            } | null> | null;
-          } | null;
+              } | null | undefined;
+            } | null | undefined> | null | undefined;
+          } | null | undefined;
           readonly Id: string;
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ProjectDocumentView_Project: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_ProjectStatus__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly isActive: boolean;
           readonly roles: {
@@ -95,9 +95,9 @@ export type ProjectDocumentViewFragment$data = {
               readonly partnerId: string;
             }>;
           };
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentType": "ProjectDocumentViewFragment";
 };

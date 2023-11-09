@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cf1053cc6675ef3dc5179c5d3ab36724>>
+ * @generated SignedSource<<2cc49c160e6cecf4a212b0fbe894522b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,46 +23,46 @@ export type ProjectSetupBankDetailsVerifyQuery$data = {
             readonly node: {
               readonly Acc_AccountId__r: {
                 readonly Name: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
               readonly Acc_AccountNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_AddressBuildingName__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_AddressLocality__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_AddressPostcode__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_AddressStreet__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_AddressTown__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_FirstName__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_LastName__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectId__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_RegistrationNumber__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_SortCode__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
       readonly " $fragmentSpreads": FragmentRefs<"TitleFragment">;
     };

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d21eba8635b856e40515cd3ef3dfca8a>>
+ * @generated SignedSource<<c7cc29628df3596e0e18bbf7f64f209c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,63 +16,63 @@ export type ForecastWarningFragment$data = {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_ClaimStatus__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_CostCategory__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_PeriodCostCategoryTotal__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastWarning_CostCategory: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CostCategoryName__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_DisplayOrder__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Id: string;
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastWarning_Profile: {
       readonly edges: ReadonlyArray<{
         readonly node: {
           readonly Acc_CostCategoryGOLCost__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_CostCategory__c: {
-            readonly value: string | null;
-          } | null;
+            readonly value: string | null | undefined;
+          } | null | undefined;
           readonly Acc_LatestForecastCost__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_ProjectPeriodNumber__c: {
-            readonly value: number | null;
-          } | null;
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly RecordType: {
             readonly DeveloperName: {
-              readonly value: string | null;
-            } | null;
-          } | null;
-        } | null;
-      } | null> | null;
-    } | null;
+              readonly value: string | null | undefined;
+            } | null | undefined;
+          } | null | undefined;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
     readonly ForecastWarning_Project: {
       readonly edges: ReadonlyArray<{
         readonly node: {
@@ -80,12 +80,12 @@ export type ForecastWarningFragment$data = {
             readonly edges: ReadonlyArray<{
               readonly node: {
                 readonly Acc_AccountId__c: {
-                  readonly value: string | null;
-                } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
                 readonly Id: string;
-              } | null;
-            } | null> | null;
-          } | null;
+              } | null | undefined;
+            } | null | undefined> | null | undefined;
+          } | null | undefined;
           readonly Id: string;
           readonly roles: {
             readonly isFc: boolean;
@@ -98,9 +98,9 @@ export type ForecastWarningFragment$data = {
               readonly partnerId: string;
             }>;
           };
-        } | null;
-      } | null> | null;
-    } | null;
+        } | null | undefined;
+      } | null | undefined> | null | undefined;
+    } | null | undefined;
   };
   readonly " $fragmentType": "ForecastWarningFragment";
 };

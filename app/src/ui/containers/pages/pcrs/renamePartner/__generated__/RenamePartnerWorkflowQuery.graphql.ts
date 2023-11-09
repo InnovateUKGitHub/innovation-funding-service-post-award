@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bfc72f89633b2b6e6175275afbcbbff0>>
+ * @generated SignedSource<<75df09aa58c422c4fe04ed8c24706e63>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,95 +21,95 @@ export type RenamePartnerWorkflowQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ExistingPartnerName__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_NewOrganisationName__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly Acc_Project_Participant__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_Status__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly ContentDocumentLinks: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly ContentDocument: {
                       readonly ContentSize: {
-                        readonly value: number | null;
-                      } | null;
+                        readonly value: number | null | undefined;
+                      } | null | undefined;
                       readonly CreatedBy: {
                         readonly Id: string;
                         readonly Name: {
-                          readonly value: string | null;
-                        } | null;
-                      } | null;
+                          readonly value: string | null | undefined;
+                        } | null | undefined;
+                      } | null | undefined;
                       readonly CreatedDate: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Description: {
-                        readonly value: any | null;
-                      } | null;
+                        readonly value: any | null | undefined;
+                      } | null | undefined;
                       readonly FileExtension: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Id: string;
                       readonly LastModifiedBy: {
                         readonly ContactId: {
-                          readonly value: string | null;
-                        } | null;
-                      } | null;
+                          readonly value: string | null | undefined;
+                        } | null | undefined;
+                      } | null | undefined;
                       readonly LatestPublishedVersionId: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Title: {
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
                     readonly Id: string;
                     readonly LinkedEntityId: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly isFeedAttachment: boolean;
                     readonly isOwner: boolean;
-                  } | null;
-                } | null> | null;
-              } | null;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly RecordType: {
                 readonly DeveloperName: {
-                  readonly value: string | null;
-                } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
                 readonly Name: {
-                  readonly label: string | null;
-                  readonly value: string | null;
-                } | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                  readonly label: string | null | undefined;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_ProjectParticipant__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_AccountId__r: {
                 readonly Name: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
               readonly Acc_OrganisationType__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ParticipantStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectRole__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
@@ -119,9 +119,9 @@ export type RenamePartnerWorkflowQuery$data = {
                 readonly isMo: boolean;
                 readonly isPm: boolean;
               };
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
     };
   };

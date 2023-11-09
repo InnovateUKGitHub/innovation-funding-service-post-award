@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f555b498705319316145b48419ac6442>>
+ * @generated SignedSource<<9198cdbe919d168638b5f9276a529c25>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest, Query } from "relay-runtime";
+import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
 export type ClaimSummaryQuery$variables = {
   partnerId: string;
@@ -24,89 +24,89 @@ export type ClaimSummaryQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CompetitionType__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_CostCategoryName__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_DisplayOrder__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_OrganisationType__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Profile__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CostCategoryGOLCost__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_CostCategory__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_LatestForecastCost__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodEndDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodStartDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly RecordType: {
                 readonly DeveloperName: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_ProjectParticipant__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_Award_Rate__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_TotalApprovedCosts__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_TotalFutureForecastsForParticipant__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_TotalParticipantCosts__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_TotalParticipantGrant__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Id: string;
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CompetitionType__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_MonitoringLevel__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_NonFEC__c: {
-                readonly value: boolean | null;
-              } | null;
+                readonly value: boolean | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Impact_Management_Participation__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly isActive: boolean;
               readonly roles: {
                 readonly isFc: boolean;
@@ -119,158 +119,153 @@ export type ClaimSummaryQuery$data = {
                   readonly partnerId: string;
                 }>;
               };
-            } | null;
-          } | null> | null;
-        } | null;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly ClaimDetails: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ClaimStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_CostCategory__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_PeriodCostCategoryTotal__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodEndDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodStartDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly RecordType: {
                 readonly DeveloperName: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly ClaimForPartner: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ClaimStatus__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_FinalClaim__c: {
-                readonly value: boolean | null;
-              } | null;
+                readonly value: boolean | null | undefined;
+              } | null | undefined;
               readonly Acc_IARRequired__c: {
-                readonly value: boolean | null;
-              } | null;
+                readonly value: boolean | null | undefined;
+              } | null | undefined;
               readonly Acc_PCF_Status__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectParticipant__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodCost__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodEndDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodNumber__c: {
-                readonly value: number | null;
-              } | null;
+                readonly value: number | null | undefined;
+              } | null | undefined;
               readonly Acc_ProjectPeriodStartDate__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly Acc_ReasonForDifference__c: {
-                readonly value: any | null;
-              } | null;
+                readonly value: any | null | undefined;
+              } | null | undefined;
               readonly IM_PhasedCompetitionStage__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly IM_PhasedCompetition__c: {
-                readonly value: boolean | null;
-              } | null;
+                readonly value: boolean | null | undefined;
+              } | null | undefined;
               readonly Id: string;
               readonly Impact_Management_Participation__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly RecordType: {
                 readonly DeveloperName: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly ClaimsByPeriodForDocuments: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_CostCategory__c: {
-                readonly value: string | null;
-              } | null;
+                readonly value: string | null | undefined;
+              } | null | undefined;
               readonly ContentDocumentLinks: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly ContentDocument: {
                       readonly ContentSize: {
-                        readonly value: number | null;
-                      } | null;
+                        readonly value: number | null | undefined;
+                      } | null | undefined;
                       readonly CreatedBy: {
                         readonly Id: string;
                         readonly Name: {
-                          readonly value: string | null;
-                        } | null;
-                      } | null;
+                          readonly value: string | null | undefined;
+                        } | null | undefined;
+                      } | null | undefined;
                       readonly CreatedDate: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Description: {
-                        readonly value: any | null;
-                      } | null;
+                        readonly value: any | null | undefined;
+                      } | null | undefined;
                       readonly FileExtension: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Id: string;
                       readonly LastModifiedBy: {
                         readonly ContactId: {
-                          readonly value: string | null;
-                        } | null;
-                      } | null;
+                          readonly value: string | null | undefined;
+                        } | null | undefined;
+                      } | null | undefined;
                       readonly LatestPublishedVersionId: {
-                        readonly value: string | null;
-                      } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
                       readonly Title: {
-                        readonly value: string | null;
-                      } | null;
-                    } | null;
+                        readonly value: string | null | undefined;
+                      } | null | undefined;
+                    } | null | undefined;
                     readonly Id: string;
                     readonly LinkedEntityId: {
-                      readonly value: string | null;
-                    } | null;
+                      readonly value: string | null | undefined;
+                    } | null | undefined;
                     readonly isFeedAttachment: boolean;
                     readonly isOwner: boolean;
-                  } | null;
-                } | null> | null;
-              } | null;
+                  } | null | undefined;
+                } | null | undefined> | null | undefined;
+              } | null | undefined;
               readonly RecordType: {
                 readonly DeveloperName: {
-                  readonly value: string | null;
-                } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
                 readonly Name: {
-                  readonly value: string | null;
-                } | null;
-              } | null;
-            } | null;
-          } | null> | null;
-        } | null;
+                  readonly value: string | null | undefined;
+                } | null | undefined;
+              } | null | undefined;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
       };
-      readonly " $fragmentSpreads": FragmentRefs<
-        | "AwardRateOverridesMessageFragment"
-        | "StatusChangesLogsFragment"
-        | "TitleFragment"
-        | "TotalCostsClaimedFragment"
-      >;
+      readonly " $fragmentSpreads": FragmentRefs<"AwardRateOverridesMessageFragment" | "StatusChangesLogsFragment" | "TitleFragment" | "TotalCostsClaimedFragment">;
     };
   };
 };
@@ -868,24 +863,8 @@ v36 = {
         "Acc_ProjectParticipant__r": (v23/*: any*/)
       }
     },
-    v2 = {
-      defaultValue: null,
-      kind: "LocalArgument",
-      name: "projectId",
-    },
-    v3 = {
-      defaultValue: null,
-      kind: "LocalArgument",
-      name: "projectIdStr",
-    },
-    v4 = {
-      alias: null,
-      args: null,
-      concreteType: "CurrentUserObject",
-      kind: "LinkedField",
-      name: "currentUser",
-      plural: false,
-      selections: [
+    {
+      "fields": [
         {
           "items": [
             {
@@ -920,151 +899,31 @@ v36 = {
           "name": "and"
         }
       ],
-      storageKey: null,
-    },
-    v5 = {
-      kind: "Literal",
-      name: "first",
-      value: 2000,
-    },
-    v6 = [
-      {
-        kind: "Variable",
-        name: "eq",
-        variableName: "partnerId",
-      },
-    ],
-    v7 = [
-      {
-        fields: v6 /*: any*/,
-        kind: "ObjectValue",
-        name: "Acc_ProjectParticipant__c",
-      },
-    ],
-    v8 = {
-      fields: v7 /*: any*/,
-      kind: "ObjectValue",
-      name: "and.0",
-    },
-    v9 = {
-      RecordType: {
-        DeveloperName: {
-          eq: "Total_Cost_Category",
-        },
-      },
-    },
-    v10 = {
-      Acc_CostCategory__c: {
-        ne: null,
-      },
-    },
-    v11 = {
-      kind: "Literal",
-      name: "and.2",
-      value: v10 /*: any*/,
-    },
-    v12 = {
-      alias: null,
-      args: null,
-      kind: "ScalarField",
-      name: "Id",
-      storageKey: null,
-    },
-    v13 = [
-      {
-        alias: null,
-        args: null,
-        kind: "ScalarField",
-        name: "value",
-        storageKey: null,
-      },
-    ],
-    v14 = {
-      alias: null,
-      args: null,
-      concreteType: "IDValue",
-      kind: "LinkedField",
-      name: "Acc_CostCategory__c",
-      plural: false,
-      selections: v13 /*: any*/,
-      storageKey: null,
-    },
-    v15 = {
-      alias: null,
-      args: null,
-      concreteType: "CurrencyValue",
-      kind: "LinkedField",
-      name: "Acc_CostCategoryGOLCost__c",
-      plural: false,
-      selections: v13 /*: any*/,
-      storageKey: null,
-    },
-    v16 = {
-      alias: null,
-      args: null,
-      concreteType: "DoubleValue",
-      kind: "LinkedField",
-      name: "Acc_ProjectPeriodNumber__c",
-      plural: false,
-      selections: v13 /*: any*/,
-      storageKey: null,
-    },
-    v17 = {
-      alias: null,
-      args: null,
-      concreteType: "DateValue",
-      kind: "LinkedField",
-      name: "Acc_ProjectPeriodStartDate__c",
-      plural: false,
-      selections: v13 /*: any*/,
-      storageKey: null,
-    },
-    v18 = {
-      alias: null,
-      args: null,
-      concreteType: "DateValue",
-      kind: "LinkedField",
-      name: "Acc_ProjectPeriodEndDate__c",
-      plural: false,
-      selections: v13 /*: any*/,
-      storageKey: null,
-    },
-    v19 = {
-      alias: null,
-      args: null,
-      concreteType: "CurrencyValue",
-      kind: "LinkedField",
-      name: "Acc_LatestForecastCost__c",
-      plural: false,
-      selections: v13 /*: any*/,
-      storageKey: null,
-    },
-    v20 = {
-      alias: null,
-      args: null,
-      concreteType: "StringValue",
-      kind: "LinkedField",
-      name: "DeveloperName",
-      plural: false,
-      selections: v13 /*: any*/,
-      storageKey: null,
-    },
-    v21 = {
-      alias: null,
-      args: null,
-      concreteType: "RecordType",
-      kind: "LinkedField",
-      name: "RecordType",
-      plural: false,
-      selections: [v20 /*: any*/],
-      storageKey: null,
-    },
-    v22 = {
-      alias: null,
-      args: [
-        v5 /*: any*/,
+      "kind": "ObjectValue",
+      "name": "where"
+    }
+  ],
+  "concreteType": "Acc_Claims__cConnection",
+  "kind": "LinkedField",
+  "name": "Acc_Claims__c",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "Acc_Claims__cEdge",
+      "kind": "LinkedField",
+      "name": "edges",
+      "plural": true,
+      "selections": [
         {
-          fields: [
+          "alias": null,
+          "args": null,
+          "concreteType": "Acc_Claims__c",
+          "kind": "LinkedField",
+          "name": "node",
+          "plural": false,
+          "selections": [
             {
               "alias": null,
               "args": null,

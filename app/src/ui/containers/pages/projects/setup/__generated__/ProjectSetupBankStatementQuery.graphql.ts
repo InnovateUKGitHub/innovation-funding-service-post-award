@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<be0b1ccb57d6dcea2603f616371a7d4a>>
+ * @generated SignedSource<<294f44fdbd47890c5a6054c8fed4c652>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,7 +16,7 @@ export type ProjectSetupBankStatementQuery$variables = {
 };
 export type ProjectSetupBankStatementQuery$data = {
   readonly currentUser: {
-    readonly userId: string | null;
+    readonly userId: string | null | undefined;
   };
   readonly salesforce: {
     readonly uiapi: {
