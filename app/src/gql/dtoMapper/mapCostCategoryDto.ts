@@ -44,7 +44,8 @@ const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
   id(node) {
     return (node?.Id ?? "") as CostCategoryId;
   },
-  isCalculated() {
+  isCalculated(node) {
+    this.type(node);
     return false;
   },
   organisationType(node) {

@@ -46,10 +46,7 @@ export interface ForecastDataForTableLayout {
   claimDetails: Pick<ClaimDetailsSummaryDto, "costCategoryId" | "periodId" | "value" | "periodEnd" | "periodStart">[];
   forecastDetails: ForecastDetailsDTO[];
   golCosts: Pick<GOLCostDto, "costCategoryId" | "value">[];
-  costCategories: Pick<
-    CostCategoryDto,
-    "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type"
-  >[];
+  costCategories: Pick<CostCategoryDto, "id" | "competitionType" | "name" | "organisationType" | "type">[];
 }
 
 interface TableRow {
@@ -473,7 +470,7 @@ export class ForecastTable extends React.Component<Props> {
     const isPending = data.partner.partnerStatus === PartnerStatus.Pending;
 
     if (
-      (costCategory && costCategory.isCalculated) ||
+      (costCategory?.type === CostCategoryType.Overheads && data.partner.overheadRate !== null) ||
       !editor ||
       (periodId < data.project.periodId && !isPending && !allowRetroactiveForecastEdit) ||
       (periodId === data.project.periodId && !isPending && !isSubmitting && !allowRetroactiveForecastEdit)
