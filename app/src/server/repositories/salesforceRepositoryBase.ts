@@ -419,7 +419,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
    *
    * A batch is determined from a config value. This config has been set to the max payload size SF can handle on each request, thus removing SF query errors.
    */
-  private batchRequest<BatchType, Response>(
+  protected batchRequest<BatchType, Response>(
     payload: BatchType[],
     request: (batchPayload: BatchType[]) => Promise<Response>,
   ): Promise<Response[]> {
