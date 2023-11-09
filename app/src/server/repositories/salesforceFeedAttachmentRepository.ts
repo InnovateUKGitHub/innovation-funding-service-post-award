@@ -26,7 +26,11 @@ export class SalesforceFeedAttachmentRepository
     return super.where(`RecordId = '${sss(id)}'`);
   }
 
-  getAllByRecordIds(ids: string[]) {
-    return super.where(`RecordId IN ('${ids.map(sss).join("','")}')`);
+  async getAllByRecordIds(ids: string[]): Promise<ISalesforceFeedAttachment[]> {
+    const records = await this.batchRequest(ids, idBatch => {
+      return super.where(`RecordId IN ('${idBatch.map(sss).join("','")}')`);
+    });
+
+    return records.flat();
   }
 }
