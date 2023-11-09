@@ -68,6 +68,8 @@ export const mapToPCRStatus = (statusLabel: string) => {
       return PCRStatus.InExternalReview;
     case "In Review with Innovate UK":
       return PCRStatus.InReviewWithInnovateUK;
+    case "Ready for approval":
+      return PCRStatus.ReadyForApproval;
     case "Rejected":
       return PCRStatus.Rejected;
     case "Withdrawn":

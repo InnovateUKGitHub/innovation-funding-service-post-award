@@ -18,6 +18,7 @@ export enum PCRStatus {
   SubmittedToInnovateUK = 12,
   QueriedByInnovationLead = 13,
   InReviewWithProjectFinance = 14,
+  ReadyForApproval = 15,
 }
 
 export enum PCRProjectRole {
@@ -330,6 +331,7 @@ export const pcrStatusMetaValues: ReadonlyArray<IPcrStatusMetaValue> = [
   { status: PCRStatus.SubmittedToInnovateUK, i18nName: x => x.pcrStatus.SubmittedToInnovateUK },
   { status: PCRStatus.QueriedByInnovationLead, i18nName: x => x.pcrStatus.QueriedByInnovationLead },
   { status: PCRStatus.InReviewWithProjectFinance, i18nName: x => x.pcrStatus.InReviewWithProjectFinance },
+  { status: PCRStatus.ReadyForApproval, i18nName: x => x.pcrStatus.ReadyForApproval },
 ] as const;
 
 export interface IMetaValue {

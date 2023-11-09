@@ -19,6 +19,8 @@ import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Ta
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { ProjectBackLink } from "@ui/components/atomicDesign/organisms/projects/ProjectBackLink/projectBackLink";
 import { usePcrItemName } from "../utils/getPcrItemName";
+import { useGetPcrStatusName } from "../utils/useGetPcrStatusName";
+import { useContent } from "@ui/hooks/content.hook";
 
 interface PCRDashboardParams {
   projectId: ProjectId;
@@ -26,10 +28,7 @@ interface PCRDashboardParams {
 
 type PCRDashboardType = Merge<
   Omit<
-    Pick<
-      PCRSummaryDto,
-      "id" | "requestNumber" | "started" | "status" | "lastUpdated" | "statusName" | "items" | "projectId"
-    >,
+    Pick<PCRSummaryDto, "id" | "requestNumber" | "started" | "status" | "lastUpdated" | "items" | "projectId">,
     "items"
   >,
   { items: Pick<PCRItemSummaryDto, "shortName">[] }
@@ -40,7 +39,9 @@ const PCRTable = createTypedTable<PCRDashboardType>();
 const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
   const { project, pcrs } = usePcrDashboardQuery(props.projectId);
+  const { getContent } = useContent();
   const { getPcrItemContent } = usePcrItemName();
+  const { getPcrStatusName } = useGetPcrStatusName();
 
   const renderStartANewRequestLink = (project: Pick<ProjectDto, "roles">) => {
     const { isPm } = getAuthRoles(project.roles);
@@ -73,7 +74,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
           value={x => <LineBreakList items={x.items.map(y => getPcrItemContent(y.shortName).name)} />}
         />
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
-        <PCRTable.String qa="status" header="Status" value={x => x.statusName} />
+        <PCRTable.String qa="status" header="Status" value={x => getPcrStatusName(x.status)} />
         <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />
         <PCRTable.Custom qa="actions" header="Actions" hideHeader value={x => renderLinks(project, x)} />
       </PCRTable.Table>
@@ -135,14 +136,24 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
       <Messages messages={props.messages} />
 
       <Section qa="pcr-table">
-        {renderTable(project, active, "pcrs-active", "You have no ongoing requests.")}
+        {renderTable(
+          project,
+          active,
+          "pcrs-active",
+          getContent(x => x.pages.pcrsDashboard.noOngoingRequests),
+        )}
 
         {isProjectActive && renderStartANewRequestLink(project)}
       </Section>
 
       <Accordion>
         <AccordionItem title="Past requests" qa="past-requests">
-          {renderTable(project, archived, "pcrs-archived", "You have no past requests.")}
+          {renderTable(
+            project,
+            archived,
+            "pcrs-archived",
+            getContent(x => x.pages.pcrsDashboard.noPastRequests),
+          )}
         </AccordionItem>
       </Accordion>
     </Page>
@@ -157,10 +168,7 @@ export const PCRsDashboardRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
   }),
-  getTitle: () => ({
-    htmlTitle: "Project change requests",
-    displayTitle: "Project change requests",
-  }),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrsDashboard.title),
   accessControl: (auth, { projectId }) =>
     auth
       .forProject(projectId)
