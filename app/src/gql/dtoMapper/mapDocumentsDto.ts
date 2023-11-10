@@ -49,7 +49,7 @@ const mapper: GQL.DtoMapper<
     partnerId?: PartnerId;
     periodId?: PeriodId;
     costCategoryId?: string;
-    pcrId?: PcrId;
+    pcrId?: PcrId | PcrItemId;
     type: "projects" | "partners" | "claims" | "claim details" | "pcr";
   }
 > = {
@@ -128,7 +128,7 @@ export function mapToDocumentSummaryDto<
     partnerName?: string;
     partnerId?: PartnerId;
     periodId?: PeriodId;
-    pcrId?: PcrId;
+    pcrId?: PcrId | PcrItemId;
     costCategoryId?: string;
     type: "projects" | "partners" | "claims" | "claim details" | "pcr";
   },
@@ -199,7 +199,7 @@ export function mapToProjectDocumentSummaryDtoArray<
     partnerId?: PartnerId;
     periodId?: PeriodId;
     costCategoryId?: string;
-    pcrId?: PcrId;
+    pcrId?: PcrId | PcrItemId;
     type: "projects" | "claims" | "claim details" | "pcr";
   },
 ) {

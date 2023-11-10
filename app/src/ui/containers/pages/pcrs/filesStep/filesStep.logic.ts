@@ -42,6 +42,7 @@ export const usePcrFilesQuery = (
       {
         type: "pcr",
         projectId,
+        pcrId: pcrItemId,
       },
     ),
   );

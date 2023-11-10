@@ -40,6 +40,7 @@ export const useRenamePartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: P
       {
         type: "pcr",
         projectId,
+        pcrId: pcrItemId,
       },
     ),
   );
