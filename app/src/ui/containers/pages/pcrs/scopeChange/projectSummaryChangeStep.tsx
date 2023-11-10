@@ -46,7 +46,6 @@ export const ProjectSummaryChangeStep = () => {
     resolver: zodResolver(pcrScopeChangeProjectSummarySchema, {
       errorMap,
     }),
-    mode: markedAsCompleteHasBeenChecked ? "onChange" : "onSubmit",
   });
 
   const projectSummaryLength = watch("projectSummary")?.length ?? 0;

@@ -42,7 +42,6 @@ export const PublicDescriptionChangeStep = () => {
     resolver: zodResolver(pcrScopeChangePublicDescriptionSchema, {
       errorMap,
     }),
-    mode: markedAsCompleteHasBeenChecked ? "onChange" : "onSubmit",
   });
 
   const hint = getRequiredToCompleteMessage();

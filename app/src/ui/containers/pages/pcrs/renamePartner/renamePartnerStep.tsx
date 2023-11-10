@@ -18,6 +18,7 @@ import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { getRenamePartnerSchema, errorMap, RenamePartnerSchemaType } from "./renamePartner.zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 export const RenamePartnerStep = () => {
   const { getContent } = useContent();
@@ -34,7 +35,7 @@ export const RenamePartnerStep = () => {
 
   const { partners, pcrItem } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { handleSubmit, register, formState, trigger } = useForm<RenamePartnerSchemaType>({
+  const { handleSubmit, register, formState, trigger, getFieldState } = useForm<RenamePartnerSchemaType>({
     defaultValues: {
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete || markedAsCompleteHasBeenChecked,
       accountName: pcrItem.accountName ?? "",
@@ -66,7 +67,8 @@ export const RenamePartnerStep = () => {
         >
           <Fieldset>
             <Legend>{getContent(x => x.pages.pcrNameChange.headingSelectPartner)}</Legend>
-            <FormGroup>
+            <FormGroup hasError={!!getFieldState("partnerId").error}>
+              <ValidationError error={getFieldState("partnerId").error} />
               <RadioList name="partnerId" register={register}>
                 {partnerOptions.map(partner => (
                   <Radio key={partner.id} id={partner.id} label={partner.label} disabled={isFetching}></Radio>
@@ -77,8 +79,9 @@ export const RenamePartnerStep = () => {
 
           <Fieldset>
             <Legend>{getContent(x => x.pcrNameChangeLabels.enterName)}</Legend>
-            <FormGroup>
+            <FormGroup hasError={!!getFieldState("accountName").error}>
               <Hint id="hint-for-accountName">{getRequiredToCompleteMessage()}</Hint>
+              <ValidationError error={getFieldState("accountName").error} />
               <TextInput disabled={isFetching} {...register("accountName")} />
             </FormGroup>
           </Fieldset>
