@@ -37,6 +37,7 @@ export type PcrNode = GQL.PartialNode<{
   Acc_NewPublicDescription__c: GQL.Value<string>;
   Acc_NewProjectSummary__c: GQL.Value<string>;
   Acc_ProjectSummarySnapshot__c: GQL.Value<string>;
+  Acc_RemovalPeriod__c: GQL.Value<number>;
   CreatedDate: GQL.Value<string>;
   Acc_Status__c: GQL.Value<string>;
   Acc_SuspensionStarts__c: GQL.Value<string>;
@@ -86,6 +87,7 @@ export type PcrItemDtoMapping = Pick<
   | "projectRole"
   | "publicDescription"
   | "publicDescriptionSnapshot"
+  | "removalPeriod"
   | "requestNumber"
   | "shortName"
   | "started"
@@ -164,6 +166,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   publicDescriptionSnapshot(node) {
     return node?.Acc_PublicDescriptionSnapshot__c?.value ?? "";
+  },
+  removalPeriod(node) {
+    return node?.Acc_RemovalPeriod__c?.value ?? null;
   },
   requestNumber(node) {
     return node?.Acc_RequestNumber__c?.value ?? 0;

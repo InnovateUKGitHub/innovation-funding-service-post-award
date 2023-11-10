@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6b1d947bb9db5474a608f0f55c2dec9b>>
+ * @generated SignedSource<<43caa99563e58b5a5aa60eb7f36d42d9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,11 +9,11 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type PcrFilesQuery$variables = {
+export type RemovePartnerWorkflowQuery$variables = {
   pcrItemId: string;
   projectId: string;
 };
-export type PcrFilesQuery$data = {
+export type RemovePartnerWorkflowQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
@@ -21,114 +21,117 @@ export type PcrFilesQuery$data = {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_ExistingPartnerName__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
-              readonly Acc_NewOrganisationName__c: {
-                readonly value: any | null | undefined;
-              } | null | undefined;
+                readonly value: string | null;
+              } | null;
               readonly Acc_Project_Participant__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
+                readonly value: string | null;
+              } | null;
+              readonly Acc_RemovalPeriod__c: {
+                readonly value: number | null;
+              } | null;
               readonly Acc_Status__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
+                readonly value: string | null;
+              } | null;
               readonly ContentDocumentLinks: {
                 readonly edges: ReadonlyArray<{
                   readonly node: {
                     readonly ContentDocument: {
                       readonly ContentSize: {
-                        readonly value: number | null | undefined;
-                      } | null | undefined;
+                        readonly value: number | null;
+                      } | null;
                       readonly CreatedBy: {
                         readonly Id: string;
                         readonly Name: {
-                          readonly value: string | null | undefined;
-                        } | null | undefined;
-                      } | null | undefined;
+                          readonly value: string | null;
+                        } | null;
+                      } | null;
                       readonly CreatedDate: {
-                        readonly value: string | null | undefined;
-                      } | null | undefined;
+                        readonly value: string | null;
+                      } | null;
                       readonly Description: {
-                        readonly value: any | null | undefined;
-                      } | null | undefined;
+                        readonly value: any | null;
+                      } | null;
                       readonly FileExtension: {
-                        readonly value: string | null | undefined;
-                      } | null | undefined;
+                        readonly value: string | null;
+                      } | null;
                       readonly Id: string;
                       readonly LastModifiedBy: {
                         readonly ContactId: {
-                          readonly value: string | null | undefined;
-                        } | null | undefined;
-                      } | null | undefined;
+                          readonly value: string | null;
+                        } | null;
+                      } | null;
                       readonly LatestPublishedVersionId: {
-                        readonly value: string | null | undefined;
-                      } | null | undefined;
+                        readonly value: string | null;
+                      } | null;
                       readonly Title: {
-                        readonly value: string | null | undefined;
-                      } | null | undefined;
-                    } | null | undefined;
+                        readonly value: string | null;
+                      } | null;
+                    } | null;
                     readonly Id: string;
                     readonly LinkedEntityId: {
-                      readonly value: string | null | undefined;
-                    } | null | undefined;
+                      readonly value: string | null;
+                    } | null;
                     readonly isFeedAttachment: boolean;
                     readonly isOwner: boolean;
-                  } | null | undefined;
-                } | null | undefined> | null | undefined;
-              } | null | undefined;
+                  } | null;
+                } | null> | null;
+              } | null;
               readonly Id: string;
               readonly RecordType: {
                 readonly DeveloperName: {
-                  readonly value: string | null | undefined;
-                } | null | undefined;
+                  readonly value: string | null;
+                } | null;
                 readonly Name: {
-                  readonly label: string | null | undefined;
-                  readonly value: string | null | undefined;
-                } | null | undefined;
-              } | null | undefined;
-            } | null | undefined;
-          } | null | undefined> | null | undefined;
-        } | null | undefined;
+                  readonly label: string | null;
+                  readonly value: string | null;
+                } | null;
+              } | null;
+            } | null;
+          } | null> | null;
+        } | null;
         readonly Acc_ProjectParticipant__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
               readonly Acc_AccountId__r: {
                 readonly Name: {
-                  readonly value: string | null | undefined;
-                } | null | undefined;
-              } | null | undefined;
+                  readonly value: string | null;
+                } | null;
+              } | null;
               readonly Acc_OrganisationType__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
+                readonly value: string | null;
+              } | null;
               readonly Acc_ParticipantStatus__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
+                readonly value: string | null;
+              } | null;
               readonly Acc_ProjectRole__c: {
-                readonly value: string | null | undefined;
-              } | null | undefined;
+                readonly value: string | null;
+              } | null;
               readonly Id: string;
-            } | null | undefined;
-          } | null | undefined> | null | undefined;
-        } | null | undefined;
+            } | null;
+          } | null> | null;
+        } | null;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly Acc_NumberofPeriods__c: {
+                readonly value: number | null;
+              } | null;
               readonly Id: string;
               readonly roles: {
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
               };
-            } | null | undefined;
-          } | null | undefined> | null | undefined;
-        } | null | undefined;
+            } | null;
+          } | null> | null;
+        } | null;
       };
     };
   };
 };
-export type PcrFilesQuery = {
-  response: PcrFilesQuery$data;
-  variables: PcrFilesQuery$variables;
+export type RemovePartnerWorkflowQuery = {
+  response: RemovePartnerWorkflowQuery$data;
+  variables: RemovePartnerWorkflowQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -378,9 +381,9 @@ v9 = [
                           {
                             "alias": null,
                             "args": null,
-                            "concreteType": "LongTextAreaValue",
+                            "concreteType": "DoubleValue",
                             "kind": "LinkedField",
-                            "name": "Acc_NewOrganisationName__c",
+                            "name": "Acc_RemovalPeriod__c",
                             "plural": false,
                             "selections": (v6/*: any*/),
                             "storageKey": null
@@ -690,6 +693,16 @@ v9 = [
                               }
                             ],
                             "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "DoubleValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_NumberofPeriods__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
                           }
                         ],
                         "storageKey": null
@@ -718,7 +731,7 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "PcrFilesQuery",
+    "name": "RemovePartnerWorkflowQuery",
     "selections": (v9/*: any*/),
     "type": "Query",
     "abstractKey": null
@@ -730,20 +743,20 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "PcrFilesQuery",
+    "name": "RemovePartnerWorkflowQuery",
     "selections": (v9/*: any*/)
   },
   "params": {
-    "cacheID": "23be212b4a68e55882bcaaf125e3b5fd",
+    "cacheID": "8090b9f41a0f560ba88eb4f36a9d54fe",
     "id": null,
     "metadata": {},
-    "name": "PcrFilesQuery",
+    "name": "RemovePartnerWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrFilesQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_Project_Participant__c {\n                value\n              }\n              Acc_ExistingPartnerName__c {\n                value\n              }\n              Acc_NewOrganisationName__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query RemovePartnerWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_Project_Participant__c {\n                value\n              }\n              Acc_ExistingPartnerName__c {\n                value\n              }\n              Acc_RemovalPeriod__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b4ace4ac85b9d0f782b2e98651aeb27b";
+(node as any).hash = "2e128de4f68926af798c502cc0d8be06";
 
 export default node;

@@ -1,93 +1,97 @@
-import { PartnerDto } from "@framework/dtos/partnerDto";
-import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos/pcrDtos";
-import { Pending } from "@shared/pending";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { RadioOptionProps } from "@ui/components/bjss/inputs/radioList";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Loader } from "@ui/components/bjss/loading";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { useStores } from "@ui/redux/storesProvider";
-import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
+import { useContent } from "@ui/hooks/content.hook";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNextLink } from "../utils/useNextLink";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { PcrPage } from "../pcrPage";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { getRemovePartnerSchema, errorMap, RemovePartnerSchemaType } from "./removePartner.zod";
+import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
-interface InnerProps {
-  partners: PartnerDto[];
-}
+export const RemovePartnerStep = () => {
+  const { getContent } = useContent();
+  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
+    usePcrWorkflowContext();
 
-const Form = createTypedForm<PCRItemForPartnerWithdrawalDto>();
+  const { partners, pcrItem, project } = useRemovePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-const InnerContainer = (
-  props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> & InnerProps,
-) => {
-  const partnerOptions: RadioOptionProps[] = props.partners
+  const { handleSubmit, register, formState, trigger } = useForm<RemovePartnerSchemaType>({
+    defaultValues: {
+      markedAsComplete: pcrItem.status === PCRItemStatus.Complete || markedAsCompleteHasBeenChecked,
+      removalPeriod: pcrItem.removalPeriod,
+      partnerId: pcrItem.partnerId,
+    },
+    resolver: zodResolver(getRemovePartnerSchema(project.numberOfPeriods), {
+      errorMap,
+    }),
+  });
+
+  const validationErrors = useRhfErrors(formState.errors);
+  useFormValidate(trigger);
+
+  const partnerOptions = partners
     .filter(x => !x.isWithdrawn)
     .map(x => ({
       id: x.id,
-      value: getPartnerName(x),
+      label: getPartnerName(x),
     }));
 
-  const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
+  const nextLink = useNextLink();
 
   return (
-    <Section>
-      <Form.Form
-        qa="withdrawPartnerForm"
-        data={props.pcrItem}
-        isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave(false)}
-        onChange={dto => props.onChange(dto)}
-      >
-        <Form.Fieldset heading={x => x.pages.pcrRemovePartner.headingSelectPartner}>
-          <Form.Radio
-            name="partnerId"
-            hint={props.getRequiredToCompleteMessage()}
-            options={partnerOptions}
-            inline={false}
-            value={() => selectedPartnerOption}
-            update={(x: PCRItemForPartnerWithdrawalDto, value) => {
-              if (value?.id) {
-                x.partnerId = value.id as PartnerId;
-                // Save a copy of the partner name in our DTO, so our client can show the past name.
-                // Salesforce must never save this value. If it does, that's an accountability problem.
-                x.partnerNameSnapshot = props.partners.find(x => x.id === value.id)?.name ?? "";
-              } else {
-                x.partnerId = null;
-                x.partnerNameSnapshot = "";
-              }
-            }}
-            validation={props.validator.partnerId}
-          />
-        </Form.Fieldset>
-        <Form.Fieldset heading={x => x.pages.pcrRemovePartner.headingRemovalPeriod}>
-          <Form.Numeric
-            label={x => x.pcrRemovePartnerLabels.removalPeriod}
-            hint={x => x.pages.pcrRemovePartner.hintRemovalPeriod}
-            labelHidden
-            width={3}
-            name="removalPeriod"
-            value={x => x.removalPeriod}
-            update={(x, value) => (x.removalPeriod = value)}
-            validation={props.validator.removalPeriod}
-          />
-        </Form.Fieldset>
-        <Form.Submit>
-          <Content value={x => x.pcrItem.submitButton} />
-        </Form.Submit>
-      </Form.Form>
-    </Section>
+    <PcrPage validationErrors={validationErrors}>
+      <Section>
+        <Form
+          onSubmit={handleSubmit(data => {
+            onSave({ data, context: { link: nextLink } });
+          })}
+        >
+          <Fieldset>
+            <Legend>{getContent(x => x.pages.pcrRemovePartner.headingSelectPartner)}</Legend>
+            <FormGroup>
+              <RadioList name="partnerId" register={register}>
+                {partnerOptions.map(partner => (
+                  <Radio key={partner.id} id={partner.id} label={partner.label} disabled={isFetching}></Radio>
+                ))}
+              </RadioList>
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <Legend> {getContent(x => x.pages.pcrRemovePartner.headingRemovalPeriod)}</Legend>
+            <FormGroup hasError={!!validationErrors?.removalPeriod}>
+              <Hint id="hint-for-removalPeriod">{getContent(x => x.pages.pcrRemovePartner.hintRemovalPeriod)}</Hint>
+              <ValidationError error={validationErrors?.removalPeriod as RhfErrors} />
+              <NumberInput
+                aria-label={getContent(x => x.pcrRemovePartnerLabels.removalPeriod)}
+                aria-describedby="hint-for-removalPeriod"
+                inputWidth={3}
+                id="removalPeriod"
+                disabled={isFetching}
+                {...register("removalPeriod")}
+              />
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <Button disabled={isFetching} type="submit">
+              {getContent(x => x.pcrItem.submitButton)}
+            </Button>
+          </Fieldset>
+        </Form>
+      </Section>
+    </PcrPage>
   );
-};
-
-export const RemovePartnerStep = (
-  props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator>,
-) => {
-  const stores = useStores();
-
-  const pending = Pending.combine({
-    partners: stores.partners.getPartnersForProject(props.project.id),
-  });
-
-  return <Loader pending={pending} render={({ partners }) => <InnerContainer partners={partners} {...props} />} />;
 };

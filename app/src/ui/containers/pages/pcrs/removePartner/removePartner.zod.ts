@@ -1,29 +1,19 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { PartnerDto } from "@framework/dtos/partnerDto";
 import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helperValidators.zod";
 
-export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
+export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "removePartner"] });
 
 z.setErrorMap(errorMap);
 
-export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">[]) =>
+export const getRemovePartnerSchema = (numberOfPeriods: number) =>
   z
     .object({
       markedAsComplete: z.boolean(),
-      accountName: z.string().optional(),
+      removalPeriod: z.coerce.number().int().max(numberOfPeriods).nullable(),
       partnerId: z.union([emptyStringToNullValidation, partnerIdValidation]),
     })
     .superRefine((data, ctx) => {
-      if (data.partnerId) {
-        const matchingName = partners.find(x => x.id === data.partnerId)?.name;
-        if (matchingName === data.accountName) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            path: ["accountName"],
-          });
-        }
-      }
       if (data.markedAsComplete) {
         if (!data.partnerId) {
           ctx.addIssue({
@@ -34,16 +24,17 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
             path: ["partnerId"],
           });
         }
-        if (!data.accountName) {
+
+        if (!data.removalPeriod) {
           ctx.addIssue({
             code: z.ZodIssueCode.too_small,
             minimum: 1,
             inclusive: true,
-            type: "string",
-            path: ["accountName"],
+            type: "number",
+            path: ["removalPeriod"],
           });
         }
       }
     });
 
-export type RenamePartnerSchemaType = z.infer<ReturnType<typeof getRenamePartnerSchema>>;
+export type RemovePartnerSchemaType = z.infer<ReturnType<typeof getRemovePartnerSchema>>;

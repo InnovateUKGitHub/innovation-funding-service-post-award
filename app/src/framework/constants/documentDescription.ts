@@ -124,6 +124,9 @@ export const allowedImpactManagementClaimDocuments = [
   DocumentDescription.ScheduleThree,
 ];
 
-export const allowedPcrLevelDocuments = [DocumentDescription.CertificateOfNameChange];
+export const allowedPcrLevelDocuments = [
+  DocumentDescription.CertificateOfNameChange,
+  DocumentDescription.WithdrawalOfPartnerCertificate,
+];
 
 export { getDocumentDescriptionContentSelector };

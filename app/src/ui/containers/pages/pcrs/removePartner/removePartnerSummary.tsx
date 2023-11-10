@@ -1,73 +1,77 @@
-import React from "react";
-import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { removePartnerStepNames } from "@ui/containers/pages/pcrs/removePartner/removePartnerWorkflow";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { PCRStepType } from "@framework/constants/pcrConstants";
-import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos/pcrDtos";
+import { PCRItemStatus, PCRStepType } from "@framework/constants/pcrConstants";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { useStores } from "@ui/redux/storesProvider";
-import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { Loader } from "@ui/components/bjss/loading";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
+import { useForm } from "react-hook-form";
+import { RemovePartnerSchemaType, getRemovePartnerSchema, errorMap } from "./removePartner.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { PcrPage } from "../pcrPage";
+import { EditLink } from "../pcrItemSummaryLinks";
+import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 
-interface InnerProps {
-  documents: DocumentSummaryDto[];
-}
+export const RemovePartnerSummary = () => {
+  const { projectId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
 
-class Component extends React.Component<
-  PcrSummaryProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator, removePartnerStepNames> &
-    InnerProps
-> {
-  render() {
-    const { pcrItem, validator, documents } = this.props;
-    return (
-      <Section qa="remove-partner-summary">
-        <SummaryList qa="remove-partner-summary-list">
+  const { pcrItem, documents, project } = useRemovePartnerWorkflowQuery(projectId, itemId, fetchKey);
+
+  const { register, handleSubmit, formState, watch } = useForm<RemovePartnerSchemaType>({
+    defaultValues: {
+      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
+      removalPeriod: pcrItem.removalPeriod,
+      partnerId: pcrItem.partnerId,
+    },
+    resolver: zodResolver(getRemovePartnerSchema(project.numberOfPeriods), {
+      errorMap,
+    }),
+  });
+
+  const validationErrors = useRhfErrors(formState.errors);
+
+  return (
+    <PcrPage validationErrors={validationErrors}>
+      <Section qa="name-change-summary">
+        <SummaryList qa="name-change-summary-list">
           <SummaryListItem
             label={x => x.pcrRemovePartnerLabels.removedPartner}
             content={pcrItem.partnerNameSnapshot}
-            validation={validator.partnerId}
             qa="partnerToRemove"
-            action={this.props.getEditLink(PCRStepType.removalPeriodStep, validator.partnerId)}
+            action={<EditLink stepName={PCRStepType.removalPeriodStep} />}
+            hasError={!!formState?.errors?.partnerId}
           />
           <SummaryListItem
             label={x => x.pcrRemovePartnerLabels.lastPeriod}
             content={pcrItem.removalPeriod}
-            validation={validator.removalPeriod}
             qa="removalPeriod"
-            action={this.props.getEditLink(PCRStepType.removalPeriodStep, validator.removalPeriod)}
+            action={<EditLink stepName={PCRStepType.removalPeriodStep} />}
+            hasError={!!formState?.errors?.removalPeriod}
           />
           <SummaryListItem
             label={x => x.pcrRemovePartnerLabels.documents}
-            content={this.renderDocuments(documents)}
+            content={
+              documents.length > 0 ? (
+                <DocumentList documents={documents} qa="documentsList" />
+              ) : (
+                <Content value={x => x.documentMessages.noDocumentsUploaded} />
+              )
+            }
             qa="supportingDocuments"
-            action={this.props.getEditLink(PCRStepType.filesStep, null)}
+            action={<EditLink stepName={PCRStepType.filesStep} />}
           />
         </SummaryList>
       </Section>
-    );
-  }
 
-  private renderDocuments(documents: DocumentSummaryDto[]) {
-    return documents.length > 0 ? (
-      <DocumentList documents={documents} qa="documentsList" />
-    ) : (
-      <Content value={x => x.documentMessages.noDocumentsUploaded} />
-    );
-  }
-}
-
-export const RemovePartnerSummary = (
-  props: PcrSummaryProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator, removePartnerStepNames>,
-) => {
-  const stores = useStores();
-
-  return (
-    <Loader
-      pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
-      render={documents => <Component {...props} documents={documents} />}
-    />
+      {displayCompleteForm && (
+        <PcrItemSummaryForm<RemovePartnerSchemaType>
+          register={register}
+          watch={watch}
+          handleSubmit={handleSubmit}
+          pcrItem={pcrItem}
+        />
+      )}
+    </PcrPage>
   );
 };

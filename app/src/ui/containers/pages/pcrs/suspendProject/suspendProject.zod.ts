@@ -2,7 +2,7 @@ import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { endDateIsBeforeStart, isValidMonth, isValidYear, isEmptyDate } from "@framework/validation-helpers/date";
 
-export const errorMap = makeZodI18nMap({ keyPrefix: ["pcrProjectSuspension"] });
+export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "projectSuspension"] });
 
 z.setErrorMap(errorMap);
 

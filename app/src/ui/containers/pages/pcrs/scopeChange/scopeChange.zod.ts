@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 
-export const errorMap = makeZodI18nMap({ keyPrefix: ["pcrScopeChange"] });
+export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "scopeChange"] });
 
 z.setErrorMap(errorMap);
 
