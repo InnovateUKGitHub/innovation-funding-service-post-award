@@ -137,6 +137,11 @@ const getList = (title: string) => {
   return cy.get("li").contains(title);
 };
 
+const getCaption = (title: string) => {
+  cy.log("**pageCaption**");
+  return cy.getByQA("page-title-caption").contains(title);
+};
+
 const getCommands = {
   getByLabel,
   getLabel,
@@ -155,6 +160,7 @@ const getCommands = {
   getHeading,
   getParagraph,
   getList,
+  getCaption,
 } as const;
 
 export { getCommands };

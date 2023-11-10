@@ -41,6 +41,11 @@ const goToMspDocumentShare = (ctx: SirtestalotContext) => {
   cy.waitForPageHeading("Project documents");
 };
 
+const goToBroadcastPage = () => {
+  cy.goToProjectsDashboard();
+  cy.get("a").contains("Read me").click();
+};
+
 const goToCommands = {
   waitForPageHeading,
   goToPage,
@@ -48,6 +53,7 @@ const goToCommands = {
   goToProjectsDashboard,
   goToProjectOverview,
   goToMspDocumentShare,
+  goToBroadcastPage,
 };
 
 export { goToCommands };

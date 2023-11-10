@@ -13,7 +13,7 @@ const uploadFile = (path: string) =>
   };
 
 When("the user uploads a file named {string} with no type", function (name: string) {
-  uploadFile("README.md").call(this, name);
+  uploadFile("README.md")(name);
 });
 
 When("the user uploads a file named {string} as type {string}", function (name: string, type: string) {
