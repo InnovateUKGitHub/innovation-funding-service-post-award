@@ -1,5 +1,5 @@
 import express from "express";
-import { Params } from "react-router";
+import { Params } from "react-router-dom";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { InferEditorStoreDto, InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
@@ -12,6 +12,7 @@ import { IFileWrapper } from "@framework/types/fileWapper";
 import { IAppError } from "@framework/types/IAppError";
 import { EditorStateKeys } from "@ui/redux/reducers/editorsReducer";
 import { EditorState } from "@ui/redux/reducers/rootReducer";
+import { equalityIfDefined } from "@gql/dtoMapper/equalityIfDefined";
 
 const logger: Logger = new Logger("FormHandlerBase");
 
@@ -44,7 +45,7 @@ export interface IFormHandler {
 
 export interface IFormButton {
   name: string;
-  value: string;
+  value?: string;
 }
 
 export type IFormBody = {
@@ -56,16 +57,17 @@ type StoreKey<TStore extends EditorStateKeys> = keyof EditorState[TStore];
 type AnyEditor = InferEditorStoreDto<any>;
 
 abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implements IFormHandler {
-  protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[], protected store: TStore) {
+  protected constructor(routeInfo: RouteInfo<TParams>, buttons: (string | IFormButton)[], protected store: TStore) {
     this.routePath = routeInfo.routePath.split("?")[0];
     this.routeName = routeInfo.routeName;
     this.getParams = routeInfo.getParams;
-    this.buttons = buttons;
+
+    this.buttons = buttons.map(x => (typeof x === "string" ? { name: x, value: undefined } : x));
   }
 
   public readonly routePath: string;
   public readonly routeName: string;
-  public readonly buttons: string[];
+  public readonly buttons: IFormButton[];
   private readonly getParams: (route: { name: string; path: string; params: Params }) => TParams;
 
   public async handle({
@@ -94,9 +96,12 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
       return next(err);
     } else {
       // See if our button matches this handler.
-      const buttonName = this.buttons.find(x => `button_${x}` in req.body);
-      if (!buttonName) return next();
-      button = { name: buttonName, value: req.body[`button_${buttonName}`] };
+      const buttonMatch = this.buttons.find(
+        x => `button_${x.name}` in req.body && equalityIfDefined(x.value, req.body[`button_${x.name}`]),
+      );
+      if (!buttonMatch) return next();
+
+      button = { name: buttonMatch.name, value: req.body[`button_${buttonMatch.name}`] };
     }
 
     const params = this.getParams({

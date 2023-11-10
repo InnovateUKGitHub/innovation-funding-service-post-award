@@ -16,7 +16,14 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
   "monitoringReport"
 > {
   constructor() {
-    super(MonitoringReportWorkflowRoute, ["submit"], "monitoringReport");
+    super(
+      MonitoringReportWorkflowRoute,
+      [
+        { name: "submit", value: "save-continue" },
+        { name: "submit", value: "save-return" },
+      ],
+      "monitoringReport",
+    );
   }
 
   protected async getDto(
