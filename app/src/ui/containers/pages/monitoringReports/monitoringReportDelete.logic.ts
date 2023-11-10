@@ -7,7 +7,7 @@ import {
 import { monitoringReportDeleteQuery } from "./MonitoringReportDelete.query";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { IRoutes } from "@ui/routing/routeConfig";
 

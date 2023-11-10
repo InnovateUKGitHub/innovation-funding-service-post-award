@@ -6,7 +6,7 @@ import { mapToMonitoringReportQuestionDtoArray } from "@gql/dtoMapper/mapMonitor
 import { mapToFullMonitoringReport } from "@gql/dtoMapper/mapMonitoringReportDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { IRoutes } from "@ui/routing/routeConfig";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos/monitoringReportDto";
 import { clientsideApiClient } from "@ui/apiClient";
