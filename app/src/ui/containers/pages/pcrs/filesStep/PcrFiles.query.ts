@@ -29,7 +29,7 @@ export const pcrFilesQuery = graphql`
               }
             }
           }
-          Acc_ProjectChangeRequest__c(where: { Id: { eq: $pcrItemId } }) {
+          Acc_ProjectChangeRequest__c(where: { Id: { eq: $pcrItemId } }, first: 1) {
             edges {
               node {
                 Id
@@ -101,7 +101,7 @@ export const pcrFilesQuery = graphql`
               }
             }
           }
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+          Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
                 Id

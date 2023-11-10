@@ -2040,7 +2040,7 @@
       }
     },
     "projectSetupBankDetails": {
-      "accountName": {
+      "accountNumber": {
         "errors": {
           "too_small": "Account number cannot be empty.",
           "invalid_string": {

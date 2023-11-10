@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { PartnerDto } from "@framework/dtos/partnerDto";
+import { emptyStringToUndefinedValidation, partnerIdValidation } from "@ui/zod/helperValidators.zod";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcrRenamePartner"] });
 
@@ -11,10 +12,7 @@ export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">
     .object({
       markedAsComplete: z.boolean(),
       accountName: z.string().optional(),
-      partnerId: z
-        .string()
-        .transform(x => x as PartnerId)
-        .nullable(),
+      partnerId: z.union([emptyStringToUndefinedValidation, partnerIdValidation]),
     })
     .superRefine((data, ctx) => {
       if (data.partnerId) {
