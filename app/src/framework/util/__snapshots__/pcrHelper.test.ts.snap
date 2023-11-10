@@ -1,22 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`mergePcrData should merge PcrData left to right matching and merging items 1`] = `
+exports[`mergePcrData should merge new PCR on top of old PCR, matching and merging items 1`] = `
 {
   "comments": "",
   "id": "a0G26000007LUrbEAG",
   "items": [
-    {
-      "accountName": "banana services",
-      "guidance": "This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.
-",
-      "id": "a0G26000007LUrgEAG",
-      "partnerId": "a0D2600000zYOlEEAW",
-      "partnerNameSnapshot": "A B Cad Services",
-      "shortName": "Change a partner's name",
-      "status": 3,
-      "statusName": "Complete",
-      "typeName": "Change a partner's name",
-    },
     {
       "contact1Forename": "Ramsey",
       "contact1Surname": "Bolton",
@@ -31,11 +19,46 @@ exports[`mergePcrData should merge PcrData left to right matching and merging it
       "typeName": "Add a partner",
     },
     {
+      "accountName": "banana services",
+      "guidance": "This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.
+",
+      "id": "a0G26000007LUrgEAG",
+      "partnerId": "a0D2600000zYOlEEAW",
+      "partnerNameSnapshot": "A B Cad Services",
+      "shortName": "Change a partner's name",
+      "status": 3,
+      "statusName": "Complete",
+      "typeName": "Change a partner's name",
+    },
+    {
       "id": "a0G26000007Ldgjhk",
       "organisationName": "Wetherspoons",
       "shortName": "Add a partner",
     },
   ],
   "projectId": "a0E2600000om3ABEAY",
+}
+`;
+
+exports[`mergePcrData should merge new PCR types without an ID 1`] = `
+{
+  "items": [
+    {
+      "accountName": "✅ This should not be overwritten ✅",
+      "id": "apple",
+      "partnerNameSnapshot": "✅ This should have overridden the PCR item type ✅",
+    },
+    {
+      "contact1Forename": "Banana / This should exist",
+      "id": "banana",
+    },
+    {
+      "type": 20,
+    },
+    {
+      "contact1Forename": "Cherry / This should exist",
+      "id": "cherry",
+    },
+  ],
 }
 `;

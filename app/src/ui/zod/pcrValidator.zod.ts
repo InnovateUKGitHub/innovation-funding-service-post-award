@@ -74,7 +74,7 @@ const getPcrTypeValidation = ({ pcrItemInfo, numberOfPartners, currentPcrItems }
         ),
     )
     .min(1)
-    .superRefine((vals, ctx) => {
+    .superRefine((vals: PCRItemType[], ctx) => {
       let additionSelected = false;
       let renameSelected = false;
       let removeSelected = false;
