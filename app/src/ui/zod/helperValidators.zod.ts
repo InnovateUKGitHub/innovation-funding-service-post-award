@@ -33,6 +33,12 @@ const emptyStringToUndefinedValidation = z
   .transform(() => undefined)
   .optional();
 
+const emptyStringToNullValidation = z
+  .string()
+  .refine(x => x === "")
+  .transform(() => null)
+  .nullable();
+
 const periodIdValidation = z.coerce
   .number()
   .int()
@@ -121,6 +127,7 @@ export {
   partnerIdValidation,
   periodIdValidation,
   emptyStringToUndefinedValidation,
+  emptyStringToNullValidation,
   getSingleFileValidation,
   getMultiFileValidation,
 };

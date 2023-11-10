@@ -1,4 +1,4 @@
-import { graphql } from "relay-hooks";
+import { graphql } from "react-relay";
 
 export const pcrFilesQuery = graphql`
   query PcrFilesQuery($projectId: ID!, $pcrItemId: ID!) {
@@ -8,6 +8,7 @@ export const pcrFilesQuery = graphql`
           Acc_ProjectParticipant__c(
             where: { Acc_ProjectId__c: { eq: $projectId } }
             orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
+            first: 2000
           ) {
             edges {
               node {
