@@ -132,6 +132,8 @@ export const giveUsInformation = () => {
 };
 
 export const bankDetailsValidation = () => {
+  cy.getByLabel("Sort code").clear();
+  cy.getByLabel("Account number").clear();
   cy.submitButton("Submit bank details").click();
   cy.validationMessage("Sort code cannot be empty.");
   cy.validationMessage("Account number cannot be empty.");
