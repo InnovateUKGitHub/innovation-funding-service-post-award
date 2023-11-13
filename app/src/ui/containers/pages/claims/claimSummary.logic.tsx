@@ -100,7 +100,6 @@ export const useClaimSummaryData = (
         ["id", "dateCreated", "fileSize", "fileName", "link", "uploadedBy", "isOwner", "description"],
         {
           projectId,
-          currentUser: { userId: data?.currentUser?.userId ?? null },
           type: docs?.node?.RecordType?.Name?.value === "Claims Detail" ? "claim details" : "claims",
           partnerId,
           periodId,
