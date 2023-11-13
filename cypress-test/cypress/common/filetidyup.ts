@@ -12,11 +12,10 @@ export const fileTidyUp = (name: string) => {
         cy.get("tr")
           .eq(1)
           .within(() => {
-            cy.tableCell("Remove").wait(200).click();
+            cy.tableCell("Remove").click();
           });
         cy.validationNotification("has been removed.");
-        cy.reload();
-        cy.wait(500);
+        cy.wait(1000);
       } else {
         cy.get("h2").contains("Files uploaded");
       }
