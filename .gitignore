@@ -16,6 +16,7 @@ app/security
 render-acc-ui-*
 acc-ui-docker-image.json
 __pycache__
+cypress.env.json
 
 # Mac OS X files
 .DS_Store
