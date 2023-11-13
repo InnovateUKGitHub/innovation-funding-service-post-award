@@ -1048,7 +1048,8 @@ const node: ConcreteRequest = (function () {
                                 storageKey: null,
                               },
                             ],
-                            storageKey: null,
+                            storageKey:
+                              'ContentDocumentLinks(first:2000,orderBy:{"ContentDocument":{"CreatedDate":{"order":"DESC"}}})',
                           },
                         ],
                         storageKey: null,

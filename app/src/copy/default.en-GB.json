@@ -2028,6 +2028,28 @@
       }
     },
     "pcr": {
+      "addPartner": {
+        "roleAndOrganisation": {
+          "isCommercialWork": {
+            "errors": {
+              "invalid_type": "Select a project output.",
+              "too_small": "Select a project output."
+            }
+          },
+          "projectRole": {
+            "errors": {
+              "invalid_type": "Select a partner role.",
+              "too_small": "Select a partner role."
+            }
+          },
+          "partnerType": {
+            "errors": {
+              "invalid_type": "Select a partner type.",
+              "too_small": "Select a partner type."
+            }
+          }
+        }
+      },
       "timeExtension": {
         "errors": {
           "custom": "You must either increase or decrease the project duration. You cannot select your current end date."

@@ -1,168 +1,180 @@
-import React from "react";
-import {
-  PCRProjectRole,
-  PCRPartnerType,
-  PCRParticipantSize,
-  getPCROrganisationType,
-  PCROrganisationType,
-} from "@framework/constants/pcrConstants";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
-import { Pending } from "@shared/pending";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { useStores } from "@ui/redux/storesProvider";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { PcrStepProps } from "../pcrWorkflow";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
 import { Option } from "@framework/dtos/option";
-import { Loader } from "@ui/components/bjss/loading";
+import { useContent } from "@ui/hooks/content.hook";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
+import { useForm } from "react-hook-form";
+import { RoleAndOrganisationSchema, errorMap, roleAndOrganisationSchema } from "./addPartner.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useLinks } from "../utils/useNextLink";
+import { PcrPage } from "../pcrPage";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { pcrProjectRoles } from "@framework/picklist/pcrProjectRoles";
+import { pcrPartnerTypes } from "@framework/picklist/pcrPartnerTypes";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { createRegisterButton } from "@framework/util/registerButton";
+import { PCROrganisationType, PCRParticipantSize, getPCROrganisationType } from "@framework/constants/pcrConstants";
 
-interface InnerProps {
-  pcrProjectRoles: Option<PCRProjectRole>[];
-  pcrPartnerTypes: Option<PCRPartnerType>[];
-}
+const setData = (data: RoleAndOrganisationSchema) => {
+  // It's not possible to come back to this page after it's submitted
+  // so we can assume that the participant size hasn't explicitly been set by the user yet
+  // and it's safe for us to reset it
+  let participantSize = PCRParticipantSize.Unknown;
 
-const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
+  // If the partner type is academic then the organisation step is skipped and the participant size is set to "Academic"
+  const organisationType = getPCROrganisationType(data.partnerType);
+  if (organisationType === PCROrganisationType.Academic) {
+    participantSize = PCRParticipantSize.Academic;
+  }
 
-class Component extends React.Component<
-  PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps
-> {
-  render() {
-    const roleOptions = this.getOptions(this.props.pcrItem.projectRole, this.props.pcrProjectRoles);
-    const typeOptions = this.getOptions(this.props.pcrItem.partnerType, this.props.pcrPartnerTypes);
-    const commercialWorkOptions: SelectOption[] = [
-      {
-        id: "true",
-        value: <Content value={x => x.pcrAddPartnerLabels.commercialWorkYes} />,
-      },
-      {
-        id: "false",
-        value: <Content value={x => x.pcrAddPartnerLabels.commercialWorkNo} />,
-      },
-    ];
-    return (
+  return {
+    ...data,
+    organisationType,
+    participantSize,
+    isCommercialWork: data.isCommercialWork === "true",
+  };
+};
+
+export const RoleAndOrganisationStep = () => {
+  const { getContent } = useContent();
+  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
+    usePcrWorkflowContext();
+
+  const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
+
+  const { handleSubmit, register, formState, trigger, setValue } = useForm<RoleAndOrganisationSchema>({
+    defaultValues: {
+      markedAsComplete: markedAsCompleteHasBeenChecked,
+    },
+    resolver: zodResolver(roleAndOrganisationSchema, {
+      errorMap,
+    }),
+  });
+
+  const validationErrors = useRhfErrors(formState.errors);
+  useFormValidate(trigger);
+
+  const registerButton = createRegisterButton(setValue, "button_submit");
+
+  const link = useLinks();
+  const roleOptions = getOptions(pcrItem.projectRole, pcrProjectRoles);
+  const typeOptions = getOptions(pcrItem.partnerType, pcrPartnerTypes);
+  const commercialWorkOptions = [
+    {
+      value: "true",
+      id: "yes",
+      label: getContent(x => x.pcrAddPartnerLabels.commercialWorkYes),
+    },
+    {
+      value: "false",
+      id: "no",
+      label: getContent(x => x.pcrAddPartnerLabels.commercialWorkNo),
+    },
+  ];
+
+  return (
+    <PcrPage validationErrors={validationErrors}>
       <Section qa="role-and-partner-type" title={x => x.pages.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
-        <Form.Form
-          qa="addPartnerForm"
-          data={this.props.pcrItem}
-          isSaving={this.props.status === EditorStatus.Saving}
-          onSubmit={() => this.onSave(this.props.pcrItem)}
-          onChange={dto => this.onChange(dto)}
+        <Form
+          data-qa="addPartnerForm"
+          onSubmit={handleSubmit(data =>
+            onSave({
+              data: setData(data),
+              context: link(data),
+            }),
+          )}
         >
           <ValidationMessage
             messageType="info"
             message={x => x.pages.pcrAddPartnerRoleAndOrganisation.validationMessage}
           />
-          <Form.Fieldset heading={x => x.pcrAddPartnerLabels.roleHeading}>
-            <Form.Radio
-              name="projectRole"
-              options={roleOptions.options}
-              inline={false}
-              value={() => roleOptions.selected}
-              update={(x, option) => {
-                if (!option) return (x.projectRole = PCRProjectRole.Unknown);
-                x.projectRole = parseInt(option.id, 10);
-              }}
-              validation={this.props.validator.projectRole}
-            />
-          </Form.Fieldset>
-          <Form.Fieldset heading={x => x.pcrAddPartnerLabels.commercialWorkHeading}>
-            <Form.Radio
-              name="isCommercialWork"
-              label={x => x.pcrAddPartnerLabels.commercialWorkLabel}
-              hint={x => x.pcrAddPartnerLabels.commercialWorkLabelHint}
-              options={commercialWorkOptions}
-              inline={false}
-              value={dto => {
-                if (dto.isCommercialWork === null || dto.isCommercialWork === undefined) return null;
-                return commercialWorkOptions.find(x => x.id === dto?.isCommercialWork?.toString());
-              }}
-              update={(dto, option) => {
-                if (!option) return (dto.isCommercialWork = null);
-                dto.isCommercialWork = option.id === "true";
-              }}
-              validation={this.props.validator.isCommercialWork}
-            />
-          </Form.Fieldset>
-          <Form.Fieldset heading={x => x.pcrAddPartnerLabels.organisationHeading}>
+          <Fieldset>
+            <Legend>{getContent(x => x.pcrAddPartnerLabels.roleHeading)}</Legend>
+
+            <FormGroup hasError={!!validationErrors?.projectRole}>
+              <ValidationError error={validationErrors?.projectRole as RhfError} />
+              <RadioList name="projectRole" id="questions" register={register}>
+                {roleOptions.options.map(option => (
+                  <Radio
+                    key={option.id}
+                    id={option.id}
+                    data-qa={option.label}
+                    label={option.label}
+                    disabled={isFetching}
+                    defaultChecked={option.id === roleOptions.selected?.id}
+                  />
+                ))}
+              </RadioList>
+            </FormGroup>
+          </Fieldset>
+          <Fieldset>
+            <Legend>{getContent(x => x.pcrAddPartnerLabels.commercialWorkHeading)}</Legend>
+
+            <FormGroup hasError={!!validationErrors?.isCommercialWork}>
+              <Label htmlFor="isCommercialWork">{getContent(x => x.pcrAddPartnerLabels.commercialWorkLabel)}</Label>
+              <Hint id="hint-for-isCommercialWork">
+                {getContent(x => x.pcrAddPartnerLabels.commercialWorkLabelHint)}
+              </Hint>
+              <ValidationError error={validationErrors?.isCommercialWork as RhfError} />
+              <RadioList id="isCommercialWork" name="isCommercialWork" register={register}>
+                {commercialWorkOptions.map(x => (
+                  <Radio key={x.label} {...x} disabled={isFetching} />
+                ))}
+              </RadioList>
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <Legend>{getContent(x => x.pcrAddPartnerLabels.organisationHeading)}</Legend>
             <Info summary={<Content value={x => x.pages.pcrAddPartnerRoleAndOrganisation.infoSummary} />}>
               <Content markdown value={x => x.pages.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo} />
             </Info>
-            <Form.Radio
-              name="partnerType"
-              hint={x => x.pages.pcrAddPartnerRoleAndOrganisation.organisationTypeHint}
-              options={typeOptions.options}
-              inline={false}
-              value={() => typeOptions.selected}
-              update={(x, option) => {
-                // It's not possible to come back to this page after it's submitted
-                // so we can assume that the participant size hasn't explicitly been set by the user yet
-                // and it's safe for us to reset it
-                x.participantSize = PCRParticipantSize.Unknown;
-                if (!option) {
-                  return (x.partnerType = PCRPartnerType.Unknown);
-                }
-                const selectedOption = parseInt(option.id, 10);
-                // If the partner type is academic then the organisation step is skipped and the participant size is set to "Academic"
-                const organisationType = getPCROrganisationType(selectedOption);
-                if (organisationType === PCROrganisationType.Academic) {
-                  x.participantSize = PCRParticipantSize.Academic;
-                }
-                x.organisationType = organisationType;
-                x.partnerType = selectedOption;
-              }}
-              validation={this.props.validator.partnerType}
-            />
-          </Form.Fieldset>
-          <Form.Fieldset qa="save-and-continue">
-            <Form.Submit>
+            <FormGroup hasError={!!validationErrors?.partnerType}>
+              <Hint id="hint-for-partner-type">
+                {getContent(x => x.pages.pcrAddPartnerRoleAndOrganisation.organisationTypeHint)}
+              </Hint>
+              <ValidationError error={validationErrors?.partnerType as RhfError} />
+              <RadioList id="partner-type" name="partnerType" register={register}>
+                {typeOptions.options.map(option => (
+                  <Radio
+                    key={option.label}
+                    {...option}
+                    defaultChecked={option.id === roleOptions.selected?.id}
+                    disabled={isFetching}
+                  />
+                ))}
+              </RadioList>
+            </FormGroup>
+          </Fieldset>
+          <Fieldset data-qa="save-and-continue">
+            <Button type="submit" {...registerButton("submit")}>
               <Content value={x => x.pcrItem.submitButton} />
-            </Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.onSave(this.props.pcrItem, true)}>
+            </Button>
+            <Button type="submit" secondary {...registerButton("saveAndReturn")}>
               <Content value={x => x.pcrItem.returnToSummaryButton} />
-            </Form.Button>
-          </Form.Fieldset>
-        </Form.Form>
+            </Button>
+          </Fieldset>
+        </Form>
       </Section>
-    );
-  }
-
-  private onSave(dto: PCRItemForPartnerAdditionDto, skipToSummary?: boolean) {
-    this.onChange(dto);
-    this.props.onSave(!!skipToSummary);
-  }
-
-  private onChange(dto: PCRItemForPartnerAdditionDto) {
-    dto.isProjectRoleAndPartnerTypeRequired = true;
-    this.props.onChange(dto);
-  }
-
-  private getOptions<T extends number>(selected: T, options: Option<T>[]) {
-    const filteredOptions: SelectOption[] = options
-      .filter(x => x.active)
-      .map(x => ({ id: x.value.toString(), value: x.label }));
-
-    const selectedOption = selected && filteredOptions.find(x => parseInt(x.id, 10) === selected);
-
-    return { options: filteredOptions, selected: selectedOption };
-  }
-}
-
-export const RoleAndOrganisationStep = (
-  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
-) => {
-  const stores = useStores();
-
-  const pcrProjectRoles = stores.projectChangeRequests.getPcrProjectRoles();
-  const pcrPartnerTypes = stores.projectChangeRequests.getPcrPartnerTypes();
-
-  return (
-    <Loader
-      pending={Pending.combine({ pcrProjectRoles, pcrPartnerTypes })}
-      render={x => <Component pcrProjectRoles={x.pcrProjectRoles} pcrPartnerTypes={x.pcrPartnerTypes} {...props} />}
-    />
+    </PcrPage>
   );
+};
+
+const getOptions = <T extends number>(selected: T, options: Option<T>[]) => {
+  const filteredOptions = options.filter(x => x.active).map(x => ({ id: x.value.toString(), label: x.label }));
+
+  const selectedOption = selected && filteredOptions.find(x => parseInt(x.id, 10) === selected);
+
+  return { options: filteredOptions, selected: selectedOption };
 };

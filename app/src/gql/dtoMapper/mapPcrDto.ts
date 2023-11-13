@@ -2,6 +2,7 @@ import { pcrItemTypes } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { PCRDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
+import { PcrParticipantSizeMapper } from "@framework/mappers/participantSize";
 import {
   getPCROrganisationType,
   mapToPCRItemStatus,
@@ -32,6 +33,7 @@ export type PcrNode = GQL.PartialNode<{
   Acc_MarkedasComplete__c: GQL.Value<string>;
   Acc_OrganisationName__c: GQL.Value<string>;
   Acc_Project_Participant__c: GQL.Value<string>;
+  Acc_ParticipantSize__c: GQL.Value<string>;
   Acc_ParticipantType__c: GQL.Value<string>;
   Acc_PublicDescriptionSnapshot__c: GQL.Value<string>;
   Acc_NewPublicDescription__c: GQL.Value<string>;
@@ -91,6 +93,7 @@ export type PcrItemDtoMapping = Pick<
   | "hasOtherFunding"
   | "id"
   | "isCommercialWork"
+  | "isProjectRoleAndPartnerTypeRequired"
   | "grantMovingOverFinancialYear"
   | "guidance"
   | "lastUpdated"
@@ -99,6 +102,7 @@ export type PcrItemDtoMapping = Pick<
   | "organisationType"
   | "partnerId"
   | "partnerNameSnapshot"
+  | "participantSize"
   | "partnerType"
   | "projectDurationSnapshot"
   | "projectSummary"
@@ -195,6 +199,11 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   organisationType(node) {
     return getPCROrganisationType(mapFromSalesforcePCRPartnerType(node?.Acc_ParticipantType__c?.value ?? ""));
+  },
+  participantSize(node) {
+    return new PcrParticipantSizeMapper().mapFromSalesforcePCRParticipantSize(
+      node?.Acc_ParticipantSize__c?.value ?? "",
+    );
   },
   partnerId(node) {
     return (node?.Acc_Project_Participant__c?.value as PartnerId) ?? null;

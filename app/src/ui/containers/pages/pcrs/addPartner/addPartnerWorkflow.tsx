@@ -94,6 +94,7 @@ export const getAddPartnerWorkflow = (
       validation: val => val,
       summaryRender: AddPartnerSummary,
     },
+    isMigratedToGql: true,
   };
 
   if (step === 1 || !item.projectRole || !item.partnerType) {
@@ -101,8 +102,7 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.roleAndOrganisationStep,
       displayName: "New partner information",
       stepNumber: 1,
-      validation: val => val.pcr,
-      stepRender: RoleAndOrganisationStep,
+      migratedStepRender: RoleAndOrganisationStep,
     });
   }
 

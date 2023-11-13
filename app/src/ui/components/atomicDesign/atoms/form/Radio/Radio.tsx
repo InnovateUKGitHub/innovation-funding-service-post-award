@@ -29,7 +29,7 @@ const Radio = ({ label, ...props }: RadioInputProps) => {
   return (
     <div className="govuk-radios__item">
       <input
-        value={props.value || props.id}
+        value={props.value ?? props.id}
         className={cx("govuk-radios__input", props.className)}
         type="radio"
         {...props}
