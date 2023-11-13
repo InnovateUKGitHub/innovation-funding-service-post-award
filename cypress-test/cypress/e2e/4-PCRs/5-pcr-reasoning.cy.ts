@@ -87,7 +87,7 @@ describe("PCR > Reasoning section", () => {
 
   it("Should save the comments and proceed", () => {
     cy.button("Save and continue").click();
-    cy.heading("Provide reasons to Innovate UK");
+    cy.get("legend").contains("Upload documents");
   });
 
   it("Should upload a file", () => {

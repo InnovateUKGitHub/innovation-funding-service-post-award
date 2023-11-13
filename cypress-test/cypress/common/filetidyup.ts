@@ -15,7 +15,7 @@ export const fileTidyUp = (name: string) => {
             cy.tableCell("Remove").click();
           });
         cy.validationNotification("has been removed.");
-        cy.wait(1000);
+        cy.wait(2000);
       } else {
         cy.get("h2").contains("Files uploaded");
       }
