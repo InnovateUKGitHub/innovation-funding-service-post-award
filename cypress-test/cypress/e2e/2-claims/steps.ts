@@ -1276,7 +1276,7 @@ export const finalClaimGuidance = () => {
   );
 };
 
-export const editClaimDocUploadRandomFiles = () => {
+export const editClaimDocUploadWithPCF = () => {
   cy.get("a").contains("Edit claim documents").click();
   cy.heading("Claim documents");
   [
@@ -1299,6 +1299,7 @@ export const editClaimDocUploadIAR = () => {
   cy.heading("Claim documents");
   cy.fileInput(testFile);
   cy.get("#description").select("Independent accountant’s report");
+  cy.wait(500);
   cy.button("Upload documents").click();
   cy.validationNotification("Your document has been uploaded.");
 };
@@ -1313,10 +1314,4 @@ export const submitButtonDisabled = () => {
   cy.get("a").contains("Continue to summary").click();
   cy.heading("Claim summary");
   cy.button("Submit claim").should("have.attr", "disabled");
-};
-
-export const removeIAR = () => {
-  cy.backLink("Back to claim documents").click();
-  cy.heading("Claim documents");
-  fileTidyUp("Neil O'Reilly");
 };

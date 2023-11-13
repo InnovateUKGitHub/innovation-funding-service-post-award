@@ -2,11 +2,9 @@ import { fileTidyUp } from "common/filetidyup";
 import { visitApp } from "common/visit";
 import {
   editClaimDocUploadIAR,
-  editClaimDocUploadRandomFiles,
+  editClaimDocUploadWithPCF,
   finalClaimGuidance,
   navigateToClaimsTile,
-  removeIAR,
-  submitButtonDisabled,
   submitButtonEnabled,
 } from "./steps";
 
@@ -54,20 +52,25 @@ describe("claims > final claim with IAR required", () => {
   });
 
   it(
-    "Should click into 'Edit claim documents' and upload a number of files that are NOT an IAR",
-    editClaimDocUploadRandomFiles,
+    "Should click into 'Edit claim documents' and upload completion form and a number of files that are NOT an IAR",
+    editClaimDocUploadWithPCF,
   );
 
-  it("Should continue to the Claim summary screen and check the submit button is still disabled", submitButtonDisabled);
+  it("Should contain guidance surrounding final Claim documents", finalClaimGuidance);
+
+  it("Should continue to the Claim summary screen and the submit button should now be enabled", submitButtonEnabled);
+
+  it("Should not submit when clicked and throw correct messaging", () => {
+    cy.button("Submit claim").click();
+    cy.validationLink("You must upload an independent accountant's report before you can submit this claim.");
+  });
 
   it("Should click into the 'Edit claim documents' link and upload an IAR", editClaimDocUploadIAR);
 
   it("Should display the uploaded file", () => {
     cy.reload;
-    cy.get("tr").contains("Neil O'Reilly");
+    cy.get("tr").contains("Independent accountant’s report");
   });
 
-  it("Should continue to the Claim summary screen and check the submit button is now enabled", submitButtonEnabled);
-
-  it("Should navigate to claim documents and delete the file that was uploaded", removeIAR);
+  it("Should delete the files that were uploaded", () => fileTidyUp("Neil O'Reilly"));
 });
