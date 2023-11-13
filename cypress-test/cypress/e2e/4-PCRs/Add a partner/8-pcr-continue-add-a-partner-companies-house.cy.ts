@@ -8,6 +8,7 @@ import {
   typeASearchResults,
   companyHouseAutofillAssert,
   saveContinueSaveSummary,
+  specialCharInput,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -49,6 +50,8 @@ describe("PCR > Add partner > Continuing editing PCR Companies House section", (
     "Should have a 'Search companies house' subheading and guidance information beneath search box",
     searchCompanyHouseGuidance,
   );
+
+  it("Should enter special characters and assert that no errors are thrown", specialCharInput);
 
   it(
     "Should type 'A' in the search box and display 'Companies house search results' and the company 'A Limited'",

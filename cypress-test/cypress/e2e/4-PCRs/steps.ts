@@ -302,8 +302,15 @@ export const searchCompanyHouseGuidance = () => {
   cy.paragraph("Is your organisation not showing in these results?");
 };
 
+export const specialCharInput = () => {
+  ["&", "!", "£", "$", "%", "^", "*", "(", ")", "-", "+", "=", "////", "|"].forEach(specChar => {
+    cy.get("#searchCompaniesHouse").clear().type(specChar).wait(3000);
+    cy.getByQA("error-summary").should("not.exist");
+  });
+};
+
 export const typeASearchResults = () => {
-  cy.get("#searchCompaniesHouse").type("A").wait(500);
+  cy.get("#searchCompaniesHouse").clear().type("A").wait(500);
   cy.get("h2").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
 };
