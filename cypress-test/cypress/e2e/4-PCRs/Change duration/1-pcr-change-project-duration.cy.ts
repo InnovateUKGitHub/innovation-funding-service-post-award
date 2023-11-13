@@ -108,6 +108,6 @@ describe("PCR >  Change project duration > Create PCR", () => {
   it("Should re-access the PCR and assert that the tick box is populated", () => {
     cy.get("a").contains("Change project duration").click();
     cy.heading("Change project duration");
-    cy.get("#marked-as-complete").should("have.value", "marked-as-complete");
+    cy.get("#marked-as-complete").should("be.checked");
   });
 });
