@@ -4,7 +4,7 @@ import {
   shouldShowProjectTitle,
   learnFiles,
   pcrDocUpload,
-  pcrFileTable,
+  removePartnerFileTable,
   clickPartnerAddPeriod,
   removePartnerGuidanceInfo,
 } from "../steps";
@@ -20,6 +20,9 @@ import {
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { fileTidyUp } from "common/filetidyup";
 import { pcrTidyUp } from "common/pcrtidyup";
+
+import { rejectElevenDocsAndShowError, allowBatchFileUpload } from "e2e/2-claims/steps";
+
 const pmEmail = "james.black@euimeabs.test";
 
 describe("PCR > Remove partner > Continuing editing the Remove a partner section once a partner is selected", () => {
@@ -66,6 +69,8 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 
+  it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
+
   it("Should validate uploading a file that is too large", uploadFileTooLarge);
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
@@ -78,7 +83,13 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
 
-  it("Should allow you to upload a file", pcrDocUpload);
+  it("Should upload a batch of 10 documents", { retries: 0 }, allowBatchFileUpload);
+
+  it("Should see a success message for '10 documents have been uploaded'", { retries: 2 }, () => {
+    cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
+  });
+
+  it("Should allow a single file upload", pcrDocUpload);
 
   it("Should display a document upload validation message", () => {
     cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
@@ -92,14 +103,18 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
     cy.get("p.govuk-body").contains("uploaded");
   });
 
-  it("Should show a table of information", () => pcrFileTable("Withdrawal of partner certificate", "James Black"));
+  it("Should show a table of information", removePartnerFileTable);
 
   it("Should show the file that's just been uploaded", () => {
     cy.get("a.govuk-link").contains("testfile.doc");
   });
 
   it("Should allow you to delete the document that was just uploaded", () => {
-    cy.button("Remove").click();
+    cy.get("tr")
+      .eq(10)
+      .within(() => {
+        cy.get("td:nth-child(6)").contains("Remove").click();
+      });
     cy.validationNotification(`'${testFile}' has been removed.`);
   });
 

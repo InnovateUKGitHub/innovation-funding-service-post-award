@@ -1,7 +1,5 @@
 import { revertSpendTableZero } from "common/spend-table-edit";
 
-const partners = ["EUI Small Ent Health", "ABS EUI Medium Enterprise", "A B Cad Services"] as const;
-
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };

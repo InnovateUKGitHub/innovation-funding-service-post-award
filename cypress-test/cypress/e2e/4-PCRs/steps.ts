@@ -1,5 +1,5 @@
-import { testFile } from "common/testfileNames";
 import { PcrType } from "typings/pcr";
+import { documents } from "e2e/2-claims/steps";
 
 let date = new Date();
 let createdDay = date.getDate();
@@ -157,16 +157,15 @@ export const addPartnerDocUpload = () => {
   cy.validationNotification("Your document has been uploaded.");
 };
 
-export const pcrFileTable = (fileType: string, user: string) => {
-  [
-    ["File name", testFile],
-    ["Type", fileType],
-    ["Date uploaded", "2023"],
-    ["Size", "0KB"],
-    ["Uploaded by", user],
-  ].forEach(([head, row], column = 0) => {
-    cy.get(`th:nth-child(${column + 1})`).contains(head);
-    cy.get(`td:nth-child(${column + 1})`).contains(row);
+const uploadedDocs = documents.reverse();
+
+export const removePartnerFileTable = () => {
+  uploadedDocs.forEach((doc, index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(doc);
+      });
   });
 };
 
@@ -407,26 +406,33 @@ export const removePartnerPromptValidation = () => {
   cy.getByLabel("I agree with this change").click();
   cy.wait(500);
   cy.button("Save and return to request").click();
-  cy.validationLink("Enter a removal period");
+  cy.validationLink("Enter a valid removal period");
   cy.validationLink("Select a partner to remove from this project.");
 };
 
 export const validatePeriodBox = () => {
-  cy.getByLabel("Removal period").clear().type("13");
+  cy.getByAriaLabel("Removal period").clear().type("13");
   cy.wait(1000);
   cy.button("Save and continue").click();
   cy.validationLink("Period must be 12 or fewer");
   cy.paragraph("Period must be 12 or fewer");
-  cy.getByLabel("Removal period").clear().type("not a number");
+  cy.getByAriaLabel("Removal period").clear().type("not a number");
   cy.wait(1000);
   cy.button("Save and continue").click();
   cy.validationLink("Period must be a whole number, like 3.");
   cy.paragraph("Period must be a whole number, like 3.");
-  ["!", "$", "%", "^", "&", "*"].forEach(specialChar => {
-    cy.getByLabel("Removal period").clear().type(specialChar);
+  ["!", "$", "%", "^", "&", "*", "<", ">"].forEach(specialChar => {
+    cy.getByAriaLabel("Removal period").clear().type(specialChar);
     cy.wait(1000);
     cy.button("Save and continue").click();
     cy.validationLink("Period must be a whole number, like 3.");
+  });
+  ["-1", "-100", "-3333333", "-0"].forEach(negative => {
+    cy.getByAriaLabel("Removal period").clear().type(negative);
+    cy.wait(1000);
+    cy.button("Save and continue").click();
+    cy.validationLink("Enter a valid removal period");
+    cy.paragraph("Enter a valid removal period");
   });
 };
 
@@ -503,6 +509,16 @@ export const removePartnerPreviousArrow = () => {
   cy.getByQA("arrow-right").contains("Remove a partner");
   cy.getByQA("arrow-right").contains("Previous").click();
   cy.heading("Remove a partner");
+};
+
+export const removeManyPartners = () => {
+  partnersList.forEach(partner => {
+    cy.getByLabel(partner).click();
+  });
+  cy.button("Save and continue").click();
+  cy.get("legend").contains("Upload withdrawal of partner certificate");
+  cy.button("Save and continue").click();
+  cy.getListItemFromKey("Partner being removed", "Hedges' Hedges Ltd");
 };
 
 export const navigateToPartnerOrgPage = () => {
