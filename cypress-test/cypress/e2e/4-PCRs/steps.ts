@@ -396,6 +396,40 @@ export const removePartnerGiveInfoTodo = () => {
   cy.assertPcrCompletionStatus("Remove a partner", "To do");
 };
 
+export const removePartnerContinueNoEdit = () => {
+  cy.button("Save and continue").click();
+  cy.get("legend").contains("Upload withdrawal of partner certificate");
+  cy.button("Save and continue").click();
+  cy.get("legend").contains("Mark as complete");
+};
+
+export const removePartnerPromptValidation = () => {
+  cy.getByLabel("I agree with this change").click();
+  cy.wait(500);
+  cy.button("Save and return to request").click();
+  cy.validationLink("Enter a removal period");
+  cy.validationLink("Select a partner to remove from this project.");
+};
+
+export const validatePeriodBox = () => {
+  cy.getByLabel("Removal period").clear().type("13");
+  cy.wait(1000);
+  cy.button("Save and continue").click();
+  cy.validationLink("Period must be 12 or fewer");
+  cy.paragraph("Period must be 12 or fewer");
+  cy.getByLabel("Removal period").clear().type("not a number");
+  cy.wait(1000);
+  cy.button("Save and continue").click();
+  cy.validationLink("Period must be a whole number, like 3.");
+  cy.paragraph("Period must be a whole number, like 3.");
+  ["!", "$", "%", "^", "&", "*"].forEach(specialChar => {
+    cy.getByLabel("Removal period").clear().type(specialChar);
+    cy.wait(1000);
+    cy.button("Save and continue").click();
+    cy.validationLink("Period must be a whole number, like 3.");
+  });
+};
+
 export const clickPartnerAddPeriod = () => {
   cy.getByLabel("EUI Small Ent Health").click();
   cy.get("#removalPeriod").clear().type("3");
@@ -420,6 +454,55 @@ export const removePartnerTable = () => {
   ].forEach(([key, listItem]) => {
     cy.getListItemFromKey(key, listItem);
   });
+};
+
+export const removePartnerEditLinks = () => {
+  [
+    ["Partner being removed", "Select partner to remove"],
+    ["Last period", "When is their last period?"],
+    ["Documents", "Upload withdrawal of partner certificate"],
+  ].forEach(([key, subheading]) => {
+    cy.getListItemFromKey(key, "Edit").click();
+    cy.get("legend").contains(subheading);
+    cy.backLink("Back to request").click();
+    cy.get("a").contains("Remove a partner").click();
+    cy.get("legend").contains("Mark as complete");
+  });
+};
+
+export const removePartnerMarkAsComplete = () => {
+  cy.get("legend").contains("Mark as complete");
+  cy.clickCheckBox("I agree with this change");
+  cy.getByLabel("I agree with this change.").should("be.checked");
+};
+
+export const removePartnerAccessPcrInReview = () => {
+  cy.selectTile("Project change requests");
+  cy.heading("Project change requests");
+  cy.get("a").contains("Review").click();
+  cy.heading("Request");
+};
+
+export const removePartnerReviewValidateContents = () => {
+  [
+    ["Partner being removed", "ABS EUI Medium Enterprise"],
+    ["Last period", "11"],
+    ["Documents", "t02.docx"],
+  ].forEach(([item, content]) => {
+    cy.getListItemFromKey(item, content);
+  });
+};
+
+export const removePartnerNextArrow = () => {
+  cy.getByQA("arrow-left").contains("Reasoning");
+  cy.getByQA("arrow-left").contains("Next").click();
+  cy.heading("Reasons for Innovate UK");
+};
+
+export const removePartnerPreviousArrow = () => {
+  cy.getByQA("arrow-right").contains("Remove a partner");
+  cy.getByQA("arrow-right").contains("Previous").click();
+  cy.heading("Remove a partner");
 };
 
 export const navigateToPartnerOrgPage = () => {

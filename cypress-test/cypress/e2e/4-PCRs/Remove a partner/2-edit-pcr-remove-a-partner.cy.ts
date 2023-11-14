@@ -1,5 +1,11 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, showPartners } from "../steps";
+import {
+  removePartnerContinueNoEdit,
+  removePartnerPromptValidation,
+  shouldShowProjectTitle,
+  showPartners,
+  validatePeriodBox,
+} from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
 const pm = "james.black@euimeabs.test";
@@ -41,44 +47,16 @@ describe("PCR > Remove partner > Begin editing the Remove a partner section", ()
     );
   });
 
-  it("Should 'Save and continue' having entered nothing and selected nothing", () => {
-    cy.button("Save and continue").click();
-    cy.get("legend").contains("Upload withdrawal of partner certificate");
-    cy.button("Save and continue").click();
-    cy.get("legend").contains("Mark as complete");
-  });
+  it("Should 'Save and continue' having entered nothing and selected nothing", removePartnerContinueNoEdit);
 
-  it("Should mark as complete and attempt to save prompting validation", () => {
-    cy.getByLabel("I agree with this change").click();
-    cy.wait(500);
-    cy.button("Save and return to request").click();
-    cy.validationLink("Enter a removal period");
-    cy.validationLink("Select a partner to remove from this project.");
-  });
+  it("Should mark as complete and attempt to save prompting validation", removePartnerPromptValidation);
 
   it("Should use the edit button next to 'Partner being removed' to navigate back", () => {
     cy.getListItemFromKey("Partner being removed", "Edit").click();
     cy.get("legend").contains("Select partner to remove");
   });
 
-  it("Should validate the period box", () => {
-    cy.getByLabel("Removal period").clear().type("13");
-    cy.wait(1000);
-    cy.button("Save and continue").click();
-    cy.validationLink("Period must be 12 or fewer");
-    cy.paragraph("Period must be 12 or fewer");
-    cy.getByLabel("Removal period").clear().type("not a number");
-    cy.wait(1000);
-    cy.button("Save and continue").click();
-    cy.validationLink("Period must be a whole number, like 3.");
-    cy.paragraph("Period must be a whole number, like 3.");
-    ["!", "$", "%", "^", "&", "*"].forEach(specialChar => {
-      cy.getByLabel("Removal period").clear().type(specialChar);
-      cy.wait(1000);
-      cy.button("Save and continue").click();
-      cy.validationLink("Period must be a whole number, like 3.");
-    });
-  });
+  it("Should validate the period box", validatePeriodBox);
 
   it("Should have a working backlink", () => {
     cy.backLink("Back to request").click();

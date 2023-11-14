@@ -1,5 +1,11 @@
 import { visitApp } from "common/visit";
-import { shouldShowProjectTitle } from "../steps";
+import {
+  removePartnerAccessPcrInReview,
+  removePartnerNextArrow,
+  removePartnerPreviousArrow,
+  removePartnerReviewValidateContents,
+  shouldShowProjectTitle,
+} from "../steps";
 
 const mo = "testman2@testing.com";
 describe("PCR > Remove a partner > Review", () => {
@@ -8,12 +14,7 @@ describe("PCR > Remove a partner > Review", () => {
     cy.navigateToProject("328407");
   });
 
-  it("Should navigate to the PCR tile and access the PCR in Review", () => {
-    cy.selectTile("Project change requests");
-    cy.heading("Project change requests");
-    cy.get("a").contains("Review").click();
-    cy.heading("Request");
-  });
+  it("Should navigate to the PCR tile and access the PCR in Review", removePartnerAccessPcrInReview);
 
   it("Should display 'Remove a partner' with 'Complete' against it", () => {
     cy.getByQA("WhatDoYouWantToDo").contains("Complete");
@@ -26,15 +27,7 @@ describe("PCR > Remove a partner > Review", () => {
 
   it("Should have correct project title", shouldShowProjectTitle);
 
-  it("Should validate the contents of the PCR", () => {
-    [
-      ["Partner being removed", "ABS EUI Medium Enterprise"],
-      ["Last period", "11"],
-      ["Documents", "t02.docx"],
-    ].forEach(([item, content]) => {
-      cy.getListItemFromKey(item, content);
-    });
-  });
+  it("Should validate the contents of the PCR", removePartnerReviewValidateContents);
 
   it("Should read the contents of the file correctly", () => {
     cy.downloadFile(
@@ -42,17 +35,9 @@ describe("PCR > Remove a partner > Review", () => {
     );
   });
 
-  it("Should have a correctly functioning 'Next' arrow", () => {
-    cy.getByQA("arrow-left").contains("Reasoning");
-    cy.getByQA("arrow-left").contains("Next").click();
-    cy.heading("Reasons for Innovate UK");
-  });
+  it("Should have a correctly functioning 'Next' arrow", removePartnerNextArrow);
 
-  it("Should use the 'previous' arrow to navigate back to Remove a partner", () => {
-    cy.getByQA("arrow-right").contains("Remove a partner");
-    cy.getByQA("arrow-right").contains("Previous").click();
-    cy.heading("Remove a partner");
-  });
+  it("Should use the 'previous' arrow to navigate back to Remove a partner", removePartnerPreviousArrow);
 
   it("Should have a working backlink", () => {
     cy.backLink("Back to request").click();

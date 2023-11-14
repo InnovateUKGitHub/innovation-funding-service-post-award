@@ -1,5 +1,12 @@
 import { visitApp } from "../../../common/visit";
-import { shouldShowProjectTitle, pcrDocUpload, clickPartnerAddPeriod, removePartnerTable } from "../steps";
+import {
+  shouldShowProjectTitle,
+  pcrDocUpload,
+  clickPartnerAddPeriod,
+  removePartnerTable,
+  removePartnerEditLinks,
+  removePartnerMarkAsComplete,
+} from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
 const pmEmail = "james.black@euimeabs.test";
@@ -43,25 +50,9 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should display a remove partner table containing information on the request entered so far", removePartnerTable);
 
-  it("Should ensure the 'Edit' links are working correctly", () => {
-    [
-      ["Partner being removed", "Select partner to remove"],
-      ["Last period", "When is their last period?"],
-      ["Documents", "Upload withdrawal of partner certificate"],
-    ].forEach(([key, subheading]) => {
-      cy.getListItemFromKey(key, "Edit").click();
-      cy.get("legend").contains(subheading);
-      cy.backLink("Back to request").click();
-      cy.get("a").contains("Remove a partner").click();
-      cy.get("legend").contains("Mark as complete");
-    });
-  });
+  it("Should ensure the 'Edit' links are working correctly", removePartnerEditLinks);
 
-  it("Has a subheading 'Mark as complete' with an 'I agree with this change' checkbox", () => {
-    cy.get("legend").contains("Mark as complete");
-    cy.clickCheckBox("I agree with this change");
-    cy.getByLabel("I agree with this change.").should("be.checked");
-  });
+  it("Has a subheading 'Mark as complete' with an 'I agree with this change' checkbox", removePartnerMarkAsComplete);
 
   it("Should save and return to request", () => {
     cy.submitButton("Save and return to request").click();
