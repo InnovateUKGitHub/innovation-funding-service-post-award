@@ -8,6 +8,41 @@ let comments = JSON.stringify(date);
 const moEmail = "testman2@testing.com";
 const pmEmail = "james.black@euimeabs.test";
 
+const partnersList = [
+  "EUI Small Ent Health",
+  "A B Cad Services",
+  "ABS EUI Medium Enterprise",
+  "Auto Corporation Ltd",
+  "Auto Healthcare Ltd",
+  "Auto Monitoring Ltd",
+  "Auto Research Ltd",
+  "Brown and co",
+  "Deep Rock Galactic",
+  "EUI Micro Research Co.",
+  "Gorcium Management Services Ltd.",
+  "Hyperion Corporation",
+  "Image Development Society",
+  "Intaser",
+  "Jakobs",
+  "Java Coffee Inc",
+  "Lutor Systems",
+  "Maliwan",
+  "Munce Inc",
+  "National Investment Bank",
+  "NIB Reasearch Limited",
+  "RBA Test Account 1",
+  "Red Motor Research Ltd.",
+  "Swindon Development University",
+  "Swindon University",
+  "The Best Manufacturing",
+  "Top Castle Co.",
+  "UAT37",
+  "University of Bristol",
+  "Vitruvius Stonework Limited",
+  "YHDHDL",
+  "Hedges' Hedges Ltd",
+];
+
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 export const newPubDescription = "I am a new public description. I am 55 characters long.";
 export const newPubSummary = "I am a new public summary. I am 51 characters long.";
@@ -1019,6 +1054,17 @@ export const completeChangeName = () => {
   cy.getByLabel("I agree with this change").click();
   cy.button("Save and return to request").click();
   cy.get("strong").contains("Complete");
+};
+
+export const changeNameValidateManyPartners = () => {
+  partnersList.forEach(partner => {
+    cy.getByLabel(partner).click();
+    cy.wait(200);
+  });
+  cy.button("Save and continue").click();
+  cy.get("legend").contains("Upload change of name certificate");
+  cy.button("Save and continue").click();
+  cy.getListItemFromKey("Existing name", "Hedges' Hedges Ltd");
 };
 
 export const existingProjectDetails = () => {
