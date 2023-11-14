@@ -7,6 +7,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { useLazyLoadQuery } from "react-relay";
 import { claimDocumentsQuery } from "./ClaimDocuments.query";
 import { ClaimDocumentsQuery } from "./__generated__/ClaimDocumentsQuery.graphql";
+import { getPartnerRoles, mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 
 export const useClaimDocumentsQuery = (
   { projectId, partnerId, periodId }: ClaimKey,
@@ -19,6 +20,7 @@ export const useClaimDocumentsQuery = (
   );
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
+  const { node: partnerNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectParticipant__c?.edges);
   const { node: claimNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges);
 
   const project = mapToProjectDto(projectNode, [
@@ -27,13 +29,18 @@ export const useClaimDocumentsQuery = (
     "title",
     "status",
     "roles",
+    "partnerRoles",
     "impactManagementParticipation",
     "competitionType",
   ]);
 
+  const partner = mapToPartnerDto(partnerNode, ["roles", "partnerStatus", "isWithdrawn"], {
+    roles: getPartnerRoles(project.partnerRoles, partnerNode?.Id ?? "unknown"),
+  });
+
   const claim = mapToClaimDto(
     claimNode,
-    ["id", "isFinalClaim", "impactManagementParticipation", "isIarRequired", "pcfStatus"],
+    ["id", "isFinalClaim", "impactManagementParticipation", "isIarRequired", "pcfStatus", "status"],
     {},
   );
 
@@ -48,5 +55,5 @@ export const useClaimDocumentsQuery = (
     },
   );
 
-  return { claim, project, claimDocuments };
+  return { claim, project, partner, claimDocuments };
 };

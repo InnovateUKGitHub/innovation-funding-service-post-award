@@ -116,6 +116,16 @@ export const claimDocumentsQuery = graphql`
               }
             }
           }
+          Acc_ProjectParticipant__c(where: { Id: { eq: $partnerId } }, first: 1) {
+            edges {
+              node {
+                Id
+                Acc_ParticipantStatus__c {
+                  value
+                }
+              }
+            }
+          }
         }
       }
     }

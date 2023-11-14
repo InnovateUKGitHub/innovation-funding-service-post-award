@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<336a8606ad0896e8a3060af940bd2f7e>>
+ * @generated SignedSource<<c99fbdbac3145634345c6ffd21adf5fa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -86,6 +86,16 @@ export type ClaimDocumentsQuery$data = {
             } | null | undefined;
           } | null | undefined> | null | undefined;
         } | null | undefined;
+        readonly Acc_ProjectParticipant__c: {
+          readonly edges: ReadonlyArray<{
+            readonly node: {
+              readonly Acc_ParticipantStatus__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Id: string;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
@@ -149,14 +159,21 @@ v3 = {
   "name": "first",
   "value": 1
 },
-v4 = {
+v4 = [
+  {
+    "kind": "Variable",
+    "name": "eq",
+    "variableName": "partnerId"
+  }
+],
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
-v5 = [
+v6 = [
   {
     "alias": null,
     "args": null,
@@ -165,38 +182,38 @@ v5 = [
     "storageKey": null
   }
 ],
-v6 = {
+v7 = {
   "alias": null,
   "args": null,
   "concreteType": "StringValue",
   "kind": "LinkedField",
   "name": "Impact_Management_Participation__c",
   "plural": false,
-  "selections": (v5/*: any*/),
-  "storageKey": null
-},
-v7 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "isMo",
+  "selections": (v6/*: any*/),
   "storageKey": null
 },
 v8 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "isFc",
+  "name": "isMo",
   "storageKey": null
 },
 v9 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "isFc",
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "isPm",
   "storageKey": null
 },
-v10 = [
+v11 = [
   {
     "alias": null,
     "args": null,
@@ -228,13 +245,7 @@ v10 = [
                   {
                     "fields": [
                       {
-                        "fields": [
-                          {
-                            "kind": "Variable",
-                            "name": "eq",
-                            "variableName": "partnerId"
-                          }
-                        ],
+                        "fields": (v4/*: any*/),
                         "kind": "ObjectValue",
                         "name": "Acc_ProjectParticipant__c"
                       },
@@ -284,7 +295,7 @@ v10 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v4/*: any*/),
+                          (v5/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -292,7 +303,7 @@ v10 = [
                             "kind": "LinkedField",
                             "name": "Acc_FinalClaim__c",
                             "plural": false,
-                            "selections": (v5/*: any*/),
+                            "selections": (v6/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -302,7 +313,7 @@ v10 = [
                             "kind": "LinkedField",
                             "name": "Acc_IARRequired__c",
                             "plural": false,
-                            "selections": (v5/*: any*/),
+                            "selections": (v6/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -312,10 +323,10 @@ v10 = [
                             "kind": "LinkedField",
                             "name": "Acc_PCF_Status__c",
                             "plural": false,
-                            "selections": (v5/*: any*/),
+                            "selections": (v6/*: any*/),
                             "storageKey": null
                           },
-                          (v6/*: any*/),
+                          (v7/*: any*/),
                           {
                             "alias": null,
                             "args": [
@@ -378,7 +389,7 @@ v10 = [
                                         "kind": "LinkedField",
                                         "name": "LinkedEntityId",
                                         "plural": false,
-                                        "selections": (v5/*: any*/),
+                                        "selections": (v6/*: any*/),
                                         "storageKey": null
                                       },
                                       {
@@ -389,7 +400,7 @@ v10 = [
                                         "name": "ContentDocument",
                                         "plural": false,
                                         "selections": [
-                                          (v4/*: any*/),
+                                          (v5/*: any*/),
                                           {
                                             "alias": null,
                                             "args": null,
@@ -405,7 +416,7 @@ v10 = [
                                                 "kind": "LinkedField",
                                                 "name": "ContactId",
                                                 "plural": false,
-                                                "selections": (v5/*: any*/),
+                                                "selections": (v6/*: any*/),
                                                 "storageKey": null
                                               }
                                             ],
@@ -418,7 +429,7 @@ v10 = [
                                             "kind": "LinkedField",
                                             "name": "LatestPublishedVersionId",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v6/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -428,7 +439,7 @@ v10 = [
                                             "kind": "LinkedField",
                                             "name": "Description",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v6/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -438,7 +449,7 @@ v10 = [
                                             "kind": "LinkedField",
                                             "name": "ContentSize",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v6/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -448,7 +459,7 @@ v10 = [
                                             "kind": "LinkedField",
                                             "name": "CreatedDate",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v6/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -458,7 +469,7 @@ v10 = [
                                             "kind": "LinkedField",
                                             "name": "FileType",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v6/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -468,7 +479,7 @@ v10 = [
                                             "kind": "LinkedField",
                                             "name": "FileExtension",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v6/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -478,7 +489,7 @@ v10 = [
                                             "kind": "LinkedField",
                                             "name": "Title",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v6/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -488,7 +499,7 @@ v10 = [
                                             "kind": "LinkedField",
                                             "name": "LastModifiedDate",
                                             "plural": false,
-                                            "selections": (v5/*: any*/),
+                                            "selections": (v6/*: any*/),
                                             "storageKey": null
                                           },
                                           {
@@ -499,7 +510,7 @@ v10 = [
                                             "name": "CreatedBy",
                                             "plural": false,
                                             "selections": [
-                                              (v4/*: any*/),
+                                              (v5/*: any*/),
                                               {
                                                 "alias": null,
                                                 "args": null,
@@ -507,7 +518,7 @@ v10 = [
                                                 "kind": "LinkedField",
                                                 "name": "Name",
                                                 "plural": false,
-                                                "selections": (v5/*: any*/),
+                                                "selections": (v6/*: any*/),
                                                 "storageKey": null
                                               }
                                             ],
@@ -577,7 +588,7 @@ v10 = [
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v4/*: any*/),
+                          (v5/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -586,9 +597,9 @@ v10 = [
                             "name": "roles",
                             "plural": false,
                             "selections": [
-                              (v7/*: any*/),
                               (v8/*: any*/),
                               (v9/*: any*/),
+                              (v10/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -597,9 +608,9 @@ v10 = [
                                 "name": "partnerRoles",
                                 "plural": true,
                                 "selections": [
-                                  (v8/*: any*/),
-                                  (v7/*: any*/),
                                   (v9/*: any*/),
+                                  (v8/*: any*/),
+                                  (v10/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -620,7 +631,7 @@ v10 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectNumber__c",
                             "plural": false,
-                            "selections": (v5/*: any*/),
+                            "selections": (v6/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -630,7 +641,7 @@ v10 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectTitle__c",
                             "plural": false,
-                            "selections": (v5/*: any*/),
+                            "selections": (v6/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -640,7 +651,7 @@ v10 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectStatus__c",
                             "plural": false,
-                            "selections": (v5/*: any*/),
+                            "selections": (v6/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -650,10 +661,67 @@ v10 = [
                             "kind": "LinkedField",
                             "name": "Acc_CompetitionType__c",
                             "plural": false,
-                            "selections": (v5/*: any*/),
+                            "selections": (v6/*: any*/),
                             "storageKey": null
                           },
-                          (v6/*: any*/)
+                          (v7/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": [
+                  (v3/*: any*/),
+                  {
+                    "fields": [
+                      {
+                        "fields": (v4/*: any*/),
+                        "kind": "ObjectValue",
+                        "name": "Id"
+                      }
+                    ],
+                    "kind": "ObjectValue",
+                    "name": "where"
+                  }
+                ],
+                "concreteType": "Acc_ProjectParticipant__cConnection",
+                "kind": "LinkedField",
+                "name": "Acc_ProjectParticipant__c",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "Acc_ProjectParticipant__cEdge",
+                    "kind": "LinkedField",
+                    "name": "edges",
+                    "plural": true,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "Acc_ProjectParticipant__c",
+                        "kind": "LinkedField",
+                        "name": "node",
+                        "plural": false,
+                        "selections": [
+                          (v5/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "PicklistValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ParticipantStatus__c",
+                            "plural": false,
+                            "selections": (v6/*: any*/),
+                            "storageKey": null
+                          }
                         ],
                         "storageKey": null
                       }
@@ -683,7 +751,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ClaimDocumentsQuery",
-    "selections": (v10/*: any*/),
+    "selections": (v11/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -696,19 +764,19 @@ return {
     ],
     "kind": "Operation",
     "name": "ClaimDocumentsQuery",
-    "selections": (v10/*: any*/)
+    "selections": (v11/*: any*/)
   },
   "params": {
-    "cacheID": "e0e2af0960f7feded9bc43e6c6294ef9",
+    "cacheID": "c089b6e8c6751813370c88b3ac06d0af",
     "id": null,
     "metadata": {},
     "name": "ClaimDocumentsQuery",
     "operationKind": "query",
-    "text": "query ClaimDocumentsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $periodId: Double\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, Acc_ProjectPeriodNumber__c: {eq: $periodId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_PCF_Status__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    isFeedAttachment\n                    isOwner\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ClaimDocumentsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $periodId: Double\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, Acc_ProjectPeriodNumber__c: {eq: $periodId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_PCF_Status__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    isFeedAttachment\n                    isOwner\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "990a448f133137b490984513b7f0f60d";
+(node as any).hash = "26c4233661a8def25cdf575d87244c0d";
 
 export default node;
