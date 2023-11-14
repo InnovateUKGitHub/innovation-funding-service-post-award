@@ -17,7 +17,6 @@ import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { getRenamePartnerSchema, errorMap, RenamePartnerSchemaType } from "./renamePartner.zod";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 export const RenamePartnerStep = () => {
@@ -37,7 +36,8 @@ export const RenamePartnerStep = () => {
 
   const { handleSubmit, register, formState, trigger, getFieldState } = useForm<RenamePartnerSchemaType>({
     defaultValues: {
-      markedAsComplete: pcrItem.status === PCRItemStatus.Complete || markedAsCompleteHasBeenChecked,
+      // take the marked as complete state from the current checkbox state on the summary
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       accountName: pcrItem.accountName ?? "",
       partnerId: pcrItem.partnerId as string,
     },

@@ -18,8 +18,9 @@ export const RemovePartnerSummary = () => {
 
   const { pcrItem, documents, project } = useRemovePartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const { register, handleSubmit, formState, watch } = useForm<RemovePartnerSchemaType>({
+  const { register, handleSubmit, formState, watch, getFieldState } = useForm<RemovePartnerSchemaType>({
     defaultValues: {
+      // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       removalPeriod: pcrItem.removalPeriod,
       partnerId: pcrItem.partnerId,
@@ -40,14 +41,14 @@ export const RemovePartnerSummary = () => {
             content={pcrItem.partnerNameSnapshot}
             qa="partnerToRemove"
             action={<EditLink stepName={PCRStepType.removalPeriodStep} />}
-            hasError={!!formState?.errors?.partnerId}
+            hasError={!!getFieldState("partnerId")?.error}
           />
           <SummaryListItem
             label={x => x.pcrRemovePartnerLabels.lastPeriod}
             content={pcrItem.removalPeriod}
             qa="removalPeriod"
             action={<EditLink stepName={PCRStepType.removalPeriodStep} />}
-            hasError={!!formState?.errors?.removalPeriod}
+            hasError={!!getFieldState("removalPeriod")?.error}
           />
           <SummaryListItem
             label={x => x.pcrRemovePartnerLabels.documents}

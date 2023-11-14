@@ -16,7 +16,6 @@ import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { getRemovePartnerSchema, errorMap, RemovePartnerSchemaType } from "./removePartner.zod";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
@@ -29,7 +28,7 @@ export const RemovePartnerStep = () => {
 
   const { handleSubmit, register, formState, trigger } = useForm<RemovePartnerSchemaType>({
     defaultValues: {
-      markedAsComplete: pcrItem.status === PCRItemStatus.Complete || markedAsCompleteHasBeenChecked,
+      markedAsComplete: markedAsCompleteHasBeenChecked,
       removalPeriod: pcrItem.removalPeriod,
       partnerId: pcrItem.partnerId,
     },

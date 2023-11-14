@@ -19,8 +19,9 @@ export const RenamePartnerSummary = () => {
   const { pcrItem, partners, documents } = useRenamePartnerWorkflowQuery(projectId, itemId, fetchKey);
   const multiplePartnerProject = partners.length > 1;
 
-  const { register, handleSubmit, formState, watch } = useForm<RenamePartnerSchemaType>({
+  const { register, handleSubmit, formState, watch, getFieldState } = useForm<RenamePartnerSchemaType>({
     defaultValues: {
+      // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       accountName: pcrItem.accountName ?? "",
       partnerId: pcrItem.partnerId as string,
@@ -41,12 +42,14 @@ export const RenamePartnerSummary = () => {
             content={pcrItem.partnerNameSnapshot}
             qa="currentPartnerName"
             action={multiplePartnerProject && <EditLink stepName={PCRStepType.partnerNameStep} />}
+            hasError={!!getFieldState("partnerId")?.error}
           />
           <SummaryListItem
             label={x => x.pcrNameChangeLabels.proposedName}
             content={pcrItem.accountName}
             qa="newPartnerName"
             action={<EditLink stepName={PCRStepType.partnerNameStep} />}
+            hasError={!!getFieldState("accountName")?.error}
           />
           <SummaryListItem
             label={x => x.pcrNameChangeLabels.certificate}
