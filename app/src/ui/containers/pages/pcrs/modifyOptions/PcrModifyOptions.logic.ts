@@ -1,65 +1,17 @@
 import { useOnUpdate } from "@framework/api-helpers/onUpdate";
-import { SalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
-import {
-  getPcrItemsSingleInstanceInAnyPcrViolations,
-  getPcrItemsSingleInstanceInThisPcrViolations,
-  getPcrItemsTooManyViolations,
-  PCRItemDisabledReason,
-  PCRItemStatus,
-  PCRStatus,
-  recordTypeMetaValues,
-} from "@framework/constants/pcrConstants";
-import { PCRDto, PCRItemDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRItemStatus, PCRStatus } from "@framework/constants/pcrConstants";
+import { PCRDto, PCRItemDto } from "@framework/dtos/pcrDtos";
 import { mapToPcrDtoArray } from "@gql/dtoMapper/mapPcrDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 import { clientsideApiClient } from "@ui/apiClient";
-import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { PcrModifyTypesSchemaType } from "@ui/zod/pcrValidator.zod";
 import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { pcrModifyOptionsQuery } from "./PcrModifyOptions.query";
 import { PcrModifyOptionsQuery } from "./__generated__/PcrModifyOptionsQuery.graphql";
-
-const usePcrItemsForThisCategory = (
-  competitionType: SalesforceCompetitionTypes,
-  allPcrs: Pick<PCRSummaryDto, "status" | "items" | "id">[],
-  pcrId: PcrId | undefined,
-  numberOfPartners: number,
-) => {
-  const { getContent } = useContent();
-
-  const items = recordTypeMetaValues.filter(x => !(x.ignoredCompetitions.includes(competitionType) || x.deprecated));
-
-  const anyOtherPcrViolations = getPcrItemsSingleInstanceInAnyPcrViolations(allPcrs);
-  const thisPcrViolations = getPcrItemsSingleInstanceInThisPcrViolations(allPcrs.find(x => x.id === pcrId));
-  const tooManyViolations = getPcrItemsTooManyViolations(
-    numberOfPartners,
-    allPcrs.find(x => x.id === pcrId),
-  );
-
-  return items.map(pcrItem => {
-    let disabledReason = PCRItemDisabledReason.None;
-
-    if (thisPcrViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.ThisPcrAlreadyHasThisType;
-    } else if (anyOtherPcrViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.AnotherPcrAlreadyHasThisType;
-    } else if (tooManyViolations.includes(pcrItem.type)) {
-      disabledReason = PCRItemDisabledReason.NotEnoughPartnersToActionThisType;
-    }
-
-    return {
-      item: pcrItem,
-      displayName: (pcrItem.i18nName ? getContent(pcrItem.i18nName) : pcrItem.displayName) ?? pcrItem.typeName,
-      type: pcrItem.type,
-      disabled: disabledReason !== PCRItemDisabledReason.None,
-      disabledReason,
-    };
-  });
-};
+import { pcrModifyOptionsQuery } from "./PcrModifyOptions.query";
 
 const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
   const data = useLazyLoadQuery<PcrModifyOptionsQuery>(
@@ -116,4 +68,4 @@ const useOnSubmit = () => {
   });
 };
 
-export { usePcrItemsForThisCategory, usePcrModifyOptionsQuery, useOnSubmit };
+export { useOnSubmit, usePcrModifyOptionsQuery };

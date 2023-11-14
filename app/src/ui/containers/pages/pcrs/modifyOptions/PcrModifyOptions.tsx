@@ -25,7 +25,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { PcrDisabledReasoning } from "../components/PcrDisabledReasoning/PcrDisabledReasoning";
 import { usePcrItemName } from "../utils/getPcrItemName";
-import { usePcrItemsForThisCategory, useOnSubmit, usePcrModifyOptionsQuery } from "./PcrModifyOptions.logic";
+import { useOnSubmit, usePcrModifyOptionsQuery } from "./PcrModifyOptions.logic";
+import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
 
 interface PcrModifyParams {
   projectId: ProjectId;
@@ -46,7 +47,7 @@ const PcrModifyOptions = ({ projectId, pcrId }: PcrBaseParams & BaseProps) => {
   const { project, pcrs, numberOfPartners } = usePcrModifyOptionsQuery({ projectId });
   const currentPcr = pcrs.find(x => x.id === pcrId);
 
-  const pcrItems = usePcrItemsForThisCategory(
+  const pcrItems = usePcrItemsForThisCompetition(
     mapToSalesforceCompetitionTypes(project.competitionType),
     pcrs,
     pcrId,
