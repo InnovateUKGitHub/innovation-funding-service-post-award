@@ -22,7 +22,7 @@ export class OverheadDocumentsDeleteHandler extends StandardFormHandlerBase<
   }
 
   protected getDto(context: IContext, params: OverheadDocumentsPageParams, button: IFormButton): Promise<Dto> {
-    return Promise.resolve({ id: button.value, files: [] });
+    return Promise.resolve({ id: button.value ?? "", files: [] });
   }
 
   protected async run(
