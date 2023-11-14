@@ -32,6 +32,7 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
     "typeOfAid",
     "roles",
     "monitoringLevel",
+    "competitionType",
   ]);
 
   const pcr = mapToPcrDtoArray(
@@ -58,7 +59,15 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
 
   if (!pcr) throw new Error("Failed to find a matching PCR");
 
-  const isMultipleParticipants = (projectNode?.Acc_ProjectParticipantsProject__r?.edges ?? []).length > 0;
+  const pcrs = mapToPcrDtoArray(
+    projectNode?.Project_Change_Requests__r?.edges ?? [],
+    ["id", "status"],
+    ["id", "type", "typeName", "shortName"],
+    {},
+  );
+
+  const numberOfPartners = projectNode?.Acc_ProjectParticipantsProject__r?.totalCount ?? 0;
+  const isMultipleParticipants = numberOfPartners > 0;
 
   const statusChanges = mapToPcrStatusDtoArray(
     data?.salesforce?.uiapi?.query?.Acc_StatusChange__c?.edges ?? [],
@@ -68,7 +77,7 @@ export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
 
   const editableItemTypes = getEditableItemTypes(pcr);
 
-  return { project, pcr, editableItemTypes, statusChanges, isMultipleParticipants };
+  return { project, pcr, pcrs, editableItemTypes, statusChanges, isMultipleParticipants, numberOfPartners };
 };
 
 export type FormValues = {

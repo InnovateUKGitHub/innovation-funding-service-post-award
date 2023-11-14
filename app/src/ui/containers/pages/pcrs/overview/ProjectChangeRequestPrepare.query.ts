@@ -54,6 +54,9 @@ export const pcrPrepareQuery = graphql`
                 Acc_ProjectNumber__c {
                   value
                 }
+                Acc_CompetitionType__c {
+                  value
+                }
                 Acc_CompetitionId__r {
                   Acc_TypeofAid__c {
                     value
@@ -69,11 +72,7 @@ export const pcrPrepareQuery = graphql`
                   value
                 }
                 Acc_ProjectParticipantsProject__r(first: 2000) {
-                  edges {
-                    node {
-                      Id
-                    }
-                  }
+                  totalCount
                 }
                 Project_Change_Requests__r(first: 2000) {
                   edges {

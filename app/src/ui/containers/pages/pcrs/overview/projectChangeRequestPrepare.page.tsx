@@ -23,6 +23,8 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { usePcrItemName } from "../utils/getPcrItemName";
+import { mapToSalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
+import { usePcrItemsForThisCompetition } from "../utils/usePcrItemsForThisCompetition";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: ProjectId;
@@ -30,10 +32,8 @@ export interface ProjectChangeRequestPrepareParams {
 }
 
 const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) => {
-  const { project, pcr, statusChanges, editableItemTypes, isMultipleParticipants } = usePCRPrepareQuery(
-    props.projectId,
-    props.pcrId,
-  );
+  const { project, pcr, pcrs, statusChanges, editableItemTypes, isMultipleParticipants, numberOfPartners } =
+    usePCRPrepareQuery(props.projectId, props.pcrId);
 
   const { getPcrItemContent } = usePcrItemName();
 
@@ -41,6 +41,13 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
     shortName: getPcrItemContent(x.shortName).name,
     status: getPcrItemTaskStatus(x.status),
   }));
+
+  const availablePcrItems = usePcrItemsForThisCompetition(
+    mapToSalesforceCompetitionTypes(project.competitionType),
+    pcrs,
+    pcr.id,
+    numberOfPartners,
+  );
 
   const { register, formState, handleSubmit, watch, setValue } = useForm<FormValues>({
     defaultValues: {
@@ -73,7 +80,11 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
       validationErrors={validatorErrors}
       apiError={apiError}
     >
-      <ProjectChangeRequestOverviewSummary pcr={pcr} projectId={project.id} />
+      <ProjectChangeRequestOverviewSummary
+        pcr={pcr}
+        projectId={project.id}
+        hideAddTypesLink={availablePcrItems.every(x => x.disabled)}
+      />
       <ProjectChangeRequestOverviewTasks
         pcr={pcr as unknown as Pick<PCRDto, "id" | "reasoningStatus"> & { items: GetItemTaskProps["item"][] }}
         projectId={project.id}
