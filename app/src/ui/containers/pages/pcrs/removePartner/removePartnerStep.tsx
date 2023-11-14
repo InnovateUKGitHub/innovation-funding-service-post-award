@@ -37,6 +37,8 @@ export const RemovePartnerStep = () => {
     }),
   });
 
+  console.log("marked as complete", markedAsCompleteHasBeenChecked);
+
   const validationErrors = useRhfErrors(formState.errors);
   useFormValidate(trigger);
 
