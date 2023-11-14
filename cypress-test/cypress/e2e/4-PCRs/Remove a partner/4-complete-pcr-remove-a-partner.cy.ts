@@ -1,21 +1,17 @@
 import { visitApp } from "../../../common/visit";
 import { shouldShowProjectTitle, pcrDocUpload, clickPartnerAddPeriod, removePartnerTable } from "../steps";
+import { pcrTidyUp } from "common/pcrtidyup";
+
+const pmEmail = "james.black@euimeabs.test";
 
 describe("PCR > Remove partner > Continuing editing the Remove a partner section once a partner is selected", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
-    /**
-     * Note that the pcrTidyUp will not currently work for 'remove partner' as we are keeping two 'remove partner' PCRs open
-     * As such, this step will be missed from this particular test
-     */
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    pcrTidyUp("Draft");
   });
 
   after(() => {
     cy.deletePcr("328407");
-  });
-
-  it("Should click the 'Create request' button", () => {
-    cy.get("a").contains("Create request").click();
   });
 
   it("Should create a Remove partner PCR", () => {
@@ -32,6 +28,7 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should have a 'Save and continue' button", () => {
     cy.submitButton("Save and continue").click();
+    cy.get("legend").contains("Mark as complete");
   });
 
   it("Should have a back option", () => {
@@ -46,9 +43,24 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should display a remove partner table containing information on the request entered so far", removePartnerTable);
 
+  it("Should ensure the 'Edit' links are working correctly", () => {
+    [
+      ["Partner being removed", "Select partner to remove"],
+      ["Last period", "When is their last period?"],
+      ["Documents", "Upload withdrawal of partner certificate"],
+    ].forEach(([key, subheading]) => {
+      cy.getListItemFromKey(key, "Edit").click();
+      cy.get("legend").contains(subheading);
+      cy.backLink("Back to request").click();
+      cy.get("a").contains("Remove a partner").click();
+      cy.get("legend").contains("Mark as complete");
+    });
+  });
+
   it("Has a subheading 'Mark as complete' with an 'I agree with this change' checkbox", () => {
-    cy.get("h2").contains("Mark as complete");
+    cy.get("legend").contains("Mark as complete");
     cy.clickCheckBox("I agree with this change");
+    cy.getByLabel("I agree with this change.").should("be.checked");
   });
 
   it("Should save and return to request", () => {

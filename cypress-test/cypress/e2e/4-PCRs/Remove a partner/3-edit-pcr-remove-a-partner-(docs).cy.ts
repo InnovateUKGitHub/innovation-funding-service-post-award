@@ -8,23 +8,30 @@ import {
   clickPartnerAddPeriod,
   removePartnerGuidanceInfo,
 } from "../steps";
+import {
+  validateFileUpload,
+  uploadFileTooLarge,
+  uploadSingleChar,
+  deleteSingleChar,
+  uploadFileNameTooShort,
+  validateExcessiveFileName,
+  doNotUploadSpecialChar,
+} from "e2e/3-documents/steps";
+import { createTestFile, deleteTestFile } from "common/createTestFile";
+import { fileTidyUp } from "common/filetidyup";
+import { pcrTidyUp } from "common/pcrtidyup";
+const pmEmail = "james.black@euimeabs.test";
 
 describe("PCR > Remove partner > Continuing editing the Remove a partner section once a partner is selected", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
-    /**
-     * Note that the pcrTidyUp will not currently work for 'remove partner' as we are keeping two 'remove partner' PCRs open
-     * As such, this step will be missed from this particular test
-     */
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    createTestFile("bigger_test", 33);
+    pcrTidyUp("Draft");
   });
 
   after(() => {
     cy.deletePcr("328407");
-  });
-
-  it("Should click the 'Create request' button", () => {
-    cy.get("a").contains("Create request").click();
-    cy.wait(500);
+    deleteTestFile("bigger_test");
   });
 
   it("Should create a Remove partner PCR", () => {
@@ -37,10 +44,6 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("Should click a partner name before entering a period number and proceeding", clickPartnerAddPeriod);
 
-  it("Should have a back option", () => {
-    cy.backLink("Back to request");
-  });
-
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should have the page title 'Remove a partner'", () => {
@@ -48,12 +51,32 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
   });
 
   it("Should have a subheading 'Upload withdrawal of partner certificate'", () => {
-    cy.get("h2").contains("Upload withdrawal of partner certificate");
+    cy.get("legend").contains("Upload withdrawal of partner certificate");
   });
 
   it("Should have guidance information on what is required", removePartnerGuidanceInfo);
 
   it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
+
+  it("Should ensure no files are present and delete any that are", () => fileTidyUp("James Black"));
+
+  it("Should have 'No documents uploaded.' message at the bottom", () => {
+    cy.paragraph("No documents uploaded.");
+  });
+
+  it("Should validate when uploading without choosing a file.", validateFileUpload);
+
+  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+
+  it("Should upload a file with a single character as the name", uploadSingleChar);
+
+  it("Should delete the file with the very short file name", deleteSingleChar);
+
+  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
+
+  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
+
+  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
 
   it("Should allow you to upload a file", pcrDocUpload);
 
@@ -69,18 +92,23 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
     cy.get("p.govuk-body").contains("uploaded");
   });
 
-  it("Should show a table of information", () => pcrFileTable("Withdrawal of partner certificate", "Innovate UK"));
+  it("Should show a table of information", () => pcrFileTable("Withdrawal of partner certificate", "James Black"));
 
   it("Should show the file that's just been uploaded", () => {
     cy.get("a.govuk-link").contains("testfile.doc");
   });
 
   it("Should allow you to delete the document that was just uploaded", () => {
-    cy.getByQA("button_delete-qa").contains("Remove").click();
+    cy.button("Remove").click();
     cy.validationNotification(`'${testFile}' has been removed.`);
   });
 
   it("Should have a 'Save and continue' button", () => {
     cy.submitButton("Save and continue");
+  });
+
+  it("Should have a working back link", () => {
+    cy.backLink("Back to request").click();
+    cy.heading("Request");
   });
 });

@@ -347,9 +347,9 @@ export const reallocateCostsGiveInfoTodo = () => {
 };
 
 export const showPartners = () => {
-  cy.contains("EUI Small Ent Health");
-  cy.contains("A B Cad Services");
-  cy.contains("ABS EUI Medium Enterprise");
+  ["EUI Small Ent Health", "A B Cad Services", "ABS EUI Medium Enterprise"].forEach(partner => {
+    cy.getByLabel(partner);
+  });
 };
 
 export const markAsComplete = () => {
@@ -400,22 +400,26 @@ export const clickPartnerAddPeriod = () => {
   cy.getByLabel("EUI Small Ent Health").click();
   cy.get("#removalPeriod").clear().type("3");
   cy.submitButton("Save and continue").click();
+  cy.get("legend").contains("Upload withdrawal of partner certificate");
 };
 
 export const removePartnerGuidanceInfo = () => {
   cy.paragraph("You must upload these documents");
-  cy.list("a confirmation letter");
-  cy.list("a brief list of");
+  cy.list(
+    "a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority",
+  );
+  cy.list("a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves");
   cy.list("copies of signed letters");
 };
 
 export const removePartnerTable = () => {
-  cy.getByQA("partnerToRemove").contains("Partner being removed");
-  cy.getByQA("partnerToRemove").contains("EUI Small Ent Health");
-  cy.getByQA("removalPeriod").contains("Last period");
-  cy.getByQA("removalPeriod").contains("3");
-  cy.getByQA("supportingDocuments").contains("Documents");
-  cy.getByQA("supportingDocuments").contains("testfile.doc");
+  [
+    ["Partner being removed", "EUI Small Ent Health"],
+    ["Last period", "3"],
+    ["Documents", "testfile.doc"],
+  ].forEach(([key, listItem]) => {
+    cy.getListItemFromKey(key, listItem);
+  });
 };
 
 export const navigateToPartnerOrgPage = () => {

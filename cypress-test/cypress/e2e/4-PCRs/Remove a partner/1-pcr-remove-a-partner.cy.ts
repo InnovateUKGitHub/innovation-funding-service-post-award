@@ -1,3 +1,4 @@
+import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
@@ -13,18 +14,11 @@ import {
 describe("PCR > Remove partner > Creating PCR", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
-    /**
-     * Note that the pcrTidyUp will not currently work for 'remove partner' as we are keeping two 'remove partner' PCRs open
-     * As such, this step will be missed from this particular test
-     */
+    pcrTidyUp("Draft");
   });
 
   after(() => {
     cy.deletePcr("328407");
-  });
-
-  it("Should click the 'Create request' button", () => {
-    cy.get("a").contains("Create request").click();
   });
 
   it("Should create a Remove partner PCR", () => {

@@ -303,6 +303,7 @@ export const validateFileUpload = () => {
   cy.button("Upload").click();
   cy.validationLink("Choose a file to upload");
   cy.paragraph("Choose a file to upload.");
+  cy.wait(500);
 };
 
 export const uploadSingleChar = () => {
@@ -314,7 +315,7 @@ export const uploadSingleChar = () => {
 };
 
 export const deleteSingleChar = () => {
-  cy.wait(1000);
+  cy.wait(500);
   cy.get("tr")
     .eq(1)
     .within(() => {
@@ -330,6 +331,7 @@ export const validateExcessiveFileName = () => {
   cy.button("Upload documents").click();
   cy.validationLink(`You cannot upload '${longFile}' because the name of the file must be shorter than 80 characters.`);
   cy.paragraph(`You cannot upload '${longFile}' because the name of the file must be shorter than 80 characters.`);
+  cy.wait(500);
 };
 
 export const doNotUploadSpecialChar = () => {
@@ -341,6 +343,7 @@ export const doNotUploadSpecialChar = () => {
   cy.paragraph(
     `Your document '${specialCharFile}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`,
   );
+  cy.wait(500);
 };
 
 export const uploadFileTooLarge = () => {
@@ -348,6 +351,7 @@ export const uploadFileTooLarge = () => {
   cy.button("Upload documents").click();
   cy.validationLink("You cannot upload 'bigger_test.txt' because it must be smaller than 32MB.");
   cy.paragraph("You cannot upload 'bigger_test.txt' because it must be smaller than 32MB.");
+  cy.wait(500);
 };
 
 export const uploadFileNameTooShort = () => {
@@ -355,6 +359,7 @@ export const uploadFileNameTooShort = () => {
   cy.button("Upload").click();
   cy.validationLink(`You cannot upload this file because the file has no name.`);
   cy.paragraph(`You cannot upload this file because the file has no name.`);
+  cy.wait(500);
 };
 
 export const checkABCadVisibility = () => {
