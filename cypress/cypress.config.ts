@@ -39,7 +39,7 @@ const makeUrl = (): string => {
     return `https://www-acc-${SANDBOX}.apps.ocp4.innovateuk.ukri.org`;
   }
 
-  return "http://127.0.0.1:3000";
+  return "https://www-acc-dev.apps.ocp4.innovateuk.ukri.org/";
 };
 
 const config: Cypress.ConfigOptions = {
