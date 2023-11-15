@@ -1,5 +1,6 @@
 import { claimReviewFileTidyUp, fileTidyUp } from "common/filetidyup";
 import { loremIpsum1k } from "common/lorem";
+import { seconds } from "common/seconds";
 import { testFile } from "common/testfileNames";
 let date = new Date();
 let comments = JSON.stringify(date);
@@ -188,10 +189,13 @@ export const rejectElevenDocsAndShowError = () => {
   cy.reload();
 };
 
-export const allowBatchFileUpload = () => {
-  const tenFiles = [...documentPaths];
-  cy.get(`input[type="file"]`).selectFile(tenFiles);
-  cy.submitButton("Upload documents").click();
+export const allowBatchFileUpload = (documentType: "claim-details") => () => {
+  cy.intercept("POST", `/api/documents/${documentType}/**`).as("filesUpload");
+  cy.get(`input[type="file"]`)
+    .wait(seconds(1))
+    .selectFile(documentPaths, { force: true, timeout: seconds(5) });
+  cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
+  cy.wait("@filesUpload");
 };
 
 export const deleteClaimDocument = (document: string) => {

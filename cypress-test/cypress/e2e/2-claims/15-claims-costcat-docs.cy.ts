@@ -17,6 +17,7 @@ import {
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 
 import { fileTidyUp } from "common/filetidyup";
+import { seconds } from "common/seconds";
 
 const fcEmail = "s.shuang@irc.trde.org.uk.test";
 
@@ -62,9 +63,13 @@ describe("Claims > Cost category document uploads", () => {
 
   it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
 
-  it("Should upload a batch of 10 documents", { retries: 0 }, allowBatchFileUpload);
+  it(
+    "Should upload a batch of 10 documents",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowBatchFileUpload("claim-details"),
+  );
 
-  it("Should see a success message for '10 documents have been uploaded'", { retries: 2 }, () => {
+  it("Should see a success message for '10 documents have been uploaded'", () => {
     cy.getByAriaLabel("success message").contains("10 documents have been uploaded.");
   });
 
