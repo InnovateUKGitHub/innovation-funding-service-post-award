@@ -8,6 +8,9 @@ enum FormTypes {
   ClaimLevelDelete = "claimLevelDelete",
   ClaimLevelUpload = "claimLevelUpload",
 
+  // Project Setup
+  ProjectSetupBankDetails = "projectSetupBankDetails",
+
   // Project Change Requests
   ProjectChangeRequestCreate = "projectChangeRequestCreate",
   ProjectChangeRequestUpdateTypes = "projectChangeRequestUpdateTypes",

@@ -32,13 +32,13 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
  */
 export const ResultsLinks = ({ results }: { results: (Result | ValidationError)[] }) => {
   const navigate = useNavigate();
-  const search = window.location.search ?? "";
   return (
     <>
       {results.map((x, i) => (
         <li key={i}>
           <a
             onClick={e => {
+              const search = window.location.search ?? "";
               e.preventDefault();
               scrollToTheParentFieldsetSmoothly(x.key);
               navigate(`${search}#${x.key}`, { replace: true });

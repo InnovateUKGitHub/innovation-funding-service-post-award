@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`convertResultErrorsToZodFormat should handle nested errors 1`] = `
+[
+  {
+    "code": "custom",
+    "message": "You should have eaten the lettuce",
+    "path": [
+      "lettuce",
+    ],
+  },
+  {
+    "code": "custom",
+    "message": "You should have had the pocari sweat",
+    "path": [
+      "pocariSweat",
+    ],
+  },
+  {
+    "code": "custom",
+    "message": "You should have eaten the mama",
+    "path": [
+      "mama",
+    ],
+  },
+  {
+    "code": "custom",
+    "message": "You should have had the fish snacks",
+    "path": [
+      "fishSnacks",
+    ],
+  },
+]
+`;

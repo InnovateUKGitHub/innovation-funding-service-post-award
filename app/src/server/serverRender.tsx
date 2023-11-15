@@ -141,7 +141,7 @@ const serverRender =
         if (err instanceof ZodFormHandlerError) {
           // Dispatch the Zod issues we have into Redux, such that they are
           // available on page load.
-          store.dispatch(setZodError(err.zodError.issues));
+          store.dispatch(setZodError(err.zodIssues));
 
           // If a DTO is provided, add to Redux state so that it may be used
           // to repopulate the user's input form.

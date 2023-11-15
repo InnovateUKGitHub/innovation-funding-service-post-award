@@ -145,6 +145,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       this,
       !!this.options.failBankValidation,
       this.getContent(x => x.validation.partnerDtoValidator.bankChecksFailed),
+      "bankCheckValidation",
     ),
   );
 

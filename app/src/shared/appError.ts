@@ -1,7 +1,7 @@
 import { ErrorCode } from "@framework/constants/enums";
 import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
-import { ZodError } from "zod";
+import { ZodIssue } from "zod";
 
 export class AppError<T extends Results<ResultBase> = Results<ResultBase>> extends Error implements IAppError<T> {
   public results: T | null = null;
@@ -44,8 +44,8 @@ export class FormHandlerError extends AppError {
 }
 
 export class ZodFormHandlerError extends AppError {
-  constructor(public dto: AnyObject | null, public zodError: ZodError) {
-    super(ErrorCode.VALIDATION_ERROR, zodError.message, zodError);
+  constructor(public dto: AnyObject | null, message: string, public zodIssues: ZodIssue[]) {
+    super(ErrorCode.VALIDATION_ERROR, message);
   }
 }
 

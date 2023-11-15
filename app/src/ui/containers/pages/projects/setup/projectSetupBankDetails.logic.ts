@@ -16,18 +16,8 @@ import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator"
 import { UseFormSetError } from "react-hook-form";
 import { useContent } from "@ui/hooks/content.hook";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
-
-export type FormValues = {
-  companyNumber: string;
-  sortCode: string;
-  accountDetails: undefined;
-  accountNumber: string;
-  accountBuilding: string;
-  accountStreet: string;
-  accountLocality: string;
-  accountTownOrCity: string;
-  accountPostcode: string;
-};
+import { ProjectSetupBankDetailsSchemaType } from "./projectSetupBankDetails.zod";
+import { z } from "zod";
 
 const isPartnerDtoValidatorError = (e: unknown): e is ValidationError<PartnerDtoValidator> => {
   return typeof e === "object" && e !== null && "code" in e && e.code === ErrorCode.VALIDATION_ERROR;
@@ -66,14 +56,14 @@ export const useOnUpdateProjectSetupBankDetails = (
   projectId: ProjectId,
   partnerId: PartnerId,
   partner: Pick<PartnerDto, "bankDetails" | "bankCheckRetryAttempts" | "id" | "projectId">,
-  { setError }: { setError: UseFormSetError<FormValues> },
+  { setError }: { setError: UseFormSetError<z.output<ProjectSetupBankDetailsSchemaType>> },
 ) => {
   const navigate = useNavigate();
   const routes = useRoutes();
   const config = useClientConfig();
   const { getContent } = useContent();
 
-  return useOnUpdate<FormValues, { bankCheckStatus: BankCheckStatus }>({
+  return useOnUpdate<z.output<ProjectSetupBankDetailsSchemaType>, { bankCheckStatus: BankCheckStatus }>({
     req: data =>
       clientsideApiClient.partners.updatePartner({
         partnerId,
@@ -81,7 +71,8 @@ export const useOnUpdateProjectSetupBankDetails = (
           ...partner,
           projectId,
           bankDetails: {
-            accountNumber: data.accountNumber,
+            accountNumber: "accountNumber" in data ? data.accountNumber : null,
+            sortCode: "sortCode" in data ? data.sortCode : null,
             address: {
               accountBuilding: data.accountBuilding,
               accountLocality: data.accountLocality,
@@ -92,7 +83,6 @@ export const useOnUpdateProjectSetupBankDetails = (
             companyNumber: data.companyNumber,
             firstName: null,
             lastName: null,
-            sortCode: data.sortCode,
           },
         },
         validateBankDetails: true,
@@ -134,7 +124,7 @@ export const useOnUpdateProjectSetupBankDetails = (
 
           // Display the error message in React Hook Form
           const message = getContent(x => x.validation.partnerDtoValidator.bankChecksFailed);
-          setError("accountDetails", { message, types: { deps: ["sortCode", "accountNumber"] } });
+          setError("bankCheckValidation", { message, types: { deps: ["sortCode", "accountNumber"] } });
 
           // Stop the API Error box from appearing
           return Propagation.STOP;

@@ -53,7 +53,7 @@ import { ProjectChangeRequestReasoningUpdateHandler } from "./handlers/projects/
 import { ProjectChangeRequestReviewFormHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/review/reviewProjectChangeRequestFormHandler";
 import { ProjectSetupPartnerPostcodeFormHandler } from "./handlers/projects/[projectId]/postcode/[partnerId]/projectSetupPartnerPostcodeFormHandler";
 import { ProjectSetupBankDetailsVerifyHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details-verify/ProjectSetupBankDetailsVerifyHandler";
-import { ProjectSetupBankDetailsHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details/ProjectSetupBankDetailsHandler";
+import { ProjectSetupBankDetailsHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-details/ProjectSetupBankDetails.handler";
 import { BankSetupStatementDocumentDeleteHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentDeleteHandler";
 import { BankSetupStatementDocumentUploadHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/BankSetupStatementDocumentUploadHandler";
 import { ProjectSetupBankStatementHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/ProjectSetupBankStatementHandler";
@@ -100,7 +100,6 @@ export const standardFormHandlers = [
   new ProjectSetupSpendProfileFormHandler(),
   new ProjectSetupPartnerPostcodeFormHandler(),
   new BankSetupStatementDocumentDeleteHandler(),
-  new ProjectSetupBankDetailsHandler(),
   new ProjectSetupBankDetailsVerifyHandler(),
   new ProjectSetupBankStatementHandler(),
   new LoanRequestDocumentDeleteHandler(),
@@ -110,6 +109,7 @@ export const standardFormHandlers = [
   new ClaimLevelDocumentShareDeleteHandler(),
   new ProjectChangeRequestCreateHandler(),
   new ProjectChangeRequestAddTypeHandler(),
+  new ProjectSetupBankDetailsHandler(),
 ] as const;
 
 export const multiFileFormHandlers = [

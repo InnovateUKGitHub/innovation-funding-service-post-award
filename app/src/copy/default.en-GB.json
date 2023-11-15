@@ -2054,6 +2054,11 @@
       }
     },
     "projectSetupBankDetails": {
+      "companyNumber": {
+        "errors": {
+          "too_big": "Company number must be {{ count }} characters or less."
+        }
+      },
       "accountNumber": {
         "errors": {
           "too_small": "Account number cannot be empty.",
@@ -2068,6 +2073,31 @@
           "invalid_string": {
             "regex": "Enter a valid sort code."
           }
+        }
+      },
+      "accountBuilding": {
+        "errors": {
+          "too_big": "Building must be {{ count }} characters or less."
+        }
+      },
+      "accountStreet": {
+        "errors": {
+          "too_big": "Street must be {{ count }} characters or less."
+        }
+      },
+      "accountLocality": {
+        "errors": {
+          "too_big": "Locality must be {{ count }} characters or less."
+        }
+      },
+      "accountTownOrCity": {
+        "errors": {
+          "too_big": "Town or city must be {{ count }} characters or less."
+        }
+      },
+      "accountPostcode": {
+        "errors": {
+          "too_big": "Postcode must be {{ count }} characters or less."
         }
       }
     }

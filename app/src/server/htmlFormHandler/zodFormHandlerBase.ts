@@ -2,7 +2,7 @@ import { Copy } from "@copy/Copy";
 import { IContext } from "@framework/types/IContext";
 import { ISession, ServerFileWrapper } from "@server/apis/controllerBase";
 import { contextProvider } from "@server/features/common/contextProvider";
-import { ZodFormHandlerError } from "@shared/appError";
+import { ValidationError, ZodFormHandlerError } from "@shared/appError";
 import { Logger } from "@shared/developmentLogger";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { IRouteDefinition } from "@ui/containers/containerBase";
@@ -10,6 +10,7 @@ import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
 import { z, ZodError, ZodTypeAny } from "zod";
 import { IFormHandler } from "./formHandlerBase";
+import { convertResultErrorsToZodFormat } from "@framework/util/errorHelpers";
 
 // Ensure that the Schema passed into the ZodFormHandlerBase
 // has the "form" form/button discriminator
@@ -115,7 +116,10 @@ abstract class ZodFormHandlerBase<
     } catch (e) {
       if (e instanceof ZodError) {
         this.logger.debug("Failed to parse Zod input.", userInput, e);
-        next(new ZodFormHandlerError(userInput, e));
+        next(new ZodFormHandlerError(userInput, e.message, e.issues));
+      } else if (e instanceof ValidationError) {
+        this.logger.debug("Failed to execute Zod form handler due to ValidationError", userInput, e);
+        next(new ZodFormHandlerError(userInput, e.message, convertResultErrorsToZodFormat(e.results.errors)));
       } else {
         this.logger.error("Failed to execute Zod form handler.", e);
         next(e);

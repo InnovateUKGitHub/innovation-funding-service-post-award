@@ -1,5 +1,9 @@
 import { Result } from "@ui/validation/result";
-import { convertErrorFormatFromRhfForErrorSummary, convertResultErrorsToReactHookFormFormat } from "./errorHelpers";
+import {
+  convertErrorFormatFromRhfForErrorSummary,
+  convertResultErrorsToReactHookFormFormat,
+  convertResultErrorsToZodFormat,
+} from "./errorHelpers";
 
 describe("convertResultErrorsToReactHookFormFormat", () => {
   it("should handle the simple case of converting a server side error to rhf format", () => {
@@ -122,6 +126,65 @@ describe("convertResultErrorsToReactHookFormFormat", () => {
         },
       ],
     });
+  });
+});
+
+describe("convertResultErrorsToZodFormat", () => {
+  it("should handle the simple case of converting a server side error to zod format", () => {
+    const resultError = [
+      { errorMessage: "You should have eaten the lettuce", key: "Key:0", keyId: "lettuce" },
+      { errorMessage: "You should have had the pocari sweat", key: "Key:1", keyId: "pilk" },
+    ] as Result[];
+
+    expect(convertResultErrorsToZodFormat(resultError)).toEqual([
+      {
+        code: "custom",
+        message: "You should have eaten the lettuce",
+        path: ["lettuce"],
+      },
+      {
+        code: "custom",
+        message: "You should have had the pocari sweat",
+        path: ["pilk"],
+      },
+    ]);
+  });
+
+  it("should handle nested errors", () => {
+    const resultError = [
+      {
+        errorMessage: "No Good",
+        key: "food",
+        results: [
+          {
+            errors: [
+              {
+                errorMessage: "You should have eaten the lettuce",
+                keyId: "lettuce",
+              },
+              {
+                errorMessage: "You should have had the pocari sweat",
+                keyId: "pocariSweat",
+              },
+            ],
+          },
+          {
+            errors: [
+              {
+                errorMessage: "You should have eaten the mama",
+                keyId: "mama",
+              },
+              {
+                errorMessage: "You should have had the fish snacks",
+                keyId: "fishSnacks",
+              },
+            ],
+          },
+        ],
+      },
+    ] as unknown as Result[];
+
+    expect(convertResultErrorsToZodFormat(resultError)).toMatchSnapshot();
   });
 });
 

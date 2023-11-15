@@ -1,7 +1,7 @@
 import { FieldErrors } from "react-hook-form";
 import { useFormErrorContext } from "@ui/context/form-error";
 import { IAppError } from "@framework/types/IAppError";
-import { ZodError } from "zod";
+import { ZodError, ZodIssue } from "zod";
 import { useState } from "react";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
@@ -61,6 +61,34 @@ export const convertResultErrorsToReactHookFormFormat = (
 };
 
 /**
+ * Convert Result[] to ZodIssue[].
+ *
+ * @param errors List of results, such as from a (xyzDtoValidator#.results)
+ * @returns List of Zod formatted errors
+ */
+export const convertResultErrorsToZodFormat = (errors: Result[]): ZodIssue[] => {
+  if (!errors || !errors.length) return [];
+
+  const zodIssues: ZodIssue[] = [];
+
+  for (const error of errors) {
+    if (isNestedResult(error)) {
+      for (const nestedError of error.results) {
+        zodIssues.push(...convertResultErrorsToZodFormat(nestedError?.errors ?? []));
+      }
+    } else {
+      zodIssues.push({
+        code: "custom",
+        message: error.errorMessage ?? "No error message",
+        path: error.keyId?.split(".") ?? [],
+      });
+    }
+  }
+
+  return zodIssues;
+};
+
+/**
  * In some cases we wish to validate errors directly from zod without going through
  * react hook form, e.g. when validating directly on a dto.
  *
@@ -81,7 +109,7 @@ export const convertZodErrorsToResultsFormat = <TFormValues extends AnyObject>(e
 };
 
 /**
- * `useValidationErrors` takes the react hook form  errors, converts to our Results format and merges
+ * `useValidationErrors` takes the react hook form errors, converts to our Results format and merges
  * with any server side rendering errors before returning.
  *
  */

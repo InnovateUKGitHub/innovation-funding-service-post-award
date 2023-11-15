@@ -20,14 +20,18 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { Field } from "@ui/components/atomicDesign/molecules/form/Field/Field";
-import { getProjectSetupBankDetailsSchema, projectSetupBankDetailsErrorMap } from "./projectSetupBankDetails.zod";
 import {
-  useOnUpdateProjectSetupBankDetails,
-  useProjectSetupBankDetailsQuery,
-  FormValues,
-} from "./projectSetupBankDetails.logic";
-import { useRhfErrors } from "@framework/util/errorHelpers";
+  ProjectSetupBankDetailsSchemaType,
+  getProjectSetupBankDetailsSchema,
+  projectSetupBankDetailsErrorMap,
+  projectSetupBankDetailsMaxLength,
+} from "./projectSetupBankDetails.zod";
+import { useOnUpdateProjectSetupBankDetails, useProjectSetupBankDetailsQuery } from "./projectSetupBankDetails.logic";
 import { useContent } from "@ui/hooks/content.hook";
+import { z } from "zod";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { TValidationError } from "@framework/mappers/mapRhfError";
 
 export interface ProjectSetupBankDetailsParams {
   projectId: ProjectId;
@@ -38,22 +42,19 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
   const { getContent: c } = useContent();
   const { project, partner } = useProjectSetupBankDetailsQuery(props.projectId, props.partnerId);
 
-  const { register, handleSubmit, formState, setError } = useForm<FormValues>({
-    defaultValues: {
-      companyNumber: partner.bankDetails.companyNumber ?? "",
-      sortCode: partner.bankDetails.sortCode ?? "",
-      accountNumber: partner.bankDetails.accountNumber ?? "",
-      accountBuilding: partner.bankDetails.address.accountBuilding ?? "",
-      accountStreet: partner.bankDetails.address.accountStreet ?? "",
-      accountLocality: partner.bankDetails.address.accountLocality ?? "",
-      accountTownOrCity: partner.bankDetails.address.accountTownOrCity ?? "",
-      accountPostcode: partner.bankDetails.address.accountPostcode ?? "",
-    },
+  const defaults = useServerInput<z.output<ProjectSetupBankDetailsSchemaType>>();
+
+  const { register, handleSubmit, formState, setError, getFieldState } = useForm<
+    z.output<ProjectSetupBankDetailsSchemaType>
+  >({
     resolver: zodResolver(getProjectSetupBankDetailsSchema(partner.bankCheckStatus), {
       errorMap: projectSetupBankDetailsErrorMap,
     }),
     reValidateMode: "onBlur",
   });
+
+  // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
+  const allErrors = useZodErrors<z.output<ProjectSetupBankDetailsSchemaType>>(setError, formState.errors);
 
   const { onUpdate, apiError, isFetching } = useOnUpdateProjectSetupBankDetails(
     props.projectId,
@@ -63,8 +64,6 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
       setError,
     },
   );
-
-  const validationErrors = useRhfErrors<FormValues>(formState.errors);
 
   return (
     <Page
@@ -79,39 +78,52 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
         </BackLink>
       }
       apiError={apiError}
-      validationErrors={validationErrors}
+      validationErrors={allErrors}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
     >
       <Guidance />
 
       <Section qa="bank-details-section">
         <Form onSubmit={handleSubmit(data => onUpdate({ data }))} data-qa="bank-details-form">
+          <input type="hidden" {...register("form")} value={FormTypes.ProjectSetupBankDetails} />
+          <input type="hidden" {...register("projectId")} value={props.projectId} />
+          <input type="hidden" {...register("partnerId")} value={props.partnerId} />
+
           <Fieldset>
             <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleOrganisationInfo)}</Legend>
             <P bold>{partner.name}</P>
 
-            <FormGroup>
+            <FormGroup hasError={!!getFieldState("companyNumber").error}>
               <Label htmlFor="companyNumber">{c(x => x.partnerLabels.companyNumber)}</Label>
               <Hint id="hint-for-companyNumber">{c(x => x.partnerLabels.companyNumberHint)}</Hint>
-              <TextInput disabled={isFetching} inputWidth="one-third" {...register("companyNumber")} />
+              <ValidationError error={getFieldState("companyNumber").error} />
+              <TextInput
+                disabled={isFetching}
+                inputWidth="one-third"
+                {...register("companyNumber")}
+                maxLength={projectSetupBankDetailsMaxLength}
+                defaultValue={defaults?.companyNumber}
+              />
             </FormGroup>
           </Fieldset>
 
-          <Fieldset id="accountDetails">
+          <Fieldset id="bankCheckValidation">
             <Legend>{c(x => x.pages.projectSetupBankDetails.fieldsetTitleAccountDetails)}</Legend>
 
             <SortCode
               partner={partner}
               disabled={isFetching}
               register={register}
-              error={(validationErrors?.accountDetails as RhfErrors) ?? (validationErrors?.sortCode as RhfErrors)}
+              error={getFieldState("bankCheckValidation").error ?? getFieldState("sortCode").error}
+              defaultValue={partner.bankDetails.sortCode ?? ""}
             />
 
             <AccountNumber
               partner={partner}
               disabled={isFetching}
               register={register}
-              error={(validationErrors?.accountDetails as RhfErrors) ?? (validationErrors?.accountNumber as RhfErrors)}
+              error={getFieldState("bankCheckValidation").error ?? getFieldState("accountNumber").error}
+              defaultValue={partner.bankDetails.accountNumber ?? ""}
             />
           </Fieldset>
 
@@ -120,29 +132,64 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
 
             <P>{c(x => x.pages.projectSetupBankDetails.fieldsetGuidanceBillingAddress)}</P>
 
-            <FormGroup>
+            <FormGroup hasError={!!getFieldState("accountBuilding").error}>
               <Label htmlFor="accountBuilding">{c(x => x.partnerLabels.accountBuilding)}</Label>
-              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountBuilding")}></TextInput>
+              <ValidationError error={getFieldState("accountBuilding").error} />
+              <TextInput
+                disabled={isFetching}
+                inputWidth="one-third"
+                {...register("accountBuilding")}
+                maxLength={projectSetupBankDetailsMaxLength}
+                defaultValue={defaults?.accountBuilding}
+              />
             </FormGroup>
 
-            <FormGroup>
+            <FormGroup hasError={!!getFieldState("accountStreet").error}>
               <Label htmlFor="accountStreet">{c(x => x.partnerLabels.accountStreet)}</Label>
-              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountStreet")}></TextInput>
+              <ValidationError error={getFieldState("accountStreet").error} />
+              <TextInput
+                disabled={isFetching}
+                inputWidth="one-third"
+                {...register("accountStreet")}
+                maxLength={projectSetupBankDetailsMaxLength}
+                defaultValue={defaults?.accountStreet}
+              />
             </FormGroup>
 
-            <FormGroup>
+            <FormGroup hasError={!!getFieldState("accountLocality").error}>
               <Label htmlFor="accountLocality">{c(x => x.partnerLabels.accountLocality)}</Label>
-              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountLocality")}></TextInput>
+              <ValidationError error={getFieldState("accountLocality").error} />
+              <TextInput
+                disabled={isFetching}
+                inputWidth="one-third"
+                {...register("accountLocality")}
+                maxLength={projectSetupBankDetailsMaxLength}
+                defaultValue={defaults?.accountLocality}
+              />
             </FormGroup>
 
-            <FormGroup>
+            <FormGroup hasError={!!getFieldState("accountTownOrCity").error}>
               <Label htmlFor="accountTownOrCity">{c(x => x.partnerLabels.accountTownOrCity)}</Label>
-              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountTownOrCity")}></TextInput>
+              <ValidationError error={getFieldState("accountTownOrCity").error} />
+              <TextInput
+                disabled={isFetching}
+                inputWidth="one-third"
+                {...register("accountTownOrCity")}
+                maxLength={projectSetupBankDetailsMaxLength}
+                defaultValue={defaults?.accountTownOrCity}
+              />
             </FormGroup>
 
-            <FormGroup>
+            <FormGroup hasError={!!getFieldState("accountPostcode").error}>
               <Label htmlFor="accountPostcode">{c(x => x.partnerLabels.accountPostcode)}</Label>
-              <TextInput disabled={isFetching} inputWidth="one-third" {...register("accountPostcode")}></TextInput>
+              <ValidationError error={getFieldState("accountPostcode").error} />
+              <TextInput
+                disabled={isFetching}
+                inputWidth="one-third"
+                {...register("accountPostcode")}
+                maxLength={projectSetupBankDetailsMaxLength}
+                defaultValue={defaults?.accountPostcode}
+              />
             </FormGroup>
           </Fieldset>
 
@@ -170,11 +217,13 @@ const SortCode = ({
   register,
   error,
   disabled,
+  defaultValue,
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
-  register: UseFormRegister<FormValues>;
-  error?: RhfErrors;
+  register: UseFormRegister<z.output<ProjectSetupBankDetailsSchemaType>>;
+  error?: TValidationError;
   disabled: boolean;
+  defaultValue?: string;
 }) => {
   const { getContent: c } = useContent();
   if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
@@ -188,6 +237,7 @@ const SortCode = ({
           hasError={!!error}
           inputWidth="one-third"
           {...register("sortCode", { required: true })}
+          defaultValue={defaultValue}
         ></TextInput>
       </FormGroup>
     );
@@ -207,11 +257,13 @@ const AccountNumber = ({
   register,
   error,
   disabled,
+  defaultValue,
 }: {
   partner: Pick<PartnerDto, "bankCheckStatus" | "bankDetails">;
-  register: UseFormRegister<FormValues>;
+  register: UseFormRegister<z.output<ProjectSetupBankDetailsSchemaType>>;
   disabled: boolean;
-  error?: RhfErrors;
+  error?: TValidationError;
+  defaultValue?: string;
 }) => {
   const { getContent: c } = useContent();
   if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
@@ -227,6 +279,7 @@ const AccountNumber = ({
           hasError={!!error}
           {...register("accountNumber", { required: true })}
           inputWidth="one-third"
+          defaultValue={defaultValue}
         />
       </Field>
     );
