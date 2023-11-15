@@ -1,16 +1,17 @@
 import { Then } from "@badeball/cypress-cucumber-preprocessor";
 import { And } from "@badeball/cypress-cucumber-preprocessor";
 import { When } from "@badeball/cypress-cucumber-preprocessor";
+import { Given } from "@badeball/cypress-cucumber-preprocessor";
 
 Then("the user sees the projects dashboard", () => {
   cy.waitForPageHeading("Dashboard").should("exist");
 });
 
-Then("the user sees the {string} page caption", function (title: string) {
+Given("the user sees the {string} page caption", function (title: string) {
   cy.getCaption(title);
 });
 
-And("the user sees the {string} page caption", function (title: string) {
+When("the user sees the {string} page caption", function (title: string) {
   cy.getCaption(title);
 });
 
@@ -47,7 +48,7 @@ Then("the accordions should open", function () {
   });
 });
 
-And("the user sees Upcoming and Archived buttons", function () {
+Given("the user sees Upcoming and Archived buttons", function () {
   ["Upcoming", "Archived"].forEach(button => {
     cy.getButton(button);
   });
