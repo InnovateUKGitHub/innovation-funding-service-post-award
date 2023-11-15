@@ -1,4 +1,4 @@
-import { graphql } from "relay-hooks";
+import { graphql } from "react-relay";
 
 export const removePartnerWorkflowQuery = graphql`
   query RemovePartnerWorkflowQuery($projectId: ID!, $pcrItemId: ID!) {
