@@ -779,7 +779,7 @@ export const acceptInputAndUpdate = () => {
       .within(() => {
         cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
       });
-    cy.getByAriaLabel("Overheads Period 2").should("have.value", overhead);
+    cy.getByAriaLabel("Overheads Period 2").should("have.text", newCurrency.format(overhead));
     cy.get("tr")
       .eq(5)
       .within(() => {
