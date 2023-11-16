@@ -18,6 +18,9 @@ profiles:
           context: .
           docker:
             dockerfile: Dockerfile
+            buildArgs:
+              ACC_BUILD_TAG: "{{.TAG_ID}}"
+              ACC_BUILD_EPOCH: '{{cmd "date" "+%s"}}'
 
   - name: custom
     build:

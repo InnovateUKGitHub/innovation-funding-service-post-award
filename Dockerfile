@@ -2,22 +2,22 @@
 FROM docker-ifs.devops.innovateuk.org/acc/node:20.9.0
 
 WORKDIR /app
-
-COPY app/package.json /app/package.json
-COPY app/package-lock.json /app/package-lock.json
-COPY app/patches /app/patches
-COPY .prettierrc /app/.prettierrc
-COPY .prettierignore /app/.prettierignore
-RUN npm install
-
-COPY app /app
-RUN chown -R node /app
-
+RUN chown node /app
 USER node
+
+COPY --chown=node:node app/package.json app/package-lock.json app/patches .prettierrc .prettierignore /app/
+RUN npm ci --no-optional
+
+COPY --chown=node:node app /app
+
 EXPOSE 8080
 
-RUN npm run test
-RUN npm run lint
-RUN npm run build
+RUN npm run lint && npm run esbuild:tsc && npm run test && npm run build
+
+ARG ACC_BUILD_TAG
+ENV ACC_BUILD_TAG $ACC_BUILD_TAG
+
+ARG ACC_BUILD_EPOCH
+ENV ACC_BUILD_EPOCH $ACC_BUILD_EPOCH
 
 CMD ["node", "--enable-source-maps", "./dist/src/server/index.js"]
