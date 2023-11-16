@@ -846,3 +846,45 @@ export const navigateDocDelete = () => {
   cy.button("Remove").click();
   cy.validationNotification("has been removed.");
 };
+
+export const createReallocatePartnerPcr = () => {
+  cy.getByLabel("Reallocate project costs").check();
+  cy.wait(500);
+  cy.button("Create request").click();
+  cy.heading("Request");
+};
+
+export const addRemainingPcrTypes = () => {
+  ["Change project scope", "Put project on hold", "Loan Drawdown Change"].forEach(pcrType => {
+    cy.getByLabel(pcrType).check();
+    cy.wait(500);
+    cy.button("Add to request").click();
+    cy.heading("Request");
+    cy.get("a").contains("Add types").click();
+    cy.heading("Add types");
+  });
+  cy.getByLabel("Change Loans Duration").check();
+  cy.wait(500);
+  cy.button("Add to request").click();
+  cy.heading("Request");
+};
+
+export const backOutCreateProjectOnHold = () => {
+  cy.backLink("Back to project change requests").click();
+  cy.heading("Project change requests");
+  cy.get("a").contains("Create request").click();
+  cy.heading("Start a new request");
+  cy.getByLabel("Put project on hold").check();
+  cy.wait(500);
+  cy.button("Create request").click();
+  cy.heading("Request");
+};
+
+export const backoutAndDelete = () => {
+  cy.backLink("Back to project change requests").click();
+  cy.heading("Project change requests");
+  cy.get("a").contains("Delete").click();
+  cy.heading("Delete draft request");
+  cy.button("Delete request").click();
+  cy.heading("Project change requests");
+};
