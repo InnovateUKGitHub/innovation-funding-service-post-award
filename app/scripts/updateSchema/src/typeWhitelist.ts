@@ -53,14 +53,26 @@ const objectsToKeep = [
   "Contact",
   "Group",
   "Order",
+  "AggregateOrderByStringClause",
+  "NoFunctionAggregateOrderByClause",
+  "AggregateOrderByNumberClause",
 ];
 
 const typeSuffixes = ["", "Input", "Value", "Operators", "Aggregate", "Literal"];
-const objectSuffixes = ["", "Node", "Edge", "Connection", "_Filter", "_OrderBy", "_GroupBy", "_Owner"];
+const objectSuffixes = [
+  "",
+  "Node",
+  "Edge",
+  "Connection",
+  "_Filter",
+  "_OrderBy",
+  "_GroupBy",
+  "_Owner",
+  "OrderByStringClause",
+];
 const additionalObjects = [
   "Query",
   "UIAPI",
-  "RateLimit",
   "GroupByDateFunction",
   "GroupByFunction",
   "GroupByClause",
@@ -70,6 +82,9 @@ const additionalObjects = [
   "OrderByClause",
   "ResultOrder",
   "NullOrder",
+  "ObjectInfo",
+  "ResultsOrder",
+  "NullsOrder",
 ];
 
 const getTypeWhitelist = () => {

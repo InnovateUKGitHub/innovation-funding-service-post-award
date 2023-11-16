@@ -37,7 +37,6 @@ const main = async () => {
   });
 
   const salesforceSchema = await introspectSchema(executor);
-
   const transformedSchema = {
     schema: salesforceSchema,
     transforms: [new FilterTypes(type => whitelist.includes(type.name))],

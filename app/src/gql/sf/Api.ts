@@ -28,7 +28,7 @@ export class Api {
   public readonly email: string;
 
   constructor({
-    version = "v56.0",
+    version = "v59.0",
     instanceUrl,
     accessToken,
     email,

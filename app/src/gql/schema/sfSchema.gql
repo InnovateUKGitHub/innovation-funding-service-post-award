@@ -1,7 +1,6 @@
 """Entry point for read operations to the schema."""
 type Query {
   uiapi: UIAPI!
-  rateLimit: RateLimit
 }
 
 type Acc_BroadcastMessage__c {
@@ -35,7 +34,7 @@ type Acc_BroadcastMessage__c {
   LastModifiedBy: User
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -109,25 +108,25 @@ input Acc_BroadcastMessage__c_GroupBy {
 }
 
 input Acc_BroadcastMessage__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_Message__c: OrderByClause
-  Acc_StartDate__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Acc_Product__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_RequestedBy__c: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_Message__c: AggregateOrderByStringClause
+  Acc_StartDate__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_Product__c: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_RequestedBy__c: NoFunctionAggregateOrderByClause
   Acc_RequestedBy__r: User_OrderBy
-  Acc_EndDate__c: OrderByClause
-  Name: OrderByClause
-  SystemModstamp: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  Acc_EndDate__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_Type__c: OrderByClause
-  CreatedDate: OrderByClause
-  Id: OrderByClause
-  LastModifiedById: OrderByClause
+  Acc_Type__c: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
 }
 
@@ -314,19 +313,19 @@ type Acc_Claims__c {
   Acc_ProjectPeriodNumber__c: DoubleValue
 
   """childRelationship"""
-  Claims__r(orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
   """childRelationship"""
-  Profiles__r(orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  Profiles__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
   """childRelationship"""
-  Profiles1__r(orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  Profiles1__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
   """childRelationship"""
-  Status_Changes__r(orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
+  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -577,163 +576,163 @@ input Acc_Claims__c_GroupBy {
 }
 
 input Acc_Claims__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_ProjectNumber__c: OrderByClause
-  Acc_NonStandardProjectInformation__c: OrderByClause
-  Acc_Approved__c: OrderByClause
-  Acc_ClaimEmailDate__c: OrderByClause
-  Acc_OverdueEmailSent__c: OrderByClause
-  Acc_PaidDate__c: OrderByClause
-  Acc_ProjectParticipantName__c: OrderByClause
-  Total_Project_Grant__c: OrderByClause
-  Acc_ClaimReference__c: OrderByClause
-  Acc_Date_Submitted__c: OrderByClause
-  Acc_DeferredGrantToBePaid__c: OrderByClause
-  VAT_Cost_Category__c: OrderByClause
-  IM_PhasedCompetition__c: OrderByClause
-  Acc_AccountIdReference__c: OrderByClause
-  Acc_DeferredGrant__c: OrderByClause
-  Acc_AddComments__c: OrderByClause
-  Acc_OverdueEmailSentDate__c: OrderByClause
-  Acc_DeferredApprovalStatus__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_PeriodCostsApprovedForPayment__c: OrderByClause
-  Acc_CostCategoryTotal__c: OrderByClause
-  Acc_Grant_Due_This_Claim__c: OrderByClause
-  Acc_PercentageOfTotalGrant__c: OrderByClause
-  Acc_Total_Participant_Grant__c: OrderByClause
-  Acc_IAROverride__c: OrderByClause
-  Acc_CompetitionType__c: OrderByClause
-  Acc_PeriodGrantToBePaidPrepDef__c: OrderByClause
-  Acc_DeferredGrantStaticDefGrant__c: OrderByClause
-  Acc_NewCapLimitDeferredGrant__c: OrderByClause
-  Acc_FinalClaim__c: OrderByClause
-  Acc_OverrideAwardRate__c: OrderByClause
-  Monitoring_Officer_Name__c: OrderByClause
-  Acc_TotalCostsSubmitted__c: OrderByClause
-  Competition__c: OrderByClause
-  Acc_CostCategory__c: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_ProjectNumber__c: AggregateOrderByStringClause
+  Acc_NonStandardProjectInformation__c: AggregateOrderByStringClause
+  Acc_Approved__c: NoFunctionAggregateOrderByClause
+  Acc_ClaimEmailDate__c: AggregateOrderByStringClause
+  Acc_OverdueEmailSent__c: NoFunctionAggregateOrderByClause
+  Acc_PaidDate__c: AggregateOrderByStringClause
+  Acc_ProjectParticipantName__c: AggregateOrderByStringClause
+  Total_Project_Grant__c: AggregateOrderByNumberClause
+  Acc_ClaimReference__c: AggregateOrderByStringClause
+  Acc_Date_Submitted__c: AggregateOrderByStringClause
+  Acc_DeferredGrantToBePaid__c: AggregateOrderByNumberClause
+  VAT_Cost_Category__c: NoFunctionAggregateOrderByClause
+  IM_PhasedCompetition__c: NoFunctionAggregateOrderByClause
+  Acc_AccountIdReference__c: AggregateOrderByStringClause
+  Acc_DeferredGrant__c: AggregateOrderByNumberClause
+  Acc_AddComments__c: AggregateOrderByStringClause
+  Acc_OverdueEmailSentDate__c: AggregateOrderByStringClause
+  Acc_DeferredApprovalStatus__c: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_PeriodCostsApprovedForPayment__c: AggregateOrderByNumberClause
+  Acc_CostCategoryTotal__c: AggregateOrderByNumberClause
+  Acc_Grant_Due_This_Claim__c: AggregateOrderByNumberClause
+  Acc_PercentageOfTotalGrant__c: AggregateOrderByNumberClause
+  Acc_Total_Participant_Grant__c: AggregateOrderByNumberClause
+  Acc_IAROverride__c: AggregateOrderByStringClause
+  Acc_CompetitionType__c: AggregateOrderByStringClause
+  Acc_PeriodGrantToBePaidPrepDef__c: AggregateOrderByNumberClause
+  Acc_DeferredGrantStaticDefGrant__c: AggregateOrderByNumberClause
+  Acc_NewCapLimitDeferredGrant__c: AggregateOrderByNumberClause
+  Acc_FinalClaim__c: NoFunctionAggregateOrderByClause
+  Acc_OverrideAwardRate__c: AggregateOrderByNumberClause
+  Monitoring_Officer_Name__c: AggregateOrderByStringClause
+  Acc_TotalCostsSubmitted__c: AggregateOrderByNumberClause
+  Competition__c: AggregateOrderByStringClause
+  Acc_CostCategory__c: NoFunctionAggregateOrderByClause
   Acc_CostCategory__r: Acc_CostCategory__c_OrderBy
-  Id: OrderByClause
-  ACC_ProjectCurrentClaimFrequency__c: OrderByClause
-  Acc_Prepayment__c: OrderByClause
-  Acc_PaidCosts__c: OrderByClause
-  Acc_LineItemDescription__c: OrderByClause
-  Acc_CapLimitPercentage__c: OrderByClause
-  Acc_HubAndSpokeClaim__c: OrderByClause
-  Acc_StaticCapLimitDeferredGrant__c: OrderByClause
-  Competition_Rec__c: OrderByClause
+  Id: AggregateOrderByStringClause
+  ACC_ProjectCurrentClaimFrequency__c: AggregateOrderByStringClause
+  Acc_Prepayment__c: AggregateOrderByNumberClause
+  Acc_PaidCosts__c: AggregateOrderByNumberClause
+  Acc_LineItemDescription__c: AggregateOrderByStringClause
+  Acc_CapLimitPercentage__c: AggregateOrderByNumberClause
+  Acc_HubAndSpokeClaim__c: NoFunctionAggregateOrderByClause
+  Acc_StaticCapLimitDeferredGrant__c: AggregateOrderByNumberClause
+  Competition_Rec__c: NoFunctionAggregateOrderByClause
   Competition_Rec__r: Competition__c_OrderBy
-  Acc_PeriodGrantToBePaidBase__c: OrderByClause
-  Acc_ReviewCapLimit__c: OrderByClause
-  Acc_Overdue_helper__c: OrderByClause
-  Acc_WatchFlag__c: OrderByClause
-  Acc_ThirdPartyPayment__c: OrderByClause
-  Acc_StaticDeferredGrant__c: OrderByClause
-  Acc_IAR_Required_Helper__c: OrderByClause
-  Acc_ProjectPeriodEndDateHelper__c: OrderByClause
-  Acc_Grant_Paid_To_Date__c: OrderByClause
-  OwnerId: OrderByClause
-  RecordTypeId: OrderByClause
+  Acc_PeriodGrantToBePaidBase__c: AggregateOrderByNumberClause
+  Acc_ReviewCapLimit__c: AggregateOrderByStringClause
+  Acc_Overdue_helper__c: NoFunctionAggregateOrderByClause
+  Acc_WatchFlag__c: AggregateOrderByStringClause
+  Acc_ThirdPartyPayment__c: NoFunctionAggregateOrderByClause
+  Acc_StaticDeferredGrant__c: AggregateOrderByNumberClause
+  Acc_IAR_Required_Helper__c: NoFunctionAggregateOrderByClause
+  Acc_ProjectPeriodEndDateHelper__c: AggregateOrderByStringClause
+  Acc_Grant_Paid_To_Date__c: AggregateOrderByNumberClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  RecordTypeId: NoFunctionAggregateOrderByClause
   RecordType: RecordType_OrderBy
-  Acc_ApprovalStatus__c: OrderByClause
-  Acc_CostsClaimedToDate__c: OrderByClause
-  Acc_ProjectTitle__c: OrderByClause
-  Acc_PriorStatusValue__c: OrderByClause
-  Acc_StaticDeferredAmount__c: OrderByClause
-  Acc_PeriodCostsToBeApproved__c: OrderByClause
-  Acc_ClaimStatus__c: OrderByClause
-  Acc_TwoStageApproval__c: OrderByClause
-  Acc_TotalPercentageOfParticipantCosts__c: OrderByClause
-  Acc_PeriodCostCategoryTotal__c: OrderByClause
-  Acc_PeriodCoststobePaid__c: OrderByClause
-  SystemModstamp: OrderByClause
-  Acc_SupplierInvoiceAddedToWorkday__c: OrderByClause
-  Acc_ClaimOverdue__c: OrderByClause
-  LastActivityDate: OrderByClause
-  Acc_Project__c: OrderByClause
-  Acc_Review_Team__c: OrderByClause
-  Acc_IARRequired__c: OrderByClause
-  Acc_GrantToBePaid__c: OrderByClause
-  Acc_FinanceContactName__c: OrderByClause
-  Acc_ApprovedDate__c: OrderByClause
-  Acc_IAR_Helper_Non_Quarterly__c: OrderByClause
-  Acc_PeriodGrantToBePaidCapLimit__c: OrderByClause
-  Acc_Account__c: OrderByClause
-  Acc_ProjectID__c: OrderByClause
-  Acc_ClaimFrequency__c: OrderByClause
-  Acc_ParticipantCapLimitFormula__c: OrderByClause
-  Acc_ProjectPeriodStartDate__c: OrderByClause
-  Acc_TotalCostsApproved__c: OrderByClause
-  Name: OrderByClause
-  Acc_CostCategoryDescription__c: OrderByClause
-  Acc_ReasonForDifference__c: OrderByClause
-  Acc_PeriodCostsSubmitted__c: OrderByClause
-  Acc_ParticipantCapLimit__c: OrderByClause
-  CreatedById: OrderByClause
+  Acc_ApprovalStatus__c: AggregateOrderByStringClause
+  Acc_CostsClaimedToDate__c: AggregateOrderByNumberClause
+  Acc_ProjectTitle__c: AggregateOrderByStringClause
+  Acc_PriorStatusValue__c: AggregateOrderByStringClause
+  Acc_StaticDeferredAmount__c: AggregateOrderByNumberClause
+  Acc_PeriodCostsToBeApproved__c: AggregateOrderByNumberClause
+  Acc_ClaimStatus__c: AggregateOrderByStringClause
+  Acc_TwoStageApproval__c: NoFunctionAggregateOrderByClause
+  Acc_TotalPercentageOfParticipantCosts__c: AggregateOrderByNumberClause
+  Acc_PeriodCostCategoryTotal__c: AggregateOrderByNumberClause
+  Acc_PeriodCoststobePaid__c: AggregateOrderByNumberClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_SupplierInvoiceAddedToWorkday__c: NoFunctionAggregateOrderByClause
+  Acc_ClaimOverdue__c: AggregateOrderByNumberClause
+  LastActivityDate: AggregateOrderByStringClause
+  Acc_Project__c: AggregateOrderByStringClause
+  Acc_Review_Team__c: AggregateOrderByStringClause
+  Acc_IARRequired__c: NoFunctionAggregateOrderByClause
+  Acc_GrantToBePaid__c: AggregateOrderByStringClause
+  Acc_FinanceContactName__c: AggregateOrderByStringClause
+  Acc_ApprovedDate__c: AggregateOrderByStringClause
+  Acc_IAR_Helper_Non_Quarterly__c: NoFunctionAggregateOrderByClause
+  Acc_PeriodGrantToBePaidCapLimit__c: AggregateOrderByNumberClause
+  Acc_Account__c: AggregateOrderByStringClause
+  Acc_ProjectID__c: AggregateOrderByStringClause
+  Acc_ClaimFrequency__c: AggregateOrderByStringClause
+  Acc_ParticipantCapLimitFormula__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodStartDate__c: AggregateOrderByStringClause
+  Acc_TotalCostsApproved__c: AggregateOrderByNumberClause
+  Name: AggregateOrderByStringClause
+  Acc_CostCategoryDescription__c: AggregateOrderByStringClause
+  Acc_ReasonForDifference__c: AggregateOrderByStringClause
+  Acc_PeriodCostsSubmitted__c: AggregateOrderByNumberClause
+  Acc_ParticipantCapLimit__c: AggregateOrderByNumberClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_PeriodApprovedDeferredCosts__c: OrderByClause
-  Acc_Integration_AccountId__c: OrderByClause
-  Acc_TotalDeferredAmount__c: OrderByClause
-  Acc_TotalParticipantCosts__c: OrderByClause
-  Acc_TrackingClaimStatus__c: OrderByClause
-  Acc_ProjectPeriodStartDateHelper__c: OrderByClause
-  CAwardRate__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Acc_GrantPaidToDateHelper__c: OrderByClause
-  Net_Invoice_total__c: OrderByClause
-  Acc_LastStatusChangeDate__c: OrderByClause
-  Acc_OverrideReviewTeam__c: OrderByClause
-  Acc_PeriodGrantToBePaidHelper__c: OrderByClause
-  Acc_Integration_AccountName__c: OrderByClause
-  Acc_IAR_Helper_Quarterly__c: OrderByClause
-  Acc_IAR_Status__c: OrderByClause
-  CreatedDate: OrderByClause
-  Acc_ProjectParticipant__c: OrderByClause
+  Acc_PeriodApprovedDeferredCosts__c: AggregateOrderByNumberClause
+  Acc_Integration_AccountId__c: AggregateOrderByStringClause
+  Acc_TotalDeferredAmount__c: AggregateOrderByNumberClause
+  Acc_TotalParticipantCosts__c: AggregateOrderByNumberClause
+  Acc_TrackingClaimStatus__c: AggregateOrderByStringClause
+  Acc_ProjectPeriodStartDateHelper__c: AggregateOrderByStringClause
+  CAwardRate__c: AggregateOrderByNumberClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_GrantPaidToDateHelper__c: AggregateOrderByNumberClause
+  Net_Invoice_total__c: AggregateOrderByNumberClause
+  Acc_LastStatusChangeDate__c: AggregateOrderByStringClause
+  Acc_OverrideReviewTeam__c: AggregateOrderByStringClause
+  Acc_PeriodGrantToBePaidHelper__c: AggregateOrderByNumberClause
+  Acc_Integration_AccountName__c: AggregateOrderByStringClause
+  Acc_IAR_Helper_Quarterly__c: NoFunctionAggregateOrderByClause
+  Acc_IAR_Status__c: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  Acc_ProjectParticipant__c: NoFunctionAggregateOrderByClause
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c_OrderBy
-  Acc_NewDefGrantPrepaymentCarriedForward__c: OrderByClause
-  Acc_CompletionReport__c: OrderByClause
-  Acc_PeriodGrantApprovedForPaymentHelper__c: OrderByClause
-  Acc_OutstandingPayment__c: OrderByClause
-  Acc_PCF_Status__c: OrderByClause
-  Acc_SubsidyControlScheme__c: OrderByClause
-  SBRI_Contracting_Authority__c: OrderByClause
-  Acc_Over100k__c: OrderByClause
-  Acc_ParentId__c: OrderByClause
+  Acc_NewDefGrantPrepaymentCarriedForward__c: AggregateOrderByNumberClause
+  Acc_CompletionReport__c: NoFunctionAggregateOrderByClause
+  Acc_PeriodGrantApprovedForPaymentHelper__c: AggregateOrderByNumberClause
+  Acc_OutstandingPayment__c: AggregateOrderByStringClause
+  Acc_PCF_Status__c: AggregateOrderByStringClause
+  Acc_SubsidyControlScheme__c: AggregateOrderByStringClause
+  SBRI_Contracting_Authority__c: AggregateOrderByStringClause
+  Acc_Over100k__c: AggregateOrderByStringClause
+  Acc_ParentId__c: NoFunctionAggregateOrderByClause
   Acc_ParentId__r: Acc_Claims__c_OrderBy
-  IM_PreCursorCompetition__c: OrderByClause
-  Acc_IsLockedDetail__c: OrderByClause
-  Claim_VAT_total__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_LeadParticipant__c: OrderByClause
-  Acc_NumberofPeriods__c: OrderByClause
-  Acc_PeriodApprovedDeferredGrant__c: OrderByClause
-  Acc_isCalculated__c: OrderByClause
-  Acc_TotalCost__c: OrderByClause
-  Acc_PeriodLengthChanged__c: OrderByClause
-  Acc_Claim_Age__c: OrderByClause
-  Acc_ProjectPeriodEndDate__c: OrderByClause
-  Acc_StaticAwardRate__c: OrderByClause
-  Acc_ClaimForReview__c: OrderByClause
-  Acc_PeriodCostsApproved__c: OrderByClause
-  Acc_LineItemCost__c: OrderByClause
-  Acc_DeferredAmount__c: OrderByClause
-  Acc_TotalGrantPerCategory__c: OrderByClause
-  Acc_StaticCapLimitDeferredAmount__c: OrderByClause
-  Organisation_Type__c: OrderByClause
-  Project_Sector__c: OrderByClause
-  Acc_IsLockedLI__c: OrderByClause
-  Acc_ProjectPeriodCost__c: OrderByClause
-  Acc_ClaimUnderQuery__c: OrderByClause
-  Acc_ProjectPeriodId__c: OrderByClause
-  Acc_Non_FEC_project__c: OrderByClause
-  IM_PhasedCompetitionStage__c: OrderByClause
-  Acc_Overdue_Project__c: OrderByClause
-  Acc_OverrideGrantToBePaid__c: OrderByClause
-  Impact_Management_Participation__c: OrderByClause
-  LastModifiedById: OrderByClause
+  IM_PreCursorCompetition__c: AggregateOrderByStringClause
+  Acc_IsLockedDetail__c: NoFunctionAggregateOrderByClause
+  Claim_VAT_total__c: AggregateOrderByNumberClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_LeadParticipant__c: NoFunctionAggregateOrderByClause
+  Acc_NumberofPeriods__c: AggregateOrderByNumberClause
+  Acc_PeriodApprovedDeferredGrant__c: AggregateOrderByNumberClause
+  Acc_isCalculated__c: NoFunctionAggregateOrderByClause
+  Acc_TotalCost__c: AggregateOrderByNumberClause
+  Acc_PeriodLengthChanged__c: NoFunctionAggregateOrderByClause
+  Acc_Claim_Age__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodEndDate__c: AggregateOrderByStringClause
+  Acc_StaticAwardRate__c: AggregateOrderByNumberClause
+  Acc_ClaimForReview__c: AggregateOrderByNumberClause
+  Acc_PeriodCostsApproved__c: AggregateOrderByNumberClause
+  Acc_LineItemCost__c: AggregateOrderByNumberClause
+  Acc_DeferredAmount__c: AggregateOrderByNumberClause
+  Acc_TotalGrantPerCategory__c: AggregateOrderByNumberClause
+  Acc_StaticCapLimitDeferredAmount__c: AggregateOrderByNumberClause
+  Organisation_Type__c: AggregateOrderByStringClause
+  Project_Sector__c: AggregateOrderByStringClause
+  Acc_IsLockedLI__c: NoFunctionAggregateOrderByClause
+  Acc_ProjectPeriodCost__c: AggregateOrderByNumberClause
+  Acc_ClaimUnderQuery__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodId__c: AggregateOrderByNumberClause
+  Acc_Non_FEC_project__c: NoFunctionAggregateOrderByClause
+  IM_PhasedCompetitionStage__c: AggregateOrderByStringClause
+  Acc_Overdue_Project__c: AggregateOrderByStringClause
+  Acc_OverrideGrantToBePaid__c: AggregateOrderByNumberClause
+  Impact_Management_Participation__c: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Acc_ProjectPeriodNumber__c: OrderByClause
+  Acc_ProjectPeriodNumber__c: AggregateOrderByNumberClause
 }
 
 union Acc_Claims__c_Owner = Group | User
@@ -770,13 +769,13 @@ type Acc_CostCategory__c {
   VAT_Cost_Category__c: BooleanValue
 
   """childRelationship"""
-  Claims__r(orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
   """childRelationship"""
-  Profile__r(orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  Profile__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -852,29 +851,29 @@ input Acc_CostCategory__c_GroupBy {
 }
 
 input Acc_CostCategory__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_CostCategoryName__c: OrderByClause
-  IsDeleted: OrderByClause
-  LastViewedDate: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_CompetitionType__c: OrderByClause
-  Name: OrderByClause
-  SystemModstamp: OrderByClause
-  Acc_CostCategoryDescription__c: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_CostCategoryName__c: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  LastViewedDate: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_CompetitionType__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_CostCategoryDescription__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_CostCategoryId__c: OrderByClause
-  Acc_OrganisationType__c: OrderByClause
-  Acc_OverrideAwardRate__c: OrderByClause
-  CreatedDate: OrderByClause
-  LastActivityDate: OrderByClause
-  Id: OrderByClause
-  Acc_HintText__c: OrderByClause
-  LastModifiedById: OrderByClause
+  Acc_CostCategoryId__c: AggregateOrderByNumberClause
+  Acc_OrganisationType__c: AggregateOrderByStringClause
+  Acc_OverrideAwardRate__c: AggregateOrderByNumberClause
+  CreatedDate: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  Acc_HintText__c: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Acc_DisplayOrder__c: OrderByClause
-  VAT_Cost_Category__c: OrderByClause
+  Acc_DisplayOrder__c: AggregateOrderByNumberClause
+  VAT_Cost_Category__c: NoFunctionAggregateOrderByClause
 }
 
 union Acc_CostCategory__c_Owner = Group | User
@@ -937,13 +936,13 @@ type Acc_MonitoringAnswer__c {
   Acc_MonitoringReportStatus__c: PicklistValue
 
   """childRelationship"""
-  Monitoring_Answers__r(orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+  Monitoring_Answers__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
 
   """childRelationship"""
-  Status_Changes__r(orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
+  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1037,42 +1036,42 @@ input Acc_MonitoringAnswer__c_GroupBy {
 }
 
 input Acc_MonitoringAnswer__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_PeriodEndDate__c: OrderByClause
-  Acc_ProjectNumber__c: OrderByClause
-  Acc_QuestionName__c: OrderByClause
-  Acc_QuestionScore__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_ProjectID__c: OrderByClause
-  Acc_QuestionComments__c: OrderByClause
-  Name: OrderByClause
-  Acc_PeriodStartDate__c: OrderByClause
-  Acc_ProjectPeriodEndDateHelper__c: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_PeriodEndDate__c: AggregateOrderByStringClause
+  Acc_ProjectNumber__c: AggregateOrderByStringClause
+  Acc_QuestionName__c: AggregateOrderByStringClause
+  Acc_QuestionScore__c: AggregateOrderByNumberClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_ProjectID__c: AggregateOrderByStringClause
+  Acc_QuestionComments__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  Acc_PeriodStartDate__c: AggregateOrderByStringClause
+  Acc_ProjectPeriodEndDateHelper__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_PeriodLengthChanged__c: OrderByClause
-  RecordTypeId: OrderByClause
+  Acc_PeriodLengthChanged__c: NoFunctionAggregateOrderByClause
+  RecordTypeId: NoFunctionAggregateOrderByClause
   RecordType: RecordType_OrderBy
-  Acc_PriorStatusValue__c: OrderByClause
-  Acc_MonitoringHeader__c: OrderByClause
+  Acc_PriorStatusValue__c: AggregateOrderByStringClause
+  Acc_MonitoringHeader__c: NoFunctionAggregateOrderByClause
   Acc_MonitoringHeader__r: Acc_MonitoringAnswer__c_OrderBy
-  Acc_AddComments__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_ProjectPeriodStartDateHelper__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Acc_Question__c: OrderByClause
+  Acc_AddComments__c: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_ProjectPeriodStartDateHelper__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_Question__c: NoFunctionAggregateOrderByClause
   Acc_Question__r: Acc_MonitoringQuestion__c_OrderBy
-  SystemModstamp: OrderByClause
-  CreatedDate: OrderByClause
-  LastActivityDate: OrderByClause
-  Id: OrderByClause
-  Acc_Project__c: OrderByClause
+  SystemModstamp: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  Acc_Project__c: NoFunctionAggregateOrderByClause
   Acc_Project__r: Acc_Project__c_OrderBy
-  LastModifiedById: OrderByClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Acc_ProjectPeriodNumber__c: OrderByClause
-  Acc_MonitoringReportStatus__c: OrderByClause
+  Acc_ProjectPeriodNumber__c: AggregateOrderByNumberClause
+  Acc_MonitoringReportStatus__c: AggregateOrderByStringClause
 }
 
 union Acc_MonitoringAnswer__c_Owner = Group | User
@@ -1106,10 +1105,10 @@ type Acc_MonitoringQuestion__c {
   Acc_DisplayOrder__c: DoubleValue
 
   """childRelationship"""
-  Monitoring_Reports__r(orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+  Monitoring_Reports__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1180,26 +1179,26 @@ input Acc_MonitoringQuestion__c_GroupBy {
 }
 
 input Acc_MonitoringQuestion__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_ActiveFlag__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_ScoredQuestion__c: OrderByClause
-  Acc_QuestionName__c: OrderByClause
-  Acc_QuestionScore__c: OrderByClause
-  LastViewedDate: OrderByClause
-  LastReferencedDate: OrderByClause
-  Name: OrderByClause
-  SystemModstamp: OrderByClause
-  Acc_QuestionDescription__c: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_ActiveFlag__c: NoFunctionAggregateOrderByClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_ScoredQuestion__c: NoFunctionAggregateOrderByClause
+  Acc_QuestionName__c: AggregateOrderByStringClause
+  Acc_QuestionScore__c: AggregateOrderByNumberClause
+  LastViewedDate: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_QuestionDescription__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  CreatedDate: OrderByClause
-  Acc_QuestionText__c: OrderByClause
-  Id: OrderByClause
-  LastModifiedById: OrderByClause
+  CreatedDate: AggregateOrderByStringClause
+  Acc_QuestionText__c: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Acc_DisplayOrder__c: OrderByClause
+  Acc_DisplayOrder__c: AggregateOrderByNumberClause
 }
 
 union Acc_MonitoringQuestion__c_Owner = Group | User
@@ -1261,10 +1260,10 @@ type Acc_Prepayment__c {
   Acc_PreviousPrepaymentStatus__c: StringValue
 
   """childRelationship"""
-  Virements__r(orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1372,52 +1371,52 @@ input Acc_Prepayment__c_GroupBy {
 }
 
 input Acc_Prepayment__c_OrderBy {
-  Loan_PlannedDateForDrawdown__c: OrderByClause
-  LastModifiedDate: OrderByClause
-  Acc_ProjectNumber__c: OrderByClause
-  Acc_ApprovedDate__c: OrderByClause
-  Loan_UserComments__c: OrderByClause
-  Acc_Account__c: OrderByClause
-  Acc_Adjustment_Type__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_ProjectID__c: OrderByClause
-  Acc_ProjectPeriodStartDate__c: OrderByClause
-  Acc_PaidDate__c: OrderByClause
-  Grant_Exceeded__c: OrderByClause
-  Name: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  Loan_PlannedDateForDrawdown__c: AggregateOrderByStringClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_ProjectNumber__c: AggregateOrderByStringClause
+  Acc_ApprovedDate__c: AggregateOrderByStringClause
+  Loan_UserComments__c: AggregateOrderByStringClause
+  Acc_Account__c: AggregateOrderByStringClause
+  Acc_Adjustment_Type__c: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_ProjectID__c: AggregateOrderByStringClause
+  Acc_ProjectPeriodStartDate__c: AggregateOrderByStringClause
+  Acc_PaidDate__c: AggregateOrderByStringClause
+  Grant_Exceeded__c: NoFunctionAggregateOrderByClause
+  Name: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_PeriodLengthChanged__c: OrderByClause
-  Acc_ProjectPeriodEndDate__c: OrderByClause
-  Acc_ProjectTitle__c: OrderByClause
-  Loan_DrawdownStatus__c: OrderByClause
-  Acc_AccountIdReference__c: OrderByClause
-  Acc_Competition_Type__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_ReasonForPrepayment__c: OrderByClause
-  Acc_Status__c: OrderByClause
-  Acc_GranttobePaid__c: OrderByClause
-  Acc_Competition__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Project_Sector__c: OrderByClause
-  Acc_PeriodCoststobePaid__c: OrderByClause
-  Loan_InitialForecastDrawdown__c: OrderByClause
-  SystemModstamp: OrderByClause
-  Acc_PeriodNumber__c: OrderByClause
-  Loan_LatestForecastDrawdown__c: OrderByClause
-  CreatedDate: OrderByClause
-  LastActivityDate: OrderByClause
-  Acc_ProjectParticipant__c: OrderByClause
+  Acc_PeriodLengthChanged__c: NoFunctionAggregateOrderByClause
+  Acc_ProjectPeriodEndDate__c: AggregateOrderByStringClause
+  Acc_ProjectTitle__c: AggregateOrderByStringClause
+  Loan_DrawdownStatus__c: AggregateOrderByStringClause
+  Acc_AccountIdReference__c: AggregateOrderByStringClause
+  Acc_Competition_Type__c: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_ReasonForPrepayment__c: AggregateOrderByStringClause
+  Acc_Status__c: AggregateOrderByStringClause
+  Acc_GranttobePaid__c: AggregateOrderByNumberClause
+  Acc_Competition__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  Project_Sector__c: AggregateOrderByStringClause
+  Acc_PeriodCoststobePaid__c: AggregateOrderByNumberClause
+  Loan_InitialForecastDrawdown__c: AggregateOrderByNumberClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_PeriodNumber__c: AggregateOrderByNumberClause
+  Loan_LatestForecastDrawdown__c: AggregateOrderByNumberClause
+  CreatedDate: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  Acc_ProjectParticipant__c: NoFunctionAggregateOrderByClause
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c_OrderBy
-  Acc_HubAndSpokePrePayment__c: OrderByClause
-  Acc_AccountId__c: OrderByClause
-  Id: OrderByClause
-  LastModifiedById: OrderByClause
+  Acc_HubAndSpokePrePayment__c: NoFunctionAggregateOrderByClause
+  Acc_AccountId__c: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Acc_ProjectPeriodNumber__c: OrderByClause
-  Acc_Loan_Due_Days__c: OrderByClause
-  Acc_PreviousPrepaymentStatus__c: OrderByClause
+  Acc_ProjectPeriodNumber__c: AggregateOrderByNumberClause
+  Acc_Loan_Due_Days__c: AggregateOrderByNumberClause
+  Acc_PreviousPrepaymentStatus__c: AggregateOrderByStringClause
 }
 
 union Acc_Prepayment__c_Owner = Group | User
@@ -1502,16 +1501,16 @@ type Acc_Profile__c {
   Acc_CostCategoryFutureForecastCost__c: CurrencyValue
 
   """childRelationship"""
-  Profiles__r(orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  Profiles__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
   """childRelationship"""
-  Project_Change_Requests__r(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Virements__r(orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -1626,60 +1625,60 @@ input Acc_Profile__c_GroupBy {
 }
 
 input Acc_Profile__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_ParentId__c: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_ParentId__c: NoFunctionAggregateOrderByClause
   Acc_ParentId__r: Acc_Profile__c_OrderBy
-  Acc_ProjectNumber__c: OrderByClause
-  Acc_TotalGOLCost__c: OrderByClause
-  Acc_Account__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_ProjectID__c: OrderByClause
-  Acc_ClaimFrequency__c: OrderByClause
-  Acc_ProjectPeriodStartDate__c: OrderByClause
-  Name: OrderByClause
-  Acc_CostCategoryDescription__c: OrderByClause
-  Acc_AwardRate__c: OrderByClause
-  Acc_InitialForecastCost__c: OrderByClause
-  Acc_ProjectPeriodEndDateHelper__c: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  Acc_ProjectNumber__c: AggregateOrderByStringClause
+  Acc_TotalGOLCost__c: AggregateOrderByNumberClause
+  Acc_Account__c: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_ProjectID__c: AggregateOrderByStringClause
+  Acc_ClaimFrequency__c: AggregateOrderByStringClause
+  Acc_ProjectPeriodStartDate__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  Acc_CostCategoryDescription__c: AggregateOrderByStringClause
+  Acc_AwardRate__c: AggregateOrderByNumberClause
+  Acc_InitialForecastCost__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodEndDateHelper__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_PeriodLengthChanged__c: OrderByClause
-  RecordTypeId: OrderByClause
+  Acc_PeriodLengthChanged__c: NoFunctionAggregateOrderByClause
+  RecordTypeId: NoFunctionAggregateOrderByClause
   RecordType: RecordType_OrderBy
-  Acc_ProjectPeriodEndDate__c: OrderByClause
-  Acc_PeriodLatestForecastCost__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_CostCategoryGOLCost__c: OrderByClause
-  Acc_PeriodForecastStatus__c: OrderByClause
-  Acc_ProfileOverrideAwardRate__c: OrderByClause
-  Acc_ProjectPeriodStartDateHelper__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Acc_ClaimDetail__c: OrderByClause
+  Acc_ProjectPeriodEndDate__c: AggregateOrderByStringClause
+  Acc_PeriodLatestForecastCost__c: AggregateOrderByNumberClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_CostCategoryGOLCost__c: AggregateOrderByNumberClause
+  Acc_PeriodForecastStatus__c: AggregateOrderByStringClause
+  Acc_ProfileOverrideAwardRate__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodStartDateHelper__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_ClaimDetail__c: NoFunctionAggregateOrderByClause
   Acc_ClaimDetail__r: Acc_Claims__c_OrderBy
-  Acc_GrantDue__c: OrderByClause
-  Acc_Claim__c: OrderByClause
+  Acc_GrantDue__c: AggregateOrderByNumberClause
+  Acc_Claim__c: NoFunctionAggregateOrderByClause
   Acc_Claim__r: Acc_Claims__c_OrderBy
-  SystemModstamp: OrderByClause
-  Acc_CostCategoryLatestForecastCost__c: OrderByClause
-  Acc_OverrideAwardRate__c: OrderByClause
-  CreatedDate: OrderByClause
-  LastActivityDate: OrderByClause
-  Acc_ProjectParticipant__c: OrderByClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_CostCategoryLatestForecastCost__c: AggregateOrderByNumberClause
+  Acc_OverrideAwardRate__c: AggregateOrderByNumberClause
+  CreatedDate: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  Acc_ProjectParticipant__c: NoFunctionAggregateOrderByClause
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c_OrderBy
-  Acc_ClaimPeriodNumber__c: OrderByClause
-  Acc_CostCategory__c: OrderByClause
+  Acc_ClaimPeriodNumber__c: AggregateOrderByNumberClause
+  Acc_CostCategory__c: NoFunctionAggregateOrderByClause
   Acc_CostCategory__r: Acc_CostCategory__c_OrderBy
-  Id: OrderByClause
-  Acc_Project__c: OrderByClause
-  Acc_CostCategoryAwardOverride__c: OrderByClause
-  Acc_PeriodInitialForecastCost__c: OrderByClause
-  Acc_TotalLatestForecastCost__c: OrderByClause
-  LastModifiedById: OrderByClause
+  Id: AggregateOrderByStringClause
+  Acc_Project__c: AggregateOrderByStringClause
+  Acc_CostCategoryAwardOverride__c: AggregateOrderByNumberClause
+  Acc_PeriodInitialForecastCost__c: AggregateOrderByNumberClause
+  Acc_TotalLatestForecastCost__c: AggregateOrderByNumberClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Acc_LatestForecastCost__c: OrderByClause
-  Acc_ProjectPeriodNumber__c: OrderByClause
-  Acc_CostCategoryFutureForecastCost__c: OrderByClause
+  Acc_LatestForecastCost__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodNumber__c: AggregateOrderByNumberClause
+  Acc_CostCategoryFutureForecastCost__c: AggregateOrderByNumberClause
 }
 
 union Acc_Profile__c_Owner = Group | User
@@ -1839,16 +1838,16 @@ type Acc_ProjectChangeRequest__c {
   LastModifiedBy: User
 
   """childRelationship"""
-  Acc_Project_Change_Requests__r(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Acc_Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Status_Changes__r(orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
+  Status_Changes__r(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
 
   """childRelationship"""
-  Virements__r(orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -2087,128 +2086,128 @@ input Acc_ProjectChangeRequest__c_GroupBy {
 }
 
 input Acc_ProjectChangeRequest__c_OrderBy {
-  Acc_Employees__c: OrderByClause
-  LastModifiedDate: OrderByClause
-  Acc_ProjectNumber__c: OrderByClause
-  Acc_Contact1ProjectRole__c: OrderByClause
-  Acc_Contact1Forename__c: OrderByClause
-  Loan_RepaymentPeriod__c: OrderByClause
-  Acc_ExternalReviewCompletedDate__c: OrderByClause
-  Acc_FastTrack__c: OrderByClause
-  Acc_ProjectRole__c: OrderByClause
-  Acc_Approved__c: OrderByClause
-  Acc_Contact1__c: OrderByClause
+  Acc_Employees__c: AggregateOrderByNumberClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_ProjectNumber__c: AggregateOrderByStringClause
+  Acc_Contact1ProjectRole__c: AggregateOrderByStringClause
+  Acc_Contact1Forename__c: AggregateOrderByStringClause
+  Loan_RepaymentPeriod__c: AggregateOrderByStringClause
+  Acc_ExternalReviewCompletedDate__c: AggregateOrderByStringClause
+  Acc_FastTrack__c: NoFunctionAggregateOrderByClause
+  Acc_ProjectRole__c: AggregateOrderByStringClause
+  Acc_Approved__c: NoFunctionAggregateOrderByClause
+  Acc_Contact1__c: NoFunctionAggregateOrderByClause
   Acc_Contact1__r: Contact_OrderBy
-  Loan_ProjectStartDate__c: OrderByClause
-  Acc_AwardRate__c: OrderByClause
-  Acc_Subsidy_Control_End_Date__c: OrderByClause
-  Acc_NewOrganisationName__c: OrderByClause
-  Loan_ExtensionEndDate__c: OrderByClause
-  Acc_RequestHeader__c: OrderByClause
+  Loan_ProjectStartDate__c: AggregateOrderByStringClause
+  Acc_AwardRate__c: AggregateOrderByNumberClause
+  Acc_Subsidy_Control_End_Date__c: AggregateOrderByStringClause
+  Acc_NewOrganisationName__c: AggregateOrderByStringClause
+  Loan_ExtensionEndDate__c: AggregateOrderByStringClause
+  Acc_RequestHeader__c: NoFunctionAggregateOrderByClause
   Acc_RequestHeader__r: Acc_ProjectChangeRequest__c_OrderBy
-  Acc_Subsidy_Control_Scheme__c: OrderByClause
-  Acc_Reasoning__c: OrderByClause
-  Acc_RegisteredAddress__c: OrderByClause
-  Acc_ExistingProjectDuration__c: OrderByClause
-  Acc_TerminationDate__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_ExistingEndDate__c: OrderByClause
-  Acc_ReasonForWithdrawal__c: OrderByClause
-  Acc_ParticipantSize__c: OrderByClause
-  Acc_ProjectSummarySnapshot__c: OrderByClause
-  Acc_CompetitionType__c: OrderByClause
-  Acc_TotalOtherFunding__c: OrderByClause
-  Override_Grant_Control__c: OrderByClause
-  Acc_AdditionalNumberofPeriods__c: OrderByClause
-  Id: OrderByClause
-  Loan_Duration__c: OrderByClause
-  Acc_SuspensionStarts__c: OrderByClause
-  Acc_Nickname__c: OrderByClause
-  OwnerId: OrderByClause
-  Acc_TurnoverYearEnd__c: OrderByClause
-  RecordTypeId: OrderByClause
+  Acc_Subsidy_Control_Scheme__c: AggregateOrderByStringClause
+  Acc_Reasoning__c: AggregateOrderByStringClause
+  Acc_RegisteredAddress__c: AggregateOrderByStringClause
+  Acc_ExistingProjectDuration__c: AggregateOrderByNumberClause
+  Acc_TerminationDate__c: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_ExistingEndDate__c: AggregateOrderByStringClause
+  Acc_ReasonForWithdrawal__c: AggregateOrderByStringClause
+  Acc_ParticipantSize__c: AggregateOrderByStringClause
+  Acc_ProjectSummarySnapshot__c: AggregateOrderByStringClause
+  Acc_CompetitionType__c: AggregateOrderByStringClause
+  Acc_TotalOtherFunding__c: AggregateOrderByNumberClause
+  Override_Grant_Control__c: NoFunctionAggregateOrderByClause
+  Acc_AdditionalNumberofPeriods__c: AggregateOrderByNumberClause
+  Id: AggregateOrderByStringClause
+  Loan_Duration__c: AggregateOrderByStringClause
+  Acc_SuspensionStarts__c: AggregateOrderByStringClause
+  Acc_Nickname__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  Acc_TurnoverYearEnd__c: AggregateOrderByStringClause
+  RecordTypeId: NoFunctionAggregateOrderByClause
   RecordType: RecordType_OrderBy
-  Acc_ApprovalStatus__c: OrderByClause
-  Acc_ProjectTitle__c: OrderByClause
-  Acc_Profile__c: OrderByClause
+  Acc_ApprovalStatus__c: AggregateOrderByStringClause
+  Acc_ProjectTitle__c: AggregateOrderByStringClause
+  Acc_Profile__c: NoFunctionAggregateOrderByClause
   Acc_Profile__r: Acc_Profile__c_OrderBy
-  Acc_Project_Participant__c: OrderByClause
+  Acc_Project_Participant__c: NoFunctionAggregateOrderByClause
   Acc_Project_Participant__r: Acc_ProjectParticipant__c_OrderBy
-  Acc_PriorStatusValue__c: OrderByClause
-  Acc_TypesofPCRRequests__c: OrderByClause
-  Acc_RemovalPeriod__c: OrderByClause
-  Acc_Status__c: OrderByClause
-  Acc_ParticipantType__c: OrderByClause
-  Acc_RemovalDate__c: OrderByClause
-  Loan_RepaymentPeriodChange__c: OrderByClause
-  Acc_Contact1EmailAddress__c: OrderByClause
-  Acc_LastUpdated__c: OrderByClause
-  Acc_RequestNumber__c: OrderByClause
-  Acc_GrantMovingOverFinancialYear__c: OrderByClause
-  SystemModstamp: OrderByClause
-  Acc_Rejected__c: OrderByClause
-  LastActivityDate: OrderByClause
-  Acc_Project__c: OrderByClause
+  Acc_PriorStatusValue__c: AggregateOrderByStringClause
+  Acc_TypesofPCRRequests__c: AggregateOrderByStringClause
+  Acc_RemovalPeriod__c: AggregateOrderByNumberClause
+  Acc_Status__c: AggregateOrderByStringClause
+  Acc_ParticipantType__c: AggregateOrderByStringClause
+  Acc_RemovalDate__c: AggregateOrderByStringClause
+  Loan_RepaymentPeriodChange__c: AggregateOrderByNumberClause
+  Acc_Contact1EmailAddress__c: AggregateOrderByStringClause
+  Acc_LastUpdated__c: AggregateOrderByStringClause
+  Acc_RequestNumber__c: AggregateOrderByNumberClause
+  Acc_GrantMovingOverFinancialYear__c: AggregateOrderByNumberClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_Rejected__c: NoFunctionAggregateOrderByClause
+  LastActivityDate: AggregateOrderByStringClause
+  Acc_Project__c: NoFunctionAggregateOrderByClause
   Acc_Project__r: Acc_Project__c_OrderBy
-  Acc_RequestedEndDate__c: OrderByClause
-  Acc_ExternalReviewRequestedDate__c: OrderByClause
-  Acc_Contact2Surname__c: OrderByClause
-  Acc_Guidance__c: OrderByClause
-  Acc_AuthorisationHardStopDate__c: OrderByClause
-  Acc_Account__c: OrderByClause
+  Acc_RequestedEndDate__c: AggregateOrderByStringClause
+  Acc_ExternalReviewRequestedDate__c: AggregateOrderByStringClause
+  Acc_Contact2Surname__c: AggregateOrderByStringClause
+  Acc_Guidance__c: AggregateOrderByStringClause
+  Acc_AuthorisationHardStopDate__c: AggregateOrderByStringClause
+  Acc_Account__c: NoFunctionAggregateOrderByClause
   Acc_Account__r: Account_OrderBy
-  Acc_ProjectID__c: OrderByClause
-  Acc_RequestedEndPeriod__c: OrderByClause
-  Name: OrderByClause
-  Acc_ProjectContactLink__c: OrderByClause
+  Acc_ProjectID__c: AggregateOrderByStringClause
+  Acc_RequestedEndPeriod__c: AggregateOrderByNumberClause
+  Name: AggregateOrderByStringClause
+  Acc_ProjectContactLink__c: NoFunctionAggregateOrderByClause
   Acc_ProjectContactLink__r: Acc_ProjectContactLink__c_OrderBy
-  CreatedById: OrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_ExternalReviewStatus__c: OrderByClause
-  Acc_ReasonforTermination__c: OrderByClause
-  Acc_Contact2Phone__c: OrderByClause
-  Acc_Contact2ProjectRole__c: OrderByClause
-  Acc_Subsidiary__c: OrderByClause
-  Acc_ProjectPostcode__c: OrderByClause
-  Acc_Contact1Surname__c: OrderByClause
-  Acc_EligibleForStateAid__c: OrderByClause
-  Acc_NewPeriodLength__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Acc_RegistrationNumber__c: OrderByClause
-  Acc_Contact2Forename__c: OrderByClause
-  Acc_AccountName__c: OrderByClause
-  Loan_ExtensionPeriod__c: OrderByClause
-  CreatedDate: OrderByClause
-  Acc_TSBReference__c: OrderByClause
-  Acc_OrganisationName__c: OrderByClause
-  Acc_CommercialWork__c: OrderByClause
-  Loan_AvailabilityEndDate__c: OrderByClause
-  Acc_Turnover__c: OrderByClause
-  Loan_ExtensionPeriodChange__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_OtherFunding__c: OrderByClause
-  Acc_AdditionalNumberofMonths__c: OrderByClause
-  Acc_Location__c: OrderByClause
-  Acc_MarkedasComplete__c: OrderByClause
-  Acc_Contact1Phone__c: OrderByClause
-  Acc_AuthorisationExpectedEndDate__c: OrderByClause
-  Acc_NewPublicDescription__c: OrderByClause
-  Acc_SuspensionEnds__c: OrderByClause
-  Acc_NewProjectSummary__c: OrderByClause
-  Acc_NewProjectDuration__c: OrderByClause
-  Acc_NewProjectEndDate__c: OrderByClause
-  Loan_RepaymentEndDate__c: OrderByClause
-  Acc_EmailSentDate__c: OrderByClause
-  Override_Justification__c: OrderByClause
-  Acc_TypeofWithdrawal__c: OrderByClause
-  Acc_PublicDescriptionSnapshot__c: OrderByClause
-  Acc_ProjectCity__c: OrderByClause
-  Acc_Contact2__c: OrderByClause
+  Acc_ExternalReviewStatus__c: AggregateOrderByStringClause
+  Acc_ReasonforTermination__c: AggregateOrderByStringClause
+  Acc_Contact2Phone__c: AggregateOrderByStringClause
+  Acc_Contact2ProjectRole__c: AggregateOrderByStringClause
+  Acc_Subsidiary__c: NoFunctionAggregateOrderByClause
+  Acc_ProjectPostcode__c: AggregateOrderByStringClause
+  Acc_Contact1Surname__c: AggregateOrderByStringClause
+  Acc_EligibleForStateAid__c: NoFunctionAggregateOrderByClause
+  Acc_NewPeriodLength__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_RegistrationNumber__c: AggregateOrderByStringClause
+  Acc_Contact2Forename__c: AggregateOrderByStringClause
+  Acc_AccountName__c: AggregateOrderByStringClause
+  Loan_ExtensionPeriod__c: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  Acc_TSBReference__c: AggregateOrderByStringClause
+  Acc_OrganisationName__c: AggregateOrderByStringClause
+  Acc_CommercialWork__c: NoFunctionAggregateOrderByClause
+  Loan_AvailabilityEndDate__c: AggregateOrderByStringClause
+  Acc_Turnover__c: AggregateOrderByNumberClause
+  Loan_ExtensionPeriodChange__c: AggregateOrderByNumberClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_OtherFunding__c: NoFunctionAggregateOrderByClause
+  Acc_AdditionalNumberofMonths__c: AggregateOrderByNumberClause
+  Acc_Location__c: AggregateOrderByStringClause
+  Acc_MarkedasComplete__c: AggregateOrderByStringClause
+  Acc_Contact1Phone__c: AggregateOrderByStringClause
+  Acc_AuthorisationExpectedEndDate__c: AggregateOrderByStringClause
+  Acc_NewPublicDescription__c: AggregateOrderByStringClause
+  Acc_SuspensionEnds__c: AggregateOrderByStringClause
+  Acc_NewProjectSummary__c: AggregateOrderByStringClause
+  Acc_NewProjectDuration__c: AggregateOrderByNumberClause
+  Acc_NewProjectEndDate__c: AggregateOrderByStringClause
+  Loan_RepaymentEndDate__c: AggregateOrderByStringClause
+  Acc_EmailSentDate__c: AggregateOrderByStringClause
+  Override_Justification__c: AggregateOrderByStringClause
+  Acc_TypeofWithdrawal__c: AggregateOrderByStringClause
+  Acc_PublicDescriptionSnapshot__c: AggregateOrderByStringClause
+  Acc_ProjectCity__c: AggregateOrderByStringClause
+  Acc_Contact2__c: NoFunctionAggregateOrderByClause
   Acc_Contact2__r: Contact_OrderBy
-  Acc_Contact2EmailAddress__c: OrderByClause
-  Acc_Comments__c: OrderByClause
-  Acc_ExistingPartnerName__c: OrderByClause
-  LastModifiedById: OrderByClause
+  Acc_Contact2EmailAddress__c: AggregateOrderByStringClause
+  Acc_Comments__c: AggregateOrderByStringClause
+  Acc_ExistingPartnerName__c: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
 }
 
@@ -2259,13 +2258,13 @@ type Acc_ProjectContactLink__c {
   LastModifiedBy: User
 
   """childRelationship"""
-  Project_Change_Requests__r(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Project_Participants__r(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Project_Participants__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -2354,33 +2353,33 @@ input Acc_ProjectContactLink__c_GroupBy {
 }
 
 input Acc_ProjectContactLink__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_Internal_User__c: OrderByClause
-  Acc_UserId__c: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_Internal_User__c: NoFunctionAggregateOrderByClause
+  Acc_UserId__c: NoFunctionAggregateOrderByClause
   Acc_UserId__r: User_OrderBy
-  Acc_ContactId__c: OrderByClause
+  Acc_ContactId__c: NoFunctionAggregateOrderByClause
   Acc_ContactId__r: Contact_OrderBy
-  Acc_Role__c: OrderByClause
-  Acc_StartDate__c: OrderByClause
-  LastViewedDate: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_EndDate__c: OrderByClause
-  Name: OrderByClause
-  SystemModstamp: OrderByClause
-  Acc_Project_Number__c: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  Acc_Role__c: AggregateOrderByStringClause
+  Acc_StartDate__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_EndDate__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_Project_Number__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_EmailOfSFContact__c: OrderByClause
-  CreatedDate: OrderByClause
-  LastActivityDate: OrderByClause
-  Acc_AccountId__c: OrderByClause
+  Acc_EmailOfSFContact__c: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  Acc_AccountId__c: NoFunctionAggregateOrderByClause
   Acc_AccountId__r: Account_OrderBy
-  Id: OrderByClause
-  Acc_ProjectId__c: OrderByClause
+  Id: AggregateOrderByStringClause
+  Acc_ProjectId__c: NoFunctionAggregateOrderByClause
   Acc_ProjectId__r: Acc_Project__c_OrderBy
-  LastModifiedById: OrderByClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
 }
 
@@ -2542,22 +2541,22 @@ type Acc_ProjectParticipant__c {
   IM_Survey_Last_Updated__c: DateValue
 
   """childRelationship"""
-  Claims__r(orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
   """childRelationship"""
-  Pre_Payments__r(orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
+  Pre_Payments__r(upperBound: Int, orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
 
   """childRelationship"""
-  Costs__r(orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  Costs__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
   """childRelationship"""
-  Project_Change_Requests__r(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Virements__r(orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -2811,137 +2810,137 @@ input Acc_ProjectParticipant__c_GroupBy {
 }
 
 input Acc_ProjectParticipant__c_OrderBy {
-  Acc_CreateClaims__c: OrderByClause
-  LastModifiedDate: OrderByClause
-  Acc_ProjectNumber__c: OrderByClause
-  Acc_VerificationConditionsDesc__c: OrderByClause
-  Acc_AddressTown__c: OrderByClause
-  Acc_CompanysHouseNumber__c: OrderByClause
-  Acc_ProjectRole__c: OrderByClause
-  Acc_ManuallyVerified__c: OrderByClause
-  Acc_ClaimsOverdue__c: OrderByClause
-  Acc_TotalFutureForecastsForParticipant__c: OrderByClause
-  Acc_AddressBuildingName__c: OrderByClause
-  IM_Survey_Form__c: OrderByClause
-  Acc_Subsidy_Control_Scheme__c: OrderByClause
-  Acc_TotalGrantApproved__c: OrderByClause
-  IM_Survey__c: OrderByClause
-  Acc_VerificationConditionsSeverity__c: OrderByClause
-  Acc_DeferredGrant__c: OrderByClause
-  Acc_PostcodeStatus__c: OrderByClause
-  Acc_TotalParticipantGrant__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_FlaggedParticipant__c: OrderByClause
-  Acc_ReasonForWithdrawal__c: OrderByClause
-  Acc_ParticipantSize__c: OrderByClause
-  Acc_Cap_Limit__c: OrderByClause
-  Acc_Award_Rate__c: OrderByClause
-  Acc_AccountValidation__c: OrderByClause
-  Acc_AccountVerification__c: OrderByClause
-  Acc_Overdue_Claim_Helper__c: OrderByClause
-  Acc_FinanceContact__c: OrderByClause
+  Acc_CreateClaims__c: NoFunctionAggregateOrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_ProjectNumber__c: AggregateOrderByStringClause
+  Acc_VerificationConditionsDesc__c: AggregateOrderByStringClause
+  Acc_AddressTown__c: AggregateOrderByStringClause
+  Acc_CompanysHouseNumber__c: AggregateOrderByStringClause
+  Acc_ProjectRole__c: AggregateOrderByStringClause
+  Acc_ManuallyVerified__c: NoFunctionAggregateOrderByClause
+  Acc_ClaimsOverdue__c: AggregateOrderByNumberClause
+  Acc_TotalFutureForecastsForParticipant__c: AggregateOrderByNumberClause
+  Acc_AddressBuildingName__c: AggregateOrderByStringClause
+  IM_Survey_Form__c: NoFunctionAggregateOrderByClause
+  Acc_Subsidy_Control_Scheme__c: AggregateOrderByStringClause
+  Acc_TotalGrantApproved__c: AggregateOrderByNumberClause
+  IM_Survey__c: AggregateOrderByStringClause
+  Acc_VerificationConditionsSeverity__c: AggregateOrderByStringClause
+  Acc_DeferredGrant__c: AggregateOrderByNumberClause
+  Acc_PostcodeStatus__c: AggregateOrderByStringClause
+  Acc_TotalParticipantGrant__c: AggregateOrderByNumberClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_FlaggedParticipant__c: NoFunctionAggregateOrderByClause
+  Acc_ReasonForWithdrawal__c: AggregateOrderByStringClause
+  Acc_ParticipantSize__c: AggregateOrderByStringClause
+  Acc_Cap_Limit__c: AggregateOrderByNumberClause
+  Acc_Award_Rate__c: AggregateOrderByNumberClause
+  Acc_AccountValidation__c: AggregateOrderByStringClause
+  Acc_AccountVerification__c: AggregateOrderByStringClause
+  Acc_Overdue_Claim_Helper__c: NoFunctionAggregateOrderByClause
+  Acc_FinanceContact__c: NoFunctionAggregateOrderByClause
   Acc_FinanceContact__r: Contact_OrderBy
-  Acc_ForecastLastModifiedDate__c: OrderByClause
-  Acc_ProjectManager__c: OrderByClause
+  Acc_ForecastLastModifiedDate__c: AggregateOrderByStringClause
+  Acc_ProjectManager__c: NoFunctionAggregateOrderByClause
   Acc_ProjectManager__r: Contact_OrderBy
-  Acc_FinalClaim__c: OrderByClause
-  Acc_RemainingParticipantGrant__c: OrderByClause
-  Acc_TotalCostsSubmitted__c: OrderByClause
-  Id: OrderByClause
-  Acc_CompanyName__c: OrderByClause
-  Acc_VerificationConditionsCode__c: OrderByClause
-  Acc_Prepayment__c: OrderByClause
-  Acc_AddressOrganisation__c: OrderByClause
-  Acc_AuditReportFrequency__c: OrderByClause
-  Acc_CapLimitDeferredGrant__c: OrderByClause
-  Acc_NewForecastNeeded__c: OrderByClause
-  No_Of_Periods__c: OrderByClause
-  Acc_ParticipantProjectReportingType__c: OrderByClause
-  Acc_CompanyNameAndAddressScore__c: OrderByClause
-  Acc_WatchFlag__c: OrderByClause
-  Acc_SpendProfileCompleted__c: OrderByClause
-  Acc_ValidationConditionsDesc__c: OrderByClause
-  OwnerId: OrderByClause
-  Acc_WorkdaySupplierSetupComplete__c: OrderByClause
-  Acc_AddressPostcode__c: OrderByClause
-  Acc_ParticipantType__c: OrderByClause
-  Acc_Open_Claim_Period__c: OrderByClause
-  Acc_FlaggedParticipantComments__c: OrderByClause
-  IM_Survey_Link__c: OrderByClause
-  Acc_TotalApprovedCosts__c: OrderByClause
-  Acc_FinanceContactPcl__c: OrderByClause
+  Acc_FinalClaim__c: NoFunctionAggregateOrderByClause
+  Acc_RemainingParticipantGrant__c: AggregateOrderByNumberClause
+  Acc_TotalCostsSubmitted__c: AggregateOrderByNumberClause
+  Id: AggregateOrderByStringClause
+  Acc_CompanyName__c: AggregateOrderByStringClause
+  Acc_VerificationConditionsCode__c: AggregateOrderByStringClause
+  Acc_Prepayment__c: NoFunctionAggregateOrderByClause
+  Acc_AddressOrganisation__c: AggregateOrderByStringClause
+  Acc_AuditReportFrequency__c: AggregateOrderByStringClause
+  Acc_CapLimitDeferredGrant__c: AggregateOrderByNumberClause
+  Acc_NewForecastNeeded__c: NoFunctionAggregateOrderByClause
+  No_Of_Periods__c: AggregateOrderByNumberClause
+  Acc_ParticipantProjectReportingType__c: AggregateOrderByStringClause
+  Acc_CompanyNameAndAddressScore__c: AggregateOrderByNumberClause
+  Acc_WatchFlag__c: AggregateOrderByStringClause
+  Acc_SpendProfileCompleted__c: AggregateOrderByStringClause
+  Acc_ValidationConditionsDesc__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  Acc_WorkdaySupplierSetupComplete__c: NoFunctionAggregateOrderByClause
+  Acc_AddressPostcode__c: AggregateOrderByStringClause
+  Acc_ParticipantType__c: AggregateOrderByStringClause
+  Acc_Open_Claim_Period__c: AggregateOrderByNumberClause
+  Acc_FlaggedParticipantComments__c: AggregateOrderByStringClause
+  IM_Survey_Link__c: AggregateOrderByStringClause
+  Acc_TotalApprovedCosts__c: AggregateOrderByNumberClause
+  Acc_FinanceContactPcl__c: NoFunctionAggregateOrderByClause
   Acc_FinanceContactPcl__r: Acc_ProjectContactLink__c_OrderBy
-  SystemModstamp: OrderByClause
-  Acc_OrganisationType__c: OrderByClause
-  Acc_Total_Prepayment_Approved__c: OrderByClause
-  IM_Survey_Stage__c: OrderByClause
-  LastActivityDate: OrderByClause
-  Acc_FirstName__c: OrderByClause
-  Acc_AccountId__c: OrderByClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_OrganisationType__c: AggregateOrderByStringClause
+  Acc_Total_Prepayment_Approved__c: AggregateOrderByNumberClause
+  IM_Survey_Stage__c: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  Acc_FirstName__c: AggregateOrderByStringClause
+  Acc_AccountId__c: NoFunctionAggregateOrderByClause
   Acc_AccountId__r: Account_OrderBy
-  Acc_ValidationConditionsCode__c: OrderByClause
-  Acc_NonfundedParticipant__c: OrderByClause
-  Acc_Current_Period_Number__c: OrderByClause
-  Acc_TotalPaidCosts__c: OrderByClause
-  Acc_OverheadRate__c: OrderByClause
-  Acc_TotalParticipationGrantHelper__c: OrderByClause
-  Acc_Recovery__c: OrderByClause
-  Name: OrderByClause
-  Acc_ValidationCheckPassed__c: OrderByClause
-  CreatedById: OrderByClause
+  Acc_ValidationConditionsCode__c: AggregateOrderByStringClause
+  Acc_NonfundedParticipant__c: NoFunctionAggregateOrderByClause
+  Acc_Current_Period_Number__c: AggregateOrderByNumberClause
+  Acc_TotalPaidCosts__c: AggregateOrderByNumberClause
+  Acc_OverheadRate__c: AggregateOrderByNumberClause
+  Acc_TotalParticipationGrantHelper__c: AggregateOrderByNumberClause
+  Acc_Recovery__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  Acc_ValidationCheckPassed__c: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_Postcode__c: OrderByClause
-  Acc_CurrentPeriodNumber__c: OrderByClause
-  Acc_ParticipantStatus__c: OrderByClause
-  Acc_AddressStreet__c: OrderByClause
-  Acc_BacsCheck__c: OrderByClause
-  Acc_RegistrationNumberMatch__c: OrderByClause
-  Acc_OrganisationLegalForm__c: OrderByClause
-  Acc_IsVariableGrant__c: OrderByClause
-  Acc_TotalParticipantCosts__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Acc_RegistrationNumber__c: OrderByClause
-  Acc_CapLimitDeferredGrantHelper__c: OrderByClause
-  Acc_StaticCapLimitGrant__c: OrderByClause
-  Acc_CompanyNameScore__c: OrderByClause
-  Acc_Total_Prepayment_Not_Approved__c: OrderByClause
-  CreatedDate: OrderByClause
-  Acc_BankAccountName__c: OrderByClause
-  Acc_BankCheckState__c: OrderByClause
-  Acc_CreateProfiles__c: OrderByClause
-  Acc_AddressScore__c: OrderByClause
-  Acc_LastName__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_TotalForecastsForParticipant__c: OrderByClause
-  Acc_OpenClaimStatus__c: OrderByClause
-  Acc_TotalPrepayment__c: OrderByClause
-  Acc_OverrideOverdueProject__c: OrderByClause
-  Acc_Total_Prepayment_created__c: OrderByClause
-  Acc_CapLimitDeferredAmount__c: OrderByClause
-  Acc_OutstandingDeferredCosts__c: OrderByClause
-  IM_Survey_Status__c: OrderByClause
-  Acc_PersonalDetailsScore__c: OrderByClause
-  Acc_ValidationConditionsSeverity__c: OrderByClause
-  Acc_RegNumberScore__c: OrderByClause
-  Acc_AccountValidationNotes__c: OrderByClause
-  Acc_MonitoringOfficer__c: OrderByClause
+  Acc_Postcode__c: AggregateOrderByStringClause
+  Acc_CurrentPeriodNumber__c: AggregateOrderByNumberClause
+  Acc_ParticipantStatus__c: AggregateOrderByStringClause
+  Acc_AddressStreet__c: AggregateOrderByStringClause
+  Acc_BacsCheck__c: AggregateOrderByStringClause
+  Acc_RegistrationNumberMatch__c: AggregateOrderByStringClause
+  Acc_OrganisationLegalForm__c: AggregateOrderByStringClause
+  Acc_IsVariableGrant__c: NoFunctionAggregateOrderByClause
+  Acc_TotalParticipantCosts__c: AggregateOrderByNumberClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_RegistrationNumber__c: AggregateOrderByStringClause
+  Acc_CapLimitDeferredGrantHelper__c: AggregateOrderByNumberClause
+  Acc_StaticCapLimitGrant__c: AggregateOrderByNumberClause
+  Acc_CompanyNameScore__c: AggregateOrderByNumberClause
+  Acc_Total_Prepayment_Not_Approved__c: AggregateOrderByNumberClause
+  CreatedDate: AggregateOrderByStringClause
+  Acc_BankAccountName__c: AggregateOrderByStringClause
+  Acc_BankCheckState__c: AggregateOrderByStringClause
+  Acc_CreateProfiles__c: NoFunctionAggregateOrderByClause
+  Acc_AddressScore__c: AggregateOrderByNumberClause
+  Acc_LastName__c: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_TotalForecastsForParticipant__c: AggregateOrderByNumberClause
+  Acc_OpenClaimStatus__c: AggregateOrderByStringClause
+  Acc_TotalPrepayment__c: AggregateOrderByNumberClause
+  Acc_OverrideOverdueProject__c: AggregateOrderByStringClause
+  Acc_Total_Prepayment_created__c: AggregateOrderByNumberClause
+  Acc_CapLimitDeferredAmount__c: AggregateOrderByNumberClause
+  Acc_OutstandingDeferredCosts__c: AggregateOrderByNumberClause
+  IM_Survey_Status__c: AggregateOrderByStringClause
+  Acc_PersonalDetailsScore__c: AggregateOrderByNumberClause
+  Acc_ValidationConditionsSeverity__c: AggregateOrderByStringClause
+  Acc_RegNumberScore__c: AggregateOrderByStringClause
+  Acc_AccountValidationNotes__c: AggregateOrderByStringClause
+  Acc_MonitoringOfficer__c: NoFunctionAggregateOrderByClause
   Acc_MonitoringOfficer__r: Contact_OrderBy
-  Acc_ClaimsUnderQuery__c: OrderByClause
-  ParticipantMigrationID__c: OrderByClause
-  Acc_TotalCostsAwarded__c: OrderByClause
-  Acc_ClaimsForReview__c: OrderByClause
-  Excess_Award_Rate__c: OrderByClause
-  IM_Survey_result_id__c: OrderByClause
-  Acc_TrackingClaims__c: OrderByClause
-  Acc_AddressLocality__c: OrderByClause
-  Acc_Non_FEC_project__c: OrderByClause
-  Acc_BankCheckCompleted__c: OrderByClause
-  Acc_Overdue_Project__c: OrderByClause
-  Acc_ProjectId__c: OrderByClause
+  Acc_ClaimsUnderQuery__c: AggregateOrderByNumberClause
+  ParticipantMigrationID__c: AggregateOrderByStringClause
+  Acc_TotalCostsAwarded__c: AggregateOrderByNumberClause
+  Acc_ClaimsForReview__c: AggregateOrderByNumberClause
+  Excess_Award_Rate__c: AggregateOrderByNumberClause
+  IM_Survey_result_id__c: AggregateOrderByStringClause
+  Acc_TrackingClaims__c: AggregateOrderByStringClause
+  Acc_AddressLocality__c: AggregateOrderByStringClause
+  Acc_Non_FEC_project__c: NoFunctionAggregateOrderByClause
+  Acc_BankCheckCompleted__c: AggregateOrderByStringClause
+  Acc_Overdue_Project__c: AggregateOrderByStringClause
+  Acc_ProjectId__c: NoFunctionAggregateOrderByClause
   Acc_ProjectId__r: Acc_Project__c_OrderBy
-  LastModifiedById: OrderByClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  IM_Survey_Last_Updated__c: OrderByClause
+  IM_Survey_Last_Updated__c: AggregateOrderByStringClause
 }
 
 union Acc_ProjectParticipant__c_Owner = Group | User
@@ -3068,22 +3067,22 @@ type Acc_Project__c {
   LastModifiedBy: User
 
   """childRelationship"""
-  Monitoring_Reports__r(orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+  Monitoring_Reports__r(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
 
   """childRelationship"""
-  Project_Change_Requests__r(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Project_Contact_Links__r(orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
   """childRelationship"""
-  Acc_ProjectParticipantsProject__r(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Acc_ProjectParticipantsProject__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  Projects__r(orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  Projects__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -3286,111 +3285,111 @@ input Acc_Project__c_GroupBy {
 }
 
 input Acc_Project__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_ProjectNumber__c: OrderByClause
-  Acc_NonStandardProjectInformation__c: OrderByClause
-  Acc_OverrideReviewTeamValue__c: OrderByClause
-  Acc_ProjectReportingType__c: OrderByClause
-  Acc_CurrentPeriodStartDateHelper__c: OrderByClause
-  Loan_LoanEndDate__c: OrderByClause
-  Acc_WorkdayParticipantCompleteHelper__c: OrderByClause
-  Acc_AwardRate__c: OrderByClause
-  Acc_EmailProjectEndDate__c: OrderByClause
-  Acc_WorkdaySetupComplete__c: OrderByClause
-  Acc_ClaimsOverdue__c: OrderByClause
-  Acc_Loan_Availability_End_Date__c: OrderByClause
-  Acc_LegacyID__c: OrderByClause
-  Acc_FlaggedProject__c: OrderByClause
-  IM_PhasedCompetition__c: OrderByClause
-  Acc_TotalFutureForecastsforProject__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_Loan_Extension_End_Date__c: OrderByClause
-  Acc_CompetitionType__c: OrderByClause
-  Acc_Overdue_Claim_Helper__c: OrderByClause
-  Acc_CompetitionId__c: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_ProjectNumber__c: AggregateOrderByStringClause
+  Acc_NonStandardProjectInformation__c: AggregateOrderByStringClause
+  Acc_OverrideReviewTeamValue__c: AggregateOrderByStringClause
+  Acc_ProjectReportingType__c: AggregateOrderByStringClause
+  Acc_CurrentPeriodStartDateHelper__c: AggregateOrderByStringClause
+  Loan_LoanEndDate__c: AggregateOrderByStringClause
+  Acc_WorkdayParticipantCompleteHelper__c: NoFunctionAggregateOrderByClause
+  Acc_AwardRate__c: AggregateOrderByNumberClause
+  Acc_EmailProjectEndDate__c: AggregateOrderByStringClause
+  Acc_WorkdaySetupComplete__c: NoFunctionAggregateOrderByClause
+  Acc_ClaimsOverdue__c: AggregateOrderByNumberClause
+  Acc_Loan_Availability_End_Date__c: AggregateOrderByStringClause
+  Acc_LegacyID__c: AggregateOrderByStringClause
+  Acc_FlaggedProject__c: NoFunctionAggregateOrderByClause
+  IM_PhasedCompetition__c: NoFunctionAggregateOrderByClause
+  Acc_TotalFutureForecastsforProject__c: AggregateOrderByNumberClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_Loan_Extension_End_Date__c: AggregateOrderByStringClause
+  Acc_CompetitionType__c: AggregateOrderByStringClause
+  Acc_Overdue_Claim_Helper__c: NoFunctionAggregateOrderByClause
+  Acc_CompetitionId__c: NoFunctionAggregateOrderByClause
   Acc_CompetitionId__r: Competition__c_OrderBy
-  Acc_HubAndSpokeProject__c: OrderByClause
-  Acc_SuspensionStartDate__c: OrderByClause
-  Id: OrderByClause
-  Loan_LoanRepaymentPeriodLength__c: OrderByClause
-  Loan_LoanAvailabilityPeriodLength__c: OrderByClause
-  Loan_LoanAvailabilityPeriodQuarter__c: OrderByClause
-  Acc_MonitoringReportSchedule__c: OrderByClause
-  Acc_NumberofPCRs__c: OrderByClause
-  Acc_WatchFlag__c: OrderByClause
-  Acc_ThirdPartyPayment__c: OrderByClause
-  Acc_LeadParticipantName__c: OrderByClause
-  OwnerId: OrderByClause
-  Acc_CompetitionCode__c: OrderByClause
-  Loans_RnDStatus__c: OrderByClause
-  Acc_CurrentPeriodNumberHelper__c: OrderByClause
-  Acc_ProjectTitle__c: OrderByClause
-  Acc_NonFEC__c: OrderByClause
-  Acc_TotalProjectGrant__c: OrderByClause
-  Acc_WorkdayProjectSetupComplete__c: OrderByClause
-  Loan_LoanExtensionPeriodLength__c: OrderByClause
-  Acc_CurrentPeriodStartDate__c: OrderByClause
-  Acc_TestProject__c: OrderByClause
-  Acc_NumberofPeriodsHelper__c: OrderByClause
-  Acc_EmailProjectStartDate__c: OrderByClause
-  Acc_LeadParticipantID__c: OrderByClause
-  SystemModstamp: OrderByClause
-  Acc_ProjectEmailDate__c: OrderByClause
-  Acc_ProjectStatus__c: OrderByClause
-  Acc_Can_Suspend__c: OrderByClause
-  LastActivityDate: OrderByClause
-  Acc_Review_Team__c: OrderByClause
-  Acc_CurrentPeriodEndDate__c: OrderByClause
-  Acc_NumberOfOpenClaims__c: OrderByClause
-  Acc_ProjectSource__c: OrderByClause
-  Acc_ReasonForTermination__c: OrderByClause
-  Loan_AvailabilityEndDateFormat__c: OrderByClause
-  Acc_StartDate__c: OrderByClause
-  Acc_ClaimFrequency__c: OrderByClause
-  Loan_LoanApplicationID__c: OrderByClause
-  Acc_Duration__c: OrderByClause
-  Acc_EndDate__c: OrderByClause
-  Name: OrderByClause
-  Acc_IsVariableGrantCalculation__c: OrderByClause
-  Acc_IFSApplicationId__c: OrderByClause
-  Acc_SuspensionEndDate__c: OrderByClause
-  CreatedById: OrderByClause
+  Acc_HubAndSpokeProject__c: NoFunctionAggregateOrderByClause
+  Acc_SuspensionStartDate__c: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  Loan_LoanRepaymentPeriodLength__c: AggregateOrderByNumberClause
+  Loan_LoanAvailabilityPeriodLength__c: AggregateOrderByNumberClause
+  Loan_LoanAvailabilityPeriodQuarter__c: AggregateOrderByNumberClause
+  Acc_MonitoringReportSchedule__c: AggregateOrderByStringClause
+  Acc_NumberofPCRs__c: AggregateOrderByNumberClause
+  Acc_WatchFlag__c: AggregateOrderByStringClause
+  Acc_ThirdPartyPayment__c: NoFunctionAggregateOrderByClause
+  Acc_LeadParticipantName__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  Acc_CompetitionCode__c: AggregateOrderByStringClause
+  Loans_RnDStatus__c: AggregateOrderByStringClause
+  Acc_CurrentPeriodNumberHelper__c: AggregateOrderByNumberClause
+  Acc_ProjectTitle__c: AggregateOrderByStringClause
+  Acc_NonFEC__c: NoFunctionAggregateOrderByClause
+  Acc_TotalProjectGrant__c: AggregateOrderByNumberClause
+  Acc_WorkdayProjectSetupComplete__c: NoFunctionAggregateOrderByClause
+  Loan_LoanExtensionPeriodLength__c: AggregateOrderByNumberClause
+  Acc_CurrentPeriodStartDate__c: AggregateOrderByStringClause
+  Acc_TestProject__c: NoFunctionAggregateOrderByClause
+  Acc_NumberofPeriodsHelper__c: AggregateOrderByNumberClause
+  Acc_EmailProjectStartDate__c: AggregateOrderByStringClause
+  Acc_LeadParticipantID__c: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_ProjectEmailDate__c: AggregateOrderByStringClause
+  Acc_ProjectStatus__c: AggregateOrderByStringClause
+  Acc_Can_Suspend__c: NoFunctionAggregateOrderByClause
+  LastActivityDate: AggregateOrderByStringClause
+  Acc_Review_Team__c: AggregateOrderByStringClause
+  Acc_CurrentPeriodEndDate__c: AggregateOrderByStringClause
+  Acc_NumberOfOpenClaims__c: AggregateOrderByNumberClause
+  Acc_ProjectSource__c: AggregateOrderByStringClause
+  Acc_ReasonForTermination__c: AggregateOrderByStringClause
+  Loan_AvailabilityEndDateFormat__c: AggregateOrderByStringClause
+  Acc_StartDate__c: AggregateOrderByStringClause
+  Acc_ClaimFrequency__c: AggregateOrderByStringClause
+  Loan_LoanApplicationID__c: AggregateOrderByStringClause
+  Acc_Duration__c: AggregateOrderByNumberClause
+  Acc_EndDate__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  Acc_IsVariableGrantCalculation__c: NoFunctionAggregateOrderByClause
+  Acc_IFSApplicationId__c: AggregateOrderByNumberClause
+  Acc_SuspensionEndDate__c: AggregateOrderByStringClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_CurrentPeriodNumber__c: OrderByClause
-  Acc_IFSApplicationIdNumber__c: OrderByClause
-  Acc_MonitoringLevel__c: OrderByClause
-  Acc_LinkedProject__c: OrderByClause
+  Acc_CurrentPeriodNumber__c: AggregateOrderByNumberClause
+  Acc_IFSApplicationIdNumber__c: AggregateOrderByStringClause
+  Acc_MonitoringLevel__c: AggregateOrderByStringClause
+  Acc_LinkedProject__c: NoFunctionAggregateOrderByClause
   Acc_LinkedProject__r: Acc_Project__c_OrderBy
-  Acc_TrackingClaimStatus__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Acc_OfferLetterDate__c: OrderByClause
-  Acc_PCRsForReview__c: OrderByClause
-  Acc_PublicDescription__c: OrderByClause
-  Acc_PCRsUnderQuery__c: OrderByClause
-  Acc_TSBProjectNumber__c: OrderByClause
-  CreatedDate: OrderByClause
-  Loans_DocusignRDConfirmation__c: OrderByClause
-  Acc_SubsidyControlScheme__c: OrderByClause
-  SBRI_Contracting_Authority__c: OrderByClause
-  IM_PreCursorCompetition__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_NumberofPeriods__c: OrderByClause
-  Acc_GOLTotalCostAwarded__c: OrderByClause
-  Acc_PeriodLengthChanged__c: OrderByClause
-  Acc_UpdatingDuration__c: OrderByClause
-  Acc_EmailClaimFrequency__c: OrderByClause
-  Acc_ProjectSummary__c: OrderByClause
-  Acc_CurrentPeriodEndDateHelper__c: OrderByClause
-  Loan_FinanceContact__c: OrderByClause
+  Acc_TrackingClaimStatus__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_OfferLetterDate__c: AggregateOrderByStringClause
+  Acc_PCRsForReview__c: AggregateOrderByNumberClause
+  Acc_PublicDescription__c: AggregateOrderByStringClause
+  Acc_PCRsUnderQuery__c: AggregateOrderByNumberClause
+  Acc_TSBProjectNumber__c: AggregateOrderByNumberClause
+  CreatedDate: AggregateOrderByStringClause
+  Loans_DocusignRDConfirmation__c: AggregateOrderByStringClause
+  Acc_SubsidyControlScheme__c: AggregateOrderByStringClause
+  SBRI_Contracting_Authority__c: AggregateOrderByStringClause
+  IM_PreCursorCompetition__c: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_NumberofPeriods__c: AggregateOrderByNumberClause
+  Acc_GOLTotalCostAwarded__c: AggregateOrderByNumberClause
+  Acc_PeriodLengthChanged__c: NoFunctionAggregateOrderByClause
+  Acc_UpdatingDuration__c: NoFunctionAggregateOrderByClause
+  Acc_EmailClaimFrequency__c: AggregateOrderByStringClause
+  Acc_ProjectSummary__c: AggregateOrderByStringClause
+  Acc_CurrentPeriodEndDateHelper__c: AggregateOrderByStringClause
+  Loan_FinanceContact__c: NoFunctionAggregateOrderByClause
   Loan_FinanceContact__r: Contact_OrderBy
-  Acc_ClaimsUnderQuery__c: OrderByClause
-  Acc_TotalProjectCosts__c: OrderByClause
-  Acc_FlaggedProjectComments__c: OrderByClause
-  Acc_ClaimsForReview__c: OrderByClause
-  IM_PhasedCompetitionStage__c: OrderByClause
-  Acc_Overdue_Project__c: OrderByClause
-  Impact_Management_Participation__c: OrderByClause
-  LastModifiedById: OrderByClause
+  Acc_ClaimsUnderQuery__c: AggregateOrderByNumberClause
+  Acc_TotalProjectCosts__c: AggregateOrderByNumberClause
+  Acc_FlaggedProjectComments__c: AggregateOrderByStringClause
+  Acc_ClaimsForReview__c: AggregateOrderByNumberClause
+  IM_PhasedCompetitionStage__c: AggregateOrderByStringClause
+  Acc_Overdue_Project__c: AggregateOrderByStringClause
+  Impact_Management_Participation__c: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
 }
 
@@ -3442,7 +3441,7 @@ type Acc_StatusChange__c {
   Acc_MonitoringReport__r: Acc_MonitoringAnswer__c
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -3534,36 +3533,36 @@ input Acc_StatusChange__c_GroupBy {
 }
 
 input Acc_StatusChange__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_Reason_for_Querying__c: OrderByClause
-  Acc_PreviousProjectChangeRequestStatus__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_ProjectID__c: OrderByClause
-  Name: OrderByClause
-  Acc_ParticipantVisibility__c: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_Reason_for_Querying__c: AggregateOrderByStringClause
+  Acc_PreviousProjectChangeRequestStatus__c: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_ProjectID__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  Acc_ParticipantVisibility__c: NoFunctionAggregateOrderByClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Acc_ProjectChangeRequest__c: OrderByClause
+  Acc_ProjectChangeRequest__c: NoFunctionAggregateOrderByClause
   Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c_OrderBy
-  Acc_ExternalComment__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_CreatedByAlias__c: OrderByClause
-  LastViewedDate: OrderByClause
-  Acc_PreviousClaimStatus__c: OrderByClause
-  Acc_Claim__c: OrderByClause
+  Acc_ExternalComment__c: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_CreatedByAlias__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_PreviousClaimStatus__c: AggregateOrderByStringClause
+  Acc_Claim__c: NoFunctionAggregateOrderByClause
   Acc_Claim__r: Acc_Claims__c_OrderBy
-  SystemModstamp: OrderByClause
-  Acc_NewClaimStatus__c: OrderByClause
-  CreatedDate: OrderByClause
-  Acc_AccountId__c: OrderByClause
-  Id: OrderByClause
-  Acc_NewProjectChangeRequestStatus__c: OrderByClause
-  LastModifiedById: OrderByClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_NewClaimStatus__c: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  Acc_AccountId__c: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  Acc_NewProjectChangeRequestStatus__c: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Acc_NewMonitoringReportStatus__c: OrderByClause
-  Acc_PreviousMonitoringReportStatus__c: OrderByClause
-  Acc_MonitoringReport__c: OrderByClause
+  Acc_NewMonitoringReportStatus__c: AggregateOrderByStringClause
+  Acc_PreviousMonitoringReportStatus__c: AggregateOrderByStringClause
+  Acc_MonitoringReport__c: NoFunctionAggregateOrderByClause
   Acc_MonitoringReport__r: Acc_MonitoringAnswer__c_OrderBy
 }
 
@@ -3643,10 +3642,10 @@ type Acc_Virements__c {
   LastModifiedBy: User
 
   """childRelationship"""
-  Virements__r(orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  Virements__r(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -3749,53 +3748,53 @@ input Acc_Virements__c_GroupBy {
 }
 
 input Acc_Virements__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_CurrentAwardRate__c: OrderByClause
-  Acc_TotalGrant__c: OrderByClause
-  Loan_NewDrawdownDate__c: OrderByClause
-  Acc_Approved__c: OrderByClause
-  Acc_ProjectID__c: OrderByClause
-  Acc_CurrentTotalEligibleCosts__c: OrderByClause
-  Loan_NewDrawdownValue__c: OrderByClause
-  Acc_NewAwardRate__c: OrderByClause
-  Acc_ParticipantName__c: OrderByClause
-  Name: OrderByClause
-  Acc_PcrRecordId__c: OrderByClause
-  Acc_CostCategoryDescription__c: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_CurrentAwardRate__c: AggregateOrderByNumberClause
+  Acc_TotalGrant__c: AggregateOrderByNumberClause
+  Loan_NewDrawdownDate__c: AggregateOrderByStringClause
+  Acc_Approved__c: NoFunctionAggregateOrderByClause
+  Acc_ProjectID__c: AggregateOrderByStringClause
+  Acc_CurrentTotalEligibleCosts__c: AggregateOrderByNumberClause
+  Loan_NewDrawdownValue__c: AggregateOrderByNumberClause
+  Acc_NewAwardRate__c: AggregateOrderByNumberClause
+  Acc_ParticipantName__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  Acc_PcrRecordId__c: AggregateOrderByStringClause
+  Acc_CostCategoryDescription__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Loan_CurrentDrawdownValue__c: OrderByClause
-  RecordTypeId: OrderByClause
+  Loan_CurrentDrawdownValue__c: AggregateOrderByNumberClause
+  RecordTypeId: NoFunctionAggregateOrderByClause
   RecordType: RecordType_OrderBy
-  Acc_NewCosts__c: OrderByClause
-  Acc_Profile__c: OrderByClause
+  Acc_NewCosts__c: AggregateOrderByNumberClause
+  Acc_Profile__c: NoFunctionAggregateOrderByClause
   Acc_Profile__r: Acc_Profile__c_OrderBy
-  Acc_ProjectChangeRequest__c: OrderByClause
+  Acc_ProjectChangeRequest__c: NoFunctionAggregateOrderByClause
   Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c_OrderBy
-  Loan_DrawdownStatus__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_ClaimedCostsToDate__c: OrderByClause
-  Acc_RemainingGrant__c: OrderByClause
-  Loan_CurrentDrawdownDate__c: OrderByClause
-  Acc_NewTotalGrant__c: OrderByClause
-  SystemModstamp: OrderByClause
-  Loan_LoanDrawdownRequest__c: OrderByClause
+  Loan_DrawdownStatus__c: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_ClaimedCostsToDate__c: AggregateOrderByNumberClause
+  Acc_RemainingGrant__c: AggregateOrderByNumberClause
+  Loan_CurrentDrawdownDate__c: AggregateOrderByStringClause
+  Acc_NewTotalGrant__c: AggregateOrderByNumberClause
+  SystemModstamp: AggregateOrderByStringClause
+  Loan_LoanDrawdownRequest__c: NoFunctionAggregateOrderByClause
   Loan_LoanDrawdownRequest__r: Acc_Prepayment__c_OrderBy
-  Acc_NewTotalEligibleCosts__c: OrderByClause
-  Acc_ParticipantVirement__c: OrderByClause
+  Acc_NewTotalEligibleCosts__c: AggregateOrderByNumberClause
+  Acc_ParticipantVirement__c: NoFunctionAggregateOrderByClause
   Acc_ParticipantVirement__r: Acc_Virements__c_OrderBy
-  Loan_PeriodNumber__c: OrderByClause
-  Acc_NewRemainingGrant__c: OrderByClause
-  CreatedDate: OrderByClause
-  LastActivityDate: OrderByClause
-  Acc_ProjectParticipant__c: OrderByClause
+  Loan_PeriodNumber__c: AggregateOrderByNumberClause
+  Acc_NewRemainingGrant__c: AggregateOrderByNumberClause
+  CreatedDate: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  Acc_ProjectParticipant__c: NoFunctionAggregateOrderByClause
   Acc_ProjectParticipant__r: Acc_ProjectParticipant__c_OrderBy
-  Acc_ParticipantVirementRecordId__c: OrderByClause
-  Acc_CurrentCosts__c: OrderByClause
-  Acc_Comments__c: OrderByClause
-  Id: OrderByClause
-  LastModifiedById: OrderByClause
+  Acc_ParticipantVirementRecordId__c: AggregateOrderByStringClause
+  Acc_CurrentCosts__c: AggregateOrderByNumberClause
+  Acc_Comments__c: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
 }
 
@@ -3959,58 +3958,58 @@ type Account {
   Migration_account_key__c: StringValue
 
   """childRelationship"""
-  Project_Change_Requests__r(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Project_Change_Requests__pr(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests__pr(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Project_Change_Requests1__pr(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests1__pr(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Project_Contact_Links__r(orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
   """childRelationship"""
-  Project_Contact_Links__pr(orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  Project_Contact_Links__pr(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
   """childRelationship"""
-  Acc_ProjectParticipantsAccount__r(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Acc_ProjectParticipantsAccount__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  Project_Participants__pr(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Project_Participants__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  Project_Participants1__pr(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Project_Participants1__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  Project_Participants2__pr(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Project_Participants2__pr(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  Projects__pr(orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  Projects__pr(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
   """childRelationship"""
-  ChildAccounts(orderBy: Account_OrderBy, where: Account_Filter, after: String, first: Int): AccountConnection
+  ChildAccounts(upperBound: Int, orderBy: Account_OrderBy, where: Account_Filter, after: String, first: Int): AccountConnection
 
   """childRelationship"""
-  Competitions2__pr(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competitions2__pr(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  Competitions1__pr(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competitions1__pr(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  Contacts(orderBy: Contact_OrderBy, where: Contact_Filter, after: String, first: Int): ContactConnection
+  Contacts(upperBound: Int, orderBy: Contact_OrderBy, where: Contact_Filter, after: String, first: Int): ContactConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
   """childRelationship"""
-  Orders(orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
+  Orders(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
 
   """childRelationship"""
-  Users(orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
+  Users(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
 
   """childRelationship"""
-  PersonUsers(orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
+  PersonUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -4301,151 +4300,161 @@ input Account_GroupBy {
 }
 
 input Account_OrderBy {
-  ShippingLatitude: OrderByClause
-  LastModifiedDate: OrderByClause
-  pi__utm_term__pc: OrderByClause
-  ChannelProgramName: OrderByClause
-  PersonDoNotCall: OrderByClause
-  ContactMigrationId__pc: OrderByClause
-  JES_Organisation__c: OrderByClause
-  pi__grade__pc: OrderByClause
-  pi__url__pc: OrderByClause
-  PersonOtherCountry: OrderByClause
-  PersonHomePhone: OrderByClause
-  Application_Number__pc: OrderByClause
-  OrgMigrationID__c: OrderByClause
-  pi__utm_medium__pc: OrderByClause
-  AccountSource: OrderByClause
-  PhotoUrl: OrderByClause
-  PersonMailingState: OrderByClause
-  pi__notes__pc: OrderByClause
-  PersonOtherPostalCode: OrderByClause
-  IsDeleted: OrderByClause
-  PersonOtherStreet: OrderByClause
-  pi__utm_campaign__pc: OrderByClause
-  Acc_FlaggedParticipant__c: OrderByClause
-  Converting_Person_Account__pc: OrderByClause
-  ChannelProgramLevelName: OrderByClause
-  PersonMailingLatitude: OrderByClause
-  LinkedIn_Id__pc: OrderByClause
-  PersonOtherGeocodeAccuracy: OrderByClause
-  pi__Needs_Score_Synced__pc: OrderByClause
-  ShippingPostalCode: OrderByClause
-  PersonMailingLongitude: OrderByClause
-  SF_Id__c: OrderByClause
-  ShippingState: OrderByClause
-  Id: OrderByClause
-  Jigsaw: OrderByClause
-  Acc_Name__c: OrderByClause
-  Description: OrderByClause
-  Dissolution_Date__c: OrderByClause
-  Company_Status__c: OrderByClause
-  Website: OrderByClause
-  BillingLatitude: OrderByClause
-  NumberOfEmployees: OrderByClause
-  Acc_WatchFlag__c: OrderByClause
-  Salutation: OrderByClause
-  PersonEmailBouncedDate: OrderByClause
-  Federation_Id__pc: OrderByClause
-  OwnerId: OrderByClause
+  ShippingLatitude: AggregateOrderByNumberClause
+  LastModifiedDate: AggregateOrderByStringClause
+  pi__utm_term__pc: AggregateOrderByStringClause
+  ChannelProgramName: AggregateOrderByStringClause
+  PersonDoNotCall: NoFunctionAggregateOrderByClause
+  ContactMigrationId__pc: AggregateOrderByStringClause
+  JES_Organisation__c: AggregateOrderByStringClause
+  pi__grade__pc: AggregateOrderByStringClause
+  pi__url__pc: AggregateOrderByStringClause
+  PersonOtherCountry: AggregateOrderByStringClause
+  PersonHomePhone: AggregateOrderByStringClause
+  Application_Number__pc: AggregateOrderByStringClause
+  OrgMigrationID__c: AggregateOrderByStringClause
+  pi__utm_medium__pc: AggregateOrderByStringClause
+  AccountSource: AggregateOrderByStringClause
+  PhotoUrl: AggregateOrderByStringClause
+  PersonMailingState: AggregateOrderByStringClause
+  pi__notes__pc: AggregateOrderByStringClause
+  PersonOtherPostalCode: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  PersonOtherStreet: AggregateOrderByStringClause
+  pi__utm_campaign__pc: AggregateOrderByStringClause
+  Acc_FlaggedParticipant__c: NoFunctionAggregateOrderByClause
+  Converting_Person_Account__pc: NoFunctionAggregateOrderByClause
+  ChannelProgramLevelName: AggregateOrderByStringClause
+  PersonMailingLatitude: AggregateOrderByNumberClause
+  LinkedIn_Id__pc: AggregateOrderByStringClause
+  PersonOtherGeocodeAccuracy: AggregateOrderByStringClause
+  pi__Needs_Score_Synced__pc: NoFunctionAggregateOrderByClause
+  ShippingPostalCode: AggregateOrderByStringClause
+  PersonMailingLongitude: AggregateOrderByNumberClause
+  SF_Id__c: AggregateOrderByStringClause
+  ShippingState: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  Jigsaw: AggregateOrderByStringClause
+  Acc_Name__c: AggregateOrderByStringClause
+  Description: AggregateOrderByStringClause
+  Dissolution_Date__c: AggregateOrderByStringClause
+  Company_Status__c: AggregateOrderByStringClause
+  Website: AggregateOrderByStringClause
+  BillingLatitude: AggregateOrderByNumberClause
+  NumberOfEmployees: AggregateOrderByNumberClause
+  Acc_WatchFlag__c: AggregateOrderByStringClause
+  Salutation: AggregateOrderByStringClause
+  PersonEmailBouncedDate: AggregateOrderByStringClause
+  Federation_Id__pc: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
   Owner: User_OrderBy
-  BillingLongitude: OrderByClause
-  PersonMobilePhone: OrderByClause
-  PersonLastCUUpdateDate: OrderByClause
-  RecordTypeId: OrderByClause
+  BillingLongitude: AggregateOrderByNumberClause
+  PersonMobilePhone: AggregateOrderByStringClause
+  PersonLastCUUpdateDate: AggregateOrderByStringClause
+  RecordTypeId: NoFunctionAggregateOrderByClause
   RecordType: RecordType_OrderBy
-  ShippingCity: OrderByClause
-  PersonMailingGeocodeAccuracy: OrderByClause
-  PersonHasOptedOutOfEmail: OrderByClause
-  pi__created_date__pc: OrderByClause
-  ParentId: OrderByClause
+  ShippingCity: AggregateOrderByStringClause
+  PersonMailingGeocodeAccuracy: AggregateOrderByStringClause
+  PersonHasOptedOutOfEmail: NoFunctionAggregateOrderByClause
+  pi__created_date__pc: AggregateOrderByStringClause
+  ParentId: NoFunctionAggregateOrderByClause
   Parent: Account_OrderBy
-  IsPersonAccount: OrderByClause
-  FirstName: OrderByClause
-  IsCustomerPortal: OrderByClause
-  OrgMigrationID__pc: OrderByClause
-  pi__utm_source__pc: OrderByClause
-  pi__pardot_hard_bounced__pc: OrderByClause
-  PersonIndividualId: OrderByClause
-  SystemModstamp: OrderByClause
-  PersonOtherLongitude: OrderByClause
-  Type: OrderByClause
-  BillingCountry: OrderByClause
-  LastActivityDate: OrderByClause
-  Experience_Type__pc: OrderByClause
-  ShippingLongitude: OrderByClause
-  Acc_Overdue_Project_Helper__c: OrderByClause
-  BillingCity: OrderByClause
-  PersonContactId: OrderByClause
+  IsPersonAccount: NoFunctionAggregateOrderByClause
+  FirstName: AggregateOrderByStringClause
+  IsCustomerPortal: NoFunctionAggregateOrderByClause
+  OrgMigrationID__pc: AggregateOrderByStringClause
+  pi__utm_source__pc: AggregateOrderByStringClause
+  pi__pardot_hard_bounced__pc: NoFunctionAggregateOrderByClause
+  PersonIndividualId: NoFunctionAggregateOrderByClause
+  SystemModstamp: AggregateOrderByStringClause
+  PersonOtherLongitude: AggregateOrderByNumberClause
+  Type: AggregateOrderByStringClause
+  BillingCountry: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  Experience_Type__pc: AggregateOrderByStringClause
+  ShippingLongitude: AggregateOrderByNumberClause
+  Acc_Overdue_Project_Helper__c: NoFunctionAggregateOrderByClause
+  BillingCity: AggregateOrderByStringClause
+  PersonContactId: NoFunctionAggregateOrderByClause
   PersonContact: Contact_OrderBy
-  JigsawCompanyId: OrderByClause
-  Acc_BillingPostCode__c: OrderByClause
-  pi__conversion_object_name__pc: OrderByClause
-  Name: OrderByClause
-  PersonTitle: OrderByClause
-  Industry: OrderByClause
-  PersonOtherLatitude: OrderByClause
-  pi__last_activity__pc: OrderByClause
-  CreatedById: OrderByClause
+  JigsawCompanyId: AggregateOrderByStringClause
+  Acc_BillingPostCode__c: AggregateOrderByStringClause
+  pi__conversion_object_name__pc: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  PersonTitle: AggregateOrderByStringClause
+  Industry: AggregateOrderByStringClause
+  PersonOtherLatitude: AggregateOrderByNumberClause
+  pi__last_activity__pc: AggregateOrderByStringClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Email__pc: OrderByClause
-  pi__conversion_date__pc: OrderByClause
-  BillingGeocodeAccuracy: OrderByClause
-  BillingPostalCode: OrderByClause
-  PersonMailingCity: OrderByClause
-  PersonMailingCountry: OrderByClause
-  MasterRecordId: OrderByClause
+  Email__pc: AggregateOrderByStringClause
+  pi__conversion_date__pc: AggregateOrderByStringClause
+  BillingGeocodeAccuracy: AggregateOrderByStringClause
+  BillingPostalCode: AggregateOrderByStringClause
+  PersonMailingCity: AggregateOrderByStringClause
+  PersonMailingCountry: AggregateOrderByStringClause
+  MasterRecordId: NoFunctionAggregateOrderByClause
   MasterRecord: Account_OrderBy
-  PersonMailingStreet: OrderByClause
-  LastViewedDate: OrderByClause
-  PersonBirthdate: OrderByClause
-  ShippingGeocodeAccuracy: OrderByClause
-  Sic: OrderByClause
-  PersonEmailBouncedReason: OrderByClause
-  ShippingStreet: OrderByClause
-  pi__Pardot_Last_Scored_At__pc: OrderByClause
-  pi__first_touch_url__pc: OrderByClause
-  CreatedDate: OrderByClause
-  pi__conversion_object_type__pc: OrderByClause
-  LastName: OrderByClause
-  SicDesc: OrderByClause
-  PersonOtherPhone: OrderByClause
-  PersonEmail: OrderByClause
-  BillingState: OrderByClause
-  IsPartner: OrderByClause
-  Email__c: OrderByClause
-  SugarContactId__pc: OrderByClause
-  Acc_FundingStatus__c: OrderByClause
-  Acc_RiskRating__c: OrderByClause
-  LastReferencedDate: OrderByClause
-  Acc_OnHold__c: OrderByClause
-  Region__pc: OrderByClause
-  pi__score__pc: OrderByClause
-  Phone: OrderByClause
-  PersonDepartment: OrderByClause
-  ShippingCountry: OrderByClause
-  PersonMailingPostalCode: OrderByClause
-  Migration_address_key__c: OrderByClause
-  pi__comments__pc: OrderByClause
-  pi__utm_content__pc: OrderByClause
-  PersonLastCURequestDate: OrderByClause
-  pi__first_search_term__pc: OrderByClause
-  RegistrationNumber__c: OrderByClause
-  pi__first_search_type__pc: OrderByClause
-  PersonOtherState: OrderByClause
-  Alt_Email__pc: OrderByClause
-  AccountNumber: OrderByClause
-  Incorporation_Date__c: OrderByClause
-  Twitter_Name__pc: OrderByClause
-  BillingStreet: OrderByClause
-  pi__campaign__pc: OrderByClause
-  PersonOtherCity: OrderByClause
-  pi__first_activity__pc: OrderByClause
-  Acc_Overdue_Project__c: OrderByClause
-  Fax: OrderByClause
-  LastModifiedById: OrderByClause
+  PersonMailingStreet: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  PersonBirthdate: AggregateOrderByStringClause
+  ShippingGeocodeAccuracy: AggregateOrderByStringClause
+  Sic: AggregateOrderByStringClause
+  PersonEmailBouncedReason: AggregateOrderByStringClause
+  ShippingStreet: AggregateOrderByStringClause
+  pi__Pardot_Last_Scored_At__pc: AggregateOrderByStringClause
+  pi__first_touch_url__pc: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  pi__conversion_object_type__pc: AggregateOrderByStringClause
+  LastName: AggregateOrderByStringClause
+  SicDesc: AggregateOrderByStringClause
+  PersonOtherPhone: AggregateOrderByStringClause
+  PersonEmail: AggregateOrderByStringClause
+  BillingState: AggregateOrderByStringClause
+  IsPartner: NoFunctionAggregateOrderByClause
+  Email__c: AggregateOrderByStringClause
+  SugarContactId__pc: AggregateOrderByStringClause
+  Acc_FundingStatus__c: AggregateOrderByStringClause
+  Acc_RiskRating__c: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_OnHold__c: NoFunctionAggregateOrderByClause
+  Region__pc: AggregateOrderByStringClause
+  pi__score__pc: AggregateOrderByNumberClause
+  Phone: AggregateOrderByStringClause
+  PersonDepartment: AggregateOrderByStringClause
+  ShippingCountry: AggregateOrderByStringClause
+  PersonMailingPostalCode: AggregateOrderByStringClause
+  Migration_address_key__c: AggregateOrderByStringClause
+  pi__comments__pc: AggregateOrderByStringClause
+  pi__utm_content__pc: AggregateOrderByStringClause
+  PersonLastCURequestDate: AggregateOrderByStringClause
+  pi__first_search_term__pc: AggregateOrderByStringClause
+  RegistrationNumber__c: AggregateOrderByStringClause
+  pi__first_search_type__pc: AggregateOrderByStringClause
+  PersonOtherState: AggregateOrderByStringClause
+  Alt_Email__pc: AggregateOrderByStringClause
+  AccountNumber: AggregateOrderByStringClause
+  Incorporation_Date__c: AggregateOrderByStringClause
+  Twitter_Name__pc: AggregateOrderByStringClause
+  BillingStreet: AggregateOrderByStringClause
+  pi__campaign__pc: AggregateOrderByStringClause
+  PersonOtherCity: AggregateOrderByStringClause
+  pi__first_activity__pc: AggregateOrderByStringClause
+  Acc_Overdue_Project__c: AggregateOrderByStringClause
+  Fax: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Migration_account_key__c: OrderByClause
+  Migration_account_key__c: AggregateOrderByStringClause
+}
+
+input AggregateOrderByNumberClause {
+  order: ResultsOrder
+  nulls: NullsOrder
+}
+
+input AggregateOrderByStringClause {
+  order: ResultsOrder
+  nulls: NullsOrder
 }
 
 scalar Base64
@@ -4557,16 +4566,16 @@ type Competition__c {
   Acc_Review_Team__c: PicklistValue
 
   """childRelationship"""
-  Claims__r(orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
   """childRelationship"""
-  Acc_ProjectCompetition__r(orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  Acc_ProjectCompetition__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
   """childRelationship"""
-  Competitions__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competitions__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -4712,62 +4721,62 @@ input Competition__c_GroupBy {
 }
 
 input Competition__c_OrderBy {
-  LastModifiedDate: OrderByClause
-  Acc_ProjectHardStopDate__c: OrderByClause
-  Acc_NonStandardProjectInformation__c: OrderByClause
-  Acc_PublicityEmbargoOnResults__c: OrderByClause
-  Authorisation_Gateway__c: OrderByClause
-  Name: OrderByClause
-  Acc_PortfolioManager__c: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_ProjectHardStopDate__c: AggregateOrderByStringClause
+  Acc_NonStandardProjectInformation__c: AggregateOrderByStringClause
+  Acc_PublicityEmbargoOnResults__c: AggregateOrderByStringClause
+  Authorisation_Gateway__c: NoFunctionAggregateOrderByClause
+  Name: AggregateOrderByStringClause
+  Acc_PortfolioManager__c: NoFunctionAggregateOrderByClause
   Acc_PortfolioManager__r: User_OrderBy
-  Acc_TermsConditions__c: OrderByClause
-  CreatedById: OrderByClause
+  Acc_TermsConditions__c: AggregateOrderByStringClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  Sent_to_MM__c: OrderByClause
-  Acc_LegacyCompetitionCode__c: OrderByClause
-  IM_PhasedCompetition__c: OrderByClause
-  Acc_ExpectedLastDateOfProjectsEnd__c: OrderByClause
-  IsDeleted: OrderByClause
-  Acc_LevelOfMonitoring__c: OrderByClause
-  LastViewedDate: OrderByClause
-  CSS_Representative__c: OrderByClause
+  Sent_to_MM__c: NoFunctionAggregateOrderByClause
+  Acc_LegacyCompetitionCode__c: AggregateOrderByStringClause
+  IM_PhasedCompetition__c: NoFunctionAggregateOrderByClause
+  Acc_ExpectedLastDateOfProjectsEnd__c: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_LevelOfMonitoring__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  CSS_Representative__c: NoFunctionAggregateOrderByClause
   CSS_Representative__r: User_OrderBy
-  Acc_CompetitionType__c: OrderByClause
-  Acc_FinanceBusinessPartner__c: OrderByClause
+  Acc_CompetitionType__c: AggregateOrderByStringClause
+  Acc_FinanceBusinessPartner__c: NoFunctionAggregateOrderByClause
   Acc_FinanceBusinessPartner__r: User_OrderBy
-  Acc_ExpectedFirstDateOfProjectsStart__c: OrderByClause
-  Acc_CompetitionName__c: OrderByClause
-  CreatedDate: OrderByClause
-  Id: OrderByClause
-  SBRI_Contracting_Authority__c: OrderByClause
-  Phased_Competition_Stage__c: OrderByClause
-  IM_PreCursorCompetition__c: OrderByClause
+  Acc_ExpectedFirstDateOfProjectsStart__c: AggregateOrderByStringClause
+  Acc_CompetitionName__c: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  SBRI_Contracting_Authority__c: AggregateOrderByStringClause
+  Phased_Competition_Stage__c: AggregateOrderByStringClause
+  IM_PreCursorCompetition__c: NoFunctionAggregateOrderByClause
   IM_PreCursorCompetition__r: Competition__c_OrderBy
-  LastReferencedDate: OrderByClause
-  ACC_PaymentType__c: OrderByClause
-  Acc_AGRefNumber__c: OrderByClause
-  OwnerId: OrderByClause
-  Acc_CompetitionCode__c: OrderByClause
-  Impact_Management_participation__c: OrderByClause
-  Technologists__c: OrderByClause
+  LastReferencedDate: AggregateOrderByStringClause
+  ACC_PaymentType__c: AggregateOrderByStringClause
+  Acc_AGRefNumber__c: NoFunctionAggregateOrderByClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  Acc_CompetitionCode__c: AggregateOrderByStringClause
+  Impact_Management_participation__c: AggregateOrderByStringClause
+  Technologists__c: NoFunctionAggregateOrderByClause
   Technologists__r: Contact_OrderBy
-  Acc_ProgrammeID__c: OrderByClause
-  Acc_ProgrammeName__c: OrderByClause
-  Acc_ActivityCode__c: OrderByClause
-  Competition_Manager__c: OrderByClause
+  Acc_ProgrammeID__c: NoFunctionAggregateOrderByClause
+  Acc_ProgrammeName__c: AggregateOrderByStringClause
+  Acc_ActivityCode__c: AggregateOrderByStringClause
+  Competition_Manager__c: NoFunctionAggregateOrderByClause
   Competition_Manager__r: User_OrderBy
-  Authorisation_hard_stop_date__c: OrderByClause
-  Competition_Exec__c: OrderByClause
+  Authorisation_hard_stop_date__c: AggregateOrderByStringClause
+  Competition_Exec__c: NoFunctionAggregateOrderByClause
   Competition_Exec__r: Contact_OrderBy
-  Authorisation_expected_end_date__c: OrderByClause
-  SystemModstamp: OrderByClause
-  ACC_SubsidyControlScheme__c: OrderByClause
-  Acc_InsertCostCentreCode__c: OrderByClause
-  LastActivityDate: OrderByClause
-  LastModifiedById: OrderByClause
+  Authorisation_expected_end_date__c: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  ACC_SubsidyControlScheme__c: NoFunctionAggregateOrderByClause
+  Acc_InsertCostCentreCode__c: AggregateOrderByStringClause
+  LastActivityDate: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  Acc_TypeofAid__c: OrderByClause
-  Acc_Review_Team__c: OrderByClause
+  Acc_TypeofAid__c: AggregateOrderByStringClause
+  Acc_Review_Team__c: AggregateOrderByStringClause
 }
 
 union Competition__c_Owner = Group | User
@@ -4879,37 +4888,37 @@ type Contact {
   JigsawContactId: StringValue
 
   """childRelationship"""
-  Project_Change_Requests__r(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Project_Change_Requests1__r(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Project_Change_Requests1__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
-  Project_Contact_Links__r(orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
   """childRelationship"""
-  Project_Participants__r(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Project_Participants__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  Project_Participants1__r(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Project_Participants1__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  Project_Participants2__r(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Project_Participants2__r(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """childRelationship"""
-  Projects__r(orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  Projects__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
   """childRelationship"""
-  Competitions2__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competitions2__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  Competitions1__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
   """childRelationship"""
-  Users(orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
+  Users(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -5123,103 +5132,103 @@ input Contact_GroupBy {
 }
 
 input Contact_OrderBy {
-  LastModifiedDate: OrderByClause
-  AccountId: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  AccountId: NoFunctionAggregateOrderByClause
   Account: Account_OrderBy
-  Email: OrderByClause
-  Alt_Email__c: OrderByClause
-  pi__campaign__c: OrderByClause
-  pi__first_search_type__c: OrderByClause
-  pi__first_touch_url__c: OrderByClause
-  MobilePhone: OrderByClause
-  pi__Needs_Score_Synced__c: OrderByClause
-  LinkedIn_Id__c: OrderByClause
-  Name: OrderByClause
-  Region__c: OrderByClause
-  Department: OrderByClause
-  pi__created_date__c: OrderByClause
-  OtherLongitude: OrderByClause
-  ContactMigrationId__c: OrderByClause
-  CreatedById: OrderByClause
+  Email: AggregateOrderByStringClause
+  Alt_Email__c: AggregateOrderByStringClause
+  pi__campaign__c: AggregateOrderByStringClause
+  pi__first_search_type__c: AggregateOrderByStringClause
+  pi__first_touch_url__c: AggregateOrderByStringClause
+  MobilePhone: AggregateOrderByStringClause
+  pi__Needs_Score_Synced__c: NoFunctionAggregateOrderByClause
+  LinkedIn_Id__c: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  Region__c: AggregateOrderByStringClause
+  Department: AggregateOrderByStringClause
+  pi__created_date__c: AggregateOrderByStringClause
+  OtherLongitude: AggregateOrderByNumberClause
+  ContactMigrationId__c: AggregateOrderByStringClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  pi__conversion_object_name__c: OrderByClause
-  OtherCity: OrderByClause
-  MailingLatitude: OrderByClause
-  OrgMigrationID__c: OrderByClause
-  pi__utm_campaign__c: OrderByClause
-  PhotoUrl: OrderByClause
-  pi__utm_source__c: OrderByClause
-  MasterRecordId: OrderByClause
+  pi__conversion_object_name__c: AggregateOrderByStringClause
+  OtherCity: AggregateOrderByStringClause
+  MailingLatitude: AggregateOrderByNumberClause
+  OrgMigrationID__c: AggregateOrderByStringClause
+  pi__utm_campaign__c: AggregateOrderByStringClause
+  PhotoUrl: AggregateOrderByStringClause
+  pi__utm_source__c: AggregateOrderByStringClause
+  MasterRecordId: NoFunctionAggregateOrderByClause
   MasterRecord: Contact_OrderBy
-  IndividualId: OrderByClause
-  IsDeleted: OrderByClause
-  OtherGeocodeAccuracy: OrderByClause
-  IsEmailBounced: OrderByClause
-  pi__comments__c: OrderByClause
-  HasOptedOutOfEmail: OrderByClause
-  LastViewedDate: OrderByClause
-  MailingCity: OrderByClause
-  Birthdate: OrderByClause
-  OtherStreet: OrderByClause
-  pi__first_activity__c: OrderByClause
-  Application_Number__c: OrderByClause
-  Experience_Type__c: OrderByClause
-  OtherLatitude: OrderByClause
-  CreatedDate: OrderByClause
-  Id: OrderByClause
-  LastName: OrderByClause
-  MailingStreet: OrderByClause
-  Jigsaw: OrderByClause
-  Email__c: OrderByClause
-  Converting_Person_Account__c: OrderByClause
-  pi__utm_medium__c: OrderByClause
-  EmailBouncedDate: OrderByClause
-  OtherPhone: OrderByClause
-  Description: OrderByClause
-  DoNotCall: OrderByClause
-  MailingCountry: OrderByClause
-  LastReferencedDate: OrderByClause
-  pi__notes__c: OrderByClause
-  Salutation: OrderByClause
-  OtherState: OrderByClause
-  pi__last_activity__c: OrderByClause
-  MailingState: OrderByClause
-  Federation_Id__c: OrderByClause
-  OwnerId: OrderByClause
+  IndividualId: NoFunctionAggregateOrderByClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  OtherGeocodeAccuracy: AggregateOrderByStringClause
+  IsEmailBounced: NoFunctionAggregateOrderByClause
+  pi__comments__c: AggregateOrderByStringClause
+  HasOptedOutOfEmail: NoFunctionAggregateOrderByClause
+  LastViewedDate: AggregateOrderByStringClause
+  MailingCity: AggregateOrderByStringClause
+  Birthdate: AggregateOrderByStringClause
+  OtherStreet: AggregateOrderByStringClause
+  pi__first_activity__c: AggregateOrderByStringClause
+  Application_Number__c: AggregateOrderByStringClause
+  Experience_Type__c: AggregateOrderByStringClause
+  OtherLatitude: AggregateOrderByNumberClause
+  CreatedDate: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  LastName: AggregateOrderByStringClause
+  MailingStreet: AggregateOrderByStringClause
+  Jigsaw: AggregateOrderByStringClause
+  Email__c: AggregateOrderByStringClause
+  Converting_Person_Account__c: NoFunctionAggregateOrderByClause
+  pi__utm_medium__c: AggregateOrderByStringClause
+  EmailBouncedDate: AggregateOrderByStringClause
+  OtherPhone: AggregateOrderByStringClause
+  Description: AggregateOrderByStringClause
+  DoNotCall: NoFunctionAggregateOrderByClause
+  MailingCountry: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  pi__notes__c: AggregateOrderByStringClause
+  Salutation: AggregateOrderByStringClause
+  OtherState: AggregateOrderByStringClause
+  pi__last_activity__c: AggregateOrderByStringClause
+  MailingState: AggregateOrderByStringClause
+  Federation_Id__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
   Owner: User_OrderBy
-  MailingLongitude: OrderByClause
-  Phone: OrderByClause
-  MailingPostalCode: OrderByClause
-  OtherCountry: OrderByClause
-  LastCUUpdateDate: OrderByClause
-  pi__conversion_object_type__c: OrderByClause
-  MailingGeocodeAccuracy: OrderByClause
-  SugarContactId__c: OrderByClause
-  Twitter_Name__c: OrderByClause
-  pi__url__c: OrderByClause
-  EmailBouncedReason: OrderByClause
-  IsPersonAccount: OrderByClause
-  pi__grade__c: OrderByClause
-  FirstName: OrderByClause
-  OtherPostalCode: OrderByClause
-  Title: OrderByClause
-  pi__Pardot_Last_Scored_At__c: OrderByClause
-  pi__utm_term__c: OrderByClause
-  LastCURequestDate: OrderByClause
-  SystemModstamp: OrderByClause
-  pi__score__c: OrderByClause
-  HomePhone: OrderByClause
-  pi__conversion_date__c: OrderByClause
-  ReportsToId: OrderByClause
+  MailingLongitude: AggregateOrderByNumberClause
+  Phone: AggregateOrderByStringClause
+  MailingPostalCode: AggregateOrderByStringClause
+  OtherCountry: AggregateOrderByStringClause
+  LastCUUpdateDate: AggregateOrderByStringClause
+  pi__conversion_object_type__c: AggregateOrderByStringClause
+  MailingGeocodeAccuracy: AggregateOrderByStringClause
+  SugarContactId__c: AggregateOrderByStringClause
+  Twitter_Name__c: AggregateOrderByStringClause
+  pi__url__c: AggregateOrderByStringClause
+  EmailBouncedReason: AggregateOrderByStringClause
+  IsPersonAccount: NoFunctionAggregateOrderByClause
+  pi__grade__c: AggregateOrderByStringClause
+  FirstName: AggregateOrderByStringClause
+  OtherPostalCode: AggregateOrderByStringClause
+  Title: AggregateOrderByStringClause
+  pi__Pardot_Last_Scored_At__c: AggregateOrderByStringClause
+  pi__utm_term__c: AggregateOrderByStringClause
+  LastCURequestDate: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  pi__score__c: AggregateOrderByNumberClause
+  HomePhone: AggregateOrderByStringClause
+  pi__conversion_date__c: AggregateOrderByStringClause
+  ReportsToId: NoFunctionAggregateOrderByClause
   ReportsTo: Contact_OrderBy
-  LastActivityDate: OrderByClause
-  pi__pardot_hard_bounced__c: OrderByClause
-  pi__utm_content__c: OrderByClause
-  Fax: OrderByClause
-  LastModifiedById: OrderByClause
+  LastActivityDate: AggregateOrderByStringClause
+  pi__pardot_hard_bounced__c: NoFunctionAggregateOrderByClause
+  pi__utm_content__c: AggregateOrderByStringClause
+  Fax: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  pi__first_search_term__c: OrderByClause
-  JigsawContactId: OrderByClause
+  pi__first_search_term__c: AggregateOrderByStringClause
+  JigsawContactId: AggregateOrderByStringClause
 }
 
 type ContentDocument {
@@ -5258,7 +5267,7 @@ type ContentDocument {
   LastModifiedBy: User
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -5342,14 +5351,14 @@ input ContentDocumentLink_GroupBy {
 }
 
 input ContentDocumentLink_OrderBy {
-  LinkedEntityId: OrderByClause
-  IsDeleted: OrderByClause
-  Visibility: OrderByClause
-  Id: OrderByClause
-  ContentDocumentId: OrderByClause
+  LinkedEntityId: NoFunctionAggregateOrderByClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Visibility: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  ContentDocumentId: NoFunctionAggregateOrderByClause
   ContentDocument: ContentDocument_OrderBy
-  SystemModstamp: OrderByClause
-  ShareType: OrderByClause
+  SystemModstamp: AggregateOrderByStringClause
+  ShareType: AggregateOrderByStringClause
 }
 
 input ContentDocument_Filter {
@@ -5417,33 +5426,33 @@ input ContentDocument_GroupBy {
 }
 
 input ContentDocument_OrderBy {
-  LastModifiedDate: OrderByClause
-  Description: OrderByClause
-  SharingPrivacy: OrderByClause
-  LastReferencedDate: OrderByClause
-  ArchivedDate: OrderByClause
-  ContentSize: OrderByClause
-  CreatedById: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Description: AggregateOrderByStringClause
+  SharingPrivacy: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  ArchivedDate: AggregateOrderByStringClause
+  ContentSize: AggregateOrderByNumberClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  OwnerId: OrderByClause
+  OwnerId: NoFunctionAggregateOrderByClause
   Owner: User_OrderBy
-  FileExtension: OrderByClause
-  PublishStatus: OrderByClause
-  ParentId: OrderByClause
-  IsDeleted: OrderByClause
-  ContentAssetId: OrderByClause
-  LastViewedDate: OrderByClause
-  Title: OrderByClause
-  ArchivedById: OrderByClause
-  SystemModstamp: OrderByClause
-  IsArchived: OrderByClause
-  LatestPublishedVersionId: OrderByClause
-  FileType: OrderByClause
-  ContentModifiedDate: OrderByClause
-  SharingOption: OrderByClause
-  CreatedDate: OrderByClause
-  Id: OrderByClause
-  LastModifiedById: OrderByClause
+  FileExtension: AggregateOrderByStringClause
+  PublishStatus: AggregateOrderByStringClause
+  ParentId: NoFunctionAggregateOrderByClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  ContentAssetId: NoFunctionAggregateOrderByClause
+  LastViewedDate: AggregateOrderByStringClause
+  Title: AggregateOrderByStringClause
+  ArchivedById: NoFunctionAggregateOrderByClause
+  SystemModstamp: AggregateOrderByStringClause
+  IsArchived: NoFunctionAggregateOrderByClause
+  LatestPublishedVersionId: NoFunctionAggregateOrderByClause
+  FileType: AggregateOrderByStringClause
+  ContentModifiedDate: AggregateOrderByStringClause
+  SharingOption: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
 }
 
@@ -5527,29 +5536,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  NEXT_MONTH
+  THIS_QUARTER
+  LAST_FISCAL_QUARTER
+  TOMORROW
+  LAST_FISCAL_YEAR
+  NEXT_YEAR
+  NEXT_90_DAYS
   THIS_WEEK
   NEXT_FISCAL_YEAR
-  LAST_MONTH
-  NEXT_QUARTER
-  YESTERDAY
-  LAST_WEEK
-  THIS_QUARTER
-  LAST_FISCAL_YEAR
-  THIS_YEAR
-  THIS_FISCAL_YEAR
-  NEXT_WEEK
-  LAST_90_DAYS
-  LAST_FISCAL_QUARTER
   LAST_YEAR
-  NEXT_90_DAYS
-  NEXT_FISCAL_QUARTER
-  TOMORROW
+  NEXT_WEEK
+  NEXT_QUARTER
+  LAST_90_DAYS
   TODAY
   THIS_MONTH
   LAST_QUARTER
-  NEXT_YEAR
+  NEXT_MONTH
   THIS_FISCAL_QUARTER
+  LAST_MONTH
+  NEXT_FISCAL_QUARTER
+  YESTERDAY
+  THIS_YEAR
+  LAST_WEEK
+  THIS_FISCAL_YEAR
 }
 
 input DateOperators {
@@ -5810,7 +5819,7 @@ type Group {
   LastModifiedBy: User
 
   """childRelationship"""
-  DelegatedUsers(orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
+  DelegatedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -5928,21 +5937,21 @@ input Group_GroupBy {
 }
 
 input Group_OrderBy {
-  LastModifiedDate: OrderByClause
-  Email: OrderByClause
-  Name: OrderByClause
-  SystemModstamp: OrderByClause
-  Type: OrderByClause
-  OwnerId: OrderByClause
-  DoesSendEmailToMembers: OrderByClause
-  CreatedById: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Email: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  Type: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  DoesSendEmailToMembers: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  CreatedDate: OrderByClause
-  DoesIncludeBosses: OrderByClause
-  Id: OrderByClause
-  DeveloperName: OrderByClause
-  RelatedId: OrderByClause
-  LastModifiedById: OrderByClause
+  CreatedDate: AggregateOrderByStringClause
+  DoesIncludeBosses: NoFunctionAggregateOrderByClause
+  Id: AggregateOrderByStringClause
+  DeveloperName: AggregateOrderByStringClause
+  RelatedId: NoFunctionAggregateOrderByClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
 }
 
@@ -6156,13 +6165,41 @@ type MultiPicklistValue {
   label: String
 }
 
+input NoFunctionAggregateOrderByClause {
+  order: ResultsOrder
+  nulls: NullsOrder
+}
+
 """Enum representing possible null ordering options."""
 enum NullOrder {
-  """The enum value represents null last order."""
-  LAST
-
   """The enum value represents null first order."""
   FIRST
+
+  """The enum value represents null last order."""
+  LAST
+}
+
+enum NullsOrder {
+  FIRST
+  LAST
+}
+
+type ObjectInfo {
+  ApiName: String!
+  createable: Boolean!
+  custom: Boolean!
+  defaultRecordTypeId: ID
+  deletable: Boolean!
+  feedEnabled: Boolean!
+  keyPrefix: String
+  label: String
+  labelPlural: String
+  layoutable: Boolean!
+  mruEnabled: Boolean!
+  nameFields: [String]!
+  queryable: Boolean!
+  searchable: Boolean!
+  updateable: Boolean!
 }
 
 type Order {
@@ -6230,10 +6267,10 @@ type Order {
   EffectiveDate: DateValue
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
   """childRelationship"""
-  Orders(orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
+  Orders(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -6370,56 +6407,56 @@ input Order_GroupBy {
 }
 
 input Order_OrderBy {
-  CompanyAuthorizedById: OrderByClause
+  CompanyAuthorizedById: NoFunctionAggregateOrderByClause
   CompanyAuthorizedBy: User_OrderBy
-  ShippingLatitude: OrderByClause
-  ActivatedById: OrderByClause
+  ShippingLatitude: AggregateOrderByNumberClause
+  ActivatedById: NoFunctionAggregateOrderByClause
   ActivatedBy: User_OrderBy
-  LastModifiedDate: OrderByClause
-  AccountId: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  AccountId: NoFunctionAggregateOrderByClause
   Account: Account_OrderBy
-  Description: OrderByClause
-  BillingCity: OrderByClause
-  OrderNumber: OrderByClause
-  LastReferencedDate: OrderByClause
-  BillingLatitude: OrderByClause
-  StatusCode: OrderByClause
-  OwnerId: OrderByClause
-  CreatedById: OrderByClause
+  Description: AggregateOrderByStringClause
+  BillingCity: AggregateOrderByStringClause
+  OrderNumber: AggregateOrderByStringClause
+  LastReferencedDate: AggregateOrderByStringClause
+  BillingLatitude: AggregateOrderByNumberClause
+  StatusCode: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  BillingLongitude: OrderByClause
-  BillingGeocodeAccuracy: OrderByClause
-  ShippingCountry: OrderByClause
-  BillingPostalCode: OrderByClause
-  ShippingCity: OrderByClause
-  ActivatedDate: OrderByClause
-  Status: OrderByClause
-  IsDeleted: OrderByClause
-  OriginalOrderId: OrderByClause
+  BillingLongitude: AggregateOrderByNumberClause
+  BillingGeocodeAccuracy: AggregateOrderByStringClause
+  ShippingCountry: AggregateOrderByStringClause
+  BillingPostalCode: AggregateOrderByStringClause
+  ShippingCity: AggregateOrderByStringClause
+  ActivatedDate: AggregateOrderByStringClause
+  Status: AggregateOrderByStringClause
+  IsDeleted: NoFunctionAggregateOrderByClause
+  OriginalOrderId: NoFunctionAggregateOrderByClause
   OriginalOrder: Order_OrderBy
-  LastViewedDate: OrderByClause
-  ShippingGeocodeAccuracy: OrderByClause
-  ContractId: OrderByClause
-  TotalAmount: OrderByClause
-  EndDate: OrderByClause
-  IsReductionOrder: OrderByClause
-  ShippingStreet: OrderByClause
-  SystemModstamp: OrderByClause
-  Type: OrderByClause
-  BillingCountry: OrderByClause
-  CustomerAuthorizedById: OrderByClause
+  LastViewedDate: AggregateOrderByStringClause
+  ShippingGeocodeAccuracy: AggregateOrderByStringClause
+  ContractId: NoFunctionAggregateOrderByClause
+  TotalAmount: AggregateOrderByNumberClause
+  EndDate: AggregateOrderByStringClause
+  IsReductionOrder: NoFunctionAggregateOrderByClause
+  ShippingStreet: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  Type: AggregateOrderByStringClause
+  BillingCountry: AggregateOrderByStringClause
+  CustomerAuthorizedById: NoFunctionAggregateOrderByClause
   CustomerAuthorizedBy: Contact_OrderBy
-  BillingStreet: OrderByClause
-  ShippingPostalCode: OrderByClause
-  CreatedDate: OrderByClause
-  Pricebook2Id: OrderByClause
-  ShippingState: OrderByClause
-  Id: OrderByClause
-  LastModifiedById: OrderByClause
+  BillingStreet: AggregateOrderByStringClause
+  ShippingPostalCode: AggregateOrderByStringClause
+  CreatedDate: AggregateOrderByStringClause
+  Pricebook2Id: NoFunctionAggregateOrderByClause
+  ShippingState: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  BillingState: OrderByClause
-  ShippingLongitude: OrderByClause
-  EffectiveDate: OrderByClause
+  BillingState: AggregateOrderByStringClause
+  ShippingLongitude: AggregateOrderByNumberClause
+  EffectiveDate: AggregateOrderByStringClause
 }
 
 union Order_Owner = Group | User
@@ -6604,87 +6641,72 @@ type PicklistValue {
   label: String
 }
 
-"""How rate limiting was applied to this query."""
-type RateLimit {
-  """The cost of this query."""
-  cost: Long
-
-  """The total budget allocated to this query."""
-  limit: Long
-
-  """The remaining budget allocated to this query."""
-  remaining: Long
-
-  """The time at which &quot;remaining&quot; resets to &quot;limit&quot;."""
-  resetAt: DateTime
-}
-
 type RecordQuery {
   """Issues a query for the specified record type."""
-  Acc_BroadcastMessage__c(orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
+  Acc_BroadcastMessage__c(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_Claims__c(orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+  Acc_Claims__c(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_CostCategory__c(orderBy: Acc_CostCategory__c_OrderBy, where: Acc_CostCategory__c_Filter, after: String, first: Int): Acc_CostCategory__cConnection
+  Acc_CostCategory__c(upperBound: Int, orderBy: Acc_CostCategory__c_OrderBy, where: Acc_CostCategory__c_Filter, after: String, first: Int): Acc_CostCategory__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_MonitoringAnswer__c(orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
+  Acc_MonitoringAnswer__c(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_MonitoringQuestion__c(orderBy: Acc_MonitoringQuestion__c_OrderBy, where: Acc_MonitoringQuestion__c_Filter, after: String, first: Int): Acc_MonitoringQuestion__cConnection
+  Acc_MonitoringQuestion__c(upperBound: Int, orderBy: Acc_MonitoringQuestion__c_OrderBy, where: Acc_MonitoringQuestion__c_Filter, after: String, first: Int): Acc_MonitoringQuestion__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_Prepayment__c(orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
+  Acc_Prepayment__c(upperBound: Int, orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_Profile__c(orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
+  Acc_Profile__c(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_ProjectChangeRequest__c(orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
+  Acc_ProjectChangeRequest__c(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_ProjectContactLink__c(orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  Acc_ProjectContactLink__c(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_ProjectParticipant__c(orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
+  Acc_ProjectParticipant__c(upperBound: Int, orderBy: Acc_ProjectParticipant__c_OrderBy, where: Acc_ProjectParticipant__c_Filter, after: String, first: Int): Acc_ProjectParticipant__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_Project__c(orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+  Acc_Project__c(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_StatusChange__c(orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
+  Acc_StatusChange__c(upperBound: Int, orderBy: Acc_StatusChange__c_OrderBy, where: Acc_StatusChange__c_Filter, after: String, first: Int): Acc_StatusChange__cConnection
 
   """Issues a query for the specified record type."""
-  Acc_Virements__c(orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
+  Acc_Virements__c(upperBound: Int, orderBy: Acc_Virements__c_OrderBy, where: Acc_Virements__c_Filter, after: String, first: Int): Acc_Virements__cConnection
 
   """Issues a query for the specified record type."""
-  Account(orderBy: Account_OrderBy, where: Account_Filter, after: String, first: Int): AccountConnection
+  Account(upperBound: Int, orderBy: Account_OrderBy, where: Account_Filter, after: String, first: Int): AccountConnection
 
   """Issues a query for the specified record type."""
-  Competition__c(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competition__c(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """Issues a query for the specified record type."""
-  Contact(orderBy: Contact_OrderBy, where: Contact_Filter, after: String, first: Int): ContactConnection
+  Contact(upperBound: Int, orderBy: Contact_OrderBy, where: Contact_Filter, after: String, first: Int): ContactConnection
 
   """Issues a query for the specified record type."""
-  ContentDocument(orderBy: ContentDocument_OrderBy, where: ContentDocument_Filter, after: String, first: Int): ContentDocumentConnection
+  ContentDocument(upperBound: Int, orderBy: ContentDocument_OrderBy, where: ContentDocument_Filter, after: String, first: Int): ContentDocumentConnection
 
   """Issues a query for the specified record type."""
-  ContentDocumentLink(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLink(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
   """Issues a query for the specified record type."""
-  Group(orderBy: Group_OrderBy, where: Group_Filter, after: String, first: Int): GroupConnection
+  Group(upperBound: Int, orderBy: Group_OrderBy, where: Group_Filter, after: String, first: Int): GroupConnection
 
   """Issues a query for the specified record type."""
-  Order(orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
+  Order(upperBound: Int, orderBy: Order_OrderBy, where: Order_Filter, after: String, first: Int): OrderConnection
 
   """Issues a query for the specified record type."""
-  RecordType(orderBy: RecordType_OrderBy, where: RecordType_Filter, after: String, first: Int): RecordTypeConnection
+  RecordType(upperBound: Int, orderBy: RecordType_OrderBy, where: RecordType_Filter, after: String, first: Int): RecordTypeConnection
 
   """Issues a query for the specified record type."""
-  User(orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
+  User(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
 }
 
 type RecordType {
@@ -6772,30 +6794,35 @@ input RecordType_GroupBy {
 }
 
 input RecordType_OrderBy {
-  LastModifiedDate: OrderByClause
-  Description: OrderByClause
-  BusinessProcessId: OrderByClause
-  IsActive: OrderByClause
-  Name: OrderByClause
-  SystemModstamp: OrderByClause
-  SobjectType: OrderByClause
-  IsPersonType: OrderByClause
-  CreatedById: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  Description: AggregateOrderByStringClause
+  BusinessProcessId: NoFunctionAggregateOrderByClause
+  IsActive: NoFunctionAggregateOrderByClause
+  Name: AggregateOrderByStringClause
+  SystemModstamp: AggregateOrderByStringClause
+  SobjectType: AggregateOrderByStringClause
+  IsPersonType: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  CreatedDate: OrderByClause
-  Id: OrderByClause
-  DeveloperName: OrderByClause
-  LastModifiedById: OrderByClause
+  CreatedDate: AggregateOrderByStringClause
+  Id: AggregateOrderByStringClause
+  DeveloperName: AggregateOrderByStringClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  NamespacePrefix: OrderByClause
+  NamespacePrefix: AggregateOrderByStringClause
 }
 
 """Enum representing possible results ordering options."""
 enum ResultOrder {
+  """The enum value represents descending order."""
+  DESC
+
   """The enum value represents ascending order."""
   ASC
+}
 
-  """The enum value represents descending order."""
+enum ResultsOrder {
+  ASC
   DESC
 }
 
@@ -6981,6 +7008,7 @@ type TimeValue {
 """The User Interface API family."""
 type UIAPI {
   query: RecordQuery!
+  objectInfos(apiNames: [String]): [ObjectInfo]
 }
 
 scalar Url
@@ -7010,7 +7038,6 @@ type User {
   UserPreferencesReadReceiptLastToggleValue: BooleanValue
   UserPreferencesHasSentWarningEmail: BooleanValue
   Street: TextAreaValue
-  UserPreferencesShowEasyServiceHome: BooleanValue
   FederationIdentifier: StringValue
   UserPreferencesHasSentWarningEmail238: BooleanValue
   UserPermissionsCallCenterAutoLogin: BooleanValue
@@ -7145,9 +7172,11 @@ type User {
   UserPreferencesHideSfxWelcomeMat: BooleanValue
   pi__Pardot_User_Id__c: EncryptedStringValue
   UserPreferencesCacheDiagnostics: BooleanValue
+  UserPreferencesLiveAgentMiawSetupDeflection: BooleanValue
   UserPreferencesShowForecastingChangeSignals: BooleanValue
   UserPreferencesShowWorkPhoneToExternalUsers: BooleanValue
   UserPreferencesHideTrialsCelebration: BooleanValue
+  UserPreferencesShowForecastingRoundedAmounts: BooleanValue
   Division: StringValue
   UserPreferencesShowCityToExternalUsers: BooleanValue
   UserPreferencesHideChatterOnboardingSplash: BooleanValue
@@ -7197,7 +7226,6 @@ type User {
   """parentRelationship"""
   Contact: Contact
   StayInTouchSignature: LongTextAreaValue
-  UserPreferencesShowEasySalesHome: BooleanValue
   UserPreferencesActivityRemindersPopup: BooleanValue
   UserPreferencesEventRemindersCheckboxDefault: BooleanValue
   Phone: PhoneNumberValue
@@ -7219,31 +7247,31 @@ type User {
   UserPreferencesHideMailAppWelcomeMat: BooleanValue
 
   """childRelationship"""
-  Acc_BroadcastMessages__r(orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
+  Acc_BroadcastMessages__r(upperBound: Int, orderBy: Acc_BroadcastMessage__c_OrderBy, where: Acc_BroadcastMessage__c_Filter, after: String, first: Int): Acc_BroadcastMessage__cConnection
 
   """childRelationship"""
-  Project_Contact_Links__r(orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
+  Project_Contact_Links__r(upperBound: Int, orderBy: Acc_ProjectContactLink__c_OrderBy, where: Acc_ProjectContactLink__c_Filter, after: String, first: Int): Acc_ProjectContactLink__cConnection
 
   """childRelationship"""
-  Competitions2__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competitions2__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  Competitions1__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  Competitions__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competitions__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  Competition_Manager__r(orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
+  Competition_Manager__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
-  ContentDocumentLinks(orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
 
   """childRelationship"""
-  DelegatedUsers(orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
+  DelegatedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
 
   """childRelationship"""
-  ManagedUsers(orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
+  ManagedUsers(upperBound: Int, orderBy: User_OrderBy, where: User_Filter, after: String, first: Int): UserConnection
   Id: ID!
   ApiName: String!
   WeakEtag: Long!
@@ -7276,7 +7304,6 @@ input User_Filter {
   UserPreferencesReadReceiptLastToggleValue: BooleanOperators
   UserPreferencesHasSentWarningEmail: BooleanOperators
   Street: TextAreaOperators
-  UserPreferencesShowEasyServiceHome: BooleanOperators
   FederationIdentifier: StringOperators
   UserPreferencesHasSentWarningEmail238: BooleanOperators
   UserPermissionsCallCenterAutoLogin: BooleanOperators
@@ -7402,9 +7429,11 @@ input User_Filter {
   Id: IdOperators
   UserPreferencesHideSfxWelcomeMat: BooleanOperators
   UserPreferencesCacheDiagnostics: BooleanOperators
+  UserPreferencesLiveAgentMiawSetupDeflection: BooleanOperators
   UserPreferencesShowForecastingChangeSignals: BooleanOperators
   UserPreferencesShowWorkPhoneToExternalUsers: BooleanOperators
   UserPreferencesHideTrialsCelebration: BooleanOperators
+  UserPreferencesShowForecastingRoundedAmounts: BooleanOperators
   Division: StringOperators
   UserPreferencesShowCityToExternalUsers: BooleanOperators
   UserPreferencesHideChatterOnboardingSplash: BooleanOperators
@@ -7446,7 +7475,6 @@ input User_Filter {
   ContactId: IdOperators
   Contact: Contact_Filter
   StayInTouchSignature: LongTextAreaOperators
-  UserPreferencesShowEasySalesHome: BooleanOperators
   UserPreferencesActivityRemindersPopup: BooleanOperators
   UserPreferencesEventRemindersCheckboxDefault: BooleanOperators
   Phone: PhoneNumberOperators
@@ -7550,210 +7578,210 @@ input User_GroupBy {
 }
 
 input User_OrderBy {
-  LastModifiedDate: OrderByClause
-  BadgeText: OrderByClause
-  IsProfilePhotoActive: OrderByClause
-  UserPreferencesShowMobilePhoneToExternalUsers: OrderByClause
-  UserPreferencesFirstTimeInLightning: OrderByClause
-  Department: OrderByClause
-  UserPreferencesReadReceiptLastToggleValue: OrderByClause
-  UserPreferencesHasSentWarningEmail: OrderByClause
-  Street: OrderByClause
-  UserPreferencesShowEasyServiceHome: OrderByClause
-  FederationIdentifier: OrderByClause
-  UserPreferencesHasSentWarningEmail238: OrderByClause
-  UserPermissionsCallCenterAutoLogin: OrderByClause
-  UserPreferencesDisableSharePostEmail: OrderByClause
-  Longitude: OrderByClause
-  UserPermissionsInteractionUser: OrderByClause
-  UserPreferencesShowStateToExternalUsers: OrderByClause
-  UserPreferencesContentEmailAsAndWhen: OrderByClause
-  UserPreferencesHideCSNDesktopTask: OrderByClause
-  UserPreferencesSalesEssentialsSetupAssistantCompleted: OrderByClause
-  UserPreferencesHideS1BrowserUI: OrderByClause
-  UserPreferencesHideEndUserOnboardingAssistantModal: OrderByClause
-  UserType: OrderByClause
-  UserPreferencesShowStateToGuestUsers: OrderByClause
-  ReceivesAdminInfoEmails: OrderByClause
-  UserPreferencesShowMobilePhoneToGuestUsers: OrderByClause
-  TimeZoneSidKey: OrderByClause
-  UserRoleId: OrderByClause
-  UserPreferencesHideCSNGetChatterMobileTask: OrderByClause
-  UserPreferencesNewLightningReportRunPageEnabled: OrderByClause
-  ForecastEnabled: OrderByClause
-  UserPreferencesLtngPromoReserved10UserPref: OrderByClause
-  natterbox__Natterbox_Username__c: OrderByClause
-  UserPreferencesExcludeMailAppAttachments: OrderByClause
-  UserPreferencesTaskRemindersCheckboxDefault: OrderByClause
-  LastPasswordChangeDate: OrderByClause
-  LocaleSidKey: OrderByClause
-  SmallPhotoUrl: OrderByClause
-  UserPreferencesSRHOverrideActivities: OrderByClause
-  UserPreferencesShowStreetAddressToExternalUsers: OrderByClause
-  FirstName: OrderByClause
-  UserPreferencesShowEmailToGuestUsers: OrderByClause
-  SmallBannerPhotoUrl: OrderByClause
-  UserPreferencesFavoritesShowTopFavorites: OrderByClause
-  ReceivesInfoEmails: OrderByClause
-  UserPreferencesGlobalNavGridMenuWTShown: OrderByClause
-  SystemModstamp: OrderByClause
-  UserPreferencesShowWorkPhoneToGuestUsers: OrderByClause
-  dsfs__DSProSFUsername__c: OrderByClause
-  UserPreferencesReceiveNoNotificationsAsApprover: OrderByClause
-  IsPortalEnabled: OrderByClause
-  UserPreferencesHideSecondChatterOnboardingSplash: OrderByClause
-  ProfilePhotoId: OrderByClause
-  pi__Can_View_Not_Assigned_Prospects__c: OrderByClause
-  Email: OrderByClause
-  AccountId: OrderByClause
+  LastModifiedDate: AggregateOrderByStringClause
+  BadgeText: AggregateOrderByStringClause
+  IsProfilePhotoActive: NoFunctionAggregateOrderByClause
+  UserPreferencesShowMobilePhoneToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesFirstTimeInLightning: NoFunctionAggregateOrderByClause
+  Department: AggregateOrderByStringClause
+  UserPreferencesReadReceiptLastToggleValue: NoFunctionAggregateOrderByClause
+  UserPreferencesHasSentWarningEmail: NoFunctionAggregateOrderByClause
+  Street: AggregateOrderByStringClause
+  FederationIdentifier: AggregateOrderByStringClause
+  UserPreferencesHasSentWarningEmail238: NoFunctionAggregateOrderByClause
+  UserPermissionsCallCenterAutoLogin: NoFunctionAggregateOrderByClause
+  UserPreferencesDisableSharePostEmail: NoFunctionAggregateOrderByClause
+  Longitude: AggregateOrderByNumberClause
+  UserPermissionsInteractionUser: NoFunctionAggregateOrderByClause
+  UserPreferencesShowStateToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesContentEmailAsAndWhen: NoFunctionAggregateOrderByClause
+  UserPreferencesHideCSNDesktopTask: NoFunctionAggregateOrderByClause
+  UserPreferencesSalesEssentialsSetupAssistantCompleted: NoFunctionAggregateOrderByClause
+  UserPreferencesHideS1BrowserUI: NoFunctionAggregateOrderByClause
+  UserPreferencesHideEndUserOnboardingAssistantModal: NoFunctionAggregateOrderByClause
+  UserType: AggregateOrderByStringClause
+  UserPreferencesShowStateToGuestUsers: NoFunctionAggregateOrderByClause
+  ReceivesAdminInfoEmails: NoFunctionAggregateOrderByClause
+  UserPreferencesShowMobilePhoneToGuestUsers: NoFunctionAggregateOrderByClause
+  TimeZoneSidKey: AggregateOrderByStringClause
+  UserRoleId: NoFunctionAggregateOrderByClause
+  UserPreferencesHideCSNGetChatterMobileTask: NoFunctionAggregateOrderByClause
+  UserPreferencesNewLightningReportRunPageEnabled: NoFunctionAggregateOrderByClause
+  ForecastEnabled: NoFunctionAggregateOrderByClause
+  UserPreferencesLtngPromoReserved10UserPref: NoFunctionAggregateOrderByClause
+  natterbox__Natterbox_Username__c: AggregateOrderByStringClause
+  UserPreferencesExcludeMailAppAttachments: NoFunctionAggregateOrderByClause
+  UserPreferencesTaskRemindersCheckboxDefault: NoFunctionAggregateOrderByClause
+  LastPasswordChangeDate: AggregateOrderByStringClause
+  LocaleSidKey: AggregateOrderByStringClause
+  SmallPhotoUrl: AggregateOrderByStringClause
+  UserPreferencesSRHOverrideActivities: NoFunctionAggregateOrderByClause
+  UserPreferencesShowStreetAddressToExternalUsers: NoFunctionAggregateOrderByClause
+  FirstName: AggregateOrderByStringClause
+  UserPreferencesShowEmailToGuestUsers: NoFunctionAggregateOrderByClause
+  SmallBannerPhotoUrl: AggregateOrderByStringClause
+  UserPreferencesFavoritesShowTopFavorites: NoFunctionAggregateOrderByClause
+  ReceivesInfoEmails: NoFunctionAggregateOrderByClause
+  UserPreferencesGlobalNavGridMenuWTShown: NoFunctionAggregateOrderByClause
+  SystemModstamp: AggregateOrderByStringClause
+  UserPreferencesShowWorkPhoneToGuestUsers: NoFunctionAggregateOrderByClause
+  dsfs__DSProSFUsername__c: AggregateOrderByStringClause
+  UserPreferencesReceiveNoNotificationsAsApprover: NoFunctionAggregateOrderByClause
+  IsPortalEnabled: NoFunctionAggregateOrderByClause
+  UserPreferencesHideSecondChatterOnboardingSplash: NoFunctionAggregateOrderByClause
+  ProfilePhotoId: NoFunctionAggregateOrderByClause
+  pi__Can_View_Not_Assigned_Prospects__c: NoFunctionAggregateOrderByClause
+  Email: AggregateOrderByStringClause
+  AccountId: NoFunctionAggregateOrderByClause
   Account: Account_OrderBy
-  UserPreferencesDisableLaterCommentEmail: OrderByClause
-  LastLoginDate: OrderByClause
-  Latitude: OrderByClause
-  UserPreferencesDisableFollowersEmail: OrderByClause
-  UserPreferencesTodayGettingStarted: OrderByClause
-  IsExtIndicatorVisible: OrderByClause
-  DigestFrequency: OrderByClause
-  Name: OrderByClause
-  UserPreferencesGlobalNavBarWTShown: OrderByClause
-  CreatedById: OrderByClause
+  UserPreferencesDisableLaterCommentEmail: NoFunctionAggregateOrderByClause
+  LastLoginDate: AggregateOrderByStringClause
+  Latitude: AggregateOrderByNumberClause
+  UserPreferencesDisableFollowersEmail: NoFunctionAggregateOrderByClause
+  UserPreferencesTodayGettingStarted: NoFunctionAggregateOrderByClause
+  IsExtIndicatorVisible: NoFunctionAggregateOrderByClause
+  DigestFrequency: AggregateOrderByStringClause
+  Name: AggregateOrderByStringClause
+  UserPreferencesGlobalNavBarWTShown: NoFunctionAggregateOrderByClause
+  CreatedById: NoFunctionAggregateOrderByClause
   CreatedBy: User_OrderBy
-  UserPreferencesDisableMessageEmail: OrderByClause
-  UserPreferencesShowEmailToExternalUsers: OrderByClause
-  UserPreferencesShowManagerToExternalUsers: OrderByClause
-  UserPreferencesDisCommentAfterLikeEmail: OrderByClause
-  LastViewedDate: OrderByClause
-  UserPermissionsSupportUser: OrderByClause
-  EmailPreferencesStayInTouchReminder: OrderByClause
-  State: OrderByClause
-  UserPreferencesSuppressEventSFXReminders: OrderByClause
-  CreatedDate: OrderByClause
-  LastName: OrderByClause
-  OutOfOfficeMessage: OrderByClause
-  ManagerId: OrderByClause
+  UserPreferencesDisableMessageEmail: NoFunctionAggregateOrderByClause
+  UserPreferencesShowEmailToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesShowManagerToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesDisCommentAfterLikeEmail: NoFunctionAggregateOrderByClause
+  LastViewedDate: AggregateOrderByStringClause
+  UserPermissionsSupportUser: NoFunctionAggregateOrderByClause
+  EmailPreferencesStayInTouchReminder: NoFunctionAggregateOrderByClause
+  State: AggregateOrderByStringClause
+  UserPreferencesSuppressEventSFXReminders: NoFunctionAggregateOrderByClause
+  CreatedDate: AggregateOrderByStringClause
+  LastName: AggregateOrderByStringClause
+  OutOfOfficeMessage: AggregateOrderByStringClause
+  ManagerId: NoFunctionAggregateOrderByClause
   Manager: User_OrderBy
-  UserPreferencesShowProfilePicToGuestUsers: OrderByClause
-  SenderName: OrderByClause
-  UserPermissionsSFContentUser: OrderByClause
-  UserPreferencesHideLightningMigrationModal: OrderByClause
-  UserPreferencesPreviewLightning: OrderByClause
-  UserPreferencesDisMentionsCommentEmail: OrderByClause
-  LastReferencedDate: OrderByClause
-  UserPreferencesApexPagesDeveloperMode: OrderByClause
-  UserPreferencesDisableAllFeedsEmail: OrderByClause
-  StayInTouchNote: OrderByClause
-  UserPreferencesReminderSoundOff: OrderByClause
-  UserPreferencesLightningExperiencePreferred: OrderByClause
-  UserPreferencesDisableMentionsPostEmail: OrderByClause
-  UserPreferencesShowCountryToGuestUsers: OrderByClause
-  UserPreferencesLtngPromoReserved19UserPref: OrderByClause
-  UserPreferencesShowCityToGuestUsers: OrderByClause
-  UserPreferencesHasSentWarningEmail240: OrderByClause
-  OfflineTrialExpirationDate: OrderByClause
-  UserPreferencesPathAssistantCollapsed: OrderByClause
-  UserPermissionsChatterAnswersUser: OrderByClause
-  EmployeeNumber: OrderByClause
-  Title: OrderByClause
-  UserPreferencesLtngPromoReserved16UserPref: OrderByClause
-  natterbox__Natterbox_Password__c: OrderByClause
-  UserPreferencesShowCountryToExternalUsers: OrderByClause
-  UserPreferencesFavoritesWTShown: OrderByClause
-  EmailEncodingKey: OrderByClause
-  UserPreferencesDisProfPostCommentEmail: OrderByClause
-  BannerPhotoId: OrderByClause
-  UserPreferencesHideTrialsWelcomeMat: OrderByClause
-  UserPreferencesSuppressTaskSFXReminders: OrderByClause
-  Extension: OrderByClause
-  UserPreferencesShowFaxToExternalUsers: OrderByClause
-  UserPreferencesHideMailAppEAPUserGuidance: OrderByClause
-  Username: OrderByClause
-  UserPreferencesDisableBookmarkEmail: OrderByClause
-  UserPreferencesSortFeedByComment: OrderByClause
-  Fax: OrderByClause
-  ProfileId: OrderByClause
-  UserPreferencesReceiveNotificationsAsDelegatedApprover: OrderByClause
-  pi__Pardot_Api_Version__c: OrderByClause
-  LanguageLocaleKey: OrderByClause
-  UserPreferencesRecordHomeSectionCollapseWTShown: OrderByClause
-  UserPreferencesHideEventCalendar: OrderByClause
-  UserPreferencesHasCelebrationBadge: OrderByClause
-  EmailPreferencesAutoBccStayInTouch: OrderByClause
-  CommunityNickname: OrderByClause
-  UserPreferencesDisableEndorsementEmail: OrderByClause
-  UserPreferencesPreviewCustomTheme: OrderByClause
-  StayInTouchSubject: OrderByClause
-  UserPreferencesDisableChangeCommentEmail: OrderByClause
-  NumberOfFailedLogins: OrderByClause
-  GeocodeAccuracy: OrderByClause
-  Country: OrderByClause
-  UserPreferencesShowPostalCodeToGuestUsers: OrderByClause
-  Id: OrderByClause
-  UserPreferencesHideSfxWelcomeMat: OrderByClause
-  UserPreferencesCacheDiagnostics: OrderByClause
-  UserPreferencesShowForecastingChangeSignals: OrderByClause
-  UserPreferencesShowWorkPhoneToExternalUsers: OrderByClause
-  UserPreferencesHideTrialsCelebration: OrderByClause
-  Division: OrderByClause
-  UserPreferencesShowCityToExternalUsers: OrderByClause
-  UserPreferencesHideChatterOnboardingSplash: OrderByClause
-  UserPreferencesReverseOpenActivitiesView: OrderByClause
-  UserPermissionsKnowledgeUser: OrderByClause
-  FullPhotoUrl: OrderByClause
-  MediumBannerPhotoUrl: OrderByClause
-  DefaultGroupNotificationFrequency: OrderByClause
-  UserPreferencesDedupeStorageMigrationComplete: OrderByClause
-  UserPreferencesDisableProfilePostEmail: OrderByClause
-  UserPreferencesShowTitleToExternalUsers: OrderByClause
-  UserPreferencesShowPostalCodeToExternalUsers: OrderByClause
-  UserPreferencesNativeEmailClient: OrderByClause
-  MobilePhone: OrderByClause
-  BannerPhotoUrl: OrderByClause
-  CompanyName: OrderByClause
-  UserPreferencesShowFaxToGuestUsers: OrderByClause
-  SenderEmail: OrderByClause
-  UserPreferencesHideLearningPathModal: OrderByClause
-  IndividualId: OrderByClause
-  pi__Pardot_User_Role__c: OrderByClause
-  MediumPhotoUrl: OrderByClause
-  DelegatedApproverId: OrderByClause
-  UserPreferencesDisableFileShareNotificationsForApi: OrderByClause
-  UserPreferencesShowStreetAddressToGuestUsers: OrderByClause
-  City: OrderByClause
-  UserPreferencesHideTaskListViewsPopover: OrderByClause
-  UserPreferencesUserDebugModePref: OrderByClause
-  UserPreferencesSetupAssistantUserPref1: OrderByClause
-  UserPermissionsMarketingUser: OrderByClause
-  UserPreferencesContentNoEmail: OrderByClause
-  OfflinePdaTrialExpirationDate: OrderByClause
-  UserPreferencesShowTitleToGuestUsers: OrderByClause
-  EmailPreferencesAutoBcc: OrderByClause
-  UserPreferencesCreateLEXAppsWTShown: OrderByClause
-  UserPermissionsAvantgoUser: OrderByClause
-  UserPreferencesShowManagerToGuestUsers: OrderByClause
-  UserPreferencesHideOnlineSalesAppWelcomeMat: OrderByClause
-  UserPermissionsOfflineUser: OrderByClause
-  IsActive: OrderByClause
-  PostalCode: OrderByClause
-  UserPreferencesHideBrowseProductRedirectConfirmation: OrderByClause
-  ContactId: OrderByClause
+  UserPreferencesShowProfilePicToGuestUsers: NoFunctionAggregateOrderByClause
+  SenderName: AggregateOrderByStringClause
+  UserPermissionsSFContentUser: NoFunctionAggregateOrderByClause
+  UserPreferencesHideLightningMigrationModal: NoFunctionAggregateOrderByClause
+  UserPreferencesPreviewLightning: NoFunctionAggregateOrderByClause
+  UserPreferencesDisMentionsCommentEmail: NoFunctionAggregateOrderByClause
+  LastReferencedDate: AggregateOrderByStringClause
+  UserPreferencesApexPagesDeveloperMode: NoFunctionAggregateOrderByClause
+  UserPreferencesDisableAllFeedsEmail: NoFunctionAggregateOrderByClause
+  StayInTouchNote: AggregateOrderByStringClause
+  UserPreferencesReminderSoundOff: NoFunctionAggregateOrderByClause
+  UserPreferencesLightningExperiencePreferred: NoFunctionAggregateOrderByClause
+  UserPreferencesDisableMentionsPostEmail: NoFunctionAggregateOrderByClause
+  UserPreferencesShowCountryToGuestUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesLtngPromoReserved19UserPref: NoFunctionAggregateOrderByClause
+  UserPreferencesShowCityToGuestUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesHasSentWarningEmail240: NoFunctionAggregateOrderByClause
+  OfflineTrialExpirationDate: AggregateOrderByStringClause
+  UserPreferencesPathAssistantCollapsed: NoFunctionAggregateOrderByClause
+  UserPermissionsChatterAnswersUser: NoFunctionAggregateOrderByClause
+  EmployeeNumber: AggregateOrderByStringClause
+  Title: AggregateOrderByStringClause
+  UserPreferencesLtngPromoReserved16UserPref: NoFunctionAggregateOrderByClause
+  natterbox__Natterbox_Password__c: AggregateOrderByStringClause
+  UserPreferencesShowCountryToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesFavoritesWTShown: NoFunctionAggregateOrderByClause
+  EmailEncodingKey: AggregateOrderByStringClause
+  UserPreferencesDisProfPostCommentEmail: NoFunctionAggregateOrderByClause
+  BannerPhotoId: NoFunctionAggregateOrderByClause
+  UserPreferencesHideTrialsWelcomeMat: NoFunctionAggregateOrderByClause
+  UserPreferencesSuppressTaskSFXReminders: NoFunctionAggregateOrderByClause
+  Extension: AggregateOrderByStringClause
+  UserPreferencesShowFaxToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesHideMailAppEAPUserGuidance: NoFunctionAggregateOrderByClause
+  Username: AggregateOrderByStringClause
+  UserPreferencesDisableBookmarkEmail: NoFunctionAggregateOrderByClause
+  UserPreferencesSortFeedByComment: NoFunctionAggregateOrderByClause
+  Fax: AggregateOrderByStringClause
+  ProfileId: NoFunctionAggregateOrderByClause
+  UserPreferencesReceiveNotificationsAsDelegatedApprover: NoFunctionAggregateOrderByClause
+  pi__Pardot_Api_Version__c: AggregateOrderByStringClause
+  LanguageLocaleKey: AggregateOrderByStringClause
+  UserPreferencesRecordHomeSectionCollapseWTShown: NoFunctionAggregateOrderByClause
+  UserPreferencesHideEventCalendar: NoFunctionAggregateOrderByClause
+  UserPreferencesHasCelebrationBadge: NoFunctionAggregateOrderByClause
+  EmailPreferencesAutoBccStayInTouch: NoFunctionAggregateOrderByClause
+  CommunityNickname: AggregateOrderByStringClause
+  UserPreferencesDisableEndorsementEmail: NoFunctionAggregateOrderByClause
+  UserPreferencesPreviewCustomTheme: NoFunctionAggregateOrderByClause
+  StayInTouchSubject: AggregateOrderByStringClause
+  UserPreferencesDisableChangeCommentEmail: NoFunctionAggregateOrderByClause
+  NumberOfFailedLogins: AggregateOrderByNumberClause
+  GeocodeAccuracy: AggregateOrderByStringClause
+  Country: AggregateOrderByStringClause
+  UserPreferencesShowPostalCodeToGuestUsers: NoFunctionAggregateOrderByClause
+  Id: AggregateOrderByStringClause
+  UserPreferencesHideSfxWelcomeMat: NoFunctionAggregateOrderByClause
+  UserPreferencesCacheDiagnostics: NoFunctionAggregateOrderByClause
+  UserPreferencesLiveAgentMiawSetupDeflection: NoFunctionAggregateOrderByClause
+  UserPreferencesShowForecastingChangeSignals: NoFunctionAggregateOrderByClause
+  UserPreferencesShowWorkPhoneToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesHideTrialsCelebration: NoFunctionAggregateOrderByClause
+  UserPreferencesShowForecastingRoundedAmounts: NoFunctionAggregateOrderByClause
+  Division: AggregateOrderByStringClause
+  UserPreferencesShowCityToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesHideChatterOnboardingSplash: NoFunctionAggregateOrderByClause
+  UserPreferencesReverseOpenActivitiesView: NoFunctionAggregateOrderByClause
+  UserPermissionsKnowledgeUser: NoFunctionAggregateOrderByClause
+  FullPhotoUrl: AggregateOrderByStringClause
+  MediumBannerPhotoUrl: AggregateOrderByStringClause
+  DefaultGroupNotificationFrequency: AggregateOrderByStringClause
+  UserPreferencesDedupeStorageMigrationComplete: NoFunctionAggregateOrderByClause
+  UserPreferencesDisableProfilePostEmail: NoFunctionAggregateOrderByClause
+  UserPreferencesShowTitleToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesShowPostalCodeToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesNativeEmailClient: NoFunctionAggregateOrderByClause
+  MobilePhone: AggregateOrderByStringClause
+  BannerPhotoUrl: AggregateOrderByStringClause
+  CompanyName: AggregateOrderByStringClause
+  UserPreferencesShowFaxToGuestUsers: NoFunctionAggregateOrderByClause
+  SenderEmail: AggregateOrderByStringClause
+  UserPreferencesHideLearningPathModal: NoFunctionAggregateOrderByClause
+  IndividualId: NoFunctionAggregateOrderByClause
+  pi__Pardot_User_Role__c: AggregateOrderByStringClause
+  MediumPhotoUrl: AggregateOrderByStringClause
+  DelegatedApproverId: NoFunctionAggregateOrderByClause
+  UserPreferencesDisableFileShareNotificationsForApi: NoFunctionAggregateOrderByClause
+  UserPreferencesShowStreetAddressToGuestUsers: NoFunctionAggregateOrderByClause
+  City: AggregateOrderByStringClause
+  UserPreferencesHideTaskListViewsPopover: NoFunctionAggregateOrderByClause
+  UserPreferencesUserDebugModePref: NoFunctionAggregateOrderByClause
+  UserPreferencesSetupAssistantUserPref1: NoFunctionAggregateOrderByClause
+  UserPermissionsMarketingUser: NoFunctionAggregateOrderByClause
+  UserPreferencesContentNoEmail: NoFunctionAggregateOrderByClause
+  OfflinePdaTrialExpirationDate: AggregateOrderByStringClause
+  UserPreferencesShowTitleToGuestUsers: NoFunctionAggregateOrderByClause
+  EmailPreferencesAutoBcc: NoFunctionAggregateOrderByClause
+  UserPreferencesCreateLEXAppsWTShown: NoFunctionAggregateOrderByClause
+  UserPermissionsAvantgoUser: NoFunctionAggregateOrderByClause
+  UserPreferencesShowManagerToGuestUsers: NoFunctionAggregateOrderByClause
+  UserPreferencesHideOnlineSalesAppWelcomeMat: NoFunctionAggregateOrderByClause
+  UserPermissionsOfflineUser: NoFunctionAggregateOrderByClause
+  IsActive: NoFunctionAggregateOrderByClause
+  PostalCode: AggregateOrderByStringClause
+  UserPreferencesHideBrowseProductRedirectConfirmation: NoFunctionAggregateOrderByClause
+  ContactId: NoFunctionAggregateOrderByClause
   Contact: Contact_OrderBy
-  StayInTouchSignature: OrderByClause
-  UserPreferencesShowEasySalesHome: OrderByClause
-  UserPreferencesActivityRemindersPopup: OrderByClause
-  UserPreferencesEventRemindersCheckboxDefault: OrderByClause
-  Phone: OrderByClause
-  UserPreferencesDisableLikeEmail: OrderByClause
-  UserPreferencesHeavyPagePromptEnabled: OrderByClause
-  UserPreferencesEnableAutoSubForFeeds: OrderByClause
-  CallCenterId: OrderByClause
-  UserPreferencesTrailheadBadgeCreated: OrderByClause
-  UserPreferencesRecordHomeReservedWTShown: OrderByClause
-  AboutMe: OrderByClause
-  PortalRole: OrderByClause
-  Alias: OrderByClause
-  Signature: OrderByClause
-  UserPreferencesHideBiggerPhotoCallout: OrderByClause
-  LastModifiedById: OrderByClause
+  StayInTouchSignature: AggregateOrderByStringClause
+  UserPreferencesActivityRemindersPopup: NoFunctionAggregateOrderByClause
+  UserPreferencesEventRemindersCheckboxDefault: NoFunctionAggregateOrderByClause
+  Phone: AggregateOrderByStringClause
+  UserPreferencesDisableLikeEmail: NoFunctionAggregateOrderByClause
+  UserPreferencesHeavyPagePromptEnabled: NoFunctionAggregateOrderByClause
+  UserPreferencesEnableAutoSubForFeeds: NoFunctionAggregateOrderByClause
+  CallCenterId: NoFunctionAggregateOrderByClause
+  UserPreferencesTrailheadBadgeCreated: NoFunctionAggregateOrderByClause
+  UserPreferencesRecordHomeReservedWTShown: NoFunctionAggregateOrderByClause
+  AboutMe: AggregateOrderByStringClause
+  PortalRole: AggregateOrderByStringClause
+  Alias: AggregateOrderByStringClause
+  Signature: AggregateOrderByStringClause
+  UserPreferencesHideBiggerPhotoCallout: NoFunctionAggregateOrderByClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
   LastModifiedBy: User_OrderBy
-  UserPreferencesHideMailAppWelcomeMat: OrderByClause
+  UserPreferencesHideMailAppWelcomeMat: NoFunctionAggregateOrderByClause
 }
