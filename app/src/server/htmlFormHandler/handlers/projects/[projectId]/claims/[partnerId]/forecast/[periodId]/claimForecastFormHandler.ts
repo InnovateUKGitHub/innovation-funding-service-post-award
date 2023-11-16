@@ -13,7 +13,7 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/g
 import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
 import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
 import { ClaimForecastParams, ClaimForecastRoute } from "@ui/containers/pages/claims/claimForecast.page";
-import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/dashboard.page";
+import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
 import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 

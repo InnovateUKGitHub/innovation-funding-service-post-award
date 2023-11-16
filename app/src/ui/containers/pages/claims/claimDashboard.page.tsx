@@ -33,37 +33,17 @@ export interface ClaimDashboardPageParams {
 }
 
 interface Data {
-  projectDetails: Pending<ProjectDto>;
-  partnerDetails: Pending<PartnerDto>;
-  previousClaims: Pending<ClaimDto[]>;
-  currentClaim: Pending<ClaimDto | null>;
+  project: ProjectDto;
+  partner: PartnerDto;
+  previousClaims: ClaimDto[];
+  currentClaim: ClaimDto | null;
 }
 
 const ClaimTable = createTypedTable<ClaimDto>();
 
-class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
+class ClaimDashboardComponent extends ContainerBase<ClaimDashboardPageParams, Data> {
   public render() {
-    const combined = Pending.combine({
-      project: this.props.projectDetails,
-      partner: this.props.partnerDetails,
-      previousClaims: this.props.previousClaims,
-      currentClaim: this.props.currentClaim,
-    });
-
-    return (
-      <PageLoader
-        pending={combined}
-        render={x => this.renderContents(x.project, x.partner, x.currentClaim, x.previousClaims)}
-      />
-    );
-  }
-
-  private renderContents(
-    project: ProjectDto,
-    partner: PartnerDto,
-    currentClaim: ClaimDto | null,
-    previousClaims: ClaimDto[],
-  ) {
+    const { project, partner, previousClaims, currentClaim } = this.props;
     return (
       <Page
         pageTitle={<Title {...project} />}
@@ -201,15 +181,14 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
 const ClaimsDashboardRouteContainer = (props: ClaimDashboardPageParams & BaseProps) => {
   const stores = useStores();
 
-  return (
-    <Component
-      {...props}
-      projectDetails={stores.projects.getById(props.projectId)}
-      partnerDetails={stores.partners.getById(props.partnerId)}
-      previousClaims={stores.claims.getInactiveClaimsForPartner(props.partnerId)}
-      currentClaim={stores.claims.getActiveClaimForPartner(props.partnerId)}
-    />
-  );
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    partner: stores.partners.getById(props.partnerId),
+    previousClaims: stores.claims.getInactiveClaimsForPartner(props.partnerId),
+    currentClaim: stores.claims.getActiveClaimForPartner(props.partnerId),
+  });
+
+  return <PageLoader pending={combined} render={x => <ClaimDashboardComponent {...x} {...props} />} />;
 };
 
 export const ClaimsDashboardRoute = defineRoute({

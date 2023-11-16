@@ -4,7 +4,7 @@ import { ClaimDetailDocumentsRoute } from "@ui/containers/pages/claims/claimDeta
 import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 import { ClaimForecastRoute } from "@ui/containers/pages/claims/claimForecast.page";
 import { ClaimLineItemsRoute, ReviewClaimLineItemsRoute } from "@ui/containers/pages/claims/claimLineItems.page";
-import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/dashboard.page";
+import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
 import { EditClaimLineItemsRoute } from "@ui/containers/pages/claims/editClaimLineItems.page";
 import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
 import { DeveloperHomePage } from "@ui/containers/pages/developer/home.page";
