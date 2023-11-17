@@ -69,20 +69,20 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   const {
     onUpdate: onUploadUpdate,
     apiError: onUploadApiError,
-    isFetching: onUploadFetching,
+    isProcessing: onUploadProcessing,
   } = useOnUpload({
-    onSuccess() {
-      refresh();
+    async onSuccess() {
+      await refresh();
       reset();
     },
   });
   const {
     onUpdate: onDeleteUpdate,
     apiError: onDeleteApiError,
-    isFetching: onDeleteFetching,
+    isProcessing: onDeleteProcessing,
   } = useOnDelete({ onSuccess: refresh });
 
-  const isFetching = onUploadFetching || onDeleteFetching;
+  const isProcessing = onUploadProcessing || onDeleteProcessing;
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<ProjectLevelUploadSchemaType>>(setError, formState.errors);
@@ -151,7 +151,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
           onSubmit={handleSubmit(onChange)}
           method="POST"
           encType="multipart/form-data"
-          aria-disabled={isFetching}
+          aria-disabled={isProcessing}
         >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
@@ -162,7 +162,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
             <FormGroup hasError={!!getFieldState("files").error}>
               <ValidationError error={getFieldState("files").error} />
               <FileInput
-                disabled={isFetching}
+                disabled={isProcessing}
                 id="files"
                 hasError={!!getFieldState("files").error}
                 multiple
@@ -176,7 +176,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
                 <Label htmlFor="partnerId">{getContent(x => x.documentLabels.participantLabel)}</Label>
                 <ValidationError error={getFieldState("partnerId").error} />
                 <Select
-                  disabled={isFetching}
+                  disabled={isProcessing}
                   id="partnerId"
                   defaultValue={defaults?.partnerId}
                   {...register("partnerId")}
@@ -200,7 +200,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
               <Label htmlFor="description">{getContent(x => x.documentLabels.descriptionLabel)}</Label>
               <ValidationError error={getFieldState("description").error} />
               <Select
-                disabled={isFetching}
+                disabled={isProcessing}
                 id="description"
                 defaultValue={defaults?.description}
                 {...register("description")}
@@ -214,7 +214,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
             </FormGroup>
           </Fieldset>
           <Fieldset>
-            <Button disabled={isFetching} name="button_default" styling="Secondary" type="submit">
+            <Button disabled={isProcessing} name="button_default" styling="Secondary" type="submit">
               {getContent(x => x.documentMessages.uploadDocuments)}
             </Button>
           </Fieldset>
@@ -242,7 +242,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
               onRemove={document => onDelete(document)}
               documents={projectDocuments}
               formType={FormTypes.ProjectLevelDelete}
-              disabled={isFetching}
+              disabled={isProcessing}
             />
           </>
         )}
@@ -268,7 +268,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
           onRemove={document => onDelete(document)}
           documents={partnerDocuments}
           project={project}
-          disabled={isFetching}
+          disabled={isProcessing}
         />
       </Section>
     </Page>
