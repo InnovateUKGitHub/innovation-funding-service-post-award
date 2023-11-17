@@ -28,27 +28,38 @@ export type RefreshedQueryOptions = { fetchKey: number; fetchPolicy: "store-only
 export function useRefreshQuery<T extends GraphQLTaggedNode, U extends AnyObject>(
   query: T,
   variables: U,
-): [RefreshedQueryOptions, () => void] {
+): [RefreshedQueryOptions, () => Promise<void>] {
   const environment = useRelayEnvironment();
-  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  // The current refresh promise - If it's realoding.
+  const [refreshPromise, setRefreshPromise] = useState<Promise<void> | null>(null);
   const [refreshedQueryOptions, setRefreshedQueryOptions] = useState<RefreshedQueryOptions>(undefined);
 
-  const refresh = () => {
-    if (isRefreshing) return;
-    setIsRefreshing(true);
+  const refresh = (): Promise<void> => {
+    // If we are already reloading, return the current promise
+    if (refreshPromise) return refreshPromise;
 
-    fetchQuery(environment, query, variables).subscribe({
-      complete: () => {
-        setIsRefreshing(false);
-        setRefreshedQueryOptions(prev => ({
-          fetchKey: (prev?.fetchKey ?? 0) + 1,
-          fetchPolicy: "store-only",
-        }));
-      },
-      error: () => {
-        setIsRefreshing(false);
-      },
+    // Wait for the fetch to complete
+    const promise = new Promise<void>((resolve, reject) => {
+      fetchQuery(environment, query, variables).subscribe({
+        complete: () => {
+          setRefreshedQueryOptions(prev => ({
+            fetchKey: (prev?.fetchKey ?? 0) + 1,
+            fetchPolicy: "store-only",
+          }));
+          resolve();
+          setRefreshPromise(null);
+        },
+        error: () => {
+          reject();
+          setRefreshPromise(null);
+        },
+      });
     });
+
+    // Return the promise that will complete when the fetch completes
+    setRefreshPromise(promise);
+    return promise;
   };
 
   return [refreshedQueryOptions, refresh];

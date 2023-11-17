@@ -28,7 +28,7 @@ export const useOnDelete = <
 >({
   onSuccess,
 }: {
-  onSuccess: () => void;
+  onSuccess: () => void | Promise<void>;
 }) => {
   const store = useStore<RootState>();
 
@@ -83,12 +83,12 @@ export const useOnDelete = <
           return Promise.reject();
       }
     },
-    onSuccess(input, _, ctx) {
+    async onSuccess(input, _, ctx) {
+      await onSuccess();
       const successMessage = getContent(x => x.documentMessages.deletedDocument({ deletedFileName: ctx?.fileName }));
       store.dispatch(removeMessages());
       store.dispatch(messageSuccess(successMessage));
       scrollToTheTopSmoothly();
-      onSuccess();
     },
   });
 };

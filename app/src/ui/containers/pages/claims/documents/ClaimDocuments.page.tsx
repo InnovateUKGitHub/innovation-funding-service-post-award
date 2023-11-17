@@ -76,20 +76,18 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const {
     onUpdate: onUploadUpdate,
     apiError: onUploadApiError,
-    isFetching: onUploadFetching,
+    isProcessing: onUploadProcessing,
   } = useOnUpload({
-    onSuccess() {
-      refresh();
+    async onSuccess() {
+      await refresh();
       reset();
     },
   });
   const {
     onUpdate: onDeleteUpdate,
     apiError: onDeleteApiError,
-    isFetching: onDeleteFetching,
+    isProcessing: onDeleteProcessing,
   } = useOnDelete({ onSuccess: refresh });
-
-  const isFetching = onUploadFetching || onDeleteFetching;
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<ClaimLevelUploadSchemaType>>(setError, formState.errors);
@@ -121,6 +119,8 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     project.impactManagementParticipation === ImpactManagementParticipation.Yes &&
     claim.isFinalClaim &&
     claim.pcfStatus !== "Received";
+
+  const disabled = onUploadProcessing || onDeleteProcessing || isNonEditable;
 
   return (
     <Page
@@ -166,7 +166,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
           onSubmit={handleSubmit(onChange)}
           method="POST"
           encType="multipart/form-data"
-          aria-disabled={isFetching || isNonEditable}
+          aria-disabled={disabled}
         >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
@@ -179,7 +179,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
             <FormGroup hasError={!!getFieldState("files").error}>
               <ValidationError error={getFieldState("files").error} />
               <FileInput
-                disabled={isFetching || isNonEditable}
+                disabled={disabled}
                 id="files"
                 hasError={!!getFieldState("files").error}
                 multiple
@@ -192,7 +192,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
               <Label htmlFor="description">{getContent(x => x.documentLabels.descriptionLabel)}</Label>
               <ValidationError error={getFieldState("description").error} />
               <Select
-                disabled={isFetching || isNonEditable}
+                disabled={disabled}
                 id="description"
                 defaultValue={defaults?.description}
                 {...register("description")}
@@ -206,7 +206,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
             </FormGroup>
           </Fieldset>
           <Fieldset>
-            <Button disabled={isFetching || isNonEditable} name="button_default" styling="Secondary" type="submit">
+            <Button disabled={disabled} name="button_default" styling="Secondary" type="submit">
               {getContent(x => x.documentMessages.uploadDocuments)}
             </Button>
           </Fieldset>
@@ -224,14 +224,14 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
           onRemove={onDelete}
           documents={claimDocuments}
           formType={FormTypes.ClaimLevelDelete}
-          disabled={isNonEditable}
+          disabled={disabled}
         />
       </Section>
 
       <Section qa="buttons">
         {claim.isFinalClaim ? (
           <Link
-            disabled={isFetching || isNonEditable}
+            disabled={disabled}
             styling="PrimaryButton"
             id="continue-claim"
             route={props.routes.claimSummary.getLink({ projectId, partnerId, periodId })}
@@ -240,7 +240,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
           </Link>
         ) : (
           <Link
-            disabled={isFetching || isNonEditable}
+            disabled={disabled}
             styling="PrimaryButton"
             id="continue-claim"
             route={props.routes.claimForecast.getLink({ projectId, partnerId, periodId })}
@@ -250,7 +250,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
         )}
 
         <Link
-          disabled={isFetching || isNonEditable}
+          disabled={disabled}
           styling="SecondaryButton"
           id="save-claim"
           route={

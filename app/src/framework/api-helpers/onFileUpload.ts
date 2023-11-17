@@ -30,7 +30,7 @@ const isClaimDetailLevelUpload = (data: InputOptions): data is z.output<ClaimDet
 const isPcrLevelUpload = (data: InputOptions): data is z.output<PcrLevelUploadSchemaType> =>
   data.form === FormTypes.PcrLevelUpload;
 
-export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void }) => {
+export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void | Promise<void> }) => {
   const { getContent } = useContent();
   const { clearMessages, setSuccessMessage } = useMessages();
 
@@ -94,10 +94,10 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
         return Promise.reject();
       }
     },
-    onSuccess(data) {
+    async onSuccess(data) {
+      await onSuccess();
       const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: data.files.length }));
       setSuccessMessage(successMessage);
-      onSuccess();
     },
   });
 };

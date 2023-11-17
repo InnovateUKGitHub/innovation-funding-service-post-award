@@ -26,22 +26,26 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
   onError = noop,
 }: {
   req: (data: TFormValues, context?: TContext) => Promise<TResponse>;
-  onSuccess?: (data: TFormValues, res: TResponse, context?: TContext) => void;
+  onSuccess?: (data: TFormValues, res: TResponse, context?: TContext) => void | Promise<void>;
   onError?: (e: unknown) => Propagation | void;
 }) => {
   const serverRenderedApiError = useApiErrorContext();
   const [apiError, setApiError] = useState(serverRenderedApiError);
   const [isFetching, setIsFetching] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const onUpdate = async ({ data, context }: { data: TFormValues; context?: TContext }) => {
     try {
       setIsFetching(true);
+      setIsProcessing(true);
+
       setApiError(null);
 
       const res = await req(data, context);
 
       setIsFetching(false);
-      onSuccess(data, res, context);
+      await onSuccess(data, res, context);
+      setIsProcessing(false);
     } catch (e: unknown) {
       const logger = new Logger("onUpdate");
 
@@ -57,8 +61,10 @@ export const useOnUpdate = <TFormValues, TResponse, TContext = undefined>({
         setApiError(e);
         scrollToTheTopSmoothly();
       }
+
+      setIsProcessing(false);
     }
   };
 
-  return { onUpdate, apiError, isFetching };
+  return { onUpdate, apiError, isFetching, isProcessing };
 };

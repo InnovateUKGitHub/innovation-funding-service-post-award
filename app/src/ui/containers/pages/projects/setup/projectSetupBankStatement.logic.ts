@@ -32,7 +32,7 @@ export const useSetupBankStatementActions = (
   const {
     onUpdate: onUploadUpdate,
     apiError: onUploadApiError,
-    isFetching: onUploadFetching,
+    isProcessing: onUploadFetching,
   } = useOnUpload({
     onSuccess() {
       refresh();
@@ -43,7 +43,7 @@ export const useSetupBankStatementActions = (
   const {
     onUpdate: onDeleteUpdate,
     apiError: onDeleteApiError,
-    isFetching: onDeleteFetching,
+    isProcessing: onDeleteFetching,
   } = useOnDelete({ onSuccess: refresh });
 
   const onChange = (dto: z.output<UploadBankStatementSchemaType>) => {
