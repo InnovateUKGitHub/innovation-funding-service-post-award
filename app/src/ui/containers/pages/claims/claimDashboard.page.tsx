@@ -33,23 +33,66 @@ export interface ClaimDashboardPageParams {
 }
 
 interface Data {
-  project: ProjectDto;
-  partner: PartnerDto;
-  previousClaims: ClaimDto[];
-  currentClaim: ClaimDto | null;
+  project: Pick<ProjectDto, "status" | "title" | "projectNumber" | "id" | "roles" | "periodEndDate">;
+  partner: Pick<PartnerDto, "partnerStatus" | "isWithdrawn" | "roles" | "id" | "competitionType" | "overdueProject">;
+  previousClaims: Pick<
+    ClaimDto,
+    | "status"
+    | "isFinalClaim"
+    | "periodId"
+    | "periodEndDate"
+    | "periodStartDate"
+    | "forecastCost"
+    | "totalCost"
+    | "approvedDate"
+    | "lastModifiedDate"
+    | "statusLabel"
+    | "paidDate"
+  >[];
+  currentClaim: Nullable<
+    Pick<
+      ClaimDto,
+      | "status"
+      | "isFinalClaim"
+      | "periodId"
+      | "periodEndDate"
+      | "periodStartDate"
+      | "forecastCost"
+      | "totalCost"
+      | "approvedDate"
+      | "lastModifiedDate"
+      | "statusLabel"
+      | "paidDate"
+    >
+  >;
 }
 
-const ClaimTable = createTypedTable<ClaimDto>();
+const ClaimTable =
+  createTypedTable<
+    Pick<
+      ClaimDto,
+      | "status"
+      | "forecastCost"
+      | "totalCost"
+      | "statusLabel"
+      | "paidDate"
+      | "approvedDate"
+      | "lastModifiedDate"
+      | "periodId"
+      | "periodEndDate"
+      | "periodStartDate"
+    >
+  >();
 
 class ClaimDashboardComponent extends ContainerBase<ClaimDashboardPageParams, Data> {
   public render() {
     const { project, partner, previousClaims, currentClaim } = this.props;
     return (
       <Page
-        pageTitle={<Title {...project} />}
+        pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
         backLink={<ProjectBackLink routes={this.props.routes} projectId={project.id} />}
-        project={project}
-        partner={partner}
+        projectStatus={project.status}
+        partnerStatus={partner.partnerStatus}
       >
         <ProjectParticipantsHoc>
           {state => state.isMultipleParticipants && <ClaimsDashboardGuidance {...partner} />}
@@ -72,7 +115,7 @@ class ClaimDashboardComponent extends ContainerBase<ClaimDashboardPageParams, Da
     );
   }
 
-  private renderNoCurrentClaimsMessage(endDate: Date, previousClaims: ClaimDto[]) {
+  private renderNoCurrentClaimsMessage(endDate: Date, previousClaims: Data["previousClaims"]) {
     const date = DateTime.fromJSDate(endDate).plus({ days: 1 }).toJSDate();
     // If the final claim has been approved
     if (previousClaims && previousClaims.find(x => x.isFinalClaim)) {
@@ -92,11 +135,11 @@ class ClaimDashboardComponent extends ContainerBase<ClaimDashboardPageParams, Da
   }
 
   private renderCurrentClaims(
-    currentClaims: ClaimDto[],
+    currentClaims: NonNullable<Data["currentClaim"]>[],
     tableQa: string,
-    project: ProjectDto,
-    partner: PartnerDto,
-    previousClaims: ClaimDto[],
+    project: Data["project"],
+    partner: Data["partner"],
+    previousClaims: Data["previousClaims"],
   ) {
     if (currentClaims.length) {
       return this.renderClaimsTable(currentClaims, tableQa, project, partner, "Open");
@@ -109,7 +152,12 @@ class ClaimDashboardComponent extends ContainerBase<ClaimDashboardPageParams, Da
     return null;
   }
 
-  private renderPreviousClaims(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto) {
+  private renderPreviousClaims(
+    data: Data["previousClaims"],
+    tableQa: string,
+    project: Data["project"],
+    partner: Data["partner"],
+  ) {
     if (data.length) {
       return this.renderClaimsTable(data, tableQa, project, partner, "Closed");
     }
@@ -122,10 +170,10 @@ class ClaimDashboardComponent extends ContainerBase<ClaimDashboardPageParams, Da
   }
 
   private renderClaimsTable(
-    data: ClaimDto[],
+    data: Data["previousClaims"],
     tableQa: string,
-    project: ProjectDto,
-    partner: PartnerDto,
+    project: Data["project"],
+    partner: Data["partner"],
     tableCaption?: string,
   ) {
     return (
@@ -171,7 +219,7 @@ class ClaimDashboardComponent extends ContainerBase<ClaimDashboardPageParams, Da
     );
   }
 
-  private hasBodyRowFlag(claim: ClaimDto, project: ProjectDto, partner: PartnerDto) {
+  private hasBodyRowFlag(claim: Pick<ClaimDto, "status">, project: Data["project"], partner: Data["partner"]) {
     const linkType = getClaimDetailsStatusType({ claim, project, partner });
 
     return linkType === "edit" ? "edit" : null;
