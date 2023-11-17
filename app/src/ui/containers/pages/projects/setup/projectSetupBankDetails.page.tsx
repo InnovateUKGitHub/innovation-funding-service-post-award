@@ -102,7 +102,8 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 inputWidth="one-third"
                 {...register("companyNumber")}
                 maxLength={projectSetupBankDetailsMaxLength}
-                defaultValue={defaults?.companyNumber}
+                defaultValue={defaults?.companyNumber ?? partner.bankDetails.companyNumber ?? undefined}
+                hasError={!!getFieldState("companyNumber").error}
               />
             </FormGroup>
           </Fieldset>
@@ -115,7 +116,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
               disabled={isFetching}
               register={register}
               error={getFieldState("bankCheckValidation").error ?? getFieldState("sortCode").error}
-              defaultValue={partner.bankDetails.sortCode ?? ""}
+              defaultValue={partner.bankDetails.sortCode ?? undefined}
             />
 
             <AccountNumber
@@ -123,7 +124,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
               disabled={isFetching}
               register={register}
               error={getFieldState("bankCheckValidation").error ?? getFieldState("accountNumber").error}
-              defaultValue={partner.bankDetails.accountNumber ?? ""}
+              defaultValue={partner.bankDetails.accountNumber ?? undefined}
             />
           </Fieldset>
 
@@ -140,7 +141,8 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 inputWidth="one-third"
                 {...register("accountBuilding")}
                 maxLength={projectSetupBankDetailsMaxLength}
-                defaultValue={defaults?.accountBuilding}
+                defaultValue={defaults?.accountBuilding ?? partner.bankDetails.address.accountBuilding ?? undefined}
+                hasError={!!getFieldState("accountBuilding").error}
               />
             </FormGroup>
 
@@ -152,7 +154,8 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 inputWidth="one-third"
                 {...register("accountStreet")}
                 maxLength={projectSetupBankDetailsMaxLength}
-                defaultValue={defaults?.accountStreet}
+                defaultValue={defaults?.accountStreet ?? partner.bankDetails.address.accountStreet ?? undefined}
+                hasError={!!getFieldState("accountStreet").error}
               />
             </FormGroup>
 
@@ -164,7 +167,8 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 inputWidth="one-third"
                 {...register("accountLocality")}
                 maxLength={projectSetupBankDetailsMaxLength}
-                defaultValue={defaults?.accountLocality}
+                defaultValue={defaults?.accountLocality ?? partner.bankDetails.address.accountLocality ?? undefined}
+                hasError={!!getFieldState("accountLocality").error}
               />
             </FormGroup>
 
@@ -176,7 +180,8 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 inputWidth="one-third"
                 {...register("accountTownOrCity")}
                 maxLength={projectSetupBankDetailsMaxLength}
-                defaultValue={defaults?.accountTownOrCity}
+                defaultValue={defaults?.accountTownOrCity ?? partner.bankDetails.address.accountTownOrCity ?? undefined}
+                hasError={!!getFieldState("accountTownOrCity").error}
               />
             </FormGroup>
 
@@ -188,7 +193,7 @@ const ProjectSetupBankDetailsPage = (props: BaseProps & ProjectSetupBankDetailsP
                 inputWidth="one-third"
                 {...register("accountPostcode")}
                 maxLength={projectSetupBankDetailsMaxLength}
-                defaultValue={defaults?.accountPostcode}
+                defaultValue={defaults?.accountPostcode ?? partner.bankDetails.address.accountPostcode ?? undefined}
               />
             </FormGroup>
           </Fieldset>
