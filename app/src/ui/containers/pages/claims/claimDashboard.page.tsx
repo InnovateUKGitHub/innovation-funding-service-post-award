@@ -1,8 +1,6 @@
 import { DateTime } from "luxon";
-import { ProjectParticipantsHoc } from "@ui/components/atomicDesign/atoms/providers/ProjectParticipants/project-participants";
-import { Pending } from "../../../../shared/pending";
+import { useProjectParticipants } from "@ui/components/atomicDesign/atoms/providers/ProjectParticipants/project-participants";
 import { BaseProps, defineRoute } from "../../containerBase";
-import { GetProjectStatus } from "../../app/project-active";
 import { ClaimsDashboardGuidance } from "./components/ClaimsDashboardGuidance";
 import { DateFormat } from "@framework/constants/enums";
 import { ProjectRole } from "@framework/constants/project";
@@ -11,11 +9,9 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { formatDate } from "@framework/util/dateHelpers";
 import { roundCurrency } from "@framework/util/numberHelper";
-import { useStores } from "@ui/redux/storesProvider";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { PageLoader } from "@ui/components/bjss/loading";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
@@ -26,66 +22,46 @@ import {
   ClaimDetailsLink,
   getClaimDetailsStatusType,
 } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
+import { useClaimDashboardData } from "./claimDashboard.logic";
+import { useProjectStatus } from "@ui/hooks/project-status.hook";
 
 export interface ClaimDashboardPageParams {
   projectId: ProjectId;
   partnerId: PartnerId;
 }
 
+type Claim = Pick<
+  ClaimDto,
+  | "status"
+  | "isFinalClaim"
+  | "periodId"
+  | "periodEndDate"
+  | "periodStartDate"
+  | "forecastCost"
+  | "totalCost"
+  | "approvedDate"
+  | "lastModifiedDate"
+  | "statusLabel"
+  | "paidDate"
+>;
+
 interface Data {
-  project: Pick<ProjectDto, "status" | "title" | "projectNumber" | "id" | "roles" | "periodEndDate">;
-  partner: Pick<PartnerDto, "partnerStatus" | "isWithdrawn" | "roles" | "id" | "competitionType" | "overdueProject">;
-  previousClaims: Pick<
-    ClaimDto,
-    | "status"
-    | "isFinalClaim"
-    | "periodId"
-    | "periodEndDate"
-    | "periodStartDate"
-    | "forecastCost"
-    | "totalCost"
-    | "approvedDate"
-    | "lastModifiedDate"
-    | "statusLabel"
-    | "paidDate"
-  >[];
-  currentClaim: Nullable<
-    Pick<
-      ClaimDto,
-      | "status"
-      | "isFinalClaim"
-      | "periodId"
-      | "periodEndDate"
-      | "periodStartDate"
-      | "forecastCost"
-      | "totalCost"
-      | "approvedDate"
-      | "lastModifiedDate"
-      | "statusLabel"
-      | "paidDate"
-    >
+  project: Pick<
+    ProjectDto,
+    "status" | "title" | "projectNumber" | "id" | "roles" | "periodEndDate" | "competitionType"
   >;
+  partner: Pick<PartnerDto, "partnerStatus" | "isWithdrawn" | "roles" | "id" | "overdueProject">;
+  previousClaims: Claim[];
+  currentClaim: Nullable<Claim>;
 }
 
-const ClaimTable =
-  createTypedTable<
-    Pick<
-      ClaimDto,
-      | "status"
-      | "forecastCost"
-      | "totalCost"
-      | "statusLabel"
-      | "paidDate"
-      | "approvedDate"
-      | "lastModifiedDate"
-      | "periodId"
-      | "periodEndDate"
-      | "periodStartDate"
-    >
-  >();
+const ClaimTable = createTypedTable<Claim>();
 
-const ClaimDashboardComponent = (props: BaseProps & Data & ClaimDashboardPageParams) => {
-  const { project, partner, previousClaims, currentClaim } = props;
+const ClaimDashboardComponent = (props: BaseProps & ClaimDashboardPageParams) => {
+  const data = useClaimDashboardData(props.projectId, props.partnerId);
+  const { project, partner, previousClaims, currentClaim } = data;
+
+  const { isMultipleParticipants } = useProjectParticipants();
   return (
     <Page
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
@@ -93,9 +69,9 @@ const ClaimDashboardComponent = (props: BaseProps & Data & ClaimDashboardPagePar
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
-      <ProjectParticipantsHoc>
-        {state => state.isMultipleParticipants && <ClaimsDashboardGuidance {...partner} />}
-      </ProjectParticipantsHoc>
+      {isMultipleParticipants && (
+        <ClaimsDashboardGuidance competitionType={project.competitionType} overdueProject={partner.overdueProject} />
+      )}
 
       <Messages messages={props.messages} />
       <Section qa="current-claims-section" title={x => x.claimsLabels.openSectionTitle}>
@@ -229,46 +205,35 @@ const ClaimsTable = ({
   tableCaption?: string;
   routes: BaseProps["routes"];
 }) => {
+  const projectStatus = useProjectStatus();
   return (
-    <GetProjectStatus>
-      {projectStatus => (
-        <ClaimTable.Table
-          data={data.sort((a, b) => a.periodId - b.periodId)}
-          bodyRowFlag={claim => (projectStatus.isActive ? hasBodyRowFlag(claim, project, partner) : null)}
-          qa={tableQa}
-          caption={tableCaption}
-        >
-          <ClaimTable.Custom
-            header={x => x.claimsLabels.period}
-            qa="period"
-            value={x => <ClaimPeriodDate claim={x} />}
-          />
-          <ClaimTable.Currency
-            header={x => x.claimsLabels.forecastCosts}
-            qa="forecast-cost"
-            value={x => x.forecastCost}
-          />
-          <ClaimTable.Currency header={x => x.claimsLabels.actualCosts} qa="actual-cost" value={x => x.totalCost} />
-          <ClaimTable.Currency
-            header={x => x.claimsLabels.difference}
-            qa="diff"
-            value={x => roundCurrency(x.forecastCost - x.totalCost)}
-          />
-          <ClaimTable.Custom header={x => x.claimsLabels.status} qa="status" value={x => x.statusLabel} />
-          <ClaimTable.ShortDate
-            header={x => x.claimsLabels.lastUpdatedDate}
-            qa="date"
-            value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}
-          />
-          <ClaimTable.Custom
-            header={x => x.claimsLabels.actionHeader}
-            hideHeader
-            qa="link"
-            value={x => <ClaimDetailsLink claim={x} project={project} partner={partner} routes={routes} />}
-          />
-        </ClaimTable.Table>
-      )}
-    </GetProjectStatus>
+    <ClaimTable.Table
+      data={data.sort((a, b) => a.periodId - b.periodId)}
+      bodyRowFlag={claim => (projectStatus.isActive ? hasBodyRowFlag(claim, project, partner) : null)}
+      qa={tableQa}
+      caption={tableCaption}
+    >
+      <ClaimTable.Custom header={x => x.claimsLabels.period} qa="period" value={x => <ClaimPeriodDate claim={x} />} />
+      <ClaimTable.Currency header={x => x.claimsLabels.forecastCosts} qa="forecast-cost" value={x => x.forecastCost} />
+      <ClaimTable.Currency header={x => x.claimsLabels.actualCosts} qa="actual-cost" value={x => x.totalCost} />
+      <ClaimTable.Currency
+        header={x => x.claimsLabels.difference}
+        qa="diff"
+        value={x => roundCurrency(x.forecastCost - x.totalCost)}
+      />
+      <ClaimTable.Custom header={x => x.claimsLabels.status} qa="status" value={x => x.statusLabel} />
+      <ClaimTable.ShortDate
+        header={x => x.claimsLabels.lastUpdatedDate}
+        qa="date"
+        value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}
+      />
+      <ClaimTable.Custom
+        header={x => x.claimsLabels.actionHeader}
+        hideHeader
+        qa="link"
+        value={x => <ClaimDetailsLink claim={x} project={project} partner={partner} routes={routes} />}
+      />
+    </ClaimTable.Table>
   );
 };
 
@@ -278,25 +243,12 @@ const hasBodyRowFlag = (claim: Pick<ClaimDto, "status">, project: Data["project"
   return linkType === "edit" ? "edit" : null;
 };
 
-const ClaimsDashboardRouteContainer = (props: ClaimDashboardPageParams & BaseProps) => {
-  const stores = useStores();
-
-  const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    partner: stores.partners.getById(props.partnerId),
-    previousClaims: stores.claims.getInactiveClaimsForPartner(props.partnerId),
-    currentClaim: stores.claims.getActiveClaimForPartner(props.partnerId),
-  });
-
-  return <PageLoader pending={combined} render={x => <ClaimDashboardComponent {...x} {...props} />} />;
-};
-
 export const ClaimsDashboardRoute = defineRoute({
   allowRouteInActiveAccess: true,
   routeName: "claimsDashboard",
   routePath: "/projects/:projectId/claims/",
   routePathWithQuery: "/projects/:projectId/claims?:partnerId",
-  container: ClaimsDashboardRouteContainer,
+  container: ClaimDashboardComponent,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
