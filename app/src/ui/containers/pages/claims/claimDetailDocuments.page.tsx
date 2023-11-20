@@ -30,13 +30,6 @@ export interface ClaimDetailDocumentsPageParams {
   periodId: PeriodId;
 }
 
-interface Data {
-  project: Pending<ProjectDto>;
-  costCategories: Pending<CostCategoryDto[]>;
-  documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
-}
-
 interface CombinedData {
   project: ProjectDto;
   costCategories: CostCategoryDto[];
@@ -51,19 +44,13 @@ interface Callbacks {
 
 const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
-export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocumentsPageParams, Data, Callbacks> {
+export class ClaimDetailDocumentsComponent extends ContainerBase<
+  ClaimDetailDocumentsPageParams,
+  CombinedData,
+  Callbacks
+> {
   public render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      costCategories: this.props.costCategories,
-      documents: this.props.documents,
-      editor: this.props.editor,
-    });
-
-    return <PageLoader pending={combined} render={data => this.renderContents(data)} />;
-  }
-
-  private renderContents({ project, costCategories, documents, editor }: CombinedData) {
+    const { project, costCategories, documents, editor } = this.props;
     const back = this.props.routes.prepareClaimLineItems.getLink({
       projectId: project.id,
       partnerId: this.props.partnerId,
@@ -176,26 +163,30 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
     );
   };
 
+  const combined = Pending.combine({
+    project: stores.projects.getById(props.projectId),
+    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+    documents: stores.claimDetailDocuments.getClaimDetailDocuments(
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      props.costCategoryId,
+    ),
+    editor: stores.claimDetailDocuments.getClaimDetailDocumentsEditor(
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      props.costCategoryId,
+      dto => (dto.description = DocumentDescription.Evidence),
+    ),
+  });
+
   return (
-    <ClaimDetailDocumentsComponent
-      project={stores.projects.getById(props.projectId)}
-      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
-      documents={stores.claimDetailDocuments.getClaimDetailDocuments(
-        props.projectId,
-        props.partnerId,
-        props.periodId,
-        props.costCategoryId,
+    <PageLoader
+      pending={combined}
+      render={data => (
+        <ClaimDetailDocumentsComponent onChange={handleOnChange} onDelete={handleOnDelete} {...data} {...props} />
       )}
-      editor={stores.claimDetailDocuments.getClaimDetailDocumentsEditor(
-        props.projectId,
-        props.partnerId,
-        props.periodId,
-        props.costCategoryId,
-        dto => (dto.description = DocumentDescription.Evidence),
-      )}
-      onChange={handleOnChange}
-      onDelete={handleOnDelete}
-      {...props}
     />
   );
 };
