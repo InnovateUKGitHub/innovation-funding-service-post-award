@@ -1,3 +1,4 @@
 reports/
 cypress/screenshots/
 cypress.env.json
+cucumber-messages.ndjson
