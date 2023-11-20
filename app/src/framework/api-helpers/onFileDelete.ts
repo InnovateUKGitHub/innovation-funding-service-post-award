@@ -13,12 +13,17 @@ import type {
   partnerLevelDelete,
   projectLevelDelete,
   pcrLevelDelete,
+  claimDetailLevelDelete,
 } from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
 
 export const useOnDelete = <
   Inputs extends z.output<
-    typeof projectLevelDelete | typeof partnerLevelDelete | typeof claimLevelDelete | typeof pcrLevelDelete
+    | typeof projectLevelDelete
+    | typeof partnerLevelDelete
+    | typeof claimLevelDelete
+    | typeof pcrLevelDelete
+    | typeof claimDetailLevelDelete
   >,
 >({
   onSuccess,
@@ -52,6 +57,14 @@ export const useOnDelete = <
           return clientsideApiClient.documents.deleteClaimDocument({
             documentId,
             claimKey: { partnerId, periodId, projectId },
+          });
+        }
+
+        case FormTypes.ClaimDetailLevelDelete: {
+          const { partnerId, periodId, costCategoryId } = props;
+          return clientsideApiClient.documents.deleteClaimDetailDocument({
+            documentId,
+            claimDetailKey: { partnerId, costCategoryId, periodId, projectId },
           });
         }
 

@@ -8,12 +8,14 @@ import type {
   ProjectLevelUploadSchemaType,
   ClaimLevelUploadSchemaType,
   PcrLevelUploadSchemaType,
+  ClaimDetailLevelUploadSchemaType,
 } from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
 
 type InputOptions =
   | ({ form: FormTypes.ProjectLevelUpload } & z.output<ProjectLevelUploadSchemaType>)
   | ({ form: FormTypes.ClaimLevelUpload } & z.output<ClaimLevelUploadSchemaType>)
+  | ({ form: FormTypes.ClaimDetailLevelUpload } & z.output<ClaimDetailLevelUploadSchemaType>)
   | ({ form: FormTypes.PcrLevelUpload } & z.output<PcrLevelUploadSchemaType>);
 
 const isProjectLevelUpload = (data: InputOptions): data is z.output<ProjectLevelUploadSchemaType> =>
@@ -21,6 +23,9 @@ const isProjectLevelUpload = (data: InputOptions): data is z.output<ProjectLevel
 
 const isClaimLevelUpload = (data: InputOptions): data is z.output<ClaimLevelUploadSchemaType> =>
   data.form === FormTypes.ClaimLevelUpload;
+
+const isClaimDetailLevelUpload = (data: InputOptions): data is z.output<ClaimDetailLevelUploadSchemaType> =>
+  data.form === FormTypes.ClaimDetailLevelUpload;
 
 const isPcrLevelUpload = (data: InputOptions): data is z.output<PcrLevelUploadSchemaType> =>
   data.form === FormTypes.PcrLevelUpload;
@@ -38,6 +43,19 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
       if (isClaimLevelUpload(data)) {
         return clientsideApiClient.documents.uploadClaimDocuments({
           claimKey: { projectId, partnerId: data.partnerId, periodId: data.periodId },
+          documents: {
+            files,
+            description,
+          },
+        });
+      } else if (isClaimDetailLevelUpload(data)) {
+        return clientsideApiClient.documents.uploadClaimDetailDocuments({
+          claimDetailKey: {
+            projectId,
+            partnerId: data.partnerId,
+            periodId: data.periodId,
+            costCategoryId: data.costCategoryId,
+          },
           documents: {
             files,
             description,

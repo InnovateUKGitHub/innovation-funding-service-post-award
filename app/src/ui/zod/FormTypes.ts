@@ -10,6 +10,9 @@ enum FormTypes {
 
   // Project Setup
   ProjectSetupBankDetails = "projectSetupBankDetails",
+  // Claim Details page
+  ClaimDetailLevelUpload = "claimDetailLevelUpload",
+  ClaimDetailLevelDelete = "claimeDetailLevelDelete",
 
   // Project Change Requests
   ProjectChangeRequestCreate = "projectChangeRequestCreate",

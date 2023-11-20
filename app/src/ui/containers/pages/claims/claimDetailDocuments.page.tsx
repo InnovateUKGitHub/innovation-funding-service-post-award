@@ -1,27 +1,39 @@
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { Pending } from "@shared/pending";
-import { createTypedForm } from "@ui/components/bjss/form/form";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import { BaseProps, defineRoute } from "../../containerBase";
-import { useStores } from "@ui/redux/storesProvider";
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { ProjectRole } from "@framework/constants/project";
-import { ProjectDto } from "@framework/dtos/projectDto";
 import { DocumentGuidance } from "@ui/components/atomicDesign/organisms/documents/DocumentGuidance/DocumentGuidance";
 import { DocumentEdit } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
-import { Page } from "@ui/components/bjss/Page/page";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useContent } from "@ui/hooks/content.hook";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
+import { useClearMessagesOnBlurOrChange } from "@framework/api-helpers/useClearMessagesOnBlurOrChange";
+import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { useClaimDetailDocumentsQuery } from "./claimDetailDocuments.logic";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { makeZodI18nMap } from "@shared/zodi18n";
+import { useOnUpload } from "@framework/api-helpers/onFileUpload";
+import { useOnDelete } from "@framework/api-helpers/onFileDelete";
+import { useZodErrors } from "@framework/api-helpers/useZodErrors";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { ClaimDetailLevelUploadSchemaType, getClaimDetailLevelUpload } from "@ui/zod/documentValidators.zod";
+import { z } from "zod";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { FileInput } from "@ui/components/atomicDesign/atoms/form/FileInput/FileInput";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useForm } from "react-hook-form";
+import { claimDetailDocumentsQuery } from "./ClaimDetailDocuments.query";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: ProjectId;
@@ -30,43 +42,98 @@ export interface ClaimDetailDocumentsPageParams {
   periodId: PeriodId;
 }
 
-interface CombinedData {
-  project: Pick<ProjectDto, "competitionType" | "id" | "title" | "projectNumber">;
-  costCategories: Pick<CostCategoryDto, "id" | "name">[];
-  documents: DocumentSummaryDto[];
-  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
-}
+const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BaseProps) => {
+  const { projectId, partnerId, periodId, costCategoryId } = props;
+  const { getContent } = useContent();
+  const onBlurOrChange = useClearMessagesOnBlurOrChange();
+  const config = useClientConfig();
 
-interface Callbacks {
-  onChange: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
-  onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
-}
-
-const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
-
-export const ClaimDetailDocumentsComponent = (
-  props: ClaimDetailDocumentsPageParams & CombinedData & Callbacks & BaseProps,
-) => {
-  const { project, costCategories, documents, editor } = props;
-  const back = props.routes.prepareClaimLineItems.getLink({
-    projectId: project.id,
-    partnerId: props.partnerId,
-    periodId: props.periodId,
-    costCategoryId: props.costCategoryId,
+  const [refreshedQueryOptions, refresh] = useRefreshQuery(claimDetailDocumentsQuery, {
+    projectId,
+    projectIdStr: projectId,
+    partnerId,
+    periodId,
+    costCategoryId,
   });
+
+  const { project, claimDocuments, costCategories } = useClaimDetailDocumentsQuery(
+    { projectId, partnerId, periodId, costCategoryId },
+    refreshedQueryOptions,
+  );
+
   const costCategory = costCategories.find(x => x.id === props.costCategoryId) || ({} as CostCategoryDto);
   const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
 
+  const { register, handleSubmit, formState, getFieldState, reset, setError } = useForm<
+    z.output<ClaimDetailLevelUploadSchemaType>
+  >({
+    resolver: zodResolver(getClaimDetailLevelUpload({ config: config.options, project }), {
+      errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
+    }),
+  });
+
+  console.log("errors", formState?.errors);
+
+  const {
+    onUpdate: onUploadUpdate,
+    apiError: onUploadApiError,
+    isFetching: onUploadFetching,
+  } = useOnUpload({
+    onSuccess() {
+      refresh();
+      reset();
+    },
+  });
+  const {
+    onUpdate: onDeleteUpdate,
+    apiError: onDeleteApiError,
+    isFetching: onDeleteFetching,
+  } = useOnDelete({ onSuccess: refresh });
+
+  const isFetching = onUploadFetching || onDeleteFetching;
+
+  // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
+  const allErrors = useZodErrors<z.output<ClaimDetailLevelUploadSchemaType>>(setError, formState.errors);
+
+  const onChange = (dto: z.output<ClaimDetailLevelUploadSchemaType>) => {
+    onUploadUpdate({
+      data: dto,
+      context: dto,
+    });
+  };
+
+  const onDelete = (doc: DocumentSummaryDto) => {
+    onDeleteUpdate({
+      data: {
+        form: FormTypes.ClaimDetailLevelDelete,
+        documentId: doc.id,
+        projectId,
+        partnerId,
+        periodId,
+        costCategoryId,
+      },
+      context: doc,
+    });
+  };
+
   return (
     <Page
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={
-        <BackLink route={back}>
+        <BackLink
+          route={props.routes.prepareClaimLineItems.getLink({
+            projectId,
+            partnerId,
+            periodId,
+            costCategoryId,
+          })}
+        >
           <Content value={x => x.documentMessages.backLink({ previousPage: costCategory.name })} />
         </BackLink>
       }
-      error={editor.error}
-      validator={editor.validator}
-      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
+      projectStatus={project.status}
+      validationErrors={allErrors}
+      apiError={onUploadApiError ?? onDeleteApiError}
     >
       {isCombinationOfSBRI ? (
         <>
@@ -87,110 +154,65 @@ export const ClaimDetailDocumentsComponent = (
 
       <Messages messages={props.messages} />
 
-      <Section title={x => x.documentMessages.uploadTitle}>
-        <UploadForm.Form
-          enctype="multipart"
-          editor={editor}
-          onSubmit={() => props.onChange(true, editor.data)}
-          onChange={dto => props.onChange(false, dto)}
-          qa="claimDetailDocuments"
+      <Section title={getContent(x => x.documentMessages.uploadTitle)}>
+        <DocumentGuidance />
+        <Form
+          onBlur={onBlurOrChange}
+          onChange={onBlurOrChange}
+          onSubmit={handleSubmit(onChange)}
+          method="POST"
+          encType="multipart/form-data"
+          aria-disabled={isFetching}
         >
-          <UploadForm.Fieldset>
-            <DocumentGuidance />
-
-            <UploadForm.Hidden name="description" value={() => DocumentDescription.Evidence} />
-
-            <UploadForm.MultipleFileUpload
-              label={x => x.documentMessages.uploadDocuments}
-              labelHidden
-              name="attachment"
-              validation={editor.validator.files}
-              value={data => data.files}
-              update={(dto, files) => (dto.files = files || [])}
-            />
-          </UploadForm.Fieldset>
-
-          <UploadForm.Submit>
-            <Content value={x => x.documentMessages.uploadDocuments} />
-          </UploadForm.Submit>
-        </UploadForm.Form>
+          <Fieldset>
+            {/* Discriminate between upload button/delete button */}
+            <input type="hidden" value={FormTypes.ClaimDetailLevelUpload} {...register("form")} />
+            <input type="hidden" value={projectId} {...register("projectId")} />
+            <input type="hidden" value={partnerId} {...register("partnerId")} />
+            <input type="hidden" value={periodId} {...register("periodId")} />
+            <input type="hidden" value={costCategoryId} {...register("costCategoryId")} />
+            <input type="hidden" value={DocumentDescription.Evidence} {...register("description")} />
+            {/* File uploads */}
+            <FormGroup hasError={!!getFieldState("files").error}>
+              <ValidationError error={getFieldState("files").error} />
+              <FileInput
+                disabled={isFetching}
+                id="files"
+                hasError={!!getFieldState("files").error}
+                multiple
+                {...register("files")}
+              />
+            </FormGroup>
+          </Fieldset>
+          <Fieldset>
+            <Button disabled={isFetching} name="button_default" styling="Secondary" type="submit">
+              {getContent(x => x.documentMessages.uploadDocuments)}
+            </Button>
+          </Fieldset>
+        </Form>
       </Section>
 
-      <Section className="govuk-!-margin-bottom-4">
+      <Section
+        title={getContent(x => x.documentLabels.documentDisplayTitle)}
+        subtitle={getContent(x => x.documentLabels.documentDisplaySubTitle)}
+      >
         <DocumentEdit
-          qa="supporting-documents"
-          onRemove={document => props.onDelete(editor.data, document)}
-          documents={documents}
+          hideHeader
+          hideSubtitle
+          qa="claim-documents"
+          onRemove={onDelete}
+          documents={claimDocuments}
+          formType={FormTypes.ClaimLevelDelete}
         />
       </Section>
     </Page>
   );
 };
 
-const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & BaseProps) => {
-  const stores = useStores();
-  const { getContent } = useContent();
-
-  const handleOnChange: Callbacks["onChange"] = (saving, dto) => {
-    stores.messages.clearMessages();
-    const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }));
-    dto.description = DocumentDescription.Evidence;
-    stores.claimDetailDocuments.updateClaimDetailDocumentsEditor(
-      saving,
-      props.projectId,
-      props.partnerId,
-      props.periodId,
-      props.costCategoryId,
-      dto,
-      successMessage,
-    );
-  };
-
-  const handleOnDelete: Callbacks["onDelete"] = (dto, document) => {
-    stores.messages.clearMessages();
-    stores.claimDetailDocuments.deleteClaimDetailDocumentsEditor(
-      props.projectId,
-      props.partnerId,
-      props.periodId,
-      props.costCategoryId,
-      dto,
-      document,
-      getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document.fileName })),
-    );
-  };
-
-  const combined = Pending.combine({
-    project: stores.projects.getById(props.projectId),
-    costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-    documents: stores.claimDetailDocuments.getClaimDetailDocuments(
-      props.projectId,
-      props.partnerId,
-      props.periodId,
-      props.costCategoryId,
-    ),
-    editor: stores.claimDetailDocuments.getClaimDetailDocumentsEditor(
-      props.projectId,
-      props.partnerId,
-      props.periodId,
-      props.costCategoryId,
-      dto => (dto.description = DocumentDescription.Evidence),
-    ),
-  });
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={data => (
-        <ClaimDetailDocumentsComponent onChange={handleOnChange} onDelete={handleOnDelete} {...data} {...props} />
-      )}
-    />
-  );
-};
-
 export const ClaimDetailDocumentsRoute = defineRoute({
   routeName: "claimDetailDocuments",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId/documents",
-  container: ClaimDetailDocumentsContainer,
+  container: ClaimDetailDocumentsPage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,

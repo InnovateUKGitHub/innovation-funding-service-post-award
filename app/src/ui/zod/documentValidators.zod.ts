@@ -15,6 +15,7 @@ import {
   getMultiFileValidation,
   periodIdValidation,
   pcrItemIdValidation,
+  costCategoryIdValidation,
 } from "./helperValidators.zod";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
@@ -81,6 +82,30 @@ const getClaimLevelUpload = ({ config, project }: ClaimLevelUploadSchemaExtraPro
     files: getMultiFileValidation(config),
   });
 
+type ClaimDetailLevelUploadSchemaType = ReturnType<typeof getClaimDetailLevelUpload>;
+const getClaimDetailLevelUpload = ({ config, project }: ClaimLevelUploadSchemaExtraProps) =>
+  z.object({
+    form: z.literal(FormTypes.ClaimDetailLevelUpload),
+    projectId: projectIdValidation,
+    partnerId: partnerIdValidation,
+    costCategoryId: costCategoryIdValidation,
+    description: z.union([
+      emptyStringToUndefinedValidation,
+      z.coerce
+        .number()
+        .refine(x =>
+          (project.impactManagementParticipation === ImpactManagementParticipation.Yes
+            ? allowedImpactManagementClaimDocuments
+            : allowedClaimDocuments
+          ).includes(x),
+        )
+        .optional()
+        .transform(x => x as DocumentDescription),
+    ]),
+    periodId: periodIdValidation,
+    files: getMultiFileValidation(config),
+  });
+
 const getPcrLevelUpload = ({ config }: { config: IAppOptions }) =>
   z.object({
     form: z.literal(FormTypes.PcrLevelUpload),
@@ -120,6 +145,15 @@ const claimLevelDelete = z.object({
   documentId: z.string(),
 });
 
+const claimDetailLevelDelete = z.object({
+  form: z.literal(FormTypes.ClaimDetailLevelDelete),
+  projectId: projectIdValidation,
+  partnerId: partnerIdValidation,
+  periodId: periodIdValidation,
+  costCategoryId: costCategoryIdValidation,
+  documentId: z.string(),
+});
+
 const pcrLevelDelete = z.object({
   form: z.literal(FormTypes.PcrLevelDelete),
   projectId: projectIdValidation,
@@ -135,6 +169,8 @@ export {
   projectLevelDelete,
   partnerLevelDelete,
   getClaimLevelUpload,
+  getClaimDetailLevelUpload,
+  claimDetailLevelDelete,
   claimLevelDelete,
   pcrLevelDelete,
   projectOrPartnerLevelDelete,
@@ -145,4 +181,5 @@ export type {
   ClaimLevelUploadSchemaType,
   UploadBankStatementSchemaType,
   PcrLevelUploadSchemaType,
+  ClaimDetailLevelUploadSchemaType,
 };
