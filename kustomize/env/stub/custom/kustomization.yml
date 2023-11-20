@@ -10,6 +10,4 @@ bases:
 
 resources:
   - ../../../config-mgmt/env/aws/custom
-
-patchesStrategicMerge:
   - acc-ui-route.yml
