@@ -3,4 +3,3 @@ kind: Component
 resources:
   - acc-ui.yml
   - acc-ui-deployment.yml
-  - acc-ui-route.yml

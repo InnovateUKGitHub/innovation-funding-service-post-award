@@ -8,6 +8,3 @@ bases:
 resources:
   - ../../../../config-mgmt/env/local
   - ../../../../secrets-mgmt/env/local
-
-patchesStrategicMerge:
-  - acc-ui-route.yml
