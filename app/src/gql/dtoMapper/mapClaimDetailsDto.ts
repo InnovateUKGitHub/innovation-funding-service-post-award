@@ -62,7 +62,7 @@ const mapper: GQL.DtoMapper<
     return clock.parse(node?.Acc_ProjectPeriodEndDate__c?.value ?? null, salesforceDateFormat);
   },
   periodId(node) {
-    return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
+    return (node?.Acc_ProjectPeriodNumber__c?.value ?? 0) as PeriodId;
   },
   periodStart(node) {
     return clock.parse(node?.Acc_ProjectPeriodStartDate__c?.value ?? null, salesforceDateFormat);

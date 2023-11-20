@@ -7,7 +7,7 @@ export interface ClaimDetailsSummaryDto {
   isAuthor: boolean;
   partnerId: PartnerId;
   periodEnd: Date | null;
-  periodId: number;
+  periodId: PeriodId;
   periodStart: Date | null;
   value: number;
   grantPaidToDate: number;

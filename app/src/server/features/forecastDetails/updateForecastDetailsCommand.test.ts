@@ -90,7 +90,7 @@ describe("UpdateForecastDetailsCommand", () => {
         project,
         costCat,
         partner,
-        periodId - 1,
+        (periodId - 1) as PeriodId,
         x => (x.Acc_PeriodCostCategoryTotal__c = 1000),
       );
       testData.createProfileTotalCostCategory(costCat, partner, 1500);
@@ -140,7 +140,7 @@ describe("UpdateForecastDetailsCommand", () => {
         project,
         costCat,
         partner,
-        periodId - 1,
+        (periodId - 1) as PeriodId,
         x => (x.Acc_PeriodCostCategoryTotal__c = 1000),
       );
       testData.createProfileTotalCostCategory(costCat, partner, 1500);
@@ -167,7 +167,7 @@ describe("UpdateForecastDetailsCommand", () => {
         project,
         costCat,
         partner,
-        periodId - 1,
+        (periodId - 1) as PeriodId,
         x => (x.Acc_PeriodCostCategoryTotal__c = 1000),
       );
       testData.createProfileTotalCostCategory(costCat, partner, 1500);
@@ -214,7 +214,7 @@ describe("UpdateForecastDetailsCommand", () => {
         project,
         costCat,
         partner,
-        periodId - 1,
+        (periodId - 1) as PeriodId,
         x => (x.Acc_PeriodCostCategoryTotal__c = 1000),
       );
       testData.createProfileTotalCostCategory(costCat, partner, 1500);
@@ -280,7 +280,7 @@ describe("UpdateForecastDetailsCommand", () => {
         project,
         costCat,
         partner,
-        periodId - 1,
+        (periodId - 1) as PeriodId,
         x => (x.Acc_PeriodCostCategoryTotal__c = 1000),
       );
       testData.createProfileTotalCostCategory(costCat, partner, 1500);
@@ -325,7 +325,7 @@ describe("UpdateForecastDetailsCommand", () => {
         project,
         costCat,
         partner,
-        periodId - 1,
+        (periodId - 1) as PeriodId,
         x => (x.Acc_PeriodCostCategoryTotal__c = 1000),
       );
       testData.createProfileTotalCostCategory(costCat, partner, 1500);
@@ -370,7 +370,7 @@ describe("UpdateForecastDetailsCommand", () => {
         project,
         costCat,
         partner,
-        periodId - 1,
+        (periodId - 1) as PeriodId,
         x => (x.Acc_PeriodCostCategoryTotal__c = 1000),
       );
       testData.createProfileTotalCostCategory(costCat, partner, 1500);
@@ -413,7 +413,7 @@ describe("UpdateForecastDetailsCommand", () => {
         project,
         costCat,
         partner,
-        periodId - 1,
+        (periodId - 1) as PeriodId,
         x => (x.Acc_PeriodCostCategoryTotal__c = 1000),
       );
       testData.createProfileTotalCostCategory(costCat, partner, 1500);
@@ -428,7 +428,7 @@ describe("UpdateForecastDetailsCommand", () => {
       const testData = context.testData;
 
       const projectPeriodId = 2;
-      const claimPeriodId = 1;
+      const claimPeriodId = 1 as PeriodId;
       const startDate = DateTime.local().minus({ months: 1 }).set({ day: 1 });
       const endDate = startDate.plus({ months: 6 });
 

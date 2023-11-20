@@ -25,7 +25,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
       projectId: project.Id,
       partnerId: partner.id,
       costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
-      periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+      periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
     };
     const deleteCommand = new DeleteClaimDetailDocumentCommand(document.ContentDocumentId, claimDetailKey);
     await context.runCommand(deleteCommand);
@@ -45,7 +45,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
         projectId: project.Id,
         partnerId: partner.id,
         costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
-        periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+        periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
       };
       const command = new DeleteClaimDetailDocumentCommand(document.ContentDocumentId, claimDetailKey);
 

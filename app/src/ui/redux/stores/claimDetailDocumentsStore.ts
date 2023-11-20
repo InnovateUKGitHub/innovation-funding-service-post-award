@@ -13,7 +13,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
   public getClaimDetailDocuments(
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     costCategoryId: CostCategoryId,
   ) {
     return this.getData("documents", this.getKey(partnerId, periodId, costCategoryId), p =>
@@ -27,7 +27,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
   public getClaimDetailDocumentsEditor(
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     costCategoryId: CostCategoryId,
     init?: (dto: MultipleDocumentUploadDto) => void,
   ) {
@@ -44,7 +44,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
     saving: boolean,
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     costCategoryId: CostCategoryId,
     dto: MultipleDocumentUploadDto,
     message: string,
@@ -69,7 +69,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
   public deleteClaimDetailDocumentsEditor(
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     costCategoryId: CostCategoryId,
     dto: MultipleDocumentUploadDto,
     document: DocumentSummaryDto,

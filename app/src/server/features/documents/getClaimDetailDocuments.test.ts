@@ -15,7 +15,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
     const query = new GetClaimDetailDocumentsQuery(
       project.Id,
       claimDetail.Acc_ProjectParticipant__r.Id,
-      claimDetail.Acc_ProjectPeriodNumber__c,
+      claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
       claimDetail.Acc_CostCategory__c as CostCategoryId,
     );
     const result = await context.runQuery(query);
@@ -31,7 +31,12 @@ describe("GetClaimDetailDocumentsQuery", () => {
 
   it("returns empty array if no claim detail", async () => {
     const context = new TestContext();
-    const query = new GetClaimDetailDocumentsQuery("" as ProjectId, "" as PartnerId, 1, "" as CostCategoryId);
+    const query = new GetClaimDetailDocumentsQuery(
+      "" as ProjectId,
+      "" as PartnerId,
+      1 as PeriodId,
+      "" as CostCategoryId,
+    );
     const result = await context.runQuery(query);
 
     expect(result).toBeInstanceOf(Array);
@@ -51,7 +56,7 @@ describe("GetClaimDetailDocumentsQuery", () => {
       const query = new GetClaimDetailDocumentsQuery(
         project.Id,
         claimDetail.Acc_ProjectParticipant__r.Id,
-        claimDetail.Acc_ProjectPeriodNumber__c,
+        claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
         claimDetail.Acc_CostCategory__c as CostCategoryId,
       );
 

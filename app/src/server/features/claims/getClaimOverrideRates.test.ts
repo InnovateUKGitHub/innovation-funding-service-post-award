@@ -6,7 +6,7 @@ import { GetClaimOverrideRates } from "./getClaimOverrideRates";
 describe("GetClaimOverrideRates", () => {
   const projectId = "stub-project-id" as ProjectId;
   const partnerId = "stub-partner-id" as PartnerId;
-  const periodNum = 1;
+  const periodNum = 1 as PeriodId;
   const nonFecClaimTotal = 1000;
 
   const setup = (isNonFecProject = false) => {

@@ -15,7 +15,7 @@ export function mapClaimDetailsSummary(
 ): ClaimDetailsSummaryDto {
   return {
     partnerId: salesforceClaimDetails.Acc_ProjectParticipant__r.Id,
-    periodId: salesforceClaimDetails.Acc_ProjectPeriodNumber__c,
+    periodId: salesforceClaimDetails.Acc_ProjectPeriodNumber__c as PeriodId,
     periodStart: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodStartDate__c, salesforceDateFormat),
     periodEnd: context.clock.parse(salesforceClaimDetails.Acc_ProjectPeriodEndDate__c, salesforceDateFormat),
     costCategoryId: salesforceClaimDetails.Acc_CostCategory__c as CostCategoryId,

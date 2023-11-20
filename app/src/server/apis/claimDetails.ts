@@ -32,7 +32,7 @@ class Controller
       p => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
-        periodId: parseInt(p.periodId, 10),
+        periodId: parseInt(p.periodId, 10) as PeriodId,
         costCategoryId: p.costCategoryId,
       }),
       p => this.get(p),
@@ -42,7 +42,7 @@ class Controller
       (p, q, b: ClaimDetailsDto) => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
-        periodId: parseInt(p.periodId, 10),
+        periodId: parseInt(p.periodId, 10) as PeriodId,
         costCategoryId: p.costCategoryId,
         claimDetails: processDto(b),
       }),

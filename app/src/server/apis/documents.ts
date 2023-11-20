@@ -114,7 +114,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
         claimDetailKey: {
           projectId: p.projectId,
           partnerId: p.partnerId,
-          periodId: parseInt(p.periodId, 10),
+          periodId: parseInt(p.periodId, 10) as PeriodId,
           costCategoryId: p.costCategoryId,
         },
       }),
@@ -127,7 +127,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
         claimDetailKey: {
           projectId: p.projectId,
           partnerId: p.partnerId,
-          periodId: parseInt(p.periodId, 10),
+          periodId: parseInt(p.periodId, 10) as PeriodId,
           costCategoryId: p.costCategoryId,
         },
         documentId: p.documentId,
@@ -142,7 +142,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
         claimDetailKey: {
           projectId: p.projectId,
           partnerId: p.partnerId,
-          periodId: parseInt(p.periodId, 10),
+          periodId: parseInt(p.periodId, 10) as PeriodId,
           costCategoryId: p.costCategoryId,
         },
       }),
@@ -154,7 +154,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       (p, q) => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
-        periodId: parseInt(p.periodId, 10),
+        periodId: parseInt(p.periodId, 10) as PeriodId,
         description: parseInt(q.description, 10),
       }),
       p => this.getClaimDocuments(p),
@@ -269,7 +269,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
         claimDetailKey: {
           projectId: p.projectId,
           partnerId: p.partnerId,
-          periodId: parseInt(p.periodId, 10),
+          periodId: parseInt(p.periodId, 10) as PeriodId,
           costCategoryId: p.costCategoryId,
         },
       }),
@@ -278,7 +278,9 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
 
     this.postAttachment(
       "/claims/:projectId/:partnerId/:periodId",
-      p => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
+      p => ({
+        claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) as PeriodId },
+      }),
       p => this.uploadClaimDocument(p),
     );
 

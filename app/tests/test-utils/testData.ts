@@ -524,13 +524,13 @@ export class TestData {
     project?: ISalesforceProject,
     costCategory?: CostCategory,
     partner?: Partner,
-    periodId?: number,
+    periodId?: PeriodId,
     update?: (item: ISalesforceClaimDetails) => void,
   ): ISalesforceClaimDetails {
     costCategory = costCategory || this.createCostCategory();
     partner = partner || this.createPartner();
     project = project || this.createProject();
-    periodId = periodId || 1;
+    periodId = (periodId || 1) as PeriodId;
 
     const newItem: ISalesforceClaimDetails = {
       Id: `${partner.id}_${periodId}_${costCategory.id}`,

@@ -15,14 +15,14 @@ const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, descripti
   id: "",
   costCategoryId: detail.costCategoryId,
   partnerId: detail.partnerId,
-  periodId: detail.periodId as PeriodId,
+  periodId: detail.periodId,
   value: value || 100,
   description: description || "A description",
   lastModifiedDate: new Date(),
   isAuthor: true,
 });
 
-const createNewDto = (partner: Partner, periodId: number, costCategory: CostCategory): ClaimDetailsDto => ({
+const createNewDto = (partner: Partner, periodId: PeriodId, costCategory: CostCategory): ClaimDetailsDto => ({
   partnerId: partner.id,
   comments: "",
   lineItems: [],
@@ -41,7 +41,7 @@ const createDto = (context: TestContext, claimDetails: ISalesforceClaimDetails) 
     x =>
       x.Acc_CostCategory__c === claimDetails.Acc_CostCategory__c &&
       x.Acc_ProjectParticipant__c === claimDetails.Acc_ProjectParticipant__r.Id &&
-      x.Acc_ProjectPeriodNumber__c === claimDetails.Acc_ProjectPeriodNumber__c,
+      x.Acc_ProjectPeriodNumber__c === (claimDetails.Acc_ProjectPeriodNumber__c as PeriodId),
   );
 
   return mapClaimDetails(claimDetails, lineItems, context);
@@ -53,7 +53,7 @@ describe("SaveClaimDetails", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const costCategory = context.testData.createCostCategory();
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
     const sfClaimDetails = context.testData.createClaimDetail(project, costCategory, partner, periodId);
 
     const dto = createDto(context, sfClaimDetails);
@@ -92,7 +92,7 @@ describe("SaveClaimDetails", () => {
     const command = new SaveClaimDetails(
       project.Id,
       partner.id,
-      claimDetails.Acc_ProjectPeriodNumber__c,
+      claimDetails.Acc_ProjectPeriodNumber__c as PeriodId,
       costCategory.id,
       dto,
     );
@@ -119,7 +119,7 @@ describe("SaveClaimDetails", () => {
     const command = new SaveClaimDetails(
       project.Id,
       partner.id,
-      claimDetails.Acc_ProjectPeriodNumber__c,
+      claimDetails.Acc_ProjectPeriodNumber__c as PeriodId,
       costCategory.id,
       dto,
     );
@@ -145,7 +145,7 @@ describe("SaveClaimDetails", () => {
     const command = new SaveClaimDetails(
       project.Id,
       partner.id,
-      claimDetails.Acc_ProjectPeriodNumber__c,
+      claimDetails.Acc_ProjectPeriodNumber__c as PeriodId,
       costCategory.id,
       dto,
     );
@@ -159,7 +159,7 @@ describe("SaveClaimDetails", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const costCategory = context.testData.createCostCategory();
-    const periodId = 3;
+    const periodId = 3 as PeriodId;
     const claimDetails = context.testData.createClaimDetail(project, costCategory, partner, periodId);
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
@@ -192,7 +192,7 @@ describe("SaveClaimDetails", () => {
     const claimLineItem = context.testData.createClaimLineItem(
       costCategory,
       partner,
-      claimDetails.Acc_ProjectPeriodNumber__c,
+      claimDetails.Acc_ProjectPeriodNumber__c as PeriodId,
     );
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(1);
@@ -204,7 +204,7 @@ describe("SaveClaimDetails", () => {
     const command = new SaveClaimDetails(
       project.Id,
       partner.id,
-      claimDetails.Acc_ProjectPeriodNumber__c,
+      claimDetails.Acc_ProjectPeriodNumber__c as PeriodId,
       costCategory.id,
       dto,
     );
@@ -223,7 +223,7 @@ describe("SaveClaimDetails", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const costCategory = context.testData.createCostCategory();
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
     const claimDetails = context.testData.createClaimDetail(project, costCategory, partner, periodId);
     const claimLineItem1 = context.testData.createClaimLineItem(costCategory, partner, periodId);
     const claimLineItem2 = context.testData.createClaimLineItem(costCategory, partner, periodId);
@@ -251,13 +251,13 @@ describe("SaveClaimDetails", () => {
       project,
       costCategory,
       partner,
-      1,
+      1 as PeriodId,
       x => (x.Acc_ReasonForDifference__c = "An old message"),
     );
     const dto = createDto(context, claimDetail);
     dto.comments = "A new message";
 
-    const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
 
     await context.runCommand(command);
 
@@ -273,13 +273,13 @@ describe("SaveClaimDetails", () => {
       project,
       costCategory,
       partner,
-      1,
+      1 as PeriodId,
       x => (x.Acc_ReasonForDifference__c = "An old message"),
     );
     const dto = createDto(context, claimDetail);
     dto.comments = null;
 
-    const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+    const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
 
     await context.runCommand(command);
 
@@ -291,7 +291,7 @@ describe("SaveClaimDetails", () => {
     const costCategory = context.testData.createCostCategory();
 
     const partner = context.testData.createPartner();
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
 
     const dto = createNewDto(partner, periodId, costCategory);
     dto.comments = "Test comments";
@@ -314,7 +314,7 @@ describe("SaveClaimDetails", () => {
     const costCategory = context.testData.createCostCategory();
 
     const partner = context.testData.createPartner();
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
 
     const dto = createNewDto(partner, periodId, costCategory);
 
@@ -340,10 +340,10 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(InActiveProjectError);
     });
 
@@ -352,14 +352,14 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
       const dto = createDto(context, claimDetail);
 
       const command = new SaveClaimDetails(
         // @ts-expect-error invalid project id
         null,
         partner.id,
-        1,
+        1 as PeriodId,
         costCategory.id,
         dto,
       );
@@ -371,14 +371,14 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
       const dto = createDto(context, claimDetail);
 
       const command = new SaveClaimDetails(
         project.Id,
         // @ts-expect-error invalid partner id
         null,
-        1,
+        1 as PeriodId,
         costCategory.id,
         dto,
       );
@@ -390,12 +390,12 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
       const dto = createDto(context, claimDetail);
       // @ts-expect-error invalid partner id
       dto.partnerId = "Invalid";
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -404,7 +404,7 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
       const dto = createDto(context, claimDetail);
 
       const command = new SaveClaimDetails(
@@ -423,13 +423,13 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
       const dto = createDto(context, claimDetail);
 
       const command = new SaveClaimDetails(
         project.Id,
         partner.id,
-        1,
+        1 as PeriodId,
         // @ts-expect-error invalid costCategoryId id
         null,
         dto,
@@ -443,10 +443,10 @@ describe("SaveClaimDetails", () => {
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
       costCategory.isCalculated = true;
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -455,7 +455,7 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
 
       const dto = createDto(context, claimDetail);
       const lineItem = createNewLineItemDto(dto);
@@ -463,7 +463,7 @@ describe("SaveClaimDetails", () => {
 
       dto.lineItems = [lineItem];
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -472,7 +472,7 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
 
       const dto = createDto(context, claimDetail);
       const lineItem = createNewLineItemDto(dto);
@@ -481,7 +481,7 @@ describe("SaveClaimDetails", () => {
 
       dto.lineItems = [lineItem];
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -490,14 +490,14 @@ describe("SaveClaimDetails", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
-      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId);
 
       const dto = createDto(context, claimDetail);
       const lineItem = createNewLineItemDto(dto);
       lineItem.costCategoryId = "Invalid" as CostCategoryId;
       dto.lineItems = [lineItem];
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -506,7 +506,7 @@ describe("SaveClaimDetails", () => {
 
       const overheads = context.testData.createCostCategory({ isCalculated: true });
 
-      const periodId = 1;
+      const periodId = 1 as PeriodId;
       const project = context.testData.createProject();
       const partner = context.testData.createPartner(project);
 
@@ -525,9 +525,9 @@ describe("SaveClaimDetails", () => {
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
 
-      const dto = createNewDto(partner, 1, costCategory);
+      const dto = createNewDto(partner, 1 as PeriodId, costCategory);
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
@@ -544,9 +544,9 @@ describe("SaveClaimDetails", () => {
       const partner = context.testData.createPartner();
       const costCategory = context.testData.createCostCategory();
 
-      const dto = createNewDto(partner, 1, costCategory);
+      const dto = createNewDto(partner, 1 as PeriodId, costCategory);
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(project.Id, partner.id, 1 as PeriodId, costCategory.id, dto);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager,

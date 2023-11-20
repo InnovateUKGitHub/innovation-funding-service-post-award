@@ -8,7 +8,7 @@ export class GetClaimDetailDocumentsQuery extends DocumentsSummaryQueryBase {
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
-    private readonly periodId: number,
+    private readonly periodId: PeriodId,
     private readonly costCategoryId: CostCategoryId,
   ) {
     super();

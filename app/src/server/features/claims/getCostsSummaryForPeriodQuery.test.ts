@@ -16,7 +16,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
 
     costCategories.forEach(x => {
-      context.testData.createClaimDetail(project, x, partner, 1);
+      context.testData.createClaimDetail(project, x, partner, 1 as PeriodId);
       context.testData.createProfileDetail(x, partner);
     });
 
@@ -42,7 +42,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
 
     costCategories.forEach(x => {
-      context.testData.createClaimDetail(project, x, partner, 1);
+      context.testData.createClaimDetail(project, x, partner, 1 as PeriodId);
       context.testData.createProfileDetail(x, partner);
     });
 
@@ -75,7 +75,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
 
     costCategories.forEach(x => {
-      context.testData.createClaimDetail(project, x, partner, 1);
+      context.testData.createClaimDetail(project, x, partner, 1 as PeriodId);
       context.testData.createProfileDetail(x, partner);
     });
 
@@ -94,7 +94,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const costCategory = context.testData.createCostCategory({ organisationType: PCROrganisationType.Industrial });
     const partner = context.testData.createPartner();
 
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
 
     const project = context.testData.createProject();
 
@@ -127,7 +127,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const partner = context.testData.createPartner();
 
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
 
     context.testData.createProfileDetail(costCategory1, partner, periodId);
     context.testData.createProfileDetail(costCategory2, partner, periodId);
@@ -163,7 +163,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
   test("should return correct cost category offer costs", async () => {
     const context = new TestContext();
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
@@ -198,7 +198,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
   test("should default cost claimed to date to 0", async () => {
     const context = new TestContext();
-    const periodId = 1;
+    const periodId = 1 as PeriodId;
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
@@ -220,8 +220,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
   test("should return correct cost claimed to date for cost category", async () => {
     const context = new TestContext();
-    const periodId1 = 1;
-    const periodId2 = 2;
+    const periodId1 = 1 as PeriodId;
+    const periodId2 = 2 as PeriodId;
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();

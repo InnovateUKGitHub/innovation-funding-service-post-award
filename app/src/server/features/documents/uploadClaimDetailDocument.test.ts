@@ -10,12 +10,12 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const costCat = context.testData.createCostCategory();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const claimDetail = context.testData.createClaimDetail(project, costCat, partner, 1);
+    const claimDetail = context.testData.createClaimDetail(project, costCat, partner, 1 as PeriodId);
 
     const claimDetailKey = {
       projectId: project.Id,
       partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
-      periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+      periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
       costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
     };
 
@@ -37,12 +37,12 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const costCat = context.testData.createCostCategory();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner();
-    const claimDetail = context.testData.createClaimDetail(project, costCat, partner, 1);
+    const claimDetail = context.testData.createClaimDetail(project, costCat, partner, 1 as PeriodId);
 
     const claimDetailKey = {
       projectId: project.Id,
       partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
-      periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+      periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
       costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
     };
 
@@ -69,7 +69,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const claimDetailKey = {
       projectId: project.Id,
       partnerId: claimDetail.Acc_ProjectParticipant__r.Id,
-      periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+      periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
       costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
     };
 
@@ -113,7 +113,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
       const claimDetailKey = {
         projectId: project.Id,
         partnerId: claimDetail.Acc_ProjectParticipant__r.Id as PartnerId,
-        periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+        periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
         costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
       };
 

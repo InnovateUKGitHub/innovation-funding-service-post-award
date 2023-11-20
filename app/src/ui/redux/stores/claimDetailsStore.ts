@@ -5,7 +5,7 @@ import { ClaimDetailsValidator } from "@ui/validation/validators/claimDetailsVal
 import { StoreBase } from "./storeBase";
 
 export class ClaimsDetailsStore extends StoreBase {
-  private getKey(partnerId: PartnerId, periodId: number, costCategoryId: CostCategoryId) {
+  private getKey(partnerId: PartnerId, periodId: PeriodId, costCategoryId: CostCategoryId) {
     return storeKeys.getClaimDetailKey(partnerId, periodId, costCategoryId);
   }
 
@@ -15,7 +15,7 @@ export class ClaimsDetailsStore extends StoreBase {
     );
   }
 
-  public get(projectId: ProjectId, partnerId: PartnerId, periodId: number, costCategoryId: CostCategoryId) {
+  public get(projectId: ProjectId, partnerId: PartnerId, periodId: PeriodId, costCategoryId: CostCategoryId) {
     return this.getData("claimDetail", this.getKey(partnerId, periodId, costCategoryId), p =>
       apiClient.claimDetails.get({ projectId, partnerId, periodId, costCategoryId, ...p }),
     );
@@ -24,7 +24,7 @@ export class ClaimsDetailsStore extends StoreBase {
   public getClaimDetailsEditor(
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     costCategoryId: CostCategoryId,
     init?: (dto: ClaimDetailsDto) => void,
   ) {
@@ -41,7 +41,7 @@ export class ClaimsDetailsStore extends StoreBase {
     saving: boolean,
     projectId: ProjectId,
     partnerId: PartnerId,
-    periodId: number,
+    periodId: PeriodId,
     costCategoryId: CostCategoryId,
     dto: ClaimDetailsDto,
     onComplete?: (result: ClaimDetailsDto) => void,

@@ -9,7 +9,7 @@ describe("GetClaimDetailDocumentQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
-    const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
+    const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1 as PeriodId);
 
     const document = context.testData.createDocument(claimDetail.Id, "cat", "jpg", "", "file content", "");
 
@@ -17,7 +17,7 @@ describe("GetClaimDetailDocumentQuery", () => {
       {
         projectId: project.Id,
         partnerId: partner.id,
-        periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+        periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
         costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
       },
       document.Id,
@@ -35,13 +35,13 @@ describe("GetClaimDetailDocumentQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
-    const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
+    const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1 as PeriodId);
 
     const query = new GetClaimDetailDocumentQuery(
       {
         projectId: project.Id,
         partnerId: partner.id,
-        periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+        periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
         costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
       },
       "FAKE ID",
@@ -55,11 +55,11 @@ describe("GetClaimDetailDocumentQuery", () => {
     const context = new TestContext();
     const project1 = context.testData.createProject();
     const partner1 = context.testData.createPartner(project1);
-    const claimDetail1 = context.testData.createClaimDetail(project1, undefined, partner1, 1);
+    const claimDetail1 = context.testData.createClaimDetail(project1, undefined, partner1, 1 as PeriodId);
 
     const project2 = context.testData.createProject();
     const partner2 = context.testData.createPartner(project2);
-    const claimDetail2 = context.testData.createClaimDetail(project2, undefined, partner2, 1);
+    const claimDetail2 = context.testData.createClaimDetail(project2, undefined, partner2, 1 as PeriodId);
 
     const document = context.testData.createDocument(claimDetail1.Id);
 
@@ -67,7 +67,7 @@ describe("GetClaimDetailDocumentQuery", () => {
       {
         projectId: project2.Id,
         partnerId: partner2.id,
-        periodId: claimDetail2.Acc_ProjectPeriodNumber__c,
+        periodId: claimDetail2.Acc_ProjectPeriodNumber__c as PeriodId,
         costCategoryId: claimDetail2.Acc_CostCategory__c as CostCategoryId,
       },
       document.Id,
@@ -81,10 +81,10 @@ describe("GetClaimDetailDocumentQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner1 = context.testData.createPartner(project);
-    const claimDetail1 = context.testData.createClaimDetail(project, undefined, partner1, 1);
+    const claimDetail1 = context.testData.createClaimDetail(project, undefined, partner1, 1 as PeriodId);
 
     const partner2 = context.testData.createPartner(project);
-    const claimDetail2 = context.testData.createClaimDetail(project, undefined, partner2, 1);
+    const claimDetail2 = context.testData.createClaimDetail(project, undefined, partner2, 1 as PeriodId);
 
     const document = context.testData.createDocument(claimDetail1.Id);
 
@@ -92,7 +92,7 @@ describe("GetClaimDetailDocumentQuery", () => {
       {
         projectId: project.Id,
         partnerId: partner2.id,
-        periodId: claimDetail2.Acc_ProjectPeriodNumber__c,
+        periodId: claimDetail2.Acc_ProjectPeriodNumber__c as PeriodId,
         costCategoryId: claimDetail2.Acc_CostCategory__c as CostCategoryId,
       },
       document.Id,
@@ -106,8 +106,8 @@ describe("GetClaimDetailDocumentQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
-    const claimDetail1 = context.testData.createClaimDetail(project, undefined, partner, 1);
-    const claimDetail2 = context.testData.createClaimDetail(project, undefined, partner, 1);
+    const claimDetail1 = context.testData.createClaimDetail(project, undefined, partner, 1 as PeriodId);
+    const claimDetail2 = context.testData.createClaimDetail(project, undefined, partner, 1 as PeriodId);
 
     const document = context.testData.createDocument(claimDetail1.Id);
 
@@ -115,7 +115,7 @@ describe("GetClaimDetailDocumentQuery", () => {
       {
         projectId: project.Id,
         partnerId: partner.id,
-        periodId: claimDetail2.Acc_ProjectPeriodNumber__c,
+        periodId: claimDetail2.Acc_ProjectPeriodNumber__c as PeriodId,
         costCategoryId: claimDetail2.Acc_CostCategory__c as CostCategoryId,
       },
       document.Id,
@@ -131,7 +131,7 @@ describe("GetClaimDetailDocumentQuery", () => {
 
       const project = context.testData.createProject();
       const partner = context.testData.createPartner(project);
-      const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1 as PeriodId);
 
       const document = context.testData.createDocument(claimDetail.Id);
 
@@ -139,7 +139,7 @@ describe("GetClaimDetailDocumentQuery", () => {
         {
           projectId: project.Id,
           partnerId: partner.id,
-          periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+          periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
           costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
@@ -156,14 +156,14 @@ describe("GetClaimDetailDocumentQuery", () => {
 
       const project = context.testData.createProject();
       const partner = context.testData.createPartner(project);
-      const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1 as PeriodId);
       const document = context.testData.createDocument(claimDetail.Id);
 
       const query = new GetClaimDetailDocumentQuery(
         {
           projectId: project.Id,
           partnerId: partner.id,
-          periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+          periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
           costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
@@ -184,14 +184,14 @@ describe("GetClaimDetailDocumentQuery", () => {
       const project = context.testData.createProject();
       const partner1 = context.testData.createPartner(project);
       const partner2 = context.testData.createPartner(project);
-      const claimDetail = context.testData.createClaimDetail(project, undefined, partner1, 1);
+      const claimDetail = context.testData.createClaimDetail(project, undefined, partner1, 1 as PeriodId);
       const document = context.testData.createDocument(claimDetail.Id);
 
       const query = new GetClaimDetailDocumentQuery(
         {
           projectId: project.Id,
           partnerId: partner1.id,
-          periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+          periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
           costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
@@ -211,14 +211,14 @@ describe("GetClaimDetailDocumentQuery", () => {
 
       const project = context.testData.createProject();
       const partner = context.testData.createPartner(project);
-      const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1 as PeriodId);
       const document = context.testData.createDocument(claimDetail.Id);
 
       const query = new GetClaimDetailDocumentQuery(
         {
           projectId: project.Id,
           partnerId: partner.id,
-          periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+          periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
           costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,
@@ -239,14 +239,14 @@ describe("GetClaimDetailDocumentQuery", () => {
       const project = context.testData.createProject();
       const partner = context.testData.createPartner(project);
       const partner2 = context.testData.createPartner(project);
-      const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1);
+      const claimDetail = context.testData.createClaimDetail(project, undefined, partner, 1 as PeriodId);
       const document = context.testData.createDocument(claimDetail.Id);
 
       const query = new GetClaimDetailDocumentQuery(
         {
           projectId: project.Id,
           partnerId: partner.id,
-          periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+          periodId: claimDetail.Acc_ProjectPeriodNumber__c as PeriodId,
           costCategoryId: claimDetail.Acc_CostCategory__c as CostCategoryId,
         },
         document.Id,

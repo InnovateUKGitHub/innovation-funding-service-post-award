@@ -258,10 +258,10 @@ describe("UpdateClaimCommand", () => {
 
     testData.createProfileDetail(costCategory, partner);
 
-    testData.createClaimDetail(project, costCategory, partner, 1, x => {
+    testData.createClaimDetail(project, costCategory, partner, 1 as PeriodId, x => {
       x.Acc_PeriodCostCategoryTotal__c = 1000000;
     });
-    testData.createClaimDetail(project, costCategory, partner, 2, x => {
+    testData.createClaimDetail(project, costCategory, partner, 2 as PeriodId, x => {
       x.Acc_PeriodCostCategoryTotal__c = 1000000;
     });
 

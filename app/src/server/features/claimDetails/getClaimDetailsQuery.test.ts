@@ -10,7 +10,7 @@ describe("GetClaimDetailsQuery", () => {
     const expectedCostCategoryId = "Expected_CostCategory_Id" as CostCategoryId;
     const expectedParticipantId = "Expected_Participant_Id" as PartnerId;
     const expectedId = "Expected_Id";
-    const expectedPeriod = 3;
+    const expectedPeriod = 3 as PeriodId;
     const expectedValue = 2000;
     const expectedStartDate = DateTime.fromFormat("1 Dec 2014", "d MMM yyyy");
     const expectedEndDate = expectedStartDate.plus({ days: 30 });
@@ -54,7 +54,7 @@ describe("GetClaimDetailsQuery", () => {
     const expectedCostCategoryId = "Expected_CostCategory_Id" as CostCategoryId;
     const expectedParticipantId = "Expected_Participant_Id" as PartnerId;
     const expectedPeriod = 3;
-    const requestedPeriodId = expectedPeriod + 1;
+    const requestedPeriodId = (expectedPeriod + 1) as PeriodId;
 
     const query = new GetClaimDetailsQuery(
       "" as ProjectId,
@@ -81,7 +81,7 @@ describe("GetClaimDetailsQuery", () => {
       const partner = context.testData.createPartner();
 
       const testData = context.testData;
-      const period = 1;
+      const period = 1 as PeriodId;
       const costCat = testData.createCostCategory();
       testData.createClaimDetail(project, costCat, partner);
 
@@ -111,7 +111,7 @@ describe("GetClaimDetailsQuery", () => {
       const partner = context.testData.createPartner();
 
       const testData = context.testData;
-      const period = 1;
+      const period = 1 as PeriodId;
       const costCat = testData.createCostCategory();
       testData.createClaimDetail(project, costCat, partner);
 
@@ -136,7 +136,7 @@ describe("GetClaimDetailsQuery", () => {
       const partner = context.testData.createPartner();
 
       const testData = context.testData;
-      const period = 1;
+      const period = 1 as PeriodId;
       const costCat = testData.createCostCategory();
 
       const query = new GetClaimDetailsQuery(project.Id, partner.id, period, costCat.id);
@@ -149,7 +149,7 @@ describe("GetClaimDetailsQuery", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "" as CostCategoryId);
+      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1 as PeriodId, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.MonitoringOfficer,
@@ -164,7 +164,7 @@ describe("GetClaimDetailsQuery", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "" as CostCategoryId);
+      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1 as PeriodId, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
@@ -179,7 +179,7 @@ describe("GetClaimDetailsQuery", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "" as CostCategoryId);
+      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1 as PeriodId, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
@@ -194,7 +194,7 @@ describe("GetClaimDetailsQuery", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();
-      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1, "" as CostCategoryId);
+      const command = new GetClaimDetailsQuery(project.Id, partner.id, 1 as PeriodId, "" as CostCategoryId);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
