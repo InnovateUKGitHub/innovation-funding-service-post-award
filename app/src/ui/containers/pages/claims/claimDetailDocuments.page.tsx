@@ -6,7 +6,7 @@ import { createTypedForm } from "@ui/components/bjss/form/form";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
-import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
+import { BaseProps, defineRoute } from "../../containerBase";
 import { useStores } from "@ui/redux/storesProvider";
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { ProjectRole } from "@framework/constants/project";
@@ -31,8 +31,8 @@ export interface ClaimDetailDocumentsPageParams {
 }
 
 interface CombinedData {
-  project: ProjectDto;
-  costCategories: CostCategoryDto[];
+  project: Pick<ProjectDto, "competitionType" | "id" | "title" | "projectNumber">;
+  costCategories: Pick<CostCategoryDto, "id" | "name">[];
   documents: DocumentSummaryDto[];
   editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
@@ -44,92 +44,88 @@ interface Callbacks {
 
 const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
-export class ClaimDetailDocumentsComponent extends ContainerBase<
-  ClaimDetailDocumentsPageParams,
-  CombinedData,
-  Callbacks
-> {
-  public render() {
-    const { project, costCategories, documents, editor } = this.props;
-    const back = this.props.routes.prepareClaimLineItems.getLink({
-      projectId: project.id,
-      partnerId: this.props.partnerId,
-      periodId: this.props.periodId,
-      costCategoryId: this.props.costCategoryId,
-    });
-    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
-    const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
+export const ClaimDetailDocumentsComponent = (
+  props: ClaimDetailDocumentsPageParams & CombinedData & Callbacks & BaseProps,
+) => {
+  const { project, costCategories, documents, editor } = props;
+  const back = props.routes.prepareClaimLineItems.getLink({
+    projectId: project.id,
+    partnerId: props.partnerId,
+    periodId: props.periodId,
+    costCategoryId: props.costCategoryId,
+  });
+  const costCategory = costCategories.find(x => x.id === props.costCategoryId) || ({} as CostCategoryDto);
+  const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
 
-    return (
-      <Page
-        backLink={
-          <BackLink route={back}>
-            <Content value={x => x.documentMessages.backLink({ previousPage: costCategory.name })} />
-          </BackLink>
-        }
-        error={editor.error}
-        validator={editor.validator}
-        pageTitle={<Title {...project} />}
-      >
-        {isCombinationOfSBRI ? (
-          <>
-            <SimpleString qa="sbriDocumentGuidance">
-              <Content
-                value={x => x.claimsMessages.sbriDocumentDetailGuidance({ costCategoryName: costCategory.name })}
-              />
-            </SimpleString>
-            <SimpleString qa="sbriSupportingDocumentGuidance">
-              <Content value={x => x.claimsMessages.sbriSupportingDocumentGuidance} />
-            </SimpleString>
-          </>
-        ) : (
-          <SimpleString qa="guidanceText">
-            <Content value={x => x.claimsMessages.documentDetailGuidance} />
+  return (
+    <Page
+      backLink={
+        <BackLink route={back}>
+          <Content value={x => x.documentMessages.backLink({ previousPage: costCategory.name })} />
+        </BackLink>
+      }
+      error={editor.error}
+      validator={editor.validator}
+      pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
+    >
+      {isCombinationOfSBRI ? (
+        <>
+          <SimpleString qa="sbriDocumentGuidance">
+            <Content
+              value={x => x.claimsMessages.sbriDocumentDetailGuidance({ costCategoryName: costCategory.name })}
+            />
           </SimpleString>
-        )}
+          <SimpleString qa="sbriSupportingDocumentGuidance">
+            <Content value={x => x.claimsMessages.sbriSupportingDocumentGuidance} />
+          </SimpleString>
+        </>
+      ) : (
+        <SimpleString qa="guidanceText">
+          <Content value={x => x.claimsMessages.documentDetailGuidance} />
+        </SimpleString>
+      )}
 
-        <Messages messages={this.props.messages} />
+      <Messages messages={props.messages} />
 
-        <Section title={x => x.documentMessages.uploadTitle}>
-          <UploadForm.Form
-            enctype="multipart"
-            editor={editor}
-            onSubmit={() => this.props.onChange(true, editor.data)}
-            onChange={dto => this.props.onChange(false, dto)}
-            qa="claimDetailDocuments"
-          >
-            <UploadForm.Fieldset>
-              <DocumentGuidance />
+      <Section title={x => x.documentMessages.uploadTitle}>
+        <UploadForm.Form
+          enctype="multipart"
+          editor={editor}
+          onSubmit={() => props.onChange(true, editor.data)}
+          onChange={dto => props.onChange(false, dto)}
+          qa="claimDetailDocuments"
+        >
+          <UploadForm.Fieldset>
+            <DocumentGuidance />
 
-              <UploadForm.Hidden name="description" value={() => DocumentDescription.Evidence} />
+            <UploadForm.Hidden name="description" value={() => DocumentDescription.Evidence} />
 
-              <UploadForm.MultipleFileUpload
-                label={x => x.documentMessages.uploadDocuments}
-                labelHidden
-                name="attachment"
-                validation={editor.validator.files}
-                value={data => data.files}
-                update={(dto, files) => (dto.files = files || [])}
-              />
-            </UploadForm.Fieldset>
+            <UploadForm.MultipleFileUpload
+              label={x => x.documentMessages.uploadDocuments}
+              labelHidden
+              name="attachment"
+              validation={editor.validator.files}
+              value={data => data.files}
+              update={(dto, files) => (dto.files = files || [])}
+            />
+          </UploadForm.Fieldset>
 
-            <UploadForm.Submit>
-              <Content value={x => x.documentMessages.uploadDocuments} />
-            </UploadForm.Submit>
-          </UploadForm.Form>
-        </Section>
+          <UploadForm.Submit>
+            <Content value={x => x.documentMessages.uploadDocuments} />
+          </UploadForm.Submit>
+        </UploadForm.Form>
+      </Section>
 
-        <Section className="govuk-!-margin-bottom-4">
-          <DocumentEdit
-            qa="supporting-documents"
-            onRemove={document => this.props.onDelete(editor.data, document)}
-            documents={documents}
-          />
-        </Section>
-      </Page>
-    );
-  }
-}
+      <Section className="govuk-!-margin-bottom-4">
+        <DocumentEdit
+          qa="supporting-documents"
+          onRemove={document => props.onDelete(editor.data, document)}
+          documents={documents}
+        />
+      </Section>
+    </Page>
+  );
+};
 
 const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & BaseProps) => {
   const stores = useStores();
