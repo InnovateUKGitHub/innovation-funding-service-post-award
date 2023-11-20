@@ -1138,10 +1138,9 @@
   "pcrStatus": {
     "Unknown": "Unknown",
     "Draft": "Draft with Project Manager",
+    "Queried": "Queried to Project Manager",
     "SubmittedToMonitoringOfficer": "Submitted to Monitoring Officer",
-    "QueriedByMonitoringOfficer": "Queried by Monitoring Officer",
     "SubmittedToInnovationLead": "Submitted to Innovation Lead",
-    "QueriedByInnovateUK": "Queried to Project Manager",
     "InExternalReview": "In External Review",
     "InReviewWithInnovateUK": "In Review with Innovate UK",
     "Rejected": "Rejected",
@@ -1149,7 +1148,6 @@
     "Approved": "Approved",
     "Actioned": "Actioned",
     "SubmittedToInnovateUK": "Submitted to Innovate UK",
-    "QueriedByInnovationLead": "Queried by Innovation Lead",
     "InReviewWithProjectFinance": "In Review with Project Finance",
     "ReadyForApproval": "Ready for Approval"
   },
