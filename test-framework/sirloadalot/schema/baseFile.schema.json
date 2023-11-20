@@ -1,0 +1,3310 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "Competition__c": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "Acc_CompetitionCode__c": {
+                "type": "string"
+              },
+              "Acc_CompetitionName__c": {
+                "type": "string"
+              },
+              "Acc_CompetitionType__c": {
+                "type": "string",
+                "enum": [
+                  "CR&D",
+                  "CONTRACTS",
+                  "SBRI",
+                  "KTP",
+                  "CATAPULTS",
+                  "LOANS",
+                  "SBRI IFS",
+                  "EDGE"
+                ]
+              },
+              "Impact_Management_Participation__c": {
+                "type": "string"
+              },
+              "Phased_Competition_Stage__c": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Acc_CompetitionCode__c",
+              "Acc_CompetitionName__c",
+              "Acc_CompetitionType__c",
+              "Impact_Management_Participation__c",
+              "Phased_Competition_Stage__c"
+            ],
+            "additionalProperties": false
+          },
+          "relationship": {
+            "not": {}
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Account": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "OrgMigrationId__c": {
+                "type": "string"
+              },
+              "Name": {
+                "type": "string"
+              },
+              "BillingStreet": {
+                "type": "string"
+              },
+              "BillingCity": {
+                "type": "string"
+              },
+              "BillingState": {
+                "type": "string"
+              },
+              "BillingPostalCode": {
+                "type": "string"
+              },
+              "BillingCountry": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "OrgMigrationId__c",
+              "Name",
+              "BillingStreet",
+              "BillingCity",
+              "BillingState",
+              "BillingPostalCode",
+              "BillingCountry"
+            ],
+            "additionalProperties": false
+          },
+          "relationship": {
+            "not": {}
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Contact": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "ContactMigrationId__c": {
+                "type": "string"
+              },
+              "FirstName": {
+                "type": "string"
+              },
+              "LastName": {
+                "type": "string"
+              },
+              "Email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ContactMigrationId__c",
+              "FirstName",
+              "LastName",
+              "Email"
+            ],
+            "additionalProperties": false
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "Account": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Account"
+            ],
+            "additionalProperties": false
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "User": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "Username": {
+                "type": "string"
+              },
+              "Email": {
+                "type": "string"
+              },
+              "FirstName": {
+                "type": "string"
+              },
+              "LastName": {
+                "type": "string"
+              },
+              "Alias": {
+                "type": "string"
+              },
+              "CommunityNickname": {
+                "type": "string"
+              },
+              "EmailEncodingKey": {
+                "type": "string",
+                "const": "UTF-8"
+              },
+              "LocaleSidKey": {
+                "type": "string",
+                "const": "en_GB"
+              },
+              "LanguageLocaleKey": {
+                "type": "string",
+                "const": "en_US"
+              },
+              "TimeZoneSidKey": {
+                "type": "string",
+                "const": "Europe/London"
+              },
+              "ProfileId": {
+                "type": "string",
+                "const": "00e58000001ITpLAAW"
+              }
+            },
+            "required": [
+              "Username",
+              "Email",
+              "FirstName",
+              "LastName",
+              "Alias",
+              "CommunityNickname",
+              "EmailEncodingKey",
+              "LocaleSidKey",
+              "LanguageLocaleKey",
+              "TimeZoneSidKey",
+              "ProfileId"
+            ],
+            "additionalProperties": false
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "Contact": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Contact"
+            ],
+            "additionalProperties": false
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Acc_Project__c": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "Acc_ProjectNumber__c": {
+                "type": "string"
+              },
+              "Acc_LegacyID__c": {
+                "type": "string"
+              },
+              "Acc_ProjectTitle__c": {
+                "type": "string"
+              },
+              "Acc_StartDate__c": {
+                "$ref": "#/definitions/LoadableDate"
+              },
+              "Acc_Duration__c": {
+                "type": "integer"
+              },
+              "Acc_WorkdayProjectSetupComplete__c": {
+                "type": "boolean"
+              },
+              "Acc_MonitoringLevel__c": {
+                "type": "string",
+                "enum": [
+                  "Platinum",
+                  "Gold",
+                  "Silver",
+                  "Bronze",
+                  "Internal Assurance"
+                ]
+              },
+              "Acc_MonitoringReportSchedule__c": {
+                "type": "string",
+                "enum": [
+                  "Monthly",
+                  "Quarterly",
+                  "6 Monthly",
+                  "Yearly",
+                  "Internal Assurance"
+                ]
+              },
+              "Acc_ClaimFrequency__c": {
+                "type": "string",
+                "enum": [
+                  "Monthly",
+                  "Quarterly"
+                ]
+              },
+              "Acc_ProjectStatus__c": {
+                "type": "string",
+                "enum": [
+                  "Not set",
+                  "PCL Creation Complete",
+                  "Offer Letter Sent",
+                  "Live",
+                  "On Hold",
+                  "Final Claim",
+                  "Closed",
+                  "Terminated"
+                ]
+              }
+            },
+            "required": [
+              "Acc_ProjectNumber__c",
+              "Acc_LegacyID__c",
+              "Acc_ProjectTitle__c",
+              "Acc_StartDate__c",
+              "Acc_Duration__c",
+              "Acc_WorkdayProjectSetupComplete__c",
+              "Acc_MonitoringLevel__c",
+              "Acc_MonitoringReportSchedule__c",
+              "Acc_ClaimFrequency__c",
+              "Acc_ProjectStatus__c"
+            ],
+            "additionalProperties": false
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "Competition__c": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Competition__c"
+            ],
+            "additionalProperties": false
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Acc_ProjectParticipant__c": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "ParticipantMigrationID__c": {
+                "type": "string"
+              },
+              "Acc_ParticipantType__c": {
+                "type": "string"
+              },
+              "Acc_ParticipantSize__c": {
+                "type": "string"
+              },
+              "Acc_ProjectRole__c": {
+                "type": "string"
+              },
+              "Acc_AuditReportFrequency__c": {
+                "type": "string"
+              },
+              "Acc_ParticipantStatus__c": {
+                "type": "string"
+              },
+              "Acc_Award_Rate__c": {
+                "type": "number"
+              },
+              "Acc_Cap_Limit__c": {
+                "type": "number"
+              },
+              "Acc_FlaggedParticipant__c": {
+                "type": "boolean"
+              },
+              "Acc_OverheadRate__c": {
+                "type": "number"
+              },
+              "Acc_ParticipantProjectReportingType__c": {
+                "type": "string"
+              },
+              "Acc_OrganisationType__c": {
+                "type": "string"
+              },
+              "Acc_CreateClaims__c": {
+                "type": "boolean"
+              },
+              "Acc_CreateProfiles__c": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "ParticipantMigrationID__c",
+              "Acc_ParticipantType__c",
+              "Acc_ParticipantSize__c",
+              "Acc_ProjectRole__c",
+              "Acc_AuditReportFrequency__c",
+              "Acc_ParticipantStatus__c",
+              "Acc_Award_Rate__c",
+              "Acc_Cap_Limit__c",
+              "Acc_FlaggedParticipant__c",
+              "Acc_OverheadRate__c",
+              "Acc_ParticipantProjectReportingType__c",
+              "Acc_OrganisationType__c",
+              "Acc_CreateClaims__c",
+              "Acc_CreateProfiles__c"
+            ],
+            "additionalProperties": false
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "Acc_Project__c": {
+                "type": "string"
+              },
+              "Account": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Acc_Project__c",
+              "Account"
+            ],
+            "additionalProperties": false
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Acc_ProjectContactLink__c": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "Acc_Role__c": {
+                "type": "string",
+                "enum": [
+                  "Project Manager",
+                  "Monitoring Officer",
+                  "Finance Contact"
+                ]
+              },
+              "Acc_EmailOfSFContact__c": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Acc_Role__c",
+              "Acc_EmailOfSFContact__c"
+            ],
+            "additionalProperties": false
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "Acc_Project__c": {
+                "type": "string"
+              },
+              "Account": {
+                "type": "string"
+              },
+              "Contact": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Acc_Project__c",
+              "Account",
+              "Contact"
+            ],
+            "additionalProperties": false
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Acc_Profile__c": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Profile_Detail"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_Profile__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_ProjectPeriodNumber__c": {
+                    "type": "number"
+                  },
+                  "Acc_CostCategory__c": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "Acc_CostCategory__c"
+                          },
+                          "Acc_CostCategoryName__c": {
+                            "type": "string",
+                            "enum": [
+                              "Labour",
+                              "Overheads",
+                              "Materials",
+                              "Capital usage",
+                              "Subcontracting",
+                              "Travel and subsistence",
+                              "Other costs",
+                              "Other Costs 2",
+                              "Other Costs 3",
+                              "Other Costs 4",
+                              "Other Costs 5",
+                              "Directly incurred - Staff",
+                              "Directly incurred - Travel and subsistence",
+                              "Directly incurred - Equipment",
+                              "Directly incurred - Other costs",
+                              "Directly allocated - Investigations",
+                              "Directly allocated - Estates costs",
+                              "Directly allocated - Other costs",
+                              "Indirect costs - Investigations",
+                              "Exceptions - Staff",
+                              "Exceptions - Travel and subsistence",
+                              "Exceptions - Equipment",
+                              "Exceptions - Other costs",
+                              "VAT",
+                              "Associate Employment",
+                              "Consumables",
+                              "Associate development",
+                              "Knowledge base supervisor",
+                              "Estate",
+                              "Indirect costs",
+                              "Additional associate support",
+                              "Academic and secretarial support",
+                              "Property Revenue",
+                              "Other Costs - Resource",
+                              "Capital Equipment",
+                              "Property Capital",
+                              "Capitalised Labour",
+                              "Other costs- Capital",
+                              "Advance on Grant",
+                              "Other public sector funding",
+                              "Loans costs for Industrial participants",
+                              "Loans costs for Academic participants"
+                            ]
+                          },
+                          "Acc_OrganisationType__c": {
+                            "type": "string",
+                            "enum": [
+                              "Academic",
+                              "Industrial"
+                            ]
+                          },
+                          "Acc_CompetitionType__c": {
+                            "type": "string",
+                            "enum": [
+                              "CR&D",
+                              "CONTRACTS",
+                              "SBRI",
+                              "KTP",
+                              "CATAPULTS",
+                              "LOANS",
+                              "SBRI IFS",
+                              "EDGE"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "Acc_CostCategoryName__c",
+                          "Acc_OrganisationType__c",
+                          "Acc_CompetitionType__c"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_InitialForecastCost__c": {
+                    "type": "number"
+                  },
+                  "Acc_LatestForecastCost__c": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_ProjectPeriodNumber__c",
+                  "Acc_CostCategory__c",
+                  "Acc_InitialForecastCost__c",
+                  "Acc_LatestForecastCost__c"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Total_Cost_Category"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_Profile__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_CostCategory__c": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "Acc_CostCategory__c"
+                          },
+                          "Acc_CostCategoryName__c": {
+                            "type": "string",
+                            "enum": [
+                              "Labour",
+                              "Overheads",
+                              "Materials",
+                              "Capital usage",
+                              "Subcontracting",
+                              "Travel and subsistence",
+                              "Other costs",
+                              "Other Costs 2",
+                              "Other Costs 3",
+                              "Other Costs 4",
+                              "Other Costs 5",
+                              "Directly incurred - Staff",
+                              "Directly incurred - Travel and subsistence",
+                              "Directly incurred - Equipment",
+                              "Directly incurred - Other costs",
+                              "Directly allocated - Investigations",
+                              "Directly allocated - Estates costs",
+                              "Directly allocated - Other costs",
+                              "Indirect costs - Investigations",
+                              "Exceptions - Staff",
+                              "Exceptions - Travel and subsistence",
+                              "Exceptions - Equipment",
+                              "Exceptions - Other costs",
+                              "VAT",
+                              "Associate Employment",
+                              "Consumables",
+                              "Associate development",
+                              "Knowledge base supervisor",
+                              "Estate",
+                              "Indirect costs",
+                              "Additional associate support",
+                              "Academic and secretarial support",
+                              "Property Revenue",
+                              "Other Costs - Resource",
+                              "Capital Equipment",
+                              "Property Capital",
+                              "Capitalised Labour",
+                              "Other costs- Capital",
+                              "Advance on Grant",
+                              "Other public sector funding",
+                              "Loans costs for Industrial participants",
+                              "Loans costs for Academic participants"
+                            ]
+                          },
+                          "Acc_OrganisationType__c": {
+                            "type": "string",
+                            "enum": [
+                              "Academic",
+                              "Industrial"
+                            ]
+                          },
+                          "Acc_CompetitionType__c": {
+                            "type": "string",
+                            "enum": [
+                              "CR&D",
+                              "CONTRACTS",
+                              "SBRI",
+                              "KTP",
+                              "CATAPULTS",
+                              "LOANS",
+                              "SBRI IFS",
+                              "EDGE"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "Acc_CostCategoryName__c",
+                          "Acc_OrganisationType__c",
+                          "Acc_CompetitionType__c"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_CostCategoryGOLCost__c": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_CostCategory__c",
+                  "Acc_CostCategoryGOLCost__c"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Total_Project_Period"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_Profile__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_ProjectPeriodNumber__c": {
+                    "type": "number"
+                  },
+                  "Acc_PeriodInitialForecastCost__c": {
+                    "type": "number"
+                  },
+                  "Acc_PeriodLatestForecastCost__c": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_ProjectPeriodNumber__c",
+                  "Acc_PeriodInitialForecastCost__c",
+                  "Acc_PeriodLatestForecastCost__c"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "Acc_ProjectParticipant__c": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Acc_ProjectParticipant__c"
+            ],
+            "additionalProperties": false
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Acc_Claims__c": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Claims_Detail"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_Claims__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_ProjectPeriodNumber__c": {
+                    "type": "number"
+                  },
+                  "Acc_CostCategory__c": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "Acc_CostCategory__c"
+                          },
+                          "Acc_CostCategoryName__c": {
+                            "type": "string",
+                            "enum": [
+                              "Labour",
+                              "Overheads",
+                              "Materials",
+                              "Capital usage",
+                              "Subcontracting",
+                              "Travel and subsistence",
+                              "Other costs",
+                              "Other Costs 2",
+                              "Other Costs 3",
+                              "Other Costs 4",
+                              "Other Costs 5",
+                              "Directly incurred - Staff",
+                              "Directly incurred - Travel and subsistence",
+                              "Directly incurred - Equipment",
+                              "Directly incurred - Other costs",
+                              "Directly allocated - Investigations",
+                              "Directly allocated - Estates costs",
+                              "Directly allocated - Other costs",
+                              "Indirect costs - Investigations",
+                              "Exceptions - Staff",
+                              "Exceptions - Travel and subsistence",
+                              "Exceptions - Equipment",
+                              "Exceptions - Other costs",
+                              "VAT",
+                              "Associate Employment",
+                              "Consumables",
+                              "Associate development",
+                              "Knowledge base supervisor",
+                              "Estate",
+                              "Indirect costs",
+                              "Additional associate support",
+                              "Academic and secretarial support",
+                              "Property Revenue",
+                              "Other Costs - Resource",
+                              "Capital Equipment",
+                              "Property Capital",
+                              "Capitalised Labour",
+                              "Other costs- Capital",
+                              "Advance on Grant",
+                              "Other public sector funding",
+                              "Loans costs for Industrial participants",
+                              "Loans costs for Academic participants"
+                            ]
+                          },
+                          "Acc_OrganisationType__c": {
+                            "type": "string",
+                            "enum": [
+                              "Academic",
+                              "Industrial"
+                            ]
+                          },
+                          "Acc_CompetitionType__c": {
+                            "type": "string",
+                            "enum": [
+                              "CR&D",
+                              "CONTRACTS",
+                              "SBRI",
+                              "KTP",
+                              "CATAPULTS",
+                              "LOANS",
+                              "SBRI IFS",
+                              "EDGE"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "Acc_CostCategoryName__c",
+                          "Acc_OrganisationType__c",
+                          "Acc_CompetitionType__c"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_ProjectPeriodNumber__c",
+                  "Acc_CostCategory__c"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Claims_Line_Item"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_Claims__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_LineItemCost__c": {
+                    "type": "number"
+                  },
+                  "Acc_LineItemDescription__c": {
+                    "type": "string"
+                  },
+                  "Acc_ProjectPeriodNumber__c": {
+                    "type": "number"
+                  },
+                  "Acc_CostCategory__c": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "Acc_CostCategory__c"
+                          },
+                          "Acc_CostCategoryName__c": {
+                            "type": "string",
+                            "enum": [
+                              "Labour",
+                              "Overheads",
+                              "Materials",
+                              "Capital usage",
+                              "Subcontracting",
+                              "Travel and subsistence",
+                              "Other costs",
+                              "Other Costs 2",
+                              "Other Costs 3",
+                              "Other Costs 4",
+                              "Other Costs 5",
+                              "Directly incurred - Staff",
+                              "Directly incurred - Travel and subsistence",
+                              "Directly incurred - Equipment",
+                              "Directly incurred - Other costs",
+                              "Directly allocated - Investigations",
+                              "Directly allocated - Estates costs",
+                              "Directly allocated - Other costs",
+                              "Indirect costs - Investigations",
+                              "Exceptions - Staff",
+                              "Exceptions - Travel and subsistence",
+                              "Exceptions - Equipment",
+                              "Exceptions - Other costs",
+                              "VAT",
+                              "Associate Employment",
+                              "Consumables",
+                              "Associate development",
+                              "Knowledge base supervisor",
+                              "Estate",
+                              "Indirect costs",
+                              "Additional associate support",
+                              "Academic and secretarial support",
+                              "Property Revenue",
+                              "Other Costs - Resource",
+                              "Capital Equipment",
+                              "Property Capital",
+                              "Capitalised Labour",
+                              "Other costs- Capital",
+                              "Advance on Grant",
+                              "Other public sector funding",
+                              "Loans costs for Industrial participants",
+                              "Loans costs for Academic participants"
+                            ]
+                          },
+                          "Acc_OrganisationType__c": {
+                            "type": "string",
+                            "enum": [
+                              "Academic",
+                              "Industrial"
+                            ]
+                          },
+                          "Acc_CompetitionType__c": {
+                            "type": "string",
+                            "enum": [
+                              "CR&D",
+                              "CONTRACTS",
+                              "SBRI",
+                              "KTP",
+                              "CATAPULTS",
+                              "LOANS",
+                              "SBRI IFS",
+                              "EDGE"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "Acc_CostCategoryName__c",
+                          "Acc_OrganisationType__c",
+                          "Acc_CompetitionType__c"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_LineItemCost__c",
+                  "Acc_LineItemDescription__c",
+                  "Acc_ProjectPeriodNumber__c",
+                  "Acc_CostCategory__c"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Total_Cost_Category"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_Claims__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_CostCategory__c": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "Acc_CostCategory__c"
+                          },
+                          "Acc_CostCategoryName__c": {
+                            "type": "string",
+                            "enum": [
+                              "Labour",
+                              "Overheads",
+                              "Materials",
+                              "Capital usage",
+                              "Subcontracting",
+                              "Travel and subsistence",
+                              "Other costs",
+                              "Other Costs 2",
+                              "Other Costs 3",
+                              "Other Costs 4",
+                              "Other Costs 5",
+                              "Directly incurred - Staff",
+                              "Directly incurred - Travel and subsistence",
+                              "Directly incurred - Equipment",
+                              "Directly incurred - Other costs",
+                              "Directly allocated - Investigations",
+                              "Directly allocated - Estates costs",
+                              "Directly allocated - Other costs",
+                              "Indirect costs - Investigations",
+                              "Exceptions - Staff",
+                              "Exceptions - Travel and subsistence",
+                              "Exceptions - Equipment",
+                              "Exceptions - Other costs",
+                              "VAT",
+                              "Associate Employment",
+                              "Consumables",
+                              "Associate development",
+                              "Knowledge base supervisor",
+                              "Estate",
+                              "Indirect costs",
+                              "Additional associate support",
+                              "Academic and secretarial support",
+                              "Property Revenue",
+                              "Other Costs - Resource",
+                              "Capital Equipment",
+                              "Property Capital",
+                              "Capitalised Labour",
+                              "Other costs- Capital",
+                              "Advance on Grant",
+                              "Other public sector funding",
+                              "Loans costs for Industrial participants",
+                              "Loans costs for Academic participants"
+                            ]
+                          },
+                          "Acc_OrganisationType__c": {
+                            "type": "string",
+                            "enum": [
+                              "Academic",
+                              "Industrial"
+                            ]
+                          },
+                          "Acc_CompetitionType__c": {
+                            "type": "string",
+                            "enum": [
+                              "CR&D",
+                              "CONTRACTS",
+                              "SBRI",
+                              "KTP",
+                              "CATAPULTS",
+                              "LOANS",
+                              "SBRI IFS",
+                              "EDGE"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "Acc_CostCategoryName__c",
+                          "Acc_OrganisationType__c",
+                          "Acc_CompetitionType__c"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_CostCategoryGOLCost__c": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_CostCategory__c",
+                  "Acc_CostCategoryGOLCost__c"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Total_Project_Period"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_Claims__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_ProjectPeriodNumber__c": {
+                    "type": "number"
+                  },
+                  "Acc_ClaimStatus__c": {
+                    "type": "string",
+                    "enum": [
+                      "New",
+                      "Draft",
+                      "Submitted",
+                      "MO Queried",
+                      "Awaiting IAR",
+                      "Completion report required",
+                      "Awaiting IUK Approval",
+                      "Innovate Queried",
+                      "Payment Requested",
+                      "Approved",
+                      "Paid",
+                      "Not used"
+                    ]
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_ProjectPeriodNumber__c",
+                  "Acc_ClaimStatus__c"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "Acc_ProjectParticipant__c": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Acc_ProjectParticipant__c"
+            ],
+            "additionalProperties": false
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Acc_ProjectChangeRequest__c": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "Acc_Status__c": {
+                    "type": "string",
+                    "enum": [
+                      "Draft",
+                      "Submitted to Monitoring Officer",
+                      "Queried by Monitoring Officer",
+                      "Submitted to Innovate UK",
+                      "Queried by Innovate UK",
+                      "Submitted to Innovation Lead",
+                      "Queried by Innovation Lead",
+                      "In External Review",
+                      "In Review with Innovate UK",
+                      "In Review with Project Finance",
+                      "Withdrawn",
+                      "Ready for approval",
+                      "Rejected",
+                      "Approved",
+                      "Actioned"
+                    ]
+                  },
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Acc_RequestHeader"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_ProjectChangeRequest__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "Acc_Status__c",
+                  "RecordTypeId"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Loan_LoanDrawdownChange"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Loan_ParticipantVirementForLoanDrawdown"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Loan_PeriodVirementForLoanDrawdown"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Loan_ChangeLoansDuration"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_AccountNameChange"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_MultiplePartnerFinancialVirement"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_PartnerAddition"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_PartnerWithdrawal"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ProjectSuspension"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ProjectTermination"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_SinglePartnerFinancialVirement"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_TimeExtension"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_AddAPartner"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_BetweenPartnerFinancialVirement"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ChangeAPartnersName"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ChangeProjectDuration"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ChangeProjectScope"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_EndTheProjectEarly"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_FinancialVirement"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_PutProjectOnHold"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ReallocateOnePartnersProjectCosts"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ReallocateSeveralPartnersProjectCost"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_RemoveAPartner"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequests"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "RecordType"
+                              },
+                              "DeveloperName": {
+                                "type": "string",
+                                "const": "Acc_ChangePeriodLength"
+                              },
+                              "SobjectType": {
+                                "type": "string",
+                                "const": "Acc_ProjectChangeRequest__c"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "DeveloperName",
+                              "SobjectType"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_Reasoning__c": {
+                    "type": "string"
+                  },
+                  "Acc_MarkedasComplete__c": {
+                    "type": "string",
+                    "enum": [
+                      "To Do",
+                      "Incomplete",
+                      "Complete"
+                    ]
+                  },
+                  "Acc_NewOrganisationName__c": {
+                    "type": "string"
+                  },
+                  "Acc_NewProjectSummary__c": {
+                    "type": "string"
+                  },
+                  "Acc_NewPublicDescription__c": {
+                    "type": "string"
+                  },
+                  "Acc_Comments__c": {
+                    "type": "string"
+                  },
+                  "Acc_AdditionalNumberofMonths__c": {
+                    "type": "number"
+                  },
+                  "Acc_NewProjectDuration__c": {
+                    "type": "number"
+                  },
+                  "Acc_RemovalPeriod__c": {
+                    "type": "number"
+                  },
+                  "Acc_ExistingProjectDuration__c": {
+                    "type": "number"
+                  },
+                  "Acc_SuspensionStarts__c": {
+                    "type": "string"
+                  },
+                  "Acc_SuspensionEnds__c": {
+                    "type": "string"
+                  },
+                  "Acc_PublicDescriptionSnapshot__c": {
+                    "type": "string"
+                  },
+                  "Acc_ProjectSummarySnapshot__c": {
+                    "type": "string"
+                  },
+                  "Acc_ExistingPartnerName__c": {
+                    "type": "string"
+                  },
+                  "Acc_Nickname__c": {
+                    "type": "string"
+                  },
+                  "Acc_ProjectRole__c": {
+                    "type": "string"
+                  },
+                  "ProjectRoleLabel": {
+                    "type": "string"
+                  },
+                  "Acc_ParticipantType__c": {
+                    "type": "string"
+                  },
+                  "ParticipantTypeLabel": {
+                    "type": "string"
+                  },
+                  "Acc_OrganisationName__c": {
+                    "type": "string"
+                  },
+                  "Acc_RegisteredAddress__c": {
+                    "type": "string"
+                  },
+                  "Acc_RegistrationNumber__c": {
+                    "type": "string"
+                  },
+                  "Acc_ParticipantSize__c": {
+                    "type": "string"
+                  },
+                  "ParticipantSizeLabel": {
+                    "type": "string"
+                  },
+                  "Acc_Employees__c": {
+                    "type": "number"
+                  },
+                  "Acc_TurnoverYearEnd__c": {
+                    "type": "string"
+                  },
+                  "Acc_Turnover__c": {
+                    "type": "number"
+                  },
+                  "Acc_Location__c": {
+                    "type": "string"
+                  },
+                  "ProjectLocationLabel": {
+                    "type": "string"
+                  },
+                  "Acc_ProjectCity__c": {
+                    "type": "string"
+                  },
+                  "Acc_ProjectPostcode__c": {
+                    "type": "string"
+                  },
+                  "Acc_Contact1ProjectRole__c": {
+                    "type": "string"
+                  },
+                  "Contact1ProjectRoleLabel": {
+                    "type": "string"
+                  },
+                  "Acc_Contact1Forename__c": {
+                    "type": "string"
+                  },
+                  "Acc_Contact1Surname__c": {
+                    "type": "string"
+                  },
+                  "Acc_Contact1Phone__c": {
+                    "type": "string"
+                  },
+                  "Acc_Contact1EmailAddress__c": {
+                    "type": "string"
+                  },
+                  "Acc_Contact2ProjectRole__c": {
+                    "type": "string"
+                  },
+                  "Contact2ProjectRoleLabel": {
+                    "type": "string"
+                  },
+                  "Acc_Contact2Forename__c": {
+                    "type": "string"
+                  },
+                  "Acc_Contact2Surname__c": {
+                    "type": "string"
+                  },
+                  "Acc_Contact2Phone__c": {
+                    "type": "string"
+                  },
+                  "Acc_Contact2EmailAddress__c": {
+                    "type": "string"
+                  },
+                  "Acc_AwardRate__c": {
+                    "type": "number"
+                  },
+                  "Acc_OtherFunding__c": {
+                    "type": "boolean"
+                  },
+                  "Acc_TotalOtherFunding__c": {
+                    "type": "number"
+                  },
+                  "Acc_CommercialWork__c": {
+                    "type": "boolean"
+                  },
+                  "Acc_TSBReference__c": {
+                    "type": "string"
+                  },
+                  "Acc_GrantMovingOverFinancialYear__c": {
+                    "type": "number"
+                  },
+                  "Loan_ProjectStartDate__c": {
+                    "type": "string"
+                  },
+                  "Loan_Duration__c": {
+                    "type": "string"
+                  },
+                  "Loan_ExtensionPeriod__c": {
+                    "type": "string"
+                  },
+                  "Loan_ExtensionPeriodChange__c": {
+                    "type": "string"
+                  },
+                  "Loan_RepaymentPeriod__c": {
+                    "type": "string"
+                  },
+                  "Loan_RepaymentPeriodChange__c": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "RecordTypeId"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "relationship": {
+            "type": "object",
+            "properties": {
+              "Acc_Project__c": {
+                "type": "string"
+              },
+              "Acc_ProjectChangeRequest__c": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Acc_Project__c"
+            ],
+            "additionalProperties": false
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "Acc_MonitoringAnswer__c": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "loadId": {
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Acc_MonitoringAnswer"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_MonitoringAnswer__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_ProjectPeriodNumber__c": {
+                    "type": "integer"
+                  },
+                  "Acc_Question__c": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "Acc_MonitoringQuestion__c"
+                              },
+                              "Acc_QuestionScore__c": {
+                                "type": "number",
+                                "enum": [
+                                  1,
+                                  2,
+                                  3,
+                                  4,
+                                  5
+                                ]
+                              },
+                              "Acc_QuestionName__c": {
+                                "type": "string",
+                                "enum": [
+                                  "Scope",
+                                  "Time",
+                                  "Cost",
+                                  "Exploitation",
+                                  "Risk management",
+                                  "Project planning"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "Acc_QuestionScore__c",
+                              "Acc_QuestionName__c"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "const": "Acc_MonitoringQuestion__c"
+                              },
+                              "Acc_QuestionName__c": {
+                                "type": "string",
+                                "enum": [
+                                  "Summary",
+                                  "Issues and actions"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "Acc_QuestionName__c"
+                            ],
+                            "additionalProperties": false
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_QuestionComments__c": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_ProjectPeriodNumber__c",
+                  "Acc_Question__c",
+                  "Acc_QuestionComments__c"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "RecordTypeId": {
+                    "type": "object",
+                    "properties": {
+                      "lookup": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "const": "RecordType"
+                          },
+                          "DeveloperName": {
+                            "type": "string",
+                            "const": "Acc_MonitoringHeader"
+                          },
+                          "SobjectType": {
+                            "type": "string",
+                            "const": "Acc_MonitoringAnswer__c"
+                          }
+                        },
+                        "required": [
+                          "type",
+                          "DeveloperName",
+                          "SobjectType"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "lookup"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "Acc_ProjectPeriodNumber__c": {
+                    "type": "integer"
+                  },
+                  "Acc_MonitoringReportStatus__c": {
+                    "type": "string",
+                    "enum": [
+                      "New",
+                      "Draft",
+                      "Awaiting IUK Approval",
+                      "Approved",
+                      "IUK Queried"
+                    ]
+                  }
+                },
+                "required": [
+                  "RecordTypeId",
+                  "Acc_ProjectPeriodNumber__c",
+                  "Acc_MonitoringReportStatus__c"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "relationship": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "Acc_Project__c": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "Acc_Project__c"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "Acc_MonitoringAnswer__c": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "Acc_MonitoringAnswer__c"
+                ],
+                "additionalProperties": false
+              }
+            ]
+          },
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Filename to display on Salesforce"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "Path relative to the `/payload` folder where the file you want to upload is found"
+                },
+                "description": {
+                  "type": "string",
+                  "enum": [
+                    "BillingStreet",
+                    "Invoice",
+                    "IAR",
+                    "Evidence",
+                    "ClaimValidationForm",
+                    "DeMinimisDeclartionForm",
+                    "CertificateOfNameChange",
+                    "WithdrawalOfPartnerCertificate",
+                    "StatementOfExpenditure",
+                    "EndOfProjectSurvey",
+                    "JeSForm",
+                    "OverheadCalculationSpreadsheet",
+                    "BankStatement",
+                    "AgreementToPCR",
+                    "LMCMinutes",
+                    "ScheduleThree",
+                    "ReviewMeeting",
+                    "Plans",
+                    "CollaborationAgreement",
+                    "RiskRegister",
+                    "AnnexThree",
+                    "Presentation",
+                    "Email",
+                    "MeetingAgenda",
+                    "ProjectCompletionForm",
+                    "ProofOfSatisfiedConditions",
+                    "Loan"
+                  ],
+                  "description": "Canned description for the file."
+                },
+                "username": {
+                  "type": "string",
+                  "description": "Username of the author of the file. This user will be treated as the owner of the file.\n\nLeave empty to mark as uploaded by the Bamboo user/Innovate UK"
+                }
+              },
+              "required": [
+                "name",
+                "path",
+                "description"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "data",
+          "relationship"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "Competition__c",
+    "Account",
+    "Contact",
+    "User",
+    "Acc_Project__c",
+    "Acc_ProjectParticipant__c",
+    "Acc_ProjectContactLink__c",
+    "Acc_Profile__c",
+    "Acc_Claims__c",
+    "Acc_ProjectChangeRequest__c",
+    "Acc_MonitoringAnswer__c"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "LoadableDate": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/RelativeDate"
+        },
+        {
+          "$ref": "#/definitions/AbsoluteDate"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "date": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "year": {
+                      "type": "integer"
+                    },
+                    "month": {
+                      "type": "integer"
+                    },
+                    "day": {
+                      "type": "integer"
+                    },
+                    "hour": {
+                      "type": "integer"
+                    },
+                    "minute": {
+                      "type": "integer"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "string",
+                  "const": "now"
+                }
+              ],
+              "description": "Set the date to a specific date/time. Skipped inputs will retain the current value."
+            },
+            "offset": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "year": {
+                      "type": "integer"
+                    },
+                    "month": {
+                      "type": "integer"
+                    },
+                    "day": {
+                      "type": "integer"
+                    },
+                    "hour": {
+                      "type": "integer"
+                    },
+                    "minute": {
+                      "type": "integer"
+                    }
+                  },
+                  "additionalProperties": false
+                },
+                {
+                  "type": "string",
+                  "const": "none"
+                }
+              ],
+              "description": "Set the date as the current date/time, with a specified offset. Skipped inputs will retain the current value."
+            }
+          },
+          "required": [
+            "date",
+            "offset"
+          ]
+        }
+      ]
+    },
+    "RelativeDate": {
+      "type": "object",
+      "properties": {
+        "offset": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "year": {
+                  "type": "integer"
+                },
+                "month": {
+                  "type": "integer"
+                },
+                "day": {
+                  "type": "integer"
+                },
+                "hour": {
+                  "type": "integer"
+                },
+                "minute": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "string",
+              "const": "none"
+            }
+          ],
+          "description": "Set the date as the current date/time, with a specified offset. Skipped inputs will retain the current value."
+        }
+      },
+      "required": [
+        "offset"
+      ],
+      "additionalProperties": false
+    },
+    "AbsoluteDate": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "year": {
+                  "type": "integer"
+                },
+                "month": {
+                  "type": "integer"
+                },
+                "day": {
+                  "type": "integer"
+                },
+                "hour": {
+                  "type": "integer"
+                },
+                "minute": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "string",
+              "const": "now"
+            }
+          ],
+          "description": "Set the date to a specific date/time. Skipped inputs will retain the current value."
+        }
+      },
+      "required": [
+        "date"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

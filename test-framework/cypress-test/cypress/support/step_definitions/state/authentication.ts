@@ -36,9 +36,18 @@ const changeUser = (info: LoginInfo): Parameters<typeof Given>[1] => {
   );
 
   Given(
-    "the user is an FC",
+    "the user is a PM",
     changeUser({
       username: lowercasePrefix + "autoimport.belgium@innovateuk.gov.uk",
+      project,
+      partner,
+    }),
+  );
+
+  Given(
+    "the user is an FC",
+    changeUser({
+      username: lowercasePrefix + "autoimport.canada@innovateuk.gov.uk",
       project,
       partner,
     }),

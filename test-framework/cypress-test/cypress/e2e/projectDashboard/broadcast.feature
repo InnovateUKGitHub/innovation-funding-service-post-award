@@ -6,6 +6,7 @@ Feature: Broadcast message
         And the user can see the broadcast banner
         When the user clicks the "Read more" link
         Then the user sees the broadcast page
+        And the user sees the broadcast information
 
     Scenario: The broadcast screen displays correct information
         Given the user is on the broadcast page

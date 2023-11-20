@@ -6,5 +6,9 @@
   "json": {
     "enabled": true,
     "output": "reports/report.json"
+  },
+  "messages": {
+    "enabled": true,
+    "output": "reports/report.ndjson"
   }
 }
