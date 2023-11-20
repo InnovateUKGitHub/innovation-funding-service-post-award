@@ -4,3 +4,12 @@ metadata:
   name: acc-ui-route
 spec:
   host: www-acc-uat.apps.org-env-0.org.innovateuk.ukri.org
+  port:
+    targetPort: 8080
+  to:
+    kind: Service
+    name: acc-ui-service
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

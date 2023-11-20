@@ -10,4 +10,3 @@ resources:
 
 patchesStrategicMerge:
   - acc-ui-deployment.yml
-  - acc-ui-route.yml
