@@ -1,5 +1,5 @@
 import { fileTidyUp } from "common/filetidyup";
-import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
+//import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
   claimCommentBox,
@@ -23,8 +23,8 @@ const fc = "james.black@euimeabs.test";
 describe("claims > Claim summary", () => {
   before(() => {
     visitApp({ asUser: fc, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
-    euiCostCleanUp();
-    overheadsTidyUp();
+    //euiCostCleanUp();
+    //overheadsTidyUp();
   });
 
   it("Should navigate to the claims document page", () => {
