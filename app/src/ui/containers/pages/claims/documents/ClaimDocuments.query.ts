@@ -16,6 +16,9 @@ export const claimDocumentsQuery = graphql`
             edges {
               node {
                 Id
+                Acc_ClaimStatus__c {
+                  value
+                }
                 Acc_FinalClaim__c {
                   value
                 }
