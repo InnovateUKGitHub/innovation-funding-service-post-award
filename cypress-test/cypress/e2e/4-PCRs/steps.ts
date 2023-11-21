@@ -79,6 +79,7 @@ export const pcrCheckboxesWithHint = () => {
     "Change project scope",
     "Change project duration",
     "Change a partner's name",
+    "Approve a new subcontractor",
     "Put project on hold",
   ].forEach(pcrType => {
     cy.get(".govuk-label").contains(pcrType);
@@ -1444,6 +1445,7 @@ export enum PcrItemType {
   ChangeProjectScope = "Change project scope",
   ChangeProjectDuration = "Change project duration",
   ChangeAPartnerName = "Change a partner's name",
+  ApproveANewSubcontractor = "Approve a new subcontractor",
   PutAProjectOnHold = "Put project on hold",
 }
 
@@ -1454,6 +1456,7 @@ const pcrArray = [
   PcrItemType.ChangeProjectScope,
   PcrItemType.ChangeProjectDuration,
   PcrItemType.ChangeAPartnerName,
+  PcrItemType.ApproveANewSubcontractor,
   PcrItemType.PutAProjectOnHold,
 ];
 

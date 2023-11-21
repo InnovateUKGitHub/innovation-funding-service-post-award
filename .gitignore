@@ -18,6 +18,7 @@ acc-ui-docker-image.json
 __pycache__
 cypress.env.json
 *.class
+bigger_test.txt
 
 # Mac OS X files
 .DS_Store
