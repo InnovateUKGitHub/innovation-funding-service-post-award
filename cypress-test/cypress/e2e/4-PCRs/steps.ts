@@ -1,5 +1,7 @@
 import { PcrType } from "typings/pcr";
 import { documents } from "e2e/2-claims/steps";
+import { seconds } from "common/seconds";
+import { testFile } from "common/testfileNames";
 
 let date = new Date();
 let createdDay = date.getDate();
@@ -160,12 +162,17 @@ export const addPartnerDocUpload = () => {
 const uploadedDocs = documents.reverse();
 
 export const removePartnerFileTable = () => {
-  uploadedDocs.forEach((doc, index) => {
-    cy.get("tr")
-      .eq(index + 1)
-      .within(() => {
-        cy.get("td:nth-child(1)").contains(doc);
-      });
+  uploadedDocs.forEach(doc => {
+    cy.get("td:nth-child(1)").contains(doc);
+  });
+};
+
+export const pcrFileTable = (fileName: string, uploadedBy: string) => {
+  ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach((header, index) => {
+    cy.get(`th:nth-child(${index + 1})`).contains(header);
+  });
+  ["testfile.doc", fileName, "2023", "0KB", uploadedBy].forEach((rowItem, index) => {
+    cy.get(`td:nth-child(${index + 1})`).contains(rowItem);
   });
 };
 
@@ -353,6 +360,16 @@ export const reallocateCostsGiveInfoTodo = () => {
 };
 
 export const showPartners = () => {
+  ["EUI Small Ent Health", "A B Cad Services", "ABS EUI Medium Enterprise"].forEach((partner, index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get(`td:nth-child(1)`).contains(partner);
+      });
+  });
+};
+
+export const partnerRadioButtons = () => {
   ["EUI Small Ent Health", "A B Cad Services", "ABS EUI Medium Enterprise"].forEach(partner => {
     cy.getByLabel(partner);
   });
@@ -1692,7 +1709,7 @@ export const correctPcrHeaders = () => {
 export const existingPcrTable = () => {
   [
     ["1421", "Remove a partner", "27 Feb 2023", "Submitted to Monitoring Officer", "27 Feb 2023"],
-    ["1419", "Remove a partner", "27 Feb 2023", "Queried by Monitoring Officer", "27 Feb 2023"],
+    ["1419", "Remove a partner", "27 Feb 2023", "Queried to Project Manager", "27 Feb 2023"],
   ].forEach(([reqNo, types, started, status, lastUpdated], index) => {
     cy.get("tr")
       .eq(index + 1)
@@ -1813,4 +1830,24 @@ export const changeNameClickEachEdit = () => {
   cy.heading("Request");
   cy.get("a").contains("Change a partner's name").click();
   cy.heading("Change a partner's name");
+};
+
+const documentPaths = documents.map(doc => `cypress/documents/${doc}`);
+
+export const pcrAllowBatchFileUpload = (documentType: string) => {
+  cy.intercept("POST", `/api/documents/${documentType}/**`).as("filesUpload");
+  cy.get(`input[type="file"]`)
+    .wait(seconds(1))
+    .selectFile(documentPaths, { force: true, timeout: seconds(5) });
+  cy.wait(seconds(1)).submitButton("Upload documents").trigger("focus").click();
+  cy.wait("@filesUpload");
+};
+
+export const removeFileDelete = () => {
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.tableCell("Remove").click();
+    });
+  cy.validationNotification(`'${testFile}' has been removed.`);
 };

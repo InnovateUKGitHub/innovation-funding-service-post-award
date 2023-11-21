@@ -1,9 +1,9 @@
 import { visitApp } from "../../../common/visit";
 import {
+  partnerRadioButtons,
   removePartnerContinueNoEdit,
   removePartnerPromptValidation,
   shouldShowProjectTitle,
-  showPartners,
   validatePeriodBox,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
@@ -35,7 +35,7 @@ describe("PCR > Remove partner > Begin editing the Remove a partner section", ()
     cy.get("legend").contains("Select partner to remove");
   });
 
-  it("Should have a list of partners and the option to select which partner you wish to remove", showPartners);
+  it("Should have a list of partners and the option to select which partner you wish to remove", partnerRadioButtons);
 
   it("Should have a 'When is their last period?' heading", () => {
     cy.get("legend").contains("When is their last period?");
