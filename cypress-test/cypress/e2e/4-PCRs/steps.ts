@@ -73,17 +73,28 @@ export const createRequestButton = () => {
 
 export const pcrCheckboxesWithHint = () => {
   [
-    "Reallocate project costs",
-    "Remove a partner",
-    "Add a partner",
-    "Change project scope",
-    "Change project duration",
-    "Change a partner's name",
-    "Approve a new subcontractor",
-    "Put project on hold",
-  ].forEach(pcrType => {
-    cy.get(".govuk-label").contains(pcrType);
-    cy.get(".govuk-label").contains(pcrType).get(".govuk-hint");
+    ["Reallocate project costs", "This allows you to move costs from one category to another."],
+    ["Remove a partner", "Use this when a partner is leaving the project and is ready to submit their final claim."],
+    [
+      "Add a partner",
+      "This allows you to add a new partner to a project. When adding a new partner to replace an existing one, also use 'Remove a partner' to remove the existing one.",
+    ],
+    ["Change project scope", "Use this to update the public project description and the internal project summary."],
+    ["Change project duration", "This allows you to request an extension or reduction to your project's duration."],
+    [
+      "Change a partner's name",
+      "Use when a partner organisation's name has changed. If a partner is being replaced, use ‘Remove a partner’ to delete the old one and ‘Add a partner’ to add the new one.",
+    ],
+    [
+      "Approve a new subcontractor",
+      "Let us know if you are working with a new subcontractor. We will need to undertake viability checks, as stated in the application process.",
+    ],
+    [
+      "Put project on hold",
+      "This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold.",
+    ],
+  ].forEach(([pcrType, hint]) => {
+    cy.getByLabel(pcrType).contains(hint);
   });
 };
 
