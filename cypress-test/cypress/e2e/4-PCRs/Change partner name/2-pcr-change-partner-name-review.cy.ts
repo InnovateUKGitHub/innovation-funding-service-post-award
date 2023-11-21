@@ -30,7 +30,7 @@ describe("PCR >  Change partner name > Review PCR", () => {
   it("Should have a working backlink", () => {
     cy.backLink("Back to request").click();
     cy.heading("Request");
-    cy.go("back");
+    cy.get("a").contains("Change a partner's name").click();
     cy.heading("Change a partner's name");
   });
 

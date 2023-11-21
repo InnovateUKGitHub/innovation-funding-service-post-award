@@ -54,7 +54,7 @@ describe("PCR >  Put project on hold > Review PCR", () => {
   it("Should have a correct working backlink", backToRequest);
 
   it("Should go back to 'Put project on hold' page", () => {
-    cy.go("back");
+    cy.get("a").contains("Put project on hold").click();
     cy.heading("Put project on hold");
   });
 
@@ -72,7 +72,7 @@ describe("PCR >  Put project on hold > Review PCR", () => {
   it("Should have a correct working backlink", backToRequest);
 
   it("Should go back to the Put project on hold page ", () => {
-    cy.go("back");
+    cy.get("a").contains("Reasoning for Innovate UK").click();
     cy.heading("Reasons for Innovate UK");
   });
 

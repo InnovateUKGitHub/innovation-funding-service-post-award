@@ -60,6 +60,9 @@ describe("PCR > In Review", () => {
     });
   });
 
+  /**
+   * The use of cy.go is justified in this case as there is no way of revisiting the PCR Submitted screen once we navigate away
+   */
   it("Should have a review PCR link", () => {
     cy.get("a").contains("Review request").click();
     cy.heading("Request");

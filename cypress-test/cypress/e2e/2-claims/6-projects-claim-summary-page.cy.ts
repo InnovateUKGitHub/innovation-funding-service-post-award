@@ -71,7 +71,11 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should go back to the summary page", () => {
-    cy.go("back");
+    cy.button("Continue to claims documents").click();
+    cy.heading("Claim documents");
+    cy.button("a").contains("Continue to update forecast").click();
+    cy.heading("Update forecast");
+    cy.button("Continue to summary").click();
     cy.heading("Claim summary");
   });
 
@@ -96,7 +100,9 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should go back to the summary page", () => {
-    cy.go("back");
+    cy.button("a").contains("Continue to update forecast").click();
+    cy.heading("Update forecast");
+    cy.button("Continue to summary").click();
     cy.heading("Claim summary");
   });
 
@@ -108,7 +114,7 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should go back to the summary page", () => {
-    cy.go("back");
+    cy.button("Continue to summary").click();
     cy.heading("Claim summary");
   });
 
@@ -143,7 +149,9 @@ describe("claims > Claim summary", () => {
   it("Should access the document page and delete the uploaded document", summaryAccessDocsDelete);
 
   it("Should go back to the summary page", () => {
-    cy.go("back");
+    cy.button("a").contains("Continue to update forecast").click();
+    cy.heading("Update forecast");
+    cy.button("Continue to summary").click();
     cy.heading("Claim summary");
   });
 

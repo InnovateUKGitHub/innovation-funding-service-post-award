@@ -1756,7 +1756,7 @@ export const validateFutureStartDate = () => {
 export const backToPcrs = () => {
   cy.backLink("Back to project change requests").click();
   cy.heading("Project change requests");
-  cy.go("back");
+  cy.get("td").contains("Put project on hold").siblings().contains("Review").click();
   cy.heading("Request");
 };
 
@@ -1817,19 +1817,17 @@ export const changeNameClickEachEdit = () => {
     ["Proposed name", "Edit"],
   ].forEach(([key, edit]) => {
     cy.contains("dt", key).siblings().contains(edit).click();
-    cy.heading("Change a partner's name");
-    cy.go("back");
-    cy.heading("Request");
-    cy.get("a").contains("Change a partner's name").click();
-    cy.heading("Change a partner's name");
+    cy.get("legend").contains("Enter new name");
+    cy.button("Save and continue").click();
+    cy.get("legend").contains("Upload change of name certificate");
+    cy.button("Save and continue").click();
+    cy.get("legend").contains("Mark as complete");
   });
   cy.contains("dt", "Change of name certificate").siblings().contains("Edit").click();
   cy.heading("Change a partner's name");
   cy.get("legend").contains("Upload change of name certificate");
-  cy.go("back");
-  cy.heading("Request");
-  cy.get("a").contains("Change a partner's name").click();
-  cy.heading("Change a partner's name");
+  cy.button("Save and continue").click();
+  cy.get("legend").contains("Mark as complete");
 };
 
 const documentPaths = documents.map(doc => `cypress/documents/${doc}`);
