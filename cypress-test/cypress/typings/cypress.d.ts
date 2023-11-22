@@ -165,6 +165,25 @@ declare global {
        */
 
       createPcr(pcr: PcrType): Chainable<Element>;
+
+      /**
+       * Finds an exact match for the inserted text and clicks on it.
+       * can accept en element selector string (.css selector) as well as content string
+       * for better precision if needed. Options as last argument are for the click
+       * options, not the contains options. If Contains options are needed, either use a
+       * different approach or extend this method
+       *
+       * N.B not to be used in any case where e.g. waits or focus, or other operations
+       * needed before clicking.
+       *
+       * Best used with main buttons and links that will not have matching copy elsewhere
+       *
+       * @example
+       * cy.clickOn("Save and continue", { force: true });
+       * cy.clickOn("button", "Save and continue", { force: true });
+       */
+      clickOn(name: string, options?: Partial<Cypress.ClickOptions>): void;
+      clickOn(element: string, name: string, options?: Partial<Cypress.ClickOptions>): void;
     }
   }
 }

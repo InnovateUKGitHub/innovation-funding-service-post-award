@@ -220,6 +220,14 @@ const createPcr = (pcr: PcrType) => {
   cy.wait("@pcrPrepare");
 };
 
+function clickOn(...args: unknown[]) {
+  if (typeof args[0] === "string" && typeof args[1] === "string") {
+    cy.contains(args[0], new RegExp(`^${args[1]}$`)).click(args[2]);
+  } else if (typeof args[0] === "string" && typeof args[1] !== "string") {
+    cy.contains(new RegExp(`^${args[0]}$`)).click(args[1]);
+  }
+}
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
@@ -249,3 +257,4 @@ Cypress.Commands.add("fileInput", fileInput);
 Cypress.Commands.add("validationNotification", validationNotification);
 Cypress.Commands.add("downloadFile", downloadFile);
 Cypress.Commands.add("createPcr", createPcr);
+Cypress.Commands.add("clickOn", clickOn);
