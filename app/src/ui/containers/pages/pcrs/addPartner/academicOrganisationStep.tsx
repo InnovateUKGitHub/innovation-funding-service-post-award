@@ -72,6 +72,7 @@ export const AcademicOrganisationStep = (
             hint={x => x.pcrAddPartnerLabels.jesOrganisationSectionSubtitle}
             value={() => searchInputValue}
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
+            maxLength={160}
           />
 
           {isServer && (

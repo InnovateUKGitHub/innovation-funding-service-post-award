@@ -59,6 +59,7 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
             hint={getContent(x => x.pages.pcrAddPartnerCompanyHouse.hint)}
             value={() => searchInputValue}
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
+            maxLength={160}
           />
 
           {isServer && (

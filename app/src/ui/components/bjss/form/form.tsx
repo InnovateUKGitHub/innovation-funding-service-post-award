@@ -169,6 +169,7 @@ export const createTypedForm = <T,>() => {
     width?: FormInputWidths;
     autoComplete?: React.InputHTMLAttributes<T>["autoComplete"];
     qa?: string;
+    maxLength?: number;
   }
 
   type MultiStringFieldProps = ExternalFieldProps<string> & Omit<TextAreaInputProps, "value">;
