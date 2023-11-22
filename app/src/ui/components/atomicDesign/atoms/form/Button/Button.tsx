@@ -1,7 +1,6 @@
 import { useGovFrontend } from "@ui/hooks/gov-frontend.hook";
 import cx from "classnames";
 import { ButtonHTMLAttributes } from "react";
-import { useMounted } from "../../providers/Mounted/Mounted";
 
 type ButtonName = string;
 
@@ -26,13 +25,7 @@ const getButtonTypeClass = (type: ButtonProps["styling"] = "Primary") => {
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { name?: ButtonName } & ButtonSubTypes;
 
-/**
- * secondarySubmit allows the button to behave as submit type when javascript is disabled and as a button type
- * when javascript is enabled. Used to allow both validation with javascript enabled and also to use the submit
- * form handler with js disabled
- */
 export const Button = ({
-  secondarySubmit,
   className,
   styling = "Primary",
   name = "button_default",
@@ -40,9 +33,7 @@ export const Button = ({
   link,
   warning,
   ...props
-}: ButtonProps & {
-  secondarySubmit?: boolean;
-}) => {
+}: ButtonProps & {}) => {
   let styleTag = styling;
   if (secondary) {
     styleTag = "Secondary";
@@ -52,18 +43,10 @@ export const Button = ({
     styleTag = "Warning";
   }
 
-  const { isClient } = useMounted();
   const { setRef } = useGovFrontend("Button");
   const buttonStyling = getButtonTypeClass(styleTag);
   return (
-    <button
-      type={secondarySubmit && !isClient ? "submit" : "button"}
-      ref={setRef}
-      name={name}
-      className={cx(buttonStyling, className)}
-      data-module="govuk-button"
-      {...props}
-    />
+    <button ref={setRef} name={name} className={cx(buttonStyling, className)} data-module="govuk-button" {...props} />
   );
 };
 
