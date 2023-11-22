@@ -3,7 +3,7 @@ import { getAuthRoles } from "@framework/types/authorisation";
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
@@ -14,8 +14,6 @@ import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTa
 import { Page } from "@ui/components/bjss/Page/page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { useNavigate } from "react-router-dom";
 import { useClaimPreparePageData } from "./claimPrepare.logic";
 import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
 import { getClaimDetailsStatusType } from "@ui/components/atomicDesign/organisms/claims/ClaimDetailsLink/claimDetailsLink";
@@ -36,8 +34,6 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
     getClaimDetailsStatusType({ project: data.project, partner: data.partner, claim: data.claim }) !== "edit";
 
   const { getContent } = useContent();
-
-  const navigate = useNavigate();
 
   const { isPm } = getAuthRoles(data.project.roles);
 
@@ -86,32 +82,21 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
 
         <Form>
           <Fieldset data-qa="save-and-continue">
-            <Button
-              name="button_default"
-              secondarySubmit
-              onClick={() =>
-                navigate(
-                  props.routes.claimDocuments.getLink({
-                    projectId: props.projectId,
-                    partnerId: props.partnerId,
-                    periodId: props.periodId,
-                  }).path,
-                )
-              }
+            <Link
+              route={props.routes.claimDocuments.getLink({
+                projectId: props.projectId,
+                partnerId: props.partnerId,
+                periodId: props.periodId,
+              })}
+              styling="PrimaryButton"
               disabled={isNonEditable}
             >
               <Content value={x => x.pages.claimPrepare.buttonSaveAndContinue} />
-            </Button>
-            <Button
-              secondary
-              secondarySubmit
-              name="button_save"
-              onClick={() => {
-                navigate(backLink.path);
-              }}
-            >
+            </Link>
+
+            <Link route={backLink} styling="SecondaryButton">
               <Content value={x => x.pages.claimPrepare.buttonSaveAndReturn} />
-            </Button>
+            </Link>
           </Fieldset>
         </Form>
       </Section>
