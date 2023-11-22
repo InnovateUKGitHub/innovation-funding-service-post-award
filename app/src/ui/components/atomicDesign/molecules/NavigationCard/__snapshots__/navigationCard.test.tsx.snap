@@ -12,6 +12,7 @@ NodeList [
       <a
         class="govuk-link card-link__link"
         href="/stub-0-path"
+        role="link"
       >
         <h2
           class="card-link__title"
@@ -45,6 +46,7 @@ NodeList [
       <a
         class="govuk-link card-link__link"
         href="/stub-1-path"
+        role="link"
       >
         <h2
           class="card-link__title"
@@ -78,6 +80,7 @@ NodeList [
       <a
         class="govuk-link card-link__link"
         href="/stub-2-path"
+        role="link"
       >
         <h2
           class="card-link__title"
@@ -111,6 +114,7 @@ NodeList [
       <a
         class="govuk-link card-link__link"
         href="/stub-3-path"
+        role="link"
       >
         <h2
           class="card-link__title"
@@ -144,6 +148,7 @@ NodeList [
       <a
         class="govuk-link card-link__link"
         href="/stub-4-path"
+        role="link"
       >
         <h2
           class="card-link__title"
@@ -177,6 +182,7 @@ NodeList [
       <a
         class="govuk-link card-link__link"
         href="/stub-5-path"
+        role="link"
       >
         <h2
           class="card-link__title"
@@ -210,6 +216,7 @@ NodeList [
       <a
         class="govuk-link card-link__link"
         href="/stub-6-path"
+        role="link"
       >
         <h2
           class="card-link__title"
@@ -243,6 +250,7 @@ NodeList [
       <a
         class="govuk-link card-link__link"
         href="/stub-7-path"
+        role="link"
       >
         <h2
           class="card-link__title"
