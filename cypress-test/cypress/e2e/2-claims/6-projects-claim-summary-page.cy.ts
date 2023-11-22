@@ -1,5 +1,5 @@
 import { fileTidyUp } from "common/filetidyup";
-//import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
+import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
   claimCommentBox,
@@ -23,12 +23,12 @@ const fc = "james.black@euimeabs.test";
 describe("claims > Claim summary", () => {
   before(() => {
     visitApp({ asUser: fc, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
-    //euiCostCleanUp();
-    //overheadsTidyUp();
+    euiCostCleanUp();
+    overheadsTidyUp();
   });
 
   it("Should navigate to the claims document page", () => {
-    cy.button("Continue to claims documents").click();
+    cy.getByRole("button", "Continue to claims documents").click();
     cy.heading("Claim documents");
   });
 
@@ -71,9 +71,9 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should go back to the summary page", () => {
-    cy.button("Continue to claims documents").click();
+    cy.getByRole("button", "Continue to claims documents").click();
     cy.heading("Claim documents");
-    cy.button("a").contains("Continue to update forecast").click();
+    cy.get("a").contains("Continue to update forecast").click();
     cy.heading("Update forecast");
     cy.button("Continue to summary").click();
     cy.heading("Claim summary");
@@ -100,7 +100,7 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should go back to the summary page", () => {
-    cy.button("a").contains("Continue to update forecast").click();
+    cy.get("a").contains("Continue to update forecast").click();
     cy.heading("Update forecast");
     cy.button("Continue to summary").click();
     cy.heading("Claim summary");
@@ -133,11 +133,11 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should have a Submit claim button", () => {
-    cy.button("Submit");
+    cy.button("Submit claim");
   });
 
   it("Should Save and return to claims", () => {
-    cy.button("Save and return to claims").click();
+    cy.button("Save and return to claims").click({});
     cy.heading("Claims");
   });
 
@@ -149,7 +149,7 @@ describe("claims > Claim summary", () => {
   it("Should access the document page and delete the uploaded document", summaryAccessDocsDelete);
 
   it("Should go back to the summary page", () => {
-    cy.button("a").contains("Continue to update forecast").click();
+    cy.get("a").contains("Continue to update forecast").click();
     cy.heading("Update forecast");
     cy.button("Continue to summary").click();
     cy.heading("Claim summary");

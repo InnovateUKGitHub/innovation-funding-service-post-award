@@ -1013,7 +1013,7 @@ export const summaryCommentsAdd = () => {
 export const summaryCommentsTooMany = () => {
   cy.get("textarea").type("{moveToEnd}").type("t");
   cy.paragraph("You have 1 character too many");
-  cy.button("Save and return").click();
+  cy.button("Save and return to claims").click();
   cy.validationLink("Comments must be a maximum of 1000 characters");
 };
 
@@ -1026,7 +1026,7 @@ export const summaryCommentsDeleteOne = () => {
 export const summaryReaccessClaim = () => {
   cy.get("a").contains("Edit").click();
   cy.heading("Costs to be claimed");
-  cy.button("Continue to claims documents").click();
+  cy.getByRole("button", "Continue to claims documents").click();
   cy.heading("Claim documents");
   cy.get("a").contains("Continue to update forecast").click();
   cy.heading("Update forecast");
@@ -1058,7 +1058,7 @@ export const summaryUpdateCostsClaimed = () => {
   cy.wait(500);
   cy.button("Save and return to claims").click();
   cy.heading("Costs to be claimed");
-  cy.button("Continue to claims documents").click();
+  cy.getByRole("button", "Continue to claims documents").click();
   cy.heading("Claim documents");
   cy.get("a").contains("Continue to update forecast").click();
   cy.heading("Update forecast");
@@ -1081,7 +1081,7 @@ export const summaryClearCostCats = () => {
 };
 
 export const summaryCheckForCostRemoval = () => {
-  cy.button("Continue to claims documents").click();
+  cy.getByRole("button", "Continue to claims documents").click();
   cy.heading("Claim documents");
   cy.get("a").contains("Continue to update forecast").click();
   cy.heading("Update forecast");
