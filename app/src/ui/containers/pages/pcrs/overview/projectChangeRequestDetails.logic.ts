@@ -8,7 +8,11 @@ import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { PCRItemType } from "@framework/constants/pcrConstants";
 
 export const usePCRDetailsQuery = (projectId: ProjectId, pcrId: PcrId) => {
-  const data = useLazyLoadQuery<ProjectChangeRequestDetailsQuery>(pcrDetailsQuery, { projectId, pcrId });
+  const data = useLazyLoadQuery<ProjectChangeRequestDetailsQuery>(
+    pcrDetailsQuery,
+    { projectId, pcrId },
+    { fetchPolicy: "store-and-network" },
+  );
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
 
