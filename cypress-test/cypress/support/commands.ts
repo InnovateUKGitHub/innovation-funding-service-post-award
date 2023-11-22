@@ -26,9 +26,13 @@ const getByQA = (tag: string, options?: CommandOptions) => {
   cy.get(`[data-qa="${tag}"]`, options ?? { timeout: 15000 });
 };
 
-const getByRole = (role: string) => {
+const getByRole = (role: string, label?: string) => {
   cy.log("**getByRole**");
-  cy.get(`[role="${role}"]`);
+  if (label) {
+    cy.get(`[role="${role}"]`).contains(label);
+  } else {
+    cy.get(`[role="${role}"]`);
+  }
 };
 
 const getByPageQA = (tag: string) => {

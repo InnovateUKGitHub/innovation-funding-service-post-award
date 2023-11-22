@@ -41,9 +41,9 @@ declare global {
       getListItemFromKey(label: string, item: string): Chainable<Element>;
 
       /**
-       * Gets an element based on the role
+       * Gets an element based on the role and any included label
        */
-      getByRole(role: string): Chainable<Element>;
+      getByRole(role: string, label?: string): Chainable<Element>;
 
       /**
        * Uses the dev tools to switch to a different named user,
