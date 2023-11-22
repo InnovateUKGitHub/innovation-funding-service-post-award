@@ -61,18 +61,18 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   it("Should display relevant messaging surrounding Supporting documents", evidenceRequiredMessage);
 
   it("Should navigate to files upload area", () => {
-    cy.submitButton("Upload and remove documents").click();
+    cy.clickOn("Upload and remove documents");
   });
 
   it("Should validate doc uploads by clicking Upload without selecting a document", () => {
-    cy.submitButton("Upload documents").click();
+    cy.clickOn("button", "Upload documents");
     cy.validationMessage("Choose a file to upload");
   });
 
   it("Should allow a file to be uploaded", allowFileUpload);
 
   it("Should return to the previous page", () => {
-    cy.backLink("Back to Labour").click();
+    cy.clickOn("Back to Labour");
   });
 
   it("Should contain additional information heading and messaging", additionalInformationHeading);
@@ -82,11 +82,11 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   });
 
   it("Should count how many characters you have used", () => {
-    cy.get("p.character-count").should("contain.text", "You have 74 characters");
+    cy.get("p.character-count").should("contain.text", "You have 32694 characters remaining");
   });
 
   it("Should save and return to the first claims screen", () => {
-    cy.submitButton("Save and return to claims").click();
+    cy.clickOn("Save and return to claims");
   });
 
   it("Should reflect the £1000 change to the claim in the cost cat table", reflectCostAdded);
@@ -100,7 +100,7 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   it("Should return you to the cost category page", returnToCostCatPage);
 
   it("Should show accordions", () => {
-    cy.get("span").contains("Status and comments log").click();
+    cy.clickOn("Status and comments log");
     cy.paragraph("There are no changes");
   });
 });

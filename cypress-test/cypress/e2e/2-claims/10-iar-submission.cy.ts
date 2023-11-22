@@ -17,7 +17,7 @@ describe("Claims > IAR Required - Submission", () => {
   it("Should proceed to Claim summary page and attempt to submit, prompting validation", iarSubmitValidate);
 
   it("Should proceed to Claim documents page via the link on the page", () => {
-    cy.get("a").contains("Edit claim documents").click();
+    cy.clickOn("Edit claim documents");
     cy.heading("Claim documents");
   });
 
@@ -26,7 +26,7 @@ describe("Claims > IAR Required - Submission", () => {
   it("Should proceed to claim summary", iarProceedToSummary);
 
   it("Should click submit and proceed without validation", () => {
-    cy.button("Submit claim").click();
+    cy.clickOn("Submit claim");
     cy.heading("Claims");
   });
 });

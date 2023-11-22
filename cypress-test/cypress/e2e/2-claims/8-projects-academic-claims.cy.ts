@@ -5,7 +5,6 @@ import {
   shouldShowProjectTitle,
   newCostCatLineItem,
   correctTableHeaders,
-  academicCosts,
   updateAcademicCosts,
   academicForecastNavigate,
 } from "./steps";
@@ -34,7 +33,7 @@ describe("claims > edit claims as FC", () => {
   it("Displays the cost category table", shouldShowAcademicCostCatTable);
 
   it("Should let you click on the cost category 'Labour'", () => {
-    cy.get("td.govuk-table__cell").contains("Directly incurred - Staff").click();
+    cy.get("td.govuk-table__cell").clickOn("Directly incurred - Staff");
   });
 
   it("Should still display the project title and cost category title", shouldShowProjectTitle);
@@ -56,7 +55,7 @@ describe("claims > edit claims as FC", () => {
   });
 
   it("Should remove the line item", () => {
-    cy.get("a").contains("Remove").click();
+    cy.clickOn("Remove");
   });
 
   it("Should navigate to the claims forecast page", academicForecastNavigate);

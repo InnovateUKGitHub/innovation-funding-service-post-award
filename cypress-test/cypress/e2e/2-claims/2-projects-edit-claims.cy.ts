@@ -30,19 +30,19 @@ describe("claims > edit claims as FC", () => {
   it("Displays the cost category table", shouldShowCostCatTable);
 
   it("Should have continue to claims documents button", () => {
-    cy.button("Continue to claims documents");
+    cy.contains(/^Continue to claims documents$/);
   });
 
   it("Should have a save and return to claims button", () => {
-    cy.button("Save and return to claims");
+    cy.contains(/^Save and return to claims$/);
   });
 
   it("Should show accordions", () => {
-    cy.get("span").contains("Status and comments log").click();
+    cy.clickOn("Status and comments log");
     cy.paragraph("There are no changes");
   });
 
   it("The Continue to claims button should direct you to the next page", () => {
-    cy.button("Continue to claims documents").click();
+    cy.clickOn("Continue to claims documents");
   });
 });

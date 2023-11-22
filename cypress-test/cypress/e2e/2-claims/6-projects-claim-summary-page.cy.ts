@@ -28,7 +28,7 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should navigate to the claims document page", () => {
-    cy.getByRole("button", "Continue to claims documents").click();
+    cy.clickOn("Continue to claims documents");
     cy.heading("Claim documents");
   });
 
@@ -37,16 +37,12 @@ describe("claims > Claim summary", () => {
   it("Should upload a document", claimsDocUpload);
 
   it("Should continue to forecast page", () => {
-    cy.get("a")
-      .contains("Continue to update forecast")
-      .then(() => {
-        cy.get("a").contains("Continue to update forecast").click();
-      });
+    cy.clickOn("Continue to update forecast");
     cy.heading("Update forecast");
   });
 
   it("Should navigate to summary page", () => {
-    cy.button("Continue to summary").click();
+    cy.clickOn("Continue to summary");
   });
 
   it("Should have Claims summary header", () => {
@@ -66,16 +62,16 @@ describe("claims > Claim summary", () => {
   it("Should show Total costs to be claimed list", summaryTotalCostsList);
 
   it("Should click the link to edit claims costs", () => {
-    cy.get("a").contains("Edit costs to be claimed").click();
+    cy.clickOn("Edit costs to be claimed");
     cy.heading("Costs to be claimed");
   });
 
   it("Should go back to the summary page", () => {
-    cy.getByRole("button", "Continue to claims documents").click();
+    cy.clickOn("Continue to claims documents");
     cy.heading("Claim documents");
-    cy.get("a").contains("Continue to update forecast").click();
+    cy.clickOn("Continue to update forecast");
     cy.heading("Update forecast");
-    cy.button("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
   });
 
@@ -95,26 +91,26 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should click the link to 'Edit claim documents'", () => {
-    cy.get("a").contains("Edit claim documents").click();
+    cy.clickOn("Edit claim documents");
     cy.heading("Claim documents");
   });
 
   it("Should go back to the summary page", () => {
-    cy.get("a").contains("Continue to update forecast").click();
+    cy.clickOn("Continue to update forecast");
     cy.heading("Update forecast");
-    cy.button("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
   });
 
   it("Should have forecast information", forecastView);
 
   it("Should click the link to 'Edit forecast'", () => {
-    cy.get("a").contains("Edit forecast").click();
+    cy.clickOn("Edit forecast");
     cy.heading("Update forecast");
   });
 
   it("Should go back to the summary page", () => {
-    cy.button("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
   });
 
@@ -137,7 +133,7 @@ describe("claims > Claim summary", () => {
   });
 
   it("Should Save and return to claims", () => {
-    cy.button("Save and return to claims").click({});
+    cy.clickOn("Save and return to claims");
     cy.heading("Claims");
   });
 
@@ -149,9 +145,9 @@ describe("claims > Claim summary", () => {
   it("Should access the document page and delete the uploaded document", summaryAccessDocsDelete);
 
   it("Should go back to the summary page", () => {
-    cy.get("a").contains("Continue to update forecast").click();
+    cy.clickOn("Continue to update forecast");
     cy.heading("Update forecast");
-    cy.button("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
   });
 

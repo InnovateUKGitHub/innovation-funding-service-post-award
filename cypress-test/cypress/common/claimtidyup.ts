@@ -8,11 +8,11 @@ export const moClaimTidyUp = (claimType: string) => {
       if ($tr.text().includes(claimType)) {
         cy.log(`Change claim status of ${claimType} claim`);
         cy.switchUserTo("iuk.accproject@bjss.com.bjssdev");
-        cy.get("td").contains("ABS EUI Medium Enterprise").siblings().contains("a", "Edit").click();
-        cy.button("Continue to claims documents").click();
-        cy.get("a").contains("Continue to update forecast").click();
-        cy.button("Continue to summary").click();
-        cy.submitButton("Submit claim").click();
+        cy.get("td").contains("ABS EUI Medium Enterprise").siblings().clickOn("a", "Edit");
+        cy.clickOn("Continue to claims documents");
+        cy.clickOn("Continue to update forecast");
+        cy.clickOn("Continue to summary");
+        cy.clickOn("Submit claim");
         cy.heading("Claims");
         cy.switchUserTo("testman2@testing.com");
       } else {
@@ -28,20 +28,20 @@ export const fcClaimTidyUp = async (claimType: string) => {
       if ($tr.text().includes(claimType)) {
         cy.log(`Change claim status of ${claimType} claim`);
         cy.switchUserTo("testman2@testing.com");
-        cy.get("td").contains("ABS EUI Medium Enterprise").siblings().contains("a", "Review").click();
+        cy.get("td").contains("ABS EUI Medium Enterprise").siblings().clickOn("a", "Review");
         cy.getByQA("status_MO Queried").click({ force: true });
         cy.get("textarea").clear();
         cy.get("textarea").type(comments);
         cy.paragraph("You have");
         cy.paragraph("I am satisfied that the costs claimed appear to comply");
         cy.getByQA("cr&d-reminder").contains("You must submit a monitoring report");
-        cy.submitButton("Send query").click();
+        cy.clickOn("Send query");
         cy.heading("Claims");
-        cy.backLink("Back to project").click();
+        cy.clickOn("Back to project");
         cy.heading("Project overview");
       } else {
         cy.heading("Claims");
-        cy.backLink("Back to project").click();
+        cy.clickOn("Back to project");
         cy.heading("Project overview");
       }
     });

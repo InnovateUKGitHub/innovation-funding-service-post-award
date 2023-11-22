@@ -36,14 +36,14 @@ describe("Claims > SBRI > Final", () => {
   it("Should display the correct cost categories", sbriCostCats);
 
   it("Should continue to claims documents page", () => {
-    cy.button("Continue to claims documents").click();
+    cy.clickOn("Continue to claims documents");
     cy.heading("Claim documents");
   });
 
   it("Should display SBRI document guidance", sbriFinalDocGuidance);
 
   it("Should continue to Summary page", () => {
-    cy.get("a").contains("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
   });
 

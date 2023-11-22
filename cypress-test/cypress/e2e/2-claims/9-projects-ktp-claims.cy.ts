@@ -32,17 +32,17 @@ describe("claims > KTP", () => {
   it("Should contain the correct KTP cost categories", ktpCorrectCats);
 
   it("Should click into the 'Associate Employment' category and take you to that page", () => {
-    cy.get("td").contains("Associate Employment").click();
+    cy.clickOn("td", "Associate Employment");
   });
 
   it("Should have Associate Employment page heading and guidance", ktpHeadings);
 
   it("Should click 'Back to claims'", () => {
-    cy.backLink("Back to claims").click();
+    cy.clickOn("Back to claims");
   });
 
   it("Should click 'Continue to claims documents' and land on the right page", () => {
-    cy.button("Continue to claims documents").click();
+    cy.clickOn("Continue to claims documents");
     cy.heading("Claim documents");
   });
 
@@ -56,7 +56,7 @@ describe("claims > KTP", () => {
   );
 
   it("Should continue to summary and display the correct messaging", () => {
-    cy.button("Continue to summary").click({ force: true });
+    cy.clickOn("Continue to summary", { force: true });
     cy.heading("Claim summary");
   });
 

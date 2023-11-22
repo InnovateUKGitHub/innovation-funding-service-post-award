@@ -151,18 +151,18 @@ export const newCostCatLineItem = () => {
     .find("tbody.govuk-table__body")
     .then($table => {
       if ($table.find("tr").length > 0) {
-        cy.get("a").contains("Remove").click({ multiple: true });
+        cy.clickOn("Remove", { multiple: true });
       }
     });
 
-  cy.get("a").contains("Add a cost").click();
+  cy.clickOn("Add a cost");
   cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
   cy.getByAriaLabel("value of claim line item 1").clear().type("1000").wait(800);
 };
 
 export const allowFileUpload = () => {
   cy.fileInput("testfile.doc");
-  cy.submitButton("Upload documents").click();
+  cy.clickOn("button", "Upload documents");
   cy.validationNotification("Your document has been uploaded.");
 };
 
@@ -184,7 +184,7 @@ const documentPaths = documents.map(doc => `cypress/documents/${doc}`);
 export const rejectElevenDocsAndShowError = () => {
   const tooManyDocuments = [...documentPaths, "cypress/documents/testfile.doc"];
   cy.get(`input[type="file"]`).selectFile(tooManyDocuments);
-  cy.submitButton("Upload documents").click();
+  cy.clickOn("button", "Upload documents");
   cy.getByRole("alert").contains("You can only select up to 10 files at the same time.");
   cy.wait(1000);
   cy.reload();
@@ -245,7 +245,7 @@ export const additionalInformationHeading = () => {
 };
 
 export const returnToCostCatPage = () => {
-  cy.submitButton("Save and return to claims").click();
+  cy.clickOn("Save and return to claims");
 };
 
 export const selectFileDescription = () => {
@@ -255,10 +255,10 @@ export const selectFileDescription = () => {
 };
 
 export const claimsDocUpload = () => {
-  cy.button("Upload documents").click();
+  cy.clickOn("Upload documents");
   cy.validationLink("Choose a file to upload");
   cy.fileInput("testfile.doc");
-  cy.button("Upload documents").click();
+  cy.clickOn("Upload documents");
   cy.validationNotification("has been uploaded.");
 };
 
@@ -346,7 +346,7 @@ export const claimCommentBox = () => {
 };
 
 export const learnFiles = () => {
-  cy.get("span").contains("Learn more about files you can upload").click();
+  cy.clickOn("Learn more about files you can upload");
   ["PDF", "test", "presentation", "spreadsheet", "images", "be less than 32MB", "have a unique file"].forEach(list => {
     cy.list(list);
   });
@@ -379,7 +379,7 @@ export const ktpGuidance = () => {
 };
 
 export const ktpForecastUpdate = () => {
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
   [
     "Associate Employment",
     "Travel and subsistence",
@@ -570,7 +570,8 @@ export const openSectionClaimData = () => {
 
 export const closedSectionAccordions = () => {
   cy.get("h2").contains("Closed");
-  cy.get("span").contains("Show all sections").click();
+  cy.wait(seconds(1)).get("button").contains("Show all sections").click();
+
   ["EUI Small Ent Health (Lead)", "A B Cad Services", "ABS EUI Medium Enterprise"].forEach(project => {
     cy.get("span").contains(project);
   });
@@ -621,12 +622,12 @@ export const queryTheClaim = () => {
   cy.paragraph("You have");
   cy.paragraph("I am satisfied that the costs claimed appear to comply");
   cy.getByQA("cr&d-reminder").contains("You must submit a monitoring report");
-  cy.submitButton("Send query").click();
+  cy.clickOn("Send query");
   cy.heading("Claims");
 };
 
 export const navigateBackToDash = () => {
-  cy.backLink("Back to project").click();
+  cy.clickOn("Back to project");
   cy.heading("Project overview");
 };
 
@@ -635,13 +636,14 @@ export const goToQueriedClaim = () => {
   cy.contains("td", "Queried by Monitoring Officer").siblings().contains("a", "Edit").click();
   cy.heading("Costs to be claimed");
   cy.get("td").contains(comments);
-  cy.button("Continue to claims documents").click();
+  cy.clickOn("Continue to claims documents");
 };
 
 export const beginEditing = () => {
-  cy.get("a").contains("Edit").click();
+  cy.clickOn("Edit");
   cy.heading("Costs to be claimed");
-  cy.get("a").contains("Labour").click();
+  cy.clickOn("a", "Labour");
+  cy.heading("Labour");
 };
 
 export const add120Lines = () => {
@@ -649,7 +651,7 @@ export const add120Lines = () => {
     const count = Number($input.val() || 0);
 
     for (let i = count; i < 120; i++) {
-      cy.get("a").contains("Add a cost").click();
+      cy.clickOn("Add a cost");
       cy.get("#description" + i).type("Labour" + i);
       cy.get("#value" + i).type("100");
     }
@@ -659,41 +661,41 @@ export const add120Lines = () => {
 };
 
 export const saveLineItems = () => {
-  cy.button("Save and return to claims").click();
+  cy.clickOn("Save and return to claims");
   cy.wait(5000);
   cy.get("h1").contains("Costs to be claimed", { timeout: 60000 });
 };
 
 export const removeLineItems = () => {
-  cy.get("a").contains("Labour").click();
+  cy.clickOn("a", "Labour");
   cy.heading("Labour");
   cy.get('input[name="itemCount"]').then($input => {
     const count = Number($input.val() || 0);
     for (let i = count; i > 0; i--) {
-      cy.get("a").contains("Remove").click();
+      cy.clickOn("Remove");
     }
   });
 };
 
 export const validateLineItem = () => {
   cy.getByAriaLabel("value of claim line item 1").clear().type("gsdfadsf").wait(500);
-  cy.submitButton("Save and return to claims").click();
+  cy.clickOn("Save and return to claims");
   cy.validationLink("Costs must be a number");
   cy.getByAriaLabel("value of claim line item 1").clear().type("1000").wait(500);
 };
 
 export const validateForecast = () => {
   cy.getByAriaLabel("Labour Period 2").clear().wait(500);
-  cy.button("Save and return to claims").click();
+  cy.clickOn("Save and return to claims");
   cy.validationLink("Forecast is required");
 };
 
 export const academicForecastNavigate = () => {
-  cy.backLink("Back to claims").click();
+  cy.clickOn("Back to claims");
   cy.heading("Costs to be claimed");
-  cy.button("Continue to claims documents").click();
+  cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
 };
 
 export const drgClaimTwo = () => {
@@ -727,12 +729,12 @@ export const capPotMessageNotExist = () => {
 
 export const triggerCapPot = () => {
   ["Labour", "Materials", "Subcontracting"].forEach(costCat => {
-    cy.get("a").contains(costCat).click();
+    cy.clickOn(costCat);
     cy.heading(costCat);
-    cy.get("a").contains("Add a cost").click();
+    cy.clickOn("Add a cost");
     cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
     cy.getByAriaLabel("value of claim line item 1").clear().type("5001").wait(800);
-    cy.submitButton("Save and return to claims").click();
+    cy.clickOn("Save and return to claims");
     cy.heading("Costs to be claimed");
   });
 };
@@ -747,10 +749,10 @@ export const capPotMessageDoesExist = () => {
 
 export const clearCostCatReturn = () => {
   ["Labour", "Materials", "Subcontracting"].forEach(costCat => {
-    cy.get("a").contains(costCat).click();
+    cy.clickOn("a", costCat);
     cy.heading(costCat);
-    cy.get("a").contains("Remove").click();
-    cy.get("button").contains("Save and return to claims").click();
+    cy.clickOn("Remove");
+    cy.clickOn("Save and return to claims");
     cy.get("h1").contains("Costs to be claimed");
   });
 };
@@ -952,7 +954,7 @@ export const claimReviewUploadDocument = () => {
   cy.fileInput("testfile.doc");
   cy.wait(500);
   cy.get("select#description.govuk-select").select("Invoice");
-  cy.submitButton("Upload documents").click();
+  cy.clickOn("Upload documents");
   cy.validationNotification("Your document has been uploaded");
 };
 
@@ -977,9 +979,9 @@ export const claimQueriedCheckForDoc = () => {
 };
 
 export const claimReviewResubmit = () => {
-  cy.get("a").contains("Continue to update forecast").click();
-  cy.button("Continue to summary").click();
-  cy.button("Submit claim").click();
+  cy.clickOn("Continue to update forecast");
+  cy.clickOn("Continue to summary");
+  cy.clickOn("Submit claim");
 };
 
 export const claimReviewDeleteDoc = () => {
@@ -1013,7 +1015,7 @@ export const summaryCommentsAdd = () => {
 export const summaryCommentsTooMany = () => {
   cy.get("textarea").type("{moveToEnd}").type("t");
   cy.paragraph("You have 1 character too many");
-  cy.button("Save and return to claims").click();
+  cy.clickOn("Save and return to claims");
   cy.validationLink("Comments must be a maximum of 1000 characters");
 };
 
@@ -1024,75 +1026,75 @@ export const summaryCommentsDeleteOne = () => {
 };
 
 export const summaryReaccessClaim = () => {
-  cy.get("a").contains("Edit").click();
+  cy.clickOn("Edit");
   cy.heading("Costs to be claimed");
-  cy.getByRole("button", "Continue to claims documents").click();
+  cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
   cy.heading("Update forecast");
-  cy.button("Continue to summary").click();
+  cy.clickOn("Continue to summary");
   cy.heading("Claim summary");
   cy.get("textarea").should("have.value", loremIpsum1k);
 };
 
 export const summaryAccessDocsDelete = () => {
-  cy.get("a").contains("Edit claim documents").click();
+  cy.clickOn("Edit claim documents");
   cy.heading("Claim documents");
   fileTidyUp("James Black");
 };
 
 export const summaryClearCommentsSave = () => {
   cy.get("textarea").clear();
-  cy.button("Save and return to claims").click();
+  cy.clickOn("Save and return to claims");
   cy.heading("Claims");
 };
 
 export const summaryUpdateCostsClaimed = () => {
-  cy.get("a").contains("Edit costs to be claimed").click();
+  cy.clickOn("Edit costs to be claimed");
   cy.heading("Costs to be claimed");
-  cy.get("a").contains("Labour").click();
+  cy.clickOn("a", "Labour");
   cy.heading("Labour");
-  cy.get("a").contains("Add a cost").click();
+  cy.clickOn("Add a cost");
   cy.get("#description0").type("Test cost");
   cy.get("#value0").type("1000");
   cy.wait(500);
-  cy.button("Save and return to claims").click();
+  cy.clickOn("Save and return to claims");
   cy.heading("Costs to be claimed");
-  cy.getByRole("button", "Continue to claims documents").click();
+  cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
   cy.heading("Update forecast");
-  cy.button("Continue to summary").click();
+  cy.clickOn("Continue to summary");
   cy.heading("Claim summary");
   cy.getListItemFromKey("Total costs to be claimed", "£281,200.00");
 };
 
 export const summaryClearCostCats = () => {
-  cy.get("a").contains("Edit costs to be claimed").click();
+  cy.clickOn("Edit costs to be claimed");
   cy.heading("Costs to be claimed");
-  cy.get("a").contains("Labour").click();
+  cy.clickOn("a", "Labour");
   cy.heading("Labour");
-  cy.get("a").contains("Remove").click();
-  cy.button("Save and return to claims").click();
+  cy.clickOn("Remove");
+  cy.clickOn("Save and return to claims");
   cy.heading("Costs to be claimed");
-  cy.get("a").contains("Overheads").click();
-  cy.get("a").contains("Remove").click();
-  cy.button("Save and return to claims").click();
+  cy.clickOn("Overheads");
+  cy.clickOn("Remove");
+  cy.clickOn("Save and return to claims");
 };
 
 export const summaryCheckForCostRemoval = () => {
-  cy.getByRole("button", "Continue to claims documents").click();
+  cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
   cy.heading("Update forecast");
-  cy.button("Continue to summary").click();
+  cy.clickOn("Continue to summary");
   cy.heading("Claim summary");
 };
 
 export const accessABCadClaim = () => {
   cy.selectTile("Claims");
   cy.heading("Claims");
-  cy.get("a").contains("Edit").click();
+  cy.clickOn("Edit");
   cy.heading("Costs to be claimed");
 };
 
@@ -1171,7 +1173,7 @@ export const sbriAccessABSClaim = () => {
   cy.paragraph(
     "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT).",
   );
-  cy.get("a").contains("Edit").click();
+  cy.clickOn("Edit");
   cy.heading("Costs to be claimed");
 };
 
@@ -1199,7 +1201,7 @@ export const iarProceedToDocs = () => {
   cy.selectTile("Claims");
   cy.get("td").contains("Period 1").siblings().contains("a", "Edit").click();
   cy.heading("Costs to be claimed");
-  cy.button("Continue to claims documents").click();
+  cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
 };
 
@@ -1213,25 +1215,25 @@ export const iarGuidance = () => {
 };
 
 export const iarSubmitValidate = () => {
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
   cy.heading("Update forecast");
-  cy.button("Continue to summary").click();
+  cy.clickOn("Continue to summary");
   cy.heading("Claim summary");
-  cy.button("Submit claim").click();
+  cy.clickOn("Submit claim");
   cy.validationLink("You must upload an independent accountant's report before you can submit this claim.");
 };
 
 export const uploadIAR = () => {
   cy.get("select#description.govuk-select").select("Independent accountant’s report");
   cy.fileInput(testFile);
-  cy.button("Upload documents").click();
+  cy.clickOn("Upload documents");
   cy.validationNotification("has been uploaded.");
 };
 
 export const iarProceedToSummary = () => {
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
   cy.heading("Update forecast");
-  cy.button("Continue to summary").click();
+  cy.clickOn("Continue to summary");
   cy.heading("Claim summary");
 };
 
@@ -1258,6 +1260,6 @@ export const impactGuidance = () => {
 export const uploadProjectCompletionForm = () => {
   cy.get("select#description.govuk-select").select("Project completion form");
   cy.fileInput(testFile);
-  cy.button("Upload documents").click();
+  cy.clickOn("Upload documents");
   cy.validationNotification("has been uploaded.");
 };

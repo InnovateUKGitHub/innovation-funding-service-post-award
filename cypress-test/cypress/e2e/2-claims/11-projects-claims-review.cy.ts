@@ -46,7 +46,7 @@ describe("Claims > Review as MO", () => {
   it("Should have a closed section with accordions", closedSectionAccordions);
 
   it("Should click into 'Review claim' as MO and ensure the page loads", () => {
-    cy.get("tr").contains("ABS EUI Medium Enterprise").siblings().contains("a", "Review").click();
+    cy.get("tr").contains("ABS EUI Medium Enterprise").siblings().clickOn("a", "Review");
     cy.heading("Claim");
   });
 
@@ -96,7 +96,7 @@ describe("Claims > Review as MO", () => {
   });
 
   it("Should back out to project overview", () => {
-    cy.backLink("Back to project").click();
+    cy.clickOn("Back to project");
     cy.heading("Project overview");
   });
 
@@ -110,12 +110,12 @@ describe("Claims > Review as MO", () => {
   });
 
   it("Should click into 'Review claim' as MO and ensure the page loads", () => {
-    cy.get("tr").contains("ABS EUI Medium Enterprise").siblings().contains("a", "Review").click();
+    cy.get("tr").contains("ABS EUI Medium Enterprise").siblings().clickOn("a", "Review");
     cy.heading("Claim");
   });
 
   it("Should expand the accordions", () => {
-    cy.button("Show all sections").click();
+    cy.clickOn("Show all sections");
   });
 
   it("Should delete the file uploaded", claimReviewDeleteDoc);

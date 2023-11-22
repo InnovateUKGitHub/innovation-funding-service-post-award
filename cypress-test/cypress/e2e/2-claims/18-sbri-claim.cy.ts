@@ -1,5 +1,5 @@
 import { visitApp } from "common/visit";
-import { accessABSOpenClaim, sbriAccessABSClaim, sbriCorrectForecastCostCat, sbriDocGuidance } from "./steps";
+import { sbriAccessABSClaim, sbriCorrectForecastCostCat, sbriDocGuidance } from "./steps";
 
 const fc = "s.shuang@irc.trde.org.uk.test";
 
@@ -24,14 +24,14 @@ describe("Claims > SBRI > Documents & Forecast", () => {
   );
 
   it("Should continue to the documents page", () => {
-    cy.button("Continue to claims documents").click();
+    cy.clickOn("Continue to claims documents");
     cy.heading("Claim documents");
   });
 
   it("Should display correct VAT messaging around doc uploads", sbriDocGuidance);
 
   it("Should continue to the forecast page", () => {
-    cy.get("a").contains("Continue to update forecast").click();
+    cy.clickOn("Continue to update forecast");
     cy.heading("Update forecast");
   });
 
@@ -42,7 +42,7 @@ describe("Claims > SBRI > Documents & Forecast", () => {
   it("Should display correct forecast cost categories for SBRI", sbriCorrectForecastCostCat);
 
   it("Should continue to the summary page", () => {
-    cy.button("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
   });
 });

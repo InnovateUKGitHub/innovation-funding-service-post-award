@@ -46,7 +46,7 @@ describe("Claims > Cost category document uploads", () => {
   });
 
   it("Should click the upload and remove documents button ", () => {
-    cy.button("Upload and remove documents").click();
+    cy.clickOn("Upload and remove documents");
     cy.heading("Exceptions - Staff documents");
     fileTidyUp("Sarah Shuang");
   });
@@ -91,7 +91,7 @@ describe("Claims > Cost category document uploads", () => {
   });
 
   it("Should navigate back to the cost category page and check the files are correctly showing there", () => {
-    cy.backLink("Back to Exceptions - Staff").click();
+    cy.clickOn("Back to Exceptions - Staff");
     cy.heading("Exceptions - Staff");
 
     documents.forEach((document, tableRow) => {
@@ -110,7 +110,7 @@ describe("Claims > Cost category document uploads", () => {
   });
 
   it("Should navigate back to the documents section and delete all files", { retries: 0 }, () => {
-    cy.button("Upload and remove documents").click();
+    cy.clickOn("Upload and remove documents");
     cy.heading("Exceptions - Staff documents");
 
     for (const document of documents) {

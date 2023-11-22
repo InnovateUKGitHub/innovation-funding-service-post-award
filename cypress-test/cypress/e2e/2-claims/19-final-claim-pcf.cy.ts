@@ -1,7 +1,7 @@
 import { visitApp } from "common/visit";
 import { drgClaimTwo, finalClaimPcfGuidance, impactGuidance, uploadProjectCompletionForm } from "./steps";
 import { fileTidyUp } from "common/filetidyup";
-import { testFile } from "common/testfileNames";
+
 const fcContact = "pauline.o'jones@uobcw.org.uk.test.prod";
 
 describe("Claims > Final claim PCF Validation", () => {
@@ -16,7 +16,7 @@ describe("Claims > Final claim PCF Validation", () => {
   });
 
   it("Should proceed to Claims documents page.", () => {
-    cy.button("Continue to claims documents").click();
+    cy.clickOn("Continue to claims documents");
     cy.heading("Claim documents");
   });
 
@@ -27,7 +27,7 @@ describe("Claims > Final claim PCF Validation", () => {
   it("Should display the final claim messaging and guidance on what is required.", finalClaimPcfGuidance);
 
   it("Should proceed to Summary page.", () => {
-    cy.get("a").contains("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
   });
 
@@ -42,27 +42,27 @@ describe("Claims > Final claim PCF Validation", () => {
   });
 
   it("Should now access documents page using the link on the Summary page", () => {
-    cy.get("a").contains("Edit claim documents").click();
+    cy.clickOn("Edit claim documents");
     cy.heading("Claim documents");
   });
 
   it("Should upload a file and mark it as Project Completion Form", uploadProjectCompletionForm);
 
   it("Should navigate back to the Claim summary page and show an enabled Submit button", () => {
-    cy.get("a").contains("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
     cy.button("Submit").should("be.enabled");
   });
 
   it("Should go back to documents page and delete the file uploaded previously", () => {
-    cy.get("a").contains("Edit claim documents").click();
+    cy.clickOn("Edit claim documents");
     cy.heading("Claim documents");
-    cy.button("Remove").click();
+    cy.clickOn("Remove");
     cy.validationNotification("has been removed.");
   });
 
   it("Should proceed to Summary page.", () => {
-    cy.get("a").contains("Continue to summary").click();
+    cy.clickOn("Continue to summary");
     cy.heading("Claim summary");
   });
 

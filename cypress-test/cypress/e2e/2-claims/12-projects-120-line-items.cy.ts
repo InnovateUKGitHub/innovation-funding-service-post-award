@@ -17,7 +17,7 @@ describe("claims > Add 120 line items", () => {
   it("Should go back into Labour and delete the line items", removeLineItems);
 
   it("Should save and continue having deleted the line items", () => {
-    cy.get("button").contains("Save and return to claims").click();
+    cy.clickOn("Save and return to claims");
     cy.heading("Costs to be claimed");
   });
 });

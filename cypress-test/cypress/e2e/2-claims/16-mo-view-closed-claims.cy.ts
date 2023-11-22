@@ -9,7 +9,7 @@ describe("claims > MO view of closed claim", () => {
   });
 
   it("should show a closed claim when the Show all sections button is clicked", () => {
-    cy.button("Show all sections").click();
+    cy.clickOn("Show all sections");
     cy.get("h2").contains("Closed").parent().siblings().get("table > caption").contains("A B Cad Services");
   });
 
@@ -49,21 +49,21 @@ describe("claims > MO view of closed claim", () => {
   });
 
   it("should show the expected status and comments log", () => {
-    cy.contains("Status and comments log").click();
+    cy.clickOn("Status and comments log");
     cy.getCellFromHeaderAndRow("Status update", "Payment being processed");
     cy.getCellFromHeaderAndRow("Status update", "Submitted to Innovate UK");
     cy.getCellFromHeaderAndRow("Status update", "Submitted to Monitoring Officer");
   });
 
   it("should show the uploaded documents", () => {
-    cy.contains("Supporting documents").click();
+    cy.clickOn("Supporting documents");
     cy.getCellFromHeaderAndRow("Type", "Sheet1.xlsx").should("have.text", "Claim evidence");
     cy.getCellFromHeaderAndRow("Type", "t04.docx").should("have.text", "Claim evidence");
     cy.getCellFromHeaderAndRow("Type", "t03.docx").should("have.text", "Claim evidence");
   });
 
   it("should navigate to the correct cost category details when the table element is clicked", () => {
-    cy.contains("table tr td a", "Labour").click();
+    cy.clickOn("table tr td a", "Labour");
     cy.heading("Labour");
   });
 
