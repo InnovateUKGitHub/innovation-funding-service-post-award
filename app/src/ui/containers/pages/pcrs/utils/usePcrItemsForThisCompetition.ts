@@ -1,6 +1,6 @@
 import { SalesforceCompetitionTypes } from "@framework/constants/competitionTypes";
 import {
-  recordTypeMetaValues,
+  pcrItemTypes,
   getPcrItemsSingleInstanceInAnyPcrViolations,
   getPcrItemsSingleInstanceInThisPcrViolations,
   getPcrItemsTooManyViolations,
@@ -17,7 +17,7 @@ const usePcrItemsForThisCompetition = (
 ) => {
   const { getContent } = useContent();
 
-  const items = recordTypeMetaValues.filter(x => !(x.ignoredCompetitions.includes(competitionType) || x.deprecated));
+  const items = pcrItemTypes.filter(x => !(x.ignoredCompetitions.includes(competitionType) || x.deprecated));
 
   const anyOtherPcrViolations = getPcrItemsSingleInstanceInAnyPcrViolations(allPcrs);
   const thisPcrViolations = getPcrItemsSingleInstanceInThisPcrViolations(allPcrs.find(x => x.id === pcrId));

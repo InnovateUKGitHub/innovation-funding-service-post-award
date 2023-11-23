@@ -14,7 +14,7 @@ import {
   PCRStatus,
   PCRItemType,
   PCRStepType,
-  recordTypeMetaValues,
+  pcrItemTypes,
 } from "@framework/constants/pcrConstants";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { ProjectChangeRequestItemEntity } from "@framework/entities/projectChangeRequest";
@@ -78,7 +78,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     context.testData.createCurrentUserAsProjectManager(project);
     const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.DraftWithProjectManager });
     const recordTypes = context.testData.createPCRRecordTypes();
-    const projectSuspensionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
+    const projectSuspensionType = pcrItemTypes.find(x => x.type === PCRItemType.PartnerAddition);
     const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
     return { context, recordType, projectChangeRequest, project };
   };
@@ -398,7 +398,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.DraftWithProjectManager });
     const recordTypes = context.testData.createPCRRecordTypes();
 
-    const partnerAddditionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
+    const partnerAddditionType = pcrItemTypes.find(x => x.type === PCRItemType.PartnerAddition);
 
     const recordType = recordTypes.find(x => x.type === partnerAddditionType?.typeName);
 

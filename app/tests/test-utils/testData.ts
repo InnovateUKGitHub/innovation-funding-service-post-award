@@ -12,7 +12,7 @@ import {
   PCRProjectRole,
   PCRPartnerType,
   PCRParticipantSize,
-  recordTypeMetaValues,
+  pcrItemTypes,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PartnerFinancialVirement } from "@framework/entities/financialVirement";
@@ -773,7 +773,7 @@ export class TestData {
   }
 
   public createPCRRecordTypes() {
-    return recordTypeMetaValues.map(x => {
+    return pcrItemTypes.map(x => {
       const parent = "Acc_ProjectChangeRequest__c";
       const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
       return (
