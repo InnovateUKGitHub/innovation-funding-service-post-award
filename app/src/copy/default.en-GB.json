@@ -825,6 +825,7 @@
         "newLength": "New length (quarters)",
         "newEndDate": "New end date"
       },
+      "approveNewSubcontractorMessage": "Let us know if you are working with a new subcontractor. We will need to undertake viability checks, as stated in the application process.",
       "anotherPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to another PCR.",
       "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
       "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
@@ -1383,7 +1384,8 @@
     "scopeChange": "Change project scope",
     "timeExtension": "Change project duration",
     "loanDrawdownChange": "Loan Drawdown Change",
-    "loanDrawdownExtension": "Change Loans Duration"
+    "loanDrawdownExtension": "Change Loans Duration",
+    "approveNewSubcontractor": "Approve a new subcontractor"
   },
   "pcrAddPartnerLabels": {
     "roleHeading": "Project role",

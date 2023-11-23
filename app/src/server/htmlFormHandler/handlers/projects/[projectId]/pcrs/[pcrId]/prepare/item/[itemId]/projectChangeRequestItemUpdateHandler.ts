@@ -19,6 +19,7 @@ import {
   PCRItemForPartnerWithdrawalDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForLoanDrawdownExtensionDto,
+  PCRItemForApproveNewSubcontractorDto,
 } from "@framework/dtos/pcrDtos";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
@@ -104,6 +105,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         break;
       case PCRItemType.LoanDrawdownExtension:
         this.updateLoanExtension(item, body, stepName);
+        break;
+      case PCRItemType.ApproveNewSubcontrator:
+        this.updateApproveNewSubcontractor(item, body, stepName);
         break;
     }
 
@@ -369,6 +373,16 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.availabilityPeriodChange = Number(body.availabilityPeriodChange);
       item.extensionPeriodChange = Number(body.extensionPeriodChange);
       item.repaymentPeriodChange = Number(body.repaymentPeriodChange);
+    }
+  }
+
+  private updateApproveNewSubcontractor(
+    item: PCRItemForApproveNewSubcontractorDto,
+    body: IFormBody,
+    stepName: string | undefined,
+  ) {
+    if (stepName === PCRStepType.approveNewContractorNameStep) {
+      // 10179: whatever
     }
   }
 
