@@ -1,4 +1,4 @@
-import { PCRItemType, recordTypeMetaValues } from "@framework/constants/pcrConstants";
+import { PCRItemType, pcrItemTypes } from "@framework/constants/pcrConstants";
 import { FullPCRItemDto } from "@framework/dtos/pcrDtos";
 import { useContent } from "@ui/hooks/content.hook";
 
@@ -17,9 +17,7 @@ export const usePcrItemName = () => {
         partnerNameSnapshot?: FullPCRItemDto["partnerNameSnapshot"];
       },
     ) => {
-      const foundPcrItem = recordTypeMetaValues.find(
-        x => x.type === value || x.typeName === value || x.displayName === value,
-      );
+      const foundPcrItem = pcrItemTypes.find(x => x.type === value || x.typeName === value || x.displayName === value);
 
       const name = foundPcrItem?.i18nName ? getContent(foundPcrItem.i18nName) : getContent(x => x.pcrTypes.unknown);
       const description = foundPcrItem?.i18nDescription ? getContent(foundPcrItem.i18nDescription) : undefined;
