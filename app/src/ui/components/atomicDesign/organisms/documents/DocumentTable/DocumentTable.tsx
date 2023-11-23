@@ -135,6 +135,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
   qa,
   hideRemove,
   onRemove,
+  disabled,
 }: DocumentTableWithDeleteProps<PartnerDocumentSummaryDto> &
   ProjectPartnerDocumentEditProps<PartnerDocumentSummaryDto>) => {
   if (!documents.length) return <DocumentsUnavailable />;
@@ -171,7 +172,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
                   style={{ marginLeft: "15px" }}
                   onClick={() => onRemove(x)}
                   value={x.id}
-                  disabled={!x.isOwner}
+                  disabled={!x.isOwner || disabled}
                 >
                   Remove
                 </Form.Button>
