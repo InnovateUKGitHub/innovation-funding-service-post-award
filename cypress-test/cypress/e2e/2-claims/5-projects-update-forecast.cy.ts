@@ -54,7 +54,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   it("Should accept input and calculate the figures accordingly", acceptInputAndUpdate);
 
   it("Should save and return to claims", () => {
-    cy.getByQA("button_save-qa").click({ force: true });
+    cy.button("Save and return to claims").click({ force: true });
   });
 
   it("Should re-open the claim", accessEUIOpenClaim);
