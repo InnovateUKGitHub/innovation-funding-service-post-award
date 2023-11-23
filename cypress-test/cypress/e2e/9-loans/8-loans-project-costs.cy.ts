@@ -75,8 +75,8 @@ describe("Loans > Project Costs & Documents", () => {
   it("Should display a status and comments log section", projCostsStatusSection);
 
   it("Should have a 'Save and return to project costs button' and click the 'Continue to costs documents' button", () => {
-    cy.button("Save and return to project costs");
-    cy.button("Continue to costs documents").click();
+    cy.getByRole("button", "Save and return to project costs");
+    cy.clickOn("Continue to costs documents");
   });
 
   it("Should display the 'Supporting evidence' heading and subheadings", () => {

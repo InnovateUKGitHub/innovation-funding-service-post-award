@@ -76,14 +76,14 @@ export const validatePage = () => {
 };
 
 export const proceedToDocuments = () => {
-  cy.button("Continue to claims documents").click();
+  cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
   cy.validationNotification(pcfNotReceivedMessage);
   cy.getByQA("validation-message").contains(finalClaimMessage);
 };
 
 export const proceedToDRGDocuments = () => {
-  cy.get("button").contains("Continue to claims documents").click();
+  cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
   cy.getByQA("validation-message").contains(finalClaimMessage);
 };

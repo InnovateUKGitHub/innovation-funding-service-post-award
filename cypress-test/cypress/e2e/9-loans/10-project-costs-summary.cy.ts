@@ -29,7 +29,7 @@ describe("Loans > Project Costs > Summary", () => {
   it("Should check the first line costs are correct", loansProjCostCleanUp);
 
   it("Should navigate to costs page and clean up any files that are there", () => {
-    cy.button("Continue to costs documents").click();
+    cy.clickOn("Continue to costs documents");
     cy.heading("Supporting evidence");
     fileTidyUp("Sarah Shuang");
   });

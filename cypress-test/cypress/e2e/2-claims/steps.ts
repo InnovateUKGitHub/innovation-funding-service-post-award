@@ -1015,7 +1015,7 @@ export const summaryCommentsAdd = () => {
 export const summaryCommentsTooMany = () => {
   cy.get("textarea").type("{moveToEnd}").type("t");
   cy.paragraph("You have 1 character too many");
-  cy.clickOn("Save and return to claims");
+  cy.clickOn("Save and return to project costs");
   cy.validationLink("Comments must be a maximum of 1000 characters");
 };
 

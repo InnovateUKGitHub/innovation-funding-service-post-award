@@ -582,11 +582,11 @@ export const projCostsStatusSection = () => {
 export const loansForecastNavigate = () => {
   cy.selectTile("Project Costs");
   cy.heading("Project costs");
-  cy.get("a").contains("Edit").click();
+  cy.clickOn("Edit");
   cy.heading("Costs for this period");
-  cy.button("Continue to costs documents").click();
+  cy.clickOn("Continue to costs documents");
   cy.heading("Supporting evidence");
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
   cy.heading("Update forecast");
 };
 
@@ -805,11 +805,11 @@ export const updateLoansCosts = () => {
 };
 
 export const navigateCheckForUpdatedValues = () => {
-  cy.button("Continue to costs documents").click();
+  cy.clickOn("Continue to costs documents");
   cy.heading("Supporting evidence");
-  cy.get("a").contains("Continue to update forecast").click();
+  cy.clickOn("Continue to update forecast");
   cy.heading("Update forecast");
-  cy.button("Continue to summary").click();
+  cy.clickOn("Continue to summary");
   cy.heading("Costs summary");
   [["Total costs for period", "£114,900.00"]].forEach(([key, item]) => {
     cy.getListItemFromKey(key, item);
@@ -841,7 +841,7 @@ export const resetCosts = () => {
 };
 
 export const navigateDocDelete = () => {
-  cy.button("Continue to costs documents").click();
+  cy.clickOn("Continue to costs documents");
   cy.heading("Supporting evidence");
   cy.button("Remove").click();
   cy.validationNotification("has been removed.");
