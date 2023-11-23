@@ -1,7 +1,7 @@
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { Authorisation } from "@framework/types/authorisation";
 import { TestContext } from "@tests/test-utils/testContextProvider";
-import { PCRItemType, PCRStatus, PCRItemStatus, recordTypeMetaValues } from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRStatus, PCRItemStatus, pcrItemTypes } from "@framework/constants/pcrConstants";
 import { ProjectRole } from "@framework/constants/project";
 import { PCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { ValidationError } from "@shared/appError";
@@ -20,7 +20,7 @@ describe("Create PCR Command", () => {
 
         // Note: Were getting all the data we need based on the PCR Item and ensuring validity
         const recordsToCreate = pcrItemsToCheck.map(pcrItem => {
-          const metaValue = recordTypeMetaValues.find(x => x.type === pcrItem);
+          const metaValue = pcrItemTypes.find(x => x.type === pcrItem);
 
           if (!metaValue) {
             throw new Error(`recordTypeMetaValues item was not found: ${pcrItem}`);
@@ -175,7 +175,7 @@ describe("Create PCR Command", () => {
     context.testData.createCurrentUserAsProjectManager(project);
     const recordTypes = context.testData.createPCRRecordTypes();
 
-    const itemType = recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange);
+    const itemType = pcrItemTypes.find(x => x.type === PCRItemType.AccountNameChange);
 
     const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,

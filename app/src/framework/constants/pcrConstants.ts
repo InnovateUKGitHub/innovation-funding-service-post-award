@@ -212,7 +212,7 @@ export const getPcrItemsSingleInstanceInAnyPcrViolations = (
 
     // For each PCR type within the PCR...
     for (const type of inProgressTypes) {
-      if (recordTypeMetaValues.find(x => x.type === type)?.singleInstanceInAnyPcr) {
+      if (pcrItemTypes.find(x => x.type === type)?.singleInstanceInAnyPcr) {
         disallowedPCRs.add(type);
       }
     }
@@ -234,7 +234,7 @@ export const getPcrItemsSingleInstanceInThisPcrViolations = (pcr?: {
   const pcrItemType: PCRItemType[] = [];
 
   // Get a list of all PCR types where only a single instance is allowed
-  const unduplicatablePcrItems = recordTypeMetaValues.filter(x => x.singleInstanceInThisPcr);
+  const unduplicatablePcrItems = pcrItemTypes.filter(x => x.singleInstanceInThisPcr);
 
   // For each PCR item in our list of items...
   for (const pcrItem of pcr.items) {
@@ -485,7 +485,7 @@ export interface IMetaValue {
  *
  * If the db has an entry but it is not defined here then it will not be available through the api.
  */
-export const recordTypeMetaValues: IMetaValue[] = [
+export const pcrItemTypes: IMetaValue[] = [
   {
     type: PCRItemType.MultiplePartnerFinancialVirement,
     typeName: "Reallocate several partners' project cost",

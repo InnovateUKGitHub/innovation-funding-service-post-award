@@ -6,7 +6,7 @@ import {
   getPcrItemsSingleInstanceInAnyPcrViolations,
   PCROrganisationType,
   PCRProjectRole,
-  recordTypeMetaValues,
+  pcrItemTypes,
 } from "@framework/constants/pcrConstants";
 import { ProjectRole, ProjectMonitoringLevel } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
@@ -431,7 +431,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
                 for (const projectPcr of items) {
                   // If a PCR type is non-duplicatable, check if it has not already been added to the PCR.
                   if (
-                    recordTypeMetaValues.find(x => x.type === projectPcr.type)?.singleInstanceInThisPcr &&
+                    pcrItemTypes.find(x => x.type === projectPcr.type)?.singleInstanceInThisPcr &&
                     seenProjectPcrs.has(projectPcr.type)
                   ) {
                     return false;

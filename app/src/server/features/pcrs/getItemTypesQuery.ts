@@ -1,9 +1,4 @@
-import {
-  PCRItemType,
-  PCRItemDisabledReason,
-  recordTypeMetaValues,
-  IMetaValue,
-} from "@framework/constants/pcrConstants";
+import { PCRItemType, PCRItemDisabledReason, pcrItemTypes, IMetaValue } from "@framework/constants/pcrConstants";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { RecordType } from "@framework/entities/recordType";
 import { IContext } from "@framework/types/IContext";
@@ -21,7 +16,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     const recordTypes = await context.runQuery(new GetAllRecordTypesQuery());
     const { competitionType } = await context.runQuery(new GetByIdQuery(this.projectId));
 
-    const recordMetaValues = recordTypeMetaValues.filter(x => !x.ignoredCompetitions.includes(competitionType));
+    const recordMetaValues = pcrItemTypes.filter(x => !x.ignoredCompetitions.includes(competitionType));
 
     const pcrRecordTypes = recordTypes.filter(x => x.parent === "Acc_ProjectChangeRequest__c");
 

@@ -9,7 +9,7 @@ import {
   PCRItemType,
   PCRProjectRole,
   PCRPartnerType,
-  recordTypeMetaValues,
+  pcrItemTypes,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import {
@@ -115,7 +115,7 @@ describe("GetPCRByIdQuery", () => {
     const result = await context.runQuery(query).then(x => x.items[0]);
 
     expect(result.id).toBe(item.id);
-    expect(result.guidance).toBe(recordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)?.guidance);
+    expect(result.guidance).toBe(pcrItemTypes.find(x => x.type === PCRItemType.ScopeChange)?.guidance);
     expect(result.type).toBe(PCRItemType.ScopeChange);
     expect(result.typeName).toBe(recordType.type);
     expect(result.status).toBe(PCRItemStatus.Complete);
@@ -127,7 +127,7 @@ describe("GetPCRByIdQuery", () => {
 
   it("returns the item short name if available", async () => {
     const context = new TestContext();
-    const pcrItemType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
+    const pcrItemType = pcrItemTypes.find(x => x.type === PCRItemType.PartnerWithdrawal);
     if (!pcrItemType) throw new Error("pcrItemType not found");
     const recordType = context.testData.createRecordType({
       type: pcrItemType.typeName,
@@ -142,7 +142,7 @@ describe("GetPCRByIdQuery", () => {
 
   it("returns the item type name if short name is not available", async () => {
     const context = new TestContext();
-    const pcrItemType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
+    const pcrItemType = pcrItemTypes.find(x => x.type === PCRItemType.PartnerWithdrawal);
     if (!pcrItemType) throw new Error("pcrItemType not found");
     const recordType = context.testData.createRecordType({
       type: pcrItemType.typeName,
@@ -158,7 +158,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for time extension", async () => {
     const context = new TestContext();
 
-    const timeExtensionType = recordTypeMetaValues.find(x => x.type === PCRItemType.TimeExtension);
+    const timeExtensionType = pcrItemTypes.find(x => x.type === PCRItemType.TimeExtension);
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === timeExtensionType?.typeName);
 
     const pcr = context.testData.createPCR();
@@ -180,7 +180,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for scope change", async () => {
     const context = new TestContext();
 
-    const scopeChangeType = recordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange);
+    const scopeChangeType = pcrItemTypes.find(x => x.type === PCRItemType.ScopeChange);
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === scopeChangeType?.typeName);
 
     const pcr = context.testData.createPCR();
@@ -205,13 +205,13 @@ describe("GetPCRByIdQuery", () => {
     expect(result.publicDescription).toBe(publicDescription);
     expect(result.publicDescriptionSnapshot).toBe(publicDescriptionSnapshot);
     expect(result.projectSummarySnapshot).toBe(projectSummarySnapshot);
-    expect(result.guidance).toBe(recordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)?.guidance);
+    expect(result.guidance).toBe(pcrItemTypes.find(x => x.type === PCRItemType.ScopeChange)?.guidance);
   });
 
   test("maps fields for account name change", async () => {
     const context = new TestContext();
 
-    const accountNameChangeType = recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange);
+    const accountNameChangeType = pcrItemTypes.find(x => x.type === PCRItemType.AccountNameChange);
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === accountNameChangeType?.typeName);
@@ -234,13 +234,13 @@ describe("GetPCRByIdQuery", () => {
     expect(result.accountName).toBe(accountName);
     expect(result.partnerNameSnapshot).toBe(partnerNameSnapshot);
     expect(result.partnerId).toBe(partner.id);
-    expect(result.guidance).toBe(recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)?.guidance);
+    expect(result.guidance).toBe(pcrItemTypes.find(x => x.type === PCRItemType.AccountNameChange)?.guidance);
   });
 
   test("maps fields for project suspension", async () => {
     const context = new TestContext();
 
-    const projectSuspensionType = recordTypeMetaValues.find(x => x.type === PCRItemType.ProjectSuspension);
+    const projectSuspensionType = pcrItemTypes.find(x => x.type === PCRItemType.ProjectSuspension);
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === projectSuspensionType?.typeName);
 
     const pcr = context.testData.createPCR();
@@ -265,7 +265,7 @@ describe("GetPCRByIdQuery", () => {
     test("maps fields for partner addition pcr item", async () => {
       const context = new TestContext();
 
-      const partnerAdditionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
+      const partnerAdditionType = pcrItemTypes.find(x => x.type === PCRItemType.PartnerAddition);
       const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerAdditionType?.typeName);
 
       const pcr = context.testData.createPCR();
@@ -301,7 +301,7 @@ describe("GetPCRByIdQuery", () => {
     test("maps fields for partner addition pcr spend profile for Labour", async () => {
       const context = new TestContext();
 
-      const partnerAdditionType = recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition);
+      const partnerAdditionType = pcrItemTypes.find(x => x.type === PCRItemType.PartnerAddition);
       const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerAdditionType?.typeName);
       const pcr = context.testData.createPCR();
       const costCategoryLabour = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });

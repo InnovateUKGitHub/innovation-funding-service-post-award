@@ -1,3 +1,4 @@
+import { pcrItemTypes } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
 import { PCRDto, FullPCRItemDto } from "@framework/dtos/pcrDtos";
@@ -10,7 +11,6 @@ import {
   mapFromSalesforcePCRPartnerType,
   mapToPcrItemType,
 } from "@framework/mappers/pcr";
-import { pcrRecordTypeMetaValues } from "@framework/mappers/pcrRecordTypeMetaData";
 import { Clock } from "@framework/util/clock";
 
 // on Project_Change_Requests__r
@@ -160,7 +160,7 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
     return node?.Acc_GrantMovingOverFinancialYear__c?.value ?? null;
   },
   guidance(node, additionalData) {
-    const metaValues = pcrRecordTypeMetaValues.find(x => x.type === itemMapper.type(node, additionalData));
+    const metaValues = pcrItemTypes.find(x => x.type === itemMapper.type(node, additionalData));
     if (!!metaValues && "guidance" in metaValues) {
       return metaValues.guidance;
     }
