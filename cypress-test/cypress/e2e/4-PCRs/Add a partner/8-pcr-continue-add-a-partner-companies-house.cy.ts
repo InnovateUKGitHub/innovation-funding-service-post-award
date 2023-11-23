@@ -11,6 +11,7 @@ import {
   specialCharInput,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
+import { loremIpsum159Char } from "common/lorem";
 
 describe("PCR > Add partner > Continuing editing PCR Companies House section", () => {
   before(() => {
@@ -50,6 +51,36 @@ describe("PCR > Add partner > Continuing editing PCR Companies House section", (
     "Should have a 'Search companies house' subheading and guidance information beneath search box",
     searchCompanyHouseGuidance,
   );
+
+  it("Should accept 159 characters", () => {
+    cy.get("#searchCompaniesHouse").clear().invoke("val", loremIpsum159Char).trigger("input");
+    cy.getByQA("error-summary").should("not.exist");
+  });
+
+  it("Should increase character count to 160 characters", () => {
+    cy.get("#searchCompaniesHouse").type("{moveToEnd}t");
+    cy.getByQA("error-summary").should("not.exist");
+  });
+
+  it("Should have a value in the input box of 160 characters", () => {
+    cy.get("#searchCompaniesHouse").should("have.value", loremIpsum159Char + "t");
+    cy.getByQA("error-summary").should("not.exist");
+  });
+
+  it("Should attempt to enter another character bringing it to 161 characters", () => {
+    cy.get("#searchCompaniesHouse").type("{moveToEnd}t");
+    cy.getByQA("error-summary").should("not.exist");
+  });
+
+  it("Should attempt to do so again bringing total to 162 characters", () => {
+    cy.get("#searchCompaniesHouse").type("{moveToEnd}t");
+    cy.getByQA("error-summary").should("not.exist");
+  });
+
+  it("Should still only contain the 160 characters in the input", () => {
+    cy.get("#searchCompaniesHouse").should("have.value", loremIpsum159Char + "t");
+    cy.getByQA("error-summary").should("not.exist");
+  });
 
   it("Should enter special characters and assert that no errors are thrown", specialCharInput);
 

@@ -311,7 +311,7 @@ export const searchCompanyHouseGuidance = () => {
 
 export const specialCharInput = () => {
   ["&", "!", "£", "$", "%", "^", "*", "(", ")", "-", "+", "=", "////", "|"].forEach(specChar => {
-    cy.get("#searchCompaniesHouse").clear().type(specChar).wait(3000);
+    cy.get("#searchCompaniesHouse").clear().type(specChar).wait(1000);
     cy.getByQA("error-summary").should("not.exist");
   });
 };
