@@ -64,7 +64,8 @@ export type PCRItemDto =
   | PCRItemForProjectSuspensionDto
   | PCRItemForProjectTerminationDto
   | PCRItemForScopeChangeDto
-  | PCRItemForTimeExtensionDto;
+  | PCRItemForTimeExtensionDto
+  | PCRItemForApproveNewSubcontractorDto;
 
 export interface PCRItemForMultiplePartnerFinancialVirementDto extends PCRItemBaseDto {
   grantMovingOverFinancialYear: number | null;
@@ -165,6 +166,10 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   tsbReference: string | null;
   type: PCRItemType.PartnerAddition;
   typeOfAid: TypeOfAid;
+}
+
+export interface PCRItemForApproveNewSubcontractorDto extends PCRItemBaseDto {
+  type: PCRItemType.ApproveNewSubcontrator;
 }
 
 export interface PCRItemTypeDto {

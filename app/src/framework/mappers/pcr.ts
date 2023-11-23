@@ -158,6 +158,9 @@ export const mapToPcrItemType = (developerName: string) => {
       return PCRItemType.PartnerWithdrawal;
     case ProjectChangeRequest.changePeriodLength:
       return PCRItemType.PeriodLengthChange;
+    case ProjectChangeRequest.approveNewSubcontractor:
+      return PCRItemType.ApproveNewSubcontrator;
+
     // Request header
     case ProjectChangeRequest.requestHeader:
     case ProjectChangeRequest.projectChangeRequests:

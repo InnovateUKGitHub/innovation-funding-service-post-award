@@ -68,6 +68,9 @@ export const enum PCRItemType {
   PeriodLengthChange = 100,
   LoanDrawdownChange = 110,
   LoanDrawdownExtension = 120,
+
+  // 10179: whatever
+  ApproveNewSubcontrator = 130,
 }
 
 export const enum PCRItemTypeName {
@@ -130,6 +133,10 @@ export const enum PCRStepType {
 
   // Account Name Change IDs
   partnerNameStep = "partnerNameStep",
+
+  // Approve a new subcontractor workflow IDs
+  // 10179: Add all workflow pages here!
+  approveNewContractorNameStep = "approveNewContractorNameStep",
 }
 
 export enum PCRParticipantSize {
@@ -219,7 +226,8 @@ export const getPcrItemsSingleInstanceInAnyPcrViolations = (
 /**
  * Return a list of all invalid PCR types because a type can only exist once in the current PCR
  *
- * @param pcr The current PCR. If none available, will return no invalid types.
+ * @param pcr The current PCR.
+ * @param pcr.items The current PCR items. If none available, will return no invalid types.
  * @returns List of PCRs that cannot be added.
  */
 export const getPcrItemsSingleInstanceInThisPcrViolations = (pcr?: {
@@ -487,6 +495,15 @@ export const pcrItemTypes: IMetaValue[] = [
     singleInstanceInAnyPcr: true,
     singleInstanceInThisPcr: true,
   },
+  {
+    type: PCRItemType.ApproveNewSubcontrator,
+    typeName: "Approve a new subcontractor",
+    ignoredCompetitions: [SalesforceCompetitionTypes.ktp, SalesforceCompetitionTypes.loans],
+    i18nName: x => x.pcrTypes.approveNewSubcontractor,
+    i18nDescription: x => x.pages.pcrModifyOptions.approveNewSubcontractorMessage,
+    singleInstanceInAnyPcr: false,
+    singleInstanceInThisPcr: false,
+  },
 ];
 
 export const pcrItems = [
@@ -501,4 +518,5 @@ export const pcrItems = [
   PCRItemType.PeriodLengthChange,
   PCRItemType.LoanDrawdownChange,
   PCRItemType.LoanDrawdownExtension,
+  PCRItemType.ApproveNewSubcontrator,
 ] as const;

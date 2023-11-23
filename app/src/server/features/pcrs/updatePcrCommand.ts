@@ -332,6 +332,19 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
         break;
       }
+
+      case PCRItemType.ApproveNewSubcontrator: {
+        if (
+          // 10179: Add checks
+          dto.id
+        ) {
+          return {
+            ...init,
+          };
+        }
+
+        break;
+      }
     }
 
     return init;

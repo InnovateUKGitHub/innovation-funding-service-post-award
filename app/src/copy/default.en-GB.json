@@ -811,6 +811,7 @@
       "endProjectEarlyMessage": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close.",
       "loanDrawdownChangeMessage": "This allows for you to change the date and/or amount of forecasted drawdowns in the case of unforeseen circumstances leading to significant variations between drawn amounts and amounts spent (over or underspent).",
       "loanDrawdownExtensionMessage": "This allows you to extend or reduce the duration of your loan periods (availability, extension and repayment).",
+      "approveNewSubcontractorMessage": "Let us know if you are working with a new subcontractor. We will need to undertake viability checks, as stated in the application process.",
       "anotherPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to another PCR.",
       "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
       "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
@@ -1371,7 +1372,8 @@
     "scopeChange": "Change project scope",
     "timeExtension": "Change project duration",
     "loanDrawdownChange": "Loan Drawdown Change",
-    "loanDrawdownExtension": "Change Loans Duration"
+    "loanDrawdownExtension": "Change Loans Duration",
+    "approveNewSubcontractor": "Approve a new subcontractor"
   },
   "pcrAddPartnerLabels": {
     "roleHeading": "Project role",
