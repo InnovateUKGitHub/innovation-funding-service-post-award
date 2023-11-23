@@ -379,6 +379,12 @@ export class ProjectChangeRequestStore extends StoreBase {
           repaymentPeriod: null,
           repaymentPeriodChange: null,
         };
+      case PCRItemType.ApproveNewSubcontrator:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          // 10179: Add extra fields to map here!
+        };
       default:
         throw new Error("Item type not handled");
     }

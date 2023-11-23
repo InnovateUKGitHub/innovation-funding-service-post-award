@@ -18,6 +18,7 @@ import {
   PCRItemForAccountNameChangeDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForPartnerAdditionDto,
+  PCRItemForApproveNewSubcontractorDto,
 } from "@framework/dtos/pcrDtos";
 import { RecordType } from "@framework/entities/recordType";
 
@@ -259,6 +260,26 @@ describe("GetPCRByIdQuery", () => {
     expect(result.id).toBe(item.id);
     expect(result.suspensionStartDate?.toISOString()).toBe(suspensionStartDate.toISOString());
     expect(result.suspensionEndDate?.toISOString()).toBe(suspensionEndDate.toISOString());
+  });
+
+  test("maps fields for approving a new subcontractor", async () => {
+    const context = new TestContext();
+
+    const approveNewSubcontractorType = pcrItemTypes.find(x => x.type === PCRItemType.ApproveNewSubcontrator);
+    const recordType = context.testData
+      .createPCRRecordTypes()
+      .find(x => x.type === approveNewSubcontractorType?.typeName);
+
+    const pcr = context.testData.createPCR();
+
+    const item = context.testData.createPCRItem(pcr, recordType, {
+      // 10179: Add fields to test here!
+    });
+
+    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+    const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForApproveNewSubcontractorDto);
+
+    expect(result.id).toBe(item.id);
   });
 
   describe("partner addition", () => {
