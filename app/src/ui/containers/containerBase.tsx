@@ -68,7 +68,7 @@ interface IRouteOptions<TParams> {
   getParams: (route: RouteState) => TParams;
 
   accessControl?: (auth: Authorisation, params: TParams, accessControlOptions: IAccessControlOptions) => boolean;
-  getTitle: (getTitleArgs: { params: TParams; stores: IStores; content: Copy }) => {
+  getTitle?: (getTitleArgs: { params: TParams; stores: IStores; content: Copy }) => {
     htmlTitle: string;
     displayTitle: string;
   };

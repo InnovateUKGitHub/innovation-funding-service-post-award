@@ -8,7 +8,12 @@ type ButtonSubTypes =
   | { secondary?: true; styling?: never; link?: never; warning?: never }
   | { warning?: true; styling?: never; link?: never; secondary?: never }
   | { link?: true; styling?: never; secondary?: never; warning?: never }
-  | { styling?: "Link" | "Secondary" | "Primary" | "Warning"; link?: never; secondary?: never; warning?: never };
+  | {
+      styling?: "TableLink" | "Link" | "Secondary" | "Primary" | "Warning";
+      link?: never;
+      secondary?: never;
+      warning?: never;
+    };
 
 const getButtonTypeClass = (type: ButtonProps["styling"] = "Primary") => {
   const govukButton = "govuk-button govuk-!-margin-right-1";
@@ -18,6 +23,7 @@ const getButtonTypeClass = (type: ButtonProps["styling"] = "Primary") => {
     Secondary: `${govukButton} govuk-button--secondary`,
     Warning: `${govukButton} govuk-button--warning`,
     Link: "govuk-link",
+    TableLink: "govuk-link govuk-!-font-size-19",
   };
 
   return buttonTypeMap[type];

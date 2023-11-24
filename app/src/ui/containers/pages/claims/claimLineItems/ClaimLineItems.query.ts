@@ -1,6 +1,6 @@
 import { graphql } from "react-relay";
-export const editClaimLineItemsQuery = graphql`
-  query EditClaimLineItemsQuery(
+export const claimLineItemsQuery = graphql`
+  query ClaimLineItemsQuery(
     $projectId: ID!
     $projectIdStr: String
     $partnerId: ID!
@@ -9,6 +9,7 @@ export const editClaimLineItemsQuery = graphql`
   ) {
     currentUser {
       isSystemUser
+      email
     }
     salesforce {
       uiapi {
@@ -28,6 +29,17 @@ export const editClaimLineItemsQuery = graphql`
             edges {
               node {
                 Id
+                RecordType {
+                  DeveloperName {
+                    value
+                  }
+                }
+                Acc_OverrideAwardRate__c {
+                  value
+                }
+                Acc_ProfileOverrideAwardRate__c {
+                  value
+                }
                 Acc_CostCategory__c {
                   value
                 }
@@ -45,11 +57,6 @@ export const editClaimLineItemsQuery = graphql`
                 }
                 Acc_LatestForecastCost__c {
                   value
-                }
-                RecordType {
-                  DeveloperName {
-                    value
-                  }
                 }
               }
             }
@@ -103,9 +110,11 @@ export const editClaimLineItemsQuery = graphql`
                 LastModifiedDate {
                   value
                 }
+                Acc_ProjectPeriodNumber__c {
+                  value
+                }
                 Acc_ClaimStatus__c {
                   value
-                  label
                 }
                 Acc_CostCategory__c {
                   value
@@ -187,6 +196,19 @@ export const editClaimLineItemsQuery = graphql`
                 }
                 Acc_CompetitionType__c {
                   value
+                }
+                Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }, first: 1) {
+                  edges {
+                    node {
+                      Id
+                      Acc_OrganisationType__c {
+                        value
+                      }
+                      Acc_OverheadRate__c {
+                        value
+                      }
+                    }
+                  }
                 }
               }
             }

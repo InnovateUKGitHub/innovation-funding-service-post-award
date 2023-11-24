@@ -9,8 +9,27 @@ import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsD
 import { claimLineItemsQuery } from "./ClaimLineItems.query";
 import { ClaimLineItemsQuery } from "./__generated__/ClaimLineItemsQuery.graphql";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
+import { useRoutes } from "@ui/redux/routesProvider";
+import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
+import { RouteState } from "@ui/containers/containerBase";
 
-export const useClaimLineItemsData = (
+interface ClaimLineItemsParams {
+  projectId: ProjectId;
+  partnerId: PartnerId;
+  costCategoryId: CostCategoryId;
+  periodId: PeriodId;
+}
+
+type ClaimLineItemMode = "prepare" | "review" | "view";
+
+const getParams = (route: RouteState): ClaimLineItemsParams => ({
+  projectId: route.params.projectId as ProjectId,
+  partnerId: route.params.partnerId as PartnerId,
+  costCategoryId: route.params.costCategoryId as CostCategoryId,
+  periodId: parseInt(route.params.periodId, 10) as PeriodId,
+});
+
+const useClaimLineItemsData = (
   projectId: ProjectId,
   partnerId: PartnerId,
   periodId: PeriodId,
@@ -39,6 +58,9 @@ export const useClaimLineItemsData = (
     "organisationType",
   ]);
 
+  const currentCostCategory = costCategories.find(x => x.id === costCategoryId);
+  if (!currentCostCategory) throw new Error("Could not find current cost cat");
+
   const documents = (data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [])
     .map(edge =>
       mapToProjectDocumentSummaryDtoArray(
@@ -57,20 +79,20 @@ export const useClaimLineItemsData = (
 
   const claimsDetails = mapToClaimDetailsWithLineItemsDtoArray(
     claimsGql,
-    ["comments"],
-    ["id", "lastModifiedDate", "value", "description"],
-    {},
+    ["isAuthor", "value", "comments"],
+    ["id", "isAuthor", "lastModifiedDate", "value", "description"],
+    { currentUser: Object.assign({}, { email: "unknown email", isSystemUser: false }, data?.currentUser) },
   );
 
-  const claimDetails =
-    head(claimsDetails) ??
-    ({ comments: "", id: "", value: 0, description: 0, lineItems: [] } || {
-      partnerId,
-      costCategoryId,
-      periodId,
-      comments: null,
-      lineItems: [],
-    });
+  const claimDetails = head(claimsDetails) || {
+    partnerId,
+    costCategoryId,
+    periodId,
+    value: 0,
+    comments: null,
+    lineItems: [],
+    isAuthor: false,
+  };
 
   const forecastDetails = mapToForecastDetailsDtoArray(profileGql, ["value"]);
 
@@ -80,12 +102,35 @@ export const useClaimLineItemsData = (
     value: 0,
   };
 
+  const claimOverrides = mapToClaimOverrides(data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? []);
+
   return {
     project,
     partner,
     claimDetails,
     forecastDetail,
     costCategories,
+    currentCostCategory,
     documents,
+    claimOverrides,
   };
 };
+
+const useBackLink = (
+  { partnerId, periodId, projectId }: Pick<ClaimLineItemsParams, "projectId" | "partnerId" | "periodId">,
+  mode: ClaimLineItemMode,
+) => {
+  const routes = useRoutes();
+
+  if (mode === "prepare") {
+    return routes.prepareClaim.getLink({ projectId, partnerId, periodId });
+  } else if (mode === "review") {
+    return routes.reviewClaim.getLink({ projectId, periodId, partnerId });
+  } else if (mode === "view") {
+    return routes.claimDetails.getLink({ projectId, periodId, partnerId });
+  }
+
+  throw new Error(`Cannot generate backLink because an invalid ClaimLineItems mode "${mode}" was passed`);
+};
+
+export { getParams, ClaimLineItemsParams, useClaimLineItemsData, useBackLink, ClaimLineItemMode };

@@ -1,5 +1,8 @@
 {
   "site": {
+    "title": {
+      "siteName": "Innovation Funding Service"
+    },
     "header": {
       "siteName": "Innovation Funding Service",
       "mobileNavigationLabel": "Menu",
@@ -486,6 +489,7 @@
       "title": "Claim summary"
     },
     "claimLineItems": {
+      "backLink": "Back to claim",
       "supportingDocumentsTitle": "Supporting documents",
       "additionalInfoTitle": "Additional information",
       "noDataMessage": "No data",
@@ -494,7 +498,12 @@
       "differenceTitle": "Difference",
       "descriptionHeader": "Description",
       "costHeader": "Cost (£)",
-      "lastUpdatedHeader": "Last updated"
+      "lastUpdatedHeader": "Last updated",
+      "htmlPrepareTitle": "Add costs for {{ title }}",
+      "htmlViewTitle": "View costs for {{ title }}",
+      "htmlReviewTitle": "Review costs for {{ title }}",
+      "defaultHtmlReviewTitle": "Review costs",
+      "defaultDisplayReviewTitle": "Costs"
     },
     "editClaimLineItems": {
       "backLink": "Back to claims",
@@ -2112,13 +2121,36 @@
         }
       }
     },
+    "claimLineItems": {
+      "lineItems": {
+        "arrayType": {
+          "value": {
+            "errors": {
+              "too_small": "Enter a cost.",
+              "too_big": "Enter a real cost.",
+              "invalid_string": {
+                "regex": "Costs must be no more than 2 decimal places."
+              },
+              "invalid_type_received_nan": "Costs must be a number."
+            }
+          },
+          "description": {
+            "errors": {
+              "too_small": "Enter a description.",
+              "too_big": "Description can be a maximum of {{ count }} characters."
+            }
+          }
+        }
+      }
+    },
     "forecastTable": {
       "profile": {
         "errors": {
           "too_small": "Forecast is required.",
           "invalid_string": {
             "regex": "Forecast must be no more than 2 decimal places."
-          }
+          },
+          "invalid_type_received_nan": "Forecast must be a number."
         }
       },
       "total": {

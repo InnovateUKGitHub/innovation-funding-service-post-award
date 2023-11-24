@@ -3,9 +3,12 @@ import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDa
 import { ClaimDetailDocumentsRoute } from "@ui/containers/pages/claims/claimDetailDocuments.page";
 import { ClaimDocumentsRoute } from "@ui/containers/pages/claims/documents/ClaimDocuments.page";
 import { ClaimForecastRoute } from "@ui/containers/pages/claims/forecast/ClaimForecast.page";
-import { ClaimLineItemsRoute, ReviewClaimLineItemsRoute } from "@ui/containers/pages/claims/claimLineItems.page";
+import {
+  ClaimLineItemsRoute,
+  ReviewClaimLineItemsRoute,
+} from "@ui/containers/pages/claims/claimLineItems/ViewClaimLineItems.page";
+import { EditClaimLineItemsRoute } from "@ui/containers/pages/claims/claimLineItems/EditClaimLineItems.page";
 import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
-import { EditClaimLineItemsRoute } from "@ui/containers/pages/claims/editClaimLineItems.page";
 import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
 import { DeveloperHomePage } from "@ui/containers/pages/developer/home.page";
 import { DeveloperPageCrasherPage } from "@ui/containers/pages/developer/PageCrasher.page";

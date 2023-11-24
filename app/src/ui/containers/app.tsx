@@ -66,7 +66,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
   // Note: We treat no invocation as valid
   const hasAccess = currentRoute.accessControl ? currentRoute.accessControl(auth, params, config) : true;
-  const titlePayload = currentRoute.getTitle({ params, stores, content });
+  const titlePayload = currentRoute.getTitle?.({ params, stores, content });
 
   const navigationType = useNavigationType();
 
@@ -100,12 +100,14 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
   return (
     <>
-      <Helmet>
-        <title>{titlePayload.htmlTitle} - Innovation Funding Service</title>
-      </Helmet>
+      <Helmet
+        defaultTitle={content.getCopyString(x => x.site.title.siteName)}
+        titleTemplate={"%s - " + content.getCopyString(x => x.site.title.siteName)}
+        title={titlePayload?.htmlTitle}
+      />
 
       <ContentProvider value={content}>
-        <PageTitleProvider title={titlePayload.displayTitle}>
+        <PageTitleProvider title={titlePayload?.displayTitle}>
           <FullHeight.Container data-page-qa={currentRoute.routeName}>
             <a href="#main-content" className="govuk-skip-link">
               Skip to main content

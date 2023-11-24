@@ -1,3 +1,4 @@
+import { ButtonHTMLAttributes } from "react";
 import { Path, PathValue, UseFormSetValue } from "react-hook-form";
 
 export type RegisterButton<TFormValues> = (value: PathValue<TFormValues, Path<TFormValues>>) => {
@@ -22,12 +23,9 @@ export function createRegisterButton<TFormValues extends AnyObject>(
   setValue: UseFormSetValue<TFormValues>,
   name: Path<TFormValues>,
 ) {
-  if (!/^button_/.test(name)) {
-    throw new Error(
-      "The button name does not begin with 'button-' and will have issues with the form handler when js is disabled",
-    );
-  }
-  return function registerButton(value: PathValue<TFormValues, Path<TFormValues>>) {
+  return function registerButton(
+    value: PathValue<TFormValues, Path<TFormValues>>,
+  ): ButtonHTMLAttributes<HTMLButtonElement> {
     return {
       name,
       // need to be able to programatically set value because react will strip the value property

@@ -9,6 +9,8 @@ enum FormTypes {
   ClaimLevelUpload = "claimLevelUpload",
   ClaimForecastSaveAndContinue = "claimForecastSaveAndContinue",
   ClaimForecastSaveAndQuit = "claimForecastSaveAndQuit",
+  ClaimLineItemSaveAndDocuments = "claimLineItemSaveAndDocuments",
+  ClaimLineItemSaveAndQuit = "claimLineItemSaveAndQuit",
 
   // Project Setup
   ProjectSetupBankDetails = "projectSetupBankDetails",

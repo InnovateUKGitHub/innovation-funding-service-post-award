@@ -5,6 +5,8 @@ enum SalesforcePrefixes {
   Acc_ProjectChangeRequest__c = "a0G",
   Acc_CostCategory__c = "a06",
   Acc_Profile__c = "a0A",
+  Acc_Claims__c = "a05",
+  Acc_CostCategory__c = "a06",
 }
 
 export { SalesforcePrefixes };

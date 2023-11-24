@@ -12,7 +12,7 @@ import { LoanRequestDocumentUploadHandler } from "./handlers/loans/[projectId]/[
 import { LoanRequestFormHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestFormHandler";
 import { ClaimForecastFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/ClaimForecastFormHandler.handler";
 import { ClaimSummaryFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/forecast/[periodId]/summary/claimSummaryFormHandler";
-import { EditClaimLineItemsFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/editClaimLineItemsFormHandler";
+import { EditClaimLineItemsFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/EditClaimLineItemsFormHandler.handler";
 import { ClaimLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareDeleteHandler.handler";
 import { ClaimLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/documents/ClaimLevelDocumentShareUploadHandler.handler";
 import { PrepareClaimFormHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/prepareClaimFormHandler";
@@ -63,7 +63,6 @@ import { ProjectChangeRequestItemFinancialVirementsSummaryUpdate } from "./handl
 
 export const standardFormHandlers = [
   new ClaimForecastFormHandler(),
-  new EditClaimLineItemsFormHandler(),
   new ClaimSummaryFormHandler(),
   new PrepareClaimFormHandler(),
   new ReviewClaimFormHandler(),
@@ -112,6 +111,8 @@ export const standardFormHandlers = [
   new ProjectChangeRequestCreateHandler(),
   new ProjectChangeRequestAddTypeHandler(),
   new ProjectChangeRequestItemFinancialVirementsSummaryUpdate(),
+  new ProjectSetupBankDetailsHandler(),
+  new EditClaimLineItemsFormHandler(),
 ] as const;
 
 export const multiFileFormHandlers = [

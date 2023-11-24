@@ -35,6 +35,13 @@ const costCategoryIdValidation = z
 
 const profileIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Profile__c);
 
+const claimIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Claims__c);
+
+const costCategoryIdValidation = z
+  .string()
+  .startsWith(SalesforcePrefixes.Acc_CostCategory__c)
+  .transform(x => x as CostCategoryId);
+
 const emptyStringToUndefinedValidation = z
   .string()
   .refine(x => x === "")
@@ -54,7 +61,39 @@ const periodIdValidation = z.coerce
   .lt(500) // Assumption that a project has fewer than 500 periods.
   .transform(x => x as PeriodId);
 
-const currencyValidation = z.string().regex(validCurrencyRegex).nonempty();
+const currencyValidation = z
+  .string()
+  .nonempty()
+  .max(20) // Assumption that nobody will claim more than ninety-nine quadrillion pounds.
+  .superRefine((val, ctx) => {
+    const currency = parseFloat(val.replaceAll("£", ""));
+
+    // Check if the string can even be parsed
+    if (isNaN(currency)) {
+      return ctx.addIssue({
+        code: ZodIssueCode.invalid_type,
+        expected: "number",
+        received: "nan",
+      });
+    }
+
+    // Make sure our currency isn't so big as to break our server
+    if (currency > Number.MAX_SAFE_INTEGER / 10000) {
+      return ctx.addIssue({
+        code: ZodIssueCode.too_big,
+        type: "number",
+        maximum: Number.MAX_SAFE_INTEGER / 10000,
+        inclusive: false,
+      });
+    }
+
+    if (!validCurrencyRegex.test(val)) {
+      return ctx.addIssue({
+        code: ZodIssueCode.invalid_string,
+        validation: "regex",
+      });
+    }
+  });
 
 const getSingleFileValidation = (options: IAppOptions) => {
   const { imageTypes, pdfTypes, presentationTypes, spreadsheetTypes, textTypes } = options.permittedTypes;
@@ -139,6 +178,8 @@ export {
   profileIdValidation,
   periodIdValidation,
   currencyValidation,
+  claimIdValidation,
+  costCategoryIdValidation,
   emptyStringToUndefinedValidation,
   emptyStringToNullValidation,
   getSingleFileValidation,

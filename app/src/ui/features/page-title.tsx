@@ -2,13 +2,13 @@ import { H1 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { createContext, useContext } from "react";
 
 export interface PageTitleContext {
-  pageTitle: string;
+  pageTitle?: string;
 }
 
 const pageTitleContext = createContext<PageTitleContext | undefined>(undefined);
 
 interface PageTitleProviderProps {
-  title: string;
+  title?: string;
   children: React.ReactNode;
 }
 
@@ -49,6 +49,7 @@ export function PageTitle({ caption, title }: PageTitleProps) {
 
   const titleValue = title || pageTitle;
 
+  if (typeof titleValue === "undefined") return null;
   if (!titleValue.length) return null;
 
   return (
