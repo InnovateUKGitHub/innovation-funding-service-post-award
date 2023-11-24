@@ -66,7 +66,6 @@ const MonitoringReportCreatePage = (props: MonitoringReportCreateParams & BasePr
         <Form
           data-qa="monitoringReportCreateForm"
           onSubmit={handleSubmit(data => {
-            console.log("formhandler data", data);
             onUpdate({ data });
           })}
         >

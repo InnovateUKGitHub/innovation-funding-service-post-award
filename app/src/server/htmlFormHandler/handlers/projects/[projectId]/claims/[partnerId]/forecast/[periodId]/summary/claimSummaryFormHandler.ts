@@ -17,7 +17,7 @@ import { PrepareClaimParams } from "@ui/containers/pages/claims/claimPrepare.pag
 
 export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {
-    super(ClaimSummaryRoute, ["default", "save"], "claim");
+    super(ClaimSummaryRoute, ["submit"], "claim");
   }
 
   protected async getDto(
@@ -31,7 +31,7 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
     claim.comments = body.comments;
 
     // Note: Not submitted so we only care about comments being updated
-    if (button.name !== "default") return claim;
+    if (button.value !== "submit") return claim;
 
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
 

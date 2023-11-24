@@ -10,7 +10,6 @@ import { getAuthRoles } from "@framework/types/authorisation";
 import { roundCurrency } from "@framework/util/numberHelper";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
 import { DocumentsUnavailable } from "@ui/components/atomicDesign/organisms/documents/DocumentsUnavailable/DocumentsUnavailable";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
@@ -33,9 +32,9 @@ import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFi
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { claimSummaryErrorMap, getClaimSummarySchema } from "./claimSummary.zod";
-import { z } from "zod";
+import { ClaimSummarySchema, claimSummaryErrorMap, getClaimSummarySchema } from "./claimSummary.zod";
 import { createRegisterButton } from "@framework/util/registerButton";
+import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 
 export interface ClaimSummaryParams {
   projectId: ProjectId;
@@ -43,11 +42,7 @@ export interface ClaimSummaryParams {
   periodId: PeriodId;
 }
 
-type LinkProps = {
-  projectId: ProjectId;
-  partnerId: PartnerId;
-  periodId: PeriodId;
-};
+type LinkProps = ClaimSummaryParams;
 
 const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
   const data = useClaimSummaryData(props.projectId, props.partnerId, props.periodId);
@@ -81,9 +76,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
     data.project.monitoringLevel,
   );
 
-  const { register, formState, handleSubmit, watch, setValue } = useForm<
-    z.output<ReturnType<typeof getClaimSummarySchema>>
-  >({
+  const { register, formState, handleSubmit, watch, setValue } = useForm<ClaimSummarySchema>({
     defaultValues: {
       status: data.claim.status,
       comments: data.claim.comments ?? "",
@@ -249,11 +242,10 @@ const DocumentValidation = (
       }
     />
   ) : (
-    // TODO: Speak with business about refactoring to document table UI
     <>
       {props.documents.length ? (
-        <Section subtitle={<Content value={x => x.documentMessages.newWindow} />}>
-          <DocumentList documents={props.documents} qa="claim-documents-list" />
+        <Section qa="supporting-documents-section">
+          <DocumentView hideHeader qa="claim-documents-list" documents={props.documents} />
         </Section>
       ) : (
         <DocumentsUnavailable />

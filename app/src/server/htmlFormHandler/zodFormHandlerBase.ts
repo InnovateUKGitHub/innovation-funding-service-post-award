@@ -145,7 +145,7 @@ abstract class ZodFormHandlerBase<
 
   /**
    * Convert the `req.body` and `req.files` of Express into the input
-   * exprected by the Zod validator
+   * expected by the Zod validator
    */
   protected abstract mapToZod({
     input,

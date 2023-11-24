@@ -21,3 +21,5 @@ export const getClaimSummarySchema = (iarRequired: boolean) =>
       comments: z.string().max(1000),
     }),
   ]);
+
+export type ClaimSummarySchema = z.output<ReturnType<typeof getClaimSummarySchema>>;
