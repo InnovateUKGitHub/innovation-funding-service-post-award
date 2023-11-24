@@ -210,25 +210,23 @@ const mapToForecastTableDto = ({
             const numberComponent = validCurrencyRegex.exec(clientProfile)?.[1] ?? "";
             value = multiplyCurrency(parseFloat(numberComponent), partner.overheadRate, 1);
             displayValue = isNaN(value) ? "" : String(value);
-            profileId = forecastProfile.id;
-            calculatedField = true;
           } else {
             value = multiplyCurrency(labourProfile.value, partner.overheadRate, 1);
             displayValue = String(value);
-            profileId = forecastProfile.id;
           }
+          profileId = forecastProfile.id;
+          calculatedField = true;
         } else {
           if (clientProfiles) {
             const clientProfile: string | undefined = clientProfiles?.[forecastProfile.id];
             const numberComponent = validCurrencyRegex.exec(clientProfile)?.[1] ?? "";
             value = parseFloat(numberComponent);
             displayValue = clientProfile;
-            profileId = forecastProfile.id;
           } else {
             value = roundCurrency(forecastProfile.value);
             displayValue = String(value);
-            profileId = forecastProfile.id;
           }
+          profileId = forecastProfile.id;
         }
       } else if (claimProfile) {
         value = roundCurrency(claimProfile.value);
