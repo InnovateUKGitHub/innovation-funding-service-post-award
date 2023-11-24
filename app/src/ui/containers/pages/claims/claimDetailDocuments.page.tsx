@@ -56,7 +56,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
     costCategoryId,
   });
 
-  const { project, claimDocuments, costCategories } = useClaimDetailDocumentsQuery(
+  const { project, claimDetailDocuments, costCategories } = useClaimDetailDocumentsQuery(
     { projectId, partnerId, periodId, costCategoryId },
     refreshedQueryOptions,
   );
@@ -71,8 +71,6 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
       errorMap: makeZodI18nMap({ keyPrefix: ["documents"] }),
     }),
   });
-
-  console.log("errors", formState?.errors);
 
   const {
     onUpdate: onUploadUpdate,
@@ -199,10 +197,10 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
         <DocumentEdit
           hideHeader
           hideSubtitle
-          qa="claim-documents"
+          qa="claim-detail-documents"
           onRemove={onDelete}
-          documents={claimDocuments}
-          formType={FormTypes.ClaimLevelDelete}
+          documents={claimDetailDocuments}
+          formType={FormTypes.ClaimDetailLevelDelete}
         />
       </Section>
     </Page>

@@ -30,7 +30,7 @@ export const useClaimDetailDocumentsQuery = (
     "competitionType",
   ]);
 
-  const claimDocuments = (data?.salesforce?.uiapi?.query?.ClaimsDocuments?.edges ?? [])
+  const claimDetailDocuments = (data?.salesforce?.uiapi?.query?.ClaimsDocuments?.edges ?? [])
     .map(edge =>
       mapToProjectDocumentSummaryDtoArray(
         edge?.node?.ContentDocumentLinks?.edges ?? [],
@@ -55,5 +55,5 @@ export const useClaimDetailDocumentsQuery = (
     "organisationType",
   ]);
 
-  return { project, claimDocuments, costCategories };
+  return { project, claimDetailDocuments, costCategories };
 };
