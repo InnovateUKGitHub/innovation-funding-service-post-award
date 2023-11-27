@@ -15,7 +15,7 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { getRemovePartnerSchema, errorMap, RemovePartnerSchemaType } from "./removePartner.zod";
+import { getRemovePartnerSchema, removePartnerErrorMap, RemovePartnerSchemaType } from "./removePartner.zod";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
@@ -33,7 +33,7 @@ export const RemovePartnerStep = () => {
       partnerId: pcrItem.partnerId,
     },
     resolver: zodResolver(getRemovePartnerSchema(project.numberOfPeriods), {
-      errorMap,
+      errorMap: removePartnerErrorMap,
     }),
   });
 

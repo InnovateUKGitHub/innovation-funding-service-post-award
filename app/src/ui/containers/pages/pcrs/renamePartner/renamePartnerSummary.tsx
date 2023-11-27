@@ -6,7 +6,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useRenamePartnerWorkflowQuery } from "./renamePartner.logic";
 import { useForm } from "react-hook-form";
-import { RenamePartnerSchemaType, getRenamePartnerSchema, errorMap } from "./renamePartner.zod";
+import { RenamePartnerSchemaType, getRenamePartnerSchema, renamePartnerErrorMap } from "./renamePartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { PcrPage } from "../pcrPage";
@@ -27,7 +27,7 @@ export const RenamePartnerSummary = () => {
       partnerId: pcrItem.partnerId as string,
     },
     resolver: zodResolver(getRenamePartnerSchema(partners), {
-      errorMap,
+      errorMap: renamePartnerErrorMap,
     }),
   });
 

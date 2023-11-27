@@ -6,7 +6,11 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { usePcrSuspendProjectWorkflowQuery } from "./suspendProject.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { pcrProjectSuspensionSummarySchema, errorMap, ProjectSuspensionSummarySchemaType } from "./suspendProject.zod";
+import {
+  pcrProjectSuspensionSummarySchema,
+  pcrProjectSuspensionErrorMap,
+  ProjectSuspensionSummarySchemaType,
+} from "./suspendProject.zod";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PcrPage } from "../pcrPage";
@@ -23,7 +27,7 @@ export const SuspendProjectSummary = () => {
       suspensionStartDate: pcrItem.suspensionStartDate,
     },
     resolver: zodResolver(pcrProjectSuspensionSummarySchema, {
-      errorMap,
+      errorMap: pcrProjectSuspensionErrorMap,
     }),
   });
 

@@ -114,7 +114,7 @@ export const MonitoringReportWorkflow = (props: MonitoringReportWorkflowParams &
     validatorErrors,
     registerButton,
     reset,
-  };
+  } as MonitoringReportContextType;
 
   return (
     <MonitoringReportFormContext.Provider value={MonitoringReportContextValues}>

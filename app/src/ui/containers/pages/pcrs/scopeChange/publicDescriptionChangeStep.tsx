@@ -12,7 +12,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { TextAreaField } from "@ui/components/atomicDesign/molecules/form/TextFieldArea/TextAreaField";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { pcrScopeChangePublicDescriptionSchema, errorMap } from "./scopeChange.zod";
+import { pcrScopeChangePublicDescriptionSchema, scopeChangeErrorMap } from "./scopeChange.zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { useNextLink } from "../utils/useNextLink";
 import { z } from "zod";
@@ -40,7 +40,7 @@ export const PublicDescriptionChangeStep = () => {
       publicDescription: pcrItem.publicDescription ?? "",
     },
     resolver: zodResolver(pcrScopeChangePublicDescriptionSchema, {
-      errorMap,
+      errorMap: scopeChangeErrorMap,
     }),
   });
 

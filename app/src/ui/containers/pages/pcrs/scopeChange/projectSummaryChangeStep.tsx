@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { pcrScopeChangeProjectSummarySchema, errorMap } from "./scopeChange.zod";
+import { pcrScopeChangeProjectSummarySchema, scopeChangeErrorMap } from "./scopeChange.zod";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { useNextLink } from "../utils/useNextLink";
 import { z } from "zod";
@@ -44,7 +44,7 @@ export const ProjectSummaryChangeStep = () => {
       projectSummary: pcrItem.projectSummary ?? "",
     },
     resolver: zodResolver(pcrScopeChangeProjectSummarySchema, {
-      errorMap,
+      errorMap: scopeChangeErrorMap,
     }),
   });
 

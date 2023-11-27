@@ -15,7 +15,11 @@ import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { DateInputGroup } from "@ui/components/atomicDesign/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atomicDesign/atoms/DateInputs/DateInput";
 import { useNextLink } from "../utils/useNextLink";
-import { pcrProjectSuspensionSchema, errorMap, ProjectSuspensionSchemaType } from "./suspendProject.zod";
+import {
+  pcrProjectSuspensionSchema,
+  pcrProjectSuspensionErrorMap,
+  ProjectSuspensionSchemaType,
+} from "./suspendProject.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
 import { PcrPage } from "../pcrPage";
@@ -57,7 +61,7 @@ export const SuspendProjectStep = () => {
       suspensionEndDate: "",
     },
     resolver: zodResolver(pcrProjectSuspensionSchema, {
-      errorMap,
+      errorMap: pcrProjectSuspensionErrorMap,
     }),
   });
 

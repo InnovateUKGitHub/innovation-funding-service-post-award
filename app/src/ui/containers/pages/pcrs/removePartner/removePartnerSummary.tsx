@@ -6,7 +6,7 @@ import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecu
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useRemovePartnerWorkflowQuery } from "./removePartner.logic";
 import { useForm } from "react-hook-form";
-import { RemovePartnerSchemaType, getRemovePartnerSchema, errorMap } from "./removePartner.zod";
+import { RemovePartnerSchemaType, getRemovePartnerSchema, removePartnerErrorMap } from "./removePartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { PcrPage } from "../pcrPage";
@@ -26,7 +26,7 @@ export const RemovePartnerSummary = () => {
       partnerId: pcrItem.partnerId,
     },
     resolver: zodResolver(getRemovePartnerSchema(project.numberOfPeriods), {
-      errorMap,
+      errorMap: removePartnerErrorMap,
     }),
   });
 

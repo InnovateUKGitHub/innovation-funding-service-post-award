@@ -3,7 +3,7 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helperValidators.zod";
 
-export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
+export const renamePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
 
 export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">[]) =>
   z

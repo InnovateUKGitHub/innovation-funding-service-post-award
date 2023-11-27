@@ -15,7 +15,7 @@ import { useOnUpdateProjectSetup, useProjectSetupQuery } from "./projectSetup.lo
 import { useZodFormatValidationErrors } from "@framework/util/errorHelpers";
 import { Result } from "@ui/validation/result";
 import { useMemo } from "react";
-import { projectSetupSchema } from "./projectSetup.zod";
+import { projectSetupErrorMap, projectSetupSchema } from "./projectSetup.zod";
 
 export interface ProjectSetupParams {
   projectId: ProjectId;
@@ -149,11 +149,16 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
           /*
            * First validate the partial partner dto to see if the necessary work has been completed
            */
-          const result = projectSetupSchema.safeParse({
-            postcode: partner.postcode,
-            bankDetailsTaskStatus: String(partner.bankDetailsTaskStatus),
-            spendProfileStatus: String(partner.spendProfileStatus),
-          });
+          const result = projectSetupSchema.safeParse(
+            {
+              postcode: partner.postcode,
+              bankDetailsTaskStatus: String(partner.bankDetailsTaskStatus),
+              spendProfileStatus: String(partner.spendProfileStatus),
+            },
+            {
+              errorMap: projectSetupErrorMap,
+            },
+          );
 
           /*
            * if validation is failed then convert from zod format to Results format and set in the state

@@ -3,7 +3,7 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helperValidators.zod";
 import { isNil } from "lodash";
 
-export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "removePartner"] });
+export const removePartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "removePartner"] });
 
 export const getRemovePartnerSchema = (numberOfPeriods: number) =>
   z

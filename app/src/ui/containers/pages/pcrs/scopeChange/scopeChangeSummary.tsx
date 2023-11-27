@@ -7,7 +7,7 @@ import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { pcrScopeChangeSchema, errorMap, PcrScopeChangeSchemaType } from "./scopeChange.zod";
+import { pcrScopeChangeSchema, scopeChangeErrorMap, PcrScopeChangeSchemaType } from "./scopeChange.zod";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
@@ -24,7 +24,7 @@ export const ScopeChangeSummary = () => {
       publicDescription: pcrItem.publicDescription ?? "",
     },
     resolver: zodResolver(pcrScopeChangeSchema, {
-      errorMap,
+      errorMap: scopeChangeErrorMap,
     }),
   });
 

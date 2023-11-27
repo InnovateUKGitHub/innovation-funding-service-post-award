@@ -16,7 +16,7 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { PcrPage } from "../pcrPage";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { getRenamePartnerSchema, errorMap, RenamePartnerSchemaType } from "./renamePartner.zod";
+import { getRenamePartnerSchema, renamePartnerErrorMap, RenamePartnerSchemaType } from "./renamePartner.zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 export const RenamePartnerStep = () => {
@@ -42,7 +42,7 @@ export const RenamePartnerStep = () => {
       partnerId: pcrItem.partnerId as string,
     },
     resolver: zodResolver(getRenamePartnerSchema(partners), {
-      errorMap,
+      errorMap: renamePartnerErrorMap,
     }),
   });
 
