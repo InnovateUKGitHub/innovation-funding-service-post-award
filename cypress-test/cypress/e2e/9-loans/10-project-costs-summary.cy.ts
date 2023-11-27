@@ -14,7 +14,7 @@ import {
   workingBackLink,
 } from "./steps";
 import { shouldShowProjectTitle } from "e2e/2-claims/steps";
-import { summaryCommentsAdd, summaryCommentsTooMany, summaryCommentsDeleteOne } from "e2e/2-claims/steps";
+import { summaryCommentsAdd, loansSummaryCommentsTooMany, summaryCommentsDeleteOne } from "e2e/2-claims/steps";
 import { loansProjCostCleanUp } from "common/costCleanUp";
 import { fileTidyUp } from "common/filetidyup";
 const fc = "s.shuang@irc.trde.org.uk.test";
@@ -98,7 +98,7 @@ describe("Loans > Project Costs > Summary", () => {
 
   it("Should populate the comments box with 1000 characters and count the characters entered", summaryCommentsAdd);
 
-  it("Should attempt to add one too many characters and validate on save", summaryCommentsTooMany);
+  it("Should attempt to add one too many characters and validate on save", loansSummaryCommentsTooMany);
 
   it("Should delete the additional character", summaryCommentsDeleteOne);
 

@@ -51,6 +51,10 @@ describe("Claims > Cost category document uploads", () => {
     fileTidyUp("Sarah Shuang");
   });
 
+  it("Should display guidance on how downloads work", () => {
+    cy.paragraph("All documents uploaded will be shown here. All documents open in a new window.");
+  });
+
   it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);

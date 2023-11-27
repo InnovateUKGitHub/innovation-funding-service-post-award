@@ -218,7 +218,7 @@ export const clearUpLabourCostCat = () => {
   cy.get("td.govuk-table__cell").contains("Labour").click();
   cy.getByQA("button_upload-qa").click();
   cy.heading("Labour documents");
-  cy.getByQA("button_delete-qa").contains("Remove").click();
+  cy.clickOn("Remove");
   cy.wait(1000);
   cy.get("a.govuk-back-link").click();
   cy.heading("Labour");
@@ -1012,10 +1012,17 @@ export const summaryCommentsAdd = () => {
   cy.paragraph("You have 0 characters remaining");
 };
 
-export const summaryCommentsTooMany = () => {
+export const loansSummaryCommentsTooMany = () => {
   cy.get("textarea").type("{moveToEnd}").type("t");
   cy.paragraph("You have 1 character too many");
   cy.clickOn("Save and return to project costs");
+  cy.validationLink("Comments must be a maximum of 1000 characters");
+};
+
+export const summaryCommentsTooMany = () => {
+  cy.get("textarea").type("{moveToEnd}").type("t");
+  cy.paragraph("You have 1 character too many");
+  cy.clickOn("Save and return to claims");
   cy.validationLink("Comments must be a maximum of 1000 characters");
 };
 
