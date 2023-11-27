@@ -135,6 +135,7 @@ export const FilesStep = ({
           }
           documents={documents}
           formType={FormTypes.PcrLevelDelete}
+          disabled={disabled}
         />
       </Section>
       <Form
