@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<10f3084d4c8cc8ad83159b7e4cd2ff41>>
+ * @generated SignedSource<<6d8b1d5ab95c6ee629cb4929d8c31f5b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -113,8 +113,8 @@ export type AddPartnerWorkflowQuery$data = {
         readonly Acc_Project__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
-              readonly Acc_NumberofPeriods__c: {
-                readonly value: number | null | undefined;
+              readonly Acc_CompetitionType__c: {
+                readonly value: string | null | undefined;
               } | null | undefined;
               readonly Id: string;
               readonly roles: {
@@ -689,9 +689,9 @@ v10 = [
                           {
                             "alias": null,
                             "args": null,
-                            "concreteType": "DoubleValue",
+                            "concreteType": "StringValue",
                             "kind": "LinkedField",
-                            "name": "Acc_NumberofPeriods__c",
+                            "name": "Acc_CompetitionType__c",
                             "plural": false,
                             "selections": (v6/*: any*/),
                             "storageKey": null
@@ -739,16 +739,16 @@ return {
     "selections": (v10/*: any*/)
   },
   "params": {
-    "cacheID": "cd00dff24ba8abacceccdeee0df17da1",
+    "cacheID": "45598f33772f230995d218309d1b882e",
     "id": null,
     "metadata": {},
     "name": "AddPartnerWorkflowQuery",
     "operationKind": "query",
-    "text": "query AddPartnerWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantSize__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_CommercialWork__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AddPartnerWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantSize__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_CommercialWork__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "af0bc6dd419b4e531ce22c302cc0e372";
+(node as any).hash = "bbd91fb0ccf858e0e8184a0d318c35f2";
 
 export default node;

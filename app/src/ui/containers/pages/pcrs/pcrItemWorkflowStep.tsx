@@ -18,7 +18,9 @@ export const WorkflowStep = () => {
   }
 
   if (!currentStep?.migratedStepRender) {
-    throw new Error("this workflow does not have a matching migratedStepRender method on the config");
+    throw new Error(
+      `${currentStep.displayName} workflow does not have a matching migratedStepRender method on the config`,
+    );
   }
 
   const CurrentStep = currentStep?.migratedStepRender;

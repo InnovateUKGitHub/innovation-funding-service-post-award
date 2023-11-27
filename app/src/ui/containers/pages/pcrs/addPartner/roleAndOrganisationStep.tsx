@@ -158,10 +158,10 @@ export const RoleAndOrganisationStep = () => {
             </FormGroup>
           </Fieldset>
           <Fieldset data-qa="save-and-continue">
-            <Button type="submit" {...registerButton("submit")}>
+            <Button type="submit" {...registerButton("submit")} disabled={isFetching}>
               <Content value={x => x.pcrItem.submitButton} />
             </Button>
-            <Button type="submit" secondary {...registerButton("saveAndReturn")}>
+            <Button type="submit" secondary {...registerButton("saveAndReturn")} disabled={isFetching}>
               <Content value={x => x.pcrItem.returnToSummaryButton} />
             </Button>
           </Fieldset>

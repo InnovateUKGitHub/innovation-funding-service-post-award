@@ -111,7 +111,7 @@ export const addPartnerWorkflowQuery = graphql`
                   isFc
                   isMo
                 }
-                Acc_NumberofPeriods__c {
+                Acc_CompetitionType__c {
                   value
                 }
               }

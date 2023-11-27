@@ -23,7 +23,7 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const { node: pcrNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_ProjectChangeRequest__c?.edges);
-  const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title", "roles", "numberOfPeriods"]);
+  const project = mapToProjectDto(projectNode, ["projectNumber", "status", "title", "roles", "competitionType"]);
 
   const partners = sortPartnersLeadFirst(
     mapToPartnerDtoArray(

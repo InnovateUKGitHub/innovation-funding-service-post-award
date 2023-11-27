@@ -112,7 +112,7 @@ export const getAddPartnerWorkflow = (
       displayName: "Non aid eligibility",
       stepNumber: 2,
       validation: val => val.pcr,
-      stepRender: NonAidFundingStep,
+      migratedStepRender: NonAidFundingStep,
     });
   } else if (item.typeOfAid === TypeOfAid.DeMinimisAid) {
     workflow.steps.push({
