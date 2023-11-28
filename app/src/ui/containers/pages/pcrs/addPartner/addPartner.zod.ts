@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 
-export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "roleAndOrganisation"] });
+export const roleAndOrganisationErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "roleAndOrganisation"] });
 
 export const roleAndOrganisationSchema = z.object({
   button_submit: z.string(),
@@ -12,3 +12,15 @@ export const roleAndOrganisationSchema = z.object({
 });
 
 export type RoleAndOrganisationSchema = z.infer<typeof roleAndOrganisationSchema>;
+
+export const academicOrganisationErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "academicOrganisation"],
+});
+
+export const academicOrganisationSchema = z.object({
+  button_submit: z.string(),
+  markedAsComplete: z.boolean(),
+  organisationName: z.string(),
+});
+
+export type AcademicOrganisationSchema = z.infer<typeof academicOrganisationSchema>;

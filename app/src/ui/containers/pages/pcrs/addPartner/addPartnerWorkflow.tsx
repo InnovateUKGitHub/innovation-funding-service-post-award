@@ -138,7 +138,7 @@ export const getAddPartnerWorkflow = (
       displayName: "Organisation name",
       stepNumber: 3,
       validation: val => val.pcr,
-      stepRender: AcademicOrganisationStep,
+      migratedStepRender: AcademicOrganisationStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.jeSStep,

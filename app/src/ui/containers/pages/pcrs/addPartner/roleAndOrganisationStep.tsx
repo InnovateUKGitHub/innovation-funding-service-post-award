@@ -7,7 +7,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
 import { useForm } from "react-hook-form";
-import { RoleAndOrganisationSchema, errorMap, roleAndOrganisationSchema } from "./addPartner.zod";
+import { RoleAndOrganisationSchema, roleAndOrganisationErrorMap, roleAndOrganisationSchema } from "./addPartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useLinks } from "../utils/useNextLink";
@@ -58,7 +58,7 @@ export const RoleAndOrganisationStep = () => {
       markedAsComplete: markedAsCompleteHasBeenChecked,
     },
     resolver: zodResolver(roleAndOrganisationSchema, {
-      errorMap,
+      errorMap: roleAndOrganisationErrorMap,
     }),
   });
 
@@ -129,7 +129,7 @@ export const RoleAndOrganisationStep = () => {
               <ValidationError error={validationErrors?.isCommercialWork as RhfError} />
               <RadioList id="isCommercialWork" name="isCommercialWork" register={register}>
                 {commercialWorkOptions.map(x => (
-                  <Radio key={x.label} {...x} disabled={isFetching} />
+                  <Radio key={x.label} {...x} disabled={isFetching} defaultChecked={x.id === "no"} />
                 ))}
               </RadioList>
             </FormGroup>

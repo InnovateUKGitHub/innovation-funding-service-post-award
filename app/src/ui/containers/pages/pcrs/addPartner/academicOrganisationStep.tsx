@@ -1,136 +1,121 @@
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { Pending } from "@shared/pending";
-import { useCallback, useState } from "react";
-import { noop } from "@ui/helpers/noop";
-import { useContent } from "@ui/hooks/content.hook";
-import { JesSearchResults } from "./jesSearchResults";
-import { AccountDto } from "@framework/dtos/accountDto";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { useState } from "react";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { useStores } from "@ui/redux/storesProvider";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { Loader } from "@ui/components/bjss/loading";
+import { PcrPage } from "../pcrPage";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useLinks } from "../utils/useNextLink";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { SearchInput } from "@ui/components/bjss/inputs/searchInput";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { academicOrganisationErrorMap, AcademicOrganisationSchema, academicOrganisationSchema } from "./addPartner.zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { createRegisterButton } from "@framework/util/registerButton";
+import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { useJesSearchQuery } from "./jesSearch.logic";
+import { useContent } from "@ui/hooks/content.hook";
 
-const AddForm = createTypedForm<PCRItemForPartnerAdditionDto>();
-const PartnerForm = createTypedForm<PCRItemForPartnerAdditionDto>();
-
-export const AcademicOrganisationStep = (
-  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
-) => {
-  const { accounts } = useStores();
+export const AcademicOrganisationStep = () => {
   const { getContent } = useContent();
+  const { markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } = usePcrWorkflowContext();
+
+  const link = useLinks();
   const { isServer } = useMounted();
 
+  const { handleSubmit, register, formState, trigger, setValue } = useForm<AcademicOrganisationSchema>({
+    defaultValues: {
+      markedAsComplete: markedAsCompleteHasBeenChecked,
+      button_submit: "submit",
+      organisationName: "",
+    },
+    resolver: zodResolver(academicOrganisationSchema, {
+      errorMap: academicOrganisationErrorMap,
+    }),
+  });
+
+  const validationErrors = useRhfErrors(formState.errors);
+  useFormValidate(trigger);
+
+  const registerButton = createRegisterButton(setValue, "button_submit");
+
   const [searchInputValue, setSearchInputValue] = useState<string>("");
-  const [currentSelectedOption, setCurrentSelectedOption] = useState<AccountDto>();
 
-  const getJesAccounts: () => Pending<AccountDto[]> = useCallback(
-    () => (searchInputValue?.length ? accounts.getJesAccountsByName(searchInputValue) : Pending.done([])),
-    [accounts, searchInputValue],
-  );
-
-  const updateOrganisationName = (organisationId: string | undefined, jesOrganisations: AccountDto[]) => {
-    if (!organisationId) return;
-
-    const selectedOrganisation = jesOrganisations.find(org => org.id === organisationId);
-    if (!selectedOrganisation?.companyName) return;
-
-    setCurrentSelectedOption(selectedOrganisation);
-    props.pcrItem.organisationName = selectedOrganisation?.companyName;
-    props.onChange(props.pcrItem);
-  };
-
-  const renderLoading = () => (
-    <SimpleString>{getContent(x => x.pages.pcrAddPartnerAcademicOrganisation.loading)}</SimpleString>
-  );
+  const { isLoading, jesAccounts } = useJesSearchQuery(searchInputValue);
 
   return (
-    <Section>
-      <AddForm.Form
-        qa="addPartnerForm"
-        data={props.pcrItem}
-        isSaving={props.status === EditorStatus.Saving}
-        onSubmit={noop}
-      >
-        <AddForm.Fieldset heading={x => x.pcrAddPartnerLabels.jesOrganisationSectionTitle}>
-          <Section>
-            <ValidationMessage
-              messageType="info"
-              qa="jes-organisation-info"
-              message={x => x.pcrAddPartnerLabels.jesOrganisationInfo}
-            />
-          </Section>
-          <AddForm.Search
-            name="searchJesOrganisations"
-            qa="input-search-jes-organisations"
-            hint={x => x.pcrAddPartnerLabels.jesOrganisationSectionSubtitle}
-            value={() => searchInputValue}
-            update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
-            maxLength={160}
-          />
+    <PcrPage validationErrors={validationErrors}>
+      <Section>
+        <Form onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
+          <Fieldset>
+            <Legend>{getContent(x => x.pcrAddPartnerLabels.jesOrganisationSectionTitle)}</Legend>
+            <Section>
+              <ValidationMessage
+                messageType="info"
+                qa="jes-organisation-info"
+                message={x => x.pcrAddPartnerLabels.jesOrganisationInfo}
+              />
+            </Section>
+            <FormGroup>
+              <Hint id="hint-for-searchJesOrganisations">
+                {getContent(x => x.pcrAddPartnerLabels.jesOrganisationSectionSubtitle)}
+              </Hint>
+              <SearchInput
+                disabled={isFetching}
+                ariaDescribedBy="hint-for-searchJesOrganisations"
+                name="searchJesOrganisations"
+                value={searchInputValue}
+                onChange={searchValue => setSearchInputValue(searchValue?.trim() || "")}
+                maxLength={160}
+              />
+            </FormGroup>
+          </Fieldset>
 
           {isServer && (
-            <AddForm.Button qa="button-search-jes-organisations" styling="Primary" name="jesOrganisationSearch">
+            <Button data-qa="button-search-jes-organisations" name="jesOrganisationSearch">
               {getContent(x => x.pcrAddPartnerLabels.searchButton)}
-            </AddForm.Button>
+            </Button>
           )}
-        </AddForm.Fieldset>
-      </AddForm.Form>
-
-      <PartnerForm.Form
-        qa="jes-accounts-form"
-        data={props.pcrItem}
-        isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave(false)}
-        onChange={props.onChange}
-      >
-        <Loader
-          pending={getJesAccounts()}
-          renderLoading={() => renderLoading()}
-          render={(jesAccounts, loading) => {
-            const hasJesAccounts = jesAccounts.length > 0;
-            const hasEmptySearchValue = typeof searchInputValue === "string" && searchInputValue.length === 0;
-            const displayResultsLoading = hasEmptySearchValue && loading;
-
-            if (displayResultsLoading) {
-              renderLoading();
-            }
-
-            return hasJesAccounts ? (
-              <JesSearchResults
-                selected={currentSelectedOption}
-                jesAccounts={jesAccounts}
-                update={updateOrganisationName}
-                Form={PartnerForm}
-              />
-            ) : (
+          <Section>
+            {isLoading ? (
+              <SimpleString>{getContent(x => x.pages.pcrAddPartnerAcademicOrganisation.loading)}</SimpleString>
+            ) : jesAccounts?.length ? (
               <>
-                <SimpleString qa="no-jes-results-found">
-                  {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}
-                </SimpleString>
+                <H2>{getContent(x => x.pages.pcrAddPartnerAcademicOrganisation.jesSearchResults)}</H2>
+                <Fieldset data-qa="jesSearchResults">
+                  <RadioList name="organisationName" register={register}>
+                    {jesAccounts.map(option => (
+                      <Radio key={option.id} id={option.id} value={option.companyName} label={option.companyName} />
+                    ))}
+                  </RadioList>
+                </Fieldset>
               </>
-            );
-          }}
-        />
-        <PartnerForm.Fieldset qa="save-and-continue">
-          <PartnerForm.Submit>
-            <Content value={x => x.pcrItem.submitButton} />
-          </PartnerForm.Submit>
-          <PartnerForm.Button
-            qa="save-and-return-to-summary"
-            name="saveAndReturnToSummary"
-            onClick={() => props.onSave(true)}
-          >
-            <Content value={x => x.pcrItem.returnToSummaryButton} />
-          </PartnerForm.Button>
-        </PartnerForm.Fieldset>
-      </PartnerForm.Form>
-    </Section>
+            ) : (
+              <P data-qa="no-jes-results-found">
+                {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}
+              </P>
+            )}
+          </Section>
+          <Section>
+            <Fieldset>
+              <Button type="submit" {...registerButton("submit")} disabled={isFetching}>
+                {getContent(x => x.pcrItem.submitButton)}
+              </Button>
+              <Button type="submit" secondary {...registerButton("returnToSummary")} disabled={isFetching}>
+                {getContent(x => x.pcrItem.returnToSummaryButton)}
+              </Button>
+            </Fieldset>
+          </Section>
+        </Form>
+      </Section>
+    </PcrPage>
   );
 };

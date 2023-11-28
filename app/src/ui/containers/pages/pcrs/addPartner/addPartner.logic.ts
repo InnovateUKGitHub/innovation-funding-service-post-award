@@ -47,7 +47,7 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
 
   const pcrItem = mapPcrItemDto(
     pcrNode,
-    ["projectRole", "partnerType", "isCommercialWork", "organisationType", "participantSize"],
+    ["projectRole", "partnerType", "isCommercialWork", "organisationType", "organisationName", "participantSize"],
     {},
   );
 

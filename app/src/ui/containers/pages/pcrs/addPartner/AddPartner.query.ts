@@ -43,6 +43,9 @@ export const addPartnerWorkflowQuery = graphql`
                 Acc_ParticipantType__c {
                   value
                 }
+                Acc_OrganisationName__c {
+                  value
+                }
                 Acc_CommercialWork__c {
                   value
                 }

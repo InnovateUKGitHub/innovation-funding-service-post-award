@@ -10,7 +10,7 @@ import { getTypeWhitelist } from "./typeWhitelist";
 
 const sfSchemaFilePath = path.join("src", "gql", "schema", "sfSchema.gql");
 
-const getenv = (key: string): string => {
+const getEnv = (key: string): string => {
   const value = process.env[key];
   if (value) return value;
   throw new Error(`Failed to find environment variable ${key}.`);
@@ -25,15 +25,15 @@ const main = async () => {
   };
 
   const { accessToken, url } = await getSalesforceAccessToken({
-    clientId: getenv("SALESFORCE_CLIENT_ID"),
-    connectionUrl: getenv("SALESFORCE_CONNECTION_URL"),
-    currentUsername: getenv("SALESFORCE_USERNAME"),
+    clientId: getEnv("SALESFORCE_CLIENT_ID"),
+    connectionUrl: getEnv("SALESFORCE_CONNECTION_URL"),
+    currentUsername: getEnv("SALESFORCE_USERNAME"),
   });
 
   const api = new Api({
     accessToken,
     instanceUrl: url,
-    email: getenv("SALESFORCE_USERNAME"),
+    email: getEnv("SALESFORCE_USERNAME"),
   });
 
   const salesforceSchema = await introspectSchema(executor);
