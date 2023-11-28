@@ -117,6 +117,12 @@ export const claimDashboardQuery = graphql`
                 Acc_ProjectStatus__c {
                   value
                 }
+                Acc_CompetitionType__c {
+                  value
+                }
+                Acc_CurrentPeriodEndDate__c {
+                  value
+                }
                 Acc_CurrentPeriodEndDate__c {
                   value
                 }

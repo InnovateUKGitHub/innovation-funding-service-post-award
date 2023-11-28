@@ -113,6 +113,15 @@ export const allClaimsDashboardQuery = graphql`
                 Acc_ProjectStatus__c {
                   value
                 }
+                Acc_CompetitionType__c {
+                  value
+                }
+                Acc_CurrentPeriodEndDate__c {
+                  value
+                }
+                Acc_CurrentPeriodStartDate__c {
+                  value
+                }
                 Acc_ProjectParticipantsProject__r(
                   orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
                   first: 1000
