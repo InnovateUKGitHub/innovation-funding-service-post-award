@@ -1,98 +1,138 @@
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { EditorStatus } from "@ui/redux/constants/enums";
 import { PCRProjectLocation } from "@framework/constants/pcrConstants";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { useStores } from "@ui/redux/storesProvider";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { Option } from "@framework/dtos/option";
-import { Loader } from "@ui/components/bjss/loading";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { useContent } from "@ui/hooks/content.hook";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useLinks } from "../utils/useNextLink";
+import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
+import { PcrPage } from "../pcrPage";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useForm } from "react-hook-form";
+import { ProjectLocationSchema, projectLocationErrorMap, projectLocationSchema } from "./addPartner.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { createRegisterButton } from "@framework/util/registerButton";
+import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 
-interface InnerProps {
-  pcrProjectLocation: Option<PCRProjectLocation>[];
-}
+const pcrProjectLocation = [
+  {
+    active: true,
+    value: PCRProjectLocation.InsideTheUnitedKingdom,
+    label: "Inside the United Kingdom",
+  },
+  {
+    active: true,
+    value: PCRProjectLocation.OutsideTheUnitedKingdom,
+    label: "Outside the United Kingdom",
+  },
+];
 
-const Form = createTypedForm<PCRItemForPartnerAdditionDto>();
+export const ProjectLocationStep = () => {
+  const { getContent } = useContent();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
+    usePcrWorkflowContext();
 
-const InnerContainer = (
-  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps,
-) => {
-  const projectLocationOptions: SelectOption[] = props.pcrProjectLocation
-    .filter(x => x.active)
-    .map(x => ({ id: x.value.toString(), value: x.label }));
+  const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const selectedProjectLocationOption =
-    props.pcrItem.projectLocation &&
-    projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
+  const link = useLinks();
 
-  return (
-    <Section title={x => x.pcrAddPartnerLabels.projectLocationHeading}>
-      <Form.Form
-        qa="addPartnerForm"
-        data={props.pcrItem}
-        isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave(false)}
-        onChange={dto => props.onChange(dto)}
-      >
-        <Form.Fieldset>
-          <Form.Radio
-            name="projectLocation"
-            hint={x => x.pages.pcrAddPartnerProjectLocation.projectLocationGuidance}
-            options={projectLocationOptions}
-            inline={false}
-            value={() => selectedProjectLocationOption || undefined}
-            update={(x, option) => {
-              if (!option) return (x.projectLocation = PCRProjectLocation.Unknown);
-              x.projectLocation = parseInt(option.id, 10);
-            }}
-            validation={props.validator.projectLocation}
-          />
-        </Form.Fieldset>
-        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.townOrCityHeading}>
-          <Form.String
-            name="projectCity"
-            value={dto => dto.projectCity}
-            update={(x, val) => {
-              x.projectCity = val;
-            }}
-            validation={props.validator.projectCity}
-          />
-        </Form.Fieldset>
-        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.postcodeHeading}>
-          <Form.String
-            name="projectPostcode"
-            hint={x => x.pages.pcrAddPartnerProjectLocation.postcodeGuidance}
-            value={dto => dto.projectPostcode}
-            update={(x, val) => {
-              x.projectPostcode = val;
-            }}
-            validation={props.validator.projectPostcode}
-          />
-        </Form.Fieldset>
-        <Form.Fieldset qa="save-and-continue">
-          <Form.Submit>
-            <Content value={x => x.pcrItem.submitButton} />
-          </Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <Content value={x => x.pcrItem.returnToSummaryButton} />
-          </Form.Button>
-        </Form.Fieldset>
-      </Form.Form>
-    </Section>
-  );
-};
+  const { handleSubmit, register, formState, trigger, setValue } = useForm<ProjectLocationSchema>({
+    defaultValues: {
+      markedAsComplete: markedAsCompleteHasBeenChecked,
+      button_submit: "submit",
+      projectLocation: pcrItem.projectLocation.toString(),
+      projectPostcode: pcrItem.projectPostcode ?? "",
+      projectCity: pcrItem.projectCity ?? "",
+    },
+    resolver: zodResolver(projectLocationSchema, {
+      errorMap: projectLocationErrorMap,
+    }),
+  });
 
-export const ProjectLocationStep = (
-  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
-) => {
-  const stores = useStores();
+  const validationErrors = useRhfErrors(formState.errors);
+  useFormValidate(trigger);
+
+  const registerButton = createRegisterButton(setValue, "button_submit");
 
   return (
-    <Loader
-      pending={stores.projectChangeRequests.getPcrProjectLocations()}
-      render={x => <InnerContainer pcrProjectLocation={x} {...props} />}
-    />
+    <PcrPage validationErrors={validationErrors}>
+      <Section>
+        <H2>{getContent(x => x.pcrAddPartnerLabels.projectLocationHeading)}</H2>
+
+        <Form
+          onSubmit={handleSubmit(data =>
+            onSave({
+              data: {
+                ...data,
+                projectLocation: parseInt(data.projectLocation, 10),
+              },
+              context: link(data),
+            }),
+          )}
+        >
+          <Fieldset>
+            <FormGroup>
+              <Hint id="hint-for-project-location">
+                {getContent(x => x.pages.pcrAddPartnerProjectLocation.projectLocationGuidance)}
+              </Hint>
+              <RadioList
+                aria-describedby="hint-for-project-location"
+                id="project-location"
+                name="projectLocation"
+                register={register}
+              >
+                {pcrProjectLocation.map(option => (
+                  <Radio
+                    key={option.value.toString()}
+                    id={option.label}
+                    defaultChecked={option.value === pcrItem.projectLocation}
+                    value={option.value.toString()}
+                    label={option.label}
+                    disabled={isFetching}
+                  />
+                ))}
+              </RadioList>
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <FormGroup>
+              <Label bold htmlFor="project-city">
+                {getContent(x => x.pcrAddPartnerLabels.townOrCityHeading)}
+              </Label>
+              <TextInput id="project-city" {...register("projectCity")} disabled={isFetching} />
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <FormGroup>
+              <Label bold htmlFor="project-postcode">
+                {getContent(x => x.pcrAddPartnerLabels.postcodeHeading)}
+              </Label>
+              <Hint id="hint-for-project-postcode">
+                {getContent(x => x.pages.pcrAddPartnerProjectLocation.postcodeGuidance)}
+              </Hint>
+              <TextInput id="project-postcode" {...register("projectPostcode")} disabled={isFetching} />
+            </FormGroup>
+          </Fieldset>
+
+          <Fieldset>
+            <Button type="submit" {...registerButton("submit")} disabled={isFetching}>
+              {getContent(x => x.pcrItem.submitButton)}
+            </Button>
+
+            <Button type="submit" secondary {...registerButton("returnToSummary")} disabled={isFetching}>
+              {getContent(x => x.pcrItem.returnToSummaryButton)}
+            </Button>
+          </Fieldset>
+        </Form>
+      </Section>
+    </PcrPage>
   );
 };

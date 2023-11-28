@@ -49,6 +49,15 @@ export const addPartnerWorkflowQuery = graphql`
                 Acc_CommercialWork__c {
                   value
                 }
+                Acc_Location__c {
+                  value
+                }
+                Acc_ProjectPostcode__c {
+                  value
+                }
+                Acc_ProjectCity__c {
+                  value
+                }
                 RecordType {
                   Name {
                     value

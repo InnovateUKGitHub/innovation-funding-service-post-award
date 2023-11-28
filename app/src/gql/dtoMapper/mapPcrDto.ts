@@ -12,41 +12,47 @@ import {
   mapFromSalesforcePCRPartnerType,
   mapToPcrItemType,
 } from "@framework/mappers/pcr";
+import { PCRProjectLocationMapper } from "@framework/mappers/projectLocation";
 import { Clock } from "@framework/util/clock";
 
 // on Project_Change_Requests__r
 
 const clock = new Clock();
 
+// projectLocation: new PCRProjectLocationMapper().mapFromSalesforecPCRProjectLocation(pcrItem.Acc_Location__c),
+
 export type PcrNode = GQL.PartialNode<{
   Id: GQL.Maybe<string>;
   Acc_AdditionalNumberofMonths__c: GQL.Value<number>;
   Acc_Comments__c: GQL.Value<string>;
-  Acc_ExistingPartnerName__c: GQL.Value<string>;
-  Acc_OtherFunding__c: GQL.Value<boolean>;
   Acc_CommercialWork__c: GQL.Value<boolean>;
+  Acc_ExistingPartnerName__c: GQL.Value<string>;
   Acc_ExistingProjectDuration__c: GQL.Value<number>;
-  Acc_NewOrganisationName__c: GQL.Value<string>;
-  Acc_Reasoning__c: GQL.Value<string>;
-  Acc_RequestHeader__c: GQL.Value<string>;
-  Acc_RequestNumber__c: GQL.Value<number>;
+  Acc_GrantMovingOverFinancialYear__c: GQL.Value<number>;
+  Acc_Location__c: GQL.Value<string>;
   Acc_MarkedasComplete__c: GQL.Value<string>;
+  Acc_NewOrganisationName__c: GQL.Value<string>;
+  Acc_NewProjectSummary__c: GQL.Value<string>;
+  Acc_NewPublicDescription__c: GQL.Value<string>;
   Acc_OrganisationName__c: GQL.Value<string>;
-  Acc_Project_Participant__c: GQL.Value<string>;
+  Acc_OtherFunding__c: GQL.Value<boolean>;
   Acc_ParticipantSize__c: GQL.Value<string>;
   Acc_ParticipantType__c: GQL.Value<string>;
-  Acc_PublicDescriptionSnapshot__c: GQL.Value<string>;
-  Acc_NewPublicDescription__c: GQL.Value<string>;
-  Acc_NewProjectSummary__c: GQL.Value<string>;
-  Acc_ProjectSummarySnapshot__c: GQL.Value<string>;
-  Acc_GrantMovingOverFinancialYear__c: GQL.Value<number>;
-  Acc_RemovalPeriod__c: GQL.Value<number>;
-  CreatedDate: GQL.Value<string>;
-  Acc_Status__c: GQL.Value<string>;
-  Acc_SuspensionStarts__c: GQL.Value<string>;
-  Acc_SuspensionEnds__c: GQL.Value<string>;
   Acc_Project__c: GQL.Value<string>;
+  Acc_ProjectCity__c: GQL.Value<string>;
+  Acc_Project_Participant__c: GQL.Value<string>;
+  Acc_ProjectPostcode__c: GQL.Value<string>;
   Acc_ProjectRole__c: GQL.Value<string>;
+  Acc_ProjectSummarySnapshot__c: GQL.Value<string>;
+  Acc_PublicDescriptionSnapshot__c: GQL.Value<string>;
+  Acc_Reasoning__c: GQL.Value<string>;
+  Acc_RemovalPeriod__c: GQL.Value<number>;
+  Acc_RequestHeader__c: GQL.Value<string>;
+  Acc_RequestNumber__c: GQL.Value<number>;
+  Acc_Status__c: GQL.Value<string>;
+  Acc_SuspensionEnds__c: GQL.Value<string>;
+  Acc_SuspensionStarts__c: GQL.Value<string>;
+  CreatedDate: GQL.Value<string>;
   LastModifiedDate: GQL.Value<string>;
   Loan_Duration__c: GQL.Value<string>;
   Loan_ExtensionPeriod__c: GQL.Value<string>;
@@ -105,6 +111,9 @@ export type PcrItemDtoMapping = Pick<
   | "participantSize"
   | "partnerType"
   | "projectDurationSnapshot"
+  | "projectCity"
+  | "projectLocation"
+  | "projectPostcode"
   | "projectSummary"
   | "projectSummarySnapshot"
   | "projectId"
@@ -214,11 +223,20 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   partnerType(node) {
     return mapFromSalesforcePCRPartnerType(node?.Acc_ParticipantType__c?.value ?? "");
   },
+  projectCity(node) {
+    return node?.Acc_ProjectCity__c?.value ?? null;
+  },
   projectDurationSnapshot(node) {
     return node?.Acc_ExistingProjectDuration__c?.value ?? 0;
   },
   projectId(node) {
     return (node?.Acc_Project__c?.value ?? "unknown-project-id") as ProjectId;
+  },
+  projectLocation(node) {
+    return new PCRProjectLocationMapper().mapFromSalesforcePCRProjectLocation(node?.Acc_Location__c?.value);
+  },
+  projectPostcode(node) {
+    return node?.Acc_ProjectPostcode__c?.value ?? null;
   },
   projectRole(node) {
     return mapFromSalesforcePCRProjectRole(node?.Acc_ProjectRole__c?.value ?? "");

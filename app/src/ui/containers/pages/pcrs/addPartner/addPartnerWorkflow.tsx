@@ -59,7 +59,7 @@ export const getAddPartnerWorkflow = (
         displayName: "Project location",
         stepNumber: 6,
         validation: val => val.pcr,
-        stepRender: ProjectLocationStep,
+        migratedStepRender: ProjectLocationStep,
       },
       {
         stepName: PCRStepType.financeContactStep,
