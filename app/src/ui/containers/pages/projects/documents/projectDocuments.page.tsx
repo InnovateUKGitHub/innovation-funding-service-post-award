@@ -86,12 +86,11 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   const allErrors = useZodErrors<z.output<ProjectLevelUploadSchemaType>>(setError, formState.errors);
   const defaults = useServerInput<z.output<ProjectLevelUploadSchemaType>>();
 
-  const onChange = (dto: z.output<ProjectLevelUploadSchemaType>) => {
+  const onChange = (dto: z.output<ProjectLevelUploadSchemaType>) =>
     onUploadUpdate({
       data: dto,
       context: dto,
     });
-  };
 
   const onDelete = (doc: DocumentSummaryDto | PartnerDocumentSummaryDtoGql) => {
     if ("partnerId" in doc) {
@@ -127,7 +126,7 @@ const ProjectDocumentsPage = (props: ProjectDocumentPageParams & BaseProps) => {
   return (
     <Page
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
+      backLink={<ProjectBackLink projectId={project.id} disabled={disabled} />}
       projectStatus={project.status}
       validationErrors={allErrors}
       apiError={onUploadApiError ?? onDeleteApiError}

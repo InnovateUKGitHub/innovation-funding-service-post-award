@@ -1,11 +1,16 @@
-import { IRoutes } from "@ui/routing/routeConfig";
 import { BackLink } from "../../../atoms/Links/links";
+import { useRoutes } from "@ui/redux/routesProvider";
 
 interface Props {
   projectId: ProjectId;
-  routes: IRoutes;
+  disabled?: boolean;
 }
 
-export const ProjectBackLink = (props: Props) => (
-  <BackLink route={props.routes.projectOverview.getLink({ projectId: props.projectId })}>Back to project</BackLink>
-);
+export const ProjectBackLink = ({ projectId, disabled }: Props) => {
+  const routes = useRoutes();
+  return (
+    <BackLink route={routes.projectOverview.getLink({ projectId })} disabled={disabled}>
+      Back to project
+    </BackLink>
+  );
+};

@@ -87,7 +87,11 @@ export const FilesStep = ({
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section>
-        <Form encType="multipart/form-data" onSubmit={handleDocumentSubmit(data => onFileUpload({ data }))}>
+        <Form
+          encType="multipart/form-data"
+          onSubmit={handleDocumentSubmit(data => onFileUpload({ data }))}
+          aria-disabled={disabled}
+        >
           <Fieldset>
             <Legend>{getContent(heading)}</Legend>
             {guidance && <Content markdown value={guidance} />}

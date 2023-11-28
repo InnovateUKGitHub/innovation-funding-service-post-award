@@ -34,8 +34,8 @@ export const useSetupBankStatementActions = (
     apiError: onUploadApiError,
     isProcessing: onUploadFetching,
   } = useOnUpload({
-    onSuccess() {
-      refresh();
+    async onSuccess() {
+      await refresh();
       reset();
     },
   });
@@ -46,16 +46,15 @@ export const useSetupBankStatementActions = (
     isProcessing: onDeleteFetching,
   } = useOnDelete({ onSuccess: refresh });
 
-  const onChange = (dto: z.output<UploadBankStatementSchemaType>) => {
+  const onChange = (dto: z.output<UploadBankStatementSchemaType>) =>
     onUploadUpdate({
       data: dto,
       context: dto,
     });
-  };
 
   const onDelete = (doc: DocumentSummaryDto | PartnerDocumentSummaryDtoGql) => {
     if ("partnerId" in doc) {
-      onDeleteUpdate({
+      return onDeleteUpdate({
         data: {
           form: FormTypes.PartnerLevelDelete,
           documentId: doc.id,
@@ -65,7 +64,7 @@ export const useSetupBankStatementActions = (
         context: doc,
       });
     } else {
-      onDeleteUpdate({
+      return onDeleteUpdate({
         data: { form: FormTypes.ProjectLevelDelete, documentId: doc.id, projectId },
         context: doc,
       });

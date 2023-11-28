@@ -149,8 +149,6 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
   const { project, partners, contacts } = useProjectDetailsQuery(props.projectId);
   const { isLoans, isKTP } = checkProjectCompetition(project.competitionType);
 
-  const routes = useRoutes();
-
   // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
   const competitionName = partners[0].competitionName;
 
@@ -170,7 +168,7 @@ const ProjectDetailsPage = (props: Props & BaseProps) => {
 
   return (
     <Page
-      backLink={<ProjectBackLink projectId={project.id} routes={routes} />}
+      backLink={<ProjectBackLink projectId={project.id} />}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       projectStatus={project.status}
     >

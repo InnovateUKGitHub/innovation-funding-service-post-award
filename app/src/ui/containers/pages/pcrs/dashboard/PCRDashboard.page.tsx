@@ -129,7 +129,7 @@ const PCRsDashboardPage = (props: PCRDashboardParams & BaseProps) => {
 
   return (
     <Page
-      backLink={<ProjectBackLink projectId={project.id} routes={props.routes} />}
+      backLink={<ProjectBackLink projectId={project.id} />}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       projectStatus={project.status}
     >

@@ -24,7 +24,7 @@ const ForecastDashboardPage = (props: Params & BaseProps) => {
   return (
     <Page
       pageTitle={<Title {...project} />}
-      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
+      backLink={<ProjectBackLink projectId={project.id} />}
       projectStatus={project.status}
     >
       <Section qa="project-forecasts">

@@ -93,19 +93,17 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
   const allErrors = useZodErrors<z.output<ClaimLevelUploadSchemaType>>(setError, formState.errors);
   const defaults = useServerInput<z.output<ClaimLevelUploadSchemaType>>();
 
-  const onChange = (dto: z.output<ClaimLevelUploadSchemaType>) => {
+  const onChange = (dto: z.output<ClaimLevelUploadSchemaType>) =>
     onUploadUpdate({
       data: dto,
       context: dto,
     });
-  };
 
-  const onDelete = (doc: DocumentSummaryDto) => {
+  const onDelete = (doc: DocumentSummaryDto) =>
     onDeleteUpdate({
       data: { form: FormTypes.ClaimLevelDelete, documentId: doc.id, projectId, partnerId, periodId },
       context: doc,
     });
-  };
 
   // If Impact Management is enabled, change the set of document upload options
   const documentDropdownOptions = useValidDocumentDropdownOptions(
@@ -126,7 +124,7 @@ const ClaimDocumentsPage = (props: ClaimDocumentsPageParams & BaseProps) => {
     <Page
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       backLink={
-        <BackLink route={props.routes.prepareClaim.getLink({ partnerId, periodId, projectId })}>
+        <BackLink route={props.routes.prepareClaim.getLink({ partnerId, periodId, projectId })} disabled={disabled}>
           {getContent(x => x.pages.claimDocuments.backLink)}
         </BackLink>
       }

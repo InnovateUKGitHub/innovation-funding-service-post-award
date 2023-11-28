@@ -65,7 +65,7 @@ const ProjectSetupBankStatementComponent = (props: BaseProps & ProjectSetupBankS
   return (
     <Page
       backLink={
-        <BackLink route={projectSetupRoute}>
+        <BackLink route={projectSetupRoute} disabled={isFetching}>
           <Content value={x => x.pages.projectSetupBankStatement.backLink} />
         </BackLink>
       }

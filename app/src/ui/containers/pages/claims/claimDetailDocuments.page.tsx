@@ -75,32 +75,31 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
   const {
     onUpdate: onUploadUpdate,
     apiError: onUploadApiError,
-    isFetching: onUploadFetching,
+    isProcessing: onUploadProcessing,
   } = useOnUpload({
-    onSuccess() {
-      refresh();
+    async onSuccess() {
+      await refresh();
       reset();
     },
   });
   const {
     onUpdate: onDeleteUpdate,
     apiError: onDeleteApiError,
-    isFetching: onDeleteFetching,
+    isProcessing: onDeleteProcessing,
   } = useOnDelete({ onSuccess: refresh });
 
-  const isFetching = onUploadFetching || onDeleteFetching;
+  const disabled = onUploadProcessing || onDeleteProcessing;
 
   // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
   const allErrors = useZodErrors<z.output<ClaimDetailLevelUploadSchemaType>>(setError, formState.errors);
 
-  const onChange = (dto: z.output<ClaimDetailLevelUploadSchemaType>) => {
+  const onChange = (dto: z.output<ClaimDetailLevelUploadSchemaType>) =>
     onUploadUpdate({
       data: dto,
       context: dto,
     });
-  };
 
-  const onDelete = (doc: DocumentSummaryDto) => {
+  const onDelete = (doc: DocumentSummaryDto) =>
     onDeleteUpdate({
       data: {
         form: FormTypes.ClaimDetailLevelDelete,
@@ -112,7 +111,6 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
       },
       context: doc,
     });
-  };
 
   return (
     <Page
@@ -125,6 +123,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
             periodId,
             costCategoryId,
           })}
+          disabled={disabled}
         >
           <Content value={x => x.documentMessages.backLink({ previousPage: costCategory.name })} />
         </BackLink>
@@ -160,7 +159,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
           onSubmit={handleSubmit(onChange)}
           method="POST"
           encType="multipart/form-data"
-          aria-disabled={isFetching}
+          aria-disabled={disabled}
         >
           <Fieldset>
             {/* Discriminate between upload button/delete button */}
@@ -174,7 +173,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
             <FormGroup hasError={!!getFieldState("files").error}>
               <ValidationError error={getFieldState("files").error} />
               <FileInput
-                disabled={isFetching}
+                disabled={disabled}
                 id="files"
                 hasError={!!getFieldState("files").error}
                 multiple
@@ -183,7 +182,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
             </FormGroup>
           </Fieldset>
           <Fieldset>
-            <Button disabled={isFetching} name="button_default" styling="Secondary" type="submit">
+            <Button disabled={disabled} name="button_default" styling="Secondary" type="submit">
               {getContent(x => x.documentMessages.uploadDocuments)}
             </Button>
           </Fieldset>
@@ -201,6 +200,7 @@ const ClaimDetailDocumentsPage = (props: ClaimDetailDocumentsPageParams & BasePr
           onRemove={onDelete}
           documents={claimDetailDocuments}
           formType={FormTypes.ClaimDetailLevelDelete}
+          disabled={disabled}
         />
       </Section>
     </Page>

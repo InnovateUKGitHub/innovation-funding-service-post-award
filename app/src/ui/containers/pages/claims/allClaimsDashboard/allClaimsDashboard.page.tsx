@@ -79,7 +79,7 @@ const AllClaimsDashboardPage = (props: AllClaimsDashboardParams & BaseProps) => 
   return (
     <Page
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
-      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
+      backLink={<ProjectBackLink projectId={project.id} />}
       projectStatus={project.status}
       partnerStatus={isLeadPartnerFc ? leadPartner.partnerStatus : undefined}
     >

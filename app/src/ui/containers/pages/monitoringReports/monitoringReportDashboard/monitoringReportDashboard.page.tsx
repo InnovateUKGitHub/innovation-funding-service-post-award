@@ -30,7 +30,7 @@ const MonitoringReportDashboard = (props: MonitoringReportDashboardParams & Base
 
   return (
     <Page
-      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
+      backLink={<ProjectBackLink projectId={project.id} />}
       pageTitle={<Title projectNumber={project.projectNumber} title={project.title} />}
       projectStatus={project.status}
     >

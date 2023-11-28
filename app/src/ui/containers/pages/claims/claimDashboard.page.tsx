@@ -65,7 +65,7 @@ const ClaimDashboardComponent = (props: BaseProps & ClaimDashboardPageParams) =>
   return (
     <Page
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
-      backLink={<ProjectBackLink routes={props.routes} projectId={project.id} />}
+      backLink={<ProjectBackLink projectId={project.id} />}
       projectStatus={project.status}
       partnerStatus={partner.partnerStatus}
     >
