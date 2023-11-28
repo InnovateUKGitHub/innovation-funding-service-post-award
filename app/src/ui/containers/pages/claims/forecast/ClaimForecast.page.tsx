@@ -89,7 +89,9 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
           )}
           <ForecastAgreedCostWarning
             isFc={project.roles.isFc}
-            costCategories={tableData.costCategories.filter(x => x.difference > 0).map(x => x.costCategoryName)}
+            costCategories={tableData.costCategories
+              .filter(x => x.greaterThanAllocatedCosts)
+              .map(x => x.costCategoryName)}
           />
           {partner.overheadRate !== null && (
             <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>

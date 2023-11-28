@@ -120,7 +120,7 @@ const ForecastTable = (props: ForecastTableProps) => {
             <TR
               data-qa={`forecast-${costCategory.costCategoryId}-row`}
               key={costCategory.costCategoryId}
-              hasWarning={costCategory.difference > 0}
+              hasWarning={costCategory.greaterThanAllocatedCosts}
             >
               <TD className={mkstickcol("left", 1)}>{costCategory.costCategoryName}</TD>
               {costCategory.profiles.map(profile => {
