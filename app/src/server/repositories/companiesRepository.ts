@@ -48,8 +48,9 @@ export class CompaniesHouse extends CompaniesHouseBase {
     return companies.filter(x => {
       const hasCompanyNumber = !!x.company_number;
       const isValidCompany = allowedCompanies.includes(x.company_status);
+      const isValidCharity = x.company_type === "charitable-incorporated-organisation";
 
-      return hasCompanyNumber && isValidCompany;
+      return hasCompanyNumber && (isValidCompany || isValidCharity);
     });
   }
 }

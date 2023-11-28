@@ -15,6 +15,7 @@ type ICompanyHouseDescriptionIdentifier =
   | "voluntary-arrangement";
 
 export type ICompanyHouseCompanyType =
+  | "charitable-incorporated-organisation"
   | "assurance-company"
   | "converted-or-closed"
   | "eeig"
