@@ -10,10 +10,12 @@ import { validCurrencyRegex } from "@framework/util/numberHelper";
 
 interface OnForecastSubmitProps {
   periodId: PeriodId;
+  isPm: boolean;
 }
 
 export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaType>>({
   periodId,
+  isPm,
 }: OnForecastSubmitProps) => {
   const navigate = useNavigate();
   const routes = useRoutes();
@@ -48,7 +50,11 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
           navigate(routes.claimSummary.getLink({ projectId, partnerId, periodId }).path);
           break;
         case FormTypes.ClaimForecastSaveAndQuit:
-          navigate(routes.forecastDashboard.getLink({ projectId }).path);
+          if (isPm) {
+            navigate(routes.allClaimsDashboard.getLink({ projectId }).path);
+          } else {
+            navigate(routes.claimsDashboard.getLink({ projectId, partnerId }).path);
+          }
           break;
       }
     },

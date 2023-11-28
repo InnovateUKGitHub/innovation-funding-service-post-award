@@ -23,6 +23,7 @@ import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
 import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { useMapToForecastTableDto } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useMapToForecastTableDto";
 import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
+import { getAuthRoles } from "@framework/types/authorisation";
 
 export interface ClaimForecastParams {
   projectId: ProjectId;
@@ -38,6 +39,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
   const { project, partner } = data;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
+  const { isPm } = getAuthRoles(project.roles);
 
   const { errorMap, schema } = getForecastTableValidation(data);
   const { register, handleSubmit, watch, control, formState, getFieldState, setValue, setError } = useForm<
@@ -53,7 +55,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
 
   const tableData = useMapToForecastTableDto({ ...data, clientProfiles: watch("profile") });
 
-  const { onUpdate, isFetching } = useOnForecastSubmit({ periodId });
+  const { onUpdate, isFetching } = useOnForecastSubmit({ periodId, isPm });
 
   const onSubmitUpdate = (dto: z.output<ForecastTableSchemaType>) => {
     onUpdate({
@@ -109,7 +111,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
             value={FormTypes.ClaimForecastSaveAndContinue}
             disabled={isFetching}
           >
-            Continue to summary
+            {getContent(x => x.pages.claimForecast.buttonContinueToSummary)}
           </SubmitButton>
           <SubmitButton
             onClick={() => setValue("form", FormTypes.ClaimForecastSaveAndQuit)}
@@ -118,7 +120,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
             value={FormTypes.ClaimForecastSaveAndQuit}
             disabled={isFetching}
           >
-            Save and return to claims
+            {getContent(x => x.pages.claimForecast.buttonSaveAndReturn)}
           </SubmitButton>
         </Fieldset>
       </Form>
