@@ -8,7 +8,6 @@ import { mapToClaimDetailsWithLineItemsDtoArray } from "@gql/dtoMapper/mapClaimD
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { editClaimLineItemsQuery } from "./EditClaimLineItems.query";
 import { EditClaimLineItemsQuery } from "./__generated__/EditClaimLineItemsQuery.graphql";
-import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 
 export const useEditClaimLineItemsData = (
   projectId: ProjectId,
@@ -24,7 +23,7 @@ export const useEditClaimLineItemsData = (
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);
   const claimsGql = data?.salesforce?.uiapi?.query?.Acc_Claims__c?.edges ?? [];
 
-  const project = mapToProjectDto(projectNode, ["id", "title", "competitionType", "projectNumber", "isNonFec"]);
+  const project = mapToProjectDto(projectNode, ["id", "title", "competitionType", "projectNumber"]);
 
   const profileGql = data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? [];
 
@@ -78,13 +77,12 @@ export const useEditClaimLineItemsData = (
     value: 0,
   };
 
-  const claimOverrides = mapToClaimOverrides(data?.salesforce?.uiapi?.query?.Acc_Profile__c?.edges ?? []);
   return {
     project,
     claimDetails,
-    claimOverrides,
     forecastDetail,
     costCategories,
     documents,
+    fragmentRef: data?.salesforce?.uiapi,
   };
 };

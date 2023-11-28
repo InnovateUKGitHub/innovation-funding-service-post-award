@@ -1,5 +1,8 @@
 import { useFragment } from "react-relay";
-import { AwardRateOverridesMessage as AwardRateOverridesMessageComponent } from "./AwardRateOverridesMessage";
+import {
+  AwardRateOverrideMessageProps,
+  AwardRateOverridesMessage as AwardRateOverridesMessageComponent,
+} from "./AwardRateOverridesMessage";
 import {
   AwardRateOverridesMessageFragment$data,
   AwardRateOverridesMessageFragment$key,
@@ -11,7 +14,9 @@ import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 
-export const AwardRateOverridesMessage = () => {
+export const AwardRateOverridesMessage = (
+  props: Pick<AwardRateOverrideMessageProps, "currentPeriod" | "currentCostCategoryId">,
+) => {
   const fragmentRef = useFragmentContext();
 
   if (!isValidFragmentKey<AwardRateOverridesMessageFragment$key>(fragmentRef, "AwardRateOverridesMessageFragment")) {
@@ -25,5 +30,5 @@ export const AwardRateOverridesMessage = () => {
     "isNonFec",
   ]);
 
-  return <AwardRateOverridesMessageComponent {...claimOverrides} isNonFec={isNonFec} />;
+  return <AwardRateOverridesMessageComponent {...props} claimOverrides={claimOverrides} isNonFec={isNonFec} />;
 };

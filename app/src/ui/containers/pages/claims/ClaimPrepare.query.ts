@@ -5,6 +5,7 @@ export const claimPrepareQuery = graphql`
       uiapi {
         ...StatusChangesLogsFragment
         ...TitleFragment
+        ...AwardRateOverridesMessageFragment
         query {
           Acc_Profile__c(
             where: {
@@ -16,7 +17,6 @@ export const claimPrepareQuery = graphql`
                     { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
                   ]
                 }
-                { Acc_CostCategory__c: { ne: null } }
               ]
             }
             first: 2000

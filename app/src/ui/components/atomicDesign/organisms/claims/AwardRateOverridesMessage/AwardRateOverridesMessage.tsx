@@ -8,19 +8,21 @@ export enum AwardRateOverrideLabel {
   PROJECT = "project",
 }
 
+interface AwardRateOverrideMessageProps {
+  claimOverrides?: ClaimOverrideRateDto;
+  currentPeriod?: number;
+  currentCostCategoryId?: string;
+  isNonFec: boolean;
+  overrideLabel?: AwardRateOverrideLabel;
+}
+
 const AwardRateOverridesMessage = ({
   claimOverrides,
   currentPeriod,
   currentCostCategoryId,
   isNonFec,
   overrideLabel = AwardRateOverrideLabel.CLAIM,
-}: {
-  claimOverrides?: ClaimOverrideRateDto;
-  currentPeriod?: number;
-  currentCostCategoryId?: string;
-  isNonFec: boolean;
-  overrideLabel?: AwardRateOverrideLabel;
-}) => {
+}: AwardRateOverrideMessageProps) => {
   const getIntroductionMessage = (type?: AwardRateOverrideType) => {
     switch (type) {
       case AwardRateOverrideType.BY_COST_CATEGORY:
@@ -115,4 +117,4 @@ const AwardRateOverridesMessage = ({
   );
 };
 
-export { AwardRateOverridesMessage };
+export { AwardRateOverridesMessage, AwardRateOverrideMessageProps };

@@ -6,7 +6,7 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
 import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
-import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
+import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
 import { EditorStatus } from "@ui/redux/constants/enums";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
@@ -102,8 +102,12 @@ const EditClaimLineItemsComponent = (
 ) => {
   const { isClient: showAddRemove } = useMounted();
 
-  const { project, claimDetails, claimOverrides, forecastDetail, costCategories, documents } =
-    useEditClaimLineItemsData(props.projectId, props.partnerId, props.periodId, props.costCategoryId);
+  const { project, claimDetails, forecastDetail, costCategories, documents, fragmentRef } = useEditClaimLineItemsData(
+    props.projectId,
+    props.partnerId,
+    props.periodId,
+    props.costCategoryId,
+  );
 
   const { editor } = props;
 
@@ -141,12 +145,9 @@ const EditClaimLineItemsComponent = (
       error={editor.error}
       validator={editor.validator}
       pageTitle={<Title title={project.title} projectNumber={project.projectNumber} heading={costCategory.name} />}
+      fragmentRef={fragmentRef}
     >
-      <AwardRateOverridesMessage
-        claimOverrides={claimOverrides}
-        currentCostCategoryId={costCategory.id}
-        isNonFec={project.isNonFec}
-      />
+      <AwardRateOverridesMessage currentCostCategoryId={costCategory.id} />
       {renderNegativeClaimWarning(claimDetails)}
       {(!claimDetails.isAuthor || claimDetails.lineItems.some(x => !x.isAuthor)) && <DeleteByEnteringZero />}
 

@@ -140,7 +140,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
           title={<Content value={x => x.pages.claimPrepareSummary.costsTitle} />}
           qa="costs-to-be-claimed-summary"
         >
-          <AwardRateOverridesMessage />
+          <AwardRateOverridesMessage currentPeriod={props.periodId} />
 
           <SummaryList qa="costs-to-be-claimed-summary-list">
             <SummaryListItem

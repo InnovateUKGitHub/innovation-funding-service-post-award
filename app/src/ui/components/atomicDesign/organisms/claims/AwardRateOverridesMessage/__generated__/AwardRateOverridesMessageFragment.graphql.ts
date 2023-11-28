@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<acf210eb19bc320151aab72a393de807>>
+ * @generated SignedSource<<afd2be3b6dec8b0ea8f3266d3f76c14d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -219,15 +219,6 @@ return {
                           }
                         ]
                       }
-                    },
-                    {
-                      "kind": "Literal",
-                      "name": "and.2",
-                      "value": {
-                        "Acc_CostCategory__c": {
-                          "ne": null
-                        }
-                      }
                     }
                   ],
                   "kind": "ListValue",
@@ -406,6 +397,6 @@ return {
 };
 })();
 
-(node as any).hash = "9ebe04ec37326617f3f1314908d76993";
+(node as any).hash = "28a9595bb28500fb44aec98b6e41c536";
 
 export default node;

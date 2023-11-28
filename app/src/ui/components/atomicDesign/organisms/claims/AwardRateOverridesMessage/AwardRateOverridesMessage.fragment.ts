@@ -22,7 +22,6 @@ export const awardRateOverridesMessageFragment = graphql`
                 { RecordType: { DeveloperName: { eq: "Total_Cost_Category" } } }
               ]
             }
-            { Acc_CostCategory__c: { ne: null } }
           ]
         }
         first: 2000

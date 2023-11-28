@@ -8,7 +8,7 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
+import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
 import { Page } from "@ui/components/bjss/Page/page";
@@ -55,7 +55,7 @@ const PrepareComponent = (props: BaseProps & PrepareClaimParams) => {
       {isNonEditable && (
         <ValidationMessage message={getContent(x => x.pages.claimPrepare.readonlyMessage)} messageType="info" />
       )}
-      <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
+      <AwardRateOverridesMessage currentPeriod={props.periodId} />
       {data.claim.isFinalClaim && <ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />}
 
       <Section title={<ClaimPeriodDate claim={data.claim} />}>

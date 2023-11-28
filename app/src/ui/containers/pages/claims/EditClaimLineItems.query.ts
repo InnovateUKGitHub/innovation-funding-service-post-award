@@ -12,6 +12,7 @@ export const editClaimLineItemsQuery = graphql`
     }
     salesforce {
       uiapi {
+        ...AwardRateOverridesMessageFragment
         query {
           Acc_Profile__c(
             where: {
@@ -178,9 +179,6 @@ export const editClaimLineItemsQuery = graphql`
             edges {
               node {
                 Id
-                Acc_NonFEC__c {
-                  value
-                }
                 Acc_ProjectNumber__c {
                   value
                 }
