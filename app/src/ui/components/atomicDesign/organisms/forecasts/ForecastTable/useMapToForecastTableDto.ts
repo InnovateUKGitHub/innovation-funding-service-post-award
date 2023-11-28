@@ -17,7 +17,14 @@ export interface MapToForecastTableProps {
   partner: Pick<PartnerDtoGql, "overheadRate">;
   claims: Pick<
     ClaimDto,
-    "periodId" | "iarStatus" | "isIarRequired" | "isApproved" | "status" | "periodEndDate" | "isFinalClaim"
+    | "periodId"
+    | "iarStatus"
+    | "isIarRequired"
+    | "isApproved"
+    | "status"
+    | "periodStartDate"
+    | "periodEndDate"
+    | "isFinalClaim"
   >[];
   claimDetails: ClaimDetailInfo[];
   costCategories: GOLCostDto[];
@@ -45,7 +52,8 @@ interface CostCategoryCellData extends BaseCellData {
 }
 
 interface TotalCellData extends BaseCellData {
-  month: Date;
+  periodStart: Date;
+  periodEnd: Date;
   iarDue: boolean;
 }
 
@@ -158,7 +166,8 @@ const mapToForecastTableDto = ({
       periodId: i,
       value: 0,
       iarDue: !!claim?.isIarRequired,
-      month: claim?.periodEndDate ?? new Date(NaN),
+      periodStart: claim?.periodStartDate ?? new Date(NaN),
+      periodEnd: claim?.periodEndDate ?? new Date(NaN),
       rhc: drawRhc,
     });
   }

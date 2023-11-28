@@ -12,23 +12,38 @@ interface DateProps extends BaseDateProps {
   value: DateConvertible;
 }
 
+interface RangeProps extends BaseDateProps {
+  start: DateConvertible;
+  end: DateConvertible;
+  className?: string;
+}
+
 const render = ({ value, invalidDisplay, nullDisplay }: DateProps, format: DateFormat) => {
   const date = formatDate(value, format, invalidDisplay, nullDisplay);
   return date ? <span>{date}</span> : null;
 };
 
-const renderDateRange = (start: DateTime | null, end: DateTime | null, format: string, isCondensed = false) => {
-  if (!start || !start.isValid || !end || !end.isValid) {
-    return null;
-  }
+const renderDateRange = (
+  { nullDisplay = null, invalidDisplay = null, className }: RangeProps,
+  start: DateTime | null,
+  end: DateTime | null,
+  format: string,
+  isCondensed = false,
+) => {
+  if (start === null || end === null) return <>{nullDisplay}</>;
+  if (!start || !start.isValid || !end || !end.isValid) return <>{invalidDisplay}</>;
 
   if (start.month === end.month && start.year === end.year && isCondensed) {
-    return <span style={{ whiteSpace: "nowrap" }}>{end.toFormat(format + " yyyy")}</span>;
+    return (
+      <span className={className} style={{ whiteSpace: "nowrap" }}>
+        {end.toFormat(format + " yyyy")}
+      </span>
+    );
   }
 
   if (start.year === end.year) {
     return (
-      <span>
+      <span className={className}>
         <span style={{ whiteSpace: "nowrap" }}>{start.toFormat(format)} to </span>
         <span style={{ whiteSpace: "nowrap" }}>{end.toFormat(format + " yyyy")}</span>
       </span>
@@ -36,23 +51,23 @@ const renderDateRange = (start: DateTime | null, end: DateTime | null, format: s
   }
 
   return (
-    <span>
+    <span className={className}>
       <span style={{ whiteSpace: "nowrap" }}>{start.toFormat(format + " yyyy")} to </span>
       <span style={{ whiteSpace: "nowrap" }}>{end.toFormat(format + " yyyy")}</span>
     </span>
   );
 };
 
-export const CondensedDateRange: React.FunctionComponent<{ start: DateConvertible; end: DateConvertible }> = props => {
-  return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "MMM", true);
+export const CondensedDateRange: React.FunctionComponent<RangeProps> = props => {
+  return renderDateRange(props, convertDateAndTime(props.start), convertDateAndTime(props.end), "MMM", true);
 };
 
-export const LongDateRange: React.FunctionComponent<{ start: DateConvertible; end: DateConvertible }> = props => {
-  return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMMM");
+export const LongDateRange: React.FunctionComponent<RangeProps> = props => {
+  return renderDateRange(props, convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMMM");
 };
 
-export const ShortDateRange: React.FunctionComponent<{ start: DateConvertible; end: DateConvertible }> = props => {
-  return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMM");
+export const ShortDateRange: React.FunctionComponent<RangeProps> = props => {
+  return renderDateRange(props, convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMM");
 };
 
 export const ShortMonth: React.FunctionComponent<DateProps> = props => {

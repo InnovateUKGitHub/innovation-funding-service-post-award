@@ -29,7 +29,16 @@ const useClaimForecastData = ({
   const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate"], {});
   const claims = mapToClaimDtoArray(
     data.salesforce.uiapi.query.Acc_Claims__c?.edges ?? [],
-    ["periodId", "status", "iarStatus", "isIarRequired", "isApproved", "periodEndDate", "isFinalClaim"],
+    [
+      "periodId",
+      "status",
+      "iarStatus",
+      "isIarRequired",
+      "isApproved",
+      "periodStartDate",
+      "periodEndDate",
+      "isFinalClaim",
+    ],
     {},
   );
   const claimDetails = mapToClaimDetailsDtoArray(

@@ -61,6 +61,9 @@ const claimForecastQuery = graphql`
                 Acc_ClaimStatus__c {
                   value
                 }
+                Acc_ProjectPeriodStartDate__c {
+                  value
+                }
                 Acc_ProjectPeriodEndDate__c {
                   value
                 }

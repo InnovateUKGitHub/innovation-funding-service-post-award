@@ -1,6 +1,6 @@
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
-import { ShortMonthYear } from "@ui/components/atomicDesign/atoms/Date";
+import { CondensedDateRange } from "@ui/components/atomicDesign/atoms/Date";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 import { Table, TBody, TFoot, THead, TH, TD, TR } from "@ui/components/atomicDesign/atoms/table/tableComponents";
@@ -96,8 +96,12 @@ const ForecastTable = (props: ForecastTableProps) => {
           <TR>
             <TH className={mkstickcol("left", 1)}>{getContent(x => x.components.forecastTable.month)}</TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={mkcol(profile.rhc, "ifspa-forecast-nowrap")}>
-                <ShortMonthYear value={profile.month} />
+              <TH key={profile.periodId} className={mkcol(profile.rhc)}>
+                <CondensedDateRange
+                  className="ifspa-forecast-wrap"
+                  start={profile.periodStart}
+                  end={profile.periodEnd}
+                />
               </TH>
             ))}
             <TH className={mkstickcol("right", 3)}>
