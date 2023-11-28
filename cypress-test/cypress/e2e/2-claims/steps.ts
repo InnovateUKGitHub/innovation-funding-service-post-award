@@ -1,7 +1,7 @@
 import { claimReviewFileTidyUp, fileTidyUp } from "common/filetidyup";
 import { loremIpsum1k } from "common/lorem";
 import { seconds } from "common/seconds";
-import { testFile } from "common/testfileNames";
+import { testFile, testFileEUIFinance } from "common/testfileNames";
 let date = new Date();
 let comments = JSON.stringify(date);
 
@@ -1269,4 +1269,20 @@ export const uploadProjectCompletionForm = () => {
   cy.fileInput(testFile);
   cy.clickOn("Upload documents");
   cy.validationNotification("has been uploaded.");
+};
+
+export const summaryDocTable = () => {
+  ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach((header, index) => {
+    cy.get(`th:nth-child(${index + 1})`).contains(header);
+  });
+  documents.forEach(doc => {
+    cy.get("td:nth-child(1)").contains(doc);
+  });
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      [testFileEUIFinance, "Schedule 3", "2023", "0KB", "James Black"].forEach((rowDetail, index) => {
+        cy.get(`td:nth-child(${index + 1})`).contains(rowDetail);
+      });
+    });
 };

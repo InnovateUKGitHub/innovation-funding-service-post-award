@@ -2,8 +2,8 @@ import { fileTidyUp } from "common/filetidyup";
 import { euiCostCleanUp, overheadsTidyUp } from "common/costCleanUp";
 import { visitApp } from "../../common/visit";
 import {
+  allowBatchFileUpload,
   claimCommentBox,
-  claimsDocUpload,
   forecastView,
   shouldShowProjectTitle,
   summaryAccessDocsDelete,
@@ -13,10 +13,12 @@ import {
   summaryCommentsAdd,
   summaryCommentsDeleteOne,
   summaryCommentsTooMany,
+  summaryDocTable,
   summaryReaccessClaim,
   summaryTotalCostsList,
   summaryUpdateCostsClaimed,
 } from "./steps";
+import { testFileEUIFinance } from "common/testfileNames";
 
 const fc = "james.black@euimeabs.test";
 
@@ -32,9 +34,18 @@ describe("claims > Claim summary", () => {
     cy.heading("Claim documents");
   });
 
-  it("Should clear any documents that shouldn't be there", async () => fileTidyUp("James Black"));
+  it("Should clear any documents that shouldn't be there", () => fileTidyUp("James Black"));
 
-  it("Should upload a document", claimsDocUpload);
+  it("Should upload a batch of 10 documents", allowBatchFileUpload("claimDocuments"));
+
+  it("Should refresh the page and upload another document", () => {
+    cy.reload();
+    cy.fileInput(testFileEUIFinance);
+    cy.getByLabel("Type").select("Schedule 3");
+    cy.wait(500);
+    cy.clickOn("Upload documents");
+    cy.validationNotification("has been uploaded");
+  });
 
   it("Should continue to forecast page", () => {
     cy.clickOn("Continue to update forecast");
@@ -77,8 +88,10 @@ describe("claims > Claim summary", () => {
 
   it("Should have a Claim documents subheading and guidance", () => {
     cy.get("h3").contains("Claim documents");
-    cy.paragraph("All documents open in new window.");
+    cy.paragraph("All documents open in a new window.");
   });
+
+  it("Should display a document table", summaryDocTable);
 
   it("Should display a link to the document that was uploaded", () => {
     cy.get("a").contains("testfile.doc");
