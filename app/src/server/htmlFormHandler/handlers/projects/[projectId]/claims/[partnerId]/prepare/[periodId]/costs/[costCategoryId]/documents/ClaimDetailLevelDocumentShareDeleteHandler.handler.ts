@@ -7,7 +7,7 @@ import {
   ClaimDetailDocumentsPageParams,
 } from "@ui/containers/pages/claims/claimDetailDocuments.page";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
-import { claimDetailLevelDelete } from "@ui/zod/documentValidators.zod";
+import { claimDetailLevelDelete, documentsErrorMap } from "@ui/zod/documentValidators.zod";
 import { FormTypes } from "@ui/zod/FormTypes";
 import express from "express";
 import { z } from "zod";
@@ -20,14 +20,16 @@ class ClaimDetailLevelDocumentShareDeleteHandler extends ZodFormHandlerBase<
     super({
       route: ClaimDetailDocumentsRoute,
       forms: [FormTypes.ClaimDetailLevelDelete],
-      formIntlKeyPrefix: ["documents"],
     });
   }
 
   public readonly acceptFiles = false;
 
   protected async getZodSchema() {
-    return claimDetailLevelDelete;
+    return {
+      schema: claimDetailLevelDelete,
+      errorMap: documentsErrorMap,
+    };
   }
 
   protected async mapToZod({

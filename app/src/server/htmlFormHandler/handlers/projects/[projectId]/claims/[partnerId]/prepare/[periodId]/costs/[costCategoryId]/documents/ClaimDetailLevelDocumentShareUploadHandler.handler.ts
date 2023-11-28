@@ -2,7 +2,11 @@ import { IContext } from "@framework/types/IContext";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
 import { z } from "zod";
-import { ClaimDetailLevelUploadSchemaType, getClaimDetailLevelUpload } from "@ui/zod/documentValidators.zod";
+import {
+  ClaimDetailLevelUploadSchemaType,
+  documentsErrorMap,
+  getClaimDetailLevelUpload,
+} from "@ui/zod/documentValidators.zod";
 import express from "express";
 import { messageSuccess } from "@ui/redux/actions/common/messageActions";
 import {
@@ -22,7 +26,6 @@ class ClaimDetailLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
     super({
       route: ClaimDetailDocumentsRoute,
       forms: [FormTypes.ClaimDetailLevelUpload],
-      formIntlKeyPrefix: ["documents"],
     });
   }
 
@@ -31,7 +34,10 @@ class ClaimDetailLevelDocumentShareUploadHandler extends ZodFormHandlerBase<
   protected async getZodSchema({ params, context }: { params: ClaimDetailDocumentsPageParams; context: IContext }) {
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
 
-    return getClaimDetailLevelUpload({ config: configuration.options, project });
+    return {
+      schema: getClaimDetailLevelUpload({ config: configuration.options, project }),
+      errorMap: documentsErrorMap,
+    };
   }
 
   protected async mapToZod({
