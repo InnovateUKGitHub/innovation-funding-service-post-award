@@ -62,6 +62,7 @@ describe("claims > documents upload screen", () => {
 
   it("Should allow you to delete the document that was just uploaded", () => {
     cy.clickOn("Remove");
+    cy.button("Remove").should("be.disabled");
     cy.validationNotification(`'${testFile}' has been removed.`);
   });
 

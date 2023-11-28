@@ -123,6 +123,7 @@ export const downloadMoFile = () => {
 export const deleteDocFromArea = () => {
   cy.wait(500);
   cy.button("Remove").click();
+  cy.button("Remove").should("be.disabled");
   cy.validationNotification(`'${testFile}' has been removed.`);
 };
 
@@ -213,21 +214,21 @@ export const manyPartnerUpload = () => {
   partnersList.forEach(selection => {
     cy.fileInput("testfile.doc");
     cy.get("select#partnerId.govuk-select").select(`Innovate UK, MO and ${selection}`);
-    cy.wait(500);
+    cy.wait(200);
     cy.get("select#description.govuk-select").select("Plans");
     cy.submitButton("Upload documents").click();
     cy.getByQA("validation-summary").should("not.exist");
     cy.validationNotification(`Your document has been uploaded`);
   });
-  cy.reload();
+  cy.wait(200);
   cy.heading("Project documents");
 };
 
 export const manyPartnerDocDelete = () => {
   partnersList.forEach(partner => {
     cy.get("td:nth-child(6)").contains(partner).siblings().contains("Remove").click();
+    cy.button("Remove").should("be.disabled");
     cy.validationNotification(`'${testFile}' has been removed.`);
-    cy.wait(500);
   });
 };
 
@@ -310,16 +311,16 @@ export const uploadSingleChar = () => {
   cy.wait(500);
   cy.button("Upload documents").click();
   cy.validationNotification(`Your document has been uploaded.`);
-  cy.wait(3000);
+  cy.wait(1000);
 };
 
 export const deleteSingleChar = () => {
-  cy.wait(500);
   cy.get("tr")
     .eq(1)
     .within(() => {
       cy.tableCell("Remove").scrollIntoView().click();
     });
+  cy.button("Remove").should("be.disabled");
   cy.validationNotification(`'${singleCharFile}' has been removed.`);
 };
 
