@@ -70,7 +70,7 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
   it("Should have saved the information from previous edit", savedFromPrev);
 
   it("Should display a 'Changes last saved' message", () => {
-    cy.getByQA("last-updated").contains("Changes last saved");
+    cy.paragraph("Changes last saved");
   });
 
   it("Should continue to summary", () => {

@@ -357,8 +357,12 @@ export const learnFiles = () => {
 
 export const savedFromPrev = () => {
   cy.getByAriaLabel("Labour Period 2").should("have.value", "33.33");
-  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£33.33");
-  cy.getByAriaLabel("Overheads Period 2").should("have.value", "6.666");
+  cy.get("tr")
+    .eq(4)
+    .within(() => {
+      cy.get("td:nth-child(14)").contains("£33.33");
+    });
+  cy.getByAriaLabel("Overheads Period 2").contains("£6.67");
 };
 
 export const openClosedSection = () => {
@@ -392,7 +396,7 @@ export const ktpForecastUpdate = () => {
     "Additional associate support",
     "Subcontracting",
   ].forEach(ktpCostCat => {
-    cy.getByQA("field-claimForecastTable").contains(ktpCostCat);
+    cy.get("td:nth-child(1)").contains(ktpCostCat);
   });
 };
 
@@ -759,6 +763,11 @@ export const clearCostCatReturn = () => {
 
 export const acceptInputAndUpdate = () => {
   [
+    [-10000, -2000],
+    [-888, -177.6],
+    [-66666, -13333.2],
+    [-3333, -66.6],
+    [0, 0],
     [22728.44, 4545.688],
     [50.24, 10.048],
     [6530.64, 1306.128],
