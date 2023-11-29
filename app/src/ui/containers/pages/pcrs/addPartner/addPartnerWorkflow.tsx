@@ -15,7 +15,7 @@ import { IPCRWorkflow } from "../pcrWorkflow";
 import { AcademicCostsStep } from "./academicCostsStep";
 import { AcademicOrganisationStep } from "./steps/academicOrganisationStep";
 import { AddPartnerSummary } from "./addPartnerSummary";
-import { StateAidEligibilityStep } from "./aidEligibilityStep";
+import { StateAidEligibilityStep } from "./steps/aidEligibilityStep";
 import { CompaniesHouseStep } from "./CompaniesHouse/CompaniesHouseStep";
 import { FinanceContactStep } from "./steps/financeContactStep";
 import { FinanceDetailsStep } from "./financeDetailsStep";
@@ -128,7 +128,7 @@ export const getAddPartnerWorkflow = (
       displayName: "State aid funding",
       stepNumber: 2,
       validation: val => val.pcr,
-      stepRender: StateAidEligibilityStep,
+      migratedStepRender: StateAidEligibilityStep,
     });
   }
 
