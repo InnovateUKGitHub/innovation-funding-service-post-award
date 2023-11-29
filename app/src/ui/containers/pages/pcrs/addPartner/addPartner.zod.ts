@@ -40,3 +40,17 @@ export const projectLocationSchema = z.object({
 });
 
 export type ProjectLocationSchema = z.infer<typeof projectLocationSchema>;
+
+export const financeContactErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "financeContact"],
+});
+
+export const financeContactSchema = z.object({
+  ...common,
+  contact1Email: z.string(),
+  contact1Forename: z.string(),
+  contact1Surname: z.string(),
+  contact1Phone: z.string(),
+});
+
+export type FinanceContactSchema = z.infer<typeof financeContactSchema>;

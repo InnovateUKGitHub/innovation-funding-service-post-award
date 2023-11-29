@@ -26,6 +26,10 @@ export type PcrNode = GQL.PartialNode<{
   Acc_AdditionalNumberofMonths__c: GQL.Value<number>;
   Acc_Comments__c: GQL.Value<string>;
   Acc_CommercialWork__c: GQL.Value<boolean>;
+  Acc_Contact1EmailAddress__c: GQL.Value<string>;
+  Acc_Contact1Forename__c: GQL.Value<string>;
+  Acc_Contact1Phone__c: GQL.Value<string>;
+  Acc_Contact1Surname__c: GQL.Value<string>;
   Acc_ExistingPartnerName__c: GQL.Value<string>;
   Acc_ExistingProjectDuration__c: GQL.Value<number>;
   Acc_GrantMovingOverFinancialYear__c: GQL.Value<number>;
@@ -96,6 +100,10 @@ export type PcrItemDtoMapping = Pick<
   | "availabilityPeriodChange"
   | "extensionPeriod"
   | "extensionPeriodChange"
+  | "contact1Email"
+  | "contact1Forename"
+  | "contact1Phone"
+  | "contact1Surname"
   | "hasOtherFunding"
   | "id"
   | "isCommercialWork"
@@ -175,6 +183,18 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
       Number(node?.Loan_ExtensionPeriod__c?.value),
       Number(node?.Loan_ExtensionPeriodChange__c?.value),
     );
+  },
+  contact1Email(node) {
+    return node?.Acc_Contact1EmailAddress__c?.value ?? null;
+  },
+  contact1Forename(node) {
+    return node?.Acc_Contact1Forename__c?.value ?? null;
+  },
+  contact1Phone(node) {
+    return node?.Acc_Contact1Phone__c?.value ?? null;
+  },
+  contact1Surname(node) {
+    return node?.Acc_Contact1Surname__c?.value ?? null;
   },
   hasOtherFunding(node) {
     return node?.Acc_OtherFunding__c?.value ?? null;
