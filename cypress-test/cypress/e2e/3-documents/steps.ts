@@ -228,7 +228,6 @@ export const manyPartnerDocDelete = () => {
     cy.get("td:nth-child(6)").contains(partner).siblings().contains("Remove").click();
     cy.validationNotification(`'${testFile}' has been removed.`);
     cy.wait(500);
-    cy.reload();
   });
 };
 

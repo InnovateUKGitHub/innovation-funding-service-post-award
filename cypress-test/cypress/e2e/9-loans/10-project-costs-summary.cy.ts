@@ -73,7 +73,7 @@ describe("Loans > Project Costs > Summary", () => {
   it("Should navigate back to Summary page", navigateToSummary);
 
   it("Should display the document uploaded on the Summary screen", () => {
-    cy.paragraph("All documents open in new window.");
+    cy.paragraph("All documents open in a new window.");
     cy.get("a").contains("testfile.doc");
   });
 

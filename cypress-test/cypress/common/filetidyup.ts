@@ -6,8 +6,9 @@
 export const fileTidyUp = (name: string) => {
   cy.wait(500);
   for (let i = 1; i < 25; i++) {
+    const fileNameRegExp = new RegExp(`[^']${name}[^']`);
     cy.get("main").then($main => {
-      if ($main.text().includes(name)) {
+      if (fileNameRegExp.test($main.text())) {
         cy.log(`Deleting existing ${name} document`);
         cy.get("tr")
           .eq(1)
@@ -15,7 +16,7 @@ export const fileTidyUp = (name: string) => {
             cy.tableCell("Remove").click();
           });
         cy.validationNotification("has been removed.");
-        cy.wait(2000);
+        cy.wait(200);
       } else {
         cy.get("h2").contains("Files uploaded");
       }
