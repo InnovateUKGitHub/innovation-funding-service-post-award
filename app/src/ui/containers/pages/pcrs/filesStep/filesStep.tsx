@@ -26,23 +26,30 @@ import { pcrFilesQuery } from "./PcrFiles.query";
 import { z } from "zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { FormTypes } from "@ui/zod/FormTypes";
-import { useNextLink } from "../utils/useNextLink";
+import { useNextLink, useSummaryLink } from "../utils/useNextLink";
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { ReactNode } from "react";
+import { createRegisterButton } from "@framework/util/registerButton";
 
 export const FilesStep = ({
   heading,
   guidance,
+  guidanceComponent: GuidanceComponent,
   documentDescription,
+  returnToSummaryButton,
 }: {
   heading: ContentSelector;
   guidance?: ContentSelector;
+  guidanceComponent?: ReactNode;
   documentDescription: DocumentDescription;
+  returnToSummaryButton?: boolean;
 }) => {
   const { getContent } = useContent();
 
   const { config, projectId, itemId, onSave, isFetching, markedAsCompleteHasBeenChecked } = usePcrWorkflowContext();
 
-  const link = useNextLink();
+  const nextLink = useNextLink();
+  const summaryLink = useSummaryLink();
 
   const [refreshedQueryOptions, refresh] = useRefreshQuery(pcrFilesQuery, {
     projectId,
@@ -74,9 +81,13 @@ export const FilesStep = ({
     },
   });
 
-  const { handleSubmit: handleFormSubmit } = useForm<{ markedAsComplete: boolean }>({
+  const { handleSubmit: handleFormSubmit, setValue } = useForm<{
+    markedAsComplete: boolean;
+    button_submit: "submit" | "returnToSummary";
+  }>({
     defaultValues: {
       markedAsComplete: markedAsCompleteHasBeenChecked,
+      button_submit: "submit",
     },
   });
 
@@ -84,6 +95,7 @@ export const FilesStep = ({
 
   const disabled = isFetching || isDeleting || isUploading;
 
+  const registerButton = createRegisterButton(setValue, "button_submit");
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section>
@@ -94,6 +106,7 @@ export const FilesStep = ({
         >
           <Fieldset>
             <Legend>{getContent(heading)}</Legend>
+            {typeof GuidanceComponent !== undefined && GuidanceComponent}
             {guidance && <Content markdown value={guidance} />}
             <input type="hidden" value={documentDescription} {...register("description")}></input>
             <input type="hidden" value={projectId} {...register("projectId")} />
@@ -143,12 +156,23 @@ export const FilesStep = ({
         />
       </Section>
       <Form
-        onSubmit={handleFormSubmit(() => onSave({ data: { status: PCRItemStatus.Incomplete }, context: { link } }))}
+        onSubmit={handleFormSubmit(data =>
+          onSave({
+            data: { status: PCRItemStatus.Incomplete },
+            context: { link: data.button_submit === "submit" ? nextLink : summaryLink },
+          }),
+        )}
       >
         <Fieldset>
-          <Button disabled={disabled} type="submit">
+          <Button disabled={disabled} type="submit" {...registerButton("submit")}>
             {getContent(x => x.pcrItem.submitButton)}
           </Button>
+
+          {returnToSummaryButton && (
+            <Button secondary disabled={disabled} type="submit" {...registerButton("returnToSummary")}>
+              {getContent(x => x.pcrItem.returnToSummaryButton)}
+            </Button>
+          )}
         </Fieldset>
       </Form>
     </PcrPage>

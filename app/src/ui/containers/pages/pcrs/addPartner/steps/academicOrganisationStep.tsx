@@ -25,7 +25,7 @@ import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/R
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { useJesSearchQuery } from "../jesSearch.logic";
+import { useJesSearchQuery } from "./jesSearch.logic";
 import { useContent } from "@ui/hooks/content.hook";
 
 export const AcademicOrganisationStep = () => {

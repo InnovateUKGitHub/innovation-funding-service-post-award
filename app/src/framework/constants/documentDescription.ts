@@ -127,6 +127,7 @@ export const allowedImpactManagementClaimDocuments = [
 export const allowedPcrLevelDocuments = [
   DocumentDescription.CertificateOfNameChange,
   DocumentDescription.WithdrawalOfPartnerCertificate,
+  DocumentDescription.JeSForm,
 ];
 
 export { getDocumentDescriptionContentSelector };

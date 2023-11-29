@@ -145,7 +145,7 @@ export const getAddPartnerWorkflow = (
       displayName: "Je-S form",
       stepNumber: 9,
       validation: val => val.files,
-      stepRender: JeSStep,
+      migratedStepRender: JeSStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.academicCostsStep,
