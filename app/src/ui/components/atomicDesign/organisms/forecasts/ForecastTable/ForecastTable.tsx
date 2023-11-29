@@ -26,13 +26,19 @@ const ForecastTable = (props: ForecastTableProps) => {
   const { control, getFieldState, disabled, tableData } = props;
   const { getContent } = useContent();
 
+  // Resize the forecast table when the contents of the data changes
   useEffect(forecastTableResize, [props.tableData]);
 
-  const mkcol = (x: boolean | undefined = true, className?: string) =>
+  // Create the className required for standard columns
+  const colClassName = (x: boolean | undefined = true, className?: string) =>
     classNames({ "ifspa-forecast-table-border-right": x }, className);
-  const mkstickcol = (pos: "left" | "right", i: number) =>
+
+  // Create the className required for sticky columns
+  const stickyColClassName = (pos: "left" | "right", i: number) =>
     classNames(
       "ifspa-forecast-table-sticky-col",
+
+      // Invert left/right
       `ifspa-forecast-table-border-${pos === "left" ? "right" : "left"}`,
       `ifspa-forecast-table-${pos}-col-${i}`,
     );
@@ -42,61 +48,69 @@ const ForecastTable = (props: ForecastTableProps) => {
       <Table id="ifspa-forecast-table" className="ifspa-forecast-table">
         <THead>
           <TR>
-            <TH className={mkstickcol("left", 1)}>
+            <TH className={stickyColClassName("left", 1)}>
               <AccessibilityText>{getContent(x => x.components.forecastTable.costCategoriesHeader)}</AccessibilityText>
             </TH>
             {tableData.statusRow.map(({ colSpan, group, rhc }, index) => (
-              <TH colSpan={colSpan} key={index} className={mkcol(rhc)}>
+              <TH colSpan={colSpan} key={index} className={colClassName(rhc)}>
                 {getContent(getForecastHeaderContent(group))}
               </TH>
             ))}
-            <TH className={mkstickcol("right", 3)}>{getContent(x => x.components.forecastTable.totalHeader)}</TH>
-            <TH className={mkstickcol("right", 2)}>
+            <TH className={stickyColClassName("right", 3)}>
+              {getContent(x => x.components.forecastTable.totalHeader)}
+            </TH>
+            <TH className={stickyColClassName("right", 2)}>
               {getContent(x => x.components.forecastTable.totalEligibleCostsHeader)}
             </TH>
-            <TH className={mkstickcol("right", 1)}>{getContent(x => x.components.forecastTable.differenceHeader)}</TH>
+            <TH className={stickyColClassName("right", 1)}>
+              {getContent(x => x.components.forecastTable.differenceHeader)}
+            </TH>
           </TR>
           <TR>
-            <TH className={mkstickcol("left", 1)}>{getContent(x => x.components.forecastTable.periodHeader)}</TH>
+            <TH className={stickyColClassName("left", 1)}>
+              {getContent(x => x.components.forecastTable.periodHeader)}
+            </TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={mkcol(profile.rhc)}>
+              <TH key={profile.periodId} className={colClassName(profile.rhc)}>
                 <AccessibilityText>{getContent(x => x.components.forecastTable.periodHeader)}</AccessibilityText>{" "}
                 {profile.periodId}
               </TH>
             ))}
-            <TH className={mkstickcol("right", 3)}>
+            <TH className={stickyColClassName("right", 3)}>
               <TableEmptyCell />
             </TH>
-            <TH className={mkstickcol("right", 2)}>
+            <TH className={stickyColClassName("right", 2)}>
               <TableEmptyCell />
             </TH>
-            <TH className={mkstickcol("right", 1)}>
+            <TH className={stickyColClassName("right", 1)}>
               <TableEmptyCell />
             </TH>
           </TR>
           <TR>
-            <TH className={mkstickcol("left", 1)}>{getContent(x => x.components.forecastTable.iarDueHeader)}</TH>
+            <TH className={stickyColClassName("left", 1)}>
+              {getContent(x => x.components.forecastTable.iarDueHeader)}
+            </TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={mkcol(profile.rhc)}>
+              <TH key={profile.periodId} className={colClassName(profile.rhc)}>
                 {getContent(
                   profile.iarDue ? x => x.components.forecastTable.iarDue : x => x.components.forecastTable.iarNotDue,
                 )}
               </TH>
             ))}
-            <TH className={mkstickcol("right", 3)}>
+            <TH className={stickyColClassName("right", 3)}>
               <TableEmptyCell />
             </TH>
-            <TH className={mkstickcol("right", 2)}>
+            <TH className={stickyColClassName("right", 2)}>
               <TableEmptyCell />
             </TH>
-            <TH className={mkstickcol("right", 1)}>
+            <TH className={stickyColClassName("right", 1)}>
               <TableEmptyCell />
             </TH>
           </TR>
           <TR>
-            <TH className={mkstickcol("left", 1)}>{getContent(x => x.components.forecastTable.month)}</TH>
+            <TH className={stickyColClassName("left", 1)}>{getContent(x => x.components.forecastTable.month)}</TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={mkcol(profile.rhc)}>
+              <TH key={profile.periodId} className={colClassName(profile.rhc)}>
                 <CondensedDateRange
                   className="ifspa-forecast-wrap"
                   start={profile.periodStart}
@@ -104,13 +118,13 @@ const ForecastTable = (props: ForecastTableProps) => {
                 />
               </TH>
             ))}
-            <TH className={mkstickcol("right", 3)}>
+            <TH className={stickyColClassName("right", 3)}>
               <TableEmptyCell />
             </TH>
-            <TH className={mkstickcol("right", 2)}>
+            <TH className={stickyColClassName("right", 2)}>
               <TableEmptyCell />
             </TH>
-            <TH className={mkstickcol("right", 1)}>
+            <TH className={stickyColClassName("right", 1)}>
               <TableEmptyCell />
             </TH>
           </TR>
@@ -122,7 +136,7 @@ const ForecastTable = (props: ForecastTableProps) => {
               key={costCategory.costCategoryId}
               hasWarning={costCategory.greaterThanAllocatedCosts}
             >
-              <TD className={mkstickcol("left", 1)}>{costCategory.costCategoryName}</TD>
+              <TD className={stickyColClassName("left", 1)}>{costCategory.costCategoryName}</TD>
               {costCategory.profiles.map(profile => {
                 const ariaLabel = getContent(x =>
                   x.components.forecastTable.inputLabel({
@@ -135,7 +149,7 @@ const ForecastTable = (props: ForecastTableProps) => {
                   <TD
                     data-qa={`forecast-${costCategory.costCategoryId}-${profile.periodId}-cell`}
                     key={profile.periodId}
-                    className={mkcol(profile.rhc)}
+                    className={colClassName(profile.rhc)}
                   >
                     {control && profile.forecastMode && !profile.calculatedField ? (
                       <ForecastTableCurrencyInput
@@ -153,13 +167,13 @@ const ForecastTable = (props: ForecastTableProps) => {
                   </TD>
                 );
               })}
-              <TD className={mkstickcol("right", 3)}>
+              <TD className={stickyColClassName("right", 3)}>
                 <Currency value={costCategory.total} />
               </TD>
-              <TD className={mkstickcol("right", 2)}>
+              <TD className={stickyColClassName("right", 2)}>
                 <Currency value={costCategory.golCost} />
               </TD>
-              <TD className={mkstickcol("right", 1)}>
+              <TD className={stickyColClassName("right", 1)}>
                 <Percentage value={costCategory.difference} />
               </TD>
             </TR>
@@ -167,23 +181,23 @@ const ForecastTable = (props: ForecastTableProps) => {
         </TBody>
         <TFoot>
           <TR data-qa="forecast-total-row" hasError={getFieldState?.("total").invalid}>
-            <TH className={mkstickcol("left", 1)}>{getContent(x => x.components.forecastTable.totalHeader)}</TH>
+            <TH className={stickyColClassName("left", 1)}>{getContent(x => x.components.forecastTable.totalHeader)}</TH>
             {tableData.totalRow.profiles.map(profile => (
               <TD
                 data-qa={`forecast-total-${profile.periodId}-cell`}
                 key={profile.periodId}
-                className={mkcol(profile.rhc)}
+                className={colClassName(profile.rhc)}
               >
                 <Currency value={profile.value} />
               </TD>
             ))}
-            <TD className={mkstickcol("right", 3)}>
+            <TD className={stickyColClassName("right", 3)}>
               <Currency value={tableData.totalRow.total} />
             </TD>
-            <TD className={mkstickcol("right", 2)}>
+            <TD className={stickyColClassName("right", 2)}>
               <Currency value={tableData.totalRow.golCost} />
             </TD>
-            <TD className={mkstickcol("right", 1)}>
+            <TD className={stickyColClassName("right", 1)}>
               <Percentage value={tableData.totalRow.difference} />
             </TD>
           </TR>
