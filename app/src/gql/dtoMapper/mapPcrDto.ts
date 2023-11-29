@@ -30,6 +30,10 @@ export type PcrNode = GQL.PartialNode<{
   Acc_Contact1Forename__c: GQL.Value<string>;
   Acc_Contact1Phone__c: GQL.Value<string>;
   Acc_Contact1Surname__c: GQL.Value<string>;
+  Acc_Contact2EmailAddress__c: GQL.Value<string>;
+  Acc_Contact2Forename__c: GQL.Value<string>;
+  Acc_Contact2Phone__c: GQL.Value<string>;
+  Acc_Contact2Surname__c: GQL.Value<string>;
   Acc_ExistingPartnerName__c: GQL.Value<string>;
   Acc_ExistingProjectDuration__c: GQL.Value<number>;
   Acc_GrantMovingOverFinancialYear__c: GQL.Value<number>;
@@ -104,6 +108,10 @@ export type PcrItemDtoMapping = Pick<
   | "contact1Forename"
   | "contact1Phone"
   | "contact1Surname"
+  | "contact2Email"
+  | "contact2Forename"
+  | "contact2Phone"
+  | "contact2Surname"
   | "hasOtherFunding"
   | "id"
   | "isCommercialWork"
@@ -195,6 +203,18 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   contact1Surname(node) {
     return node?.Acc_Contact1Surname__c?.value ?? null;
+  },
+  contact2Email(node) {
+    return node?.Acc_Contact2EmailAddress__c?.value ?? null;
+  },
+  contact2Forename(node) {
+    return node?.Acc_Contact2Forename__c?.value ?? null;
+  },
+  contact2Phone(node) {
+    return node?.Acc_Contact2Phone__c?.value ?? null;
+  },
+  contact2Surname(node) {
+    return node?.Acc_Contact2Surname__c?.value ?? null;
   },
   hasOtherFunding(node) {
     return node?.Acc_OtherFunding__c?.value ?? null;

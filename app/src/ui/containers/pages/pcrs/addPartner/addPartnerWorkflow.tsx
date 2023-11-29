@@ -22,7 +22,7 @@ import { FinanceDetailsStep } from "./financeDetailsStep";
 import { JeSStep } from "./steps/jeSStep";
 import { OrganisationDetailsStep } from "./steps/organisationDetailsSteps";
 import { ProjectLocationStep } from "./steps/projectLocationStep";
-import { ProjectManagerDetailsStep } from "./projectManagerDetailsStep";
+import { ProjectManagerDetailsStep } from "./steps/projectManagerDetailsStep";
 import { RoleAndOrganisationStep } from "./steps/roleAndOrganisationStep";
 
 export type AddPartnerStepNames =
@@ -202,7 +202,7 @@ export const getAddPartnerWorkflow = (
       displayName: "Project manager",
       stepNumber: 8,
       validation: val => val.pcr,
-      stepRender: ProjectManagerDetailsStep,
+      migratedStepRender: ProjectManagerDetailsStep,
     });
   }
 

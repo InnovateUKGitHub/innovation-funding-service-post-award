@@ -38,6 +38,8 @@ export const FinanceContactStep = () => {
       button_submit: "submit",
       contact1Forename: pcrItem.contact1Forename ?? "",
       contact1Surname: pcrItem.contact1Surname ?? "",
+      contact1Phone: pcrItem.contact1Phone ?? "",
+      contact1Email: pcrItem.contact1Email ?? "",
     },
     resolver: zodResolver(financeContactSchema, {
       errorMap: financeContactErrorMap,

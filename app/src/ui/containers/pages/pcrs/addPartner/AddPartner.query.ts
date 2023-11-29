@@ -46,6 +46,18 @@ export const addPartnerWorkflowQuery = graphql`
                 Acc_Contact1Phone__c {
                   value
                 }
+                Acc_Contact2EmailAddress__c {
+                  value
+                }
+                Acc_Contact2Forename__c {
+                  value
+                }
+                Acc_Contact2Surname__c {
+                  value
+                }
+                Acc_Contact2Phone__c {
+                  value
+                }
                 Acc_ParticipantSize__c {
                   value
                 }
