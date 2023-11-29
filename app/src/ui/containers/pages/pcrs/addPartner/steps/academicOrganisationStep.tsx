@@ -3,9 +3,9 @@ import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { PcrPage } from "../pcrPage";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
-import { useLinks } from "../utils/useNextLink";
+import { PcrPage } from "../../pcrPage";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { useLinks } from "../../utils/useNextLink";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
@@ -14,14 +14,18 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { academicOrganisationErrorMap, AcademicOrganisationSchema, academicOrganisationSchema } from "./addPartner.zod";
+import {
+  academicOrganisationErrorMap,
+  AcademicOrganisationSchema,
+  academicOrganisationSchema,
+} from "../addPartner.zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-import { useJesSearchQuery } from "./jesSearch.logic";
+import { useJesSearchQuery } from "../jesSearch.logic";
 import { useContent } from "@ui/hooks/content.hook";
 
 export const AcademicOrganisationStep = () => {

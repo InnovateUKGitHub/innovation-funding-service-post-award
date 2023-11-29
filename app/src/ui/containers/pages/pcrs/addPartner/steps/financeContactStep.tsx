@@ -1,7 +1,7 @@
 import { PCRContactRole } from "@framework/constants/pcrConstants";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
-import { PcrPage } from "../pcrPage";
+import { PcrPage } from "../../pcrPage";
 import { useContent } from "@ui/hooks/content.hook";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
@@ -12,14 +12,14 @@ import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/Text
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
-import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
-import { useLinks } from "../utils/useNextLink";
+import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { useLinks } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { FinanceContactSchema, financeContactErrorMap, financeContactSchema } from "./addPartner.zod";
+import { FinanceContactSchema, financeContactErrorMap, financeContactSchema } from "../addPartner.zod";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 

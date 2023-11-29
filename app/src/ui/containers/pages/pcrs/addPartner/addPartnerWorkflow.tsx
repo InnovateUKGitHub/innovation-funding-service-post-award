@@ -1,7 +1,7 @@
 import { SpendProfileStep } from "@ui/containers/pages/pcrs/addPartner/spendProfileStep";
 import { AwardRateStep } from "@ui/containers/pages/pcrs/addPartner/awardRateStep";
 import { OtherFundingStep } from "@ui/containers/pages/pcrs/addPartner/otherFundingStep";
-import { NonAidFundingStep } from "@ui/containers/pages/pcrs/addPartner/nonAidFundingStep";
+import { NonAidFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/nonAidFundingStep";
 import { DeMinimisStep } from "@ui/containers/pages/pcrs/addPartner/deMinimisStep";
 import { OtherSourcesOfFundingStep } from "@ui/containers/pages/pcrs/addPartner/otherSourcesOfFundingStep";
 import { AcademicCostsReviewStep } from "@ui/containers/pages/pcrs/addPartner/academicCostsReviewStep";
@@ -13,17 +13,17 @@ import { CombinedResultValidator } from "@ui/validation/results";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { IPCRWorkflow } from "../pcrWorkflow";
 import { AcademicCostsStep } from "./academicCostsStep";
-import { AcademicOrganisationStep } from "./academicOrganisationStep";
+import { AcademicOrganisationStep } from "./steps/academicOrganisationStep";
 import { AddPartnerSummary } from "./addPartnerSummary";
 import { StateAidEligibilityStep } from "./aidEligibilityStep";
 import { CompaniesHouseStep } from "./CompaniesHouse/CompaniesHouseStep";
-import { FinanceContactStep } from "./financeContactStep";
+import { FinanceContactStep } from "./steps/financeContactStep";
 import { FinanceDetailsStep } from "./financeDetailsStep";
-import { JeSStep } from "./jeSStep";
-import { OrganisationDetailsStep } from "./organisationDetailsSteps";
-import { ProjectLocationStep } from "./projectLocationStep";
+import { JeSStep } from "./steps/jeSStep";
+import { OrganisationDetailsStep } from "./steps/organisationDetailsSteps";
+import { ProjectLocationStep } from "./steps/projectLocationStep";
 import { ProjectManagerDetailsStep } from "./projectManagerDetailsStep";
-import { RoleAndOrganisationStep } from "./roleAndOrganisationStep";
+import { RoleAndOrganisationStep } from "./steps/roleAndOrganisationStep";
 
 export type AddPartnerStepNames =
   | PCRStepType.roleAndOrganisationStep
