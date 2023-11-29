@@ -2,7 +2,7 @@ import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
-import { multiplyCurrency, roundCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
+import { multiplyCurrency, parseCurrency, roundCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { useMemo } from "react";
 import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderContent";
 import { GOLCostDto } from "@framework/dtos/golCostDto";
@@ -216,8 +216,8 @@ const mapToForecastTableDto = ({
 
           if (clientProfiles) {
             const clientProfile: string | undefined = clientProfiles?.[labourProfile.id];
-            const numberComponent = validCurrencyRegex.exec(clientProfile)?.[1] ?? "";
-            value = multiplyCurrency(parseFloat(numberComponent), partner.overheadRate, 1);
+            const numberComponent = validCurrencyRegex.exec(clientProfile)?.[0] ?? "";
+            value = multiplyCurrency(parseCurrency(numberComponent), partner.overheadRate, 1);
             displayValue = isNaN(value) ? "" : String(value);
           } else {
             value = multiplyCurrency(labourProfile.value, partner.overheadRate, 1);
@@ -228,8 +228,8 @@ const mapToForecastTableDto = ({
         } else {
           if (clientProfiles) {
             const clientProfile: string | undefined = clientProfiles?.[forecastProfile.id];
-            const numberComponent = validCurrencyRegex.exec(clientProfile)?.[1] ?? "";
-            value = parseFloat(numberComponent);
+            const numberComponent = validCurrencyRegex.exec(clientProfile)?.[0] ?? "";
+            value = parseCurrency(numberComponent);
             displayValue = clientProfile;
           } else {
             value = roundCurrency(forecastProfile.value);

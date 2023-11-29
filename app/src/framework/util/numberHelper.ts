@@ -62,6 +62,17 @@ export function parseNumber(x?: string | number | null) {
 }
 
 /**
+ * Parse a string to a number. Strips out any mis-laid pound symbols.
+ * @param x Number to parse
+ * @returns Parsed number
+ */
+export function parseCurrency(x?: string | number | null) {
+  if (typeof x === "string") return parseFloat(x.replaceAll("£", ""));
+  if (typeof x === "number") return x;
+  return NaN;
+}
+
+/**
  * _sumBy_
  *
  * Takes an array of values as first argument, and a reducer function for second.
