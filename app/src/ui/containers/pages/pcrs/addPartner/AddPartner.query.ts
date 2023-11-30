@@ -91,6 +91,12 @@ export const addPartnerWorkflowQuery = graphql`
                 Acc_ProjectCity__c {
                   value
                 }
+                Acc_Turnover__c {
+                  value
+                }
+                Acc_TurnoverYearEnd__c {
+                  value
+                }
                 RecordType {
                   Name {
                     value

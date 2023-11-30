@@ -18,7 +18,7 @@ import { AddPartnerSummary } from "./addPartnerSummary";
 import { StateAidEligibilityStep } from "./steps/aidEligibilityStep";
 import { CompaniesHouseStep } from "./CompaniesHouse/CompaniesHouseStep";
 import { FinanceContactStep } from "./steps/financeContactStep";
-import { FinanceDetailsStep } from "./financeDetailsStep";
+import { FinanceDetailsStep } from "./steps/financeDetailsStep";
 import { JeSStep } from "./steps/jeSStep";
 import { OrganisationDetailsStep } from "./steps/organisationDetailsStep";
 import { ProjectLocationStep } from "./steps/projectLocationStep";
@@ -184,7 +184,7 @@ export const getAddPartnerWorkflow = (
       displayName: "Financial details",
       stepNumber: 5,
       validation: val => val.pcr,
-      stepRender: FinanceDetailsStep,
+      migratedStepRender: FinanceDetailsStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.spendProfileStep,

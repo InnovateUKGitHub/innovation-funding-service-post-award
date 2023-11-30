@@ -63,6 +63,8 @@ export type PcrNode = GQL.PartialNode<{
   Acc_Status__c: GQL.Value<string>;
   Acc_SuspensionEnds__c: GQL.Value<string>;
   Acc_SuspensionStarts__c: GQL.Value<string>;
+  Acc_Turnover__c: GQL.Value<number>;
+  Acc_TurnoverYearEnd__c: GQL.Value<string>;
   CreatedDate: GQL.Value<string>;
   LastModifiedDate: GQL.Value<string>;
   Loan_Duration__c: GQL.Value<string>;
@@ -119,6 +121,8 @@ export type PcrItemDtoMapping = Pick<
   | "id"
   | "isCommercialWork"
   | "isProjectRoleAndPartnerTypeRequired"
+  | "financialYearEndDate"
+  | "financialYearEndTurnover"
   | "grantMovingOverFinancialYear"
   | "guidance"
   | "lastUpdated"
@@ -222,6 +226,13 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   contact2Surname(node) {
     return node?.Acc_Contact2Surname__c?.value ?? null;
   },
+  financialYearEndDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Acc_TurnoverYearEnd__c?.value ?? null);
+  },
+  financialYearEndTurnover(node) {
+    return node?.Acc_Turnover__c?.value ?? null;
+  },
+
   hasOtherFunding(node) {
     return node?.Acc_OtherFunding__c?.value ?? null;
   },

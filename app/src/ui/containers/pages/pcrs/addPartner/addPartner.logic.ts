@@ -56,6 +56,8 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
       "contact2Forename",
       "contact2Phone",
       "contact2Surname",
+      "financialYearEndDate",
+      "financialYearEndTurnover",
       "isCommercialWork",
       "numberOfEmployees",
       "organisationName",

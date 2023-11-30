@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
+import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
 
 export const roleAndOrganisationErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "roleAndOrganisation"] });
 
@@ -94,3 +95,27 @@ export const organisationDetailsSchema = z.object({
 });
 
 export type OrganisationDetailsSchema = z.infer<typeof organisationDetailsSchema>;
+
+export const financeDetailsErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "financeDetails"],
+});
+
+export const financeDetailsSchema = z
+  .object({
+    ...common,
+    financialYearEndTurnover: z.coerce.number().nullable(),
+    financialYearEndDate_month: z.string().optional(),
+    financialYearEndDate_year: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (!isEmptyDate(data.financialYearEndDate_month, data.financialYearEndDate_year)) {
+      if (!isValidMonth(data.financialYearEndDate_month) || !isValidYear(data.financialYearEndDate_year)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["financialYearEndDate"],
+        });
+      }
+    }
+  });
+
+export type FinanceDetailsSchema = z.infer<typeof financeDetailsSchema>;

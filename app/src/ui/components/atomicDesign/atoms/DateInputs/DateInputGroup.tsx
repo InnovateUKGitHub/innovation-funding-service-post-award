@@ -1,5 +1,5 @@
 import cx from "classnames";
-import React from "react";
+import React, { ReactNode } from "react";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { FormGroup } from "../form/FormGroup/FormGroup";
 
@@ -7,10 +7,12 @@ export const DateInputGroup = ({
   children,
   hasError,
   error,
+  hint,
   ...props
-}: React.ComponentProps<"div"> & { error?: RhfError; hasError?: boolean }) => {
+}: React.ComponentProps<"div"> & { error?: RhfError; hasError?: boolean; hint?: ReactNode }) => {
   return (
-    <FormGroup className={cx({ "govuk-form-group--error": !!error || hasError })} {...props}>
+    <FormGroup className={cx({ "govuk-form-group--error": !!error })} {...props}>
+      {typeof hint !== "undefined" && hint}
       <ValidationError error={error} />
       <div className="govuk-date-input">
         {React.Children.map(children, child => {
