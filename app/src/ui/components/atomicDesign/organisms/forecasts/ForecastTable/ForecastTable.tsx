@@ -110,7 +110,7 @@ const ForecastTable = (props: ForecastTableProps) => {
           <TR>
             <TH className={stickyColClassName("left", 1)}>{getContent(x => x.components.forecastTable.month)}</TH>
             {tableData.totalRow.profiles.map(profile => (
-              <TH key={profile.periodId} className={colClassName(profile.rhc)}>
+              <TH key={profile.periodId} className={colClassName(profile.rhc, "ifspa-forecast-table-date")}>
                 <CondensedDateRange
                   className="ifspa-forecast-wrap"
                   start={profile.periodStart}

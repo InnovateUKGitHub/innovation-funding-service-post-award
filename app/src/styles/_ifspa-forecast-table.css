@@ -37,6 +37,10 @@ $govuk-breakpoints: (
   border-left: 1px solid #b1b4b6;
 }
 
+.ifspa-forecast-table-date {
+  font-weight: normal;
+}
+
 @media screen and (min-width: 320px) {
   .ifspa-forecast-table {
     font-size: 12pt;
