@@ -8,6 +8,7 @@ import {
   ktpGuidance,
   ktpHeadings,
   shouldShowProjectTitle,
+  nonFECMessaging,
 } from "./steps";
 
 describe("claims > KTP", () => {
@@ -60,10 +61,7 @@ describe("claims > KTP", () => {
     cy.heading("Claim summary");
   });
 
-  it("Should display correct messaging", () => {
-    cy.validationNotification("This project does not follow the normal grant calculation rules");
-    cy.validationNotification("The project and any partner may have one or more cost categories");
-  });
+  it("Should display correct messaging", nonFECMessaging);
 
   it("Should have a Supporting statement", () => {
     cy.get("legend").contains("Supporting statement");

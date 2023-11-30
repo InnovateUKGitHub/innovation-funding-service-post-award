@@ -462,6 +462,16 @@ export const ktpCorrectCats = () => {
   });
 };
 
+export const nonFECMessaging = () => {
+  [
+    "This project does not follow the normal grant calculation rules",
+    "The project and any partner may have one or more cost categories",
+  ].forEach(guidance => {
+    cy.validationNotification(guidance);
+  });
+  cy.list("This period is paid at a rate of 66.66% rather than your normal Award rate");
+};
+
 export const academicCosts = () => {
   [
     "Directly incurred - Staff",
