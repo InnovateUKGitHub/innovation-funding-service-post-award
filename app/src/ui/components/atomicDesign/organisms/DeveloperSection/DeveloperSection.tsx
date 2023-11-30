@@ -4,13 +4,12 @@ import { HiddenUserSwitcher } from "@ui/containers/pages/developer/UserSwitcher"
 import { useContent } from "@ui/hooks/content.hook";
 import { H3 } from "../../atoms/Heading/Heading.variants";
 import { GovWidthContainer } from "../../atoms/GovWidthContainer/GovWidthContainer";
-import { IRouteDefinition } from "@ui/containers/containerBase";
+import { AnyRouteDefinition } from "@ui/containers/containerBase";
 import { DeveloperEnvironmentInformation } from "../../molecules/DeveloperEnvironmentInformation/DeveloperEnvironmentInformation";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 interface DeveloperSectionProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  currentRoute: IRouteDefinition<any>;
+  currentRoute: AnyRouteDefinition;
 }
 
 const DeveloperSection = ({ currentRoute }: DeveloperSectionProps) => {

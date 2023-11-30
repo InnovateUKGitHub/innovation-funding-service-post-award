@@ -1,14 +1,12 @@
 import { AccEnvironment } from "@framework/constants/enums";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
-import { P } from "../../atoms/Paragraph/Paragraph";
-import { IRouteDefinition } from "@ui/containers/containerBase";
 import { DeveloperCurrentUsername } from "../../atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
 import { useMounted } from "../../atoms/providers/Mounted/Mounted";
 import { SummaryList, SummaryListItem } from "../SummaryList/summaryList";
+import { AnyRouteDefinition } from "@ui/containers/containerBase";
 
 interface DeveloperEnvironmentInformationProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  currentRoute: IRouteDefinition<any>;
+  currentRoute: AnyRouteDefinition;
 }
 
 const DeveloperEnvironmentInformation = ({ currentRoute }: DeveloperEnvironmentInformationProps) => {

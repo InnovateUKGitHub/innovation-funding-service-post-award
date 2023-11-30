@@ -22,8 +22,7 @@ export interface BaseProps {
   config: IClientConfig;
   routes: IRoutes;
   projectId?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  currentRoute: IRouteDefinition<any>;
+  currentRoute: AnyRouteDefinition;
 }
 
 export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & BaseProps;
@@ -79,6 +78,9 @@ interface IRouteOptions<TParams> {
 export interface IRouteDefinition<TParams> extends IRouteOptions<TParams> {
   getLink: (params: TParams) => ILinkInfo;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type AnyRouteDefinition = IRouteDefinition<any>;
 
 /**
  * ### defineRoute

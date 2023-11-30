@@ -4,7 +4,7 @@ import { Store, Dispatch } from "redux";
 import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 import { RelayEnvironmentProvider } from "react-relay";
-import { IRouteDefinition } from "@ui/containers/containerBase";
+import { AnyRouteDefinition } from "@ui/containers/containerBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PageTitleProvider } from "@ui/features/page-title";
@@ -39,8 +39,7 @@ import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 interface IAppProps {
   dispatch: Dispatch;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  currentRoute: IRouteDefinition<any>;
+  currentRoute: AnyRouteDefinition;
 }
 
 /**
