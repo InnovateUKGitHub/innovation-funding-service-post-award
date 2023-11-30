@@ -2,8 +2,9 @@ import bytes from "bytes";
 import { parseLogLevel } from "@framework/types/logLevel";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFeatureFlags } from "@framework/types/IFeaturesFlags";
-import { LogLevel } from "@framework/constants/enums";
+import { AccEnvironment, LogLevel } from "@framework/constants/enums";
 import { readFileSync } from "fs";
+import { parseAccEnvironment } from "@framework/types/accEnvironment";
 
 const defaultCacheTimeout = 720;
 
@@ -51,6 +52,7 @@ interface SalesforceUserConfig {
 
 export interface IConfig {
   readonly build: string;
+  readonly accEnvironment: AccEnvironment;
 
   /**
    * @returns 195
@@ -256,6 +258,8 @@ const companiesHouse = {
   accessToken: process.env.COMPANIES_HOUSE_ACCESS_TOKEN ?? "",
 };
 
+const accEnvironment = parseAccEnvironment(process.env.ACC_ENVIRONMENT);
+
 export const configuration: IConfig = {
   build,
   salesforceQueryLimit,
@@ -276,4 +280,5 @@ export const configuration: IConfig = {
   urls,
   googleTagManagerCode,
   s3Account,
+  accEnvironment,
 };

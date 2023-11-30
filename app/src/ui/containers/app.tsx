@@ -135,7 +135,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               </SuspensePageLoader>
             </FullHeight.Content>
 
-            {!config.ssoEnabled && <DeveloperSection />}
+            {!config.ssoEnabled && <DeveloperSection currentRoute={currentRoute} />}
             <Footer />
 
             {modalRegister.getModals().map(modal => (

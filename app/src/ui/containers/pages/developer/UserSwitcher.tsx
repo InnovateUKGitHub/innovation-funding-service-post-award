@@ -16,15 +16,11 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
-import {
-  userSwitcherCurrentUserQuery,
-  userSwitcherProjectQuery,
-  userSwitcherProjectsQuery,
-} from "./UserSwitcher.query";
-import { UserSwitcherCurrentUserQuery } from "./__generated__/UserSwitcherCurrentUserQuery.graphql";
+import { userSwitcherProjectQuery, userSwitcherProjectsQuery } from "./UserSwitcher.query";
 import { UserSwitcherProjectQuery } from "./__generated__/UserSwitcherProjectQuery.graphql";
 import { UserSwitcherProjectsQuery } from "./__generated__/UserSwitcherProjectsQuery.graphql";
 import { decode as decodeHTMLEntities } from "html-entities";
+import { DeveloperCurrentUsername } from "@ui/components/atomicDesign/atoms/DeveloperCurrentUsername/DeveloperCurrentUsername";
 
 /**
  * Get the link to the current page
@@ -64,17 +60,10 @@ const SelectContactForm = createTypedForm<string>();
 const ProjectContactTable = createTypedTable<UserSwitcherTableRow>();
 
 const UserSwitcherCurrentUser = () => {
-  const { data, isLoading } = useQuery<UserSwitcherCurrentUserQuery>(userSwitcherCurrentUserQuery);
-
-  if (isLoading) return null;
-
   return (
-    <>
-      <p>
-        Currently logged in as:{" "}
-        {data?.currentUser.isSystemUser ? "System User" : data?.currentUser.email ?? "Invalid User"}
-      </p>
-    </>
+    <p>
+      Currently logged in as: <DeveloperCurrentUsername />
+    </p>
   );
 };
 

@@ -1,14 +1,5 @@
 import { graphql } from "relay-runtime";
 
-const userSwitcherCurrentUserQuery = graphql`
-  query UserSwitcherCurrentUserQuery {
-    currentUser {
-      email
-      isSystemUser
-    }
-  }
-`;
-
 const userSwitcherProjectsQuery = graphql`
   query UserSwitcherProjectsQuery($search: String) {
     salesforce(login: "system") {
@@ -97,4 +88,4 @@ const userSwitcherProjectQuery = graphql`
   }
 `;
 
-export { userSwitcherCurrentUserQuery, userSwitcherProjectsQuery, userSwitcherProjectQuery };
+export { userSwitcherProjectsQuery, userSwitcherProjectQuery };

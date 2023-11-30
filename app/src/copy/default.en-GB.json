@@ -149,6 +149,12 @@
       "broadcastLabelStartDate": "Start date:",
       "broadcastLabelEndDate": "End date:"
     },
+    "developerEnvironmentInformation": {
+      "environment": "Environment",
+      "route": "Route",
+      "user": "Logged in User",
+      "react": "ReactJS Loaded"
+    },
     "userSwitcher": {
       "sectionTitle": "User Switcher",
       "findFromSalesforce": "Find a username from Salesforce",

@@ -304,6 +304,7 @@ function getClientConfig(context: IContext): IClientConfig {
     features: context.config.features,
     ssoEnabled: context.config.sso.enabled,
     options: context.config.options,
+    accEnvironment: context.config.accEnvironment,
     logLevel: context.config.logLevel,
   };
 }

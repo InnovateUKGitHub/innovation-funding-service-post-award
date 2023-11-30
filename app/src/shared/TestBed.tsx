@@ -8,6 +8,7 @@ import { ContentProvider } from "@ui/redux/contentProvider";
 import { IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { IClientConfig } from "src/types/IClientConfig";
+import { AccEnvironment } from "@framework/constants/enums";
 
 export type TestBedStore = Partial<IStores>;
 
@@ -103,6 +104,7 @@ export function TestBed({
     ifsRoot: "https://ifs-accdev.apps.ocp4.org.innovateuk.ukri.org",
     ssoEnabled: false,
     logLevel: "VERBOSE",
+    accEnvironment: AccEnvironment.BASE,
   };
 
   // Modify the clientConfig if the TextBed wants to.

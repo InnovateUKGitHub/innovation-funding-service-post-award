@@ -110,3 +110,19 @@ export enum LoadingStatus {
   Stale = 5, // The data is ready to display, but it is thought to be out of date.
   Updated = 6, // The data has been updated and is upto date
 }
+
+export enum AccEnvironment {
+  BASE = "base",
+  AT = "at",
+  CUSTOM = "custom",
+  DEMO = "demo",
+  DEV = "dev",
+  PERF = "perf",
+  PREPROD = "preprod",
+  PROD = "prod",
+  SYSINT = "sysint",
+  UAT = "uat",
+  LOCAL = "local",
+
+  UNKNOWN = "",
+}

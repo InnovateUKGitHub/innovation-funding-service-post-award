@@ -6,7 +6,6 @@ import { GraphQLSchema } from "graphql";
 import { serverRender } from "../serverRender";
 import { upload } from "./diskStorage";
 import { DeveloperPageCrasherHandler } from "./handlers/developer/crash/developerPageCrasherHandler";
-import { DeveloperProjectCreatorHandler } from "./handlers/developer/projectcreator/developerProjectCreatorHandler";
 import { DeveloperUserSwitcherHandler } from "./handlers/developer/userswitcher/developerUserSwitcherHandler";
 import { LoanRequestDocumentDeleteHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestDocumentDeleteHandler";
 import { LoanRequestDocumentUploadHandler } from "./handlers/loans/[projectId]/[loanId]/LoanRequestDocumentUploadHandler";
@@ -120,11 +119,7 @@ export const multiFileFormHandlers = [
   new LoanRequestDocumentUploadHandler(),
 ] as const;
 
-export const developerFormHandlers = [
-  new DeveloperUserSwitcherHandler(),
-  new DeveloperProjectCreatorHandler(),
-  new DeveloperPageCrasherHandler(),
-] as const;
+export const developerFormHandlers = [new DeveloperUserSwitcherHandler(), new DeveloperPageCrasherHandler()] as const;
 
 export const zodFormHandlers = [
   new ProjectLevelDocumentShareUploadHandler(),

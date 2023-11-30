@@ -1,4 +1,4 @@
-import { LogLevel } from "@framework/constants/enums";
+import { AccEnvironment, LogLevel } from "@framework/constants/enums";
 import { IConfig } from "@server/features/common/config";
 
 export class TestConfig implements IConfig {
@@ -119,4 +119,6 @@ export class TestConfig implements IConfig {
     contentBucket: "",
     customContentPath: "",
   };
+
+  public accEnvironment = AccEnvironment.BASE;
 }
