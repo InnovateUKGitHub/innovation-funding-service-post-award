@@ -8,6 +8,11 @@ describe("Claims > IAR Required - Submission", () => {
     fcClaimTidyUp("Submitted to Monitoring Officer");
   });
 
+  /**
+   * Note there is no after block to change status back to Draft.
+   * This is intentional as review test follows this test.
+   */
+
   it("Should access the claim and proceed to Documents page.", iarProceedToDocs);
 
   it("Should have IAR document guidance", iarGuidance);

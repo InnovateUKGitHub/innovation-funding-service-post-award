@@ -1,12 +1,13 @@
 import { visitApp } from "../../common/visit";
 import {
-  acceptInputAndUpdate,
+  acceptLabourCalculateOH,
   accessEUIOpenClaim,
   forecastCostCats,
   topThreeRows,
   savedFromPrev,
   shouldShowProjectTitle,
   validateForecast,
+  updateClaimsForecast,
 } from "./steps";
 
 const pm = "james.black@euimeabs.test";
@@ -51,7 +52,9 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
    */
   it("Should validate when null value is entered as a forecast", validateForecast);
 
-  it("Should accept input and calculate the figures accordingly", acceptInputAndUpdate);
+  it("Should accept input across the table and calculate correctly", updateClaimsForecast);
+
+  it("Should accept labour input and calculate overhead figures accordingly", acceptLabourCalculateOH);
 
   it("Should save and return to claims", () => {
     cy.button("Save and return to claims").click({ force: true });

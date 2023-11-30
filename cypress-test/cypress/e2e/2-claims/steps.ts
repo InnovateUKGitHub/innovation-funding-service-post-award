@@ -761,7 +761,7 @@ export const clearCostCatReturn = () => {
   });
 };
 
-export const acceptInputAndUpdate = () => {
+export const acceptLabourCalculateOH = () => {
   [
     [-10000, -2000],
     [-888, -177.6],
@@ -1292,4 +1292,74 @@ export const summaryDocTable = () => {
         cy.get(`td:nth-child(${index + 1})`).contains(rowDetail);
       });
     });
+};
+
+export const updateClaimsForecast = () => {
+  let totalCell = (rowNum: number, value: string) => {
+    cy.get("tr")
+      .eq(rowNum)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(value);
+      });
+  };
+
+  for (let inputNum = 2; inputNum < 13; inputNum++) {
+    let baseTotal = 35000 + inputNum * 100 - 100;
+    let labourTotal = 0 + inputNum * 100 - 100;
+    let subcontractingTotal = 0 + inputNum * 100 - 100;
+    let totalString = baseTotal.toLocaleString("en-UK");
+    let labourtotalString = labourTotal.toLocaleString("en-GB");
+    let subcontractingString = subcontractingTotal.toLocaleString("en-GB");
+    [
+      [`Labour Period ${inputNum}`, "4", `£${labourtotalString}.00`],
+      [`Materials Period ${inputNum}`, "6", `£${totalString}.00`],
+      [`Capital usage Period ${inputNum}`, "7", `£${totalString}.00`],
+      [`Subcontracting Period ${inputNum}`, "8", `£${subcontractingString}.00`],
+      [`Travel and subsistence Period ${inputNum}`, "9", `£${totalString}.00`],
+      [`Other costs Period ${inputNum}`, "10", `£${totalString}.00`],
+      [`Other costs 2 Period ${inputNum}`, "11", `£${totalString}.00`],
+      [`Other costs 3 Period ${inputNum}`, "12", `£${totalString}.00`],
+      [`Other costs 4 Period ${inputNum}`, "13", `£${totalString}.00`],
+      [`Other costs 5 Period ${inputNum}`, "14", `£${totalString}.00`],
+    ].forEach(([costCat, row, total]) => {
+      cy.getByAriaLabel(costCat).clear().type("100");
+      cy.wait(200);
+      totalCell(Number(row), total);
+    });
+  }
+  const percentages = [
+    "-96.86%",
+    "-99.37%",
+    "3.14%",
+    "3.14%",
+    "0.00%",
+    "3.14%",
+    "3.14%",
+    "3.14%",
+    "3.14%",
+    "3.14%",
+    "3.14%",
+  ];
+  let percentage = 0;
+  for (let i = 4; i < 12; i++) {
+    cy.get("tr")
+      .eq(i)
+      .within(() => {
+        cy.get("td:nth-child(16)").contains(percentages[percentage]);
+        percentage += 1;
+      });
+  }
+  for (let i = 2; i < 12; i++) {
+    cy.get("tr")
+      .eq(15)
+      .within(() => {
+        cy.get(`td:nth-child(${i + 2})`).contains("£1,020.00");
+      });
+  }
+  cy.get("tr")
+    .eq(15)
+    .within(() => {
+      cy.get("td:nth-child(14)").contains("£291,220.00");
+    });
+  cy.reload();
 };
