@@ -33,7 +33,7 @@ export function sss(unsanitisedValue: string | number): string {
 
 /**
  * Apex Injector
- * Injects strings, numbers and dates (only!) into a SOQL string.
+ * Injects strings, numbers and dates (only!) into an Apex string.
  *
  * Do not wrap variables in quotes `"` or `'`.
  */

@@ -181,18 +181,6 @@
       "externalUsername": "External username",
       "internalUsername": "Internal username"
     },
-    "projectCreator": {
-      "sectionTitle": "Project Creator",
-      "placeholderProjectCreatorProjectName": "Project name",
-      "placeholderProjectCreatorCompetitionType": "Competition type",
-      "placeholderProjectCreatorClaimFrequency": "Claim frequency",
-      "placeholderProjectCreatorProjectDuration": "Project duration",
-      "placeholderProjectParticipantType": "Participant type",
-      "placeholderProjectParticipantOrgType": "Participant organisation type",
-      "placeholderProjectCreatorProjectId": "Project ID",
-      "placeholderProjectCreatorCompetitionCode": "Competition Code",
-      "placeholderProjectCreatorImpactManagementParticipation": "Impact Management Participation"
-    },
     "pageCrasher": {
       "sectionTitle": "Page Crasher",
       "throw": "Throw a {{ name }} exception",

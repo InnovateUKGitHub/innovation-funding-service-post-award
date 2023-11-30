@@ -10,7 +10,6 @@ import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page
 import { DeveloperHomePage } from "@ui/containers/pages/developer/home.page";
 import { DeveloperPageCrasherPage } from "@ui/containers/pages/developer/PageCrasher.page";
 import { DeveloperPageCrasherForbiddenPage } from "@ui/containers/pages/developer/PageCrasherForbidden.page";
-import { DeveloperProjectCreatorPage } from "@ui/containers/pages/developer/ProjectCreator.page";
 import { DeveloperUserSwitcherPage } from "@ui/containers/pages/developer/UserSwitcher.page";
 import { ErrorNotFoundRoute, ErrorRoute } from "@ui/containers/errors.page";
 import { ForecastDashboardRoute } from "@ui/containers/pages/forecasts/forecastDashboard.page";
@@ -89,7 +88,6 @@ export const routeConfig = {
   failedBankCheckConfirmation: FailedBankCheckConfirmationRoute,
   home: DeveloperHomePage,
   developerUserSwitcherPage: DeveloperUserSwitcherPage,
-  developerProjectCreatorPage: DeveloperProjectCreatorPage,
   developerPageCrasherPage: DeveloperPageCrasherPage,
   developerPageCrasherForbiddenPage: DeveloperPageCrasherForbiddenPage,
   monitoringReportCreate: MonitoringReportCreateRoute,
