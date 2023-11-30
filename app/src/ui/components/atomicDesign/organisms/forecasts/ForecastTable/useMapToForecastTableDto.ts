@@ -8,6 +8,7 @@ import { ClaimStatusGroup, getClaimStatusGroup } from "./getForecastHeaderConten
 import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { CostCategoryType } from "@framework/constants/enums";
+import { ReceivedStatus } from "@framework/entities/received-status";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
@@ -165,7 +166,7 @@ const mapToForecastTableDto = ({
     periodTotals.push({
       periodId: i,
       value: 0,
-      iarDue: !!claim?.isIarRequired,
+      iarDue: !!claim?.isIarRequired && claim.iarStatus !== ReceivedStatus.Received,
       periodStart: claim?.periodStartDate ?? new Date(NaN),
       periodEnd: claim?.periodEndDate ?? new Date(NaN),
       rhc: drawRhc,
