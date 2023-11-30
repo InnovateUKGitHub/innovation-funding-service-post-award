@@ -24,6 +24,7 @@ const clock = new Clock();
 export type PcrNode = GQL.PartialNode<{
   Id: GQL.Maybe<string>;
   Acc_AdditionalNumberofMonths__c: GQL.Value<number>;
+  Acc_AwardRate__c: GQL.Value<number>;
   Acc_Comments__c: GQL.Value<string>;
   Acc_CommercialWork__c: GQL.Value<boolean>;
   Acc_Contact1EmailAddress__c: GQL.Value<string>;
@@ -109,6 +110,7 @@ export type PcrItemDtoMapping = Pick<
   | "availabilityPeriodChange"
   | "extensionPeriod"
   | "extensionPeriodChange"
+  | "awardRate"
   | "contact1Email"
   | "contact1Forename"
   | "contact1Phone"
@@ -201,6 +203,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
       Number(node?.Loan_ExtensionPeriod__c?.value),
       Number(node?.Loan_ExtensionPeriodChange__c?.value),
     );
+  },
+  awardRate(node) {
+    return node?.Acc_AwardRate__c?.value ?? null;
   },
   contact1Email(node) {
     return node?.Acc_Contact1EmailAddress__c?.value ?? null;

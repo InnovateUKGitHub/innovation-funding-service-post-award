@@ -96,6 +96,17 @@ export const organisationDetailsSchema = z.object({
 
 export type OrganisationDetailsSchema = z.infer<typeof organisationDetailsSchema>;
 
+export const awardRateErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "awardRate"],
+});
+
+export const awardRateSchema = z.object({
+  ...common,
+  awardRate: z.number().nullable(),
+});
+
+export type AwardRateSchema = z.infer<typeof awardRateSchema>;
+
 export const financeDetailsErrorMap = makeZodI18nMap({
   keyPrefix: ["pcr", "addPartner", "financeDetails"],
 });
