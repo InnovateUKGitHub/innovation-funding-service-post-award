@@ -1,153 +1,162 @@
-import { useState, useCallback } from "react";
-import { Pending } from "@shared/pending";
-import { EditorStatus } from "@ui/redux/constants/enums";
 import { useContent } from "@ui/hooks/content.hook";
-import { noop } from "@ui/helpers/noop";
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { CompaniesHouseResults } from "./CompaniesHouseResults";
-import { CompanyDto } from "@framework/dtos/companyDto";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
-import { useStores } from "@ui/redux/storesProvider";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
-import { Loader } from "@ui/components/bjss/loading";
+import { PcrPage } from "../../pcrPage";
+import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
+import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
+import { useLinks } from "../../utils/useNextLink";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { createRegisterButton } from "@framework/util/registerButton";
+import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
+import { SearchInput } from "@ui/components/bjss/inputs/searchInput";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
+import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { CompaniesHouseSchema, companiesHouseErrorMap, companiesHouseSchema } from "../addPartner.zod";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
+import { useUpdateCompaniesHouseResults } from "./useFetchCompanies";
 
-type CompaniesHouseStepProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
-
-const SearchForm = createTypedForm<null>();
-const CompanyForm = createTypedForm<PCRItemForPartnerAdditionDto>();
-
-export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: CompaniesHouseStepProps) => {
-  const { companies } = useStores();
+export const CompaniesHouseStep = () => {
   const { getContent } = useContent();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
+    usePcrWorkflowContext();
+
+  const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
+
+  const link = useLinks();
+
+  const { handleSubmit, register, formState, trigger, setValue, reset, getValues } = useForm<CompaniesHouseSchema>({
+    defaultValues: {
+      markedAsComplete: markedAsCompleteHasBeenChecked,
+      button_submit: "submit",
+      organisationName: pcrItem.organisationName ?? "",
+      registeredAddress: pcrItem.registeredAddress ?? "",
+      registrationNumber: pcrItem.registrationNumber ?? "",
+      searchResults: "",
+    },
+    resolver: zodResolver(companiesHouseSchema, {
+      errorMap: companiesHouseErrorMap,
+    }),
+  });
+  const validationErrors = useRhfErrors(formState.errors);
+  useFormValidate(trigger);
+
+  const { isFetchingCompanies, updateCompaniesHouseResults, companyResults } = useUpdateCompaniesHouseResults();
+
+  const registerButton = createRegisterButton(setValue, "button_submit");
   const { isServer } = useMounted();
 
-  const [searchInputValue, setSearchInputValue] = useState<string>();
-  const [formData, setFormData] = useState<PCRItemForPartnerAdditionDto>(originalPayload);
-
-  const getCompanies: () => Pending<CompanyDto[]> = useCallback(
-    () => (searchInputValue?.length ? companies.getCompanies(searchInputValue, 10) : Pending.done([])),
-    [companies, searchInputValue],
-  );
-
-  const handleCompanySelection = (companySelection: CompanyDto): void => {
-    const payload: PCRItemForPartnerAdditionDto = {
-      ...originalPayload,
-      organisationName: companySelection.title,
-      registrationNumber: companySelection.registrationNumber,
-      registeredAddress: companySelection.addressFull || originalPayload.registeredAddress,
-    };
-
-    setFormData(payload);
-    props.onChange(payload);
-  };
+  const disabled = isFetching || isFetchingCompanies;
 
   return (
-    <Section qa="company-house" title={getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}>
-      <SearchForm.Form qa="addPartnerForm" data={null} isSaving={props.status === EditorStatus.Saving} onSubmit={noop}>
-        <SearchForm.Fieldset
-          qa="search-companies-house"
-          heading={getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearch)}
-        >
-          <SearchForm.Search
-            labelHidden
-            autoComplete="off"
-            name="searchCompaniesHouse"
-            hint={getContent(x => x.pages.pcrAddPartnerCompanyHouse.hint)}
-            value={() => searchInputValue}
-            update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
-            maxLength={160}
-          />
+    <PcrPage>
+      <Section data-qa="company-house">
+        <H2>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}</H2>
+        <Form onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
+          <Fieldset>
+            <Legend>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearch)}</Legend>
+
+            <FormGroup>
+              <Hint id="hint-for-searchCompaniesHouse">
+                {getContent(x => x.pcrAddPartnerLabels.jesOrganisationSectionSubtitle)}
+              </Hint>
+              <SearchInput
+                disabled={isFetching}
+                ariaDescribedBy="hint-for-searchCompaniesHouse"
+                autoComplete="off"
+                name="searchCompaniesHouse"
+                onChange={searchValue => updateCompaniesHouseResults(searchValue?.trim() || "")}
+                maxLength={160}
+              />
+            </FormGroup>
+          </Fieldset>
 
           {isServer && (
-            <SearchForm.Button styling="Primary" name="companiesHouseSearch">
+            <Button name="companiesHouseSearch">
               {getContent(x => x.pages.pcrAddPartnerCompanyHouse.buttonSearch)}
-            </SearchForm.Button>
+            </Button>
           )}
-        </SearchForm.Fieldset>
 
-        <Loader
-          pending={getCompanies()}
-          renderLoading={() => (
-            <SimpleString>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}</SimpleString>
+          {isFetchingCompanies ? (
+            <P>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}</P>
+          ) : companyResults?.length > 0 ? (
+            <Fieldset>
+              <FormGroup>
+                <RadioList name="searchResults" register={register}>
+                  {companyResults.map(x => (
+                    <Radio
+                      key={x.registrationNumber}
+                      id={x.registrationNumber}
+                      value={x.registrationNumber}
+                      label={x.label}
+                      disabled={disabled}
+                      onClick={event => {
+                        const registrationNumber = (event.target as HTMLInputElement).value;
+                        const matchingCompany = companyResults.find(x => x.registrationNumber === registrationNumber);
+                        if (!matchingCompany) throw new Error("Cannot find matching company");
+                        reset({
+                          button_submit: "submit",
+                          markedAsComplete: markedAsCompleteHasBeenChecked,
+                          registeredAddress: matchingCompany.addressFull,
+                          organisationName: matchingCompany.title,
+                          registrationNumber,
+                        });
+                      }}
+                      defaultChecked={x.registrationNumber === getValues("registrationNumber")}
+                    />
+                  ))}
+                </RadioList>
+              </FormGroup>
+            </Fieldset>
+          ) : (
+            <P>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}</P>
           )}
-          render={(companyResults, isLoading) => {
-            const hasCompaniesResults = companyResults.length > 0;
-            const hasEmptySearchValue = typeof searchInputValue === "string" && searchInputValue.length === 0;
-            const isLoadingCompanies = hasEmptySearchValue && isLoading;
-            const hasNoCompanies = !isLoading && (hasEmptySearchValue || !hasCompaniesResults);
 
-            if (isLoadingCompanies) {
-              return <SimpleString>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}</SimpleString>;
-            }
+          <Fieldset>
+            <Legend>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingForm)}</Legend>
 
-            return (
-              <>
-                {hasCompaniesResults && (
-                  <CompaniesHouseResults
-                    options={companyResults}
-                    selectedRegistrationNumber={formData.registrationNumber || undefined}
-                    onSelect={handleCompanySelection}
-                    Form={SearchForm}
-                  />
-                )}
+            <FormGroup hasError={!!validationErrors?.organisationName}>
+              <Label htmlFor="organisationName">{getContent(x => x.pcrAddPartnerLabels.organisationNameHeading)}</Label>
+              <ValidationError error={validationErrors?.organisationName as RhfError} />
+              <TextInput id="organisationName" {...register("organisationName")} disabled={disabled} />
+            </FormGroup>
 
-                {hasNoCompanies && (
-                  <SimpleString>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}</SimpleString>
-                )}
-              </>
-            );
-          }}
-        />
-      </SearchForm.Form>
+            <FormGroup hasError={!!validationErrors?.registrationNumber}>
+              <Label htmlFor="registrationNumber">
+                {getContent(x => x.pcrAddPartnerLabels.registrationNumberHeading)}
+              </Label>
+              <ValidationError error={validationErrors?.registrationNumber as RhfError} />
+              <TextInput id="registrationNumber" {...register("registrationNumber")} disabled={disabled} />
+            </FormGroup>
 
-      <CompanyForm.Form
-        qa="company-details-form"
-        data={formData}
-        isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave(false)}
-        onChange={props.onChange}
-      >
-        <CompanyForm.Fieldset
-          qa="companies-house-form"
-          heading={getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingForm)}
-        >
-          <CompanyForm.String
-            name="organisationName"
-            label={getContent(x => x.pcrAddPartnerLabels.organisationNameHeading)}
-            value={dto => dto.organisationName}
-            update={(dto, val) => (dto.organisationName = val)}
-            validation={props.validator.companyHouseOrganisationName}
-          />
+            <FormGroup hasError={!!validationErrors?.registeredAddress}>
+              <Label htmlFor="registeredAddress">
+                {getContent(x => x.pcrAddPartnerLabels.registeredAddressHeading)}
+              </Label>
+              <ValidationError error={validationErrors?.registeredAddress as RhfError} />
+              <TextInput id="registeredAddress" {...register("registeredAddress")} disabled={disabled} />
+            </FormGroup>
+          </Fieldset>
 
-          <CompanyForm.String
-            name="registrationNumber"
-            label={getContent(x => x.pcrAddPartnerLabels.registrationNumberHeading)}
-            value={dto => dto.registrationNumber}
-            update={(dto, val) => (dto.registrationNumber = val)}
-            validation={props.validator.registrationNumber}
-          />
-
-          <CompanyForm.String
-            name="registeredAddress"
-            label={getContent(x => x.pcrAddPartnerLabels.registeredAddressHeading)}
-            value={dto => dto.registeredAddress}
-            update={(dto, val) => (dto.registeredAddress = val)}
-            validation={props.validator.registeredAddress}
-          />
-        </CompanyForm.Fieldset>
-
-        <CompanyForm.Fieldset qa="save-and-continue-companies-house">
-          <CompanyForm.Submit>{getContent(x => x.pcrItem.submitButton)}</CompanyForm.Submit>
-
-          <CompanyForm.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            {getContent(x => x.pcrItem.returnToSummaryButton)}
-          </CompanyForm.Button>
-        </CompanyForm.Fieldset>
-      </CompanyForm.Form>
-    </Section>
+          <Fieldset>
+            <Button type="submit" {...registerButton("submit")} disabled={disabled}>
+              {getContent(x => x.pcrItem.submitButton)}
+            </Button>
+            <Button type="submit" secondary {...registerButton("returnToSummary")} disabled={disabled}>
+              {getContent(x => x.pcrItem.returnToSummaryButton)}
+            </Button>
+          </Fieldset>
+        </Form>
+      </Section>
+    </PcrPage>
   );
 };

@@ -88,6 +88,7 @@ export const AcademicOrganisationStep = () => {
               {getContent(x => x.pcrAddPartnerLabels.searchButton)}
             </Button>
           )}
+
           <Section>
             {isLoading ? (
               <SimpleString>{getContent(x => x.pages.pcrAddPartnerAcademicOrganisation.loading)}</SimpleString>

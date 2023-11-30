@@ -65,6 +65,8 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
       "projectCity",
       "projectLocation",
       "projectPostcode",
+      "registeredAddress",
+      "registrationNumber",
     ],
     {},
   );

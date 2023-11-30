@@ -170,7 +170,7 @@ export const getAddPartnerWorkflow = (
       displayName: "Companies house",
       stepNumber: 3,
       validation: val => val.pcr,
-      stepRender: CompaniesHouseStep,
+      migratedStepRender: CompaniesHouseStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.organisationDetailsStep,

@@ -20,7 +20,7 @@ const useRadioListContext = () => {
 
 type RadioInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   "data-qa"?: string;
-  label: string;
+  label: string | ReactNode;
   id: string;
 };
 

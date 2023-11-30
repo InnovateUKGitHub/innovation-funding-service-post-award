@@ -68,3 +68,17 @@ export const projectManagerSchema = z.object({
 });
 
 export type ProjectManagerSchema = z.infer<typeof projectManagerSchema>;
+
+export const companiesHouseErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "companiesHouse"],
+});
+
+export const companiesHouseSchema = z.object({
+  ...common,
+  organisationName: z.string(),
+  registrationNumber: z.string(),
+  registeredAddress: z.string(),
+  searchResults: z.string(),
+});
+
+export type CompaniesHouseSchema = z.infer<typeof companiesHouseSchema>;
