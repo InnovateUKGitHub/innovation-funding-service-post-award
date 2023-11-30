@@ -82,3 +82,15 @@ export const companiesHouseSchema = z.object({
 });
 
 export type CompaniesHouseSchema = z.infer<typeof companiesHouseSchema>;
+
+export const organisationDetailsErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "organisationDetails"],
+});
+
+export const organisationDetailsSchema = z.object({
+  ...common,
+  participantSize: z.coerce.number(),
+  numberOfEmployees: z.coerce.number().nullable(),
+});
+
+export type OrganisationDetailsSchema = z.infer<typeof organisationDetailsSchema>;

@@ -20,7 +20,7 @@ import { CompaniesHouseStep } from "./CompaniesHouse/CompaniesHouseStep";
 import { FinanceContactStep } from "./steps/financeContactStep";
 import { FinanceDetailsStep } from "./financeDetailsStep";
 import { JeSStep } from "./steps/jeSStep";
-import { OrganisationDetailsStep } from "./steps/organisationDetailsSteps";
+import { OrganisationDetailsStep } from "./steps/organisationDetailsStep";
 import { ProjectLocationStep } from "./steps/projectLocationStep";
 import { ProjectManagerDetailsStep } from "./steps/projectManagerDetailsStep";
 import { RoleAndOrganisationStep } from "./steps/roleAndOrganisationStep";
@@ -177,7 +177,7 @@ export const getAddPartnerWorkflow = (
       displayName: "Organisation details",
       stepNumber: 4,
       validation: val => val.pcr,
-      stepRender: OrganisationDetailsStep,
+      migratedStepRender: OrganisationDetailsStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.financeDetailsStep,

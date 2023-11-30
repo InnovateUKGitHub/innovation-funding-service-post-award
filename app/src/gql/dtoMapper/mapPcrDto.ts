@@ -34,6 +34,7 @@ export type PcrNode = GQL.PartialNode<{
   Acc_Contact2Forename__c: GQL.Value<string>;
   Acc_Contact2Phone__c: GQL.Value<string>;
   Acc_Contact2Surname__c: GQL.Value<string>;
+  Acc_Employees__c: GQL.Value<number>;
   Acc_ExistingPartnerName__c: GQL.Value<string>;
   Acc_ExistingProjectDuration__c: GQL.Value<number>;
   Acc_GrantMovingOverFinancialYear__c: GQL.Value<number>;
@@ -121,6 +122,7 @@ export type PcrItemDtoMapping = Pick<
   | "grantMovingOverFinancialYear"
   | "guidance"
   | "lastUpdated"
+  | "numberOfEmployees"
   | "offsetMonths"
   | "organisationName"
   | "organisationType"
@@ -243,6 +245,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
     return node?.LastModifiedDate?.value
       ? clock.parseRequiredSalesforceDateTime(node?.LastModifiedDate?.value)
       : new Date();
+  },
+  numberOfEmployees(node) {
+    return node?.Acc_Employees__c?.value ?? null;
   },
   offsetMonths(node) {
     return node?.Acc_AdditionalNumberofMonths__c?.value ?? 0;
