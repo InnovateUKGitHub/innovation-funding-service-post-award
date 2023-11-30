@@ -12,8 +12,8 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { useContent } from "@ui/hooks/content.hook";
 import { useStores } from "@ui/redux/storesProvider";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
 import { userSwitcherProjectQuery, userSwitcherProjectsQuery } from "./UserSwitcher.query";
@@ -206,6 +206,7 @@ const UserSwitcherProjectSelector = () => {
   const { getContent } = useContent();
   const returnLocation = useReturnLocation();
   const user = useStores().users.getCurrentUser();
+  const { projectId: currentRouteProjectId } = useParams();
 
   const {
     email: initialEmailState,
@@ -213,7 +214,9 @@ const UserSwitcherProjectSelector = () => {
     userSwitcherSearchQuery: initialUserSwitcherSearchQuery,
   } = user;
 
-  const [projectId, setProjectId] = useState<ProjectId | undefined>(initialProjectIdState as ProjectId);
+  const [projectId, setProjectId] = useState<ProjectId | undefined>(
+    (currentRouteProjectId as ProjectId) ?? (initialProjectIdState as ProjectId),
+  );
   const [email, setEmail] = useState<string | undefined>(initialEmailState);
   const [userSearchInput, setUserSearchInput] = useState<string | undefined>(initialUserSwitcherSearchQuery);
   const [currentSearchInput, setCurrentSearchInput] = useState<string | undefined>(initialUserSwitcherSearchQuery);
@@ -222,6 +225,10 @@ const UserSwitcherProjectSelector = () => {
   const { data, isLoading } = useQuery<UserSwitcherProjectsQuery>(userSwitcherProjectsQuery, {
     search: `%${currentSearchInput ?? ""}%`,
   });
+
+  useEffect(() => {
+    setProjectId(currentRouteProjectId as ProjectId);
+  }, [currentRouteProjectId]);
 
   // Create options for dropdown to select a project.
   const projectOptions: DropdownListOption[] = getDefinedEdges(data?.salesforce.uiapi.query.Acc_Project__c?.edges).map(
