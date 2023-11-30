@@ -766,7 +766,7 @@ export const acceptInputAndUpdate = () => {
     [-10000, -2000],
     [-888, -177.6],
     [-66666, -13333.2],
-    [-3333, -66.6],
+    [-3333, -666.6],
     [0, 0],
     [22728.44, 4545.688],
     [50.24, 10.048],
@@ -1247,8 +1247,6 @@ export const uploadIAR = () => {
 };
 
 export const iarProceedToSummary = () => {
-  cy.clickOn("Continue to update forecast");
-  cy.heading("Update forecast");
   cy.clickOn("Continue to summary");
   cy.heading("Claim summary");
 };

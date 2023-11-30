@@ -16,12 +16,32 @@ describe("Claims > IAR Required - Submission", () => {
 
   it("Should proceed to Claim summary page and attempt to submit, prompting validation", iarSubmitValidate);
 
-  it("Should proceed to Claim documents page via the link on the page", () => {
-    cy.clickOn("Edit claim documents");
+  it("Should check the forecast to show that IAR is due", () => {
+    cy.clickOn("Back to update forecast");
+    cy.heading("Update forecast");
+    cy.get("tr")
+      .eq(2)
+      .within(() => {
+        cy.get("th:nth-child(2)").should("have.text", "Yes");
+      });
+  });
+
+  it("Should go back to the documents page", () => {
+    cy.clickOn("Back to claims documents");
     cy.heading("Claim documents");
   });
 
   it("Should upload an Independent Accountant's Report", uploadIAR);
+
+  it("Should proceed to the forecast table and check the IAR requirement flag has changed to No", () => {
+    cy.clickOn("Continue to update forecast");
+    cy.heading("Update forecast");
+    cy.get("tr")
+      .eq(2)
+      .within(() => {
+        cy.get("th:nth-child(2)").should("have.text", "No");
+      });
+  });
 
   it("Should proceed to claim summary", iarProceedToSummary);
 
