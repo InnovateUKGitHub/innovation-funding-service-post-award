@@ -773,6 +773,7 @@ exports[`Context should contain the repositories 1`] = `
       "Acc_ProjectParticipant__c",
       "Acc_OverrideAwardRate__c",
       "Acc_ProfileOverrideAwardRate__c",
+      "Acc_CostCategoryAwardOverride__c",
     ],
     "salesforceObjectName": "Acc_Profile__c",
   },

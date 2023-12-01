@@ -19,12 +19,15 @@ type ClaimOverrideNode = GQL.PartialNode<{
   }>;
   Acc_OverrideAwardRate__c: GQL.Value<number>;
   Acc_CostCategoryName__c: GQL.Value<string>;
-  Acc_ProfileOverrideAwardRate__c: GQL.Value<number>;
   Acc_CostCategory__c: GQL.Value<string>;
   Acc_CostCategory__r: GQL.Maybe<{
     Acc_CostCategoryName__c?: GQL.Value<string>;
   }>;
   Acc_ProjectPeriodNumber__c: GQL.Value<number>;
+
+  // Same thing twice. Don't think about it.
+  Acc_ProfileOverrideAwardRate__c: GQL.Value<number>;
+  Acc_CostCategoryAwardOverride__c: GQL.Value<number>;
 }>;
 
 /**
@@ -54,6 +57,15 @@ export function mapToClaimOverrides<T extends ReadonlyArray<GQL.Maybe<{ node: Cl
     if (typeof totalCostCategory?.node?.Acc_ProfileOverrideAwardRate__c?.value === "number") {
       foundOverride = {
         amount: totalCostCategory?.node?.Acc_ProfileOverrideAwardRate__c?.value,
+        target: AwardRateOverrideTarget.THIS_PARTICIPANT,
+        costCategoryId: (totalCostCategory?.node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId,
+        costCategoryName: totalCostCategory?.node?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ?? "unknown",
+      };
+    }
+
+    if (typeof totalCostCategory?.node?.Acc_CostCategoryAwardOverride__c?.value === "number") {
+      foundOverride = {
+        amount: totalCostCategory?.node?.Acc_CostCategoryAwardOverride__c?.value,
         target: AwardRateOverrideTarget.THIS_PARTICIPANT,
         costCategoryId: (totalCostCategory?.node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId,
         costCategoryName: totalCostCategory?.node?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ?? "unknown",

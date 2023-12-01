@@ -11,6 +11,7 @@ export interface ISalesforceProfileTotalCostCategory {
   Acc_ProjectParticipant__c: string;
   Acc_OverrideAwardRate__c: number | null;
   Acc_ProfileOverrideAwardRate__c: number | null;
+  Acc_CostCategoryAwardOverride__c: number | null;
 }
 
 export interface IProfileTotalCostCategoryRepository {
@@ -42,6 +43,7 @@ export class ProfileTotalCostCategoryRepository
     "Acc_ProjectParticipant__c",
     "Acc_OverrideAwardRate__c",
     "Acc_ProfileOverrideAwardRate__c",
+    "Acc_CostCategoryAwardOverride__c",
   ];
 
   getAllByPartnerId(partnerId: PartnerId): Promise<ISalesforceProfileTotalCostCategory[]> {

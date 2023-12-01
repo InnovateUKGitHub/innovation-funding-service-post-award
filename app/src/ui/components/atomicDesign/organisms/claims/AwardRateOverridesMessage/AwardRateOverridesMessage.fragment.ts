@@ -49,6 +49,9 @@ export const awardRateOverridesMessageFragment = graphql`
             Acc_ProfileOverrideAwardRate__c {
               value
             }
+            Acc_CostCategoryAwardOverride__c {
+              value
+            }
             Acc_ProjectPeriodStartDate__c {
               value
             }

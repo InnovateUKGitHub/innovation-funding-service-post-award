@@ -43,6 +43,15 @@ export class GetClaimOverrideRates extends QueryBase<ClaimOverrideRateDto> {
         };
       }
 
+      if (typeof totalCostCategory.Acc_CostCategoryAwardOverride__c === "number") {
+        foundOverride = {
+          amount: totalCostCategory.Acc_CostCategoryAwardOverride__c,
+          target: AwardRateOverrideTarget.THIS_PARTICIPANT,
+          costCategoryId: totalCostCategory.Acc_CostCategory__c as CostCategoryId,
+          costCategoryName: totalCostCategory.Acc_CostCategory__r.Acc_CostCategoryName__c,
+        };
+      }
+
       if (foundOverride) {
         costCategoryOverrides.push(foundOverride);
       }

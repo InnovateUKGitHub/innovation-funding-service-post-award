@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<afd2be3b6dec8b0ea8f3266d3f76c14d>>
+ * @generated SignedSource<<556f624a21b0b9162b4aaf8470c79692>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,9 @@ export type AwardRateOverridesMessageFragment$data = {
     readonly AwardRateOverridesMessage_Profile: {
       readonly edges: ReadonlyArray<{
         readonly node: {
+          readonly Acc_CostCategoryAwardOverride__c: {
+            readonly value: number | null | undefined;
+          } | null | undefined;
           readonly Acc_CostCategoryGOLCost__c: {
             readonly value: number | null | undefined;
           } | null | undefined;
@@ -331,6 +334,16 @@ return {
                     {
                       "alias": null,
                       "args": null,
+                      "concreteType": "PercentValue",
+                      "kind": "LinkedField",
+                      "name": "Acc_CostCategoryAwardOverride__c",
+                      "plural": false,
+                      "selections": (v0/*: any*/),
+                      "storageKey": null
+                    },
+                    {
+                      "alias": null,
+                      "args": null,
                       "concreteType": "DateValue",
                       "kind": "LinkedField",
                       "name": "Acc_ProjectPeriodStartDate__c",
@@ -397,6 +410,6 @@ return {
 };
 })();
 
-(node as any).hash = "28a9595bb28500fb44aec98b6e41c536";
+(node as any).hash = "c7da63dd6e83f7b58ffedca42c67f0ac";
 
 export default node;

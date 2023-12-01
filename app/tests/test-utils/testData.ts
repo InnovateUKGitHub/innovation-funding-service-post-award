@@ -706,6 +706,7 @@ export class TestData {
       Id: this.repositories.profileTotalCostCategory.Items.length + 1 + "",
       Acc_OverrideAwardRate__c: profileOverrideAwardRate ?? costCategory.overrideAwardRate ?? null,
       Acc_ProfileOverrideAwardRate__c: profileOverrideAwardRate ?? null,
+      Acc_CostCategoryAwardOverride__c: profileOverrideAwardRate ?? null,
     };
 
     if (update) {
