@@ -37,11 +37,6 @@ const profileIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Profile
 
 const claimIdValidation = z.string().startsWith(SalesforcePrefixes.Acc_Claims__c);
 
-const costCategoryIdValidation = z
-  .string()
-  .startsWith(SalesforcePrefixes.Acc_CostCategory__c)
-  .transform(x => x as CostCategoryId);
-
 const emptyStringToUndefinedValidation = z
   .string()
   .refine(x => x === "")
@@ -170,7 +165,6 @@ const getMultiFileValidation = (options: IAppOptions) =>
   }, z.array(getSingleFileValidation(options)).min(1).max(options.maxUploadFileCount));
 
 export {
-  costCategoryIdValidation,
   projectIdValidation,
   pcrIdValidation,
   pcrItemIdValidation,
