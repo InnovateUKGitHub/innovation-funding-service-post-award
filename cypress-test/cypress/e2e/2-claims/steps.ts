@@ -419,22 +419,6 @@ export const ktpAssociateEmployment = () => {
   cy.wait(500);
 };
 
-export const ktpHeadings = () => {
-  cy.heading("Associate Employment");
-  cy.validationNotification("This project does not follow the normal grant calculation rules");
-  cy.validationNotification(
-    "The project and any partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
-  );
-
-  cy.getByQA("guidance-currency-message").contains("You can enter up to 120 separate lines of costs");
-};
-
-export const ktpCostsToClaim = () => {
-  cy.heading("Costs to be claimed");
-  cy.validationNotification("This project does not follow the normal grant calculation rules");
-  cy.validationNotification("The project and any partner may have one or more cost categories");
-};
-
 export const ktpCorrectCats = () => {
   [
     "Associate Employment",
@@ -464,12 +448,13 @@ export const ktpCorrectCats = () => {
 
 export const nonFECMessaging = () => {
   [
-    "This project does not follow the normal grant calculation rules",
-    "The project and any partner may have one or more cost categories",
+    "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).",
+    "This claim may have one or more periods paid at a different funding award rate compared to your overall funding award rate.",
   ].forEach(guidance => {
     cy.validationNotification(guidance);
   });
   cy.list("This period is paid at a rate of 66.66% rather than your normal Award rate");
+  cy.list("Cost category associate employment is paid at a rate of 70% rather than your normal award rate");
 };
 
 export const academicCosts = () => {

@@ -3,10 +3,8 @@ import {
   accessOpenClaim,
   ktpAssociateEmployment,
   ktpCorrectCats,
-  ktpCostsToClaim,
   ktpForecastUpdate,
   ktpGuidance,
-  ktpHeadings,
   shouldShowProjectTitle,
   nonFECMessaging,
 } from "./steps";
@@ -28,7 +26,10 @@ describe("claims > KTP", () => {
 
   it("Displays the project title", shouldShowProjectTitle);
 
-  it("Should display 'Costs to be claimed' title and guidance messaging", ktpCostsToClaim);
+  it("Should display 'Costs to be claimed' title and guidance messaging", () => {
+    cy.heading("Costs to be claimed");
+    nonFECMessaging();
+  });
 
   it("Should contain the correct KTP cost categories", ktpCorrectCats);
 
@@ -36,7 +37,10 @@ describe("claims > KTP", () => {
     cy.clickOn("td", "Associate Employment");
   });
 
-  it("Should have Associate Employment page heading and guidance", ktpHeadings);
+  it("Should have Associate Employment page heading and guidance", () => {
+    cy.heading("Associate Employment");
+    nonFECMessaging();
+  });
 
   it("Should click 'Back to claims'", () => {
     cy.clickOn("Back to claims");
