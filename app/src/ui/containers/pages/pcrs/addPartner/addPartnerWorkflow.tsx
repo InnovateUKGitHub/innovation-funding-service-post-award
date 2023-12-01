@@ -1,6 +1,6 @@
 import { SpendProfileStep } from "@ui/containers/pages/pcrs/addPartner/spendProfileStep";
 import { AwardRateStep } from "@ui/containers/pages/pcrs/addPartner/steps/awardRateStep";
-import { OtherFundingStep } from "@ui/containers/pages/pcrs/addPartner/otherFundingStep";
+import { OtherFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/otherFundingStep";
 import { NonAidFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/nonAidFundingStep";
 import { DeMinimisStep } from "@ui/containers/pages/pcrs/addPartner/deMinimisStep";
 import { OtherSourcesOfFundingStep } from "@ui/containers/pages/pcrs/addPartner/otherSourcesOfFundingStep";
@@ -73,7 +73,7 @@ export const getAddPartnerWorkflow = (
         displayName: "Other public sector funding",
         stepNumber: 11,
         validation: val => val.pcr,
-        stepRender: OtherFundingStep,
+        migratedStepRender: OtherFundingStep,
       },
       {
         stepName: PCRStepType.awardRateStep,

@@ -37,6 +37,9 @@ export const addPartnerWorkflowQuery = graphql`
                 Acc_AwardRate__c {
                   value
                 }
+                Acc_CommercialWork__c {
+                  value
+                }
                 Acc_Contact1EmailAddress__c {
                   value
                 }
@@ -64,34 +67,34 @@ export const addPartnerWorkflowQuery = graphql`
                 Acc_Employees__c {
                   value
                 }
-                Acc_ParticipantSize__c {
-                  value
-                }
-                Acc_ProjectRole__c {
-                  value
-                }
-                Acc_ParticipantType__c {
-                  value
-                }
-                Acc_RegisteredAddress__c {
-                  value
-                }
-                Acc_RegistrationNumber__c {
+                Acc_Location__c {
                   value
                 }
                 Acc_OrganisationName__c {
                   value
                 }
-                Acc_CommercialWork__c {
+                Acc_OtherFunding__c {
                   value
                 }
-                Acc_Location__c {
+                Acc_ParticipantSize__c {
+                  value
+                }
+                Acc_ParticipantType__c {
+                  value
+                }
+                Acc_ProjectRole__c {
                   value
                 }
                 Acc_ProjectPostcode__c {
                   value
                 }
                 Acc_ProjectCity__c {
+                  value
+                }
+                Acc_RegisteredAddress__c {
+                  value
+                }
+                Acc_RegistrationNumber__c {
                   value
                 }
                 Acc_Turnover__c {

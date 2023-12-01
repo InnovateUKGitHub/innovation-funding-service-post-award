@@ -107,6 +107,17 @@ export const awardRateSchema = z.object({
 
 export type AwardRateSchema = z.infer<typeof awardRateSchema>;
 
+export const otherFundingErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "otherFunding"],
+});
+
+export const otherFundingSchema = z.object({
+  ...common,
+  hasOtherFunding: z.boolean().nullable(),
+});
+
+export type OtherFundingSchema = z.infer<typeof otherFundingSchema>;
+
 export const financeDetailsErrorMap = makeZodI18nMap({
   keyPrefix: ["pcr", "addPartner", "financeDetails"],
 });

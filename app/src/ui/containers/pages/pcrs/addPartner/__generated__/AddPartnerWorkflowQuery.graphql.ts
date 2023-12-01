@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d9338bda5562ebad207246599880af45>>
+ * @generated SignedSource<<2970dcd96f96198f9e318d1943d99c70>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,6 +17,25 @@ export type AddPartnerWorkflowQuery$data = {
   readonly salesforce: {
     readonly uiapi: {
       readonly query: {
+        readonly Acc_CostCategory__c: {
+          readonly edges: ReadonlyArray<{
+            readonly node: {
+              readonly Acc_CompetitionType__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Acc_CostCategoryName__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Acc_DisplayOrder__c: {
+                readonly value: number | null | undefined;
+              } | null | undefined;
+              readonly Acc_OrganisationType__c: {
+                readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Id: string;
+            } | null | undefined;
+          } | null | undefined> | null | undefined;
+        } | null | undefined;
         readonly Acc_ProjectChangeRequest__c: {
           readonly edges: ReadonlyArray<{
             readonly node: {
@@ -58,6 +77,9 @@ export type AddPartnerWorkflowQuery$data = {
               } | null | undefined;
               readonly Acc_OrganisationName__c: {
                 readonly value: string | null | undefined;
+              } | null | undefined;
+              readonly Acc_OtherFunding__c: {
+                readonly value: boolean | null | undefined;
               } | null | undefined;
               readonly Acc_ParticipantSize__c: {
                 readonly value: string | null | undefined;
@@ -426,6 +448,16 @@ v10 = [
                           {
                             "alias": null,
                             "args": null,
+                            "concreteType": "BooleanValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_CommercialWork__c",
+                            "plural": false,
+                            "selections": (v5/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
                             "concreteType": "StringValue",
                             "kind": "LinkedField",
                             "name": "Acc_Contact1EmailAddress__c",
@@ -518,18 +550,68 @@ v10 = [
                             "args": null,
                             "concreteType": "PicklistValue",
                             "kind": "LinkedField",
+                            "name": "Acc_Location__c",
+                            "plural": false,
+                            "selections": (v5/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_OrganisationName__c",
+                            "plural": false,
+                            "selections": (v5/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "BooleanValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_OtherFunding__c",
+                            "plural": false,
+                            "selections": (v5/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "PicklistValue",
+                            "kind": "LinkedField",
                             "name": "Acc_ParticipantSize__c",
                             "plural": false,
                             "selections": (v6/*: any*/),
                             "storageKey": null
                           },
-                          (v8/*: any*/),
                           {
                             "alias": null,
                             "args": null,
                             "concreteType": "PicklistValue",
                             "kind": "LinkedField",
                             "name": "Acc_ParticipantType__c",
+                            "plural": false,
+                            "selections": (v5/*: any*/),
+                            "storageKey": null
+                          },
+                          (v8/*: any*/),
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectPostcode__c",
+                            "plural": false,
+                            "selections": (v5/*: any*/),
+                            "storageKey": null
+                          },
+                          {
+                            "alias": null,
+                            "args": null,
+                            "concreteType": "StringValue",
+                            "kind": "LinkedField",
+                            "name": "Acc_ProjectCity__c",
                             "plural": false,
                             "selections": (v6/*: any*/),
                             "storageKey": null
@@ -973,16 +1055,16 @@ return {
     "selections": (v10/*: any*/)
   },
   "params": {
-    "cacheID": "8ab4c8e034f2be304e7feba317e7b5f0",
+    "cacheID": "662724dd400cedc87519a290ce22aca9",
     "id": null,
     "metadata": {},
     "name": "AddPartnerWorkflowQuery",
     "operationKind": "query",
-    "text": "query AddPartnerWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_AwardRate__c {\n                value\n              }\n              Acc_Contact1EmailAddress__c {\n                value\n              }\n              Acc_Contact1Forename__c {\n                value\n              }\n              Acc_Contact1Surname__c {\n                value\n              }\n              Acc_Contact1Phone__c {\n                value\n              }\n              Acc_Contact2EmailAddress__c {\n                value\n              }\n              Acc_Contact2Forename__c {\n                value\n              }\n              Acc_Contact2Surname__c {\n                value\n              }\n              Acc_Contact2Phone__c {\n                value\n              }\n              Acc_Employees__c {\n                value\n              }\n              Acc_ParticipantSize__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_RegisteredAddress__c {\n                value\n              }\n              Acc_RegistrationNumber__c {\n                value\n              }\n              Acc_OrganisationName__c {\n                value\n              }\n              Acc_CommercialWork__c {\n                value\n              }\n              Acc_Location__c {\n                value\n              }\n              Acc_ProjectPostcode__c {\n                value\n              }\n              Acc_ProjectCity__c {\n                value\n              }\n              Acc_Turnover__c {\n                value\n              }\n              Acc_TurnoverYearEnd__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query AddPartnerWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_CostCategory__c(first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_CostCategoryName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Acc_ProjectId__c: {eq: $projectId}}, orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_AccountId__r {\n                Name {\n                  value\n                }\n              }\n              Acc_OrganisationType__c {\n                value\n              }\n              Acc_ParticipantStatus__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_AwardRate__c {\n                value\n              }\n              Acc_CommercialWork__c {\n                value\n              }\n              Acc_Contact1EmailAddress__c {\n                value\n              }\n              Acc_Contact1Forename__c {\n                value\n              }\n              Acc_Contact1Surname__c {\n                value\n              }\n              Acc_Contact1Phone__c {\n                value\n              }\n              Acc_Contact2EmailAddress__c {\n                value\n              }\n              Acc_Contact2Forename__c {\n                value\n              }\n              Acc_Contact2Surname__c {\n                value\n              }\n              Acc_Contact2Phone__c {\n                value\n              }\n              Acc_Employees__c {\n                value\n              }\n              Acc_Location__c {\n                value\n              }\n              Acc_OrganisationName__c {\n                value\n              }\n              Acc_OtherFunding__c {\n                value\n              }\n              Acc_ParticipantSize__c {\n                value\n              }\n              Acc_ParticipantType__c {\n                value\n              }\n              Acc_ProjectRole__c {\n                value\n              }\n              Acc_ProjectPostcode__c {\n                value\n              }\n              Acc_ProjectCity__c {\n                value\n              }\n              Acc_RegisteredAddress__c {\n                value\n              }\n              Acc_RegistrationNumber__c {\n                value\n              }\n              Acc_Turnover__c {\n                value\n              }\n              Acc_TurnoverYearEnd__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {CreatedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    Id\n                    LinkedEntityId {\n                      value\n                    }\n                    isFeedAttachment\n                    isOwner\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      Description {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedBy {\n                        Name {\n                          value\n                        }\n                        Id\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "7b7eb4ed7051b39e12a0a34214adfbcf";
+(node as any).hash = "5909387d98c91070e29af842b3a7047e";
 
 export default node;
