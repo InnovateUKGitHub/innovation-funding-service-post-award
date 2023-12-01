@@ -43,7 +43,7 @@ const ClaimLineItemsTable = ({
   });
 
   return (
-    <Table>
+    <Table data-qa="current-claim-summary-table">
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerDescription)}</TH>
