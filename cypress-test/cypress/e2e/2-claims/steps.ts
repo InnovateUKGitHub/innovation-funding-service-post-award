@@ -132,11 +132,8 @@ export const shouldShowAcademicCostCatTable = () => {
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 
 export const correctTableHeaders = () => {
-  ["Description", "Cost (£)", "Last updated"].forEach(header => {
+  ["Description", "Cost (£)", "Last updated", "Total costs", "Forecast costs", "Difference"].forEach(header => {
     cy.tableHeader(header);
-  });
-  ["Total costs", "Forecast costs"].forEach(cell => {
-    cy.tableCell(cell);
   });
 };
 
@@ -150,14 +147,18 @@ export const newCostCatLineItem = () => {
   cy.getByQA("current-claim-summary-table")
     .find("tbody.govuk-table__body")
     .then($table => {
-      if ($table.find("tr").length > 0) {
+      if ($table.find("tr").length > 4) {
         cy.clickOn("Remove", { multiple: true });
       }
     });
-
   cy.clickOn("Add a cost");
-  cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
-  cy.getByAriaLabel("value of claim line item 1").clear().type("1000").wait(800);
+  cy.wait(200);
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.get("td:nth-child(1)").clear().type("Test line item");
+      cy.get("td:nth-child(2)").clear().type("1000").wait(800);
+    });
 };
 
 export const allowFileUpload = () => {
@@ -217,20 +218,20 @@ export const reflectCostAdded = () => {
 
 export const clearUpLabourCostCat = () => {
   cy.get("td.govuk-table__cell").contains("Labour").click();
-  cy.getByQA("button_upload-qa").click();
+  cy.clickOn("Upload and remove documents");
   cy.heading("Labour documents");
   cy.clickOn("Remove");
   cy.wait(1000);
   cy.get("a.govuk-back-link").click();
   cy.heading("Labour");
-  cy.get("a.govuk-link").contains("Remove").first().click();
-  cy.get("textarea#comments").clear();
+  cy.clickOn("Remove");
+  cy.get("textarea").clear();
 };
 
 export const clearUpOverheadsCostCat = () => {
   cy.get("td.govuk-table__cell").contains("Overheads").click();
   cy.heading("Overheads");
-  cy.get("a.govuk-link").contains("Remove").first().click();
+  cy.clickOn("Remove");
 };
 
 export const evidenceRequiredMessage = () => {
@@ -241,8 +242,8 @@ export const evidenceRequiredMessage = () => {
 };
 
 export const additionalInformationHeading = () => {
-  cy.get("h2").contains("Additional information");
-  cy.get("#comments-hint").contains("Explain any difference");
+  cy.get("legend").contains("Additional information");
+  cy.get(".govuk-hint").contains("Explain any difference");
 };
 
 export const returnToCostCatPage = () => {
@@ -680,10 +681,23 @@ export const removeLineItems = () => {
 };
 
 export const validateLineItem = () => {
-  cy.getByAriaLabel("value of claim line item 1").clear().type("gsdfadsf").wait(500);
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.get("td:nth-child(2)").within(() => {
+        cy.get("input").clear().type("gsdfadsf").wait(500);
+      });
+    });
   cy.clickOn("Save and return to claims");
+
   cy.validationLink("Costs must be a number");
-  cy.getByAriaLabel("value of claim line item 1").clear().type("1000").wait(500);
+  cy.get("tr")
+    .eq(1)
+    .within(() => {
+      cy.get("td:nth-child(2)").within(() => {
+        cy.get("input").clear().type("1000").wait(500);
+      });
+    });
 };
 
 export const validateForecast = () => {

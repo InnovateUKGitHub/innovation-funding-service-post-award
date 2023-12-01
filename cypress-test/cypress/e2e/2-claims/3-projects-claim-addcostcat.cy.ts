@@ -78,11 +78,11 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   it("Should contain additional information heading and messaging", additionalInformationHeading);
 
   it("Has an area for writing free-text comments", () => {
-    cy.getByQA("info-text-area").clear().type(standardComments);
+    cy.get("textarea").clear().type(standardComments);
   });
 
   it("Should count how many characters you have used", () => {
-    cy.get("p.character-count").should("contain.text", "You have 32694 characters remaining");
+    cy.get("p.character-count").should("have.text", "You have 32694 characters remaining");
   });
 
   it("Should save and return to the first claims screen", () => {

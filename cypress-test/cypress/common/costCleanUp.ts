@@ -6,13 +6,13 @@ export const euiCostCleanUp = () => {
         cy.log("**Clearing cost category**");
         cy.get("a").contains("Labour").click();
         cy.heading("Labour");
-        cy.get("a").contains("Remove").click();
+        cy.clickOn("Remove");
         cy.get("textarea").clear();
         cy.get("main").then($main => {
           if ($main.text().includes("testfile.doc")) {
             cy.button("Upload and remove documents").click();
             cy.heading("Labour documents");
-            cy.button("Remove").click();
+            cy.clickOn("Remove");
             cy.validationNotification("has been removed");
             cy.backLink("Back to Labour").click();
             cy.heading("Labour");
@@ -24,7 +24,7 @@ export const euiCostCleanUp = () => {
         cy.heading("Costs to be claimed");
         cy.get("a").contains("Overheads").click();
         cy.heading("Overheads");
-        cy.get("a").contains("Remove").click();
+        cy.clickOn("Remove");
         cy.get("textarea").clear();
         cy.button("Save and return to claims").click();
         cy.heading("Costs to be claimed");
@@ -41,7 +41,7 @@ export const overheadsTidyUp = () => {
       if ($tr2.text().includes("£200.00")) {
         cy.get("a").contains("Overheads").click();
         cy.heading("Overheads");
-        cy.get("a").contains("Remove").click();
+        cy.clickOn("Remove");
         cy.button("Save and return to claims").click();
         cy.heading("Costs to be claimed");
       } else {
