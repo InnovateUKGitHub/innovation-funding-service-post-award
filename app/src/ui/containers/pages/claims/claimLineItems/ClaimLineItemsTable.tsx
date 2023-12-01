@@ -13,6 +13,7 @@ import { UseFormReturn, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { EditClaimLineItemsSchemaType } from "./editClaimLineItems.zod";
 import { useMapToClaimLineItemTableDto } from "./useMapToClaimLineItemTableDto";
+import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 
 const emptyData = { id: undefined, description: "", value: "" };
 
@@ -48,7 +49,11 @@ const ClaimLineItemsTable = ({
           <TH>{getContent(x => x.pages.editClaimLineItems.headerDescription)}</TH>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerCost)}</TH>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerLastUpdated)}</TH>
-          {formMethods && isClient && <TH>{getContent(x => x.pages.editClaimLineItems.headerAction)}</TH>}
+          {formMethods && isClient && (
+            <TH>
+              <AccessibilityText>{getContent(x => x.pages.editClaimLineItems.headerAction)}</AccessibilityText>
+            </TH>
+          )}
         </TR>
       </THead>
       <TBody>
