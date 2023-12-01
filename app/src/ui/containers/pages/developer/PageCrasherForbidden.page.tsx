@@ -1,7 +1,7 @@
 import { defineRoute } from "@ui/containers/containerBase";
 
 export const DeveloperPageCrasherForbiddenPage = defineRoute({
-  routeName: "developerPageCrasherPage",
+  routeName: "developerPageCrasherForbiddenPage",
   routePath: "/developer/forbiddenCrash",
   container: () => null,
   getParams: () => ({}),

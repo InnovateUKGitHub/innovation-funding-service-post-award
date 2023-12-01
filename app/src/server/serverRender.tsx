@@ -20,16 +20,14 @@ import { IClientConfig } from "src/types/IClientConfig";
 import { rootReducer, RootState } from "@ui/redux/reducers/rootReducer";
 import { createStores, IStores, StoresProvider } from "@ui/redux/storesProvider";
 import { matchRoute } from "@ui/routing/matchRoute";
-import { routeConfig } from "@ui/routing/routeConfig";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
-import { NextFunction, Request, Response } from "express";
+import express from "express";
 import { GraphQLSchema } from "graphql";
 import { renderToString } from "react-dom/server";
 import { Helmet } from "react-helmet";
 import { Provider } from "react-redux";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
-import { StaticRouter } from "react-router-dom/server";
 import { AnyAction, createStore, Store } from "redux";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
 import { getErrorStatus } from "./errorHandlers";
@@ -40,31 +38,42 @@ import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvi
 import { MessageContextProvider } from "@ui/context/messages";
 import { setZodError } from "@ui/redux/actions/common/zodErrorAction";
 import { setPreviousReactHookFormInput } from "@ui/redux/actions/common/previousReactHookFormInputAction";
+import { ReactRouterRouter, reactRouterRoutes } from "@ui/routing/reactRouterRoutes";
+import { StaticHandlerContext, createStaticHandler, createStaticRouter } from "react-router-dom/server";
+import { expressRequestToWhatwgRequest } from "@ui/routing/expressRequestToWhatwgRequest";
 
 interface IServerApp {
-  requestUrl: string;
   store: Store<RootState>;
   stores: IStores;
   relayEnvironment: RelayModernEnvironment;
   formError?: Result[];
   apiError?: IAppError;
   clientConfig: IClientConfig;
+  router: ReactRouterRouter;
+  context: StaticHandlerContext;
 }
 
 const logger = new Logger("HTML Render");
 
-const ServerApp = ({ requestUrl, store, stores, relayEnvironment, formError, apiError, clientConfig }: IServerApp) => (
+const ServerApp = ({
+  store,
+  stores,
+  relayEnvironment,
+  formError,
+  apiError,
+  clientConfig,
+  router,
+  context,
+}: IServerApp) => (
   <ClientConfigProvider config={clientConfig}>
     <ApiErrorContextProvider value={apiError}>
       <FormErrorContextProvider value={formError}>
         <Provider store={store}>
-          <StaticRouter location={requestUrl}>
-            <StoresProvider value={stores}>
-              <MessageContextProvider>
-                <App store={store} relayEnvironment={relayEnvironment} />
-              </MessageContextProvider>
-            </StoresProvider>
-          </StaticRouter>
+          <StoresProvider value={stores}>
+            <MessageContextProvider>
+              <App relayEnvironment={relayEnvironment} router={router} context={context} />
+            </MessageContextProvider>
+          </StoresProvider>
         </Provider>
       </FormErrorContextProvider>
     </ApiErrorContextProvider>
@@ -76,8 +85,18 @@ const ServerApp = ({ requestUrl, store, stores, relayEnvironment, formError, api
  */
 const serverRender =
   ({ schema }: { schema: GraphQLSchema }) =>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async ({ req, res, next, err }: { req: Request; res: Response; next: NextFunction; err?: any }): Promise<void> => {
+  async ({
+    req,
+    res,
+    next,
+    err,
+  }: {
+    req: express.Request;
+    res: express.Response;
+    next: express.NextFunction;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    err?: any;
+  }): Promise<void> => {
     const { nonce } = res.locals;
     const middleware = setupServerMiddleware();
     const context = contextProvider.start({ user: req.session?.user });
@@ -118,8 +137,6 @@ const serverRender =
         dispatch: action => process.nextTick(() => store.dispatch(action as AnyAction)),
       });
 
-      let renderUrl = req.url;
-
       let formError: Result[] = [];
       let apiError: IAppError | undefined;
       if (err) {
@@ -159,7 +176,6 @@ const serverRender =
           statusCode = getErrorStatus(err);
           const errorPayload = createErrorPayload(err, false).params;
           store.dispatch(setError(errorPayload));
-          renderUrl = routeConfig.error.getLink({}).path;
           isErrorPage = true;
           apiError = errorPayload as unknown as IAppError;
         }
@@ -185,9 +201,9 @@ const serverRender =
       }
 
       // Note: Keep resolving app queries + actions until completion for final render below
-      await loadAllData(store, () => {
-        renderApp({
-          requestUrl: renderUrl,
+      await loadAllData(store, async () => {
+        await renderApp({
+          req,
           nonce,
           store,
           stores,
@@ -201,8 +217,8 @@ const serverRender =
       const finalRelayEnvironment = getServerGraphQLFinalRenderEnvironment(relayData);
 
       res.status(statusCode).send(
-        renderApp({
-          requestUrl: renderUrl,
+        await renderApp({
+          req,
           nonce,
           store,
           stores,
@@ -250,8 +266,8 @@ const loadAllData = (store: Store, render: () => void): Promise<void> => {
 /**
  * renders the app server side
  */
-function renderApp(props: {
-  requestUrl: string;
+async function renderApp(props: {
+  req: express.Request;
   nonce: string;
   store: Store<RootState>;
   stores: IStores;
@@ -260,9 +276,19 @@ function renderApp(props: {
   formError?: Result[] | undefined;
   apiError?: IAppError | undefined;
   clientConfig: IClientConfig;
-}): string {
+}): Promise<string> {
+  const handler = createStaticHandler(reactRouterRoutes);
+  const fetchRequest = await handler.query(expressRequestToWhatwgRequest(props.req));
+
+  if (fetchRequest instanceof Response) {
+    console.debug("Handler query has redirected HTTP rendering...");
+    throw fetchRequest;
+  }
+
+  const router = createStaticRouter(reactRouterRoutes, fetchRequest);
+
   const state = props.store.getState();
-  const html = renderToString(<ServerApp {...props} />);
+  const html = renderToString(<ServerApp {...props} context={fetchRequest} router={router} />);
   // Note: Must be called after "renderToString"
   const helmet = Helmet.renderStatic();
 

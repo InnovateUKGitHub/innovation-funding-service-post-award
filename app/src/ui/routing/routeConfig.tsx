@@ -142,5 +142,3 @@ export const routeConfig = {
   viewForecast: ViewForecastRoute,
   forecastUpdate: UpdateForecastRoute,
 } as const;
-
-export const getRoutes = () => Object.entries(routeConfig);

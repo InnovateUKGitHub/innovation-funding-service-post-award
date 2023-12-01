@@ -11,7 +11,7 @@ import { MessageContextProvider } from "@ui/context/messages";
 import { useEffect, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import type { PreloadedState } from "redux";
 import { AnyAction, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
@@ -24,6 +24,7 @@ import { Result } from "@ui/validation/result";
 import { initaliseAction } from "@ui/redux/actions/initalise";
 import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvider";
 import { IClientConfig } from "src/types/IClientConfig";
+import { reactRouterRoutes } from "@ui/routing/reactRouterRoutes";
 
 // get servers store to initialise client store
 const clientConfig = processDto(window.__CLIENT_CONFIG__) as unknown as IClientConfig;
@@ -45,6 +46,8 @@ const getStores = () => {
 
 // make sure middleware and reducers have run
 store.dispatch(initaliseAction());
+
+const router = createBrowserRouter(reactRouterRoutes);
 
 const Client = () => {
   const [, setState] = useState(0);
@@ -74,11 +77,9 @@ const Client = () => {
         <ApiErrorContextProvider value={apiErrors}>
           <FormErrorContextProvider value={formErrors}>
             <MessageContextProvider>
-              <BrowserRouter>
-                <StoresProvider value={getStores()}>
-                  <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-                </StoresProvider>
-              </BrowserRouter>
+              <StoresProvider value={getStores()}>
+                <App relayEnvironment={ClientGraphQLEnvironment} router={router} />
+              </StoresProvider>
             </MessageContextProvider>
           </FormErrorContextProvider>
         </ApiErrorContextProvider>

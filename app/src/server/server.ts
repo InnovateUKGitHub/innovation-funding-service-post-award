@@ -2,14 +2,11 @@ import fs from "fs";
 import https from "https";
 import express from "express";
 import crypto from "crypto";
-
 import { router as authRouter } from "@server/auth";
 import { router as cspRouter } from "@server/csp";
 import { getServerRoutes, noAuthRouter } from "@server/router";
 import { useBasicAuth } from "./basicAuth";
-
 import { allowCache, noCache, setOwaspHeaders, setBasicAuth } from "@server/cacheHeaders";
-
 import { contextProvider } from "@server/features/common/contextProvider";
 import { InitialiseContentCommand } from "@server/features/general/initialiseContentCommand";
 import { fetchCaches } from "@server/features/initialCache";

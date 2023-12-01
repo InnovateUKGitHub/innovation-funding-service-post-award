@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
 export interface MountedState {
   isClient: boolean;
@@ -27,7 +27,7 @@ export function useMountedState(): MountedState {
 }
 
 interface MountedProviderProps {
-  children: React.ReactElement;
+  children: ReactNode;
 }
 
 /**
