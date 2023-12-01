@@ -54,27 +54,6 @@ export const Link = (props: LinkProps) => {
   );
 };
 
-interface ModalLinkProps extends StyledLinkProps {
-  modalId: string;
-  className?: string;
-  open: boolean;
-  children: React.ReactNode;
-}
-
-export class ModalLink extends React.Component<ModalLinkProps> {
-  render() {
-    const { modalId, children } = this.props;
-    const styling = this.props.styling || "Link";
-    const className = getClassNames(styling, false, this.props.className);
-
-    return (
-      <a href={this.props.open ? `#${modalId}` : "#"} className={className}>
-        {children}
-      </a>
-    );
-  }
-}
-
 export const BackLink: React.FunctionComponent<LinkProps> = props => (
   <Link styling="BackLink" {...props}>
     {props.children}

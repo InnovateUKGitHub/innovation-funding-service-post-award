@@ -16,7 +16,6 @@ import { setError } from "@ui/redux/actions/common/errorActions";
 import { initaliseAction } from "@ui/redux/actions/initalise";
 import { setupInitialState } from "@ui/redux/initialState";
 import { setupServerMiddleware } from "@ui/redux/middleware";
-import { ModalProvider, ModalRegister } from "@ui/redux/modalProvider";
 import { IClientConfig } from "src/types/IClientConfig";
 import { rootReducer, RootState } from "@ui/redux/reducers/rootReducer";
 import { createStores, IStores, StoresProvider } from "@ui/redux/storesProvider";
@@ -46,7 +45,6 @@ interface IServerApp {
   requestUrl: string;
   store: Store<RootState>;
   stores: IStores;
-  modalRegister: ModalRegister;
   relayEnvironment: RelayModernEnvironment;
   formError?: Result[];
   apiError?: IAppError;
@@ -55,27 +53,16 @@ interface IServerApp {
 
 const logger = new Logger("HTML Render");
 
-const ServerApp = ({
-  requestUrl,
-  store,
-  stores,
-  modalRegister,
-  relayEnvironment,
-  formError,
-  apiError,
-  clientConfig,
-}: IServerApp) => (
+const ServerApp = ({ requestUrl, store, stores, relayEnvironment, formError, apiError, clientConfig }: IServerApp) => (
   <ClientConfigProvider config={clientConfig}>
     <ApiErrorContextProvider value={apiError}>
       <FormErrorContextProvider value={formError}>
         <Provider store={store}>
           <StaticRouter location={requestUrl}>
             <StoresProvider value={stores}>
-              <ModalProvider value={modalRegister}>
-                <MessageContextProvider>
-                  <App store={store} relayEnvironment={relayEnvironment} />
-                </MessageContextProvider>
-              </ModalProvider>
+              <MessageContextProvider>
+                <App store={store} relayEnvironment={relayEnvironment} />
+              </MessageContextProvider>
             </StoresProvider>
           </StaticRouter>
         </Provider>
@@ -95,7 +82,6 @@ const serverRender =
     const middleware = setupServerMiddleware();
     const context = contextProvider.start({ user: req.session?.user });
     const clientConfig = getClientConfig(context);
-    const modalRegister = new ModalRegister();
     const { ServerGraphQLEnvironment, relayServerSSR } = await getServerGraphQLEnvironment({ req, res, schema });
     let isErrorPage = false;
 
@@ -205,7 +191,6 @@ const serverRender =
           nonce,
           store,
           stores,
-          modalRegister,
           relayEnvironment: ServerGraphQLEnvironment,
           clientConfig,
         });
@@ -221,7 +206,6 @@ const serverRender =
           nonce,
           store,
           stores,
-          modalRegister,
           relayEnvironment: finalRelayEnvironment,
           relayData,
           formError,
@@ -271,7 +255,6 @@ function renderApp(props: {
   nonce: string;
   store: Store<RootState>;
   stores: IStores;
-  modalRegister: ModalRegister;
   relayEnvironment: RelayModernEnvironment;
   relayData?: SSRCache;
   formError?: Result[] | undefined;

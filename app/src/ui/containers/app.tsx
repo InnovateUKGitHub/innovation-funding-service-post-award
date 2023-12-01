@@ -11,7 +11,6 @@ import { PageTitleProvider } from "@ui/features/page-title";
 import { ProjectParticipantProvider } from "@ui/components/atomicDesign/atoms/providers/ProjectParticipants/project-participants";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
-import { noop } from "@ui/helpers/noop";
 import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { useAppMount } from "./app/app-mount.hook";
@@ -28,9 +27,7 @@ import { GovWidthContainer } from "@ui/components/atomicDesign/atoms/GovWidthCon
 import { Header } from "@ui/components/atomicDesign/organisms/Header/header";
 import { PhaseBanner } from "@ui/components/atomicDesign/molecules/PhaseBanner/phaseBanner";
 import { SuspensePageLoader } from "@ui/components/bjss/loading";
-import { PrivateModal } from "@ui/components/atomicDesign/molecules/Modal/modal";
 import { routeTransition } from "@ui/redux/actions/common/transitionActions";
-import { useModal } from "@ui/redux/modalProvider";
 import { RoutesProvider } from "@ui/redux/routesProvider";
 import { useStores } from "@ui/redux/storesProvider";
 import { routeConfig, getRoutes } from "@ui/routing/routeConfig";
@@ -60,7 +57,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   useAppMount(routePathParams);
 
   const content = useInitContent(params);
-  const modalRegister = useModal();
   const auth = stores.users.getCurrentUserAuthorisation();
   const config = useClientConfig();
   const messages = stores.messages.messages();
@@ -70,11 +66,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const titlePayload = currentRoute.getTitle({ params, stores, content });
 
   const navigationType = useNavigationType();
-
-  // Note: Modals are rarely used, but leaving support currently
-  useEffect(() => {
-    modalRegister.subscribe("app", noop);
-  }, [modalRegister]);
 
   // TODO: Deprecating 'config' and pulling from redux store via 'useSelector' prop drilling :(
   // TODO: Deprecating 'messages' and pulling from redux store via 'useSelector' prop drilling :(
@@ -137,10 +128,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
 
             {!config.ssoEnabled && <DeveloperSection />}
             <Footer />
-
-            {modalRegister.getModals().map(modal => (
-              <PrivateModal key={modal.id} {...modal} />
-            ))}
           </FullHeight.Container>
         </PageTitleProvider>
       </ContentProvider>

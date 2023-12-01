@@ -6,7 +6,6 @@ import { processDto } from "@shared/processResponse";
 import { App } from "@ui/containers/app";
 import { ApiErrorContextProvider } from "@ui/context/api-error";
 import { FormErrorContextProvider } from "@ui/context/form-error";
-import { ModalProvider, ModalRegister } from "@ui/redux/modalProvider";
 import { createStores, StoresProvider } from "@ui/redux/storesProvider";
 import { MessageContextProvider } from "@ui/context/messages";
 import { useEffect, useState } from "react";
@@ -77,9 +76,7 @@ const Client = () => {
             <MessageContextProvider>
               <BrowserRouter>
                 <StoresProvider value={getStores()}>
-                  <ModalProvider value={new ModalRegister()}>
-                    <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
-                  </ModalProvider>
+                  <App store={store} relayEnvironment={ClientGraphQLEnvironment} />
                 </StoresProvider>
               </BrowserRouter>
             </MessageContextProvider>
