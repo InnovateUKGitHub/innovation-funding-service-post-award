@@ -17,19 +17,26 @@ import { AccessibilityText } from "@ui/components/atomicDesign/atoms/Accessibili
 
 const emptyData = { id: undefined, description: "", value: "" };
 
-const ClaimLineItemsTable = ({
+interface ClaimLineItemsTableProps {
+  lineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate">[];
+  forecastDetail: Pick<ForecastDetailsDTO, "value">;
+}
+
+interface EditClaimLineItemsTableProps extends ClaimLineItemsTableProps {
+  formMethods: UseFormReturn<z.output<EditClaimLineItemsSchemaType>>;
+  disabled?: boolean;
+}
+
+const EditClaimLineItemsTable = ({
   formMethods,
   lineItems,
   forecastDetail,
   disabled,
-}: {
-  formMethods?: UseFormReturn<z.output<EditClaimLineItemsSchemaType>>;
-  lineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate">[];
-  forecastDetail: Pick<ForecastDetailsDTO, "value">;
-  disabled?: boolean;
-}) => {
+}: EditClaimLineItemsTableProps) => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
+
+  const { register, getFieldState, watch } = formMethods;
   const { fields, append, remove } = useFieldArray({
     control: formMethods?.control,
     name: "lineItems",
@@ -38,7 +45,7 @@ const ClaimLineItemsTable = ({
   const { difference, forecast, rows, total } = useMapToClaimLineItemTableDto({
     existingLineItems: lineItems,
     currentLineItems: fields,
-    watchedLineItems: formMethods?.watch("lineItems"),
+    watchedLineItems: watch("lineItems"),
     forecastDetail,
   });
 
@@ -49,7 +56,7 @@ const ClaimLineItemsTable = ({
           <TH>{getContent(x => x.pages.editClaimLineItems.headerDescription)}</TH>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerCost)}</TH>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerLastUpdated)}</TH>
-          {formMethods && isClient && (
+          {isClient && (
             <TH>
               <AccessibilityText>{getContent(x => x.pages.editClaimLineItems.headerAction)}</AccessibilityText>
             </TH>
@@ -59,54 +66,39 @@ const ClaimLineItemsTable = ({
       <TBody>
         {rows.map((x, i) => {
           return (
-            <TR
-              key={`${i}-js-enabled-${x.jsDisabledRow}`}
-              hasError={formMethods?.getFieldState(`lineItems.${i}`).invalid}
-            >
-              {formMethods ? (
-                <>
-                  <TD className="ifspa-claim-line-input-cell">
-                    <input
-                      type="hidden"
-                      value={x.id ?? ""}
-                      {...(x.jsDisabledRow ? { name: `lineItems.${i}.id` } : formMethods.register(`lineItems.${i}.id`))}
-                    />
-                    <ValidationError error={formMethods.getFieldState(`lineItems.${i}.description`).error} />
-                    <TextInput
-                      id={`lineItems_${i}_description`}
-                      hasError={formMethods.getFieldState(`lineItems.${i}.description`).invalid}
-                      defaultValue={x.description}
-                      disabled={disabled}
-                      {...(x.jsDisabledRow
-                        ? { name: `lineItems.${i}.description` }
-                        : formMethods.register(`lineItems.${i}.description`))}
-                    />
-                  </TD>
-                  <TD className="ifspa-claim-line-input-cell">
-                    <ValidationError error={formMethods.getFieldState(`lineItems.${i}.value`).error} />
-                    <TextInput
-                      id={`lineItems_${i}_value`}
-                      hasError={formMethods.getFieldState(`lineItems.${i}.value`).invalid}
-                      disabled={disabled}
-                      defaultValue={x.displayValue}
-                      {...(x.jsDisabledRow
-                        ? { name: `lineItems.${i}.value` }
-                        : formMethods.register(`lineItems.${i}.value`))}
-                    />
-                  </TD>
-                </>
-              ) : (
-                <>
-                  <TD>{x.description}</TD>
-                  <TD>
-                    <Currency value={x.value} />
-                  </TD>
-                </>
-              )}
+            <TR key={`${i}-js-enabled-${x.jsDisabledRow}`} hasError={getFieldState(`lineItems.${i}`).invalid}>
+              <TD className="ifspa-claim-line-input-cell">
+                <input
+                  type="hidden"
+                  value={x.id ?? ""}
+                  {...(x.jsDisabledRow ? { name: `lineItems.${i}.id` } : register(`lineItems.${i}.id`))}
+                />
+                <ValidationError error={getFieldState(`lineItems.${i}.description`).error} />
+                <TextInput
+                  id={`lineItems_${i}_description`}
+                  hasError={getFieldState(`lineItems.${i}.description`).invalid}
+                  defaultValue={x.description}
+                  disabled={disabled}
+                  {...(x.jsDisabledRow
+                    ? { name: `lineItems.${i}.description` }
+                    : register(`lineItems.${i}.description`))}
+                />
+              </TD>
+              <TD className="ifspa-claim-line-input-cell">
+                <ValidationError error={getFieldState(`lineItems.${i}.value`).error} />
+                <TextInput
+                  id={`lineItems_${i}_value`}
+                  hasError={getFieldState(`lineItems.${i}.value`).invalid}
+                  disabled={disabled}
+                  defaultValue={x.displayValue}
+                  {...(x.jsDisabledRow ? { name: `lineItems.${i}.value` } : register(`lineItems.${i}.value`))}
+                />
+              </TD>
+
               <TD className="ifspa-claim-line-data-cell">
                 {x.lastModifiedDate ? <ShortDate value={x.lastModifiedDate} /> : <TableEmptyCell />}
               </TD>
-              {formMethods && isClient && (
+              {isClient && (
                 <TD className="ifspa-claim-line-data-cell">
                   <SubmitButton
                     onClick={e => {
@@ -125,7 +117,7 @@ const ClaimLineItemsTable = ({
         })}
       </TBody>
       <TFoot>
-        {formMethods && isClient && (
+        {isClient && (
           <TR>
             <TD colSpan={4}>
               <SubmitButton
@@ -151,7 +143,7 @@ const ClaimLineItemsTable = ({
           <TD>
             <TableEmptyCell />
           </TD>
-          {formMethods && isClient && (
+          {isClient && (
             <TD>
               <TableEmptyCell />
             </TD>
@@ -167,7 +159,7 @@ const ClaimLineItemsTable = ({
           <TD>
             <TableEmptyCell />
           </TD>
-          {formMethods && isClient && (
+          {isClient && (
             <TD>
               <TableEmptyCell />
             </TD>
@@ -183,7 +175,7 @@ const ClaimLineItemsTable = ({
           <TD>
             <TableEmptyCell />
           </TD>
-          {formMethods && isClient && (
+          {isClient && (
             <TD>
               <TableEmptyCell />
             </TD>
@@ -194,4 +186,76 @@ const ClaimLineItemsTable = ({
   );
 };
 
-export { ClaimLineItemsTable };
+const ClaimLineItemsTable = ({ lineItems, forecastDetail }: ClaimLineItemsTableProps) => {
+  const { getContent } = useContent();
+
+  const { difference, forecast, rows, total } = useMapToClaimLineItemTableDto({
+    existingLineItems: lineItems,
+    forecastDetail,
+  });
+
+  return (
+    <Table data-qa="current-claim-summary-table">
+      <THead>
+        <TR>
+          <TH>{getContent(x => x.pages.editClaimLineItems.headerDescription)}</TH>
+          <TH>{getContent(x => x.pages.editClaimLineItems.headerCost)}</TH>
+          <TH>{getContent(x => x.pages.editClaimLineItems.headerLastUpdated)}</TH>
+        </TR>
+      </THead>
+      <TBody>
+        {rows.map((x, i) => {
+          return (
+            <TR key={i}>
+              <TD>{x.description}</TD>
+              <TD>
+                <Currency value={x.value} />
+              </TD>
+
+              <TD className="ifspa-claim-line-data-cell">
+                {x.lastModifiedDate ? <ShortDate value={x.lastModifiedDate} /> : <TableEmptyCell />}
+              </TD>
+            </TR>
+          );
+        })}
+      </TBody>
+      <TFoot>
+        <TR>
+          <TH numeric bold>
+            {getContent(x => x.pages.editClaimLineItems.totalCosts)}
+          </TH>
+          <TD>
+            <Currency value={total} />
+          </TD>
+          <TD>
+            <TableEmptyCell />
+          </TD>
+        </TR>
+        <TR>
+          <TH numeric bold>
+            {getContent(x => x.pages.editClaimLineItems.forecastCosts)}
+          </TH>
+          <TD>
+            <Currency value={forecast} />
+          </TD>
+          <TD>
+            <TableEmptyCell />
+          </TD>
+        </TR>
+        <TR>
+          <TH numeric bold>
+            {getContent(x => x.pages.editClaimLineItems.difference)}
+          </TH>
+          <TD>
+            <Currency value={difference} />
+          </TD>
+          <TD>
+            <TableEmptyCell />
+          </TD>
+        </TR>
+      </TFoot>
+    </Table>
+  );
+};
+
+export { EditClaimLineItemsTable, ClaimLineItemsTable };

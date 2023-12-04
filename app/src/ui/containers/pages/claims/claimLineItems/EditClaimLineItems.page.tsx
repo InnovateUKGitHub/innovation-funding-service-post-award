@@ -21,7 +21,7 @@ import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ClaimLineItemsParams, getParams, useBackLink, useClaimLineItemsData } from "./ClaimLineItems.logic";
-import { ClaimLineItemsTable } from "./ClaimLineItemsTable";
+import { EditClaimLineItemsTable } from "./ClaimLineItemsTable";
 import { DeleteByEnteringZero, isNotAuthorOfLineItems } from "./DeleteByEnteringZero";
 import { DocumentUploadLinkGuidance } from "./DocumentUploadLinkGuidance";
 import { GuidanceSection } from "./GuidanceSection";
@@ -64,7 +64,7 @@ const EditClaimLineItemsPage = ({
       comments: defaults?.comments,
     },
   });
-  const { register, handleSubmit, setValue, setError, formState } = formMethods;
+  const { register, handleSubmit, setValue, setError, formState, watch } = formMethods;
   const registerButton = createRegisterButton<z.output<EditClaimLineItemsSchemaType>>(setValue, "form");
   const { onUpdate, isFetching } = useOnClaimLineItemsSubmit();
   const onSubmitUpdate = (dto: z.output<EditClaimLineItemsSchemaType>) => {
@@ -102,7 +102,7 @@ const EditClaimLineItemsPage = ({
         <input type="hidden" {...register("costCategoryId")} value={costCategoryId} />
 
         <Section>
-          <ClaimLineItemsTable
+          <EditClaimLineItemsTable
             formMethods={formMethods}
             lineItems={claimDetails.lineItems}
             forecastDetail={forecastDetail}
@@ -129,7 +129,7 @@ const EditClaimLineItemsPage = ({
           <Hint id="hint-for-explaination">
             {getContent(x => x.pages.editClaimLineItems.hintAdditionalInformation)}
           </Hint>
-          <CharacterCount count={300} type="descending" maxValue={32768}>
+          <CharacterCount count={watch("comments")?.length ?? 0} type="descending" maxValue={32768}>
             <Textarea id="explaination" disabled={isFetching} {...register("comments")} />
           </CharacterCount>
         </FormGroup>
