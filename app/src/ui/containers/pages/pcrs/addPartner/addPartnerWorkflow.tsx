@@ -4,7 +4,7 @@ import { OtherFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/oth
 import { NonAidFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/nonAidFundingStep";
 import { DeMinimisStep } from "@ui/containers/pages/pcrs/addPartner/deMinimisStep";
 import { OtherSourcesOfFundingStep } from "@ui/containers/pages/pcrs/addPartner/otherSourcesOfFundingStep";
-import { AcademicCostsReviewStep } from "@ui/containers/pages/pcrs/addPartner/academicCostsReviewStep";
+import { AcademicCostsReviewStep } from "@ui/containers/pages/pcrs/addPartner/steps/academicCostsReviewStep";
 import { AgreementToPCRStep } from "./agreementToPcrStep";
 import { PCRStepType, PCROrganisationType, PCRItemType, PCRProjectRole } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
@@ -142,7 +142,7 @@ export const getAddPartnerWorkflow = (
       displayName: "Academic costs",
       stepNumber: 10,
       migratedStepRender: AcademicCostsStep,
-      readonlyStepRender: AcademicCostsReviewStep,
+      migratedReadonlyStepRender: AcademicCostsReviewStep,
     });
   } else {
     workflow.steps.push({
