@@ -49,6 +49,7 @@ const objectsToKeep = [
   "Acc_ProjectContactLink__c",
   "Acc_Project__c",
   "Acc_BroadcastMessage__c",
+  "Acc_IFSSpendProfile__c",
   "Account",
   "Contact",
   "Group",

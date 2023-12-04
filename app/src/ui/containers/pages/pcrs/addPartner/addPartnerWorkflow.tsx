@@ -9,10 +9,9 @@ import { AgreementToPCRStep } from "./agreementToPcrStep";
 import { PCRStepType, PCROrganisationType, PCRItemType, PCRProjectRole } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
-import { CombinedResultValidator } from "@ui/validation/results";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { IPCRWorkflow } from "../pcrWorkflow";
-import { AcademicCostsStep } from "./academicCostsStep";
+import { AcademicCostsStep } from "./steps/academicCostsStep";
 import { AcademicOrganisationStep } from "./steps/academicOrganisationStep";
 import { AddPartnerSummary } from "./addPartnerSummary";
 import { StateAidEligibilityStep } from "./steps/aidEligibilityStep";
@@ -58,28 +57,24 @@ export const getAddPartnerWorkflow = (
         stepName: PCRStepType.projectLocationStep,
         displayName: "Project location",
         stepNumber: 6,
-        validation: val => val.pcr,
         migratedStepRender: ProjectLocationStep,
       },
       {
         stepName: PCRStepType.financeContactStep,
         displayName: "Finance contact",
         stepNumber: 7,
-        validation: val => val.pcr,
         migratedStepRender: FinanceContactStep,
       },
       {
         stepName: PCRStepType.otherFundingStep,
         displayName: "Other public sector funding",
         stepNumber: 11,
-        validation: val => val.pcr,
         migratedStepRender: OtherFundingStep,
       },
       {
         stepName: PCRStepType.awardRateStep,
         displayName: "Funding level",
         stepNumber: 13,
-        validation: val => val.pcr,
         migratedStepRender: AwardRateStep,
       },
       {
@@ -91,7 +86,6 @@ export const getAddPartnerWorkflow = (
       },
     ],
     summary: {
-      validation: val => val,
       summaryRender: AddPartnerSummary,
     },
     isMigratedToGql: true,
@@ -111,7 +105,6 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.aidEligibilityStep,
       displayName: "Non aid eligibility",
       stepNumber: 2,
-      validation: val => val.pcr,
       migratedStepRender: NonAidFundingStep,
     });
   } else if (item.typeOfAid === TypeOfAid.DeMinimisAid) {
@@ -127,7 +120,6 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.aidEligibilityStep,
       displayName: "State aid funding",
       stepNumber: 2,
-      validation: val => val.pcr,
       migratedStepRender: StateAidEligibilityStep,
     });
   }
@@ -137,31 +129,19 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.academicOrganisationStep,
       displayName: "Organisation name",
       stepNumber: 3,
-      validation: val => val.pcr,
       migratedStepRender: AcademicOrganisationStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.jeSStep,
       displayName: "Je-S form",
       stepNumber: 9,
-      validation: val => val.files,
       migratedStepRender: JeSStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.academicCostsStep,
       displayName: "Academic costs",
       stepNumber: 10,
-      validation: val => {
-        const addPartnerValidator = val.pcr.items.results.find(
-          x => x.model.type === PCRItemType.PartnerAddition,
-        ) as PCRPartnerAdditionItemDtoValidator;
-
-        return new CombinedResultValidator(
-          addPartnerValidator.tsbReference,
-          ...addPartnerValidator.spendProfile.results[0].errors,
-        );
-      },
-      stepRender: AcademicCostsStep,
+      migratedStepRender: AcademicCostsStep,
       readonlyStepRender: AcademicCostsReviewStep,
     });
   } else {
@@ -169,21 +149,18 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.companiesHouseStep,
       displayName: "Companies house",
       stepNumber: 3,
-      validation: val => val.pcr,
       migratedStepRender: CompaniesHouseStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.organisationDetailsStep,
       displayName: "Organisation details",
       stepNumber: 4,
-      validation: val => val.pcr,
       migratedStepRender: OrganisationDetailsStep,
     });
     workflow.steps.push({
       stepName: PCRStepType.financeDetailsStep,
       displayName: "Financial details",
       stepNumber: 5,
-      validation: val => val.pcr,
       migratedStepRender: FinanceDetailsStep,
     });
     workflow.steps.push({
@@ -201,7 +178,6 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.projectManagerDetailsStep,
       displayName: "Project manager",
       stepNumber: 8,
-      validation: val => val.pcr,
       migratedStepRender: ProjectManagerDetailsStep,
     });
   }

@@ -5,6 +5,25 @@ export const addPartnerWorkflowQuery = graphql`
     salesforce {
       uiapi {
         query {
+          Acc_CostCategory__c(first: 2000, orderBy: { Acc_DisplayOrder__c: { order: ASC } }) {
+            edges {
+              node {
+                Id
+                Acc_CostCategoryName__c {
+                  value
+                }
+                Acc_DisplayOrder__c {
+                  value
+                }
+                Acc_OrganisationType__c {
+                  value
+                }
+                Acc_CompetitionType__c {
+                  value
+                }
+              }
+            }
+          }
           Acc_ProjectParticipant__c(
             where: { Acc_ProjectId__c: { eq: $projectId } }
             orderBy: { Acc_AccountId__r: { Name: { order: ASC } } }
@@ -26,6 +45,89 @@ export const addPartnerWorkflowQuery = graphql`
                 }
                 Acc_ProjectRole__c {
                   value
+                }
+              }
+            }
+          }
+          Acc_IFSSpendProfile__c(
+            where: {
+              and: [
+                { RecordType: { DeveloperName: { eq: "PCR_Spend_Profile" } } }
+                { Acc_ProjectChangeRequest__c: { eq: $pcrItemId } }
+              ]
+            }
+            first: 1000
+          ) {
+            edges {
+              node {
+                Id
+                Acc_CostCategoryID__c {
+                  value
+                }
+                Acc_ProjectChangeRequest__c {
+                  value
+                }
+                Acc_TotalCost__c {
+                  value
+                }
+                Acc_ItemDescription__c {
+                  value
+                }
+                Acc_DateSecured__c {
+                  value
+                }
+                Acc_GrossCostOfRole__c {
+                  value
+                }
+                Acc_DaysSpentOnProject__c {
+                  value
+                }
+                Acc_Rate__c {
+                  value
+                }
+                Acc_OverheadRate__c {
+                  value
+                }
+                Acc_Quantity__c {
+                  value
+                }
+                Acc_CostPerItem__c {
+                  value
+                }
+                Acc_Country__c {
+                  value
+                }
+                Acc_RoleAndDescription__c {
+                  value
+                }
+                Acc_NewOrExisting__c {
+                  value
+                }
+                Acc_DepreciationPeriod__c {
+                  value
+                }
+                Acc_NetPresentValue__c {
+                  value
+                }
+                Acc_ResidualValue__c {
+                  value
+                }
+                Acc_Utilisation__c {
+                  value
+                }
+                Acc_NumberOfTimes__c {
+                  value
+                }
+                Acc_CostEach__c {
+                  value
+                }
+                RecordType {
+                  Name {
+                    value
+                  }
+                  DeveloperName {
+                    value
+                  }
                 }
               }
             }
@@ -95,6 +197,12 @@ export const addPartnerWorkflowQuery = graphql`
                   value
                 }
                 Acc_RegistrationNumber__c {
+                  value
+                }
+                Acc_Status__c {
+                  value
+                }
+                Acc_TSBReference__c {
                   value
                 }
                 Acc_Turnover__c {

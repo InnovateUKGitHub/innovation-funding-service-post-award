@@ -778,6 +778,9 @@ type Acc_CostCategory__c {
   Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
 
   """childRelationship"""
+  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
+
+  """childRelationship"""
   Profile__r(upperBound: Int, orderBy: Acc_Profile__c_OrderBy, where: Acc_Profile__c_Filter, after: String, first: Int): Acc_Profile__cConnection
 
   """childRelationship"""
@@ -884,6 +887,380 @@ input Acc_CostCategory__c_OrderBy {
 }
 
 union Acc_CostCategory__c_Owner = Group | User
+
+type Acc_IFSSpendProfile__c {
+  LastModifiedDate: DateTimeValue
+  Acc_DATotalEstatesCosts__c: CurrencyValue
+  Acc_ForecastInitialValue__c: CurrencyValue
+  Acc_TotalOverheadCosts1__c: CurrencyValue
+  Acc_Amount__c: CurrencyValue
+  Acc_Role__c: StringValue
+  Acc_ProjectID__c: StringValue
+  Acc_CostOfSubcontractor__c: CurrencyValue
+  Acc_FundingSought__c: CurrencyValue
+  Acc_OverheadRate__c: PicklistValue
+  Acc_CostOfRole__c: CurrencyValue
+  Acc_ProjectPeriodStartDate__c: DateValue
+  Acc_TotalOverheadCosts__c: CurrencyValue
+  Name: StringValue
+  Acc_CostCategoryDescription__c: StringValue
+  Acc_TotalValue__c: CurrencyValue
+  Acc_AwardRate__c: PercentValue
+  CreatedById: IDValue
+
+  """parentRelationship"""
+  CreatedBy: User
+  Acc_CostEach__c: CurrencyValue
+  Acc_TotalIndirectCosts__c: CurrencyValue
+  Acc_ResidualValue__c: CurrencyValue
+  Acc_DITotalOtherCosts__c: CurrencyValue
+  Acc_TotalOtherCosts__c: CurrencyValue
+  Acc_PartnerContribution__c: CurrencyValue
+  Acc_GolValue__c: CurrencyValue
+  Acc_ProjectPeriodLongName__c: StringValue
+  Acc_DateSecured__c: DateValue
+  Acc_ProjectParticipantID__c: IDValue
+
+  """parentRelationship"""
+  Acc_ProjectParticipantID__r: Acc_ProjectParticipant__c
+  IsDeleted: BooleanValue
+  Acc_PeriodForecastStatus__c: PicklistValue
+  LastViewedDate: DateTimeValue
+  Acc_DITotalStaffCosts__c: CurrencyValue
+  Acc_CompetitionType__c: StringValue
+  Acc_DATotalInvestigatorsCosts__c: CurrencyValue
+  Acc_NewOrExisting__c: PicklistValue
+  Acc_Utilisation__c: PercentValue
+  Acc_ETotalOtherCosts__c: CurrencyValue
+  CreatedDate: DateTimeValue
+  Acc_TSBReference__c: StringValue
+  Acc_TotalSubcontractingCosts__c: CurrencyValue
+  Acc_TotalCapitalUsageCosts__c: CurrencyValue
+  Acc_Name__c: StringValue
+  Acc_CostCategoryID__c: IDValue
+
+  """parentRelationship"""
+  Acc_CostCategoryID__r: Acc_CostCategory__c
+  Acc_DATotalOtherCosts__c: CurrencyValue
+  Acc_TotalFutureCostCategoryValue__c: CurrencyValue
+  Acc_Item__c: StringValue
+  Acc_OCDescription__c: LongTextAreaValue
+  Acc_NetPresentValue__c: CurrencyValue
+  LastReferencedDate: DateTimeValue
+  Acc_TotalGolvalue__c: CurrencyValue
+  Acc_DITotalTravelCosts__c: CurrencyValue
+  Acc_OtherFunding__c: BooleanValue
+  Acc_DaysSpentOnProject__c: DoubleValue
+  Acc_TotalDirectlyAllocatedCosts__c: CurrencyValue
+  Acc_ItemDescription__c: LongTextAreaValue
+  Acc_Quantity__c: DoubleValue
+  Acc_TravelCostOfItem__c: CurrencyValue
+  Acc_Country__c: StringValue
+  OwnerId: IDValue
+
+  """polymorphicParentRelationship"""
+  Owner: Acc_IFSSpendProfile__c_Owner
+  Acc_TotalCost__c: CurrencyValue
+  Acc_RoleAndDescription__c: LongTextAreaValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+
+  """parentRelationship"""
+  RecordType: RecordType
+  Acc_TotalTravelCosts__c: CurrencyValue
+  Acc_ProjectPeriodEndDate__c: DateValue
+  Acc_TotalMaterialsCosts__c: CurrencyValue
+  Acc_ProjectChangeRequest__c: IDValue
+
+  """parentRelationship"""
+  Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c
+  Acc_DepreciationPeriod__c: DoubleValue
+  Acc_TotalExceptionsCosts__c: CurrencyValue
+  Acc_ETotalStaffCosts__c: CurrencyValue
+  Acc_MaterialsCostOfItem__c: CurrencyValue
+  Acc_TotalLabourCosts__c: CurrencyValue
+  Acc_TSDescription__c: TextAreaValue
+  Acc_TotalCostCategoryValue__c: CurrencyValue
+  Acc_TotalProjectCosts__c: CurrencyValue
+  Acc_Source__c: StringValue
+  Acc_NumberOfTimes__c: DoubleValue
+  Acc_TotalDirectlyIncurredCosts__c: CurrencyValue
+  Acc_CapitalUsageCostOfItem__c: CurrencyValue
+  Acc_OtherCostsCostOfItem__c: CurrencyValue
+  Acc_TotalIndirectCosts1__c: CurrencyValue
+  SystemModstamp: DateTimeValue
+  Acc_GrossCostOfRole__c: CurrencyValue
+  Acc_CostPerItem__c: CurrencyValue
+  Acc_Rate__c: CurrencyValue
+  Acc_OrganisationType__c: StringValue
+  Acc_ForecastLatestValue__c: CurrencyValue
+  LastModifiedById: IDValue
+
+  """parentRelationship"""
+  LastModifiedBy: User
+  Acc_ProjectPeriodNumber__c: DoubleValue
+
+  """childRelationship"""
+  ContentDocumentLinks(upperBound: Int, orderBy: ContentDocumentLink_OrderBy, where: ContentDocumentLink_Filter, after: String, first: Int): ContentDocumentLinkConnection
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+}
+
+type Acc_IFSSpendProfile__cConnection {
+  edges: [Acc_IFSSpendProfile__cEdge]
+  totalCount: Int!
+}
+
+type Acc_IFSSpendProfile__cEdge {
+  node: Acc_IFSSpendProfile__c
+  cursor: String!
+}
+
+input Acc_IFSSpendProfile__c_Filter {
+  LastModifiedDate: DateTimeOperators
+  Acc_DATotalEstatesCosts__c: CurrencyOperators
+  Acc_ForecastInitialValue__c: CurrencyOperators
+  Acc_TotalOverheadCosts1__c: CurrencyOperators
+  Acc_Amount__c: CurrencyOperators
+  Acc_Role__c: StringOperators
+  Acc_ProjectID__c: StringOperators
+  Acc_CostOfSubcontractor__c: CurrencyOperators
+  Acc_FundingSought__c: CurrencyOperators
+  Acc_OverheadRate__c: PicklistOperators
+  Acc_CostOfRole__c: CurrencyOperators
+  Acc_ProjectPeriodStartDate__c: DateOperators
+  Acc_TotalOverheadCosts__c: CurrencyOperators
+  Name: StringOperators
+  Acc_CostCategoryDescription__c: StringOperators
+  Acc_TotalValue__c: CurrencyOperators
+  Acc_AwardRate__c: PercentOperators
+  CreatedById: IdOperators
+  CreatedBy: User_Filter
+  Acc_CostEach__c: CurrencyOperators
+  Acc_TotalIndirectCosts__c: CurrencyOperators
+  Acc_ResidualValue__c: CurrencyOperators
+  Acc_DITotalOtherCosts__c: CurrencyOperators
+  Acc_TotalOtherCosts__c: CurrencyOperators
+  Acc_PartnerContribution__c: CurrencyOperators
+  Acc_GolValue__c: CurrencyOperators
+  Acc_ProjectPeriodLongName__c: StringOperators
+  Acc_DateSecured__c: DateOperators
+  Acc_ProjectParticipantID__c: IdOperators
+  Acc_ProjectParticipantID__r: Acc_ProjectParticipant__c_Filter
+  IsDeleted: BooleanOperators
+  Acc_PeriodForecastStatus__c: PicklistOperators
+  LastViewedDate: DateTimeOperators
+  Acc_DITotalStaffCosts__c: CurrencyOperators
+  Acc_CompetitionType__c: StringOperators
+  Acc_DATotalInvestigatorsCosts__c: CurrencyOperators
+  Acc_NewOrExisting__c: PicklistOperators
+  Acc_Utilisation__c: PercentOperators
+  Acc_ETotalOtherCosts__c: CurrencyOperators
+  CreatedDate: DateTimeOperators
+  Acc_TSBReference__c: StringOperators
+  Acc_TotalSubcontractingCosts__c: CurrencyOperators
+  Id: IdOperators
+  Acc_TotalCapitalUsageCosts__c: CurrencyOperators
+  Acc_Name__c: StringOperators
+  Acc_CostCategoryID__c: IdOperators
+  Acc_CostCategoryID__r: Acc_CostCategory__c_Filter
+  Acc_DATotalOtherCosts__c: CurrencyOperators
+  Acc_TotalFutureCostCategoryValue__c: CurrencyOperators
+  Acc_Item__c: StringOperators
+  Acc_OCDescription__c: LongTextAreaOperators
+  Acc_NetPresentValue__c: CurrencyOperators
+  LastReferencedDate: DateTimeOperators
+  Acc_TotalGolvalue__c: CurrencyOperators
+  Acc_DITotalTravelCosts__c: CurrencyOperators
+  Acc_OtherFunding__c: BooleanOperators
+  Acc_DaysSpentOnProject__c: DoubleOperators
+  Acc_TotalDirectlyAllocatedCosts__c: CurrencyOperators
+  Acc_ItemDescription__c: LongTextAreaOperators
+  Acc_Quantity__c: DoubleOperators
+  Acc_TravelCostOfItem__c: CurrencyOperators
+  Acc_Country__c: StringOperators
+  OwnerId: IdOperators
+  Acc_TotalCost__c: CurrencyOperators
+  Acc_RoleAndDescription__c: LongTextAreaOperators
+  RecordTypeId: IdOperators
+  RecordType: RecordType_Filter
+  Acc_TotalTravelCosts__c: CurrencyOperators
+  Acc_ProjectPeriodEndDate__c: DateOperators
+  Acc_TotalMaterialsCosts__c: CurrencyOperators
+  Acc_ProjectChangeRequest__c: IdOperators
+  Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c_Filter
+  Acc_DepreciationPeriod__c: DoubleOperators
+  Acc_TotalExceptionsCosts__c: CurrencyOperators
+  Acc_ETotalStaffCosts__c: CurrencyOperators
+  Acc_MaterialsCostOfItem__c: CurrencyOperators
+  Acc_TotalLabourCosts__c: CurrencyOperators
+  Acc_TSDescription__c: TextAreaOperators
+  Acc_TotalCostCategoryValue__c: CurrencyOperators
+  Acc_TotalProjectCosts__c: CurrencyOperators
+  Acc_Source__c: StringOperators
+  Acc_NumberOfTimes__c: DoubleOperators
+  Acc_TotalDirectlyIncurredCosts__c: CurrencyOperators
+  Acc_CapitalUsageCostOfItem__c: CurrencyOperators
+  Acc_OtherCostsCostOfItem__c: CurrencyOperators
+  Acc_TotalIndirectCosts1__c: CurrencyOperators
+  SystemModstamp: DateTimeOperators
+  Acc_GrossCostOfRole__c: CurrencyOperators
+  Acc_CostPerItem__c: CurrencyOperators
+  Acc_Rate__c: CurrencyOperators
+  Acc_OrganisationType__c: StringOperators
+  Acc_ForecastLatestValue__c: CurrencyOperators
+  LastModifiedById: IdOperators
+  LastModifiedBy: User_Filter
+  Acc_ProjectPeriodNumber__c: DoubleOperators
+  and: [Acc_IFSSpendProfile__c_Filter]
+  or: [Acc_IFSSpendProfile__c_Filter]
+  not: Acc_IFSSpendProfile__c_Filter
+}
+
+input Acc_IFSSpendProfile__c_GroupBy {
+  LastModifiedDate: GroupByDateFunction
+  Acc_Role__c: GroupByClause
+  Acc_OverheadRate__c: GroupByClause
+  Acc_ProjectPeriodStartDate__c: GroupByClause
+  CreatedById: GroupByClause
+  CreatedBy: User_GroupBy
+  CloneSourceId: GroupByClause
+  Acc_DateSecured__c: GroupByClause
+  Acc_ProjectParticipantID__c: GroupByClause
+  Acc_ProjectParticipantID__r: Acc_ProjectParticipant__c_GroupBy
+  IsDeleted: GroupByClause
+  Acc_PeriodForecastStatus__c: GroupByClause
+  LastViewedDate: GroupByDateFunction
+  Acc_NewOrExisting__c: GroupByClause
+  CreatedDate: GroupByDateFunction
+  Acc_TSBReference__c: GroupByClause
+  Id: GroupByClause
+  Acc_Name__c: GroupByClause
+  Acc_CostCategoryID__c: GroupByClause
+  Acc_CostCategoryID__r: Acc_CostCategory__c_GroupBy
+  Acc_Item__c: GroupByClause
+  LastReferencedDate: GroupByDateFunction
+  Acc_OtherFunding__c: GroupByClause
+  Acc_Country__c: GroupByClause
+  OwnerId: GroupByClause
+  RecordTypeId: GroupByClause
+  RecordType: RecordType_GroupBy
+  Acc_ProjectPeriodEndDate__c: GroupByClause
+  Acc_ProjectChangeRequest__c: GroupByClause
+  Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c_GroupBy
+  Acc_TSDescription__c: GroupByClause
+  Acc_Source__c: GroupByClause
+  SystemModstamp: GroupByDateFunction
+  LastModifiedById: GroupByClause
+  LastModifiedBy: User_GroupBy
+  type: GroupByType
+}
+
+input Acc_IFSSpendProfile__c_OrderBy {
+  LastModifiedDate: AggregateOrderByStringClause
+  Acc_DATotalEstatesCosts__c: AggregateOrderByNumberClause
+  Acc_ForecastInitialValue__c: AggregateOrderByNumberClause
+  Acc_TotalOverheadCosts1__c: AggregateOrderByNumberClause
+  Acc_Amount__c: AggregateOrderByNumberClause
+  Acc_Role__c: AggregateOrderByStringClause
+  Acc_ProjectID__c: AggregateOrderByStringClause
+  Acc_CostOfSubcontractor__c: AggregateOrderByNumberClause
+  Acc_FundingSought__c: AggregateOrderByNumberClause
+  Acc_OverheadRate__c: AggregateOrderByStringClause
+  Acc_CostOfRole__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodStartDate__c: AggregateOrderByStringClause
+  Acc_TotalOverheadCosts__c: AggregateOrderByNumberClause
+  Name: AggregateOrderByStringClause
+  Acc_CostCategoryDescription__c: AggregateOrderByStringClause
+  Acc_TotalValue__c: AggregateOrderByNumberClause
+  Acc_AwardRate__c: AggregateOrderByNumberClause
+  CreatedById: NoFunctionAggregateOrderByClause
+  CreatedBy: User_OrderBy
+  Acc_CostEach__c: AggregateOrderByNumberClause
+  Acc_TotalIndirectCosts__c: AggregateOrderByNumberClause
+  Acc_ResidualValue__c: AggregateOrderByNumberClause
+  Acc_DITotalOtherCosts__c: AggregateOrderByNumberClause
+  Acc_TotalOtherCosts__c: AggregateOrderByNumberClause
+  Acc_PartnerContribution__c: AggregateOrderByNumberClause
+  Acc_GolValue__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodLongName__c: AggregateOrderByStringClause
+  Acc_DateSecured__c: AggregateOrderByStringClause
+  Acc_ProjectParticipantID__c: NoFunctionAggregateOrderByClause
+  Acc_ProjectParticipantID__r: Acc_ProjectParticipant__c_OrderBy
+  IsDeleted: NoFunctionAggregateOrderByClause
+  Acc_PeriodForecastStatus__c: AggregateOrderByStringClause
+  LastViewedDate: AggregateOrderByStringClause
+  Acc_DITotalStaffCosts__c: AggregateOrderByNumberClause
+  Acc_CompetitionType__c: AggregateOrderByStringClause
+  Acc_DATotalInvestigatorsCosts__c: AggregateOrderByNumberClause
+  Acc_NewOrExisting__c: AggregateOrderByStringClause
+  Acc_Utilisation__c: AggregateOrderByNumberClause
+  Acc_ETotalOtherCosts__c: AggregateOrderByNumberClause
+  CreatedDate: AggregateOrderByStringClause
+  Acc_TSBReference__c: AggregateOrderByStringClause
+  Acc_TotalSubcontractingCosts__c: AggregateOrderByNumberClause
+  Id: AggregateOrderByStringClause
+  Acc_TotalCapitalUsageCosts__c: AggregateOrderByNumberClause
+  Acc_Name__c: AggregateOrderByStringClause
+  Acc_CostCategoryID__c: NoFunctionAggregateOrderByClause
+  Acc_CostCategoryID__r: Acc_CostCategory__c_OrderBy
+  Acc_DATotalOtherCosts__c: AggregateOrderByNumberClause
+  Acc_TotalFutureCostCategoryValue__c: AggregateOrderByNumberClause
+  Acc_Item__c: AggregateOrderByStringClause
+  Acc_OCDescription__c: AggregateOrderByStringClause
+  Acc_NetPresentValue__c: AggregateOrderByNumberClause
+  LastReferencedDate: AggregateOrderByStringClause
+  Acc_TotalGolvalue__c: AggregateOrderByNumberClause
+  Acc_DITotalTravelCosts__c: AggregateOrderByNumberClause
+  Acc_OtherFunding__c: NoFunctionAggregateOrderByClause
+  Acc_DaysSpentOnProject__c: AggregateOrderByNumberClause
+  Acc_TotalDirectlyAllocatedCosts__c: AggregateOrderByNumberClause
+  Acc_ItemDescription__c: AggregateOrderByStringClause
+  Acc_Quantity__c: AggregateOrderByNumberClause
+  Acc_TravelCostOfItem__c: AggregateOrderByNumberClause
+  Acc_Country__c: AggregateOrderByStringClause
+  OwnerId: NoFunctionAggregateOrderByClause
+  Acc_TotalCost__c: AggregateOrderByNumberClause
+  Acc_RoleAndDescription__c: AggregateOrderByStringClause
+  RecordTypeId: NoFunctionAggregateOrderByClause
+  RecordType: RecordType_OrderBy
+  Acc_TotalTravelCosts__c: AggregateOrderByNumberClause
+  Acc_ProjectPeriodEndDate__c: AggregateOrderByStringClause
+  Acc_TotalMaterialsCosts__c: AggregateOrderByNumberClause
+  Acc_ProjectChangeRequest__c: NoFunctionAggregateOrderByClause
+  Acc_ProjectChangeRequest__r: Acc_ProjectChangeRequest__c_OrderBy
+  Acc_DepreciationPeriod__c: AggregateOrderByNumberClause
+  Acc_TotalExceptionsCosts__c: AggregateOrderByNumberClause
+  Acc_ETotalStaffCosts__c: AggregateOrderByNumberClause
+  Acc_MaterialsCostOfItem__c: AggregateOrderByNumberClause
+  Acc_TotalLabourCosts__c: AggregateOrderByNumberClause
+  Acc_TSDescription__c: AggregateOrderByStringClause
+  Acc_TotalCostCategoryValue__c: AggregateOrderByNumberClause
+  Acc_TotalProjectCosts__c: AggregateOrderByNumberClause
+  Acc_Source__c: AggregateOrderByStringClause
+  Acc_NumberOfTimes__c: AggregateOrderByNumberClause
+  Acc_TotalDirectlyIncurredCosts__c: AggregateOrderByNumberClause
+  Acc_CapitalUsageCostOfItem__c: AggregateOrderByNumberClause
+  Acc_OtherCostsCostOfItem__c: AggregateOrderByNumberClause
+  Acc_TotalIndirectCosts1__c: AggregateOrderByNumberClause
+  SystemModstamp: AggregateOrderByStringClause
+  Acc_GrossCostOfRole__c: AggregateOrderByNumberClause
+  Acc_CostPerItem__c: AggregateOrderByNumberClause
+  Acc_Rate__c: AggregateOrderByNumberClause
+  Acc_OrganisationType__c: AggregateOrderByStringClause
+  Acc_ForecastLatestValue__c: AggregateOrderByNumberClause
+  LastModifiedById: NoFunctionAggregateOrderByClause
+  LastModifiedBy: User_OrderBy
+  Acc_ProjectPeriodNumber__c: AggregateOrderByNumberClause
+}
+
+union Acc_IFSSpendProfile__c_Owner = Group | User
 
 type Acc_MonitoringAnswer__c {
   LastModifiedDate: DateTimeValue
@@ -1860,6 +2237,9 @@ type Acc_ProjectChangeRequest__c {
   LastModifiedBy: User
 
   """childRelationship"""
+  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
+
+  """childRelationship"""
   Acc_Project_Change_Requests__r(upperBound: Int, orderBy: Acc_ProjectChangeRequest__c_OrderBy, where: Acc_ProjectChangeRequest__c_Filter, after: String, first: Int): Acc_ProjectChangeRequest__cConnection
 
   """childRelationship"""
@@ -2594,6 +2974,9 @@ type Acc_ProjectParticipant__c {
 
   """childRelationship"""
   Claims__r(upperBound: Int, orderBy: Acc_Claims__c_OrderBy, where: Acc_Claims__c_Filter, after: String, first: Int): Acc_Claims__cConnection
+
+  """childRelationship"""
+  IFS_Spend_Profiles__r(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
 
   """childRelationship"""
   Pre_Payments__r(upperBound: Int, orderBy: Acc_Prepayment__c_OrderBy, where: Acc_Prepayment__c_Filter, after: String, first: Int): Acc_Prepayment__cConnection
@@ -6750,6 +7133,9 @@ type RecordQuery {
 
   """Issues a query for the specified record type."""
   Acc_CostCategory__c(upperBound: Int, orderBy: Acc_CostCategory__c_OrderBy, where: Acc_CostCategory__c_Filter, after: String, first: Int): Acc_CostCategory__cConnection
+
+  """Issues a query for the specified record type."""
+  Acc_IFSSpendProfile__c(upperBound: Int, orderBy: Acc_IFSSpendProfile__c_OrderBy, where: Acc_IFSSpendProfile__c_Filter, after: String, first: Int): Acc_IFSSpendProfile__cConnection
 
   """Issues a query for the specified record type."""
   Acc_MonitoringAnswer__c(upperBound: Int, orderBy: Acc_MonitoringAnswer__c_OrderBy, where: Acc_MonitoringAnswer__c_Filter, after: String, first: Int): Acc_MonitoringAnswer__cConnection

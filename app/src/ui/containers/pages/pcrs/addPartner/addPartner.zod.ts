@@ -29,6 +29,23 @@ export const academicOrganisationSchema = z.object({
 
 export type AcademicOrganisationSchema = z.infer<typeof academicOrganisationSchema>;
 
+export const academicCostsErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "academicCosts"],
+});
+
+export const academicCostsSchema = z.object({
+  ...common,
+  tsbReference: z.string(),
+  costs: z.array(
+    z.object({
+      value: z.coerce.number(),
+      costCategoryId: z.string(),
+    }),
+  ),
+});
+
+export type AcademicCostsSchema = z.infer<typeof academicCostsSchema>;
+
 export const projectLocationErrorMap = makeZodI18nMap({
   keyPrefix: ["pcr", "addPartner", "projectLocation"],
 });
@@ -141,3 +158,36 @@ export const financeDetailsSchema = z
   });
 
 export type FinanceDetailsSchema = z.infer<typeof financeDetailsSchema>;
+
+export const addPartnerErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner"],
+});
+export const addPartnerSchema = z.object({
+  // ...common,
+  awardRate: z.number().nullable(),
+  contact1Email: z.string(),
+  contact1Forename: z.string(),
+  contact1Phone: z.string(),
+  contact1Surname: z.string(),
+  contact2Email: z.string(),
+  contact2Forename: z.string(),
+  contact2Phone: z.string(),
+  contact2Surname: z.string(),
+  financialYearEndDate: z.date(),
+  financialYearEndTurnover: z.number(),
+  hasOtherFunding: z.boolean(),
+  isCommercialWork: z.boolean(),
+  numberOfEmployees: z.coerce.number().nullable(),
+  organisationName: z.string(),
+  participantSize: z.coerce.number(),
+  partnerType: z.coerce.number().gt(0),
+  projectCity: z.string(),
+  projectLocation: z.string(),
+  projectPostcode: z.string(),
+  projectRole: z.coerce.number().gt(0),
+  registeredAddress: z.string(),
+  registrationNumber: z.string(),
+  tsbReference: z.string(),
+});
+
+export type AddPartnerSchema = z.infer<typeof addPartnerSchema>;

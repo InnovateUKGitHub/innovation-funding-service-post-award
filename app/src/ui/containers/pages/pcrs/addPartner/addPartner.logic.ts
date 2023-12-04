@@ -7,6 +7,9 @@ import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { mapToPartnerDtoArray } from "@gql/dtoMapper/mapPartnerDto";
 import { sortPartnersLeadFirst } from "@framework/util/partnerHelper";
 import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
+import { mapToCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
+import { mapPcrSpendProfileArray } from "@gql/dtoMapper/mapPcrSpendProfile";
+import { PCROrganisationType } from "@framework/constants/pcrConstants";
 
 export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrItemId, fetchKey: number) => {
   const data = useLazyLoadQuery<AddPartnerWorkflowQuery>(
@@ -33,6 +36,16 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
     ),
   );
 
+  const pcrSpendProfile = mapPcrSpendProfileArray(data?.salesforce?.uiapi?.query?.Acc_IFSSpendProfile__c?.edges ?? [], [
+    "value",
+    "capitalUsageType",
+    "id",
+    "description",
+    "costCategoryId",
+    "pcrItemId",
+    "dateOtherFundingSecured",
+  ]);
+
   const documents = (pcrNode?.ContentDocumentLinks?.edges ?? []).map(node =>
     mapToDocumentSummaryDto(
       node,
@@ -43,6 +56,21 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
         pcrId: pcrItemId,
       },
     ),
+  );
+
+  const costCategories = mapToCostCategoryDtoArray(data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [], [
+    "id",
+    "name",
+    "displayOrder",
+    "type",
+    "competitionType",
+    "organisationType",
+  ]);
+
+  const academicCostCategories = costCategories.filter(
+    costCategory =>
+      costCategory.organisationType === PCROrganisationType.Academic &&
+      costCategory.competitionType === project.competitionType,
   );
 
   const pcrItem = mapPcrItemDto(
@@ -65,17 +93,40 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
       "organisationName",
       "organisationType",
       "participantSize",
-      "participantSize",
+      "participantSizeLabel",
       "partnerType",
+      "partnerTypeLabel",
       "projectCity",
       "projectLocation",
+      "projectLocationLabel",
       "projectPostcode",
       "projectRole",
+      "projectRoleLabel",
       "registeredAddress",
       "registrationNumber",
+      "status",
+      "tsbReference",
     ],
     {},
   );
 
-  return { project, pcrItem, partners, documents, fragmentRef: data?.salesforce?.uiapi };
+  // const spendProfileWithCostsAndFunds = new SpendProfile(pcrItemId).getSpendProfile(
+  //   pcrSpendProfile,
+  //   academicCostCategories,
+  // );
+
+  return {
+    project,
+    costCategories,
+    academicCostCategories,
+    pcrItem,
+    pcrSpendProfile,
+    // pcrItem: {
+    //   ...pcrItem,
+    //   spendProfile: spendProfileWithCostsAndFunds,
+    // },
+    partners,
+    documents,
+    fragmentRef: data?.salesforce?.uiapi,
+  };
 };

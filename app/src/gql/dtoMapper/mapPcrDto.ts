@@ -19,8 +19,6 @@ import { Clock } from "@framework/util/clock";
 
 const clock = new Clock();
 
-// projectLocation: new PCRProjectLocationMapper().mapFromSalesforecPCRProjectLocation(pcrItem.Acc_Location__c),
-
 export type PcrNode = GQL.PartialNode<{
   Id: GQL.Maybe<string>;
   Acc_AdditionalNumberofMonths__c: GQL.Value<number>;
@@ -64,6 +62,7 @@ export type PcrNode = GQL.PartialNode<{
   Acc_Status__c: GQL.Value<string>;
   Acc_SuspensionEnds__c: GQL.Value<string>;
   Acc_SuspensionStarts__c: GQL.Value<string>;
+  Acc_TSBReference__c: GQL.Value<string>;
   Acc_Turnover__c: GQL.Value<number>;
   Acc_TurnoverYearEnd__c: GQL.Value<string>;
   CreatedDate: GQL.Value<string>;
@@ -135,16 +134,20 @@ export type PcrItemDtoMapping = Pick<
   | "partnerId"
   | "partnerNameSnapshot"
   | "participantSize"
+  | "participantSizeLabel"
   | "partnerType"
+  | "partnerTypeLabel"
   | "projectDurationSnapshot"
   | "projectCity"
   | "projectLocation"
+  | "projectLocationLabel"
   | "projectPostcode"
   | "projectSummary"
   | "projectSummarySnapshot"
   | "projectId"
   | "projectRole"
   | "projectStartDate"
+  | "projectRoleLabel"
   | "publicDescription"
   | "publicDescriptionSnapshot"
   | "registeredAddress"
@@ -159,6 +162,7 @@ export type PcrItemDtoMapping = Pick<
   | "statusName"
   | "suspensionEndDate"
   | "suspensionStartDate"
+  | "tsbReference"
   | "type"
   | "typeName"
   | "typeOfAid"
@@ -237,7 +241,6 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   financialYearEndTurnover(node) {
     return node?.Acc_Turnover__c?.value ?? null;
   },
-
   hasOtherFunding(node) {
     return node?.Acc_OtherFunding__c?.value ?? null;
   },
@@ -279,6 +282,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
       node?.Acc_ParticipantSize__c?.value ?? "",
     );
   },
+  participantSizeLabel(node) {
+    return node?.Acc_ParticipantSize__c?.value ?? "";
+  },
   partnerId(node) {
     return (node?.Acc_Project_Participant__c?.value as PartnerId) ?? null;
   },
@@ -287,6 +293,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   partnerType(node) {
     return mapFromSalesforcePCRPartnerType(node?.Acc_ParticipantType__c?.value ?? "");
+  },
+  partnerTypeLabel(node) {
+    return node?.Acc_ParticipantType__c?.value ?? "";
   },
   projectCity(node) {
     return node?.Acc_ProjectCity__c?.value ?? null;
@@ -300,6 +309,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   projectLocation(node) {
     return new PCRProjectLocationMapper().mapFromSalesforcePCRProjectLocation(node?.Acc_Location__c?.value);
   },
+  projectLocationLabel(node) {
+    return node?.Acc_Location__c?.value ?? "";
+  },
   projectPostcode(node) {
     return node?.Acc_ProjectPostcode__c?.value ?? null;
   },
@@ -308,6 +320,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   projectStartDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Loan_ProjectStartDate__c?.value ?? null);
+  },
+  projectRoleLabel(node) {
+    return node?.Acc_ProjectRole__c?.value ?? "";
   },
   projectSummary(node) {
     return node?.Acc_NewProjectSummary__c?.value ?? "";
@@ -359,6 +374,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   suspensionStartDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Acc_SuspensionStarts__c?.value ?? null);
+  },
+  tsbReference(node) {
+    return node?.Acc_TSBReference__c?.value ?? null;
   },
   type(node) {
     return mapToPcrItemType(node?.RecordType?.DeveloperName?.value ?? node?.RecordType?.Name?.value ?? "Unknown");
