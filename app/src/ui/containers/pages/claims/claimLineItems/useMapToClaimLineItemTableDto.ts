@@ -71,7 +71,7 @@ const mapToClaimLineItemTableDto = ({
       const existingLineItem = existingLineItems.find(x => x.id === lineItem.id);
       const value = parseFloat(lineItem.value ?? "");
 
-      total += roundCurrency(value + total);
+      total = roundCurrency(value + total);
 
       rows.push({
         id: lineItem.id,
@@ -97,7 +97,7 @@ const mapToClaimLineItemTableDto = ({
     for (const lineItem of existingLineItems) {
       const value = lineItem.value;
 
-      total += roundCurrency(value + total);
+      total = roundCurrency(value + total);
 
       rows.push({
         id: lineItem.id,
