@@ -15,6 +15,7 @@ import { EditClaimLineItemsSchemaType } from "./editClaimLineItems.zod";
 import { useMapToClaimLineItemTableDto } from "./useMapToClaimLineItemTableDto";
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
+import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 
 const emptyData = { id: undefined, description: "", value: "" };
 
@@ -36,6 +37,7 @@ const EditClaimLineItemsTable = ({
 }: EditClaimLineItemsTableProps) => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
+  const { options } = useClientConfig();
 
   const { register, getFieldState, watch } = formMethods;
   const { fields, append, remove } = useFieldArray({
@@ -124,7 +126,7 @@ const EditClaimLineItemsTable = ({
         })}
       </TBody>
       <TFoot>
-        {isClient && (
+        {isClient && rows.length < options.maxClaimLineItems && (
           <TR>
             <TD colSpan={4}>
               <SubmitButton
