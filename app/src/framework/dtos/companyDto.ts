@@ -6,10 +6,9 @@ export interface CompanyDto {
     postcode?: string;
     premises?: string;
     region?: string;
+    country?: string;
   };
   addressFull?: string;
-  companyType: string;
   registrationNumber: string;
-  status?: string;
   title: string;
 }

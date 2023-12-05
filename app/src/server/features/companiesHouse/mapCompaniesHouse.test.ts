@@ -11,14 +11,7 @@ const sfDto: ICompanyHouse = {
     postal_code: "SN3 1AB",
     region: "South West",
   },
-  address_snippet: "1 Pipers Way, Swindon",
   company_number: "12345678",
-  company_status: "active",
-  company_type: "ltd",
-  date_of_creation: new Date(2018, 4, 23),
-  kind: "Magic",
-  links: {},
-  snippet: "Neil Little ate my lunch",
   title: "Wizard Kings",
 };
 
@@ -31,11 +24,10 @@ it("should map salesforce DTO into a POJO", () => {
       postcode: "SN3 1AB",
       premises: "Wakefield House",
       region: "South West",
+      country: "England",
     },
-    addressFull: "1 Pipers Way, Swindon",
-    companyType: "ltd",
+    addressFull: "Wakefield House 1 Pipers Way, by the roundabout, Swindon, South West, England, SN3 1AB",
     registrationNumber: "12345678",
-    status: "active",
     title: "Wizard Kings",
   });
 });
@@ -46,9 +38,7 @@ it("should return undefined for address and status if nullish fields from sf", (
     {
       address: undefined,
       addressFull: undefined,
-      companyType: "ltd",
       registrationNumber: "12345678",
-      status: undefined,
       title: "Wizard Kings",
     },
   );
@@ -63,11 +53,10 @@ it("should return undefined for missing address fields", () => {
       postcode: "SN3 1AB",
       premises: "Wakefield House",
       region: "South West",
+      country: "England",
     },
-    addressFull: "1 Pipers Way, Swindon",
-    companyType: "ltd",
+    addressFull: "Wakefield House 1 Pipers Way, Swindon, South West, England, SN3 1AB",
     registrationNumber: "12345678",
-    status: "active",
     title: "Wizard Kings",
   });
 });

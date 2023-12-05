@@ -1,4 +1,4 @@
-import { ICompanyHouse, ICompanyHouseCompanyStatus } from "@framework/entities/CompanyHouse";
+import { ICompanyHouse } from "@framework/entities/CompanyHouse";
 import { withinRange } from "@framework/util/numberHelper";
 
 import { CompaniesHouseBase } from "@server/resources/companiesHouse";
@@ -11,12 +11,10 @@ export interface ICompaniesHouseParams {
 }
 
 interface ICompanyHouseResponse {
-  kind: string;
-  items_per_page: number;
-  start_index: number;
-  total_results: number;
-  etag?: string;
-  items?: ICompanyHouse[];
+  message: unknown;
+  results: {
+    items: ICompanyHouse[];
+  };
 }
 
 export class CompaniesHouse extends CompaniesHouseBase {
@@ -34,23 +32,14 @@ export class CompaniesHouse extends CompaniesHouseBase {
       throw new BadRequestError(`Param itemsPerPage '${apiParams.itemsPerPage}' needs to be within 1 - 1000.`);
     }
 
-    const params: Record<string, string> = { q: apiParams.searchString };
+    const params: Record<string, string> = { searchString: apiParams.searchString };
 
     if (apiParams.itemsPerPage) params.items_per_page = String(apiParams.itemsPerPage);
     if (apiParams.startIndex) params.start_index = String(apiParams.startIndex);
 
-    const { items: companies } = await this.queryCompaniesHouse<ICompanyHouseResponse>("/search/companies", params);
+    const data = await this.queryCompaniesHouse<ICompanyHouseResponse>("/companies-house/search", params);
 
-    if (!companies?.length) return [];
-
-    const allowedCompanies: ICompanyHouseCompanyStatus[] = ["voluntary-arrangement", "active"];
-
-    return companies.filter(x => {
-      const hasCompanyNumber = !!x.company_number;
-      const isValidCompany = allowedCompanies.includes(x.company_status);
-
-      return hasCompanyNumber && isValidCompany;
-    });
+    return data.results.items;
   }
 }
 
