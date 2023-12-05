@@ -1,5 +1,4 @@
 import { configuration } from "@server/features/common/config";
-import { ConfigurationError } from "@shared/appError";
 import { isError } from "util";
 
 export interface ICompaniesHouseParams {
@@ -10,17 +9,9 @@ export interface ICompaniesHouseParams {
 
 export class CompaniesHouseBase {
   private getUrl(endpointSegment: string, inboundParams?: Record<string, string>): string {
-    const { companiesHouse } = configuration;
+    const { sil } = configuration;
 
-    if (!companiesHouse.accessToken) {
-      throw new ConfigurationError("'companiesHouse.accessToken' has not been set!");
-    }
-
-    if (!companiesHouse.endpoint) {
-      throw new ConfigurationError("'companiesHouse.endpoint' has not been set!");
-    }
-
-    const apiEndpoint = `${companiesHouse.endpoint}${endpointSegment}`;
+    const apiEndpoint = `${sil.url}${endpointSegment}`;
 
     if (!inboundParams) return apiEndpoint;
 
@@ -33,11 +24,7 @@ export class CompaniesHouseBase {
     try {
       const parsedUrl = this.getUrl(url, searchParams);
 
-      const fetchQuery = await fetch(parsedUrl, {
-        headers: {
-          Authorization: configuration.companiesHouse.accessToken,
-        },
-      });
+      const fetchQuery = await fetch(parsedUrl);
 
       if (!fetchQuery.ok) {
         throw new Error(fetchQuery.statusText || "Bad Companies House request. Failed to get a positive response.");
