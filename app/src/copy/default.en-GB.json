@@ -524,7 +524,9 @@
       "addCost": "Add a cost",
       "additionalInfo": "Additional info",
       "setToZeroToRemove": "You can only remove claim line items you created. For other claim line items you want to remove, set the value to zero and save.",
-      "readonlyMessage": "This claim has already been submitted. No changes can be made at this time."
+      "readonlyMessage": "This claim has already been submitted. No changes can be made at this time.",
+      "descriptionAriaLabel": "Description of claim line item {{ count }}",
+      "costAriaLabel": "Cost of claim line item {{ count }}"
     },
     "claimPrepare": {
       "title": "Costs to be claimed",

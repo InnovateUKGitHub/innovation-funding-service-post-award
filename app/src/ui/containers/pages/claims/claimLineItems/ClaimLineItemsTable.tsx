@@ -66,7 +66,11 @@ const EditClaimLineItemsTable = ({
       <TBody>
         {rows.map((x, i) => {
           return (
-            <TR key={`${i}-js-enabled-${x.jsDisabledRow}`} hasError={getFieldState(`lineItems.${i}`).invalid}>
+            <TR
+              data-qa="input-row"
+              key={`${i}-js-enabled-${x.jsDisabledRow}`}
+              hasError={getFieldState(`lineItems.${i}`).invalid}
+            >
               <TD className="ifspa-claim-line-input-cell">
                 <input
                   type="hidden"
@@ -79,6 +83,7 @@ const EditClaimLineItemsTable = ({
                   hasError={getFieldState(`lineItems.${i}.description`).invalid}
                   defaultValue={x.description}
                   disabled={disabled}
+                  aria-label={getContent(x => x.pages.editClaimLineItems.descriptionAriaLabel({ count: i }))}
                   {...(x.jsDisabledRow
                     ? { name: `lineItems.${i}.description` }
                     : register(`lineItems.${i}.description`))}
@@ -91,6 +96,7 @@ const EditClaimLineItemsTable = ({
                   hasError={getFieldState(`lineItems.${i}.value`).invalid}
                   disabled={disabled}
                   defaultValue={x.displayValue}
+                  aria-label={getContent(x => x.pages.editClaimLineItems.costAriaLabel({ count: i }))}
                   {...(x.jsDisabledRow ? { name: `lineItems.${i}.value` } : register(`lineItems.${i}.value`))}
                 />
               </TD>
