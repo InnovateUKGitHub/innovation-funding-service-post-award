@@ -110,7 +110,6 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
                 <Form.Button
                   name={formType ? "documentId" : "delete"} // "documentId" for RHF, "delete" for old forms
                   styling="Link"
-                  className="govuk-!-font-size-19"
                   style={{ marginLeft: "15px" }}
                   onClick={() => onRemove(x)}
                   value={x.id}
@@ -168,7 +167,6 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
                 <Form.Button
                   name="documentId"
                   styling="Link"
-                  className="govuk-!-font-size-19"
                   style={{ marginLeft: "15px" }}
                   onClick={() => onRemove(x)}
                   value={x.id}

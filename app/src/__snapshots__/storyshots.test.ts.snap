@@ -270,7 +270,7 @@ exports[`Storyshots GOV.UK Components/Button Link Button 1`] = `
   id="root"
 >
   <button
-    className="govuk-link"
+    className="govuk-link govuk-!-font-size-19"
     data-module="govuk-button"
   >
     A link button

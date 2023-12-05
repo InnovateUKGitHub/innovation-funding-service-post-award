@@ -16,6 +16,7 @@ import { useMapToClaimLineItemTableDto } from "./useMapToClaimLineItemTableDto";
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
+import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 
 const emptyData = { id: undefined, description: "", value: "" };
 
@@ -109,16 +110,16 @@ const EditClaimLineItemsTable = ({
               </TD>
               {isClient && (
                 <TD className="ifspa-claim-line-data-cell">
-                  <SubmitButton
+                  <Button
                     onClick={e => {
                       remove(i);
                       e.preventDefault();
                     }}
                     disabled={disabled}
-                    styling="TableLink"
+                    styling="Link"
                   >
                     {getContent(x => x.pages.editClaimLineItems.buttonRemove)}
-                  </SubmitButton>
+                  </Button>
                 </TD>
               )}
             </TR>
@@ -135,7 +136,7 @@ const EditClaimLineItemsTable = ({
                   e.preventDefault();
                 }}
                 disabled={disabled}
-                styling="TableLink"
+                styling="Link"
               >
                 {getContent(x => x.pages.editClaimLineItems.addCost)}
               </SubmitButton>

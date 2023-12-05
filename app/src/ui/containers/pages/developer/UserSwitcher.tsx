@@ -183,10 +183,10 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
                   <SelectContactForm.Hidden name="project_id" value={() => projectId} />
                   <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
                   <SelectContactForm.Hidden name="user" value={() => x.user.externalUsername} />
-                  <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19" qa="btn-home">
+                  <SelectContactForm.Button name="home" styling="Link" qa="btn-home">
                     {getContent(x => x.components.userSwitcher.switchAndHome)}
                   </SelectContactForm.Button>
-                  <SelectContactForm.Button name="stay" styling="Link" className="govuk-!-font-size-19" qa="btn-stay">
+                  <SelectContactForm.Button name="stay" styling="Link" qa="btn-stay">
                     {getContent(x => x.components.userSwitcher.switchAndStay)}
                   </SelectContactForm.Button>
                 </SelectContactForm.Form>

@@ -19,7 +19,7 @@ export const Button = ({ className, styling, qa, ...props }: StyledButtonProps) 
       Primary: govukButton,
       Secondary: `${govukButton} govuk-button--secondary`,
       Warning: `${govukButton} govuk-button--warning`,
-      Link: "govuk-link",
+      Link: "govuk-link govuk-!-font-size-19",
     };
 
     return buttonTypeMap[type] || govukButton;
