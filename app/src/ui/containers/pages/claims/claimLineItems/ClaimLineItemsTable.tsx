@@ -14,6 +14,7 @@ import { z } from "zod";
 import { EditClaimLineItemsSchemaType } from "./editClaimLineItems.zod";
 import { useMapToClaimLineItemTableDto } from "./useMapToClaimLineItemTableDto";
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
+import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 
 const emptyData = { id: undefined, description: "", value: "" };
 
@@ -176,7 +177,7 @@ const EditClaimLineItemsTable = ({
             {getContent(x => x.pages.editClaimLineItems.difference)}
           </TH>
           <TD>
-            <Currency value={difference} />
+            <Percentage value={difference} />
           </TD>
           <TD>
             <TableEmptyCell />
@@ -253,7 +254,7 @@ const ClaimLineItemsTable = ({ lineItems, forecastDetail }: ClaimLineItemsTableP
             {getContent(x => x.pages.editClaimLineItems.difference)}
           </TH>
           <TD>
-            <Currency value={difference} />
+            <Percentage value={difference} />
           </TD>
           <TD>
             <TableEmptyCell />
