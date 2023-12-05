@@ -1,6 +1,7 @@
 import createBundler from "@bahmutov/cypress-esbuild-preprocessor";
 import { addCucumberPreprocessorPlugin } from "@badeball/cypress-cucumber-preprocessor";
 import { createEsbuildPlugin } from "@badeball/cypress-cucumber-preprocessor/esbuild";
+import { tasks } from "./cypress/support/tasks";
 
 async function setupNodeEvents(
   on: Cypress.PluginEvents,
@@ -15,6 +16,8 @@ async function setupNodeEvents(
       plugins: [createEsbuildPlugin(config)],
     }),
   );
+
+  on("task", tasks);
 
   // Make sure to return the config object as it might have been modified by the plugin.
   return config;

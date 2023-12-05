@@ -5,6 +5,8 @@ import { getCommands } from "./get";
 import { goToCommands } from "./state/navigate";
 import { messageCommands } from "./components/messaging";
 import { documentCommands } from "./state/document";
+import { accCommands } from "./accTask";
+import { cacheCommands } from "./state/cache";
 
 const commands = {
   ...getCommands,
@@ -14,6 +16,8 @@ const commands = {
   ...tileCommands,
   ...messageCommands,
   ...documentCommands,
+  ...accCommands,
+  ...cacheCommands,
 
   clickOnTile(label: string) {
     cy.get(".card-link").contains(label).click();
