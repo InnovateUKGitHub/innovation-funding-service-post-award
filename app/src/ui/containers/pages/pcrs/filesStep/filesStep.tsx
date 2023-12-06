@@ -38,7 +38,7 @@ export const FilesStep = ({
   documentDescription,
   returnToSummaryButton,
 }: {
-  heading: ContentSelector;
+  heading?: ContentSelector;
   guidance?: ContentSelector;
   guidanceComponent?: ReactNode;
   documentDescription: DocumentDescription;
@@ -105,7 +105,7 @@ export const FilesStep = ({
           aria-disabled={disabled}
         >
           <Fieldset>
-            <Legend>{getContent(heading)}</Legend>
+            {!!heading && <Legend>{getContent(heading)}</Legend>}
             {typeof GuidanceComponent !== undefined && GuidanceComponent}
             {guidance && <Content markdown value={guidance} />}
             <input type="hidden" value={documentDescription} {...register("description")}></input>

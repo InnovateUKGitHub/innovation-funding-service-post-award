@@ -1,15 +1,10 @@
 import { useContent } from "@ui/hooks/content.hook";
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { DocumentDescription } from "@framework/constants/documentDescription";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { UL } from "@ui/components/atomicDesign/atoms/List/list";
 import { ExternalLink } from "@ui/components/atomicDesign/atoms/ExternalLink/externalLink";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
 import { useMemo } from "react";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
@@ -20,15 +15,6 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 
 import { Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
-
-export type BasePcrProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
-
-export interface JesStepUIProps extends BasePcrProps {
-  documents: DocumentSummaryDto[];
-  onSubmit: (dto: MultipleDocumentUploadDto) => void;
-  onFileChange: (isSaving: boolean, dto: MultipleDocumentUploadDto) => void;
-  onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
-}
 
 const useJesContent = () => {
   const { getContent } = useContent();

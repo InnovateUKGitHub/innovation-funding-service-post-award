@@ -2,7 +2,7 @@ import { SpendProfileStep } from "@ui/containers/pages/pcrs/addPartner/spendProf
 import { AwardRateStep } from "@ui/containers/pages/pcrs/addPartner/steps/awardRateStep";
 import { OtherFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/otherFundingStep";
 import { NonAidFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/nonAidFundingStep";
-import { DeMinimisStep } from "@ui/containers/pages/pcrs/addPartner/deMinimisStep";
+import { DeMinimisStep } from "@ui/containers/pages/pcrs/addPartner/steps/deMinimisStep";
 import { OtherSourcesOfFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/otherSourcesOfFundingStep";
 import { AcademicCostsReviewStep } from "@ui/containers/pages/pcrs/addPartner/steps/academicCostsReviewStep";
 import { AgreementToPCRStep } from "./agreementToPcrStep";
@@ -118,7 +118,7 @@ export const getAddPartnerWorkflow = (
       displayName: "De minimis funding",
       stepNumber: 2,
       validation: val => val,
-      stepRender: DeMinimisStep,
+      migratedStepRender: DeMinimisStep,
     });
   } else {
     workflow.steps.push({
