@@ -1,4 +1,4 @@
-import { SpendProfileStep } from "@ui/containers/pages/pcrs/addPartner/spendProfileStep";
+import { SpendProfileStep } from "@ui/containers/pages/pcrs/addPartner/steps/spendProfileStep";
 import { AwardRateStep } from "@ui/containers/pages/pcrs/addPartner/steps/awardRateStep";
 import { OtherFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/otherFundingStep";
 import { NonAidFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/nonAidFundingStep";
@@ -171,9 +171,9 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.spendProfileStep,
       displayName: "Project costs for new partner",
       stepNumber: 9,
-      validation: val => val.pcr,
-      stepRender: SpendProfileStep,
-      readonlyStepRender: SpendProfileStep,
+      // validation: val => val.pcr,
+      migratedStepRender: SpendProfileStep,
+      migratedReadonlyStepRender: SpendProfileStep,
     });
   }
 

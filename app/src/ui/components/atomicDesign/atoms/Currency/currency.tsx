@@ -11,6 +11,7 @@ export interface CurrencyProps extends CurrentArgs {
   className?: string | false;
   style?: React.CSSProperties;
   qa?: string;
+  bold?: boolean;
 }
 
 /**
@@ -34,7 +35,7 @@ export function getCurrency(value: CurrentArgs["value"], fractionDigits: Current
 /**
  * Formatted currency component
  */
-export function Currency({ qa, value, fractionDigits = 2, className, ...props }: CurrencyProps) {
+export function Currency({ qa, value, bold, fractionDigits = 2, className, ...props }: CurrencyProps) {
   const formattedValue = getCurrency(value, fractionDigits);
 
   // Enable word wrap if the value is above a trillion pounds.
@@ -46,7 +47,7 @@ export function Currency({ qa, value, fractionDigits = 2, className, ...props }:
     <span
       {...props}
       data-qa={qa}
-      className={cx("currency", className)}
+      className={cx("currency", { "govuk-!-font-weight-bold": bold }, className)}
       style={{ ...props.style, whiteSpace: wordWrap }}
     >
       {shouldWordWrap
@@ -54,7 +55,7 @@ export function Currency({ qa, value, fractionDigits = 2, className, ...props }:
             // Inject ZWSP after commas as a word wrap hint.
             <Fragment key={i}>
               {x}
-              {shouldWordWrap && i < a.length - 1 && (
+              {i < a.length - 1 && (
                 <>
                   ,
                   <wbr />
