@@ -5,7 +5,7 @@ import { NonAidFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/no
 import { DeMinimisStep } from "@ui/containers/pages/pcrs/addPartner/steps/deMinimisStep";
 import { OtherSourcesOfFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/otherSourcesOfFundingStep";
 import { AcademicCostsReviewStep } from "@ui/containers/pages/pcrs/addPartner/steps/academicCostsReviewStep";
-import { AgreementToPCRStep } from "./agreementToPcrStep";
+import { AgreementToPCRStep } from "./steps/agreementToPcrStep";
 import {
   PCRStepType,
   PCROrganisationType,
@@ -86,8 +86,7 @@ export const getAddPartnerWorkflow = (
         stepName: PCRStepType.agreementToPcrStep,
         displayName: "Upload partner agreement",
         stepNumber: 14,
-        validation: val => val.files,
-        stepRender: AgreementToPCRStep,
+        migratedStepRender: AgreementToPCRStep,
       },
     ],
     summary: {
