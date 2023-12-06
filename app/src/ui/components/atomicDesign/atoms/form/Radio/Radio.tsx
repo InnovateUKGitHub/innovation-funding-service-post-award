@@ -1,6 +1,6 @@
 import { DetailedHTMLProps, HTMLAttributes, InputHTMLAttributes, ReactNode, createContext, useContext } from "react";
 import cx from "classnames";
-import { FieldValues, UseFormRegister } from "react-hook-form";
+import { FieldValues, RegisterOptions, UseFormRegister } from "react-hook-form";
 import { useMounted } from "../../providers/Mounted/Mounted";
 
 interface IRadioListContext<TFormValues extends FieldValues> {
@@ -22,9 +22,10 @@ type RadioInputProps = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, 
   "data-qa"?: string;
   label: string | ReactNode;
   id: string;
+  registerOptions?: RegisterOptions<FieldValues, string>;
 };
 
-const Radio = ({ label, ...props }: RadioInputProps) => {
+const Radio = ({ label, registerOptions, ...props }: RadioInputProps) => {
   const { register, name } = useRadioListContext();
   return (
     <div className="govuk-radios__item">
@@ -33,7 +34,7 @@ const Radio = ({ label, ...props }: RadioInputProps) => {
         className={cx("govuk-radios__input", props.className)}
         type="radio"
         {...props}
-        {...register(name)}
+        {...register(name, registerOptions)}
       />
       <label className="govuk-label govuk-radios__label" htmlFor={props.id}>
         {label}

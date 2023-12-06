@@ -28,6 +28,9 @@ enum FormTypes {
   PcrFinancialVirementsSummary = "pcrFinancialVirementsSummary",
   PcrApproveNewSubcontractorStep = "pcrApproveNewSubcontractorDetails",
   PcrApproveNewSubcontractorSummary = "pcrApproveNewSubcontractorSummary",
+
+  PcrAddPartnerCompaniesHouseStepSaveAndContinue = "pcrAddPartnerCompaniesHouseStepSaveAndContinue",
+  PcrAddPartnerCompaniesHouseStepSaveAndQuit = "pcrAddPartnerCompaniesHouseStepSaveAndQuit",
 }
 
 export { FormTypes };

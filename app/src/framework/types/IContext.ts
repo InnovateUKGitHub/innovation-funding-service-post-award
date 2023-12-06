@@ -5,7 +5,6 @@ import { IClock } from "@framework/util/clock";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { ICustomContentStore } from "@server/resources/customContentStore";
-import { ICompaniesHouseBase } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { IBankCheckService } from "@server/resources/bankCheckService";
 import { ISessionUser } from "./IUser";
@@ -75,7 +74,6 @@ export interface IRepositories {
 
 export interface IResources {
   readonly customContent: ICustomContentStore;
-  readonly companiesHouse: ICompaniesHouseBase;
   readonly bankCheckService: IBankCheckService;
 }
 

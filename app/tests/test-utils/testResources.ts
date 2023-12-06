@@ -23,8 +23,8 @@ class TestCustomContent {
   setInfo = (value: { lastModified: Date }) => (this.info = value);
 }
 
-class TestCompaniesHouse implements ICompaniesHouseBase {
-  public async queryCompaniesHouse<T>(): Promise<T> {
+class TestCompaniesHouse extends ICompaniesHouseBase {
+  protected async queryCompaniesHouse<T>(): Promise<T> {
     return Promise.resolve([] as unknown as T);
   }
 }

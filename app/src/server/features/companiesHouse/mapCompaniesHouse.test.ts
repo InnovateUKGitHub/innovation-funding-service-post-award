@@ -1,7 +1,7 @@
-import { ICompanyHouse } from "@framework/entities/CompanyHouse";
-import { mapCompaniesHouse } from "./mapCompaniesHouse";
+import { ICompaniesHouseResponse } from "@framework/entities/CompanyHouse";
+import { mapCompaniesHouse } from "../../repositories/mapCompaniesHouse";
 
-const sfDto: ICompanyHouse = {
+const sfDto = {
   address: {
     address_line_1: "1 Pipers Way",
     address_line_2: "by the roundabout",
@@ -13,7 +13,7 @@ const sfDto: ICompanyHouse = {
   },
   company_number: "12345678",
   title: "Wizard Kings",
-};
+} as ICompaniesHouseResponse;
 
 it("should map salesforce DTO into a POJO", () => {
   expect(mapCompaniesHouse(sfDto)).toEqual({

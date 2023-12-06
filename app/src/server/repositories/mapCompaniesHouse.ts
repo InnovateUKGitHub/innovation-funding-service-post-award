@@ -1,9 +1,9 @@
 import { CompanyDto } from "@framework/dtos/companyDto";
-import { ICompanyHouse } from "@framework/entities/CompanyHouse";
+import { ICompaniesHouseResponse } from "@framework/entities/CompanyHouse";
 
 export const trimmed = <T>(field: T): T | string => (typeof field === "string" ? field.trim() : field);
 
-export const mapCompaniesHouse = (x: ICompanyHouse): CompanyDto => {
+export const mapCompaniesHouse = (x: ICompaniesHouseResponse): CompanyDto => {
   const registrationNumber = trimmed(x.company_number);
   const premises = trimmed(x.address?.premises);
   const addressLine1 = trimmed(x.address?.address_line_1);

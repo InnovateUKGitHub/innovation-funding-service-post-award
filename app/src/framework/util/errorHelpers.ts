@@ -1,4 +1,4 @@
-import { FieldErrors } from "react-hook-form";
+import { FieldErrors, FieldValues, UseFormSetError, Path } from "react-hook-form";
 import { useFormErrorContext } from "@ui/context/form-error";
 import { IAppError } from "@framework/types/IAppError";
 import { ZodError, ZodIssue } from "zod";
@@ -205,3 +205,20 @@ export function convertErrorFormatFromRhfForErrorSummary(
 
   return validationErrors;
 }
+
+export const convertZodIssueToRhf = <T extends FieldValues>(
+  zodIssues: ZodIssue[] | undefined,
+  collatedErrors: RhfErrors = {},
+  setError: UseFormSetError<T>,
+) => {
+  if (!zodIssues) return [];
+  if (collatedErrors === null) throw new Error("Cannot extend zod issues of null");
+
+  for (const error of zodIssues) {
+    const rhfError = { message: error.message, type: error.code };
+    setError(error.path.join(".") as Path<T>, rhfError);
+    collatedErrors[error.path.join("_").replaceAll(".", "_")] = rhfError;
+  }
+
+  return collatedErrors;
+};

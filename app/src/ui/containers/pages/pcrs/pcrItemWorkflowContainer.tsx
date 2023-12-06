@@ -21,9 +21,18 @@ export interface ProjectChangeRequestPrepareItemParams {
   step?: number;
 }
 
+export interface ProjectChangeRequestPrepareItemSearchParams {
+  search?: string;
+  companiesHouseResult?: SerialisedProjectChangeRequestAddPartnerCompaniesHouseResult;
+}
+
 export type Mode = "prepare" | "review" | "view";
 
-export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & BaseProps & { mode: Mode }) => {
+export const PCRItemContainer = (
+  props: ProjectChangeRequestPrepareItemParams &
+    ProjectChangeRequestPrepareItemSearchParams &
+    BaseProps & { mode: Mode },
+) => {
   const stores = useStores();
   const navigate = useNavigate();
 

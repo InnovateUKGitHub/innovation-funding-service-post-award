@@ -1,4 +1,4 @@
-import { ICompanyHouse } from "@framework/entities/CompanyHouse";
+import { ICompaniesHouseResponse } from "@framework/entities/CompanyHouse";
 import { withinRange } from "@framework/util/numberHelper";
 
 import { CompaniesHouseBase } from "@server/resources/companiesHouse";
@@ -13,19 +13,19 @@ export interface ICompaniesHouseParams {
 interface ICompanyHouseResponse {
   message: unknown;
   results: {
-    items: ICompanyHouse[];
+    items: ICompaniesHouseResponse[] | null;
   };
 }
 
-export class CompaniesHouse extends CompaniesHouseBase {
-  constructor() {
-    super();
-  }
+export abstract class ICompaniesHouse extends CompaniesHouseBase {
+  public abstract searchCompany(apiParams: ICompaniesHouseParams): Promise<ICompaniesHouseResponse[]>;
+}
 
-  public async searchCompany(apiParams: ICompaniesHouseParams): Promise<ICompanyHouse[]> {
+export class CompaniesHouse extends ICompaniesHouse {
+  public async searchCompany(apiParams: ICompaniesHouseParams): Promise<ICompaniesHouseResponse[]> {
     // Note: Start checking params and there validity here
     if (!apiParams.searchString.length) {
-      throw new BadRequestError("Missing a searchString param!");
+      throw new BadRequestError("Search query must have 1 character or greater.");
     }
 
     if (apiParams.itemsPerPage && !withinRange(apiParams.itemsPerPage, 1, 1000)) {
@@ -34,13 +34,13 @@ export class CompaniesHouse extends CompaniesHouseBase {
 
     const params: Record<string, string> = { searchString: apiParams.searchString };
 
-    if (apiParams.itemsPerPage) params.items_per_page = String(apiParams.itemsPerPage);
-    if (apiParams.startIndex) params.start_index = String(apiParams.startIndex);
+    if (typeof apiParams.itemsPerPage === "number") params.items_per_page = String(apiParams.itemsPerPage);
+    if (typeof apiParams.startIndex === "number") params.start_index = String(apiParams.startIndex);
 
     const data = await this.queryCompaniesHouse<ICompanyHouseResponse>("/companies-house/search", params);
 
-    return data.results.items;
+    return data.results?.items ?? [];
   }
 }
 
-export type ICompaniesHouse = Pick<CompaniesHouse, "searchCompany">;
+export const companiesHouse = new CompaniesHouse();

@@ -892,11 +892,12 @@
       "noResultsFound": "No results found"
     },
     "pcrAddPartnerCompanyHouse": {
-      "sectionTitle": "Company house",
+      "sectionTitle": "Company Information",
       "headingForm": "Company details",
       "headingSearch": "Search companies house",
       "hint": "Enter your organisation name or registration number. To filter your search by location e.g. find HSBC in London would be - hsbc location:'London'.",
       "buttonSearch": "Search",
+      "buttonAutofill": "Autofill result",
       "resultsLoading": "Loading company results...",
       "resultNotShowing": "Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.",
       "headingSearchResults": "Companies house search results"
@@ -2180,7 +2181,8 @@
         "organisationName": {
           "errors": {
             "too_small": "Enter an organisation name.",
-            "invalid_type": "Enter an organisation name."
+            "invalid_type": "Enter an organisation name.",
+            "too_big": "Organisation name must be {{ count }} or less."
           }
         },
         "participantSize": {
@@ -2223,19 +2225,26 @@
         "registeredAddress": {
           "errors": {
             "too_small": "Enter a registered address.",
-            "invalid_type": "Enter a registered address."
+            "invalid_type": "Enter a registered address.",
+            "too_big": "Registered address must be {{ count }} characters or less."
           }
         },
         "registrationNumber": {
           "errors": {
             "too_small": "Enter a registration number.",
-            "invalid_type": "Enter a registration number."
+            "invalid_type": "Enter a registration number.",
+            "too_big": "Registration number must be {{ count }} characters or less."
           }
         },
         "tsbReference": {
           "errors": {
             "too_small": "Enter the TSB reference.",
             "invalid_type": "Enter the TSB reference."
+          }
+        },
+        "search": {
+          "errors": {
+            "too_big": "Search must be {{ count }} characters or less."
           }
         }
       },

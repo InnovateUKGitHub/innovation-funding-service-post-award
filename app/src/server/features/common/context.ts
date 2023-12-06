@@ -2,7 +2,6 @@ import i18next from "i18next";
 import { CustomContentStore } from "@server/resources/customContentStore";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BankCheckService } from "@server/resources/bankCheckService";
-import { CompaniesHouseBase } from "@server/resources/companiesHouse";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import { GetRecordTypeQuery } from "../general/getRecordTypeQuery";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
@@ -170,7 +169,6 @@ export class Context implements IContext {
 
     this.resources = {
       bankCheckService: new BankCheckService(),
-      companiesHouse: new CompaniesHouseBase(),
       customContent: new CustomContentStore(),
     };
   }

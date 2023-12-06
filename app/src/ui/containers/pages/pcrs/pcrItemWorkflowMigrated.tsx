@@ -4,7 +4,11 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { BaseProps } from "@ui/containers/containerBase";
 import { PcrWorkflow } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import { Dispatch, SetStateAction, createContext, useContext, useState } from "react";
-import { Mode, ProjectChangeRequestPrepareItemParams } from "./pcrItemWorkflowContainer";
+import {
+  Mode,
+  ProjectChangeRequestPrepareItemParams,
+  ProjectChangeRequestPrepareItemSearchParams,
+} from "./pcrItemWorkflowContainer";
 import { WorkflowStep } from "./pcrItemWorkflowStep";
 import { SummarySection } from "./pcrItemWorkflowSummary";
 import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
@@ -58,6 +62,7 @@ function getRequiredToCompleteMessage(message?: string) {
 
 type PcrWorkflowContextProps = Data &
   ProjectChangeRequestPrepareItemParams &
+  ProjectChangeRequestPrepareItemSearchParams &
   Pick<BaseProps, "config" | "messages" | "routes" | "currentRoute"> & {
     isFetching: boolean;
     onSave: ({
@@ -82,7 +87,9 @@ const PcrWorkflowContext = createContext<PcrWorkflowContextProps>(null as unknow
 
 export const usePcrWorkflowContext = () => useContext(PcrWorkflowContext);
 
-export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectChangeRequestPrepareItemParams) => {
+export const PCRItemWorkflowMigratedForGql = (
+  props: BaseProps & Data & ProjectChangeRequestPrepareItemParams & ProjectChangeRequestPrepareItemSearchParams,
+) => {
   const workflow = PcrWorkflow.getWorkflow(props.pcrItem, props.step) as unknown as PcrWorkflow<
     Partial<FullPCRItemDto>,
     null

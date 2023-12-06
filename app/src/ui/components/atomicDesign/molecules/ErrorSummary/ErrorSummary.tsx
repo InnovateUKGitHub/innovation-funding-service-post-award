@@ -4,7 +4,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { H2 } from "../../atoms/Heading/Heading.variants";
 
 export interface ErrorSummaryProps {
-  code: IAppError["code"];
+  code?: IAppError["code"];
   message?: IAppError["message"];
 }
 

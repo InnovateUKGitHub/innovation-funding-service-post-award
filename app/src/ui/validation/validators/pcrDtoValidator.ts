@@ -37,6 +37,11 @@ import { Results } from "@ui/validation/results";
 import { PCRSpendProfileDtoValidator } from "@ui/validation/validators/pcrSpendProfileDtoValidator";
 import { DateTime } from "luxon";
 import * as Validation from "./common";
+import {
+  pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
+  pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
+  pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
+} from "@ui/containers/pages/pcrs/addPartner/steps/schemas/companiesHouse.zod";
 
 interface PCRBaseDtoValidationProps<T> {
   model: T;
@@ -1254,6 +1259,17 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.original && this.original.organisationName,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.organisationNameReadOnly),
       ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.organisationName,
+        pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
+        this.getContent(x =>
+          x.forms.pcr.addPartner.organisationName.errors.too_big({
+            count: pcrAddPartnerCompaniesHouseStepOrganisationNameMaxLength,
+          }),
+        ),
+      ),
   );
 
   registeredAddress = Validation.all(
@@ -1269,6 +1285,17 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.original && this.original.registeredAddress,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.registeredAddressReadOnly),
       ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.registeredAddress,
+        pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
+        this.getContent(x =>
+          x.forms.pcr.addPartner.registeredAddress.errors.too_big({
+            count: pcrAddPartnerCompaniesHouseStepRegisteredAddressMaxLength,
+          }),
+        ),
+      ),
   );
 
   registrationNumber = Validation.all(
@@ -1283,6 +1310,17 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
         this.model.registrationNumber,
         this.original && this.original.registrationNumber,
         this.getContent(x => x.validation.pcrPartnerAdditionItemDtoValidator.registrationNumberReadOnly),
+      ),
+    () =>
+      Validation.maxLength(
+        this,
+        this.model.registrationNumber,
+        pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
+        this.getContent(x =>
+          x.forms.pcr.addPartner.registrationNumber.errors.too_big({
+            count: pcrAddPartnerCompaniesHouseStepRegistrationNumberMaxLength,
+          }),
+        ),
       ),
   );
 

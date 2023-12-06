@@ -1,6 +1,7 @@
+import { convertZodIssueToRhf } from "@framework/util/errorHelpers";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { RootState } from "@ui/redux/reducers/rootReducer";
-import { FieldErrors, FieldValues, Path, UseFormSetError } from "react-hook-form";
+import { FieldErrors, FieldValues, UseFormSetError } from "react-hook-form";
 import { useStore } from "react-redux";
 import { ZodIssue } from "zod";
 
@@ -12,26 +13,20 @@ import { ZodIssue } from "zod";
  * @param formErrors React Hook Form clientside errors
  * @returns Serverside errors converted to RHF errors, or clientside errors as-is
  */
-const useZodErrors = <T extends FieldValues>(setError: UseFormSetError<T>, formErrors: FieldErrors): RhfErrors => {
+const useZodErrors = <T extends FieldValues>(
+  setError: UseFormSetError<T>,
+  formErrors: FieldErrors,
+  extraZodErrors?: ZodIssue[],
+): RhfErrors => {
   const store = useStore<RootState>();
   const { isServer } = useMounted();
 
   if (isServer) {
     const errors = store.getState().zodError as ZodIssue[] | undefined;
-
-    if (errors) {
-      const collatedErrors: RhfErrors = {};
-
-      for (const error of errors) {
-        const rhfError = { message: error.message, type: error.code };
-        setError(error.path.join(".") as Path<T>, rhfError);
-        collatedErrors[error.path.join("_").replaceAll(".", "_")] = rhfError;
-      }
-
-      return collatedErrors;
-    }
-
-    return {};
+    const collatedErrors: RhfErrors = {};
+    convertZodIssueToRhf(errors, collatedErrors, setError);
+    convertZodIssueToRhf(extraZodErrors, collatedErrors, setError);
+    return collatedErrors;
   } else {
     return formErrors as RhfErrors;
   }

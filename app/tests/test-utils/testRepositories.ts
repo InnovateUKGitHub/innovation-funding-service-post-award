@@ -230,7 +230,7 @@ class ProjectContactTestRepository
   }
 }
 
-class CompaniesTestRepository implements ICompaniesHouse {
+class CompaniesTestRepository extends ICompaniesHouse {
   searchCompany() {
     return Promise.resolve([]);
   }

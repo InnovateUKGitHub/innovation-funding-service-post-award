@@ -7,7 +7,11 @@ export interface ICompaniesHouseParams {
   startIndex?: number;
 }
 
-export class CompaniesHouseBase {
+export abstract class ICompaniesHouseBase {
+  protected abstract queryCompaniesHouse<T>(url: string, searchParams?: Record<string, string>): Promise<T>;
+}
+
+export class CompaniesHouseBase extends ICompaniesHouseBase {
   private getUrl(endpointSegment: string, inboundParams?: Record<string, string>): string {
     const { sil } = configuration;
 
@@ -20,14 +24,14 @@ export class CompaniesHouseBase {
     return `${apiEndpoint}?${parsedParams.toString()}`;
   }
 
-  public async queryCompaniesHouse<T>(url: string, searchParams?: Record<string, string>): Promise<T> {
+  protected async queryCompaniesHouse<T>(url: string, searchParams?: Record<string, string>): Promise<T> {
     try {
       const parsedUrl = this.getUrl(url, searchParams);
 
       const fetchQuery = await fetch(parsedUrl);
 
       if (!fetchQuery.ok) {
-        throw new Error(fetchQuery.statusText || "Bad Companies House request. Failed to get a positive response.");
+        throw new Error((await fetchQuery.text()) || "Bad Companies House request. Failed to get a positive response.");
       }
 
       return await fetchQuery.json();
@@ -47,5 +51,3 @@ export class CompaniesHouseBase {
     }
   }
 }
-
-export type ICompaniesHouseBase = Pick<CompaniesHouseBase, "queryCompaniesHouse">;
