@@ -203,6 +203,9 @@ export const claimPrepareQuery = graphql`
                 Acc_TotalGrantApproved__c {
                   value
                 }
+                Acc_OverheadRate__c {
+                  value
+                }
               }
             }
           }

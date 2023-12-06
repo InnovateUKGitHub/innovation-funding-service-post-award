@@ -662,6 +662,7 @@ describe("renderCostCategory()", () => {
     const stubCategory: CategoryInfoProps = {
       id: "stub-id" as CostCategoryId,
       name: "stub-name",
+      isCalculated: false,
     };
 
     const categoryNameAsString = setup(defaultCostCategory, stubCategory);
@@ -683,6 +684,7 @@ describe("renderCostCategory()", () => {
     const stubCategory: CategoryInfoProps = {
       id: "stub-id" as CostCategoryId,
       name: "stub-name",
+      isCalculated: false,
     };
 
     const categoryNameAsString = setup(defaultCostCategory, stubCategory);
@@ -709,6 +711,7 @@ describe("renderCostCategory()", () => {
     const stubCategory: CategoryInfoProps = {
       id: "stub-id" as CostCategoryId,
       name: "stub-name",
+      isCalculated: false,
     };
 
     const categoryNameAsString = setup(defaultCostCategory, stubCategory);

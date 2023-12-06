@@ -44,7 +44,7 @@ interface ClaimTableResponse {
 }
 
 export interface ClaimTableProps {
-  costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType">[];
+  costCategories: Pick<CostCategoryDto, "id" | "name" | "competitionType" | "organisationType" | "isCalculated">[];
   project: Pick<ProjectDto, "competitionType">;
   partner: Pick<PartnerDto, "organisationType">;
   claimDetails: Pick<
@@ -155,7 +155,7 @@ function calculateTotalRow(claimDetails: ClaimTableProps["claimDetails"]): Claim
  * creates a row
  */
 function createRow(
-  category: Pick<CostCategoryDto, "id" | "name">,
+  category: Pick<CostCategoryDto, "id" | "name" | "isCalculated">,
   claimItem: {
     claimDetails: Pick<
       CostsSummaryForPeriodDto,
@@ -195,7 +195,7 @@ function createRow(
 }
 
 export type ClaimInfoProps = Pick<ClaimProps, "getLink" | "validation">;
-export type CategoryInfoProps = Pick<CostCategoryDto, "id" | "name">;
+export type CategoryInfoProps = Pick<CostCategoryDto, "id" | "name" | "isCalculated">;
 
 export const renderCostCategory = (claimInfo: ClaimInfoProps, categoryInfo: CategoryInfoProps, disabled?: boolean) => {
   const { getLink, validation } = claimInfo;
@@ -204,7 +204,7 @@ export const renderCostCategory = (claimInfo: ClaimInfoProps, categoryInfo: Cate
   if (!route) return categoryInfo.name;
 
   const linkId = (validation && validation.errorMessage && validation.key) || "";
-  if (disabled) {
+  if (disabled || categoryInfo.isCalculated) {
     return <P id={linkId}>{categoryInfo.name}</P>;
   }
   return (
