@@ -137,6 +137,24 @@ export const correctTableHeaders = () => {
   });
 };
 
+export const costCatTableFooter = () => {
+  [
+    ["Total costs", "£12,000.00"],
+    ["Forecast costs", "£35,000.00"],
+    ["Difference", "-65.71%"],
+  ].forEach(([col1, col2], index) => {
+    cy.get("tfoot").within(() => {
+      cy.get("tr")
+        .eq(index)
+        .within(() => {
+          cy.get(`th:nth-child(1)`).contains(col1);
+          cy.get(`td:nth-child(2)`).contains(col2);
+          index + 1;
+        });
+    });
+  });
+};
+
 /**
  * Wait required in newCostCatLineItem below
  */
@@ -650,17 +668,44 @@ export const beginEditing = () => {
 };
 
 export const add120Lines = () => {
-  cy.get('input[name="itemCount"]').then($input => {
-    const count = Number($input.val() || 0);
-
-    for (let i = count; i < 120; i++) {
-      cy.clickOn("Add a cost");
-      cy.get("#description" + i).type("Labour" + i);
-      cy.get("#value" + i).type("100");
-    }
-  });
+  cy.clickOn("Add a cost");
   cy.wait(500);
-  cy.get("a").contains("Add a cost").should("not.exist");
+  cy.getByQA("current-claim-summary-table")
+    .find(`[data-qa="input-row"]`)
+    .then($rows => {
+      let numberOfRows = $rows.length;
+      cy.log(numberOfRows.toString());
+      if (numberOfRows > 1) {
+        for (let i = 0; i < numberOfRows; numberOfRows--) {
+          cy.get("tr")
+            .eq(numberOfRows)
+            .within(() => {
+              cy.clickOn("Remove");
+            });
+        }
+        cy.clickOn("Save and return to claims");
+        cy.heading("Costs to be claimed");
+        cy.clickOn("Labour");
+        cy.heading("Labour");
+        for (let i = 0; i < 119; i++) {
+          cy.clickOn("Add a cost");
+          cy.get(`#lineItems_${i}_description`).type(`Labour${i}`);
+          cy.get(`#lineItems_${i}_value`).type("100");
+        }
+        cy.get(`#lineItems_119_description`).type(`Labour119`);
+        cy.get(`#lineItems_119_value`).type("100");
+        cy.button("Add a cost").should("not.exist");
+      } else {
+        for (let i = 0; i < 119; i++) {
+          cy.clickOn("Add a cost");
+          cy.get(`#lineItems_${i}_description`).type(`Labour${i}`);
+          cy.get(`#lineItems_${i}_value`).type("100");
+        }
+        cy.get(`#lineItems_119_description`).type(`Labour119`);
+        cy.get(`#lineItems_119_value`).type("100");
+        cy.button("Add a cost").should("not.exist");
+      }
+    });
 };
 
 export const saveLineItems = () => {
@@ -672,12 +717,23 @@ export const saveLineItems = () => {
 export const removeLineItems = () => {
   cy.clickOn("a", "Labour");
   cy.heading("Labour");
-  cy.get('input[name="itemCount"]').then($input => {
-    const count = Number($input.val() || 0);
-    for (let i = count; i > 0; i--) {
-      cy.clickOn("Remove");
-    }
-  });
+  cy.getByQA("current-claim-summary-table")
+    .find(`[data-qa="input-row"]`)
+    .then($rows => {
+      let numberOfRows = $rows.length;
+      cy.log(numberOfRows.toString());
+      if (numberOfRows > 2) {
+        for (let i = 0; i < numberOfRows; numberOfRows--) {
+          cy.get("tr")
+            .eq(numberOfRows)
+            .within(() => {
+              cy.clickOn("Remove");
+            });
+        }
+      } else {
+        cy.heading("Labour");
+      }
+    });
 };
 
 export const validateLineItem = () => {
@@ -748,8 +804,8 @@ export const triggerCapPot = () => {
     cy.clickOn(costCat);
     cy.heading(costCat);
     cy.clickOn("Add a cost");
-    cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
-    cy.getByAriaLabel("value of claim line item 1").clear().type("5001").wait(800);
+    cy.get(`#lineItems_0_description`).clear().type(`Test line item`);
+    cy.get(`#lineItems_0_value`).clear().type("5001").wait(800);
     cy.clickOn("Save and return to claims");
     cy.heading("Costs to be claimed");
   });
@@ -1084,8 +1140,8 @@ export const summaryUpdateCostsClaimed = () => {
   cy.clickOn("a", "Labour");
   cy.heading("Labour");
   cy.clickOn("Add a cost");
-  cy.get("#description0").type("Test cost");
-  cy.get("#value0").type("1000");
+  cy.get("#lineItems_0_description").type("Test cost");
+  cy.get("#lineItems_0_value").type("1000");
   cy.wait(500);
   cy.clickOn("Save and return to claims");
   cy.heading("Costs to be claimed");

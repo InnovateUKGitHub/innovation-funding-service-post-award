@@ -1,5 +1,5 @@
 import { visitApp } from "common/visit";
-import { add120Lines, beginEditing, removeLineItems, saveLineItems } from "./steps";
+import { add120Lines, beginEditing, costCatTableFooter, removeLineItems, saveLineItems } from "./steps";
 
 describe("claims > Add 120 line items", () => {
   before(() => {
@@ -11,6 +11,12 @@ describe("claims > Add 120 line items", () => {
   it("Should begin editing", beginEditing);
 
   it("Should add 120 line items", add120Lines);
+
+  it("Should no longer display the 'Add a cost' button", () => {
+    cy.button("Add a cost").should("not.exist");
+  });
+
+  it("Should check the foot of the table for totals and difference", costCatTableFooter);
 
   it("Should save line items and continue", saveLineItems);
 

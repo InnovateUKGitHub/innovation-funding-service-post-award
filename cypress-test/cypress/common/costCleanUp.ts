@@ -79,10 +79,10 @@ export const retentionTidyUp = () => {
       .then($row => {
         if ($row.text().includes("£5,001.00")) {
           cy.log("**Clearing cost category**");
-          cy.get("a").contains(catName).click();
+          cy.button(catName).click();
           cy.heading(catName);
-          cy.get("a").contains("Remove").click();
-          cy.get("button").contains("Save and return to claims").click();
+          cy.button("Remove").click();
+          cy.button("Save and return to claims").click();
           cy.heading("Costs to be claimed");
         } else {
           cy.heading("Costs to be claimed");

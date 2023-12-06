@@ -99,7 +99,7 @@ describe("Claims > Cost category document uploads", () => {
     cy.heading("Exceptions - Staff");
 
     documents.forEach((document, tableRow) => {
-      cy.getByQA("edit-claim-line-items-documents-container").within(() => {
+      cy.getByQA("claim-line-item-documents-container").within(() => {
         cy.get("tr")
           .eq(tableRow + 1)
           .within(() => {
