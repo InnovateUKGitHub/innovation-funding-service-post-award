@@ -35,6 +35,7 @@ export const useSetupSpendProfileData = (projectId: ProjectId, partnerId: Partne
     data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
     ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
     golProfileGql,
+    { overheadRate: partner.overheadRate ?? undefined },
   );
 
   // GOL COSTS

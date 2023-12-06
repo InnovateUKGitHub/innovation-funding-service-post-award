@@ -46,6 +46,7 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
         "roles",
         "isWithdrawn",
         "partnerStatus",
+        "overheadRate",
       ],
       { roles: getPartnerRoles(project.partnerRoles, partnerNode?.Id ?? "unknown") },
     );
@@ -54,8 +55,9 @@ export const useClaimPreparePageData = (projectId: ProjectId, partnerId: Partner
 
     const costCategories = mapToRequiredSortedCostCategoryDtoArray(
       data?.salesforce?.uiapi?.query?.Acc_CostCategory__c?.edges ?? [],
-      ["id", "name", "displayOrder", "competitionType", "organisationType"],
+      ["id", "name", "displayOrder", "competitionType", "organisationType", "isCalculated"],
       profileGql,
+      { overheadRate: partner.overheadRate ?? undefined },
     );
 
     const claims = mapToCurrentClaimsDtoArray(
