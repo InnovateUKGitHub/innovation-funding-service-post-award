@@ -4,15 +4,21 @@ import { forwardRef } from "react";
 import { Label } from "../form/Label/Label";
 import { FormGroup } from "../form/FormGroup/FormGroup";
 
-type DateInputProps = { hasError?: boolean; type: "month" | "year" | "day" } & React.ComponentProps<"input">;
+type DateInputProps = {
+  hasError?: boolean;
+  noLabel?: boolean;
+  type: "month" | "year" | "day";
+} & React.ComponentProps<"input">;
 
-export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(({ hasError, type, ...props }, ref) => {
+export const DateInput = forwardRef<HTMLInputElement, DateInputProps>(({ hasError, noLabel, type, ...props }, ref) => {
   const { getContent } = useContent();
 
   return (
     <div className="govuk-date-input__item">
       <FormGroup>
-        <Label htmlFor={props.id || props.name || ""}>{getContent(x => x.components.dateInput[type])}</Label>
+        {!noLabel && (
+          <Label htmlFor={props.id || props.name || ""}>{getContent(x => x.components.dateInput[type])}</Label>
+        )}
 
         <input
           ref={ref}

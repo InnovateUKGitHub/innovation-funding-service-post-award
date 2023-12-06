@@ -3,10 +3,15 @@ import { AwardRateStep } from "@ui/containers/pages/pcrs/addPartner/steps/awardR
 import { OtherFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/otherFundingStep";
 import { NonAidFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/nonAidFundingStep";
 import { DeMinimisStep } from "@ui/containers/pages/pcrs/addPartner/deMinimisStep";
-import { OtherSourcesOfFundingStep } from "@ui/containers/pages/pcrs/addPartner/otherSourcesOfFundingStep";
+import { OtherSourcesOfFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/otherSourcesOfFundingStep";
 import { AcademicCostsReviewStep } from "@ui/containers/pages/pcrs/addPartner/steps/academicCostsReviewStep";
 import { AgreementToPCRStep } from "./agreementToPcrStep";
-import { PCRStepType, PCROrganisationType, PCRItemType, PCRProjectRole } from "@framework/constants/pcrConstants";
+import {
+  PCRStepType,
+  PCROrganisationType,
+  // PCRItemType,
+  PCRProjectRole,
+} from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
@@ -187,13 +192,13 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.otherFundingSourcesStep,
       displayName: "Other public sector funding",
       stepNumber: 12,
-      validation: val => {
-        const addPartnerValidator = val.pcr.items.results.find(
-          x => x.model.type === PCRItemType.PartnerAddition,
-        ) as PCRPartnerAdditionItemDtoValidator;
-        return addPartnerValidator.spendProfile.results[0];
-      },
-      stepRender: OtherSourcesOfFundingStep,
+      // validation: val => {
+      //   const addPartnerValidator = val.pcr.items.results.find(
+      //     x => x.model.type === PCRItemType.PartnerAddition,
+      //   ) as PCRPartnerAdditionItemDtoValidator;
+      //   return addPartnerValidator.spendProfile.results[0];
+      // },
+      migratedStepRender: OtherSourcesOfFundingStep,
     });
   }
 

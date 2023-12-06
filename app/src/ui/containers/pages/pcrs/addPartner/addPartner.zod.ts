@@ -135,6 +135,25 @@ export const otherFundingSchema = z.object({
 
 export type OtherFundingSchema = z.infer<typeof otherFundingSchema>;
 
+export const otherSourcesOfFundingErrorMap = makeZodI18nMap({
+  keyPrefix: ["pcr", "addPartner", "otherSourcesOfFunding"],
+});
+
+export const otherSourcesOfFundingSchema = z.object({
+  ...common,
+  itemsLength: z.string(),
+  funds: z.array(
+    z.object({
+      value: z.coerce.number().nullable(),
+      description: z.string(),
+      dateSecured_month: z.string().nullable(),
+      dateSecured_year: z.string().nullable(),
+    }),
+  ),
+});
+
+export type OtherSourcesOfFundingSchema = z.infer<typeof otherSourcesOfFundingSchema>;
+
 export const financeDetailsErrorMap = makeZodI18nMap({
   keyPrefix: ["pcr", "addPartner", "financeDetails"],
 });
