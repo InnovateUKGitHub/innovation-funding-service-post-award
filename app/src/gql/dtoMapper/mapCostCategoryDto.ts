@@ -1,3 +1,4 @@
+import { CostCategoryType } from "@framework/constants/enums";
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { costCategoryTypeMapper } from "@framework/mappers/costCategory";
@@ -33,7 +34,11 @@ export type CostCategoryDtoMapping = Pick<
   "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type" | "hintText"
 > & { displayOrder: number };
 
-const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
+type CostCategoryAdditionalData = {
+  overheadRate?: number;
+};
+
+const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode, CostCategoryAdditionalData> = {
   competitionType(node) {
     return node?.Acc_CompetitionType__c?.value ?? "unknown";
   },
@@ -46,8 +51,9 @@ const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
   id(node) {
     return (node?.Id ?? "") as CostCategoryId;
   },
-  isCalculated() {
-    return false;
+  isCalculated(node, additionalData) {
+    const type = this.type(node, additionalData);
+    return type === CostCategoryType.Overheads && typeof additionalData.overheadRate === "number";
   },
   organisationType(node) {
     return (node?.Acc_OrganisationType__c?.value ?? "unknown") as PCROrganisationType;
@@ -70,9 +76,10 @@ const mapper: GQL.DtoMapper<CostCategoryDtoMapping, CostCategoryNode> = {
 export function mapToCostCategoryDto<T extends CostCategoryNode, PickList extends keyof CostCategoryDtoMapping>(
   node: T,
   pickList: PickList[],
+  additionalData: CostCategoryAdditionalData = {},
 ): Pick<CostCategoryDtoMapping, PickList> {
   return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node);
+    dto[field] = mapper[field](node, additionalData);
     return dto;
   }, {} as Pick<CostCategoryDtoMapping, PickList>);
 }
@@ -83,10 +90,14 @@ export function mapToCostCategoryDto<T extends CostCategoryNode, PickList extend
 export function mapToCostCategoryDtoArray<
   T extends ReadonlyArray<GQL.Maybe<{ node: CostCategoryNode }>> | null,
   PickList extends keyof CostCategoryDtoMapping,
->(edges: T, pickList: PickList[]): Pick<CostCategoryDtoMapping, PickList>[] {
+>(
+  edges: T,
+  pickList: PickList[],
+  additionalData: CostCategoryAdditionalData = {},
+): Pick<CostCategoryDtoMapping, PickList>[] {
   return (
     edges?.map(node => {
-      return mapToCostCategoryDto(node?.node ?? null, pickList);
+      return mapToCostCategoryDto(node?.node ?? null, pickList, additionalData);
     }) ?? []
   );
 }
@@ -105,10 +116,11 @@ export function mapToRequiredSortedCostCategoryDtoArray<
   edges: T,
   pickList: [...["id", "name", "displayOrder"], ...PickList[]],
   profileNode: ProfileNodeForRequiredCostCategories,
+  additionalData: CostCategoryAdditionalData = {},
 ): Pick<CostCategoryDtoMapping, "id" | "name" | "displayOrder" | PickList>[] {
   return (edges ?? [])
     .map(node => {
-      return mapToCostCategoryDto(node?.node ?? null, pickList);
+      return mapToCostCategoryDto(node?.node ?? null, pickList, additionalData);
     })
     .filter(
       x =>

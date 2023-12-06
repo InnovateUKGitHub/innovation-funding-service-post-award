@@ -50,16 +50,6 @@ export const Warning = ({
 
     total = roundCurrency(total);
 
-    if (category.name === "Labour") {
-      console.log({
-        costCategory: category.name,
-        costCategoryId: category.id,
-        gol: gol?.value,
-        total,
-        push: gol && gol.value < total,
-      });
-    }
-
     if (gol && gol.value < total) {
       categories.push(category.name);
     }

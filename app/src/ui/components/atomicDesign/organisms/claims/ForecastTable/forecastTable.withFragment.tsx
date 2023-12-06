@@ -34,14 +34,14 @@ export const ForecastTable = ({
   const { node: partnerNode } = getFirstEdge(fragment?.query?.ForecastTable_Partner?.edges);
 
   const project = mapToProjectDto(projectNode, ["periodId", "numberOfPeriods", "competitionType"]);
+  const partner = mapToPartnerDto(partnerNode, ["id", "partnerStatus", "name", "organisationType", "overheadRate"], {});
 
   const costCategories = mapToRequiredSortedCostCategoryDtoArray(
     fragment?.query?.ForecastTable_CostCategory?.edges ?? [],
     ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
     fragment?.query?.ForecastTable_ProfileForCostCategory?.edges ?? [],
+    { overheadRate: partner.overheadRate ?? undefined },
   );
-
-  const partner = mapToPartnerDto(partnerNode, ["id", "partnerStatus", "name", "organisationType", "overheadRate"], {});
 
   const claims = mapToCurrentClaimsDtoArray(
     fragment?.query?.ForecastTable_AllClaimsForPartner?.edges ?? [],
