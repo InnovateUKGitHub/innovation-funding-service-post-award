@@ -36,9 +36,9 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
   const handleCompanySelection = (companySelection: CompanyDto): void => {
     const payload: PCRItemForPartnerAdditionDto = {
       ...originalPayload,
-      organisationName: companySelection.title,
-      registrationNumber: companySelection.registrationNumber,
-      registeredAddress: companySelection.addressFull || originalPayload.registeredAddress,
+      organisationName: companySelection.title ?? "",
+      registrationNumber: companySelection.registrationNumber ?? "",
+      registeredAddress: companySelection.addressFull ?? "",
     };
 
     setFormData(payload);
