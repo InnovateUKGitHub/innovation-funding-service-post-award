@@ -38,7 +38,7 @@ export const ForecastTable = ({
   const costCategories = mapToRequiredSortedCostCategoryDtoArray(
     fragment?.query?.ForecastTable_CostCategory?.edges ?? [],
     ["id", "name", "displayOrder", "isCalculated", "competitionType", "organisationType", "type"],
-    fragment?.query?.ForecastTable_ProfileForCostCategory?.edges ?? [],
+    fragment?.query?.ForecastTable_ForecastDetails?.edges ?? [],
   );
 
   const partner = mapToPartnerDto(partnerNode, ["id", "partnerStatus", "name", "organisationType", "overheadRate"], {});

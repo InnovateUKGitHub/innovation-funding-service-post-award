@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3d5c805242d2d2196f5adfa369ce51b0>>
+ * @generated SignedSource<<3827831247f7513df0ccbccfdf9483cc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -167,16 +167,6 @@ export type ForecastTableFragment$data = {
         } | null | undefined;
       } | null | undefined> | null | undefined;
     } | null | undefined;
-    readonly ForecastTable_ProfileForCostCategory: {
-      readonly edges: ReadonlyArray<{
-        readonly node: {
-          readonly Acc_CostCategory__c: {
-            readonly value: string | null | undefined;
-          } | null | undefined;
-          readonly Id: string;
-        } | null | undefined;
-      } | null | undefined> | null | undefined;
-    } | null | undefined;
     readonly ForecastTable_Project: {
       readonly edges: ReadonlyArray<{
         readonly node: {
@@ -239,42 +229,14 @@ v5 = {
   "name": "and.2",
   "value": (v4/*: any*/)
 },
-v6 = [
-  (v0/*: any*/),
-  {
-    "fields": [
-      {
-        "items": [
-          (v3/*: any*/),
-          {
-            "kind": "Literal",
-            "name": "and.1",
-            "value": {
-              "RecordType": {
-                "DeveloperName": {
-                  "eq": "Profile_Detail"
-                }
-              }
-            }
-          },
-          (v5/*: any*/)
-        ],
-        "kind": "ListValue",
-        "name": "and"
-      }
-    ],
-    "kind": "ObjectValue",
-    "name": "where"
-  }
-],
-v7 = {
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
-v8 = [
+v7 = [
   {
     "alias": null,
     "args": null,
@@ -283,24 +245,34 @@ v8 = [
     "storageKey": null
   }
 ],
-v9 = {
+v8 = {
   "alias": null,
   "args": null,
   "concreteType": "IDValue",
   "kind": "LinkedField",
   "name": "Acc_CostCategory__c",
   "plural": false,
-  "selections": (v8/*: any*/),
+  "selections": (v7/*: any*/),
   "storageKey": null
 },
-v10 = {
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "DoubleValue",
   "kind": "LinkedField",
   "name": "Acc_ProjectPeriodNumber__c",
   "plural": false,
-  "selections": (v8/*: any*/),
+  "selections": (v7/*: any*/),
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "DateValue",
+  "kind": "LinkedField",
+  "name": "Acc_ProjectPeriodStartDate__c",
+  "plural": false,
+  "selections": (v7/*: any*/),
   "storageKey": null
 },
 v11 = {
@@ -308,22 +280,12 @@ v11 = {
   "args": null,
   "concreteType": "DateValue",
   "kind": "LinkedField",
-  "name": "Acc_ProjectPeriodStartDate__c",
+  "name": "Acc_ProjectPeriodEndDate__c",
   "plural": false,
-  "selections": (v8/*: any*/),
+  "selections": (v7/*: any*/),
   "storageKey": null
 },
 v12 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "DateValue",
-  "kind": "LinkedField",
-  "name": "Acc_ProjectPeriodEndDate__c",
-  "plural": false,
-  "selections": (v8/*: any*/),
-  "storageKey": null
-},
-v13 = {
   "alias": null,
   "args": null,
   "concreteType": "RecordType",
@@ -338,16 +300,25 @@ v13 = {
       "kind": "LinkedField",
       "name": "DeveloperName",
       "plural": false,
-      "selections": (v8/*: any*/),
+      "selections": (v7/*: any*/),
       "storageKey": null
     }
   ],
   "storageKey": null
 },
-v14 = {
+v13 = {
   "RecordType": {
     "DeveloperName": {
       "eq": "Total_Project_Period"
+    }
+  }
+},
+v14 = {
+  "kind": "Literal",
+  "name": "and.2",
+  "value": {
+    "Acc_ClaimStatus__c": {
+      "ne": "New"
     }
   }
 },
@@ -358,7 +329,7 @@ v15 = {
   "kind": "LinkedField",
   "name": "Acc_ClaimStatus__c",
   "plural": false,
-  "selections": (v8/*: any*/),
+  "selections": (v7/*: any*/),
   "storageKey": null
 },
 v16 = [
@@ -396,43 +367,35 @@ return {
       "plural": false,
       "selections": [
         {
-          "alias": "ForecastTable_ProfileForCostCategory",
-          "args": (v6/*: any*/),
-          "concreteType": "Acc_Profile__cConnection",
-          "kind": "LinkedField",
-          "name": "Acc_Profile__c",
-          "plural": false,
-          "selections": [
+          "alias": "ForecastTable_ForecastDetails",
+          "args": [
+            (v0/*: any*/),
             {
-              "alias": null,
-              "args": null,
-              "concreteType": "Acc_Profile__cEdge",
-              "kind": "LinkedField",
-              "name": "edges",
-              "plural": true,
-              "selections": [
+              "fields": [
                 {
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "Acc_Profile__c",
-                  "kind": "LinkedField",
-                  "name": "node",
-                  "plural": false,
-                  "selections": [
-                    (v7/*: any*/),
-                    (v9/*: any*/)
+                  "items": [
+                    (v3/*: any*/),
+                    {
+                      "kind": "Literal",
+                      "name": "and.1",
+                      "value": {
+                        "RecordType": {
+                          "DeveloperName": {
+                            "eq": "Profile_Detail"
+                          }
+                        }
+                      }
+                    },
+                    (v5/*: any*/)
                   ],
-                  "storageKey": null
+                  "kind": "ListValue",
+                  "name": "and"
                 }
               ],
-              "storageKey": null
+              "kind": "ObjectValue",
+              "name": "where"
             }
           ],
-          "storageKey": null
-        },
-        {
-          "alias": "ForecastTable_ForecastDetails",
-          "args": (v6/*: any*/),
           "concreteType": "Acc_Profile__cConnection",
           "kind": "LinkedField",
           "name": "Acc_Profile__c",
@@ -454,11 +417,11 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v7/*: any*/),
+                    (v6/*: any*/),
+                    (v8/*: any*/),
                     (v9/*: any*/),
                     (v10/*: any*/),
                     (v11/*: any*/),
-                    (v12/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -466,10 +429,10 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_LatestForecastCost__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
-                    (v13/*: any*/)
+                    (v12/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -530,8 +493,8 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v7/*: any*/),
-                    (v9/*: any*/),
+                    (v6/*: any*/),
+                    (v8/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -539,10 +502,10 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_CostCategoryGOLCost__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
-                    (v13/*: any*/)
+                    (v12/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -564,17 +527,9 @@ return {
                     {
                       "kind": "Literal",
                       "name": "and.1",
-                      "value": (v14/*: any*/)
+                      "value": (v13/*: any*/)
                     },
-                    {
-                      "kind": "Literal",
-                      "name": "and.2",
-                      "value": {
-                        "Acc_ClaimStatus__c": {
-                          "ne": "New "
-                        }
-                      }
-                    },
+                    (v14/*: any*/),
                     {
                       "kind": "Literal",
                       "name": "and.3",
@@ -614,10 +569,10 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v13/*: any*/),
-                    (v7/*: any*/),
+                    (v12/*: any*/),
+                    (v6/*: any*/),
                     (v15/*: any*/),
-                    (v10/*: any*/)
+                    (v9/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -660,15 +615,7 @@ return {
                         }
                       }
                     },
-                    {
-                      "kind": "Literal",
-                      "name": "and.2",
-                      "value": {
-                        "Acc_ClaimStatus__c": {
-                          "ne": "New"
-                        }
-                      }
-                    },
+                    (v14/*: any*/),
                     {
                       "kind": "Literal",
                       "name": "and.3",
@@ -704,8 +651,8 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v13/*: any*/),
-                    (v9/*: any*/),
+                    (v12/*: any*/),
+                    (v8/*: any*/),
                     (v15/*: any*/),
                     {
                       "alias": null,
@@ -714,12 +661,12 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_PeriodCostCategoryTotal__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
-                    (v12/*: any*/),
-                    (v10/*: any*/),
-                    (v11/*: any*/)
+                    (v11/*: any*/),
+                    (v9/*: any*/),
+                    (v10/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -764,7 +711,7 @@ return {
                       "name": "and.2",
                       "value": {
                         "or": [
-                          (v14/*: any*/),
+                          (v13/*: any*/),
                           {
                             "RecordType": {
                               "DeveloperName": {
@@ -805,7 +752,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v13/*: any*/),
+                    (v12/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -813,7 +760,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_IAR_Status__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -823,10 +770,10 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_IARRequired__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
-                    (v10/*: any*/)
+                    (v9/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -862,7 +809,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v7/*: any*/),
+                    (v6/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -870,7 +817,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_CostCategoryName__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -880,7 +827,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_DisplayOrder__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -890,7 +837,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_OrganisationType__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -900,7 +847,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_CompetitionType__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     }
                   ],
@@ -972,7 +919,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v7/*: any*/),
+                    (v6/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -988,7 +935,7 @@ return {
                           "kind": "LinkedField",
                           "name": "Name",
                           "plural": false,
-                          "selections": (v8/*: any*/),
+                          "selections": (v7/*: any*/),
                           "storageKey": null
                         }
                       ],
@@ -1001,7 +948,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_ProjectRole__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -1011,7 +958,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_OrganisationType__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -1021,7 +968,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_ParticipantStatus__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -1031,7 +978,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_OverheadRate__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     }
                   ],
@@ -1084,7 +1031,7 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v7/*: any*/),
+                    (v6/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -1092,7 +1039,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_CompetitionType__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -1102,7 +1049,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_NumberofPeriods__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -1112,7 +1059,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_ClaimFrequency__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -1122,7 +1069,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_CurrentPeriodNumber__c",
                       "plural": false,
-                      "selections": (v8/*: any*/),
+                      "selections": (v7/*: any*/),
                       "storageKey": null
                     }
                   ],
@@ -1143,6 +1090,6 @@ return {
 };
 })();
 
-(node as any).hash = "b5f0ccc3ec68c4038c7a8e851db2553d";
+(node as any).hash = "083a6741fb19b830d75f4f760dc5a7dc";
 
 export default node;

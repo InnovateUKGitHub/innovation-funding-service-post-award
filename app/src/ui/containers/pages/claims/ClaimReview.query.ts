@@ -1,11 +1,20 @@
 import { graphql } from "react-relay";
-export const claimReviewQuery = graphql`
-  query ClaimReviewQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
+
+export const claimReviewFragmentsQuery = graphql`
+  query ClaimReviewFragmentsQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     salesforce {
       uiapi {
         ...StatusChangesLogsFragment
         ...ForecastTableFragment
-        ...TitleFragment
+      }
+    }
+  }
+`;
+
+export const claimReviewQuery = graphql`
+  query ClaimReviewQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
+    salesforce {
+      uiapi {
         query {
           Acc_Profile__c(
             where: {
@@ -297,6 +306,12 @@ export const claimReviewQuery = graphql`
                   value
                 }
                 Impact_Management_Participation__c {
+                  value
+                }
+                Acc_ProjectNumber__c {
+                  value
+                }
+                Acc_ProjectTitle__c {
                   value
                 }
               }

@@ -198,8 +198,7 @@ const serverRender =
         }
       }
 
-      // Note: Keep resolving app queries + actions until completion for final render below
-      await loadAllData(store, () => {
+      const blankRender = () =>
         renderApp({
           requestUrl: renderUrl,
           nonce,
@@ -209,9 +208,15 @@ const serverRender =
           relayEnvironment: ServerGraphQLEnvironment,
           clientConfig,
         });
-      });
+
+      // Note: Keep resolving app queries + actions until completion for final render below
+      await loadAllData(store, blankRender);
 
       // Wait until all Relay queries have been made.
+      await relayServerSSR.getCache();
+      // Do another render for good luck
+      blankRender();
+
       const relayData = await relayServerSSR.getCache();
       const finalRelayEnvironment = getServerGraphQLFinalRenderEnvironment(relayData);
 

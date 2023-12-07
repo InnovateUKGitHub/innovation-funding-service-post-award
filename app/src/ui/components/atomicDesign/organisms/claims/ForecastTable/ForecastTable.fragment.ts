@@ -3,25 +3,6 @@ import { graphql } from "react-relay";
 export const forecastTableFragment = graphql`
   fragment ForecastTableFragment on UIAPI {
     query {
-      ForecastTable_ProfileForCostCategory: Acc_Profile__c(
-        where: {
-          and: [
-            { Acc_ProjectParticipant__c: { eq: $partnerId } }
-            { RecordType: { DeveloperName: { eq: "Profile_Detail" } } }
-            { Acc_CostCategory__c: { ne: null } }
-          ]
-        }
-        first: 2000
-      ) {
-        edges {
-          node {
-            Id
-            Acc_CostCategory__c {
-              value
-            }
-          }
-        }
-      }
       ForecastTable_ForecastDetails: Acc_Profile__c(
         where: {
           and: [
@@ -92,7 +73,7 @@ export const forecastTableFragment = graphql`
           and: [
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
             { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
-            { Acc_ClaimStatus__c: { ne: "New " } }
+            { Acc_ClaimStatus__c: { ne: "New" } }
             { Acc_ClaimStatus__c: { ne: "Not used" } }
           ]
         }

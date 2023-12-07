@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { claimReviewQuery } from "./ClaimReview.query";
+import { claimReviewFragmentsQuery, claimReviewQuery } from "./ClaimReview.query";
 import { ClaimReviewQuery } from "./__generated__/ClaimReviewQuery.graphql";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
@@ -21,6 +21,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { claimReviewSchema } from "./claimReview.zod";
 import { z } from "zod";
 import { Claims } from "@framework/constants/recordTypes";
+import { ClaimReviewFragmentsQuery } from "./__generated__/ClaimReviewFragmentsQuery.graphql";
 
 type QueryOptions = RefreshedQueryOptions | { fetchPolicy: "network-only" };
 export const useClaimReviewPageData = (
@@ -29,6 +30,11 @@ export const useClaimReviewPageData = (
   periodId: PeriodId,
   queryOptions: QueryOptions = { fetchPolicy: "network-only" },
 ) => {
+  const fragments = useLazyLoadQuery<ClaimReviewFragmentsQuery>(
+    claimReviewFragmentsQuery,
+    { projectId, projectIdStr: projectId, partnerId, periodId },
+    queryOptions,
+  );
   const data = useLazyLoadQuery<ClaimReviewQuery>(
     claimReviewQuery,
     { projectId, projectIdStr: projectId, partnerId, periodId },
@@ -49,6 +55,8 @@ export const useClaimReviewPageData = (
       "partnerRoles",
       "roles",
       "impactManagementParticipation",
+      "title",
+      "projectNumber",
     ]);
 
     const partner = mapToPartnerDto(
@@ -144,7 +152,7 @@ export const useClaimReviewPageData = (
       claim,
       claimDetails: costsSummaryForPeriod,
       documents,
-      fragmentRef: data?.salesforce?.uiapi,
+      fragmentRef: fragments?.salesforce?.uiapi,
     };
   }, [totalDocumentsLength]);
 };
