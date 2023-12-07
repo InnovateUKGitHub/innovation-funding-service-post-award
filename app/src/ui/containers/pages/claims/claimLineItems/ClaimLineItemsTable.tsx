@@ -252,17 +252,6 @@ const ClaimLineItemsTable = ({ lineItems, forecastDetail }: ClaimLineItemsTableP
             <TableEmptyCell />
           </TD>
         </TR>
-        <TR>
-          <TH numeric bold>
-            {getContent(x => x.pages.editClaimLineItems.difference)}
-          </TH>
-          <TD>
-            <Percentage value={difference} />
-          </TD>
-          <TD>
-            <TableEmptyCell />
-          </TD>
-        </TR>
       </TFoot>
     </Table>
   );
