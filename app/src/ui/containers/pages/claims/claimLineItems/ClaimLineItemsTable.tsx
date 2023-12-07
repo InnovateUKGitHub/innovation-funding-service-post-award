@@ -18,10 +18,10 @@ import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percent
 import { useClientConfig } from "@ui/components/providers/ClientConfigProvider";
 import { Button } from "@ui/components/atomicDesign/atoms/Button/Button";
 
-const emptyData = { id: undefined, description: "", value: "" };
+const emptyData = { id: "", description: "", value: "" };
 
 interface ClaimLineItemsTableProps {
-  lineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate">[];
+  lineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate" | "isAuthor">[];
   forecastDetail: Pick<ForecastDetailsDTO, "value">;
 }
 
@@ -53,6 +53,8 @@ const EditClaimLineItemsTable = ({
     forecastDetail,
   });
 
+  const ownsAnyRows = rows.some(x => x.isAuthor);
+
   return (
     <Table data-qa="current-claim-summary-table">
       <THead>
@@ -60,7 +62,7 @@ const EditClaimLineItemsTable = ({
           <TH>{getContent(x => x.pages.editClaimLineItems.headerDescription)}</TH>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerCost)}</TH>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerLastUpdated)}</TH>
-          {isClient && (
+          {isClient && ownsAnyRows && (
             <TH>
               <AccessibilityText>{getContent(x => x.pages.editClaimLineItems.headerAction)}</AccessibilityText>
             </TH>
@@ -108,18 +110,22 @@ const EditClaimLineItemsTable = ({
               <TD className="ifspa-claim-line-data-cell">
                 {x.lastModifiedDate ? <ShortDate value={x.lastModifiedDate} /> : <TableEmptyCell />}
               </TD>
-              {isClient && (
+              {isClient && ownsAnyRows && (
                 <TD className="ifspa-claim-line-data-cell">
-                  <Button
-                    onClick={e => {
-                      remove(i);
-                      e.preventDefault();
-                    }}
-                    disabled={disabled}
-                    styling="Link"
-                  >
-                    {getContent(x => x.pages.editClaimLineItems.buttonRemove)}
-                  </Button>
+                  {x.isAuthor ? (
+                    <Button
+                      onClick={e => {
+                        remove(i);
+                        e.preventDefault();
+                      }}
+                      disabled={disabled}
+                      styling="Link"
+                    >
+                      {getContent(x => x.pages.editClaimLineItems.buttonRemove)}
+                    </Button>
+                  ) : (
+                    <TableEmptyCell />
+                  )}
                 </TD>
               )}
             </TR>
@@ -129,7 +135,7 @@ const EditClaimLineItemsTable = ({
       <TFoot>
         {isClient && rows.length < options.maxClaimLineItems && (
           <TR>
-            <TD colSpan={4}>
+            <TD colSpan={isClient && ownsAnyRows ? 4 : 3}>
               <SubmitButton
                 onClick={e => {
                   append(emptyData);
@@ -153,7 +159,7 @@ const EditClaimLineItemsTable = ({
           <TD>
             <TableEmptyCell />
           </TD>
-          {isClient && (
+          {isClient && ownsAnyRows && (
             <TD>
               <TableEmptyCell />
             </TD>
@@ -169,7 +175,7 @@ const EditClaimLineItemsTable = ({
           <TD>
             <TableEmptyCell />
           </TD>
-          {isClient && (
+          {isClient && ownsAnyRows && (
             <TD>
               <TableEmptyCell />
             </TD>
@@ -185,7 +191,7 @@ const EditClaimLineItemsTable = ({
           <TD>
             <TableEmptyCell />
           </TD>
-          {isClient && (
+          {isClient && ownsAnyRows && (
             <TD>
               <TableEmptyCell />
             </TD>
@@ -199,7 +205,7 @@ const EditClaimLineItemsTable = ({
 const ClaimLineItemsTable = ({ lineItems, forecastDetail }: ClaimLineItemsTableProps) => {
   const { getContent } = useContent();
 
-  const { difference, forecast, rows, total } = useMapToClaimLineItemTableDto({
+  const { forecast, rows, total } = useMapToClaimLineItemTableDto({
     existingLineItems: lineItems,
     forecastDetail,
   });

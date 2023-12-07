@@ -20,7 +20,7 @@ interface InitialLineItem {
 }
 
 interface MapToClaimLineItemTableProps {
-  existingLineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate">[];
+  existingLineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate" | "isAuthor">[];
   currentLineItems?: LineItem[];
   watchedLineItems?: LineItem[];
   forecastDetail: Pick<ForecastDetailsDTO, "value">;
@@ -33,6 +33,7 @@ interface ClaimLineItemRow {
   value: number;
   lastModifiedDate?: Date;
   displayValue: string;
+  isAuthor: boolean;
   jsDisabledRow: boolean;
 }
 
@@ -80,6 +81,7 @@ const mapToClaimLineItemTableDto = ({
         value: isNumber(value) ? value : 0,
         lastModifiedDate: existingLineItem?.lastModifiedDate,
         jsDisabledRow: false,
+        isAuthor: existingLineItem?.isAuthor ?? true,
       });
     }
 
@@ -91,6 +93,7 @@ const mapToClaimLineItemTableDto = ({
         displayValue: "",
         value: 0,
         jsDisabledRow: true,
+        isAuthor: true,
       });
     }
   } else {
@@ -106,6 +109,7 @@ const mapToClaimLineItemTableDto = ({
         value,
         lastModifiedDate: lineItem.lastModifiedDate,
         jsDisabledRow: false,
+        isAuthor: lineItem.isAuthor,
       });
     }
   }
