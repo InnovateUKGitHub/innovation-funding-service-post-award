@@ -89,8 +89,8 @@ export const getAddPartnerWorkflow = (
         migratedStepRender: AgreementToPCRStep,
       },
     ],
-    summary: {
-      summaryRender: AddPartnerSummary,
+    migratedSummary: {
+      migratedSummaryRender: AddPartnerSummary,
     },
     isMigratedToGql: true,
   };
@@ -116,7 +116,6 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.aidEligibilityStep,
       displayName: "De minimis funding",
       stepNumber: 2,
-      validation: val => val,
       migratedStepRender: DeMinimisStep,
     });
   } else {

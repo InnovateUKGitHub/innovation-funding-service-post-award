@@ -1,50 +1,91 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { CostCategoryType } from "@framework/constants/enums";
-import { PCROrganisationType, PCRProjectRole, PCRStepType } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCROrganisationType, PCRProjectRole, PCRStepType } from "@framework/constants/pcrConstants";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { sumBy } from "@framework/util/numberHelper";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentList } from "@ui/components/atomicDesign/organisms/documents/DocumentList/DocumentList";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { Loader } from "@ui/components/bjss/loading";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { MonthYear } from "@ui/components/atomicDesign/atoms/Date";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SummaryList, SummaryListItem } from "@ui/components/atomicDesign/molecules/SummaryList/summaryList";
-import { AddPartnerStepNames } from "@ui/containers/pages/pcrs/addPartner/addPartnerWorkflow";
-import { PcrSummaryProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { useStores } from "@ui/redux/storesProvider";
-import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { AddPartnerSchema, addPartnerErrorMap, addPartnerSchema } from "./addPartner.zod";
+import { PcrPage } from "../pcrPage";
+import { EditLink, ViewLink } from "../pcrItemSummaryLinks";
+import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
+import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
+import { useMemo } from "react";
 
-interface InnerProps {
-  documents: DocumentSummaryDto[];
-}
+export const AddPartnerSummary = () => {
+  const { projectId, itemId, fetchKey, mode, displayCompleteForm } = usePcrWorkflowContext();
 
-const SummaryComponent = (
-  props: PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, AddPartnerStepNames> &
-    InnerProps,
-) => {
-  const { pcrItem, validator, documents } = props;
+  const { pcrItem, documents, pcrSpendProfile, costCategories } = useAddPartnerWorkflowQuery(
+    projectId,
+    itemId,
+    fetchKey,
+  );
+
+  const { handleSubmit, register, formState, watch } = useForm<AddPartnerSchema>({
+    defaultValues: {
+      // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
+      markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
+      button_submit: "submit",
+      isCommercialWork: pcrItem.isCommercialWork,
+      financialYearEndDate: pcrItem.financialYearEndDate,
+      financialYearEndTurnover: pcrItem.financialYearEndTurnover,
+      organisationName: pcrItem.organisationName,
+      registrationNumber: pcrItem.registrationNumber,
+      registeredAddress: pcrItem.registeredAddress,
+      participantSize: pcrItem.participantSize,
+      numberOfEmployees: pcrItem.numberOfEmployees,
+      projectLocation: pcrItem.projectLocation,
+      projectCity: pcrItem.projectCity,
+      projectPostcode: pcrItem.projectPostcode,
+      contact1Email: pcrItem.contact1Email,
+      contact1Forename: pcrItem.contact1Forename,
+      contact1Surname: pcrItem.contact1Surname,
+      contact1Phone: pcrItem.contact1Phone,
+      tsbReference: pcrItem.tsbReference,
+    },
+    resolver: zodResolver(addPartnerSchema, {
+      errorMap: addPartnerErrorMap,
+    }),
+  });
+
+  const validationErrors = useRhfErrors(formState.errors);
+
   // Used to determine items displayed for industrial org vs academic org
   const isIndustrial = pcrItem.organisationType === PCROrganisationType.Industrial;
 
-  // Funding section values
-  const totalProjectCosts = pcrItem.spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
-  const totalOtherFunding = calculateTotalOtherFunding(pcrItem?.spendProfile?.funds ?? []);
+  const data = useMemo(() => {
+    // const spendProfileCostCategories = costCategories.filter(
+    //   x => x.competitionType === project.competitionType && x.organisationType === pcrItem.organisationType,
+    // );
+    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, costCategories);
+    const totalProjectCosts = spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
+    const totalOtherFunding = calculateTotalOtherFunding(spendProfile?.funds ?? []);
+    const nonFundedCosts = totalProjectCosts - (totalOtherFunding || 0);
+    const fundingSought = (nonFundedCosts * (pcrItem.awardRate || 0)) / 100 || 0;
+    const partnerContribution = nonFundedCosts - fundingSought;
 
-  const nonFundedCosts = totalProjectCosts - (totalOtherFunding || 0);
-  const fundingSought = (nonFundedCosts * (pcrItem.awardRate || 0)) / 100 || 0;
-  const partnerContribution = nonFundedCosts - fundingSought;
+    return { totalProjectCosts, totalOtherFunding, fundingSought, partnerContribution };
+  }, []);
 
   return (
-    <>
+    <PcrPage validationErrors={validationErrors}>
       <Section title={x => x.pcrAddPartnerLabels.organisationSectionTitle} qa="add-partner-summary-organisation">
         <SummaryList qa="add-partner-summary-list-organisation">
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.roleHeading}
             content={pcrItem.projectRoleLabel}
-            validation={validator.projectRole}
+            hasError={!!validationErrors?.projectRole}
             qa="projectRole"
           />
           <SummaryListItem
@@ -58,13 +99,13 @@ const SummaryComponent = (
                 }
               />
             }
-            validation={validator.isCommercialWork}
+            hasError={!!validationErrors?.isCommercialWork}
             qa="isCommercialWork"
           />
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.organisationHeading}
             content={pcrItem.partnerTypeLabel}
-            validation={validator.partnerType}
+            hasError={!!validationErrors?.partnerType}
             qa="partnerType"
           />
           <SummaryListItem
@@ -73,100 +114,104 @@ const SummaryComponent = (
               <DocumentsComponent documents={documents} description={DocumentDescription.DeMinimisDeclarationForm} />
             }
             qa="supportingDocumentsAidEligibility"
-            action={props.getEditLink(PCRStepType.aidEligibilityStep, null)}
+            action={<EditLink stepName={PCRStepType.aidEligibilityStep} />}
           />
           {!isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.organisationNameHeading}
               content={pcrItem.organisationName}
-              validation={validator.organisationName}
+              hasError={!!validationErrors?.organisationName}
               qa="organisationName"
-              action={props.getEditLink(PCRStepType.academicOrganisationStep, validator.organisationName)}
+              action={<EditLink stepName={PCRStepType.academicOrganisationStep} />}
             />
           )}
           {isIndustrial && (
             <SummaryListItem
+              // TODO: double check validation here
               label={x => x.pcrAddPartnerLabels.organisationNameHeading}
               content={pcrItem.organisationName}
-              validation={validator.companyHouseOrganisationName}
+              // validation={validator.companyHouseOrganisationName}
+              hasError={!!validationErrors?.organisationName}
               qa="organisationName"
-              action={props.getEditLink(PCRStepType.companiesHouseStep, validator.companyHouseOrganisationName)}
+              action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
+              // action={props.getEditLink(PCRStepType.companiesHouseStep, validator.companyHouseOrganisationName)}
             />
           )}
           {isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.registrationNumberHeading}
               content={pcrItem.registrationNumber}
-              validation={validator.registrationNumber}
+              // validation={validator.registrationNumber}
+              hasError={!!validationErrors?.registrationNumber}
               qa="registrationNumber"
-              action={props.getEditLink(PCRStepType.companiesHouseStep, validator.registrationNumber)}
+              // action={props.getEditLink(PCRStepType.companiesHouseStep, validator.registrationNumber)}
+              action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
             />
           )}
           {isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.registeredAddressHeading}
               content={pcrItem.registeredAddress}
-              validation={validator.registeredAddress}
+              // validation={validator.registeredAddress}
+              hasError={!!validationErrors?.registeredAddress}
               qa="registeredAddress"
-              action={props.getEditLink(PCRStepType.companiesHouseStep, validator.registeredAddress)}
+              action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
             />
           )}
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.organisationSizeHeading}
             content={pcrItem.participantSizeLabel}
-            validation={validator.participantSize}
+            hasError={!!validationErrors?.participantSize}
             qa="participantSize"
-            action={
-              isIndustrial ? props.getEditLink(PCRStepType.organisationDetailsStep, validator.participantSize) : null
-            }
+            action={isIndustrial ? <EditLink stepName={PCRStepType.organisationDetailsStep} /> : null}
           />
           {isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.employeeCountHeading}
               content={pcrItem.numberOfEmployees}
-              validation={validator.numberOfEmployees}
+              hasError={!!validationErrors?.numberOfEmployees}
               qa="numberOfEmployees"
-              action={props.getEditLink(PCRStepType.organisationDetailsStep, validator.numberOfEmployees)}
+              action={<EditLink stepName={PCRStepType.organisationDetailsStep} />}
             />
           )}
           {isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.financialYearEndHeading}
               content={<MonthYear value={pcrItem.financialYearEndDate} />}
-              validation={validator.financialYearEndDate}
+              hasError={!!validationErrors?.financialYearEndDate}
               qa="financialYearEndDate"
-              action={props.getEditLink(PCRStepType.financeDetailsStep, validator.financialYearEndDate)}
+              action={<EditLink stepName={PCRStepType.financeDetailsStep} />}
             />
           )}
           {isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.turnoverSummaryHeading}
               content={<Currency value={pcrItem.financialYearEndTurnover} />}
-              validation={validator.financialYearEndTurnover}
+              hasError={!!validationErrors?.financialYearEndTurnover}
               qa="financialYearEndTurnover"
-              action={props.getEditLink(PCRStepType.financeDetailsStep, validator.financialYearEndTurnover)}
+              action={<EditLink stepName={PCRStepType.financeDetailsStep} />}
             />
           )}
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.projectLocationHeading}
             content={pcrItem.projectLocationLabel}
-            validation={validator.projectLocation}
+            hasError={!!validationErrors?.projectLocation}
             qa="projectLocation"
-            action={props.getEditLink(PCRStepType.projectLocationStep, validator.projectLocation)}
+            action={<EditLink stepName={PCRStepType.projectLocationStep} />}
           />
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.townOrCityHeading}
             content={pcrItem.projectCity}
-            validation={validator.projectCity}
+            hasError={!!validationErrors?.projectCity}
             qa="projectCity"
-            action={props.getEditLink(PCRStepType.projectLocationStep, validator.projectCity)}
+            action={<EditLink stepName={PCRStepType.projectLocationStep} />}
           />
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.postcodeHeading}
             content={pcrItem.projectPostcode}
-            validation={validator.projectPostcode}
+            hasError={!!validationErrors?.projectPostcode}
             qa="projectPostcode"
-            action={props.getEditLink(PCRStepType.projectLocationStep, validator.projectPostcode)}
+            action={<EditLink stepName={PCRStepType.projectLocationStep} />}
           />
         </SummaryList>
       </Section>
@@ -177,30 +222,30 @@ const SummaryComponent = (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.contactFirstNameHeading}
               content={pcrItem.contact1Forename}
-              validation={validator.contact1Forename}
+              hasError={!!validationErrors?.contact1Forename}
               qa="contact1Forename"
-              action={props.getEditLink(PCRStepType.financeContactStep, validator.contact1Forename)}
+              action={<EditLink stepName={PCRStepType.financeContactStep} />}
             />
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.contactLastNameHeading}
               content={pcrItem.contact1Surname}
-              validation={validator.contact1Surname}
+              hasError={!!validationErrors?.contact1Surname}
               qa="contact1Surname"
-              action={props.getEditLink(PCRStepType.financeContactStep, validator.contact1Surname)}
+              action={<EditLink stepName={PCRStepType.financeContactStep} />}
             />
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.contactPhoneNumberHeading}
               content={pcrItem.contact1Phone}
-              validation={validator.contact1Phone}
+              hasError={!!validationErrors?.contact1Phone}
               qa="contact1Phone"
-              action={props.getEditLink(PCRStepType.financeContactStep, validator.contact1Phone)}
+              action={<EditLink stepName={PCRStepType.financeContactStep} />}
             />
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.contactEmailHeading}
               content={pcrItem.contact1Email}
-              validation={validator.contact1Email}
+              hasError={!!validationErrors?.contact1Email}
               qa="contact1Email"
-              action={props.getEditLink(PCRStepType.financeContactStep, validator.contact1Email)}
+              action={<EditLink stepName={PCRStepType.financeContactStep} />}
             />
           </SummaryList>
         </Section>
@@ -210,30 +255,30 @@ const SummaryComponent = (
               <SummaryListItem
                 label={x => x.pcrAddPartnerLabels.contactFirstNameHeading}
                 content={pcrItem.contact2Forename}
-                validation={validator.contact2Forename}
+                hasError={!!validationErrors?.contact2Forename}
                 qa="contact2Forename"
-                action={props.getEditLink(PCRStepType.projectManagerDetailsStep, validator.contact2Forename)}
+                action={<EditLink stepName={PCRStepType.projectManagerDetailsStep} />}
               />
               <SummaryListItem
                 label={x => x.pcrAddPartnerLabels.contactLastNameHeading}
                 content={pcrItem.contact2Surname}
-                validation={validator.contact2Surname}
+                hasError={!!validationErrors?.contact2Surname}
                 qa="contact2Surname"
-                action={props.getEditLink(PCRStepType.projectManagerDetailsStep, validator.contact2Surname)}
+                action={<EditLink stepName={PCRStepType.projectManagerDetailsStep} />}
               />
               <SummaryListItem
                 label={x => x.pcrAddPartnerLabels.contactPhoneNumberHeading}
                 content={pcrItem.contact2Phone}
-                validation={validator.contact2Phone}
+                hasError={!!validationErrors?.contact2Phone}
                 qa="contact2Phone"
-                action={props.getEditLink(PCRStepType.projectManagerDetailsStep, validator.contact2Phone)}
+                action={<EditLink stepName={PCRStepType.projectManagerDetailsStep} />}
               />
               <SummaryListItem
                 label={x => x.pcrAddPartnerLabels.contactEmailHeading}
                 content={pcrItem.contact2Email}
-                validation={validator.contact2Email}
+                hasError={!!validationErrors?.contact2Email}
                 qa="contact2Email"
-                action={props.getEditLink(PCRStepType.projectManagerDetailsStep, validator.contact2Email)}
+                action={<EditLink stepName={PCRStepType.projectManagerDetailsStep} />}
               />
             </SummaryList>
           </Section>
@@ -247,39 +292,45 @@ const SummaryComponent = (
               label={x => x.pcrAddPartnerLabels.jesHeading}
               content={<DocumentsComponent documents={documents} description={DocumentDescription.JeSForm} />}
               qa="supportingDocumentsJes"
-              action={props.getEditLink(PCRStepType.jeSStep, null)}
+              action={<EditLink stepName={PCRStepType.jeSStep} />}
             />
           )}
           {!isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.tsbReferenceHeading}
               content={pcrItem.tsbReference}
-              validation={validator.tsbReference}
+              hasError={!!validationErrors?.tsbReference}
               qa="tsbReference"
-              action={props.getEditLink(PCRStepType.academicCostsStep, validator.tsbReference)}
+              action={<EditLink stepName={PCRStepType.academicCostsStep} />}
             />
           )}
           {isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.projectCostsHeading}
-              content={<Currency value={totalProjectCosts} />}
+              content={<Currency value={data.totalProjectCosts} />}
+              hasError={!!validationErrors?.totalProjectCosts}
               qa="projectCosts"
               action={
-                props.mode === "prepare"
-                  ? props.getEditLink(PCRStepType.spendProfileStep, null)
-                  : props.getViewLink(PCRStepType.spendProfileStep)
+                mode === "prepare" ? (
+                  <EditLink stepName={PCRStepType.spendProfileStep} />
+                ) : (
+                  <ViewLink stepName={PCRStepType.spendProfileStep} />
+                )
               }
             />
           )}
           {!isIndustrial && (
             <SummaryListItem
               label={x => x.pcrAddPartnerLabels.projectCostsHeading}
-              content={<Currency value={totalProjectCosts} />}
+              content={<Currency value={data.totalProjectCosts} />}
               qa="projectCosts"
+              hasError={!!validationErrors?.totalProjectCosts}
               action={
-                props.mode === "prepare"
-                  ? props.getEditLink(PCRStepType.academicCostsStep, null)
-                  : props.getViewLink(PCRStepType.academicCostsStep)
+                mode === "prepare" ? (
+                  <EditLink stepName={PCRStepType.academicCostsStep} />
+                ) : (
+                  <ViewLink stepName={PCRStepType.academicCostsStep} />
+                )
               }
             />
           )}
@@ -292,33 +343,36 @@ const SummaryComponent = (
                 }
               />
             }
-            validation={validator.hasOtherFunding}
+            hasError={!!validationErrors?.hasOtherFunding}
             qa="hasOtherFunding"
-            action={props.getEditLink(PCRStepType.otherFundingStep, validator.hasOtherFunding)}
+            action={<EditLink stepName={PCRStepType.otherFundingStep} />}
           />
           {pcrItem.hasOtherFunding && (
             <SummaryListItem
+              hasError={!!validationErrors?.totalOtherFunding}
               label={x => x.pcrAddPartnerLabels.amountOfOtherFundingHeading}
-              content={<Currency value={totalOtherFunding} />}
+              content={<Currency value={data.totalOtherFunding} />}
               qa="amountOfOtherFunding"
-              action={props.getEditLink(PCRStepType.otherFundingSourcesStep, null)}
+              action={<EditLink stepName={PCRStepType.otherFundingSourcesStep} />}
             />
           )}
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.fundingLevelHeading}
             content={<Percentage value={pcrItem.awardRate} />}
-            validation={validator.awardRate}
+            hasError={!!validationErrors?.awardRate}
             qa="fundingLevel"
-            action={props.getEditLink(PCRStepType.awardRateStep, validator.awardRate)}
+            action={<EditLink stepName={PCRStepType.awardRateStep} />}
           />
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.fundingSoughtHeading}
-            content={<Currency value={fundingSought} />}
+            content={<Currency value={data.fundingSought} />}
+            hasError={!!validationErrors?.fundingSought}
             qa="fundingSought"
           />
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.partnerContributionsHeading}
-            content={<Currency value={partnerContribution} />}
+            content={<Currency value={data.partnerContribution} />}
+            hasError={!!validationErrors?.partnerContribution}
             qa="partnerContribution"
           />
         </SummaryList>
@@ -330,11 +384,20 @@ const SummaryComponent = (
             label={x => x.pcrAddPartnerLabels.agreementToPcrHeading}
             content={<DocumentsComponent documents={documents} description={DocumentDescription.AgreementToPCR} />}
             qa="agreementToPcrDocument"
-            action={props.getEditLink(PCRStepType.agreementToPcrStep, null)}
+            action={<EditLink stepName={PCRStepType.agreementToPcrStep} />}
           />
         </SummaryList>
       </Section>
-    </>
+
+      {displayCompleteForm && (
+        <PcrItemSummaryForm<AddPartnerSchema>
+          register={register}
+          watch={watch}
+          handleSubmit={handleSubmit}
+          pcrItem={pcrItem}
+        />
+      )}
+    </PcrPage>
   );
 };
 
@@ -364,18 +427,5 @@ const calculateTotalOtherFunding = (funds: PCRItemForPartnerAdditionDto["spendPr
         x.costCategory === CostCategoryType.Other_Funding,
     ),
     fund => fund.value || 0,
-  );
-};
-
-export const AddPartnerSummary = (
-  props: PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, AddPartnerStepNames>,
-) => {
-  const stores = useStores();
-
-  return (
-    <Loader
-      pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
-      render={documents => <SummaryComponent {...props} documents={documents} />}
-    />
   );
 };

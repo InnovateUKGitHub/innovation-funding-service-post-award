@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
+import { PCRProjectLocation } from "@framework/constants/pcrConstants";
 
 export const roleAndOrganisationErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "roleAndOrganisation"] });
 
@@ -201,31 +202,34 @@ export const addPartnerErrorMap = makeZodI18nMap({
   keyPrefix: ["pcr", "addPartner"],
 });
 export const addPartnerSchema = z.object({
-  // ...common,
+  ...common,
   awardRate: z.number().nullable(),
-  contact1Email: z.string(),
-  contact1Forename: z.string(),
-  contact1Phone: z.string(),
-  contact1Surname: z.string(),
-  contact2Email: z.string(),
-  contact2Forename: z.string(),
-  contact2Phone: z.string(),
-  contact2Surname: z.string(),
-  financialYearEndDate: z.date(),
-  financialYearEndTurnover: z.number(),
-  hasOtherFunding: z.boolean(),
-  isCommercialWork: z.boolean(),
+  contact1Email: z.string().nullable(),
+  contact1Forename: z.string().nullable(),
+  contact1Phone: z.string().nullable(),
+  contact1Surname: z.string().nullable(),
+  contact2Email: z.string().nullable(),
+  contact2Forename: z.string().nullable(),
+  contact2Phone: z.string().nullable(),
+  contact2Surname: z.string().nullable(),
+  financialYearEndDate: z.date().nullable(),
+  financialYearEndTurnover: z.number().nullable(),
+  hasOtherFunding: z.boolean().nullable(),
+  isCommercialWork: z.boolean().nullable(),
   numberOfEmployees: z.coerce.number().nullable(),
-  organisationName: z.string(),
-  participantSize: z.coerce.number(),
-  partnerType: z.coerce.number().gt(0),
-  projectCity: z.string(),
-  projectLocation: z.string(),
-  projectPostcode: z.string(),
-  projectRole: z.coerce.number().gt(0),
-  registeredAddress: z.string(),
-  registrationNumber: z.string(),
-  tsbReference: z.string(),
+  organisationName: z.string().nullable(),
+  participantSize: z.coerce.number().nullable(),
+  partnerType: z.coerce.number().gt(0).nullable(),
+  projectCity: z.string().nullable(),
+  projectLocation: z.coerce
+    .number()
+    .transform(x => x as PCRProjectLocation)
+    .nullable(),
+  projectPostcode: z.string().nullable(),
+  projectRole: z.coerce.number().gt(0).nullable(),
+  registeredAddress: z.string().nullable(),
+  registrationNumber: z.string().nullable(),
+  tsbReference: z.string().nullable(),
 });
 
 export type AddPartnerSchema = z.infer<typeof addPartnerSchema>;

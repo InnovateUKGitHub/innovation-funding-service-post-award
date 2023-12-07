@@ -106,6 +106,7 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
       "registrationNumber",
       "status",
       "tsbReference",
+      "type",
     ],
     {},
   );
