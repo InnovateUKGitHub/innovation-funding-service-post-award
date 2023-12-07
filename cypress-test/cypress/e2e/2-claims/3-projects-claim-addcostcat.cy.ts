@@ -16,7 +16,8 @@ import {
   validateLineItem,
   clearUpOverheadsCostCat,
 } from "./steps";
-
+const fc = "james.black@euimeabs.test";
+const sysUser = "iuk.accproject@bjss.com.bjssdev";
 describe("claims > Editing a claim by accessing cost categories", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1" });
@@ -43,6 +44,10 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   });
 
   it("Should still display the project title", shouldShowProjectTitle);
+
+  it("Should have a back option", () => {
+    cy.backLink("Back to claim");
+  });
 
   it("Should show relevant messaging at the top of the page", () => {
     cy.getByQA("guidance-message").should("contain.text", "You must break down your total costs");
@@ -90,6 +95,18 @@ describe("claims > Editing a claim by accessing cost categories", () => {
   });
 
   it("Should reflect the £1000 change to the claim in the cost cat table", reflectCostAdded);
+
+  it("Should re-access the claim line item, switch user and assert that notification of when you can delete a line item appears", () => {
+    cy.get("a").contains("Labour").click();
+    cy.heading("Labour");
+    cy.switchUserTo(fc);
+    cy.getByQA("claim-warning-content").should(
+      "have.text",
+      "You can only remove claim line items you created. For other claim line items you want to remove, set the value to zero and save.",
+    );
+    cy.switchUserTo(sysUser);
+    cy.getByQA("claim-warning-content").should("not.exist");
+  });
 
   it("Should clear the cost category line item and delete the file that was uploaded", clearUpLabourCostCat);
 

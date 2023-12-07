@@ -66,7 +66,7 @@ describe("claims > KTP", () => {
   });
 
   it("Should click 'Back to claims'", () => {
-    cy.clickOn("Back to claims");
+    cy.clickOn("Back to claim");
   });
 
   it("Should click 'Continue to claims documents' and land on the right page", () => {

@@ -235,7 +235,6 @@ export const reflectCostAdded = () => {
 };
 
 export const clearUpLabourCostCat = () => {
-  cy.get("td.govuk-table__cell").contains("Labour").click();
   cy.clickOn("Upload and remove documents");
   cy.heading("Labour documents");
   cy.clickOn("Remove");

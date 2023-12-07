@@ -797,8 +797,8 @@ export const loansForecastCosts = () => {
 export const updateLoansCosts = () => {
   cy.get("a").contains("Loans costs for Industrial participants").click();
   cy.heading("Loans costs for Industrial participants");
-  cy.get("#description0").clear().type("Stuff");
-  cy.get("#value0").clear().type("11400");
+  cy.get("#lineItems_0_description").clear().type("Stuff");
+  cy.get("#lineItems_0_value").clear().type("11400");
   cy.wait(500);
   cy.button("Save and return to project costs").click();
   cy.heading("Costs for this period");
@@ -833,8 +833,8 @@ export const resetCosts = () => {
   cy.heading("Costs for this period");
   cy.get("a").contains("Loans costs for Industrial participants").click();
   cy.heading("Loans costs for Industrial participants");
-  cy.get("#description0").clear().type("Stuff");
-  cy.get("#value0").clear().type("11500");
+  cy.get("#lineItems_0_description").clear().type("Stuff");
+  cy.get("#lineItems_0_value").clear().type("11500");
   cy.wait(500);
   cy.button("Save and return to project costs").click();
   cy.heading("Costs for this period");
