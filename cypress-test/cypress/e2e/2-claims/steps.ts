@@ -449,12 +449,14 @@ export const ktpCorrectCats = () => {
 export const nonFECMessaging = () => {
   [
     "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).",
-    "This claim may have one or more periods paid at a different funding award rate compared to your overall funding award rate.",
+    "This claim may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
   ].forEach(guidance => {
     cy.validationNotification(guidance);
   });
-  cy.list("This period is paid at a rate of 66.66% rather than your normal Award rate");
-  cy.list("Cost category associate employment is paid at a rate of 70% rather than your normal award rate");
+};
+
+export const costCatAwardOverrideMessage = (costCat: string, percentage: string) => {
+  cy.list(`Cost category ${costCat} is paid at a rate of ${percentage} rather than your normal Award rate`);
 };
 
 export const academicCosts = () => {

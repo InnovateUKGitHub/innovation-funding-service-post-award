@@ -7,6 +7,7 @@ import {
   ktpGuidance,
   shouldShowProjectTitle,
   nonFECMessaging,
+  costCatAwardOverrideMessage,
 } from "./steps";
 
 describe("claims > KTP", () => {
@@ -29,6 +30,10 @@ describe("claims > KTP", () => {
   it("Should display 'Costs to be claimed' title and guidance messaging", () => {
     cy.heading("Costs to be claimed");
     nonFECMessaging();
+    costCatAwardOverrideMessage("associate employment", "70%");
+    costCatAwardOverrideMessage("travel and subsistence", "20%");
+    costCatAwardOverrideMessage("consumables", "11.11%");
+    costCatAwardOverrideMessage("associate development", "5%");
   });
 
   it("Should contain the correct KTP cost categories", ktpCorrectCats);
@@ -40,6 +45,23 @@ describe("claims > KTP", () => {
   it("Should have Associate Employment page heading and guidance", () => {
     cy.heading("Associate Employment");
     nonFECMessaging();
+    costCatAwardOverrideMessage("travel and subsistence", "20%");
+    costCatAwardOverrideMessage("consumables", "11.11%");
+    costCatAwardOverrideMessage("associate development", "5%");
+    cy.list("This cost category is paid at a rate of 70% rather than your normal Award rate");
+  });
+
+  it("Should click 'Back to claims'", () => {
+    cy.clickOn("Back to claims");
+  });
+
+  it("Should click into 'Travel and subsistence' and check the copy", () => {
+    cy.clickOn("Travel and subsistence");
+    cy.heading("Travel and subsistence");
+    cy.list("This cost category is paid at a rate of 20% rather than your normal Award rate");
+    costCatAwardOverrideMessage("associate employment", "70%");
+    costCatAwardOverrideMessage("consumables", "11.11%");
+    costCatAwardOverrideMessage("associate development", "5%");
   });
 
   it("Should click 'Back to claims'", () => {
@@ -65,7 +87,13 @@ describe("claims > KTP", () => {
     cy.heading("Claim summary");
   });
 
-  it("Should display correct messaging", nonFECMessaging);
+  it("Should display correct messaging", () => {
+    nonFECMessaging();
+    costCatAwardOverrideMessage("associate employment", "70%");
+    costCatAwardOverrideMessage("travel and subsistence", "20%");
+    costCatAwardOverrideMessage("consumables", "11.11%");
+    costCatAwardOverrideMessage("associate development", "5%");
+  });
 
   it("Should have a Supporting statement", () => {
     cy.get("legend").contains("Supporting statement");
