@@ -12,7 +12,7 @@ import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSe
 import {
   ProjectSetupSpendProfileParams,
   ProjectSetupSpendProfileRoute,
-} from "@ui/containers/pages/projects/setup/projectSetupSpendProfile.page";
+} from "@ui/containers/pages/projects/setup/projectSetupSpendProfile/projectSetupSpendProfile.page";
 import { isNumber } from "@framework/util/numberHelper";
 import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
 

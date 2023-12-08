@@ -1,13 +1,12 @@
+import { useLazyLoadQuery } from "react-relay";
+import { claimForecastQuery } from "./ClaimForecast.query";
+import { ClaimForecastQuery } from "./__generated__/ClaimForecastQuery.graphql";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToClaimDtoArray } from "@gql/dtoMapper/mapClaimDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
-import { useLazyLoadQuery } from "react-relay";
-import { claimForecastQuery } from "./ClaimForecast.query";
-import { ClaimForecastQuery } from "./__generated__/ClaimForecastQuery.graphql";
-import { mapToGolCostDtoArray as mapToProfileTotalCostCategoryDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 
 const useClaimForecastData = ({
   projectParticipantId,

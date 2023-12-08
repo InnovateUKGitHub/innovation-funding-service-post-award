@@ -1,28 +1,30 @@
+import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
+import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { ProjectRole } from "@framework/constants/project";
+import { getAuthRoles } from "@framework/types/authorisation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FullDateTime } from "@ui/components/atomicDesign/atoms/Date";
+import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/ForecastTable";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/ForecastTable.withFragment";
+import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
 import { useRoutes } from "@ui/redux/routesProvider";
+import { FormTypes } from "@ui/zod/FormTypes";
 import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { useForm } from "react-hook-form";
-import { useClaimForecastData } from "./ClaimForecast.logic";
 import { z } from "zod";
-import { FormTypes } from "@ui/zod/FormTypes";
-import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
-import { ForecastAgreedCostWarning } from "@ui/components/atomicDesign/molecules/forecasts/ForecastAgreedCostWarning/ForecastAgreedCostWarning";
+import { useClaimForecastData } from "./ClaimForecast.logic";
 import { useMapToForecastTableDto } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useMapToForecastTableDto";
-import { useZodErrors, useServerInput } from "@framework/api-helpers/useZodErrors";
-import { getAuthRoles } from "@framework/types/authorisation";
 import { useFormRevalidate } from "@ui/hooks/useFormRevalidate";
 
 export interface ClaimForecastParams {
@@ -32,11 +34,13 @@ export interface ClaimForecastParams {
 }
 
 const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & ClaimForecastParams) => {
-  const data = useClaimForecastData({
+  const { fragmentRef } = useClaimForecastData({
     projectId,
     projectParticipantId: partnerId,
   });
-  const { project, partner, fragmentRef } = data;
+  const data = useForecastTableFragment({ fragmentRef });
+  const tableData = useMapToForecastTableDto(data);
+  const { project, partner } = data;
 
   const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
   const { isPm } = getAuthRoles(project.roles);
@@ -52,8 +56,6 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
   });
   const routes = useRoutes();
   const { getContent } = useContent();
-
-  const tableData = useMapToForecastTableDto({ ...data, clientProfiles: watch("profile") });
 
   const { onUpdate, isFetching } = useOnForecastSubmit({ periodId, isPm });
 
@@ -98,7 +100,12 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
           {partner.overheadRate !== null && (
             <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
           )}
-          <ForecastTable tableData={tableData} control={control} getFieldState={getFieldState} disabled={isFetching} />
+          <ForecastTable
+            clientProfiles={watch("profile")}
+            control={control}
+            getFieldState={getFieldState}
+            disabled={isFetching}
+          />
           <P>
             {getContent(x => x.components.claimLastModified.message)}
             {": "}

@@ -65,7 +65,7 @@ import { ProjectSetupBankDetailsRoute } from "@ui/containers/pages/projects/setu
 import { ProjectSetupBankDetailsVerifyRoute } from "@ui/containers/pages/projects/setup/projectSetupBankDetailsVerify.page";
 import { ProjectSetupBankStatementRoute } from "@ui/containers/pages/projects/setup/projectSetupBankStatement.page";
 import { ProjectSetupPartnerPostcodeRoute } from "@ui/containers/pages/projects/setup/projectSetupPartnerPostcode.page";
-import { ProjectSetupSpendProfileRoute } from "@ui/containers/pages/projects/setup/projectSetupSpendProfile.page";
+import { ProjectSetupSpendProfileRoute } from "@ui/containers/pages/projects/setup/projectSetupSpendProfile/projectSetupSpendProfile.page";
 import { ClaimsDetailsRoute } from "@ui/containers/pages/claims/claimDetails.page";
 import { PrepareClaimRoute } from "@ui/containers/pages/claims/claimPrepare.page";
 import { ReviewClaimRoute } from "@ui/containers/pages/claims/claimReview.page";
