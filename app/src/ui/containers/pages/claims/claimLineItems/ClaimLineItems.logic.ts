@@ -20,7 +20,7 @@ interface ClaimLineItemsParams {
   periodId: PeriodId;
 }
 
-type ClaimLineItemMode = "prepare" | "review" | "view";
+type ClaimLineItemMode = "prepare" | "review" | "details";
 
 const getParams = (route: RouteState): ClaimLineItemsParams => ({
   projectId: route.params.projectId as ProjectId,
@@ -126,7 +126,7 @@ const useBackLink = (
     return routes.prepareClaim.getLink({ projectId, partnerId, periodId });
   } else if (mode === "review") {
     return routes.reviewClaim.getLink({ projectId, periodId, partnerId });
-  } else if (mode === "view") {
+  } else if (mode === "details") {
     return routes.claimDetails.getLink({ projectId, periodId, partnerId });
   }
 

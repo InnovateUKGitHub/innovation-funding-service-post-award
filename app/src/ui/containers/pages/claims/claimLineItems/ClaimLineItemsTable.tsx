@@ -23,6 +23,7 @@ const emptyData = { id: "", description: "", value: "" };
 interface ClaimLineItemsTableProps {
   lineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate" | "isAuthor">[];
   forecastDetail: Pick<ForecastDetailsDTO, "value">;
+  differenceRow: boolean;
 }
 
 interface EditClaimLineItemsTableProps extends ClaimLineItemsTableProps {
@@ -35,6 +36,7 @@ const EditClaimLineItemsTable = ({
   lineItems,
   forecastDetail,
   disabled,
+  differenceRow = true,
 }: EditClaimLineItemsTableProps) => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
@@ -181,31 +183,33 @@ const EditClaimLineItemsTable = ({
             </TD>
           )}
         </TR>
-        <TR>
-          <TH numeric bold>
-            {getContent(x => x.pages.editClaimLineItems.difference)}
-          </TH>
-          <TD>
-            <Percentage value={difference} />
-          </TD>
-          <TD>
-            <TableEmptyCell />
-          </TD>
-          {isClient && ownsAnyRows && (
+        {differenceRow && (
+          <TR>
+            <TH numeric bold>
+              {getContent(x => x.pages.editClaimLineItems.difference)}
+            </TH>
+            <TD>
+              <Percentage value={difference} />
+            </TD>
             <TD>
               <TableEmptyCell />
             </TD>
-          )}
-        </TR>
+            {isClient && ownsAnyRows && (
+              <TD>
+                <TableEmptyCell />
+              </TD>
+            )}
+          </TR>
+        )}
       </TFoot>
     </Table>
   );
 };
 
-const ClaimLineItemsTable = ({ lineItems, forecastDetail }: ClaimLineItemsTableProps) => {
+const ClaimLineItemsTable = ({ lineItems, forecastDetail, differenceRow = false }: ClaimLineItemsTableProps) => {
   const { getContent } = useContent();
 
-  const { forecast, rows, total } = useMapToClaimLineItemTableDto({
+  const { difference, forecast, rows, total } = useMapToClaimLineItemTableDto({
     existingLineItems: lineItems,
     forecastDetail,
   });
@@ -258,6 +262,19 @@ const ClaimLineItemsTable = ({ lineItems, forecastDetail }: ClaimLineItemsTableP
             <TableEmptyCell />
           </TD>
         </TR>
+        {differenceRow && (
+          <TR>
+            <TH numeric bold>
+              {getContent(x => x.pages.editClaimLineItems.difference)}
+            </TH>
+            <TD>
+              <Percentage value={difference} />
+            </TD>
+            <TD>
+              <TableEmptyCell />
+            </TD>
+          </TR>
+        )}
       </TFoot>
     </Table>
   );

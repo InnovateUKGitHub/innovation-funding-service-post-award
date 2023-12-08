@@ -16,7 +16,7 @@ import { SupportingDocumentsSection } from "./SupportingDocumentsSection";
 import { ClaimLineItemsTable } from "./ClaimLineItemsTable";
 
 interface ViewClaimLineItemsProps extends ClaimLineItemsParams {
-  mode: "view" | "review";
+  mode: "details" | "review";
 }
 
 const ViewClaimLineItemsPage = ({
@@ -49,7 +49,7 @@ const ViewClaimLineItemsPage = ({
     >
       {/* Update the HTML title to include the costCategoryName */}
       <Helmet>
-        {mode === "view" && (
+        {mode === "details" && (
           <title>{getContent(x => x.pages.claimLineItems.htmlViewTitle({ title: currentCostCategory.name }))}</title>
         )}
         {mode === "review" && (
@@ -63,7 +63,7 @@ const ViewClaimLineItemsPage = ({
       <GuidanceSection project={project} costCategory={currentCostCategory} />
 
       <Section>
-        <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} />
+        <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} differenceRow={true} />
       </Section>
 
       <SupportingDocumentsSection mode={mode} project={project} claimDetails={claimDetails} documents={documents} />
@@ -83,7 +83,7 @@ const ClaimLineItemsRoute = defineRoute<ClaimLineItemsParams>({
   allowRouteInActiveAccess: true,
   routeName: "claimLineItemsView",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
-  container: props => <ViewClaimLineItemsPage {...props} mode="view" />,
+  container: props => <ViewClaimLineItemsPage {...props} mode="details" />,
   getParams: route => getParams(route),
 });
 
