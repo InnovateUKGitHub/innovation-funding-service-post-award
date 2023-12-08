@@ -2,7 +2,7 @@ import { UL } from "@ui/components/atomicDesign/atoms/List/list";
 import { Content } from "../../Content/content";
 import { ValidationMessage } from "../../validation/ValidationMessage/ValidationMessage";
 
-interface ForecastAgreedCostWarningProps {
+export interface ForecastAgreedCostWarningProps {
   isFc: boolean;
   costCategories: string[];
 }
