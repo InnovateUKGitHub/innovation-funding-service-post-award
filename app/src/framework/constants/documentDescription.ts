@@ -128,6 +128,8 @@ export const allowedPcrLevelDocuments = [
   DocumentDescription.CertificateOfNameChange,
   DocumentDescription.WithdrawalOfPartnerCertificate,
   DocumentDescription.JeSForm,
+  DocumentDescription.AgreementToPCR,
+  DocumentDescription.DeMinimisDeclarationForm,
 ];
 
 export { getDocumentDescriptionContentSelector };

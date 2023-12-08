@@ -40,7 +40,6 @@ export const academicCostsSchema = z.object({
   costs: z.array(
     z.object({
       value: z.coerce.number(),
-      costCategoryId: z.string(),
     }),
   ),
 });
@@ -120,7 +119,7 @@ export const awardRateErrorMap = makeZodI18nMap({
 
 export const awardRateSchema = z.object({
   ...common,
-  awardRate: z.number().nullable(),
+  awardRate: z.coerce.number().nullable(),
 });
 
 export type AwardRateSchema = z.infer<typeof awardRateSchema>;
@@ -131,7 +130,7 @@ export const otherFundingErrorMap = makeZodI18nMap({
 
 export const otherFundingSchema = z.object({
   ...common,
-  hasOtherFunding: z.boolean().nullable(),
+  hasOtherFunding: z.string().nullable(),
 });
 
 export type OtherFundingSchema = z.infer<typeof otherFundingSchema>;
@@ -214,7 +213,7 @@ export const addPartnerSchema = z.object({
   contact2Surname: z.string().nullable(),
   financialYearEndDate: z.date().nullable(),
   financialYearEndTurnover: z.number().nullable(),
-  hasOtherFunding: z.boolean().nullable(),
+  hasOtherFunding: z.string().nullable(),
   isCommercialWork: z.boolean().nullable(),
   numberOfEmployees: z.coerce.number().nullable(),
   organisationName: z.string().nullable(),

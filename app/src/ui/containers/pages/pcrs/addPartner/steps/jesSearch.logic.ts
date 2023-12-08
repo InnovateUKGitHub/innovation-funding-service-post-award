@@ -1,5 +1,5 @@
 import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
-import { JesSearchQuery, JesSearchQuery$data } from "../__generated__/JesSearchQuery.graphql";
+import { JesSearchQuery, JesSearchQuery$data } from "./__generated__/JesSearchQuery.graphql";
 import { jesSearchQuery } from "./JesSearchQuery";
 import { useQuery } from "@framework/api-helpers/useQuery/useQuery";
 import { useEffect } from "react";
