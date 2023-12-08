@@ -52,7 +52,7 @@ export const projectLocationErrorMap = makeZodI18nMap({
 
 export const projectLocationSchema = z.object({
   ...common,
-  projectLocation: z.string(),
+  projectLocation: z.coerce.number().gt(0),
   projectCity: z.string(),
   projectPostcode: z.string(),
 });

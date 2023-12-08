@@ -1,15 +1,16 @@
 import { PCRProjectRole } from "@framework/constants/pcrConstants";
-import { Option } from "@framework/dtos/option";
 
 export const pcrProjectRoles = [
   {
     value: PCRProjectRole.Collaborator,
     label: "Collaborator",
+    id: "collaborator",
     active: true,
   },
   {
     value: PCRProjectRole.ProjectLead,
     label: "Project Lead",
+    id: "project_lead",
     active: true,
   },
-] as Option<PCRProjectRole>[];
+] as const;

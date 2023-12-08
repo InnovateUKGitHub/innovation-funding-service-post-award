@@ -90,6 +90,7 @@ export const CompaniesHouseStep = () => {
             <P>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}</P>
           ) : companyResults?.length > 0 ? (
             <Fieldset>
+              <Legend>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearchResults)}</Legend>
               <FormGroup>
                 <RadioList name="searchResults" register={register}>
                   {companyResults.map(x => (

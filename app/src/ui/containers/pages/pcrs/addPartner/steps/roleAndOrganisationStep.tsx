@@ -2,7 +2,6 @@ import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validation/ValidationMessage/ValidationMessage";
 import { Info } from "@ui/components/atomicDesign/atoms/Details/Details";
-import { Option } from "@framework/dtos/option";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
@@ -119,6 +118,7 @@ export const RoleAndOrganisationStep = () => {
                     id={option.id}
                     data-qa={option.label}
                     label={option.label}
+                    value={option.value}
                     disabled={isFetching}
                     defaultChecked={option.id === roleOptions.selected?.id}
                   />
@@ -157,8 +157,10 @@ export const RoleAndOrganisationStep = () => {
                 {typeOptions.options.map(option => (
                   <Radio
                     key={option.label}
-                    {...option}
-                    defaultChecked={option.id === roleOptions.selected?.id}
+                    label={option.label}
+                    value={option.value}
+                    id={option.id}
+                    defaultChecked={option.id === typeOptions.selected?.id}
                     disabled={isFetching}
                   />
                 ))}
@@ -179,8 +181,11 @@ export const RoleAndOrganisationStep = () => {
   );
 };
 
-const getOptions = <T extends number>(selected: T, options: Option<T>[]) => {
-  const filteredOptions = options.filter(x => x.active).map(x => ({ id: x.value.toString(), label: x.label }));
+const getOptions = <T extends number>(
+  selected: T,
+  options: readonly { id: string; label: string; active: boolean; value: string | number }[],
+) => {
+  const filteredOptions = options.filter(x => x.active);
 
   const selectedOption = selected && filteredOptions.find(x => parseInt(x.id, 10) === selected);
 

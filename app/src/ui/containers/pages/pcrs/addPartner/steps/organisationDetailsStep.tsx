@@ -82,7 +82,12 @@ export const OrganisationDetailsStep = () => {
           <Fieldset>
             <Legend>{getContent(x => x.pcrAddPartnerLabels.employeeCountHeading)}</Legend>
             <FormGroup>
-              <NumberInput inputWidth={4} {...register("numberOfEmployees")} disabled={isFetching} />
+              <NumberInput
+                inputWidth={4}
+                {...register("numberOfEmployees")}
+                disabled={isFetching}
+                aria-label="number of full time employees"
+              />
             </FormGroup>
           </Fieldset>
 

@@ -65,9 +65,6 @@ export const AddPartnerSummary = () => {
   const isIndustrial = pcrItem.organisationType === PCROrganisationType.Industrial;
 
   const data = useMemo(() => {
-    // const spendProfileCostCategories = costCategories.filter(
-    //   x => x.competitionType === project.competitionType && x.organisationType === pcrItem.organisationType,
-    // );
     const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, costCategories);
     const totalProjectCosts = spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
     const totalOtherFunding = calculateTotalOtherFunding(spendProfile?.funds ?? []);
@@ -134,7 +131,6 @@ export const AddPartnerSummary = () => {
               hasError={!!validationErrors?.organisationName}
               qa="organisationName"
               action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
-              // action={props.getEditLink(PCRStepType.companiesHouseStep, validator.companyHouseOrganisationName)}
             />
           )}
           {isIndustrial && (
@@ -144,7 +140,6 @@ export const AddPartnerSummary = () => {
               // validation={validator.registrationNumber}
               hasError={!!validationErrors?.registrationNumber}
               qa="registrationNumber"
-              // action={props.getEditLink(PCRStepType.companiesHouseStep, validator.registrationNumber)}
               action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
             />
           )}

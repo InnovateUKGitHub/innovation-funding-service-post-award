@@ -19,15 +19,18 @@ import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 const pcrProjectLocation = [
   {
     active: true,
+    id: "inside-the-united-kingdom",
     value: PCRProjectLocation.InsideTheUnitedKingdom,
     label: "Inside the United Kingdom",
   },
   {
     active: true,
+    id: "outside-the-united-kingdom",
     value: PCRProjectLocation.OutsideTheUnitedKingdom,
     label: "Outside the United Kingdom",
   },
@@ -46,7 +49,7 @@ export const ProjectLocationStep = () => {
     defaultValues: {
       markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
-      projectLocation: pcrItem.projectLocation.toString(),
+      projectLocation: pcrItem.projectLocation ?? 0,
       projectPostcode: pcrItem.projectPostcode ?? "",
       projectCity: pcrItem.projectCity ?? "",
     },
@@ -68,19 +71,17 @@ export const ProjectLocationStep = () => {
         <Form
           onSubmit={handleSubmit(data =>
             onSave({
-              data: {
-                ...data,
-                projectLocation: parseInt(data.projectLocation, 10),
-              },
+              data,
               context: link(data),
             }),
           )}
         >
           <Fieldset>
-            <FormGroup>
+            <FormGroup hasError={!!validationErrors?.projectLocation}>
               <Hint id="hint-for-project-location">
                 {getContent(x => x.pages.pcrAddPartnerProjectLocation.projectLocationGuidance)}
               </Hint>
+              <ValidationError error={validationErrors?.projectLocation as RhfError} />
               <RadioList
                 aria-describedby="hint-for-project-location"
                 id="project-location"
@@ -89,10 +90,10 @@ export const ProjectLocationStep = () => {
               >
                 {pcrProjectLocation.map(option => (
                   <Radio
-                    key={option.value.toString()}
-                    id={option.label}
+                    key={option.id}
+                    id={option.id}
                     defaultChecked={option.value === pcrItem.projectLocation}
-                    value={option.value.toString()}
+                    value={option.value}
                     label={option.label}
                     disabled={isFetching}
                   />

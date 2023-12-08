@@ -2029,6 +2029,13 @@
     },
     "pcr": {
       "addPartner": {
+        "projectLocation": {
+          "projectLocation": {
+            "errors": {
+              "too_small": "Select a project location."
+            }
+          }
+        },
         "roleAndOrganisation": {
           "isCommercialWork": {
             "errors": {
@@ -2038,8 +2045,8 @@
           },
           "projectRole": {
             "errors": {
-              "invalid_type": "Select a partner role.",
-              "too_small": "Select a partner role."
+              "invalid_type": "Select a project role.",
+              "too_small": "Select a project role."
             }
           },
           "partnerType": {
