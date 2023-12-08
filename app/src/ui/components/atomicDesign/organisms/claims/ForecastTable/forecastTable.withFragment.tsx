@@ -14,7 +14,7 @@ import { useFragmentContext } from "@gql/utils/fragmentContextHook";
 import { isValidFragmentKey } from "@gql/utils/isValidFragmentKey";
 import { getIARDueOnClaimPeriods } from "@gql/dtoMapper/mapIarDue";
 
-type Props =
+export type ForecastTableWithFragmentProps =
   | { periodId: PeriodId; selectCurrentClaimByApprovedStatus?: false | undefined | null }
   | { periodId?: never; selectCurrentClaimByApprovedStatus: true };
 
@@ -22,7 +22,7 @@ export const ForecastTable = ({
   periodId,
   selectCurrentClaimByApprovedStatus,
   ...props
-}: Props & Omit<ForecastTableProps, "data">) => {
+}: ForecastTableWithFragmentProps & Omit<ForecastTableProps, "data">) => {
   const fragmentRef = useFragmentContext();
 
   if (!isValidFragmentKey<ForecastTableFragment$key>(fragmentRef, "ForecastTableFragment")) {

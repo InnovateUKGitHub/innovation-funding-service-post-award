@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { fetchQuery, GraphQLTaggedNode, useRelayEnvironment } from "react-relay";
+import type { useLazyLoadQuery } from "react-relay";
 
 export type RefreshedQueryOptions = { fetchKey: number; fetchPolicy: "store-only" } | undefined;
+export type QueryOptions = Parameters<typeof useLazyLoadQuery>[2];
 
 /**
  * `useRefreshQuery` returns an array with a set of refreshed Query Options to be used
