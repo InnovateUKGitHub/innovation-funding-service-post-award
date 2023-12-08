@@ -41,6 +41,7 @@ import { ClientConfigProvider } from "@ui/components/providers/ClientConfigProvi
 import { MessageContextProvider } from "@ui/context/messages";
 import { setZodError } from "@ui/redux/actions/common/zodErrorAction";
 import { setPreviousReactHookFormInput } from "@ui/redux/actions/common/previousReactHookFormInputAction";
+import RelayServerSSR from "react-relay-network-modern-ssr/node8/server";
 
 interface IServerApp {
   requestUrl: string;
@@ -199,7 +200,7 @@ const serverRender =
       }
 
       // Note: Keep resolving app queries + actions until completion for final render below
-      await loadAllData(store, () => {
+      await loadAllData(store, relayServerSSR, () => {
         renderApp({
           requestUrl: renderUrl,
           nonce,
@@ -238,8 +239,8 @@ const serverRender =
 /**
  * Populates the redux store before being added as preloaded state
  */
-const loadAllData = (store: Store, render: () => void): Promise<void> => {
-  return new Promise<void>(resolve => {
+const loadAllData = async (store: Store, relayServerSSR: RelayServerSSR, render: () => void): Promise<void> => {
+  await new Promise<void>(resolve => {
     const unsubscribeStore = store.subscribe(() => {
       if (store.getState().loadStatus === 0) {
         // render the app to cause any other actions to go round the loop
@@ -261,6 +262,10 @@ const loadAllData = (store: Store, render: () => void): Promise<void> => {
     // initial action to kick of callbacks
     store.dispatch(initaliseAction());
   });
+
+  // Rerender for nested "useLazyLoadQuery"
+  await relayServerSSR.getCache();
+  render();
 };
 
 /**
