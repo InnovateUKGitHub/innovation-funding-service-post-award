@@ -32,7 +32,7 @@ const Logs = ({ qa, projectId, partnerId, periodId, queryOptions }: LogsStandalo
   const { fragmentRef } = useLogsData({ projectId, partnerId, periodId, queryOptions });
   return (
     <FragmentContextProvider fragment={fragmentRef}>
-      <LogsWithFragment qa={qa} />;
+      <LogsWithFragment qa={qa} />
     </FragmentContextProvider>
   );
 };
