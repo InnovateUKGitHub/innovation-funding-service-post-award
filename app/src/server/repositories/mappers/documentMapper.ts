@@ -31,7 +31,7 @@ export class DocumentDescriptionMapper {
     IAR: "IAR",
     Evidence: "Evidence",
     ClaimValidationForm: "ClaimValidationForm",
-    DeMinimisDeclarationForm: "DeMinimisDeclartionForm",
+    DeMinimisDeclarationForm: "DeMinimisDeclartionForm", // sic
     CertificateOfNameChange: "CertificateOfNameChange",
     WithdrawalOfPartnerCertificate: "WithdrawalOfPartnerCertificate",
     StatementOfExpenditure: "StatementOfExpenditure",
@@ -53,7 +53,7 @@ export class DocumentDescriptionMapper {
     ProjectCompletionForm: "ProjectCompletionForm",
     ProofOfSatisfiedConditions: "ProofOfSatisfiedConditions",
     Loan: "Loan",
-  };
+  } as const;
 
   public mapFromSalesforceDocumentDescription = (
     documentType: string | null | undefined,

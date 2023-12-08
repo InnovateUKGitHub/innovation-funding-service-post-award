@@ -1,4 +1,4 @@
-import { DocumentDescription } from "@framework/constants/documentDescription";
+import { DocumentDescriptionMapper } from "@framework/constants/documentDescription";
 import { PartnerDocumentSummaryDtoGql } from "@framework/dtos/documentDto";
 
 export type DocumentSummaryNode = GQL.PartialNode<{
@@ -79,10 +79,8 @@ const mapper: GQL.DtoMapper<
       : node?.node?.ContentDocument?.Title?.value ?? "";
   },
   description(node) {
-    return (
-      (DocumentDescription[
-        (node?.node?.ContentDocument?.Description?.value ?? "unknown") as unknown as DocumentDescription
-      ] as unknown as DocumentDescription) ?? null
+    return new DocumentDescriptionMapper().mapFromSalesforceDocumentDescription(
+      node?.node?.ContentDocument?.Description?.value ?? "unknown",
     );
   },
   fileSize(node) {
