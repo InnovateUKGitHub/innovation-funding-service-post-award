@@ -11,12 +11,18 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { useStores } from "@ui/redux/storesProvider";
+import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 
-export const usePcrItemWorkflowQuery = (projectId: ProjectId, pcrId: PcrId, pcrItemId: PcrItemId) => {
+export const usePcrItemWorkflowQuery = (
+  projectId: ProjectId,
+  pcrId: PcrId,
+  pcrItemId: PcrItemId,
+  refreshedQueryOptions: RefreshedQueryOptions,
+) => {
   const data = useLazyLoadQuery<PcrItemWorkflowQuery>(
     pcrItemWorkflowQuery,
     { projectId, pcrId, pcrItemId },
-    { fetchPolicy: "network-only" },
+    refreshedQueryOptions,
   );
 
   const { node: projectNode } = getFirstEdge(data?.salesforce?.uiapi?.query?.Acc_Project__c?.edges);

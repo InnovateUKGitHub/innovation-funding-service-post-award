@@ -11,6 +11,8 @@ import { PageLoader } from "@ui/components/bjss/loading";
 import { ProjectRole } from "@framework/constants/project";
 import { PCRItemWorkflowMigratedForGql } from "./pcrItemWorkflowMigrated";
 import { PCRItemWorkflow } from "./pcrItemWorkflow";
+import { useRefreshQuery } from "@gql/hooks/useRefreshQuery";
+import { pcrItemWorkflowQuery } from "./PcrItemWorkflow.query";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: ProjectId;
@@ -25,7 +27,13 @@ export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
   const stores = useStores();
   const navigate = useNavigate();
 
-  const data = usePcrItemWorkflowQuery(props.projectId, props.pcrId, props.itemId);
+  const [refreshedQueryOptions, refresh] = useRefreshQuery(pcrItemWorkflowQuery, {
+    projectId: props.projectId,
+    pcrId: props.pcrId,
+    pcrItemId: props.itemId,
+  });
+
+  const data = usePcrItemWorkflowQuery(props.projectId, props.pcrId, props.itemId, refreshedQueryOptions);
 
   const workflow = PcrWorkflow.getWorkflow(data.pcrItem as WorkflowPcrType, props.step);
 
@@ -35,6 +43,7 @@ export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
         project={data.project}
         pcrItem={data.pcrItem}
         fragmentRef={data.fragmentRef}
+        refreshItemWorkflowQuery={refresh}
         {...props}
       />
     );

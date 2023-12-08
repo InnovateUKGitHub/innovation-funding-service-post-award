@@ -6,12 +6,7 @@ import { DeMinimisStep } from "@ui/containers/pages/pcrs/addPartner/steps/deMini
 import { OtherSourcesOfFundingStep } from "@ui/containers/pages/pcrs/addPartner/steps/otherSourcesOfFundingStep";
 import { AcademicCostsReviewStep } from "@ui/containers/pages/pcrs/addPartner/steps/academicCostsReviewStep";
 import { AgreementToPCRStep } from "./steps/agreementToPcrStep";
-import {
-  PCRStepType,
-  PCROrganisationType,
-  // PCRItemType,
-  PCRProjectRole,
-} from "@framework/constants/pcrConstants";
+import { PCRStepType, PCROrganisationType, PCRProjectRole } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos/pcrDtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
@@ -170,7 +165,6 @@ export const getAddPartnerWorkflow = (
       stepName: PCRStepType.spendProfileStep,
       displayName: "Project costs for new partner",
       stepNumber: 9,
-      // validation: val => val.pcr,
       migratedStepRender: SpendProfileStep,
       migratedReadonlyStepRender: SpendProfileStep,
     });

@@ -32,6 +32,7 @@ type Data = {
   >;
   mode: Mode;
   fragmentRef: unknown;
+  refreshItemWorkflowQuery: () => Promise<void>;
 };
 
 /**
@@ -67,6 +68,7 @@ type PcrWorkflowContextProps = Data &
     markedAsCompleteHasBeenChecked: boolean;
     setMarkedAsCompleteHasBeenChecked: Dispatch<SetStateAction<boolean>>;
     apiError: IAppError<Results<ResultBase>> | null | undefined;
+    refreshItemWorkflowQuery: () => Promise<void>;
   };
 
 const PcrWorkflowContext = createContext<PcrWorkflowContextProps>(null as unknown as PcrWorkflowContextProps);

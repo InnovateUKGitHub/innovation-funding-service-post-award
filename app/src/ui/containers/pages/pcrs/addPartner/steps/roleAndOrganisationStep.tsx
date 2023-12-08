@@ -48,8 +48,16 @@ const setData = (data: RoleAndOrganisationSchema) => {
 
 export const RoleAndOrganisationStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
-    usePcrWorkflowContext();
+  const {
+    projectId,
+    itemId,
+    fetchKey,
+    onSave,
+    isFetching,
+    markedAsCompleteHasBeenChecked,
+    useFormValidate,
+    refreshItemWorkflowQuery,
+  } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -92,7 +100,7 @@ export const RoleAndOrganisationStep = () => {
             onSave({
               data: setData(data),
               context: link(data),
-            }),
+            }).then(() => refreshItemWorkflowQuery()),
           )}
         >
           <ValidationMessage
