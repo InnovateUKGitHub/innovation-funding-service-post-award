@@ -42,6 +42,10 @@ describe("claims > Updating forecasts after claim costs and document upload", ()
     cy.validationNotification("last chance");
   });
 
+  it("Should show the overhead rate", () => {
+    cy.paragraph("Overheads costs: 20.00%");
+  });
+
   it("Should display the Period, IAR and Month rows correctly", topThreeRows);
 
   it("Should contain the correct cost categories", forecastCostCats);

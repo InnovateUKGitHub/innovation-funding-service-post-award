@@ -12,12 +12,12 @@ import {
   submitComplete,
 } from "./steps";
 import { topThreeRows } from "e2e/5-forecasts/steps";
-import { acceptInputAndUpdate } from "e2e/2-claims/steps";
+import { acceptLabourCalculateOH, updateClaimsForecast } from "e2e/2-claims/steps";
 import { spendTableValues } from "common/spend-table-values";
 
 const pmEmail = "james.black@euimeabs.test";
 
-describe("Project setup > Set spend profile", () => {
+describe("Project setup > Set spend profile with pre-defined overhead rate", () => {
   before(() => {
     visitApp({ asUser: pmEmail });
     cy.navigateToProject("365447");
@@ -40,13 +40,19 @@ describe("Project setup > Set spend profile", () => {
     );
   });
 
+  //it("Should show the overhead rate", () => {
+  //  cy.paragraph("Overheads costs: 20.00%");
+  //});
+
   it("Should check for existing forecast figures", spendTableTidyUp);
 
   it("Should display the forecast table", correctSpendProfileTotals);
 
   it("Should display the correct top three rows including IAR frequency", topThreeRows);
 
-  it("Should correctly calculate overheads against labour input", acceptInputAndUpdate);
+  it("Should accept input across the table and calculate correctly", updateClaimsForecast);
+
+  it("Should correctly calculate overheads against labour input", acceptLabourCalculateOH);
 
   it("Should edit the forecast table and calculate the new totals correctly", spendTableEdit);
 
