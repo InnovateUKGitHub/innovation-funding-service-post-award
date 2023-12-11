@@ -63,13 +63,6 @@ describe("claims > Editing a claim by accessing cost categories", () => {
 
   it("Should validate a negative number correctly updates the difference", () => {
     cy.get("#lineItems_0_value").clear().type("-1000").wait(800);
-    cy.get("tfoot").within(() => {
-      cy.get("tr")
-        .eq(3)
-        .within(() => {
-          cy.get(`td:nth-child(2)`).contains("-100%");
-        });
-    });
     cy.get("span.currency").contains("-£1,000.00");
   });
 

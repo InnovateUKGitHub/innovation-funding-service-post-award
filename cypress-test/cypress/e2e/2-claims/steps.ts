@@ -714,8 +714,6 @@ export const saveLineItems = () => {
 };
 
 export const removeLineItems = () => {
-  cy.clickOn("a", "Labour");
-  cy.heading("Labour");
   cy.getByQA("current-claim-summary-table")
     .find(`[data-qa="input-row"]`)
     .then($rows => {
