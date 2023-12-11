@@ -133,6 +133,7 @@ const mapToForecastTableDto = ({
     const forecastTotalProjectPeriod = profileTotalProjectPeriods?.find(x => x.periodId === i);
     const claimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i);
     const nextClaimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i + 1);
+    const isLastColumn = i === project.numberOfPeriods;
     let drawRhc = false;
 
     // If we haven't got a "current status cell",
@@ -152,12 +153,12 @@ const mapToForecastTableDto = ({
         : ClaimStatusGroup.FORECAST;
 
       // If it's a part of the same claim, we should extend the colspan of the column.
-      if (currentStatusCell.group === nextClaimGroup) {
+      if (currentStatusCell.group === nextClaimGroup && !isLastColumn) {
         currentStatusCell.colSpan += 1;
       } else {
         // If it's not a part of the same claim, we should mark it as requiring a right-hand-column
-        currentStatusCell.rhc = true;
-        drawRhc = true;
+        currentStatusCell.rhc = !isLastColumn;
+        drawRhc = !isLastColumn;
         statusCells.push(currentStatusCell);
 
         // Create a new status cell with the status of the next claim
@@ -180,8 +181,6 @@ const mapToForecastTableDto = ({
       rhc: drawRhc,
     });
   }
-
-  statusCells.push(currentStatusCell as StatusCell);
 
   const labourCostCategory = profileTotalCostCategories.find(x => x.type === CostCategoryType.Labour);
 
