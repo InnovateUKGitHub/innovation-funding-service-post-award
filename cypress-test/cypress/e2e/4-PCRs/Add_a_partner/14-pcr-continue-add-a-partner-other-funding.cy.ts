@@ -28,7 +28,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 
   it("Should click 'Save and continue'", () => {
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
   });
 
   it("Should display the 'Other public sector funding?' subheading and guidance information", () => {
@@ -46,11 +46,10 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.heading("Add a partner");
   });
 
-  it("Should click both radio buttons for 'Yes' and 'No'", otherFundingOptions);
+  it("Should click both radio buttons for 'Yes' and 'No' and finally select 'Yes", otherFundingOptions);
 
   it("Should click'Save and continue'", () => {
-    cy.submitButton("Save and return to summary");
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
   });
 
   it("Should display guidance and the 'Other public sector funding?' subheading", () => {
@@ -78,7 +77,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should 'Save and continue'", () => {
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
   });
 
   it("Should land on the 'Funding level' page and contain subheading and guidance information", fundingLevelPage);
@@ -95,7 +94,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should enter a percentage and click 'Save and continue'", () => {
     cy.get(`input[id="awardRate"]`).type("5");
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
   });
 
   it(
@@ -130,7 +129,6 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should click 'Save and continue'", () => {
-    cy.submitButton("Save and return to summary");
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
   });
 });
