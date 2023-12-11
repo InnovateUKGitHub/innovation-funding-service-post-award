@@ -73,7 +73,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should have a 'Save and continue' button and 'Save and return to summary' button", () => {
-    cy.submitButton("Save and continue");
-    cy.submitButton("Save and return to summary");
+    cy.contains("a", "Save and continue");
+    cy.contains("a", "Save and return to summary");
   });
 });

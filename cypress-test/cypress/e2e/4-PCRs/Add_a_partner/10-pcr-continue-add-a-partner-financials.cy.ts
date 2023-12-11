@@ -16,7 +16,7 @@ describe("PCR > Add partner > Continuing editing PCR financial details section",
 
   it("Should show the 'Financial details' heading and 'End of financial year' subheading", () => {
     cy.get("h2").contains("Financial details");
-    cy.get("h2").contains("End of financial year");
+    cy.get("legend").contains("End of financial year");
   });
 
   it("Should have a back option", () => {
@@ -30,7 +30,7 @@ describe("PCR > Add partner > Continuing editing PCR financial details section",
   });
 
   it("Should display guidance information", () => {
-    cy.getByQA("field-financialYearEndDate").contains("This is the end of the last financial year");
+    cy.get("#hint-for-suspensionStartDate").contains("This is the end of the last financial year");
   });
 
   it("Should enter a month and year of last financial year and enter a turnover amount", () => {

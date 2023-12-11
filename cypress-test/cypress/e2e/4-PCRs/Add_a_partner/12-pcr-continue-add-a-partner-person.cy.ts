@@ -35,7 +35,7 @@ describe("PCR > Add partner > Continuing editing PCR person details section", ()
   });
 
   it("Should have a 'Finance contact' heading", () => {
-    cy.get("h2").contains("Finance contact");
+    cy.get("legend").contains("Finance contact");
   });
 
   it("Should check for validation messaging while entering invalid details", validateAddPerson);
@@ -46,7 +46,7 @@ describe("PCR > Add partner > Continuing editing PCR person details section", ()
   );
 
   it("With valid data, it should now 'Save and continue' and then assert the next page loads correctly", () => {
-    cy.get("button").contains("Save and continue").click();
+    cy.clickOn("Save and continue");
     cy.get("h2").contains("Project costs for new partner");
   });
 });

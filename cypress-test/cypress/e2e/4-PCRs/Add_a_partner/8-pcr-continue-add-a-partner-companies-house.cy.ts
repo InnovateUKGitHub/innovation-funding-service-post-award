@@ -36,7 +36,7 @@ describe("PCR > Add partner > Continuing editing PCR Companies House section", (
   it("Should display a 'Add a partner' heading and 'State aid eligibility' heading", stateAidAddPartnerHeading);
 
   it("Should click 'Save and continue' button", () => {
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
   });
 
   it("Should have a back option", () => {

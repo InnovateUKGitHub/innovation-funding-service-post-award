@@ -34,7 +34,7 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
   });
 
   it("Should attempt to Save and continue without completing fields to prompt validation", () => {
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
     cy.validationLink("Select a project location");
     cy.paragraph("Select a project location.");
   });
@@ -47,8 +47,8 @@ describe("PCR > Add partner > Continuing editing PCR location details section", 
   );
 
   it("Should complete the text boxes for name of town and postcode", () => {
-    cy.get("#projectCity").type("Swindon");
-    cy.get("#projectPostcode").type("SN5");
+    cy.getByLabel("Name of town or city").type("Swindon");
+    cy.getByLabel("Postcode").type("SN5");
   });
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);

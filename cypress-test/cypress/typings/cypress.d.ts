@@ -26,6 +26,19 @@ declare global {
       getByQA(tag: string): Chainable<Element>;
 
       /**
+       * Gets the hint element from a label. If this component
+       * does not have an attached label then this method won't work.
+       *
+       * It works because by convention the id of a hint element should
+       * match the id of the input element but with `hint-for-` prefixing it
+       */
+      getHintFromLabel(label: string): Chainable<Element>;
+
+      /**
+       * Gets the error message attached to an input field using the label as the identifier
+       */
+      getErrorFromLabel(label: string): Chainable<Element>;
+      /**
        * Gets an element based on the PageQA data tag
        */
       getByPageQA(tag: string): Chainable<Element>;

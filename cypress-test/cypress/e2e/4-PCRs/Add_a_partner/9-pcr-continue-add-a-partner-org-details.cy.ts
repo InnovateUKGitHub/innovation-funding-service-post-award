@@ -39,8 +39,8 @@ describe("PCR > Add partner > Continuing editing PCR organisation details sectio
   it("Should have 'Small', 'Medium' and 'Large' radio button options and click in turn", addPartnerSizeOptions);
 
   it("Should have a 'Number of full time employees' subheading and enter 1000 in the text box", () => {
-    cy.get("h2").contains("Number of full time employees");
-    cy.get(`input[id="numberOfEmployees"]`).type("1000");
+    cy.get("legend").contains("Number of full time employees");
+    cy.getByAriaLabel("number of full time employees").type("1000");
   });
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);

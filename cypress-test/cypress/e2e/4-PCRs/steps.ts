@@ -200,35 +200,35 @@ export const completeNewPartnerInfoAsBus = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
 };
 
 export const completeNewPartnerInfoAsResearch = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Research").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
 };
 
 export const completeNewPartnerInfoAsRto = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Research and Technology Organisation (RTO)").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
 };
 
 export const completeNewPartnerInfoAsPublic = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Public Sector, charity or non Je-S registered research organisation").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
 };
 
 export const completeNewPartnerInfoNonAid = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("No").click();
   cy.getByLabel("Business").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
 };
 
 export const requestHeadingDetailsHeading = () => {
@@ -268,10 +268,8 @@ export const explainChangesReasoning = () => {
 };
 
 export const projectOutputs = () => {
-  cy.get("h2").contains("Project outputs");
-  cy.getByQA("field-isCommercialWork").contains(
-    "Will the new partner's work on the project be mostly commercial or economic",
-  );
+  cy.get("legend").contains("Project outputs");
+  cy.get("label").contains("Will the new partner's work on the project be mostly commercial or economic");
   cy.getByLabel("Yes").click();
   cy.getByLabel("No").click();
   cy.getByLabel("Yes").click();
@@ -285,8 +283,8 @@ export const organisationRadios = () => {
 };
 
 export const saveContinueSaveSummary = () => {
-  cy.submitButton("Save and continue");
-  cy.submitButton("Save and return to summary");
+  cy.contains("Save and continue");
+  cy.contains("Save and return to summary");
 };
 
 export const stateAidAddPartnerHeading = () => {
@@ -316,7 +314,7 @@ export const addPartnerCompanyHouseHeader = () => {
 };
 
 export const searchCompanyHouseGuidance = () => {
-  cy.get("h2").contains("Search companies house");
+  cy.get("legend").contains("Search companies house");
   cy.paragraph("Is your organisation not showing in these results?");
 };
 
@@ -329,7 +327,7 @@ export const specialCharInput = () => {
 
 export const typeASearchResults = () => {
   cy.get("#searchCompaniesHouse").clear().type("A").wait(500);
-  cy.get("h2").contains("Companies house search results");
+  cy.get("legend").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
 };
 
@@ -340,7 +338,7 @@ export const companyHouseAutofillAssert = () => {
 };
 
 export const projectRoleRadios = () => {
-  cy.get("h2").contains("Project role");
+  cy.get("legend").contains("Project role");
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Project Lead").click();
 };
@@ -498,7 +496,7 @@ export const validatePeriodBox = () => {
 export const clickPartnerAddPeriod = () => {
   cy.getByLabel("EUI Small Ent Health").click();
   cy.get("#removalPeriod").clear().type("3");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("legend").contains("Upload withdrawal of partner certificate");
 };
 
@@ -590,122 +588,115 @@ export const navigateToPartnerOrgPage = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
-  cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Search companies house");
+  cy.clickOn("Save and continue");
+  cy.get("legend").contains("Search companies house");
   cy.get("#searchCompaniesHouse").type("A").wait(500);
-  cy.get("h2").contains("Companies house search results");
+  cy.get("legend").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
 };
 
 export const navigateToFinancialsPage = () => {
   cy.clickCheckBox("Add a partner");
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.submitButton("Create request").click();
+  cy.clickOn("Create request");
   cy.wait("@pcrPrepare");
   cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
-  cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Search companies house");
+  cy.clickOn("Save and continue");
+  cy.get("legend").contains("Search companies house");
   cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get("h2").contains("Companies house search results");
+  cy.get("legend").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Organisation details");
   cy.getByLabel("Large").click();
   cy.get(`input[id="numberOfEmployees"]`).type("1000");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
 };
 
 export const navigateToPartnerLocation = () => {
   cy.clickCheckBox("Add a partner");
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.submitButton("Create request").click();
+  cy.clickOn("Create request");
   cy.wait("@pcrPrepare");
   cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
-  cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Search companies house");
+  cy.clickOn("Save and continue");
   cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get("h2").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Organisation details");
   cy.getByLabel("Large").click();
   cy.get(`input[id="numberOfEmployees"]`).type("1000");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Financial details");
-  cy.get(`input[id="financialYearEndDate_month"]`).type("03");
-  cy.get(`input[id="financialYearEndDate_year"]`).type("2022");
-  cy.get(`input[id="financialYearEndTurnover"]`).type("1000000");
-  cy.submitButton("Save and continue").click();
+  cy.get("#financialYearEndDate_month").type("03");
+  cy.get("#financialYearEndDate_year").type("2022");
+  cy.get("#financialYearEndTurnover").type("1000000");
+  cy.clickOn("Save and continue");
 };
 
 export const navigateToPartnerPerson = () => {
   cy.clickCheckBox("Add a partner");
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.submitButton("Create request").click();
+  cy.clickOn("Create request");
   cy.wait("@pcrPrepare");
   cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
-  cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Search companies house");
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get("h2").contains("Companies house search results");
-  cy.get(`input[type="radio"]`).click();
-  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
-  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
-  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
+  cy.getByLabel("Search companies house").type("A").wait(500);
+  cy.getByLabel("A LIMITED").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Organisation details");
   cy.getByLabel("Large").click();
-  cy.get(`input[id="numberOfEmployees"]`).type("1000");
-  cy.submitButton("Save and continue").click();
+  cy.get("#numberOfEmployees").type("1000");
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Financial details");
-  cy.get(`input[id="financialYearEndDate_month"]`).type("03");
-  cy.get(`input[id="financialYearEndDate_year"]`).type("2022");
-  cy.get(`input[id="financialYearEndTurnover"]`).type("1000000");
-  cy.submitButton("Save and continue").click();
+  cy.get("#financialYearEndDate_month").type("03");
+  cy.get("#financialYearEndDate_year").type("2022");
+  cy.get("#financialYearEndTurnover").type("1000000");
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Project location");
-  cy.get(`input[id="projectLocation_10"]`).click();
-  cy.get(`input[id="projectCity"]`).type("Swindon");
-  cy.get(`input[id="projectPostcode"]`).type("SN5");
-  cy.submitButton("Save and continue").click();
+  cy.getByLabel("Inside the United Kingdom").click();
+  cy.getByLabel("Name of town or city").type("Swindon");
+  cy.getByLabel("Postcode").type("SN5");
+  cy.clickOn("Save and continue");
 };
 
 export const completeAddPartnerForMulti = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Search companies house");
   cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
   cy.get("h2").contains("Companies house search results");
@@ -713,65 +704,63 @@ export const completeAddPartnerForMulti = () => {
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Organisation details");
   cy.getByLabel("Large").click();
   cy.get(`input[id="numberOfEmployees"]`).type("1000");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Financial details");
-  cy.get(`input[id="financialYearEndDate_month"]`).type("03");
-  cy.get(`input[id="financialYearEndDate_year"]`).type("2022");
-  cy.get(`input[id="financialYearEndTurnover"]`).type("1000000");
-  cy.submitButton("Save and continue").click();
+  cy.get("#financialYearEndDate_month").type("03");
+  cy.get("#financialYearEndDate_year").type("2022");
+  cy.get("#financialYearEndTurnover").type("1000000");
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Project location");
-  cy.get(`input[id="projectLocation_10"]`).click();
-  cy.get(`input[id="projectCity"]`).type("Swindon");
-  cy.get(`input[id="projectPostcode"]`).type("SN5");
-  cy.submitButton("Save and continue").click();
+  cy.getByLabel("Inside the United Kingdom").click();
+  cy.getByLabel("Name of town or city").type("Swindon");
+  cy.getByLabel("Postcode").type("SN5");
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Add person to organisation");
 };
 
 export const navigateToPartnerCosts = () => {
   cy.clickCheckBox("Add a partner");
   cy.intercept("POST", "/api/pcrs/*").as("pcrPrepare");
-  cy.submitButton("Create request").click();
+  cy.clickOn("Create request");
   cy.wait("@pcrPrepare");
   cy.heading("Request");
   cy.get("a").contains("Add a partner").click();
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
-  cy.submitButton("Save and continue").click();
-  cy.get("h2").contains("Search companies house");
+  cy.clickOn("Save and continue");
   cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get("h2").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
   cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Organisation details");
   cy.getByLabel("Large").click();
   cy.get(`input[id="numberOfEmployees"]`).type("1000");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Financial details");
-  cy.get(`input[id="financialYearEndDate_month"]`).type("03");
-  cy.get(`input[id="financialYearEndDate_year"]`).type("2022");
-  cy.get(`input[id="financialYearEndTurnover"]`).type("1000000");
-  cy.submitButton("Save and continue").click();
+  cy.get("#financialYearEndDate_month").type("03");
+  cy.get("#financialYearEndDate_year").type("2022");
+  cy.get("#financialYearEndTurnover").type("1000000");
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Project location", { timeout: 20000 });
-  cy.get(`input[id="projectLocation_10"]`).click();
-  cy.get(`input[id="projectCity"]`).type("Swindon");
-  cy.get(`input[id="projectPostcode"]`).type("SN5");
-  cy.submitButton("Save and continue").click();
+  cy.getByLabel("Inside the United Kingdom").click();
+  cy.getByLabel("Name of town or city").type("Swindon");
+  cy.getByLabel("Postcode").type("SN5");
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Add person to organisation");
-  cy.get(`input[id="contact1Forename"]`).type("Joseph");
-  cy.get(`input[id="contact1Surname"]`).type("Dredd");
-  cy.get(`input[id="contact1Phone"]`).type("01234567890");
-  cy.get(`input[id="contact1Email"]`).type("Joseph.dredd@mc1.comtest");
-  cy.submitButton("Save and continue").click();
+  cy.getByLabel("First name").type("Joseph");
+  cy.getByLabel("Last name").type("Dredd");
+  cy.getByLabel("Phone number").type("01234567890");
+  cy.getByLabel("Email").type("Joseph.dredd@mc1.comtest");
+  cy.clickOn("Save and continue");
   cy.get("h2").contains("Project costs for new partner");
 };
 
@@ -929,7 +918,7 @@ export const otherFundingTable = () => {
 
 export const addSourceOfFundingValidation = () => {
   cy.getByQA("add-fund").contains("Add another source of funding").click().wait(500);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
     cy.validationLink(message);
   });
@@ -966,11 +955,11 @@ export const uploadPartnerInfo = () => {
 export const fundingLevelPercentage = () => {
   cy.get("h2").contains("Funding level");
   cy.get("#awardRate").type("5");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
 };
 
 export const addPartnerSize = () => {
-  cy.get("h2").contains("Size");
+  cy.get("legend").contains("Size");
   cy.paragraph("This definition must include");
   cy.paragraph("Use the European Commission (EC)");
 };
@@ -994,9 +983,9 @@ export const addPartnerLocation = () => {
 };
 
 export const otherFundingOptions = () => {
-  cy.get("#hasOtherFunding_true").click();
-  cy.get("#hasOtherFunding_false").click();
-  cy.get("#hasOtherFunding_true").click();
+  cy.getByLabel("Yes").click();
+  cy.getByLabel("No").click();
+  cy.getByLabel("Yes").click();
 };
 
 export const headingAndGuidance = () => {
@@ -1293,14 +1282,17 @@ export const dateChangeSummary = () => {
 export const validateAddPerson = () => {
   ["First name", "Last name"].forEach(field => {
     cy.getByLabel(field).clear().type("Thisisovertheagreedlimitforvalidationfiftycharacter");
-    cy.button("Save and continue").click();
+    cy.clickOn("Save and continue");
     cy.validationLink("Finance contact name must be 50 characters or less.");
   }),
     cy.getByLabel("Phone number").clear().type("012345678910111213141");
-  cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
+  cy.getHintFromLabel("Phone number").contains(
+    "We may use this to contact the partner for more information about this request.",
+  );
   cy.button("Save and continue").click();
   cy.validationLink("Finance contact phone number must be 20 characters or less.");
-  cy.getByQA("field-contact1Phone").contains("Finance contact phone number must be 20 characters or less.");
+  // cy.getByQA("field-contact1Phone").contains("Finance contact phone number must be 20 characters or less.");
+  cy.getErrorFromLabel("Phone number").contains("Finance contact phone number must be 20 characters or less.");
 
   cy.getByLabel("Email")
     .clear()
@@ -1309,21 +1301,21 @@ export const validateAddPerson = () => {
     );
   cy.button("Save and continue").click();
   cy.validationLink("Email address must be 255 characters or less.");
-  cy.getByQA("field-contact1Email").contains("Email address must be 255 characters or less.");
-  cy.getByQA("field-contact1Forename").contains("Finance contact name must be 50 characters or less.");
-  cy.getByQA("field-contact1Surname").contains("Finance contact surname must be 50 characters or less.");
+  cy.getErrorFromLabel("Email").contains("Email address must be 255 characters or less.");
+  cy.getErrorFromLabel("First name").contains("Finance contact name must be 50 characters or less.");
+  cy.getErrorFromLabel("Last name").contains("Finance contact surname must be 50 characters or less.");
 };
 
 export const clearAndEnterValidPersonInfo = () => {
   cy.getByLabel("First name").clear().type("Joseph");
   cy.getByLabel("Last name").clear().type("Dredd");
   cy.getByLabel("Phone number").clear().type("01234567890");
-  cy.getByQA("field-contact1Phone").contains("We may use this to contact the partner");
+  cy.getHintFromLabel("Phone number").contains("We may use this to contact the partner");
   cy.getByLabel("Email").clear().type("Joseph.dredd@mc1.comtest");
 };
 
 export const newInfoValidation = () => {
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.validationLink("Select a project role");
   cy.validationLink("Select a partner type");
   cy.paragraph("Select a project role.");
@@ -1332,7 +1324,7 @@ export const newInfoValidation = () => {
 
 export const displayLocationWithGuidance = () => {
   cy.get("h2").contains("Project location");
-  cy.getByQA("field-projectLocation").contains("Indicate where the majority");
+  cy.contains("Indicate where the majority of the work being done by this partner will take place");
 };
 
 export const locationRadioButtons = () => {
@@ -1342,15 +1334,15 @@ export const locationRadioButtons = () => {
 };
 
 export const townAndPostcodeFields = () => {
-  cy.get("h2").contains("Name of town or city");
-  cy.get("h2").contains("Postcode");
-  cy.getByQA("field-projectPostcode").contains("If this is not available,");
+  cy.get("label").contains("Name of town or city");
+  cy.get("label").contains("Postcode");
+  cy.contains("If this is not available, leave this blank.");
 };
 
 export const validateChangeName = () => {
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("legend").contains("Upload change of name certificate");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("legend").contains("Mark as complete");
   cy.getByLabel("I agree with this change").click();
   cy.button("Save and return to request").click();
@@ -1365,11 +1357,11 @@ export const validateChangeName = () => {
 export const clearAndValidate = () => {
   cy.get("textarea").should("have.value", "Hello! I am the public description for this Cypress project. \\").clear();
   cy.wait(500);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.heading("Change project scope");
   cy.get("textarea").should("have.value", "Howdy! I am the public summary for this Cypress project. \\").clear();
   cy.wait(500);
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
@@ -1387,7 +1379,7 @@ export const validateDateRequired = () => {
   ].forEach(input => {
     cy.get(input).clear().type("Error");
   });
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.validationLink("Enter a valid project suspension start date.");
   cy.validationLink("Enter a valid project suspension end date.");
   cy.paragraph("Enter a valid project suspension start date.");
@@ -1401,7 +1393,7 @@ export const validateDateRequired = () => {
   ].forEach(input => {
     cy.get(input).clear().type("200");
   });
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.validationLink("Enter a valid project suspension start date.");
   cy.validationLink("Enter a valid project suspension end date.");
   cy.paragraph("Enter a valid project suspension start date.");
@@ -1415,7 +1407,7 @@ export const validateDateRequired = () => {
   ].forEach(input => {
     cy.get(input).clear().type("-200");
   });
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.validationLink("Enter a valid project suspension start date.");
   cy.validationLink("Enter a valid project suspension end date.");
   cy.paragraph("Enter a valid project suspension start date.");
@@ -1429,7 +1421,7 @@ export const validateDateRequired = () => {
   ].forEach(input => {
     cy.get(input).clear().type("%^&*");
   });
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.validationLink("Enter a valid project suspension start date.");
   cy.validationLink("Enter a valid project suspension end date.");
   cy.paragraph("Enter a valid project suspension start date.");
@@ -1455,16 +1447,16 @@ export const validatePcrDurationPage = () => {
   cy.reload();
 };
 
-export enum PcrItemType {
-  ReallocateProjectCosts = "Reallocate project costs",
-  RemoveAPartner = "Remove a partner",
-  AddAPartner = "Add a partner",
-  ChangeProjectScope = "Change project scope",
-  ChangeProjectDuration = "Change project duration",
-  ChangeAPartnerName = "Change a partner's name",
-  ApproveANewSubcontractor = "Approve a new subcontractor",
-  PutAProjectOnHold = "Put project on hold",
-}
+export const PcrItemType = {
+  ReallocateProjectCosts: "Reallocate project costs",
+  RemoveAPartner: "Remove a partner",
+  AddAPartner: "Add a partner",
+  ChangeProjectScope: "Change project scope",
+  ChangeProjectDuration: "Change project duration",
+  ChangeAPartnerName: "Change a partner's name",
+  ApproveANewSubcontractor: "Approve a new subcontractor",
+  PutAProjectOnHold: "Put project on hold",
+};
 
 const pcrArray = [
   PcrItemType.ReallocateProjectCosts,
@@ -1778,7 +1770,7 @@ export const validatePartialDate = () => {
   cy.get("#suspensionStartDate_year").clear().type("2023");
   cy.get("#suspensionEndDate_month").clear().type("03");
   cy.get("#suspensionEndDate_year").clear().type("2024");
-  cy.submitButton("Save and continue").click();
+  cy.clickOn("Save and continue");
   cy.validationLink("Enter a valid project suspension start date.");
   cy.get("a").each($a => {
     cy.wrap($a).should("not.have.text", "The last day of pause cannot be before the first day of pause.");

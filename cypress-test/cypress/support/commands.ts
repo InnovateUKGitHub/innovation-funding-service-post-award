@@ -35,6 +35,21 @@ const getByRole = (role: string, label?: string) => {
   }
 };
 
+const getHintFromLabel = (label: string) => {
+  cy.log(`** get hint related to ${label} **`);
+  cy.contains("label", label)
+    .invoke("attr", "for")
+    .then(id => {
+      cy.get("#hint-for-" + id);
+    });
+};
+
+const getErrorFromLabel = (label: string) => {
+  cy.log(`** get error related to ${label} **`);
+
+  cy.contains("label", label).siblings().get(".govuk-error-message");
+};
+
 const getByPageQA = (tag: string) => {
   cy.log("**getByQA**");
   cy.get(`[data-page-qa="${tag}"]`);
@@ -242,6 +257,8 @@ Cypress.Commands.add("getListItemFromKey", getListItemFromKey);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByPageQA", getByPageQA);
 Cypress.Commands.add("getByRole", getByRole);
+Cypress.Commands.add("getHintFromLabel", getHintFromLabel);
+Cypress.Commands.add("getErrorFromLabel", getErrorFromLabel);
 Cypress.Commands.add("getByAriaLabel", getByAriaLabel);
 Cypress.Commands.add("switchUserTo", switchUserTo);
 Cypress.Commands.add("backLink", backLink);

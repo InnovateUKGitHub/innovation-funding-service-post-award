@@ -56,13 +56,13 @@ describe("PCR > Add partner > Edit PCR", () => {
   );
 
   it("Should have the subheading 'Organisation type'", () => {
-    cy.get("h2").contains("Organisation type");
+    cy.get("legend").contains("Organisation type");
   });
 
   it("Should have a 'What are the different types?' expandable section", learnOrganisations);
 
   it("Should have a contact your MO for information message", () => {
-    cy.getByQA("field-partnerType").contains("If the new partner's organisation type is not listed");
+    cy.get("#hint-for-partner-type").contains("If the new partner's organisation type is not listed");
   });
 
   it("Should click the radio buttons to select the organisation type", organisationRadios);
