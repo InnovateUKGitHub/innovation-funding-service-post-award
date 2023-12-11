@@ -996,7 +996,7 @@ export const otherFundingTable = () => {
 };
 
 export const addSourceOfFundingValidation = () => {
-  cy.contains("button", "Add another source of funding").click().wait(500);
+  cy.getByQA("add-fund").contains("Add another source of funding").click().wait(500);
   cy.clickOn("Save and continue");
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
     cy.validationLink(message);
@@ -1378,6 +1378,7 @@ export const validateAddPerson = () => {
   );
   cy.button("Save and continue").click();
   cy.validationLink("Finance contact phone number must be 20 characters or less.");
+  // cy.getByQA("field-contact1Phone").contains("Finance contact phone number must be 20 characters or less.");
   cy.getErrorFromLabel("Phone number").contains("Finance contact phone number must be 20 characters or less.");
 
   cy.getByLabel("Email")
