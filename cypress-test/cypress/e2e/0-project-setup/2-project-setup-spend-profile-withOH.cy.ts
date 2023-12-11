@@ -1,6 +1,7 @@
 import { revertSpendTableZero, spendTableEdit, spendTableWithinGOL } from "common/spend-table-edit";
 import { visitApp } from "../../common/visit";
 import {
+  calculateTotalsCorrectly,
   checkSpendProfileIncomplete,
   correctSpendProfileTotals,
   reaccessSpendProfile,
@@ -10,10 +11,11 @@ import {
   spendProfileNullValidation,
   spendTableTidyUp,
   submitComplete,
+  updateSpendProfile,
+  acceptSpendLabourCalculateOH,
 } from "./steps";
 import { topThreeRows } from "e2e/5-forecasts/steps";
-import { acceptLabourCalculateOH, updateClaimsForecast } from "e2e/2-claims/steps";
-import { spendTableValues } from "common/spend-table-values";
+import { spendTableValuesOHRate } from "common/spend-table-values";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -50,9 +52,11 @@ describe("Project setup > Set spend profile with pre-defined overhead rate", () 
 
   it("Should display the correct top three rows including IAR frequency", topThreeRows);
 
-  it("Should accept input across the table and calculate correctly", updateClaimsForecast);
+  it("Should accept input across the table", updateSpendProfile);
 
-  it("Should correctly calculate overheads against labour input", acceptLabourCalculateOH);
+  it("Should calculate the totals correctly", calculateTotalsCorrectly);
+
+  it("Should correctly calculate overheads against labour input", acceptSpendLabourCalculateOH);
 
   it("Should edit the forecast table and calculate the new totals correctly", spendTableEdit);
 
@@ -65,7 +69,7 @@ describe("Project setup > Set spend profile with pre-defined overhead rate", () 
     cy.get("a").contains("Set spend profile").click();
     cy.heading("Spend Profile");
   });
-  it("Should check that all costs saved correctly", spendTableValues);
+  it("Should check that all costs saved correctly", spendTableValuesOHRate);
 
   it("Should enter a null value and prompt correct validation message", spendProfileNullValidation);
 
@@ -80,7 +84,7 @@ describe("Project setup > Set spend profile with pre-defined overhead rate", () 
   it("Should access the spend profile page again.", reaccessSpendProfile);
 
   it("Should untick the setup complete box", () => {
-    cy.get("h2").contains("Mark as complete");
+    cy.get("legend").contains("Mark as complete");
     cy.getByLabel("This is ready to submit").click();
   });
 

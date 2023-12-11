@@ -1,4 +1,4 @@
-import { revertSpendTableZero } from "common/spend-table-edit";
+import { revertSpendTableZero, revertSpendTableZeroNoOHRate } from "common/spend-table-edit";
 
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
@@ -149,9 +149,9 @@ export const spendProfileNullValidation = () => {
 };
 
 export const saveAndValidate = () => {
-  cy.get("h2").contains("Mark as complete");
+  cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("This is ready to submit");
-  cy.submitButton("Save and return to project setup").click;
+  cy.submitButton("Save and return to project setup").click();
   [
     "The total forecasts for labour must be the same as the total eligible costs",
     "The total forecasts for overheads must be the same as the total eligible costs",
@@ -196,6 +196,15 @@ export const spendTableTidyUp = () => {
   });
 };
 
+export const spendTableTidyUpNoOH = () => {
+  cy.get("table").then($table => {
+    if ($table.text().includes("£1,200.00")) {
+      cy.wait(500);
+      revertSpendTableZeroNoOHRate();
+    }
+  });
+};
+
 export const submitComplete = () => {
   cy.button("Save and return to project setup").click();
   cy.heading("Project setup");
@@ -211,4 +220,126 @@ export const checkSpendProfileIncomplete = () => {
   cy.backLink("Back to set up your project").click();
   cy.heading("Project setup");
   cy.get("li").eq(4).contains("Incomplete");
+};
+
+export const updateSpendProfile = () => {
+  let totalCell = (rowNum: number, value: string) => {
+    cy.get("tr")
+      .eq(rowNum)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(value);
+      });
+  };
+
+  for (let inputNum = 1; inputNum < 13; inputNum++) {
+    let total = 100 * inputNum;
+    let totalString = total.toLocaleString("en-UK");
+
+    [
+      [`Labour Period ${inputNum}`, "4", `£${totalString}.00`],
+      [`Materials Period ${inputNum}`, "6", `£${totalString}.00`],
+      [`Capital usage Period ${inputNum}`, "7", `£${totalString}.00`],
+      [`Subcontracting Period ${inputNum}`, "8", `£${totalString}.00`],
+      [`Travel and subsistence Period ${inputNum}`, "9", `£${totalString}.00`],
+      [`Other costs Period ${inputNum}`, "10", `£${totalString}.00`],
+      [`Other costs 2 Period ${inputNum}`, "11", `£${totalString}.00`],
+      [`Other costs 3 Period ${inputNum}`, "12", `£${totalString}.00`],
+      [`Other costs 4 Period ${inputNum}`, "13", `£${totalString}.00`],
+      [`Other costs 5 Period ${inputNum}`, "14", `£${totalString}.00`],
+    ].forEach(([costCat, row, total]) => {
+      cy.getByAriaLabel(costCat).clear().type("100");
+      cy.wait(200);
+      totalCell(Number(row), total);
+    });
+  }
+};
+
+export const calculateTotalsCorrectly = () => {
+  for (let i = 4; i < 12; i++) {
+    cy.get("tr")
+      .eq(i)
+      .within(() => {
+        cy.get("td:nth-child(16)").contains("-96.57%");
+      });
+  }
+  for (let i = 2; i < 12; i++) {
+    cy.get("tr")
+      .eq(15)
+      .within(() => {
+        cy.get(`td:nth-child(${i + 2})`).contains("£1,020.00");
+      });
+  }
+  cy.get("tr")
+    .eq(15)
+    .within(() => {
+      cy.get("td:nth-child(14)").contains("£12,240.00");
+    });
+  cy.reload();
+};
+
+export const accessAndCheckFigures = () => {
+  cy.clickOn("Set spend profile");
+  cy.heading("Spend Profile");
+  for (let i = 1; i < 13; i++) {
+    cy.getByAriaLabel(`Labour Period ${i}`).should("have.value", 100);
+    cy.getByAriaLabel(`Overheads Period ${i}`).should("have.value", 100);
+  }
+};
+
+export const independentLabourOHRows = () => {
+  for (let i = 1; i < 13; i++) {
+    cy.getByAriaLabel(`Labour Period ${i}`).clear().type("100");
+    cy.getByAriaLabel(`Overheads Period ${i}`).should("have.value", 0);
+  }
+  for (let i = 1; i < 13; i++) {
+    let total = 100 * i;
+    let totalString = total.toLocaleString("en-UK");
+    cy.getByAriaLabel(`Overheads Period ${i}`).clear().type("100");
+    cy.get("tr")
+      .eq(5)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(`£${totalString}.00`);
+      });
+  }
+};
+
+export const acceptSpendLabourCalculateOH = () => {
+  [
+    [-10000, -2000],
+    [-888, -177.6],
+    [-66666, -13333.2],
+    [-3333, -666.6],
+    [0, 0],
+    [22728.44, 4545.688],
+    [50.24, 10.048],
+    [6530.64, 1306.128],
+    [50.64, 10.128],
+    [100, 20],
+    [1000000, 200000],
+    [10000.33, 2000.066],
+    [5.11, 1.022],
+    [33.33, 6.666],
+  ].forEach(([labourCost, overhead]) => {
+    cy.wait(100);
+    cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
+    let newCurrency = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    cy.get("tr")
+      .eq(4)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
+      });
+    cy.get("tr")
+      .eq(5)
+      .within(() => {
+        cy.get("td:nth-child(3)").contains(newCurrency.format(overhead));
+      });
+    cy.get("tr")
+      .eq(5)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(overhead));
+      });
+  });
 };

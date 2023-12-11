@@ -1,5 +1,6 @@
 import { visitApp } from "common/visit";
-import { shouldShowProjectTitle } from "./steps";
+import { accessAndCheckFigures, independentLabourOHRows, shouldShowProjectTitle, spendTableTidyUpNoOH } from "./steps";
+import { revertSpendTableZeroNoOHRate } from "common/spend-table-edit";
 
 const fcEmail = "contact77@test.co.uk";
 
@@ -26,11 +27,16 @@ describe("Project setup > Set spend profile without an overhead rate", () => {
     );
   });
 
-  it("Should have an overhead row independent to labour which will accept independent input", () => {
-    for (let i = 1; i < 12; i++)
-      [[`Labour Period ${i}`], [`Overheads Period ${i}`]].forEach(([labour, overhead]) => {
-        cy.getByAriaLabel(labour).clear().type("100");
-        cy.getByAriaLabel(overhead).should("have.value", 0);
-      });
+  it("Should check for existing forecast figures", spendTableTidyUpNoOH);
+
+  it("Should have an overhead row independent to labour which will accept independent input", independentLabourOHRows);
+
+  it("Should save and return to project setup", () => {
+    cy.clickOn("Save and return to project setup");
+    cy.heading("Project setup");
   });
+
+  it("Should re-access spend profile and check that the figures saved correctly", accessAndCheckFigures);
+
+  it("Should revert the spend table to zero", revertSpendTableZeroNoOHRate);
 });

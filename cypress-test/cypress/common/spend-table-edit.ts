@@ -572,3 +572,46 @@ export const revertSpendTableZero = () => {
   cy.get("a").contains("Set spend profile").click();
   cy.heading("Spend Profile");
 };
+
+export const revertSpendTableZeroNoOHRate = () => {
+  [
+    "Labour Period 1",
+    "Labour Period 2",
+    "Labour Period 3",
+    "Labour Period 4",
+    "Labour Period 5",
+    "Labour Period 6",
+    "Labour Period 7",
+    "Labour Period 8",
+    "Labour Period 9",
+    "Labour Period 10",
+    "Labour Period 11",
+    "Labour Period 12",
+  ].forEach(labourInput => {
+    cy.getByAriaLabel(labourInput).clear().type("0");
+  });
+  cy.wait(500);
+  cy.get("td:nth-child(14)").contains("£0.00");
+  [
+    "Overheads Period 1",
+    "Overheads Period 2",
+    "Overheads Period 3",
+    "Overheads Period 4",
+    "Overheads Period 5",
+    "Overheads Period 6",
+    "Overheads Period 7",
+    "Overheads Period 8",
+    "Overheads Period 9",
+    "Overheads Period 10",
+    "Overheads Period 11",
+    "Overheads Period 12",
+  ].forEach(labourInput => {
+    cy.getByAriaLabel(labourInput).clear().type("0");
+  });
+  cy.wait(500);
+  cy.get("td:nth-child(14)").contains("£0.00");
+  cy.button("Save and return to project setup").click();
+  cy.heading("Project setup");
+  cy.get("a").contains("Set spend profile").click();
+  cy.heading("Spend Profile");
+};
