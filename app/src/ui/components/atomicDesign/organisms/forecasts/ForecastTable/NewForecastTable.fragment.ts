@@ -44,7 +44,7 @@ export const newForecastTableFragment = graphql`
           RecordType: { DeveloperName: { eq: "Total_Project_Period" } }
         }
         orderBy: { Acc_ProjectPeriodNumber__c: { order: ASC } }
-        first: 200
+        first: 100
       ) {
         edges {
           node {
@@ -96,13 +96,35 @@ export const newForecastTableFragment = graphql`
         }
       }
 
+      ForecastTable_ProfileTotalProjectPeriod: Acc_Profile__c(
+        where: {
+          Acc_ProjectParticipant__c: { eq: $projectParticipantId }
+          RecordType: { DeveloperName: { eq: "Total_Project_Period" } }
+        }
+        first: 100
+      ) {
+        edges {
+          node {
+            Acc_ProjectPeriodNumber__c {
+              value
+            }
+            Acc_ProjectPeriodStartDate__c {
+              value
+            }
+            Acc_ProjectPeriodEndDate__c {
+              value
+            }
+          }
+        }
+      }
+
       ForecastTable_ProfileTotalCostCategories: Acc_Profile__c(
         where: {
           Acc_ProjectParticipant__c: { eq: $projectParticipantId }
           RecordType: { DeveloperName: { eq: "Total_Cost_Category" } }
         }
         orderBy: { Acc_CostCategory__r: { Acc_DisplayOrder__c: { order: ASC } } }
-        first: 2000
+        first: 100
       ) {
         edges {
           node {

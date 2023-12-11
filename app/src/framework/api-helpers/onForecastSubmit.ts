@@ -6,10 +6,10 @@ import { useOnUpdate } from "./onUpdate";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { useNavigate } from "react-router-dom";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { validCurrencyRegex } from "@framework/util/numberHelper";
+import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 
 interface OnForecastSubmitProps {
-  periodId: PeriodId;
+  periodId?: PeriodId;
   isPm: boolean;
 }
 
@@ -22,32 +22,43 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
 
   return useOnUpdate<Inputs, unknown>({
     async req(data) {
-      const { projectId, partnerId, profile } = data;
+      const { projectId, partnerId, profile, form, submit } = data;
 
       if (profile) {
         const forecasts: Pick<ForecastDetailsDTO, "id" | "value">[] = Object.entries(profile).map(([id, forecast]) => {
-          const numberComponent = validCurrencyRegex.exec(forecast)?.[1] ?? "";
+          const numberComponent = validCurrencyRegex.exec(forecast)?.[0] ?? "";
 
           return {
             id,
-            value: parseFloat(numberComponent),
+            value: parseCurrency(numberComponent),
           };
         });
 
-        await clientsideApiClient.forecastDetails.update({
+        const forecastDetails = {
           projectId,
           partnerId,
           forecasts: forecasts as ForecastDetailsDTO[],
-          submit: false,
-        });
+          submit,
+        };
+
+        switch (form) {
+          case FormTypes.ProjectSetupForecast:
+            return await clientsideApiClient.initialForecastDetails.update(forecastDetails);
+          case FormTypes.ClaimForecastSaveAndContinue:
+          case FormTypes.ClaimForecastSaveAndQuit:
+            return await clientsideApiClient.forecastDetails.update(forecastDetails);
+        }
       }
     },
     onSuccess(data) {
       const { projectId, partnerId, form } = data;
 
       switch (form) {
+        case FormTypes.ProjectSetupForecast:
+          navigate(routes.projectSetup.getLink({ projectId, partnerId }).path);
+          break;
         case FormTypes.ClaimForecastSaveAndContinue:
-          navigate(routes.claimSummary.getLink({ projectId, partnerId, periodId }).path);
+          navigate(routes.claimSummary.getLink({ projectId, partnerId, periodId: periodId ?? (0 as PeriodId) }).path);
           break;
         case FormTypes.ClaimForecastSaveAndQuit:
           if (isPm) {

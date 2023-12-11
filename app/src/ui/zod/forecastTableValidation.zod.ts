@@ -24,22 +24,48 @@ const getForecastTableValidation = (data: Omit<MapToForecastTableProps, "clientP
     .object({
       projectId: projectIdValidation,
       partnerId: partnerIdValidation,
-      form: z.union([z.literal(FormTypes.ClaimForecastSaveAndContinue), z.literal(FormTypes.ClaimForecastSaveAndQuit)]),
+      form: z.union([
+        z.literal(FormTypes.ClaimForecastSaveAndContinue),
+        z.literal(FormTypes.ClaimForecastSaveAndQuit),
+        z.literal(FormTypes.ProjectSetupForecast),
+      ]),
       profile: z.record(profileIdValidation, currencyValidation).optional(),
+      submit: z.coerce.boolean(),
     })
-    .superRefine(({ profile: clientProfiles }, { addIssue, path }) => {
+    .superRefine(({ profile: clientProfiles, form, submit }, { addIssue, path }) => {
       const table = mapToForecastTableDto({ ...data, clientProfiles });
-      const nonForecastClaims = data.claims.filter(x => getClaimStatusGroup(x.status) !== ClaimStatusGroup.FORECAST);
+      const nonForecastClaims = data.claimTotalProjectPeriods.filter(
+        x => getClaimStatusGroup(x.status) !== ClaimStatusGroup.FORECAST,
+      );
       const finalClaim = nonForecastClaims.find(claim => claim.isFinalClaim);
 
-      if (table.totalRow.total > table.totalRow.golCost) {
-        addIssue({
-          code: ZodIssueCode.too_big,
-          maximum: table.totalRow.golCost,
-          inclusive: false,
-          type: "number",
-          path: [...path, "total"],
-        });
+      if (form === FormTypes.ProjectSetupForecast) {
+        if (submit) {
+          for (const costCategory of table.costCategories) {
+            if (costCategory.differentThanAllocatedCosts) {
+              addIssue({
+                code: ZodIssueCode.custom,
+                path: [...path, "costCategory", costCategory.costCategoryId],
+                params: {
+                  costCategoryName: costCategory.costCategoryName,
+                  i18n: "errors.forecasts_different",
+                },
+              });
+            }
+          }
+        }
+      } else {
+        // Don't check if the total is too big for project setup spend profile
+        // (there is already a check for each cost cat)
+        if (table.totalRow.total > table.totalRow.golCost) {
+          addIssue({
+            code: ZodIssueCode.too_big,
+            maximum: table.totalRow.golCost,
+            inclusive: false,
+            type: "number",
+            path: [...path, "total"],
+          });
+        }
       }
 
       if (clientProfiles && finalClaim) {

@@ -480,7 +480,8 @@
       "backLink": "Back to claims documents",
       "buttonSaveAndReturn": "Save and return to claims",
       "buttonContinueToSummary": "Continue to summary",
-      "overheadsCosts": "Overheads costs: {{ percentage, round(dp: 2) }}%"
+      "overheadsCosts": "Overheads costs: {{ percentage, round(dp: 2) }}%",
+      "title": "Update forecast"
     },
     "claimSummary": {
       "title": "Claim summary"
@@ -2106,6 +2107,11 @@
           "invalid_string": {
             "regex": "Forecast must be no more than 2 decimal places."
           }
+        }
+      },
+      "costCategory": {
+        "errors": {
+          "forecasts_different": "The total forecasts for {{ costCategoryName, lowercase }} must be the same as the total eligible costs."
         }
       },
       "total": {

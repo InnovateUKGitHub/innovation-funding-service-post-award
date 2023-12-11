@@ -135,6 +135,8 @@ const ForecastTable = (props: ForecastTableProps) => {
               data-qa={`forecast-${costCategory.costCategoryId}-row`}
               key={costCategory.costCategoryId}
               hasWarning={costCategory.greaterThanAllocatedCosts}
+              id={`costCategory_${costCategory.costCategoryId}`}
+              hasError={getFieldState?.(`costCategory.${costCategory.costCategoryId}`).invalid}
             >
               <TD className={stickyColClassName("left", 1)}>{costCategory.costCategoryName}</TD>
               {costCategory.profiles.map(profile => {
@@ -180,7 +182,7 @@ const ForecastTable = (props: ForecastTableProps) => {
           ))}
         </TBody>
         <TFoot>
-          <TR data-qa="forecast-total-row" hasError={getFieldState?.("total").invalid}>
+          <TR data-qa="forecast-total-row" id="total" hasError={getFieldState?.("total").invalid}>
             <TH className={stickyColClassName("left", 1)}>{getContent(x => x.components.forecastTable.totalHeader)}</TH>
             {tableData.totalRow.profiles.map(profile => (
               <TD
