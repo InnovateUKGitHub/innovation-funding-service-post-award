@@ -33,7 +33,7 @@ export interface ClaimForecastParams {
   periodId: PeriodId;
 }
 
-const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & ClaimForecastParams) => {
+const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & ClaimForecastParams) => {
   const { fragmentRef } = useClaimForecastData({
     projectId,
     projectParticipantId: partnerId,
@@ -83,6 +83,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
       <Form onSubmit={handleSubmit(onSubmitUpdate)}>
         <input {...register("projectId")} value={projectId} type="hidden" />
         <input {...register("partnerId")} value={partnerId} type="hidden" />
+        <input {...register("submit")} value="false" type="hidden" />
 
         <Section>
           {periodId + 1 < project.numberOfPeriods && (
@@ -142,7 +143,7 @@ const ClaimForecastContainer = ({ projectId, partnerId, periodId }: BaseProps & 
 export const ClaimForecastRoute = defineRoute({
   routeName: "claimForecast",
   routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
-  container: ClaimForecastContainer,
+  container: ClaimForecastPage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,
@@ -150,8 +151,5 @@ export const ClaimForecastRoute = defineRoute({
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: () => ({
-    htmlTitle: "Update forecast",
-    displayTitle: "Update forecast",
-  }),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimForecast.title),
 });

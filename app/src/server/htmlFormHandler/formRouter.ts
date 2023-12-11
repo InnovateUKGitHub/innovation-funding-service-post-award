@@ -55,7 +55,7 @@ import { BankSetupStatementDocumentUploadHandler } from "./handlers/projects/[pr
 import { ProjectSetupBankStatementHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/bank-statement/ProjectSetupBankStatementHandler";
 import { PartnerDetailsEditFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/project-location/partnerDetailsEditFormHandler";
 import { ProjectSetupFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupFormHandler";
-import { ProjectSetupSpendProfileFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupSpendProfile/projectSetupSpendProfileFormHandler";
+import { ProjectSetupSpendProfileFormHandler } from "./handlers/projects/[projectId]/setup/[partnerId]/projectSetupSpendProfile/projectSetupSpendProfile.handler";
 import { PostFormHandleHandler } from "./postFormHandleHandler";
 import { ClaimDetailLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareUploadHandler.handler";
 import { ClaimDetailLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareDeleteHandler.handler";

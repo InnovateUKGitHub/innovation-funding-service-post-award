@@ -1,44 +1,41 @@
-import { ProjectRole } from "@framework/constants/project";
 import { IContext } from "@framework/types/IContext";
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails/getAllByPartnerQuery";
 import { GetAllForPartnerQuery } from "@server/features/claims/getAllForPartnerQuery";
 import { GetAllForecastsGOLCostsQuery } from "@server/features/claims/getAllForecastGOLCostsQuery";
-import { GetAllForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllForecastsForPartnerQuery";
-import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails/updateForecastDetailsCommand";
+import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
+import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails/updateInitialForecastDetailsCommand";
 import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
-import { GetAllProjectRolesForUser } from "@server/features/projects/getAllProjectRolesForUser";
 import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
-import { AllClaimsDashboardRoute } from "@ui/containers/pages/claims/allClaimsDashboard/allClaimsDashboard.page";
-import { ClaimsDashboardRoute } from "@ui/containers/pages/claims/claimDashboard.page";
-import { ClaimForecastRoute } from "@ui/containers/pages/claims/forecast/ClaimForecast.page";
-import { ClaimSummaryRoute } from "@ui/containers/pages/claims/claimSummary.page";
+import { ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
+import {
+  ProjectSetupSpendProfileParams,
+  ProjectSetupSpendProfileRoute,
+} from "@ui/containers/pages/projects/setup/projectSetupSpendProfile/projectSetupSpendProfile.page";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
 import { z } from "zod";
 
-interface ClaimForecastFormHandlerParams {
-  projectId: ProjectId;
-  partnerId: PartnerId;
-  periodId: PeriodId;
-}
-class ClaimForecastFormHandler extends ZodFormHandlerBase<ForecastTableSchemaType, ClaimForecastFormHandlerParams> {
+class ProjectSetupSpendProfileFormHandler extends ZodFormHandlerBase<
+  ForecastTableSchemaType,
+  ProjectSetupSpendProfileParams
+> {
   constructor() {
     super({
-      route: ClaimForecastRoute,
-      forms: [FormTypes.ClaimForecastSaveAndContinue, FormTypes.ClaimForecastSaveAndQuit],
+      route: ProjectSetupSpendProfileRoute,
+      forms: [FormTypes.ProjectSetupForecast],
     });
   }
 
   public readonly acceptFiles = false;
 
-  async getZodSchema({ context, params }: { context: IContext; params: ClaimForecastFormHandlerParams }) {
+  async getZodSchema({ context, params }: { context: IContext; params: ProjectSetupSpendProfileParams }) {
     const projectPromise = context.runQuery(new GetProjectByIdQuery(params.projectId));
     const partnerPromise = context.runQuery(new GetPartnerByIdQuery(params.partnerId));
     const claimDetailsPromise = context.runQuery(new GetAllClaimDetailsByPartner(params.partnerId));
     const claimTotalProjectPeriodsPromise = context.runQuery(new GetAllForPartnerQuery(params.partnerId));
     const profileTotalCostCategoriesPromise = context.runQuery(new GetAllForecastsGOLCostsQuery(params.partnerId));
-    const profileDetailsPromise = context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
+    const profileDetailsPromise = context.runQuery(new GetAllInitialForecastsForPartnerQuery(params.partnerId));
 
     const [project, claimDetails, claimTotalProjectPeriods, profileTotalCostCategories, profileDetails, partner] =
       await Promise.all([
@@ -81,11 +78,11 @@ class ClaimForecastFormHandler extends ZodFormHandlerBase<ForecastTableSchemaTyp
   }: {
     input: z.input<ForecastTableSchemaType>;
     context: IContext;
-    params: ClaimForecastFormHandlerParams;
+    params: ProjectSetupSpendProfileParams;
   }): Promise<string> {
     if (input.profile) {
       await context.runCommand(
-        new UpdateForecastDetailsCommand(
+        new UpdateInitialForecastDetailsCommand(
           params.projectId,
           params.partnerId,
           Object.entries(input.profile).map(([id, value]) => ({
@@ -97,18 +94,8 @@ class ClaimForecastFormHandler extends ZodFormHandlerBase<ForecastTableSchemaTyp
       );
     }
 
-    if (input.form === FormTypes.ClaimForecastSaveAndContinue) {
-      return ClaimSummaryRoute.getLink(params).path;
-    }
-
-    // if pm as well as fc then go to all claims route
-    const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(params.projectId));
-    if (roles.hasRole(ProjectRole.ProjectManager)) {
-      return AllClaimsDashboardRoute.getLink(params).path;
-    }
-
-    return ClaimsDashboardRoute.getLink(params).path;
+    return ProjectSetupRoute.getLink(params).path;
   }
 }
 
-export { ClaimForecastFormHandler };
+export { ProjectSetupSpendProfileFormHandler };

@@ -113,8 +113,9 @@ export class InitialForecastDetailsDtoCostCategoryValidator
      *
      * 1) Ignore validation when not submitting
      * 2) Skip validation on calculated forecasts to support non-js form submissions
+     * 3) Skip validation if no forecasts for that cost category is avail
      */
-    const shouldNotValidate = !this.submit || this.model.costCategory.isCalculated;
+    const shouldNotValidate = !this.submit || this.model.costCategory.isCalculated || this.model.forecasts.length === 0;
 
     if (shouldNotValidate) return Validation.valid(this);
 

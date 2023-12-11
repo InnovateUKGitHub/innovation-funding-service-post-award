@@ -11,6 +11,7 @@ type ForecastDetailsNode = GQL.PartialNode<{
   Acc_CostCategory__r: {
     Id: string;
   } | null;
+  Acc_InitialForecastCost__c: GQL.Value<number>;
   Acc_LatestForecastCost__c: GQL.Value<number>;
   Acc_ProjectPeriodStartDate__c?: GQL.Value<string>;
   Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
@@ -22,7 +23,11 @@ type ForecastDetailsNode = GQL.PartialNode<{
 
 type ForecastDetailsDtoMapping = ForecastDetailsDTO;
 
-const mapper: GQL.DtoMapper<ForecastDetailsDtoMapping, ForecastDetailsNode> = {
+interface ForecastDetailsAdditionalData {
+  isProjectSetup?: boolean;
+}
+
+const mapper: GQL.DtoMapper<ForecastDetailsDtoMapping, ForecastDetailsNode, ForecastDetailsAdditionalData> = {
   id: function (node) {
     return node?.Id ?? "";
   },
@@ -38,8 +43,12 @@ const mapper: GQL.DtoMapper<ForecastDetailsDtoMapping, ForecastDetailsNode> = {
   periodEnd: function (node) {
     return clock.parse(node?.Acc_ProjectPeriodEndDate__c?.value ?? null, salesforceDateFormat);
   },
-  value: function (node) {
-    return node?.Acc_LatestForecastCost__c?.value ?? 0;
+  value: function (node, additionalData) {
+    return (
+      (additionalData.isProjectSetup
+        ? node?.Acc_InitialForecastCost__c?.value
+        : node?.Acc_LatestForecastCost__c?.value) ?? 0
+    );
   },
 };
 
@@ -50,9 +59,13 @@ const mapper: GQL.DtoMapper<ForecastDetailsDtoMapping, ForecastDetailsNode> = {
 export function mapToForecastDetailsDto<
   T extends ForecastDetailsNode,
   PickList extends keyof ForecastDetailsDtoMapping,
->(node: T, pickList: PickList[]): Pick<ForecastDetailsDtoMapping, PickList> {
+>(
+  node: T,
+  pickList: PickList[],
+  additionalData = { isProjectSetup: false },
+): Pick<ForecastDetailsDtoMapping, PickList> {
   return pickList.reduce((dto, field) => {
-    dto[field] = mapper[field](node);
+    dto[field] = mapper[field](node, additionalData);
     return dto;
   }, {} as Pick<ForecastDetailsDtoMapping, PickList>);
 }
@@ -63,12 +76,16 @@ export function mapToForecastDetailsDto<
 export function mapToForecastDetailsDtoArray<
   T extends ReadonlyArray<GQL.Maybe<{ node: ForecastDetailsNode }>> | null,
   PickList extends keyof ForecastDetailsDtoMapping,
->(edges: T, pickList: PickList[]): Pick<ForecastDetailsDtoMapping, PickList>[] {
+>(
+  edges: T,
+  pickList: PickList[],
+  additionalData = { isProjectSetup: false },
+): Pick<ForecastDetailsDtoMapping, PickList>[] {
   return (
     edges
       ?.filter(x => equalityIfDefined(x?.node?.RecordType?.DeveloperName?.value, Profile.profileDetails))
       ?.map(node => {
-        return mapToForecastDetailsDto(node?.node ?? null, pickList);
+        return mapToForecastDetailsDto(node?.node ?? null, pickList, additionalData);
       }) ?? []
   );
 }

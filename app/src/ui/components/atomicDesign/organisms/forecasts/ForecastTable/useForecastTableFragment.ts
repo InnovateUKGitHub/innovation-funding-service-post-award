@@ -13,8 +13,15 @@ import {
   NewForecastTableFragment$data,
 } from "./__generated__/NewForecastTableFragment.graphql";
 import { mapToGolCostDtoArray as mapToProfileTotalCostCategoryDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
+import { mapToProfilePeriodDetailsDtoArray } from "@gql/dtoMapper/mapProfilePeriodDetail";
 
-const useForecastTableFragment = ({ fragmentRef }: { fragmentRef: unknown }) => {
+const useForecastTableFragment = ({
+  fragmentRef,
+  isProjectSetup = false,
+}: {
+  fragmentRef: unknown;
+  isProjectSetup?: boolean;
+}) => {
   if (!isValidFragmentKey<NewForecastTableFragment$key>(fragmentRef, "NewForecastTableFragment")) {
     throw new Error("Forecast Table (new) is missing a ForecastTableFragment reference");
   }
@@ -26,7 +33,7 @@ const useForecastTableFragment = ({ fragmentRef }: { fragmentRef: unknown }) => 
 
   const project = mapToProjectDto(projectNode, ["title", "projectNumber", "numberOfPeriods", "roles"]);
   const partner = mapToPartnerDto(partnerNode, ["forecastLastModifiedDate", "overheadRate"], {});
-  const claims = mapToClaimDtoArray(
+  const claimTotalProjectPeriods = mapToClaimDtoArray(
     fragment?.query?.ForecastTable_ClaimTotalProjectPeriods?.edges ?? [],
     [
       "periodId",
@@ -45,30 +52,34 @@ const useForecastTableFragment = ({ fragmentRef }: { fragmentRef: unknown }) => 
     ["periodId", "costCategoryId", "value"],
     {},
   );
-  const costCategories = mapToProfileTotalCostCategoryDtoArray(
+  const profileTotalProjectPeriods = mapToProfilePeriodDetailsDtoArray(
+    fragment.query.ForecastTable_ProfileTotalProjectPeriod?.edges ?? [],
+    ["periodId", "periodStartDate", "periodEndDate"],
+  );
+  const profileTotalCostCategories = mapToProfileTotalCostCategoryDtoArray(
     fragment?.query?.ForecastTable_ProfileTotalCostCategories?.edges ?? [],
     ["value", "costCategoryId", "costCategoryName", "type"],
   );
-  const profiles = mapToForecastDetailsDtoArray(fragment?.query?.ForecastTable_ProfileDetails?.edges ?? [], [
-    "value",
-    "periodId",
-    "costCategoryId",
-    "id",
-  ]);
+  const profileDetails = mapToForecastDetailsDtoArray(
+    fragment?.query?.ForecastTable_ProfileDetails?.edges ?? [],
+    ["value", "periodId", "costCategoryId", "id"],
+    { isProjectSetup },
+  );
 
   return {
     project,
     partner,
-    costCategories,
-    profiles,
-    claims,
+    profileTotalProjectPeriods,
+    profileTotalCostCategories,
+    profileDetails,
+    claimTotalProjectPeriods,
     claimDetails,
   };
 };
 
-const useForecastTableFragmentFromContext = () => {
+const useForecastTableFragmentFromContext = ({ isProjectSetup }: { isProjectSetup?: boolean }) => {
   const fragmentRef = useFragmentContext();
-  return useForecastTableFragment({ fragmentRef });
+  return useForecastTableFragment({ fragmentRef, isProjectSetup });
 };
 
 export { useForecastTableFragment, useForecastTableFragmentFromContext };

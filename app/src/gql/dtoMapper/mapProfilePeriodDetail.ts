@@ -1,19 +1,23 @@
+import { Clock } from "@framework/util/clock";
+
 // on Acc_Profile__c WHERE Acc_ProjectID__c=ProjectID AND RecordType.Name="Total Project Period"
 type ProfilePeriodDetailsNode = GQL.PartialNode<{
   Acc_PeriodLatestForecastCost__c: GQL.Value<number>;
   Acc_ProjectParticipant__c?: GQL.Value<string>;
+  Acc_ProjectPeriodEndDate__c: GQL.Value<string>;
   Acc_ProjectPeriodNumber__c: GQL.Value<number>;
-  Acc_CostCategory__r?: GQL.Maybe<{
-    Id?: string;
-  }>;
+  Acc_ProjectPeriodStartDate__c: GQL.Value<string>;
 }>;
 
-type ProfilePeriodDetailsDtoMapping = {
+export type ProfilePeriodDetailsDtoMapping = {
   partnerId: PartnerId;
   forecastCost: number;
+  periodEndDate: Date;
   periodId: number;
-  costCategoryId: string;
+  periodStartDate: Date;
 };
+
+const clock = new Clock();
 
 const mapper: GQL.DtoMapper<ProfilePeriodDetailsDtoMapping, ProfilePeriodDetailsNode> = {
   partnerId(node) {
@@ -22,11 +26,18 @@ const mapper: GQL.DtoMapper<ProfilePeriodDetailsDtoMapping, ProfilePeriodDetails
   forecastCost(node) {
     return node?.Acc_PeriodLatestForecastCost__c?.value ?? 0;
   },
-  periodId(node) {
-    return node?.Acc_ProjectPeriodNumber__c?.value ?? 0;
+  periodEndDate(node) {
+    return !!node?.Acc_ProjectPeriodEndDate__c?.value
+      ? clock.parseRequiredSalesforceDate(node?.Acc_ProjectPeriodEndDate__c?.value)
+      : new Date(NaN);
   },
-  costCategoryId(node) {
-    return node?.Acc_CostCategory__r?.Id ?? "";
+  periodId(node) {
+    return (node?.Acc_ProjectPeriodNumber__c?.value ?? 0) as PeriodId;
+  },
+  periodStartDate(node) {
+    return !!node?.Acc_ProjectPeriodStartDate__c?.value
+      ? clock.parseRequiredSalesforceDate(node?.Acc_ProjectPeriodStartDate__c?.value)
+      : new Date(NaN);
   },
 };
 

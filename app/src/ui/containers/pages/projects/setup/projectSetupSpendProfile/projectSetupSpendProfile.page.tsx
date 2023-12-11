@@ -1,159 +1,133 @@
-import { useNavigate } from "react-router-dom";
-import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { Pending } from "@shared/pending";
-import { PartnerDtoValidator } from "@ui/validation/validators/partnerValidator";
-import { SpendProfileStatus } from "@framework/constants/partner";
+import { useOnForecastSubmit } from "@framework/api-helpers/onForecastSubmit";
+import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { ProjectRole } from "@framework/constants/project";
-import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
-import { PartnerDto } from "@framework/dtos/partnerDto";
-import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
-import { createTypedForm, SelectOption } from "@ui/components/bjss/form/form";
-import { Page } from "@ui/components/bjss/Page/page";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { getAuthRoles } from "@framework/types/authorisation";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page.withFragment";
+import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/ForecastTable.withFragment";
+import { useForecastTableFragment } from "@ui/components/atomicDesign/organisms/forecasts/ForecastTable/useForecastTableFragment";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
-import { IForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
-import { useSetupSpendProfileData } from "./projectSetupSpendProfile.logic";
+import { useRoutes } from "@ui/redux/routesProvider";
+import { FormTypes } from "@ui/zod/FormTypes";
+import { ForecastTableSchemaType, getForecastTableValidation } from "@ui/zod/forecastTableValidation.zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useProjectSetupSpendProfileData } from "./projectSetupSpendProfile.logic";
+import { Checkbox, CheckboxList } from "@ui/components/atomicDesign/atoms/form/Checkbox/Checkbox";
+import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: ProjectId;
   partnerId: PartnerId;
 }
 
-interface Data {
-  editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
-  partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>;
-}
+const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & ProjectSetupSpendProfileParams) => {
+  const { fragmentRef } = useProjectSetupSpendProfileData({
+    projectId,
+    projectParticipantId: partnerId,
+  });
+  const data = useForecastTableFragment({ fragmentRef, isProjectSetup: true });
+  const { project } = data;
 
-interface Callbacks {
-  onChange: (saving: boolean, submit: boolean, dto: ForecastDetailsDTO[]) => void;
-  onChangePartner: (dto: PartnerDto) => void;
-}
+  const defaults = useServerInput<z.output<ForecastTableSchemaType>>();
+  const { isPm } = getAuthRoles(project.roles);
 
-const Form = createTypedForm<ForecastDetailsDTO[]>();
+  const { errorMap, schema } = getForecastTableValidation(data);
+  const { register, handleSubmit, watch, control, formState, getFieldState, setError } = useForm<
+    z.output<ForecastTableSchemaType>
+  >({
+    resolver: zodResolver(schema, {
+      errorMap,
+    }),
+    defaultValues: defaults ?? undefined,
+  });
+  const routes = useRoutes();
+  const { getContent } = useContent();
 
-const ProjectSetupSpendProfile = (props: BaseProps & ProjectSetupSpendProfileParams & Data & Callbacks) => {
-  const { editor, partnerEditor } = props;
+  const { onUpdate, isFetching } = useOnForecastSubmit({ isPm });
 
-  const data = useSetupSpendProfileData(props.projectId, props.partnerId);
+  const onSubmitUpdate = (dto: z.output<ForecastTableSchemaType>) => {
+    onUpdate({
+      data: dto,
+    });
+  };
 
-  const readyToSubmitMessage = <Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
-
-  const options: SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
+  // Use server-side errors if they exist, or use client-side errors if JavaScript is enabled.
+  const allErrors = useZodErrors<z.output<ForecastTableSchemaType>>(setError, formState.errors);
 
   return (
     <Page
+      validationErrors={allErrors}
       backLink={
         <BackLink
-          route={props.routes.projectSetup.getLink({
-            projectId: props.projectId,
-            partnerId: props.partnerId,
+          route={routes.projectSetup.getLink({
+            projectId,
+            partnerId,
           })}
         >
-          <Content value={x => x.pages.projectSetupSpendProfile.backLink} />
+          {getContent(x => x.pages.projectSetupSpendProfile.backLink)}
         </BackLink>
       }
-      isActive={data.project.isActive}
-      error={editor.error}
-      validator={editor.validator}
-      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
+      fragmentRef={fragmentRef}
     >
-      <Section qa="project-setup-spend-profile">
-        <SimpleString qa="guidance">
-          <Content value={x => x.pages.projectSetupSpendProfile.guidanceMessage} />
-        </SimpleString>
-        <Form.Form
-          editor={editor}
-          onChange={data => {
-            props.onChangePartner(partnerEditor.data);
-            props.onChange(false, partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete, data);
-          }}
-          onSubmit={() =>
-            props.onChange(true, partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete, editor.data)
-          }
-          qa="project-setup-spend-profile-form"
-        >
-          <Form.Custom
-            name="forecastTable"
-            update={() => null}
-            value={({ onChange }) => <ForecastTable onChange={onChange} data={data} editor={editor} />}
+      <Form onSubmit={handleSubmit(onSubmitUpdate)}>
+        <input {...register("form")} value={FormTypes.ProjectSetupForecast} type="hidden" />
+        <input {...register("projectId")} value={projectId} type="hidden" />
+        <input {...register("partnerId")} value={partnerId} type="hidden" />
+
+        <Section>
+          <P data-qa="guidance">{getContent(x => x.pages.projectSetupSpendProfile.guidanceMessage)}</P>
+          {/* {partner.overheadRate !== null && (
+            <P>{getContent(x => x.pages.claimForecast.overheadsCosts({ percentage: partner.overheadRate }))}</P>
+          )} */}
+          <ForecastTable
+            clientProfiles={watch("profile")}
+            control={control}
+            getFieldState={getFieldState}
+            disabled={isFetching}
+            isProjectSetup
           />
-          <Form.Fieldset heading={x => x.pages.projectSetupSpendProfile.markAsComplete}>
-            <Form.Checkboxes
-              name="isComplete"
-              options={options}
-              value={() => (partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete ? options : [])}
-              update={(_, value) =>
-                (partnerEditor.data.spendProfileStatus =
-                  value && value.some(y => y.id === "true")
-                    ? SpendProfileStatus.Complete
-                    : SpendProfileStatus.Incomplete)
-              }
+          {/* <P>
+            {getContent(x => x.components.claimLastModified.message)}
+            {": "}
+            <FullDateTime
+              value={data.partner.forecastLastModifiedDate}
+              nullDisplay={getContent(x => x.components.claimLastModified.never)}
             />
-            <Form.Submit>
-              <Content value={x => x.pages.projectSetupSpendProfile.submitButton} />
-            </Form.Submit>
-          </Form.Fieldset>
-        </Form.Form>
-      </Section>
+          </P> */}
+        </Section>
+        <Section>
+          <Fieldset>
+            <Legend>{getContent(x => x.pages.projectSetupSpendProfile.markAsComplete)}</Legend>
+            <CheckboxList name="submit" register={register} disabled={isFetching}>
+              <Checkbox id="submit" label={getContent(x => x.pages.projectSetupSpendProfile.readyToSubmitMessage)} />
+            </CheckboxList>
+          </Fieldset>
+        </Section>
+        <Section>
+          <Fieldset>
+            <SubmitButton disabled={isFetching}>
+              {getContent(x => x.pages.projectSetupSpendProfile.submitButton)}
+            </SubmitButton>
+          </Fieldset>
+        </Section>
+      </Form>
     </Page>
-  );
-};
-
-const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams & BaseProps) => {
-  const stores = useStores();
-  const { getContent } = useContent();
-  const navigate = useNavigate();
-
-  const navigateToProjectSetup = () => {
-    const projectSetupParams = {
-      projectId: props.projectId,
-      partnerId: props.partnerId,
-    };
-
-    navigate(props.routes.projectSetup.getLink(projectSetupParams).path);
-  };
-
-  const editor = stores.forecastDetails.getInitialForecastEditor(props.partnerId);
-
-  const partnerEditor = stores.partners.getPartnerEditor(props.projectId, props.partnerId);
-  const onChange = (saving: boolean, submit: boolean, payload: ForecastDetailsDTO[]) => {
-    stores.forecastDetails.updateInitialForecastEditor(
-      saving,
-      props.projectId,
-      props.partnerId,
-      payload,
-      submit,
-      getContent(x => x.pages.projectSetupSpendProfile.spendProfileUpdatedMessage),
-      navigateToProjectSetup,
-    );
-  };
-
-  const onChangePartner = (dto: PartnerDto) => stores.partners.updatePartner(false, props.partnerId, dto);
-
-  const combined = Pending.combine({
-    editor,
-    partnerEditor,
-  });
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={x => <ProjectSetupSpendProfile onChange={onChange} onChangePartner={onChangePartner} {...props} {...x} />}
-    />
   );
 };
 
 export const ProjectSetupSpendProfileRoute = defineRoute({
   routeName: "projectSetupSpendProfile",
   routePath: "/projects/:projectId/setup/:partnerId/projectSetupSpendProfile",
-  container: ProjectSetupSpendProfileContainer,
+  container: ProjectSetupSpendProfilePage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     partnerId: route.params.partnerId as PartnerId,

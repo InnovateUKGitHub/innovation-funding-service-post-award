@@ -2,7 +2,6 @@ import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PartnerStatus, SpendProfileStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
@@ -17,12 +16,13 @@ import { InActiveProjectError, BadRequestError, ValidationError } from "../commo
 import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../partners/getByIdQuery";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
+import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: ProjectId,
     private readonly partnerId: PartnerId,
-    private readonly forecasts: ForecastDetailsDTO[],
+    private readonly forecasts: Pick<ForecastDetailsDTO, "id" | "value">[],
     private readonly isSubmitting: boolean,
   ) {
     super();
@@ -48,8 +48,12 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
     const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
 
+    const existing = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(this.partnerId));
+
+    const preparedForecasts = await this.prepareForecasts(context, existing, this.forecasts);
+
     const validation = new InitialForecastDetailsDtosValidator(
-      this.forecasts,
+      preparedForecasts,
       golCosts,
       costCategories,
       this.isSubmitting,
@@ -59,20 +63,37 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     if (!validation.isValid) {
       throw new ValidationError(validation);
     }
-
-    const existing = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(this.partnerId));
-
-    const preparedForecasts = await this.ignoreCalculatedCostCategories(costCategories, this.forecasts);
-
     await this.updateProfileDetails(context, preparedForecasts, existing, this.isSubmitting);
     await this.updatePartner(context, partner, this.isSubmitting);
 
     return true;
   }
 
-  private async ignoreCalculatedCostCategories(costCategories: CostCategoryDto[], dtos: ForecastDetailsDTO[]) {
+  private async prepareForecasts(
+    context: IContext,
+    existingDtos: ForecastDetailsDTO[],
+    newDtos: Pick<ForecastDetailsDTO, "id" | "value">[],
+  ): Promise<ForecastDetailsDTO[]> {
+    const returnDtos: ForecastDetailsDTO[] = [];
+
+    for (const newDto of newDtos) {
+      const existingDto = existingDtos.find(x => x.id === newDto.id);
+
+      returnDtos.push({
+        ...existingDto,
+        ...newDto,
+      } as ForecastDetailsDTO);
+    }
+
+    return await this.ignoreCalculatedCostCategories(context, returnDtos);
+  }
+
+  private async ignoreCalculatedCostCategories(context: IContext, dtos: ForecastDetailsDTO[]) {
     // check to see if there are any calculated cost categories
-    const calculatedCostCategoryIds = await costCategories.filter(x => x.isCalculated).map(x => x.id);
+    const calculatedCostCategoryIds = await context
+      .runQuery(new GetUnfilteredCostCategoriesQuery())
+      .then(costCategories => costCategories.filter(x => x.isCalculated).map(x => x.id));
+
     return dtos.filter(forecast => calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1);
   }
 

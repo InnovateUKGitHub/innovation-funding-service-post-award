@@ -15,6 +15,7 @@ enum FormTypes {
   // Project Setup
   ProjectSetupBankDetails = "projectSetupBankDetails",
   ProjectSetupContactAssociate = "projectSetupContactAssociate",
+  ProjectSetupForecast = "projectSetupForecast",
 
   // Claim Details page
   ClaimDetailLevelUpload = "claimDetailLevelUpload",

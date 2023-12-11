@@ -1,6 +1,5 @@
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { ClaimDto } from "@framework/dtos/claimDto";
-import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { multiplyCurrency, parseCurrency, roundCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { useMemo } from "react";
@@ -9,27 +8,35 @@ import { GOLCostDto } from "@framework/dtos/golCostDto";
 import { PartnerDtoGql } from "@framework/dtos/partnerDto";
 import { CostCategoryType } from "@framework/constants/enums";
 import { ReceivedStatus } from "@framework/entities/received-status";
+import { ProfilePeriodDetailsDtoMapping } from "@gql/dtoMapper/mapProfilePeriodDetail";
+import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 
 type ProfileInfo = Pick<ForecastDetailsDTO, "value" | "costCategoryId" | "periodId" | "id">;
 type ClaimDetailInfo = Pick<ClaimDetailsDto, "value" | "costCategoryId" | "periodId">;
+type ClaimTotalProjectPeriodsInfo = Pick<
+  ClaimDto,
+  | "periodId"
+  | "iarStatus"
+  | "isIarRequired"
+  | "isApproved"
+  | "status"
+  | "periodStartDate"
+  | "periodEndDate"
+  | "isFinalClaim"
+>;
+type ProfileTotalProjectPeriodsInfo = Pick<
+  ProfilePeriodDetailsDtoMapping,
+  "periodId" | "periodStartDate" | "periodEndDate"
+>;
 
 export interface MapToForecastTableProps {
   project: Pick<ProjectDto, "numberOfPeriods">;
   partner: Pick<PartnerDtoGql, "overheadRate">;
-  claims: Pick<
-    ClaimDto,
-    | "periodId"
-    | "iarStatus"
-    | "isIarRequired"
-    | "isApproved"
-    | "status"
-    | "periodStartDate"
-    | "periodEndDate"
-    | "isFinalClaim"
-  >[];
+  claimTotalProjectPeriods: ClaimTotalProjectPeriodsInfo[];
   claimDetails: ClaimDetailInfo[];
-  costCategories: GOLCostDto[];
-  profiles: ProfileInfo[];
+  profileTotalProjectPeriods?: ProfileTotalProjectPeriodsInfo[];
+  profileTotalCostCategories: GOLCostDto[];
+  profileDetails: ProfileInfo[];
   clientProfiles?: Record<string, string>;
 }
 
@@ -69,6 +76,7 @@ interface CostCategoryRow extends TableCraftRow {
   costCategoryName: string;
   profiles: CostCategoryCellData[];
   greaterThanAllocatedCosts: boolean;
+  differentThanAllocatedCosts: boolean;
 }
 
 interface TotalRow extends TableCraftRow {
@@ -85,16 +93,19 @@ export interface ForecastTableDto {
 const mapToForecastTableDto = ({
   project,
   partner,
-  claims,
+  profileTotalProjectPeriods,
+  profileTotalCostCategories,
+  profileDetails,
+  claimTotalProjectPeriods,
   claimDetails,
-  costCategories,
-  profiles,
   clientProfiles,
 }: MapToForecastTableProps): ForecastTableDto => {
   const costCatAccum: CostCategoryRow[] = [];
   const periodTotals: TotalCellData[] = [];
   const statusCells: StatusCell[] = [];
-  const nonForecastClaims = claims.filter(x => getClaimStatusGroup(x.status) !== ClaimStatusGroup.FORECAST);
+  const nonForecastClaims = claimTotalProjectPeriods.filter(
+    x => getClaimStatusGroup(x.status) !== ClaimStatusGroup.FORECAST,
+  );
   const finalClaim = nonForecastClaims.find(claim => claim.isFinalClaim);
 
   let grandTotal = 0;
@@ -119,46 +130,42 @@ const mapToForecastTableDto = ({
    */
 
   for (let i = 1; i <= project.numberOfPeriods; i++) {
-    const claim = claims.find(x => x.periodId === i);
-    const nextClaim = claims.find(x => x.periodId === i + 1);
+    const forecastTotalProjectPeriod = profileTotalProjectPeriods?.find(x => x.periodId === i);
+    const claimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i);
+    const nextClaimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i + 1);
     let drawRhc = false;
 
     // If we haven't got a "current status cell",
     // initialise it with the status of our first claim.
-    if (!currentStatusCell && claim) {
+    if (!currentStatusCell && claimTotalProjectPeriod) {
       currentStatusCell = {
         colSpan: 1,
         rhc: false,
-        group: getClaimStatusGroup(claim.status),
+        group: getClaimStatusGroup(claimTotalProjectPeriod.status),
       };
     }
 
     // If we have a previous status cell
     if (currentStatusCell) {
-      // And a next claim exists,
-      if (nextClaim) {
-        const nextClaimGroup = getClaimStatusGroup(nextClaim.status);
+      const nextClaimGroup = nextClaimTotalProjectPeriod
+        ? getClaimStatusGroup(nextClaimTotalProjectPeriod.status)
+        : ClaimStatusGroup.FORECAST;
 
-        // If it's a part of the same claim, we should extend the colspan of the column.
-        if (currentStatusCell.group === nextClaimGroup) {
-          currentStatusCell.colSpan += 1;
-        } else {
-          // If it's not a part of the same claim, we should mark it as requiring a right-hand-column
-          currentStatusCell.rhc = true;
-          drawRhc = true;
-          statusCells.push(currentStatusCell);
-
-          // Create a new status cell with the status of the next claim
-          currentStatusCell = {
-            colSpan: 1,
-            rhc: false,
-            group: nextClaimGroup,
-          };
-        }
+      // If it's a part of the same claim, we should extend the colspan of the column.
+      if (currentStatusCell.group === nextClaimGroup) {
+        currentStatusCell.colSpan += 1;
       } else {
-        // If there is no next claim, we should push the
-        // current claim status colspan to the array.
+        // If it's not a part of the same claim, we should mark it as requiring a right-hand-column
+        currentStatusCell.rhc = true;
+        drawRhc = true;
         statusCells.push(currentStatusCell);
+
+        // Create a new status cell with the status of the next claim
+        currentStatusCell = {
+          colSpan: 1,
+          rhc: false,
+          group: nextClaimGroup,
+        };
       }
     }
 
@@ -166,29 +173,37 @@ const mapToForecastTableDto = ({
     periodTotals.push({
       periodId: i,
       value: 0,
-      iarDue: !!claim?.isIarRequired && claim.iarStatus !== ReceivedStatus.Received,
-      periodStart: claim?.periodStartDate ?? new Date(NaN),
-      periodEnd: claim?.periodEndDate ?? new Date(NaN),
+      iarDue: !!claimTotalProjectPeriod?.isIarRequired && claimTotalProjectPeriod.iarStatus !== ReceivedStatus.Received,
+      periodStart:
+        claimTotalProjectPeriod?.periodStartDate ?? forecastTotalProjectPeriod?.periodStartDate ?? new Date(NaN),
+      periodEnd: claimTotalProjectPeriod?.periodEndDate ?? forecastTotalProjectPeriod?.periodEndDate ?? new Date(NaN),
       rhc: drawRhc,
     });
   }
 
-  const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour);
+  statusCells.push(currentStatusCell as StatusCell);
 
-  for (const costCategory of costCategories) {
+  const labourCostCategory = profileTotalCostCategories.find(x => x.type === CostCategoryType.Labour);
+
+  for (const costCategory of profileTotalCostCategories) {
     const costCategoryProfiles: CostCategoryCellData[] = [];
     let total = 0;
 
     for (let i = 1; i <= project.numberOfPeriods; i++) {
-      const forecastProfile = profiles.find(x => x.periodId === i && x.costCategoryId === costCategory.costCategoryId);
+      const forecastProfile = profileDetails.find(
+        x => x.periodId === i && x.costCategoryId === costCategory.costCategoryId,
+      );
       const labourProfile = labourCostCategory
-        ? profiles.find(x => x.periodId === i && x.costCategoryId === labourCostCategory.costCategoryId)
+        ? profileDetails.find(x => x.periodId === i && x.costCategoryId === labourCostCategory.costCategoryId)
         : undefined;
       const claimProfile = claimDetails.find(x => x.periodId === i && x.costCategoryId === costCategory.costCategoryId);
-      const claim = claims.find(x => x.periodId === i);
+      const claimTotalProjectPeriod = claimTotalProjectPeriods.find(x => x.periodId === i);
 
       const forecast =
-        !finalClaim && !!claim && [ClaimStatusGroup.FORECAST].includes(getClaimStatusGroup(claim.status));
+        !claimTotalProjectPeriod ||
+        (!finalClaim &&
+          !!claimTotalProjectPeriod &&
+          [ClaimStatusGroup.FORECAST].includes(getClaimStatusGroup(claimTotalProjectPeriod.status)));
 
       /**
        * Case A:
@@ -262,7 +277,7 @@ const mapToForecastTableDto = ({
       }
     }
 
-    grandGolValue += costCategory.value;
+    grandGolValue = roundCurrency(grandGolValue + costCategory.value);
 
     const costCategoryRow: CostCategoryRow = {
       costCategoryId: costCategory.costCategoryId,
@@ -271,6 +286,7 @@ const mapToForecastTableDto = ({
       profiles: costCategoryProfiles,
       total,
       greaterThanAllocatedCosts: total > costCategory.value,
+      differentThanAllocatedCosts: total !== roundCurrency(costCategory.value),
       difference:
         costCategory.value < 0.01 // If denominator is very small, show 0% difference.
           ? 0
