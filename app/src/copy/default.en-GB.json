@@ -82,10 +82,10 @@
       "claimPeriodAwardRateOverride": "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThis claim may have one or more periods paid at a different funding award rate compared to your overall funding award rate.",
       "claimCostCategoryAwardRateOverride": "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThis claim may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
       "nonFec": "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThe project and any partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
-      "periodPaidAt": "Period {{period}} is paid at a rate of {{amount}}% rather than your normal Award rate",
-      "currentPeriodPaidAt": "This period is paid at a rate of {{amount}}% rather than your normal Award rate",
-      "costCategoryPaidAt": "Cost category {{costCategoryName, lowercase}} is paid at a rate of {{amount}}% rather than your normal Award rate",
-      "currentCostCategoryPaidAt": "This cost category is paid at a rate of {{amount}}% rather than your normal Award rate"
+      "periodPaidAt": "Period {{period}} is paid at a rate of {{amount}}% rather than your normal award rate",
+      "currentPeriodPaidAt": "This period is paid at a rate of {{amount}}% rather than your normal award rate",
+      "costCategoryPaidAt": "Cost category {{costCategoryName, lowercase}} is paid at a rate of {{amount}}% rather than your normal award rate",
+      "currentCostCategoryPaidAt": "This cost category is paid at a rate of {{amount}}% rather than your normal award rate"
     },
     "forecastTable": {
       "costsClaimedHeader": "Costs claimed",
