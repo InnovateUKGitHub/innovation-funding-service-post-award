@@ -456,7 +456,7 @@ export const nonFECMessaging = () => {
 };
 
 export const costCatAwardOverrideMessage = (costCat: string, percentage: string) => {
-  cy.list(`Cost category ${costCat} is paid at a rate of ${percentage} rather than your normal Award rate`);
+  cy.list(`Cost category ${costCat} is paid at a rate of ${percentage} rather than your normal award rate`);
 };
 
 export const academicCosts = () => {

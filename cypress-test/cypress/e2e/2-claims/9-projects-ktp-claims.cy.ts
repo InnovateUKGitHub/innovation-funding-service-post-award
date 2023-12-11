@@ -48,7 +48,7 @@ describe("claims > KTP", () => {
     costCatAwardOverrideMessage("travel and subsistence", "20%");
     costCatAwardOverrideMessage("consumables", "11.11%");
     costCatAwardOverrideMessage("associate development", "5%");
-    cy.list("This cost category is paid at a rate of 70% rather than your normal Award rate");
+    cy.list("This cost category is paid at a rate of 70% rather than your normal award rate");
   });
 
   it("Should click 'Back to claims'", () => {
@@ -58,7 +58,7 @@ describe("claims > KTP", () => {
   it("Should click into 'Travel and subsistence' and check the copy", () => {
     cy.clickOn("Travel and subsistence");
     cy.heading("Travel and subsistence");
-    cy.list("This cost category is paid at a rate of 20% rather than your normal Award rate");
+    cy.list("This cost category is paid at a rate of 20% rather than your normal award rate");
     costCatAwardOverrideMessage("associate employment", "70%");
     costCatAwardOverrideMessage("consumables", "11.11%");
     costCatAwardOverrideMessage("associate development", "5%");
