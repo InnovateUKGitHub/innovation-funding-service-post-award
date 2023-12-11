@@ -65,10 +65,10 @@ export const financeContactErrorMap = makeZodI18nMap({
 
 export const financeContactSchema = z.object({
   ...common,
-  contact1Email: z.string(),
-  contact1Forename: z.string(),
-  contact1Surname: z.string(),
-  contact1Phone: z.string(),
+  contact1Email: z.string().max(255),
+  contact1Forename: z.string().max(50),
+  contact1Surname: z.string().max(50),
+  contact1Phone: z.string().max(20),
 });
 
 export type FinanceContactSchema = z.infer<typeof financeContactSchema>;
@@ -79,10 +79,10 @@ export const projectManagerErrorMap = makeZodI18nMap({
 
 export const projectManagerSchema = z.object({
   ...common,
-  contact2Email: z.string(),
-  contact2Forename: z.string(),
-  contact2Surname: z.string(),
-  contact2Phone: z.string(),
+  contact2Email: z.string().max(255),
+  contact2Forename: z.string().max(50),
+  contact2Surname: z.string().max(50),
+  contact2Phone: z.string().max(20),
 });
 
 export type ProjectManagerSchema = z.infer<typeof projectManagerSchema>;

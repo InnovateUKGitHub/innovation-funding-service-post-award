@@ -54,7 +54,7 @@ export const ProjectManagerDetailsStep = () => {
   const { isClient } = useMounted();
 
   return (
-    <PcrPage>
+    <PcrPage validationErrors={validationErrors}>
       <Section>
         <H2>{getContent(x => x.pages.pcrAddPartnerProjectContacts.sectionTitle)}</H2>
         <P>{getContent(x => x.pages.pcrAddPartnerProjectContacts.guidance)}</P>

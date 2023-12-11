@@ -63,9 +63,10 @@ export const CompaniesHouseStep = () => {
         <H2>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}</H2>
         <Form onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
           <Fieldset>
-            <Legend>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearch)}</Legend>
-
             <FormGroup>
+              <Label bold htmlFor="searchCompaniesHouse">
+                {getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearch)}
+              </Label>
               <Hint id="hint-for-searchCompaniesHouse">
                 {getContent(x => x.pcrAddPartnerLabels.jesOrganisationSectionSubtitle)}
               </Hint>

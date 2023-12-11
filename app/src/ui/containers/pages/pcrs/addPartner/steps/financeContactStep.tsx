@@ -52,7 +52,7 @@ export const FinanceContactStep = () => {
   const registerButton = createRegisterButton(setValue, "button_submit");
 
   return (
-    <PcrPage>
+    <PcrPage validationErrors={validationErrors}>
       <Section>
         <H2>{getContent(x => x.pages.pcrAddPartnerProjectContacts.sectionTitle)}</H2>
         <P>{getContent(x => x.pages.pcrAddPartnerProjectContacts.guidance)}</P>

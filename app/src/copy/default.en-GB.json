@@ -2055,6 +2055,50 @@
               "too_small": "Select a partner type."
             }
           }
+        },
+        "financeContact": {
+          "contact1Forename": {
+            "errors": {
+              "too_big": "Finance contact name must be 50 characters or less."
+            }
+          },
+          "contact1Surname": {
+            "errors": {
+              "too_big": "Finance contact surname must be 50 characters or less."
+            }
+          },
+          "contact1Email": {
+            "errors": {
+              "too_big": "Email address must be 255 characters or less."
+            }
+          },
+          "contact1Phone": {
+            "errors": {
+              "too_big": "Finance contact phone number must be 20 characters or less."
+            }
+          }
+        },
+        "projectManager": {
+          "contact2Forename": {
+            "errors": {
+              "too_big": "Project manager name must be 50 characters or less."
+            }
+          },
+          "contact2Surname": {
+            "errors": {
+              "too_big": "Project manager surname must be 50 characters or less."
+            }
+          },
+          "contact2Email": {
+            "errors": {
+              "too_big": "Email address must be 255 characters or less."
+            }
+          },
+          "contact2Phone": {
+            "errors": {
+              "too_big": "Project manager phone number must be 20 characters or less."
+            }
+          }
         }
       },
       "timeExtension": {
