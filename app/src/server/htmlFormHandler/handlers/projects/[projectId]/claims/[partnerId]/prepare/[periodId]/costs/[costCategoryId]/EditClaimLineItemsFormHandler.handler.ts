@@ -1,6 +1,6 @@
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
 import { IContext } from "@framework/types/IContext";
-import { validCurrencyRegex } from "@framework/util/numberHelper";
+import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { configuration } from "@server/features/common/config";
 import { ZodFormHandlerBase } from "@server/htmlFormHandler/zodFormHandlerBase";
@@ -80,14 +80,14 @@ class EditClaimLineItemsFormHandler extends ZodFormHandlerBase<EditClaimLineItem
     const { projectId, partnerId, periodId, costCategoryId, comments, lineItems } = input;
 
     const mappedLineItems = lineItems.map(lineItem => {
-      const numberComponent = validCurrencyRegex.exec(lineItem.value ?? "")?.[1] ?? "";
+      const numberComponent = validCurrencyRegex.exec(lineItem.value ?? "")?.[0] ?? "";
 
       return {
         ...lineItem,
         periodId,
         partnerId,
         costCategoryId,
-        value: parseFloat(numberComponent),
+        value: parseCurrency(numberComponent),
       };
     });
 

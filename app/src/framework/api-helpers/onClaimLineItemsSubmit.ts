@@ -1,5 +1,5 @@
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
-import { validCurrencyRegex } from "@framework/util/numberHelper";
+import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 import { clientsideApiClient } from "@ui/apiClient";
 import { EditClaimLineItemsSchemaType } from "@ui/containers/pages/claims/claimLineItems/editClaimLineItems.zod";
 import { useRoutes } from "@ui/redux/routesProvider";
@@ -16,14 +16,14 @@ export const useOnClaimLineItemsSubmit = <Inputs extends z.output<EditClaimLineI
     async req(data) {
       const { projectId, partnerId, periodId, costCategoryId, comments, lineItems } = data;
       const mappedLineItems = lineItems.map(lineItem => {
-        const numberComponent = validCurrencyRegex.exec(lineItem.value ?? "")?.[1] ?? "";
+        const numberComponent = validCurrencyRegex.exec(lineItem.value ?? "")?.[0] ?? "";
 
         return {
           ...lineItem,
           periodId,
           partnerId,
           costCategoryId,
-          value: parseFloat(numberComponent),
+          value: parseCurrency(numberComponent),
         };
       });
 

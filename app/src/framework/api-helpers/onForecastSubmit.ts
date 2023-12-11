@@ -6,7 +6,7 @@ import { useOnUpdate } from "./onUpdate";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { useNavigate } from "react-router-dom";
 import { useRoutes } from "@ui/redux/routesProvider";
-import { validCurrencyRegex } from "@framework/util/numberHelper";
+import { parseCurrency, validCurrencyRegex } from "@framework/util/numberHelper";
 
 interface OnForecastSubmitProps {
   periodId: PeriodId;
@@ -26,11 +26,11 @@ export const useOnForecastSubmit = <Inputs extends z.output<ForecastTableSchemaT
 
       if (profile) {
         const forecasts: Pick<ForecastDetailsDTO, "id" | "value">[] = Object.entries(profile).map(([id, forecast]) => {
-          const numberComponent = validCurrencyRegex.exec(forecast)?.[1] ?? "";
+          const numberComponent = validCurrencyRegex.exec(forecast)?.[0] ?? "";
 
           return {
             id,
-            value: parseFloat(numberComponent),
+            value: parseCurrency(numberComponent),
           };
         });
 
