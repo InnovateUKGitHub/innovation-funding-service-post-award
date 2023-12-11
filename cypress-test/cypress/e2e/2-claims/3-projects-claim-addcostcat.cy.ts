@@ -61,7 +61,34 @@ describe("claims > Editing a claim by accessing cost categories", () => {
     cy.get("span.currency").contains("£1,000.00");
   });
 
-  it("Should type over the £1000 figure with an invalid number and check for validation", validateLineItem);
+  it("Should validate a negative number correctly updates the difference", () => {
+    cy.get("#lineItems_0_value").clear().type("-1000").wait(800);
+    cy.get("tfoot").within(() => {
+      cy.get("tr")
+        .eq(3)
+        .within(() => {
+          cy.get(`td:nth-child(2)`).contains("-100%");
+        });
+    });
+    cy.get("span.currency").contains("-£1,000.00");
+  });
+
+  it("Should save and reflect this value on the Costs to be claimed screen", () => {
+    cy.clickOn("Save and return to claims");
+    cy.heading("Costs to be claimed");
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(4)").contains("-£1,000.00");
+      });
+  });
+
+  it("Should re-access the Labour category", () => {
+    cy.get("a").contains("Labour").click();
+    cy.heading("Labour");
+  });
+
+  it("Should type over the -£1000 figure with an invalid number and check for validation", validateLineItem);
 
   it("Should display relevant messaging surrounding Supporting documents", evidenceRequiredMessage);
 

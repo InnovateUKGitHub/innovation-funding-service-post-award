@@ -762,7 +762,7 @@ export const validateForecast = () => {
 };
 
 export const academicForecastNavigate = () => {
-  cy.clickOn("Back to claims");
+  cy.clickOn("Back to claim");
   cy.heading("Costs to be claimed");
   cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
