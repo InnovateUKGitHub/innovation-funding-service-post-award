@@ -11,11 +11,31 @@ interface TableRowProps extends CommonTableProps {
   hasWarning?: boolean;
 }
 
-const TD = ({ className, ...props }: HTMLProps<HTMLTableCellElement> & CommonTableProps) => (
-  <td {...props} className={classNames("govuk-table__cell", className)} />
+interface TableCellProps extends CommonTableProps {
+  numeric?: boolean;
+  bold?: boolean;
+  small?: boolean;
+}
+
+const TD = ({ className, numeric, bold, small, ...props }: HTMLProps<HTMLTableCellElement> & TableCellProps) => (
+  <td
+    {...props}
+    className={classNames(
+      "govuk-table__cell",
+      { "govuk-table__cell--numeric": numeric, "govuk-!-font-weight-bold": bold, "govuk-body-s": small },
+      className,
+    )}
+  />
 );
-const TH = ({ className, ...props }: HTMLProps<HTMLTableCellElement> & CommonTableProps) => (
-  <th {...props} className={classNames("govuk-table__header", className)} />
+const TH = ({ className, numeric, bold, small, ...props }: HTMLProps<HTMLTableCellElement> & TableCellProps) => (
+  <th
+    {...props}
+    className={classNames(
+      "govuk-table__header",
+      { "govuk-table__header--numeric": numeric, "govuk-!-font-weight-bold": bold, "govuk-body-s": small },
+      className,
+    )}
+  />
 );
 const TR = ({ className, hasError, hasWarning, ...props }: HTMLProps<HTMLTableRowElement> & TableRowProps) => (
   <tr
@@ -40,7 +60,9 @@ const TCaption = ({ className, ...props }: HTMLProps<HTMLTableCaptionElement> & 
   <caption {...props} className={classNames("govuk-caption govuk-table__caption--m", className)} />
 );
 const Table = ({ className, ...props }: HTMLProps<HTMLTableElement> & CommonTableProps) => (
-  <table {...props} className={classNames("govuk-table", className)} />
+  <div className="govuk-table-wrapper">
+    <table {...props} className={classNames("govuk-table", className)} />
+  </div>
 );
 
 export { Table, TBody, TCaption, TFoot, THead, TH, TD, TR };

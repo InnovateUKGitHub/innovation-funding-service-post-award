@@ -37,6 +37,7 @@ export type PcrNode = GQL.PartialNode<{
   Acc_NewPublicDescription__c: GQL.Value<string>;
   Acc_NewProjectSummary__c: GQL.Value<string>;
   Acc_ProjectSummarySnapshot__c: GQL.Value<string>;
+  Acc_GrantMovingOverFinancialYear__c: GQL.Value<number>;
   Acc_RemovalPeriod__c: GQL.Value<number>;
   CreatedDate: GQL.Value<string>;
   Acc_Status__c: GQL.Value<string>;
@@ -72,6 +73,7 @@ export type PcrItemDtoMapping = Pick<
   | "hasOtherFunding"
   | "id"
   | "isCommercialWork"
+  | "grantMovingOverFinancialYear"
   | "guidance"
   | "lastUpdated"
   | "offsetMonths"
@@ -115,6 +117,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   isCommercialWork(node) {
     return node?.Acc_CommercialWork__c?.value ?? null;
+  },
+  grantMovingOverFinancialYear(node) {
+    return node?.Acc_GrantMovingOverFinancialYear__c?.value ?? null;
   },
   guidance(node, additionalData) {
     const metaValues = pcrRecordTypeMetaValues.find(x => x.type === itemMapper.type(node, additionalData));

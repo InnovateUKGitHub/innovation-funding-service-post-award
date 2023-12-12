@@ -3,7 +3,7 @@ import { AwardRateOverrideTarget, AwardRateOverrideType } from "@framework/const
 interface BaseClaimOverrideRate {
   amount: number;
   target: AwardRateOverrideTarget;
-  targetId?: string;
+  targetId?: PartnerId;
 }
 
 interface PeriodClaimOverrideRate extends BaseClaimOverrideRate {

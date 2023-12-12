@@ -1,3 +1,4 @@
+import { isNumber } from "@framework/util/numberHelper";
 import bytes from "bytes";
 import i18next, { InterpolationOptions } from "i18next";
 
@@ -32,6 +33,30 @@ const registerIntlFormatter = () => {
   i18next.services.formatter?.add("round", (value, _, options) => {
     const { dp } = options ?? {};
     if (typeof value === "number") return value.toFixed(Number(dp));
+    return value;
+  });
+
+  i18next.services.formatter?.add("abs", value => {
+    if (typeof value === "number") return Math.abs(value);
+    return value;
+  });
+
+  i18next.services.formatter?.add("currency", (value, _, options) => {
+    const { fractionDigits } = options ?? { fractionDigits: 2 };
+    if (typeof value === "number") {
+      const currentLocale = "en-GB";
+      const currencyOptions = {
+        style: "currency",
+        currency: "GBP",
+        minimumFractionDigits: fractionDigits,
+        maximumFractionDigits: fractionDigits,
+      };
+
+      const currencyValue = new Intl.NumberFormat(currentLocale, currencyOptions);
+      const formatValue = isNumber(value) ? value : 0;
+
+      return currencyValue.format(formatValue);
+    }
     return value;
   });
 };

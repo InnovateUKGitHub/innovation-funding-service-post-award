@@ -11,7 +11,7 @@ export interface LoanFinancialVirement extends Pick<LoanDto, "id" | "status" | "
 }
 
 export interface PartnerFinancialVirement {
-  id: string;
+  id: FinancialVirementForParticipantId;
   newEligibleCosts?: number;
   newFundingLevel: number;
   newRemainingGrant?: number;
@@ -23,9 +23,10 @@ export interface PartnerFinancialVirement {
 
 export interface CostCategoryFinancialVirement {
   costCategoryId: CostCategoryId;
-  id: string;
+  id: FinancialVirementForCostsId;
   newEligibleCosts: number;
   originalCostsClaimedToDate: number;
   originalEligibleCosts: number;
   profileId: string;
+  parentId: FinancialVirementForParticipantId;
 }

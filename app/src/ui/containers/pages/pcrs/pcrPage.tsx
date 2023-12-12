@@ -7,9 +7,21 @@ import { Messages } from "@ui/components/atomicDesign/molecules/Messages/message
 import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { NavigationArrowsForPCRs } from "./navigationArrows.withFragment";
+import { usePcrItemName } from "./utils/getPcrItemName";
+import { IAppError } from "@framework/types/IAppError";
+import { Results } from "@ui/validation/results";
 
-export const PcrPage = ({ children, validationErrors }: { children: React.ReactNode; validationErrors: RhfErrors }) => {
+export const PcrPage = ({
+  children,
+  apiError: pcrLevelApiError,
+  validationErrors,
+}: {
+  children: React.ReactNode;
+  apiError?: IAppError<Results<ResultBase>> | null | undefined;
+  validationErrors: RhfErrors;
+}) => {
   const { workflow, pcrItem, mode, step, project, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
+  const { getPcrItemContent } = usePcrItemName();
 
   const isPrepareMode = mode === "prepare";
   const isFirstStep = step === 1;
@@ -18,14 +30,16 @@ export const PcrPage = ({ children, validationErrors }: { children: React.ReactN
   const isReviewing = mode === "review";
   const displayNavigationArrows = (workflow.isOnSummary() && mode === "review") || mode === "view";
 
+  const content = getPcrItemContent(pcrItem.type);
+
   return (
     <Page
       backLink={<PcrBackLink />}
-      pageTitle={<Title heading={pcrItem.typeName} />}
+      pageTitle={<Title heading={content.name} />}
       projectStatus={project.status}
       fragmentRef={fragmentRef}
       validationErrors={validationErrors}
-      apiError={apiError}
+      apiError={pcrLevelApiError ?? apiError}
     >
       <Messages messages={messages} />
 

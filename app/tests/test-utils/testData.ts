@@ -914,7 +914,7 @@ export class TestData {
   ): PartnerFinancialVirement {
     const seed = this.repositories.financialVirements.Items.length + 1;
     const response: PartnerFinancialVirement = {
-      id: `FinancialVirement: ${seed}`,
+      id: `FinancialVirement: ${seed}` as FinancialVirementForParticipantId,
       pcrItemId: pcrItem.id,
       partnerId: partner.id,
       originalFundingLevel: 100,

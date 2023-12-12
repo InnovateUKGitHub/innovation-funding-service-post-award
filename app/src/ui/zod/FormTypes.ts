@@ -22,6 +22,8 @@ enum FormTypes {
 
   PcrLevelDelete = "pcrLevelDelete",
   PcrLevelUpload = "pcrLevelUpload",
+
+  PcrFinancialVirementsSummary = "pcrFinancialVirementsSummary",
 }
 
 export { FormTypes };

@@ -23,6 +23,7 @@ type ClaimOverrideNode = GQL.PartialNode<{
   Acc_CostCategory__r: GQL.Maybe<{
     Acc_CostCategoryName__c?: GQL.Value<string>;
   }>;
+  Acc_ProjectParticipant__c: GQL.Value<string>;
   Acc_ProjectPeriodNumber__c: GQL.Value<number>;
 
   // Same thing twice. Don't think about it.
@@ -58,6 +59,7 @@ export function mapToClaimOverrides<T extends ReadonlyArray<GQL.Maybe<{ node: Cl
       foundOverride = {
         amount: totalCostCategory?.node?.Acc_ProfileOverrideAwardRate__c?.value,
         target: AwardRateOverrideTarget.THIS_PARTICIPANT,
+        targetId: (totalCostCategory?.node?.Acc_ProjectParticipant__c?.value ?? "unknown") as PartnerId,
         costCategoryId: (totalCostCategory?.node?.Acc_CostCategory__c?.value ?? "unknown") as CostCategoryId,
         costCategoryName: totalCostCategory?.node?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ?? "unknown",
       };

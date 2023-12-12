@@ -28,7 +28,7 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<
     );
 
     return {
-      id: partnerItem.Id,
+      id: partnerItem.Id as FinancialVirementForParticipantId,
       pcrItemId: partnerItem.Acc_ProjectChangeRequest__c as PcrItemId,
       partnerId: partnerItem.Acc_ProjectParticipant__c as PartnerId,
       newFundingLevel: partnerItem.Acc_NewAwardRate__c,
@@ -41,12 +41,13 @@ export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<
 
   private mapVirement(costCategoryItem: ISalesforceFinancialVirement): CostCategoryFinancialVirement {
     return {
-      id: costCategoryItem.Id,
+      id: costCategoryItem.Id as FinancialVirementForCostsId,
       profileId: costCategoryItem.Acc_Profile__c,
       costCategoryId: costCategoryItem.Acc_Profile__r.Acc_CostCategory__c as CostCategoryId,
       originalEligibleCosts: costCategoryItem.Acc_CurrentCosts__c,
       originalCostsClaimedToDate: costCategoryItem.Acc_ClaimedCostsToDate__c,
       newEligibleCosts: costCategoryItem.Acc_NewCosts__c,
+      parentId: costCategoryItem.Acc_ParticipantVirement__c as FinancialVirementForParticipantId,
     };
   }
 }

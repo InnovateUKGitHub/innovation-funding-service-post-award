@@ -38,6 +38,7 @@ export class GetClaimOverrideRates extends QueryBase<ClaimOverrideRateDto> {
         foundOverride = {
           amount: totalCostCategory.Acc_ProfileOverrideAwardRate__c,
           target: AwardRateOverrideTarget.THIS_PARTICIPANT,
+          targetId: this.partnerId,
           costCategoryId: totalCostCategory.Acc_CostCategory__c as CostCategoryId,
           costCategoryName: totalCostCategory.Acc_CostCategory__r.Acc_CostCategoryName__c,
         };

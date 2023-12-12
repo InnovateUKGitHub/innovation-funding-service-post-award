@@ -10,6 +10,8 @@ declare type PcrItemId = Nominal<string, "PcrItemId">;
 declare type LinkedEntityId = Nominal<string, "LinkedEntityId">;
 declare type PeriodId = Nominal<number, "PeriodId">;
 declare type CostCategoryId = Nominal<string, "CostCategoryId">;
+declare type FinancialVirementForParticipantId = Nominal<string, "FinancialVirementForParticipantId">;
+declare type FinancialVirementForCostsId = Nominal<string, "FinancialVirementForCostsId">;
 
 interface INominalTypes {
   projectId: ProjectId;

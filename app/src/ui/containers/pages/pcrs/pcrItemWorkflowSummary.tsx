@@ -1,6 +1,5 @@
 import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
 import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { EditLink, ViewLink, getStepLink } from "./pcrItemSummaryLinks";
 
 export const SummarySection = () => {
@@ -17,9 +16,7 @@ export const SummarySection = () => {
 
   return (
     <WithScrollToTopOnPropChange propToScrollOn={workflow?.getCurrentStepName()}>
-      <Section qa="item-save-and-return">
-        <Summary />
-      </Section>
+      <Summary />
     </WithScrollToTopOnPropChange>
   );
 };

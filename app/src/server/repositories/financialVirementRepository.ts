@@ -21,6 +21,7 @@ export interface ISalesforceFinancialVirement {
   Acc_NewAwardRate__c: number;
   Acc_NewRemainingGrant__c: number;
   Acc_NewTotalEligibleCosts__c: number;
+  Acc_ParticipantVirement__c: string;
   RecordTypeId: string;
 }
 

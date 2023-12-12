@@ -19,7 +19,7 @@ abstract class ZodFormHandlerBase<
   Schema extends
     | z.ZodObject<AnyForm>
     | z.ZodEffects<z.ZodObject<AnyForm>>
-    | z.ZodDiscriminatedUnion<"form", z.ZodObject<AnyForm>[]>,
+    | z.ZodDiscriminatedUnion<string, z.ZodObject<AnyForm>[]>,
   QueryParams extends AnyObject,
 > implements IFormHandler
 {
@@ -84,7 +84,7 @@ abstract class ZodFormHandlerBase<
 
       // TODO: Make `mapToRedirect` accept the Zod output instead of the req.body
       const { schema, errorMap } = await this.getZodSchema({
-        input: req.body,
+        input: userInput,
         req,
         res,
         params: req.params as QueryParams,
@@ -127,7 +127,7 @@ abstract class ZodFormHandlerBase<
     files,
     context,
   }: {
-    input: AnyObject;
+    input: z.input<Schema>;
     req: express.Request;
     res: express.Response;
     params: QueryParams;

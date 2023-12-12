@@ -24,20 +24,22 @@ describe("GetFinancialVirementQuery", () => {
     const costCategory2 = testData.createCostCategory();
 
     const stubVirement1 = {
-      id: "cat1",
+      id: "cat1" as FinancialVirementForCostsId,
       costCategoryId: costCategory1.id,
       newEligibleCosts: 50,
       originalCostsClaimedToDate: 51,
       originalEligibleCosts: 52,
       profileId: "profileId",
+      parentId: "parentId" as FinancialVirementForParticipantId,
     };
     const stubVirement2 = {
-      id: "cat2",
+      id: "cat2" as FinancialVirementForCostsId,
       costCategoryId: costCategory2.id,
       newEligibleCosts: 60,
       originalCostsClaimedToDate: 51,
       originalEligibleCosts: 52,
       profileId: "profileId",
+      parentId: "parentId" as FinancialVirementForParticipantId,
     };
 
     const stubPayload = {
@@ -77,12 +79,13 @@ describe("GetFinancialVirementQuery", () => {
       const stubFundingLevel = 70;
 
       const stubVirement = {
-        id: "cat1",
+        id: "cat1" as FinancialVirementForCostsId,
         costCategoryId: costCategory.id,
         newEligibleCosts: 50,
         originalCostsClaimedToDate: stubOriginalCostsClaimedToDate,
         originalEligibleCosts: stubEligibleCostsValue,
         profileId: "profileId",
+        parentId: "parentId" as FinancialVirementForParticipantId,
       };
 
       const stubPayload = {

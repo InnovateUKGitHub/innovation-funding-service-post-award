@@ -54,12 +54,13 @@ describe("UpdateFinancialVirementCommand", () => {
     const partner1 = testData.createFinancialVirement(pcrItem, partner);
 
     partner1.virements.push({
-      id: "cc1",
+      id: "cc1" as FinancialVirementForCostsId,
       costCategoryId: costCategory.id,
       newEligibleCosts: 10,
       originalEligibleCosts: 10,
       originalCostsClaimedToDate: 0,
       profileId: "profileId",
+      parentId: "parentId" as FinancialVirementForParticipantId,
     });
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
@@ -93,21 +94,23 @@ describe("UpdateFinancialVirementCommand", () => {
     const partner1 = testData.createFinancialVirement(pcrItem, partner);
 
     partner1.virements.push({
-      id: "cc1",
+      id: "cc1" as FinancialVirementForCostsId,
       costCategoryId: costCategory1.id,
       newEligibleCosts: 10,
       originalEligibleCosts: 10,
       originalCostsClaimedToDate: 0,
       profileId: "profileId",
+      parentId: "parentId" as FinancialVirementForParticipantId,
     });
 
     partner1.virements.push({
-      id: "cc2",
+      id: "cc2" as FinancialVirementForCostsId,
       costCategoryId: costCategory2.id,
       newEligibleCosts: 100,
       originalEligibleCosts: 120,
       originalCostsClaimedToDate: 0,
       profileId: "profileId",
+      parentId: "parentId" as FinancialVirementForParticipantId,
     });
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
@@ -147,21 +150,23 @@ describe("UpdateFinancialVirementCommand", () => {
     });
 
     partner1.virements.push({
-      id: "cc1",
+      id: "cc1" as FinancialVirementForCostsId,
       costCategoryId: costCategory1.id,
       newEligibleCosts: 10,
       originalEligibleCosts: 10,
       originalCostsClaimedToDate: 0,
       profileId: "profileId",
+      parentId: "parentId" as FinancialVirementForParticipantId,
     });
 
     partner1.virements.push({
-      id: "cc2",
+      id: "cc2" as FinancialVirementForCostsId,
       costCategoryId: costCategory2.id,
       newEligibleCosts: 100,
       originalEligibleCosts: 120,
       originalCostsClaimedToDate: 0,
       profileId: "profileId",
+      parentId: "parentId" as FinancialVirementForParticipantId,
     });
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
@@ -195,12 +200,13 @@ describe("UpdateFinancialVirementCommand", () => {
     const partner1 = testData.createFinancialVirement(pcrItem, partner);
 
     partner1.virements.push({
-      id: "cc1",
+      id: "cc1" as FinancialVirementForCostsId,
       costCategoryId: costCategory.id,
       newEligibleCosts: 0,
       originalEligibleCosts: 10,
       originalCostsClaimedToDate: 10,
       profileId: "profileId",
+      parentId: "parentId" as FinancialVirementForParticipantId,
     });
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));

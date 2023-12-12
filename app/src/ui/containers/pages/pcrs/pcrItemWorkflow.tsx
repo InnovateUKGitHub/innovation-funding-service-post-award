@@ -15,7 +15,6 @@ import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
 import { EditorStatus } from "@ui/redux/constants/enums";
 import { BaseProps } from "@ui/containers/containerBase";
-import { GrantMovingOverFinancialYearForm } from "@ui/containers/pages/pcrs/financialVirements/financialVirementsSummary";
 import { NavigationArrowsForPCRs } from "@ui/containers/pages/pcrs/navigationArrows";
 import { PcrStepProps, PcrWorkflow, WorkflowPcrType } from "@ui/containers/pages/pcrs/pcrWorkflow";
 import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
@@ -121,7 +120,7 @@ const SummarySection = () => {
           const displayCompleteForm = isPrepareMode && summaryContext.isSummaryValid;
 
           return (
-            <Section qa="item-save-and-return">
+            <>
               <Summary />
               {displayCompleteForm && <WorkflowItemForm allowSubmit={summaryContext.allowSubmit} />}
 
@@ -134,7 +133,7 @@ const SummarySection = () => {
                   routes={routes}
                 />
               )}
-            </Section>
+            </>
           );
         }}
       </PcrSummaryConsumer>
@@ -346,8 +345,6 @@ const WorkflowItemForm = ({ allowSubmit }: { allowSubmit: boolean }) => {
   const { editor, itemId, workflow, onChange, onSave, projectId, pcrId, routes } = useContext(PcrItemContext);
   const pcrItem = editor.data.items.find(x => x.id === itemId);
   if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${itemId}`);
-  const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
-
   const options: SelectOption[] = [{ id: "true", value: "I agree with this change." }];
 
   return (
@@ -358,8 +355,6 @@ const WorkflowItemForm = ({ allowSubmit }: { allowSubmit: boolean }) => {
       onSubmit={() => handleSave(workflow, editor.data, itemId, projectId, pcrId, onSave, routes, false)}
       isSaving={editor.status === EditorStatus.Saving}
     >
-      {canReallocatePcr && <GrantMovingOverFinancialYearForm form={PCRForm} editor={editor} />}
-
       <PCRForm.Fieldset heading="Mark as complete">
         <PCRForm.Checkboxes
           name="itemStatus"

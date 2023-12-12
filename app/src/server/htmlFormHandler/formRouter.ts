@@ -59,6 +59,7 @@ import { ProjectSetupSpendProfileFormHandler } from "./handlers/projects/[projec
 import { PostFormHandleHandler } from "./postFormHandleHandler";
 import { ClaimDetailLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareUploadHandler.handler";
 import { ClaimDetailLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareDeleteHandler.handler";
+import { ProjectChangeRequestItemFinancialVirementsSummaryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemFinancialVirementsSummaryUpdate.handler";
 
 export const standardFormHandlers = [
   new ClaimForecastFormHandler(),
@@ -105,9 +106,12 @@ export const standardFormHandlers = [
   new ProjectLevelDocumentShareDeleteHandler(),
   new ClaimLevelDocumentShareDeleteHandler(),
   new ClaimDetailLevelDocumentShareDeleteHandler(),
+  new ProjectSetupBankDetailsHandler(),
+
+  // Zod PCRs
   new ProjectChangeRequestCreateHandler(),
   new ProjectChangeRequestAddTypeHandler(),
-  new ProjectSetupBankDetailsHandler(),
+  new ProjectChangeRequestItemFinancialVirementsSummaryUpdate(),
 ] as const;
 
 export const multiFileFormHandlers = [

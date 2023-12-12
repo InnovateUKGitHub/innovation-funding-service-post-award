@@ -585,8 +585,8 @@
       }
     },
     "financialVirementSummary": {
-      "availableGrantMessage": "Your 'Remaining grant' has a surplus of {{grantDifference}}. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
-      "unavailableGrantMessage": "You must reduce your 'New remaining grant' project total to {{totalOriginalGrant}} or less, because you have exceeded it by {{grantDifference}}. You can change each partner\u2019s 'Remaining grant' to reduce the project total to the amount agreed.",
+      "availableGrantMessage": "Your 'Remaining grant' has a surplus of {{ difference, abs, currency }}. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
+      "unavailableGrantMessage": "You must reduce your 'New remaining grant' project total to {{ total, currency }} or less, because you have exceeded it by {{ difference, abs, currency }}. You can change each partner\u2019s 'Remaining grant' to reduce the project total to the amount agreed.",
       "linkChangeGrant": "Change remaining grant",
       "headingYearEndGrantValue": "Grant value moving over the financial year end",
       "nonFecGrantAdvice": "If you would like to reallocate costs between partners in this project, contact <0 />.",
@@ -1228,7 +1228,8 @@
     "accountStreet": "Street",
     "accountLocality": "Locality",
     "accountTownOrCity": "Town or city",
-    "accountPostcode": "Postcode"
+    "accountPostcode": "Postcode",
+    "leadPartner": "{{ name }} (Lead)"
   },
   "projectContactLabels": {
     "contactName": "Name",
@@ -1341,7 +1342,6 @@
     "projectTotals": "Project totals",
     "partnerTotals": "Partner totals",
     "grantMovingOverYear": "Grant value moving over the financial year end",
-    "yearEndInformation": "The financial year ends on March 31st.",
     "backToSummary": "Back to summary"
   },
   "forecastsLabels": {
@@ -2048,6 +2048,18 @@
             "too_small": "Enter a valid removal period",
             "too_big": "Period must be {{count}} or fewer",
             "invalid_type": "Period must be a whole number, like 3."
+          }
+        }
+      },
+      "financialVirements": {
+        "errors": {
+          "virement_too_big": "You must reduce your 'New remaining grant' project total to {{ total, currency }} or less, because you have exceeded it by {{ difference, abs, currency }}."
+        },
+        "grantMovingOverFinancialYear": {
+          "errors": {
+            "required": "Grant moving over financial year is required.",
+            "invalid": "The value of a grant moving over financial year must be numerical.",
+            "too_small": "The value can not be lower than 0."
           }
         }
       }

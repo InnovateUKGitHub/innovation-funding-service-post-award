@@ -22,13 +22,16 @@ export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisa
   return PCROrganisationType.Unknown;
 };
 
-export const mapToPCRItemStatus = (status: string): PCRItemStatus => {
+export const mapToPCRItemStatus = (status: string | number): PCRItemStatus => {
   switch (status) {
     case "To Do":
+    case PCRItemStatus.ToDo:
       return PCRItemStatus.ToDo;
     case "Incomplete":
+    case PCRItemStatus.Incomplete:
       return PCRItemStatus.Incomplete;
     case "Complete":
+    case PCRItemStatus.Complete:
       return PCRItemStatus.Complete;
     default:
       return PCRItemStatus.Unknown;
