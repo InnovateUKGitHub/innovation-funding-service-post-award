@@ -37,12 +37,12 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 
   it("Should click 'Save and continue'", () => {
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
   });
 
   it("Should click the 'No' radio button and then save and continue", () => {
-    cy.get("#hasOtherFunding_false").click();
-    cy.submitButton("Save and continue").click();
+    cy.getByLabel("No").click();
+    cy.clickOn("Save and continue");
   });
 
   it(
@@ -51,7 +51,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   );
 
   it("Should land on a document upload page and contain 'Upload partner agreement' subheading and display guidance information", () => {
-    cy.get("h2").contains("Upload partner agreement");
+    cy.get("legend").contains("Upload partner agreement");
     cy.paragraph("You must upload copies of signed letters");
   });
 
@@ -71,7 +71,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should save and continue", () => {
     cy.validationNotification("Your document has been uploaded");
-    cy.submitButton("Save and continue").click();
+    cy.clickOn("Save and continue");
   });
 
   it("Should now display a summary page with all completed sections", addPartnerSummaryTable);
@@ -87,11 +87,11 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should have a 'Mark as complete box'", () => {
-    cy.get("h2").contains("Mark as complete");
+    cy.get("legend").contains("Mark as complete");
     cy.clickCheckBox("I agree with this change");
   });
 
   it("Should have a 'Save and return to request' button", () => {
-    cy.submitButton("Save and return to request").click();
+    cy.submitButton("Save and return to request");
   });
 });

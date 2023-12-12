@@ -1,6 +1,6 @@
 import { visitApp } from "common/visit";
 import { pcrTidyUp } from "common/pcrtidyup";
-import { PcrItemType, completeAddPartnerForMulti, multiPcrArray, navigateToPartnerCosts } from "../steps";
+import { PcrItemType, completeAddPartnerForMulti } from "../steps";
 
 describe("PCR > Multiple add partner", () => {
   before(() => {
@@ -14,7 +14,7 @@ describe("PCR > Multiple add partner", () => {
 
   it("Should create an Add partner PCR", () => {
     cy.clickCheckBox(PcrItemType.AddAPartner);
-    cy.submitButton("Create request").click();
+    cy.clickOn("Create request");
     cy.get("h1").contains("Request", { timeout: 60000 });
   });
 
@@ -22,7 +22,7 @@ describe("PCR > Multiple add partner", () => {
     cy.get("a").contains("Add types").click();
     cy.heading("Add types");
     cy.clickCheckBox(PcrItemType.AddAPartner);
-    cy.submitButton("Add to request").click();
+    cy.clickOn("Add to request");
     cy.get("h1").contains("Request", { timeout: 60000 });
   });
 

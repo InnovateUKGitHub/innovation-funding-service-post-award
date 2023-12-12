@@ -697,9 +697,7 @@ export const completeAddPartnerForMulti = () => {
   cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
   cy.clickOn("Save and continue");
-  cy.get("h2").contains("Search companies house");
   cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get("h2").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
   cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
   cy.get(`input[id="registrationNumber"], [value="11790215"]`);
@@ -1299,7 +1297,6 @@ export const validateAddPerson = () => {
   );
   cy.button("Save and continue").click();
   cy.validationLink("Finance contact phone number must be 20 characters or less.");
-  // cy.getByQA("field-contact1Phone").contains("Finance contact phone number must be 20 characters or less.");
   cy.getErrorFromLabel("Phone number").contains("Finance contact phone number must be 20 characters or less.");
 
   cy.getByLabel("Email")
