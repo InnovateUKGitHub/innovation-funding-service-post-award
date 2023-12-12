@@ -11,6 +11,7 @@ import { ClaimLineItemNavigationArrows } from "./ClaimLineItemNavigationArrows";
 import { ClaimLineItemsParams, getParams, useBackLink, useClaimLineItemsData } from "./ClaimLineItems.logic";
 import { SupportingDocumentsSection } from "./SupportingDocumentsSection";
 import { ClaimLineItemsTable } from "./ClaimLineItemsTable";
+import { ClaimLineItemClaimDetailComments } from "./ClaimLineItemClaimDetailComments";
 
 interface ViewClaimLineItemsProps extends ClaimLineItemsParams {
   mode: "details" | "review";
@@ -65,7 +66,8 @@ const ViewClaimLineItemsPage = ({
         />
       </Section>
 
-      <SupportingDocumentsSection mode={mode} project={project} claimDetails={claimDetails} documents={documents} />
+      <SupportingDocumentsSection mode={mode} project={project} documents={documents} />
+      <ClaimLineItemClaimDetailComments claimDetails={claimDetails} />
 
       <ClaimLineItemNavigationArrows
         mode={mode}

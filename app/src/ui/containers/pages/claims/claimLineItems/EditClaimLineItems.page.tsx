@@ -124,7 +124,7 @@ const EditClaimLineItemsPage = ({
           </SubmitButton>
         </Section>
 
-        <SupportingDocumentsSection mode={mode} project={project} claimDetails={claimDetails} documents={documents} />
+        <SupportingDocumentsSection mode={mode} project={project} documents={documents} />
 
         <FormGroup>
           <Legend>{getContent(x => x.pages.editClaimLineItems.headerAdditionalInformation)}</Legend>
