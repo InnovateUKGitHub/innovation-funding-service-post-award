@@ -23,6 +23,10 @@ import {
   openAccordions,
   claimReviewForecastCostsClaiming,
   claimReviewForecastTotals,
+  reviewLabourFCCopy,
+  reviewLabourCostCat,
+  reviewLabourDocUpload,
+  reviewLabourRightLeft,
 } from "./steps";
 
 describe("Claims > Review as MO", () => {
@@ -54,6 +58,19 @@ describe("Claims > Review as MO", () => {
 
   it("Should show the cost category table with submitted costs", submittedCostCats);
 
+  it("Should access the Labour cost category and check the page doesn't have FC-specific copy", reviewLabourFCCopy);
+
+  it("Should check the Labour cost category totals are correct", reviewLabourCostCat);
+
+  it("Should check the Labour cost category document upload", reviewLabourDocUpload);
+
+  it("Should have an additional information section", () => {
+    cy.get("h2").contains("Additional information");
+    cy.paragraph("Carpenters and electricians are doing stuff");
+  });
+
+  it("Should have right and left arrows for the next cost category options", reviewLabourRightLeft);
+
   it("Should have more than 10 status changes recorded", claimStatusTable);
 
   it("Should click the Show all sections", openAccordions);
@@ -84,7 +101,6 @@ describe("Claims > Review as MO", () => {
     cy.reload();
     cy.switchUserTo("s.shuang@irc.trde.org.uk.test");
   });
-
   it("Should navigate to the queried claim and go to the documents page", goToQueriedClaim);
 
   it("Should check for the document uploaded by the MO", claimQueriedCheckForDoc);

@@ -52,8 +52,8 @@ describe("claims > KTP", () => {
     cy.list("This cost category is paid at a rate of 70% rather than your normal award rate");
   });
 
-  it("Should click 'Back to claims'", () => {
-    cy.clickOn("Back to claims");
+  it("Should click 'Back to claim'", () => {
+    cy.clickOn("Back to claim");
   });
 
   it("Should click into 'Travel and subsistence' and check the copy", () => {
@@ -65,7 +65,7 @@ describe("claims > KTP", () => {
     costCatAwardOverrideMessage("associate development", "5%");
   });
 
-  it("Should click 'Back to claims'", () => {
+  it("Should click 'Back to claim'", () => {
     cy.clickOn("Back to claim");
   });
 

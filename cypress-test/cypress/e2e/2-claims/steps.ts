@@ -235,6 +235,7 @@ export const reflectCostAdded = () => {
 };
 
 export const clearUpLabourCostCat = () => {
+  cy.wait(200);
   cy.clickOn("Upload and remove documents");
   cy.heading("Labour documents");
   cy.clickOn("Remove");
@@ -1419,4 +1420,77 @@ export const updateClaimsForecast = () => {
       cy.get("td:nth-child(14)").contains("£291,220.00");
     });
   cy.reload();
+};
+
+export const reviewLabourFCCopy = () => {
+  cy.get("a").contains("Labour").click();
+  cy.heading("Labour");
+  ["guidance-message", "guidance-currency-message", "claim-warning-content"].forEach(qaTag => {
+    cy.getByQA(qaTag).should("not.exist");
+  });
+  [
+    "You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact your monitoring officer for more information about the level of detail you are required to provide.",
+    "You can enter up to 120 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
+  ].forEach(copy => {
+    cy.paragraph(copy).should("not.exist");
+  });
+};
+
+export const reviewLabourCostCat = () => {
+  ["Description", "Cost (£)", "Last updated"].forEach(header => {
+    cy.tableHeader(header);
+  });
+  [
+    ["Carpenters", "£1,000.00", "2023"],
+    ["Electricians", "£1,000.00", "2023"],
+  ].forEach(([description, value, date], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get(`td:nth-child(1)`).contains(description);
+        cy.get(`td:nth-child(2)`).contains(value);
+        cy.get(`td:nth-child(3)`).contains(date);
+      });
+  });
+  [
+    ["Total costs", "£2,000.00"],
+    ["Forecast costs", "£0.00"],
+    ["Difference", "0.00%"],
+  ].forEach(([col1, col2], index) => {
+    cy.get("tfoot").within(() => {
+      cy.get("tr")
+        .eq(index)
+        .within(() => {
+          cy.get(`th:nth-child(1)`).contains(col1);
+          cy.get(`td:nth-child(2)`).contains(col2);
+          index + 1;
+        });
+    });
+  });
+};
+
+export const reviewLabourDocUpload = () => {
+  cy.get("h2").contains("Supporting documents");
+  cy.paragraph("All documents uploaded will be shown here. All documents open in a new window.");
+  cy.getByQA("claim-line-item-documents-container").within(() => {
+    ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach(header => {
+      cy.tableHeader(header);
+    });
+    ["Sheet1.xlsx", "Claim evidence", "4 Sep 2023", "6KB", "Innovate UK"].forEach((fileCell, index) => {
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get(`td:nth-child(${index + 1})`).contains(fileCell);
+        });
+    });
+  });
+};
+
+export const reviewLabourRightLeft = () => {
+  cy.getByQA("arrow-right").contains("Subcontracting");
+  cy.getByQA("arrow-right").contains("Previous");
+  cy.getByQA("arrow-left").contains("Materials");
+  cy.getByQA("arrow-left").contains("Next");
+  cy.clickOn("Back to claim");
+  cy.heading("Claim");
 };
