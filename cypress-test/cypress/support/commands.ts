@@ -126,6 +126,21 @@ const getCellFromHeaderAndRow = <T extends string, U extends string>(header: T, 
     .then(columnIndex => cy.contains("tbody tr", row).find("td").eq(columnIndex));
 };
 
+const getCellFromHeaderAndRowNumber = <T extends string>(header: T, rowNumber: number, selector?: string) => {
+  cy.log(`**getCellFromHeaderAndRowNumber header: ${header}; rowNumber: ${rowNumber} **`);
+
+  if (selector) {
+    cy.contains("table thead th", header)
+      .invoke("index")
+      .then(columnIndex => cy.get(`table tr:nth-child(${rowNumber})`).find("td").eq(columnIndex))
+      .find(selector);
+  } else {
+    cy.contains("table thead th", header)
+      .invoke("index")
+      .then(columnIndex => cy.get(`table tr:nth-child(${rowNumber})`).find("td").eq(columnIndex));
+  }
+};
+
 const assertPcrCompletionStatus = (pcrType: string, status: string) => {
   cy.log("**assertPcrCompletionStatus**");
   cy.get("li").contains(pcrType).get("strong").contains(status);
@@ -268,6 +283,7 @@ Cypress.Commands.add("tableCell", tableCell);
 Cypress.Commands.add("tableHeader", tableHeader);
 Cypress.Commands.add("getTableRow", getTableRow);
 Cypress.Commands.add("getCellFromHeaderAndRow", getCellFromHeaderAndRow);
+Cypress.Commands.add("getCellFromHeaderAndRowNumber", getCellFromHeaderAndRowNumber);
 Cypress.Commands.add("assertPcrCompletionStatus", assertPcrCompletionStatus);
 Cypress.Commands.add("clickCheckBox", clickCheckBox);
 Cypress.Commands.add("navigateToProject", navigateToProject);

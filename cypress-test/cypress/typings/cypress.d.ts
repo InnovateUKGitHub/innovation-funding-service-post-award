@@ -109,6 +109,15 @@ declare global {
       getCellFromHeaderAndRow<T extends string, U extends string>(header: T, row: U): Chainable<Element>;
 
       /**
+       * Gets table cell from the header label and the row number (1 - indexed).
+       * a third argument is a standard selector string to be passed into a find method in case
+       * the exact element in the cell needs to be selected
+       * @example
+       * getCellFromHeaderAndRowNumber("Description", 2, );
+       * getCellFromHeaderAndRowNumber("Date secured", 2, '[aria-label="month financing secured"]');
+       */
+      getCellFromHeaderAndRowNumber<T extends string>(header: T, row: number, selector?: string): Chainable<Element>;
+      /**
        * Clicks checkbox with matching label, scrolls into view and waits before checking
        */
       clickCheckBox<T extends string = string>(label: T, uncheck?: boolean): void;
