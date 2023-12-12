@@ -90,7 +90,7 @@ const EditClaimLineItemsPage = ({
         <title>{getContent(x => x.pages.claimLineItems.htmlPrepareTitle({ title: currentCostCategory.name }))}</title>
       </Helmet>
 
-      <AwardRateOverridesMessage />
+      <AwardRateOverridesMessage currentCostCategoryId={costCategoryId} currentPeriod={periodId} />
       <NegativeClaimWarning claimDetails={claimDetails} />
       {isNotAuthorOfLineItems(claimDetails) && <DeleteByEnteringZero />}
       <GuidanceSection project={project} costCategory={currentCostCategory} />

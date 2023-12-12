@@ -55,7 +55,7 @@ const ViewClaimLineItemsPage = ({
         )}
       </Helmet>
 
-      <AwardRateOverridesMessage />
+      <AwardRateOverridesMessage currentCostCategoryId={costCategoryId} currentPeriod={periodId} />
 
       <Section>
         <ClaimLineItemsTable
