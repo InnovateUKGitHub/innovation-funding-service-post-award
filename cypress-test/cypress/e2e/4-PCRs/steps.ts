@@ -917,7 +917,7 @@ export const otherFundingTable = () => {
 };
 
 export const addSourceOfFundingValidation = () => {
-  cy.getByQA("add-fund").contains("Add another source of funding").click().wait(500);
+  cy.contains("button", "Add another source of funding").click().wait(500);
   cy.clickOn("Save and continue");
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
     cy.validationLink(message);
@@ -925,19 +925,27 @@ export const addSourceOfFundingValidation = () => {
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
     cy.paragraph(message);
   });
-  cy.get("#item_0_value").type("error").wait(500);
+  cy.getCellFromHeaderAndRowNumber("Funding amount", 1).type("error").wait(500);
   cy.validationLink("Funding amount must be a number");
   cy.paragraph("Funding amount must be a number");
-  cy.get("#item_0_date_month").type("error");
+  cy.getCellFromHeaderAndRowNumber("Date secured", 1, '[aria-label="year funding is secured for item 1"]')
+    .type("error")
+    .wait(500)
+    .blur();
+
   cy.validationLink("Date secured must be a date");
   cy.paragraph("Date secured must be a date");
 };
 
 export const addSourceOfFunding = () => {
-  cy.get("#item_0_description").clear().type("Public");
-  cy.get("#item_0_date_month").clear().type("12");
-  cy.get("#item_0_date_year").clear().type("2022");
-  cy.get("#item_0_value").clear().type("50000");
+  cy.getCellFromHeaderAndRowNumber("Source of funding", 1, "input").clear().type("Public");
+  cy.getCellFromHeaderAndRowNumber("Date secured", 1, '[aria-label="month funding is secured for item 1"]')
+    .clear()
+    .type("12");
+  cy.getCellFromHeaderAndRowNumber("Date secured", 1, '[aria-label="year funding is secured for item 1"]')
+    .clear()
+    .type("2022");
+  cy.getCellFromHeaderAndRowNumber("Funding amount", 1, "input").clear().type("50000");
   cy.wait(500);
 };
 
@@ -948,7 +956,7 @@ export const fundingLevelPage = () => {
 };
 
 export const uploadPartnerInfo = () => {
-  cy.get("h2").contains("Upload partner agreement");
+  cy.get("legend").contains("Upload partner agreement");
   cy.paragraph("You must upload copies of signed letters");
 };
 

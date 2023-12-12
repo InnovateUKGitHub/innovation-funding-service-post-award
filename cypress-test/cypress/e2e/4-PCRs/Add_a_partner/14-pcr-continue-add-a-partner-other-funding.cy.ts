@@ -60,7 +60,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should have a table containing any other sources of funding", otherFundingTable);
 
   it("Should contain an 'Add another source of funding'", () => {
-    cy.getByQA("add-fund").contains("Add another source of funding");
+    cy.contains("button", "Add another source of funding");
   });
 
   it("Should have a 'Save and continue' and 'Save and return to summary' button", () => {
