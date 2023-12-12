@@ -6,8 +6,6 @@ export const claimDetailsQuery = graphql`
     }
     salesforce {
       uiapi {
-        ...StatusChangesLogsFragment
-        ...ForecastTableFragment
         ...TitleFragment
         query {
           Acc_Profile__c(

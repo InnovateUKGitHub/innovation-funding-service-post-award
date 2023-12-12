@@ -19,14 +19,14 @@ import { ValidationMessage } from "@ui/components/atomicDesign/molecules/validat
 import { ClaimPeriodDate } from "@ui/components/atomicDesign/organisms/claims/ClaimPeriodDate/claimPeriodDate";
 import { ClaimReviewTable } from "@ui/components/atomicDesign/organisms/claims/ClaimReviewTable/claimReviewTable";
 import { ClaimTable } from "@ui/components/atomicDesign/organisms/claims/ClaimTable/claimTable";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.standalone";
 import { DocumentView } from "@ui/components/atomicDesign/organisms/documents/DocumentView/DocumentView";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
 import { TypedDetails, DualDetails } from "@ui/components/bjss/details/details";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useClaimDetailsPageData } from "./claimDetails.logic";
-import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.withFragment";
+import { Logs } from "@ui/components/atomicDesign/molecules/Logs/logs.standalone";
 
 interface Params {
   projectId: ProjectId;
@@ -128,7 +128,12 @@ export const ClaimsDetailsPage = (props: Params & BaseProps) => {
       </Section>
 
       <Section>
-        <AccordionSection data={data} periodId={props.periodId} />
+        <AccordionSection
+          data={data}
+          projectId={props.projectId}
+          partnerId={props.partnerId}
+          periodId={props.periodId}
+        />
       </Section>
 
       <CommentsFromFC project={data.project} claim={data.claim} />
@@ -195,6 +200,8 @@ const CostsAndGrantSummary = ({
 
 const AccordionSection = ({
   data,
+  projectId,
+  partnerId,
   periodId,
 }: {
   data: {
@@ -202,8 +209,7 @@ const AccordionSection = ({
     project: Pick<ClaimData["project"], "roles">;
     documents: ClaimData["documents"];
   };
-  periodId: PeriodId;
-}) => {
+} & Params) => {
   const isArchived =
     data.claim.status === ClaimStatus.PAID ||
     data.claim.status === ClaimStatus.APPROVED ||
@@ -214,12 +220,24 @@ const AccordionSection = ({
     <Accordion>
       {showForecast && (
         <AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
-          <ForecastTable periodId={periodId} hideValidation />
+          <ForecastTable
+            projectId={projectId}
+            partnerId={partnerId}
+            periodId={periodId}
+            hideValidation
+            queryOptions={{ fetchPolicy: "network-only" }}
+          />
         </AccordionItem>
       )}
 
       <AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
-        <Logs qa="claim-status-change-table" />
+        <Logs
+          qa="claim-status-change-table"
+          projectId={projectId}
+          partnerId={partnerId}
+          periodId={periodId}
+          queryOptions={{ fetchPolicy: "network-only" }}
+        />
       </AccordionItem>
 
       {isMo && (
