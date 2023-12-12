@@ -113,6 +113,7 @@ const useClaimLineItemsData = (
     currentCostCategory,
     documents,
     claimOverrides,
+    fragmentRef: data.salesforce.uiapi,
   };
 };
 
