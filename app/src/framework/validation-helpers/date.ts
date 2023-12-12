@@ -1,12 +1,12 @@
-export const isEmptyDate = (monthStr?: string, yearStr?: string) => !monthStr && !yearStr;
+export const isEmptyDate = (month?: string | number | null, year?: string | number | null) => !month && !year;
 
-export const isValidMonth = (monthStr?: string) => {
-  const month = Number(monthStr);
+export const isValidMonth = (monthVal?: string | number | null) => {
+  const month = Number(monthVal);
   return !isNaN(month) && Number.isInteger(month) && month >= 1 && month <= 12;
 };
 
-export const isValidYear = (yearStr?: string) => {
-  const year = Number(yearStr);
+export const isValidYear = (yearVal?: string | number | null) => {
+  const year = Number(yearVal);
   return !isNaN(year) && Number.isInteger(year) && year >= 2000 && year <= 2200;
 };
 

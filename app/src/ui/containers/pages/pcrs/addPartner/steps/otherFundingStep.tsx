@@ -5,7 +5,7 @@ import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
-import { useLinks } from "../../utils/useNextLink";
+import { useSummaryLink } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
 import { otherFundingErrorMap, otherFundingSchema, OtherFundingSchema } from "../addPartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,12 +30,22 @@ const options = [
 
 export const OtherFundingStep = () => {
   const { getContent } = useContent();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const {
+    projectId,
+    pcrId,
+    itemId,
+    fetchKey,
+    markedAsCompleteHasBeenChecked,
+    useFormValidate,
+    onSave,
+    isFetching,
+    //refreshItemWorkflowQuery,
+    routes,
+  } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
-  const link = useLinks();
+  const summaryLink = useSummaryLink();
   const { handleSubmit, register, formState, trigger, setValue } = useForm<OtherFundingSchema>({
     defaultValues: {
       markedAsComplete: markedAsCompleteHasBeenChecked,
@@ -51,6 +61,21 @@ export const OtherFundingStep = () => {
   useFormValidate(trigger);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
+
+  const getNextLink = (data: OtherFundingSchema) => {
+    return {
+      link:
+        data.button_submit === "submit"
+          ? routes.pcrPrepareItem.getLink({
+              projectId,
+              pcrId,
+              itemId,
+              step: data.hasOtherFunding === "true" ? 12 : 13,
+            })
+          : summaryLink,
+    };
+  };
+
   return (
     <PcrPage validationErrors={validationErrors}>
       <H2>{getContent(x => x.pages.pcrAddPartnerOtherFunding.formSectionTitle)}</H2>
@@ -66,7 +91,7 @@ export const OtherFundingStep = () => {
                 ...data,
                 hasOtherFunding: data.hasOtherFunding === "true",
               },
-              context: link(data),
+              context: getNextLink(data),
             }),
           )}
         >

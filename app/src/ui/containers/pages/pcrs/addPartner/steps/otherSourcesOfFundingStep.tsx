@@ -31,16 +31,8 @@ import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
 import { head } from "lodash";
-
-const getEmptyFund = (id: CostCategoryId) =>
-  ({
-    id: "",
-    costCategoryId: id,
-    costCategory: CostCategoryType.Other_Public_Sector_Funding,
-    description: "",
-    dateSecured: null,
-    value: null,
-  } as PCRSpendProfileOtherFundingDto);
+import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
   const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Public_Sector_Funding);
@@ -72,11 +64,20 @@ const getFunds = (
   // return [...funds, ...extraFundItems];
 };
 
+type FundingSourceRhfError = {
+  funds: {
+    description: RhfError;
+    dateSecured: RhfError;
+    value: RhfError;
+  }[];
+};
+
 export const mapWithDateParts = (fund: PCRSpendProfileOtherFundingDto) => ({
-  ...fund,
   description: fund.description ?? "",
   dateSecured_month: getMonth(fund.dateSecured),
   dateSecured_year: getYear(fund.dateSecured),
+  dateSecured: fund.dateSecured,
+  value: fund.value ?? undefined,
 });
 
 export const OtherSourcesOfFundingStep = () => {
@@ -109,7 +110,8 @@ export const OtherSourcesOfFundingStep = () => {
     },
   );
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useRhfErrors(formState.errors) as FundingSourceRhfError;
+
   useFormValidate(trigger);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -122,6 +124,7 @@ export const OtherSourcesOfFundingStep = () => {
   });
 
   const total = watch("funds").reduce((acc, cur) => acc + Number(cur.value), 0);
+
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section title={x => x.pages.pcrAddPartnerOtherFundingSources.formSectionTitle}>
@@ -153,28 +156,39 @@ export const OtherSourcesOfFundingStep = () => {
 
             <Table>
               <THead>
-                <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDescription)}</TH>
-                <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDate)}</TH>
-                <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderValue)}</TH>
-                <TH hidden>Action</TH>
+                <TR>
+                  <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDescription)}</TH>
+                  <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDate)}</TH>
+                  <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderValue)}</TH>
+                  <TH hidden>Action</TH>
+                </TR>
               </THead>
 
               <TBody>
                 {fields.map((x, i) => (
                   <TR key={`funds.${i}.key`}>
                     <TD>
-                      <TextInput {...register(`funds.${i}.description`)} disabled={isFetching} />
+                      <FormGroup id={`funds_${i}_description`} hasError={!!validationErrors?.funds?.[i]?.description}>
+                        <ValidationError error={validationErrors?.funds?.[i]?.description as RhfError} />
+                        <TextInput
+                          hasError={!!validationErrors?.funds?.[i]?.description}
+                          aria-label={`source of funding item ${i + 1}`}
+                          {...register(`funds.${i}.description`)}
+                          disabled={isFetching}
+                        />
+                      </FormGroup>
                     </TD>
 
                     <TD>
                       <DateInputGroup
-                        id="suspensionStartDate"
-                        error={validationErrors?.suspensionStartDate as RhfError}
+                        id={`funds_${i}_dateSecured`}
+                        error={validationErrors?.funds?.[i]?.dateSecured as RhfError}
                       >
                         <DateInput
                           noLabel
                           type="month"
                           disabled={isFetching}
+                          aria-label={`month funding is secured for item ${i + 1}`}
                           {...register(`funds.${i}.dateSecured_month`)}
                         />
 
@@ -182,13 +196,22 @@ export const OtherSourcesOfFundingStep = () => {
                           noLabel
                           type="year"
                           disabled={isFetching}
+                          aria-label={`year funding is secured for item ${i + 1}`}
                           {...register(`funds.${i}.dateSecured_year`)}
                         />
                       </DateInputGroup>
                     </TD>
 
                     <TD>
-                      <TextInput {...register(`funds.${i}.value`)} disabled={isFetching} />
+                      <FormGroup id={`funds_${i}_value`} hasError={!!validationErrors?.funds?.[i]?.value}>
+                        <ValidationError error={validationErrors?.funds?.[i]?.value as RhfError} />
+                        <TextInput
+                          hasError={!!validationErrors?.funds?.[i]?.value}
+                          aria-label={`funding amount for item ${i}`}
+                          {...register(`funds.${i}.value`)}
+                          disabled={isFetching}
+                        />
+                      </FormGroup>
                     </TD>
 
                     <TD>
@@ -215,7 +238,19 @@ export const OtherSourcesOfFundingStep = () => {
                         type="button"
                         link
                         onClick={() => {
-                          append(mapWithDateParts(getEmptyFund(getOtherFundingCostCategory(costCategories).id)));
+                          const costCategoryId = getOtherFundingCostCategory(costCategories).id;
+                          const emptyFund = {
+                            id: "",
+                            costCategoryId,
+                            costCategory: CostCategoryType.Other_Public_Sector_Funding,
+                            description: "",
+                            dateSecured: null,
+                            dateSecured_month: "",
+                            dateSecured_year: "",
+                            value: undefined as unknown as number,
+                          };
+
+                          append(emptyFund);
                         }}
                       >
                         {getContent(x => x.pages.pcrAddPartnerOtherFundingSources.buttonAdd)}

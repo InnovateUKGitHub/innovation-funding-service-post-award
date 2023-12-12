@@ -2036,6 +2036,31 @@
             }
           }
         },
+        "otherSourcesOfFunding": {
+          "funds": {
+            "arrayType": {
+              "description": {
+                "errors": {
+                  "too_small": "Source of funding is required.",
+                  "invalid_type": "Source of funding is required."
+                }
+              },
+              "dateSecured": {
+                "errors": {
+                  "custom": "Date secured is required.",
+                  "invalid_date": "Date secured must be a date.",
+                  "invalid_type": "Date secured must be a date."
+                }
+              },
+              "value": {
+                "errors": {
+                  "too_small": "Funding amount is required.",
+                  "invalid_type": "Funding amount must be a number"
+                }
+              }
+            }
+          }
+        },
         "roleAndOrganisation": {
           "isCommercialWork": {
             "errors": {

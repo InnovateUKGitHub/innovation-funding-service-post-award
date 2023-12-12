@@ -10,8 +10,8 @@ import { clientsideApiClient } from "@ui/apiClient";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
-import { useStores } from "@ui/redux/storesProvider";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
+import { useMessageContext } from "@ui/context/messages";
 
 export const usePcrItemWorkflowQuery = (
   projectId: ProjectId,
@@ -81,9 +81,10 @@ export const useOnSavePcrItem = (
   pcrId: PcrId,
   pcrItemId: PcrItemId,
   setFetchKey: Dispatch<SetStateAction<number>>,
+  refreshItemWorkflowQuery: () => Promise<void>,
 ) => {
   const navigate = useNavigate();
-  const stores = useStores();
+  const { clearMessages } = useMessageContext();
   return useOnUpdate<Partial<FullPCRItemDto>, PCRDto, { link: ILinkInfo }>({
     req: data => {
       return clientsideApiClient.pcrs.update({
@@ -97,8 +98,9 @@ export const useOnSavePcrItem = (
         }),
       });
     },
-    onSuccess: (_, __, context) => {
-      stores.messages.clearMessages();
+    onSuccess: async (_, __, context) => {
+      await refreshItemWorkflowQuery();
+      clearMessages();
       setFetchKey(k => k + 1);
       navigate(context?.link?.path ?? "");
     },
