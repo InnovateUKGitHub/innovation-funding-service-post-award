@@ -25,7 +25,7 @@ const SupportingDocumentsSection = ({ mode, documents, project, claimDetails }: 
   return (
     <Section
       qa="supporting-documents-section"
-      title={mode !== "prepare" ? getContent(x => x.documentLabels.documentDisplayTitle) : undefined}
+      title={mode !== "prepare" ? getContent(x => x.pages.claimLineItems.supportingDocumentsTitle) : undefined}
     >
       <DocumentView hideHeader={mode !== "prepare"} qa="claim-line-item-documents" documents={documents} />
 
