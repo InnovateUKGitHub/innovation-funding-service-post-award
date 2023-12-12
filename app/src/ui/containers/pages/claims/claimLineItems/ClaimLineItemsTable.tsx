@@ -24,6 +24,7 @@ interface ClaimLineItemsTableProps {
   lineItems: Pick<ClaimLineItemDto, "id" | "description" | "value" | "lastModifiedDate" | "isAuthor">[];
   forecastDetail: Pick<ForecastDetailsDTO, "value">;
   differenceRow: boolean;
+  boldTotalCosts: boolean;
 }
 
 interface EditClaimLineItemsTableProps extends ClaimLineItemsTableProps {
@@ -37,6 +38,7 @@ const EditClaimLineItemsTable = ({
   forecastDetail,
   disabled,
   differenceRow = true,
+  boldTotalCosts = false,
 }: EditClaimLineItemsTableProps) => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
@@ -62,8 +64,8 @@ const EditClaimLineItemsTable = ({
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerDescription)}</TH>
-          <TH>{getContent(x => x.pages.editClaimLineItems.headerCost)}</TH>
-          <TH>{getContent(x => x.pages.editClaimLineItems.headerLastUpdated)}</TH>
+          <TH numeric>{getContent(x => x.pages.editClaimLineItems.headerCost)}</TH>
+          <TH numeric>{getContent(x => x.pages.editClaimLineItems.headerLastUpdated)}</TH>
           {isClient && ownsAnyRows && (
             <TH>
               <AccessibilityText>{getContent(x => x.pages.editClaimLineItems.headerAction)}</AccessibilityText>
@@ -97,7 +99,7 @@ const EditClaimLineItemsTable = ({
                     : register(`lineItems.${i}.description`))}
                 />
               </TD>
-              <TD className="ifspa-claim-line-input-cell">
+              <TD numeric className="ifspa-claim-line-input-cell">
                 <ValidationError error={getFieldState(`lineItems.${i}.value`).error} />
                 <TextInput
                   id={`lineItems_${i}_value`}
@@ -105,11 +107,12 @@ const EditClaimLineItemsTable = ({
                   disabled={disabled}
                   defaultValue={x.displayValue}
                   aria-label={getContent(x => x.pages.editClaimLineItems.costAriaLabel({ count: i }))}
+                  numeric
                   {...(x.jsDisabledRow ? { name: `lineItems.${i}.value` } : register(`lineItems.${i}.value`))}
                 />
               </TD>
 
-              <TD className="ifspa-claim-line-data-cell">
+              <TD numeric className="ifspa-claim-line-data-cell">
                 {x.lastModifiedDate ? <ShortDate value={x.lastModifiedDate} /> : <TableEmptyCell />}
               </TD>
               {isClient && ownsAnyRows && (
@@ -155,7 +158,7 @@ const EditClaimLineItemsTable = ({
           <TH numeric bold>
             {getContent(x => x.pages.editClaimLineItems.totalCosts)}
           </TH>
-          <TD>
+          <TD numeric bold={boldTotalCosts}>
             <Currency value={total} />
           </TD>
           <TD>
@@ -171,7 +174,7 @@ const EditClaimLineItemsTable = ({
           <TH numeric bold>
             {getContent(x => x.pages.editClaimLineItems.forecastCosts)}
           </TH>
-          <TD>
+          <TD numeric>
             <Currency value={forecast} />
           </TD>
           <TD>
@@ -188,7 +191,7 @@ const EditClaimLineItemsTable = ({
             <TH numeric bold>
               {getContent(x => x.pages.editClaimLineItems.difference)}
             </TH>
-            <TD>
+            <TD numeric>
               <Percentage value={difference} />
             </TD>
             <TD>
@@ -206,7 +209,12 @@ const EditClaimLineItemsTable = ({
   );
 };
 
-const ClaimLineItemsTable = ({ lineItems, forecastDetail, differenceRow = false }: ClaimLineItemsTableProps) => {
+const ClaimLineItemsTable = ({
+  lineItems,
+  forecastDetail,
+  differenceRow = false,
+  boldTotalCosts = false,
+}: ClaimLineItemsTableProps) => {
   const { getContent } = useContent();
 
   const { difference, forecast, rows, total } = useMapToClaimLineItemTableDto({
@@ -219,8 +227,8 @@ const ClaimLineItemsTable = ({ lineItems, forecastDetail, differenceRow = false 
       <THead>
         <TR>
           <TH>{getContent(x => x.pages.editClaimLineItems.headerDescription)}</TH>
-          <TH>{getContent(x => x.pages.editClaimLineItems.headerCost)}</TH>
-          <TH>{getContent(x => x.pages.editClaimLineItems.headerLastUpdated)}</TH>
+          <TH numeric>{getContent(x => x.pages.editClaimLineItems.headerCost)}</TH>
+          <TH numeric>{getContent(x => x.pages.editClaimLineItems.headerLastUpdated)}</TH>
         </TR>
       </THead>
       <TBody>
@@ -228,11 +236,11 @@ const ClaimLineItemsTable = ({ lineItems, forecastDetail, differenceRow = false 
           return (
             <TR key={i}>
               <TD>{x.description}</TD>
-              <TD>
+              <TD numeric>
                 <Currency value={x.value} />
               </TD>
 
-              <TD className="ifspa-claim-line-data-cell">
+              <TD numeric className="ifspa-claim-line-data-cell">
                 {x.lastModifiedDate ? <ShortDate value={x.lastModifiedDate} /> : <TableEmptyCell />}
               </TD>
             </TR>
@@ -244,7 +252,7 @@ const ClaimLineItemsTable = ({ lineItems, forecastDetail, differenceRow = false 
           <TH numeric bold>
             {getContent(x => x.pages.editClaimLineItems.totalCosts)}
           </TH>
-          <TD>
+          <TD numeric bold={boldTotalCosts}>
             <Currency value={total} />
           </TD>
           <TD>
@@ -255,7 +263,7 @@ const ClaimLineItemsTable = ({ lineItems, forecastDetail, differenceRow = false 
           <TH numeric bold>
             {getContent(x => x.pages.editClaimLineItems.forecastCosts)}
           </TH>
-          <TD>
+          <TD numeric>
             <Currency value={forecast} />
           </TD>
           <TD>
@@ -267,7 +275,7 @@ const ClaimLineItemsTable = ({ lineItems, forecastDetail, differenceRow = false 
             <TH numeric bold>
               {getContent(x => x.pages.editClaimLineItems.difference)}
             </TH>
-            <TD>
+            <TD numeric>
               <Percentage value={difference} />
             </TD>
             <TD>

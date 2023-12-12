@@ -9,9 +9,6 @@ import { useContent } from "@ui/hooks/content.hook";
 import { Helmet } from "react-helmet";
 import { ClaimLineItemNavigationArrows } from "./ClaimLineItemNavigationArrows";
 import { ClaimLineItemsParams, getParams, useBackLink, useClaimLineItemsData } from "./ClaimLineItems.logic";
-import { DeleteByEnteringZero, isNotAuthorOfLineItems } from "./DeleteByEnteringZero";
-import { GuidanceSection } from "./GuidanceSection";
-import { NegativeClaimWarning } from "./NegativeClaimWarning";
 import { SupportingDocumentsSection } from "./SupportingDocumentsSection";
 import { ClaimLineItemsTable } from "./ClaimLineItemsTable";
 
@@ -58,12 +55,14 @@ const ViewClaimLineItemsPage = ({
       </Helmet>
 
       <AwardRateOverridesMessage />
-      <NegativeClaimWarning claimDetails={claimDetails} />
-      {isNotAuthorOfLineItems(claimDetails) && <DeleteByEnteringZero />}
-      <GuidanceSection project={project} costCategory={currentCostCategory} />
 
       <Section>
-        <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} differenceRow={true} />
+        <ClaimLineItemsTable
+          lineItems={claimDetails.lineItems}
+          forecastDetail={forecastDetail}
+          differenceRow={true}
+          boldTotalCosts={true}
+        />
       </Section>
 
       <SupportingDocumentsSection mode={mode} project={project} claimDetails={claimDetails} documents={documents} />

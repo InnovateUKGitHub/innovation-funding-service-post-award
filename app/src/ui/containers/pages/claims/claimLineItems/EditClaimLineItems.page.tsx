@@ -108,6 +108,7 @@ const EditClaimLineItemsPage = ({
             forecastDetail={forecastDetail}
             disabled={isFetching}
             differenceRow={true}
+            boldTotalCosts={false}
           />
         </Section>
 
