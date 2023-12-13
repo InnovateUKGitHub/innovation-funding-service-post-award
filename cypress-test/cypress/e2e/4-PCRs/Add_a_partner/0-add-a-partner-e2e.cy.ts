@@ -7,6 +7,8 @@ import {
   correctPcrType,
   giveUsInfoTodo,
   explainChangesReasoning,
+  typeASearchResults,
+  companyHouseAutofillAssert,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -67,6 +69,17 @@ describe("PCR >  Add a partner > Create PCR", () => {
     });
   });
 
+  it("Should display correct guidance copy", () => {
+    cy.getByQA("validation-message-content").contains("You cannot change this information after you continue.");
+    cy.getByLabel("Will the new partner's work on the project be mostly commercial or economic?");
+    cy.get("#isCommercialWork-hint").contains(
+      "This question applies to all organisations, including research organisations that normally act non-economically.",
+    );
+    cy.get("#partnerType-hint").contains(
+      "If the new partner's organisation type is not listed, contact your monitoring officer.",
+    );
+  });
+
   it("Should click 'Save and return to summary' prompting validation", () => {
     cy.clickOn("Save and return to summary");
     cy.validationLink("Select a project role.");
@@ -117,5 +130,174 @@ describe("PCR >  Add a partner > Create PCR", () => {
       cy.getByLabel(radio).click();
     });
     cy.clickOn("Save and return to summary");
+  });
+
+  it("Should present a summary screen with correct subheadings", () => {
+    cy.heading("Add a partner");
+    ["Organisation", "Contacts", "Funding", "Agreement", "Mark as complete"].forEach(subheading => {
+      cy.get("h2").contains(subheading);
+    });
+    cy.get("h3").contains("Finance contact");
+  });
+
+  it("Should mark as complete and click 'Save and return to request', prompting validation", () => {
+    cy.getByLabel("I agree with this change.").click();
+    cy.clickOn("Save and return to request");
+    [
+      "Enter an organisation name.",
+      "Enter a registered address.",
+      "Enter a registration number.",
+      "Enter a financial year end.",
+      "Enter a financial year end turnover.",
+      "Enter a finance contact name.",
+      "Enter a finance contact surname.",
+      "Enter a finance contact phone number.",
+      "Enter a finance contact email address.",
+      "Select a project location.",
+      "Enter a project city.",
+      "Select a participant size.",
+      "Enter the number of employees.",
+      "Enter the funding level.",
+    ].forEach(valMsg => {
+      cy.validationLink(valMsg);
+    });
+    [
+      "Organisation name",
+      "Registration number",
+      "Registered address",
+      "Size",
+      "Number of full time employees",
+      "End of financial year",
+      "Turnover",
+      "Project location",
+      "Name of town or city",
+      "First name",
+      "Last name",
+      "Phone number",
+      "Email",
+      "Funding level",
+    ].forEach(section => {
+      cy.get(".govuk-summary-list__row summary-list__row--error").contains(section);
+    });
+  });
+  /**
+   * Eligibility of aid declaration section
+   */
+  it("Should access 'Eligibility of aid declaration' section", () => {
+    cy.getListItemFromKey("Eligibility of aid declaration", "Edit").click();
+    cy.get("h2").contains("Non-aid funding");
+    cy.paragraph(
+      "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.",
+    );
+  });
+
+  it("Should back out to summary", () => {
+    cy.clickOn("Save and return to summary");
+    cy.get("h2").contains("Organisation");
+  });
+
+  /**
+   * Organisation name section
+   */
+  it("Should access Organisation name' section", () => {
+    cy.getListItemFromKey("Organisation name", "Edit").click();
+    cy.get("h2").contains("Company house");
+  });
+
+  it(
+    "Should type 'A' in the search box and display 'Companies house search results' and the company 'A Limited'",
+    typeASearchResults,
+  );
+
+  it(
+    "Should auto-fill the 'Organisation name', 'Registration number' and 'Registered address' fields",
+    companyHouseAutofillAssert,
+  );
+
+  it("Should return to summary page", () => {
+    cy.clickOn("Save and return to summary");
+    cy.get("h2").contains("Organisation");
+  });
+
+  it("Should now validate but this time no validation link will appear for Organisation, registration or registered address", () => {
+    cy.getByLabel("I agree with this change.").click();
+    cy.clickOn("Save and return to request");
+    [
+      "Enter a financial year end.",
+      "Enter a financial year end turnover.",
+      "Enter a finance contact name.",
+      "Enter a finance contact surname.",
+      "Enter a finance contact phone number.",
+      "Enter a finance contact email address.",
+      "Select a project location.",
+      "Enter a project city.",
+      "Select a participant size.",
+      "Enter the number of employees.",
+      "Enter the funding level.",
+    ].forEach(valMsg => {
+      cy.validationLink(valMsg);
+    });
+    ["Enter an organisation name.", "Enter a registered address.", "Enter a registration number."].forEach(
+      completed => {
+        cy.validationLink(completed).should("not.exist");
+      },
+    );
+  });
+
+  it("Should now access the Size section", () => {
+    cy.getListItemFromKey("Size", "Edit").click();
+    cy.get("h2").contains("Organisation details");
+  });
+
+  /**
+   * Size section
+   */
+  it("Should display copy directing user to Select participantr size and enter number of employees", () => {
+    ["Select a participant size.", "Enter the number of employees."].forEach(direction => {
+      cy.paragraph(direction);
+    });
+  });
+
+  it("Validate the input box", () => {
+    ["-1", "a", "999999999"].forEach(input => {
+      cy.get("input").clear().type(input);
+      cy.wait(200);
+      cy.clickOn("Save and return to summary");
+      cy.validationLink("Please enter a valid number of employees.");
+    });
+  });
+
+  it("Should select 'Medium' size and enter 100 employees", () => {
+    cy.getByLabel("Medium").click();
+    cy.get("input").clear().type("100");
+    cy.clickOn("Save and return to summary");
+    cy.get("h2").contains("Organisation");
+  });
+
+  it("Should now validate but this time no validation link will appear for Size", () => {
+    cy.getByLabel("I agree with this change.").click();
+    cy.clickOn("Save and return to request");
+    [
+      "Enter a financial year end.",
+      "Enter a financial year end turnover.",
+      "Enter a finance contact name.",
+      "Enter a finance contact surname.",
+      "Enter a finance contact phone number.",
+      "Enter a finance contact email address.",
+      "Select a project location.",
+      "Enter a project city.",
+      "Enter the funding level.",
+    ].forEach(valMsg => {
+      cy.validationLink(valMsg);
+    });
+    [
+      "Enter an organisation name.",
+      "Enter a registered address.",
+      "Enter a registration number.",
+      "Select a participant size.",
+      "Enter the number of employees.",
+    ].forEach(completed => {
+      cy.validationLink(completed).should("not.exist");
+    });
   });
 });
