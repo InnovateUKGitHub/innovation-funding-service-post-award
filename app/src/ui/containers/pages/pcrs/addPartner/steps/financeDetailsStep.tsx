@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { FinanceDetailsSchema, financeDetailsErrorMap, financeDetailsSchema } from "../addPartner.zod";
+import { FinanceDetailsSchema, addPartnerErrorMap, financeDetailsSchema } from "../addPartner.zod";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { PcrPage } from "../../pcrPage";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
@@ -40,7 +40,7 @@ export const FinanceDetailsStep = () => {
       financialYearEndDate_year: getYear(pcrItem.financialYearEndDate),
     },
     resolver: zodResolver(financeDetailsSchema, {
-      errorMap: financeDetailsErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
 

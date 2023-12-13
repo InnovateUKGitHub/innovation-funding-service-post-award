@@ -14,11 +14,7 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  academicOrganisationErrorMap,
-  AcademicOrganisationSchema,
-  academicOrganisationSchema,
-} from "../addPartner.zod";
+import { addPartnerErrorMap, AcademicOrganisationSchema, academicOrganisationSchema } from "../addPartner.zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
@@ -42,7 +38,7 @@ export const AcademicOrganisationStep = () => {
       organisationName: "",
     },
     resolver: zodResolver(academicOrganisationSchema, {
-      errorMap: academicOrganisationErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
 

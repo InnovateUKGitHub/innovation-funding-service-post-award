@@ -19,7 +19,7 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { ProjectManagerSchema, projectManagerErrorMap, projectManagerSchema } from "../addPartner.zod";
+import { ProjectManagerSchema, addPartnerErrorMap, projectManagerSchema } from "../addPartner.zod";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 
@@ -42,7 +42,7 @@ export const ProjectManagerDetailsStep = () => {
       contact2Email: pcrItem.contact2Email ?? "",
     },
     resolver: zodResolver(projectManagerSchema, {
-      errorMap: projectManagerErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
 

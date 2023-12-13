@@ -6,7 +6,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useForm } from "react-hook-form";
-import { RoleAndOrganisationSchema, roleAndOrganisationErrorMap, roleAndOrganisationSchema } from "../addPartner.zod";
+import { RoleAndOrganisationSchema, addPartnerErrorMap, roleAndOrganisationSchema } from "../addPartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useLinks } from "../../utils/useNextLink";
@@ -65,7 +65,7 @@ export const RoleAndOrganisationStep = () => {
       markedAsComplete: markedAsCompleteHasBeenChecked,
     },
     resolver: zodResolver(roleAndOrganisationSchema, {
-      errorMap: roleAndOrganisationErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
 

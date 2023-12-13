@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { useContent } from "@ui/hooks/content.hook";
-import { AwardRateSchema, awardRateErrorMap, awardRateSchema } from "../addPartner.zod";
+import { AwardRateSchema, addPartnerErrorMap, awardRateSchema } from "../addPartner.zod";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
@@ -33,7 +33,7 @@ export const AwardRateStep = () => {
       awardRate: pcrItem.awardRate,
     },
     resolver: zodResolver(awardRateSchema, {
-      errorMap: awardRateErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
 

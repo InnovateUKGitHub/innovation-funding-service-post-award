@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
 import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
-import { PCRProjectLocation } from "@framework/constants/pcrConstants";
+import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framework/constants/pcrConstants";
 
-export const roleAndOrganisationErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner", "roleAndOrganisation"] });
+export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
 
 const common = {
   button_submit: z.string(),
@@ -19,20 +19,12 @@ export const roleAndOrganisationSchema = z.object({
 
 export type RoleAndOrganisationSchema = z.infer<typeof roleAndOrganisationSchema>;
 
-export const academicOrganisationErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "academicOrganisation"],
-});
-
 export const academicOrganisationSchema = z.object({
   ...common,
   organisationName: z.string(),
 });
 
 export type AcademicOrganisationSchema = z.infer<typeof academicOrganisationSchema>;
-
-export const academicCostsErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "academicCosts"],
-});
 
 export const academicCostsSchema = z.object({
   ...common,
@@ -46,22 +38,22 @@ export const academicCostsSchema = z.object({
 
 export type AcademicCostsSchema = z.infer<typeof academicCostsSchema>;
 
-export const projectLocationErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "projectLocation"],
-});
+export const getProjectLocationSchema = (markedAsComplete: boolean) =>
+  markedAsComplete
+    ? z.object({
+        button_submit: z.string(),
+        projectLocation: z.coerce.number().gt(0),
+        projectCity: z.string().min(1).max(40),
+        projectPostcode: z.string().max(10),
+      })
+    : z.object({
+        button_submit: z.string(),
+        projectLocation: z.coerce.number().gt(0),
+        projectCity: z.string().max(40),
+        projectPostcode: z.string().max(10),
+      });
 
-export const projectLocationSchema = z.object({
-  ...common,
-  projectLocation: z.coerce.number().gt(0),
-  projectCity: z.string(),
-  projectPostcode: z.string(),
-});
-
-export type ProjectLocationSchema = z.infer<typeof projectLocationSchema>;
-
-export const financeContactErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "financeContact"],
-});
+export type ProjectLocationSchema = z.infer<ReturnType<typeof getProjectLocationSchema>>;
 
 export const financeContactSchema = z.object({
   ...common,
@@ -73,10 +65,6 @@ export const financeContactSchema = z.object({
 
 export type FinanceContactSchema = z.infer<typeof financeContactSchema>;
 
-export const projectManagerErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "projectManager"],
-});
-
 export const projectManagerSchema = z.object({
   ...common,
   contact2Email: z.string().max(255),
@@ -86,10 +74,6 @@ export const projectManagerSchema = z.object({
 });
 
 export type ProjectManagerSchema = z.infer<typeof projectManagerSchema>;
-
-export const companiesHouseErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "companiesHouse"],
-});
 
 export const companiesHouseSchema = z.object({
   ...common,
@@ -101,10 +85,6 @@ export const companiesHouseSchema = z.object({
 
 export type CompaniesHouseSchema = z.infer<typeof companiesHouseSchema>;
 
-export const organisationDetailsErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "organisationDetails"],
-});
-
 export const organisationDetailsSchema = z.object({
   ...common,
   participantSize: z.coerce.number(),
@@ -113,10 +93,6 @@ export const organisationDetailsSchema = z.object({
 
 export type OrganisationDetailsSchema = z.infer<typeof organisationDetailsSchema>;
 
-export const awardRateErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "awardRate"],
-});
-
 export const awardRateSchema = z.object({
   ...common,
   awardRate: z.coerce.number().nullable(),
@@ -124,20 +100,12 @@ export const awardRateSchema = z.object({
 
 export type AwardRateSchema = z.infer<typeof awardRateSchema>;
 
-export const otherFundingErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "otherFunding"],
-});
-
 export const otherFundingSchema = z.object({
   ...common,
   hasOtherFunding: z.string().nullable(),
 });
 
 export type OtherFundingSchema = z.infer<typeof otherFundingSchema>;
-
-export const otherSourcesOfFundingErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "otherSourcesOfFunding"],
-});
 
 const valueDescription = z.object({
   value: z.coerce.number().min(1),
@@ -182,19 +150,11 @@ export const otherSourcesOfFundingSchema = baseSchema.and(fundingSchema);
 
 export type OtherSourcesOfFundingSchema = z.infer<typeof otherSourcesOfFundingSchema>;
 
-export const spendProfileErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "spendProfile"],
-});
-
 export const spendProfileSchema = z.object({
   ...common,
 });
 
 export type SpendProfileSchema = z.infer<typeof spendProfileSchema>;
-
-export const financeDetailsErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner", "financeDetails"],
-});
 
 export const financeDetailsSchema = z
   .object({
@@ -216,38 +176,110 @@ export const financeDetailsSchema = z
 
 export type FinanceDetailsSchema = z.infer<typeof financeDetailsSchema>;
 
-export const addPartnerErrorMap = makeZodI18nMap({
-  keyPrefix: ["pcr", "addPartner"],
-});
-export const addPartnerSchema = z.object({
-  ...common,
-  awardRate: z.number().nullable(),
-  contact1Email: z.string().nullable(),
-  contact1Forename: z.string().nullable(),
-  contact1Phone: z.string().nullable(),
-  contact1Surname: z.string().nullable(),
-  contact2Email: z.string().nullable(),
-  contact2Forename: z.string().nullable(),
-  contact2Phone: z.string().nullable(),
-  contact2Surname: z.string().nullable(),
-  financialYearEndDate: z.date().nullable(),
-  financialYearEndTurnover: z.number().nullable(),
-  hasOtherFunding: z.string().nullable(),
-  isCommercialWork: z.boolean().nullable(),
-  numberOfEmployees: z.coerce.number().nullable(),
-  organisationName: z.string().nullable(),
-  participantSize: z.coerce.number().nullable(),
-  partnerType: z.coerce.number().gt(0).nullable(),
-  projectCity: z.string().nullable(),
-  projectLocation: z.coerce
-    .number()
-    .transform(x => x as PCRProjectLocation)
-    .nullable(),
-  projectPostcode: z.string().nullable(),
-  projectRole: z.coerce.number().gt(0).nullable(),
-  registeredAddress: z.string().nullable(),
-  registrationNumber: z.string().nullable(),
-  tsbReference: z.string().nullable(),
+const projectManagerDetailsSchema = z.object({
+  contact2Email: z.string().min(1),
+  contact2Forename: z.string().min(1),
+  contact2Phone: z.string().min(1),
+  contact2Surname: z.string().min(1),
 });
 
-export type AddPartnerSchema = z.infer<typeof addPartnerSchema>;
+const submitAddPartnerSummarySchema = z.object({
+  button_submit: z.string(),
+  awardRate: z.number(),
+  isCommercialWork: z.boolean(),
+  contact1Email: z.string().min(1),
+  contact1Forename: z.string().min(1),
+  contact1Phone: z.string().min(1),
+  contact1Surname: z.string().min(1),
+  hasOtherFunding: z.boolean(),
+  organisationName: z.string(),
+  organisationType: z.string(),
+  participantSize: z.number(),
+  partnerType: z.number().gt(0),
+  projectCity: z.string().min(1),
+  projectLocation: z.number().transform(x => x as PCRProjectLocation),
+  projectPostcode: z.string().max(10).optional().nullable(),
+  projectRole: z.number().gt(0),
+});
+
+const saveAddPartnerSummarySchema = z.object({
+  button_submit: z.string(),
+  partnerType: z.number().gt(0),
+  projectRole: z.number().gt(0),
+  isCommercialWork: z.boolean(),
+  awardRate: z.number().nullable().optional(),
+  contact1Email: z.string().nullable().optional(),
+  contact1Forename: z.string().nullable().optional(),
+  contact1Phone: z.string().nullable().optional(),
+  contact1Surname: z.string().nullable().optional(),
+  contact2Email: z.string().nullable().optional(),
+  contact2Forename: z.string().nullable().optional(),
+  contact2Phone: z.string().nullable().optional(),
+  contact2Surname: z.string().nullable().optional(),
+  financialYearEndDate: z.date().nullable().optional(),
+  financialYearEndTurnover: z.number().nullable().optional(),
+  hasOtherFunding: z.boolean().nullable().optional(),
+  numberOfEmployees: z.number().nullable().optional(),
+  organisationName: z.string().nullable().optional(),
+  organisationType: z.string().min(1),
+  participantSize: z.number().nullable().optional(),
+  projectCity: z.string().nullable().optional(),
+  projectLocation: z
+    .number()
+    .transform(x => x as PCRProjectLocation)
+    .nullable()
+    .optional(),
+  projectPostcode: z.string().max(10).nullable().optional(),
+  registeredAddress: z.string().nullable().optional(),
+  registrationNumber: z.string().nullable().optional(),
+  tsbReference: z.string().nullable().optional(),
+});
+
+const academicPartnerSummarySchema = z.object({
+  tsbReference: z.string().min(1),
+});
+
+const industrialPartnerSummarySchema = z.object({
+  registeredAddress: z.string(),
+  registrationNumber: z.string(),
+  numberOfEmployees: z.number(),
+  financialYearEndDate: z.date(),
+  financialYearEndTurnover: z.number(),
+});
+
+export const getAddPartnerSummarySchema = ({
+  projectRole,
+  organisationType,
+}: {
+  projectRole: PCRProjectRole;
+  organisationType: PCROrganisationType;
+}) => {
+  let markedAsCompleteSchema = submitAddPartnerSummarySchema;
+
+  if (projectRole === PCRProjectRole.ProjectLead) {
+    markedAsCompleteSchema = markedAsCompleteSchema.merge(projectManagerDetailsSchema);
+  }
+
+  if (organisationType === PCROrganisationType.Academic) {
+    markedAsCompleteSchema = markedAsCompleteSchema.merge(academicPartnerSummarySchema);
+  }
+
+  if (organisationType === PCROrganisationType.Industrial) {
+    markedAsCompleteSchema = markedAsCompleteSchema.merge(industrialPartnerSummarySchema);
+  }
+
+  return z.discriminatedUnion("markedAsComplete", [
+    z
+      .object({
+        markedAsComplete: z.literal(false),
+      })
+      .merge(saveAddPartnerSummarySchema),
+    z
+      .object({
+        markedAsComplete: z.literal(true),
+      })
+      .merge(markedAsCompleteSchema),
+  ]);
+};
+
+export type AddPartnerSchema = z.infer<ReturnType<typeof getAddPartnerSummarySchema>>;

@@ -7,7 +7,7 @@ import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useSummaryLink } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
-import { otherFundingErrorMap, otherFundingSchema, OtherFundingSchema } from "../addPartner.zod";
+import { addPartnerErrorMap, otherFundingSchema, OtherFundingSchema } from "../addPartner.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
@@ -53,7 +53,7 @@ export const OtherFundingStep = () => {
       hasOtherFunding: pcrItem.hasOtherFunding ? "true" : "false",
     },
     resolver: zodResolver(otherFundingSchema, {
-      errorMap: otherFundingErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
 

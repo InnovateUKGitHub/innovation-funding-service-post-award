@@ -2029,100 +2029,113 @@
     },
     "pcr": {
       "addPartner": {
-        "projectLocation": {
-          "projectLocation": {
-            "errors": {
-              "too_small": "Select a project location."
-            }
-          }
-        },
-        "otherSourcesOfFunding": {
-          "funds": {
-            "arrayType": {
-              "description": {
-                "errors": {
-                  "too_small": "Source of funding is required.",
-                  "invalid_type": "Source of funding is required."
-                }
-              },
-              "dateSecured": {
-                "errors": {
-                  "custom": "Date secured is required.",
-                  "invalid_date": "Date secured must be a date.",
-                  "invalid_type": "Date secured must be a date."
-                }
-              },
-              "value": {
-                "errors": {
-                  "too_small": "Funding amount is required.",
-                  "invalid_type": "Funding amount must be a number"
-                }
+        "funds": {
+          "arrayType": {
+            "description": {
+              "errors": {
+                "too_small": "Source of funding is required.",
+                "invalid_type": "Source of funding is required."
+              }
+            },
+            "dateSecured": {
+              "errors": {
+                "custom": "Date secured is required.",
+                "invalid_date": "Date secured must be a date.",
+                "invalid_type": "Date secured must be a date."
+              }
+            },
+            "value": {
+              "errors": {
+                "too_small": "Funding amount is required.",
+                "invalid_type": "Funding amount must be a number"
               }
             }
           }
         },
-        "roleAndOrganisation": {
-          "isCommercialWork": {
-            "errors": {
-              "invalid_type": "Select a project output.",
-              "too_small": "Select a project output."
-            }
-          },
-          "projectRole": {
-            "errors": {
-              "invalid_type": "Select a project role.",
-              "too_small": "Select a project role."
-            }
-          },
-          "partnerType": {
-            "errors": {
-              "invalid_type": "Select a partner type.",
-              "too_small": "Select a partner type."
-            }
+        "isCommercialWork": {
+          "errors": {
+            "invalid_type": "Select a project output.",
+            "too_small": "Select a project output."
           }
         },
-        "financeContact": {
-          "contact1Forename": {
-            "errors": {
-              "too_big": "Finance contact name must be 50 characters or less."
-            }
-          },
-          "contact1Surname": {
-            "errors": {
-              "too_big": "Finance contact surname must be 50 characters or less."
-            }
-          },
-          "contact1Email": {
-            "errors": {
-              "too_big": "Email address must be 255 characters or less."
-            }
-          },
-          "contact1Phone": {
-            "errors": {
-              "too_big": "Finance contact phone number must be 20 characters or less."
-            }
+        "contact1Forename": {
+          "errors": {
+            "too_small": "Enter a finance contact name.",
+            "invalid_type": "Enter a finance contact name.",
+            "too_big": "Finance contact name must be 50 characters or less."
           }
         },
-        "projectManager": {
-          "contact2Forename": {
-            "errors": {
-              "too_big": "Project manager name must be 50 characters or less."
-            }
-          },
-          "contact2Surname": {
-            "errors": {
-              "too_big": "Project manager surname must be 50 characters or less."
-            }
-          },
-          "contact2Email": {
-            "errors": {
-              "too_big": "Email address must be 255 characters or less."
-            }
-          },
-          "contact2Phone": {
-            "errors": {
-              "too_big": "Project manager phone number must be 20 characters or less."
-            }
+        "contact1Surname": {
+          "errors": {
+            "too_small": "Enter a finance contact surname.",
+            "invalid_type": "Enter a finance contact surname.",
+            "too_big": "Finance contact surname must be 50 characters or less."
+          }
+        },
+        "contact1Email": {
+          "errors": {
+            "too_small": "Enter a finance contact email address.",
+            "invalid_type": "Enter a finance contact email address.",
+            "too_big": "Email address must be 255 characters or less."
+          }
+        },
+        "contact1Phone": {
+          "errors": {
+            "too_small": "Enter a finance contact phone number.",
+            "invalid_type": "Enter a finance contact phone number.",
+            "too_big": "Finance contact phone number must be 20 characters or less."
+          }
+        },
+        "contact2Forename": {
+          "errors": {
+            "too_big": "Project manager name must be 50 characters or less."
+          }
+        },
+        "contact2Surname": {
+          "errors": {
+            "too_big": "Project manager surname must be 50 characters or less."
+          }
+        },
+        "contact2Email": {
+          "errors": {
+            "too_big": "Email address must be 255 characters or less."
+          }
+        },
+        "contact2Phone": {
+          "errors": {
+            "too_big": "Project manager phone number must be 20 characters or less."
+          }
+        },
+        "partnerType": {
+          "errors": {
+            "invalid_type": "Select a partner type.",
+            "too_small": "Select a partner type."
+          }
+        },
+        "projectCity": {
+          "errors": {
+            "invalid_type": "Select a project city.",
+            "too_small": "Select a project city.",
+            "too_big": "Project city must be {{ count }} characters or less."
+          }
+        },
+        "projectLocation": {
+          "errors": {
+            "invalid_type": "Select a project location.",
+            "too_small": "Select a project location."
+          }
+        },
+        "projectPostcode": {
+          "errors": {
+            "invalid_type": "Select a project postcode.",
+            "too_small": "Select a project postcode.",
+            "too_big": "Project postcode must be {{ count }} characters or less."
+          }
+        },
+        "projectRole": {
+          "errors": {
+            "invalid_type": "Select a project role.",
+            "too_small": "Select a project role."
           }
         }
       },

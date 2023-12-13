@@ -16,7 +16,7 @@ import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
-import { AddPartnerSchema, addPartnerErrorMap, addPartnerSchema } from "./addPartner.zod";
+import { AddPartnerSchema, addPartnerErrorMap, getAddPartnerSummarySchema } from "./addPartner.zod";
 import { PcrPage } from "../pcrPage";
 import { EditLink, ViewLink } from "../pcrItemSummaryLinks";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
@@ -35,28 +35,17 @@ export const AddPartnerSummary = () => {
   const { handleSubmit, register, formState, watch } = useForm<AddPartnerSchema>({
     defaultValues: {
       // summary page should take default value from saved state. it will be overridden when the checkbox is clicked
+      // @ts-expect-error it's so annoying but boolean type is freaking out over the literal false and true in the discriminated union
       markedAsComplete: pcrItem.status === PCRItemStatus.Complete,
       button_submit: "submit",
-      isCommercialWork: pcrItem.isCommercialWork,
-      financialYearEndDate: pcrItem.financialYearEndDate,
-      financialYearEndTurnover: pcrItem.financialYearEndTurnover,
-      organisationName: pcrItem.organisationName,
-      registrationNumber: pcrItem.registrationNumber,
-      registeredAddress: pcrItem.registeredAddress,
-      participantSize: pcrItem.participantSize,
-      numberOfEmployees: pcrItem.numberOfEmployees,
-      projectLocation: pcrItem.projectLocation,
-      projectCity: pcrItem.projectCity,
-      projectPostcode: pcrItem.projectPostcode,
-      contact1Email: pcrItem.contact1Email,
-      contact1Forename: pcrItem.contact1Forename,
-      contact1Surname: pcrItem.contact1Surname,
-      contact1Phone: pcrItem.contact1Phone,
-      tsbReference: pcrItem.tsbReference,
+      ...pcrItem,
     },
-    resolver: zodResolver(addPartnerSchema, {
-      errorMap: addPartnerErrorMap,
-    }),
+    resolver: zodResolver(
+      getAddPartnerSummarySchema({ projectRole: pcrItem.projectRole, organisationType: pcrItem.organisationType }),
+      {
+        errorMap: addPartnerErrorMap,
+      },
+    ),
   });
 
   const validationErrors = useRhfErrors(formState.errors);
@@ -122,36 +111,36 @@ export const AddPartnerSummary = () => {
               action={<EditLink stepName={PCRStepType.academicOrganisationStep} />}
             />
           )}
+
           {isIndustrial && (
-            <SummaryListItem
-              // TODO: double check validation here
-              label={x => x.pcrAddPartnerLabels.organisationNameHeading}
-              content={pcrItem.organisationName}
-              // validation={validator.companyHouseOrganisationName}
-              hasError={!!validationErrors?.organisationName}
-              qa="organisationName"
-              action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
-            />
-          )}
-          {isIndustrial && (
-            <SummaryListItem
-              label={x => x.pcrAddPartnerLabels.registrationNumberHeading}
-              content={pcrItem.registrationNumber}
-              // validation={validator.registrationNumber}
-              hasError={!!validationErrors?.registrationNumber}
-              qa="registrationNumber"
-              action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
-            />
-          )}
-          {isIndustrial && (
-            <SummaryListItem
-              label={x => x.pcrAddPartnerLabels.registeredAddressHeading}
-              content={pcrItem.registeredAddress}
-              // validation={validator.registeredAddress}
-              hasError={!!validationErrors?.registeredAddress}
-              qa="registeredAddress"
-              action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
-            />
+            <>
+              <SummaryListItem
+                // TODO: double check validation here
+                label={x => x.pcrAddPartnerLabels.organisationNameHeading}
+                content={pcrItem.organisationName}
+                // validation={validator.companyHouseOrganisationName}
+                hasError={!!validationErrors?.organisationName}
+                qa="organisationName"
+                action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
+              />
+              <SummaryListItem
+                label={x => x.pcrAddPartnerLabels.registrationNumberHeading}
+                content={pcrItem.registrationNumber}
+                // validation={validator.registrationNumber}
+                hasError={!!validationErrors?.registrationNumber}
+                qa="registrationNumber"
+                action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
+              />
+
+              <SummaryListItem
+                label={x => x.pcrAddPartnerLabels.registeredAddressHeading}
+                content={pcrItem.registeredAddress}
+                // validation={validator.registeredAddress}
+                hasError={!!validationErrors?.registeredAddress}
+                qa="registeredAddress"
+                action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
+              />
+            </>
           )}
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.organisationSizeHeading}
@@ -161,32 +150,32 @@ export const AddPartnerSummary = () => {
             action={isIndustrial ? <EditLink stepName={PCRStepType.organisationDetailsStep} /> : null}
           />
           {isIndustrial && (
-            <SummaryListItem
-              label={x => x.pcrAddPartnerLabels.employeeCountHeading}
-              content={pcrItem.numberOfEmployees}
-              hasError={!!validationErrors?.numberOfEmployees}
-              qa="numberOfEmployees"
-              action={<EditLink stepName={PCRStepType.organisationDetailsStep} />}
-            />
+            <>
+              <SummaryListItem
+                label={x => x.pcrAddPartnerLabels.employeeCountHeading}
+                content={pcrItem.numberOfEmployees}
+                hasError={!!validationErrors?.numberOfEmployees}
+                qa="numberOfEmployees"
+                action={<EditLink stepName={PCRStepType.organisationDetailsStep} />}
+              />
+              <SummaryListItem
+                label={x => x.pcrAddPartnerLabels.financialYearEndHeading}
+                content={<MonthYear value={pcrItem.financialYearEndDate} />}
+                hasError={!!validationErrors?.financialYearEndDate}
+                qa="financialYearEndDate"
+                action={<EditLink stepName={PCRStepType.financeDetailsStep} />}
+              />
+
+              <SummaryListItem
+                label={x => x.pcrAddPartnerLabels.turnoverSummaryHeading}
+                content={<Currency value={pcrItem.financialYearEndTurnover} />}
+                hasError={!!validationErrors?.financialYearEndTurnover}
+                qa="financialYearEndTurnover"
+                action={<EditLink stepName={PCRStepType.financeDetailsStep} />}
+              />
+            </>
           )}
-          {isIndustrial && (
-            <SummaryListItem
-              label={x => x.pcrAddPartnerLabels.financialYearEndHeading}
-              content={<MonthYear value={pcrItem.financialYearEndDate} />}
-              hasError={!!validationErrors?.financialYearEndDate}
-              qa="financialYearEndDate"
-              action={<EditLink stepName={PCRStepType.financeDetailsStep} />}
-            />
-          )}
-          {isIndustrial && (
-            <SummaryListItem
-              label={x => x.pcrAddPartnerLabels.turnoverSummaryHeading}
-              content={<Currency value={pcrItem.financialYearEndTurnover} />}
-              hasError={!!validationErrors?.financialYearEndTurnover}
-              qa="financialYearEndTurnover"
-              action={<EditLink stepName={PCRStepType.financeDetailsStep} />}
-            />
-          )}
+
           <SummaryListItem
             label={x => x.pcrAddPartnerLabels.projectLocationHeading}
             content={pcrItem.projectLocationLabel}
@@ -283,21 +272,22 @@ export const AddPartnerSummary = () => {
       <Section title={x => x.pcrAddPartnerLabels.fundingSectionTitle} qa="add-partner-summary-funding">
         <SummaryList qa="add-partner-summary-list-funding">
           {!isIndustrial && (
-            <SummaryListItem
-              label={x => x.pcrAddPartnerLabels.jesHeading}
-              content={<DocumentsComponent documents={documents} description={DocumentDescription.JeSForm} />}
-              qa="supportingDocumentsJes"
-              action={<EditLink stepName={PCRStepType.jeSStep} />}
-            />
-          )}
-          {!isIndustrial && (
-            <SummaryListItem
-              label={x => x.pcrAddPartnerLabels.tsbReferenceHeading}
-              content={pcrItem.tsbReference}
-              hasError={!!validationErrors?.tsbReference}
-              qa="tsbReference"
-              action={<EditLink stepName={PCRStepType.academicCostsStep} />}
-            />
+            <>
+              <SummaryListItem
+                label={x => x.pcrAddPartnerLabels.jesHeading}
+                content={<DocumentsComponent documents={documents} description={DocumentDescription.JeSForm} />}
+                qa="supportingDocumentsJes"
+                action={<EditLink stepName={PCRStepType.jeSStep} />}
+              />
+
+              <SummaryListItem
+                label={x => x.pcrAddPartnerLabels.tsbReferenceHeading}
+                content={pcrItem.tsbReference}
+                hasError={!!validationErrors?.tsbReference}
+                qa="tsbReference"
+                action={<EditLink stepName={PCRStepType.academicCostsStep} />}
+              />
+            </>
           )}
           {isIndustrial && (
             <SummaryListItem

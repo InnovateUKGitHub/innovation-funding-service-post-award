@@ -12,11 +12,7 @@ import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useLinks } from "../../utils/useNextLink";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import {
-  OtherSourcesOfFundingSchema,
-  otherSourcesOfFundingErrorMap,
-  otherSourcesOfFundingSchema,
-} from "../addPartner.zod";
+import { OtherSourcesOfFundingSchema, addPartnerErrorMap, otherSourcesOfFundingSchema } from "../addPartner.zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { PcrPage } from "../../pcrPage";
@@ -105,7 +101,7 @@ export const OtherSourcesOfFundingStep = () => {
         funds: funds.map(mapWithDateParts),
       },
       resolver: zodResolver(otherSourcesOfFundingSchema, {
-        errorMap: otherSourcesOfFundingErrorMap,
+        errorMap: addPartnerErrorMap,
       }),
     },
   );

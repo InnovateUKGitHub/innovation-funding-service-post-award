@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { FinanceContactSchema, financeContactErrorMap, financeContactSchema } from "../addPartner.zod";
+import { FinanceContactSchema, addPartnerErrorMap, financeContactSchema } from "../addPartner.zod";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 
@@ -42,7 +42,7 @@ export const FinanceContactStep = () => {
       contact1Email: pcrItem.contact1Email ?? "",
     },
     resolver: zodResolver(financeContactSchema, {
-      errorMap: financeContactErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
 

@@ -19,7 +19,7 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { CompaniesHouseSchema, companiesHouseErrorMap, companiesHouseSchema } from "../addPartner.zod";
+import { CompaniesHouseSchema, addPartnerErrorMap, companiesHouseSchema } from "../addPartner.zod";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
@@ -44,7 +44,7 @@ export const CompaniesHouseStep = () => {
       searchResults: "",
     },
     resolver: zodResolver(companiesHouseSchema, {
-      errorMap: companiesHouseErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
   const validationErrors = useRhfErrors(formState.errors);

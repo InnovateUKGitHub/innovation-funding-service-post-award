@@ -15,7 +15,7 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { organisationDetailsErrorMap, organisationDetailsSchema, OrganisationDetailsSchema } from "../addPartner.zod";
+import { addPartnerErrorMap, organisationDetailsSchema, OrganisationDetailsSchema } from "../addPartner.zod";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { PCRParticipantSize } from "@framework/constants/pcrConstants";
@@ -43,7 +43,7 @@ export const OrganisationDetailsStep = () => {
       participantSize: pcrItem.participantSize,
     },
     resolver: zodResolver(organisationDetailsSchema, {
-      errorMap: organisationDetailsErrorMap,
+      errorMap: addPartnerErrorMap,
     }),
   });
 
