@@ -19,11 +19,12 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
-import { CompaniesHouseSchema, addPartnerErrorMap, companiesHouseSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { useUpdateCompaniesHouseResults } from "./useFetchCompanies";
+import { CompaniesHouseSchema, getCompaniesHouseSchema } from "./schemas/companyHouse.zod";
 
 export const CompaniesHouseStep = () => {
   const { getContent } = useContent();
@@ -36,14 +37,13 @@ export const CompaniesHouseStep = () => {
 
   const { handleSubmit, register, formState, trigger, setValue, reset, getValues } = useForm<CompaniesHouseSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       organisationName: pcrItem.organisationName ?? "",
       registeredAddress: pcrItem.registeredAddress ?? "",
       registrationNumber: pcrItem.registrationNumber ?? "",
       searchResults: "",
     },
-    resolver: zodResolver(companiesHouseSchema, {
+    resolver: zodResolver(getCompaniesHouseSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
@@ -58,7 +58,7 @@ export const CompaniesHouseStep = () => {
   const disabled = isFetching || isFetchingCompanies;
 
   return (
-    <PcrPage>
+    <PcrPage validationErrors={validationErrors}>
       <Section data-qa="company-house">
         <H2>{getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}</H2>
         <Form onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
@@ -107,7 +107,6 @@ export const CompaniesHouseStep = () => {
                         if (!matchingCompany) throw new Error("Cannot find matching company");
                         reset({
                           button_submit: "submit",
-                          markedAsComplete: markedAsCompleteHasBeenChecked,
                           registeredAddress: matchingCompany.addressFull,
                           organisationName: matchingCompany.title,
                           registrationNumber,
@@ -129,7 +128,12 @@ export const CompaniesHouseStep = () => {
             <FormGroup hasError={!!validationErrors?.organisationName}>
               <Label htmlFor="organisationName">{getContent(x => x.pcrAddPartnerLabels.organisationNameHeading)}</Label>
               <ValidationError error={validationErrors?.organisationName as RhfError} />
-              <TextInput id="organisationName" {...register("organisationName")} disabled={disabled} />
+              <TextInput
+                hasError={!!validationErrors?.organisationName}
+                id="organisationName"
+                {...register("organisationName")}
+                disabled={disabled}
+              />
             </FormGroup>
 
             <FormGroup hasError={!!validationErrors?.registrationNumber}>
@@ -137,7 +141,12 @@ export const CompaniesHouseStep = () => {
                 {getContent(x => x.pcrAddPartnerLabels.registrationNumberHeading)}
               </Label>
               <ValidationError error={validationErrors?.registrationNumber as RhfError} />
-              <TextInput id="registrationNumber" {...register("registrationNumber")} disabled={disabled} />
+              <TextInput
+                hasError={!!validationErrors?.registrationNumber}
+                id="registrationNumber"
+                {...register("registrationNumber")}
+                disabled={disabled}
+              />
             </FormGroup>
 
             <FormGroup hasError={!!validationErrors?.registeredAddress}>
@@ -145,7 +154,12 @@ export const CompaniesHouseStep = () => {
                 {getContent(x => x.pcrAddPartnerLabels.registeredAddressHeading)}
               </Label>
               <ValidationError error={validationErrors?.registeredAddress as RhfError} />
-              <TextInput id="registeredAddress" {...register("registeredAddress")} disabled={disabled} />
+              <TextInput
+                hasError={!!validationErrors?.registeredAddress}
+                id="registeredAddress"
+                {...register("registeredAddress")}
+                disabled={disabled}
+              />
             </FormGroup>
           </Fieldset>
 

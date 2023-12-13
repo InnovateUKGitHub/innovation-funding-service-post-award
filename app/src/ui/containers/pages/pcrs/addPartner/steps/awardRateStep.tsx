@@ -9,13 +9,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { useContent } from "@ui/hooks/content.hook";
-import { AwardRateSchema, addPartnerErrorMap, awardRateSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { AwardRateSchema, getAwardRateSchema } from "./schemas/awardRate.zod";
 
 export const AwardRateStep = () => {
   const { getContent } = useContent();
@@ -28,11 +29,10 @@ export const AwardRateStep = () => {
 
   const { handleSubmit, register, formState, trigger, setValue } = useForm<AwardRateSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       awardRate: pcrItem.awardRate,
     },
-    resolver: zodResolver(awardRateSchema, {
+    resolver: zodResolver(getAwardRateSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
@@ -43,14 +43,19 @@ export const AwardRateStep = () => {
   const registerButton = createRegisterButton(setValue, "button_submit");
 
   return (
-    <PcrPage>
+    <PcrPage validationErrors={validationErrors}>
       <Section title={x => x.pages.pcrAddPartnerAwardRate.formSectionTitle}>
         <Content markdown value={x => x.pages.pcrAddPartnerAwardRate.guidance} />
         <Form data-qa="addPartnerForm" onSubmit={handleSubmit(data => onSave({ data, context: link(data) }))}>
           <Fieldset>
             <FormGroup hasError={!!validationErrors?.awardRate}>
               <ValidationError error={validationErrors?.awardRate as RhfError} />
-              <NumberInput inputWidth={4} {...register("awardRate")} disabled={isFetching} />
+              <NumberInput
+                hasError={!!validationErrors?.awardRate}
+                inputWidth={4}
+                {...register("awardRate")}
+                disabled={isFetching}
+              />
             </FormGroup>
           </Fieldset>
 

@@ -19,9 +19,10 @@ import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/Va
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
-import { ProjectManagerSchema, addPartnerErrorMap, projectManagerSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
+import { ProjectManagerSchema, getProjectManagerSchema } from "./schemas/projectManager.zod";
 
 export const ProjectManagerDetailsStep = () => {
   const { getContent } = useContent();
@@ -34,14 +35,13 @@ export const ProjectManagerDetailsStep = () => {
 
   const { handleSubmit, register, formState, trigger, setValue, reset } = useForm<ProjectManagerSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       contact2Forename: pcrItem.contact2Forename ?? "",
       contact2Surname: pcrItem.contact2Surname ?? "",
       contact2Phone: pcrItem.contact2Phone ?? "",
       contact2Email: pcrItem.contact2Email ?? "",
     },
-    resolver: zodResolver(projectManagerSchema, {
+    resolver: zodResolver(getProjectManagerSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
@@ -78,7 +78,6 @@ export const ProjectManagerDetailsStep = () => {
                 name="useFinanceContactDetails"
                 onClick={() =>
                   reset({
-                    markedAsComplete: markedAsCompleteHasBeenChecked,
                     button_submit: "submit",
                     contact2Forename: pcrItem.contact1Forename ?? "",
                     contact2Surname: pcrItem.contact1Surname ?? "",

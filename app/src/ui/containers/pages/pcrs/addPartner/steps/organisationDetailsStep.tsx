@@ -15,10 +15,12 @@ import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fields
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
-import { addPartnerErrorMap, organisationDetailsSchema, OrganisationDetailsSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
 import { PCRParticipantSize } from "@framework/constants/pcrConstants";
+import { OrganisationDetailsSchema, getOrganisationDetailsSchema } from "./schemas/organisationDetails.zod";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 const participantSizeOptions = [
   { label: "Large", value: PCRParticipantSize.Large },
@@ -37,12 +39,11 @@ export const OrganisationDetailsStep = () => {
 
   const { handleSubmit, register, formState, trigger, setValue } = useForm<OrganisationDetailsSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       numberOfEmployees: pcrItem.numberOfEmployees,
       participantSize: pcrItem.participantSize,
     },
-    resolver: zodResolver(organisationDetailsSchema, {
+    resolver: zodResolver(getOrganisationDetailsSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
@@ -81,8 +82,10 @@ export const OrganisationDetailsStep = () => {
 
           <Fieldset>
             <Legend>{getContent(x => x.pcrAddPartnerLabels.employeeCountHeading)}</Legend>
-            <FormGroup>
+            <FormGroup hasError={!!validationErrors?.numberOfEmployees}>
+              <ValidationError error={validationErrors?.numberOfEmployees as RhfError} />
               <NumberInput
+                hasError={!!validationErrors?.numberOfEmployees}
                 inputWidth={4}
                 {...register("numberOfEmployees")}
                 disabled={isFetching}

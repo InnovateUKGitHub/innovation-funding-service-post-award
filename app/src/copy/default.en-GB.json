@@ -2029,6 +2029,80 @@
     },
     "pcr": {
       "addPartner": {
+        "awardRate": {
+          "errors": {
+            "too_small": "Enter a valid funding level.",
+            "invalid_type": "Enter a funding level."
+          }
+        },
+        "contact1Forename": {
+          "errors": {
+            "too_small": "Enter a finance contact name.",
+            "invalid_type": "Enter a finance contact name.",
+            "too_big": "Finance contact name must be {{count}} characters or less."
+          }
+        },
+        "contact1Surname": {
+          "errors": {
+            "too_small": "Enter a finance contact surname.",
+            "invalid_type": "Enter a finance contact surname.",
+            "too_big": "Finance contact surname must be {{count}} characters or less."
+          }
+        },
+        "contact1Email": {
+          "errors": {
+            "too_small": "Enter a finance contact email address.",
+            "invalid_type": "Enter a finance contact email address.",
+            "too_big": "Email address must be {{count}} characters or less."
+          }
+        },
+        "contact1Phone": {
+          "errors": {
+            "too_small": "Enter a finance contact phone number.",
+            "invalid_type": "Enter a finance contact phone number.",
+            "too_big": "Finance contact phone number must be {{count}} characters or less."
+          }
+        },
+        "contact2Forename": {
+          "errors": {
+            "too_small": "Enter a project manager name.",
+            "invalid_type": "Enter a project manager name.",
+            "too_big": "Project manager name must be {{count}} characters or less."
+          }
+        },
+        "contact2Surname": {
+          "errors": {
+            "too_small": "Enter a project manager name.",
+            "invalid_type": "Enter a project manager name.",
+            "too_big": "Project manager surname must be {{count}} characters or less."
+          }
+        },
+        "contact2Email": {
+          "errors": {
+            "too_small": "Enter a project manager email address.",
+            "invalid_type": "Enter a project manager email address.",
+            "too_big": "Email address must be {{count}} characters or less."
+          }
+        },
+        "contact2Phone": {
+          "errors": {
+            "too_small": "Enter a project manager phone number.",
+            "invalid_type": "Enter a project manager phone number.",
+            "too_big": "Project manager phone number must be {{count}} characters or less."
+          }
+        },
+        "financialYearEndTurnover": {
+          "errors": {
+            "invalid_type": "Enter a valid financial year end turnover.",
+            "too_small": "Enter a valid financial year end turnover."
+          }
+        },
+        "financialYearEndDate": {
+          "errors": {
+            "invalid_type": "Enter a financial year end.",
+            "too_small": "Enter a financial year end."
+          }
+        },
         "funds": {
           "arrayType": {
             "description": {
@@ -2058,52 +2132,17 @@
             "too_small": "Select a project output."
           }
         },
-        "contact1Forename": {
+
+        "numberOfEmployees": {
           "errors": {
-            "too_small": "Enter a finance contact name.",
-            "invalid_type": "Enter a finance contact name.",
-            "too_big": "Finance contact name must be 50 characters or less."
+            "invalid_type": "Enter the number of employees.",
+            "custom": "Please enter a valid number of employees."
           }
         },
-        "contact1Surname": {
+        "organisationName": {
           "errors": {
-            "too_small": "Enter a finance contact surname.",
-            "invalid_type": "Enter a finance contact surname.",
-            "too_big": "Finance contact surname must be 50 characters or less."
-          }
-        },
-        "contact1Email": {
-          "errors": {
-            "too_small": "Enter a finance contact email address.",
-            "invalid_type": "Enter a finance contact email address.",
-            "too_big": "Email address must be 255 characters or less."
-          }
-        },
-        "contact1Phone": {
-          "errors": {
-            "too_small": "Enter a finance contact phone number.",
-            "invalid_type": "Enter a finance contact phone number.",
-            "too_big": "Finance contact phone number must be 20 characters or less."
-          }
-        },
-        "contact2Forename": {
-          "errors": {
-            "too_big": "Project manager name must be 50 characters or less."
-          }
-        },
-        "contact2Surname": {
-          "errors": {
-            "too_big": "Project manager surname must be 50 characters or less."
-          }
-        },
-        "contact2Email": {
-          "errors": {
-            "too_big": "Email address must be 255 characters or less."
-          }
-        },
-        "contact2Phone": {
-          "errors": {
-            "too_big": "Project manager phone number must be 20 characters or less."
+            "too_small": "Enter an organisation name.",
+            "invalid_type": "Enter an organisation name."
           }
         },
         "partnerType": {
@@ -2136,6 +2175,18 @@
           "errors": {
             "invalid_type": "Select a project role.",
             "too_small": "Select a project role."
+          }
+        },
+        "registeredAddress": {
+          "errors": {
+            "too_small": "Enter a registered address.",
+            "invalid_type": "Enter a registered address."
+          }
+        },
+        "registrationNumber": {
+          "errors": {
+            "too_small": "Enter a registration number.",
+            "invalid_type": "Enter a registration number."
           }
         }
       },

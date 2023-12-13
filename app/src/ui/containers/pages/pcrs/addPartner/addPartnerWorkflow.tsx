@@ -15,7 +15,7 @@ import { AcademicCostsStep } from "./steps/academicCostsStep";
 import { AcademicOrganisationStep } from "./steps/academicOrganisationStep";
 import { AddPartnerSummary } from "./addPartnerSummary";
 import { StateAidEligibilityStep } from "./steps/aidEligibilityStep";
-import { CompaniesHouseStep } from "./CompaniesHouse/CompaniesHouseStep";
+import { CompaniesHouseStep } from "./steps/CompaniesHouseStep";
 import { FinanceContactStep } from "./steps/financeContactStep";
 import { FinanceDetailsStep } from "./steps/financeDetailsStep";
 import { JeSStep } from "./steps/jeSStep";

@@ -207,6 +207,41 @@ const getMultiFileValidation = (options: IAppOptions) =>
       }
     });
 
+const integerInput = z.union([
+  z.number().int(),
+  z.string().transform((x, ctx) => {
+    if (x === "") return null;
+    const x1 = Number(x);
+    if (!Number.isInteger(x1)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    return x1;
+  }),
+]);
+
+const numberInput = z.union([z.number(), z.string().transform(x => (x === "" ? null : Number(x)))]);
+
+const positiveNumberInput = z.union([
+  z.number().min(0),
+  z.string().transform((x, ctx) => {
+    if (x === "") return null;
+    const x1 = Number(x);
+    if (x1 < 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.too_small,
+        minimum: 0,
+        inclusive: true,
+        type: "number",
+      });
+    }
+
+    return x1;
+  }),
+]);
+
 export {
   projectIdValidation,
   pcrIdValidation,
@@ -219,6 +254,9 @@ export {
   zeroOrGreaterCurrencyValidation,
   claimIdValidation,
   costCategoryIdValidation,
+  integerInput,
+  numberInput,
+  positiveNumberInput,
   emptyStringToUndefinedValidation,
   emptyStringToNullValidation,
   getSingleFileValidation,

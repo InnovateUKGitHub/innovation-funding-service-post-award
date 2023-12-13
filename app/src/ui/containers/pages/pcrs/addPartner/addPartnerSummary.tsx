@@ -16,7 +16,7 @@ import { useAddPartnerWorkflowQuery } from "./addPartner.logic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
-import { AddPartnerSchema, addPartnerErrorMap, getAddPartnerSummarySchema } from "./addPartner.zod";
+import { AddPartnerSchema, addPartnerErrorMap, getAddPartnerSummarySchema } from "./addPartnerSummary.zod";
 import { PcrPage } from "../pcrPage";
 import { EditLink, ViewLink } from "../pcrItemSummaryLinks";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
@@ -159,6 +159,7 @@ export const AddPartnerSummary = () => {
                 action={<EditLink stepName={PCRStepType.organisationDetailsStep} />}
               />
               <SummaryListItem
+                id="financialYearEndDate"
                 label={x => x.pcrAddPartnerLabels.financialYearEndHeading}
                 content={<MonthYear value={pcrItem.financialYearEndDate} />}
                 hasError={!!validationErrors?.financialYearEndDate}
@@ -342,6 +343,7 @@ export const AddPartnerSummary = () => {
             />
           )}
           <SummaryListItem
+            id="awardRate"
             label={x => x.pcrAddPartnerLabels.fundingLevelHeading}
             content={<Percentage value={pcrItem.awardRate} />}
             hasError={!!validationErrors?.awardRate}

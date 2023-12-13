@@ -6,7 +6,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useForm } from "react-hook-form";
-import { RoleAndOrganisationSchema, addPartnerErrorMap, roleAndOrganisationSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { useLinks } from "../../utils/useNextLink";
@@ -24,6 +24,7 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { PCROrganisationType, PCRParticipantSize, getPCROrganisationType } from "@framework/constants/pcrConstants";
+import { RoleAndOrganisationSchema, roleAndOrganisationSchema } from "./schemas/roleAndOrganisation.zod";
 
 const setData = (data: RoleAndOrganisationSchema) => {
   // It's not possible to come back to this page after it's submitted
@@ -47,23 +48,12 @@ const setData = (data: RoleAndOrganisationSchema) => {
 
 export const RoleAndOrganisationStep = () => {
   const { getContent } = useContent();
-  const {
-    projectId,
-    itemId,
-    fetchKey,
-    onSave,
-    isFetching,
-    markedAsCompleteHasBeenChecked,
-    useFormValidate,
-    refreshItemWorkflowQuery,
-  } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, onSave, isFetching, useFormValidate, refreshItemWorkflowQuery } =
+    usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const { handleSubmit, register, formState, trigger, setValue } = useForm<RoleAndOrganisationSchema>({
-    defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
-    },
     resolver: zodResolver(roleAndOrganisationSchema, {
       errorMap: addPartnerErrorMap,
     }),

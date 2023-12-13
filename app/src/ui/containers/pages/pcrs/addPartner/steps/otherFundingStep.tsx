@@ -7,7 +7,7 @@ import { usePcrWorkflowContext } from "../../pcrItemWorkflowMigrated";
 import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useSummaryLink } from "../../utils/useNextLink";
 import { useForm } from "react-hook-form";
-import { addPartnerErrorMap, otherFundingSchema, OtherFundingSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
@@ -16,6 +16,7 @@ import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/R
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { OtherFundingSchema, otherFundingSchema } from "./schemas/otherFunding.zod";
 
 const options = [
   {
@@ -30,25 +31,13 @@ const options = [
 
 export const OtherFundingStep = () => {
   const { getContent } = useContent();
-  const {
-    projectId,
-    pcrId,
-    itemId,
-    fetchKey,
-    markedAsCompleteHasBeenChecked,
-    useFormValidate,
-    onSave,
-    isFetching,
-    //refreshItemWorkflowQuery,
-    routes,
-  } = usePcrWorkflowContext();
+  const { projectId, pcrId, itemId, fetchKey, useFormValidate, onSave, isFetching, routes } = usePcrWorkflowContext();
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const summaryLink = useSummaryLink();
   const { handleSubmit, register, formState, trigger, setValue } = useForm<OtherFundingSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       hasOtherFunding: pcrItem.hasOtherFunding ? "true" : "false",
     },

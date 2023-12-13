@@ -19,9 +19,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { FinanceContactSchema, addPartnerErrorMap, financeContactSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { FinanceContactSchema, getFinanceContactSchema } from "./schemas/financeContact.zod";
 
 export const FinanceContactStep = () => {
   const { getContent } = useContent();
@@ -34,14 +35,13 @@ export const FinanceContactStep = () => {
 
   const { handleSubmit, register, formState, trigger, setValue } = useForm<FinanceContactSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       contact1Forename: pcrItem.contact1Forename ?? "",
       contact1Surname: pcrItem.contact1Surname ?? "",
       contact1Phone: pcrItem.contact1Phone ?? "",
       contact1Email: pcrItem.contact1Email ?? "",
     },
-    resolver: zodResolver(financeContactSchema, {
+    resolver: zodResolver(getFinanceContactSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
@@ -73,6 +73,7 @@ export const FinanceContactStep = () => {
               <Label htmlFor="contact1Forename">{getContent(x => x.pcrAddPartnerLabels.contactFirstNameHeading)}</Label>
               <ValidationError error={validationErrors?.contact1Forename as RhfErrors} />
               <TextInput
+                hasError={!!validationErrors?.contact1Forename}
                 defaultValue={pcrItem.contact1Forename ?? ""}
                 id="contact1Forename"
                 disabled={isFetching}
@@ -84,6 +85,7 @@ export const FinanceContactStep = () => {
               <Label htmlFor="contact1Surname">{getContent(x => x.pcrAddPartnerLabels.contactLastNameHeading)}</Label>
               <ValidationError error={validationErrors?.contact1Surname as RhfErrors} />
               <TextInput
+                hasError={!!validationErrors?.contact1Surname}
                 defaultValue={pcrItem.contact1Surname ?? ""}
                 id="contact1Surname"
                 disabled={isFetching}
@@ -98,6 +100,7 @@ export const FinanceContactStep = () => {
               </Hint>
               <ValidationError error={validationErrors?.contact1Phone as RhfErrors} />
               <TextInput
+                hasError={!!validationErrors?.contact1Phone}
                 aria-describedby="hint-for-contact1Phone"
                 defaultValue={pcrItem.contact1Phone ?? ""}
                 id="contact1Phone"
@@ -110,6 +113,7 @@ export const FinanceContactStep = () => {
               <Label htmlFor="contact1Email">{getContent(x => x.pcrAddPartnerLabels.contactEmailHeading)}</Label>
               <ValidationError error={validationErrors?.contact1Email as RhfErrors} />
               <TextInput
+                hasError={!!validationErrors?.contact1Email}
                 defaultValue={pcrItem.contact1Email ?? ""}
                 id="contact1Email"
                 {...register("contact1Email")}

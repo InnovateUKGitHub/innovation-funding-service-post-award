@@ -12,7 +12,7 @@ import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 import { useLinks } from "../../utils/useNextLink";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
-import { OtherSourcesOfFundingSchema, addPartnerErrorMap, otherSourcesOfFundingSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { PcrPage } from "../../pcrPage";
@@ -29,6 +29,7 @@ import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atom
 import { head } from "lodash";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { OtherSourcesOfFundingSchema, otherSourcesOfFundingSchema } from "./schemas/otherSourcesOfFunding.zod";
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
   const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Public_Sector_Funding);
@@ -79,8 +80,7 @@ export const mapWithDateParts = (fund: PCRSpendProfileOtherFundingDto) => ({
 export const OtherSourcesOfFundingStep = () => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
-  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
-    usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, useFormValidate, onSave, isFetching } = usePcrWorkflowContext();
 
   const { costCategories, pcrSpendProfile } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
@@ -96,7 +96,6 @@ export const OtherSourcesOfFundingStep = () => {
   const { handleSubmit, register, formState, trigger, setValue, watch, control } = useForm<OtherSourcesOfFundingSchema>(
     {
       defaultValues: {
-        markedAsComplete: markedAsCompleteHasBeenChecked,
         button_submit: "submit",
         funds: funds.map(mapWithDateParts),
       },

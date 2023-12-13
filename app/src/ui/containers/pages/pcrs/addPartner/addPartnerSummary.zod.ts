@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { makeZodI18nMap } from "@shared/zodi18n";
-import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
 import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framework/constants/pcrConstants";
 
 export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
@@ -9,15 +8,6 @@ const common = {
   button_submit: z.string(),
   markedAsComplete: z.boolean(),
 };
-
-export const roleAndOrganisationSchema = z.object({
-  ...common,
-  projectRole: z.coerce.number().gt(0),
-  isCommercialWork: z.string(),
-  partnerType: z.coerce.number().gt(0),
-});
-
-export type RoleAndOrganisationSchema = z.infer<typeof roleAndOrganisationSchema>;
 
 export const academicOrganisationSchema = z.object({
   ...common,
@@ -38,143 +28,11 @@ export const academicCostsSchema = z.object({
 
 export type AcademicCostsSchema = z.infer<typeof academicCostsSchema>;
 
-export const getProjectLocationSchema = (markedAsComplete: boolean) =>
-  markedAsComplete
-    ? z.object({
-        button_submit: z.string(),
-        projectLocation: z.coerce.number().gt(0),
-        projectCity: z.string().min(1).max(40),
-        projectPostcode: z.string().max(10),
-      })
-    : z.object({
-        button_submit: z.string(),
-        projectLocation: z.coerce.number().gt(0),
-        projectCity: z.string().max(40),
-        projectPostcode: z.string().max(10),
-      });
-
-export type ProjectLocationSchema = z.infer<ReturnType<typeof getProjectLocationSchema>>;
-
-export const financeContactSchema = z.object({
-  ...common,
-  contact1Email: z.string().max(255),
-  contact1Forename: z.string().max(50),
-  contact1Surname: z.string().max(50),
-  contact1Phone: z.string().max(20),
-});
-
-export type FinanceContactSchema = z.infer<typeof financeContactSchema>;
-
-export const projectManagerSchema = z.object({
-  ...common,
-  contact2Email: z.string().max(255),
-  contact2Forename: z.string().max(50),
-  contact2Surname: z.string().max(50),
-  contact2Phone: z.string().max(20),
-});
-
-export type ProjectManagerSchema = z.infer<typeof projectManagerSchema>;
-
-export const companiesHouseSchema = z.object({
-  ...common,
-  organisationName: z.string(),
-  registrationNumber: z.string(),
-  registeredAddress: z.string(),
-  searchResults: z.string(),
-});
-
-export type CompaniesHouseSchema = z.infer<typeof companiesHouseSchema>;
-
-export const organisationDetailsSchema = z.object({
-  ...common,
-  participantSize: z.coerce.number(),
-  numberOfEmployees: z.coerce.number().nullable(),
-});
-
-export type OrganisationDetailsSchema = z.infer<typeof organisationDetailsSchema>;
-
-export const awardRateSchema = z.object({
-  ...common,
-  awardRate: z.coerce.number().nullable(),
-});
-
-export type AwardRateSchema = z.infer<typeof awardRateSchema>;
-
-export const otherFundingSchema = z.object({
-  ...common,
-  hasOtherFunding: z.string().nullable(),
-});
-
-export type OtherFundingSchema = z.infer<typeof otherFundingSchema>;
-
-const valueDescription = z.object({
-  value: z.coerce.number().min(1),
-  description: z.string().min(1),
-});
-
-/*
- * this approach bypasses the limitation that objects only reach refine after all fields have been otherwise passed
- */
-const dateSecured = z
-  .object({
-    dateSecured_month: z.string().optional().nullable(),
-    dateSecured_year: z.string().optional().nullable(),
-    dateSecured: z.date().nullable(),
-  })
-  .superRefine((data, ctx) => {
-    if (isEmptyDate(data.dateSecured_month, data.dateSecured_year)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["dateSecured"],
-      });
-    }
-
-    if (!isValidMonth(data.dateSecured_month) || !isValidYear(data.dateSecured_year)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.invalid_date,
-        path: ["dateSecured"],
-      });
-    }
-  });
-
-export const fundingSchema = z.object({
-  funds: z.array(valueDescription.and(dateSecured)),
-});
-
-const baseSchema = z.object({
-  ...common,
-  itemsLength: z.string(),
-});
-
-export const otherSourcesOfFundingSchema = baseSchema.and(fundingSchema);
-
-export type OtherSourcesOfFundingSchema = z.infer<typeof otherSourcesOfFundingSchema>;
-
 export const spendProfileSchema = z.object({
   ...common,
 });
 
 export type SpendProfileSchema = z.infer<typeof spendProfileSchema>;
-
-export const financeDetailsSchema = z
-  .object({
-    ...common,
-    financialYearEndTurnover: z.coerce.number().nullable(),
-    financialYearEndDate_month: z.string().optional(),
-    financialYearEndDate_year: z.string().optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (!isEmptyDate(data.financialYearEndDate_month, data.financialYearEndDate_year)) {
-      if (!isValidMonth(data.financialYearEndDate_month) || !isValidYear(data.financialYearEndDate_year)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ["financialYearEndDate"],
-        });
-      }
-    }
-  });
-
-export type FinanceDetailsSchema = z.infer<typeof financeDetailsSchema>;
 
 const projectManagerDetailsSchema = z.object({
   contact2Email: z.string().min(1),
@@ -244,7 +102,7 @@ const industrialPartnerSummarySchema = z.object({
   registrationNumber: z.string(),
   numberOfEmployees: z.number(),
   financialYearEndDate: z.date(),
-  financialYearEndTurnover: z.number(),
+  financialYearEndTurnover: z.number().min(0).nullable(),
 });
 
 export const getAddPartnerSummarySchema = ({

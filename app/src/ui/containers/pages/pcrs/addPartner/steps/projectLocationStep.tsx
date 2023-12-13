@@ -13,13 +13,14 @@ import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
-import { ProjectLocationSchema, addPartnerErrorMap, getProjectLocationSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { ProjectLocationSchema, getProjectLocationSchema } from "./schemas/projectLocation.zod";
 
 const pcrProjectLocation = [
   {

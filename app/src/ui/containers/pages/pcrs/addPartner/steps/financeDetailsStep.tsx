@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { FinanceDetailsSchema, addPartnerErrorMap, financeDetailsSchema } from "../addPartner.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { PcrPage } from "../../pcrPage";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
@@ -21,6 +21,7 @@ import { DateInput } from "@ui/components/atomicDesign/atoms/DateInputs/DateInpu
 import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
+import { FinanceDetailsSchema, getFinanceDetailsSchema } from "./schemas/financialDetails.zod";
 
 export const FinanceDetailsStep = () => {
   const { getContent } = useContent();
@@ -33,13 +34,12 @@ export const FinanceDetailsStep = () => {
 
   const { handleSubmit, register, formState, trigger, setValue } = useForm<FinanceDetailsSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       financialYearEndTurnover: pcrItem.financialYearEndTurnover,
       financialYearEndDate_month: getMonth(pcrItem.financialYearEndDate),
       financialYearEndDate_year: getYear(pcrItem.financialYearEndDate),
     },
-    resolver: zodResolver(financeDetailsSchema, {
+    resolver: zodResolver(getFinanceDetailsSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
@@ -91,7 +91,12 @@ export const FinanceDetailsStep = () => {
             <Legend>{getContent(x => x.pages.pcrAddPartnerFinanceDetails.headingTurnover)}</Legend>
             <FormGroup hasError={!!validationErrors?.financialYearEndTurnover}>
               <ValidationError error={validationErrors?.financialYearEndTurnover as RhfError} />
-              <NumberInput inputWidth="one-third" {...register("financialYearEndTurnover")} disabled={isFetching} />
+              <NumberInput
+                hasError={!!validationErrors?.financialYearEndTurnover}
+                inputWidth="one-third"
+                {...register("financialYearEndTurnover")}
+                disabled={isFetching}
+              />
             </FormGroup>
           </Fieldset>
 

@@ -19,7 +19,7 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { AcademicCostsSchema, addPartnerErrorMap, academicCostsSchema } from "../addPartner.zod";
+import { AcademicCostsSchema, addPartnerErrorMap, academicCostsSchema } from "../addPartnerSummary.zod";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
