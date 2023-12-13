@@ -35,6 +35,7 @@ export class TestConfig implements IConfig {
   public logLevel = LogLevel.DEBUG;
 
   public options = {
+    maxTotalFileSize: 100000,
     maxFileSize: 100000,
     maxUploadFileCount: 10,
     maxFileBasenameLength: 80,

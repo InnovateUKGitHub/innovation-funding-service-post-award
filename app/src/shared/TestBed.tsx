@@ -63,6 +63,7 @@ export function TestBed({
       futureTimeExtensionInYears: 5,
     },
     options: {
+      maxTotalFileSize: 33554432,
       maxFileSize: 33554432,
       maxUploadFileCount: 10,
       maxFileBasenameLength: 80,

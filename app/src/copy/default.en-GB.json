@@ -70,7 +70,7 @@
     },
     "documentGuidance": {
       "header": "Learn more about files you can upload",
-      "message": "You can upload up to {{documentCount}} documents at a time. Each document must:\n\n- be less than {{maxFileSize}} in file size\n- have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.\n\nYou can upload these file types:\n\n- PDF ({{ documentFormats, arrayJoin }})\n- text ({{ textFormats, arrayJoin }})\n- presentation ({{ presentationFormats, arrayJoin }})\n- spreadsheet ({{ spreadsheetFormats, arrayJoin }})\n- images ({{ imageFormats, arrayJoin }})\n"
+      "message": "You can upload up to {{ documentCount }} documents at a time. The documents must:\n\n- total no more than {{ size, bytes }} in file size\n- each have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.\n\nYou can upload these file types:\n\n- PDF ({{ documentFormats, arrayJoin }})\n- text ({{ textFormats, arrayJoin }})\n- presentation ({{ presentationFormats, arrayJoin }})\n- spreadsheet ({{ spreadsheetFormats, arrayJoin }})\n- images ({{ imageFormats, arrayJoin }})\n"
     },
     "claimLastModified": {
       "message": "Changes last saved",
@@ -1528,7 +1528,7 @@
     "documentValidator": {
       "nameInvalidCharacters": "Your document '{{ name }}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.",
       "fileTypeInvalid": "You cannot upload '{{ name }}' because it is the wrong file type.",
-      "fileSizeTooLarge": "You cannot upload '{{ name }}' because it must be smaller than {{ size }}.",
+      "fileSizeTooLarge": "You cannot upload '{{ name }}' because it must be no more than {{ size }}.",
       "fileBasenameTooLong": "You cannot upload '{{ name }}' because the name of the file must be shorter than {{ count }} characters.",
       "fileSizeEmpty": "You cannot upload '{{ name }}' because it is empty.",
       "fileNameEmpty": "You cannot upload this file because the file has no name.",
@@ -1540,7 +1540,7 @@
       "fileUploadFailure_other": "One or more of your files cannot be uploaded.",
       "fileMissing": "File does not exist",
       "impactManagementParticipationDisallowsProjectCompletionForm": "You are not required to upload a Project Completion Form. These questions are handled by the Project Impact survey link sent to the Finance Contact.",
-      "multerTooLarge": "The selected files must be smaller than {{ size }}."
+      "multerTooLarge": "The selected files must be no more than {{ size }}."
     },
     "financialVirementDtoValidator": {
       "loanAmountTooLarge_one": "You cannot exceed '{{ total }}' by '{{ amount }}'. Adjust period '{{ periods, arrayJoin }}' to proceed.",
@@ -1969,9 +1969,10 @@
           "file_basename_too_small": "You cannot upload this file because the file has no name.",
           "file_basename_too_big": "You cannot upload '{{ input.fileName }}' because the name of the file must be shorter than {{ count }} characters.",
           "file_size_too_small": "You cannot upload '{{ input.fileName }}' because it is empty.",
-          "file_size_too_large": "You cannot upload '{{ input.fileName }}' because it must be smaller than {{ size, bytes }}.",
+          "file_size_too_large": "You cannot upload '{{ input.fileName }}' because it must be no more than {{ size, bytes }}.",
           "too_small": "Choose a file to upload.",
-          "too_big": "You can only select up to {{ count }} files at the same time."
+          "too_big": "You can only select up to {{ count }} files at the same time.",
+          "total_size_too_large": "You can only upload up to {{ size, bytes }} at the same time."
         }
       }
     },

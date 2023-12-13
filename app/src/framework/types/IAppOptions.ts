@@ -1,5 +1,7 @@
 export interface IAppOptions {
   readonly maxFileSize: number;
+  readonly maxTotalFileSize: number;
+
   readonly maxUploadFileCount: number;
   readonly maxFileBasenameLength: number;
   /**
