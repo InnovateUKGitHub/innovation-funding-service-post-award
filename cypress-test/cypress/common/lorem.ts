@@ -13,10 +13,12 @@ const getLorem = (chars: number): string => {
   return baseLorem.repeat(repeats) + baseLorem.substring(0, leftOver);
 };
 
-export const loremIpsum100Char = getLorem(100);
+export const loremIpsum10Char = getLorem(10);
+export const loremIpsum20Char = getLorem(20);
+export const loremIpsum40Char = getLorem(40);
+export const loremIpsum50Char = getLorem(50);
 export const loremIpsum159Char = getLorem(159);
 export const loremIpsum255Char = getLorem(255);
-export const loremIpsum254Char = getLorem(254);
 export const loremIpsum1k = getLorem(1_000);
 export const loremIpsum2k = getLorem(2_000);
 export const loremIpsum10k = getLorem(10_000);
