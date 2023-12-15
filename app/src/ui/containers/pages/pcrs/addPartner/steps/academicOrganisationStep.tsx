@@ -35,7 +35,7 @@ export const AcademicOrganisationStep = () => {
   const link = useLinks();
   const { isServer } = useMounted();
 
-  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<AcademicOrganisationSchema>({
+  const { handleSubmit, register, formState, trigger, setValue } = useForm<AcademicOrganisationSchema>({
     defaultValues: {
       button_submit: "submit",
       organisationName: pcrItem.organisationName,
