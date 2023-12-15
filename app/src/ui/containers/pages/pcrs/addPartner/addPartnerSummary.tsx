@@ -104,6 +104,7 @@ export const AddPartnerSummary = () => {
           />
           {!isIndustrial && (
             <SummaryListItem
+              id="organisationName"
               label={x => x.pcrAddPartnerLabels.organisationNameHeading}
               content={pcrItem.organisationName}
               hasError={!!validationErrors?.organisationName}
@@ -116,26 +117,26 @@ export const AddPartnerSummary = () => {
             <>
               <SummaryListItem
                 // TODO: double check validation here
+                id="organisationName"
                 label={x => x.pcrAddPartnerLabels.organisationNameHeading}
                 content={pcrItem.organisationName}
-                // validation={validator.companyHouseOrganisationName}
                 hasError={!!validationErrors?.organisationName}
                 qa="organisationName"
                 action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
               />
               <SummaryListItem
+                id="registrationNumber"
                 label={x => x.pcrAddPartnerLabels.registrationNumberHeading}
                 content={pcrItem.registrationNumber}
-                // validation={validator.registrationNumber}
                 hasError={!!validationErrors?.registrationNumber}
                 qa="registrationNumber"
                 action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
               />
 
               <SummaryListItem
+                id="registeredAddress"
                 label={x => x.pcrAddPartnerLabels.registeredAddressHeading}
                 content={pcrItem.registeredAddress}
-                // validation={validator.registeredAddress}
                 hasError={!!validationErrors?.registeredAddress}
                 qa="registeredAddress"
                 action={<EditLink stepName={PCRStepType.companiesHouseStep} />}
@@ -143,6 +144,7 @@ export const AddPartnerSummary = () => {
             </>
           )}
           <SummaryListItem
+            id="participantSize"
             label={x => x.pcrAddPartnerLabels.organisationSizeHeading}
             content={pcrItem.participantSizeLabel}
             hasError={!!validationErrors?.participantSize}
@@ -152,6 +154,7 @@ export const AddPartnerSummary = () => {
           {isIndustrial && (
             <>
               <SummaryListItem
+                id="numberOfEmployees"
                 label={x => x.pcrAddPartnerLabels.employeeCountHeading}
                 content={pcrItem.numberOfEmployees}
                 hasError={!!validationErrors?.numberOfEmployees}
@@ -168,6 +171,7 @@ export const AddPartnerSummary = () => {
               />
 
               <SummaryListItem
+                id="financialYearEndTurnover"
                 label={x => x.pcrAddPartnerLabels.turnoverSummaryHeading}
                 content={<Currency value={pcrItem.financialYearEndTurnover} />}
                 hasError={!!validationErrors?.financialYearEndTurnover}
@@ -178,6 +182,7 @@ export const AddPartnerSummary = () => {
           )}
 
           <SummaryListItem
+            id="projectLocation"
             label={x => x.pcrAddPartnerLabels.projectLocationHeading}
             content={pcrItem.projectLocationLabel}
             hasError={!!validationErrors?.projectLocation}
@@ -185,6 +190,7 @@ export const AddPartnerSummary = () => {
             action={<EditLink stepName={PCRStepType.projectLocationStep} />}
           />
           <SummaryListItem
+            id="projectCity"
             label={x => x.pcrAddPartnerLabels.townOrCityHeading}
             content={pcrItem.projectCity}
             hasError={!!validationErrors?.projectCity}
@@ -192,6 +198,7 @@ export const AddPartnerSummary = () => {
             action={<EditLink stepName={PCRStepType.projectLocationStep} />}
           />
           <SummaryListItem
+            id="projectPostcode"
             label={x => x.pcrAddPartnerLabels.postcodeHeading}
             content={pcrItem.projectPostcode}
             hasError={!!validationErrors?.projectPostcode}
@@ -205,6 +212,7 @@ export const AddPartnerSummary = () => {
         <Section title={x => x.pcrAddPartnerLabels.financeContactHeading}>
           <SummaryList qa="add-partner-summary-list-contacts-finance-contact">
             <SummaryListItem
+              id="contact1Forename"
               label={x => x.pcrAddPartnerLabels.contactFirstNameHeading}
               content={pcrItem.contact1Forename}
               hasError={!!validationErrors?.contact1Forename}
@@ -212,6 +220,7 @@ export const AddPartnerSummary = () => {
               action={<EditLink stepName={PCRStepType.financeContactStep} />}
             />
             <SummaryListItem
+              id="contact1Surname"
               label={x => x.pcrAddPartnerLabels.contactLastNameHeading}
               content={pcrItem.contact1Surname}
               hasError={!!validationErrors?.contact1Surname}
@@ -219,6 +228,7 @@ export const AddPartnerSummary = () => {
               action={<EditLink stepName={PCRStepType.financeContactStep} />}
             />
             <SummaryListItem
+              id="contact1Phone"
               label={x => x.pcrAddPartnerLabels.contactPhoneNumberHeading}
               content={pcrItem.contact1Phone}
               hasError={!!validationErrors?.contact1Phone}
@@ -226,6 +236,7 @@ export const AddPartnerSummary = () => {
               action={<EditLink stepName={PCRStepType.financeContactStep} />}
             />
             <SummaryListItem
+              id="contact1Email"
               label={x => x.pcrAddPartnerLabels.contactEmailHeading}
               content={pcrItem.contact1Email}
               hasError={!!validationErrors?.contact1Email}
@@ -238,6 +249,7 @@ export const AddPartnerSummary = () => {
           <Section title={x => x.pcrAddPartnerLabels.projectLeadContactHeading}>
             <SummaryList qa="add-partner-summary-list-contacts-project-manager">
               <SummaryListItem
+                id="contact2Forename"
                 label={x => x.pcrAddPartnerLabels.contactFirstNameHeading}
                 content={pcrItem.contact2Forename}
                 hasError={!!validationErrors?.contact2Forename}
@@ -245,6 +257,7 @@ export const AddPartnerSummary = () => {
                 action={<EditLink stepName={PCRStepType.projectManagerDetailsStep} />}
               />
               <SummaryListItem
+                id="contact2Surname"
                 label={x => x.pcrAddPartnerLabels.contactLastNameHeading}
                 content={pcrItem.contact2Surname}
                 hasError={!!validationErrors?.contact2Surname}
@@ -252,6 +265,7 @@ export const AddPartnerSummary = () => {
                 action={<EditLink stepName={PCRStepType.projectManagerDetailsStep} />}
               />
               <SummaryListItem
+                id="contact2Phone"
                 label={x => x.pcrAddPartnerLabels.contactPhoneNumberHeading}
                 content={pcrItem.contact2Phone}
                 hasError={!!validationErrors?.contact2Phone}
@@ -259,6 +273,7 @@ export const AddPartnerSummary = () => {
                 action={<EditLink stepName={PCRStepType.projectManagerDetailsStep} />}
               />
               <SummaryListItem
+                id="contact2Email"
                 label={x => x.pcrAddPartnerLabels.contactEmailHeading}
                 content={pcrItem.contact2Email}
                 hasError={!!validationErrors?.contact2Email}
@@ -282,6 +297,7 @@ export const AddPartnerSummary = () => {
               />
 
               <SummaryListItem
+                id="tsbReference"
                 label={x => x.pcrAddPartnerLabels.tsbReferenceHeading}
                 content={pcrItem.tsbReference}
                 hasError={!!validationErrors?.tsbReference}
@@ -292,6 +308,7 @@ export const AddPartnerSummary = () => {
           )}
           {isIndustrial && (
             <SummaryListItem
+              id="projectCosts"
               label={x => x.pcrAddPartnerLabels.projectCostsHeading}
               content={<Currency value={data.totalProjectCosts} />}
               hasError={!!validationErrors?.totalProjectCosts}
@@ -307,6 +324,7 @@ export const AddPartnerSummary = () => {
           )}
           {!isIndustrial && (
             <SummaryListItem
+              id="projectCosts"
               label={x => x.pcrAddPartnerLabels.projectCostsHeading}
               content={<Currency value={data.totalProjectCosts} />}
               qa="projectCosts"
@@ -321,6 +339,7 @@ export const AddPartnerSummary = () => {
             />
           )}
           <SummaryListItem
+            id="hasOtherFunding"
             label={x => x.pcrAddPartnerLabels.otherFundingSourcesHeading}
             content={
               <Content
@@ -335,6 +354,7 @@ export const AddPartnerSummary = () => {
           />
           {pcrItem.hasOtherFunding && (
             <SummaryListItem
+              id="totalOtherFunding"
               hasError={!!validationErrors?.totalOtherFunding}
               label={x => x.pcrAddPartnerLabels.amountOfOtherFundingHeading}
               content={<Currency value={data.totalOtherFunding} />}
@@ -351,12 +371,14 @@ export const AddPartnerSummary = () => {
             action={<EditLink stepName={PCRStepType.awardRateStep} />}
           />
           <SummaryListItem
+            id="fundingSought"
             label={x => x.pcrAddPartnerLabels.fundingSoughtHeading}
             content={<Currency value={data.fundingSought} />}
             hasError={!!validationErrors?.fundingSought}
             qa="fundingSought"
           />
           <SummaryListItem
+            id="partnerContribution"
             label={x => x.pcrAddPartnerLabels.partnerContributionsHeading}
             content={<Currency value={data.partnerContribution} />}
             hasError={!!validationErrors?.partnerContribution}

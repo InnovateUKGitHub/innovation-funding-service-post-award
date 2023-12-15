@@ -14,7 +14,7 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addPartnerErrorMap, AcademicOrganisationSchema, academicOrganisationSchema } from "../addPartnerSummary.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { useRhfErrors } from "@framework/util/errorHelpers";
 import { createRegisterButton } from "@framework/util/registerButton";
 import { Radio, RadioList } from "@ui/components/atomicDesign/atoms/form/Radio/Radio";
@@ -23,21 +23,24 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { useJesSearchQuery } from "./jesSearch.logic";
 import { useContent } from "@ui/hooks/content.hook";
+import { AcademicOrganisationSchema, getAcademicOrganisationSchema } from "./schemas/academicOrganisation.zod";
+import { useAddPartnerWorkflowQuery } from "../addPartner.logic";
 
 export const AcademicOrganisationStep = () => {
   const { getContent } = useContent();
-  const { markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } = usePcrWorkflowContext();
+  const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
+    usePcrWorkflowContext();
+  const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const link = useLinks();
   const { isServer } = useMounted();
 
-  const { handleSubmit, register, formState, trigger, setValue } = useForm<AcademicOrganisationSchema>({
+  const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<AcademicOrganisationSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
-      organisationName: "",
+      organisationName: pcrItem.organisationName,
     },
-    resolver: zodResolver(academicOrganisationSchema, {
+    resolver: zodResolver(getAcademicOrganisationSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });

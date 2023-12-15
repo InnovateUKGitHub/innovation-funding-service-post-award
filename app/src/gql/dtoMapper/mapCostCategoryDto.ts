@@ -28,7 +28,7 @@ type ProfileNodeForRequiredCostCategories = GQL.Maybe<
   >
 >;
 
-type CostCategoryDtoMapping = Pick<
+export type CostCategoryDtoMapping = Pick<
   CostCategoryDto,
   "id" | "competitionType" | "name" | "isCalculated" | "organisationType" | "type" | "hintText"
 > & { displayOrder: number };

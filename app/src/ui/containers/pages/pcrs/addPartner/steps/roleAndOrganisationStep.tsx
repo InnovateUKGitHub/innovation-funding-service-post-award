@@ -54,6 +54,11 @@ export const RoleAndOrganisationStep = () => {
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const { handleSubmit, register, formState, trigger, setValue } = useForm<RoleAndOrganisationSchema>({
+    defaultValues: {
+      isCommercialWork: pcrItem.isCommercialWork === null ? undefined : pcrItem.isCommercialWork ? "true" : "false",
+      projectRole: pcrItem.projectRole,
+      partnerType: pcrItem.partnerType,
+    },
     resolver: zodResolver(roleAndOrganisationSchema, {
       errorMap: addPartnerErrorMap,
     }),
@@ -127,7 +132,12 @@ export const RoleAndOrganisationStep = () => {
               <ValidationError error={validationErrors?.isCommercialWork as RhfError} />
               <RadioList id="isCommercialWork" name="isCommercialWork" register={register}>
                 {commercialWorkOptions.map(x => (
-                  <Radio key={x.label} {...x} disabled={isFetching} defaultChecked={x.id === "no"} />
+                  <Radio
+                    key={x.label}
+                    {...x}
+                    disabled={isFetching}
+                    defaultChecked={x.id === (pcrItem.isCommercialWork ? "yes" : "no")}
+                  />
                 ))}
               </RadioList>
             </FormGroup>
@@ -177,7 +187,7 @@ const getOptions = <T extends number>(
 ) => {
   const filteredOptions = options.filter(x => x.active);
 
-  const selectedOption = selected && filteredOptions.find(x => parseInt(x.id, 10) === selected);
+  const selectedOption = selected && filteredOptions.find(x => Number(x.value) === selected);
 
   return { options: filteredOptions, selected: selectedOption };
 };

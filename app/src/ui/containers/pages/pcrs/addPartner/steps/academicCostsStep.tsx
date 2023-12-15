@@ -19,11 +19,41 @@ import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/Form
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { Legend } from "@ui/components/atomicDesign/atoms/form/Legend/Legend";
-import { AcademicCostsSchema, addPartnerErrorMap, academicCostsSchema } from "../addPartnerSummary.zod";
+import { addPartnerErrorMap } from "../addPartnerSummary.zod";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
+import { AcademicCostsSchema, getAcademicCostsSchema } from "./schemas/academicCosts.zod";
+import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+
+type AcademicCostsRhfError = {
+  tsbReference: RhfError;
+  costs: {
+    value: RhfError;
+    costCategoryId: RhfError;
+  }[];
+};
+
+const getDefaultCosts = (
+  profile: PcrSpendProfileDto,
+  costCategories: Pick<CostCategoryDto & { displayOrder: number }, "id" | "displayOrder">[],
+) => {
+  if (profile.costs.length) {
+    return profile.costs.map(x => ({
+      value: x.value ?? 0,
+      costCategoryId: x.costCategoryId,
+    }));
+  } else {
+    return costCategories
+      .sort((a, b) => (a.displayOrder < b.displayOrder ? 1 : -1))
+      .map(x => ({
+        value: 0,
+        costCategoryId: x.id,
+      }));
+  }
+};
 
 export const AcademicCostsStep = () => {
   const { isClient } = useMounted();
@@ -39,19 +69,16 @@ export const AcademicCostsStep = () => {
 
   const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<AcademicCostsSchema>({
     defaultValues: {
-      markedAsComplete: markedAsCompleteHasBeenChecked,
       button_submit: "submit",
       tsbReference: pcrItem.tsbReference ?? "",
-      costs: spendProfile.costs.map(x => ({
-        value: x.value ?? 0,
-      })),
+      costs: getDefaultCosts(spendProfile, academicCostCategories),
     },
-    resolver: zodResolver(academicCostsSchema, {
+    resolver: zodResolver(getAcademicCostsSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
     }),
   });
 
-  const validationErrors = useRhfErrors(formState.errors);
+  const validationErrors = useRhfErrors(formState.errors) as AcademicCostsRhfError;
   useFormValidate(trigger);
 
   const registerButton = createRegisterButton(setValue, "button_submit");
@@ -68,10 +95,15 @@ export const AcademicCostsStep = () => {
           onSubmit={handleSubmit(data => {
             return onSave({
               data: {
-                ...data,
+                tsbReference: data.tsbReference,
+                button_submit: data.button_submit,
+                type: pcrItem.type,
                 spendProfile: {
                   ...spendProfile,
-                  costs: spendProfile.costs.map((x, i) => ({ ...x, value: Number(data.costs[i].value ?? 0) })),
+                  costs: spendProfile.costs.map(x => ({
+                    ...x,
+                    value: data.costs.find(xx => xx.costCategoryId === x.costCategoryId)?.value ?? 0,
+                  })),
                 },
               },
               context: link(data),
@@ -80,10 +112,11 @@ export const AcademicCostsStep = () => {
         >
           <Fieldset>
             <Legend>{getContent(x => x.pcrAddPartnerLabels.tsbReferenceHeading)}</Legend>
-            <FormGroup>
+            <FormGroup hasError={!!validationErrors?.tsbReference}>
               <Label htmlFor="tsb-reference">{getContent(x => x.pages.pcrAddPartnerAcademicCosts.tsbLabel)}</Label>
               <ValidationError error={validationErrors?.tsbReference as RhfError} />
               <TextInput
+                hasError={!!validationErrors?.tsbReference}
                 id="tsb-reference"
                 inputWidth="one-third"
                 {...register("tsbReference")}
@@ -113,7 +146,9 @@ export const AcademicCostsStep = () => {
                     <P>{x.name}</P>
                   </TD>
                   <TD>
+                    <ValidationError error={validationErrors?.costs?.[i]?.value as RhfError} />
                     <NumberInput
+                      hasError={!!validationErrors?.costs?.[i]?.value}
                       aria-label={`value of academic cost item ${x.name}`}
                       disabled={isFetching}
                       {...register(`costs.${i}.value`)}

@@ -66,7 +66,6 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   ): PcrSpendProfileEntity {
     const init = this.getBaseSpendProfileEntity(dto);
     const costCategoryType = new CostCategoryList().fromId(dto.costCategory);
-
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Other_Funding:
         return this.mapOtherFunding(context, dto as PCRSpendProfileOtherFundingDto, init);
@@ -315,6 +314,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     }
 
     const originalSpendProfiles = await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId);
+
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const overheadsRates = await context.runQuery(new GetPcrSpendProfileOverheadRateOptionsQuery());
 

@@ -111,21 +111,12 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
     {},
   );
 
-  // const spendProfileWithCostsAndFunds = new SpendProfile(pcrItemId).getSpendProfile(
-  //   pcrSpendProfile,
-  //   academicCostCategories,
-  // );
-
   return {
     project,
     costCategories,
     academicCostCategories,
     pcrItem,
     pcrSpendProfile,
-    // pcrItem: {
-    //   ...pcrItem,
-    //   spendProfile: spendProfileWithCostsAndFunds,
-    // },
     partners,
     documents,
     fragmentRef: data?.salesforce?.uiapi,

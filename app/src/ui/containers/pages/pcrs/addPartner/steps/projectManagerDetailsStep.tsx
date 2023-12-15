@@ -94,6 +94,7 @@ export const ProjectManagerDetailsStep = () => {
               <Label htmlFor="contact2Forename">{getContent(x => x.pcrAddPartnerLabels.contactFirstNameHeading)}</Label>
               <ValidationError error={validationErrors?.contact2Forename as RhfErrors} />
               <TextInput
+                hasError={!!validationErrors?.contact2Forename}
                 defaultValue={pcrItem.contact2Forename ?? ""}
                 id="contact1Forename"
                 disabled={isFetching}
@@ -105,6 +106,7 @@ export const ProjectManagerDetailsStep = () => {
               <Label htmlFor="contact2Surname">{getContent(x => x.pcrAddPartnerLabels.contactLastNameHeading)}</Label>
               <ValidationError error={validationErrors?.contact2Surname as RhfErrors} />
               <TextInput
+                hasError={!!validationErrors?.contact2Surname}
                 defaultValue={pcrItem.contact2Surname ?? ""}
                 id="contact2Surname"
                 disabled={isFetching}
@@ -119,6 +121,7 @@ export const ProjectManagerDetailsStep = () => {
               </Hint>
               <ValidationError error={validationErrors?.contact2Phone as RhfErrors} />
               <TextInput
+                hasError={!!validationErrors?.contact2Phone}
                 aria-describedby="hint-for-contact2Phone"
                 defaultValue={pcrItem.contact2Phone ?? ""}
                 id="contact2Phone"
@@ -131,6 +134,7 @@ export const ProjectManagerDetailsStep = () => {
               <Label htmlFor="contact2Email">{getContent(x => x.pcrAddPartnerLabels.contactEmailHeading)}</Label>
               <ValidationError error={validationErrors?.contact2Email as RhfErrors} />
               <TextInput
+                hasError={!!validationErrors?.contact2Email}
                 defaultValue={pcrItem.contact2Email ?? ""}
                 id="contact2Email"
                 {...register("contact2Email")}

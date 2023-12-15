@@ -59,7 +59,13 @@ type PcrWorkflowContextProps = Data &
   ProjectChangeRequestPrepareItemParams &
   Pick<BaseProps, "config" | "messages" | "routes" | "currentRoute"> & {
     isFetching: boolean;
-    onSave: ({ data, context }: { data: Partial<FullPCRItemDto>; context?: { link: ILinkInfo } }) => Promise<void>;
+    onSave: ({
+      data,
+      context,
+    }: {
+      data: Partial<FullPCRItemDto> & { button_submit?: string | null };
+      context?: { link: ILinkInfo };
+    }) => Promise<void>;
     workflow: PcrWorkflow<Partial<FullPCRItemDto>, null>;
     fetchKey: number;
     displayCompleteForm: boolean;

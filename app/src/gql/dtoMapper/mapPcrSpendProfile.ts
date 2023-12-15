@@ -166,8 +166,9 @@ export class SpendProfile {
 
   getSpendProfile(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategories: Pick<CostCategoryDto, "type" | "id">[],
+    costCategories: Pick<CostCategoryDto, "type" | "id" | "name">[],
   ): PcrSpendProfileDto {
+    // console.log("SpendProfile > getSpendProfile > spendProfile", spendProfiles);
     return {
       pcrItemId: this.pcrItemId,
       costs: costCategories
@@ -195,6 +196,7 @@ export class SpendProfile {
     spendProfiles: PcrSpendProfileEntity[],
   ): PCRSpendProfileCostDto[] {
     const costCategoryType = new CostCategoryList().fromId(costCategory.type);
+
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Academic:
         return this.mapAcademicCosts(spendProfiles, costCategoryType.id);

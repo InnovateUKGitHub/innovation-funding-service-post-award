@@ -4,35 +4,16 @@ import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framew
 
 export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
 
-const common = {
-  button_submit: z.string(),
-  markedAsComplete: z.boolean(),
-};
+// const common = {
+//   button_submit: z.string(),
+//   markedAsComplete: z.boolean(),
+// };
 
-export const academicOrganisationSchema = z.object({
-  ...common,
-  organisationName: z.string(),
-});
+// export const spendProfileSchema = z.object({
+//   ...common,
+// });
 
-export type AcademicOrganisationSchema = z.infer<typeof academicOrganisationSchema>;
-
-export const academicCostsSchema = z.object({
-  ...common,
-  tsbReference: z.string(),
-  costs: z.array(
-    z.object({
-      value: z.coerce.number(),
-    }),
-  ),
-});
-
-export type AcademicCostsSchema = z.infer<typeof academicCostsSchema>;
-
-export const spendProfileSchema = z.object({
-  ...common,
-});
-
-export type SpendProfileSchema = z.infer<typeof spendProfileSchema>;
+// export type SpendProfileSchema = z.infer<typeof spendProfileSchema>;
 
 const projectManagerDetailsSchema = z.object({
   contact2Email: z.string().min(1),
@@ -55,7 +36,10 @@ const submitAddPartnerSummarySchema = z.object({
   participantSize: z.number(),
   partnerType: z.number().gt(0),
   projectCity: z.string().min(1),
-  projectLocation: z.number().transform(x => x as PCRProjectLocation),
+  projectLocation: z
+    .number()
+    .gt(0)
+    .transform(x => x as PCRProjectLocation),
   projectPostcode: z.string().max(10).optional().nullable(),
   projectRole: z.number().gt(0),
 });

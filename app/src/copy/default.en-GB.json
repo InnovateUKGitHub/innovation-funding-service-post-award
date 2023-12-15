@@ -2032,7 +2032,8 @@
         "awardRate": {
           "errors": {
             "too_small": "Enter a valid funding level.",
-            "invalid_type": "Enter a funding level."
+            "invalid_type": "Enter a funding level.",
+            "too_big": "Please enter a funding level up to {{count}}%."
           }
         },
         "contact1Forename": {
@@ -2091,6 +2092,15 @@
             "too_big": "Project manager phone number must be {{count}} characters or less."
           }
         },
+        "costs": {
+          "arrayType": {
+            "value": {
+              "errors": {
+                "invalid_type": "Value must be a number"
+              }
+            }
+          }
+        },
         "financialYearEndTurnover": {
           "errors": {
             "invalid_type": "Enter a valid financial year end turnover.",
@@ -2126,6 +2136,7 @@
             }
           }
         },
+
         "isCommercialWork": {
           "errors": {
             "invalid_type": "Select a project output.",
@@ -2187,6 +2198,12 @@
           "errors": {
             "too_small": "Enter a registration number.",
             "invalid_type": "Enter a registration number."
+          }
+        },
+        "tsbReference": {
+          "errors": {
+            "too_small": "Enter the TSB reference.",
+            "invalid_type": "Enter the TSB reference."
           }
         }
       },

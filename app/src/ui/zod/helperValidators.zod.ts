@@ -242,6 +242,40 @@ const positiveNumberInput = z.union([
   }),
 ]);
 
+const percentageNumberInput = ({ max = 0, min = 100 }: { max: number; min: number } = { max: 100, min: 0 }) =>
+  z.union([
+    z.number().min(min).max(max),
+    z.string().transform((x, ctx) => {
+      if (x === "") return null;
+
+      const x1 = Number(x.replace(/%$/, ""));
+      if (Number.isNaN(x1)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_small,
+          minimum: min,
+          inclusive: true,
+          type: "number",
+        });
+      } else if (x1 < min) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_small,
+          minimum: min,
+          inclusive: true,
+          type: "number",
+        });
+      } else if (x1 > max) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.too_big,
+          maximum: max,
+          inclusive: true,
+          type: "number",
+        });
+      }
+
+      return x1;
+    }),
+  ]);
+
 export {
   projectIdValidation,
   pcrIdValidation,
@@ -256,6 +290,7 @@ export {
   costCategoryIdValidation,
   integerInput,
   numberInput,
+  percentageNumberInput,
   positiveNumberInput,
   emptyStringToUndefinedValidation,
   emptyStringToNullValidation,
