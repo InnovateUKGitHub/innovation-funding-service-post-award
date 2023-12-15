@@ -1,7 +1,6 @@
 import { CostCategoryType } from "@framework/constants/enums";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ProjectDto } from "@framework/dtos/projectDto";
-import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
@@ -21,7 +20,7 @@ const GuidanceSection = ({ project, costCategory }: GuidanceSectionProps) => {
   const isVAT = costCategory.type === CostCategoryType.VAT;
 
   return (
-    <Section>
+    <>
       {isCombinationOfSBRI ? (
         <>
           {isOtherCosts && (
@@ -52,7 +51,7 @@ const GuidanceSection = ({ project, costCategory }: GuidanceSectionProps) => {
         {isClient && getContent(x => x.claimsMessages.editClaimLineItemConvertGbp)}
         {isServer && getContent(x => x.claimsMessages.nonJsEditClaimLineItemConvertGbp)}
       </SimpleString>
-    </Section>
+    </>
   );
 };
 
