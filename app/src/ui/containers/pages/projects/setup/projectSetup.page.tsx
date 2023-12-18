@@ -3,7 +3,7 @@ import { PartnerStatus, BankDetailsTaskStatus, BankCheckStatus } from "@framewor
 import { ProjectRole } from "@framework/constants/project";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { createTypedForm } from "@ui/components/bjss/form/form";
-import { UL } from "@ui/components/atomicDesign/atoms/List/list";
+import { List } from "@ui/components/atomicDesign/atoms/List/list";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
@@ -112,7 +112,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
         </P>
       </Section>
 
-      <UL qa="taskList">
+      <List qa="taskList">
         <TaskListSection title={x => x.taskList.giveUsInfoSectionTitle} qa="WhatDoYouWantToDo">
           <Task
             name={x => x.pages.projectSetup.setSpendProfile}
@@ -141,7 +141,7 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
             validation={mappedErrors?.postcode}
           />
         </TaskListSection>
-      </UL>
+      </List>
 
       <Form.Form
         data={partner}
