@@ -56,7 +56,6 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
   });
   const routes = useRoutes();
   const { getContent } = useContent();
-
   const { onUpdate, isFetching } = useOnForecastSubmit({ periodId, isPm });
 
   useFormRevalidate(watch, trigger);
@@ -106,6 +105,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
             control={control}
             getFieldState={getFieldState}
             disabled={isFetching}
+            trigger={trigger}
           />
           <P>
             {getContent(x => x.components.claimLastModified.message)}

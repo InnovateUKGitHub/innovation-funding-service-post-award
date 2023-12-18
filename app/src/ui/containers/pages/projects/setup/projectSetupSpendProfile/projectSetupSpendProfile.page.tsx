@@ -41,7 +41,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
   const { isPm } = getAuthRoles(project.roles);
 
   const { errorMap, schema } = getForecastTableValidation(data);
-  const { register, handleSubmit, watch, control, formState, getFieldState, setError } = useForm<
+  const { register, handleSubmit, watch, control, formState, getFieldState, setError, trigger } = useForm<
     z.output<ForecastTableSchemaType>
   >({
     resolver: zodResolver(schema, {
@@ -91,6 +91,7 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
           <ForecastTable
             clientProfiles={watch("profile")}
             control={control}
+            trigger={trigger}
             getFieldState={getFieldState}
             disabled={isFetching}
             isProjectSetup
@@ -107,8 +108,12 @@ const ProjectSetupSpendProfilePage = ({ projectId, partnerId }: BaseProps & Proj
         <Section>
           <Fieldset>
             <Legend>{getContent(x => x.pages.projectSetupSpendProfile.markAsComplete)}</Legend>
-            <CheckboxList name="submit" register={register} disabled={isFetching}>
-              <Checkbox id="submit" label={getContent(x => x.pages.projectSetupSpendProfile.readyToSubmitMessage)} />
+            <CheckboxList name="submit" register={register}>
+              <Checkbox
+                id="submit"
+                disabled={isFetching}
+                label={getContent(x => x.pages.projectSetupSpendProfile.readyToSubmitMessage)}
+              />
             </CheckboxList>
           </Fieldset>
         </Section>

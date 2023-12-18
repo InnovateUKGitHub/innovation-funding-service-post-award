@@ -2,7 +2,7 @@ import { validTypingCurrencyRegex } from "@framework/util/numberHelper";
 import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
 import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
 import { DetailedHTMLProps, InputHTMLAttributes } from "react";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, UseFormTrigger } from "react-hook-form";
 import { z } from "zod";
 
 interface ForecastTableCurrencyInputProps {
@@ -10,6 +10,7 @@ interface ForecastTableCurrencyInputProps {
   periodId: number;
   profileId: string;
   control: Control<z.output<ForecastTableSchemaType>>;
+  trigger: UseFormTrigger<z.output<ForecastTableSchemaType>>;
   defaultValue?: string;
   disabled?: boolean;
 }
@@ -19,6 +20,7 @@ const ForecastTableCurrencyInput = ({
   periodId,
   profileId,
   control,
+  trigger,
   defaultValue,
   disabled,
   ...props
@@ -38,6 +40,10 @@ const ForecastTableCurrencyInput = ({
             const valueAsString = e.target.value;
             if (validTypingCurrencyRegex.test(valueAsString)) {
               onChange(valueAsString);
+
+              // Force revalidation of virtual field every time cost cat item changes
+              // @ts-expect-error Virtual field, for storing errors only.
+              trigger(`costCategory.${costCategoryId}`);
             }
           }}
           onBlur={onBlur}
