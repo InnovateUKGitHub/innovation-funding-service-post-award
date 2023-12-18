@@ -45,7 +45,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
   const { isPm } = getAuthRoles(project.roles);
 
   const { errorMap, schema } = getForecastTableValidation(data);
-  const { register, handleSubmit, watch, control, formState, getFieldState, setValue, setError } = useForm<
+  const { register, handleSubmit, watch, control, formState, getFieldState, setValue, setError, trigger } = useForm<
     z.output<ForecastTableSchemaType>
   >({
     resolver: zodResolver(schema, {
@@ -55,7 +55,6 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
   });
   const routes = useRoutes();
   const { getContent } = useContent();
-
   const { onUpdate, isFetching } = useOnForecastSubmit({ periodId, isPm });
 
   const onSubmitUpdate = (dto: z.output<ForecastTableSchemaType>) => {
@@ -104,6 +103,7 @@ const ClaimForecastPage = ({ projectId, partnerId, periodId }: BaseProps & Claim
             control={control}
             getFieldState={getFieldState}
             disabled={isFetching}
+            trigger={trigger}
           />
           <P>
             {getContent(x => x.components.claimLastModified.message)}

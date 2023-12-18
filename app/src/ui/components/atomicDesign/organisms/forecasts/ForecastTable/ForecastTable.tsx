@@ -8,7 +8,7 @@ import { useContent } from "@ui/hooks/content.hook";
 import { ForecastTableSchemaType } from "@ui/zod/forecastTableValidation.zod";
 import classNames from "classnames";
 import { useEffect } from "react";
-import { Control, FieldValues, UseFormGetFieldState } from "react-hook-form";
+import { Control, FieldValues, UseFormGetFieldState, UseFormTrigger } from "react-hook-form";
 import { z } from "zod";
 import { ForecastTableCurrencyInput } from "./ForecastTableCurrencyInput";
 import { forecastTableResize } from "./forecastTableResize";
@@ -17,13 +17,14 @@ import { ForecastTableDto } from "./useMapToForecastTableDto";
 
 export interface ForecastTableProps {
   control?: Control<z.output<ForecastTableSchemaType>>;
+  trigger?: UseFormTrigger<z.output<ForecastTableSchemaType>>;
   getFieldState?: UseFormGetFieldState<FieldValues>;
   tableData: ForecastTableDto;
   disabled?: boolean;
 }
 
 const ForecastTable = (props: ForecastTableProps) => {
-  const { control, getFieldState, disabled, tableData } = props;
+  const { control, getFieldState, disabled, tableData, trigger } = props;
   const { getContent } = useContent();
 
   // Resize the forecast table when the contents of the data changes
@@ -153,13 +154,14 @@ const ForecastTable = (props: ForecastTableProps) => {
                     key={profile.periodId}
                     className={colClassName(profile.rhc)}
                   >
-                    {control && profile.forecastMode && !profile.calculatedField ? (
+                    {control && trigger && profile.forecastMode && !profile.calculatedField ? (
                       <ForecastTableCurrencyInput
                         costCategoryId={costCategory.costCategoryId}
                         periodId={profile.periodId}
                         profileId={profile.profileId}
                         defaultValue={String(profile.value)}
                         control={control}
+                        trigger={trigger}
                         disabled={disabled}
                         aria-label={ariaLabel}
                       />
