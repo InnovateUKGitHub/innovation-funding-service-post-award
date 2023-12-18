@@ -10,6 +10,17 @@ import {
   typeASearchResults,
   companyHouseAutofillAssert,
 } from "../steps";
+import {
+  learnAboutFiles,
+  accessControl,
+  validateFileUpload,
+  uploadFileTooLarge,
+  uploadSingleChar,
+  deleteSingleChar,
+  uploadFileNameTooShort,
+  validateExcessiveFileName,
+  doNotUploadSpecialChar,
+} from "e2e/3-documents/steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
   addPartnerContinue,
@@ -51,11 +62,19 @@ import {
   validateWithoutFundingLevel,
   correctFundingLevelCopy,
   fundingLevelInputValidation,
+  checkDetailsScreenComplete,
+  accessOtherPublicFunding,
+  validateOtherSourceInput,
+  checkDetailsAgain,
+  accessPartnerAgreement,
+  uploadTestFile,
 } from "./add-partner-e2e-steps";
+
+const pmEmail = "james.black@euimeabs.test";
 
 describe("PCR >  Add a partner > E2E", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
   });
 
@@ -92,8 +111,9 @@ describe("PCR >  Add a partner > E2E", () => {
   it("Should show the project title", shouldShowProjectTitle);
 
   it("Should show correct subheadings", () => {
-    ["New partner information", "Project role", "Project outputs", "Organisation type"].forEach(subheading => {
-      cy.get("h2").contains(subheading);
+    cy.get("h2").contains("New partner information");
+    ["Project role", "Project outputs", "Organisation type"].forEach(subheading => {
+      cy.get("legend").contains(subheading);
     });
   });
 
@@ -331,9 +351,52 @@ describe("PCR >  Add a partner > E2E", () => {
 
   it("Should validate the funding level input box", fundingLevelInputValidation);
 
-  it("Should enter 100% as funding level", () => {
-    cy.get("#awardRate").clear().type("100");
+  it("Should enter 75% as funding level", () => {
+    cy.get("#awardRate").clear().type("75");
   });
 
   it("Should now validate but this time no validation link will appear for costs,", validateWithoutFundingLevel);
+
+  it("Should let you click 'Add a partner' and continue to the next screen", addPartnerContinue);
+
+  it("Should validate the details entered on the Details screen", checkDetailsScreenComplete);
+
+  it("Should re-access 'Other public sector funding' and change", accessOtherPublicFunding);
+
+  it("Should add a source and validate the inputs", validateOtherSourceInput);
+
+  it("Should check the Funding from other sources on Details page", checkDetailsAgain);
+
+  it("Should access the Partner agreement section", accessPartnerAgreement);
+
+  it("Should display a clickable 'Learn more about files you can upload' message", learnAboutFiles);
+
+  it("Should have an access control drop-down", accessControl);
+
+  it("Should validate when uploading without choosing a file.", validateFileUpload);
+
+  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+
+  it("Should upload a file with a single character as the name", uploadSingleChar);
+
+  it("Should delete the file with the very short file name", deleteSingleChar);
+
+  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
+
+  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
+
+  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+
+  it("Should upload a testfile and check it appears", uploadTestFile);
+
+  it("Should display the partner agreement", () => {
+    cy.getListItemFromKey("Partner agreement", "testfile.doc");
+  });
+
+  it("Should mark as complete and Save and return to request", () => {
+    cy.getByLabel("I agree with this change").click();
+    cy.clickOn("Save and return to request");
+    cy.heading("Request");
+    cy.get("span").contains("Complete");
+  });
 });

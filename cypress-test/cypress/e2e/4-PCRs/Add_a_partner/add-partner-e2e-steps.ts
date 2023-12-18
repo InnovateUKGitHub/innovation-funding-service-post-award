@@ -8,6 +8,7 @@ import {
   loremIpsum10Char,
   loremIpsum256Char,
 } from "common/lorem";
+import { testFile } from "common/testfileNames";
 
 export const navigateToCostCat = (category: string, row: number) => {
   cy.get("tr")
@@ -98,9 +99,10 @@ export const collaboratorAndBusiness = () => {
 
 export const summaryWithSubs = () => {
   cy.heading("Add a partner");
-  ["Organisation", "Contacts", "Funding", "Agreement", "Mark as complete"].forEach(subheading => {
+  ["Organisation", "Contacts", "Funding", "Agreement"].forEach(subheading => {
     cy.get("h2").contains(subheading);
   });
+  cy.get("legend").contains("Mark as complete");
   cy.get("h3").contains("Finance contact");
 };
 
@@ -355,8 +357,8 @@ export const validateNameOverLimit = () => {
   cy.clickOn("Save and return to summary");
   cy.validationLink(`Finance contact name must be 50 characters or less.`);
   cy.paragraph(`Finance contact name must be 50 characters or less.`);
-  cy.validationLink("Phone number must be 20 characters or less.");
-  cy.paragraph("Phone number must be 20 characters or less.");
+  cy.validationLink("Finance contact phone number must be 20 characters or less.");
+  cy.paragraph("Finance contact phone number must be 20 characters or less.");
   cy.validationLink("Email address must be 255 characters or less.");
   cy.paragraph("Email address must be 255 characters or less.");
 };
@@ -527,6 +529,7 @@ export const completeSubcontractingForm = () => {
   ].forEach(([label, input]) => {
     cy.getByLabel(label).clear().type(input);
   });
+  cy.wait(500);
   cy.clickOn("Save and return to subcontracting");
   cy.get("th").contains("Description");
   cy.clickOn("Save and return to project costs");
@@ -543,6 +546,7 @@ export const completeTandSForm = () => {
     cy.getByLabel(label).clear().type(input);
   });
   cy.paragraph("£1,000.00");
+  cy.wait(500);
   cy.clickOn("Save and return to travel and subsistence");
   cy.tableHeader("Description");
   cy.clickOn("Save and return to project costs");
@@ -561,6 +565,7 @@ export const completeOtherCostsForm = () => {
   ].forEach(([label, input]) => {
     cy.getByLabel(label).type(input);
   });
+  cy.wait(500);
   cy.clickOn("Save and return to other costs");
   cy.get("button").contains("Save and return to project costs").click();
   cy.get("h2").contains("Project costs for new partner");
@@ -619,6 +624,7 @@ export const fundingLevelInputValidation = () => {
     ["!%^&*(", "Please enter a valid funding level."],
   ].forEach(([input, message]) => {
     cy.get("#awardRate").clear().type(input);
+    cy.wait(500);
     cy.clickOn("Save and return to summary");
     cy.validationLink(message);
   });
@@ -629,4 +635,119 @@ export const validateWithoutFundingLevel = () => {
   cy.clickOn("Save and return to request");
   cy.getByQA("validation-summary").should("not.exist");
   cy.get("h2").contains("Details");
+};
+
+export const checkDetailsScreenComplete = () => {
+  [
+    ["Project role", "Collaborator"],
+    ["Commercial or economic project outputs", "No"],
+    ["Organisation type", "Business"],
+    ["Eligibility of aid declaration", "Not applicable"],
+    ["Organisation name", "A LIMITED"],
+    ["Registration number", "11790215"],
+    ["Registered address", "38 Springfield Road, Gillingham, Kent, England, ME7 1YJ"],
+    ["Size", "Medium"],
+    ["Number of full time employees", "100"],
+    ["End of financial year", "2024"],
+    ["Turnover", "£300,000.00"],
+    ["Project location", "Inside the United Kingdom"],
+    ["Name of town or city", "Swindon"],
+    ["Postcode", "SN5 1LT"],
+    ["First name", "Joseph"],
+    ["Last name", "Dredd"],
+    ["Phone number", "01234567890"],
+    ["Email", "j.dredd@mc1justice.law"],
+    ["Project costs for new partner", "£20,656.58"],
+    ["Other sources of funding", "No"],
+    ["Funding level", "100.00%"],
+    ["Funding sought", "£7,992.44"],
+    ["Partner contribution to project", "£2,664.15"],
+    ["Partner agreement", "Not applicable"],
+  ].forEach(([section, data]) => {
+    cy.getListItemFromKey(section, data);
+  });
+};
+
+export const accessOtherPublicFunding = () => {
+  cy.getListItemFromKey("Other sources of funding", "Edit").click();
+  cy.get("h2").contains("Other public sector funding?");
+  cy.getByLabel("Yes").click();
+  cy.button("Save and continue").click();
+  cy.paragraph(
+    "Include all sources of funding the new partner is receiving on top of the funding they are claiming from Innovate UK. These will be taken into account when calculating the funding they will receive.",
+  );
+  ["Source of funding", "Date secured (MM YYYY)", "Funding amount (£)"].forEach(header => {
+    cy.tableHeader(header);
+  });
+};
+
+export const validateOtherSourceInput = () => {
+  cy.clickOn("Add another source of funding");
+  cy.clickOn("Save and return to summary");
+  cy.validationLink("Source of funding is required.");
+  cy.paragraph("Source of funding is required.");
+  [
+    ["#item_0_description", loremIpsum50Char],
+    ["#item_0_date_month", loremIpsum20Char],
+    ["#item_0_date_year", loremIpsum20Char],
+    ["#item_0_value", loremIpsum50Char],
+  ].forEach(([input, copy]) => {
+    cy.get(input).clear().type(copy);
+  });
+  cy.clickOn("Save and return to summary");
+  cy.validationLink("Date secured must be a date.");
+  cy.validationLink("Funding amount must be a number");
+  cy.paragraph("Date secured must be a date.");
+  cy.paragraph("Funding amount must be a number");
+};
+
+export const completeOtherSourceLine = () => {
+  [
+    ["#item_0_description", "Side project cash injection"],
+    ["#item_0_date_month", "02"],
+    ["#item_0_date_year", "2024"],
+    ["#item_0_value", "10000"],
+  ].forEach(([input, copy]) => {
+    cy.get(input).clear().type(copy);
+  });
+  cy.get("tfoot").within(() => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains("Total other funding");
+        cy.get("td:nth-child(2)").contains("£10,000.00");
+      });
+  });
+  cy.get("a").contains("Remove");
+  cy.clickOn("Save and return to summary");
+};
+
+export const checkDetailsAgain = () => {
+  cy.getListItemFromKey("Other sources of funding?", "Yes");
+  cy.getListItemFromKey("Funding from other sources", "£10,000.00");
+};
+
+export const accessPartnerAgreement = () => {
+  cy.getListItemFromKey("Partner agreement", "Edit").click();
+  cy.get("h2").contains("Upload partner agreement");
+};
+
+export const uploadTestFile = () => {
+  cy.fileInput(testFile);
+  cy.wait(500);
+  cy.button("Upload documents").click();
+  cy.validationNotification(`Your document has been uploaded.`);
+  cy.wait(500);
+  ["File name", "Type", "Date uploaded", "Size", "13KB", "Uploaded by"].forEach(header => {
+    cy.tableHeader(header);
+  });
+
+  ["testfile.doc", "Agreement to PCR", "2023", "0KB", "James Black", "Remove"].forEach((lineItem, index) => {
+    cy.get("tr")
+      .eq(1)
+      .within(() => {
+        cy.get(`td:nth-child(${index + 1})`).contains(lineItem);
+      });
+  });
+  cy.clickOn("Save and return to summary");
 };
