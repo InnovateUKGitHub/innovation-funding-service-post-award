@@ -22,12 +22,6 @@ import { PCRParticipantSize } from "@framework/constants/pcrConstants";
 import { OrganisationDetailsSchema, getOrganisationDetailsSchema } from "./schemas/organisationDetails.zod";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
-const participantSizeOptions = [
-  { label: "Large", value: PCRParticipantSize.Large },
-  { label: "Medium", value: PCRParticipantSize.Medium },
-  { label: "Small", value: PCRParticipantSize.Small },
-];
-
 export const OrganisationDetailsStep = () => {
   const { getContent } = useContent();
   const { projectId, itemId, fetchKey, markedAsCompleteHasBeenChecked, useFormValidate, onSave, isFetching } =
@@ -67,16 +61,27 @@ export const OrganisationDetailsStep = () => {
             <FormGroup hasError={!!validationErrors?.participantSize}>
               <ValidationError error={validationErrors?.participantSize as RhfError} />
               <RadioList name="participantSize" register={register}>
-                {participantSizeOptions.map(x => (
-                  <Radio
-                    key={x.label}
-                    id={x.label}
-                    label={x.label}
-                    value={x.value}
-                    defaultChecked={x.value === pcrItem.participantSize}
-                    disabled={isFetching}
-                  />
-                ))}
+                <Radio
+                  id="Large"
+                  label={getContent(x => x.pcrAddPartnerLabels.organisationSizeLarge)}
+                  disabled={isFetching}
+                  value={PCRParticipantSize.Large}
+                  defaultChecked={pcrItem.participantSize === PCRParticipantSize.Large}
+                />
+                <Radio
+                  id="Medium"
+                  label={getContent(x => x.pcrAddPartnerLabels.organisationSizeMedium)}
+                  value={PCRParticipantSize.Medium}
+                  disabled={isFetching}
+                  defaultChecked={pcrItem.participantSize === PCRParticipantSize.Medium}
+                />
+                <Radio
+                  id="Small"
+                  label={getContent(x => x.pcrAddPartnerLabels.organisationSizeSmall)}
+                  value={PCRParticipantSize.Small}
+                  disabled={isFetching}
+                  defaultChecked={pcrItem.participantSize === PCRParticipantSize.Small}
+                />
               </RadioList>
             </FormGroup>
           </Fieldset>
