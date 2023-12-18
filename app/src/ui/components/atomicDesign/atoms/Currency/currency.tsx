@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import cx from "classnames";
 import { isNumber } from "@framework/util/numberHelper";
+import { isNil } from "lodash";
 
 interface CurrentArgs {
   value: number | null;
@@ -12,6 +13,7 @@ export interface CurrencyProps extends CurrentArgs {
   style?: React.CSSProperties;
   qa?: string;
   bold?: boolean;
+  noDefault?: boolean;
 }
 
 /**
@@ -35,13 +37,17 @@ export function getCurrency(value: CurrentArgs["value"], fractionDigits: Current
 /**
  * Formatted currency component
  */
-export function Currency({ qa, value, bold, fractionDigits = 2, className, ...props }: CurrencyProps) {
+export function Currency({ qa, value, bold, noDefault, fractionDigits = 2, className, ...props }: CurrencyProps) {
   const formattedValue = getCurrency(value, fractionDigits);
 
   // Enable word wrap if the value is above a trillion pounds.
   // If Innovate UK ever gives out a grant worth over trillion pounds, please fix.
   const shouldWordWrap = isNumber(value) && value > 1_000_000_000_000;
   const wordWrap = shouldWordWrap ? "normal" : "nowrap";
+
+  if (noDefault && isNil(value)) {
+    return null;
+  }
 
   return (
     <span

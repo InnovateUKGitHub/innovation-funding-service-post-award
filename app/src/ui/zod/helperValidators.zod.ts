@@ -229,6 +229,14 @@ const positiveNumberInput = z.union([
   z.string().transform((x, ctx) => {
     if (x === "") return null;
     const x1 = Number(x);
+
+    if (isNaN(x1)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_type,
+        expected: "number",
+        received: "string",
+      });
+    }
     if (x1 < 0) {
       ctx.addIssue({
         code: z.ZodIssueCode.too_small,

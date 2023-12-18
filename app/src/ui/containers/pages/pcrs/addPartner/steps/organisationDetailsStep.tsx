@@ -64,7 +64,8 @@ export const OrganisationDetailsStep = () => {
               <Content markdown value={x => x.pages.pcrAddPartnerOrganisationDetails.guidance} />
             </FormGroup>
 
-            <FormGroup>
+            <FormGroup hasError={!!validationErrors?.participantSize}>
+              <ValidationError error={validationErrors?.participantSize as RhfError} />
               <RadioList name="participantSize" register={register}>
                 {participantSizeOptions.map(x => (
                   <Radio

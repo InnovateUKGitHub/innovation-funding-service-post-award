@@ -63,7 +63,7 @@ export const FinanceDetailsStep = () => {
                   data.financialYearEndDate_year,
                   false,
                 ),
-                financialYearEndTurnover: Number(data.financialYearEndTurnover),
+                financialYearEndTurnover: data.financialYearEndTurnover,
               },
               context: link(data),
             }),
@@ -91,6 +91,7 @@ export const FinanceDetailsStep = () => {
             <Legend>{getContent(x => x.pages.pcrAddPartnerFinanceDetails.headingTurnover)}</Legend>
             <FormGroup hasError={!!validationErrors?.financialYearEndTurnover}>
               <ValidationError error={validationErrors?.financialYearEndTurnover as RhfError} />
+
               <NumberInput
                 hasError={!!validationErrors?.financialYearEndTurnover}
                 inputWidth="one-third"

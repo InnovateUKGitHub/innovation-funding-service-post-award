@@ -2103,7 +2103,8 @@
         },
         "financialYearEndTurnover": {
           "errors": {
-            "invalid_type": "Enter a valid financial year end turnover.",
+            "invalid_type_received_null": "Enter a financial year end turnover.",
+            "invalid_type_received_string": "Enter a valid financial year end turnover.",
             "too_small": "Enter a valid financial year end turnover."
           }
         },
@@ -2154,6 +2155,11 @@
           "errors": {
             "too_small": "Enter an organisation name.",
             "invalid_type": "Enter an organisation name."
+          }
+        },
+        "participantSize": {
+          "errors": {
+            "too_small": "Select a participant size."
           }
         },
         "partnerType": {

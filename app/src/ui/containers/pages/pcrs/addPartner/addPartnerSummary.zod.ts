@@ -4,17 +4,6 @@ import { PCROrganisationType, PCRProjectLocation, PCRProjectRole } from "@framew
 
 export const addPartnerErrorMap = makeZodI18nMap({ keyPrefix: ["pcr", "addPartner"] });
 
-// const common = {
-//   button_submit: z.string(),
-//   markedAsComplete: z.boolean(),
-// };
-
-// export const spendProfileSchema = z.object({
-//   ...common,
-// });
-
-// export type SpendProfileSchema = z.infer<typeof spendProfileSchema>;
-
 const projectManagerDetailsSchema = z.object({
   contact2Email: z.string().min(1),
   contact2Forename: z.string().min(1),
@@ -33,7 +22,7 @@ const submitAddPartnerSummarySchema = z.object({
   hasOtherFunding: z.boolean(),
   organisationName: z.string(),
   organisationType: z.string(),
-  participantSize: z.number(),
+  participantSize: z.number().gt(0),
   partnerType: z.number().gt(0),
   projectCity: z.string().min(1),
   projectLocation: z
@@ -86,7 +75,7 @@ const industrialPartnerSummarySchema = z.object({
   registrationNumber: z.string(),
   numberOfEmployees: z.number(),
   financialYearEndDate: z.date(),
-  financialYearEndTurnover: z.number().min(0).nullable(),
+  financialYearEndTurnover: z.number().min(0),
 });
 
 export const getAddPartnerSummarySchema = ({

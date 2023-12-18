@@ -173,7 +173,7 @@ export const AddPartnerSummary = () => {
               <SummaryListItem
                 id="financialYearEndTurnover"
                 label={x => x.pcrAddPartnerLabels.turnoverSummaryHeading}
-                content={<Currency value={pcrItem.financialYearEndTurnover} />}
+                content={<Currency noDefault value={pcrItem.financialYearEndTurnover} />}
                 hasError={!!validationErrors?.financialYearEndTurnover}
                 qa="financialYearEndTurnover"
                 action={<EditLink stepName={PCRStepType.financeDetailsStep} />}

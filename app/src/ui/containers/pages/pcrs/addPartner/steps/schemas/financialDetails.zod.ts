@@ -7,7 +7,7 @@ export const getFinanceDetailsSchema = (markedAsComplete: boolean) =>
     ? z
         .object({
           button_submit: z.string(),
-          financialYearEndTurnover: positiveNumberInput.nullable(),
+          financialYearEndTurnover: positiveNumberInput,
           financialYearEndDate_month: z.string(),
           financialYearEndDate_year: z.string(),
         })
