@@ -360,13 +360,42 @@ export const reallocateCostsGiveInfoTodo = () => {
 };
 
 export const showPartners = () => {
-  ["EUI Small Ent Health", "A B Cad Services", "ABS EUI Medium Enterprise"].forEach((partner, index) => {
-    cy.get("tr")
-      .eq(index + 1)
-      .within(() => {
-        cy.get(`td:nth-child(1)`).contains(partner);
+  [
+    [
+      "EUI Small Ent Health (Lead)",
+      "£350,000.00",
+      "£350,000.00",
+      "£227,500.00",
+      "£350,000.00",
+      "£350,000.00",
+      "£227,500.00",
+    ],
+    ["A B Cad Services", "£175,000.00", "£175,000.00", "£113,750.00", "£175,000.00", "£175,000.00", "£113,750.00"],
+    ["ABS EUI Medium Enterprise", "£50,000.00", "£1,000.00", "£650.00", "£50,000.00", "£1,000.00", "£650.00"],
+  ].forEach(
+    ([partner, totalEl, remainingCosts, remainingGrant, newTotalEl, newRemainingCosts, newRemainingGrant], index) => {
+      cy.get("tr")
+        .eq(index + 1)
+        .within(() => {
+          cy.get(`td:nth-child(1)`).contains(partner);
+          cy.get(`td:nth-child(2)`).contains(totalEl);
+          cy.get(`td:nth-child(3)`).contains(remainingCosts);
+          cy.get(`td:nth-child(4)`).contains(remainingGrant);
+          cy.get(`td:nth-child(5)`).contains(newTotalEl);
+          cy.get(`td:nth-child(6)`).contains(newRemainingCosts);
+          cy.get(`td:nth-child(7)`).contains(newRemainingGrant);
+        });
+    },
+  );
+  ["Project totals", "£575,000.00", "£526,000.00", "£341,900.00", "£575,000.00", "£526,000.00", "£341,900.00"].forEach(
+    (total, index) => {
+      cy.get("tfoot").within(() => {
+        cy.get("tr").within(() => {
+          cy.get(`th:nth-child(${index + 1})`).contains(total);
+        });
       });
-  });
+    },
+  );
 };
 
 export const partnerRadioButtons = () => {
@@ -376,8 +405,8 @@ export const partnerRadioButtons = () => {
 };
 
 export const markAsComplete = () => {
-  cy.get("h2").contains("Mark as complete");
-  cy.get("input#itemStatus_true.govuk-checkboxes__input").click();
+  cy.get("legend").contains("Mark as complete");
+  cy.getByLabel("I agree with this change").click();
 };
 
 export const reallocateCostsGiveUsInfoContinue = () => {
@@ -1021,8 +1050,12 @@ export const scopeSummaryPage = () => {
 
 export const correctKtpMessaging = () => {
   [
-    "This project does not follow the normal grant calculation rules",
-    "The project and any partner may have one or more cost categories",
+    "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).",
+    "The partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
+    "Cost category associate development is paid at a rate of 5% rather than your normal award rate",
+    "Cost category associate employment is paid at a rate of 70% rather than your normal award rate",
+    "Cost category consumables is paid at a rate of 11.11% rather than your normal award rate",
+    "Cost category travel and subsistence is paid at a rate of 20% rather than your normal award rate",
   ].forEach(validation => {
     cy.validationNotification(validation);
   });
@@ -1398,7 +1431,7 @@ export const validateDateRequired = () => {
 
 export const validateGrantMoving = () => {
   cy.get("input#grantMovingOverFinancialYear").type("Error");
-  cy.get("h2").contains("Mark as complete");
+  cy.get("legend").contains("Mark as complete");
   cy.clickCheckBox("I agree with this change");
   cy.submitButton("Save and return to request").click();
   cy.validationLink("The value of a grant moving over financial year must be numerical.");
@@ -1848,4 +1881,192 @@ export const removeFileDelete = () => {
       cy.tableCell("Remove").click();
     });
   cy.validationNotification(`'${testFile}' has been removed.`);
+};
+
+export const validateCostUpdateInputs = () => {
+  cy.get("a").contains("EUI Small Ent Health").click();
+  cy.get("h2").contains("EUI Small Ent Health");
+  cy.getByAriaLabel("Labour").clear().type("10000000000000000");
+  cy.wait(500);
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.validationLink("Please enter a valid cost");
+};
+
+export const updateEUICosts = () => {
+  [
+    ["Labour", "34000", "-£1,000.00"],
+    ["Overheads", "33000", "-£2,000.00"],
+    ["Materials", "32000", "-£3,000.00"],
+    ["Capital usage", "31000", "-£4,000.00"],
+    ["Subcontracting", "1000", "£1,000.00"],
+    ["Travel and subsistence", "30000", "-£5,000.00"],
+    ["Other costs", "29000", "-£6,000.00"],
+    ["Other costs 2", "28000", "-£7,000.00"],
+    ["Other costs 3", "27000", "-£8,000.00"],
+    ["Other costs 4", "26000", "-£9,000.00"],
+    ["Other costs 5", "25000", "-£10,000.00"],
+  ].forEach(([aria, input, calculation], index) => {
+    cy.getByAriaLabel(aria).clear().type(input);
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(5)").contains(calculation);
+      });
+  });
+  cy.wait(500);
+  ["Partner totals", "£350,000.00", "£0.00", "£296,000.00", "-£54,000.00"].forEach((total, index) => {
+    cy.get("tfoot").within(() => {
+      cy.get("tr").within(() => {
+        cy.get(`td:nth-child(${index + 1})`).contains(total);
+      });
+    });
+  });
+  [
+    "Total eligible costs",
+    "New total eligible costs",
+    "Difference",
+    "Total remaining grant",
+    "New total remaining grant",
+    "Difference",
+  ].forEach((head, index) => {
+    cy.getByQA("summary-table").within(() => {
+      cy.get("thead").within(() => {
+        cy.get(`th:nth-child(${index + 1})`).contains(head);
+      });
+    });
+  });
+  ["£575,000.00", "£521,000.00", "-£54,000.00", "£341,900.00", "£306,800.00", "-£35,100.00"].forEach((total, index) => {
+    cy.getByQA("summary-table").within(() => {
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get(`td:nth-child(${index + 1})`).contains(total);
+        });
+    });
+  });
+};
+
+export const partnerTableWithUnderspend = () => {
+  [
+    [
+      "EUI Small Ent Health (Lead)",
+      "£350,000.00",
+      "£350,000.00",
+      "£227,500.00",
+      "£296,000.00",
+      "£296,000.00",
+      "£192,400.00",
+    ],
+    ["A B Cad Services", "£175,000.00", "£175,000.00", "£113,750.00", "£175,000.00", "£175,000.00", "£113,750.00"],
+    ["ABS EUI Medium Enterprise", "£50,000.00", "£1,000.00", "£650.00", "£50,000.00", "£1,000.00", "£650.00"],
+  ].forEach(
+    ([partner, totalEl, remainingCosts, remainingGrant, newTotalEl, newRemainingCosts, newRemainingGrant], index) => {
+      cy.get("tr")
+        .eq(index + 1)
+        .within(() => {
+          cy.get(`td:nth-child(1)`).contains(partner);
+          cy.get(`td:nth-child(2)`).contains(totalEl);
+          cy.get(`td:nth-child(3)`).contains(remainingCosts);
+          cy.get(`td:nth-child(4)`).contains(remainingGrant);
+          cy.get(`td:nth-child(5)`).contains(newTotalEl);
+          cy.get(`td:nth-child(6)`).contains(newRemainingCosts);
+          cy.get(`td:nth-child(7)`).contains(newRemainingGrant);
+        });
+    },
+  );
+};
+
+export const updateABCad = () => {
+  cy.get("a").contains("A B Cad Services").click();
+  cy.get("h2").contains("A B Cad Services");
+  [
+    ["Labour", "18500", "£1,000.00"],
+    ["Overheads", "19500", "£2,000.00"],
+    ["Materials", "20500", "£3,000.00"],
+    ["Capital usage", "21500", "£4,000.00"],
+    ["Subcontracting", "19500", "£2,000.00"],
+    ["Travel and subsistence", "22500", "£5,000.00"],
+    ["Other costs", "23500", "£6,000.00"],
+    ["Other costs 2", "24500", "£7,000.00"],
+    ["Other costs 3", "25500", "£8,000.00"],
+    ["Other costs 4", "26500", "£9,000.00"],
+    ["Other costs 5", "10000", "£10,000.00"],
+  ].forEach(([aria, input, calculation], index) => {
+    cy.getByAriaLabel(aria).clear().type(input);
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(5)").contains(calculation);
+      });
+  });
+  cy.wait(500);
+  ["Partner totals", "£175,000.00", "£0.00", "£232,000.00", "£57,000.00"].forEach((total, index) => {
+    cy.get("tfoot").within(() => {
+      cy.get("tr").within(() => {
+        cy.get(`td:nth-child(${index + 1})`).contains(total);
+      });
+    });
+  });
+  [
+    "Total eligible costs",
+    "New total eligible costs",
+    "Difference",
+    "Total remaining grant",
+    "New total remaining grant",
+    "Difference",
+  ].forEach((head, index) => {
+    cy.getByQA("summary-table").within(() => {
+      cy.get("thead").within(() => {
+        cy.get(`th:nth-child(${index + 1})`).contains(head);
+      });
+    });
+  });
+  ["£575,000.00", "£578,000.00", "£3,000.00", "£341,900.00", "£343,850.00", "£1,950.00"].forEach((total, index) => {
+    cy.getByQA("summary-table").within(() => {
+      cy.get("tr")
+        .eq(1)
+        .within(() => {
+          cy.get(`td:nth-child(${index + 1})`).contains(total);
+        });
+    });
+  });
+};
+
+export const partnerTableWithOverspend = () => {
+  [
+    [
+      "EUI Small Ent Health (Lead)",
+      "£350,000.00",
+      "£350,000.00",
+      "£227,500.00",
+      "£296,000.00",
+      "£296,000.00",
+      "£192,400.00",
+    ],
+    ["A B Cad Services", "£175,000.00", "£175,000.00", "£113,750.00", "£232,000.00", "£232,000.00", "£150,800.00"],
+    ["ABS EUI Medium Enterprise", "£50,000.00", "£1,000.00", "£650.00", "£50,000.00", "£1,000.00", "£650.00"],
+  ].forEach(
+    ([partner, totalEl, remainingCosts, remainingGrant, newTotalEl, newRemainingCosts, newRemainingGrant], index) => {
+      cy.get("tr")
+        .eq(index + 1)
+        .within(() => {
+          cy.get(`td:nth-child(1)`).contains(partner);
+          cy.get(`td:nth-child(2)`).contains(totalEl);
+          cy.get(`td:nth-child(3)`).contains(remainingCosts);
+          cy.get(`td:nth-child(4)`).contains(remainingGrant);
+          cy.get(`td:nth-child(5)`).contains(newTotalEl);
+          cy.get(`td:nth-child(6)`).contains(newRemainingCosts);
+          cy.get(`td:nth-child(7)`).contains(newRemainingGrant);
+        });
+    },
+  );
+};
+
+export const reaccessABCadReduce = () => {
+  cy.get("a").contains("A B Cad Services").click();
+  cy.get("h2").contains("A B Cad Services");
+  cy.getByAriaLabel("Other costs 5").clear().type("7000");
+  cy.wait(500);
+  cy.button("Save and return to reallocate project costs").click();
+  cy.heading("Reallocate project costs");
 };

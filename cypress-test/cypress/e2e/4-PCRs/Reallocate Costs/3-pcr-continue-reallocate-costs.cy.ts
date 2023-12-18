@@ -7,6 +7,12 @@ import {
   reallocateCostsTableHeaders,
   shouldShowProjectTitle,
   showPartners,
+  partnerTableWithUnderspend,
+  updateABCad,
+  updateEUICosts,
+  partnerTableWithOverspend,
+  reaccessABCadReduce,
+  validateCostUpdateInputs,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -53,13 +59,7 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   /**
    * This assumes the value in the current box is 35000 as per project creation script
    */
-  it("Should have numeric text boxes to change costs", () => {
-    cy.get("input#a0626000007qoQlAAI").clear().type("34000");
-  });
-
-  it("Should reflect the change in costs in the costs reallocated column", () => {
-    cy.tableCell("-£1,000.00");
-  });
+  it("Should update costs for re-distribution", updateEUICosts);
 
   it("Should have a 'Save and return to reallocate project costs' button", () => {
     cy.submitButton("Save and return to reallocate project costs").click();
@@ -68,6 +68,37 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   it("Should return to the 'Reallocate costs screen", () => {
     cy.heading("Reallocate project costs");
   });
+
+  it("Should display a warning message regarding the underspend/surplus amount", () => {
+    cy.getByQA("validation-message-content").contains(
+      "Your 'Remaining grant' has a surplus of £35,100.00. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
+    );
+  });
+
+  it("Should display the updated partner table with revised costs", partnerTableWithUnderspend);
+
+  it("Should access A B Cad Services and begin updating the costs", updateABCad);
+
+  it("Should save and return to reallocate project costs", () => {
+    cy.clickOn("Save and return to reallocate project costs");
+    cy.heading("Reallocate project costs");
+  });
+
+  it("Should display messaging surrounding an overspend", () => {
+    cy.getByQA("validation-message-content").contains(
+      "You must reduce your 'New remaining grant' project total to £341,900.00 or less, because you have exceeded it by £1,950.00. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
+    );
+  });
+
+  it("Should display a revised partner table with totals with the overspend", partnerTableWithOverspend);
+
+  it("Should re-access A B Cad Services and reduce costs in line with total grant value", reaccessABCadReduce);
+
+  it("Should no longer show validation message stating overspend", () => {
+    cy.getByQA("validation-message-content").should("not.exist");
+  });
+
+  it("Should click back into EUI and validate the inputs", validateCostUpdateInputs);
 
   it("Has an input box for grant moving over financial year", () => {
     cy.get("input#grantMovingOverFinancialYear").type("0");

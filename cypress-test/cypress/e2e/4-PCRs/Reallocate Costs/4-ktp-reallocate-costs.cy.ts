@@ -33,6 +33,16 @@ describe("PCR > KTP > Reallocate Costs > Creating  PCR", () => {
 
   it("Should display the correct messaging for KTP", correctKtpMessaging);
 
+  it("Should contain the correct guidance copy", () => {
+    [
+      "The knowledge base partner may vire funds between the 'Travel and subsistence' and 'Consumables' cost categories. Funds can also be vired out of these 2 categories into the 'Associate development' category. Funds cannot be vired out of the 'Associate development' category.",
+      "Virements are subject to approval by the Local Management Committee (LMC).",
+      "Requests for virements must be submitted online using the Innovation Funding Service and must be approved before the related costs are incurred. These requests must not be submitted after the project partnership has ended.",
+    ].forEach(copy => {
+      cy.paragraph(copy);
+    });
+  });
+
   it("Should show a table for reallocating costs and a summary table", ktpCostsTable);
 
   it("Should update figures and calculate the changes", ktpUpdateVirement);
