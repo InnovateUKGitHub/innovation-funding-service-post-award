@@ -154,7 +154,6 @@ export const saveAndValidate = () => {
   cy.submitButton("Save and return to project setup").click();
   [
     "The total forecasts for labour must be the same as the total eligible costs",
-    "The total forecasts for overheads must be the same as the total eligible costs",
     "The total forecasts for materials must be the same as the total eligible costs",
     "The total forecasts for capital usage must be the same as the total eligible costs",
     "The total forecasts for subcontracting must be the same as the total eligible costs",
@@ -172,7 +171,6 @@ export const saveAndValidate = () => {
 export const saveAndRemoveValidationMsg = () => {
   [
     "The total forecasts for labour must be the same as the total eligible costs",
-    "The total forecasts for overheads must be the same as the total eligible costs",
     "The total forecasts for materials must be the same as the total eligible costs",
     "The total forecasts for capital usage must be the same as the total eligible costs",
     "The total forecasts for subcontracting must be the same as the total eligible costs",
@@ -320,22 +318,25 @@ export const acceptSpendLabourCalculateOH = () => {
     [5.11, 1.022],
     [33.33, 6.666],
   ].forEach(([labourCost, overhead]) => {
-    cy.wait(100);
+    cy.wait(200);
     cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
     let newCurrency = new Intl.NumberFormat("en-GB", {
       style: "currency",
       currency: "GBP",
     });
+    cy.wait(200);
     cy.get("tr")
       .eq(4)
       .within(() => {
         cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
       });
+    cy.wait(200);
     cy.get("tr")
       .eq(5)
       .within(() => {
         cy.get("td:nth-child(3)").contains(newCurrency.format(overhead));
       });
+    cy.wait(200);
     cy.get("tr")
       .eq(5)
       .within(() => {

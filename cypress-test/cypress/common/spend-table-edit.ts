@@ -567,6 +567,8 @@ export const revertSpendTableZero = () => {
   cy.wait(500);
   cy.get("td:nth-child(14)").contains("£0.00");
   cy.wait(500);
+  cy.getByLabel("This is ready to submit").click();
+  cy.wait(200);
   cy.button("Save and return to project setup").click();
   cy.heading("Project setup");
   cy.get("a").contains("Set spend profile").click();
