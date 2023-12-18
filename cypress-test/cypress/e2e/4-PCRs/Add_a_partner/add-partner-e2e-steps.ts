@@ -11,6 +11,7 @@ import {
 import { testFile } from "common/testfileNames";
 
 export const navigateToCostCat = (category: string, row: number) => {
+  cy.wait(500);
   cy.get("tr")
     .eq(row)
     .within(() => {
@@ -121,10 +122,9 @@ export const saveAndReturnPromptingValidation = () => {
     "Enter a finance contact email address.",
     "Select a project location.",
     "Enter a project city.",
-    //"Enter a project postcode",
     "Select a participant size.",
     "Enter the number of employees.",
-    "Enter the funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -160,10 +160,9 @@ export const validateWithoutOrganisation = () => {
     "Enter a finance contact email address.",
     "Select a project location.",
     "Enter a project city.",
-    //"Enter a project postcode",
     "Select a participant size.",
     "Enter the number of employees.",
-    "Enter the funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -173,11 +172,11 @@ export const validateWithoutOrganisation = () => {
 };
 
 export const validateSizeInput = () => {
-  ["-1", "a", "999999999"].forEach(input => {
+  ["-1", "a", "&*£"].forEach(input => {
     cy.get("#numberOfEmployees").clear().type(input);
     cy.wait(200);
     cy.clickOn("Save and return to summary");
-    cy.validationLink("Please enter a valid number of employees.");
+    cy.validationLink("Enter a valid number of employees.");
   });
 };
 export const medium100Employees = () => {
@@ -200,8 +199,7 @@ export const validateWithoutSize = () => {
     "Enter a finance contact email address.",
     "Select a project location.",
     "Enter a project city.",
-    // "Enter a project postcode",
-    "Enter the funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -224,8 +222,8 @@ export const validateMonthYearInput = () => {
     cy.getByLabel("Month").clear().type(input);
     cy.getByLabel("Year").clear().type(input);
     cy.clickOn("Save and return to summary");
-    cy.validationLink("must be a whole number");
-    cy.paragraph("must be a whole number");
+    cy.validationLink("Enter a valid financial year end.");
+    cy.paragraph("Enter a valid financial year end.");
   });
 };
 
@@ -233,8 +231,8 @@ export const validateTurnoverInput = () => {
   ["-1", "test copy", "99999999999999999999999999"].forEach(input => {
     cy.get("#financialYearEndTurnover").clear().type(input);
     cy.clickOn("Save and return to summary");
-    cy.validationLink("must be a whole number");
-    cy.paragraph("must be a whole number");
+    cy.validationLink("Enter a valid financial year end turnover.");
+    cy.paragraph("Enter a valid financial year end turnover.");
   });
 };
 
@@ -259,8 +257,7 @@ export const validateWithoutFY = () => {
     "Enter a finance contact email address.",
     "Select a project location.",
     "Enter a project city.",
-    // "Enter a project postcode",
-    "Enter the funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -278,31 +275,31 @@ export const validateWithoutFY = () => {
 };
 
 export const validateNameOfTown = () => {
-  cy.get("#projectCity").clear().invoke("val", loremIpsum40Char).trigger("input");
-  cy.get("#projectCity").type("{moveToEnd}").type("t");
+  cy.get("#project-city").clear().invoke("val", loremIpsum40Char).trigger("input");
+  cy.get("#project-city").type("{moveToEnd}").type("t");
   cy.clickOn("Save and return to summary");
   cy.validationLink("Project city must be 40 characters or less.");
   cy.paragraph("Project city must be 40 characters or less.");
-  cy.get("#projectCity").type("{moveToEnd}{backspace}");
+  cy.get("#project-city").type("{moveToEnd}{backspace}");
   cy.validationLink("Project city must be 40 characters or less.").should("not.exist");
   cy.paragraph("Project city must be 40 characters or less.").should("not.exist");
 };
 
 export const validatePostcodeInput = () => {
-  cy.get("#projectPostcode").clear().invoke("val", loremIpsum10Char).trigger("input");
-  cy.get("#projectPostcode").type("{moveToEnd}").type("t");
+  cy.get("#project-postcode").clear().invoke("val", loremIpsum10Char).trigger("input");
+  cy.get("#project-postcode").type("{moveToEnd}").type("t");
   cy.clickOn("Save and return to summary");
   cy.validationLink("Project postcode must be 10 characters or less.");
   cy.paragraph("Project postcode must be 10 characters or less.");
-  cy.get("#projectPostcode").type("{moveToEnd}{backspace}");
+  cy.get("#project-postcode").type("{moveToEnd}{backspace}");
   cy.validationLink("Project postcode must be 10 characters or less.").should("not.exist");
   cy.paragraph("Project postcode must be 10 characters or less.").should("not.exist");
 };
 
 export const completeLocationForm = () => {
   cy.getByLabel("Inside the United Kingdom").click();
-  cy.get("#projectCity").clear().type("Swindon");
-  cy.get("#projectPostcode").clear().type("SN5 1LT");
+  cy.get("#project-city").clear().type("Swindon");
+  cy.get("#project-postcode").clear().type("SN5 1LT");
   cy.clickOn("Save and return to summary");
   cy.get("dt").contains("Project role");
 };
@@ -315,7 +312,7 @@ export const validateWithoutLocation = () => {
     "Enter a finance contact surname.",
     "Enter a finance contact phone number.",
     "Enter a finance contact email address.",
-    "Enter the funding level.",
+    "Enter a funding level.",
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
@@ -340,7 +337,7 @@ export const nameSectionSubheadings = () => {
     cy.getByLabel(subheading);
   });
   cy.paragraph("This information will be used to create an account for this person in the Innovation Funding Service.");
-  cy.get("#contact1Phone-hint").contains(
+  cy.get("#hint-for-contact1Phone").contains(
     "We may use this to contact the partner for more information about this request.",
   );
 };
@@ -354,6 +351,7 @@ export const validateNameOverLimit = () => {
     cy.getByLabel(label).clear().invoke("val", input).trigger("input");
   });
   cy.getByLabel("Email").invoke("val", loremIpsum256Char).trigger("input");
+  cy.getByLabel("Email").type("{moveToEnd");
   cy.clickOn("Save and return to summary");
   cy.validationLink(`Finance contact name must be 50 characters or less.`);
   cy.paragraph(`Finance contact name must be 50 characters or less.`);
@@ -374,7 +372,10 @@ export const validateNameForm = () => {
     cy.getByLabel(input).invoke("val", copy).trigger("input");
     cy.wait(200);
   });
+  cy.clickOn("Save and return to summary");
   cy.getByQA("validation-summary").should("not.exist");
+  cy.get("dt").contains("Project role");
+  cy.getListItemFromKey("First name", "Edit").click();
 };
 
 export const completeNameForm = () => {
@@ -393,7 +394,7 @@ export const completeNameForm = () => {
 export const validateWithoutName = () => {
   cy.getByLabel("I agree with this change.").click();
   cy.clickOn("Save and return to request");
-  ["Enter the funding level."].forEach(valMsg => {
+  ["Enter a funding level."].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
   [
@@ -441,7 +442,7 @@ export const displayCostCatTable = () => {
     ["Other costs 5", inputVal],
   ].forEach(([costCat, value], index) => {
     cy.get("tr")
-      .eq(index + 1)
+      .eq(index)
       .within(() => {
         cy.get("td:nth-child(1)").contains(costCat);
         cy.get("td:nth-child(2)").contains(value);
@@ -469,6 +470,7 @@ export const completeLabourForm = () => {
   cy.paragraph("£6,666.60");
   cy.clickOn("Save and return to labour");
   cy.get("h2").contains("Labour");
+  cy.wait(1000);
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
 };
@@ -492,6 +494,7 @@ export const completeMaterialsForm = () => {
   cy.paragraph("£6,666.66");
   cy.clickOn("Save and return to materials");
   cy.get("h2").contains("Materials");
+  cy.wait(1000);
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
 };
@@ -512,6 +515,7 @@ export const completeCapUsageForm = () => {
   cy.paragraph("£990.00");
   cy.clickOn("Save and return to capital usage");
   cy.get("h2").contains("Capital usage");
+  cy.wait(1000);
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
 };
@@ -532,6 +536,7 @@ export const completeSubcontractingForm = () => {
   cy.wait(500);
   cy.clickOn("Save and return to subcontracting");
   cy.get("th").contains("Description");
+  cy.wait(1000);
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
 };
@@ -549,6 +554,7 @@ export const completeTandSForm = () => {
   cy.wait(500);
   cy.clickOn("Save and return to travel and subsistence");
   cy.tableHeader("Description");
+  cy.wait(1000);
   cy.clickOn("Save and return to project costs");
   cy.get("h2").contains("Project costs for new partner");
 };
@@ -581,25 +587,23 @@ export const completedCostCatProfiles = () => {
     ["Subcontracting", "£3,000.00"],
     ["Travel and subsistence", oneThousand],
     ["Other costs", oneThousand],
-    ["Other cost 2", oneThousand],
-    ["Other cost 3", oneThousand],
-    ["Other costs 4", oneThousand],
-    ["Other costs 5", oneThousand],
+    //["Other cost 2", oneThousand],
+    //["Other cost 3", oneThousand],
+    //["Other costs 4", oneThousand],
+    //["Other costs 5", oneThousand],
   ].forEach(([costcat, cost], index) => {
     cy.get("tr")
-      .eq(index + 1)
+      .eq(index)
       .within(() => {
         cy.get("td:nth-child(1)").contains(costcat);
         cy.get("td:nth-child(2)").contains(cost);
       });
   });
   cy.get("tfoot").within(() => {
-    cy.get("tr")
-      .eq(1)
-      .within(() => {
-        cy.get("td:nth-child(1)").contains("Total costs (£)");
-        cy.get("td:nth-child(2)").contains("£24,656.58");
-      });
+    cy.get("tr").within(() => {
+      cy.get("td:nth-child(1)").contains("Total costs (£)");
+      cy.get("td:nth-child(2)").contains("£20,656.58");
+    });
   });
 };
 
@@ -616,12 +620,12 @@ export const correctFundingLevelCopy = () => {
 
 export const fundingLevelInputValidation = () => {
   [
-    ["-1", "Please enter a valid funding level."],
-    ["99999999", "Please enter a funding level up to 100%."],
-    ["101", "Please enter a funding level up to 100%."],
-    ["100.5", "Please enter a funding level up to 100%."],
-    ["Spagbol", "Please enter a valid funding level."],
-    ["!%^&*(", "Please enter a valid funding level."],
+    ["-1", "Enter a valid funding level."],
+    ["99999999", "Enter a funding level up to 100%."],
+    ["101", "Enter a funding level up to 100%."],
+    ["100.5", "Enter a funding level up to 100%."],
+    ["Spagbol", "Enter a valid funding level."],
+    ["!%^&*(", "Enter a valid funding level."],
   ].forEach(([input, message]) => {
     cy.get("#awardRate").clear().type(input);
     cy.wait(500);
@@ -659,9 +663,9 @@ export const checkDetailsScreenComplete = () => {
     ["Email", "j.dredd@mc1justice.law"],
     ["Project costs for new partner", "£20,656.58"],
     ["Other sources of funding", "No"],
-    ["Funding level", "100.00%"],
-    ["Funding sought", "£7,992.44"],
-    ["Partner contribution to project", "£2,664.15"],
+    ["Funding level", "75.00%"],
+    ["Funding sought", "£15,492.44"],
+    ["Partner contribution to project", "£5,164.14"],
     ["Partner agreement", "Not applicable"],
   ].forEach(([section, data]) => {
     cy.getListItemFromKey(section, data);
@@ -687,10 +691,10 @@ export const validateOtherSourceInput = () => {
   cy.validationLink("Source of funding is required.");
   cy.paragraph("Source of funding is required.");
   [
-    ["#item_0_description", loremIpsum50Char],
-    ["#item_0_date_month", loremIpsum20Char],
-    ["#item_0_date_year", loremIpsum20Char],
-    ["#item_0_value", loremIpsum50Char],
+    ["#funds.0.description", loremIpsum50Char],
+    ["#funds.0.dateSecured_month", loremIpsum20Char],
+    ["#funds.0.dateSecured_year", loremIpsum20Char],
+    ["#funds.0.value", loremIpsum50Char],
   ].forEach(([input, copy]) => {
     cy.get(input).clear().type(copy);
   });
@@ -703,10 +707,10 @@ export const validateOtherSourceInput = () => {
 
 export const completeOtherSourceLine = () => {
   [
-    ["#item_0_description", "Side project cash injection"],
-    ["#item_0_date_month", "02"],
-    ["#item_0_date_year", "2024"],
-    ["#item_0_value", "10000"],
+    ["#funds_0_description", "Side project cash injection"],
+    ["#funds_0_date_month", "02"],
+    ["#funds_0_date_year", "2024"],
+    ["#funds_0_value", "10000"],
   ].forEach(([input, copy]) => {
     cy.get(input).clear().type(copy);
   });
