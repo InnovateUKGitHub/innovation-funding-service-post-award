@@ -74,6 +74,7 @@ interface TableCraftRow {
 interface CostCategoryRow extends TableCraftRow {
   costCategoryId: string;
   costCategoryName: string;
+  isCalculated: boolean;
   profiles: CostCategoryCellData[];
   greaterThanAllocatedCosts: boolean;
   differentThanAllocatedCosts: boolean;
@@ -187,6 +188,7 @@ const mapToForecastTableDto = ({
   for (const costCategory of profileTotalCostCategories) {
     const costCategoryProfiles: CostCategoryCellData[] = [];
     let total = 0;
+    let isCalculatedCostCategory = false;
 
     for (let i = 1; i <= project.numberOfPeriods; i++) {
       const forecastProfile = profileDetails.find(
@@ -240,6 +242,7 @@ const mapToForecastTableDto = ({
           }
           profileId = forecastProfile.id;
           calculatedField = true;
+          isCalculatedCostCategory = true;
         } else {
           if (clientProfiles) {
             const clientProfile: string | undefined = clientProfiles?.[forecastProfile.id];
@@ -281,6 +284,7 @@ const mapToForecastTableDto = ({
     const costCategoryRow: CostCategoryRow = {
       costCategoryId: costCategory.costCategoryId,
       costCategoryName: costCategory.costCategoryName,
+      isCalculated: isCalculatedCostCategory,
       golCost: costCategory.value,
       profiles: costCategoryProfiles,
       total,
