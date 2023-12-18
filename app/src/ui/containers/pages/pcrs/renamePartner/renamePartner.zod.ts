@@ -5,8 +5,6 @@ import { emptyStringToNullValidation, partnerIdValidation } from "@ui/zod/helper
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "renamePartner"] });
 
-z.setErrorMap(errorMap);
-
 export const getRenamePartnerSchema = (partners: Pick<PartnerDto, "id" | "name">[]) =>
   z
     .object({

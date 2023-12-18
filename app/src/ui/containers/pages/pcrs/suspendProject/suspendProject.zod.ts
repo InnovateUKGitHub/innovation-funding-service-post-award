@@ -4,8 +4,6 @@ import { endDateIsBeforeStart, isValidMonth, isValidYear, isEmptyDate } from "@f
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "projectSuspension"] });
 
-z.setErrorMap(errorMap);
-
 export const pcrProjectSuspensionSchema = z
   .object({
     markedAsCompleteHasBeenChecked: z.boolean(),

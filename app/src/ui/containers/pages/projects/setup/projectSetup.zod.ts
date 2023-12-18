@@ -4,7 +4,6 @@ import { BankDetailsTaskStatus, SpendProfileStatus } from "@framework/constants/
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["projectSetup"] });
 
-z.setErrorMap(errorMap);
 export const projectSetupSchema = z.object({
   postcode: z.string().min(1),
   bankDetailsTaskStatus: z.enum([String(BankDetailsTaskStatus.Complete)]),

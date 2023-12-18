@@ -5,8 +5,6 @@ import { isNil } from "lodash";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "removePartner"] });
 
-z.setErrorMap(errorMap);
-
 export const getRemovePartnerSchema = (numberOfPeriods: number) =>
   z
     .object({

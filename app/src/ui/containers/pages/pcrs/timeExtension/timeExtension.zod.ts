@@ -3,8 +3,6 @@ import { makeZodI18nMap } from "@shared/zodi18n";
 
 export const errorMap = makeZodI18nMap({ keyPrefix: ["pcr", "timeExtension"] });
 
-z.setErrorMap(errorMap);
-
 export const pcrTimeExtensionSchema = z
   .object({
     markedAsComplete: z.boolean(),
