@@ -18,17 +18,6 @@ import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
 import { OtherFundingSchema, otherFundingSchema } from "./schemas/otherFunding.zod";
 
-const options = [
-  {
-    value: "true",
-    label: <Content value={x => x.pcrAddPartnerLabels.otherFundsYes} />,
-  },
-  {
-    value: "false",
-    label: <Content value={x => x.pcrAddPartnerLabels.otherFundsNo} />,
-  },
-];
-
 export const OtherFundingStep = () => {
   const { getContent } = useContent();
   const { projectId, pcrId, itemId, fetchKey, useFormValidate, onSave, isFetching, routes } = usePcrWorkflowContext();
@@ -91,9 +80,18 @@ export const OtherFundingStep = () => {
                 aria-label={getContent(x => x.pages.pcrAddPartnerOtherFunding.labelOtherSourcesQuestion)}
                 register={register}
               >
-                {options.map(x => (
-                  <Radio key={x.value} id={x.value} value={x.value} label={x.label} disabled={isFetching} />
-                ))}
+                <Radio
+                  id="true"
+                  value="true"
+                  label={<Content value={x => x.pcrAddPartnerLabels.otherFundsYes} />}
+                  disabled={isFetching}
+                />
+                <Radio
+                  id="false"
+                  value="false"
+                  label={<Content value={x => x.pcrAddPartnerLabels.otherFundsNo} />}
+                  disabled={isFetching}
+                />
               </RadioList>
             </FormGroup>
           </Fieldset>

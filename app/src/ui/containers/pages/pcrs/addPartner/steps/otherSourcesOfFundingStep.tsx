@@ -155,7 +155,7 @@ export const OtherSourcesOfFundingStep = () => {
                   <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDescription)}</TH>
                   <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDate)}</TH>
                   <TH>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderValue)}</TH>
-                  <TH hidden>Action</TH>
+                  <TH hidden>{getContent(x => x.pages.pcrAddPartnerOtherFundingSources.actionHeader)}</TH>
                 </TR>
               </THead>
 

@@ -140,16 +140,19 @@ export const AcademicCostsStep = () => {
               </TR>
             </THead>
             <TBody>
-              {academicCostCategories.map((x, i) => (
-                <TR key={x.name}>
+              {academicCostCategories.map((cat, i) => (
+                <TR key={cat.name}>
                   <TD>
-                    <P>{x.name}</P>
+                    <P>{cat.name}</P>
                   </TD>
                   <TD>
                     <ValidationError error={validationErrors?.costs?.[i]?.value as RhfError} />
                     <NumberInput
                       hasError={!!validationErrors?.costs?.[i]?.value}
-                      aria-label={`value of academic cost item ${x.name}`}
+                      // aria-label={`value of academic cost item ${x.name}`}
+                      aria-label={getContent(x =>
+                        x.forms.pcr.addPartner.costs.arrayType.value.aria_label({ costCategory: cat.name }),
+                      )}
                       disabled={isFetching}
                       {...register(`costs.${i}.value`)}
                     />

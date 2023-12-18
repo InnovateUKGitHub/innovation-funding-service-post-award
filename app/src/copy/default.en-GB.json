@@ -947,7 +947,8 @@
       "columnHeaderValue": "Funding amount (£)",
       "buttonRemove": "Remove",
       "buttonAdd": "Add another source of funding",
-      "footerLabelTotal": "Total other funding"
+      "footerLabelTotal": "Total other funding",
+      "actionHeader": "Action"
     },
     "pcrAddPartnerAgreementToPcr": {
       "guidance": "You must upload copies of signed letters from all other project partners to show they have agreed to this change",
@@ -2095,8 +2096,9 @@
         "costs": {
           "arrayType": {
             "value": {
+              "aria_label": "value of academic cost item {{costCategory}}",
               "errors": {
-                "invalid_type": "Value must be a number"
+                "invalid_type": "Value must be a number."
               }
             }
           }
@@ -2132,7 +2134,7 @@
             "value": {
               "errors": {
                 "too_small": "Funding amount is required.",
-                "invalid_type": "Funding amount must be a number"
+                "invalid_type": "Funding amount must be a number."
               }
             }
           }
@@ -2146,6 +2148,7 @@
         },
 
         "numberOfEmployees": {
+          "aria_label": "number of full-time employees",
           "errors": {
             "invalid_type": "Enter the number of employees.",
             "custom": "Please enter a valid number of employees."
@@ -2170,8 +2173,8 @@
         },
         "projectCity": {
           "errors": {
-            "invalid_type": "Select a project city.",
-            "too_small": "Select a project city.",
+            "invalid_type": "Enter a project city.",
+            "too_small": "Enter a project city.",
             "too_big": "Project city must be {{ count }} characters or less."
           }
         },

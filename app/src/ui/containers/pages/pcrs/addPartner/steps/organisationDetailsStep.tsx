@@ -90,7 +90,7 @@ export const OrganisationDetailsStep = () => {
                 inputWidth={4}
                 {...register("numberOfEmployees")}
                 disabled={isFetching}
-                aria-label="number of full time employees"
+                aria-label={getContent(x => x.forms.pcr.addPartner.numberOfEmployees.aria_label)}
               />
             </FormGroup>
           </Fieldset>

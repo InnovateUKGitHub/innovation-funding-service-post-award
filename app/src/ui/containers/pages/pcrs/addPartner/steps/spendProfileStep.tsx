@@ -12,9 +12,9 @@ import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { useMemo } from "react";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
-import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { sumBy } from "lodash";
+import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 
 export const SpendProfileStep = () => {
   const { getContent } = useContent();
@@ -86,9 +86,7 @@ export const SpendProfileStep = () => {
                 <TD>
                   <Currency bold value={data.total} />
                 </TD>
-                <TD>
-                  <AccessibilityText>No data</AccessibilityText>
-                </TD>
+                <TableEmptyCell />
               </TR>
             </TFoot>
           </Table>
