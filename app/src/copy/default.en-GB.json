@@ -2150,8 +2150,10 @@
         "numberOfEmployees": {
           "aria_label": "number of full-time employees",
           "errors": {
-            "invalid_type": "Enter the number of employees.",
-            "custom": "Please enter a valid number of employees."
+            "invalid_type_received_null": "Enter the number of employees.",
+            "invalid_type_received_string": "Please enter a valid number of employees.",
+            "custom": "Please enter a valid number of employees.",
+            "too_small": "Please enter a valid number of employees."
           }
         },
         "organisationName": {

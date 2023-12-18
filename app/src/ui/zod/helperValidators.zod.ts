@@ -212,7 +212,38 @@ const integerInput = z.union([
   z.string().transform((x, ctx) => {
     if (x === "") return null;
     const x1 = Number(x);
+    if (isNaN(x1)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_type,
+        expected: "number",
+        received: "string",
+      });
+    }
     if (!Number.isInteger(x1)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+      });
+    }
+
+    return x1;
+  }),
+]);
+
+const positiveIntegerInput = z.union([
+  z.number().int().min(0),
+  z.string().transform((x, ctx) => {
+    if (x === "") return null;
+    const x1 = Number(x);
+
+    if (isNaN(x1)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_type,
+        expected: "number",
+        received: "string",
+      });
+    } else if (x1 < 0) {
+      ctx.addIssue({ code: z.ZodIssueCode.too_small, minimum: 0, inclusive: true, type: "number" });
+    } else if (!Number.isInteger(x1)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
       });
@@ -300,6 +331,7 @@ export {
   numberInput,
   percentageNumberInput,
   positiveNumberInput,
+  positiveIntegerInput,
   emptyStringToUndefinedValidation,
   emptyStringToNullValidation,
   getSingleFileValidation,
