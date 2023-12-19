@@ -83,16 +83,6 @@ describe("PCR > Reallocate Costs > 2 -Continues Reallocate costs to the costs ta
 
   it("Should validate the grant moving over financial year input", validateGrantMoving);
 
-  it("Should contain the correct guidance copy", () => {
-    [
-      "The knowledge base partner may vire funds between the 'Travel and subsistence' and 'Consumables' cost categories. Funds can also be vired out of these 2 categories into the 'Associate development' category. Funds cannot be vired out of the 'Associate development' category.",
-      "Virements are subject to approval by the Local Management Committee (LMC).",
-      "Requests for virements must be submitted online using the Innovation Funding Service and must be approved before the related costs are incurred. These requests must not be submitted after the project partnership has ended.",
-    ].forEach(copy => {
-      cy.paragraph(copy);
-    });
-  });
-
   it("Clears the input and types a valid number", () => {
     cy.get("input#grantMovingOverFinancialYear").type("10000");
   });

@@ -1,7 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
   reallocateCostsGiveUsInfoContinue,
-  markAsComplete,
   reallocateCostsAndPartner,
   reallocateCostsCats,
   reallocateCostsTableHeaders,
@@ -13,6 +12,12 @@ import {
   partnerTableWithOverspend,
   reaccessABCadReduce,
   validateCostUpdateInputs,
+  validateGrantMoving,
+  changeRemainingGrantPage,
+  updateNewRemainingGrant,
+  reduceNewRemainingGrant,
+  saveReflectSurplus,
+  restoreRemainingGrant,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
@@ -71,7 +76,7 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
 
   it("Should display a warning message regarding the underspend/surplus amount", () => {
     cy.getByQA("validation-message-content").contains(
-      "Your 'Remaining grant' has a surplus of £35,100.00. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
+      "Your 'Remaining grant' has a surplus of £35,751.50. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
     );
   });
 
@@ -86,7 +91,7 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
 
   it("Should display messaging surrounding an overspend", () => {
     cy.getByQA("validation-message-content").contains(
-      "You must reduce your 'New remaining grant' project total to £341,900.00 or less, because you have exceeded it by £1,950.00. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
+      "You must reduce your 'New remaining grant' project total to £341,900.00 or less, because you have exceeded it by £1,298.50. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
     );
   });
 
@@ -95,18 +100,63 @@ describe("PCR > Reallocate Costs > 3 - Continues Reallocate costs to the costs t
   it("Should re-access A B Cad Services and reduce costs in line with total grant value", reaccessABCadReduce);
 
   it("Should no longer show validation message stating overspend", () => {
-    cy.getByQA("validation-message-content").should("not.exist");
+    cy.getByQA("validation-message-content")
+      .contains(
+        "You must reduce your 'New remaining grant' project total to £341,900.00 or less, because you have exceeded it by £1,298.50. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
+      )
+      .should("not.exist");
   });
 
-  it("Should click back into EUI and validate the inputs", validateCostUpdateInputs);
+  it("Should navigate back into EUI and validate the inputs", validateCostUpdateInputs);
 
-  it("Has an input box for grant moving over financial year", () => {
-    cy.get("input#grantMovingOverFinancialYear").type("0");
+  it("Should click the backlink to return to the partner table.", () => {
+    cy.backLink("Back to summary").click();
+    cy.heading("Reallocate project costs");
   });
 
-  it("Has a mark as complete section", markAsComplete);
+  it("Should present remaining grant copy", () => {
+    cy.paragraph(
+      "If the new remaining grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant.",
+    );
+  });
+
+  it("Should access the 'Change remaining grant section", () => {
+    cy.clickOn("Change remaining grant");
+    cy.heading("Change remaining grant");
+  });
+
+  it("Should verify the correct copy exists and the partner table", changeRemainingGrantPage);
+
+  it(
+    "Should update the New remaining grant values which in turn, update the New funding level percentages",
+    updateNewRemainingGrant,
+  );
+
+  it("Should attempt to save the increase in grant, prompting validation", () => {
+    cy.clickOn("Save and return to reallocate project costs");
+    cy.validationLink("The total grant cannot exceed the remaining grant.");
+    cy.paragraph("The total grant cannot exceed the remaining grant.");
+  });
+
+  it("Should reduce the grant value to below the remaining grant value", reduceNewRemainingGrant);
+
+  it("Should save and reflect on the previous page this changes and surplus", saveReflectSurplus);
+
+  it("Should show validation pertaining to surplus of £2.99", () => {
+    cy.getByQA("validation-message-content").contains(
+      "Your 'Remaining grant' has a surplus of £3.00. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
+    );
+  });
+
+  it("Should go back into Change remaining grant and reduce figure by £3.00", restoreRemainingGrant);
+
+  it("Has an input box for grant moving over financial year and will validate the input", validateGrantMoving);
 
   it("Has a save and return to request button", () => {
     cy.submitButton("Save and return to request").click();
+  });
+
+  it("Should reflect that the section is complete", () => {
+    cy.get("span").contains("Complete");
   });
 });

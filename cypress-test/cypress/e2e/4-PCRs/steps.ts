@@ -404,11 +404,6 @@ export const partnerRadioButtons = () => {
   });
 };
 
-export const markAsComplete = () => {
-  cy.get("legend").contains("Mark as complete");
-  cy.getByLabel("I agree with this change").click();
-};
-
 export const reallocateCostsGiveUsInfoContinue = () => {
   cy.get("h2.app-task-list__section").contains("Give us information");
   cy.get("span.app-task-list__task-name").contains("Reallocate project costs").click();
@@ -1436,6 +1431,7 @@ export const validateGrantMoving = () => {
   cy.submitButton("Save and return to request").click();
   cy.validationLink("The value of a grant moving over financial year must be numerical.");
   cy.clickCheckBox("I agree with this change");
+  cy.get("input#grantMovingOverFinancialYear").clear().type("0");
 };
 
 export const validatePcrDurationPage = () => {
@@ -1894,10 +1890,10 @@ export const validateCostUpdateInputs = () => {
 
 export const updateEUICosts = () => {
   [
-    ["Labour", "34000", "-£1,000.00"],
-    ["Overheads", "33000", "-£2,000.00"],
-    ["Materials", "32000", "-£3,000.00"],
-    ["Capital usage", "31000", "-£4,000.00"],
+    ["Labour", "33998.90", "-£1,001.10"],
+    ["Overheads", "32998.80", "-£2,001.20"],
+    ["Materials", "31666.33", "-£3,333.67"],
+    ["Capital usage", "30333.66", "-£4,666.34"],
     ["Subcontracting", "1000", "£1,000.00"],
     ["Travel and subsistence", "30000", "-£5,000.00"],
     ["Other costs", "29000", "-£6,000.00"],
@@ -1914,7 +1910,7 @@ export const updateEUICosts = () => {
       });
   });
   cy.wait(500);
-  ["Partner totals", "£350,000.00", "£0.00", "£296,000.00", "-£54,000.00"].forEach((total, index) => {
+  ["Partner totals", "£350,000.00", "£0.00", "£294,997.69", "-£55,002.31"].forEach((total, index) => {
     cy.get("tfoot").within(() => {
       cy.get("tr").within(() => {
         cy.get(`td:nth-child(${index + 1})`).contains(total);
@@ -1935,7 +1931,7 @@ export const updateEUICosts = () => {
       });
     });
   });
-  ["£575,000.00", "£521,000.00", "-£54,000.00", "£341,900.00", "£306,800.00", "-£35,100.00"].forEach((total, index) => {
+  ["£575,000.00", "£519,997.69", "-£55,002.31", "£341,900.00", "£306,148.50", "-£35,751.50"].forEach((total, index) => {
     cy.getByQA("summary-table").within(() => {
       cy.get("tr")
         .eq(1)
@@ -1953,9 +1949,9 @@ export const partnerTableWithUnderspend = () => {
       "£350,000.00",
       "£350,000.00",
       "£227,500.00",
-      "£296,000.00",
-      "£296,000.00",
-      "£192,400.00",
+      "£294,997.69",
+      "£294,997.69",
+      "£191,748.50",
     ],
     ["A B Cad Services", "£175,000.00", "£175,000.00", "£113,750.00", "£175,000.00", "£175,000.00", "£113,750.00"],
     ["ABS EUI Medium Enterprise", "£50,000.00", "£1,000.00", "£650.00", "£50,000.00", "£1,000.00", "£650.00"],
@@ -2021,7 +2017,7 @@ export const updateABCad = () => {
       });
     });
   });
-  ["£575,000.00", "£578,000.00", "£3,000.00", "£341,900.00", "£343,850.00", "£1,950.00"].forEach((total, index) => {
+  ["£575,000.00", "£576,997.69", "£1,997.69", "£341,900.00", "£343,198.50", "£1,298.50"].forEach((total, index) => {
     cy.getByQA("summary-table").within(() => {
       cy.get("tr")
         .eq(1)
@@ -2039,9 +2035,9 @@ export const partnerTableWithOverspend = () => {
       "£350,000.00",
       "£350,000.00",
       "£227,500.00",
-      "£296,000.00",
-      "£296,000.00",
-      "£192,400.00",
+      "£294,997.69",
+      "£294,997.69",
+      "£191,748.50",
     ],
     ["A B Cad Services", "£175,000.00", "£175,000.00", "£113,750.00", "£232,000.00", "£232,000.00", "£150,800.00"],
     ["ABS EUI Medium Enterprise", "£50,000.00", "£1,000.00", "£650.00", "£50,000.00", "£1,000.00", "£650.00"],
@@ -2069,4 +2065,121 @@ export const reaccessABCadReduce = () => {
   cy.wait(500);
   cy.button("Save and return to reallocate project costs").click();
   cy.heading("Reallocate project costs");
+};
+
+export const changeRemainingGrantPage = () => {
+  [
+    "You can only use this page to change the 'New remaining grant' for partners who can have different funding level percentages.",
+    "Check the funding rules to ensure each partner's funding level does not exceed their allowable limit.",
+    "You can change the 'New remaining grant' for any partner to ensure the total 'New remaining grant' does not exceed the total 'Remaining grant'.",
+    "Each partner's 'Funding level' will be updated to the 'New funding level' for the remaining project costs.",
+  ].forEach(copy => {
+    cy.paragraph(copy);
+  });
+
+  [
+    "Partner",
+    "Remaining costs",
+    "Remaining grant",
+    "Funding level",
+    "New remaining costs",
+    "New remaining grant",
+    "New funding level",
+  ].forEach(header => {
+    cy.tableHeader(header);
+  });
+  [
+    ["EUI Small Ent Health", "£350,000.00", "£227,500.00", "65.00%", "£294,997.69"],
+    ["A B Cad Services", "£175,000.00", "£113,750.00", "65.00%", "£229,000.00"],
+    ["ABS EUI Medium Enterprise", "£1,000.00", "£650.00", "65.00%", "£1,000.00"],
+  ].forEach(([partner, remainingCosts, remainingGrant, fundingLevel, newRemainingCosts], index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(partner);
+        cy.get("td:nth-child(2)").contains(remainingCosts);
+        cy.get("td:nth-child(3)").contains(remainingGrant);
+        cy.get("td:nth-child(4)").contains(fundingLevel);
+        cy.get("td:nth-child(5)").contains(newRemainingCosts);
+      });
+  });
+  ["Project totals", "£526,000.00", "£341,900.00", "65.00%", "£524,997.69", "£341,248.50", "65.00%"].forEach(
+    (footer, index) => {
+      cy.get("tfoot").within(() => {
+        cy.get("tr").within(() => {
+          cy.get(`td:nth-child(${index + 1})`).contains(footer);
+        });
+      });
+    },
+  );
+};
+
+export const updateNewRemainingGrant = () => {
+  [
+    ["EUI Small Ent Health", "191748.50", "200000", "67.80%", "£349,500.00", "66.57%"],
+    ["A B Cad Services", "148850", "150000", "65.50%", "£350,650.00", "66.79%"],
+    ["ABS EUI Medium Enterprise", "650", "700", "70.00%", "£350,700.00", "66.80%"],
+  ].forEach(([aria, value, input, rowPercentage, totalGrant, totalPercentage], index) => {
+    cy.getByAriaLabel(aria).should("have.value", Number(value)).clear().type(input);
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get(`td:nth-child(7)`).contains(rowPercentage);
+      });
+    cy.get("tfoot").within(() => {
+      cy.get("tr").within(() => {
+        cy.get("td:nth-child(6)").contains(totalGrant);
+        cy.get("td:nth-child(7)").contains(totalPercentage);
+      });
+    });
+  });
+};
+
+export const reduceNewRemainingGrant = () => {
+  [
+    ["EUI Small Ent Health", "192399", "65.22%", "£343,099.00", "65.35%"],
+    ["A B Cad Services", "148849", "65.00%", "£341,948.00", "65.13%"],
+    ["ABS EUI Medium Enterprise", "649", "64.90%", "£341,897.00", "65.12%"],
+  ].forEach(([aria, input, rowPercentage, totalGrant, totalPercentage], index) => {
+    cy.getByAriaLabel(aria).clear().type(input);
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get(`td:nth-child(7)`).contains(rowPercentage);
+      });
+    cy.get("tfoot").within(() => {
+      cy.get("tr").within(() => {
+        cy.get("td:nth-child(6)").contains(totalGrant);
+        cy.get("td:nth-child(7)").contains(totalPercentage);
+      });
+    });
+  });
+  cy.getByQA("validation-summary").should("not.exist");
+};
+
+export const saveReflectSurplus = () => {
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.heading("Reallocate project costs");
+  ["£192,399.01", "£148,848.99", "£649.00"].forEach((newRemGrant, index) => {
+    cy.get("tr")
+      .eq(index + 1)
+      .within(() => {
+        cy.get("td:nth-child(7)").contains(newRemGrant);
+      });
+  });
+  cy.get("tfoot").within(() => {
+    cy.get("tr").within(() => {
+      cy.get("th:nth-child(7)").contains("£341,897.00");
+    });
+  });
+};
+
+export const restoreRemainingGrant = () => {
+  cy.clickOn("Change remaining grant");
+  cy.heading("Change remaining grant");
+  cy.getByAriaLabel("ABS EUI Medium Enterprise").clear().type("652");
+  cy.wait(300);
+  cy.clickOn("Save and return to reallocate project costs");
+  cy.heading("Reallocate project costs");
+  cy.getByQA("validation-message-content").should("not.exist");
 };
