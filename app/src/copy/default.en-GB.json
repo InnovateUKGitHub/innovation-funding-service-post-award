@@ -2116,8 +2116,10 @@
         },
         "financialYearEndDate": {
           "errors": {
-            "invalid_type": "Enter a financial year end.",
-            "too_small": "Enter a financial year end."
+            "invalid_type_received_null": "Enter a financial year end.",
+            "invalid_type_received_string": "Enter a valid financial year end.",
+            "too_small": "Enter a financial year end.",
+            "custom": "Enter a valid financial year end."
           }
         },
         "funds": {

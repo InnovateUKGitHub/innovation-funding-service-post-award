@@ -11,6 +11,15 @@ const dateSecuredRequired = z
     financialYearEndDate_year: z.string(),
   })
   .superRefine((data, ctx) => {
+    if (!/^\d*$/.test(data.financialYearEndDate_month) || !/^\d*$/.test(data.financialYearEndDate_year)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_type,
+        received: "string",
+        expected: "number",
+        path: ["financialYearEndDate"],
+      });
+    }
+
     if (isEmptyDate(data.financialYearEndDate_month, data.financialYearEndDate_year)) {
       ctx.addIssue({
         code: z.ZodIssueCode.too_small,
@@ -32,10 +41,19 @@ const dateSecuredRequired = z
 
 const dateSecuredOptional = z
   .object({
-    financialYearEndDate_month: z.string().optional(),
-    financialYearEndDate_year: z.string().optional(),
+    financialYearEndDate_month: z.string(),
+    financialYearEndDate_year: z.string(),
   })
   .superRefine((data, ctx) => {
+    if (!/^\d*$/.test(data.financialYearEndDate_month) || !/^\d*$/.test(data.financialYearEndDate_year)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.invalid_type,
+        received: "string",
+        expected: "number",
+        path: ["financialYearEndDate"],
+      });
+    }
+
     if (!isEmptyDate(data.financialYearEndDate_month, data.financialYearEndDate_year)) {
       if (!isValidMonth(data.financialYearEndDate_month) || !isValidYear(data.financialYearEndDate_year)) {
         ctx.addIssue({
