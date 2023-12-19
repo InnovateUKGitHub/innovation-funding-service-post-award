@@ -2,7 +2,7 @@ import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ClaimFrequency } from "@framework/constants/enums";
-import { ProjectRole, ProjectMonitoringLevel, ProjectStatus } from "@framework/constants/project";
+import { ProjectRole, ProjectMonitoringLevel, ProjectStatus, ProjectSource } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { mapToProjectDto } from "./mapToProjectDto";
 
@@ -62,6 +62,7 @@ describe("mapToProjectDto", () => {
       loanExtensionPeriodLength: null,
       loanRepaymentPeriodLength: null,
       impactManagementParticipation: ImpactManagementParticipation.Unknown,
+      projectSource: ProjectSource.Manual,
     };
 
     const project = context.testData.createProject(x => {

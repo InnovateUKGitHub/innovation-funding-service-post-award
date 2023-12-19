@@ -12,7 +12,7 @@ import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerD
 import { BankCheckCondition, MatchFlag } from "@framework/types/bankCheck";
 import { GetBankVerificationDetailsByIdQuery } from "./getBankVerificationDetailsByIdQuery";
 import { PartnerStatus, BankCheckStatus, BankDetailsTaskStatus } from "@framework/constants/partner";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRole, ProjectSource } from "@framework/constants/project";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Authorisation } from "@framework/types/authorisation";
 import { IContext } from "@framework/types/IContext";
@@ -32,8 +32,11 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
   constructor(
     private readonly partner: PickRequiredFromPartial<PartnerDto, "id" | "projectId">,
-    private readonly validateBankDetails?: boolean,
-    private readonly verifyBankDetails?: boolean,
+    private readonly check: {
+      validateBankDetails?: boolean;
+      verifyBankDetails?: boolean;
+      projectSource?: ProjectSource;
+    } = {},
   ) {
     super();
   }
@@ -65,15 +68,15 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     };
 
     if (mergedPartner.partnerStatus === PartnerStatus.Pending) {
-      if (mergedPartner.bankCheckStatus === BankCheckStatus.NotValidated && this.validateBankDetails) {
+      if (mergedPartner.bankCheckStatus === BankCheckStatus.NotValidated && this.check?.validateBankDetails) {
         await this.bankCheckValidate(originalDto, partnerDocuments, update, context);
       }
 
-      if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.validateBankDetails) {
+      if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.check?.validateBankDetails) {
         await this.updateBankDetails(update);
       }
 
-      if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.verifyBankDetails) {
+      if (mergedPartner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.check?.verifyBankDetails) {
         await this.bankCheckVerify(update, context);
       }
     }
@@ -256,13 +259,14 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       throw new BadRequestError("Request is missing required fields");
     }
 
-    if (originalDto.partnerStatus !== PartnerStatus.Pending && this.validateBankDetails) {
+    if (originalDto.partnerStatus !== PartnerStatus.Pending && this.check?.validateBankDetails) {
       throw new BadRequestError("Cannot validate bank details for an active partner");
     }
 
     const validationResult = new PartnerDtoValidator(this.mergedPartner, originalDto, partnerDocuments, {
       showValidationErrors: true,
-      validateBankDetails: this.validateBankDetails || this.verifyBankDetails,
+      validateBankDetails: this.check?.validateBankDetails || this.check?.verifyBankDetails,
+      projectSource: this.check.projectSource,
     });
 
     if (!validationResult.isValid) {

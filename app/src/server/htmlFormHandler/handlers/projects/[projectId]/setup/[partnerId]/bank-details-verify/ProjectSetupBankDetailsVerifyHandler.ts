@@ -39,7 +39,11 @@ export class ProjectSetupBankDetailsVerifyHandler extends StandardFormHandlerBas
     const bankCheckStatusMapper = new BankCheckStatusMapper();
 
     // Run an Experian verification on the DTO
-    await context.runCommand(new UpdatePartnerCommand(dto, false, true));
+    await context.runCommand(
+      new UpdatePartnerCommand(dto, {
+        verifyBankDetails: true,
+      }),
+    );
 
     // Re-obtain the new results
     const partnerDto = await context.repositories.partners.getById(dto.id);

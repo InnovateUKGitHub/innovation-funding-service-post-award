@@ -8,6 +8,13 @@ export enum ProjectStatus {
   Terminated = 6,
 }
 
+export enum ProjectSource {
+  Unknown = "Unknown",
+  Manual = "Manual",
+  IFS = "IFS",
+  Grants = "Grants",
+}
+
 export enum ProjectMonitoringLevel {
   Unknown = "Unknown",
   Platinum = "Platinum",

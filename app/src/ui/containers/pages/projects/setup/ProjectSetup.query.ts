@@ -18,6 +18,9 @@ export const projectSetupQuery = graphql`
                 Acc_ProjectTitle__c {
                   value
                 }
+                Acc_ProjectSource__c {
+                  value
+                }
                 Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }) {
                   edges {
                     node {

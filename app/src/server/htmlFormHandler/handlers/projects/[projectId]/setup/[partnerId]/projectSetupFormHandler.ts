@@ -8,22 +8,32 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { ProjectDashboardRoute } from "@ui/containers/pages/projects/dashboard/Dashboard.page";
 import { ProjectSetupParams, ProjectSetupRoute } from "@ui/containers/pages/projects/setup/projectSetup.page";
 import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners/getByIdQuery";
+import { ProjectDto } from "@framework/dtos/projectDto";
+import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 
 export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetupParams, "partner"> {
   constructor() {
     super(ProjectSetupRoute, ["default"], "partner");
   }
-  protected async getDto(context: IContext, params: ProjectSetupParams): Promise<PartnerDto> {
-    return context.runQuery(new GetPartnerByIdQuery(params.partnerId));
+  protected async getDto(
+    context: IContext,
+    params: ProjectSetupParams,
+  ): Promise<{ partner: PartnerDto; project: ProjectDto }> {
+    const [partner, project] = await Promise.all([
+      context.runQuery(new GetPartnerByIdQuery(params.partnerId)),
+      context.runQuery(new GetByIdQuery(params.projectId)),
+    ]);
+
+    return { project, partner };
   }
 
   protected async run(
     context: IContext,
     params: ProjectSetupParams,
     button: IFormButton,
-    dto: PartnerDto,
+    { partner, project }: { partner: PartnerDto; project: ProjectDto },
   ): Promise<ILinkInfo> {
-    await context.runCommand(new UpdatePartnerCommand(dto));
+    await context.runCommand(new UpdatePartnerCommand(partner, { projectSource: project.projectSource }));
     return ProjectDashboardRoute.getLink({});
   }
 
@@ -31,7 +41,13 @@ export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetu
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(params: ProjectSetupParams, dto: PartnerDto) {
-    return new PartnerDtoValidator(dto, dto, [], { showValidationErrors: false });
+  protected createValidationResult(
+    params: ProjectSetupParams,
+    { partner, project }: { partner: PartnerDto; project: ProjectDto },
+  ) {
+    return new PartnerDtoValidator(partner, partner, [], {
+      showValidationErrors: false,
+      projectSource: project.projectSource,
+    });
   }
 }

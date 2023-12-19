@@ -42,7 +42,7 @@ export class ProjectSetupBankStatementHandler extends StandardFormHandlerBase<
     // Attempt to update the partner information.
     // Will crash and burn if there are validation errors,
     // which will return to the current page as expected.
-    await context.runCommand(new UpdatePartnerCommand(dto, false, false));
+    await context.runCommand(new UpdatePartnerCommand(dto));
 
     // Accept that the user is done.
     return ProjectSetupRoute.getLink(params);
