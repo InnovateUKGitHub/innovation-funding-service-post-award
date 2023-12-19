@@ -9,4 +9,7 @@
   footer.govuk-footer {
     display: none;
   }
+  .govuk-width-container {
+    max-width: unset;
+  }
 }

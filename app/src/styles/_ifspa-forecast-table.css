@@ -9,19 +9,24 @@ $govuk-breakpoints: (
 
 */
 
-.ifspa-forecast-wrapper {
-  display: grid;
-  position: relative;
-}
+@media print {
+  .ifspa-forecast-table-right-col-1,
+  .ifspa-forecast-table-right-col-2,
+  .ifspa-forecast-table-right-col-3,
+  .ifspa-forecast-table-sticky-col {
+    left: unset !important;
+    right: unset !important;
+    width: unset !important;
+    height: unset !important;
+    position: unset !important;
+    display: table-cell !important;
+  }
 
-.ifspa-forecast-table {
-  display: block;
-  overflow-x: scroll;
-}
-
-.ifspa-forecast-wrap {
-  display: flex;
-  flex-direction: column;
+  .ifspa-forecast-table {
+    margin-left: unset !important;
+    margin-right: unset !important;
+    width: unset !important;
+  }
 }
 
 .ifspa-forecast-table tbody tr:last-of-type td,
@@ -39,6 +44,23 @@ $govuk-breakpoints: (
 
 .ifspa-forecast-table-date {
   font-weight: normal;
+}
+
+@media screen {
+  .ifspa-forecast-wrapper {
+    display: grid;
+    position: relative;
+  }
+
+  .ifspa-forecast-table {
+    display: block;
+    overflow-x: scroll;
+  }
+
+  .ifspa-forecast-wrap {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 @media screen and (min-width: 320px) {
