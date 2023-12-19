@@ -1,5 +1,5 @@
 import { ClaimFrequency } from "@framework/constants/enums";
-import { ProjectRole } from "@framework/constants/project";
+import { ProjectRole, ProjectSource } from "@framework/constants/project";
 import { ProjectDto } from "@framework/dtos/projectDto";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
@@ -61,6 +61,7 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     impactManagementParticipation: mapImpactManagementParticipationToEnum(
       item.Impact_Management_Participation__c ?? null,
     ),
+    projectSource: (item.Acc_ProjectSource__c as ProjectSource) ?? ProjectSource.Unknown,
   };
 };
 

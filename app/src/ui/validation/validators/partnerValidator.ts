@@ -11,6 +11,7 @@ import { PartnerDto } from "@framework/dtos/partnerDto";
 import { Result } from "@ui/validation/result";
 import { Results } from "../results";
 import * as Validation from "./common";
+import { ProjectSource } from "@framework/constants/project";
 
 export class PartnerDtoValidator extends Results<PartnerDto> {
   constructor(
@@ -21,6 +22,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       showValidationErrors: boolean;
       validateBankDetails?: boolean;
       failBankValidation?: boolean;
+      projectSource?: ProjectSource;
     },
   ) {
     super({ model, showValidationErrors: options.showValidationErrors });
@@ -192,6 +194,16 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
       ),
     this.original.bankCheckStatus === BankCheckStatus.NotValidated,
   );
+
+  public manualProjectSetup =
+    this.options.projectSource === "Manual"
+      ? this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+          Validation.inValid(
+            this,
+            this.getContent(x => x.validation.partnerDtoValidator.partnerStatusChangeDisallowed),
+          ),
+        )
+      : Validation.valid(this);
 
   private conditionallyValidateBankDetails(test: () => Result, condition = true) {
     if (condition && this.options.validateBankDetails) {

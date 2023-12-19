@@ -1,6 +1,12 @@
 import { ImpactManagementParticipation } from "@framework/constants/competitionTypes";
 import { ClaimFrequency } from "@framework/constants/enums";
-import { ProjectMonitoringLevel, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/constants/project";
+import {
+  ProjectMonitoringLevel,
+  ProjectRole,
+  ProjectSource,
+  ProjectStatus,
+  TypeOfAid,
+} from "@framework/constants/project";
 
 export interface ProjectDto {
   applicationUrl?: string | null;
@@ -41,6 +47,7 @@ export interface ProjectDto {
   statusName: string;
   summary: string;
   title: string;
+  projectSource: ProjectSource;
   impactManagementParticipation: ImpactManagementParticipation;
 }
 

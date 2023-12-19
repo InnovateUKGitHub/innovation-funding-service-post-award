@@ -300,7 +300,8 @@
       "setSpendProfile": "Set spend profile",
       "provideBankDetails": "Provide your bank details",
       "provideProjectLocation": "Provide your project location postcode",
-      "complete": "Complete project setup"
+      "complete": "Complete project setup",
+      "manualComplete": "Return to projects dashboard"
     },
     "projectOverview": {
       "title": "Project overview",
@@ -1133,6 +1134,7 @@
     }
   },
   "projectMessages": {
+    "manualSetupGuidance": "You need to give us some information so that we can complete project setup. Innovate UK will send you an email when you are able to view your project and begin making claims.",
     "setupGuidance": "You need to give us some information so that we can complete project setup.  You will then be able to view your project and begin making claims.",
     "noClaimDueMessage": "No claim due",
     "claimDueMessage": "Claim due",

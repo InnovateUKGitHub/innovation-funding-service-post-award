@@ -144,7 +144,9 @@ describe("updatePartnerCommand", () => {
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
 
-    const command = new UpdatePartnerCommand(expected, true);
+    const command = new UpdatePartnerCommand(expected, {
+      validateBankDetails: true,
+    });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     const result = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result.validationResponse.validationConditionsSeverity).toEqual("");
@@ -176,7 +178,9 @@ describe("updatePartnerCommand", () => {
     expected.bankDetails.sortCode = "654321";
     expected.bankDetails.accountNumber = "87654321";
 
-    const command = new UpdatePartnerCommand(expected, true);
+    const command = new UpdatePartnerCommand(expected, {
+      validateBankDetails: true,
+    });
     await expect(context.runCommand(command)).resolves.toBe(true);
     const result = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result.bankCheckStatus).toEqual(BankCheckStatus.ValidationPassed);
@@ -214,7 +218,9 @@ describe("updatePartnerCommand", () => {
     expected.bankDetails.sortCode = "654321";
     expected.bankDetails.accountNumber = "87654321";
 
-    const command = new UpdatePartnerCommand(expected, true);
+    const command = new UpdatePartnerCommand(expected, {
+      validateBankDetails: true,
+    });
     await expect(context.runCommand(command)).resolves.toBe(true);
 
     const result = await context.runQuery(new GetByIdQuery(partner.id));
@@ -237,7 +243,9 @@ describe("updatePartnerCommand", () => {
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
 
-    const command = new UpdatePartnerCommand(expected, false, true);
+    const command = new UpdatePartnerCommand(expected, {
+      verifyBankDetails: true,
+    });
     await expect(context.runCommand(command)).resolves.toBe(true);
     const result = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result.bankCheckStatus).toEqual(BankCheckStatus.VerificationPassed);
@@ -257,7 +265,9 @@ describe("updatePartnerCommand", () => {
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
 
-    const command = new UpdatePartnerCommand(expected, false, true);
+    const command = new UpdatePartnerCommand(expected, {
+      verifyBankDetails: true,
+    });
     await expect(context.runCommand(command)).resolves.toBe(true);
     const result = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result.bankCheckStatus).toEqual(BankCheckStatus.VerificationFailed);

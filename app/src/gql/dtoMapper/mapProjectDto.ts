@@ -1,5 +1,5 @@
 import { ClaimFrequency } from "@framework/constants/enums";
-import { TypeOfAid } from "@framework/constants/project";
+import { ProjectSource, TypeOfAid } from "@framework/constants/project";
 import { ProjectDtoGql } from "@framework/dtos/projectDto";
 import { mapImpactManagementParticipationToEnum } from "@framework/mappers/impactManagementParticipation";
 import { getMonitoringLevel } from "@framework/mappers/projectMonitoringLevel";
@@ -73,6 +73,7 @@ type ProjectNode = GQL.PartialNode<{
   Loan_LoanExtensionPeriodLength__c: GQL.Value<number>;
   Loan_LoanRepaymentPeriodLength__c: GQL.Value<number>;
   Impact_Management_Participation__c: GQL.Value<string>;
+  Acc_ProjectSource__c: GQL.Value<string>;
 }>;
 
 type ProjectDtoMapping = Pick<
@@ -117,6 +118,7 @@ type ProjectDtoMapping = Pick<
   | "typeOfAid"
   | "partnerRoles"
   | "impactManagementParticipation"
+  | "projectSource"
 >;
 
 const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
@@ -225,6 +227,9 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
   },
   projectNumber(node) {
     return node?.Acc_ProjectNumber__c?.value ?? "";
+  },
+  projectSource(node) {
+    return (node?.Acc_ProjectSource__c?.value as ProjectSource) ?? ProjectSource.Unknown;
   },
   roles(node) {
     return {

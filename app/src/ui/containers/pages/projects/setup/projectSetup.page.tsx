@@ -6,7 +6,7 @@ import { createTypedForm } from "@ui/components/bjss/form/form";
 import { List } from "@ui/components/atomicDesign/atoms/List/list";
 import { Page } from "@ui/components/bjss/Page/page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
+import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
 import { TaskListSection, Task, TaskStatus } from "@ui/components/atomicDesign/molecules/TaskList/TaskList";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
@@ -16,6 +16,7 @@ import { useZodFormatValidationErrors } from "@framework/util/errorHelpers";
 import { Result } from "@ui/validation/result";
 import { useMemo } from "react";
 import { projectSetupErrorMap, projectSetupSchema } from "./projectSetup.zod";
+import { useContent } from "@ui/hooks/content.hook";
 
 export interface ProjectSetupParams {
   projectId: ProjectId;
@@ -38,6 +39,7 @@ const Form = createTypedForm<ProjectSetupPartnerDto>();
 const isPostcodeComplete = (postcode: string | null): TaskStatus => (postcode ? "Complete" : "To do");
 
 const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
+  const { getContent } = useContent();
   const { project, partner } = useProjectSetupQuery(props.projectId, props.partnerId);
 
   const [validatorErrors, setValidatorZodErrors] = useZodFormatValidationErrors();
@@ -108,7 +110,9 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
     >
       <Section qa="guidance">
         <P>
-          <Content value={x => x.projectMessages.setupGuidance} />
+          {project.projectSource === "Manual"
+            ? getContent(x => x.projectMessages.manualSetupGuidance)
+            : getContent(x => x.projectMessages.setupGuidance)}
         </P>
       </Section>
 
@@ -175,9 +179,13 @@ const ProjectSetupPage = (props: ProjectSetupParams & BaseProps) => {
         qa="projectSetupForm"
       >
         <Form.Fieldset>
-          <Form.Submit>
-            <Content value={x => x.pages.projectSetup.complete} />
-          </Form.Submit>
+          {project.projectSource === "Manual" ? (
+            <Link route={props.routes.projectDashboard.getLink({})} styling="SecondaryButton">
+              {getContent(x => x.pages.projectSetup.manualComplete)}
+            </Link>
+          ) : (
+            <Form.Submit>{getContent(x => x.pages.projectSetup.complete)}</Form.Submit>
+          )}
         </Form.Fieldset>
       </Form.Form>
     </Page>
