@@ -23,15 +23,12 @@ const checkImpactManagementPcfNotSubmittedForFinalClaim = ({
   const isPhased = impactManagementPhasedCompetition;
   const isFinalPhase = impactManagementPhasedCompetitionStage === ImpactManagementPhase.Last;
 
-  if (isFinalClaim && !isReceived) {
-    // If we are not in IM and the PCF is not received on the final claim, disallow
-    if (!isImpactManagement) return true;
-
+  if (isFinalClaim && !isReceived && isImpactManagement) {
     // If we are in an unphased IM and the PCF is not received on the final claim, disallow
-    if (isImpactManagement && !isPhased) return true;
+    if (!isPhased) return true;
 
     // If we are in an phased IM and the PCF is not received on the final claim and the final phase, disallow
-    if (isImpactManagement && isPhased && isFinalPhase) return true;
+    if (isPhased && isFinalPhase) return true;
   }
 
   return false;
