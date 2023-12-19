@@ -23,7 +23,13 @@ import { pcrPartnerTypes } from "@framework/picklist/pcrPartnerTypes";
 import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { createRegisterButton } from "@framework/util/registerButton";
-import { PCROrganisationType, PCRParticipantSize, getPCROrganisationType } from "@framework/constants/pcrConstants";
+import {
+  PCROrganisationType,
+  PCRParticipantSize,
+  PCRPartnerType,
+  PCRProjectRole,
+  getPCROrganisationType,
+} from "@framework/constants/pcrConstants";
 import { RoleAndOrganisationSchema, roleAndOrganisationSchema } from "./schemas/roleAndOrganisation.zod";
 
 const setData = (data: RoleAndOrganisationSchema) => {
@@ -53,6 +59,9 @@ export const RoleAndOrganisationStep = () => {
 
   const { pcrItem } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
+  const formHasBeenFilled =
+    pcrItem.projectRole !== PCRProjectRole.Unknown && pcrItem.partnerType !== PCRPartnerType.Unknown;
+
   const { handleSubmit, register, formState, trigger, setValue } = useForm<RoleAndOrganisationSchema>({
     defaultValues: {
       isCommercialWork: pcrItem.isCommercialWork === null ? undefined : pcrItem.isCommercialWork ? "true" : "false",
@@ -64,6 +73,10 @@ export const RoleAndOrganisationStep = () => {
     }),
   });
 
+  const disabled = formHasBeenFilled || isFetching;
+
+  console.log("disabled", disabled);
+
   const validationErrors = useRhfErrors(formState.errors);
   useFormValidate(trigger);
 
@@ -71,7 +84,9 @@ export const RoleAndOrganisationStep = () => {
 
   const link = useLinks();
   const roleOptions = getOptions(pcrItem.projectRole, pcrProjectRoles);
+
   const typeOptions = getOptions(pcrItem.partnerType, pcrPartnerTypes);
+
   const commercialWorkOptions = [
     {
       value: "true",
@@ -92,15 +107,23 @@ export const RoleAndOrganisationStep = () => {
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data =>
             onSave({
-              data: setData(data),
+              data: formHasBeenFilled ? {} : setData(data),
               context: link(data),
             }).then(() => refreshItemWorkflowQuery()),
           )}
         >
-          <ValidationMessage
-            messageType="info"
-            message={x => x.pages.pcrAddPartnerRoleAndOrganisation.validationMessage}
-          />
+          {formHasBeenFilled ? (
+            <ValidationMessage
+              messageType="info"
+              message={x => x.pages.pcrAddPartnerRoleAndOrganisation.alreadyCompletedMessage}
+            />
+          ) : (
+            <ValidationMessage
+              messageType="info"
+              message={x => x.pages.pcrAddPartnerRoleAndOrganisation.validationMessage}
+            />
+          )}
+
           <Fieldset>
             <Legend>{getContent(x => x.pcrAddPartnerLabels.roleHeading)}</Legend>
 
@@ -114,8 +137,8 @@ export const RoleAndOrganisationStep = () => {
                     data-qa={option.label}
                     label={option.label}
                     value={option.value}
-                    disabled={isFetching}
                     defaultChecked={option.id === roleOptions.selected?.id}
+                    disabled={isFetching}
                   />
                 ))}
               </RadioList>
@@ -135,8 +158,8 @@ export const RoleAndOrganisationStep = () => {
                   <Radio
                     key={x.label}
                     {...x}
-                    disabled={isFetching}
                     defaultChecked={x.id === (pcrItem.isCommercialWork ? "yes" : "no")}
+                    disabled={isFetching}
                   />
                 ))}
               </RadioList>
@@ -168,10 +191,10 @@ export const RoleAndOrganisationStep = () => {
             </FormGroup>
           </Fieldset>
           <Fieldset data-qa="save-and-continue">
-            <Button type="submit" {...registerButton("submit")} disabled={isFetching}>
+            <Button type="submit" {...registerButton("submit")} disabled={disabled}>
               <Content value={x => x.pcrItem.submitButton} />
             </Button>
-            <Button type="submit" secondary {...registerButton("saveAndReturn")} disabled={isFetching}>
+            <Button type="submit" secondary {...registerButton("saveAndReturn")} disabled={disabled}>
               <Content value={x => x.pcrItem.returnToSummaryButton} />
             </Button>
           </Fieldset>

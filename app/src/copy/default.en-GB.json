@@ -854,6 +854,7 @@
     "pcrAddPartnerRoleAndOrganisation": {
       "formSectionTitle": "New partner information",
       "validationMessage": "You cannot change this information after you continue.",
+      "alreadyCompletedMessage": "The information here can no longer be changed. If there is a mistake, you should delete the request and start again.",
       "infoSummary": "What are the different types?",
       "organisationTypeInfo": "**Business** - a business based in the UK or overseas.\n\n **Research** - higher education and organisations registered with Je-S.\n\n **Research and technology organisation (RTO)** - organisations which solely promote and conduct collaborative research and innovation.\n\n **Public sector, charity or non Je-S registered research organisation** - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.",
       "organisationTypeHint": "If the new partner's organisation type is not listed, contact your monitoring officer.",
