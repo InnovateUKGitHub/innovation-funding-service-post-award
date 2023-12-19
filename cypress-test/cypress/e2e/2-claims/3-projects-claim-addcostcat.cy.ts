@@ -16,6 +16,7 @@ import {
   validateLineItem,
   clearUpOverheadsCostCat,
 } from "./steps";
+import { loremIpsum33k } from "common/lorem";
 const fc = "james.black@euimeabs.test";
 const sysUser = "iuk.accproject@bjss.com.bjssdev";
 describe("claims > Editing a claim by accessing cost categories", () => {
@@ -102,11 +103,21 @@ describe("claims > Editing a claim by accessing cost categories", () => {
 
   it("Should contain additional information heading and messaging", additionalInformationHeading);
 
-  it("Has an area for writing free-text comments", () => {
-    cy.get("textarea").clear().type(standardComments);
+  it("Should validate the free-text box", () => {
+    cy.get("textarea").clear().invoke("val", loremIpsum33k).trigger("input");
+    cy.get("textarea").type("{moveToEnd}");
+    cy.clickOn("Save and return to claims");
+    cy.validationLink("Comment can be a maximum of 32768 characters.");
+    cy.paragraph("Comment can be a maximum of 32768 characters.");
   });
 
-  it("Should count how many characters you have used", () => {
+  it("Should reduce the character length to 32768 and remove validation", () => {
+    cy.get("textarea").type("{moveToEnd}{backspace}");
+    cy.getByQA("validation-summary").should("not.exist");
+  });
+
+  it("Should update the box with standard characters and count the total remaining", () => {
+    cy.get("textarea").clear().type(standardComments);
     cy.get("p.character-count").should("have.text", "You have 32694 characters remaining");
   });
 
