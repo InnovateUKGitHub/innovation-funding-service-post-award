@@ -104,7 +104,14 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
     onUpdate: onSave,
     apiError,
     isProcessing,
-  } = useOnSavePcrItem(props.projectId, props.pcrId, props.itemId, setFetchKey, props.refreshItemWorkflowQuery);
+  } = useOnSavePcrItem(
+    props.projectId,
+    props.pcrId,
+    props.itemId,
+    setFetchKey,
+    props.refreshItemWorkflowQuery,
+    props.step,
+  );
 
   const displayCompleteForm = props.mode === "prepare";
   const allowSubmit = true; // this will not necessarily be true after all pcrs have been migrated
