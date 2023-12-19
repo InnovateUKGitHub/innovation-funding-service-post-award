@@ -2142,6 +2142,11 @@
             }
           }
         }
+      },
+      "comments": {
+        "errors": {
+          "too_big": "Comment can be a maximum of {{ count }} characters."
+        }
       }
     },
     "forecastTable": {

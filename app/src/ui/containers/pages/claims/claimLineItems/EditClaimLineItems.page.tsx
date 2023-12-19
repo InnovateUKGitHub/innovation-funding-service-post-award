@@ -34,6 +34,7 @@ import {
 } from "./editClaimLineItems.zod";
 import { useMapToInitialLineItems } from "./useMapToClaimLineItemTableDto";
 import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 interface EditClaimLineItemsProps extends ClaimLineItemsParams {
   mode: "prepare";
@@ -64,7 +65,7 @@ const EditClaimLineItemsPage = ({
       comments: defaults?.comments,
     },
   });
-  const { register, handleSubmit, setValue, setError, formState, watch } = formMethods;
+  const { register, handleSubmit, setValue, setError, formState, watch, getFieldState } = formMethods;
   const registerButton = createRegisterButton<z.output<EditClaimLineItemsSchemaType>>(setValue, "form");
   const { onUpdate, isFetching } = useOnClaimLineItemsSubmit();
   const onSubmitUpdate = (dto: z.output<EditClaimLineItemsSchemaType>) => {
@@ -126,11 +127,12 @@ const EditClaimLineItemsPage = ({
 
         <SupportingDocumentsSection mode={mode} project={project} documents={documents} />
 
-        <FormGroup>
+        <FormGroup hasError={!!getFieldState("comments").error}>
           <Legend>{getContent(x => x.pages.editClaimLineItems.headerAdditionalInformation)}</Legend>
           <Hint id="hint-for-explaination">
             {getContent(x => x.pages.editClaimLineItems.hintAdditionalInformation)}
           </Hint>
+          <ValidationError error={getFieldState("comments").error} />
           <CharacterCount count={watch("comments")?.length ?? 0} type="descending" maxValue={32768}>
             <Textarea id="explaination" disabled={isFetching} {...register("comments")} />
           </CharacterCount>
