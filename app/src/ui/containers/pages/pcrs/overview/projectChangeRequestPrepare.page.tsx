@@ -86,7 +86,7 @@ const PCRPreparePage = (props: BaseProps & ProjectChangeRequestPrepareParams) =>
         hideAddTypesLink={availablePcrItems.every(x => x.disabled)}
       />
       <ProjectChangeRequestOverviewTasks
-        pcr={pcr as unknown as Pick<PCRDto, "id" | "reasoningStatus"> & { items: GetItemTaskProps["item"][] }}
+        pcr={pcr as Pick<PCRDto, "id" | "reasoningStatus"> & { items: GetItemTaskProps["item"][] }}
         projectId={project.id}
         editableItemTypes={editableItemTypes}
         rhfErrors={validatorErrors as TaskErrors}

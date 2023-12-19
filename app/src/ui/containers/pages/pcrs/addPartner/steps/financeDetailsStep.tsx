@@ -73,10 +73,10 @@ export const FinanceDetailsStep = () => {
             <Legend>{getContent(x => x.pcrAddPartnerLabels.financialYearEndHeading)}</Legend>
 
             <DateInputGroup
-              id="suspensionStartDate"
+              id="financialYearEndDate"
               error={validationErrors?.financialYearEndDate as RhfError}
               hint={
-                <Hint id="hint-for-suspensionStartDate">
+                <Hint id="hint-for-financialYearEndDate">
                   {getContent(x => x.pages.pcrAddPartnerFinanceDetails.hintYearEnd)}
                 </Hint>
               }
