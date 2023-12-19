@@ -11,7 +11,6 @@ import { Hint } from "@ui/components/atomicDesign/atoms/form/Hint/Hint";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { usePcrSuspendProjectWorkflowQuery } from "./suspendProject.logic";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { DateInputGroup } from "@ui/components/atomicDesign/atoms/DateInputs/DateInputGroup";
 import { DateInput } from "@ui/components/atomicDesign/atoms/DateInputs/DateInput";
 import { useNextLink } from "../utils/useNextLink";
@@ -84,7 +83,6 @@ export const SuspendProjectStep = () => {
               data: {
                 suspensionStartDate: combineDate(data.suspensionStartDate_month, data.suspensionStartDate_year, true),
                 suspensionEndDate: combineDate(data.suspensionEndDate_month, data.suspensionEndDate_year, false),
-                status: PCRItemStatus.Incomplete,
               },
               context: { link: nextLink },
             });

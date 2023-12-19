@@ -16,7 +16,6 @@ import { Label } from "@ui/components/atomicDesign/atoms/form/Label/Label";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { useForm } from "react-hook-form";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { useNextLink } from "../utils/useNextLink";
 import { PcrPage } from "../pcrPage";
@@ -104,7 +103,7 @@ export const TimeExtensionStep = () => {
 
       <Form
         onSubmit={handleSubmit(() => {
-          onSave({ data: { offsetMonths: newOffset, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
+          onSave({ data: { offsetMonths: newOffset }, context: { link: nextLink } });
         })}
       >
         <Fieldset>

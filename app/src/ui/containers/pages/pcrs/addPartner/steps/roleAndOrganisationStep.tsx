@@ -75,8 +75,6 @@ export const RoleAndOrganisationStep = () => {
 
   const disabled = formHasBeenFilled || isFetching;
 
-  console.log("disabled", disabled);
-
   const validationErrors = useRhfErrors(formState.errors);
   useFormValidate(trigger);
 

@@ -14,7 +14,6 @@ import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useScopeChangeWorkflowQuery } from "./scopeChange.logic";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { pcrScopeChangeProjectSummarySchema, scopeChangeErrorMap } from "./scopeChange.zod";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
 import { useNextLink } from "../utils/useNextLink";
 import { z } from "zod";
 import { PcrPage } from "../pcrPage";
@@ -62,7 +61,7 @@ export const ProjectSummaryChangeStep = () => {
       <Section data-qa="newSummarySection">
         <Form
           onSubmit={handleSubmit(data => {
-            onSave({ data: { ...data, status: PCRItemStatus.Incomplete }, context: { link: nextLink } });
+            onSave({ data, context: { link: nextLink } });
           })}
         >
           <Fieldset>
