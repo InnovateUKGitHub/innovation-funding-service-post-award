@@ -5,7 +5,7 @@ import { checkImpactManagementPcfNotSubmittedForFinalClaim } from "./checkImpPcf
 describe("checkImpactManagementPcfNotSubmittedForFinalClaim", () => {
   test.each`
     impactManagementParticipation        | isFinalClaim | pcfStatus                     | impactManagementPhasedCompetition | impactManagementPhasedCompetitionStage | shouldBeBlocked
-    ${ImpactManagementParticipation.No}  | ${true}      | ${ReceivedStatus.NotReceived} | ${undefined}                      | ${ImpactManagementPhase.Unknown}       | ${true}
+    ${ImpactManagementParticipation.No}  | ${true}      | ${ReceivedStatus.NotReceived} | ${undefined}                      | ${ImpactManagementPhase.Unknown}       | ${false}
     ${ImpactManagementParticipation.Yes} | ${true}      | ${ReceivedStatus.NotReceived} | ${true}                           | ${ImpactManagementPhase.Last}          | ${true}
     ${ImpactManagementParticipation.Yes} | ${true}      | ${ReceivedStatus.NotReceived} | ${false}                          | ${ImpactManagementPhase.Unknown}       | ${true}
     ${ImpactManagementParticipation.Yes} | ${true}      | ${ReceivedStatus.NotReceived} | ${false}                          | ${undefined}                           | ${true}
