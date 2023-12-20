@@ -2038,7 +2038,7 @@
           "errors": {
             "too_small": "Enter a valid funding level.",
             "invalid_type": "Enter a funding level.",
-            "too_big": "Please enter a funding level up to {{count}}%."
+            "too_big": "Enter a funding level up to {{count}}%."
           }
         },
         "contact1Forename": {
@@ -2157,9 +2157,9 @@
           "aria_label": "number of full-time employees",
           "errors": {
             "invalid_type_received_null": "Enter the number of employees.",
-            "invalid_type_received_string": "Please enter a valid number of employees.",
-            "custom": "Please enter a valid number of employees.",
-            "too_small": "Please enter a valid number of employees."
+            "invalid_type_received_string": "Enter a valid number of employees.",
+            "custom": "Enter a valid number of employees.",
+            "too_small": "Enter a valid number of employees."
           }
         },
         "organisationName": {
