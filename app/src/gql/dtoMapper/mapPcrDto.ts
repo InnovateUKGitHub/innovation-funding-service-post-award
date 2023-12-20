@@ -46,6 +46,12 @@ export type PcrNode = GQL.PartialNode<{
   Acc_Project__c: GQL.Value<string>;
   Acc_ProjectRole__c: GQL.Value<string>;
   LastModifiedDate: GQL.Value<string>;
+  Loan_Duration__c: GQL.Value<string>;
+  Loan_ExtensionPeriod__c: GQL.Value<string>;
+  Loan_ExtensionPeriodChange__c: GQL.Value<number>;
+  Loan_ProjectStartDate__c: GQL.Value<string>;
+  Loan_RepaymentPeriod__c: GQL.Value<string>;
+  Loan_RepaymentPeriodChange__c: GQL.Value<number>;
   RecordType: GQL.Maybe<{
     DeveloperName?: GQL.Value<string>;
     Name?: GQL.ValueAndLabel<string>;
@@ -70,6 +76,10 @@ type PcrDtoMapping = Pick<
 export type PcrItemDtoMapping = Pick<
   FullPCRItemDto,
   | "accountName"
+  | "availabilityPeriod"
+  | "availabilityPeriodChange"
+  | "extensionPeriod"
+  | "extensionPeriodChange"
   | "hasOtherFunding"
   | "id"
   | "isCommercialWork"
@@ -87,9 +97,12 @@ export type PcrItemDtoMapping = Pick<
   | "projectSummarySnapshot"
   | "projectId"
   | "projectRole"
+  | "projectStartDate"
   | "publicDescription"
   | "publicDescriptionSnapshot"
   | "removalPeriod"
+  | "repaymentPeriod"
+  | "repaymentPeriodChange"
   | "requestNumber"
   | "shortName"
   | "started"
@@ -102,12 +115,37 @@ export type PcrItemDtoMapping = Pick<
   | "typeOfAid"
 >;
 
+const mapChangeOffsetToQuarter = (currentMonthOffset: number, changedMonthOffset: number) => {
+  // Note: Set default value if no change entry has been populated
+  if (!changedMonthOffset) return currentMonthOffset;
+
+  return changedMonthOffset + currentMonthOffset;
+};
+
 /**
  * Mapper for PCR Child items
  */
 const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string | TypeOfAid }> = {
   accountName(node) {
     return node?.Acc_NewOrganisationName__c?.value ?? null;
+  },
+  availabilityPeriod(node) {
+    return Number(node?.Loan_Duration__c?.value);
+  },
+  availabilityPeriodChange(node) {
+    return mapChangeOffsetToQuarter(
+      Number(node?.Loan_Duration__c?.value),
+      Number(node?.Acc_AdditionalNumberofMonths__c?.value ?? 0),
+    );
+  },
+  extensionPeriod(node) {
+    return Number(node?.Loan_ExtensionPeriod__c?.value);
+  },
+  extensionPeriodChange(node) {
+    return mapChangeOffsetToQuarter(
+      Number(node?.Loan_ExtensionPeriod__c?.value),
+      Number(node?.Loan_ExtensionPeriodChange__c?.value),
+    );
   },
   hasOtherFunding(node) {
     return node?.Acc_OtherFunding__c?.value ?? null;
@@ -160,6 +198,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   projectRole(node) {
     return mapFromSalesforcePCRProjectRole(node?.Acc_ProjectRole__c?.value ?? "");
   },
+  projectStartDate(node) {
+    return clock.parseOptionalSalesforceDate(node?.Loan_ProjectStartDate__c?.value ?? null);
+  },
   projectSummary(node) {
     return node?.Acc_NewProjectSummary__c?.value ?? "";
   },
@@ -174,6 +215,15 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   removalPeriod(node) {
     return node?.Acc_RemovalPeriod__c?.value ?? null;
+  },
+  repaymentPeriod(node) {
+    return Number(node?.Loan_RepaymentPeriod__c?.value);
+  },
+  repaymentPeriodChange(node) {
+    return mapChangeOffsetToQuarter(
+      Number(node?.Loan_RepaymentPeriod__c?.value),
+      Number(node?.Loan_RepaymentPeriodChange__c?.value),
+    );
   },
   requestNumber(node) {
     return node?.Acc_RequestNumber__c?.value ?? 0;

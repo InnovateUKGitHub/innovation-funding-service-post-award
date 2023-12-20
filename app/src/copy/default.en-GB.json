@@ -818,6 +818,13 @@
       "endProjectEarlyMessage": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close.",
       "loanDrawdownChangeMessage": "This allows for you to change the date and/or amount of forecasted drawdowns in the case of unforeseen circumstances leading to significant variations between drawn amounts and amounts spent (over or underspent).",
       "loanDrawdownExtensionMessage": "This allows you to extend or reduce the duration of your loan periods (availability, extension and repayment).",
+      "loanDrawdownExtensionTableHeadings": {
+        "phase": "Phase",
+        "currentLength": "Current length (quarters)",
+        "currentEndDate": "Current end date",
+        "newLength": "New length (quarters)",
+        "newEndDate": "New end date"
+      },
       "anotherPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to another PCR.",
       "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
       "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
@@ -2045,6 +2052,33 @@
             "too_small": "The last day of pause cannot be before the first day of pause.",
             "custom": "Enter a valid project suspension end date.",
             "readonly": "Project suspension end date cannot be changed."
+          }
+        }
+      },
+      "loanDrawdownExtension": {
+        "information": "You can request a change to the duration of the phases of your loans project.",
+        "startDate": "Project start date: {{startDate}}",
+        "availabilityPeriodChange": {
+          "label": "Availability Period",
+          "errors": {
+            "custom": "'Availability period' value must be in increments of '3', you have entered '{{ input.availabilityPeriodChange }}'."
+          }
+        },
+        "extensionPeriodChange": {
+          "label": "Extension Period",
+          "errors": {
+            "custom": "'Extension period' value must be in increments of '3', you have entered '{{ input.extensionPeriodChange }}'."
+          }
+        },
+        "repaymentPeriodChange": {
+          "label": "Repayment Period",
+          "errors": {
+            "invalid_string": "'Repayment period' value must be in increments of '3', you have entered '{{ input.repaymentPeriodChange }}'."
+          }
+        },
+        "loanDrawdownExtension": {
+          "errors": {
+            "custom": "You must make at least one change to a phase to continue."
           }
         }
       },

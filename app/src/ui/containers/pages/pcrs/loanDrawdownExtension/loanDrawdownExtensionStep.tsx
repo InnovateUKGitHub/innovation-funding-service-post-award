@@ -1,60 +1,88 @@
-import { useState } from "react";
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { LoanChangeDurationTable } from "./LoanChangeDurationTable";
 import { DateFormat } from "@framework/constants/enums";
-import { PCRItemForLoanDrawdownExtensionDto } from "@framework/dtos/pcrDtos";
 import { formatDate } from "@framework/util/dateHelpers";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { PCRLoanExtensionItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { useContent } from "@ui/hooks/content.hook";
+import { PcrPage } from "../pcrPage";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { LoanDrawdownExtensionErrors, useLoanDrawdownExtensionQuery } from "./loanDrawdownExtension.logic";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useNextLink } from "../utils/useNextLink";
+import { loanDrawdownExtensionSchema, errorMap, LoanDrawdownExtensionSchema } from "./loanDrawdownExtension.zod";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { LoanDrawdownTable } from "./loanDrawdownTable";
 
-type LoanDrawdownExtensionStepProps = PcrStepProps<
-  PCRItemForLoanDrawdownExtensionDto,
-  PCRLoanExtensionItemDtoValidator
->;
+export const LoanDrawdownExtensionStep = () => {
+  const { getContent } = useContent();
 
-const LoanForm = createTypedForm<PCRItemForLoanDrawdownExtensionDto>();
+  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
+    usePcrWorkflowContext();
 
-export const LoanDrawdownExtensionStepContainer = (props: LoanDrawdownExtensionStepProps) => {
-  const [state, setState] = useState<PCRItemForLoanDrawdownExtensionDto>(props.pcrItem);
+  const { pcrItem } = useLoanDrawdownExtensionQuery(projectId, itemId, fetchKey);
 
-  if (!props.pcrItem.projectStartDate) throw Error("A project start is required");
+  const formattedStartDate = formatDate(pcrItem.projectStartDate, DateFormat.SHORT_DATE);
 
-  const handleOnUpdate = (data: AnyObject): void => {
-    const latestState = { ...state, ...data };
+  const { handleSubmit, register, formState, trigger, watch } = useForm<LoanDrawdownExtensionSchema>({
+    defaultValues: {
+      availabilityPeriodChange: String(pcrItem.availabilityPeriodChange ?? 0),
+      extensionPeriodChange: String(pcrItem.extensionPeriodChange ?? 0),
+      repaymentPeriodChange: String(pcrItem.repaymentPeriodChange ?? 0),
+      markedAsComplete: markedAsCompleteHasBeenChecked,
+    },
+    resolver: zodResolver(
+      loanDrawdownExtensionSchema({
+        availabilityPeriod: pcrItem.availabilityPeriod ?? 0,
+        extensionPeriod: pcrItem.extensionPeriod ?? 0,
+        repaymentPeriod: pcrItem.repaymentPeriod ?? 0,
+      }),
+      {
+        errorMap,
+      },
+    ),
+  });
 
-    setState(latestState);
+  const validationErrors = useRhfErrors(formState.errors) as LoanDrawdownExtensionErrors;
+  useFormValidate(trigger);
 
-    props.onChange(latestState);
-  };
-
-  const formattedStartDate = formatDate(props.pcrItem.projectStartDate, DateFormat.SHORT_DATE);
-
-  const isDisabled = props.status === EditorStatus.Saving;
+  const nextLink = useNextLink();
 
   return (
-    <>
-      <SimpleString>You can request a change to the duration of the phases of your loans project.</SimpleString>
+    <PcrPage validationErrors={validationErrors}>
+      <P>{getContent(x => x.forms.pcr.loanDrawdownExtension.information)}</P>
 
-      <SimpleString>Project start date: {formattedStartDate}</SimpleString>
+      <P>{getContent(x => x.forms.pcr.loanDrawdownExtension.startDate({ startDate: formattedStartDate }))}</P>
 
-      <LoanForm.Form qa="loanEditForm" data={state} onSubmit={() => props.onSave(false)}>
-        <LoanForm.Custom
-          name="loanChangeDurationTable"
-          value={({ formData }) => (
-            <LoanChangeDurationTable
-              editMode
-              isDisabled={isDisabled}
-              validator={props.validator}
-              onUpdate={handleOnUpdate}
-              formData={formData}
-            />
+      <Section>
+        <Form
+          data-qa="loanEditForm"
+          onSubmit={handleSubmit(data =>
+            onSave({
+              data: {
+                ...data,
+                availabilityPeriodChange: Number(data.availabilityPeriodChange),
+                extensionPeriodChange: Number(data.extensionPeriodChange),
+                repaymentPeriodChange: Number(data.repaymentPeriodChange),
+              },
+              context: { link: nextLink },
+            }),
           )}
-        />
+        >
+          <LoanDrawdownTable
+            pcrItem={pcrItem}
+            register={register}
+            watch={watch}
+            isFetching={isFetching}
+            validationErrors={validationErrors}
+          />
 
-        <LoanForm.SubmitAndContinue name="changeLoanEdit" disabled={isDisabled} />
-      </LoanForm.Form>
-    </>
+          <Button type="submit" disabled={isFetching}>
+            {getContent(x => x.pcrItem.submitButton)}
+          </Button>
+        </Form>
+      </Section>
+    </PcrPage>
   );
 };

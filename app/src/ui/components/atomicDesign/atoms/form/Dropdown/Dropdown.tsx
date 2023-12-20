@@ -3,7 +3,10 @@ import cx from "classnames";
 
 type OptionProps = ComponentProps<"option">;
 
-type DropdownProps = ComponentPropsWithRef<"select"> & { hasEmptyOption?: boolean; options: OptionProps[] };
+type DropdownProps = ComponentPropsWithRef<"select"> & {
+  hasEmptyOption?: boolean;
+  options: OptionProps[];
+};
 
 const DropdownSelect = forwardRef<HTMLSelectElement, DropdownProps>(
   ({ className, disabled, hasEmptyOption, placeholder, options, ...props }: DropdownProps, ref) => {
