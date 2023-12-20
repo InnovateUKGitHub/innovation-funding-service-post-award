@@ -1,3 +1,4 @@
+import { useContent } from "@ui/hooks/content.hook";
 import { ShortDateRange } from "../../atoms/Date";
 
 interface Props {
@@ -7,9 +8,13 @@ interface Props {
 }
 
 export const PeriodTitle: React.FunctionComponent<Props> = (props: Props) => {
+  const { getContent } = useContent();
+
   return (
     <>
-      Period {props.periodId}: <ShortDateRange start={props.periodStartDate} end={props.periodEndDate} />
+      {getContent(x => x.projectMessages.shortCurrentPeriodInfo({ currentPeriod: props.periodId }))}
+      {": "}
+      <ShortDateRange start={props.periodStartDate} end={props.periodEndDate} />
     </>
   );
 };

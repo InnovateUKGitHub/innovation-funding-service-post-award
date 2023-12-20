@@ -10,7 +10,9 @@ import { useContent } from "@ui/hooks/content.hook";
 import { memo } from "react";
 import { DashboardProjectProps, ProjectProps } from "./Dashboard.interface";
 
-const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Element[] => {
+const useProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Element[] => {
+  const { getContent } = useContent();
+
   const isNotAvailable = !["open", "awaiting"].includes(section);
   const isPartnerWithdrawn = !!partner?.isWithdrawn;
 
@@ -33,11 +35,17 @@ const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Eleme
   if (project.isPastEndDate || isPartnerWithdrawn) {
     messages.push(<Content value={x => x.projectMessages.projectEndedMessage} />);
   } else {
-    const projectDate = <ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
-
     messages.push(
       <>
-        Period {project.periodId} of {project.numberOfPeriods} ({projectDate})
+        {getContent(x =>
+          x.projectMessages.shortCurrentPeriodRangeInfo({
+            currentPeriod: project.periodId,
+            numberOfPeriods: project.numberOfPeriods,
+          }),
+        )}
+        {" ("}
+        <ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />
+        {")"}
       </>,
     );
   }
@@ -129,7 +137,7 @@ const DashboardProject = (props: DashboardProjectProps) => {
   const titleValue = generateTitle(props);
 
   const projectActions = useProjectActions(props);
-  const projectNotes = getProjectNotes(props);
+  const projectNotes = useProjectNotes(props);
 
   const displayAction = projectActions.length > 0 && !doesNotRequireAction(props);
   return (

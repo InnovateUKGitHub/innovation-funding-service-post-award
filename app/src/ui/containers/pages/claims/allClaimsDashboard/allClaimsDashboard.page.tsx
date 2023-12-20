@@ -9,7 +9,6 @@ import { roundCurrency } from "@framework/util/numberHelper";
 import { getLeadPartner } from "@framework/util/partnerHelper";
 import { Accordion } from "@ui/components/atomicDesign/atoms/Accordion/Accordion";
 import { AccordionItem } from "@ui/components/atomicDesign/atoms/Accordion/AccordionItem";
-import { ShortDateRange } from "@ui/components/atomicDesign/atoms/Date";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Messages } from "@ui/components/atomicDesign/molecules/Messages/messages";
@@ -31,6 +30,7 @@ import { IRoutes } from "@ui/routing/routeConfig";
 import { DateTime } from "luxon";
 import { ClaimsDashboardGuidance } from "../components/ClaimsDashboardGuidance";
 import { useAllClaimsDashboardData } from "./allClaimsDashboard.logic";
+import { PeriodTitle } from "@ui/components/atomicDesign/molecules/PeriodTitle/periodTitle";
 
 export interface AllClaimsDashboardParams {
   projectId: ProjectId;
@@ -171,11 +171,6 @@ const renderCurrentClaims = (
   index: number,
   routes: IRoutes,
 ) => {
-  const title = (
-    <>
-      Period {periodId}: <ShortDateRange start={start} end={end} />
-    </>
-  );
   const renderPartnerName = (x: ClaimType) => {
     const p = partners.filter(y => y.id === x.partnerId)[0];
     if (p) return getPartnerName(p, true);
@@ -183,7 +178,11 @@ const renderCurrentClaims = (
   };
 
   return (
-    <Section title={title} qa="current-claims-section" key={index}>
+    <Section
+      title={<PeriodTitle periodId={periodId} periodStartDate={start} periodEndDate={end} />}
+      qa="current-claims-section"
+      key={index}
+    >
       <ClaimTable.Table
         data={claims}
         bodyRowFlag={x => (getBodyRowFlag(x, project, partners) ? "edit" : null)}
