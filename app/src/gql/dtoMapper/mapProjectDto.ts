@@ -213,7 +213,12 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
     return !!node?.Acc_CurrentPeriodEndDate__c?.value ? new Date(node?.Acc_CurrentPeriodEndDate__c?.value) : null;
   },
   periodId(node) {
-    return (node?.Acc_CurrentPeriodNumber__c?.value ?? -1) as PeriodId;
+    const periodId = node?.Acc_CurrentPeriodNumber__c?.value;
+
+    if (typeof periodId !== "number") return 0 as PeriodId;
+    if (typeof periodId === "number" && periodId < 0) return 0 as PeriodId;
+
+    return periodId as PeriodId;
   },
   periodStartDate(node) {
     return !!node?.Acc_CurrentPeriodStartDate__c?.value ? new Date(node?.Acc_CurrentPeriodStartDate__c?.value) : null;
