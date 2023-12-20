@@ -1,7 +1,14 @@
 import { visitApp } from "common/visit";
 import { fcClaimTidyUp } from "common/claimtidyup";
 import { fileTidyUp } from "common/filetidyup";
-import { iarGuidance, iarProceedToDocs, iarProceedToSummary, iarSubmitValidate, uploadIAR } from "./steps";
+import {
+  iarGuidance,
+  iarProceedToDocs,
+  iarProceedToSummary,
+  iarSubmitValidate,
+  uploadIAR,
+  impactGuidance,
+} from "./steps";
 describe("Claims > IAR Required - Submission", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSvOGEA0/claims/dashboard" });
@@ -49,6 +56,8 @@ describe("Claims > IAR Required - Submission", () => {
   });
 
   it("Should proceed to claim summary", iarProceedToSummary);
+
+  it("Should not display Project Impact guidance", impactGuidance);
 
   it("Should click submit and proceed without validation", () => {
     cy.clickOn("Submit claim");

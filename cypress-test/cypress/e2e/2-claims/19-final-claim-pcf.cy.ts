@@ -35,7 +35,7 @@ describe("Claims > Final claim PCF Validation", () => {
     cy.validationNotification("This is the final claim.");
   });
 
-  it("Should display Project Impact guidance", impactGuidance);
+  it("Should not display Project Impact guidance", impactGuidance);
 
   it("Should have a disabled Submit button", () => {
     cy.button("Submit").should("be.disabled");

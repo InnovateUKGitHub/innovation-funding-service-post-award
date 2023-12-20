@@ -8,6 +8,7 @@ import {
   shouldShowProjectTitle,
   nonFECMessaging,
   costCatAwardOverrideMessage,
+  impactGuidance,
 } from "./steps";
 
 describe("claims > KTP", () => {
@@ -86,6 +87,8 @@ describe("claims > KTP", () => {
     cy.clickOn("Continue to summary", { force: true });
     cy.heading("Claim summary");
   });
+
+  it("Should not display Project Impact guidance", impactGuidance);
 
   it("Should display correct messaging", () => {
     nonFECMessaging();

@@ -1,7 +1,7 @@
 import { visitApp } from "common/visit";
 import {
   accessABCadClaim,
-  correctClaimGuidance,
+  impactGuidance,
   grantRetentionMessage,
   sbriCostCats,
   sbriFinalDocGuidance,
@@ -47,7 +47,7 @@ describe("Claims > SBRI > Final", () => {
     cy.heading("Claim summary");
   });
 
-  it("Should display correct guidance", correctClaimGuidance);
+  it("Should not display Project Impact guidance", impactGuidance);
 
   it("Should display final claim notification", () => {
     cy.validationNotification("This is the final claim.");

@@ -1170,18 +1170,6 @@ export const sbriFinalDocGuidance = () => {
   });
 };
 
-export const correctClaimGuidance = () => {
-  cy.paragraph(
-    "In order to submit your final claim you need to submit your Project Impact questions. An email has been sent to the Finance Contact on the Project with a link to review and update the Project Impact questions.",
-  );
-  cy.paragraph(
-    "If you need more information or help to complete your Project Impact questions, see the Project Impact guidance in the ",
-  );
-  cy.paragraph(". Alternatively, you can contact our customer support service by calling 0300 321 4357 or email ");
-  cy.get("a").contains("Innovate UK Guidance for applicants");
-  cy.get("a").contains("support@iuk.ukri.org");
-};
-
 export const sbriAccessABSClaim = () => {
   cy.selectTile("Claims");
   cy.heading("Claims");
@@ -1234,6 +1222,7 @@ export const iarSubmitValidate = () => {
   cy.heading("Update forecast");
   cy.clickOn("Continue to summary");
   cy.heading("Claim summary");
+  impactGuidance();
   cy.clickOn("Submit claim");
   cy.validationLink("You must upload an independent accountant's report before you can submit this claim.");
 };
@@ -1261,13 +1250,15 @@ export const finalClaimPcfGuidance = () => {
 export const impactGuidance = () => {
   cy.paragraph(
     "In order to submit your final claim you need to submit your Project Impact questions. An email has been sent to the Finance Contact on the Project with a link to review and update the Project Impact questions.",
-  );
+  ).should("not.exist");
   cy.paragraph(
     "If you need more information or help to complete your Project Impact questions, see the Project Impact guidance in the ",
-  );
-  cy.paragraph(". Alternatively, you can contact our customer support service by calling 0300 321 4357 or email ");
-  cy.get("a").contains("Innovate UK Guidance for applicants");
-  cy.get("a").contains("support@iuk.ukri.org");
+  ).should("not.exist");
+  cy.paragraph(
+    ". Alternatively, you can contact our customer support service by calling 0300 321 4357 or email ",
+  ).should("not.exist");
+  cy.get("a").contains("Innovate UK Guidance for applicants").should("not.exist");
+  cy.get("a").contains("support@iuk.ukri.org").should("not.exist");
 };
 
 export const uploadProjectCompletionForm = () => {

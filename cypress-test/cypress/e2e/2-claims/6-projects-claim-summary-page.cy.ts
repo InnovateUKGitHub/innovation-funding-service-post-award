@@ -17,6 +17,7 @@ import {
   summaryReaccessClaim,
   summaryTotalCostsList,
   summaryUpdateCostsClaimed,
+  impactGuidance,
 } from "./steps";
 import { testFileEUIFinance } from "common/testfileNames";
 
@@ -69,6 +70,8 @@ describe("claims > Claim summary", () => {
   it("Should show the Period heading", () => {
     cy.get("h2").contains("Period");
   });
+
+  it("Should not display Project Impact guidance", impactGuidance);
 
   it("Should show Total costs to be claimed list", summaryTotalCostsList);
 
