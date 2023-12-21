@@ -1,4 +1,5 @@
 import { visitApp } from "../../../common/visit";
+import { createTestFile, deleteTestFile } from "common/createTestFile";
 import {
   shouldShowProjectTitle,
   statusAndCommentsAccordion,
@@ -12,7 +13,6 @@ import {
 } from "../steps";
 import {
   learnAboutFiles,
-  accessControl,
   validateFileUpload,
   uploadFileTooLarge,
   uploadSingleChar,
@@ -68,8 +68,8 @@ import {
   checkDetailsAgain,
   accessPartnerAgreement,
   uploadTestFile,
+  completeOtherSourceLine,
 } from "./add-partner-e2e-steps";
-import { clickForecastAccessEUI } from "e2e/5-forecasts/steps";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -77,9 +77,11 @@ describe("PCR >  Add a partner > E2E", () => {
   before(() => {
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
+    createTestFile("bigger_test", 33);
   });
 
   after(() => {
+    deleteTestFile("bigger_test");
     cy.deletePcr("328407");
   });
 
@@ -326,6 +328,9 @@ describe("PCR >  Add a partner > E2E", () => {
 
   it("Should complete the Other costs form", completeOtherCostsForm);
 
+  /**
+   * These next sections do not appear in acc-dev so these steps have been removed for now.
+   */
   //it("Should access the Other costs 2 section", () => navigateToCostCat("Other costs 2", 7));
   //
   //it("Should complete the Other costs 2 section", completeOtherCostsForm);
@@ -380,6 +385,8 @@ describe("PCR >  Add a partner > E2E", () => {
 
   it("Should add a source and validate the inputs", validateOtherSourceInput);
 
+  it("Should complete the other source line item", completeOtherSourceLine);
+
   it("Should check the Funding from other sources on Details page", checkDetailsAgain);
 
   /**
@@ -389,8 +396,6 @@ describe("PCR >  Add a partner > E2E", () => {
   it("Should access the Partner agreement section", accessPartnerAgreement);
 
   it("Should display a clickable 'Learn more about files you can upload' message", learnAboutFiles);
-
-  it("Should have an access control drop-down", accessControl);
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 

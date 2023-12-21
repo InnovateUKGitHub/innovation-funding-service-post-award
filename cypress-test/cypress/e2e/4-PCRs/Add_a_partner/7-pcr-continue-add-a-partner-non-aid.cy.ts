@@ -6,6 +6,7 @@ import {
   saveContinueSaveSummary,
   stateAidFurtherInfo,
 } from "../steps";
+import { nonAidSummaryIncomplete, companyHouseSwindonUniversity } from "./add-partner-e2e-steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 
 describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation", () => {
@@ -14,9 +15,9 @@ describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation",
     pcrTidyUp("Add a partner");
   });
 
-  after(() => {
-    cy.deletePcr("328407");
-  });
+  //after(() => {
+  //  cy.deletePcr("328407");
+  //});
 
   it("Should create an Add partner PCR", () => {
     cy.createPcr("Add a partner");
@@ -26,7 +27,7 @@ describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation",
     cy.get("a").contains("Add a partner").click();
   });
 
-  it("Should complete this page as a business and continue to the next page", completeNewPartnerInfoNonAid);
+  it("Should complete this page as academic and continue to the next page", completeNewPartnerInfoNonAid);
 
   it("Should have a back option", () => {
     cy.backLink("Back to request");
@@ -39,4 +40,24 @@ describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation",
   it("Should have further information on state aid eligibility", stateAidFurtherInfo);
 
   it("Should have a 'Save and continue' button and a 'Save and return to summary' button", saveContinueSaveSummary);
+
+  it("Should save and return to Summary and check the full details of the page", nonAidSummaryIncomplete);
+
+  it("Should access Organisation name' section", () => {
+    cy.getListItemFromKey("Organisation name", "Edit").click();
+    cy.get("legend").contains("Search for organisation");
+    cy.getByQA("jes-organisation-info-content").contains(
+      "Your organisation must be registered on Je-S before we will consider you to be a research organisation.",
+    );
+    cy.get("#hint-for-searchJesOrganisations").contains("Enter the name of the organisation that you work for.");
+  });
+
+  it("Should validate the search box", () => {
+    cy.get("#searchJesOrganisations").clear().type("Can I pet that dawg");
+    cy.paragraph(
+      "Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.",
+    );
+  });
+
+  it("Should type 'Swindon' and select 'Swindon University", companyHouseSwindonUniversity);
 });

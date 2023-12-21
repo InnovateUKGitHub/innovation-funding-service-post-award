@@ -10,6 +10,8 @@ import {
 } from "common/lorem";
 import { testFile } from "common/testfileNames";
 
+const uploadDate = new Date().getFullYear().toString();
+
 export const navigateToCostCat = (category: string, row: number) => {
   cy.wait(500);
   cy.get("tr")
@@ -691,12 +693,12 @@ export const validateOtherSourceInput = () => {
   cy.validationLink("Source of funding is required.");
   cy.paragraph("Source of funding is required.");
   [
-    ["#funds.0.description", loremIpsum50Char],
-    ["#funds.0.dateSecured_month", loremIpsum20Char],
-    ["#funds.0.dateSecured_year", loremIpsum20Char],
-    ["#funds.0.value", loremIpsum50Char],
+    ["source of funding item 1", loremIpsum50Char],
+    ["month funding is secured for item 1", loremIpsum20Char],
+    ["year funding is secured for item 1", loremIpsum20Char],
+    ["funding amount for item 0", loremIpsum50Char],
   ].forEach(([input, copy]) => {
-    cy.get(input).clear().type(copy);
+    cy.getByAriaLabel(input).clear().type(copy);
   });
   cy.clickOn("Save and return to summary");
   cy.validationLink("Date secured must be a date.");
@@ -707,23 +709,24 @@ export const validateOtherSourceInput = () => {
 
 export const completeOtherSourceLine = () => {
   [
-    ["#funds_0_description", "Side project cash injection"],
-    ["#funds_0_date_month", "02"],
-    ["#funds_0_date_year", "2024"],
-    ["#funds_0_value", "10000"],
+    ["source of funding item 1", "Side project cash injection"],
+    ["month funding is secured for item 1", "02"],
+    ["year funding is secured for item 1", "2024"],
+    ["funding amount for item 0", "10000"],
   ].forEach(([input, copy]) => {
-    cy.get(input).clear().type(copy);
+    cy.getByAriaLabel(input).clear().type(copy);
   });
   cy.get("tfoot").within(() => {
     cy.get("tr")
       .eq(1)
       .within(() => {
-        cy.get("td:nth-child(1)").contains("Total other funding");
-        cy.get("td:nth-child(2)").contains("£10,000.00");
+        cy.get("td:nth-child(2)").contains("Total other funding");
+        cy.get("td:nth-child(3)").contains("£10,000.00");
       });
   });
-  cy.get("a").contains("Remove");
+  cy.button("Remove");
   cy.clickOn("Save and return to summary");
+  cy.get("dt").contains("Project role");
 };
 
 export const checkDetailsAgain = () => {
@@ -733,7 +736,7 @@ export const checkDetailsAgain = () => {
 
 export const accessPartnerAgreement = () => {
   cy.getListItemFromKey("Partner agreement", "Edit").click();
-  cy.get("h2").contains("Upload partner agreement");
+  cy.get("legend").contains("Upload partner agreement");
 };
 
 export const uploadTestFile = () => {
@@ -742,16 +745,42 @@ export const uploadTestFile = () => {
   cy.button("Upload documents").click();
   cy.validationNotification(`Your document has been uploaded.`);
   cy.wait(500);
-  ["File name", "Type", "Date uploaded", "Size", "13KB", "Uploaded by"].forEach(header => {
+  ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach(header => {
     cy.tableHeader(header);
   });
 
-  ["testfile.doc", "Agreement to PCR", "2023", "0KB", "James Black", "Remove"].forEach((lineItem, index) => {
+  ["testfile.doc", "Agreement to PCR", uploadDate, "0KB", "James Black", "Remove"].forEach((lineItem, index) => {
     cy.get("tr")
       .eq(1)
       .within(() => {
         cy.get(`td:nth-child(${index + 1})`).contains(lineItem);
       });
   });
+  cy.clickOn("Save and return to summary");
+};
+
+export const nonAidSummaryIncomplete = () => {
+  cy.clickOn("Save and return to summary");
+  [
+    ["Project role", "Collaborator"],
+    ["Commercial or economic project outputs", "No"],
+    ["Organisation type", "Research"],
+    ["Eligibility of aid declaration", "Not applicable"],
+    ["Size", "Academic"],
+    ["Je-S form", "Not applicable"],
+    ["Project costs for new partner", "£0.00"],
+    ["Other sources of funding?", "No"],
+    ["Funding sought", "£0.00"],
+    ["Partner contribution to project", "£0.00"],
+    ["Partner agreement", "Not applicable"],
+  ].forEach(([section, data]) => {
+    cy.getListItemFromKey(section, data);
+  });
+};
+
+export const companyHouseSwindonUniversity = () => {
+  cy.get("#searchJesOrganisations").clear().type("S").wait(500).type("windon");
+  cy.get("p").contains("Loading Je-S organisations");
+  cy.getByLabel("Swindon University").click();
   cy.clickOn("Save and return to summary");
 };

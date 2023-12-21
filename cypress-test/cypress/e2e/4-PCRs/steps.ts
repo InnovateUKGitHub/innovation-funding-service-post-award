@@ -227,7 +227,7 @@ export const completeNewPartnerInfoAsPublic = () => {
 export const completeNewPartnerInfoNonAid = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("No").click();
-  cy.getByLabel("Business").click();
+  cy.getByLabel("Research").click();
   cy.clickOn("Save and continue");
 };
 
