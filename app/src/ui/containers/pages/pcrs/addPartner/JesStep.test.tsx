@@ -80,6 +80,7 @@ describe("<JesStepUI />", () => {
     pcrItemType: null as unknown as PCRItemTypeDto,
     documentsEditor: {
       data: { files: [] },
+      idempotencyKey: "",
       validator: new MultipleDocumentUploadDtoValidator(stubFiles, configuration.options, false, true, null),
       status: 1,
       error: null,

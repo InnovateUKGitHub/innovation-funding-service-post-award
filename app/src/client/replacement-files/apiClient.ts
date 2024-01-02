@@ -1,5 +1,5 @@
 import { UnauthenticatedError } from "@shared/appError";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IApiClient } from "@server/apis";
 import { processResponse } from "@shared/processResponse";
 import { removeUndefinedString } from "@shared/string-helpers";
@@ -56,7 +56,10 @@ const clientApi: IApiClient<"client"> = {
   documents: {
     getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}/${params.loanId}`),
     uploadLoanDocuments: params =>
-      ajaxPostFiles(`/api/documents/loans/${params.projectId}/${params.loanId}`, params.documents),
+      ajaxPostFiles(
+        `/api/documents/loans/${params.projectId}/${params.loanId}?idempotencyKey=${params.idempotencyKey}`,
+        params.documents,
+      ),
     deleteLoanDocument: p =>
       ajaxJson(`/api/documents/loans/${p.projectId}/${p.loanId}/${p.documentId}`, { method: "DELETE" }),
     getClaimDocuments: params =>
@@ -92,24 +95,30 @@ const clientApi: IApiClient<"client"> = {
       ajaxJson(`/api/documents/partners/${projectId}/${partnerId}/${documentId}`, { method: "DELETE" }),
     deleteProjectDocument: ({ projectId, documentId }) =>
       ajaxJson(`/api/documents/projects/${projectId}/${documentId}`, { method: "DELETE" }),
-    uploadClaimDetailDocuments: ({ claimDetailKey, documents }) =>
+    uploadClaimDetailDocuments: ({ claimDetailKey, documents, idempotencyKey }) =>
       ajaxPostFiles(
-        `/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`,
+        `/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}?idempotencyKey=${idempotencyKey}`,
         documents,
       ),
-    uploadClaimDocument: ({ claimKey, document }) =>
-      ajaxPostFile(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, document),
-    uploadClaimDocuments: ({ claimKey, documents }) =>
+    uploadClaimDocuments: ({ claimKey, documents, idempotencyKey }) =>
       ajaxPostFiles(
-        `/api/documents/claimDocuments/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`,
+        `/api/documents/claimDocuments/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}?idempotencyKey=${idempotencyKey}`,
         documents,
       ),
-    uploadProjectChangeRequestDocumentOrItemDocument: ({ projectId, projectChangeRequestIdOrItemId, documents }) =>
-      ajaxPostFiles(`/api/documents/projectChangeRequests/${projectId}/${projectChangeRequestIdOrItemId}`, documents),
-    uploadProjectDocument: ({ projectId, documents }) =>
-      ajaxPostFiles(`/api/documents/projects/${projectId}`, documents),
-    uploadPartnerDocument: ({ projectId, partnerId, documents }) =>
-      ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}`, documents),
+    uploadProjectChangeRequestDocumentOrItemDocument: ({
+      projectId,
+      projectChangeRequestIdOrItemId,
+      documents,
+      idempotencyKey,
+    }) =>
+      ajaxPostFiles(
+        `/api/documents/projectChangeRequests/${projectId}/${projectChangeRequestIdOrItemId}?idempotencyKey=${idempotencyKey}`,
+        documents,
+      ),
+    uploadProjectDocument: ({ projectId, documents, idempotencyKey }) =>
+      ajaxPostFiles(`/api/documents/projects/${projectId}?idempotencyKey=${idempotencyKey}`, documents),
+    uploadPartnerDocument: ({ projectId, partnerId, documents, idempotencyKey }) =>
+      ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}?idempotencyKey=${idempotencyKey}`, documents),
   },
   financialVirements: {
     get: params =>
@@ -174,7 +183,8 @@ const clientApi: IApiClient<"client"> = {
     getTypes: params => ajax(`/api/pcrs/all-types/${params.projectId}`),
     getAvailableTypes: params => ajax(`/api/pcrs/available-types?projectId=${params.projectId}&pcrId=${params.pcrId}`),
     getTimeExtensionOptions: params => ajax(`/api/pcrs/time-extension-options?projectId=${params.projectId}`),
-    update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
+    update: params =>
+      ajaxPut(`/api/pcrs/${params.projectId}/${params.id}?idempotencyKey=${params.idempotencyKey}`, params.pcr),
     delete: params => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
     getStatusChanges: params => ajax(`/api/pcrs/status-changes/${params.projectId}/${params.projectChangeRequestId}`),
     getPcrProjectRoles: () => ajax("/api/pcrs/project-roles"),
@@ -263,15 +273,6 @@ const ajaxDelete = <T>(url: string, opts?: RequestInit): Promise<T> => {
   });
 
   return ajaxJson<T>(url, options);
-};
-
-const ajaxPostFile = <T>(url: string, document: DocumentUploadDto) => {
-  const formData = new FormData();
-  formData.append("attachment", (document.file as ClientFileWrapper).file);
-  if (document.description) {
-    formData.append("description", document.description.toString());
-  }
-  return ajaxPostFormData<T>(url, formData);
 };
 
 const ajaxPostFiles = <T>(url: string, documents: MultipleDocumentUploadDto) => {

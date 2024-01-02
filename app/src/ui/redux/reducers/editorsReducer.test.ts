@@ -24,6 +24,7 @@ const setupInitialState = (update?: (data: IEditorStore<ClaimDto, ClaimDtoValida
     1: {
       data: {} as ClaimDto,
       validator: {} as ClaimDtoValidator,
+      idempotencyKey: "",
       error: null,
     },
   };

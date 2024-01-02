@@ -37,7 +37,7 @@ import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 
 export interface IPCRsApi<Context extends "client" | "server"> {
   create: (
-    params: ApiParams<Context, { projectId: ProjectId; projectChangeRequestDto: CreatePcrDto }>,
+    params: ApiParams<Context, { projectId: ProjectId; projectChangeRequestDto: CreatePcrDto; idempotencyKey: string }>,
   ) => Promise<PCRDto>;
   getAll: (params: ApiParams<Context, { projectId: ProjectId }>) => Promise<PCRSummaryDto[]>;
   get: (params: ApiParams<Context, { projectId: ProjectId; id: PcrId }>) => Promise<PCRDto>;
@@ -53,6 +53,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
         pcr: PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
           items?: PickRequiredFromPartial<FullPCRItemDto, "id">[];
         };
+        idempotencyKey: string;
       }
     >,
   ) => Promise<PCRDto>;

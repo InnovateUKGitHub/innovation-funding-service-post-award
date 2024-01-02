@@ -2,7 +2,7 @@ import mimeTypes from "mime-types";
 import express, { Request, Response } from "express";
 import { NotFoundError } from "@shared/appError";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
 import { upload } from "../htmlFormHandler/diskStorage";
 import { IFileWrapper } from "@framework/types/fileWapper";
@@ -95,25 +95,6 @@ export abstract class ControllerBaseWithSummary<Context extends "client" | "serv
   ) {
     this.router.get(path, this.attachmentHandler(200, getParams, run));
     return this;
-  }
-
-  protected postAttachment<TParams>(
-    path: string,
-    getParams: GetParams<TParams>,
-    run: Run<Context, TParams & { document: DocumentUploadDto }, { documentId: string }>,
-  ) {
-    const wrappedGetParams: InnerGetParams<TParams & { document: DocumentUploadDto }> = (params, query, body, req) => {
-      const p = getParams(params, query, body);
-
-      const file: IFileWrapper | null = req.file ? (new ServerFileWrapper(req.file) as IFileWrapper) : null;
-      const description = Number(body.description) || undefined;
-
-      const document: DocumentUploadDto = { file, description };
-
-      return { document, ...p };
-    };
-
-    this.router.post(path, upload.single("attachment"), this.executeMethod(201, wrappedGetParams, run, false));
   }
 
   protected postAttachments<TParams>(

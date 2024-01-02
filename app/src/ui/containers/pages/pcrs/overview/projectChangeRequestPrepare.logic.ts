@@ -14,6 +14,7 @@ import { ProjectDto } from "@framework/dtos/projectDto";
 import { ProjectMonitoringLevel } from "@framework/constants/project";
 import { useRoutes } from "@ui/redux/routesProvider";
 import { getEditableItemTypes } from "@gql/dtoMapper/getEditableItemTypes";
+import { useUuid } from "@framework/api-helpers/useUuid";
 
 export const usePCRPrepareQuery = (projectId: ProjectId, pcrId: PcrId) => {
   const data = useLazyLoadQuery<ProjectChangeRequestPrepareQuery>(
@@ -124,6 +125,7 @@ export const useOnUpdatePcrPrepare = (
 ) => {
   const routes = useRoutes();
   const navigate = useNavigate();
+  const { uuid, newUuid } = useUuid();
 
   return useOnUpdate<FormValues, PCRDto>({
     req(data) {
@@ -131,6 +133,7 @@ export const useOnUpdatePcrPrepare = (
         projectId,
         id: pcrId,
         pcr: getPayload(data.button_submit === "submit", project, pcr, data),
+        idempotencyKey: uuid,
       };
 
       return clientsideApiClient.pcrs.update(payload);
@@ -143,6 +146,8 @@ export const useOnUpdatePcrPrepare = (
       if (data.button_submit === "save-and-return") {
         navigate(routes.pcrsDashboard.getLink({ projectId }).path);
       }
+
+      newUuid();
     },
   });
 };

@@ -210,10 +210,6 @@ export class Context implements IContext {
   private async runAsync<TResult>(runnable: IAsyncRunnable<TResult>): Promise<TResult> {
     const timer = this.startTimer(runnable.constructor.name);
     try {
-      if (runnable.accessControl) {
-        const authorisation = await this.getAuthorisation();
-        if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
-      }
       // await the run because of the finally
       return await runnable.run(this);
     } catch (e: unknown) {
@@ -240,8 +236,12 @@ export class Context implements IContext {
     }
   }
 
-  public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
+  public async runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
     const runnable = query as unknown as IAsyncRunnable<TResult>;
+    if (runnable.accessControl) {
+      const authorisation = await this.getAuthorisation();
+      if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
+    }
     this.logger.info("Running async query", runnable.logMessage());
     return this.runAsync(runnable);
   }
@@ -252,10 +252,25 @@ export class Context implements IContext {
     return this.runSync(runnable);
   }
 
-  public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
+  public async runCommand<TResult>(
+    command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>,
+  ): Promise<TResult> {
     const runnable = command as unknown as IAsyncRunnable<TResult>;
+    if (runnable.accessControl) {
+      const authorisation = await this.getAuthorisation();
+      if (!(await runnable.accessControl(authorisation, this))) throw new ForbiddenError();
+    }
     this.logger.info("Running async command", ...runnable.logMessage());
     return this.runAsync(runnable);
+  }
+
+  public static idempotencyCache = new Cache(1);
+  public runIdempotentCommand<TResult>(
+    cmd: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>,
+    key: Record<string, unknown>,
+  ): Promise<TResult> {
+    this.logger.info("Running cached async command");
+    return Context.idempotencyCache.fetchAsync(JSON.stringify(key), () => this.runCommand(cmd)) as Promise<TResult>;
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {

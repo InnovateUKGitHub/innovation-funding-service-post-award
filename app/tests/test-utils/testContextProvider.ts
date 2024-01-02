@@ -60,6 +60,13 @@ export class TestContext implements IContext {
     });
   }
 
+  public runIdempotentCommand<TResult>(
+    command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>,
+    // awoo: Add the second argument in
+  ): Promise<TResult> {
+    return this.runCommand(command);
+  }
+
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
     return (query as unknown as ISyncRunnable<TResult>).run(this);
   }

@@ -11,6 +11,7 @@ import type {
   ClaimDetailLevelUploadSchemaType,
 } from "@ui/zod/documentValidators.zod";
 import { useMessages } from "./useMessages";
+import { useUuid } from "./useUuid";
 
 type InputOptions =
   | ({ form: FormTypes.ProjectLevelUpload } & z.output<ProjectLevelUploadSchemaType>)
@@ -33,6 +34,7 @@ const isPcrLevelUpload = (data: InputOptions): data is z.output<PcrLevelUploadSc
 export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSuccess: () => void | Promise<void> }) => {
   const { getContent } = useContent();
   const { clearMessages, setSuccessMessage } = useMessages();
+  const { uuid, newUuid } = useUuid();
 
   return useOnUpdate<Inputs, unknown, MultipleDocumentUploadDto>({
     req(data) {
@@ -47,6 +49,7 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
             files,
             description,
           },
+          idempotencyKey: uuid,
         });
       } else if (isClaimDetailLevelUpload(data)) {
         return clientsideApiClient.documents.uploadClaimDetailDocuments({
@@ -60,6 +63,7 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
             files,
             description,
           },
+          idempotencyKey: uuid,
         });
       } else if (isPcrLevelUpload(data)) {
         return clientsideApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({
@@ -69,6 +73,7 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
             files,
             description,
           },
+          idempotencyKey: uuid,
         });
       } else if (isProjectLevelUpload(data)) {
         if (data.partnerId) {
@@ -79,6 +84,7 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
               files,
               description,
             },
+            idempotencyKey: uuid,
           });
         } else {
           return clientsideApiClient.documents.uploadProjectDocument({
@@ -87,6 +93,7 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
               files,
               description,
             },
+            idempotencyKey: uuid,
           });
         }
       } else {
@@ -98,6 +105,7 @@ export const useOnUpload = <Inputs extends InputOptions>({ onSuccess }: { onSucc
       await onSuccess();
       const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: data.files.length }));
       setSuccessMessage(successMessage);
+      newUuid();
     },
   });
 };

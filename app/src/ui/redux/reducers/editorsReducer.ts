@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { EditorStatus } from "@ui/redux/constants/enums";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { ErrorCode } from "@framework/constants/enums";
 import { ClaimDetailsDto } from "@framework/dtos/claimDetailsDto";
@@ -15,10 +15,7 @@ import { IAppError } from "@framework/types/IAppError";
 import { Results } from "@ui/validation/results";
 import { ClaimDetailsValidator } from "@ui/validation/validators/claimDetailsValidator";
 import { ClaimDtoValidator } from "@ui/validation/validators/claimDtoValidator";
-import {
-  DocumentUploadDtoValidator,
-  MultipleDocumentUploadDtoValidator,
-} from "@ui/validation/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validation/validators/documentUploadValidator";
 import {
   FinancialVirementDtoValidator,
   FinancialLoanVirementDtoValidator,
@@ -26,10 +23,12 @@ import {
 import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
 import { MonitoringReportDtoValidator } from "@ui/validation/validators/MonitoringReportDtoValidator";
 import { RootActions } from "../actions/root";
+import { v4 as uuid } from "uuid";
 
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;
   validator: TValidator;
+  idempotencyKey: string;
   status?: EditorStatus;
   error?: IAppError | null;
 }
@@ -56,6 +55,7 @@ export const editorsReducer =
       const originalEditor = result[action.payload.id];
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...originalEditor,
+        idempotencyKey: uuid(),
         data: action.payload.dto as TDto,
         validator: action.payload.validator as TValidator,
         status: EditorStatus.Editing,
@@ -85,6 +85,7 @@ export const editorsReducer =
         const originalEditor = result[action.payload.id];
         const newEditor: IEditorStore<TDto, TValidator> = {
           ...originalEditor,
+          idempotencyKey: uuid(),
           status: EditorStatus.Editing,
           validator: { ...originalEditor?.validator, showValidationErrors: false },
         };
@@ -117,6 +118,7 @@ export const editorsReducer =
       // the new replacement default dto
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...result[action.payload?.id],
+        idempotencyKey: uuid(),
         data: action.payload?.dto as TDto,
         validator: action.payload.validator as TValidator,
         status: EditorStatus.Editing,
@@ -145,7 +147,6 @@ const reducers = {
   financialLoanVirement: editorsReducer<FinancialLoanVirementDto, FinancialLoanVirementDtoValidator>(
     "financialLoanVirement",
   ),
-  documents: editorsReducer<DocumentUploadDto, DocumentUploadDtoValidator>("documents"),
   multipleDocuments: editorsReducer<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>("multipleDocuments"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
   monitoringReport: editorsReducer<MonitoringReportDto, MonitoringReportDtoValidator>("monitoringReport"),

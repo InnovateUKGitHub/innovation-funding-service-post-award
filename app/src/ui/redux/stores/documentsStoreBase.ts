@@ -53,6 +53,7 @@ export abstract class DocumentsStoreBase extends StoreBase {
     callUpdateApi: (p: {
       user: IClientUser;
       documents: MultipleDocumentUploadDto;
+      idempotencyKey: string;
     }) => Promise<{ documentIds: string[] }>,
     message: string | undefined,
     onComplete: (() => void) | undefined,

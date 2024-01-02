@@ -22,6 +22,7 @@ import { RootActionsOrThunk } from "../actions/root";
 import { IDataStore, DataStateKeys } from "../reducers/dataReducer";
 import { IEditorStore, EditorStateKeys } from "../reducers/editorsReducer";
 import { DataState, RootState, EditorState } from "../reducers/rootReducer";
+import { v4 as uuid } from "uuid";
 
 type InferDataStore<T> = T extends IDataStore<infer U> ? U : never;
 export type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;
@@ -63,7 +64,7 @@ const conditionalSave = <
   key: K,
   dto: TDto,
   getValidator: (show: boolean) => Pending<TVal> | TVal,
-  saveCall: (params: { user: IClientUser }) => Promise<TResult>,
+  saveCall: (params: { user: IClientUser; idempotencyKey: string }) => Promise<TResult>,
   onComplete?: (result: TResult) => void,
   onError?: (e: unknown) => void,
 ) => {
@@ -90,7 +91,7 @@ const conditionalSave = <
       scrollToTheTopSmoothly();
     } else if (saving) {
       dispatch(handleEditorSubmit(key as string, store as string, dto, validator));
-      saveCall({ user: getState().user })
+      saveCall({ user: getState().user, idempotencyKey: current.idempotencyKey })
         .then(x => {
           dispatch(handleEditorSuccess(key as string, store as string));
           if (onComplete) {
@@ -218,6 +219,7 @@ export class StoreBase {
       data: x.data,
       validator: x.validator,
       status: EditorStatus.Editing,
+      idempotencyKey: uuid(),
       error: null,
     }));
   }
@@ -234,7 +236,7 @@ export class StoreBase {
     key: K,
     dto: TDto,
     getValidator: (showErrors: boolean) => Pending<TVal> | TVal,
-    saveCall: (p: { user: IClientUser }) => Promise<TResult>,
+    saveCall: (p: { user: IClientUser; idempotencyKey: string }) => Promise<TResult>,
     onComplete?: (result: TResult) => void,
     onError?: (e: unknown) => void,
   ) {

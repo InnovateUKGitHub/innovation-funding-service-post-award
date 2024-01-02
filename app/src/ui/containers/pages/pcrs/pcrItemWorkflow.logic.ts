@@ -11,6 +11,7 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { useStores } from "@ui/redux/storesProvider";
+import { useUuid } from "@framework/api-helpers/useUuid";
 
 export const usePcrItemWorkflowQuery = (projectId: ProjectId, pcrId: PcrId, pcrItemId: PcrItemId) => {
   const data = useLazyLoadQuery<PcrItemWorkflowQuery>(
@@ -78,6 +79,8 @@ export const useOnSavePcrItem = (
 ) => {
   const navigate = useNavigate();
   const stores = useStores();
+  const { uuid, newUuid } = useUuid();
+
   return useOnUpdate<Partial<FullPCRItemDto>, PCRDto, { link: ILinkInfo }>({
     req: data => {
       return clientsideApiClient.pcrs.update({
@@ -89,12 +92,14 @@ export const useOnSavePcrItem = (
           pcrItemId,
           data,
         }),
+        idempotencyKey: uuid,
       });
     },
     onSuccess: (_, __, context) => {
       stores.messages.clearMessages();
       setFetchKey(k => k + 1);
       navigate(context?.link?.path ?? "");
+      newUuid();
     },
   });
 };

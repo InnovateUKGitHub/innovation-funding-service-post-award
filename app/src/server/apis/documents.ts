@@ -1,6 +1,6 @@
 import { DocumentDescription } from "@framework/constants/documentDescription";
 import { DocumentSummaryDto, AllPartnerDocumentSummaryDto, DocumentDto } from "@framework/dtos/documentDto";
-import { MultipleDocumentUploadDto, DocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { ClaimDetailKey } from "@framework/types/ClaimDetailKey";
 import { ClaimKey } from "@framework/types/ClaimKey";
 import { contextProvider } from "@server/features/common/contextProvider";
@@ -24,7 +24,6 @@ import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@ser
 import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
 import { GetProjectDocumentSummaryQuery } from "@server/features/documents/getProjectDocumentSummaryQuery";
 import { UploadClaimDetailDocumentCommand } from "@server/features/documents/uploadClaimDetailDocument";
-import { UploadClaimDocumentCommand } from "@server/features/documents/uploadClaimDocument";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { UploadLoanDocumentsCommand } from "@server/features/documents/uploadLoanDocument";
 import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
@@ -61,13 +60,13 @@ export interface IDocumentsApi<Context extends "client" | "server"> {
     params: ApiParams<Context, { projectId: ProjectId; loanId: string }>,
   ) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocuments: (
-    params: ApiParams<Context, { claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<
+      Context,
+      { claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto; idempotencyKey: string }
+    >,
   ) => Promise<{ documentIds: string[] }>;
-  uploadClaimDocument: (
-    params: ApiParams<Context, { claimKey: ClaimKey; document: DocumentUploadDto }>,
-  ) => Promise<{ documentId: string }>;
   uploadClaimDocuments: (
-    params: ApiParams<Context, { claimKey: ClaimKey; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<Context, { claimKey: ClaimKey; documents: MultipleDocumentUploadDto; idempotencyKey: string }>,
   ) => Promise<{ documentIds: string[] }>;
   uploadProjectChangeRequestDocumentOrItemDocument: (
     params: ApiParams<
@@ -76,17 +75,24 @@ export interface IDocumentsApi<Context extends "client" | "server"> {
         projectId: ProjectId;
         projectChangeRequestIdOrItemId: string;
         documents: MultipleDocumentUploadDto;
+        idempotencyKey: string;
       }
     >,
   ) => Promise<{ documentIds: string[] }>;
   uploadProjectDocument: (
-    params: ApiParams<Context, { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<Context, { projectId: ProjectId; documents: MultipleDocumentUploadDto; idempotencyKey: string }>,
   ) => Promise<{ documentIds: string[] }>;
   uploadPartnerDocument: (
-    params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<
+      Context,
+      { projectId: ProjectId; partnerId: PartnerId; documents: MultipleDocumentUploadDto; idempotencyKey: string }
+    >,
   ) => Promise<{ documentIds: string[] }>;
   uploadLoanDocuments: (
-    params: ApiParams<Context, { projectId: ProjectId; loanId: LoanId; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<
+      Context,
+      { projectId: ProjectId; loanId: LoanId; documents: MultipleDocumentUploadDto; idempotencyKey: string }
+    >,
   ) => Promise<{ documentIds: string[] }>;
   deleteLoanDocument: (
     params: ApiParams<Context, { projectId: ProjectId; loanId: LoanId; documentId: string }>,
@@ -209,7 +215,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
 
     this.postAttachments(
       "/loans/:projectId/:loanId",
-      p => ({ projectId: p.projectId, loanId: p.loanId }),
+      p => ({ projectId: p.projectId, loanId: p.loanId, idempotencyKey: p.idempotencyKey }),
       this.uploadLoanDocuments,
     );
 
@@ -272,39 +278,43 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
           periodId: parseInt(p.periodId, 10) as PeriodId,
           costCategoryId: p.costCategoryId,
         },
+        idempotencyKey: p.idempotencyKey,
       }),
       p => this.uploadClaimDetailDocuments(p),
     );
 
-    this.postAttachment(
-      "/claims/:projectId/:partnerId/:periodId",
-      p => ({
-        claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) as PeriodId },
-      }),
-      p => this.uploadClaimDocument(p),
-    );
-
     this.postAttachments(
       "/claimDocuments/:projectId/:partnerId/:periodId",
-      p => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
+      p => ({
+        claimKey: {
+          projectId: p.projectId,
+          partnerId: p.partnerId,
+          periodId: parseInt(p.periodId, 10),
+        },
+        idempotencyKey: p.idempotencyKey,
+      }),
       p => this.uploadClaimDocuments(p),
     );
 
     this.postAttachments(
       "/projects/:projectId",
-      p => ({ projectId: p.projectId }),
+      p => ({ projectId: p.projectId, idempotencyKey: p.idempotencyKey }),
       p => this.uploadProjectDocument(p),
     );
 
     this.postAttachments(
       "/partners/:projectId/:partnerId",
-      p => ({ projectId: p.projectId, partnerId: p.partnerId }),
+      p => ({ projectId: p.projectId, partnerId: p.partnerId, idempotencyKey: p.idempotencyKey }),
       p => this.uploadPartnerDocument(p),
     );
 
     this.postAttachments(
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId",
-      p => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
+      p => ({
+        projectId: p.projectId,
+        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId,
+        idempotencyKey: p.idempotencyKey,
+      }),
       p => this.uploadProjectChangeRequestDocumentOrItemDocument(p),
     );
   }
@@ -322,10 +332,13 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   }
 
   public async uploadLoanDocuments(
-    params: ApiParams<"server", { projectId: ProjectId; loanId: LoanId; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<
+      "server",
+      { projectId: ProjectId; loanId: LoanId; documents: MultipleDocumentUploadDto; idempotencyKey: string }
+    >,
   ) {
     const command = new UploadLoanDocumentsCommand(params.documents, params.projectId, params.loanId);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
+    const insertedIDs = await contextProvider.start(params).runIdempotentCommand(command, params);
 
     return { documentIds: insertedIDs };
   }
@@ -442,27 +455,23 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
   }
 
   public async uploadClaimDetailDocuments(
-    params: ApiParams<"server", { claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<
+      "server",
+      { claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto; idempotencyKey: string }
+    >,
   ) {
     const { claimDetailKey, documents } = params;
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, documents);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
+    const insertedIDs = await contextProvider.start(params).runIdempotentCommand(command, params);
     return { documentIds: insertedIDs };
   }
 
-  public async uploadClaimDocument(params: ApiParams<"server", { claimKey: ClaimKey; document: DocumentUploadDto }>) {
-    const { claimKey, document } = params;
-    const command = new UploadClaimDocumentCommand(claimKey, document);
-    const insertedID = await contextProvider.start(params).runCommand(command);
-    return { documentId: insertedID };
-  }
-
   public async uploadClaimDocuments(
-    params: ApiParams<"server", { claimKey: ClaimKey; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<"server", { claimKey: ClaimKey; documents: MultipleDocumentUploadDto; idempotencyKey: string }>,
   ) {
     const { claimKey, documents } = params;
     const command = new UploadClaimDocumentsCommand(claimKey, documents);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
+    const insertedIDs = await contextProvider.start(params).runIdempotentCommand(command, params);
     return { documentIds: insertedIDs };
   }
 
@@ -473,6 +482,7 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
         projectId: ProjectId;
         projectChangeRequestIdOrItemId: string;
         documents: MultipleDocumentUploadDto;
+        idempotencyKey: string;
       }
     >,
   ) {
@@ -481,25 +491,28 @@ class Controller extends ControllerBase<"server", DocumentSummaryDto> implements
       params.projectChangeRequestIdOrItemId,
       params.documents,
     );
-    const insertedIds = await contextProvider.start(params).runCommand(command);
+    const insertedIds = await contextProvider.start(params).runIdempotentCommand(command, params);
 
     return { documentIds: insertedIds };
   }
 
   public async uploadProjectDocument(
-    params: ApiParams<"server", { projectId: ProjectId; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<"server", { projectId: ProjectId; documents: MultipleDocumentUploadDto; idempotencyKey: string }>,
   ) {
     const command = new UploadProjectDocumentCommand(params.projectId, params.documents);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
+    const insertedIDs = await contextProvider.start(params).runIdempotentCommand(command, params);
 
     return { documentIds: insertedIDs };
   }
 
   public async uploadPartnerDocument(
-    params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; documents: MultipleDocumentUploadDto }>,
+    params: ApiParams<
+      "server",
+      { projectId: ProjectId; partnerId: PartnerId; documents: MultipleDocumentUploadDto; idempotencyKey: string }
+    >,
   ) {
     const command = new UploadPartnerDocumentCommand(params.projectId, params.partnerId, params.documents);
-    const insertedIDs = await contextProvider.start(params).runCommand(command);
+    const insertedIDs = await contextProvider.start(params).runIdempotentCommand(command, params);
 
     return { documentIds: insertedIDs };
   }

@@ -91,6 +91,10 @@ export interface IContext {
   runQuery<TResult>(cmd: QueryBase<TResult>): Promise<TResult>;
   runSyncQuery<TResult>(cmd: SyncQueryBase<TResult>): TResult;
   runCommand<TResult>(cmd: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult>;
+  runIdempotentCommand<TResult>(
+    cmd: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>,
+    key: Record<string, unknown>,
+  ): Promise<TResult>;
   runSyncCommand<TResult>(cmd: SyncCommandBase<TResult>): TResult;
   clock: IClock;
   logger: ILogger;

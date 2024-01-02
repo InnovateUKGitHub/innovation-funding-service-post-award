@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { PcrModifyOptionsQuery } from "./__generated__/PcrModifyOptionsQuery.graphql";
 import { pcrModifyOptionsQuery } from "./PcrModifyOptions.query";
+import { useUuid } from "@framework/api-helpers/useUuid";
 
 const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
   const data = useLazyLoadQuery<PcrModifyOptionsQuery>(
@@ -35,6 +36,7 @@ const usePcrModifyOptionsQuery = ({ projectId }: { projectId: ProjectId }) => {
 const useOnSubmit = () => {
   const navigate = useNavigate();
   const routes = useRoutes();
+  const { uuid, newUuid } = useUuid();
 
   return useOnUpdate<z.output<PcrModifyTypesSchemaType>, PCRDto, EmptyObject>({
     req: async data => {
@@ -48,6 +50,7 @@ const useOnSubmit = () => {
             reasoningStatus: PCRItemStatus.ToDo,
             items: data.types.map(x => ({ type: x, status: PCRItemStatus.ToDo })) as PCRItemDto[],
           },
+          idempotencyKey: uuid,
         });
       } else {
         return await clientsideApiClient.pcrs.create({
@@ -58,11 +61,13 @@ const useOnSubmit = () => {
             reasoningStatus: PCRItemStatus.ToDo,
             items: data.types.map(x => ({ type: x, status: PCRItemStatus.ToDo })) as PCRItemDto[],
           },
+          idempotencyKey: uuid,
         });
       }
     },
     onSuccess(data, res) {
       navigate(routes.pcrPrepare.getLink({ pcrId: res.id, projectId: res.projectId }).path);
+      newUuid();
     },
   });
 };
