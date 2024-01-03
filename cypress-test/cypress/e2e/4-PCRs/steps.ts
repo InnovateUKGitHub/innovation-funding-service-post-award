@@ -141,12 +141,6 @@ export const characterCount = () => {
   cy.get("p.character-count.character-count--default.govuk-body").contains("You have 926 characters remaining");
 };
 
-export const learnFiles = () => {
-  cy.get("span").contains("Learn more about files you can upload").click();
-  cy.paragraph("You can upload");
-  cy.paragraph("There is no limit");
-};
-
 export const pcrDocUpload = () => {
   cy.fileInput("testfile.doc");
   cy.uploadButton("Upload documents").click();

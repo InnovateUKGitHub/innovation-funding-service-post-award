@@ -361,16 +361,6 @@ export const claimCommentBox = () => {
   cy.paragraph("You have 1000 characters remaining");
 };
 
-export const learnFiles = () => {
-  cy.clickOn("Learn more about files you can upload");
-  ["PDF", "test", "presentation", "spreadsheet", "images", "be less than 32MB", "have a unique file"].forEach(list => {
-    cy.list(list);
-  });
-  ["You can upload", "There is no limit", "Each document must"].forEach(description => {
-    cy.paragraph(description);
-  });
-};
-
 export const savedFromPrev = () => {
   cy.getByAriaLabel("Labour Period 2").should("have.value", "33.33");
   cy.get("tr")

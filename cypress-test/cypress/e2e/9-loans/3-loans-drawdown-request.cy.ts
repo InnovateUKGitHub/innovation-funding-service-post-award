@@ -6,11 +6,11 @@ import {
   fcDrawdownGuidance,
   drawdownRequestTable,
   fcFileUploadedSection,
-  learnFiles,
   requestDrawdown,
   sendYourRequestSection,
   uploadApprovalGuidance,
 } from "./steps";
+import { learnFiles } from "common/fileComponentTests";
 
 const fcEmail = "wed.addams@test.test.co.uk";
 

@@ -9,7 +9,6 @@ import {
   displayEUIMedFile,
   doNotUploadSpecialChar,
   downloadMoFile,
-  learnAboutFiles,
   selectFileDescription,
   shouldShowProjectTitle,
   validateExcessiveFileName,
@@ -23,16 +22,24 @@ import {
   uploadFileNameTooShort,
 } from "./steps";
 import { fileTidyUp } from "common/filetidyup";
+import { learnFiles, allowLargerBatchFileUpload, validationMessageCumulative } from "common/fileComponentTests";
+import { seconds } from "common/seconds";
 
 describe("Project Documents page", () => {
   before(() => {
     visitApp({ asUser: "testman2@testing.com", path: "projects/a0E2600000kSotUEAS/documents" });
     fileTidyUp("testfile.doc");
     createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
   });
 
   after(() => {
     deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
   });
 
   it("Should show back to project link", () => {
@@ -51,7 +58,7 @@ describe("Project Documents page", () => {
     );
   });
 
-  it("Should display a clickable 'Learn more about files you can upload' message", learnAboutFiles);
+  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
 
   it("Should have an access control drop-down", accessControl);
 
@@ -59,7 +66,15 @@ describe("Project Documents page", () => {
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 
-  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
+
+  it(
+    "Should attempt to upload three files totalling 33MB",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowLargerBatchFileUpload("projects"),
+  );
+
+  it("Should display the correct validation messaging", validationMessageCumulative);
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
 

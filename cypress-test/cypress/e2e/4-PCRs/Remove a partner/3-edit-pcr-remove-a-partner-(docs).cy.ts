@@ -1,7 +1,6 @@
 import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
-  learnFiles,
   pcrDocUpload,
   removePartnerFileTable,
   clickPartnerAddPeriod,
@@ -21,6 +20,7 @@ import {
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { fileTidyUp } from "common/filetidyup";
 import { pcrTidyUp } from "common/pcrtidyup";
+import { learnFiles } from "common/fileComponentTests";
 
 import { rejectElevenDocsAndShowError } from "e2e/2-claims/steps";
 

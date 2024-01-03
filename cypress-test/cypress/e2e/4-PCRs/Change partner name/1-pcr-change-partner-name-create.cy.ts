@@ -4,7 +4,6 @@ import {
   shouldShowProjectTitle,
   requestHeadingDetailsHeading,
   changeNamePcrType,
-  learnFiles,
   tickEachPartner,
   saveContinueProceed,
   uploadNameChange,
@@ -28,6 +27,7 @@ import {
   doNotUploadSpecialChar,
 } from "e2e/3-documents/steps";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
+import { learnFiles } from "common/fileComponentTests";
 const projectManager = "james.black@euimeabs.test";
 
 describe("PCR >  Change a partner's name > Create PCR", () => {

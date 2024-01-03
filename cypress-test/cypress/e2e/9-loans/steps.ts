@@ -27,33 +27,6 @@ export const shouldFindMatchingProjectCard = (projectCard: string) => {
   cy.get(".card-link h2").contains(projectCard);
 };
 
-export const learnFiles = () => {
-  cy.get("span").contains("Learn more about files you can upload").click();
-  [
-    "You can upload up to 10 documents at a time. Each document must:",
-    "There is no limit to the number of files you can upload in total.",
-    "You can upload these file types:",
-  ].forEach(para => {
-    cy.paragraph(para);
-  });
-  [
-    "be less than 32MB",
-    "have a unique file name",
-    "PDF",
-    "(pdf, xps)",
-    "(doc, docx, rtf, txt, csv, odt)",
-    "text",
-    "presentation",
-    "(ppt, pptx, odp)",
-    "spreadsheet",
-    "(xls, xlsx, ods)",
-    "images",
-    "(jpg, jpeg, png, odg)",
-  ].forEach(fileInfo => {
-    cy.get("li").contains(fileInfo);
-  });
-};
-
 export const drawdownCard = () => {
   cy.get("a").contains("Drawdowns").click();
   cy.heading("Drawdowns");

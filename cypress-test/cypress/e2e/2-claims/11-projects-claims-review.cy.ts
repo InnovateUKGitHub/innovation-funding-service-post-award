@@ -10,7 +10,6 @@ import {
   closedSectionAccordions,
   shouldShowProjectTitle,
   claimStatusTable,
-  learnFiles,
   claimReviewDocArea,
   claimReviewExistingEvidence,
   claimReviewUploadDocument,
@@ -28,6 +27,7 @@ import {
   reviewLabourDocUpload,
   reviewLabourRightLeft,
 } from "./steps";
+import { learnFiles } from "common/fileComponentTests";
 
 describe("Claims > Review as MO", () => {
   before(() => {

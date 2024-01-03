@@ -78,24 +78,6 @@ export const accessControl = () => {
   cy.get("select#partnerId.govuk-select").select("Innovate UK, MO and ABS EUI Medium Enterprise");
 };
 
-export const learnAboutFiles = () => {
-  cy.get("span.govuk-details__summary-text").contains("Learn more about files you can upload").click();
-  ["You can upload up to 10 documents", "There is no limit", "upload these file types"].forEach(note => {
-    cy.paragraph(note);
-  });
-  [
-    "less than 32MB",
-    "unique file name",
-    "PDF (pdf, xps)",
-    "text (doc, docx, rtf, txt, csv, odt)",
-    "presentation (ppt, pptx, odp)",
-    "spreadsheet (xls, xlsx, ods)",
-    "images (jpg, jpeg, png, odg)",
-  ].forEach(fileItem => {
-    cy.list(fileItem);
-  });
-};
-
 export const uploadToMO = () => {
   cy.fileInput(testFile);
   cy.get("select#partnerId.govuk-select").select("Innovate UK and MO only");
@@ -349,8 +331,8 @@ export const doNotUploadSpecialChar = () => {
 export const uploadFileTooLarge = () => {
   cy.fileInput("bigger_test.txt");
   cy.button("Upload documents").click();
-  cy.validationLink("You cannot upload 'bigger_test.txt' because it must be smaller than 32MB.");
-  cy.paragraph("You cannot upload 'bigger_test.txt' because it must be smaller than 32MB.");
+  cy.validationLink("You cannot upload 'bigger_test.txt' because it must be no larger than 32MB.");
+  cy.paragraph("You cannot upload 'bigger_test.txt' because it must be no larger than 32MB.");
   cy.wait(500);
 };
 

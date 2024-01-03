@@ -2,7 +2,6 @@ import { visitApp } from "common/visit";
 import { shouldShowProjectTitle } from "e2e/2-claims/steps";
 import {
   costCatTable,
-  learnFiles,
   projCostsCostHeaders,
   projCostsDownload,
   projCostsDrawdownTable,
@@ -24,6 +23,7 @@ import {
   deleteDocFromArea,
 } from "e2e/3-documents/steps";
 import { fileTidyUp } from "common/filetidyup";
+import { learnFiles } from "common/fileComponentTests";
 
 const fc = "s.shuang@irc.trde.org.uk.test";
 describe("Loans > Project Costs & Documents", () => {

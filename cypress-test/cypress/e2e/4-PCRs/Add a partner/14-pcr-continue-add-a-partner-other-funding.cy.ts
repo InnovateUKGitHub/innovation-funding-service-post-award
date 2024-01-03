@@ -3,7 +3,6 @@ import { visitApp } from "../../../common/visit";
 import {
   shouldShowProjectTitle,
   navigateToPartnerCosts,
-  learnFiles,
   addPartnerDocUpload,
   pcrFileTable,
   otherFundingTable,
@@ -14,6 +13,7 @@ import {
   addSourceOfFundingValidation,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
+import { learnFiles } from "common/fileComponentTests";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
   before(() => {

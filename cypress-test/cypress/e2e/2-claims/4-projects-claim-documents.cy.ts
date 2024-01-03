@@ -1,6 +1,6 @@
 import { visitApp } from "../../common/visit";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
-import { claimsDocUpload, claimsFileTable, learnFiles, selectFileDescription, shouldShowProjectTitle } from "./steps";
+import { claimsDocUpload, claimsFileTable, selectFileDescription, shouldShowProjectTitle } from "./steps";
 import {
   validateFileUpload,
   uploadFileTooLarge,
@@ -12,6 +12,7 @@ import {
 } from "e2e/3-documents/steps";
 import { fileTidyUp } from "common/filetidyup";
 import { testFile } from "common/testfileNames";
+import { learnFiles } from "common/fileComponentTests";
 const pmEmail = "james.black@euimeabs.test";
 
 describe("claims > documents upload screen", () => {
