@@ -1,5 +1,5 @@
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
-import { mapToClaimStatus } from "@server/features/claims/mapClaim";
+import { mapClaim, mapToClaimStatus } from "@server/features/claims/mapClaim";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
@@ -12,6 +12,7 @@ import { InActiveProjectError } from "../common/appError";
 import { CommandBase } from "../common/commandBase";
 import { GetByIdQuery } from "../partners/getByIdQuery";
 import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
+import { mapToReceivedStatus } from "@gql/dtoMapper/mapClaimDto";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(
@@ -53,6 +54,9 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     const documents = await context.runQuery(documentQuery);
 
     const originalClaimStatus = mapToClaimStatus(existingStatus);
+
+    // TODO: Merge what we need automatically
+    this.claimDto.iarStatus = mapToReceivedStatus(existingClaim.Acc_IAR_Status__c);
 
     const result = new ClaimDtoValidator(
       this.claimDto,

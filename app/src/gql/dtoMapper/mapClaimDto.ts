@@ -13,7 +13,7 @@ import { equalityIfDefined, inequalityIfDefined } from "./equalityIfDefined";
 
 const clock = new Clock();
 
-const mapToReceivedStatus = (status: string): ReceivedStatus => {
+export const mapToReceivedStatus = (status: string): ReceivedStatus => {
   if (!status?.length) return ReceivedStatus.Unknown;
 
   const allowedStatuses: ReceivedStatus[] = [ReceivedStatus.Received, ReceivedStatus.NotReceived];
