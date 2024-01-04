@@ -55,7 +55,8 @@ describe("Claims > SBRI > Final", () => {
 
   it("Should display correct costs being claimed", summaryTotalCostsList);
 
-  it("Should have the submit button greyed out and clicking on it does nothing", () => {
-    cy.button("Submit").should("be.disabled");
+  it("Should have an enabled submit button but clicking it throws a PCF error", () => {
+    cy.button("Submit").click();
+    cy.validationLink("You must upload a project completion form before you can submit this claim.");
   });
 });
