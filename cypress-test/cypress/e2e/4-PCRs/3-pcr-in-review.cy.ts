@@ -9,6 +9,7 @@ import {
   switchToMoCheckComments,
   shouldShowProjectTitle,
 } from "./steps";
+import { uploadDate } from "e2e/2-claims/steps";
 
 describe("PCR > In Review", () => {
   before(() => {
@@ -54,7 +55,7 @@ describe("PCR > In Review", () => {
       ["Request type", "Reallocate project costs"],
       ["Request started", "5 July 2023"],
       ["Request status", "Submitted to Monitoring Officer"],
-      ["Request last updated", "2023"],
+      ["Request last updated", uploadDate],
     ].forEach(([requestItem, requestDetail]) => {
       cy.get("dt").contains(requestItem).siblings().contains(requestDetail);
     });

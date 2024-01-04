@@ -1317,13 +1317,6 @@ export const impactGuidance = () => {
   cy.get("a").contains("support@iuk.ukri.org").should("not.exist");
 };
 
-export const uploadProjectCompletionForm = () => {
-  cy.get("select#description.govuk-select").select("Project completion form");
-  cy.fileInput(testFile);
-  cy.clickOn("Upload documents");
-  cy.validationNotification("has been uploaded.");
-};
-
 export const summaryDocTable = () => {
   ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach((header, index) => {
     cy.get(`th:nth-child(${index + 1})`).contains(header);
@@ -1334,7 +1327,7 @@ export const summaryDocTable = () => {
   cy.get("tr")
     .eq(1)
     .within(() => {
-      [testFileEUIFinance, "Schedule 3", "2023", "0KB", "James Black"].forEach((rowDetail, index) => {
+      [testFileEUIFinance, "Schedule 3", uploadDate, "0KB", "James Black"].forEach((rowDetail, index) => {
         cy.get(`td:nth-child(${index + 1})`).contains(rowDetail);
       });
     });

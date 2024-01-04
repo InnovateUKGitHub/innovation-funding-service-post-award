@@ -1,5 +1,5 @@
 import { visitApp } from "common/visit";
-import { drgClaimTwo, finalClaimPcfGuidance, impactGuidance, uploadProjectCompletionForm } from "./steps";
+import { drgClaimTwo, finalClaimPcfGuidance, impactGuidance } from "./steps";
 import { fileTidyUp } from "common/filetidyup";
 
 const fcContact = "pauline.o'jones@uobcw.org.uk.test.prod";
@@ -37,36 +37,8 @@ describe("Claims > Final claim PCF Validation", () => {
 
   it("Should not display Project Impact guidance", impactGuidance);
 
-  it("Should have a disabled Submit button", () => {
-    cy.button("Submit").should("be.disabled");
-  });
-
-  it("Should now access documents page using the link on the Summary page", () => {
-    cy.clickOn("Edit claim documents");
-    cy.heading("Claim documents");
-  });
-
-  it("Should upload a file and mark it as Project Completion Form", uploadProjectCompletionForm);
-
-  it("Should navigate back to the Claim summary page and show an enabled Submit button", () => {
-    cy.clickOn("Continue to summary");
-    cy.heading("Claim summary");
-    cy.button("Submit").should("be.enabled");
-  });
-
-  it("Should go back to documents page and delete the file uploaded previously", () => {
-    cy.clickOn("Edit claim documents");
-    cy.heading("Claim documents");
-    cy.clickOn("Remove");
-    cy.validationNotification("has been removed.");
-  });
-
-  it("Should proceed to Summary page.", () => {
-    cy.clickOn("Continue to summary");
-    cy.heading("Claim summary");
-  });
-
-  it("Should have a disabled Submit button", () => {
-    cy.button("Submit").should("be.disabled");
+  it("Should have an enabled submit button but clicking it throws a PCF error", () => {
+    cy.button("Submit").click();
+    cy.validationLink("You must upload a project completion form before you can submit this claim.");
   });
 });
