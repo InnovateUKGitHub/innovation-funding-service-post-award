@@ -1,5 +1,5 @@
 import { PcrType } from "typings/pcr";
-import { documents } from "e2e/2-claims/steps";
+import { documents, uploadDate } from "e2e/2-claims/steps";
 import { seconds } from "common/seconds";
 import { testFile } from "common/testfileNames";
 
@@ -165,7 +165,7 @@ export const pcrFileTable = (fileName: string, uploadedBy: string) => {
   ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach((header, index) => {
     cy.get(`th:nth-child(${index + 1})`).contains(header);
   });
-  ["testfile.doc", fileName, "2023", "0KB", uploadedBy].forEach((rowItem, index) => {
+  ["testfile.doc", fileName, uploadDate, "0KB", uploadedBy].forEach((rowItem, index) => {
     cy.get(`td:nth-child(${index + 1})`).contains(rowItem);
   });
 };

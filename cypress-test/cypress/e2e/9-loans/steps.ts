@@ -6,6 +6,7 @@ export const standardComments = "This is a standard message for use in a text bo
 import { fileTidyUp } from "common/filetidyup";
 import { testFile } from "common/testfileNames";
 import { visitApp } from "common/visit";
+import { uploadDate } from "e2e/2-claims/steps";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const cardId = "191431";
@@ -160,7 +161,7 @@ export const projCostsUploadedSection = () => {
     });
   });
   let a = 1;
-  ["testfile.doc", "Schedule 3", "2023", "0KB", "Sarah Shuang", "Remove"].forEach(docTableItem => {
+  ["testfile.doc", "Schedule 3", uploadDate, "0KB", "Sarah Shuang", "Remove"].forEach(docTableItem => {
     cy.get("tr")
       .eq(1)
       .within(() => {

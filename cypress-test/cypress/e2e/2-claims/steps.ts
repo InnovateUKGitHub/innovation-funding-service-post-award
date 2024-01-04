@@ -5,6 +5,8 @@ import { testFile, testFileEUIFinance } from "common/testfileNames";
 let date = new Date();
 let comments = JSON.stringify(date);
 
+export const uploadDate = new Date().getFullYear().toString();
+
 export const costCategories = [
   "Labour",
   "Overheads",
@@ -1026,7 +1028,7 @@ export const claimReviewCheckForNewDoc = () => {
       .within(() => {
         cy.get("td:nth-child(1)").contains("testfile.doc");
         cy.get("td:nth-child(2)").contains("Invoice");
-        cy.get("td:nth-child(3)").contains("2023");
+        cy.get("td:nth-child(3)").contains(uploadDate);
         cy.get("td:nth-child(4)").contains("0KB");
         cy.get("td:nth-child(5)").contains("Javier Baez");
       });
@@ -1034,7 +1036,7 @@ export const claimReviewCheckForNewDoc = () => {
 };
 
 export const claimQueriedCheckForDoc = () => {
-  ["testfile.doc", "Invoice", "2023", "0KB", "Javier Baez"].forEach(fileDetails => {
+  ["testfile.doc", "Invoice", uploadDate, "0KB", "Javier Baez"].forEach(fileDetails => {
     cy.get("tr").contains(fileDetails);
   });
 };
