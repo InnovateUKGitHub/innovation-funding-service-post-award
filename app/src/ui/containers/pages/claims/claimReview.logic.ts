@@ -164,6 +164,7 @@ export const useOnUpdateClaimReview = (
         projectId,
         periodId,
         claim: { ...claim, ...data } as ClaimDto,
+        isClaimSummary: false,
       });
     },
     onSuccess() {

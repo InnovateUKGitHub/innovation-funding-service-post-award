@@ -18,7 +18,10 @@ export interface IClaimsApi<Context extends "client" | "server"> {
   getAllIncludingNewByPartnerId(params: ApiParams<Context, { partnerId: PartnerId }>): Promise<ClaimDto[]>;
   get(params: ApiParams<Context, { partnerId: PartnerId; periodId: number }>): Promise<ClaimDto>;
   update(
-    params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; periodId: number; claim: ClaimDto }>,
+    params: ApiParams<
+      Context,
+      { projectId: ProjectId; partnerId: PartnerId; periodId: number; claim: ClaimDto; isClaimSummary: boolean }
+    >,
   ): Promise<ClaimDto>;
   getStatusChanges(
     params: ApiParams<Context, { projectId: ProjectId; partnerId: PartnerId; periodId: number }>,
@@ -92,6 +95,7 @@ class ClaimController extends ControllerBase<"server", ClaimDto> implements ICla
         partnerId: p.partnerId,
         periodId: parseInt(p.periodId, 10) as PeriodId,
         claim: processDto(b),
+        isClaimSummary: q.isClaimSummary === "true",
       }),
       this.update,
     );
@@ -121,16 +125,19 @@ class ClaimController extends ControllerBase<"server", ClaimDto> implements ICla
   }
 
   public async update(
-    params: ApiParams<"server", { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId; claim: ClaimDto }>,
+    params: ApiParams<
+      "server",
+      { projectId: ProjectId; partnerId: PartnerId; periodId: PeriodId; claim: ClaimDto; isClaimSummary: boolean }
+    >,
   ): Promise<ClaimDto> {
-    const { projectId, partnerId, periodId, claim } = params;
+    const { projectId, partnerId, periodId, claim, isClaimSummary } = params;
 
     if (partnerId !== claim.partnerId || periodId !== claim.periodId) {
       throw new BadRequestError();
     }
 
     const context = contextProvider.start(params);
-    const command = new UpdateClaimCommand(projectId, claim);
+    const command = new UpdateClaimCommand(projectId, claim, isClaimSummary);
     await context.runCommand(command);
 
     const query = new GetClaim(partnerId, periodId);

@@ -116,7 +116,7 @@ export class ClaimsStore extends StoreBase {
       this.getClaimKey(partnerId, periodId),
       dto,
       showErrors => this.validate(projectId, partnerId, periodId, dto, showErrors, isClaimSummary),
-      p => apiClient.claims.update({ projectId, partnerId, periodId, claim: dto, ...p }),
+      p => apiClient.claims.update({ projectId, partnerId, periodId, claim: dto, isClaimSummary, ...p }),
       result => {
         this.markStale("claim", this.getClaimKey(partnerId, periodId), result);
         if (message) {

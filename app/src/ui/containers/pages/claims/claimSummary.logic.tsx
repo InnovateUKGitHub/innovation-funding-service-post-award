@@ -200,6 +200,7 @@ export const useOnUpdateClaimSummary = (
         projectId,
         periodId,
         claim: { ...claim, ...data, status: nextStatus } as ClaimDto,
+        isClaimSummary: true,
       });
     },
     onSuccess() {

@@ -1853,7 +1853,8 @@
       },
       "documents": {
         "errors": {
-          "custom": "You must upload an independent accountant's report before you can submit this claim."
+          "iar_required": "You must upload an independent accountant's report before you can submit this claim.",
+          "pcf_required": "You must upload a project completion form before you can submit this claim."
         }
       }
     },

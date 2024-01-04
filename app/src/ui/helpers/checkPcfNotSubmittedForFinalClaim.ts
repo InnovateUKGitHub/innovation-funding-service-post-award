@@ -11,7 +11,7 @@ type CheckImpactManagementPcfNotSubmittedForFinalClaimProps = Pick<
   | "impactManagementPhasedCompetitionStage"
 >;
 
-const checkImpactManagementPcfNotSubmittedForFinalClaim = ({
+const checkPcfNotSubmittedForFinalClaim = ({
   impactManagementParticipation,
   isFinalClaim,
   pcfStatus,
@@ -23,15 +23,17 @@ const checkImpactManagementPcfNotSubmittedForFinalClaim = ({
   const isPhased = impactManagementPhasedCompetition;
   const isFinalPhase = impactManagementPhasedCompetitionStage === ImpactManagementPhase.Last;
 
-  if (isFinalClaim && !isReceived && isImpactManagement) {
-    // If we are in an unphased IM and the PCF is not received on the final claim, disallow
-    if (!isPhased) return true;
-
-    // If we are in an phased IM and the PCF is not received on the final claim and the final phase, disallow
-    if (isPhased && isFinalPhase) return true;
+  if (isImpactManagement && !isReceived && isFinalClaim && !isPhased) {
+    return { imDisabled: true, checkForFileOnSubmit: true };
+  }
+  if (isImpactManagement && !isReceived && isFinalClaim && isPhased && isFinalPhase) {
+    return { imDisabled: true, checkForFileOnSubmit: true };
+  }
+  if (!isImpactManagement && !isReceived && isFinalClaim) {
+    return { imDisabled: false, checkForFileOnSubmit: true };
   }
 
-  return false;
+  return { imDisabled: false, checkForFileOnSubmit: false };
 };
 
-export { checkImpactManagementPcfNotSubmittedForFinalClaim };
+export { checkPcfNotSubmittedForFinalClaim };
