@@ -1,5 +1,5 @@
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
-import { mapClaim, mapToClaimStatus } from "@server/features/claims/mapClaim";
+import { mapToClaimStatus } from "@server/features/claims/mapClaim";
 import { ClaimStatus } from "@framework/constants/claimStatus";
 import { ProjectRole } from "@framework/constants/project";
 import { ClaimDto } from "@framework/dtos/claimDto";
