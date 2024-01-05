@@ -62,14 +62,14 @@ export const ProjectManagerDetailsStep = () => {
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data =>
             onSave({
-              data,
+              data: { ...data, contact2ProjectRole: PCRContactRole.ProjectManager },
               context: link(data),
             }),
           )}
         >
           <Fieldset>
             <Legend>{getContent(x => x.pcrAddPartnerLabels.projectLeadContactHeading)}</Legend>
-            <input type="hidden" name="contact1ProjectRole" value={PCRContactRole.ProjectManager} />
+            <input type="hidden" name="contact2ProjectRole" value={PCRContactRole.ProjectManager} />
 
             {isClient && (
               <Button

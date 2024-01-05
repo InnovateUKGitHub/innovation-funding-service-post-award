@@ -60,7 +60,7 @@ export const FinanceContactStep = () => {
           data-qa="addPartnerForm"
           onSubmit={handleSubmit(data =>
             onSave({
-              data,
+              data: { ...data, contact1ProjectRole: PCRContactRole.FinanceContact },
               context: link(data),
             }),
           )}

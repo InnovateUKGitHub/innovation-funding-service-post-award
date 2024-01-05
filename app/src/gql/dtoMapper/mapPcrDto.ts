@@ -11,6 +11,7 @@ import {
   mapToPCRStatus,
   mapFromSalesforcePCRPartnerType,
   mapToPcrItemType,
+  PcrContactRoleMapper,
 } from "@framework/mappers/pcr";
 import { PCRProjectLocationMapper } from "@framework/mappers/projectLocation";
 import { Clock } from "@framework/util/clock";
@@ -28,11 +29,13 @@ export type PcrNode = GQL.PartialNode<{
   Acc_Contact1EmailAddress__c: GQL.Value<string>;
   Acc_Contact1Forename__c: GQL.Value<string>;
   Acc_Contact1Phone__c: GQL.Value<string>;
+  Acc_Contact1ProjectRole__c: GQL.Value<string>;
   Acc_Contact1Surname__c: GQL.Value<string>;
   Acc_Contact2EmailAddress__c: GQL.Value<string>;
   Acc_Contact2Forename__c: GQL.Value<string>;
   Acc_Contact2Phone__c: GQL.Value<string>;
   Acc_Contact2Surname__c: GQL.Value<string>;
+  Acc_Contact2ProjectRole__c: GQL.Value<string>;
   Acc_Employees__c: GQL.Value<number>;
   Acc_ExistingPartnerName__c: GQL.Value<string>;
   Acc_ExistingProjectDuration__c: GQL.Value<number>;
@@ -114,10 +117,12 @@ export type PcrItemDtoMapping = Pick<
   | "contact1Forename"
   | "contact1Phone"
   | "contact1Surname"
+  | "contact1ProjectRole"
   | "contact2Email"
   | "contact2Forename"
   | "contact2Phone"
   | "contact2Surname"
+  | "contact2ProjectRole"
   | "hasOtherFunding"
   | "id"
   | "isCommercialWork"
@@ -223,6 +228,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   contact1Surname(node) {
     return node?.Acc_Contact1Surname__c?.value ?? null;
   },
+  contact1ProjectRole(node) {
+    return new PcrContactRoleMapper().mapFromSalesforcePCRProjectRole(node?.Acc_Contact1ProjectRole__c?.value ?? "");
+  },
   contact2Email(node) {
     return node?.Acc_Contact2EmailAddress__c?.value ?? null;
   },
@@ -234,6 +242,9 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
   },
   contact2Surname(node) {
     return node?.Acc_Contact2Surname__c?.value ?? null;
+  },
+  contact2ProjectRole(node) {
+    return new PcrContactRoleMapper().mapFromSalesforcePCRProjectRole(node?.Acc_Contact2ProjectRole__c?.value ?? "");
   },
   financialYearEndDate(node) {
     return clock.parseOptionalSalesforceDate(node?.Acc_TurnoverYearEnd__c?.value ?? null);

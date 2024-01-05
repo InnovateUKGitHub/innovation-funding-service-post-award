@@ -5,6 +5,7 @@ import {
   PCRStatus,
   PCRProjectRole,
   PCRItemType,
+  PCRContactRole,
 } from "@framework/constants/pcrConstants";
 import { TypeOfAid } from "@framework/constants/project";
 import { ProjectChangeRequest } from "@framework/constants/recordTypes";
@@ -217,3 +218,32 @@ export const mapToPcrItemType = (developerName: string) => {
       return PCRItemType.Unknown;
   }
 };
+
+export class PcrContactRoleMapper {
+  private readonly roles = {
+    projectManager: "Project Manager",
+    financeContact: "Finance Contact",
+  };
+
+  public mapFromSalesforcePCRProjectRole = (role: string | null): PCRContactRole => {
+    switch (role) {
+      case this.roles.projectManager:
+        return PCRContactRole.ProjectManager;
+      case this.roles.financeContact:
+        return PCRContactRole.FinanceContact;
+      default:
+        return PCRContactRole.Unknown;
+    }
+  };
+
+  public mapToSalesforcePCRProjectRole = (role: PCRContactRole | undefined) => {
+    switch (role) {
+      case PCRContactRole.ProjectManager:
+        return this.roles.projectManager;
+      case PCRContactRole.FinanceContact:
+        return this.roles.financeContact;
+      default:
+        return null;
+    }
+  };
+}
