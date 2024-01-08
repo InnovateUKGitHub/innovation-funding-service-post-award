@@ -123,14 +123,17 @@ export const LoanDrawdownTable = ({
           return (
             <TR key={x.label} id={x.phaseId}>
               <TD>{x.label}</TD>
-              <TD>{getQuarterInMonths(x.currentLength)}</TD>
+              <TD centered>{getQuarterInMonths(x.currentLength)}</TD>
               <TD>
                 <FullNumericDate value={x.currentEndDate} />
               </TD>
-              <TD>
-                {readonlyTable ? (
+
+              {readonlyTable ? (
+                <TD centered>
                   <P>{getQuarterInMonths(x.newLength)}</P>
-                ) : (
+                </TD>
+              ) : (
+                <TD>
                   <DropdownSelect
                     className={cx({
                       "loan-table__cell--date-error":
@@ -141,8 +144,9 @@ export const LoanDrawdownTable = ({
                     {...register(x.phaseId)}
                     defaultValue={String(pcrItem[x.phaseId])}
                   />
-                )}
-              </TD>
+                </TD>
+              )}
+
               <TD>
                 {x.currentEndDate.getTime() === newEndDate.getTime() ? (
                   <P>-</P>

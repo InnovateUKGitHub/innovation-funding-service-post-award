@@ -15,14 +15,27 @@ interface TableCellProps extends CommonTableProps {
   numeric?: boolean;
   bold?: boolean;
   small?: boolean;
+  centered?: boolean;
 }
 
-const TD = ({ className, numeric, bold, small, ...props }: HTMLProps<HTMLTableCellElement> & TableCellProps) => (
+const TD = ({
+  className,
+  numeric,
+  bold,
+  small,
+  centered,
+  ...props
+}: HTMLProps<HTMLTableCellElement> & TableCellProps) => (
   <td
     {...props}
     className={classNames(
       "govuk-table__cell",
-      { "govuk-table__cell--numeric": numeric, "govuk-!-font-weight-bold": bold, "govuk-body-s": small },
+      {
+        "govuk-table__cell--numeric": numeric,
+        "govuk-!-font-weight-bold": bold,
+        "govuk-body-s": small,
+        "govuk-!-text-align-centre": centered,
+      },
       className,
     )}
   />
