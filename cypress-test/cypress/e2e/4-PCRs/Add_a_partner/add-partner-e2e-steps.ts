@@ -779,8 +779,8 @@ export const nonAidSummaryIncomplete = () => {
 };
 
 export const companyHouseSwindonUniversity = () => {
-  cy.get("#searchJesOrganisations").clear().type("S").wait(500).type("windon");
-  cy.get("p").contains("Loading Je-S organisations");
+  cy.get(`input[id="searchJesOrganisations"]`).clear().wait(500);
+  cy.get(`input[id="searchJesOrganisations"]`).type("Swindon");
   cy.getByLabel("Swindon University").click();
   cy.clickOn("Save and return to summary");
 };

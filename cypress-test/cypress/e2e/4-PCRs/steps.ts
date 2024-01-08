@@ -314,7 +314,8 @@ export const addPartnerCompanyHouseHeader = () => {
 };
 
 export const searchCompanyHouseGuidance = () => {
-  cy.get("legend").contains("Search companies house");
+  cy.getByLabel("Search companies house");
+  cy.get("#hint-for-searchCompaniesHouse").contains("Enter the name of the organisation that you work for.");
   cy.paragraph("Is your organisation not showing in these results?");
 };
 
@@ -591,7 +592,7 @@ export const navigateToPartnerOrgPage = () => {
   cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
   cy.clickOn("Save and continue");
-  cy.get("legend").contains("Search companies house");
+  cy.getByLabel("Search companies house");
   cy.get("#searchCompaniesHouse").type("A").wait(500);
   cy.get("legend").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
@@ -614,7 +615,7 @@ export const navigateToFinancialsPage = () => {
   cy.clickOn("Save and continue");
   cy.get("h2").contains("State aid eligibility");
   cy.clickOn("Save and continue");
-  cy.get("legend").contains("Search companies house");
+  cy.getByLabel("Search companies house");
   cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
   cy.get("legend").contains("Companies house search results");
   cy.get(`input[type="radio"]`).click();
@@ -996,7 +997,7 @@ export const otherFundingTable = () => {
 };
 
 export const addSourceOfFundingValidation = () => {
-  cy.getByQA("add-fund").contains("Add another source of funding").click().wait(500);
+  cy.button("Add another source of funding").click().wait(500);
   cy.clickOn("Save and continue");
   ["Source of funding is required.", "Date secured is required.", "Funding amount is required"].forEach(message => {
     cy.validationLink(message);
@@ -1039,9 +1040,24 @@ export const uploadPartnerInfo = () => {
   cy.paragraph("You must upload copies of signed letters");
 };
 
+export const validateFundingLevelInput = () => {
+  ["200", "2000", "100.22222"].forEach(entry => {
+    cy.get("#awardRate").clear().type(entry);
+    cy.clickOn("Save and continue");
+    cy.validationLink("Enter a funding level up to 100%.");
+    cy.paragraph("Enter a funding level up to 100%.");
+  });
+  ["Lorem", "one hundred", "1 0 0", "£$%^*", "-100", "This is far too long for a percentage input"].forEach(input => {
+    cy.get("#awardRate").clear().type(input);
+    cy.clickOn("Save and continue");
+    cy.validationLink("Enter a valid funding level.");
+    cy.paragraph("Enter a valid funding level.");
+  });
+};
+
 export const fundingLevelPercentage = () => {
   cy.get("h2").contains("Funding level");
-  cy.get("#awardRate").type("5");
+  cy.get("#awardRate").clear().type("5");
   cy.clickOn("Save and continue");
 };
 

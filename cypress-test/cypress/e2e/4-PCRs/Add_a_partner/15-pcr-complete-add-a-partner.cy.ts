@@ -6,6 +6,7 @@ import {
   addPartnerDocUpload,
   addPartnerSummaryTable,
   fundingLevelPercentage,
+  validateFundingLevelInput,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
@@ -44,6 +45,8 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.getByLabel("No").click();
     cy.clickOn("Save and continue");
   });
+
+  it("Should validate the Funding level input", validateFundingLevelInput);
 
   it(
     "Should display 'Funding level' heading and enter a percentage and click 'Save and continue'",

@@ -15,9 +15,9 @@ describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation",
     pcrTidyUp("Add a partner");
   });
 
-  //after(() => {
-  //  cy.deletePcr("328407");
-  //});
+  after(() => {
+    cy.deletePcr("328407");
+  });
 
   it("Should create an Add partner PCR", () => {
     cy.createPcr("Add a partner");
@@ -53,11 +53,16 @@ describe("PCR > Add partner > Continuing editing PCR as a non-aid organisation",
   });
 
   it("Should validate the search box", () => {
-    cy.get("#searchJesOrganisations").clear().type("Can I pet that dawg");
+    cy.get(`input[id="searchJesOrganisations"]`).clear().type("Can I pet that dawg");
     cy.paragraph(
       "Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.",
     );
   });
 
   it("Should type 'Swindon' and select 'Swindon University", companyHouseSwindonUniversity);
+
+  it("Should show Swindon University under the organisation listing", () => {
+    cy.get("h2").contains("Organisation");
+    cy.getListItemFromKey("Organisation name", "Swindon University");
+  });
 });

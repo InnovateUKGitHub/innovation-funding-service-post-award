@@ -30,7 +30,7 @@ describe("PCR > Add partner > Continuing editing PCR financial details section",
   });
 
   it("Should display guidance information", () => {
-    cy.get("#hint-for-suspensionStartDate").contains("This is the end of the last financial year");
+    cy.get("#hint-for-financialYearEndDate").contains("This is the end of the last financial year");
   });
 
   it("Should enter a month and year of last financial year and enter a turnover amount", () => {
