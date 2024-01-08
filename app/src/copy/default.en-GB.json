@@ -1528,7 +1528,7 @@
     "documentValidator": {
       "nameInvalidCharacters": "Your document '{{ name }}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.",
       "fileTypeInvalid": "You cannot upload '{{ name }}' because it is the wrong file type.",
-      "fileSizeTooLarge": "You cannot upload '{{ name }}' because it must be no more than {{ size }}.",
+      "fileSizeTooLarge": "You cannot upload '{{ name }}' because it must be no larger than {{ size }}.",
       "fileBasenameTooLong": "You cannot upload '{{ name }}' because the name of the file must be shorter than {{ count }} characters.",
       "fileSizeEmpty": "You cannot upload '{{ name }}' because it is empty.",
       "fileNameEmpty": "You cannot upload this file because the file has no name.",
@@ -1969,7 +1969,7 @@
           "file_basename_too_small": "You cannot upload this file because the file has no name.",
           "file_basename_too_big": "You cannot upload '{{ input.fileName }}' because the name of the file must be shorter than {{ count }} characters.",
           "file_size_too_small": "You cannot upload '{{ input.fileName }}' because it is empty.",
-          "file_size_too_large": "You cannot upload '{{ input.fileName }}' because it must be no more than {{ size, bytes }}.",
+          "file_size_too_large": "You cannot upload '{{ input.fileName }}' because it must be no larger than {{ size, bytes }}.",
           "too_small": "Choose a file to upload.",
           "too_big": "You can only select up to {{ count }} files at the same time.",
           "total_size_too_large": "You can only upload up to {{ size, bytes }} at the same time."

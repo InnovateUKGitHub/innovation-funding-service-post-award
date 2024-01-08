@@ -36,7 +36,7 @@ exports[`Document upload validator With en-GB i18n test file extension with disa
 
 exports[`Document upload validator With en-GB i18n test file size when below minimum 1`] = `"You cannot upload 'test.pdf' because it is empty."`;
 
-exports[`Document upload validator With en-GB i18n test file size when exceeding maximum 1`] = `"You cannot upload 'test.pdf' because it must be no more than 32MB."`;
+exports[`Document upload validator With en-GB i18n test file size when exceeding maximum 1`] = `"You cannot upload 'test.pdf' because it must be no larger than 32MB."`;
 
 exports[`Document upload validator With no i18n invalid file names containing invalid character: ! 1`] = `"validation.documentValidator.nameInvalidCharacters"`;
 
