@@ -58,14 +58,14 @@ export const SpendProfileStep = () => {
           <Table>
             <THead>
               <TH>{getContent(x => x.pages.pcrAddPartnerSpendProfile.categoryHeading)}</TH>
-              <TH>{getContent(x => x.pages.pcrAddPartnerSpendProfile.costHeading)}</TH>
+              <TH numeric>{getContent(x => x.pages.pcrAddPartnerSpendProfile.costHeading)}</TH>
             </THead>
 
             <TBody>
               {data.costCategories.map(x => (
                 <TR key={x.name}>
                   <TD>{x.name}</TD>
-                  <TD>
+                  <TD numeric>
                     <Currency value={x.cost} />
                   </TD>
                   <TD>
@@ -83,7 +83,7 @@ export const SpendProfileStep = () => {
                 <TD>
                   <P bold>{getContent(x => x.pages.pcrAddPartnerSpendProfile.totalCosts)}</P>
                 </TD>
-                <TD>
+                <TD numeric>
                   <Currency bold value={data.total} />
                 </TD>
                 <TableEmptyCell />
