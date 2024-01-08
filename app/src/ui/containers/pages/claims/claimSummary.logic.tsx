@@ -48,6 +48,8 @@ export const useClaimSummaryData = (
     "impactManagementParticipation",
     "isNonFec",
     "monitoringLevel",
+    "title",
+    "projectNumber",
   ]);
 
   const partner = mapToPartnerDto(
@@ -143,7 +145,7 @@ export const useClaimSummaryData = (
     },
   );
 
-  const totalCosts = useGetTotalCostsClaimed(data?.salesforce?.uiapi, periodId);
+  const totalCosts = useGetTotalCostsClaimed(data?.salesforce?.uiapi, project, partner, periodId);
 
   return {
     project,

@@ -8,13 +8,13 @@ import { ClaimDto } from "@framework/dtos/claimDto";
 import { PartnerDto } from "@framework/dtos/partnerDto";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { roundCurrency } from "@framework/util/numberHelper";
-import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.withFragment";
+import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage.standalone";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { DocumentsUnavailable } from "@ui/components/atomicDesign/organisms/documents/DocumentsUnavailable/DocumentsUnavailable";
 import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
 import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink, Link } from "@ui/components/atomicDesign/atoms/Links/links";
-import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title.withFragment";
+import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
 import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
@@ -113,7 +113,7 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
         )
       }
       apiError={apiError}
-      pageTitle={<Title />}
+      pageTitle={<Title projectNumber={data.project.projectNumber} title={data.project.title} />}
       validationErrors={validationErrors}
       fragmentRef={data.fragmentRef}
     >
@@ -146,7 +146,11 @@ const ClaimSummaryPage = (props: BaseProps & ClaimSummaryParams) => {
           title={<Content value={x => x.pages.claimPrepareSummary.costsTitle} />}
           qa="costs-to-be-claimed-summary"
         >
-          <AwardRateOverridesMessage currentPeriod={props.periodId} />
+          <AwardRateOverridesMessage
+            projectId={props.projectId}
+            partnerId={props.partnerId}
+            currentPeriod={props.periodId}
+          />
 
           <SummaryList qa="costs-to-be-claimed-summary-list">
             <SummaryListItem

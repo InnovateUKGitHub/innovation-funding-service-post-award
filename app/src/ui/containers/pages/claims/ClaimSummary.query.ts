@@ -4,9 +4,6 @@ export const claimSummaryQuery = graphql`
   query ClaimSummaryQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     salesforce {
       uiapi {
-        ...AwardRateOverridesMessageFragment
-        ...StatusChangesLogsFragment
-        ...TitleFragment
         ...TotalCostsClaimedFragment
         query {
           Acc_Profile__c(
@@ -59,7 +56,7 @@ export const claimSummaryQuery = graphql`
                 { Acc_ProjectParticipant__c: { eq: $partnerId } }
                 { Acc_ProjectPeriodNumber__c: { eq: $periodId } }
                 { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
-                { Acc_ClaimStatus__c: { ne: "New " } }
+                { Acc_ClaimStatus__c: { ne: "New" } }
                 { Acc_ClaimStatus__c: { ne: "Not used" } }
               ]
             }
@@ -304,6 +301,12 @@ export const claimSummaryQuery = graphql`
                   value
                 }
                 Acc_MonitoringLevel__c {
+                  value
+                }
+                Acc_ProjectNumber__c {
+                  value
+                }
+                Acc_ProjectTitle__c {
                   value
                 }
               }
