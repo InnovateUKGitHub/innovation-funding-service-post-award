@@ -7,6 +7,7 @@ type Acc_BroadcastMessage__c {
   LastModifiedDate: DateTimeValue
   IsDeleted: BooleanValue
   Acc_Message__c: LongTextAreaValue
+  Competition_type__c: PicklistValue
   Acc_StartDate__c: DateValue
   LastViewedDate: DateTimeValue
   Acc_Product__c: PicklistValue
@@ -50,6 +51,7 @@ type Acc_BroadcastMessage__c {
 type Acc_BroadcastMessage__cConnection {
   edges: [Acc_BroadcastMessage__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_BroadcastMessage__cEdge {
@@ -61,6 +63,7 @@ input Acc_BroadcastMessage__c_Filter {
   LastModifiedDate: DateTimeOperators
   IsDeleted: BooleanOperators
   Acc_Message__c: LongTextAreaOperators
+  Competition_type__c: PicklistOperators
   Acc_StartDate__c: DateOperators
   LastViewedDate: DateTimeOperators
   Acc_Product__c: PicklistOperators
@@ -86,6 +89,7 @@ input Acc_BroadcastMessage__c_Filter {
 input Acc_BroadcastMessage__c_GroupBy {
   LastModifiedDate: GroupByDateFunction
   IsDeleted: GroupByClause
+  Competition_type__c: GroupByClause
   Acc_StartDate__c: GroupByClause
   LastViewedDate: GroupByDateFunction
   Acc_Product__c: GroupByClause
@@ -111,6 +115,7 @@ input Acc_BroadcastMessage__c_OrderBy {
   LastModifiedDate: AggregateOrderByStringClause
   IsDeleted: NoFunctionAggregateOrderByClause
   Acc_Message__c: AggregateOrderByStringClause
+  Competition_type__c: AggregateOrderByStringClause
   Acc_StartDate__c: AggregateOrderByStringClause
   LastViewedDate: AggregateOrderByStringClause
   Acc_Product__c: AggregateOrderByStringClause
@@ -335,6 +340,7 @@ type Acc_Claims__c {
 type Acc_Claims__cConnection {
   edges: [Acc_Claims__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_Claims__cEdge {
@@ -791,6 +797,7 @@ type Acc_CostCategory__c {
 type Acc_CostCategory__cConnection {
   edges: [Acc_CostCategory__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_CostCategory__cEdge {
@@ -952,6 +959,7 @@ type Acc_MonitoringAnswer__c {
 type Acc_MonitoringAnswer__cConnection {
   edges: [Acc_MonitoringAnswer__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_MonitoringAnswer__cEdge {
@@ -1124,6 +1132,7 @@ type Acc_MonitoringQuestion__c {
 type Acc_MonitoringQuestion__cConnection {
   edges: [Acc_MonitoringQuestion__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_MonitoringQuestion__cEdge {
@@ -1279,6 +1288,7 @@ type Acc_Prepayment__c {
 type Acc_Prepayment__cConnection {
   edges: [Acc_Prepayment__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_Prepayment__cEdge {
@@ -1520,6 +1530,7 @@ type Acc_Profile__c {
 type Acc_Profile__cConnection {
   edges: [Acc_Profile__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_Profile__cEdge {
@@ -1857,6 +1868,7 @@ type Acc_ProjectChangeRequest__c {
 type Acc_ProjectChangeRequest__cConnection {
   edges: [Acc_ProjectChangeRequest__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_ProjectChangeRequest__cEdge {
@@ -2280,6 +2292,7 @@ type Acc_ProjectContactLink__c {
 type Acc_ProjectContactLink__cConnection {
   edges: [Acc_ProjectContactLink__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_ProjectContactLink__cEdge {
@@ -2572,6 +2585,7 @@ type Acc_ProjectParticipant__c {
 type Acc_ProjectParticipant__cConnection {
   edges: [Acc_ProjectParticipant__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_ProjectParticipant__cEdge {
@@ -3098,6 +3112,7 @@ type Acc_Project__c {
 type Acc_Project__cConnection {
   edges: [Acc_Project__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_Project__cEdge {
@@ -3457,6 +3472,7 @@ type Acc_StatusChange__c {
 type Acc_StatusChange__cConnection {
   edges: [Acc_StatusChange__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_StatusChange__cEdge {
@@ -3655,6 +3671,7 @@ type Acc_Virements__c {
 type Acc_Virements__cConnection {
   edges: [Acc_Virements__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Acc_Virements__cEdge {
@@ -4019,6 +4036,7 @@ type Account {
 type AccountConnection {
   edges: [AccountEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type AccountEdge {
@@ -4591,6 +4609,7 @@ type Competition__c {
 type Competition__cConnection {
   edges: [Competition__cEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type Competition__cEdge {
@@ -4934,6 +4953,7 @@ type Contact {
 type ContactConnection {
   edges: [ContactEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type ContactEdge {
@@ -5283,6 +5303,7 @@ type ContentDocument {
 type ContentDocumentConnection {
   edges: [ContentDocumentEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type ContentDocumentEdge {
@@ -5317,6 +5338,7 @@ type ContentDocumentLink {
 type ContentDocumentLinkConnection {
   edges: [ContentDocumentLinkEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type ContentDocumentLinkEdge {
@@ -5536,29 +5558,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  THIS_QUARTER
-  LAST_FISCAL_QUARTER
   TOMORROW
-  LAST_FISCAL_YEAR
-  NEXT_YEAR
-  NEXT_90_DAYS
-  THIS_WEEK
-  NEXT_FISCAL_YEAR
-  LAST_YEAR
-  NEXT_WEEK
-  NEXT_QUARTER
-  LAST_90_DAYS
-  TODAY
-  THIS_MONTH
-  LAST_QUARTER
   NEXT_MONTH
-  THIS_FISCAL_QUARTER
-  LAST_MONTH
-  NEXT_FISCAL_QUARTER
-  YESTERDAY
-  THIS_YEAR
+  LAST_QUARTER
+  LAST_FISCAL_QUARTER
   LAST_WEEK
+  THIS_FISCAL_QUARTER
+  NEXT_YEAR
+  LAST_YEAR
+  THIS_YEAR
+  THIS_WEEK
+  NEXT_90_DAYS
   THIS_FISCAL_YEAR
+  TODAY
+  LAST_90_DAYS
+  THIS_QUARTER
+  NEXT_QUARTER
+  NEXT_FISCAL_YEAR
+  NEXT_FISCAL_QUARTER
+  THIS_MONTH
+  LAST_MONTH
+  YESTERDAY
+  LAST_FISCAL_YEAR
+  NEXT_WEEK
 }
 
 input DateOperators {
@@ -5883,6 +5905,7 @@ enum GroupByType {
 type GroupConnection {
   edges: [GroupEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type GroupEdge {
@@ -6200,6 +6223,7 @@ type ObjectInfo {
   queryable: Boolean!
   searchable: Boolean!
   updateable: Boolean!
+  locale: String
 }
 
 type Order {
@@ -6299,6 +6323,7 @@ input OrderByClause {
 type OrderConnection {
   edges: [OrderEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type OrderEdge {
@@ -6744,6 +6769,7 @@ type RecordType {
 type RecordTypeConnection {
   edges: [RecordTypeEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type RecordTypeEdge {
@@ -7008,7 +7034,14 @@ type TimeValue {
 """The User Interface API family."""
 type UIAPI {
   query: RecordQuery!
-  objectInfos(apiNames: [String]): [ObjectInfo]
+  objectInfos(
+    apiNames: [String]
+
+    """
+    Specifies which locale to use for the labels. Defaults to the user&#39;s locale.
+    """
+    locale: String
+  ): [ObjectInfo]
 }
 
 scalar Url
@@ -7287,6 +7320,7 @@ type User {
 type UserConnection {
   edges: [UserEdge]
   totalCount: Int!
+  pageResultCount: Int!
 }
 
 type UserEdge {

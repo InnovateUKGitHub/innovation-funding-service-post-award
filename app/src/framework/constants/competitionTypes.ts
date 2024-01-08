@@ -9,6 +9,7 @@ enum SalesforceCompetitionTypes {
   loans = "LOANS",
   edge = "EDGE",
   horizonEurope = "Horizon Europe Participation",
+  combinedCapital = "Combined Capital",
 }
 
 enum ImpactManagementParticipation {
@@ -43,18 +44,6 @@ const allSalesforceCompetitionTypes = [
   SalesforceCompetitionTypes.horizonEurope,
 ];
 
-const salesforceCompetitionTypesMap = [
-  ["crnd", SalesforceCompetitionTypes.crnd],
-  ["contracts", SalesforceCompetitionTypes.contracts],
-  ["sbri", SalesforceCompetitionTypes.sbri],
-  ["sbriIfs", SalesforceCompetitionTypes.sbriIfs],
-  ["ktp", SalesforceCompetitionTypes.ktp],
-  ["catapults", SalesforceCompetitionTypes.catapults],
-  ["loans", SalesforceCompetitionTypes.loans],
-  ["edge", SalesforceCompetitionTypes.edge],
-  ["horizonEurope", SalesforceCompetitionTypes.horizonEurope],
-] as const;
-
 const mapToSalesforceCompetitionTypes = (type: string): SalesforceCompetitionTypes => {
   switch (type) {
     case "CR&D":
@@ -75,6 +64,8 @@ const mapToSalesforceCompetitionTypes = (type: string): SalesforceCompetitionTyp
       return SalesforceCompetitionTypes.edge;
     case "Horizon Europe Participation":
       return SalesforceCompetitionTypes.horizonEurope;
+    case "Combined Capital":
+      return SalesforceCompetitionTypes.combinedCapital;
     default:
       return SalesforceCompetitionTypes.unknown;
   }
@@ -86,5 +77,4 @@ export {
   ImpactManagementParticipation,
   ImpactManagementPhase,
   mapToSalesforceCompetitionTypes,
-  salesforceCompetitionTypesMap,
 };

@@ -21,9 +21,12 @@ type BroadcastNode = GQL.PartialNode<{
   Acc_StartDate__c: GQL.Value<string>;
   Acc_EndDate__c: GQL.Value<string>;
   Acc_Message__c: GQL.Value<string>;
+  Competition_type__c: GQL.Value<string>;
 }>;
 
-type BroadcastDtoMapping = BroadcastDto;
+type BroadcastDtoMapping = BroadcastDto & {
+  competitionType: string | null;
+};
 
 const mapper: GQL.DtoMapper<BroadcastDtoMapping, BroadcastNode> = {
   id(node) {
@@ -44,6 +47,9 @@ const mapper: GQL.DtoMapper<BroadcastDtoMapping, BroadcastNode> = {
   },
   title(node) {
     return node?.DisplayValue ?? "";
+  },
+  competitionType(node) {
+    return node?.Competition_type__c?.value ?? null;
   },
 };
 

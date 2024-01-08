@@ -16,6 +16,9 @@ export const projectDashboardQuery = graphql`
                 Acc_Message__c {
                   value
                 }
+                Competition_type__c {
+                  value
+                }
                 Id
                 DisplayValue
               }
@@ -44,6 +47,9 @@ export const projectDashboardQuery = graphql`
                     isMo
                     partnerId
                   }
+                }
+                Acc_CompetitionType__c {
+                  value
                 }
                 Acc_ProjectNumber__c {
                   value

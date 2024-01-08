@@ -245,6 +245,7 @@ export const useProjectsDashboardData = (search: string | number) => {
       "claimsToReview",
       "endDate",
       "id",
+      "competitionType",
       "isPastEndDate",
       "leadPartnerId",
       "leadPartnerName",
@@ -285,7 +286,13 @@ export const useProjectsDashboardData = (search: string | number) => {
     "id",
     "title",
     "content",
-  ]);
+    "competitionType",
+  ]).filter(
+    x =>
+      x.competitionType === null ||
+      x.competitionType === "All" ||
+      unfilteredObjects.some(y => y.competitionType === x.competitionType),
+  );
 
   return { unfilteredObjects, totalNumberOfProjects: unfilteredObjects?.length ?? 0, projects, broadcasts };
 };
