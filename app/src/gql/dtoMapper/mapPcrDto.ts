@@ -126,7 +126,6 @@ export type PcrItemDtoMapping = Pick<
   | "hasOtherFunding"
   | "id"
   | "isCommercialWork"
-  | "isProjectRoleAndPartnerTypeRequired"
   | "financialYearEndDate"
   | "financialYearEndTurnover"
   | "grantMovingOverFinancialYear"

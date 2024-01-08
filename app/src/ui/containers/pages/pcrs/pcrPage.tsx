@@ -18,7 +18,7 @@ export const PcrPage = ({
 }: {
   children: React.ReactNode;
   apiError?: IAppError<Results<ResultBase>> | null | undefined;
-  validationErrors: RhfErrors;
+  validationErrors?: RhfErrors;
 }) => {
   const { workflow, pcrItem, mode, step, project, apiError, fragmentRef, messages, routes } = usePcrWorkflowContext();
   const { getPcrItemContent } = usePcrItemName();
