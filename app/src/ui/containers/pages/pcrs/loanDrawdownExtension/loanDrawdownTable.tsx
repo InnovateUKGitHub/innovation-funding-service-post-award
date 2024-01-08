@@ -118,43 +118,46 @@ export const LoanDrawdownTable = ({
         <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.newEndDate)}</TH>
       </THead>
       <TBody>
-        {data.map(x => (
-          <TR key={x.label} id={x.phaseId}>
-            <TD>{x.label}</TD>
-            <TD>{getQuarterInMonths(x.currentLength)}</TD>
-            <TD>
-              <FullNumericDate value={x.currentEndDate} />
-            </TD>
-            <TD>
-              {readonlyTable ? (
-                <P>{getQuarterInMonths(x.newLength)}</P>
-              ) : (
-                <DropdownSelect
-                  className={cx({
-                    "loan-table__cell--date-error":
-                      !!validationErrors?.loanDrawdownExtension || !!validationErrors?.[x.phaseId],
-                  })}
-                  disabled={isFetching}
-                  options={x.newEndDateOptions}
-                  {...register(x.phaseId)}
-                  defaultValue={String(pcrItem[x.phaseId])}
-                />
-              )}
-            </TD>
-            <TD>
-              {String(x.currentLength) === watch(x.phaseId) ? (
-                <P>-</P>
-              ) : (
-                <FullNumericDate value={getNewDate(x.phaseId, watch(), pcrItem.projectStartDate)} />
-              )}
-            </TD>
-            {readonlyTable && (
+        {data.map(x => {
+          const newEndDate = getNewDate(x.phaseId, watch(), pcrItem.projectStartDate);
+          return (
+            <TR key={x.label} id={x.phaseId}>
+              <TD>{x.label}</TD>
+              <TD>{getQuarterInMonths(x.currentLength)}</TD>
               <TD>
-                <EditLink stepName={PCRStepType.loanExtension} />
+                <FullNumericDate value={x.currentEndDate} />
               </TD>
-            )}
-          </TR>
-        ))}
+              <TD>
+                {readonlyTable ? (
+                  <P>{getQuarterInMonths(x.newLength)}</P>
+                ) : (
+                  <DropdownSelect
+                    className={cx({
+                      "loan-table__cell--date-error":
+                        !!validationErrors?.loanDrawdownExtension || !!validationErrors?.[x.phaseId],
+                    })}
+                    disabled={isFetching}
+                    options={x.newEndDateOptions}
+                    {...register(x.phaseId)}
+                    defaultValue={String(pcrItem[x.phaseId])}
+                  />
+                )}
+              </TD>
+              <TD>
+                {x.currentEndDate.getTime() === newEndDate.getTime() ? (
+                  <P>-</P>
+                ) : (
+                  <FullNumericDate value={getNewDate(x.phaseId, watch(), pcrItem.projectStartDate)} />
+                )}
+              </TD>
+              {readonlyTable && (
+                <TD>
+                  <EditLink stepName={PCRStepType.loanExtension} />
+                </TD>
+              )}
+            </TR>
+          );
+        })}
       </TBody>
     </Table>
   );
