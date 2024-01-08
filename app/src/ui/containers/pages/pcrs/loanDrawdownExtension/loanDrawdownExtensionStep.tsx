@@ -70,17 +70,20 @@ export const LoanDrawdownExtensionStep = () => {
             }),
           )}
         >
-          <LoanDrawdownTable
-            pcrItem={pcrItem}
-            register={register}
-            watch={watch}
-            isFetching={isFetching}
-            validationErrors={validationErrors}
-          />
-
-          <Button type="submit" disabled={isFetching}>
-            {getContent(x => x.pcrItem.submitButton)}
-          </Button>
+          <Section>
+            <LoanDrawdownTable
+              pcrItem={pcrItem}
+              register={register}
+              watch={watch}
+              isFetching={isFetching}
+              validationErrors={validationErrors}
+            />
+          </Section>
+          <Section>
+            <Button type="submit" disabled={isFetching}>
+              {getContent(x => x.pcrItem.submitButton)}
+            </Button>
+          </Section>
         </Form>
       </Section>
     </PcrPage>

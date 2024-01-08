@@ -9,6 +9,7 @@ interface CommonTableProps {
 interface TableRowProps extends CommonTableProps {
   hasError?: boolean;
   hasWarning?: boolean;
+  editableRow?: boolean;
 }
 
 interface TableCellProps extends CommonTableProps {
@@ -50,12 +51,18 @@ const TH = ({ className, numeric, bold, small, ...props }: HTMLProps<HTMLTableCe
     )}
   />
 );
-const TR = ({ className, hasError, hasWarning, ...props }: HTMLProps<HTMLTableRowElement> & TableRowProps) => (
+const TR = ({
+  className,
+  hasError,
+  hasWarning,
+  editableRow,
+  ...props
+}: HTMLProps<HTMLTableRowElement> & TableRowProps) => (
   <tr
     {...props}
     className={classNames(
       "govuk-table__row",
-      { "table__row--error": hasError, "table__row--warning": hasWarning },
+      { "table__row--error": hasError, "table__row--warning": hasWarning, "govuk-table__row--editable": editableRow },
       className,
     )}
   />

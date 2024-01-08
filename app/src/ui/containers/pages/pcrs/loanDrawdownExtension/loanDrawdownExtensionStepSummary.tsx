@@ -1,5 +1,5 @@
 import { PCRItemStatus } from "@framework/constants/pcrConstants";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
 import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
 import { useForm } from "react-hook-form";
 import { PcrItemSummaryForm } from "../pcrItemSummaryForm";
@@ -40,14 +40,16 @@ export const LoanDrawdownExtensionSummary = () => {
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section>
-        <LoanDrawdownTable
-          pcrItem={pcrItem}
-          register={register}
-          watch={watch}
-          isFetching={isFetching}
-          readonlyTable
-          validationErrors={validationErrors}
-        />
+        <Section>
+          <LoanDrawdownTable
+            pcrItem={pcrItem}
+            register={register}
+            watch={watch}
+            isFetching={isFetching}
+            readonlyTable
+            validationErrors={validationErrors}
+          />
+        </Section>
       </Section>
 
       {displayCompleteForm && (

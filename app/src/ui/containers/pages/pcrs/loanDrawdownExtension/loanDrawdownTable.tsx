@@ -12,10 +12,10 @@ import { TBody, TD, TH, THead, TR, Table } from "@ui/components/atomicDesign/ato
 import { FullNumericDate } from "@ui/components/atomicDesign/atoms/Date";
 import { DropdownSelect } from "@ui/components/atomicDesign/atoms/form/Dropdown/Dropdown";
 import { UseFormRegister, UseFormWatch } from "react-hook-form";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { LoanDrawdownExtensionSchema } from "./loanDrawdownExtension.zod";
 import { EditLink } from "../pcrItemSummaryLinks";
 import { PCRStepType } from "@framework/constants/pcrConstants";
+import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 
 const totalMonths = 75;
 
@@ -116,12 +116,17 @@ export const LoanDrawdownTable = ({
         <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.currentEndDate)}</TH>
         <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.newLength)}</TH>
         <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.newEndDate)}</TH>
+        {readonlyTable && (
+          <TH>
+            <TableEmptyCell />
+          </TH>
+        )}
       </THead>
       <TBody>
         {data.map(x => {
           const newEndDate = getNewDate(x.phaseId, watch(), pcrItem.projectStartDate);
           return (
-            <TR key={x.label} id={x.phaseId}>
+            <TR editableRow={!readonlyTable} key={x.label} id={x.phaseId}>
               <TD>{x.label}</TD>
               <TD centered>{getQuarterInMonths(x.currentLength)}</TD>
               <TD>
@@ -129,9 +134,7 @@ export const LoanDrawdownTable = ({
               </TD>
 
               {readonlyTable ? (
-                <TD centered>
-                  <P>{getQuarterInMonths(x.newLength)}</P>
-                </TD>
+                <TD centered>{getQuarterInMonths(x.newLength)}</TD>
               ) : (
                 <TD>
                   <DropdownSelect
@@ -147,13 +150,16 @@ export const LoanDrawdownTable = ({
                 </TD>
               )}
 
-              <TD>
-                {x.currentEndDate.getTime() === newEndDate.getTime() ? (
-                  <P>-</P>
-                ) : (
+              {x.currentEndDate.getTime() === newEndDate.getTime() ? (
+                <TD centered>
+                  <span>-</span>
+                </TD>
+              ) : (
+                <TD>
                   <FullNumericDate value={getNewDate(x.phaseId, watch(), pcrItem.projectStartDate)} />
-                )}
-              </TD>
+                </TD>
+              )}
+
               {readonlyTable && (
                 <TD>
                   <EditLink stepName={PCRStepType.loanExtension} />
