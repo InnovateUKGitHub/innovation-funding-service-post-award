@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<403e8cf940c9894ffe0936fb48e6a327>>
+ * @generated SignedSource<<d643396585a6ff1a418caad73d9bf358>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -87,26 +87,6 @@ export type TotalCostsClaimedFragment$data = {
         } | null | undefined;
       } | null | undefined> | null | undefined;
     } | null | undefined;
-    readonly TotalCostsClaimed_Partner: {
-      readonly edges: ReadonlyArray<{
-        readonly node: {
-          readonly Acc_Award_Rate__c: {
-            readonly value: number | null | undefined;
-          } | null | undefined;
-          readonly Id: string;
-        } | null | undefined;
-      } | null | undefined> | null | undefined;
-    } | null | undefined;
-    readonly TotalCostsClaimed_Project: {
-      readonly edges: ReadonlyArray<{
-        readonly node: {
-          readonly Acc_NonFEC__c: {
-            readonly value: boolean | null | undefined;
-          } | null | undefined;
-          readonly Id: string;
-        } | null | undefined;
-      } | null | undefined> | null | undefined;
-    } | null | undefined;
   };
   readonly " $fragmentType": "TotalCostsClaimedFragment";
 };
@@ -124,17 +104,16 @@ var v0 = {
 v1 = {
   "order": "ASC"
 },
-v2 = [
-  {
-    "kind": "Variable",
-    "name": "eq",
-    "variableName": "partnerId"
-  }
-],
-v3 = {
+v2 = {
   "fields": [
     {
-      "fields": (v2/*: any*/),
+      "fields": [
+        {
+          "kind": "Variable",
+          "name": "eq",
+          "variableName": "partnerId"
+        }
+      ],
       "kind": "ObjectValue",
       "name": "Acc_ProjectParticipant__c"
     }
@@ -142,19 +121,19 @@ v3 = {
   "kind": "ObjectValue",
   "name": "and.0"
 },
-v4 = {
+v3 = {
   "Acc_CostCategory__c": {
     "ne": null
   }
 },
-v5 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "Id",
   "storageKey": null
 },
-v6 = [
+v5 = [
   {
     "alias": null,
     "args": null,
@@ -163,7 +142,7 @@ v6 = [
     "storageKey": null
   }
 ],
-v7 = {
+v6 = {
   "alias": null,
   "args": null,
   "concreteType": "RecordType",
@@ -178,68 +157,57 @@ v7 = {
       "kind": "LinkedField",
       "name": "DeveloperName",
       "plural": false,
-      "selections": (v6/*: any*/),
+      "selections": (v5/*: any*/),
       "storageKey": null
     }
   ],
   "storageKey": null
 },
-v8 = {
+v7 = {
   "alias": null,
   "args": null,
   "concreteType": "IDValue",
   "kind": "LinkedField",
   "name": "Acc_CostCategory__c",
   "plural": false,
-  "selections": (v6/*: any*/),
+  "selections": (v5/*: any*/),
   "storageKey": null
 },
-v9 = {
+v8 = {
   "alias": null,
   "args": null,
   "concreteType": "DoubleValue",
   "kind": "LinkedField",
   "name": "Acc_ProjectPeriodNumber__c",
   "plural": false,
-  "selections": (v6/*: any*/),
+  "selections": (v5/*: any*/),
   "storageKey": null
 },
-v10 = {
+v9 = {
   "alias": null,
   "args": null,
   "concreteType": "StringValue",
   "kind": "LinkedField",
   "name": "Acc_CostCategoryName__c",
   "plural": false,
-  "selections": (v6/*: any*/),
+  "selections": (v5/*: any*/),
   "storageKey": null
 },
-v11 = {
+v10 = {
   "alias": null,
   "args": null,
   "concreteType": "PercentValue",
   "kind": "LinkedField",
   "name": "Acc_OverrideAwardRate__c",
   "plural": false,
-  "selections": (v6/*: any*/),
+  "selections": (v5/*: any*/),
   "storageKey": null
-},
-v12 = [
-  {
-    "kind": "Variable",
-    "name": "eq",
-    "variableName": "projectId"
-  }
-];
+};
 return {
   "argumentDefinitions": [
     {
       "kind": "RootArgument",
       "name": "partnerId"
-    },
-    {
-      "kind": "RootArgument",
-      "name": "projectId"
     }
   ],
   "kind": "Fragment",
@@ -270,7 +238,7 @@ return {
               "fields": [
                 {
                   "items": [
-                    (v3/*: any*/),
+                    (v2/*: any*/),
                     {
                       "kind": "Literal",
                       "name": "and.1",
@@ -294,7 +262,7 @@ return {
                     {
                       "kind": "Literal",
                       "name": "and.3",
-                      "value": (v4/*: any*/)
+                      "value": (v3/*: any*/)
                     }
                   ],
                   "kind": "ListValue",
@@ -326,9 +294,9 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v5/*: any*/),
+                    (v4/*: any*/),
+                    (v6/*: any*/),
                     (v7/*: any*/),
-                    (v8/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -336,10 +304,10 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_PeriodCostCategoryTotal__c",
                       "plural": false,
-                      "selections": (v6/*: any*/),
+                      "selections": (v5/*: any*/),
                       "storageKey": null
                     },
-                    (v9/*: any*/)
+                    (v8/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -357,7 +325,7 @@ return {
               "fields": [
                 {
                   "items": [
-                    (v3/*: any*/),
+                    (v2/*: any*/),
                     {
                       "kind": "Literal",
                       "name": "and.1",
@@ -372,7 +340,7 @@ return {
                     {
                       "kind": "Literal",
                       "name": "and.2",
-                      "value": (v4/*: any*/)
+                      "value": (v3/*: any*/)
                     }
                   ],
                   "kind": "ListValue",
@@ -404,9 +372,9 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v5/*: any*/),
+                    (v4/*: any*/),
+                    (v6/*: any*/),
                     (v7/*: any*/),
-                    (v8/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -415,7 +383,7 @@ return {
                       "name": "Acc_CostCategory__r",
                       "plural": false,
                       "selections": [
-                        (v10/*: any*/)
+                        (v9/*: any*/)
                       ],
                       "storageKey": null
                     },
@@ -426,11 +394,11 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_CostCategoryGOLCost__c",
                       "plural": false,
-                      "selections": (v6/*: any*/),
+                      "selections": (v5/*: any*/),
                       "storageKey": null
                     },
-                    (v11/*: any*/),
-                    (v9/*: any*/),
+                    (v10/*: any*/),
+                    (v8/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -438,7 +406,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_ProfileOverrideAwardRate__c",
                       "plural": false,
-                      "selections": (v6/*: any*/),
+                      "selections": (v5/*: any*/),
                       "storageKey": null
                     }
                   ],
@@ -476,8 +444,8 @@ return {
                   "name": "node",
                   "plural": false,
                   "selections": [
-                    (v5/*: any*/),
-                    (v10/*: any*/),
+                    (v4/*: any*/),
+                    (v9/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -485,7 +453,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_DisplayOrder__c",
                       "plural": false,
-                      "selections": (v6/*: any*/),
+                      "selections": (v5/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -495,7 +463,7 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_OrganisationType__c",
                       "plural": false,
-                      "selections": (v6/*: any*/),
+                      "selections": (v5/*: any*/),
                       "storageKey": null
                     },
                     {
@@ -505,10 +473,10 @@ return {
                       "kind": "LinkedField",
                       "name": "Acc_CompetitionType__c",
                       "plural": false,
-                      "selections": (v6/*: any*/),
+                      "selections": (v5/*: any*/),
                       "storageKey": null
                     },
-                    (v11/*: any*/)
+                    (v10/*: any*/)
                   ],
                   "storageKey": null
                 }
@@ -517,147 +485,6 @@ return {
             }
           ],
           "storageKey": "Acc_CostCategory__c(first:2000)"
-        },
-        {
-          "alias": "TotalCostsClaimed_Partner",
-          "args": [
-            (v0/*: any*/),
-            {
-              "fields": [
-                {
-                  "items": [
-                    {
-                      "fields": [
-                        {
-                          "fields": (v12/*: any*/),
-                          "kind": "ObjectValue",
-                          "name": "Acc_ProjectId__c"
-                        }
-                      ],
-                      "kind": "ObjectValue",
-                      "name": "and.0"
-                    },
-                    {
-                      "fields": [
-                        {
-                          "fields": (v2/*: any*/),
-                          "kind": "ObjectValue",
-                          "name": "Id"
-                        }
-                      ],
-                      "kind": "ObjectValue",
-                      "name": "and.1"
-                    }
-                  ],
-                  "kind": "ListValue",
-                  "name": "and"
-                }
-              ],
-              "kind": "ObjectValue",
-              "name": "where"
-            }
-          ],
-          "concreteType": "Acc_ProjectParticipant__cConnection",
-          "kind": "LinkedField",
-          "name": "Acc_ProjectParticipant__c",
-          "plural": false,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "Acc_ProjectParticipant__cEdge",
-              "kind": "LinkedField",
-              "name": "edges",
-              "plural": true,
-              "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "Acc_ProjectParticipant__c",
-                  "kind": "LinkedField",
-                  "name": "node",
-                  "plural": false,
-                  "selections": [
-                    (v5/*: any*/),
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "PercentValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_Award_Rate__c",
-                      "plural": false,
-                      "selections": (v6/*: any*/),
-                      "storageKey": null
-                    }
-                  ],
-                  "storageKey": null
-                }
-              ],
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
-        },
-        {
-          "alias": "TotalCostsClaimed_Project",
-          "args": [
-            {
-              "kind": "Literal",
-              "name": "first",
-              "value": 1
-            },
-            {
-              "fields": [
-                {
-                  "fields": (v12/*: any*/),
-                  "kind": "ObjectValue",
-                  "name": "Id"
-                }
-              ],
-              "kind": "ObjectValue",
-              "name": "where"
-            }
-          ],
-          "concreteType": "Acc_Project__cConnection",
-          "kind": "LinkedField",
-          "name": "Acc_Project__c",
-          "plural": false,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "Acc_Project__cEdge",
-              "kind": "LinkedField",
-              "name": "edges",
-              "plural": true,
-              "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "concreteType": "Acc_Project__c",
-                  "kind": "LinkedField",
-                  "name": "node",
-                  "plural": false,
-                  "selections": [
-                    (v5/*: any*/),
-                    {
-                      "alias": null,
-                      "args": null,
-                      "concreteType": "BooleanValue",
-                      "kind": "LinkedField",
-                      "name": "Acc_NonFEC__c",
-                      "plural": false,
-                      "selections": (v6/*: any*/),
-                      "storageKey": null
-                    }
-                  ],
-                  "storageKey": null
-                }
-              ],
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
         }
       ],
       "storageKey": null
@@ -668,6 +495,6 @@ return {
 };
 })();
 
-(node as any).hash = "f2d309f9db70df3330368c523f3939f9";
+(node as any).hash = "90658a191e28302b1e058fb19ecad2f5";
 
 export default node;

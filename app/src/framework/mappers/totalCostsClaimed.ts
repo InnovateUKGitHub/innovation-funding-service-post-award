@@ -17,9 +17,6 @@ import {
   TotalCostsClaimedFragment$key,
 } from "@gql/fragment/__generated__/TotalCostsClaimedFragment.graphql";
 import { totalCostsClaimedFragment } from "@gql/fragment/TotalCostsClaimedFragment";
-import { getFirstEdge } from "@gql/selectors/edges";
-import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
-import { mapToPartnerDto } from "@gql/dtoMapper/mapPartnerDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 import { mapToCostSummaryForPeriodDtoArray } from "@gql/dtoMapper/mapCostSummaryForPeriod";
 import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
@@ -83,13 +80,14 @@ const calculateCostsClaimed = (awardRate: number, costsClaimed: number): number 
   return decimalAwardRate * costsClaimed;
 };
 
-export const useGetTotalCostsClaimed = (fragmentRef: TotalCostsClaimedFragment$key, periodId: PeriodId) => {
+export const useGetTotalCostsClaimed = (
+  fragmentRef: TotalCostsClaimedFragment$key,
+  project: Pick<ProjectDto, "isNonFec">,
+  partner: Pick<PartnerDto, "awardRate">,
+  periodId: PeriodId,
+) => {
   const fragment: TotalCostsClaimedFragment$data = useFragment(totalCostsClaimedFragment, fragmentRef);
 
-  const { node: projectNode } = getFirstEdge(fragment?.query?.TotalCostsClaimed_Project?.edges);
-  const { node: partnerNode } = getFirstEdge(fragment?.query?.TotalCostsClaimed_Partner?.edges);
-  const project = mapToProjectDto(projectNode, ["isNonFec"]);
-  const partner = mapToPartnerDto(partnerNode, ["awardRate"], {});
   const claimDetailsAllPeriods = mapToClaimDetailsDtoArray(
     fragment?.query?.TotalCostsClaimed_ClaimDetails?.edges ?? [],
     ["periodId", "costCategoryId", "value"],

@@ -98,29 +98,6 @@ export const totalCostsClaimedFragment = graphql`
           }
         }
       }
-      TotalCostsClaimed_Partner: Acc_ProjectParticipant__c(
-        where: { and: [{ Acc_ProjectId__c: { eq: $projectId } }, { Id: { eq: $partnerId } }] }
-        first: 2000
-      ) {
-        edges {
-          node {
-            Id
-            Acc_Award_Rate__c {
-              value
-            }
-          }
-        }
-      }
-      TotalCostsClaimed_Project: Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
-        edges {
-          node {
-            Id
-            Acc_NonFEC__c {
-              value
-            }
-          }
-        }
-      }
     }
   }
 `;

@@ -14,9 +14,12 @@ import { mapToClaimOverrides } from "@gql/dtoMapper/mapClaimOverrides";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { getFirstEdge } from "@gql/selectors/edges";
 
-export const AwardRateOverridesMessage = (
-  props: Pick<AwardRateOverrideMessageProps, "currentPeriod" | "currentCostCategoryId">,
-) => {
+export type AwardRateOverridesMessageFragmentProps = Pick<
+  AwardRateOverrideMessageProps,
+  "currentPeriod" | "currentCostCategoryId"
+>;
+
+export const AwardRateOverridesMessage = (props: AwardRateOverridesMessageFragmentProps) => {
   const fragmentRef = useFragmentContext();
 
   if (!isValidFragmentKey<AwardRateOverridesMessageFragment$key>(fragmentRef, "AwardRateOverridesMessageFragment")) {
