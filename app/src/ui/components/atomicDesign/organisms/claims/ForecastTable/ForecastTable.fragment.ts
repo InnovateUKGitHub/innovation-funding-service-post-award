@@ -92,7 +92,7 @@ export const forecastTableFragment = graphql`
           and: [
             { Acc_ProjectParticipant__c: { eq: $partnerId } }
             { RecordType: { DeveloperName: { eq: "Total_Project_Period" } } }
-            { Acc_ClaimStatus__c: { ne: "New " } }
+            { Acc_ClaimStatus__c: { ne: "New" } }
             { Acc_ClaimStatus__c: { ne: "Not used" } }
           ]
         }

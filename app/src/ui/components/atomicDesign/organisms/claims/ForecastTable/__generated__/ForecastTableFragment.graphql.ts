@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3d5c805242d2d2196f5adfa369ce51b0>>
+ * @generated SignedSource<<df8b8ae6f61e2557579a89c4bc5109fc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -352,6 +352,15 @@ v14 = {
   }
 },
 v15 = {
+  "kind": "Literal",
+  "name": "and.2",
+  "value": {
+    "Acc_ClaimStatus__c": {
+      "ne": "New"
+    }
+  }
+},
+v16 = {
   "alias": null,
   "args": null,
   "concreteType": "PicklistValue",
@@ -361,7 +370,7 @@ v15 = {
   "selections": (v8/*: any*/),
   "storageKey": null
 },
-v16 = [
+v17 = [
   {
     "kind": "Variable",
     "name": "eq",
@@ -566,15 +575,7 @@ return {
                       "name": "and.1",
                       "value": (v14/*: any*/)
                     },
-                    {
-                      "kind": "Literal",
-                      "name": "and.2",
-                      "value": {
-                        "Acc_ClaimStatus__c": {
-                          "ne": "New "
-                        }
-                      }
-                    },
+                    (v15/*: any*/),
                     {
                       "kind": "Literal",
                       "name": "and.3",
@@ -616,7 +617,7 @@ return {
                   "selections": [
                     (v13/*: any*/),
                     (v7/*: any*/),
-                    (v15/*: any*/),
+                    (v16/*: any*/),
                     (v10/*: any*/)
                   ],
                   "storageKey": null
@@ -660,15 +661,7 @@ return {
                         }
                       }
                     },
-                    {
-                      "kind": "Literal",
-                      "name": "and.2",
-                      "value": {
-                        "Acc_ClaimStatus__c": {
-                          "ne": "New"
-                        }
-                      }
-                    },
+                    (v15/*: any*/),
                     {
                       "kind": "Literal",
                       "name": "and.3",
@@ -706,7 +699,7 @@ return {
                   "selections": [
                     (v13/*: any*/),
                     (v9/*: any*/),
-                    (v15/*: any*/),
+                    (v16/*: any*/),
                     {
                       "alias": null,
                       "args": null,
@@ -923,7 +916,7 @@ return {
                     {
                       "fields": [
                         {
-                          "fields": (v16/*: any*/),
+                          "fields": (v17/*: any*/),
                           "kind": "ObjectValue",
                           "name": "Acc_ProjectId__c"
                         }
@@ -1054,7 +1047,7 @@ return {
             {
               "fields": [
                 {
-                  "fields": (v16/*: any*/),
+                  "fields": (v17/*: any*/),
                   "kind": "ObjectValue",
                   "name": "Id"
                 }
@@ -1143,6 +1136,6 @@ return {
 };
 })();
 
-(node as any).hash = "b5f0ccc3ec68c4038c7a8e851db2553d";
+(node as any).hash = "f3e27e11d51f01cb80a7702507b8721d";
 
 export default node;
