@@ -396,7 +396,7 @@ describe("getMonth", () => {
   });
 
   it("should return the month number as string", () => {
-    expect(getMonth(new Date("2012/01/1"))).toEqual("1");
+    expect(getMonth(new Date("2012/01/1"))).toEqual("01");
     expect(getMonth(new Date("2012/12/1"))).toEqual("12");
   });
 });
@@ -423,9 +423,5 @@ describe("combineDate", () => {
   it("should return null if month and year is missing", () => {
     expect(combineDate(null, null, false)).toEqual(null);
     expect(combineDate(null, null, false)).toEqual(null);
-  });
-
-  it("should throw if one value is missing", () => {
-    expect(() => combineDate(null, "2012", false)).toThrow("the date is invalid");
   });
 });

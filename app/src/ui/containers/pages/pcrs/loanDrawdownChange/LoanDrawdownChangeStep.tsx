@@ -1,96 +1,81 @@
-import { PcrStepProps } from "@ui/containers/pages/pcrs/pcrWorkflow";
-import { Pending } from "@shared/pending";
-import { getPending } from "@ui/helpers/get-pending";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { LoanEditTable } from "./LoanEditTable";
-import { FinancialLoanVirementDto } from "@framework/dtos/financialVirementDto";
-import { PCRItemForLoanDrawdownChangeDto } from "@framework/dtos/pcrDtos";
-import { LoanFinancialVirement } from "@framework/entities/financialVirement";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
-import { LoadingMessage } from "@ui/components/bjss/loading";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { ValidationSummary } from "@ui/components/atomicDesign/molecules/validation/ValidationSummary/validationSummary";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
-import { FinancialLoanVirementDtoValidator } from "@ui/validation/validators/financialVirementDtoValidator";
-import { PCRLoanDrawdownChangeItemDtoValidator } from "@ui/validation/validators/pcrDtoValidator";
+import { useContent } from "@ui/hooks/content.hook";
+import { usePcrWorkflowContext } from "../pcrItemWorkflowMigrated";
+import { PcrPage } from "../pcrPage";
+import { useLoanDrawdownChangeQuery, useOnUpdateLoanChange } from "./loanDrawdownChange.logic";
+import { useForm } from "react-hook-form";
+import { loanDrawdownChangeSchema, errorMap, LoanDrawdownChangeSchema } from "./loanDrawdownChange.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { useNextLink } from "../utils/useNextLink";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { LoanDrawdownChangeEditTable, LoanDrawdownEditErrors } from "./LoanDrawdownChangeEditTable";
+import { getDay, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
 
-type LoanDrawdownPcrStepProps = PcrStepProps<PCRItemForLoanDrawdownChangeDto, PCRLoanDrawdownChangeItemDtoValidator>;
+export const LoanDrawdownChangeStep = () => {
+  const { getContent } = useContent();
+  const { projectId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
+    usePcrWorkflowContext();
 
-interface LoanDrawnDownUi extends Omit<LoanDrawdownPcrStepProps, "onChange"> {
-  editor: Pending<IEditorStore<FinancialLoanVirementDto, FinancialLoanVirementDtoValidator>>;
+  const { pcrItem, loans } = useLoanDrawdownChangeQuery(itemId, fetchKey);
 
-  onChange: (saving: boolean, dto: FinancialLoanVirementDto) => void;
-}
+  const { handleSubmit, register, formState, trigger, watch } = useForm<LoanDrawdownChangeSchema>({
+    defaultValues: {
+      // take the marked as complete state from the current checkbox state on the summary
+      markedAsComplete: markedAsCompleteHasBeenChecked,
+      loans: loans.map(x => ({
+        period: x.period,
+        currentDate: x.currentDate,
+        currentValue: x.currentValue,
+        newDate: x.newDate,
+        newDate_day: getDay(x.newDate),
+        newDate_month: getMonth(x.newDate),
+        newDate_year: getYear(x.newDate),
+        newValue: String(x.newValue),
+      })),
+    },
+    resolver: zodResolver(loanDrawdownChangeSchema, {
+      errorMap,
+    }),
+  });
 
-const LoanUpdateForm = createTypedForm<LoanFinancialVirement[]>();
+  const { isFetching: isUpdatingLoans, onUpdate: onUpdateLoans } = useOnUpdateLoanChange(projectId, itemId, loans);
 
-/**
- * React Component for Loan Drawdown CHange
- */
-function LoanDrawdownChange({ onChange, ...props }: LoanDrawnDownUi) {
-  const { isLoading, payload, isRejected, error } = getPending(props.editor);
+  const validationErrors = useRhfErrors(formState.errors) as LoanDrawdownEditErrors;
+  useFormValidate(trigger);
 
-  if (isRejected || error) {
-    return <SimpleString>There was an error getting your drawdown data.</SimpleString>;
-  }
-
-  if (!payload || isLoading) return <LoadingMessage />;
-
-  const handleTableChanges = (dto: FinancialLoanVirementDto): void => {
-    // Note: Mutating this value frustrating, however the whole current UI revolves around mutating this data key
-    payload.data = dto;
-
-    onChange(false, payload.data);
-  };
-
-  const handleSubmit = (): void => {
-    onChange(true, payload.data);
-
-    props.onSave(false);
-  };
-
+  const nextLink = useNextLink();
   return (
-    <Section qa="uploadFileSection">
-      <ValidationSummary validation={payload.validator} compressed={false} />
+    <PcrPage validationErrors={validationErrors}>
+      <Section data-qa="uploadFileSection">
+        <Form
+          data-qa="loanEditForm"
+          onSubmit={handleSubmit(async data => {
+            await onUpdateLoans({ data });
 
-      <LoanUpdateForm.Form
-        qa="loanEditForm"
-        data={payload.data.loans}
-        isSaving={props.status === EditorStatus.Saving}
-        onSubmit={handleSubmit}
-      >
-        <LoanEditTable {...payload} mode="edit" onEdit={handleTableChanges} />
+            onSave({
+              data: pcrItem,
+              context: { link: nextLink },
+            });
+          })}
+        >
+          <LoanDrawdownChangeEditTable
+            loans={loans}
+            register={register}
+            watch={watch}
+            disabled={isFetching || isUpdatingLoans}
+            errors={validationErrors}
+          />
 
-        <LoanUpdateForm.Submit name="loanEdit">Continue to summary</LoanUpdateForm.Submit>
-      </LoanUpdateForm.Form>
-    </Section>
-  );
-}
-
-export const LoanDrawdownChangeStepContainer = (props: LoanDrawdownPcrStepProps) => {
-  const stores = useStores();
-
-  return (
-    <LoanDrawdownChange
-      {...props}
-      editor={stores.financialLoanVirements.getFinancialVirementEditor(
-        props.project.id,
-        props.pcr.id,
-        props.pcrItem.id,
-        false,
-      )}
-      onChange={(saving, dto) =>
-        stores.financialLoanVirements.updateFinancialVirementEditor(
-          saving,
-          props.project.id,
-          props.pcr.id,
-          props.pcrItem.id,
-          dto,
-          false,
-        )
-      }
-    />
+          <Fieldset>
+            <Button disabled={isFetching || isUpdatingLoans} type="submit">
+              {getContent(x => x.pcrItem.continueToSummaryButton)}
+            </Button>
+          </Fieldset>
+        </Form>
+      </Section>
+    </PcrPage>
   );
 };

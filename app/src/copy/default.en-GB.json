@@ -210,6 +210,7 @@
       "view": "View"
     },
     "dateInput": {
+      "day": "Day",
       "month": "Month",
       "year": "Year"
     }
@@ -418,7 +419,13 @@
       "loanDeclaration": "By submitting this drawdown request I confirm that the amount requested is in line with forecast eligible project costs and that this has been approved by an authorised signatory of the business. I understand and accept that if I knowingly submit a drawdown request without appropriate approvals or provide false or misleading information, this may result in my drawdown being rejected, termination of the loan, recovery of loan proceeds and outstanding interest, civil action and where there is evidence of fraud, criminal prosecution.",
       "loanSubmitButton": "Accept and send",
       "loanDocumentsUploaded_one": "{{firstFileName}} file has been uploaded",
-      "loanDocumentsUploaded_other": "{{count}} files have been uploaded"
+      "loanDocumentsUploaded_other": "{{count}} files have been uploaded",
+      "drawdownPeriodLabel": "Drawdown",
+      "currentDateLabel": "Current date",
+      "currentAmountLabel": "Current amount",
+      "newDateLabel": "New date",
+      "newAmountLabel": "New amount",
+      "totalLabel": "Total"
     },
     "financeSummary": {
       "title": "Finance summary",
@@ -1369,6 +1376,7 @@
   },
   "pcrItem": {
     "submitButton": "Save and continue",
+    "continueToSummaryButton": "Continue to summary",
     "returnToSummaryButton": "Save and return to summary",
     "returnToRequestButton": "Save and return to request",
     "uploadDocumentsButton": "Upload documents"
@@ -2110,6 +2118,44 @@
             "too_small": "Enter a valid removal period",
             "too_big": "Period must be {{count}} or fewer",
             "invalid_type": "Period must be a whole number, like 3."
+          }
+        }
+      },
+      "loanDrawdownChange": {
+        "loans": {
+          "arrayType": {
+            "newDate": {
+              "errors": {
+                "date_out_of_order": "Period '{{periodA}}' must be dated after period '{{periodB}}' drawdown.",
+                "invalid_date": "Enter a valid date."
+              }
+            },
+            "newDate_day": {
+              "errors": {
+                "invalid_string": { "regex": "Day must be a number." }
+              }
+            },
+            "newDate_month": {
+              "errors": {
+                "invalid_string": { "regex": "Month must be a number." }
+              }
+            },
+            "newDate_year": {
+              "errors": {
+                "invalid_string": { "regex": "Year must be a number." }
+              }
+            },
+            "newValue": {
+              "errors": {
+                "invalid_type": "Amount must be a valid number.",
+                "invalid_string": { "regex": "Amount must be a number." }
+              }
+            }
+          }
+        },
+        "newValue": {
+          "errors": {
+            "too_big": "The new drawdown total cannot exceed the current drawdown total."
           }
         }
       },

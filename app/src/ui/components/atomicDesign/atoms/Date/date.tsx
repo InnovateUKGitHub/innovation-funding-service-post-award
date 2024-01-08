@@ -147,6 +147,24 @@ export const ShortDateRangeFromDuration = (props: { startDate: DateConvertible; 
   return <ShortDateRange start={props.startDate} end={endDate} />;
 };
 
+const makeDate = (inputDate: DateTime) => {
+  // Set our time to mid-day
+  const date = inputDate.set({
+    hour: 12,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  });
+
+  return date.toJSDate();
+
+  // if (date.isValid) {
+  //   return date.toJSDate();
+  // } else {
+  //   throw new Error("the date is invalid");
+  // }
+};
+
 /**
  * Combines nullable month and year input strings into a date object
  */
@@ -161,19 +179,35 @@ export const combineDate = (month: Nullable<string>, year: Nullable<string>, fro
     date = date.endOf("month");
   }
 
-  // Set our time to mid-day
-  date = date.set({
-    hour: 12,
-    minute: 0,
-    second: 0,
-    millisecond: 0,
-  });
+  return makeDate(date);
+};
 
-  if (date.isValid) {
-    return date.toJSDate();
-  } else {
-    throw new Error("the date is invalid");
-  }
+/**
+ * Combines nullable day, month and year input strings into a date object
+ *
+ * if validateOnly flag is true, it returns a boolean for validity of date
+ */
+export const combineDayMonthYear = (day: Nullable<string>, month: Nullable<string>, year: Nullable<string>) => {
+  // set date to null if the fields are empty
+  if (!day && !month && !year) return null;
+  const date = DateTime.local(Number(year), Number(month), Number(day));
+
+  return makeDate(date);
+};
+
+export const validateDayMonthYear = (day: Nullable<string>, month: Nullable<string>, year: Nullable<string>) => {
+  // set date to null if the fields are empty
+  if (!day && !month && !year) return false;
+  return DateTime.local(Number(year), Number(month), Number(day)).isValid;
+};
+
+/**
+ * returns the day from a date object as string
+ */
+export const getDay = (date: Date | null) => {
+  if (!date) return "";
+
+  return String(DateTime.fromJSDate(date).day).padStart(2, "0");
 };
 
 /**
@@ -182,7 +216,7 @@ export const combineDate = (month: Nullable<string>, year: Nullable<string>, fro
 export const getMonth = (date: Date | null) => {
   if (!date) return "";
 
-  return String(DateTime.fromJSDate(date).month);
+  return String(DateTime.fromJSDate(date).month).padStart(2, "0");
 };
 
 /**

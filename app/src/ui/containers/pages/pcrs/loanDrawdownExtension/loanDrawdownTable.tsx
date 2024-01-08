@@ -115,16 +115,18 @@ export const LoanDrawdownTable = ({
   return (
     <Table aria-label="Change loan duration table">
       <THead>
-        <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.phase)}</TH>
-        <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.currentLength)}</TH>
-        <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.currentEndDate)}</TH>
-        <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.newLength)}</TH>
-        <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.newEndDate)}</TH>
-        {readonlyTable && (
-          <TH>
-            <TableEmptyCell />
-          </TH>
-        )}
+        <TR>
+          <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.phase)}</TH>
+          <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.currentLength)}</TH>
+          <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.currentEndDate)}</TH>
+          <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.newLength)}</TH>
+          <TH>{getContent(x => x.pages.pcrModifyOptions.loanDrawdownExtensionTableHeadings.newEndDate)}</TH>
+          {readonlyTable && (
+            <TH>
+              <TableEmptyCell />
+            </TH>
+          )}
+        </TR>
       </THead>
       <TBody>
         {data.map(x => {
