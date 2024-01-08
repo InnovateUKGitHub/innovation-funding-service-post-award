@@ -171,12 +171,8 @@ export const newCostCatLineItem = () => {
     });
   cy.clickOn("Add a cost");
   cy.wait(200);
-  cy.get("tr")
-    .eq(1)
-    .within(() => {
-      cy.get("td:nth-child(1)").clear().type("Test line item");
-      cy.get("td:nth-child(2)").clear().type("1000").wait(800);
-    });
+  cy.getByAriaLabel("Description of claim line item 0").clear().type("Test line item");
+  cy.getByAriaLabel("Cost of claim line item 0").clear().type("1000").wait(800);
 };
 
 export const allowFileUpload = () => {

@@ -184,6 +184,15 @@ declare global {
        */
       clickOn(name: string, options?: Partial<Cypress.ClickOptions>): void;
       clickOn(element: string, name: string, options?: Partial<Cypress.ClickOptions>): void;
+
+      /**
+       * Gets the hint element from a label. If this component
+       * does not have an attached label then this method won't work.
+       *
+       * It works because by convention the id of a hint element should
+       * match the id of the input element but with `hint-for-` prefixing it
+       */
+      getHintFromLabel(label: string): Chainable<Element>;
     }
   }
 }
