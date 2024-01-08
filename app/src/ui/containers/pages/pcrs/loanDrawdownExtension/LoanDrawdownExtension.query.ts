@@ -12,6 +12,9 @@ export const loanDrawdownExtensionQuery = graphql`
                 Acc_AdditionalNumberofMonths__c {
                   value
                 }
+                Acc_MarkedasComplete__c {
+                  value
+                }
                 Acc_Status__c {
                   value
                 }
