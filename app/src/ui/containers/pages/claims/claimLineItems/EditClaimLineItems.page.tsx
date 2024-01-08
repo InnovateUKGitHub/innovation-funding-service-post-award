@@ -1,4 +1,4 @@
-import { useOnClaimLineItemsSubmit } from "@framework/api-helpers/onClaimLineItemsSubmit";
+import { useOnClaimLineItemsSubmit } from "@ui/containers/pages/claims/claimLineItems/onClaimLineItemsSubmit";
 import { useServerInput, useZodErrors } from "@framework/api-helpers/useZodErrors";
 import { ProjectRole } from "@framework/constants/project";
 import { createRegisterButton } from "@framework/util/registerButton";
@@ -56,13 +56,13 @@ const EditClaimLineItemsPage = ({
     costCategoryId,
   );
 
-  const defaults = useServerInput<z.output<EditClaimLineItemsSchemaType>>();
-  const initialLineItems = useMapToInitialLineItems(defaults?.lineItems ?? claimDetails.lineItems);
+  const previousInputs = useServerInput<z.output<EditClaimLineItemsSchemaType>>();
+  const initialLineItems = useMapToInitialLineItems(previousInputs?.lineItems ?? claimDetails.lineItems);
   const formMethods = useForm<z.output<EditClaimLineItemsSchemaType>>({
     resolver: zodResolver(editClaimLineItemsSchema, { errorMap: editClaimLineItemErrorMap }),
     defaultValues: {
       lineItems: initialLineItems,
-      comments: defaults?.comments,
+      comments: previousInputs?.comments,
     },
   });
   const { register, handleSubmit, setValue, setError, formState, watch, getFieldState } = formMethods;

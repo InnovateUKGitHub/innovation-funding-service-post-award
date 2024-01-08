@@ -2,7 +2,6 @@ import { ClaimLineItemDto } from "@framework/dtos/claimLineItemDto";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { ShortDate } from "@ui/components/atomicDesign/atoms/Date";
-import { SubmitButton } from "@ui/components/atomicDesign/atoms/form/Button/Button";
 import { TextInput } from "@ui/components/atomicDesign/atoms/form/TextInput/TextInput";
 import { useMounted } from "@ui/components/atomicDesign/atoms/providers/Mounted/Mounted";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
@@ -141,7 +140,7 @@ const EditClaimLineItemsTable = ({
         {isClient && rows.length < options.maxClaimLineItems && (
           <TR>
             <TD colSpan={isClient && ownsAnyRows ? 4 : 3}>
-              <SubmitButton
+              <Button
                 onClick={e => {
                   append(emptyData);
                   e.preventDefault();
@@ -150,7 +149,7 @@ const EditClaimLineItemsTable = ({
                 styling="Link"
               >
                 {getContent(x => x.pages.editClaimLineItems.addCost)}
-              </SubmitButton>
+              </Button>
             </TD>
           </TR>
         )}

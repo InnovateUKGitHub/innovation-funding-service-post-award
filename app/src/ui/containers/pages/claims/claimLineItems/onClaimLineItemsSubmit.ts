@@ -6,7 +6,7 @@ import { useRoutes } from "@ui/redux/routesProvider";
 import { FormTypes } from "@ui/zod/FormTypes";
 import { useNavigate } from "react-router-dom";
 import type { z } from "zod";
-import { useOnUpdate } from "./onUpdate";
+import { useOnUpdate } from "@framework/api-helpers/onUpdate";
 
 export const useOnClaimLineItemsSubmit = <Inputs extends z.output<EditClaimLineItemsSchemaType>>() => {
   const navigate = useNavigate();
