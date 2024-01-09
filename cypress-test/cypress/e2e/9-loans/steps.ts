@@ -322,17 +322,21 @@ export const markAndContinue = () => {
 };
 
 export const currentLoanTable = () => {
-  [
-    "Phase",
-    "Current length (quarters)",
-    "Current end date",
-    "New length (quarters)",
-    "New end date",
-    "Availability Period",
-    "Extension Period",
-    "Repayment Period",
-  ].forEach(loanChange => {
-    cy.getByQA("loanChangeDuration").contains(loanChange);
+  ["Phase", "Current length (quarters)", "Current end date", "New length (quarters)", "New end date"].forEach(
+    (loanChangeHeader, index) => {
+      cy.get("thead")
+        .eq(0)
+        .within(() => {
+          cy.get(`th:nth-child(${index + 1})`).contains(loanChangeHeader);
+        });
+    },
+  );
+  ["Availability Period", "Extension Period", "Repayment Period"].forEach((phase, index) => {
+    cy.get("tr")
+      .eq(index)
+      .within(() => {
+        cy.get("td:nth-child(1)").contains(phase);
+      });
   });
 };
 
