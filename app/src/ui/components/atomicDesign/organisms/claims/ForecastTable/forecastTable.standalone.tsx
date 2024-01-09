@@ -10,7 +10,7 @@ import { forecastTableQuery } from "./ForecastTable.query";
 import { Props as ForecastTableProps } from "./forecastTable";
 
 interface ForecastTableStandaloneProps {
-  queryOptions: QueryOptions;
+  queryOptions?: QueryOptions;
   partnerId: PartnerId;
   projectId: ProjectId;
 }

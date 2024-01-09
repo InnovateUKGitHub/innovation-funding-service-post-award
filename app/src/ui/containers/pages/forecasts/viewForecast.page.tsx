@@ -2,7 +2,7 @@ import { PartnerStatus } from "@framework/constants/partner";
 import { ProjectRole } from "@framework/constants/project";
 import { getAuthRoles } from "@framework/types/authorisation";
 import { ClaimLastModified } from "@ui/components/atomicDesign/organisms/claims/ClaimLastModified/claimLastModified";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.standalone";
 import { Content } from "@ui/components/atomicDesign/molecules/Content/content";
 import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warning.withFragment";
 import { Page } from "@ui/components/bjss/Page/page";
@@ -95,7 +95,12 @@ const ViewForecastPage = (props: ViewForecastParams & BaseProps) => {
           </SimpleString>
         )}
 
-        <ForecastTable selectCurrentClaimByApprovedStatus hideValidation={isProjectPmOrMo} />
+        <ForecastTable
+          selectCurrentClaimByApprovedStatus
+          hideValidation={isProjectPmOrMo}
+          partnerId={props.partnerId}
+          projectId={props.projectId}
+        />
       </Section>
 
       <Section qa="viewForecastUpdate">
