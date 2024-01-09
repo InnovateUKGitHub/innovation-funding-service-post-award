@@ -88,23 +88,42 @@ export const switchUserTestLiveArea = () => {
   });
 };
 
-export const hasBroadcast = () => {
+export const hasBroadcasts = () => {
   cy.get("h2").contains("Broadcasts");
-  cy.get("span").contains("Cypress broadcast message");
+  ["Cypress broadcast message", "KTP KTP KTP KTP KTP KTP KTP KTP KTP KTP", "CR&D CR&D CR&D CR&D CR&D CR&D"].forEach(
+    broadcast => {
+      cy.paragraph(broadcast);
+    },
+  );
+  cy.get("span").should("not.contain", "I shouldn't appear");
 };
 
-export const accessBroadCastMessageAndAssert = () => {
-  cy.get("a").contains("Read more").click();
-  cy.getByQA("page-title-caption").contains("Broadcast");
-  cy.heading("Cypress broadcast message");
+export const ktpBroadcastInvisible = () => {
+  cy.get("span").should("not.contain", "KTP");
+  cy.get("span").should("not.contain", "I shouldn't appear");
+};
+
+export const hasLimitedBroadcasts = () => {
+  cy.get("h2").contains("Broadcasts");
+  ["Cypress broadcast message", "CR&D CR&D CR&D CR&D CR&D CR&D"].forEach(broadcast => {
+    cy.paragraph(broadcast);
+  });
+};
+
+export const accessBroadCastMessageAndAssert = (message: string) => {
+  cy.get("p").contains(message).siblings().contains("Read more").click();
+
+  cy.heading(message);
   ["Details", "Message"].forEach(subheader => {
     cy.get("h2").contains(subheader);
   });
-  ["Start date:", "End date:", "30 March 2023", "31 March 2027", "This is a test message for Cypress."].forEach(
-    item => {
-      cy.paragraph(item);
-    },
-  );
+  ["Start date:", "End date:", "1 January 1900", "1 January 2100"].forEach(item => {
+    cy.paragraph(item);
+  });
+};
+
+export const broadcastMessageText = (message: string) => {
+  cy.paragraph(message);
 };
 
 export const backToDashboard = () => {
