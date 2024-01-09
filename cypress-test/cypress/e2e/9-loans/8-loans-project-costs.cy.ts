@@ -12,6 +12,9 @@ import {
   projCostsUploadedSection,
 } from "./steps";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
+import { deleteDocFromArea } from "e2e/3-documents/steps";
+import { fileTidyUp } from "common/filetidyup";
+import { learnFiles } from "common/fileComponentTests";
 import {
   validateFileUpload,
   uploadFileTooLarge,
@@ -20,10 +23,7 @@ import {
   uploadFileNameTooShort,
   validateExcessiveFileName,
   doNotUploadSpecialChar,
-  deleteDocFromArea,
-} from "e2e/3-documents/steps";
-import { fileTidyUp } from "common/filetidyup";
-import { learnFiles } from "common/fileComponentTests";
+} from "common/fileComponentTests";
 
 const fc = "s.shuang@irc.trde.org.uk.test";
 describe("Loans > Project Costs & Documents", () => {

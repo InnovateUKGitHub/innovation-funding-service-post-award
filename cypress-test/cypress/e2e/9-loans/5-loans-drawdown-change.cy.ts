@@ -55,7 +55,7 @@ describe("Loans project > Loan Drawdown Change", () => {
 
   it("Should click 'Continue to summary'", () => {
     cy.submitButton("Continue to summary").click();
-    //cy.heading("Summary");
+    cy.heading("Summary");
   });
 
   it("Should have a 'Mark as complete' subheading with 'I agree with this change.' check box", () => {

@@ -1,4 +1,5 @@
 import { visitApp } from "../../../common/visit";
+import { createTestFile, deleteTestFile } from "common/createTestFile";
 import {
   shouldShowProjectTitle,
   navigateToPartnerCosts,
@@ -7,15 +8,30 @@ import {
   fundingLevelPercentage,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
+import {
+  learnFiles,
+  allowLargerBatchFileUpload,
+  validateFileUpload,
+  uploadFileTooLarge,
+} from "common/fileComponentTests";
+import { seconds } from "common/seconds";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
     pcrTidyUp("Add a partner");
   });
 
   after(() => {
     cy.deletePcr("328407");
+    deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
   });
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
@@ -38,6 +54,18 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.get("h2").contains("Upload partner agreement");
     cy.paragraph("You must upload copies of signed letters");
   });
+
+  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
+
+  it("Should validate when uploading without choosing a file.", validateFileUpload);
+
+  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
+
+  it(
+    "Should attempt to upload three files totalling 33MB",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowLargerBatchFileUpload,
+  );
 
   it("Should upload a file", addPartnerDocUpload);
 

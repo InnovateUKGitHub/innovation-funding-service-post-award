@@ -27,12 +27,33 @@ import {
   reviewLabourDocUpload,
   reviewLabourRightLeft,
 } from "./steps";
-import { learnFiles } from "common/fileComponentTests";
+import {
+  learnFiles,
+  allowLargerBatchFileUpload,
+  validateFileUpload,
+  uploadFileTooLarge,
+  validateExcessiveFileName,
+  doNotUploadSpecialChar,
+  uploadFileNameTooShort,
+} from "common/fileComponentTests";
+import { createTestFile, deleteTestFile } from "common/createTestFile";
+import { seconds } from "common/seconds";
 
 describe("Claims > Review as MO", () => {
   before(() => {
     visitApp({ path: "projects/a0E2600000kSvOGEA0/claims/dashboard" });
+    createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
     moClaimTidyUp("Queried by Monitoring Officer");
+  });
+
+  after(() => {
+    deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
   });
 
   it("Should ensure the Claims dashboard has loaded", () => {
@@ -88,6 +109,22 @@ describe("Claims > Review as MO", () => {
   it("Should have a learn about files section", learnFiles);
 
   it("Should have a documents area with existing evidence", claimReviewExistingEvidence);
+
+  it("Should validate when uploading without choosing a file.", validateFileUpload);
+
+  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
+
+  it(
+    "Should attempt to upload three files totalling 33MB",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowLargerBatchFileUpload,
+  );
+
+  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
+
+  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+
+  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
 
   it("Should allow a file to be uploaded", claimReviewUploadDocument);
 

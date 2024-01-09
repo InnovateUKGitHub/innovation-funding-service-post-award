@@ -1,28 +1,32 @@
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { visitApp } from "../../common/visit";
 import {
-  accessControl,
   deleteDocFromArea,
-  deleteSingleChar,
   displayABFile,
   displayEUIFile,
   displayEUIMedFile,
-  doNotUploadSpecialChar,
   downloadMoFile,
-  selectFileDescription,
   shouldShowProjectTitle,
-  validateExcessiveFileName,
-  uploadSingleChar,
   uploadToAB,
   uploadToEUI,
   uploadToEUIMed,
   uploadToMO,
+} from "./steps";
+import { fileTidyUp } from "common/filetidyup";
+import {
+  learnFiles,
+  allowLargerBatchFileUpload,
+  validationMessageCumulative,
   validateFileUpload,
   uploadFileTooLarge,
   uploadFileNameTooShort,
-} from "./steps";
-import { fileTidyUp } from "common/filetidyup";
-import { learnFiles, allowLargerBatchFileUpload, validationMessageCumulative } from "common/fileComponentTests";
+  accessControl,
+  deleteSingleChar,
+  doNotUploadSpecialChar,
+  selectFileDescription,
+  validateExcessiveFileName,
+  uploadSingleChar,
+} from "common/fileComponentTests";
 import { seconds } from "common/seconds";
 
 describe("Project Documents page", () => {
@@ -71,7 +75,7 @@ describe("Project Documents page", () => {
   it(
     "Should attempt to upload three files totalling 33MB",
     { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
-    allowLargerBatchFileUpload("projects"),
+    allowLargerBatchFileUpload,
   );
 
   it("Should display the correct validation messaging", validationMessageCumulative);

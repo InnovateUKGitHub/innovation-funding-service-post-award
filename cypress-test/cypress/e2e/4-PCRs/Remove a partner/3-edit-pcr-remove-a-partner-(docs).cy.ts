@@ -8,7 +8,13 @@ import {
   pcrAllowBatchFileUpload,
   removeFileDelete,
 } from "../steps";
+import { createTestFile, deleteTestFile } from "common/createTestFile";
+import { fileTidyUp } from "common/filetidyup";
+import { pcrTidyUp } from "common/pcrtidyup";
+import { seconds } from "common/seconds";
 import {
+  learnFiles,
+  allowLargerBatchFileUpload,
   validateFileUpload,
   uploadFileTooLarge,
   uploadSingleChar,
@@ -16,11 +22,7 @@ import {
   uploadFileNameTooShort,
   validateExcessiveFileName,
   doNotUploadSpecialChar,
-} from "e2e/3-documents/steps";
-import { createTestFile, deleteTestFile } from "common/createTestFile";
-import { fileTidyUp } from "common/filetidyup";
-import { pcrTidyUp } from "common/pcrtidyup";
-import { learnFiles } from "common/fileComponentTests";
+} from "common/fileComponentTests";
 
 import { rejectElevenDocsAndShowError } from "e2e/2-claims/steps";
 
@@ -30,12 +32,18 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
   before(() => {
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
     pcrTidyUp("Draft");
   });
 
   after(() => {
     cy.deletePcr("328407");
     deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
   });
 
   it("Should create a Remove partner PCR", () => {
@@ -72,7 +80,13 @@ describe("PCR > Remove partner > Continuing editing the Remove a partner section
 
   it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
 
-  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
+
+  it(
+    "Should attempt to upload three files totalling 33MB prompting validation",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowLargerBatchFileUpload,
+  );
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
 

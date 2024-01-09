@@ -10,13 +10,34 @@ import {
   sendYourRequestSection,
   uploadApprovalGuidance,
 } from "./steps";
-import { learnFiles } from "common/fileComponentTests";
+import {
+  learnFiles,
+  allowLargerBatchFileUpload,
+  validateFileUpload,
+  uploadFileTooLarge,
+  validateExcessiveFileName,
+  doNotUploadSpecialChar,
+  uploadFileNameTooShort,
+} from "common/fileComponentTests";
+import { createTestFile, deleteTestFile } from "common/createTestFile";
+import { seconds } from "common/seconds";
 
 const fcEmail = "wed.addams@test.test.co.uk";
 
 describe("Loans project > Drawdown request", () => {
   before(() => {
     visitApp({ asUser: fcEmail, path: "/loans/a0E2600000kTcmIEAS" });
+    createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
+  });
+
+  after(() => {
+    deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
   });
 
   it("Should click the drawdown 'Request' button and land on the drawdown request page ", requestDrawdown);
@@ -36,6 +57,21 @@ describe("Loans project > Drawdown request", () => {
   it("Should show the 'Upload drawdown approval request' heading with guidance", uploadApprovalGuidance);
 
   it("Should click the 'Learn more about files you can upload' link and check messaging", learnFiles);
+  it("Should validate when uploading without choosing a file.", validateFileUpload);
+
+  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
+
+  it(
+    "Should attempt to upload three files totalling 33MB",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowLargerBatchFileUpload,
+  );
+
+  it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
+
+  it("Should NOT upload a file with these special characters", doNotUploadSpecialChar);
+
+  it("Should not allow a file to be uploaded unless it has a valid file name", uploadFileNameTooShort);
 
   it("Should upload a file and display validation message", drawdownFileUpload);
 

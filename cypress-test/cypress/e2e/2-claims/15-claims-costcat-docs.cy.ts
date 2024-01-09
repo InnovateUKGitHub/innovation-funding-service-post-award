@@ -5,17 +5,16 @@ import {
   rejectElevenDocsAndShowError,
   documents as uploadDocuments,
 } from "./steps";
-
+import { createTestFile, deleteTestFile } from "common/createTestFile";
 import {
+  allowLargerBatchFileUpload,
+  learnFiles,
   validateFileUpload,
   uploadFileTooLarge,
   validateExcessiveFileName,
   doNotUploadSpecialChar,
   uploadFileNameTooShort,
-} from "e2e/3-documents/steps";
-
-import { createTestFile, deleteTestFile } from "common/createTestFile";
-
+} from "common/fileComponentTests";
 import { fileTidyUp } from "common/filetidyup";
 import { seconds } from "common/seconds";
 
@@ -30,10 +29,16 @@ describe("Claims > Cost category document uploads", () => {
     visitApp({ asUser: fcEmail });
     cy.navigateToProject("328407");
     createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
   });
 
   after(() => {
     deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
   });
 
   it("Should click the claims tile and access the 'Exceptions - Staff' cost category", () => {
@@ -55,11 +60,19 @@ describe("Claims > Cost category document uploads", () => {
     cy.paragraph("All documents uploaded will be shown here. All documents open in a new window.");
   });
 
+  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
+
   it("should reject 11 documents and show an error", rejectElevenDocsAndShowError);
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 
-  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
+
+  it(
+    "Should attempt to upload three files totalling 33MB",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowLargerBatchFileUpload,
+  );
 
   it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
 

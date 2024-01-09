@@ -1,7 +1,11 @@
 import { visitApp } from "../../common/visit";
 import { createTestFile, deleteTestFile } from "common/createTestFile";
 import { claimsDocUpload, claimsFileTable, selectFileDescription, shouldShowProjectTitle } from "./steps";
+import { fileTidyUp } from "common/filetidyup";
+import { testFile } from "common/testfileNames";
 import {
+  learnFiles,
+  allowLargerBatchFileUpload,
   validateFileUpload,
   uploadFileTooLarge,
   uploadSingleChar,
@@ -9,10 +13,8 @@ import {
   validateExcessiveFileName,
   doNotUploadSpecialChar,
   uploadFileNameTooShort,
-} from "e2e/3-documents/steps";
-import { fileTidyUp } from "common/filetidyup";
-import { testFile } from "common/testfileNames";
-import { learnFiles } from "common/fileComponentTests";
+} from "common/fileComponentTests";
+import { seconds } from "common/seconds";
 const pmEmail = "james.black@euimeabs.test";
 
 describe("claims > documents upload screen", () => {
@@ -20,11 +22,17 @@ describe("claims > documents upload screen", () => {
     cy.intercept("POST", "/api/documents/claim-details/*").as("uploadDocument");
     visitApp({ asUser: pmEmail, path: "projects/a0E2600000kSotUEAS/claims/a0D2600000z6KBxEAM/prepare/1/documents" });
     createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
     fileTidyUp(testFile);
   });
 
   after(() => {
     deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
   });
 
   it("Should have a back option", () => {
@@ -67,17 +75,19 @@ describe("claims > documents upload screen", () => {
     cy.validationNotification(`'${testFile}' has been removed.`);
   });
 
-  //it("Should display a document removal validation message", () => {
-  //
-  //});
-
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 
-  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
+
+  it(
+    "Should attempt to upload three files totalling 33MB",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowLargerBatchFileUpload,
+  );
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
 
-  it("Should delete the file with asingle character as the name", deleteSingleChar);
+  it("Should delete the file with a single character as the name", deleteSingleChar);
 
   it("Should validate a file with a name over 80 characters", validateExcessiveFileName);
 
