@@ -10,7 +10,6 @@ import { getFileSize, getFileExtension, getFileName } from "@framework/util/file
 import { FileTypeNotAllowedError } from "@server/repositories/errors";
 import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { NestedResult } from "@ui/validation/nestedResult";
-import { sumBy } from "@framework/util/numberHelper";
 
 export const validDocumentFilenameCharacters = /^[\w\d\s\\.\-()]+$/;
 
@@ -183,7 +182,23 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
             ),
           () =>
             children.isTrue(
-              x => sumBy(x, file => file.size) < config.maxTotalFileSize,
+              files => {
+                let anyFileTooBig = false;
+                let total = 0;
+
+                for (const file of files) {
+                  total += file.size;
+
+                  if (file.size > config.maxTotalFileSize) {
+                    anyFileTooBig = true;
+                    break;
+                  }
+                }
+
+                if (files.length <= 1) return true;
+                if (anyFileTooBig) return true;
+                return total <= config.maxTotalFileSize;
+              },
               this.getContent(x =>
                 x.forms.documents.files.errors.total_size_too_large({ size: config.maxTotalFileSize }),
               ),
