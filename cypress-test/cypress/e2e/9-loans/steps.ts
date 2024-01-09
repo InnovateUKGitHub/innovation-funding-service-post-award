@@ -97,9 +97,11 @@ export const drawdownRequestTable = () => {
     "Drawdown amount",
     "Remaining loan",
   ].forEach((requestCat, index) => {
-    cy.get("thead").within(() => {
-      cy.get(`th:nth-child(${index + 1})`).contains(requestCat);
-    });
+    cy.get("thead")
+      .eq(0)
+      .within(() => {
+        cy.get(`th:nth-child(${index + 1})`).contains(requestCat);
+      });
     ["1", "2021", "£10,000", "£115,000", "£0", "£10,000", "£105,000"].forEach((value, index) => {
       cy.get("tr")
         .eq(1)
@@ -153,20 +155,18 @@ export const projCostsSelectFileDescription = () => {
 export const projCostsUploadedSection = () => {
   cy.get("h2").contains("Files uploaded");
   cy.paragraph("All documents uploaded will be shown here.");
-  let i = 1;
-  ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach(header => {
-    cy.get("thead").within(() => {
-      cy.get(`th:nth-child(${i})`).contains(header);
-      i++;
-    });
+  ["File name", "Type", "Date uploaded", "Size", "Uploaded by"].forEach((header, index) => {
+    cy.get("thead")
+      .eq(0)
+      .within(() => {
+        cy.get(`th:nth-child(${index + 1})`).contains(header);
+      });
   });
-  let a = 1;
-  ["testfile.doc", "Schedule 3", uploadDate, "0KB", "Sarah Shuang", "Remove"].forEach(docTableItem => {
+  ["testfile.doc", "Schedule 3", uploadDate, "0KB", "Sarah Shuang", "Remove"].forEach((docTableItem, index) => {
     cy.get("tr")
       .eq(1)
       .within(() => {
-        cy.get(`td:nth-child(${a})`).contains(docTableItem);
-        a++;
+        cy.get(`td:nth-child(${index + 1})`).contains(docTableItem);
       });
   });
 };

@@ -23,18 +23,26 @@ import {
   uploadFileNameTooShort,
   validateExcessiveFileName,
   doNotUploadSpecialChar,
+  allowLargerBatchFileUpload,
 } from "common/fileComponentTests";
+import { seconds } from "common/seconds";
 
 const fc = "s.shuang@irc.trde.org.uk.test";
 describe("Loans > Project Costs & Documents", () => {
   before(() => {
     visitApp({ asUser: fc });
     createTestFile("bigger_test", 33);
+    createTestFile("11MB_1", 11);
+    createTestFile("11MB_2", 11);
+    createTestFile("11MB_3", 11);
     cy.navigateToProject("191431");
   });
 
   after(() => {
     deleteTestFile("bigger_test");
+    deleteTestFile("11MB_1");
+    deleteTestFile("11MB_2");
+    deleteTestFile("11MB_3");
   });
 
   it("Should click the Project Costs tile", () => {
@@ -97,7 +105,12 @@ describe("Loans > Project Costs & Documents", () => {
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 
-  it("Should validate uploading a file that is too large", uploadFileTooLarge);
+  it("Should validate uploading a single file that is too large", uploadFileTooLarge);
+  it(
+    "Should attempt to upload three files totalling 33MB",
+    { retries: 0, requestTimeout: seconds(30), responseTimeout: seconds(30) },
+    allowLargerBatchFileUpload,
+  );
 
   it("Should upload a file with a single character as the name", uploadSingleChar);
 
