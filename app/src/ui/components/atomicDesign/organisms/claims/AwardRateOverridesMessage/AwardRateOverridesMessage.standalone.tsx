@@ -38,7 +38,7 @@ const AwardRateOverridesMessage = ({
   const { fragmentRef } = useForecastTableData({ projectId, partnerId, queryOptions });
   return (
     <FragmentContextProvider fragment={fragmentRef}>
-      <AwardRateOverridesMessageWithFragment {...rest} />;
+      <AwardRateOverridesMessageWithFragment {...rest} />
     </FragmentContextProvider>
   );
 };
