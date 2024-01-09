@@ -6,7 +6,7 @@ import { StatusChangeLogsQuery } from "./__generated__/StatusChangeLogsQuery.gra
 import { statusChangesLogsQuery } from "./StatusChangeLogs.query";
 
 interface BaseLogsStandaloneProps {
-  queryOptions: QueryOptions;
+  queryOptions?: QueryOptions;
   partnerId: PartnerId;
   projectId: ProjectId;
   periodId: PeriodId;
