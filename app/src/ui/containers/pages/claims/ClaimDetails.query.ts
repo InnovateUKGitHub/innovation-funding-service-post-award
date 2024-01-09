@@ -3,8 +3,6 @@ export const claimDetailsQuery = graphql`
   query ClaimDetailsQuery($projectId: ID!, $projectIdStr: String, $partnerId: ID!, $periodId: Double!) {
     salesforce {
       uiapi {
-        ...StatusChangesLogsFragment
-        ...ForecastTableFragment
         ...TitleFragment
         query {
           Acc_Profile__c(
