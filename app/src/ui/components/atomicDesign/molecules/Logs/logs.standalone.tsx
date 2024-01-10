@@ -28,7 +28,13 @@ const useLogsData = ({ projectId, partnerId, periodId, queryOptions }: BaseLogsS
   };
 };
 
-const Logs = ({ qa, projectId, partnerId, periodId, queryOptions }: LogsStandaloneProps) => {
+const Logs = ({
+  qa,
+  projectId,
+  partnerId,
+  periodId,
+  queryOptions = { fetchPolicy: "network-only" },
+}: LogsStandaloneProps) => {
   const { fragmentRef } = useLogsData({ projectId, partnerId, periodId, queryOptions });
   return (
     <FragmentContextProvider fragment={fragmentRef}>

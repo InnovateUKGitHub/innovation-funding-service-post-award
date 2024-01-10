@@ -30,7 +30,7 @@ const useForecastTableData = ({ projectId, partnerId, queryOptions }: AwardRateO
 const AwardRateOverridesMessage = ({
   projectId,
   partnerId,
-  queryOptions,
+  queryOptions = { fetchPolicy: "network-only" },
   ...rest
 }: AwardRateOverrideStandaloneProps &
   AwardRateOverridesMessageFragmentProps &

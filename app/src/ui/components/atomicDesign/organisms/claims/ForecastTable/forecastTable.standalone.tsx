@@ -30,7 +30,7 @@ const useForecastTableData = ({ projectId, partnerId, queryOptions }: ForecastTa
 const ForecastTable = ({
   projectId,
   partnerId,
-  queryOptions,
+  queryOptions = { fetchPolicy: "network-only" },
   ...rest
 }: ForecastTableStandaloneProps & ForecastTableWithFragmentProps & Omit<ForecastTableProps, "data">) => {
   const { fragmentRef } = useForecastTableData({ projectId, partnerId, queryOptions });
