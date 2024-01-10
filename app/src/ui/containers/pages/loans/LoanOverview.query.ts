@@ -5,7 +5,7 @@ export const loanOverviewQuery = graphql`
     salesforce {
       uiapi {
         query {
-          Acc_Project__c(where: { Id: { eq: $projectId } }) {
+          Acc_Project__c(where: { Id: { eq: $projectId } }, first: 1) {
             edges {
               node {
                 Id
@@ -26,6 +26,7 @@ export const loanOverviewQuery = graphql`
           }
           Acc_Prepayment__c(
             where: { Acc_ProjectParticipant__r: { Acc_ProjectId__c: { eq: $projectId } } }
+            orderBy: { Acc_PeriodNumber__c: { order: ASC } }
             first: 1000
           ) {
             edges {
