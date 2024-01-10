@@ -36,7 +36,7 @@ const ForecastTable = ({
   const { fragmentRef } = useForecastTableData({ projectId, partnerId, queryOptions });
   return (
     <FragmentContextProvider fragment={fragmentRef}>
-      <ForecastTableWithFragment {...rest} />;
+      <ForecastTableWithFragment {...rest} />
     </FragmentContextProvider>
   );
 };
