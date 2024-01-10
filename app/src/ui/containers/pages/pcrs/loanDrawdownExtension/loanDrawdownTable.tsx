@@ -17,7 +17,7 @@ import { EditLink } from "../pcrItemSummaryLinks";
 import { PCRStepType } from "@framework/constants/pcrConstants";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 
-const totalMonths = 75;
+const maximumLoanDurationChangeInMonths = 75;
 
 const getNewDate = (
   phaseId: "availabilityPeriodChange" | "extensionPeriodChange" | "repaymentPeriodChange",
@@ -80,7 +80,11 @@ export const LoanDrawdownTable = ({
           currentLength: pcrItem.availabilityPeriod ?? 0,
           currentEndDate: calculateOffsetDate(pcrItem.availabilityPeriod ?? 0, pcrItem.projectStartDate),
           newLength: pcrItem.availabilityPeriodChange ?? 0,
-          newEndDateOptions: createOptions(pcrItem.availabilityPeriod ?? 0, totalMonths, getContent),
+          newEndDateOptions: createOptions(
+            pcrItem.availabilityPeriod ?? 0,
+            maximumLoanDurationChangeInMonths,
+            getContent,
+          ),
         },
         {
           label: getContent(x => x.forms.pcr.loanDrawdownExtension.extensionPeriodChange.label),
@@ -91,7 +95,7 @@ export const LoanDrawdownTable = ({
             pcrItem.projectStartDate,
           ),
           newLength: pcrItem.extensionPeriodChange ?? 0,
-          newEndDateOptions: createOptions(pcrItem.extensionPeriod ?? 0, totalMonths, getContent),
+          newEndDateOptions: createOptions(pcrItem.extensionPeriod ?? 0, maximumLoanDurationChangeInMonths, getContent),
         },
         {
           label: getContent(x => x.forms.pcr.loanDrawdownExtension.repaymentPeriodChange.label),
@@ -102,7 +106,7 @@ export const LoanDrawdownTable = ({
             pcrItem.projectStartDate,
           ),
           newLength: pcrItem.repaymentPeriodChange ?? 0,
-          newEndDateOptions: createOptions(pcrItem.repaymentPeriod ?? 0, totalMonths, getContent),
+          newEndDateOptions: createOptions(pcrItem.repaymentPeriod ?? 0, maximumLoanDurationChangeInMonths, getContent),
         },
       ] as const,
     [],
