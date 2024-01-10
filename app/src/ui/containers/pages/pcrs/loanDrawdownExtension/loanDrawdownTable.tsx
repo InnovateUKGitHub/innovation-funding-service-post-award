@@ -80,7 +80,7 @@ export const LoanDrawdownTable = ({
           currentLength: pcrItem.availabilityPeriod ?? 0,
           currentEndDate: calculateOffsetDate(pcrItem.availabilityPeriod ?? 0, pcrItem.projectStartDate),
           newLength: pcrItem.availabilityPeriodChange ?? 0,
-          newEndDateOptions: createOptions(pcrItem.availabilityPeriod ?? 0, totalMonths),
+          newEndDateOptions: createOptions(pcrItem.availabilityPeriod ?? 0, totalMonths, getContent),
         },
         {
           label: getContent(x => x.forms.pcr.loanDrawdownExtension.extensionPeriodChange.label),
@@ -91,7 +91,7 @@ export const LoanDrawdownTable = ({
             pcrItem.projectStartDate,
           ),
           newLength: pcrItem.extensionPeriodChange ?? 0,
-          newEndDateOptions: createOptions(pcrItem.extensionPeriod ?? 0, totalMonths),
+          newEndDateOptions: createOptions(pcrItem.extensionPeriod ?? 0, totalMonths, getContent),
         },
         {
           label: getContent(x => x.forms.pcr.loanDrawdownExtension.repaymentPeriodChange.label),
@@ -102,7 +102,7 @@ export const LoanDrawdownTable = ({
             pcrItem.projectStartDate,
           ),
           newLength: pcrItem.repaymentPeriodChange ?? 0,
-          newEndDateOptions: createOptions(pcrItem.repaymentPeriod ?? 0, totalMonths),
+          newEndDateOptions: createOptions(pcrItem.repaymentPeriod ?? 0, totalMonths, getContent),
         },
       ] as const,
     [],

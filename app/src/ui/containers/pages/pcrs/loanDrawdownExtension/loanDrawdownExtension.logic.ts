@@ -5,6 +5,7 @@ import { getFirstEdge } from "@gql/selectors/edges";
 import { mapToProjectDto } from "@gql/dtoMapper/mapProjectDto";
 import { mapPcrItemDto } from "@gql/dtoMapper/mapPcrDto";
 import { DateTime } from "luxon";
+import { ContentSelector } from "@copy/type";
 
 export const quarterlyOffset = 3;
 
@@ -60,31 +61,27 @@ export const calculateOffsetDate = (offset: number, projectStartDate: Date | nul
 
 export const getQuarterInMonths = (totalMonths: number): number => totalMonths / 3;
 
-const createDurationOption = (value: number) => {
-  const id = String(value);
-  const quarterValue = getQuarterInMonths(value);
-
-  const isSingular = quarterValue === 1;
-  const quarterPlural = isSingular ? "quarter" : "quarters";
-
-  const displayValue = `${quarterValue} ${quarterPlural}`;
-
+const createDurationOption = (value: number, getContent: (contentSelector: string | ContentSelector) => string) => {
   return {
-    id,
-    value: displayValue,
+    id: String(value),
+    value: getContent(x => x.pcrLoanExtensionLabels.quarters({ count: getQuarterInMonths(value) })),
   };
 };
 
 /**
  * Creates a list of options
  */
-export function createOptions(currentOffset: number, totalMonths: number) {
+export function createOptions(
+  currentOffset: number,
+  totalMonths: number,
+  getContent: (contentSelector: string | ContentSelector) => string,
+) {
   // Note: Capture any current options which are less than "quarterlyOffset" or not modulo of 3
   const shouldAddStartOption = currentOffset < quarterlyOffset;
 
   const list = [];
 
-  if (shouldAddStartOption) list.push(createDurationOption(currentOffset));
+  if (shouldAddStartOption) list.push(createDurationOption(currentOffset, getContent));
 
   for (let newOffset = quarterlyOffset; newOffset <= totalMonths; newOffset += quarterlyOffset) {
     const notCurrentIndex = currentOffset !== newOffset;
@@ -92,8 +89,8 @@ export function createOptions(currentOffset: number, totalMonths: number) {
     const shouldAddDefaultOption = currentOffset - newOffset === currentOffset % quarterlyOffset;
     const shouldAddMiddleOption = optionDoesNotExist && shouldAddDefaultOption;
 
-    if (notCurrentIndex) list.push(createDurationOption(newOffset));
-    if (shouldAddMiddleOption) list.push(createDurationOption(currentOffset));
+    if (notCurrentIndex) list.push(createDurationOption(newOffset, getContent));
+    if (shouldAddMiddleOption) list.push(createDurationOption(currentOffset, getContent));
   }
 
   return list;

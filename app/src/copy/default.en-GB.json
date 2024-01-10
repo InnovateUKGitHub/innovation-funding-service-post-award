@@ -1464,6 +1464,10 @@
     "statusAndCommentsLog": "Status and comments log",
     "requiredToComplete": "This is required to complete this request."
   },
+  "pcrLoanExtensionLabels": {
+    "quarters_one": "{{ count }} quarter",
+    "quarters_other": "{{ count }} quarters"
+  },
   "pcrReasoningLabels": {
     "comments": "Comments",
     "files": "Files"
