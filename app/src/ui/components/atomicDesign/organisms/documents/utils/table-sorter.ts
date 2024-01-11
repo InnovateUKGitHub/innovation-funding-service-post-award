@@ -49,16 +49,25 @@ function sortRowsFromKey<T>({ sortKey, sortDirection }: ColumnSortState<keyof T 
   });
 }
 
-const initialSortState: SortOptions = "none";
-
 /**
  * ### useTableSorter
  *
  * hook returns sorted table configuration
  */
-export function useTableSorter<T>(sortKeys: (keyof T | null | undefined)[], tableRows: T[]) {
+export function useTableSorter<T>({
+  sortKeys,
+  tableRows,
+  initialSortKey,
+  initialSortState = "none",
+}: {
+  sortKeys: (keyof T | null | undefined)[];
+  tableRows: T[];
+  initialSortKey?: keyof T;
+  initialSortState?: SortOptions;
+}) {
   const { isServer } = useMounted();
   const [sortColumn, setSortColumn] = useState<ColumnSortState<keyof T | null | undefined>>({
+    sortKey: initialSortKey,
     sortDirection: initialSortState,
   });
 

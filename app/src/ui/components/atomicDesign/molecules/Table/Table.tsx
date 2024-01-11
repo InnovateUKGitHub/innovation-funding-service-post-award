@@ -9,7 +9,7 @@ import { DateConvertible } from "@framework/util/dateHelpers";
 import { isContentSelector, useContent } from "@ui/hooks/content.hook";
 import { Result } from "@ui/validation/result";
 import { Results } from "@ui/validation/results";
-import { useTableSorter } from "@ui/components/atomicDesign/organisms/documents/utils/table-sorter";
+import { SortOptions, useTableSorter } from "@ui/components/atomicDesign/organisms/documents/utils/table-sorter";
 import { AccessibilityText } from "@ui/components/atomicDesign/atoms/AccessibilityText/AccessibilityText";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import {
@@ -128,6 +128,10 @@ export const createTypedTable = <T,>() => {
     bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
     headerRowClass?: string;
     footerRowClass?: string;
+    /** if passed in will initialise the sort key of the table */
+    initialSortKey?: keyof T;
+    /** if passed in will initialise the sort order of the table with `none` as default */
+    initialSortState?: SortOptions;
   }
 
   // Create a context for all child components to consume table data
@@ -282,6 +286,8 @@ export const createTypedTable = <T,>() => {
     qa,
     className,
     caption,
+    initialSortKey,
+    initialSortState,
     ...props
   }: TableProps) => {
     const { getContent } = useContent();
@@ -292,8 +298,13 @@ export const createTypedTable = <T,>() => {
       () => React.Children.toArray(unflattenedChildren).filter(Boolean) as TableChild[],
       [unflattenedChildren],
     );
-
-    const { handleSort, getColumnOption, sortedRows } = useTableSorter(getSortKeys(children), data);
+    const sortKeys = getSortKeys(children);
+    const { handleSort, getColumnOption, sortedRows } = useTableSorter<T>({
+      sortKeys,
+      tableRows: data,
+      initialSortKey,
+      initialSortState,
+    });
 
     const headers = children.map((column, columnIndex) => (
       <Fragment key={columnIndex}>

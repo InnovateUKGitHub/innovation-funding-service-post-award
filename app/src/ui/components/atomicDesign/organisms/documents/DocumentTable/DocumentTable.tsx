@@ -26,7 +26,7 @@ export const DocumentTable = <T extends DocumentSummaryDto>({
   const ProjectDocumentsTable = createTypedTable<T>();
 
   return (
-    <ProjectDocumentsTable.Table data={documents} qa={qa}>
+    <ProjectDocumentsTable.Table data={documents} qa={qa} initialSortKey="dateCreated" initialSortState="descending">
       <ProjectDocumentsTable.Custom
         sortByKey="fileName"
         header="File name"

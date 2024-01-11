@@ -57,7 +57,7 @@ describe("useTableSorter()", () => {
   const stubNoColumnsSorted: (keyof typeof stubTableData[0] | null)[] = [null, null, null, null, null, null, null];
 
   const setup = (sortKeys: (keyof TableDataItem | null)[], tableRows: TableDataItem[], isServer?: boolean) =>
-    renderHook(() => useTableSorter(sortKeys, tableRows), hookTestBed({ isServer }));
+    renderHook(() => useTableSorter({ sortKeys, tableRows }), hookTestBed({ isServer }));
 
   describe("@returns", () => {
     // Note: the easiest way of checking the change has occurred is to check the unique id against values that change
