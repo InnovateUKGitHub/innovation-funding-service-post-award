@@ -1,0 +1,9 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: sysint
+
+resources:
+  - ../../../base
+
+generators:
+  - ./ksops.yml

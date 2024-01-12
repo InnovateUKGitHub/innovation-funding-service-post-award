@@ -1,0 +1,10 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: perf
+
+resources:
+  - ../../../base
+
+generators:
+  - ./ksops.yml
+

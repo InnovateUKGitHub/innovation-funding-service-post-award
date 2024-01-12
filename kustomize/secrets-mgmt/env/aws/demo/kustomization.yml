@@ -1,0 +1,9 @@
+commonAnnotations:
+  deployedWith: kustomize
+  environment: demo
+
+resources:
+  - ../../../base
+
+generators:
+  - ./ksops.yml
