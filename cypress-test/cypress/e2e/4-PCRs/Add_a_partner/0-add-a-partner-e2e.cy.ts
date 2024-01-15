@@ -12,7 +12,6 @@ import {
   companyHouseAutofillAssert,
 } from "../steps";
 import {
-  learnAboutFiles,
   validateFileUpload,
   uploadFileTooLarge,
   uploadSingleChar,
@@ -20,7 +19,7 @@ import {
   uploadFileNameTooShort,
   validateExcessiveFileName,
   doNotUploadSpecialChar,
-} from "e2e/3-documents/steps";
+} from "common/fileComponentTests";
 import { pcrTidyUp } from "common/pcrtidyup";
 import {
   addPartnerContinue,
@@ -70,6 +69,7 @@ import {
   uploadTestFile,
   completeOtherSourceLine,
 } from "./add-partner-e2e-steps";
+import { learnFiles } from "common/fileComponentTests";
 
 const pmEmail = "james.black@euimeabs.test";
 
@@ -395,7 +395,7 @@ describe("PCR >  Add a partner > E2E", () => {
 
   it("Should access the Partner agreement section", accessPartnerAgreement);
 
-  it("Should display a clickable 'Learn more about files you can upload' message", learnAboutFiles);
+  it("Should display a clickable 'Learn more about files you can upload' message", learnFiles);
 
   it("Should validate when uploading without choosing a file.", validateFileUpload);
 
