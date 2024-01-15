@@ -586,15 +586,6 @@ v22 = {
   "plural": false,
   "selections": (v8/*: any*/),
   "storageKey": null
-},
-v48 = {
-  "kind": "Literal",
-  "name": "and.2",
-  "value": {
-    "Acc_ClaimStatus__c": {
-      "ne": "New"
-    }
-  }
 };
 return {
   "fragment": {
