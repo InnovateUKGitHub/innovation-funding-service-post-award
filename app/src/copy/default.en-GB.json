@@ -2065,19 +2065,19 @@
         "availabilityPeriodChange": {
           "label": "Availability Period",
           "errors": {
-            "custom": "'Availability period' value must be a whole number (1 quarter = 3 months)."
+            "custom": "'Availability period' value must be in increments of '3', you have entered '{{ input.availabilityPeriodChange }}'."
           }
         },
         "extensionPeriodChange": {
           "label": "Extension Period",
           "errors": {
-            "custom": "'Extension period' value must be a whole number (1 quarter = 3 months)."
+            "custom": "'Extension period' value must be in increments of '3', you have entered '{{ input.extensionPeriodChange }}'."
           }
         },
         "repaymentPeriodChange": {
           "label": "Repayment Period",
           "errors": {
-            "invalid_string": "'Repayment period' value must be a whole number (1 quarter = 3 months)."
+            "invalid_string": "'Repayment period' value must be in increments of '3', you have entered '{{ input.repaymentPeriodChange }}'."
           }
         },
         "loanDrawdownExtension": {
