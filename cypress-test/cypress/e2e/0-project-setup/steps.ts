@@ -212,3 +212,39 @@ export const checkSpendProfileIncomplete = () => {
   cy.heading("Project setup");
   cy.get("li").eq(4).contains("Incomplete");
 };
+
+export const spendLabourCalculateOH = () => {
+  [
+    [-10000, -2000],
+    [-888, -177.6],
+    [-66666, -13333.2],
+    [-3333, -666.6],
+    [0, 0],
+    [22728.44, 4545.688],
+    [50.24, 10.048],
+    [6530.64, 1306.128],
+    [50.64, 10.128],
+    [100, 20],
+    [1000000, 200000],
+    [10000.33, 2000.066],
+    [5.11, 1.022],
+    [33.33, 6.666],
+  ].forEach(([labourCost, overhead]) => {
+    cy.getByAriaLabel("Labour Period 2").clear().type(String(labourCost));
+    let newCurrency = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: "GBP",
+    });
+    cy.get("tr")
+      .eq(4)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(labourCost));
+      });
+    cy.getByAriaLabel("Overheads Period 2").should("have.value", overhead);
+    cy.get("tr")
+      .eq(5)
+      .within(() => {
+        cy.get("td:nth-child(14)").contains(newCurrency.format(overhead));
+      });
+  });
+};

@@ -12,7 +12,7 @@ import {
   submitComplete,
 } from "./steps";
 import { topThreeRows } from "e2e/5-forecasts/steps";
-import { acceptInputAndUpdate } from "e2e/2-claims/steps";
+import { spendLabourCalculateOH } from "./steps";
 import { spendTableValues } from "common/spend-table-values";
 
 const pmEmail = "james.black@euimeabs.test";
@@ -46,7 +46,7 @@ describe("Project setup > Set spend profile", () => {
 
   it("Should display the correct top three rows including IAR frequency", topThreeRows);
 
-  it("Should correctly calculate overheads against labour input", acceptInputAndUpdate);
+  it("Should correctly calculate overheads against labour input", spendLabourCalculateOH);
 
   it("Should edit the forecast table and calculate the new totals correctly", spendTableEdit);
 
