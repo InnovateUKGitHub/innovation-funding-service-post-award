@@ -75,6 +75,7 @@ export const mapWithDateParts = (fund: PCRSpendProfileOtherFundingDto) => ({
   dateSecured_year: getYear(fund.dateSecured),
   dateSecured: fund.dateSecured,
   value: fund.value ?? undefined,
+  id: fund.id ?? "",
 });
 
 export const OtherSourcesOfFundingStep = () => {
@@ -132,13 +133,14 @@ export const OtherSourcesOfFundingStep = () => {
               data: {
                 spendProfile: {
                   ...spendProfile,
+                  editPcrFunds: true,
                   funds: data.funds.map(x => ({
                     description: x.description,
                     value: Number(x.value),
                     dateSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false),
                     costCategory: otherFundingCostCategory.type,
                     costCategoryId: otherFundingCostCategory.id,
-                    id: "" as PcrId,
+                    id: x.id as PcrId,
                   })),
                 },
               },

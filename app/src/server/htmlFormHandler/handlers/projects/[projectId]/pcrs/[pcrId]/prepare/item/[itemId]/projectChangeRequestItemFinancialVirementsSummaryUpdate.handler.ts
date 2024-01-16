@@ -85,7 +85,7 @@ class ProjectChangeRequestItemFinancialVirementsSummaryUpdate extends ZodFormHan
         ? parseFloat(input.grantMovingOverFinancialYear)
         : undefined,
       status: input.markedAsComplete ? PCRItemStatus.Complete : PCRItemStatus.Incomplete,
-    } as Pick<PCRItemForMultiplePartnerFinancialVirementDto, "id" | "grantMovingOverFinancialYear" | "status">;
+    } as Pick<PCRItemForMultiplePartnerFinancialVirementDto, "id" | "grantMovingOverFinancialYear" | "status" | "type">;
 
     await context.runCommand(
       new UpdatePCRCommand({

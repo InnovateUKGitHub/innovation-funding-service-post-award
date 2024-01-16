@@ -1,5 +1,145 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`add partner with spend profile merging > should merge matching spend profile data if it already exists and add if none already exist and not change others that do not appear in the new pcr list 1`] = `
+{
+  "id": "a0GAd000000tnzNMAQ",
+  "items": [
+    {
+      "button_submit": "returnToSummary",
+      "id": "a0GAd000000to0zMAA",
+      "organisationName": "Swindon University",
+      "organisationType": "Academic",
+      "partnerTypeLabel": "Research",
+      "projectLocationLabel": "Inside the United Kingdom",
+      "projectRoleLabel": "Collaborator",
+      "shortName": "Add a partner",
+      "spendProfile": {
+        "costs": [
+          {
+            "costCategory": 2,
+            "costCategoryId": "a0626000007qoT2AAI",
+            "description": "Directly incurred - Travel and subsistence",
+            "id": "a08Ad00000AhanGIAR",
+            "someAdditionalProperty": "✅ This should not be overwritten ✅",
+            "value": 2000,
+          },
+          {
+            "costCategory": 2,
+            "costCategoryId": "random-cost-cat",
+            "description": "Pre existing cost ✅ This should not be overwritten ✅",
+            "id": "a08Ad00000Ahaabcdse",
+            "value": 1232,
+          },
+          {
+            "costCategory": 2,
+            "costCategoryId": "a0626000007qoT1AAI",
+            "description": "Directly incurred - Staff",
+            "id": "a08Ad00000AhanFIAR",
+            "value": 10000,
+          },
+          {
+            "costCategory": 2,
+            "costCategoryId": "a0626000007qoT3AAI",
+            "description": "Directly incurred - Equipment",
+            "id": "a08Ad00000AhanHIAR",
+            "value": 250,
+          },
+          {
+            "costCategory": 2,
+            "costCategoryId": "a0626000007qoT4AAI",
+            "description": "Directly incurred - Other costs",
+            "id": "a08Ad00000AhanIIAR",
+            "value": 0,
+          },
+        ],
+        "funds": [],
+        "pcrItemId": "a0GAd000000to0zMAA",
+      },
+      "status": 2,
+      "tsbReference": "13456",
+      "type": 20,
+      "typeName": "Add a partner",
+    },
+    {
+      "guidance": "This will change the project's scope.",
+      "id": "a0G26000007LUrgEAG",
+      "partnerId": "a0D2600000zYOlEEAW",
+      "shortName": "Scope change",
+      "status": 3,
+      "statusName": "Complete",
+      "typeName": "Change a project scope",
+    },
+  ],
+  "projectId": "a0E2600000om3ABEAY",
+}
+`;
+
+exports[`add partner with spend profile merging > should merge spend profile data in the case of add partner pcr items when there is no current spend profile 1`] = `
+{
+  "id": "a0GAd000000tnzNMAQ",
+  "items": [
+    {
+      "button_submit": "returnToSummary",
+      "id": "a0GAd000000to0zMAA",
+      "organisationName": "Swindon University",
+      "organisationType": "Academic",
+      "partnerTypeLabel": "Research",
+      "projectLocationLabel": "Inside the United Kingdom",
+      "projectRoleLabel": "Collaborator",
+      "shortName": "Change a partner's name",
+      "spendProfile": {
+        "costs": [
+          {
+            "costCategory": 2,
+            "costCategoryId": "a0626000007qoT1AAI",
+            "description": "Directly incurred - Staff",
+            "id": "a08Ad00000AhanFIAR",
+            "value": 10000,
+          },
+          {
+            "costCategory": 2,
+            "costCategoryId": "a0626000007qoT2AAI",
+            "description": "Directly incurred - Travel and subsistence",
+            "id": "a08Ad00000AhanGIAR",
+            "value": 2000,
+          },
+          {
+            "costCategory": 2,
+            "costCategoryId": "a0626000007qoT3AAI",
+            "description": "Directly incurred - Equipment",
+            "id": "a08Ad00000AhanHIAR",
+            "value": 250,
+          },
+          {
+            "costCategory": 2,
+            "costCategoryId": "a0626000007qoT4AAI",
+            "description": "Directly incurred - Other costs",
+            "id": "a08Ad00000AhanIIAR",
+            "value": 0,
+          },
+        ],
+        "funds": [],
+        "pcrItemId": "a0GAd000000to0zMAA",
+      },
+      "status": 2,
+      "tsbReference": "13456",
+      "type": 20,
+      "typeName": "Change a partner name",
+    },
+    {
+      "guidance": "This will change the project's scope.",
+      "id": "a0G26000007LUrgEAG",
+      "partnerId": "a0D2600000zYOlEEAW",
+      "shortName": "Scope change",
+      "status": 3,
+      "statusName": "Complete",
+      "typeName": "Change a project scope",
+    },
+  ],
+  "projectId": "a0E2600000om3ABEAY",
+}
+`;
+
 exports[`mergePcrData should merge new PCR on top of old PCR, matching and merging items 1`] = `
 {
   "comments": "",
@@ -14,26 +154,28 @@ exports[`mergePcrData should merge new PCR on top of old PCR, matching and mergi
       "partnerTypeLabel": "Research",
       "projectLocationLabel": "Inside the United Kingdom",
       "projectRoleLabel": "Collaborator",
-      "shortName": "Add a partner",
+      "shortName": "Change a partner's name",
       "statusName": "Complete",
-      "typeName": "Add a partner",
+      "type": 10,
+      "typeName": "Change a partner name",
     },
     {
       "accountName": "banana services",
-      "guidance": "This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.
-",
+      "guidance": "This will change the project's scope.",
       "id": "a0G26000007LUrgEAG",
       "partnerId": "a0D2600000zYOlEEAW",
       "partnerNameSnapshot": "A B Cad Services",
-      "shortName": "Change a partner's name",
+      "shortName": "Scope change",
       "status": 3,
       "statusName": "Complete",
-      "typeName": "Change a partner's name",
+      "type": 80,
+      "typeName": "Change a project scope",
     },
     {
       "id": "a0G26000007Ldgjhk",
       "organisationName": "Wetherspoons",
-      "shortName": "Add a partner",
+      "shortName": "Remove a partner",
+      "type": 30,
     },
   ],
   "projectId": "a0E2600000om3ABEAY",
@@ -47,17 +189,19 @@ exports[`mergePcrData should merge new PCR types without an ID 1`] = `
       "accountName": "✅ This should not be overwritten ✅",
       "id": "apple",
       "partnerNameSnapshot": "✅ This should have overridden the PCR item type ✅",
+      "type": 50,
     },
     {
       "contact1Forename": "Banana / This should exist",
       "id": "banana",
     },
     {
-      "type": 20,
+      "type": 90,
     },
     {
       "contact1Forename": "Cherry / This should exist",
       "id": "cherry",
+      "type": 30,
     },
   ],
 }

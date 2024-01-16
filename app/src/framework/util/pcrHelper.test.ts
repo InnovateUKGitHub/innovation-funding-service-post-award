@@ -1,5 +1,6 @@
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { mergePcrData } from "./pcrHelper";
+import { PCRItemType } from "@framework/constants/pcrConstants";
 
 describe("mergePcrData", () => {
   it("should merge new PCR on top of old PCR, matching and merging items", () => {
@@ -11,20 +12,23 @@ describe("mergePcrData", () => {
           accountName: "banana services",
           id: "a0G26000007LUrgEAG",
           partnerNameSnapshot: "A B Cad Services",
-          shortName: "Change a partner's name",
+          shortName: "Scope change",
+          type: PCRItemType.ScopeChange,
         },
         {
           id: "a0G26000007LdsWEAS",
           organisationName: "Swindon University",
-          shortName: "Add a partner",
+          shortName: "Change a partner's name",
           statusName: "Complete",
           contact1Forename: "Ramsey",
           contact1Surname: "Bolton",
+          type: PCRItemType.AccountNameChange,
         },
         {
           id: "a0G26000007Ldgjhk",
           organisationName: "Wetherspoons",
-          shortName: "Add a partner",
+          shortName: "Remove a partner",
+          type: PCRItemType.PartnerWithdrawal,
         },
       ],
       comments: "",
@@ -36,9 +40,8 @@ describe("mergePcrData", () => {
       items: [
         {
           id: "a0G26000007LdsWEAS",
-          typeName: "Add a partner",
-          shortName: "Add a partner",
-
+          typeName: "Change a partner name",
+          shortName: "Change a partner's name",
           organisationName: "Swindon University",
           organisationType: "Academic",
           projectRoleLabel: "Collaborator",
@@ -47,12 +50,11 @@ describe("mergePcrData", () => {
         },
         {
           id: "a0G26000007LUrgEAG",
-          guidance:
-            "This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.\n",
-          typeName: "Change a partner's name",
+          guidance: "This will change the project's scope.",
+          typeName: "Change a project scope",
           status: 3,
           statusName: "Complete",
-          shortName: "Change a partner's name",
+          shortName: "Scope change",
           partnerId: "a0D2600000zYOlEEAW",
         },
       ],
@@ -65,11 +67,15 @@ describe("mergePcrData", () => {
     const newPcr = {
       items: [
         // New type!
-        { type: 20 },
+        { type: PCRItemType.TimeExtension },
 
         // Types with IDs
-        { id: "apple", partnerNameSnapshot: "✅ This should have overridden the PCR item type ✅" },
-        { id: "cherry", contact1Forename: "Cherry / This should exist" },
+        {
+          id: "apple",
+          partnerNameSnapshot: "✅ This should have overridden the PCR item type ✅",
+          type: PCRItemType.ProjectTermination,
+        },
+        { id: "cherry", contact1Forename: "Cherry / This should exist", type: PCRItemType.PartnerWithdrawal },
       ],
     } as unknown as PCRDto;
 
@@ -83,6 +89,143 @@ describe("mergePcrData", () => {
         {
           id: "banana",
           contact1Forename: "Banana / This should exist",
+        },
+      ],
+    } as unknown as PCRDto;
+
+    expect(mergePcrData(newPcr, existingPcr)).toMatchSnapshot();
+  });
+});
+
+describe("add partner with spend profile merging >", () => {
+  const newPcr = {
+    id: "a0GAd000000tnzNMAQ",
+    projectId: "a0E2600000om3ABEAY",
+    items: [
+      {
+        id: "a0GAd000000to0zMAA",
+        tsbReference: "13456",
+        button_submit: "returnToSummary",
+        type: PCRItemType.PartnerAddition,
+        spendProfile: {
+          pcrItemId: "a0GAd000000to0zMAA",
+          costs: [
+            {
+              id: "a08Ad00000AhanFIAR",
+              costCategoryId: "a0626000007qoT1AAI",
+              value: 10000,
+              description: "Directly incurred - Staff",
+              costCategory: 2,
+            },
+            {
+              id: "a08Ad00000AhanGIAR",
+              costCategoryId: "a0626000007qoT2AAI",
+              value: 2000,
+              description: "Directly incurred - Travel and subsistence",
+              costCategory: 2,
+            },
+            {
+              id: "a08Ad00000AhanHIAR",
+              costCategoryId: "a0626000007qoT3AAI",
+              value: 250,
+              description: "Directly incurred - Equipment",
+              costCategory: 2,
+            },
+            {
+              id: "a08Ad00000AhanIIAR",
+              costCategoryId: "a0626000007qoT4AAI",
+              value: 0,
+              description: "Directly incurred - Other costs",
+              costCategory: 2,
+            },
+          ],
+          funds: [],
+        },
+        status: 2,
+      },
+    ],
+  } as unknown as PCRDto;
+
+  it("should merge spend profile data in the case of add partner pcr items when there is no current spend profile", () => {
+    const existingPcr = {
+      id: "a0GAd000000tnzNMAQ",
+      projectId: "a0E2600000om3ABEAY",
+      items: [
+        {
+          id: "a0GAd000000to0zMAA",
+          typeName: "Change a partner name",
+          shortName: "Change a partner's name",
+          organisationName: "Swindon University",
+          organisationType: "Academic",
+          projectRoleLabel: "Collaborator",
+          partnerTypeLabel: "Research",
+          projectLocationLabel: "Inside the United Kingdom",
+          spendProfile: {
+            pcrItemId: "a0GAd000000to0zMAA",
+            costs: [],
+            funds: [],
+          },
+        },
+        {
+          id: "a0G26000007LUrgEAG",
+          guidance: "This will change the project's scope.",
+          typeName: "Change a project scope",
+          status: 3,
+          statusName: "Complete",
+          shortName: "Scope change",
+          partnerId: "a0D2600000zYOlEEAW",
+        },
+      ],
+    } as unknown as PCRDto;
+
+    expect(mergePcrData(newPcr, existingPcr)).toMatchSnapshot();
+  });
+
+  it("should merge matching spend profile data if it already exists and add if none already exist and not change others that do not appear in the new pcr list", () => {
+    const existingPcr = {
+      id: "a0GAd000000tnzNMAQ",
+      projectId: "a0E2600000om3ABEAY",
+      items: [
+        {
+          id: "a0GAd000000to0zMAA",
+          typeName: "Add a partner",
+          shortName: "Add a partner",
+          organisationName: "Swindon University",
+          organisationType: "Academic",
+          projectRoleLabel: "Collaborator",
+          partnerTypeLabel: "Research",
+          projectLocationLabel: "Inside the United Kingdom",
+          type: PCRItemType.PartnerAddition,
+          spendProfile: {
+            pcrItemId: "a0GAd000000to0zMAA",
+            costs: [
+              {
+                id: "a08Ad00000AhanGIAR",
+                costCategoryId: "a0626000007qoT2AAI",
+                value: 2222,
+                description: "❌ This should be overwritten ❌",
+                costCategory: 2,
+                someAdditionalProperty: "✅ This should not be overwritten ✅",
+              },
+              {
+                id: "a08Ad00000Ahaabcdse",
+                costCategoryId: "random-cost-cat",
+                value: 1232,
+                description: "Pre existing cost ✅ This should not be overwritten ✅",
+                costCategory: 2,
+              },
+            ],
+            funds: [],
+          },
+        },
+        {
+          id: "a0G26000007LUrgEAG",
+          guidance: "This will change the project's scope.",
+          typeName: "Change a project scope",
+          status: 3,
+          statusName: "Complete",
+          shortName: "Scope change",
+          partnerId: "a0D2600000zYOlEEAW",
         },
       ],
     } as unknown as PCRDto;

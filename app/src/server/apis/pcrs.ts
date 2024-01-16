@@ -51,7 +51,7 @@ export interface IPCRsApi<Context extends "client" | "server"> {
         projectId: ProjectId;
         id: PcrId;
         pcr: PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
-          items?: PickRequiredFromPartial<FullPCRItemDto, "id">[];
+          items?: PickRequiredFromPartial<FullPCRItemDto, "id" | "type">[];
         };
       }
     >,
@@ -151,7 +151,7 @@ class Controller extends ControllerBaseWithSummary<"server", PCRSummaryDto, PCRD
         projectId: ProjectId;
         id: PcrId | PcrItemId;
         pcr: PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
-          items?: PickRequiredFromPartial<FullPCRItemDto, "id">[];
+          items?: PickRequiredFromPartial<FullPCRItemDto, "id" | "type">[];
         };
       }
     >,

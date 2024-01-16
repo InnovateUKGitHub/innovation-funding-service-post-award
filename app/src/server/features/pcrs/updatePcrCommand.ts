@@ -22,9 +22,10 @@ import { GetProjectStatusQuery } from "../projects/GetProjectStatus";
 import { GetAllForProjectQuery } from "../partners/getAllForProjectQuery";
 import { GetPCRByIdQuery } from "./getPCRByIdQuery";
 import { mergePcrData } from "@framework/util/pcrHelper";
+import { GetPcrSpendProfilesQuery } from "./getPcrSpendProfiles";
 
 type PcrData = PickRequiredFromPartial<Omit<PCRDto, "items">, "projectId" | "id"> & {
-  items?: PickRequiredFromPartial<FullPCRItemDto, "id">[];
+  items?: PickRequiredFromPartial<FullPCRItemDto, "id" | "type">[];
 };
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
@@ -91,6 +92,14 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     if (!isProjectActive) throw new InActiveProjectError();
 
     const pcr = await context.runQuery(new GetPCRByIdQuery(this.pcr.projectId, this.pcr.id));
+
+    // for partner addition Pcr Items we need to fetch existing spend profiles and merge into the item
+    for (const item of pcr.items) {
+      if (item.type === PCRItemType.PartnerAddition) {
+        const spendProfile = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+        item.spendProfile = spendProfile;
+      }
+    }
 
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
     const projectRoles = auth.forProject(this.projectId).getRoles();

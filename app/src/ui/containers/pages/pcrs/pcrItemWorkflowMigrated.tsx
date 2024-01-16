@@ -9,7 +9,7 @@ import { WorkflowStep } from "./pcrItemWorkflowStep";
 import { SummarySection } from "./pcrItemWorkflowSummary";
 import { useOnSavePcrItem } from "./pcrItemWorkflow.logic";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 import { Results } from "@ui/validation/results";
 import { IAppError } from "@framework/types/IAppError";
 
@@ -33,6 +33,7 @@ type Data = {
   mode: Mode;
   fragmentRef: unknown;
   refreshItemWorkflowQuery: () => Promise<void>;
+  pcrType: PCRItemType;
 };
 
 /**
@@ -111,6 +112,7 @@ export const PCRItemWorkflowMigratedForGql = (props: BaseProps & Data & ProjectC
     setFetchKey,
     props.refreshItemWorkflowQuery,
     props.step,
+    props.pcrType,
   );
 
   const displayCompleteForm = props.mode === "prepare";

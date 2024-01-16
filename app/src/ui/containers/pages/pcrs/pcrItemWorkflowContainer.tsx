@@ -43,6 +43,7 @@ export const PCRItemContainer = (props: ProjectChangeRequestPrepareItemParams & 
         project={data.project}
         pcrItem={data.pcrItem}
         fragmentRef={data.fragmentRef}
+        pcrType={data.pcrItem.type}
         refreshItemWorkflowQuery={refresh}
         {...props}
       />

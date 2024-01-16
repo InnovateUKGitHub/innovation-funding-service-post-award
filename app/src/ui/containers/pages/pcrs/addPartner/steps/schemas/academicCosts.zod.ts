@@ -1,3 +1,4 @@
+import { CostCategoryType } from "@framework/constants/enums";
 import { z } from "zod";
 
 export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
@@ -9,6 +10,9 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
           z.object({
             value: z.coerce.number(),
             costCategoryId: z.string(),
+            id: z.string(),
+            description: z.string(),
+            costCategory: z.number().transform(x => x as CostCategoryType),
           }),
         ),
       })
@@ -19,6 +23,9 @@ export const getAcademicCostsSchema = (markedAsComplete: boolean) =>
           z.object({
             value: z.coerce.number(),
             costCategoryId: z.string(),
+            id: z.string(),
+            description: z.string(),
+            costCategory: z.number().transform(x => x as CostCategoryType),
           }),
         ),
       });

@@ -12,7 +12,7 @@ import { FullPCRItemDto, PCRDto } from "@framework/dtos/pcrDtos";
 import { Dispatch, SetStateAction } from "react";
 import { RefreshedQueryOptions } from "@gql/hooks/useRefreshQuery";
 import { useMessageContext } from "@ui/context/messages";
-import { PCRItemStatus } from "@framework/constants/pcrConstants";
+import { PCRItemStatus, PCRItemType } from "@framework/constants/pcrConstants";
 
 export const usePcrItemWorkflowQuery = (
   projectId: ProjectId,
@@ -63,7 +63,7 @@ const createMinimalPcrUpdateDto = ({
   projectId: ProjectId;
   pcrId: PcrId;
   pcrItemId: PcrItemId;
-  data: Partial<FullPCRItemDto>;
+  data: PickRequiredFromPartial<FullPCRItemDto, "type">;
 }) => {
   return {
     id: pcrId,
@@ -84,6 +84,7 @@ export const useOnSavePcrItem = (
   setFetchKey: Dispatch<SetStateAction<number>>,
   refreshItemWorkflowQuery: () => Promise<void>,
   step: number | undefined,
+  pcrType: PCRItemType,
 ) => {
   const navigate = useNavigate();
 
@@ -97,7 +98,7 @@ export const useOnSavePcrItem = (
           projectId,
           pcrId,
           pcrItemId,
-          data: { ...data, ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}) },
+          data: { ...data, type: pcrType, ...(typeof step === "number" ? { status: PCRItemStatus.Incomplete } : {}) },
         }),
       });
     },

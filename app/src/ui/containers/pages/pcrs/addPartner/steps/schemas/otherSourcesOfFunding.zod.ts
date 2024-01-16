@@ -4,6 +4,7 @@ import { z } from "zod";
 const valueDescription = z.object({
   value: z.coerce.number().min(1),
   description: z.string().min(1),
+  id: z.string(),
 });
 
 /*

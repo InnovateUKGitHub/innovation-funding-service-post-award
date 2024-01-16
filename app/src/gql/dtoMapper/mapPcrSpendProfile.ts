@@ -168,7 +168,6 @@ export class SpendProfile {
     spendProfiles: PcrSpendProfileEntity[],
     costCategories: Pick<CostCategoryDto, "type" | "id" | "name">[],
   ): PcrSpendProfileDto {
-    // console.log("SpendProfile > getSpendProfile > spendProfile", spendProfiles);
     return {
       pcrItemId: this.pcrItemId,
       costs: costCategories

@@ -36,21 +36,27 @@ type AcademicCostsRhfError = {
   }[];
 };
 
-const getDefaultCosts = (
+const getInitialCosts = (
   profile: PcrSpendProfileDto,
-  costCategories: Pick<CostCategoryDto & { displayOrder: number }, "id" | "displayOrder">[],
+  costCategories: Pick<CostCategoryDto & { displayOrder: number }, "id" | "displayOrder" | "name" | "type">[],
 ) => {
   if (profile.costs.length) {
     return profile.costs.map(x => ({
+      id: x.id,
       value: x.value ?? 0,
+      description: x.description ?? "",
+      costCategory: x.costCategory,
       costCategoryId: x.costCategoryId,
     }));
   } else {
     return costCategories
       .sort((a, b) => (a.displayOrder < b.displayOrder ? 1 : -1))
       .map(x => ({
+        id: "" as PcrId,
         value: 0,
         costCategoryId: x.id,
+        description: x.name ?? "",
+        costCategory: x.type,
       }));
   }
 };
@@ -67,11 +73,13 @@ export const AcademicCostsStep = () => {
 
   const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, academicCostCategories);
 
+  const initialCosts = getInitialCosts(spendProfile, academicCostCategories);
+
   const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<AcademicCostsSchema>({
     defaultValues: {
       button_submit: "submit",
       tsbReference: pcrItem.tsbReference ?? "",
-      costs: getDefaultCosts(spendProfile, academicCostCategories),
+      costs: initialCosts,
     },
     resolver: zodResolver(getAcademicCostsSchema(markedAsCompleteHasBeenChecked), {
       errorMap: addPartnerErrorMap,
@@ -100,10 +108,7 @@ export const AcademicCostsStep = () => {
                 type: pcrItem.type,
                 spendProfile: {
                   ...spendProfile,
-                  costs: spendProfile.costs.map(x => ({
-                    ...x,
-                    value: data.costs.find(xx => xx.costCategoryId === x.costCategoryId)?.value ?? 0,
-                  })),
+                  costs: data.costs as PcrSpendProfileDto["costs"],
                 },
               },
               context: link(data),
