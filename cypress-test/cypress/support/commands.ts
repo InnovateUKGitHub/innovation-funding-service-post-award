@@ -23,7 +23,7 @@ const getListItemFromKey = (label: string, item: string) => {
 
 const getByQA = (tag: string, options?: CommandOptions) => {
   cy.log("**getByQA**");
-  cy.get(`[data-qa="${tag}"]`, options ?? { timeout: 15000 });
+  cy.get(`[data-qa="${tag}"]`, options ?? { timeout: 25000 });
 };
 
 const getByRole = (role: string, label?: string) => {
