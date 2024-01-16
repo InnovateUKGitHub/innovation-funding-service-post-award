@@ -6,3 +6,4 @@ data:
   ACC_ENVIRONMENT: sysint
   SERVER_URL: https://www-acc-sysint.apps.org-env-0.org.innovateuk.ukri.org
   USE_SSO: "false"
+  NEW_RELIC_ENABLED: "false"
