@@ -1476,3 +1476,30 @@ export const reviewLabourRightLeft = () => {
   cy.clickOn("Back to claim");
   cy.heading("Claim");
 };
+
+export const accessClaimNavigateToForecast = () => {
+  cy.get("td").contains("Period 1").siblings().contains("a", "Edit").click();
+  cy.heading("Costs to be claimed");
+  cy.clickOn("Continue to claims documents");
+  cy.heading("Claim documents");
+  cy.clickOn("Continue to update forecasts");
+};
+
+export const forecastShowsIARDue = () => {
+  cy.heading("Update forecast");
+  cy.get("tr")
+    .eq(2)
+    .within(() => {
+      cy.get("th:nth-child(2)").should("have.text", "Yes");
+    });
+};
+
+export const forecastShowsIARNotDue = () => {
+  cy.clickOn("Continue to update forecast");
+  cy.heading("Update forecast");
+  cy.get("tr")
+    .eq(2)
+    .within(() => {
+      cy.get("th:nth-child(2)").should("have.text", "No");
+    });
+};

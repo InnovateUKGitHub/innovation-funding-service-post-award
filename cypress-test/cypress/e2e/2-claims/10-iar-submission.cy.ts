@@ -8,6 +8,9 @@ import {
   iarSubmitValidate,
   uploadIAR,
   impactGuidance,
+  accessClaimNavigateToForecast,
+  forecastShowsIARDue,
+  forecastShowsIARNotDue,
 } from "./steps";
 describe("Claims > IAR Required - Submission", () => {
   before(() => {
@@ -28,15 +31,14 @@ describe("Claims > IAR Required - Submission", () => {
 
   it("Should proceed to Claim summary page and attempt to submit, prompting validation", iarSubmitValidate);
 
-  it("Should check the forecast to show that IAR is due", () => {
-    cy.clickOn("Back to update forecast");
-    cy.heading("Update forecast");
-    cy.get("tr")
-      .eq(2)
-      .within(() => {
-        cy.get("th:nth-child(2)").should("have.text", "Yes");
-      });
+  it("Should 'Save and return to claims' without validation prompting", () => {
+    cy.button("Save and return to claims").click();
+    cy.heading("Claims");
   });
+
+  it("Should access the claim and navigate to Forecast page", accessClaimNavigateToForecast);
+
+  it("Should check the forecast to show that IAR is due", forecastShowsIARDue);
 
   it("Should go back to the documents page", () => {
     cy.clickOn("Back to claims documents");
@@ -45,15 +47,10 @@ describe("Claims > IAR Required - Submission", () => {
 
   it("Should upload an Independent Accountant's Report", uploadIAR);
 
-  it("Should proceed to the forecast table and check the IAR requirement flag has changed to No", () => {
-    cy.clickOn("Continue to update forecast");
-    cy.heading("Update forecast");
-    cy.get("tr")
-      .eq(2)
-      .within(() => {
-        cy.get("th:nth-child(2)").should("have.text", "No");
-      });
-  });
+  it(
+    "Should proceed to the forecast table and check the IAR requirement flag has changed to No",
+    forecastShowsIARNotDue,
+  );
 
   it("Should proceed to claim summary", iarProceedToSummary);
 
