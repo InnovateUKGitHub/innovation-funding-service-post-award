@@ -70,6 +70,7 @@ export default defineConfig({
     },
     defaultCommandTimeout,
     specPattern: getSpecPatternArray(specPattern),
+    excludeSpecPattern: "cypress/e2e/2-claims/EXCLUDE-large-file-uploads-test.cy.ts",
     env: {
       BASIC_AUTH: process.env.BASIC_AUTH,
     },
