@@ -58,7 +58,7 @@ export const loansProjCostCleanUp = () => {
         cy.log("**Clearing cost category**");
         cy.get("a").contains("Loans costs for Industrial participants").click();
         cy.heading("Loans costs for Industrial participants");
-        cy.get("#value0").clear().type("11500");
+        cy.getByAriaLabel("Cost of claim line item 0").clear().type("11500");
         cy.wait(500);
         cy.button("Save and return to project costs").click();
         cy.heading("Costs for this period");
