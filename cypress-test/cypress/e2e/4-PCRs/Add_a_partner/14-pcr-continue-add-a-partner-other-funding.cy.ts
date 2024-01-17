@@ -14,6 +14,7 @@ import {
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { learnFiles } from "common/fileComponentTests";
+import { completeLabourForm, displayCostCatTable, navigateToCostCat } from "./add-partner-e2e-steps";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
   before(() => {
@@ -27,8 +28,26 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should navigate to the 'Project costs for new partner' page", navigateToPartnerCosts);
 
-  it("Should click 'Save and continue'", () => {
-    cy.clickOn("Save and continue");
+  /**
+   * Project costs for new partner section
+   */
+
+  it("Should display a cost category table", displayCostCatTable);
+
+  it("Should access the Labour section", () => navigateToCostCat("Labour", 0));
+
+  it("Should complete the Labour form", completeLabourForm);
+
+  it("Should click 'Save and return to summary'", () => {
+    cy.clickOn("Save and return to summary");
+  });
+
+  it("Should display the Labour costs on the summary page", () => {
+    cy.getListItemFromKey("Project costs for new partner", "£6,666.60");
+  });
+
+  it("Should access the Other public sector funding section", () => {
+    cy.getListItemFromKey("Other sources of funding?", "Edit").click();
   });
 
   it("Should display the 'Other public sector funding?' subheading and guidance information", () => {
@@ -70,7 +89,33 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should click 'Add another source of funding' and then validate fields.", addSourceOfFundingValidation);
 
-  it("Should now clear and enter valid information into the fields", addSourceOfFunding);
+  it("Should reload the page and then continue through without adding information", () => {
+    cy.reload();
+    cy.get("h2").contains("Other public sector funding?");
+    cy.clickOn("Save and continue");
+    cy.get("h2").contains("Funding level");
+    cy.clickOn("Save and continue");
+    cy.get("legend").contains("Upload partner agreement");
+  });
+
+  it("Should save and return to summary and still display the project costs from the previous steps", () => {
+    cy.clickOn("Save and return to summary");
+    [
+      ["Project costs for new partner", "£6,666.60"],
+      ["Other sources of funding?", "Yes"],
+      ["Funding from other sources", "£0.00"],
+    ].forEach(([key, item]) => {
+      cy.getListItemFromKey(key, item);
+    });
+  });
+
+  it("Should now re-access Other sources of funding and complete", () => {
+    cy.getListItemFromKey("Funding from other sources", "Edit").click();
+    cy.get("h2").contains("Other public sector funding?");
+    cy.contains("button", "Add another source of funding").click();
+  });
+
+  it("Should now enter valid information into the fields", addSourceOfFunding);
 
   it("Should reflect the value entered in the table", () => {
     cy.tableCell("£50,000.00");

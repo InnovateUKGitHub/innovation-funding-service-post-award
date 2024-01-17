@@ -353,6 +353,10 @@ describe("PCR >  Add a partner > E2E", () => {
     cy.get("h2").contains("Organisation");
   });
 
+  it("Should display the saved total against the Project costs for new partner section", () => {
+    cy.getListItemFromKey("Project costs for new partner", "£20,656.58");
+  });
+
   /**
    * Funding level section
    */
@@ -388,6 +392,19 @@ describe("PCR >  Add a partner > E2E", () => {
   it("Should complete the other source line item", completeOtherSourceLine);
 
   it("Should check the Funding from other sources on Details page", checkDetailsAgain);
+
+  it("Should show that Project costs for new partner have been included on summary with correct totals", () => {
+    [
+      ["Project costs for new partner", "£20,656.58"],
+      ["Other sources of funding?", "Yes"],
+      ["Funding from other sources", "£10,000.00"],
+      ["Funding level", "75.00%"],
+      ["Funding sought", "£7,992.44"],
+      ["Partner contribution to project", "£2,664.15"],
+    ].forEach(([key, item]) => {
+      cy.getListItemFromKey(key, item);
+    });
+  });
 
   /**
    * Partner agreement section
