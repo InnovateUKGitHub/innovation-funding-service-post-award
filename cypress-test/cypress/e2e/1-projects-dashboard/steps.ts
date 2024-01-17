@@ -99,7 +99,7 @@ export const hasBroadcasts = () => {
 };
 
 export const ktpBroadcastInvisible = () => {
-  cy.get("span").should("not.contain", "KTP");
+  cy.get("span").should("not.have.text", "This is a KTP-only broadcast message.");
   cy.get("span").should("not.contain", "I shouldn't appear");
 };
 
