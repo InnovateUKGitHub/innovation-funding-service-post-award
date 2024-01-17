@@ -37,6 +37,7 @@ describe("PCR > Multiple add types", () => {
 
   it("Should allow you to add a remove partner ", () => {
     cy.getByLabel("Change a partner's name").uncheck();
+    cy.getByLabel("Add a partner").uncheck();
     cy.button("Add to request").click();
     cy.heading("Request");
   });
