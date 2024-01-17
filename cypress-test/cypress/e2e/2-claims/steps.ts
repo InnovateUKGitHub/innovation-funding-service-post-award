@@ -925,14 +925,15 @@ export const claimReviewDocArea = () => {
 export const claimReviewExistingEvidence = () => {
   claimReviewFileTidyUp("Javier Baez");
   [
+    ["testfile.doc", "Independent accountant’s report", "17 Jan 2024", "0KB", "Sarah Shuang"],
     ["Sheet1.xlsx", "Claim evidence", "4 Sep 2023", "6KB", "Innovate UK"],
-    ["Sheet2.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
-    ["Sheet3.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
     ["t10.pdf", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
+    ["Sheet3.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
+    ["Sheet2.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
   ].forEach(([claimDoc, type, date, size, uploadBy], rowNumber = 1) => {
     cy.getByQA("claim-supporting-documents-container").within(() => {
       cy.get("tr")
-        .eq(rowNumber + 2)
+        .eq(rowNumber + 1)
         .within(() => {
           cy.get("td:nth-child(1)").contains(claimDoc);
           cy.get("td:nth-child(2)").contains(type);
