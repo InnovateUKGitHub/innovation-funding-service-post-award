@@ -202,7 +202,8 @@ export const useOnUpdateClaimSummary = (
         projectId,
         periodId,
         claim: { ...claim, ...data, status: nextStatus } as ClaimDto,
-        isClaimSummary: true,
+        // only demand summary validated if attempting to submit
+        isClaimSummary: data.button_submit === "submit",
       });
     },
     onSuccess() {
