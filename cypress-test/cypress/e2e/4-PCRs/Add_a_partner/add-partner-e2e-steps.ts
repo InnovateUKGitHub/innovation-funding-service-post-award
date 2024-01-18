@@ -784,3 +784,44 @@ export const companyHouseSwindonUniversity = () => {
   cy.getByLabel("Swindon University").click();
   cy.clickOn("Save and return to summary");
 };
+
+export const deleteCost = () => {
+  cy.tableCell("Labour").siblings().contains("Edit").click();
+  cy.get("h2").contains("Labour");
+  cy.tableCell("Law keeper").siblings().contains("Remove").click();
+  cy.getByQA("validation-message-content").contains("All the information will be permanently deleted.");
+  cy.get("h2").contains("Delete labour");
+  [
+    ["Role within project", "Law keeper"],
+    ["Gross employee cost", "£50,000.00"],
+    ["Rate (£/day)", "£500.00"],
+    ["Days to be spent by all staff with this role", "100"],
+    ["Total cost", "£50,000.00"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key, item);
+  });
+  cy.button("Delete cost").click();
+  cy.get("h2").contains("Labour");
+  cy.getByQA("validation-message-content").contains("You have deleted a cost");
+  cy.get("td").should("not.have.text", "Law keeper");
+};
+
+export const deleteCoste2e = () => {
+  cy.tableCell("Labour").siblings().contains("Edit").click();
+  cy.get("h2").contains("Labour");
+  cy.tableCell("Test").siblings().contains("Remove").click();
+  cy.getByQA("validation-message-content").contains("All the information will be permanently deleted.");
+  cy.get("h2").contains("Delete labour");
+  [
+    ["Role within project", "Test"],
+    ["Gross employee cost", "£6,666.66"],
+    ["Rate (£/day)", "£222.22"],
+    ["Days to be spent by all staff with this role", "30"],
+  ].forEach(([key, item]) => {
+    cy.getListItemFromKey(key, item);
+  });
+  cy.button("Delete cost").click();
+  cy.get("h2").contains("Labour");
+  cy.getByQA("validation-message-content").contains("You have deleted a cost");
+  cy.get("td").should("not.have.text", "Test");
+};

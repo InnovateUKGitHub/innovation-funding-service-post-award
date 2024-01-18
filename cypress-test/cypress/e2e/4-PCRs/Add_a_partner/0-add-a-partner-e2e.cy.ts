@@ -68,6 +68,8 @@ import {
   accessPartnerAgreement,
   uploadTestFile,
   completeOtherSourceLine,
+  deleteCost,
+  deleteCoste2e,
 } from "./add-partner-e2e-steps";
 import { learnFiles } from "common/fileComponentTests";
 
@@ -404,6 +406,18 @@ describe("PCR >  Add a partner > E2E", () => {
     ].forEach(([key, item]) => {
       cy.getListItemFromKey(key, item);
     });
+  });
+
+  it("Should go into costs again", () => {
+    cy.getListItemFromKey("Project costs for new partner", "Edit").click();
+  });
+
+  it("Should access the cost category again and delete the line item", deleteCoste2e);
+
+  it("Should save and return to proejct summary", () => {
+    cy.clickOn("Save and return to project costs");
+    cy.get("h2").contains("Project costs for new partner");
+    cy.clickOn("Save and return to summary");
   });
 
   /**

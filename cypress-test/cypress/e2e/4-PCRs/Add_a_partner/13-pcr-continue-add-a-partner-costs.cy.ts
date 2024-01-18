@@ -8,10 +8,13 @@ import {
   addPartnerWholeDaysOnly,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
+import { deleteCost } from "./add-partner-e2e-steps";
+
+const pm = "james.black@euimeabs.test";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: pm, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
   });
 
@@ -72,8 +75,5 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.get("span").contains("£50,000.00");
   });
 
-  it("Should have a 'Save and continue' button and 'Save and return to summary' button", () => {
-    cy.contains("a", "Save and continue");
-    cy.contains("a", "Save and return to summary");
-  });
+  it("Should access the cost category again and delete the line item", deleteCost);
 });

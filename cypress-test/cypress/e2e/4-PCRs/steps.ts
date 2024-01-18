@@ -1025,7 +1025,7 @@ export const addSourceOfFunding = () => {
   cy.getCellFromHeaderAndRowNumber("Date secured", 1, '[aria-label="year funding is secured for item 1"]')
     .clear()
     .type("2022");
-  cy.getCellFromHeaderAndRowNumber("Funding amount", 1, "input").clear().type("50000");
+  cy.getCellFromHeaderAndRowNumber("Funding amount", 1, "input").clear().type("2000");
   cy.wait(500);
 };
 

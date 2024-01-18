@@ -11,14 +11,17 @@ import {
   uploadPartnerInfo,
   otherFundingOptions,
   addSourceOfFundingValidation,
+  pcrNewCostCatLineItem,
 } from "../steps";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { learnFiles } from "common/fileComponentTests";
-import { completeLabourForm, displayCostCatTable, navigateToCostCat } from "./add-partner-e2e-steps";
+import { deleteCost, displayCostCatTable, navigateToCostCat } from "./add-partner-e2e-steps";
+
+const pm = "james.black@euimeabs.test";
 
 describe("PCR > Add partner > Continuing editing PCR project costs section", () => {
   before(() => {
-    visitApp({ path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
+    visitApp({ asUser: pm, path: "projects/a0E2600000kSotUEAS/pcrs/dashboard" });
     pcrTidyUp("Add a partner");
   });
 
@@ -36,14 +39,21 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should access the Labour section", () => navigateToCostCat("Labour", 0));
 
-  it("Should complete the Labour form", completeLabourForm);
+  it("Should click Add a cost", () => {
+    cy.clickOn("Add a cost");
+    cy.get("h2").contains("Labour");
+  });
 
-  it("Should click 'Save and return to summary'", () => {
+  it("Should enter a new cost category line item by navigating to a new page", pcrNewCostCatLineItem);
+
+  it("Should return to Summary", () => {
+    cy.clickOn("Save and return to project costs");
+    cy.get("h2").contains("Project costs for new partner");
     cy.clickOn("Save and return to summary");
   });
 
   it("Should display the Labour costs on the summary page", () => {
-    cy.getListItemFromKey("Project costs for new partner", "£6,666.60");
+    cy.getListItemFromKey("Project costs for new partner", "£50,000.00");
   });
 
   it("Should access the Other public sector funding section", () => {
@@ -101,7 +111,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should save and return to summary and still display the project costs from the previous steps", () => {
     cy.clickOn("Save and return to summary");
     [
-      ["Project costs for new partner", "£6,666.60"],
+      ["Project costs for new partner", "£50,000.00"],
       ["Other sources of funding?", "Yes"],
       ["Funding from other sources", "£0.00"],
     ].forEach(([key, item]) => {
@@ -118,7 +128,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   it("Should now enter valid information into the fields", addSourceOfFunding);
 
   it("Should reflect the value entered in the table", () => {
-    cy.tableCell("£50,000.00");
+    cy.tableCell("£2,000.00");
   });
 
   it("Should 'Save and continue'", () => {
@@ -173,7 +183,24 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
     cy.validationNotification(`'${testFile}' has been removed.`);
   });
 
-  it("Should click 'Save and continue'", () => {
-    cy.clickOn("Save and continue");
+  it("Should click 'Save and return to summary' and summary should display the correct information", () => {
+    cy.clickOn("Save and return to summary");
+    [
+      ["Project costs for new partner", "£50,000.00"],
+      ["Other sources of funding?", "Yes"],
+      ["Funding from other sources", "£2,000.00"],
+      ["Funding level", "5.00%"],
+      ["Funding sought", "£2,400.00"],
+      ["Partner contribution to project", "£45,600.00"],
+    ].forEach(([key, item]) => {
+      cy.getListItemFromKey(key, item);
+    });
   });
+
+  it("Should access Project costs for new partner again", () => {
+    cy.getListItemFromKey("Project costs for new partner", "Edit").click();
+    cy.get("h2").contains("Project costs for new partner");
+  });
+
+  it("Should access the cost category again and delete the line item", deleteCost);
 });
