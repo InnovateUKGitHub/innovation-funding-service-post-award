@@ -6,7 +6,8 @@ import { omit } from "lodash";
 type AddPartnerItem = { id: PcrItemId; type: PCRItemType.PartnerAddition; spendProfile: PcrSpendProfileDto };
 type Item = { id: PcrItemId; type: PCRItemType };
 
-type MinimalPcrType = Pick<PCRDto, "id"> & {
+type MinimalPcrType = {
+  id: PcrId;
   items?: (Item | AddPartnerItem)[];
 };
 

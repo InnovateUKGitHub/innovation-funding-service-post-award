@@ -12,7 +12,6 @@ import { H2 } from "@ui/components/atomicDesign/atoms/Heading/Heading.variants";
 import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
 import { useMemo } from "react";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
-import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { sumBy } from "lodash";
 import { TableEmptyCell } from "@ui/components/atomicDesign/atoms/table/TableEmptyCell/TableEmptyCell";
 
@@ -57,8 +56,10 @@ export const SpendProfileStep = () => {
         <Section>
           <Table>
             <THead>
-              <TH>{getContent(x => x.pages.pcrAddPartnerSpendProfile.categoryHeading)}</TH>
-              <TH numeric>{getContent(x => x.pages.pcrAddPartnerSpendProfile.costHeading)}</TH>
+              <TR>
+                <TH>{getContent(x => x.pages.pcrAddPartnerSpendProfile.categoryHeading)}</TH>
+                <TH numeric>{getContent(x => x.pages.pcrAddPartnerSpendProfile.costHeading)}</TH>
+              </TR>
             </THead>
 
             <TBody>
@@ -80,12 +81,10 @@ export const SpendProfileStep = () => {
             </TBody>
             <TFoot>
               <TR>
-                <TD>
-                  <P bold>{getContent(x => x.pages.pcrAddPartnerSpendProfile.totalCosts)}</P>
-                </TD>
-                <TD numeric>
-                  <Currency bold value={data.total} />
-                </TD>
+                <TH>{getContent(x => x.pages.pcrAddPartnerSpendProfile.totalCosts)}</TH>
+                <TH numeric>
+                  <Currency value={data.total} />
+                </TH>
                 <TableEmptyCell />
               </TR>
             </TFoot>
