@@ -192,3 +192,10 @@ k8s_help() {
     echo '    k8s_describe [name] - deletes the pod matching the deployment'
     echo '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
 }
+
+docker_upload_node() {
+    VERSION=$1
+    docker pull --platform=linux/amd64 node:$VERSION
+    docker tag node:$VERSION docker-ifs.devops.innovateuk.org/acc/node:$VERSION
+    docker push docker-ifs.devops.innovateuk.org/acc/node:$VERSION
+}
