@@ -332,7 +332,6 @@ describe("UpdatePCRCommand - Partner addition", () => {
       type: CostCategoryType.Other_Funding,
     });
     const dummyDate = DateTime.local().toJSDate();
-    item.spendProfile.editPcrFunds = true;
     item.spendProfile.funds = [
       {
         id: "" as PcrId,

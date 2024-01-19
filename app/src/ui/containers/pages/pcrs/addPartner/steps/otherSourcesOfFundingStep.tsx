@@ -26,10 +26,10 @@ import { DateInput } from "@ui/components/atomicDesign/atoms/DateInputs/DateInpu
 import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 import { SpendProfile } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { combineDate, getMonth, getYear } from "@ui/components/atomicDesign/atoms/Date";
-import { head } from "lodash";
 import { FormGroup } from "@ui/components/atomicDesign/atoms/form/FormGroup/FormGroup";
 import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 import { OtherSourcesOfFundingSchema, otherSourcesOfFundingSchema } from "./schemas/otherSourcesOfFunding.zod";
+import { useMemo } from "react";
 
 const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" | "type">[]) => {
   const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Public_Sector_Funding);
@@ -38,11 +38,7 @@ const getOtherFundingCostCategory = (costCategories: Pick<CostCategoryDto, "id" 
   return otherFundingCostCategory;
 };
 
-const getFunds = (
-  fetchedFunds: PCRSpendProfileOtherFundingDto[],
-  // costCategories: Pick<CostCategoryDto, "id" | "type">[],
-  // isClient: boolean,
-) => {
+const getFunds = (fetchedFunds: PCRSpendProfileOtherFundingDto[]) => {
   const funds = fetchedFunds.filter(x => x.costCategory === CostCategoryType.Other_Public_Sector_Funding);
   return funds;
 
@@ -76,6 +72,8 @@ export const mapWithDateParts = (fund: PCRSpendProfileOtherFundingDto) => ({
   dateSecured: fund.dateSecured,
   value: fund.value ?? undefined,
   id: fund.id ?? "",
+  costCategoryId: fund.costCategoryId,
+  costCategory: fund.costCategory,
 });
 
 export const OtherSourcesOfFundingStep = () => {
@@ -83,22 +81,22 @@ export const OtherSourcesOfFundingStep = () => {
   const { isClient } = useMounted();
   const { projectId, itemId, fetchKey, useFormValidate, onSave, isFetching } = usePcrWorkflowContext();
 
-  const { costCategories, pcrSpendProfile } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
-
-  const otherFundingCostCategory = head(
-    costCategories.filter(x => x.type === CostCategoryType.Other_Public_Sector_Funding),
+  const { costCategories, pcrSpendProfile, academicCostCategories } = useAddPartnerWorkflowQuery(
+    projectId,
+    itemId,
+    fetchKey,
   );
 
-  if (!otherFundingCostCategory) throw new Error("could not find other public funding cost category");
-
-  const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, [otherFundingCostCategory]);
-  const funds = getFunds(spendProfile.funds);
+  const { spendProfile, funds } = useMemo(() => {
+    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, academicCostCategories);
+    return { spendProfile, funds: getFunds(spendProfile.funds).map(mapWithDateParts) };
+  }, [itemId]);
 
   const { handleSubmit, register, formState, trigger, setValue, watch, control } = useForm<OtherSourcesOfFundingSchema>(
     {
       defaultValues: {
         button_submit: "submit",
-        funds: funds.map(mapWithDateParts),
+        funds,
       },
       resolver: zodResolver(otherSourcesOfFundingSchema, {
         errorMap: addPartnerErrorMap,
@@ -133,13 +131,12 @@ export const OtherSourcesOfFundingStep = () => {
               data: {
                 spendProfile: {
                   ...spendProfile,
-                  editPcrFunds: true,
                   funds: data.funds.map(x => ({
                     description: x.description,
                     value: Number(x.value),
                     dateSecured: combineDate(x.dateSecured_month, x.dateSecured_year, false),
-                    costCategory: otherFundingCostCategory.type,
-                    costCategoryId: otherFundingCostCategory.id,
+                    costCategory: x.costCategory,
+                    costCategoryId: x.costCategoryId,
                     id: x.id as PcrId,
                   })),
                 },
@@ -149,7 +146,7 @@ export const OtherSourcesOfFundingStep = () => {
           )}
         >
           <Fieldset>
-            <input type="hidden" value={funds.length} {...register("itemsLength")} />
+            <input type="hidden" value={fields.length} {...register("itemsLength")} />
 
             <Table>
               <THead>

@@ -5,16 +5,6 @@ export interface PcrSpendProfileDto {
   costs: PCRSpendProfileCostDto[];
   funds: PCRSpendProfileFundingDto[];
   pcrItemId: PcrItemId;
-  // /**
-  //  * flag to enable updating costs on server. necessary because sometimes an empty array means delete and sometimes
-  //  * we want it to mean ignore
-  //  */
-  // editPcrCosts?: boolean;
-  /**
-   * flag to enable updating funds on server. necessary because sometimes an empty array means delete and sometimes
-   * we want it to mean ignore
-   */
-  editPcrFunds?: boolean;
 }
 
 export type PCRSpendProfileCostDto =

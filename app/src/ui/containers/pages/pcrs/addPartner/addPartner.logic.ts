@@ -10,6 +10,7 @@ import { mapToDocumentSummaryDto } from "@gql/dtoMapper/mapDocumentsDto";
 import { mapToCostCategoryDtoArray } from "@gql/dtoMapper/mapCostCategoryDto";
 import { mapPcrSpendProfileArray } from "@gql/dtoMapper/mapPcrSpendProfile";
 import { PCROrganisationType } from "@framework/constants/pcrConstants";
+import { CostCategoryType } from "@framework/constants/enums";
 
 export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrItemId, fetchKey: number) => {
   const data = useLazyLoadQuery<AddPartnerWorkflowQuery>(
@@ -69,8 +70,9 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
 
   const academicCostCategories = costCategories.filter(
     costCategory =>
-      costCategory.organisationType === PCROrganisationType.Academic &&
-      costCategory.competitionType === project.competitionType,
+      (costCategory.organisationType === PCROrganisationType.Academic &&
+        costCategory.competitionType === project.competitionType) ||
+      costCategory.type === CostCategoryType.Other_Public_Sector_Funding,
   );
 
   const pcrItem = mapPcrItemDto(

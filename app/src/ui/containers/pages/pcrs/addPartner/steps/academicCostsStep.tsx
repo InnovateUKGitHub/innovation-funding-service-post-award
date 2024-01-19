@@ -70,9 +70,7 @@ export const AcademicCostsStep = () => {
   const link = useLinks();
 
   const { pcrItem, academicCostCategories, pcrSpendProfile } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
-
   const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, academicCostCategories);
-
   const initialCosts = getInitialCosts(spendProfile, academicCostCategories);
 
   const { handleSubmit, register, formState, trigger, setValue, watch } = useForm<AcademicCostsSchema>({
@@ -145,17 +143,17 @@ export const AcademicCostsStep = () => {
               </TR>
             </THead>
             <TBody>
-              {academicCostCategories.map((cat, i) => (
-                <TR key={cat.name}>
+              {initialCosts.map((cat, i) => (
+                <TR key={cat.description}>
                   <TD>
-                    <P>{cat.name}</P>
+                    <P>{cat.description}</P>
                   </TD>
                   <TD>
                     <ValidationError error={validationErrors?.costs?.[i]?.value as RhfError} />
                     <NumberInput
                       hasError={!!validationErrors?.costs?.[i]?.value}
                       aria-label={getContent(x =>
-                        x.forms.pcr.addPartner.costs.arrayType.value.aria_label({ costCategory: cat.name }),
+                        x.forms.pcr.addPartner.costs.arrayType.value.aria_label({ costCategory: cat.description }),
                       )}
                       disabled={isFetching}
                       {...register(`costs.${i}.value`)}

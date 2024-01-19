@@ -1,3 +1,4 @@
+import { CostCategoryType } from "@framework/constants/enums";
 import { isEmptyDate, isValidMonth, isValidYear } from "@framework/validation-helpers/date";
 import { z } from "zod";
 
@@ -5,6 +6,8 @@ const valueDescription = z.object({
   value: z.coerce.number().min(1),
   description: z.string().min(1),
   id: z.string(),
+  costCategory: z.number().transform(x => x as CostCategoryType),
+  costCategoryId: z.string().transform(x => x as CostCategoryId),
 });
 
 /*
