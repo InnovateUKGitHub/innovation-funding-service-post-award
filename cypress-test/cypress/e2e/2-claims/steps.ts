@@ -233,7 +233,7 @@ export const reflectCostAdded = () => {
 };
 
 export const clearUpLabourCostCat = () => {
-  cy.wait(200);
+  cy.wait(3000);
   cy.clickOn("Upload and remove documents");
   cy.heading("Labour documents");
   cy.clickOn("Remove");
@@ -241,6 +241,7 @@ export const clearUpLabourCostCat = () => {
   cy.get("a.govuk-back-link").click();
   cy.heading("Labour");
   cy.clickOn("Remove");
+  cy.get("textarea").should("have.value", standardComments);
   cy.get("textarea").clear();
 };
 
@@ -925,7 +926,7 @@ export const claimReviewDocArea = () => {
 export const claimReviewExistingEvidence = () => {
   claimReviewFileTidyUp("Javier Baez");
   [
-    ["testfile.doc", "Independent accountant’s report", "17 Jan 2024", "0KB", "Sarah Shuang"],
+    ["testfile.doc", "Independent accountant’s report", uploadDate, "0KB", "Sarah Shuang"],
     ["Sheet1.xlsx", "Claim evidence", "4 Sep 2023", "6KB", "Innovate UK"],
     ["t10.pdf", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
     ["Sheet3.xlsx", "Claim evidence", "20 Mar 2023", "6KB", "Innovate UK"],
@@ -1482,7 +1483,7 @@ export const accessClaimNavigateToForecast = () => {
   cy.heading("Costs to be claimed");
   cy.clickOn("Continue to claims documents");
   cy.heading("Claim documents");
-  cy.clickOn("Continue to update forecasts");
+  cy.clickOn("Continue to update forecast");
 };
 
 export const forecastShowsIARDue = () => {

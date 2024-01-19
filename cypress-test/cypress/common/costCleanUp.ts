@@ -7,6 +7,7 @@ export const euiCostCleanUp = () => {
         cy.get("a").contains("Labour").click();
         cy.heading("Labour");
         cy.clickOn("Remove");
+        cy.wait(500);
         cy.get("textarea").clear();
         cy.get("main").then($main => {
           if ($main.text().includes("testfile.doc")) {

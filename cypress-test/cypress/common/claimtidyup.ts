@@ -30,7 +30,7 @@ export const fcClaimTidyUp = async (claimType: string) => {
         cy.switchUserTo("testman2@testing.com");
         cy.get("td").contains("ABS EUI Medium Enterprise").siblings().clickOn("a", "Review");
         cy.getByQA("status_MO Queried").click({ force: true });
-        cy.get("textarea").clear();
+        cy.get("textarea").wait(200).clear();
         cy.get("textarea").type(comments);
         cy.paragraph("You have");
         cy.paragraph("I am satisfied that the costs claimed appear to comply");
