@@ -62,7 +62,7 @@ const EditClaimLineItemsPage = ({
     resolver: zodResolver(editClaimLineItemsSchema, { errorMap: editClaimLineItemErrorMap }),
     defaultValues: {
       lineItems: initialLineItems,
-      comments: previousInputs?.comments,
+      comments: previousInputs?.comments ?? claimDetails.comments ?? "",
     },
   });
   const { register, handleSubmit, setValue, setError, formState, watch, getFieldState } = formMethods;
