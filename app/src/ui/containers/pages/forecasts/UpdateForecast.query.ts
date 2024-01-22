@@ -4,7 +4,6 @@ export const updateForecastQuery = graphql`
   query UpdateForecastQuery($projectIdStr: String!, $projectId: ID!, $partnerId: ID!) {
     salesforce {
       uiapi {
-        ...ForecastTableFragment
         ...TitleFragment
         ...ForecastWarningFragment
         query {

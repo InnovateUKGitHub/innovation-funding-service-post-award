@@ -22,7 +22,7 @@ import { useStores } from "@ui/redux/storesProvider";
 import { ForecastDetailsDtosValidator } from "@ui/validation/validators/forecastDetailsDtosValidator";
 import { isNumber } from "@framework/util/numberHelper";
 import { ClaimLastModified } from "@ui/components/atomicDesign/organisms/claims/ClaimLastModified/claimLastModified";
-import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.withFragment";
+import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.standalone";
 import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warning.withFragment";
 
 export interface UpdateForecastParams {
@@ -101,6 +101,8 @@ const UpdateForecastComponent = ({
             update={() => null}
             value={({ onChange }) => (
               <ForecastTable
+                projectId={projectId}
+                partnerId={partnerId}
                 onChange={onChange}
                 selectCurrentClaimByApprovedStatus
                 editor={editor}
