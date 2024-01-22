@@ -11,18 +11,20 @@ import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/
 import { useContent } from "@ui/hooks/content.hook";
 import { UseFormHandleSubmit, UseFormRegister, UseFormWatch } from "react-hook-form";
 import { usePcrWorkflowContext } from "./pcrItemWorkflowMigrated";
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 
 export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolean }>({
   register,
   pcrItem,
   handleSubmit,
   watch,
+  children,
 }: {
   pcrItem: Pick<FullPCRItemDto, "type" | "status">;
   register: UseFormRegister<FormValues>;
   handleSubmit: UseFormHandleSubmit<FormValues>;
   watch: UseFormWatch<FormValues>;
+  children?: ReactNode;
 }) => {
   const { itemId, routes, projectId, pcrId, isFetching, onSave, allowSubmit, setMarkedAsCompleteHasBeenChecked } =
     usePcrWorkflowContext();
@@ -54,6 +56,8 @@ export const PcrItemSummaryForm = <FormValues extends { markedAsComplete: boolea
         });
       })}
     >
+      {children}
+
       {canReallocatePcr && (
         <Fieldset>
           <Hint id="hint-for-grantMovingOverFinancialYear">

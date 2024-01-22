@@ -1734,11 +1734,13 @@ type Acc_ProjectChangeRequest__c {
   Acc_AdditionalNumberofPeriods__c: DoubleValue
   Loan_Duration__c: StringValue
   Acc_SuspensionStarts__c: DateValue
+  New_company_subcontractor_name__c: StringValue
   Acc_Nickname__c: StringValue
   OwnerId: IDValue
 
   """polymorphicParentRelationship"""
   Owner: Acc_ProjectChangeRequest__c_Owner
+  Justification__c: LongTextAreaValue
   Acc_TurnoverYearEnd__c: DateValue
   RecordTypeId(
     """
@@ -1760,6 +1762,7 @@ type Acc_ProjectChangeRequest__c {
   """parentRelationship"""
   Acc_Project_Participant__r: Acc_ProjectParticipant__c
   Acc_PriorStatusValue__c: TextAreaValue
+  Country_where_work_will_be_carried_out__c: StringValue
   Acc_TypesofPCRRequests__c: LongTextAreaValue
   Acc_RemovalPeriod__c: DoubleValue
   Acc_Status__c: PicklistValue
@@ -1787,6 +1790,7 @@ type Acc_ProjectChangeRequest__c {
   """parentRelationship"""
   Acc_Account__r: Account
   Acc_ProjectID__c: StringValue
+  Days_in_previous_statuses__c: DoubleValue
   Acc_RequestedEndPeriod__c: DoubleValue
   Name: StringValue
   Acc_ProjectContactLink__c: IDValue
@@ -1800,8 +1804,11 @@ type Acc_ProjectChangeRequest__c {
   Acc_ExternalReviewStatus__c: PicklistValue
   Acc_ReasonforTermination__c: PicklistValue
   Acc_Contact2Phone__c: StringValue
+  Cost_of_work__c: CurrencyValue
   Acc_Contact2ProjectRole__c: PicklistValue
   Acc_Subsidiary__c: BooleanValue
+  Role_in_the_project__c: StringValue
+  Company_registration_number__c: StringValue
   Acc_ProjectPostcode__c: StringValue
   Acc_Contact1Surname__c: StringValue
   Acc_EligibleForStateAid__c: BooleanValue
@@ -1811,6 +1818,7 @@ type Acc_ProjectChangeRequest__c {
   Acc_Contact2Forename__c: StringValue
   Acc_AccountName__c: StringValue
   Loan_ExtensionPeriod__c: StringValue
+  Status_change_date__c: DateValue
   CreatedDate: DateTimeValue
   Acc_TSBReference__c: StringValue
   Acc_OrganisationName__c: StringValue
@@ -1820,6 +1828,7 @@ type Acc_ProjectChangeRequest__c {
   Loan_ExtensionPeriodChange__c: DoubleValue
   LastReferencedDate: DateTimeValue
   Acc_OtherFunding__c: BooleanValue
+  Relationship_between_partners__c: BooleanValue
   Acc_AdditionalNumberofMonths__c: DoubleValue
   Acc_Location__c: PicklistValue
   Acc_MarkedasComplete__c: PicklistValue
@@ -1841,6 +1850,8 @@ type Acc_ProjectChangeRequest__c {
   """parentRelationship"""
   Acc_Contact2__r: Contact
   Acc_Contact2EmailAddress__c: StringValue
+  PCR_Age__c: DoubleValue
+  Relationship_justification__c: LongTextAreaValue
   Acc_Comments__c: LongTextAreaValue
   Acc_ExistingPartnerName__c: TextAreaValue
   LastModifiedById: IDValue
@@ -1913,8 +1924,10 @@ input Acc_ProjectChangeRequest__c_Filter {
   Id: IdOperators
   Loan_Duration__c: StringOperators
   Acc_SuspensionStarts__c: DateOperators
+  New_company_subcontractor_name__c: StringOperators
   Acc_Nickname__c: StringOperators
   OwnerId: IdOperators
+  Justification__c: LongTextAreaOperators
   Acc_TurnoverYearEnd__c: DateOperators
   RecordTypeId: IdOperators
   RecordType: RecordType_Filter
@@ -1925,6 +1938,7 @@ input Acc_ProjectChangeRequest__c_Filter {
   Acc_Project_Participant__c: IdOperators
   Acc_Project_Participant__r: Acc_ProjectParticipant__c_Filter
   Acc_PriorStatusValue__c: TextAreaOperators
+  Country_where_work_will_be_carried_out__c: StringOperators
   Acc_TypesofPCRRequests__c: LongTextAreaOperators
   Acc_RemovalPeriod__c: DoubleOperators
   Acc_Status__c: PicklistOperators
@@ -1948,6 +1962,7 @@ input Acc_ProjectChangeRequest__c_Filter {
   Acc_Account__c: IdOperators
   Acc_Account__r: Account_Filter
   Acc_ProjectID__c: StringOperators
+  Days_in_previous_statuses__c: DoubleOperators
   Acc_RequestedEndPeriod__c: DoubleOperators
   Name: StringOperators
   Acc_ProjectContactLink__c: IdOperators
@@ -1957,8 +1972,11 @@ input Acc_ProjectChangeRequest__c_Filter {
   Acc_ExternalReviewStatus__c: PicklistOperators
   Acc_ReasonforTermination__c: PicklistOperators
   Acc_Contact2Phone__c: StringOperators
+  Cost_of_work__c: CurrencyOperators
   Acc_Contact2ProjectRole__c: PicklistOperators
   Acc_Subsidiary__c: BooleanOperators
+  Role_in_the_project__c: StringOperators
+  Company_registration_number__c: StringOperators
   Acc_ProjectPostcode__c: StringOperators
   Acc_Contact1Surname__c: StringOperators
   Acc_EligibleForStateAid__c: BooleanOperators
@@ -1968,6 +1986,7 @@ input Acc_ProjectChangeRequest__c_Filter {
   Acc_Contact2Forename__c: StringOperators
   Acc_AccountName__c: StringOperators
   Loan_ExtensionPeriod__c: StringOperators
+  Status_change_date__c: DateOperators
   CreatedDate: DateTimeOperators
   Acc_TSBReference__c: StringOperators
   Acc_OrganisationName__c: StringOperators
@@ -1977,6 +1996,7 @@ input Acc_ProjectChangeRequest__c_Filter {
   Loan_ExtensionPeriodChange__c: DoubleOperators
   LastReferencedDate: DateTimeOperators
   Acc_OtherFunding__c: BooleanOperators
+  Relationship_between_partners__c: BooleanOperators
   Acc_AdditionalNumberofMonths__c: DoubleOperators
   Acc_Location__c: PicklistOperators
   Acc_MarkedasComplete__c: PicklistOperators
@@ -1996,6 +2016,8 @@ input Acc_ProjectChangeRequest__c_Filter {
   Acc_Contact2__c: IdOperators
   Acc_Contact2__r: Contact_Filter
   Acc_Contact2EmailAddress__c: StringOperators
+  PCR_Age__c: DoubleOperators
+  Relationship_justification__c: LongTextAreaOperators
   Acc_Comments__c: LongTextAreaOperators
   Acc_ExistingPartnerName__c: TextAreaOperators
   LastModifiedById: IdOperators
@@ -2028,6 +2050,7 @@ input Acc_ProjectChangeRequest__c_GroupBy {
   Override_Grant_Control__c: GroupByClause
   Id: GroupByClause
   Acc_SuspensionStarts__c: GroupByClause
+  New_company_subcontractor_name__c: GroupByClause
   Acc_Nickname__c: GroupByClause
   OwnerId: GroupByClause
   Acc_TurnoverYearEnd__c: GroupByClause
@@ -2039,6 +2062,7 @@ input Acc_ProjectChangeRequest__c_GroupBy {
   Acc_Project_Participant__c: GroupByClause
   Acc_Project_Participant__r: Acc_ProjectParticipant__c_GroupBy
   Acc_PriorStatusValue__c: GroupByClause
+  Country_where_work_will_be_carried_out__c: GroupByClause
   Acc_Status__c: GroupByClause
   Acc_ParticipantType__c: GroupByClause
   Acc_RemovalDate__c: GroupByClause
@@ -2064,6 +2088,8 @@ input Acc_ProjectChangeRequest__c_GroupBy {
   Acc_Contact2Phone__c: GroupByClause
   Acc_Contact2ProjectRole__c: GroupByClause
   Acc_Subsidiary__c: GroupByClause
+  Role_in_the_project__c: GroupByClause
+  Company_registration_number__c: GroupByClause
   Acc_ProjectPostcode__c: GroupByClause
   Acc_Contact1Surname__c: GroupByClause
   Acc_EligibleForStateAid__c: GroupByClause
@@ -2071,6 +2097,7 @@ input Acc_ProjectChangeRequest__c_GroupBy {
   LastViewedDate: GroupByDateFunction
   Acc_RegistrationNumber__c: GroupByClause
   Acc_Contact2Forename__c: GroupByClause
+  Status_change_date__c: GroupByClause
   CreatedDate: GroupByDateFunction
   Acc_TSBReference__c: GroupByClause
   Acc_OrganisationName__c: GroupByClause
@@ -2078,6 +2105,7 @@ input Acc_ProjectChangeRequest__c_GroupBy {
   Loan_AvailabilityEndDate__c: GroupByClause
   LastReferencedDate: GroupByDateFunction
   Acc_OtherFunding__c: GroupByClause
+  Relationship_between_partners__c: GroupByClause
   Acc_Location__c: GroupByClause
   Acc_MarkedasComplete__c: GroupByClause
   Acc_Contact1Phone__c: GroupByClause
@@ -2134,8 +2162,10 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   Id: AggregateOrderByStringClause
   Loan_Duration__c: AggregateOrderByStringClause
   Acc_SuspensionStarts__c: AggregateOrderByStringClause
+  New_company_subcontractor_name__c: AggregateOrderByStringClause
   Acc_Nickname__c: AggregateOrderByStringClause
   OwnerId: NoFunctionAggregateOrderByClause
+  Justification__c: AggregateOrderByStringClause
   Acc_TurnoverYearEnd__c: AggregateOrderByStringClause
   RecordTypeId: NoFunctionAggregateOrderByClause
   RecordType: RecordType_OrderBy
@@ -2146,6 +2176,7 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   Acc_Project_Participant__c: NoFunctionAggregateOrderByClause
   Acc_Project_Participant__r: Acc_ProjectParticipant__c_OrderBy
   Acc_PriorStatusValue__c: AggregateOrderByStringClause
+  Country_where_work_will_be_carried_out__c: AggregateOrderByStringClause
   Acc_TypesofPCRRequests__c: AggregateOrderByStringClause
   Acc_RemovalPeriod__c: AggregateOrderByNumberClause
   Acc_Status__c: AggregateOrderByStringClause
@@ -2169,6 +2200,7 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   Acc_Account__c: NoFunctionAggregateOrderByClause
   Acc_Account__r: Account_OrderBy
   Acc_ProjectID__c: AggregateOrderByStringClause
+  Days_in_previous_statuses__c: AggregateOrderByNumberClause
   Acc_RequestedEndPeriod__c: AggregateOrderByNumberClause
   Name: AggregateOrderByStringClause
   Acc_ProjectContactLink__c: NoFunctionAggregateOrderByClause
@@ -2178,8 +2210,11 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   Acc_ExternalReviewStatus__c: AggregateOrderByStringClause
   Acc_ReasonforTermination__c: AggregateOrderByStringClause
   Acc_Contact2Phone__c: AggregateOrderByStringClause
+  Cost_of_work__c: AggregateOrderByNumberClause
   Acc_Contact2ProjectRole__c: AggregateOrderByStringClause
   Acc_Subsidiary__c: NoFunctionAggregateOrderByClause
+  Role_in_the_project__c: AggregateOrderByStringClause
+  Company_registration_number__c: AggregateOrderByStringClause
   Acc_ProjectPostcode__c: AggregateOrderByStringClause
   Acc_Contact1Surname__c: AggregateOrderByStringClause
   Acc_EligibleForStateAid__c: NoFunctionAggregateOrderByClause
@@ -2189,6 +2224,7 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   Acc_Contact2Forename__c: AggregateOrderByStringClause
   Acc_AccountName__c: AggregateOrderByStringClause
   Loan_ExtensionPeriod__c: AggregateOrderByStringClause
+  Status_change_date__c: AggregateOrderByStringClause
   CreatedDate: AggregateOrderByStringClause
   Acc_TSBReference__c: AggregateOrderByStringClause
   Acc_OrganisationName__c: AggregateOrderByStringClause
@@ -2198,6 +2234,7 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   Loan_ExtensionPeriodChange__c: AggregateOrderByNumberClause
   LastReferencedDate: AggregateOrderByStringClause
   Acc_OtherFunding__c: NoFunctionAggregateOrderByClause
+  Relationship_between_partners__c: NoFunctionAggregateOrderByClause
   Acc_AdditionalNumberofMonths__c: AggregateOrderByNumberClause
   Acc_Location__c: AggregateOrderByStringClause
   Acc_MarkedasComplete__c: AggregateOrderByStringClause
@@ -2217,6 +2254,8 @@ input Acc_ProjectChangeRequest__c_OrderBy {
   Acc_Contact2__c: NoFunctionAggregateOrderByClause
   Acc_Contact2__r: Contact_OrderBy
   Acc_Contact2EmailAddress__c: AggregateOrderByStringClause
+  PCR_Age__c: AggregateOrderByNumberClause
+  Relationship_justification__c: AggregateOrderByStringClause
   Acc_Comments__c: AggregateOrderByStringClause
   Acc_ExistingPartnerName__c: AggregateOrderByStringClause
   LastModifiedById: NoFunctionAggregateOrderByClause
@@ -3020,6 +3059,7 @@ type Acc_Project__c {
   LastActivityDate: DateValue
   Acc_Review_Team__c: StringValue
   Acc_CurrentPeriodEndDate__c: DateValue
+  IM_Phase1ProjectNumber__c: StringValue
   Acc_NumberOfOpenClaims__c: DoubleValue
   Acc_ProjectSource__c: PicklistValue
   Acc_ReasonForTermination__c: PicklistValue
@@ -3051,6 +3091,7 @@ type Acc_Project__c {
   Acc_PublicDescription__c: LongTextAreaValue
   Acc_PCRsUnderQuery__c: DoubleValue
   Acc_TSBProjectNumber__c: DoubleValue
+  IM_Phase1Competition__c: StringValue
   CreatedDate: DateTimeValue
   Loans_DocusignRDConfirmation__c: PicklistValue
   Acc_SubsidyControlScheme__c: StringValue
@@ -3177,6 +3218,7 @@ input Acc_Project__c_Filter {
   LastActivityDate: DateOperators
   Acc_Review_Team__c: StringOperators
   Acc_CurrentPeriodEndDate__c: DateOperators
+  IM_Phase1ProjectNumber__c: StringOperators
   Acc_NumberOfOpenClaims__c: DoubleOperators
   Acc_ProjectSource__c: PicklistOperators
   Acc_ReasonForTermination__c: PicklistOperators
@@ -3204,6 +3246,7 @@ input Acc_Project__c_Filter {
   Acc_PublicDescription__c: LongTextAreaOperators
   Acc_PCRsUnderQuery__c: DoubleOperators
   Acc_TSBProjectNumber__c: DoubleOperators
+  IM_Phase1Competition__c: StringOperators
   CreatedDate: DateTimeOperators
   Loans_DocusignRDConfirmation__c: PicklistOperators
   Acc_SubsidyControlScheme__c: StringOperators
@@ -3270,6 +3313,7 @@ input Acc_Project__c_GroupBy {
   Acc_Can_Suspend__c: GroupByClause
   LastActivityDate: GroupByClause
   Acc_CurrentPeriodEndDate__c: GroupByClause
+  IM_Phase1ProjectNumber__c: GroupByClause
   Acc_ProjectSource__c: GroupByClause
   Acc_ReasonForTermination__c: GroupByClause
   Acc_StartDate__c: GroupByClause
@@ -3355,6 +3399,7 @@ input Acc_Project__c_OrderBy {
   LastActivityDate: AggregateOrderByStringClause
   Acc_Review_Team__c: AggregateOrderByStringClause
   Acc_CurrentPeriodEndDate__c: AggregateOrderByStringClause
+  IM_Phase1ProjectNumber__c: AggregateOrderByStringClause
   Acc_NumberOfOpenClaims__c: AggregateOrderByNumberClause
   Acc_ProjectSource__c: AggregateOrderByStringClause
   Acc_ReasonForTermination__c: AggregateOrderByStringClause
@@ -3382,6 +3427,7 @@ input Acc_Project__c_OrderBy {
   Acc_PublicDescription__c: AggregateOrderByStringClause
   Acc_PCRsUnderQuery__c: AggregateOrderByNumberClause
   Acc_TSBProjectNumber__c: AggregateOrderByNumberClause
+  IM_Phase1Competition__c: AggregateOrderByStringClause
   CreatedDate: AggregateOrderByStringClause
   Loans_DocusignRDConfirmation__c: AggregateOrderByStringClause
   Acc_SubsidyControlScheme__c: AggregateOrderByStringClause
@@ -3586,6 +3632,7 @@ union Acc_StatusChange__c_Owner = Group | User
 
 type Acc_Virements__c {
   LastModifiedDate: DateTimeValue
+  Cost_Category_Description_Order__c: DoubleValue
   Acc_CurrentAwardRate__c: PercentValue
   Acc_TotalGrant__c: CurrencyValue
   Loan_NewDrawdownDate__c: DateValue
@@ -3681,6 +3728,7 @@ type Acc_Virements__cEdge {
 
 input Acc_Virements__c_Filter {
   LastModifiedDate: DateTimeOperators
+  Cost_Category_Description_Order__c: DoubleOperators
   Acc_CurrentAwardRate__c: PercentOperators
   Acc_TotalGrant__c: CurrencyOperators
   Loan_NewDrawdownDate__c: DateOperators
@@ -3766,6 +3814,7 @@ input Acc_Virements__c_GroupBy {
 
 input Acc_Virements__c_OrderBy {
   LastModifiedDate: AggregateOrderByStringClause
+  Cost_Category_Description_Order__c: AggregateOrderByNumberClause
   Acc_CurrentAwardRate__c: AggregateOrderByNumberClause
   Acc_TotalGrant__c: AggregateOrderByNumberClause
   Loan_NewDrawdownDate__c: AggregateOrderByStringClause
@@ -3829,6 +3878,7 @@ type Account {
   PersonOtherCountry: StringValue
   PersonHomePhone: PhoneNumberValue
   Application_Number__pc: StringValue
+  Acc_FundingStatus__pc: PicklistValue
   OrgMigrationID__c: StringValue
   pi__utm_medium__pc: StringValue
   AccountSource: PicklistValue
@@ -4055,6 +4105,7 @@ input Account_Filter {
   PersonOtherCountry: StringOperators
   PersonHomePhone: PhoneNumberOperators
   Application_Number__pc: StringOperators
+  Acc_FundingStatus__pc: PicklistOperators
   OrgMigrationID__c: StringOperators
   pi__utm_medium__pc: StringOperators
   AccountSource: PicklistOperators
@@ -4195,6 +4246,7 @@ input Account_GroupBy {
   PersonOtherCountry: GroupByClause
   PersonHomePhone: GroupByClause
   Application_Number__pc: GroupByClause
+  Acc_FundingStatus__pc: GroupByClause
   OrgMigrationID__c: GroupByClause
   pi__utm_medium__pc: GroupByClause
   CloneSourceId: GroupByClause
@@ -4330,6 +4382,7 @@ input Account_OrderBy {
   PersonOtherCountry: AggregateOrderByStringClause
   PersonHomePhone: AggregateOrderByStringClause
   Application_Number__pc: AggregateOrderByStringClause
+  Acc_FundingStatus__pc: AggregateOrderByStringClause
   OrgMigrationID__c: AggregateOrderByStringClause
   pi__utm_medium__pc: AggregateOrderByStringClause
   AccountSource: AggregateOrderByStringClause
@@ -4538,6 +4591,10 @@ type Competition__c {
   """parentRelationship"""
   Acc_FinanceBusinessPartner__r: User
   Acc_ExpectedFirstDateOfProjectsStart__c: DateValue
+  IM_Phase1Competition__c: IDValue
+
+  """parentRelationship"""
+  IM_Phase1Competition__r: Competition__c
   Acc_CompetitionName__c: StringValue
   CreatedDate: DateTimeValue
   SBRI_Contracting_Authority__c: PicklistValue
@@ -4588,6 +4645,9 @@ type Competition__c {
 
   """childRelationship"""
   Acc_ProjectCompetition__r(upperBound: Int, orderBy: Acc_Project__c_OrderBy, where: Acc_Project__c_Filter, after: String, first: Int): Acc_Project__cConnection
+
+  """childRelationship"""
+  Competitions1__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
 
   """childRelationship"""
   Competitions__r(upperBound: Int, orderBy: Competition__c_OrderBy, where: Competition__c_Filter, after: String, first: Int): Competition__cConnection
@@ -4642,6 +4702,8 @@ input Competition__c_Filter {
   Acc_FinanceBusinessPartner__c: IdOperators
   Acc_FinanceBusinessPartner__r: User_Filter
   Acc_ExpectedFirstDateOfProjectsStart__c: DateOperators
+  IM_Phase1Competition__c: IdOperators
+  IM_Phase1Competition__r: Competition__c_Filter
   Acc_CompetitionName__c: StringOperators
   CreatedDate: DateTimeOperators
   Id: IdOperators
@@ -4705,6 +4767,8 @@ input Competition__c_GroupBy {
   Acc_FinanceBusinessPartner__c: GroupByClause
   Acc_FinanceBusinessPartner__r: User_GroupBy
   Acc_ExpectedFirstDateOfProjectsStart__c: GroupByClause
+  IM_Phase1Competition__c: GroupByClause
+  IM_Phase1Competition__r: Competition__c_GroupBy
   Acc_CompetitionName__c: GroupByClause
   CreatedDate: GroupByDateFunction
   Id: GroupByClause
@@ -4764,6 +4828,8 @@ input Competition__c_OrderBy {
   Acc_FinanceBusinessPartner__c: NoFunctionAggregateOrderByClause
   Acc_FinanceBusinessPartner__r: User_OrderBy
   Acc_ExpectedFirstDateOfProjectsStart__c: AggregateOrderByStringClause
+  IM_Phase1Competition__c: NoFunctionAggregateOrderByClause
+  IM_Phase1Competition__r: Competition__c_OrderBy
   Acc_CompetitionName__c: AggregateOrderByStringClause
   CreatedDate: AggregateOrderByStringClause
   Id: AggregateOrderByStringClause
@@ -4855,6 +4921,7 @@ type Contact {
   pi__utm_medium__c: StringValue
   EmailBouncedDate: DateTimeValue
   OtherPhone: PhoneNumberValue
+  Acc_FundingStatus__c: PicklistValue
   Description: LongTextAreaValue
   DoNotCall: BooleanValue
   MailingCountry: StringValue
@@ -5010,6 +5077,7 @@ input Contact_Filter {
   pi__utm_medium__c: StringOperators
   EmailBouncedDate: DateTimeOperators
   OtherPhone: PhoneNumberOperators
+  Acc_FundingStatus__c: PicklistOperators
   Description: LongTextAreaOperators
   DoNotCall: BooleanOperators
   MailingCountry: StringOperators
@@ -5107,6 +5175,7 @@ input Contact_GroupBy {
   pi__utm_medium__c: GroupByClause
   EmailBouncedDate: GroupByDateFunction
   OtherPhone: GroupByClause
+  Acc_FundingStatus__c: GroupByClause
   DoNotCall: GroupByClause
   MailingCountry: GroupByClause
   LastReferencedDate: GroupByDateFunction
@@ -5204,6 +5273,7 @@ input Contact_OrderBy {
   pi__utm_medium__c: AggregateOrderByStringClause
   EmailBouncedDate: AggregateOrderByStringClause
   OtherPhone: AggregateOrderByStringClause
+  Acc_FundingStatus__c: AggregateOrderByStringClause
   Description: AggregateOrderByStringClause
   DoNotCall: NoFunctionAggregateOrderByClause
   MailingCountry: AggregateOrderByStringClause
@@ -5558,29 +5628,29 @@ input DateInput {
 }
 
 enum DateLiteral {
-  TOMORROW
-  NEXT_MONTH
-  LAST_QUARTER
   LAST_FISCAL_QUARTER
-  LAST_WEEK
   THIS_FISCAL_QUARTER
-  NEXT_YEAR
-  LAST_YEAR
   THIS_YEAR
-  THIS_WEEK
-  NEXT_90_DAYS
-  THIS_FISCAL_YEAR
-  TODAY
-  LAST_90_DAYS
+  YESTERDAY
+  NEXT_MONTH
   THIS_QUARTER
+  NEXT_90_DAYS
+  LAST_MONTH
+  NEXT_YEAR
+  THIS_MONTH
+  NEXT_WEEK
   NEXT_QUARTER
   NEXT_FISCAL_YEAR
-  NEXT_FISCAL_QUARTER
-  THIS_MONTH
-  LAST_MONTH
-  YESTERDAY
+  TOMORROW
+  LAST_YEAR
+  LAST_WEEK
   LAST_FISCAL_YEAR
-  NEXT_WEEK
+  THIS_WEEK
+  NEXT_FISCAL_QUARTER
+  LAST_90_DAYS
+  THIS_FISCAL_YEAR
+  TODAY
+  LAST_QUARTER
 }
 
 input DateOperators {
@@ -5833,6 +5903,7 @@ type Group {
   CreatedBy: User
   CreatedDate: DateTimeValue
   DoesIncludeBosses: BooleanValue
+  QueueRoutingConfigId: IDValue
   DeveloperName: StringValue
   RelatedId: IDValue
   LastModifiedById: IDValue
@@ -5866,6 +5937,7 @@ type GroupAggregate {
   CreatedDate: DateAggregate
   DoesIncludeBosses: BooleanAggregate
   Id: IDAggregate
+  QueueRoutingConfigId: IDAggregate
   DeveloperName: StringAggregate
   RelatedId: IDAggregate
   LastModifiedById: IDAggregate
@@ -5930,6 +6002,7 @@ input Group_Filter {
   CreatedDate: DateTimeOperators
   DoesIncludeBosses: BooleanOperators
   Id: IdOperators
+  QueueRoutingConfigId: IdOperators
   DeveloperName: StringOperators
   RelatedId: IdOperators
   LastModifiedById: IdOperators
@@ -5952,6 +6025,7 @@ input Group_GroupBy {
   CreatedDate: GroupByDateFunction
   DoesIncludeBosses: GroupByClause
   Id: GroupByClause
+  QueueRoutingConfigId: GroupByClause
   DeveloperName: GroupByClause
   RelatedId: GroupByClause
   LastModifiedById: GroupByClause
@@ -5972,6 +6046,7 @@ input Group_OrderBy {
   CreatedDate: AggregateOrderByStringClause
   DoesIncludeBosses: NoFunctionAggregateOrderByClause
   Id: AggregateOrderByStringClause
+  QueueRoutingConfigId: NoFunctionAggregateOrderByClause
   DeveloperName: AggregateOrderByStringClause
   RelatedId: NoFunctionAggregateOrderByClause
   LastModifiedById: NoFunctionAggregateOrderByClause
@@ -6840,11 +6915,11 @@ input RecordType_OrderBy {
 
 """Enum representing possible results ordering options."""
 enum ResultOrder {
-  """The enum value represents descending order."""
-  DESC
-
   """The enum value represents ascending order."""
   ASC
+
+  """The enum value represents descending order."""
+  DESC
 }
 
 enum ResultsOrder {
@@ -7223,6 +7298,7 @@ type User {
   UserPreferencesDisableProfilePostEmail: BooleanValue
   pi__Pardot_User_Key__c: EncryptedStringValue
   UserPreferencesShowTitleToExternalUsers: BooleanValue
+  UserPermissionsLiveAgentUser: BooleanValue
   UserPreferencesShowPostalCodeToExternalUsers: BooleanValue
   UserPreferencesNativeEmailClient: BooleanValue
   MobilePhone: PhoneNumberValue
@@ -7269,6 +7345,7 @@ type User {
   UserPreferencesTrailheadBadgeCreated: BooleanValue
   UserPreferencesRecordHomeReservedWTShown: BooleanValue
   AboutMe: LongTextAreaValue
+  UserPreferencesBrowserNotificationEnabled: BooleanValue
   PortalRole: PicklistValue
   Alias: StringValue
   Signature: LongTextAreaValue
@@ -7477,6 +7554,7 @@ input User_Filter {
   UserPreferencesDedupeStorageMigrationComplete: BooleanOperators
   UserPreferencesDisableProfilePostEmail: BooleanOperators
   UserPreferencesShowTitleToExternalUsers: BooleanOperators
+  UserPermissionsLiveAgentUser: BooleanOperators
   UserPreferencesShowPostalCodeToExternalUsers: BooleanOperators
   UserPreferencesNativeEmailClient: BooleanOperators
   MobilePhone: PhoneNumberOperators
@@ -7519,6 +7597,7 @@ input User_Filter {
   UserPreferencesTrailheadBadgeCreated: BooleanOperators
   UserPreferencesRecordHomeReservedWTShown: BooleanOperators
   AboutMe: LongTextAreaOperators
+  UserPreferencesBrowserNotificationEnabled: BooleanOperators
   PortalRole: PicklistOperators
   Alias: StringOperators
   Signature: LongTextAreaOperators
@@ -7767,6 +7846,7 @@ input User_OrderBy {
   UserPreferencesDedupeStorageMigrationComplete: NoFunctionAggregateOrderByClause
   UserPreferencesDisableProfilePostEmail: NoFunctionAggregateOrderByClause
   UserPreferencesShowTitleToExternalUsers: NoFunctionAggregateOrderByClause
+  UserPermissionsLiveAgentUser: NoFunctionAggregateOrderByClause
   UserPreferencesShowPostalCodeToExternalUsers: NoFunctionAggregateOrderByClause
   UserPreferencesNativeEmailClient: NoFunctionAggregateOrderByClause
   MobilePhone: AggregateOrderByStringClause
@@ -7811,6 +7891,7 @@ input User_OrderBy {
   UserPreferencesTrailheadBadgeCreated: NoFunctionAggregateOrderByClause
   UserPreferencesRecordHomeReservedWTShown: NoFunctionAggregateOrderByClause
   AboutMe: AggregateOrderByStringClause
+  UserPreferencesBrowserNotificationEnabled: NoFunctionAggregateOrderByClause
   PortalRole: AggregateOrderByStringClause
   Alias: AggregateOrderByStringClause
   Signature: AggregateOrderByStringClause

@@ -56,6 +56,14 @@ const periodIdValidation = z.coerce
   .lt(500) // Assumption that a project has fewer than 500 periods.
   .transform(x => x as PeriodId);
 
+const booleanValidation = z
+  .union([z.literal(true), z.literal(false), z.literal("true"), z.literal("false")])
+  .transform<boolean>(value => {
+    if (value === "true") return true;
+    if (value === "false") return false;
+    return value;
+  });
+
 const currencyValidation = z
   .string()
   .nonempty()
@@ -194,6 +202,7 @@ export {
   partnerIdValidation,
   profileIdValidation,
   periodIdValidation,
+  booleanValidation,
   currencyValidation,
   claimIdValidation,
   costCategoryIdValidation,

@@ -124,6 +124,17 @@ export interface ISalesforcePCR {
   Loan_ExtensionPeriodChange__c: string | null;
   Loan_RepaymentPeriod__c: string | null;
   Loan_RepaymentPeriodChange__c: string | null;
+
+  // Approve a new subcontractor
+  New_company_subcontractor_name__c: string | null;
+  Company_registration_number__c: string | null;
+  Relationship_between_partners__c: boolean;
+  Relationship_justification__c: string | null;
+  Country_where_work_will_be_carried_out__c: string | null;
+  Cost_of_work__c: number | null;
+  // Description of work to be carried out by the subcontractor
+  Role_in_the_project__c: string | null;
+  Justification__c: string | null;
 }
 
 export const mapToPCRApiName = (status: PCRStatus): string => {
@@ -272,6 +283,16 @@ export class ProjectChangeRequestRepository
     "Loan_ExtensionPeriodChange__c",
     "Loan_RepaymentPeriod__c",
     "Loan_RepaymentPeriodChange__c",
+
+    // Approve a new subcontractor fields
+    "New_company_subcontractor_name__c",
+    "Company_registration_number__c",
+    "Relationship_between_partners__c",
+    "Relationship_justification__c",
+    "Country_where_work_will_be_carried_out__c",
+    "Role_in_the_project__c",
+    "Cost_of_work__c",
+    "Justification__c",
   ];
 
   async getAllByProjectId(projectId: ProjectId): Promise<ProjectChangeRequestEntity[]> {
@@ -364,6 +385,16 @@ export class ProjectChangeRequestRepository
           Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
           Loan_ExtensionPeriodChange__c: String(x.extensionPeriodChange),
           Loan_RepaymentPeriodChange__c: String(x.repaymentPeriodChange),
+          New_company_subcontractor_name__c: x.subcontractorName,
+          Company_registration_number__c: x.subcontractorRegistrationNumber,
+
+          // N.B. Field is REQUIRED on Salesforce - Cannot have a unset state :(
+          Relationship_between_partners__c: x.subcontractorRelationship ?? false,
+          Relationship_justification__c: x.subcontractorRelationshipJustification,
+          Country_where_work_will_be_carried_out__c: x.subcontractorLocation,
+          Role_in_the_project__c: x.subcontractorDescription,
+          Cost_of_work__c: x.subcontractorCost,
+          Justification__c: x.subcontractorJustification,
         };
       }),
     );

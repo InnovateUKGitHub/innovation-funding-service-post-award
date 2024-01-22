@@ -1444,6 +1444,19 @@
     "proposedName": "Proposed name",
     "certificate": "Change of name certificate"
   },
+  "pcrApproveNewSubcontractorLabels": {
+    "guidance": "Please let us know if you are working with a new subcontractor, as Innovate UK will need to undertake viability checks, as per the application process.",
+    "subcontractorName": "Company name of subcontractor",
+    "subcontractorRegistrationNumber": "Company registration number",
+    "subcontractorRelationship": "Is there a relationship between the partner and the subcontractor?",
+    "subcontractorRelationshipYes": "Yes",
+    "subcontractorRelationshipNo": "No",
+    "subcontractorRelationshipJustification": "Please describe the relationship between the collaborator and the new subcontractor",
+    "subcontractorLocation": "Country where the subcontractor's work will be carried out",
+    "subcontractorDescription": "Description of work to be carried out by subcontractor",
+    "subcontractorJustification": "Justification",
+    "subcontractorCost": "Cost of work to be carried out by the new subcontractor"
+  },
   "pcrLabels": {
     "requestNumber": "Request number",
     "requestType": "Request type",
@@ -2109,6 +2122,56 @@
             "required": "Grant moving over financial year is required.",
             "invalid": "The value of a grant moving over financial year must be numerical.",
             "too_small": "The value can not be lower than 0."
+          }
+        }
+      },
+      "approveNewSubcontractor": {
+        "subcontractorName": {
+          "errors": {
+            "too_small": "Enter the subcontractor's name.",
+            "too_big": "Subcontractor's name must be {{ count }} characters or less."
+          }
+        },
+        "subcontractorRegistrationNumber": {
+          "errors": {
+            "too_small": "Enter the subcontractor's registration number.",
+            "too_big": "Subcontractor's registration number must be {{ count }} characters or less."
+          }
+        },
+        "subcontractorRelationship": {
+          "errors": {
+            "too_small": "Select a relationship status with the subcontractor."
+          }
+        },
+        "subcontractorRelationshipJustification": {
+          "errors": {
+            "too_small": "Enter the relationship between the partner and the subcontractor.",
+            "too_big": "Relationship between the partner and the subcontractor must be {{ count }} characters or less."
+          }
+        },
+        "subcontractorLocation": {
+          "errors": {
+            "too_small": "Enter the country where the subcontractor's work will be carried out.",
+            "too_big": "Country where the subcontactor's work will be carried out must be {{ count }} characters or less."
+          }
+        },
+        "subcontractorDescription": {
+          "errors": {
+            "too_small": "Enter the description of work to be carried out by the subcontractor.",
+            "too_big": "Description of work to be carried out by the subcontractor must be {{ count }} characters or less."
+          }
+        },
+        "subcontractorJustification": {
+          "errors": {
+            "too_small": "Enter the justification for including the subcontractor.",
+            "too_big": "Justification for including the subcontractor must be {{ count }} characters or less."
+          }
+        },
+        "subcontractorCost": {
+          "errors": {
+            "too_small": "Enter the cost of work to be carried out by the new subcontractor.",
+            "too_big": "Cost of work must be {{ count }} characters or less.",
+            "invalid": "Enter a valid cost of work."
           }
         }
       }

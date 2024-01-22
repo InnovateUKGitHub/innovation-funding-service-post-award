@@ -170,6 +170,14 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
 
 export interface PCRItemForApproveNewSubcontractorDto extends PCRItemBaseDto {
   type: PCRItemType.ApproveNewSubcontrator;
+  subcontractorName: string | null;
+  subcontractorRegistrationNumber: string | null;
+  subcontractorRelationship: boolean | null;
+  subcontractorRelationshipJustification: string | null;
+  subcontractorLocation: string | null;
+  subcontractorDescription: string | null;
+  subcontractorJustification: string | null;
+  subcontractorCost: number | null;
 }
 
 export interface PCRItemTypeDto {
@@ -271,4 +279,12 @@ export type FullPCRItemDto = {
   type: PCRItemType;
   typeName: string;
   typeOfAid: TypeOfAid;
+  subcontractorName: string | null;
+  subcontractorRegistrationNumber: string | null;
+  subcontractorRelationship: boolean | null;
+  subcontractorRelationshipJustification: string | null;
+  subcontractorLocation: string | null;
+  subcontractorDescription: string | null;
+  subcontractorJustification: string | null;
+  subcontractorCost: number | null;
 };

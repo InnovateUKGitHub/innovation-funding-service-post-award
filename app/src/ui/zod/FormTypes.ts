@@ -26,6 +26,8 @@ enum FormTypes {
   PcrLevelUpload = "pcrLevelUpload",
 
   PcrFinancialVirementsSummary = "pcrFinancialVirementsSummary",
+  PcrApproveNewSubcontractorStep = "pcrApproveNewSubcontractorDetails",
+  PcrApproveNewSubcontractorSummary = "pcrApproveNewSubcontractorSummary",
 }
 
 export { FormTypes };

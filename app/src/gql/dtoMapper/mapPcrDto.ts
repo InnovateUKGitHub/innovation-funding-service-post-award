@@ -57,6 +57,14 @@ export type PcrNode = GQL.PartialNode<{
     Name?: GQL.ValueAndLabel<string>;
     Id?: GQL.Maybe<string>;
   }>;
+  New_company_subcontractor_name__c: GQL.Value<string>;
+  Company_registration_number__c: GQL.Value<string>;
+  Relationship_between_partners__c: GQL.Value<boolean>;
+  Relationship_justification__c: GQL.Value<string>;
+  Role_in_the_project__c: GQL.Value<string>;
+  Country_where_work_will_be_carried_out__c: GQL.Value<string>;
+  Cost_of_work__c: GQL.Value<number>;
+  Justification__c: GQL.Value<string>;
 }>;
 
 type PcrDtoMapping = Pick<
@@ -113,6 +121,14 @@ export type PcrItemDtoMapping = Pick<
   | "type"
   | "typeName"
   | "typeOfAid"
+  | "subcontractorName"
+  | "subcontractorRegistrationNumber"
+  | "subcontractorRelationship"
+  | "subcontractorRelationshipJustification"
+  | "subcontractorLocation"
+  | "subcontractorDescription"
+  | "subcontractorJustification"
+  | "subcontractorCost"
 >;
 
 const mapChangeOffsetToQuarter = (currentMonthOffset: number, changedMonthOffset: number) => {
@@ -259,6 +275,30 @@ const itemMapper: GQL.DtoMapper<PcrItemDtoMapping, PcrNode, { typeOfAid?: string
       : typeof additionalData.typeOfAid === "string"
       ? mapTypeOfAidToEnum(additionalData?.typeOfAid)
       : additionalData.typeOfAid;
+  },
+  subcontractorName(node) {
+    return node?.New_company_subcontractor_name__c?.value ?? null;
+  },
+  subcontractorRegistrationNumber(node) {
+    return node?.Company_registration_number__c?.value ?? null;
+  },
+  subcontractorRelationship(node) {
+    return node?.Relationship_between_partners__c?.value ?? null;
+  },
+  subcontractorRelationshipJustification(node) {
+    return node?.Relationship_justification__c?.value ?? null;
+  },
+  subcontractorLocation(node) {
+    return node?.Country_where_work_will_be_carried_out__c?.value ?? null;
+  },
+  subcontractorDescription(node) {
+    return node?.Role_in_the_project__c?.value ?? null;
+  },
+  subcontractorCost(node) {
+    return node?.Cost_of_work__c?.value ?? null;
+  },
+  subcontractorJustification(node) {
+    return node?.Justification__c?.value ?? null;
   },
 };
 
