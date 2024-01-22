@@ -59,6 +59,9 @@ export const SpendProfileStep = () => {
               <TR>
                 <TH>{getContent(x => x.pages.pcrAddPartnerSpendProfile.categoryHeading)}</TH>
                 <TH numeric>{getContent(x => x.pages.pcrAddPartnerSpendProfile.costHeading)}</TH>
+                <TH>
+                  <TableEmptyCell />
+                </TH>
               </TR>
             </THead>
 
@@ -85,7 +88,9 @@ export const SpendProfileStep = () => {
                 <TH numeric>
                   <Currency value={data.total} />
                 </TH>
-                <TableEmptyCell />
+                <TH>
+                  <TableEmptyCell />
+                </TH>
               </TR>
             </TFoot>
           </Table>
