@@ -211,6 +211,8 @@ export const mapToPcrItemType = (developerName: string) => {
     case "change loans duration":
     case "loan duration change":
       return PCRItemType.LoanDrawdownExtension;
+    case "approve a new subcontractor":
+      return PCRItemType.ApproveNewSubcontrator;
     default:
       return PCRItemType.Unknown;
   }

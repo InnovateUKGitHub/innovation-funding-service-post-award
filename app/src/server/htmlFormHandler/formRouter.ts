@@ -60,8 +60,25 @@ import { PostFormHandleHandler } from "./postFormHandleHandler";
 import { ClaimDetailLevelDocumentShareUploadHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareUploadHandler.handler";
 import { ClaimDetailLevelDocumentShareDeleteHandler } from "./handlers/projects/[projectId]/claims/[partnerId]/prepare/[periodId]/costs/[costCategoryId]/documents/ClaimDetailLevelDocumentShareDeleteHandler.handler";
 import { ProjectChangeRequestItemFinancialVirementsSummaryUpdate } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemFinancialVirementsSummaryUpdate.handler";
+import { ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemApproveNewSubcontractorSummaryUpdate.handler";
+import { ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler } from "./handlers/projects/[projectId]/pcrs/[pcrId]/prepare/item/[itemId]/projectChangeRequestItemApproveNewSubcontractorStepUpdate.handler";
 
 export const standardFormHandlers = [
+  // Zod
+  new ProjectLevelDocumentShareDeleteHandler(),
+  new ClaimLevelDocumentShareDeleteHandler(),
+  new ClaimDetailLevelDocumentShareDeleteHandler(),
+  new ProjectSetupBankDetailsHandler(),
+
+  // Zod PCRs
+  new ProjectChangeRequestCreateHandler(),
+  new ProjectChangeRequestAddTypeHandler(),
+  new ProjectChangeRequestItemFinancialVirementsSummaryUpdate(),
+  new ProjectChangeRequestItemApproveNewSubcontractorSummaryUpdateHandler(),
+  new ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler(),
+  new ProjectSetupBankDetailsHandler(),
+  new EditClaimLineItemsFormHandler(),
+
   new ClaimForecastFormHandler(),
   new ClaimSummaryFormHandler(),
   new PrepareClaimFormHandler(),
@@ -100,19 +117,6 @@ export const standardFormHandlers = [
   new ProjectSetupBankDetailsVerifyHandler(),
   new ProjectSetupBankStatementHandler(),
   new LoanRequestDocumentDeleteHandler(),
-
-  // Zod
-  new ProjectLevelDocumentShareDeleteHandler(),
-  new ClaimLevelDocumentShareDeleteHandler(),
-  new ClaimDetailLevelDocumentShareDeleteHandler(),
-  new ProjectSetupBankDetailsHandler(),
-
-  // Zod PCRs
-  new ProjectChangeRequestCreateHandler(),
-  new ProjectChangeRequestAddTypeHandler(),
-  new ProjectChangeRequestItemFinancialVirementsSummaryUpdate(),
-  new ProjectSetupBankDetailsHandler(),
-  new EditClaimLineItemsFormHandler(),
 ] as const;
 
 export const multiFileFormHandlers = [

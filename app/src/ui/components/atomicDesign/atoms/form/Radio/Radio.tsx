@@ -1,6 +1,7 @@
 import { DetailedHTMLProps, HTMLAttributes, InputHTMLAttributes, ReactNode, createContext, useContext } from "react";
 import cx from "classnames";
 import { FieldValues, UseFormRegister } from "react-hook-form";
+import { useMounted } from "../../providers/Mounted/Mounted";
 
 interface IRadioListContext<TFormValues extends FieldValues> {
   name: string;
@@ -65,4 +66,14 @@ const RadioList = <TFormValues extends FieldValues>({
   );
 };
 
-export { Radio, RadioList };
+const RadioConditional = ({ children, show }: { children: ReactNode; show?: boolean }) => {
+  const { isServer } = useMounted();
+
+  const shown = isServer || show;
+
+  return (
+    <div className={cx("govuk-radios__conditional", { "govuk-radios__conditional--hidden": !shown })}>{children}</div>
+  );
+};
+
+export { Radio, RadioList, RadioConditional };

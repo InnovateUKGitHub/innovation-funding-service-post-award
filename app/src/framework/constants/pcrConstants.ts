@@ -73,8 +73,6 @@ export const enum PCRItemType {
   PeriodLengthChange = 100,
   LoanDrawdownChange = 110,
   LoanDrawdownExtension = 120,
-
-  // 10179: whatever
   ApproveNewSubcontrator = 130,
 }
 
@@ -139,8 +137,7 @@ export const enum PCRStepType {
   // Account Name Change IDs
   partnerNameStep = "partnerNameStep",
 
-  // Approve a new subcontractor workflow IDs
-  // 10179: Add all workflow pages here!
+  // Approve a new subcontractor workflow ID
   approveNewContractorNameStep = "approveNewContractorNameStep",
 }
 

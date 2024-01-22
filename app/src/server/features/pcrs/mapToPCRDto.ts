@@ -126,6 +126,14 @@ const mapItemForApproveNewSubcontractor = (
   type: PCRItemType.ApproveNewSubcontrator,
 ): PCRItemForApproveNewSubcontractorDto => ({
   ...mapBaseItem(pcr, typeName, type),
+  subcontractorName: pcr.subcontractorName ?? null,
+  subcontractorRegistrationNumber: pcr.subcontractorRegistrationNumber ?? null,
+  subcontractorRelationship: pcr.subcontractorRelationship ?? null,
+  subcontractorRelationshipJustification: pcr.subcontractorRelationshipJustification ?? null,
+  subcontractorLocation: pcr.subcontractorLocation ?? null,
+  subcontractorDescription: pcr.subcontractorDescription ?? null,
+  subcontractorJustification: pcr.subcontractorJustification ?? null,
+  subcontractorCost: pcr.subcontractorCost ?? null,
   type,
 });
 

@@ -335,11 +335,26 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
       case PCRItemType.ApproveNewSubcontrator: {
         if (
-          // 10179: Add checks
-          dto.id
+          statusChange ||
+          item.subcontractorName !== dto.subcontractorName ||
+          item.subcontractorRegistrationNumber !== dto.subcontractorRegistrationNumber ||
+          item.subcontractorRelationship !== dto.subcontractorRelationship ||
+          item.subcontractorRelationshipJustification !== dto.subcontractorRelationshipJustification ||
+          item.subcontractorLocation !== dto.subcontractorLocation ||
+          item.subcontractorDescription !== dto.subcontractorDescription ||
+          item.subcontractorJustification !== dto.subcontractorJustification ||
+          item.subcontractorCost !== dto.subcontractorCost
         ) {
           return {
             ...init,
+            subcontractorName: dto.subcontractorName,
+            subcontractorRegistrationNumber: dto.subcontractorRegistrationNumber,
+            subcontractorRelationship: dto.subcontractorRelationship,
+            subcontractorRelationshipJustification: dto.subcontractorRelationshipJustification,
+            subcontractorLocation: dto.subcontractorLocation,
+            subcontractorDescription: dto.subcontractorDescription,
+            subcontractorJustification: dto.subcontractorJustification,
+            subcontractorCost: dto.subcontractorCost,
           };
         }
 

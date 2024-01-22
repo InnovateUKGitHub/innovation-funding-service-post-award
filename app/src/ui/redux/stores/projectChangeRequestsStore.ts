@@ -383,7 +383,14 @@ export class ProjectChangeRequestStore extends StoreBase {
         return {
           ...baseFields,
           type: itemType.type,
-          // 10179: Add extra fields to map here!
+          subcontractorName: null,
+          subcontractorRegistrationNumber: null,
+          subcontractorRelationship: null,
+          subcontractorRelationshipJustification: null,
+          subcontractorLocation: null,
+          subcontractorDescription: null,
+          subcontractorJustification: null,
+          subcontractorCost: null,
         };
       default:
         throw new Error("Item type not handled");

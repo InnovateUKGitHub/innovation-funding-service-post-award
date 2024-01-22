@@ -37,5 +37,5 @@ export const enum ProjectChangeRequest {
   partnerWithdrawal = "Acc_PartnerWithdrawal",
   changePeriodLength = "Acc_ChangePeriodLength",
   projectChangeRequests = "Acc_ProjectChangeRequests",
-  approveNewSubcontractor = "// 10179: Add SFDC PCR header Record Type name",
+  approveNewSubcontractor = "Approve_a_new_subcontractor",
 }

@@ -81,6 +81,14 @@ export interface ProjectChangeRequestItemForCreateEntity {
   suspensionEndDate?: Date | null;
   suspensionStartDate?: Date | null;
   tsbReference?: string | null;
+  subcontractorName?: string | null;
+  subcontractorRegistrationNumber?: string | null;
+  subcontractorRelationship?: boolean | null;
+  subcontractorRelationshipJustification?: string | null;
+  subcontractorLocation?: string | null;
+  subcontractorDescription?: string | null;
+  subcontractorJustification?: string | null;
+  subcontractorCost?: number | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
