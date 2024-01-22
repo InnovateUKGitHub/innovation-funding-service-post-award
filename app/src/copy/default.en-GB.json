@@ -185,6 +185,7 @@
       "tableHeaderMonitoringOfficer": "MO",
       "tableHeaderProjectManager": "PM",
       "tableHeaderFinancialContact": "FC",
+      "tableHeaderRole": "Role",
       "tableHeaderSwitchOptions": "After changing...",
       "loadingUsers": "Loading PCL list...",
       "externalUsername": "External username",

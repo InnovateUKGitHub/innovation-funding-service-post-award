@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<204abf45c173a9daa8bdad9bb5d3e17b>>
+ * @generated SignedSource<<742e19551be695d6c0d9b8f80be05d0e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -68,6 +68,7 @@ export type LoanDrawdownExtensionQuery$data = {
               } | null | undefined;
               readonly Id: string;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
@@ -397,6 +398,13 @@ v6 = [
                                 "kind": "ScalarField",
                                 "name": "isMo",
                                 "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isAssociate",
+                                "storageKey": null
                               }
                             ],
                             "storageKey": null
@@ -454,16 +462,16 @@ return {
     "selections": (v6/*: any*/)
   },
   "params": {
-    "cacheID": "95f890807035ca2e802ae3b132351519",
+    "cacheID": "75d000c2807818e0a0ce8cfbc5295b46",
     "id": null,
     "metadata": {},
     "name": "LoanDrawdownExtensionQuery",
     "operationKind": "query",
-    "text": "query LoanDrawdownExtensionQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_AdditionalNumberofMonths__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              Loan_Duration__c {\n                value\n              }\n              Loan_ExtensionPeriod__c {\n                value\n              }\n              Loan_ExtensionPeriodChange__c {\n                value\n              }\n              Loan_RepaymentPeriod__c {\n                value\n              }\n              Loan_RepaymentPeriodChange__c {\n                value\n              }\n              Loan_ProjectStartDate__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query LoanDrawdownExtensionQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_ProjectChangeRequest__c(where: {Id: {eq: $pcrItemId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_AdditionalNumberofMonths__c {\n                value\n              }\n              Acc_MarkedasComplete__c {\n                value\n              }\n              Acc_Status__c {\n                value\n              }\n              Loan_Duration__c {\n                value\n              }\n              Loan_ExtensionPeriod__c {\n                value\n              }\n              Loan_ExtensionPeriodChange__c {\n                value\n              }\n              Loan_RepaymentPeriod__c {\n                value\n              }\n              Loan_RepaymentPeriodChange__c {\n                value\n              }\n              Loan_ProjectStartDate__c {\n                value\n              }\n              RecordType {\n                Name {\n                  value\n                  label\n                }\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n                isAssociate\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0eb75664836e74f83ddcfc0a74af5045";
+(node as any).hash = "6fc0c17decad7b090eef527297e47bfb";
 
 export default node;

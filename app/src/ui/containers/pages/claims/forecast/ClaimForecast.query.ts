@@ -21,6 +21,7 @@ const claimForecastQuery = graphql`
                   isFc
                   isPm
                   isMo
+                  isAssociate
                 }
               }
             }

@@ -7,7 +7,7 @@ import { useLazyLoadQuery } from "react-relay";
 import { viewForecastQuery } from "./ViewForecast.query";
 import { ViewForecastQuery } from "./__generated__/ViewForecastQuery.graphql";
 
-const defaultRole = { isPm: false, isMo: false, isFc: false };
+const defaultRole = { isPm: false, isMo: false, isFc: false, isAssociate: false };
 
 export const useViewForecastData = (projectId: ProjectId, partnerId: PartnerId) => {
   const data = useLazyLoadQuery<ViewForecastQuery>(

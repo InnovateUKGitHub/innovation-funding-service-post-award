@@ -6,6 +6,7 @@ exports[`mapPartnerDtoArray should map the gql data only including fields on the
     "id": "a0D-partner1",
     "isLead": true,
     "roles": {
+      "isAssociate": false,
       "isFc": true,
       "isMo": false,
       "isPm": true,
@@ -16,6 +17,7 @@ exports[`mapPartnerDtoArray should map the gql data only including fields on the
     "id": "a0D-partner2",
     "isLead": false,
     "roles": {
+      "isAssociate": false,
       "isFc": true,
       "isMo": false,
       "isPm": false,
@@ -50,6 +52,7 @@ exports[`mapPartnerDtoArray should map the gql data to the correct Dtos filterin
     "postcodeStatus": 30,
     "remainingParticipantGrant": 3000,
     "roles": {
+      "isAssociate": false,
       "isFc": true,
       "isMo": false,
       "isPm": true,
@@ -84,6 +87,7 @@ exports[`mapPartnerDtoArray should map the gql data to the correct Dtos filterin
     "postcodeStatus": 10,
     "remainingParticipantGrant": 3000,
     "roles": {
+      "isAssociate": false,
       "isFc": true,
       "isMo": false,
       "isPm": false,

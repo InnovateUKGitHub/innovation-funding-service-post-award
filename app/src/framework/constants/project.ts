@@ -22,6 +22,7 @@ export enum ProjectRole {
   MonitoringOfficer = 1 << 0,
   ProjectManager = 1 << 1,
   FinancialContact = 1 << 2,
+  Associate = 1 << 3,
 }
 
 export enum TypeOfAid {

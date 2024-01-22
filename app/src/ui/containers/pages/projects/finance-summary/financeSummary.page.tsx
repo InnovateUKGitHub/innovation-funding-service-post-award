@@ -201,6 +201,11 @@ export const FinanceSummaryRoute = defineRoute({
   accessControl: (auth, params) =>
     auth
       .forProject(params.projectId)
-      .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact),
+      .hasAnyRoles(
+        ProjectRole.ProjectManager,
+        ProjectRole.MonitoringOfficer,
+        ProjectRole.FinancialContact,
+        ProjectRole.Associate,
+      ),
   getTitle: x => x.content.getTitleCopy(x => x.pages.financeSummary.title),
 });

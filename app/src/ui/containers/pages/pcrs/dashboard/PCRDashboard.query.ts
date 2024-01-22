@@ -14,6 +14,7 @@ const pcrDashboardQuery = graphql`
                   isMo
                   isFc
                   isPm
+                  isAssociate
                 }
                 Acc_ProjectNumber__c {
                   value

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6b79f69f41eb55641ac87b7ab3fce15b>>
+ * @generated SignedSource<<5f3d6e389bf8a834c4c34ccf467cf078>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -85,10 +85,12 @@ export type ViewForecastQuery$data = {
               readonly Id: string;
               readonly isActive: boolean;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
                 readonly partnerRoles: ReadonlyArray<{
+                  readonly isAssociate: boolean;
                   readonly isFc: boolean;
                   readonly isMo: boolean;
                   readonly isPm: boolean;
@@ -349,6 +351,13 @@ v17 = {
 v18 = {
   "alias": null,
   "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
+  "storageKey": null
+},
+v19 = {
+  "alias": null,
+  "args": null,
   "concreteType": "Ext_Project_Roles",
   "kind": "LinkedField",
   "name": "roles",
@@ -357,6 +366,7 @@ v18 = {
     (v15/*: any*/),
     (v16/*: any*/),
     (v17/*: any*/),
+    (v18/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -368,6 +378,7 @@ v18 = {
         (v16/*: any*/),
         (v15/*: any*/),
         (v17/*: any*/),
+        (v18/*: any*/),
         {
           "alias": null,
           "args": null,
@@ -381,7 +392,7 @@ v18 = {
   ],
   "storageKey": null
 },
-v19 = [
+v20 = [
   {
     "kind": "Literal",
     "name": "first",
@@ -399,7 +410,7 @@ v19 = [
     "name": "where"
   }
 ],
-v20 = {
+v21 = {
   "alias": null,
   "args": null,
   "concreteType": "IDValue",
@@ -409,7 +420,7 @@ v20 = {
   "selections": (v8/*: any*/),
   "storageKey": null
 },
-v21 = {
+v22 = {
   "alias": null,
   "args": (v14/*: any*/),
   "concreteType": "Acc_Project__cConnection",
@@ -441,7 +452,7 @@ v21 = {
               "name": "isActive",
               "storageKey": null
             },
-            (v18/*: any*/),
+            (v19/*: any*/),
             {
               "alias": null,
               "args": null,
@@ -464,7 +475,7 @@ v21 = {
             },
             {
               "alias": null,
-              "args": (v19/*: any*/),
+              "args": (v20/*: any*/),
               "concreteType": "Acc_ProjectParticipant__cConnection",
               "kind": "LinkedField",
               "name": "Acc_ProjectParticipantsProject__r",
@@ -558,7 +569,7 @@ v21 = {
                           "selections": (v8/*: any*/),
                           "storageKey": null
                         },
-                        (v20/*: any*/)
+                        (v21/*: any*/)
                       ],
                       "storageKey": null
                     }
@@ -577,7 +588,7 @@ v21 = {
   ],
   "storageKey": null
 },
-v22 = {
+v23 = {
   "alias": null,
   "args": null,
   "concreteType": "IDValue",
@@ -633,7 +644,7 @@ return {
                 "plural": false,
                 "selections": [
                   (v12/*: any*/),
-                  (v21/*: any*/)
+                  (v22/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -760,7 +771,7 @@ return {
                             "plural": false,
                             "selections": [
                               (v7/*: any*/),
-                              (v22/*: any*/),
+                              (v23/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -874,7 +885,7 @@ return {
                             "selections": [
                               (v7/*: any*/),
                               (v10/*: any*/),
-                              (v22/*: any*/),
+                              (v23/*: any*/),
                               (v9/*: any*/),
                               (v11/*: any*/),
                               {
@@ -921,10 +932,10 @@ return {
                             "plural": false,
                             "selections": [
                               (v7/*: any*/),
-                              (v18/*: any*/),
+                              (v19/*: any*/),
                               {
                                 "alias": null,
-                                "args": (v19/*: any*/),
+                                "args": (v20/*: any*/),
                                 "concreteType": "Acc_ProjectParticipant__cConnection",
                                 "kind": "LinkedField",
                                 "name": "Acc_ProjectParticipantsProject__r",
@@ -947,7 +958,7 @@ return {
                                         "plural": false,
                                         "selections": [
                                           (v7/*: any*/),
-                                          (v20/*: any*/)
+                                          (v21/*: any*/)
                                         ],
                                         "storageKey": null
                                       }
@@ -1027,7 +1038,7 @@ return {
                     "storageKey": null
                   },
                   (v12/*: any*/),
-                  (v21/*: any*/)
+                  (v22/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -1040,16 +1051,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "d75848d405198c4b672216e539fff17d",
+    "cacheID": "6417e5ef4ab115d89c6ce20b2a46ed91",
     "id": null,
     "metadata": {},
     "name": "ViewForecastQuery",
     "operationKind": "query",
-    "text": "query ViewForecastQuery(\n  $projectIdStr: String!\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...ForecastWarningFragment\n      ...TitleFragment\n      query {\n        Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ClaimStatus__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_PaidDate__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}, first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_NewForecastNeeded__c {\n                      value\n                    }\n                    Acc_OverheadRate__c {\n                      value\n                    }\n                    Acc_ForecastLastModifiedDate__c {\n                      value\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ForecastWarningFragment on UIAPI {\n  query {\n    ForecastWarning_Profile: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {or: [{RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}]}, {Acc_CostCategory__c: {ne: null}}]}, first: 1000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_CostCategoryGOLCost__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_LatestForecastCost__c {\n            value\n          }\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n    ForecastWarning_CostCategory: Acc_CostCategory__c(first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategoryName__c {\n            value\n          }\n          Acc_DisplayOrder__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastWarning_Claims: Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_ClaimStatus__c {\n            value\n          }\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n          Acc_PeriodCostCategoryTotal__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastWarning_Project: Acc_Project__c(where: {Id: {eq: $projectId}}) {\n      edges {\n        node {\n          Id\n          roles {\n            isMo\n            isFc\n            isPm\n            partnerRoles {\n              isFc\n              isMo\n              isPm\n              partnerId\n            }\n          }\n          Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}, first: 500) {\n            edges {\n              node {\n                Id\n                Acc_AccountId__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment TitleFragment on UIAPI {\n  query {\n    Title_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ViewForecastQuery(\n  $projectIdStr: String!\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      ...ForecastWarningFragment\n      ...TitleFragment\n      query {\n        Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}]}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_ClaimStatus__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_PaidDate__c {\n                value\n              }\n              RecordType {\n                DeveloperName {\n                  value\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}, first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_NewForecastNeeded__c {\n                      value\n                    }\n                    Acc_OverheadRate__c {\n                      value\n                    }\n                    Acc_ForecastLastModifiedDate__c {\n                      value\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment ForecastWarningFragment on UIAPI {\n  query {\n    ForecastWarning_Profile: Acc_Profile__c(where: {and: [{Acc_ProjectParticipant__c: {eq: $partnerId}}, {or: [{RecordType: {DeveloperName: {eq: \"Profile_Detail\"}}}, {RecordType: {DeveloperName: {eq: \"Total_Cost_Category\"}}}]}, {Acc_CostCategory__c: {ne: null}}]}, first: 1000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_CostCategoryGOLCost__c {\n            value\n          }\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_LatestForecastCost__c {\n            value\n          }\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n        }\n      }\n    }\n    ForecastWarning_CostCategory: Acc_CostCategory__c(first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_CostCategoryName__c {\n            value\n          }\n          Acc_DisplayOrder__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastWarning_Claims: Acc_Claims__c(where: {and: [{Acc_ProjectID__c: {eq: $projectIdStr}}, {Acc_ProjectParticipant__c: {eq: $partnerId}}, {RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}]}, first: 2000) {\n      edges {\n        node {\n          Id\n          Acc_ProjectPeriodNumber__c {\n            value\n          }\n          Acc_CostCategory__c {\n            value\n          }\n          Acc_ClaimStatus__c {\n            value\n          }\n          RecordType {\n            DeveloperName {\n              value\n            }\n          }\n          Acc_PeriodCostCategoryTotal__c {\n            value\n          }\n        }\n      }\n    }\n    ForecastWarning_Project: Acc_Project__c(where: {Id: {eq: $projectId}}) {\n      edges {\n        node {\n          Id\n          roles {\n            isMo\n            isFc\n            isPm\n            isAssociate\n            partnerRoles {\n              isFc\n              isMo\n              isPm\n              isAssociate\n              partnerId\n            }\n          }\n          Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}, first: 500) {\n            edges {\n              node {\n                Id\n                Acc_AccountId__c {\n                  value\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment TitleFragment on UIAPI {\n  query {\n    Title_Project: Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n      edges {\n        node {\n          Acc_ProjectNumber__c {\n            value\n          }\n          Acc_ProjectTitle__c {\n            value\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "437ddf6919d40ee976b4a406ac1ebbaf";
+(node as any).hash = "6bf38cffd133751c28c8145a6cc0923a";
 
 export default node;

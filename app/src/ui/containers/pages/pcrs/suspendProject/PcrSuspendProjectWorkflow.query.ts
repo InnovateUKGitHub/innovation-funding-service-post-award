@@ -13,6 +13,7 @@ export const pcrSuspendProjectWorkflowQuery = graphql`
                   isPm
                   isFc
                   isMo
+                  isAssociate
                 }
                 Project_Change_Requests__r(first: 2000, where: { Id: { eq: $pcrItemId } }) {
                   edges {

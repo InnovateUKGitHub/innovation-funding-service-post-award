@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c7cc29628df3596e0e18bbf7f64f209c>>
+ * @generated SignedSource<<6d03722e35995ca9de1c8597513cb95d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -88,10 +88,12 @@ export type ForecastWarningFragment$data = {
           } | null | undefined;
           readonly Id: string;
           readonly roles: {
+            readonly isAssociate: boolean;
             readonly isFc: boolean;
             readonly isMo: boolean;
             readonly isPm: boolean;
             readonly partnerRoles: ReadonlyArray<{
+              readonly isAssociate: boolean;
               readonly isFc: boolean;
               readonly isMo: boolean;
               readonly isPm: boolean;
@@ -205,6 +207,13 @@ v10 = {
   "args": null,
   "kind": "ScalarField",
   "name": "isPm",
+  "storageKey": null
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
   "storageKey": null
 };
 return {
@@ -559,6 +568,7 @@ return {
                         (v8/*: any*/),
                         (v9/*: any*/),
                         (v10/*: any*/),
+                        (v11/*: any*/),
                         {
                           "alias": null,
                           "args": null,
@@ -570,6 +580,7 @@ return {
                             (v9/*: any*/),
                             (v8/*: any*/),
                             (v10/*: any*/),
+                            (v11/*: any*/),
                             {
                               "alias": null,
                               "args": null,
@@ -662,6 +673,6 @@ return {
 };
 })();
 
-(node as any).hash = "b453691f44de50c4bebaf53fc0ba1ed7";
+(node as any).hash = "255c990ced75dcd45faf1d17adfd7377";
 
 export default node;

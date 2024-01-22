@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0be093bf5d098e224f8bcc2b6dc2a0d8>>
+ * @generated SignedSource<<fe2d66a57bdd6c329e228ddff2e98638>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -50,6 +50,7 @@ export type LoanOverviewQuery$data = {
               readonly Id: string;
               readonly isActive: boolean;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
@@ -198,6 +199,13 @@ v4 = [
                                 "args": null,
                                 "kind": "ScalarField",
                                 "name": "isPm",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isAssociate",
                                 "storageKey": null
                               }
                             ],
@@ -376,16 +384,16 @@ return {
     "selections": (v4/*: any*/)
   },
   "params": {
-    "cacheID": "c3317d09ef1ec55543e52622082c7cdc",
+    "cacheID": "164232177f537635cf8682c3ab036d58",
     "id": null,
     "metadata": {},
     "name": "LoanOverviewQuery",
     "operationKind": "query",
-    "text": "query LoanOverviewQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Prepayment__c(where: {Acc_ProjectParticipant__r: {Acc_ProjectId__c: {eq: $projectId}}}, orderBy: {Acc_PeriodNumber__c: {order: ASC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_PeriodNumber__c {\n                value\n              }\n              Loan_DrawdownStatus__c {\n                value\n              }\n              Loan_LatestForecastDrawdown__c {\n                value\n              }\n              Loan_PlannedDateForDrawdown__c {\n                value\n              }\n              Loan_UserComments__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query LoanOverviewQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}, first: 1) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Prepayment__c(where: {Acc_ProjectParticipant__r: {Acc_ProjectId__c: {eq: $projectId}}}, orderBy: {Acc_PeriodNumber__c: {order: ASC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_PeriodNumber__c {\n                value\n              }\n              Loan_DrawdownStatus__c {\n                value\n              }\n              Loan_LatestForecastDrawdown__c {\n                value\n              }\n              Loan_PlannedDateForDrawdown__c {\n                value\n              }\n              Loan_UserComments__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c986352e566e085cc560e0f5da7bf329";
+(node as any).hash = "afb70b9385cc0abc36d6bb640bad1819";
 
 export default node;

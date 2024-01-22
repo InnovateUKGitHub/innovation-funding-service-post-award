@@ -88,7 +88,7 @@ describe("mapPcrStatusDtoArray", () => {
           "comments",
           "previousStatusLabel",
         ],
-        { roles: { isMo: true, isFc: false, isPm: true } },
+        { roles: { isMo: true, isFc: false, isPm: true, isAssociate: false } },
       ),
     ).toMatchSnapshot();
   });

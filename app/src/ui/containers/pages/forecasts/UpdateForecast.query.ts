@@ -46,6 +46,7 @@ export const updateForecastQuery = graphql`
                   isMo
                   isFc
                   isPm
+                  isAssociate
                   isSalesforceSystemUser
                 }
                 Acc_ProjectParticipantsProject__r(where: { Id: { eq: $partnerId } }, first: 500) {

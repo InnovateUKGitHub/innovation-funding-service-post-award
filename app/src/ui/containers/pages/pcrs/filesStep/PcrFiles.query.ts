@@ -110,6 +110,7 @@ export const pcrFilesQuery = graphql`
                   isPm
                   isFc
                   isMo
+                  isAssociate
                 }
               }
             }

@@ -59,6 +59,7 @@ export const useClaimReviewPageData = (
           isFc: false,
           isMo: false,
           isPm: false,
+          isAssociate: false,
         },
       },
     );

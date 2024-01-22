@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6da9e898dcc5fa14e24fb844457885e8>>
+ * @generated SignedSource<<63454e7f258278d6ad1bfd4ba8e55207>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -65,6 +65,7 @@ export type PcrSuspendProjectWorkflowQuery$data = {
                 } | null | undefined> | null | undefined;
               } | null | undefined;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
@@ -204,6 +205,13 @@ v5 = [
                                 "args": null,
                                 "kind": "ScalarField",
                                 "name": "isMo",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isAssociate",
                                 "storageKey": null
                               }
                             ],
@@ -439,16 +447,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "af89b73b9d9b2bdc78bddb40dc1f37d1",
+    "cacheID": "85c4f136b947f3936bc6012870cd64a7",
     "id": null,
     "metadata": {},
     "name": "PcrSuspendProjectWorkflowQuery",
     "operationKind": "query",
-    "text": "query PcrSuspendProjectWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n              }\n              Project_Change_Requests__r(first: 2000, where: {Id: {eq: $pcrItemId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Project__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_SuspensionStarts__c {\n                      value\n                    }\n                    Acc_SuspensionEnds__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PcrSuspendProjectWorkflowQuery(\n  $projectId: ID!\n  $pcrItemId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isPm\n                isFc\n                isMo\n                isAssociate\n              }\n              Project_Change_Requests__r(first: 2000, where: {Id: {eq: $pcrItemId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_Project__c {\n                      value\n                    }\n                    Acc_MarkedasComplete__c {\n                      value\n                    }\n                    Acc_RequestHeader__c {\n                      value\n                    }\n                    Acc_RequestNumber__c {\n                      value\n                    }\n                    Acc_Status__c {\n                      value\n                    }\n                    CreatedDate {\n                      value\n                    }\n                    LastModifiedDate {\n                      value\n                    }\n                    Acc_SuspensionStarts__c {\n                      value\n                    }\n                    Acc_SuspensionEnds__c {\n                      value\n                    }\n                    RecordType {\n                      Name {\n                        value\n                        label\n                      }\n                      DeveloperName {\n                        value\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "1a99fe8f76fc2bc7d89415503e6eb0c4";
+(node as any).hash = "4dc3a36df894cf95fcb548bbc1dc1606";
 
 export default node;

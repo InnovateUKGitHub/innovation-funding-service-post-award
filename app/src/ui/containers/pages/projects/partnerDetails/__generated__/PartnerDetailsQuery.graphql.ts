@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2f682754fe8d638ff39c79032a7fd339>>
+ * @generated SignedSource<<6886788a9fc287200a56196c35b61e0e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -56,11 +56,13 @@ export type PartnerDetailsQuery$data = {
               readonly Id: string;
               readonly isActive: boolean;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
                 readonly isSalesforceSystemUser: boolean;
                 readonly partnerRoles: ReadonlyArray<{
+                  readonly isAssociate: boolean;
                   readonly isFc: boolean;
                   readonly isMo: boolean;
                   readonly isPm: boolean;
@@ -118,7 +120,14 @@ v5 = {
   "name": "isPm",
   "storageKey": null
 },
-v6 = [
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
+  "storageKey": null
+},
+v7 = [
   {
     "alias": null,
     "args": null,
@@ -127,7 +136,7 @@ v6 = [
     "storageKey": null
   }
 ],
-v7 = [
+v8 = [
   {
     "alias": null,
     "args": null,
@@ -213,6 +222,7 @@ v7 = [
                               (v3/*: any*/),
                               (v4/*: any*/),
                               (v5/*: any*/),
+                              (v6/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -231,6 +241,7 @@ v7 = [
                                   (v4/*: any*/),
                                   (v3/*: any*/),
                                   (v5/*: any*/),
+                                  (v6/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -251,7 +262,7 @@ v7 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectNumber__c",
                             "plural": false,
-                            "selections": (v6/*: any*/),
+                            "selections": (v7/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -261,7 +272,7 @@ v7 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectStatus__c",
                             "plural": false,
-                            "selections": (v6/*: any*/),
+                            "selections": (v7/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -271,7 +282,7 @@ v7 = [
                             "kind": "LinkedField",
                             "name": "Acc_ProjectTitle__c",
                             "plural": false,
-                            "selections": (v6/*: any*/),
+                            "selections": (v7/*: any*/),
                             "storageKey": null
                           },
                           {
@@ -332,7 +343,7 @@ v7 = [
                                             "kind": "LinkedField",
                                             "name": "Name",
                                             "plural": false,
-                                            "selections": (v6/*: any*/),
+                                            "selections": (v7/*: any*/),
                                             "storageKey": null
                                           }
                                         ],
@@ -345,7 +356,7 @@ v7 = [
                                         "kind": "LinkedField",
                                         "name": "Acc_AccountId__c",
                                         "plural": false,
-                                        "selections": (v6/*: any*/),
+                                        "selections": (v7/*: any*/),
                                         "storageKey": null
                                       },
                                       {
@@ -355,7 +366,7 @@ v7 = [
                                         "kind": "LinkedField",
                                         "name": "Acc_ParticipantType__c",
                                         "plural": false,
-                                        "selections": (v6/*: any*/),
+                                        "selections": (v7/*: any*/),
                                         "storageKey": null
                                       },
                                       {
@@ -365,7 +376,7 @@ v7 = [
                                         "kind": "LinkedField",
                                         "name": "Acc_ParticipantStatus__c",
                                         "plural": false,
-                                        "selections": (v6/*: any*/),
+                                        "selections": (v7/*: any*/),
                                         "storageKey": null
                                       },
                                       {
@@ -375,7 +386,7 @@ v7 = [
                                         "kind": "LinkedField",
                                         "name": "Acc_Postcode__c",
                                         "plural": false,
-                                        "selections": (v6/*: any*/),
+                                        "selections": (v7/*: any*/),
                                         "storageKey": null
                                       }
                                     ],
@@ -415,7 +426,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "PartnerDetailsQuery",
-    "selections": (v7/*: any*/),
+    "selections": (v8/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -427,19 +438,19 @@ return {
     ],
     "kind": "Operation",
     "name": "PartnerDetailsQuery",
-    "selections": (v7/*: any*/)
+    "selections": (v8/*: any*/)
   },
   "params": {
-    "cacheID": "45692d6dcf7de779b70d591a9a8a276e",
+    "cacheID": "85eb14925a100353d0ff0bd0b8a5a170",
     "id": null,
     "metadata": {},
     "name": "PartnerDetailsQuery",
     "operationKind": "query",
-    "text": "query PartnerDetailsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query PartnerDetailsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(where: {Id: {eq: $partnerId}}) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Acc_ParticipantType__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_Postcode__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "47f9178ddd69581697b6021719a2760c";
+(node as any).hash = "b1374b09a2cbb6aab229d2eb9e836b6a";
 
 export default node;

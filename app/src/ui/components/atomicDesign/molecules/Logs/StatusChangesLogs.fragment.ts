@@ -14,6 +14,7 @@ export const statusChangesLogsFragment = graphql`
               isFc
               isPm
               isMo
+              isAssociate
             }
           }
         }

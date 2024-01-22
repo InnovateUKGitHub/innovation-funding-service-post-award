@@ -265,7 +265,7 @@ const mapper: GQL.DtoMapper<PartnerDtoMapping, PartnerNode, { roles?: SfRoles; c
     return node?.Acc_RemainingParticipantGrant__c?.value ?? 0;
   },
   roles(node, additionalData: { roles?: SfRoles }) {
-    return additionalData?.roles ?? { isPm: false, isMo: false, isFc: false };
+    return additionalData?.roles ?? { isPm: false, isMo: false, isFc: false, isAssociate: false };
   },
   spendProfileStatus(node) {
     const partnerStatus = this["partnerStatus"](node, {}); // requires Acc_ParticipantStatus__c

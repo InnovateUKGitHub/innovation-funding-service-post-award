@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9fd311b0086e97dc159c69cb3e9a0ec9>>
+ * @generated SignedSource<<b928449cf8d1c044d85c9ef6f83397d4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -85,6 +85,7 @@ export type FinanceSummaryQuery$data = {
               readonly Id: string;
               readonly isActive: boolean;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
@@ -227,6 +228,13 @@ v3 = [
                                 "args": null,
                                 "kind": "ScalarField",
                                 "name": "isPm",
+                                "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isAssociate",
                                 "storageKey": null
                               }
                             ],
@@ -511,16 +519,16 @@ return {
     "selections": (v3/*: any*/)
   },
   "params": {
-    "cacheID": "f4220aa4aa9e612ec9edbdb81ba6d393",
+    "cacheID": "fb982ec796e9b211d592a9365cc0a14a",
     "id": null,
     "metadata": {},
     "name": "FinanceSummaryQuery",
     "operationKind": "query",
-    "text": "query FinanceSummaryQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalCostsSubmitted__c {\n                      value\n                    }\n                    Acc_Award_Rate__c {\n                      value\n                    }\n                    Acc_RemainingParticipantGrant__c {\n                      value\n                    }\n                    Acc_TotalPrepayment__c {\n                      value\n                    }\n                    Acc_TotalGrantApproved__c {\n                      value\n                    }\n                    Acc_Cap_Limit__c {\n                      value\n                    }\n                    Acc_CapLimitDeferredGrant__c {\n                      value\n                    }\n                    Acc_AuditReportFrequency__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query FinanceSummaryQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              isActive\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(orderBy: {Acc_AccountId__r: {Name: {order: ASC}}}, first: 500) {\n                edges {\n                  node {\n                    Id\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                    }\n                    Acc_ProjectRole__c {\n                      value\n                    }\n                    Acc_TotalParticipantCosts__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TotalCostsSubmitted__c {\n                      value\n                    }\n                    Acc_Award_Rate__c {\n                      value\n                    }\n                    Acc_RemainingParticipantGrant__c {\n                      value\n                    }\n                    Acc_TotalPrepayment__c {\n                      value\n                    }\n                    Acc_TotalGrantApproved__c {\n                      value\n                    }\n                    Acc_Cap_Limit__c {\n                      value\n                    }\n                    Acc_CapLimitDeferredGrant__c {\n                      value\n                    }\n                    Acc_AuditReportFrequency__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "7a5900cb1a501762bd6e2cf6da66404a";
+(node as any).hash = "3580674e53ee4f585763891b5c4d427e";
 
 export default node;

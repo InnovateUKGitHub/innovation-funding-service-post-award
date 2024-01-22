@@ -50,6 +50,7 @@ const pcrDetailsQuery = graphql`
                   isFc
                   isMo
                   isPm
+                  isAssociate
                 }
                 Acc_ProjectNumber__c {
                   value

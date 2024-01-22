@@ -110,6 +110,7 @@ export const renamePartnerWorkflowQuery = graphql`
                   isPm
                   isFc
                   isMo
+                  isAssociate
                 }
               }
             }

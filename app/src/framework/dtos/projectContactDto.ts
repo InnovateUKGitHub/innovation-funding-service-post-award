@@ -1,4 +1,10 @@
-export type ProjectRoleName = "Monitoring officer" | "Project Manager" | "Finance contact" | "Innovation lead" | "IPM";
+export type ProjectRoleName =
+  | "Monitoring officer"
+  | "Project Manager"
+  | "Finance contact"
+  | "Innovation lead"
+  | "IPM"
+  | "Associate";
 
 export interface ProjectContactDto {
   accountId?: string;

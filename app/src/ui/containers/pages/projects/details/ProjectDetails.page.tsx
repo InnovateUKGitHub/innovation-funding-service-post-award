@@ -62,14 +62,15 @@ const OtherContactProjectDetailsComponent = ({
 type PartnerNameProps = {
   project: Pick<ProjectDtoGql, "id">;
   partner: Pick<PartnerDtoGql, "name" | "isWithdrawn" | "isLead" | "id">;
+  readonly: boolean;
 };
 
-const PartnerName = ({ project, partner }: PartnerNameProps) => {
+const PartnerName = ({ project, partner, readonly }: PartnerNameProps) => {
   const partnerName = getPartnerName(partner, true);
   const projectStatus = useProjectStatus();
   const routes = useRoutes();
 
-  if (projectStatus.isActive) {
+  if (projectStatus.isActive && !readonly) {
     return (
       <Link
         route={routes.partnerDetails.getLink({
@@ -99,14 +100,14 @@ const PartnerInformationTable = ({
   project: Pick<ProjectDtoGql, "roles" | "id">;
   partners: PartnerTableType[];
 }) => {
-  const { isPmOrMo } = getAuthRoles(project.roles);
+  const { isPmOrMo, isAssociate, isFc } = getAuthRoles(project.roles);
 
   return (
     <Section title={x => x.projectLabels.partners}>
       <PartnersTable.Table qa="partner-information" data={partners}>
         <PartnersTable.Custom
           header={x => x.pages.partnerDetails.projectContactLabels.partnerName}
-          value={x => <PartnerName project={project} partner={x} />}
+          value={x => <PartnerName project={project} partner={x} readonly={isAssociate && !isFc && !isPmOrMo} />}
           qa="partner-name"
         />
         <PartnersTable.String header={x => x.projectContactLabels.partnerType} value={x => x.type} qa="partner-type" />
@@ -328,5 +329,10 @@ export const ProjectDetailsRoute = defineRoute({
   accessControl: (auth, params) =>
     auth
       .forProject(params.projectId)
-      .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+      .hasAnyRoles(
+        ProjectRole.FinancialContact,
+        ProjectRole.ProjectManager,
+        ProjectRole.MonitoringOfficer,
+        ProjectRole.Associate,
+      ),
 });

@@ -56,6 +56,7 @@ export const loanDrawdownExtensionQuery = graphql`
                   isPm
                   isFc
                   isMo
+                  isAssociate
                 }
                 Acc_NumberofPeriods__c {
                   value

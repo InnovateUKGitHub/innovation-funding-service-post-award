@@ -39,6 +39,7 @@ declare interface SfRoles {
   isPm: boolean;
   isFc: boolean;
   isMo: boolean;
+  isAssociate: boolean;
 }
 
 interface SfPartnerRoles extends SfRoles {

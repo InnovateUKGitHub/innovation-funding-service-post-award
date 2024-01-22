@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fe029e29ea0850acfbbf753cc8bf6b81>>
+ * @generated SignedSource<<22eea9ff8ad89af32e6b2659776f297f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -105,6 +105,7 @@ export type MonitoringReportWorkflowQuery$data = {
               } | null | undefined;
               readonly Id: string;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
@@ -751,6 +752,13 @@ v9 = [
                                 "kind": "ScalarField",
                                 "name": "isPm",
                                 "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isAssociate",
+                                "storageKey": null
                               }
                             ],
                             "storageKey": null
@@ -818,16 +826,16 @@ return {
     "selections": (v9/*: any*/)
   },
   "params": {
-    "cacheID": "b7b1f36c0ff3b4f19da2a061bf88e580",
+    "cacheID": "c918f0efb69d707c1afef5699215065f",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportWorkflowQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportWorkflowQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_StatusChange__c(where: {Acc_MonitoringReport__c: {eq: $monitoringReportId}}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_NewMonitoringReportStatus__c {\n                value\n              }\n              Acc_PreviousMonitoringReportStatus__c {\n                value\n              }\n              Acc_MonitoringReport__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringAnswer__c(where: {or: [{Id: {eq: $monitoringReportId}}, {and: [{Acc_MonitoringHeader__c: {eq: $monitoringReportId}}, {RecordType: {Name: {eq: \"Monitoring Answer\"}}}]}]}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_MonitoringHeader__c {\n                value\n              }\n              Acc_Question__c {\n                value\n              }\n              Acc_QuestionComments__c {\n                value\n              }\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringQuestion__c(first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_QuestionScore__c {\n                value\n              }\n              Acc_QuestionText__c {\n                value\n              }\n              Acc_QuestionDescription__c {\n                value\n              }\n              Acc_ActiveFlag__c {\n                value\n              }\n              Acc_ScoredQuestion__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportWorkflowQuery(\n  $projectId: ID!\n  $monitoringReportId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_StatusChange__c(where: {Acc_MonitoringReport__c: {eq: $monitoringReportId}}, orderBy: {CreatedDate: {order: DESC}}, first: 2000) {\n          edges {\n            node {\n              Id\n              Acc_NewMonitoringReportStatus__c {\n                value\n              }\n              Acc_PreviousMonitoringReportStatus__c {\n                value\n              }\n              Acc_MonitoringReport__c {\n                value\n              }\n              Acc_ExternalComment__c {\n                value\n              }\n              Acc_CreatedByAlias__c {\n                value\n              }\n              CreatedDate {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringAnswer__c(where: {or: [{Id: {eq: $monitoringReportId}}, {and: [{Acc_MonitoringHeader__c: {eq: $monitoringReportId}}, {RecordType: {Name: {eq: \"Monitoring Answer\"}}}]}]}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              RecordType {\n                Name {\n                  value\n                }\n                DeveloperName {\n                  value\n                }\n              }\n              Acc_MonitoringHeader__c {\n                value\n              }\n              Acc_Question__c {\n                value\n              }\n              Acc_QuestionComments__c {\n                value\n              }\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_MonitoringQuestion__c(first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_QuestionName__c {\n                value\n              }\n              Acc_DisplayOrder__c {\n                value\n              }\n              Acc_QuestionScore__c {\n                value\n              }\n              Acc_QuestionText__c {\n                value\n              }\n              Acc_QuestionDescription__c {\n                value\n              }\n              Acc_ActiveFlag__c {\n                value\n              }\n              Acc_ScoredQuestion__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "2fd4b3fe7092ad9cc9b94ed40e42a62c";
+(node as any).hash = "2646440b71478e4be6e9ed2353adb333";
 
 export default node;

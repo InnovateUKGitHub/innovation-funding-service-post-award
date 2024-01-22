@@ -107,10 +107,12 @@ export const claimDetailDocumentsQuery = graphql`
                   isMo
                   isFc
                   isPm
+                  isAssociate
                   partnerRoles {
                     isFc
                     isMo
                     isPm
+                    isAssociate
                     partnerId
                   }
                 }

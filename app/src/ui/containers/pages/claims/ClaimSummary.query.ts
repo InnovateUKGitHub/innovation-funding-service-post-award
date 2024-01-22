@@ -284,10 +284,12 @@ export const claimSummaryQuery = graphql`
                   isMo
                   isFc
                   isPm
+                  isAssociate
                   partnerRoles {
                     isMo
                     isFc
                     isPm
+                    isAssociate
                     partnerId
                   }
                 }

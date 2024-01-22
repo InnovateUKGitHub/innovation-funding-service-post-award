@@ -1,6 +1,6 @@
 import { BaseProps, defineRoute } from "../../../containerBase";
-import FCProjectOverviewDetails from "./projectOverviewFC";
-import PMProjectOverviewDetails from "./projectOverviewPM";
+import { ProjectOverviewSinglePartnerDetails } from "./projectOverviewSinglePartner";
+import { ProjectOverviewAllPartnersDetails } from "./projectOverviewAllPartners";
 import ProjectOverviewTiles from "./projectOverviewTiles";
 import { useProjectOverviewData, isPartnerWithdrawn } from "./projectOverview.logic";
 import { ProjectRole } from "@framework/constants/project";
@@ -20,6 +20,7 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
     props.projectId,
   );
 
+  console.log("project", project);
   const title =
     isProjectClosed || project.isPastEndDate || isPartnerWithdrawn(project.roles, partners) ? (
       <Content value={x => x.projectMessages.projectEndedMessage} />
@@ -53,10 +54,10 @@ const ProjectOverviewPage = (props: Props & BaseProps) => {
       partnerStatus={highlightedPartner?.partnerStatus}
     >
       <Section qa="period-information" className="govuk-!-padding-bottom-6" title={title} subtitle={subtitle}>
-        {highlightedPartner && project.roles.isPm ? (
-          <PMProjectOverviewDetails project={project} partner={highlightedPartner} />
+        {highlightedPartner && (project.roles.isPm || project.roles.isMo) ? (
+          <ProjectOverviewAllPartnersDetails project={project} partner={highlightedPartner} />
         ) : highlightedPartner && project.roles.isFc ? (
-          <FCProjectOverviewDetails partner={highlightedPartner} />
+          <ProjectOverviewSinglePartnerDetails partner={highlightedPartner} />
         ) : null}
       </Section>
       <ProjectOverviewTiles
@@ -79,6 +80,11 @@ export const ProjectOverviewRoute = defineRoute({
   accessControl: (auth, params) =>
     auth
       .forProject(params.projectId)
-      .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
+      .hasAnyRoles(
+        ProjectRole.FinancialContact,
+        ProjectRole.ProjectManager,
+        ProjectRole.MonitoringOfficer,
+        ProjectRole.Associate,
+      ),
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectOverview.title),
 });

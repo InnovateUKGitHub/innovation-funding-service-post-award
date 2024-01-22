@@ -6,5 +6,6 @@ export const convertRolesToPermissionsValue = (role: SfRoles | ProjectRole) => {
   if (role.isMo) permissions += ProjectRole.MonitoringOfficer;
   if (role.isPm) permissions += ProjectRole.ProjectManager;
   if (role.isFc) permissions += ProjectRole.FinancialContact;
+  if (role.isAssociate) permissions += ProjectRole.Associate;
   return permissions;
 };

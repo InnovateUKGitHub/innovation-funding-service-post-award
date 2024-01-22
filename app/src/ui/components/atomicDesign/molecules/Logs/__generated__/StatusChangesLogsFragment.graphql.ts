@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c974b775cf5336e8d87e313f7e3bbb43>>
+ * @generated SignedSource<<ea2c01cb314c3480b7b87926f8baf96a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,7 @@ export type StatusChangesLogsFragment$data = {
           } | null | undefined;
           readonly Id: string;
           readonly roles: {
+            readonly isAssociate: boolean;
             readonly isFc: boolean;
             readonly isMo: boolean;
             readonly isPm: boolean;
@@ -294,6 +295,13 @@ return {
                           "kind": "ScalarField",
                           "name": "isMo",
                           "storageKey": null
+                        },
+                        {
+                          "alias": null,
+                          "args": null,
+                          "kind": "ScalarField",
+                          "name": "isAssociate",
+                          "storageKey": null
                         }
                       ],
                       "storageKey": null
@@ -407,6 +415,6 @@ return {
 };
 })();
 
-(node as any).hash = "be2588b8f4e6dc06f3c3209b117c2ea4";
+(node as any).hash = "8b87c8b0ff5a5992f1b7070201f3b7aa";
 
 export default node;

@@ -39,6 +39,7 @@ interface UserSwitcherTableRow {
   isMo: boolean;
   isFc: boolean;
   isPm: boolean;
+  isAssociate: boolean;
   user: DeveloperUser;
 }
 interface UserSwitcherEmailFormInput {
@@ -105,6 +106,7 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
           isMo: false,
           isFc: false,
           isPm: false,
+          isAssociate: false,
           user: {
             externalUsername,
             internalUsername,
@@ -121,6 +123,8 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
         contactRoleInfo[username].isFc = true;
       } else if (role === "Project Manager") {
         contactRoleInfo[username].isPm = true;
+      } else if (role === "Associate") {
+        contactRoleInfo[username].isAssociate = true;
       }
     }
   }
@@ -142,21 +146,9 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
         />
 
         <ProjectContactTable.String
-          qa="partner-mo"
-          header={x => x.components.userSwitcher.tableHeaderMonitoringOfficer}
-          value={x => (x.isMo ? getContent(x => x.components.userSwitcher.tableHeaderMonitoringOfficer) : "")}
-        />
-
-        <ProjectContactTable.String
-          qa="partner-pm"
-          header={x => x.components.userSwitcher.tableHeaderProjectManager}
-          value={x => (x.isPm ? getContent(x => x.components.userSwitcher.tableHeaderProjectManager) : "")}
-        />
-
-        <ProjectContactTable.String
-          qa="partner-fc"
-          header={x => x.components.userSwitcher.tableHeaderFinancialContact}
-          value={x => (x.isFc ? getContent(x => x.components.userSwitcher.tableHeaderFinancialContact) : "")}
+          qa="partner-role"
+          header={x => x.components.userSwitcher.tableHeaderRole}
+          value={x => x.user.role}
         />
 
         <ProjectContactTable.Email
@@ -183,6 +175,20 @@ const UserSwitcherProjectSelectorPartnerSelector = ({ projectId }: { projectId: 
                   <SelectContactForm.Hidden name="project_id" value={() => projectId} />
                   <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
                   <SelectContactForm.Hidden name="user" value={() => x.user.externalUsername} />
+                  <SelectContactForm.Button name="home" styling="Link" qa="btn-home">
+                    {getContent(x => x.components.userSwitcher.switchAndHome)}
+                  </SelectContactForm.Button>
+                  <SelectContactForm.Button name="stay" styling="Link" qa="btn-stay">
+                    {getContent(x => x.components.userSwitcher.switchAndStay)}
+                  </SelectContactForm.Button>
+                </SelectContactForm.Form>
+              );
+            } else if (x.user.internalUsername) {
+              return (
+                <SelectContactForm.Form data="" action={DeveloperUserSwitcherPage.routePath}>
+                  <SelectContactForm.Hidden name="project_id" value={() => projectId} />
+                  <SelectContactForm.Hidden name="current_url" value={() => returnLocation} />
+                  <SelectContactForm.Hidden name="user" value={() => x.user.internalUsername} />
                   <SelectContactForm.Button name="home" styling="Link" qa="btn-home">
                     {getContent(x => x.components.userSwitcher.switchAndHome)}
                   </SelectContactForm.Button>

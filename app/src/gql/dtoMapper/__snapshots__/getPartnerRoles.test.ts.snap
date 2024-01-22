@@ -3,22 +3,32 @@
 exports[`getPartnerRoles should map from the partnerRoles object to a list of partner roles 1`] = `
 [
   {
+    "isAssociate": false,
     "isFc": true,
     "isMo": false,
     "isPm": false,
     "partnerId": "1",
   },
   {
+    "isAssociate": false,
     "isFc": false,
     "isMo": false,
     "isPm": true,
     "partnerId": "2",
   },
   {
+    "isAssociate": false,
     "isFc": false,
     "isMo": true,
     "isPm": false,
     "partnerId": "3",
+  },
+  {
+    "isAssociate": true,
+    "isFc": false,
+    "isMo": false,
+    "isPm": false,
+    "partnerId": "4",
   },
 ]
 `;

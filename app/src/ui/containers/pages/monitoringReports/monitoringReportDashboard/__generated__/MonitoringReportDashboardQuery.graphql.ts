@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<064a79af427c4a1379a1398164d8ad37>>
+ * @generated SignedSource<<ceffb3a476d6aa78e8901009a7eef9fa>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -59,6 +59,7 @@ export type MonitoringReportDashboardQuery$data = {
               } | null | undefined;
               readonly Id: string;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
@@ -336,6 +337,13 @@ v5 = [
                                 "kind": "ScalarField",
                                 "name": "isPm",
                                 "storageKey": null
+                              },
+                              {
+                                "alias": null,
+                                "args": null,
+                                "kind": "ScalarField",
+                                "name": "isAssociate",
+                                "storageKey": null
                               }
                             ],
                             "storageKey": null
@@ -407,16 +415,16 @@ return {
     "selections": (v5/*: any*/)
   },
   "params": {
-    "cacheID": "643719ae15135da8d4efe83bb76f400d",
+    "cacheID": "47074ba8e22e6fb3f68fec025e997230",
     "id": null,
     "metadata": {},
     "name": "MonitoringReportDashboardQuery",
     "operationKind": "query",
-    "text": "query MonitoringReportDashboardQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {Acc_Project__c: {eq: $projectId}}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query MonitoringReportDashboardQuery(\n  $projectId: ID!\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_MonitoringAnswer__c(where: {Acc_Project__c: {eq: $projectId}}, orderBy: {LastModifiedDate: {order: DESC}}, first: 1000) {\n          edges {\n            node {\n              Id\n              Acc_MonitoringReportStatus__c {\n                value\n                label\n              }\n              LastModifiedDate {\n                value\n              }\n              Acc_Project__c {\n                value\n              }\n              Acc_ProjectPeriodNumber__c {\n                value\n              }\n              Acc_AddComments__c {\n                value\n              }\n              Acc_PeriodStartDate__c {\n                value\n              }\n              Acc_PeriodEndDate__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_Project__c(where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "3a3167cbb92a7f9a567fc8ba6b5504ae";
+(node as any).hash = "6b15d9b22d9305d7e8d2e568238fb0a4";
 
 export default node;

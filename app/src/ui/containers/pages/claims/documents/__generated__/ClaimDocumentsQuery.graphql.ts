@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d36f141fb50201d0781ade29babfd0bf>>
+ * @generated SignedSource<<1a9cd3fbdb9ed5ffc6341736c056812f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -119,10 +119,12 @@ export type ClaimDocumentsQuery$data = {
                 readonly value: string | null | undefined;
               } | null | undefined;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
                 readonly partnerRoles: ReadonlyArray<{
+                  readonly isAssociate: boolean;
                   readonly isFc: boolean;
                   readonly isMo: boolean;
                   readonly isPm: boolean;
@@ -216,7 +218,14 @@ v10 = {
   "name": "isPm",
   "storageKey": null
 },
-v11 = [
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
+  "storageKey": null
+},
+v12 = [
   {
     "alias": null,
     "args": null,
@@ -613,6 +622,7 @@ v11 = [
                               (v8/*: any*/),
                               (v9/*: any*/),
                               (v10/*: any*/),
+                              (v11/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -624,6 +634,7 @@ v11 = [
                                   (v9/*: any*/),
                                   (v8/*: any*/),
                                   (v10/*: any*/),
+                                  (v11/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -764,7 +775,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "ClaimDocumentsQuery",
-    "selections": (v11/*: any*/),
+    "selections": (v12/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -777,19 +788,19 @@ return {
     ],
     "kind": "Operation",
     "name": "ClaimDocumentsQuery",
-    "selections": (v11/*: any*/)
+    "selections": (v12/*: any*/)
   },
   "params": {
-    "cacheID": "0aa50d6082c0b9aca8f5e963f6215c0c",
+    "cacheID": "8ded5b71c8d0c8c173b9578b49f39b71",
     "id": null,
     "metadata": {},
     "name": "ClaimDocumentsQuery",
     "operationKind": "query",
-    "text": "query ClaimDocumentsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $periodId: Double\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, Acc_ProjectPeriodNumber__c: {eq: $periodId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ClaimStatus__c {\n                value\n              }\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_PCF_Status__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    isFeedAttachment\n                    isOwner\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ClaimDocumentsQuery(\n  $projectId: ID!\n  $partnerId: ID!\n  $periodId: Double\n) {\n  salesforce {\n    uiapi {\n      query {\n        Acc_Claims__c(where: {Acc_ProjectParticipant__c: {eq: $partnerId}, Acc_ProjectPeriodNumber__c: {eq: $periodId}, RecordType: {DeveloperName: {eq: \"Total_Project_Period\"}}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ClaimStatus__c {\n                value\n              }\n              Acc_FinalClaim__c {\n                value\n              }\n              Acc_IARRequired__c {\n                value\n              }\n              Acc_PCF_Status__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n              ContentDocumentLinks(first: 2000, orderBy: {ContentDocument: {LastModifiedDate: {order: DESC}}}) {\n                edges {\n                  node {\n                    isFeedAttachment\n                    isOwner\n                    LinkedEntityId {\n                      value\n                    }\n                    ContentDocument {\n                      Id\n                      LastModifiedBy {\n                        ContactId {\n                          value\n                        }\n                      }\n                      LatestPublishedVersionId {\n                        value\n                      }\n                      Description {\n                        value\n                      }\n                      ContentSize {\n                        value\n                      }\n                      CreatedDate {\n                        value\n                      }\n                      FileType {\n                        value\n                      }\n                      FileExtension {\n                        value\n                      }\n                      Title {\n                        value\n                      }\n                      LastModifiedDate {\n                        value\n                      }\n                      CreatedBy {\n                        Id\n                        Name {\n                          value\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n        Acc_Project__c(first: 1, where: {Id: {eq: $projectId}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                partnerRoles {\n                  isFc\n                  isMo\n                  isPm\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Impact_Management_Participation__c {\n                value\n              }\n            }\n          }\n        }\n        Acc_ProjectParticipant__c(where: {Id: {eq: $partnerId}}, first: 1) {\n          edges {\n            node {\n              Id\n              Acc_ParticipantStatus__c {\n                value\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0c22cba5cfebed87a942cca99152ff44";
+(node as any).hash = "601d93ab793d2fb50bea71f839e356e1";
 
 export default node;

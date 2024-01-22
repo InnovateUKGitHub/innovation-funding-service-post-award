@@ -9,6 +9,7 @@ export const getPartnerRoles = (
       isFc: x?.isFc ?? false,
       isPm: x?.isPm ?? false,
       isMo: x?.isMo ?? false,
+      isAssociate: x?.isAssociate ?? false,
       partnerId: x?.partnerId ?? "unknown partner id",
     })) ?? []
   );

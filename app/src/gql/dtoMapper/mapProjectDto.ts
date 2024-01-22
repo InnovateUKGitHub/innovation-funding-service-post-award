@@ -231,6 +231,7 @@ const mapper: GQL.DtoMapper<ProjectDtoMapping, ProjectNode> = {
       isPm: node?.roles?.isPm ?? false,
       isMo: node?.roles?.isMo ?? false,
       isFc: node?.roles?.isFc ?? false,
+      isAssociate: node?.roles?.isAssociate ?? false,
     };
   },
   startDate(node) {

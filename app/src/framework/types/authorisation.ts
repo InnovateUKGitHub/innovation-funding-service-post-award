@@ -1,7 +1,7 @@
 import { ProjectRole } from "@framework/constants/project";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 
-type AvailableAuthRoles = "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc" | "Unknown" | "SuperAdmin";
+type AvailableAuthRoles = "Associate" | "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc" | "Unknown" | "SuperAdmin";
 
 /**
  * Gets object with auth roles as series of booleans
@@ -10,16 +10,20 @@ export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${Available
   let isFc: boolean;
   let isPm: boolean;
   let isMo: boolean;
+  let isAssociate: boolean;
+
   let isUnknown = false;
   if (typeof role == "number") {
     isUnknown = (role & ProjectRole.Unknown) === ProjectRole.Unknown && role === ProjectRole.Unknown;
     isFc = !!(role & ProjectRole.FinancialContact);
     isPm = !!(role & ProjectRole.ProjectManager);
     isMo = !!(role & ProjectRole.MonitoringOfficer);
+    isAssociate = !!(role & ProjectRole.Associate);
   } else {
     isFc = role.isFc;
     isPm = role.isPm;
     isMo = role.isMo;
+    isAssociate = role.isAssociate;
   }
 
   const isSuperAdmin = isFc && isPm && isMo;
@@ -35,6 +39,7 @@ export function getAuthRoles(role: ProjectRole | SfRoles): Record<`is${Available
     isSuperAdmin,
     isPmAndFc,
     isPmOrMo,
+    isAssociate,
   };
 }
 

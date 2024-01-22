@@ -8,6 +8,7 @@ exports[`mapToProjectDto should map the node to a subset of the project dto 1`] 
   "id": "0",
   "projectNumber": "2345",
   "roles": {
+    "isAssociate": false,
     "isFc": true,
     "isMo": false,
     "isPm": false,
@@ -35,6 +36,7 @@ exports[`mapToProjectDto should map the node to the projectDto structure 1`] = `
   "numberOfPeriods": 12,
   "partnerRoles": [
     {
+      "isAssociate": false,
       "isFc": true,
       "isMo": false,
       "isPm": false,
@@ -48,6 +50,7 @@ exports[`mapToProjectDto should map the node to the projectDto structure 1`] = `
   "periodStartDate": 2022-01-24T00:00:00.000Z,
   "projectNumber": "2345",
   "roles": {
+    "isAssociate": false,
     "isFc": true,
     "isMo": false,
     "isPm": false,

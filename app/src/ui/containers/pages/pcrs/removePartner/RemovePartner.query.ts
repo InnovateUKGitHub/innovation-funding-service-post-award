@@ -110,6 +110,7 @@ export const removePartnerWorkflowQuery = graphql`
                   isPm
                   isFc
                   isMo
+                  isAssociate
                 }
                 Acc_NumberofPeriods__c {
                   value

@@ -17,11 +17,13 @@ export const projectOverviewQuery = graphql`
                   isMo
                   isFc
                   isPm
+                  isAssociate
                   isSalesforceSystemUser
                   partnerRoles {
                     isFc
                     isMo
                     isPm
+                    isAssociate
                     partnerId
                   }
                 }

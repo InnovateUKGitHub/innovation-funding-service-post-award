@@ -233,6 +233,8 @@ export class TestData {
         return "Monitoring Officer";
       case "Project Manager":
         return "Project Manager";
+      case "Associate":
+        return "Associate";
     }
   }
 

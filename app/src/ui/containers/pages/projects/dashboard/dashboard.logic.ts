@@ -174,6 +174,7 @@ export function getRolesForPartner(partner: Partner, partnerRoles: SfPartnerRole
       isFc: false,
       isPm: false,
       isMo: false,
+      isAssociate: false,
     }
   );
 }
@@ -190,7 +191,16 @@ export function getPartnerOnProject(project: Project): Partner | undefined {
     return leadPartner;
   }
 
-  return project.partners.find(partner => getRolesForPartner(partner, project.partnerRoles)?.isFc);
+  if (leadPartner) {
+    const leadRoles = getRolesForPartner(leadPartner, project.partnerRoles);
+    if (isPm || leadRoles.isFc || leadRoles.isAssociate) {
+      return leadPartner;
+    }
+  }
+  return project.partners.find(partner => {
+    const roles = getRolesForPartner(partner, project.partnerRoles);
+    return roles?.isFc || roles?.isAssociate;
+  });
 }
 
 /**
@@ -201,7 +211,7 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
     return "pending";
   }
 
-  const { isFc, isPmOrMo } = getAuthRoles(project.roles);
+  const { isFc, isPmOrMo, isAssociate } = getAuthRoles(project.roles);
 
   switch (project.status) {
     case ProjectStatus.Live:
@@ -211,7 +221,7 @@ export function getProjectSection(project: Project, partner?: Partner): Section 
         return "upcoming";
       }
 
-      if (isPmOrMo) {
+      if (isPmOrMo || isAssociate) {
         return project.numberOfOpenClaims > 0 ? "open" : "awaiting";
       }
 

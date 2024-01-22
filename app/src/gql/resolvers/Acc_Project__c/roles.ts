@@ -6,6 +6,7 @@ interface ExternalRoles {
   isMo: boolean;
   isFc: boolean;
   isPm: boolean;
+  isAssociate: boolean;
   isSalesforceSystemUser: boolean;
 }
 
@@ -31,6 +32,7 @@ const rolesResolver: IFieldResolverOptions = {
       isMo: isSalesforceSystemUser,
       isFc: isSalesforceSystemUser,
       isPm: isSalesforceSystemUser,
+      isAssociate: false,
       isSalesforceSystemUser,
       partnerRoles: [],
     };
@@ -46,11 +48,13 @@ const rolesResolver: IFieldResolverOptions = {
     const project = roleData.node;
 
     for (const { node: projectContactLink } of project.Project_Contact_Links__r.edges) {
+      // console.log("roles.ts > rolesResolver > projectContactLink > Acc_Role__c", projectContactLink.Acc_Role__c.value);
       // If the user's Contact ID is the same as the Contact ID for the PCL, then apply the role for the PCL.
       if (projectContactLink?.Acc_ContactId__r?.Id === contactId) {
         if (projectContactLink.Acc_Role__c.value === "Monitoring officer") permissions.isMo = true;
         if (projectContactLink.Acc_Role__c.value === "Finance contact") permissions.isFc = true;
         if (projectContactLink.Acc_Role__c.value === "Project Manager") permissions.isPm = true;
+        if (projectContactLink.Acc_Role__c.value === "Associate") permissions.isAssociate = true;
       }
 
       for (const { node: projectParticipant } of project.Acc_ProjectParticipantsProject__r.edges) {
@@ -59,6 +63,7 @@ const rolesResolver: IFieldResolverOptions = {
           isMo: isSalesforceSystemUser,
           isFc: isSalesforceSystemUser,
           isPm: isSalesforceSystemUser,
+          isAssociate: false,
           isSalesforceSystemUser: ctx.email === configuration.salesforceServiceUser.serviceUsername,
           accountId: projectParticipant.Acc_AccountId__c.value,
           partnerId: projectParticipant.Id,
@@ -71,6 +76,8 @@ const rolesResolver: IFieldResolverOptions = {
           if (permissions.isFc) partnerPermissions.isFc = true;
           if (permissions.isPm && projectParticipant.Acc_ProjectRole__c.value === "Lead")
             partnerPermissions.isPm = true;
+
+          // TODO: find rules for partner permissions
         }
 
         if (!existingPartnerPermissions) permissions.partnerRoles.push(partnerPermissions);

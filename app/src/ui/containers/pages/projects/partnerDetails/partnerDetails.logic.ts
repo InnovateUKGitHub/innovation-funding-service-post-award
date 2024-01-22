@@ -22,6 +22,7 @@ export const usePartnerDetailsQuery = (projectId: ProjectId, partnerId: PartnerI
       isFc: false,
       isPm: false,
       isMo: false,
+      isAssociate: false,
     },
   });
 

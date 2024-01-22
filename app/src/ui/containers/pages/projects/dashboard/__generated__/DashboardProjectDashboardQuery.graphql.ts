@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5427733b033483ab7b84b45464a82d95>>
+ * @generated SignedSource<<32ccd2c9ba3bb978b885ed4416e8acce>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -116,11 +116,13 @@ export type DashboardProjectDashboardQuery$data = {
               } | null | undefined;
               readonly Id: string;
               readonly roles: {
+                readonly isAssociate: boolean;
                 readonly isFc: boolean;
                 readonly isMo: boolean;
                 readonly isPm: boolean;
                 readonly isSalesforceSystemUser: boolean;
                 readonly partnerRoles: ReadonlyArray<{
+                  readonly isAssociate: boolean;
                   readonly isFc: boolean;
                   readonly isMo: boolean;
                   readonly isPm: boolean;
@@ -185,7 +187,14 @@ v7 = {
   "name": "isPm",
   "storageKey": null
 },
-v8 = [
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "isAssociate",
+  "storageKey": null
+},
+v9 = [
   {
     "alias": null,
     "args": null,
@@ -350,6 +359,7 @@ v8 = [
                               (v5/*: any*/),
                               (v6/*: any*/),
                               (v7/*: any*/),
+                              (v8/*: any*/),
                               {
                                 "alias": null,
                                 "args": null,
@@ -368,6 +378,7 @@ v8 = [
                                   (v6/*: any*/),
                                   (v7/*: any*/),
                                   (v5/*: any*/),
+                                  (v8/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -707,7 +718,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "DashboardProjectDashboardQuery",
-    "selections": (v8/*: any*/),
+    "selections": (v9/*: any*/),
     "type": "Query",
     "abstractKey": null
   },
@@ -716,19 +727,19 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "DashboardProjectDashboardQuery",
-    "selections": (v8/*: any*/)
+    "selections": (v9/*: any*/)
   },
   "params": {
-    "cacheID": "2e8c25a18c7876a27f1fc9cc7a627b56",
+    "cacheID": "9761f020f13fc2a9481f3eef89f65917",
     "id": null,
     "metadata": {},
     "name": "DashboardProjectDashboardQuery",
     "operationKind": "query",
-    "text": "query DashboardProjectDashboardQuery {\n  salesforce {\n    uiapi {\n      query {\n        Acc_BroadcastMessage__c(first: 100, where: {and: [{Acc_StartDate__c: {lte: {literal: TODAY}}}, {Acc_EndDate__c: {gte: {literal: TODAY}}}]}) {\n          edges {\n            node {\n              Acc_Message__c {\n                value\n              }\n              Competition_type__c {\n                value\n              }\n              Id\n              DisplayValue\n            }\n          }\n        }\n        Acc_Project__c(first: 2000, orderBy: {Acc_ClaimsForReview__c: {nulls: LAST, order: DESC}, Acc_PCRsForReview__c: {nulls: LAST, order: DESC}, Acc_PCRsUnderQuery__c: {nulls: LAST, order: DESC}, Acc_ProjectTitle__c: {nulls: LAST, order: ASC}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isPm\n                  isMo\n                  partnerId\n                }\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_LeadParticipantName__c {\n                value\n              }\n              Acc_LeadParticipantID__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_ClaimsForReview__c {\n                value\n              }\n              Acc_PCRsForReview__c {\n                value\n              }\n              Acc_PCRsUnderQuery__c {\n                value\n              }\n              Acc_ClaimsOverdue__c {\n                value\n              }\n              Acc_ClaimsUnderQuery__c {\n                value\n              }\n              Acc_NumberOfOpenClaims__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n                label\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                      Id\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Id\n                    Acc_NewForecastNeeded__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TrackingClaims__c {\n                      value\n                    }\n                    Acc_OpenClaimStatus__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query DashboardProjectDashboardQuery {\n  salesforce {\n    uiapi {\n      query {\n        Acc_BroadcastMessage__c(first: 100, where: {and: [{Acc_StartDate__c: {lte: {literal: TODAY}}}, {Acc_EndDate__c: {gte: {literal: TODAY}}}]}) {\n          edges {\n            node {\n              Acc_Message__c {\n                value\n              }\n              Competition_type__c {\n                value\n              }\n              Id\n              DisplayValue\n            }\n          }\n        }\n        Acc_Project__c(first: 2000, orderBy: {Acc_ClaimsForReview__c: {nulls: LAST, order: DESC}, Acc_PCRsForReview__c: {nulls: LAST, order: DESC}, Acc_PCRsUnderQuery__c: {nulls: LAST, order: DESC}, Acc_ProjectTitle__c: {nulls: LAST, order: ASC}}) {\n          edges {\n            node {\n              Id\n              roles {\n                isMo\n                isFc\n                isPm\n                isAssociate\n                isSalesforceSystemUser\n                partnerRoles {\n                  isFc\n                  isPm\n                  isMo\n                  isAssociate\n                  partnerId\n                }\n              }\n              Acc_CompetitionType__c {\n                value\n              }\n              Acc_ProjectNumber__c {\n                value\n              }\n              Acc_ProjectTitle__c {\n                value\n              }\n              Acc_LeadParticipantName__c {\n                value\n              }\n              Acc_LeadParticipantID__c {\n                value\n              }\n              Acc_NumberofPeriods__c {\n                value\n              }\n              Acc_CurrentPeriodNumber__c {\n                value\n              }\n              Acc_StartDate__c {\n                value\n              }\n              Acc_EndDate__c {\n                value\n              }\n              Acc_ClaimsForReview__c {\n                value\n              }\n              Acc_PCRsForReview__c {\n                value\n              }\n              Acc_PCRsUnderQuery__c {\n                value\n              }\n              Acc_ClaimsOverdue__c {\n                value\n              }\n              Acc_ClaimsUnderQuery__c {\n                value\n              }\n              Acc_NumberOfOpenClaims__c {\n                value\n              }\n              Acc_ProjectStatus__c {\n                value\n                label\n              }\n              Acc_CurrentPeriodStartDate__c {\n                value\n              }\n              Acc_CurrentPeriodEndDate__c {\n                value\n              }\n              Acc_ProjectParticipantsProject__r(first: 500) {\n                edges {\n                  node {\n                    Acc_AccountId__r {\n                      Name {\n                        value\n                      }\n                      Id\n                    }\n                    Acc_AccountId__c {\n                      value\n                    }\n                    Id\n                    Acc_NewForecastNeeded__c {\n                      value\n                    }\n                    Acc_ParticipantStatus__c {\n                      value\n                    }\n                    Acc_TrackingClaims__c {\n                      value\n                    }\n                    Acc_OpenClaimStatus__c {\n                      value\n                    }\n                  }\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4eda9eaf91f2d71177e1af55921e8725";
+(node as any).hash = "943c035bb143837a8c79d08b66ff05ae";
 
 export default node;

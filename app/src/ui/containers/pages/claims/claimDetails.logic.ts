@@ -36,6 +36,7 @@ export const useClaimDetailsPageData = (projectId: ProjectId, partnerId: Partner
           isFc: false,
           isMo: false,
           isPm: false,
+          isAssociate: false,
         },
       },
     );

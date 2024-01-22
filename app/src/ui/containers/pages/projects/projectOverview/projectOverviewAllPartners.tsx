@@ -5,7 +5,7 @@ import { useProjectParticipants } from "@ui/components/atomicDesign/atoms/provid
 import type { Partner, Project } from "./projectOverview.logic";
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
 
-const PMProjectOverviewDetails = ({ project, partner }: { partner: Partner; project: Project }) => {
+export const ProjectOverviewAllPartnersDetails = ({ project, partner }: { partner: Partner; project: Project }) => {
   const ProjectSummaryDetails = TypedDetails<Project>();
   const PartnerSummaryDetails = TypedDetails<Partner>();
   const state = useProjectParticipants();
@@ -67,5 +67,3 @@ const PMProjectOverviewDetails = ({ project, partner }: { partner: Partner; proj
     </SectionPanel>
   );
 };
-
-export default PMProjectOverviewDetails;

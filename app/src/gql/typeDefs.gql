@@ -3,6 +3,7 @@ interface Ext_Roles {
   isMo: Boolean!
   isFc: Boolean!
   isPm: Boolean!
+  isAssociate: Boolean!
   isSalesforceSystemUser: Boolean!
 }
 
@@ -10,6 +11,7 @@ type Ext_Partner_Roles implements Ext_Roles {
   isMo: Boolean!
   isFc: Boolean!
   isPm: Boolean!
+  isAssociate: Boolean!
   isSalesforceSystemUser: Boolean!
   partnerId: ID!
 }
@@ -18,6 +20,7 @@ type Ext_Project_Roles implements Ext_Roles {
   isMo: Boolean!
   isFc: Boolean!
   isPm: Boolean!
+  isAssociate: Boolean!
   isSalesforceSystemUser: Boolean!
   partnerRoles: [Ext_Partner_Roles!]!
 }

@@ -65,12 +65,13 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
 };
 
 const getRoleTitles = (roles: ProjectRole) => {
-  const { isMo, isPm, isFc } = getAuthRoles(roles);
+  const { isMo, isPm, isFc, isAssociate } = getAuthRoles(roles);
   const results: string[] = [];
 
   if (isMo) results.push("Monitoring Officer");
   if (isPm) results.push("Project Manager");
   if (isFc) results.push("Finance Contact");
+  if (isAssociate) results.push("Associate");
 
   return results;
 };

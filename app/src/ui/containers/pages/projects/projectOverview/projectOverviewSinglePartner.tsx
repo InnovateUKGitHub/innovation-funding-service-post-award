@@ -4,7 +4,7 @@ import { SectionPanel } from "@ui/components/atomicDesign/molecules/SectionPanel
 import { getPartnerName } from "@ui/components/atomicDesign/organisms/partners/utils/partnerName";
 import type { Partner } from "./projectOverview.logic";
 
-const FCProjectOverviewDetails = ({ partner }: { partner: Partner }) => {
+export const ProjectOverviewSinglePartnerDetails = ({ partner }: { partner: Partner }) => {
   const PartnerSummaryDetails = TypedDetails<Partner>();
   const partnerName = getPartnerName(partner);
 
@@ -37,5 +37,3 @@ const FCProjectOverviewDetails = ({ partner }: { partner: Partner }) => {
     </SectionPanel>
   );
 };
-
-export default FCProjectOverviewDetails;

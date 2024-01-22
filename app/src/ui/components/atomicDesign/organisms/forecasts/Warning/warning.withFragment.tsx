@@ -17,7 +17,7 @@ import { mapToGolCostDtoArray } from "@gql/dtoMapper/mapGolCostsDto";
 import { mapToForecastDetailsDtoArray } from "@gql/dtoMapper/mapForecastDetailsDto";
 import { mapToClaimDetailsDtoArray } from "@gql/dtoMapper/mapClaimDetailsDto";
 
-const defaultRole = { isPm: false, isMo: false, isFc: false };
+const defaultRole = { isPm: false, isMo: false, isFc: false, isAssociate: false };
 
 export const Warning = ({ editor }: { editor?: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator> }) => {
   const fragmentRef = useFragmentContext();

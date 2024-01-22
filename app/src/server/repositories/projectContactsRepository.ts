@@ -1,7 +1,7 @@
 import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
-export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance contact";
+export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance contact" | "Associate";
 
 export interface ISalesforceProjectContact {
   Id: string;

@@ -76,7 +76,8 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
   private async getServiceAccountRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
     const projects = await context.repositories.projects.getAll();
     const partners = await context.repositories.partners.getAll();
-    const allRoles = ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager | ProjectRole.FinancialContact;
+    const allRoles =
+      ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.Associate;
 
     // Create an empty roles set.
     const roles: Record<string, IRoleInfo> = {};
@@ -112,6 +113,8 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
         return ProjectRole.ProjectManager;
       case "Finance contact":
         return ProjectRole.FinancialContact;
+      case "Associate":
+        return ProjectRole.Associate;
       default:
         return ProjectRole.Unknown;
     }

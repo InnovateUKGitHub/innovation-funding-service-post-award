@@ -2085,7 +2085,7 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
           partnerRoles: data.salesforce.uiapi.query.Acc_Project__c.edges[0].node.roles
             .partnerRoles as unknown as SfPartnerRoles[],
-          currentUserRoles: { isMo: true, isFc: false, isPm: false },
+          currentUserRoles: { isMo: true, isFc: false, isPm: false, isAssociate: false },
         },
       ),
     ).toMatchSnapshot();
@@ -2112,7 +2112,7 @@ describe("mapToPartnerDocumentSummaryDtoArray", () => {
           projectId: "a0E2600000kSp3gEAC" as ProjectId,
           partnerRoles: data.salesforce.uiapi.query.Acc_Project__c.edges[0].node.roles
             .partnerRoles as unknown as SfPartnerRoles[],
-          currentUserRoles: { isMo: false, isFc: true, isPm: false },
+          currentUserRoles: { isMo: false, isFc: true, isPm: false, isAssociate: false },
         },
       ),
     ).toMatchSnapshot();

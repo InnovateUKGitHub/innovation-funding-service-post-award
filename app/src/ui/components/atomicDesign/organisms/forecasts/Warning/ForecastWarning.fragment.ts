@@ -95,10 +95,12 @@ export const forecastWarningFragment = graphql`
               isMo
               isFc
               isPm
+              isAssociate
               partnerRoles {
                 isFc
                 isMo
                 isPm
+                isAssociate
                 partnerId
               }
             }

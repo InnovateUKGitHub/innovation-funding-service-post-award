@@ -26,12 +26,14 @@ describe("mapToProjectDto", () => {
       isFc: true,
       isPm: false,
       isMo: false,
+      isAssociate: false,
       partnerRoles: [
         {
           partnerId: "1",
           isFc: true,
           isPm: false,
           isMo: false,
+          isAssociate: false,
         },
       ],
     },
