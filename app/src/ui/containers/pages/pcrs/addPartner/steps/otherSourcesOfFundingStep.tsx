@@ -81,14 +81,15 @@ export const OtherSourcesOfFundingStep = () => {
   const { isClient } = useMounted();
   const { projectId, itemId, fetchKey, useFormValidate, onSave, isFetching } = usePcrWorkflowContext();
 
-  const { costCategories, pcrSpendProfile, academicCostCategories } = useAddPartnerWorkflowQuery(
-    projectId,
-    itemId,
-    fetchKey,
-  );
+  const { costCategories, pcrSpendProfile, academicCostCategories, spendProfileCostCategories } =
+    useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const { spendProfile, funds } = useMemo(() => {
-    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, academicCostCategories);
+    const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, [
+      ...academicCostCategories,
+      ...spendProfileCostCategories,
+    ]);
+
     return { spendProfile, funds: getFunds(spendProfile.funds).map(mapWithDateParts) };
   }, [itemId]);
 

@@ -38,13 +38,28 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
   );
 
   const pcrSpendProfile = mapPcrSpendProfileArray(data?.salesforce?.uiapi?.query?.Acc_IFSSpendProfile__c?.edges ?? [], [
-    "value",
     "capitalUsageType",
-    "id",
-    "description",
     "costCategoryId",
-    "pcrItemId",
+    "costOfEach",
+    "costPerItem",
     "dateOtherFundingSecured",
+    "daysSpentOnProject",
+    "depreciationPeriod",
+    "description",
+    "grossCostOfRole",
+    "id",
+    "netPresentValue",
+    "numberOfTimes",
+    "overheadRate",
+    "pcrItemId",
+    "quantity",
+    "ratePerDay",
+    "residualValue",
+    "subcontractorCountry",
+    "subcontractorRoleAndDescription",
+    "typeLabel",
+    "utilisation",
+    "value",
   ]);
 
   const documents = (pcrNode?.ContentDocumentLinks?.edges ?? []).map(node =>
@@ -113,10 +128,15 @@ export const useAddPartnerWorkflowQuery = (projectId: ProjectId, pcrItemId: PcrI
     {},
   );
 
+  const spendProfileCostCategories = costCategories.filter(
+    x => x.competitionType === project.competitionType && x.organisationType === pcrItem.organisationType,
+  );
+
   return {
     project,
     costCategories,
     academicCostCategories,
+    spendProfileCostCategories,
     pcrItem,
     pcrSpendProfile,
     partners,

@@ -19,18 +19,9 @@ export const SpendProfileStep = () => {
   const { getContent } = useContent();
   const { projectId, itemId, fetchKey } = usePcrWorkflowContext();
 
-  const {
-    pcrItem,
-    costCategories: allCostCategories,
-    project,
-    pcrSpendProfile,
-  } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
+  const { spendProfileCostCategories, pcrSpendProfile } = useAddPartnerWorkflowQuery(projectId, itemId, fetchKey);
 
   const data = useMemo(() => {
-    const spendProfileCostCategories = allCostCategories.filter(
-      x => x.competitionType === project.competitionType && x.organisationType === pcrItem.organisationType,
-    );
-
     const spendProfile = new SpendProfile(itemId).getSpendProfile(pcrSpendProfile, spendProfileCostCategories);
 
     const costCategories = spendProfileCostCategories.map(costCategory => ({
