@@ -24,6 +24,7 @@ import { isNumber } from "@framework/util/numberHelper";
 import { ClaimLastModified } from "@ui/components/atomicDesign/organisms/claims/ClaimLastModified/claimLastModified";
 import { ForecastTable } from "@ui/components/atomicDesign/organisms/claims/ForecastTable/forecastTable.standalone";
 import { Warning } from "@ui/components/atomicDesign/organisms/forecasts/Warning/warning.withFragment";
+import { useState } from "react";
 
 export interface UpdateForecastParams {
   projectId: ProjectId;
@@ -34,6 +35,7 @@ export interface UpdateForecastParams {
 interface UpdateForecastProps {
   editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>;
   onChange: (saving: boolean, dto: ForecastDetailsDTO[]) => void;
+  fetchKey: number;
 }
 
 const Form = createTypedForm<ForecastDetailsDTO[]>();
@@ -44,6 +46,7 @@ const UpdateForecastComponent = ({
   partnerId,
   projectId,
   onChange,
+  fetchKey,
 }: UpdateForecastParams & UpdateForecastProps & BaseProps) => {
   const data = useUpdateForecastData(projectId, partnerId, undefined);
 
@@ -107,6 +110,7 @@ const UpdateForecastComponent = ({
                 selectCurrentClaimByApprovedStatus
                 editor={editor}
                 allowRetroactiveForecastEdit
+                queryOptions={{ fetchKey, fetchPolicy: "network-only" }}
               />
             )}
           />
@@ -127,6 +131,7 @@ const UpdateForecastComponent = ({
 const UpdateForecastContainer = (props: UpdateForecastParams & BaseProps) => {
   const { getContent } = useContent();
   const stores = useStores();
+  const [fetchKey, setFetchKey] = useState(0);
 
   const navigate = useNavigate();
   const forecastUpdatedMessage = getContent(x => x.forecastsMessages.forecastUpdated);
@@ -144,6 +149,7 @@ const UpdateForecastContainer = (props: UpdateForecastParams & BaseProps) => {
       false,
       forecastUpdatedMessage,
       () => {
+        setFetchKey(x => x + 1);
         navigate(props.routes.viewForecast.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path);
       },
     );
@@ -151,7 +157,7 @@ const UpdateForecastContainer = (props: UpdateForecastParams & BaseProps) => {
   return (
     <PageLoader
       pending={pending}
-      render={x => <UpdateForecastComponent onChange={onChange} {...Object.assign({}, props, x)} />}
+      render={x => <UpdateForecastComponent fetchKey={fetchKey} onChange={onChange} {...Object.assign({}, props, x)} />}
     />
   );
 };
