@@ -56,8 +56,8 @@ const approveNewSubcontractorSchema = z
       checkIfFalsy("subcontractorRegistrationNumber", data.subcontractorRegistrationNumber);
       checkIfFalsy("subcontractorLocation", data.subcontractorLocation);
       checkIfFalsy("subcontractorDescription", data.subcontractorDescription);
-      checkIfFalsy("subcontractorJustification", data.subcontractorJustification);
       checkIfFalsy("subcontractorCost", data.subcontractorCost);
+      checkIfFalsy("subcontractorJustification", data.subcontractorJustification);
       if (data.subcontractorRelationship) {
         checkIfFalsy("subcontractorRelationshipJustification", data.subcontractorRelationshipJustification);
       }
