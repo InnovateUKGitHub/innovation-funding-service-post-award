@@ -444,7 +444,7 @@ export const displayCostCatTable = () => {
     ["Other costs 5", inputVal],
   ].forEach(([costCat, value], index) => {
     cy.get("tr")
-      .eq(index)
+      .eq(index + 1)
       .within(() => {
         cy.get("td:nth-child(1)").contains(costCat);
         cy.get("td:nth-child(2)").contains(value);
@@ -453,8 +453,8 @@ export const displayCostCatTable = () => {
   });
   cy.get("tfoot").within(() => {
     cy.get("tr").within(() => {
-      cy.get("td:nth-child(1)").contains("Total costs (£)");
-      cy.get("td:nth-child(2)").contains(inputVal);
+      cy.get("th:nth-child(1)").contains("Total costs (£)");
+      cy.get("th:nth-child(2)").contains(inputVal);
     });
   });
 };
@@ -595,7 +595,7 @@ export const completedCostCatProfiles = () => {
     //["Other costs 5", oneThousand],
   ].forEach(([costcat, cost], index) => {
     cy.get("tr")
-      .eq(index)
+      .eq(index + 1)
       .within(() => {
         cy.get("td:nth-child(1)").contains(costcat);
         cy.get("td:nth-child(2)").contains(cost);
@@ -603,8 +603,8 @@ export const completedCostCatProfiles = () => {
   });
   cy.get("tfoot").within(() => {
     cy.get("tr").within(() => {
-      cy.get("td:nth-child(1)").contains("Total costs (£)");
-      cy.get("td:nth-child(2)").contains("£20,656.58");
+      cy.get("th:nth-child(1)").contains("Total costs (£)");
+      cy.get("th:nth-child(2)").contains("£20,656.58");
     });
   });
 };
