@@ -108,6 +108,8 @@ export const pcrCheckBoxes = () => {
   cy.wait(500);
   cy.clickCheckBox<PcrType>("Add a partner");
   cy.wait(500);
+  cy.clickCheckBox<PcrType>("Approve a new subcontractor");
+  cy.wait(500);
   cy.clickCheckBox<PcrType>("Change project scope");
   cy.wait(500);
   cy.clickCheckBox<PcrType>("Change project duration");
@@ -124,6 +126,8 @@ export const pcrCheckBoxes = () => {
   cy.clickCheckBox<PcrType>("Remove a partner", true);
   cy.wait(500);
   cy.clickCheckBox<PcrType>("Add a partner", true);
+  cy.wait(500);
+  cy.clickCheckBox<PcrType>("Approve a new subcontractor", true);
   cy.wait(500);
   cy.clickCheckBox<PcrType>("Change project scope", true);
   cy.wait(500);
