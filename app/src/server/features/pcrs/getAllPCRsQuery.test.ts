@@ -147,6 +147,7 @@ describe("GetAllPCRsQuery", () => {
       PCRItemType.AccountNameChange,
       PCRItemType.ProjectSuspension,
       PCRItemType.ProjectTermination,
+      PCRItemType.ApproveNewSubcontrator,
     ];
 
     const expectedNames = [
@@ -158,6 +159,7 @@ describe("GetAllPCRsQuery", () => {
       "Change a partner's name",
       "Put project on hold",
       "End the project early",
+      "Approve a new subcontractor",
     ];
 
     expect(result.items.map(x => x.type)).toEqual(expectedTypes);

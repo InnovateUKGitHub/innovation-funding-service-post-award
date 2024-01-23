@@ -31,7 +31,7 @@ const approveNewSubcontractorSchema = z
     subcontractorName: z.string().max(subcontractorNameMaxChars),
     subcontractorRegistrationNumber: z.string().max(subcontractorRegistrationNumberMaxChars),
     subcontractorRelationship: booleanValidation,
-    subcontractorRelationshipJustification: z.string().max(subcontractorRelationshipJustificationMaxChars),
+    subcontractorRelationshipJustification: z.string(),
     subcontractorLocation: z.string().max(subcontractorLocationMaxChars),
     subcontractorDescription: z.string().max(subcontractorDescriptionMaxChars),
     subcontractorJustification: z.string().max(subcontractorJustificationMaxChars),
@@ -60,6 +60,18 @@ const approveNewSubcontractorSchema = z
       checkIfFalsy("subcontractorCost", data.subcontractorCost);
       if (data.subcontractorRelationship) {
         checkIfFalsy("subcontractorRelationshipJustification", data.subcontractorRelationshipJustification);
+      }
+    }
+
+    if (data.subcontractorRelationship) {
+      if (data.subcontractorRelationshipJustification.length > subcontractorRelationshipJustificationMaxChars) {
+        ctx.addIssue({
+          type: "string",
+          code: z.ZodIssueCode.too_big,
+          maximum: subcontractorRelationshipJustificationMaxChars,
+          inclusive: true,
+          path: ["subcontractorRelationshipJustification"],
+        });
       }
     }
   });

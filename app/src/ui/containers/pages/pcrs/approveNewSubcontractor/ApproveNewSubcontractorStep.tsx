@@ -64,6 +64,11 @@ const ApproveNewSubcontractorStep = () => {
               data: {
                 ...data,
                 subcontractorCost: parseCurrency(data.subcontractorCost),
+
+                // If NO RELATIONSHIP selected, set field to empty string
+                subcontractorRelationshipJustification: data.subcontractorRelationship
+                  ? data.subcontractorRelationshipJustification
+                  : "",
               },
               context: { link: nextLink },
             });
