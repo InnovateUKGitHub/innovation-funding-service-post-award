@@ -17,6 +17,7 @@ describe("GetPCRItemTypesQuery", () => {
       PCRItemType.AccountNameChange,
       PCRItemType.ProjectSuspension,
       PCRItemType.ProjectTermination,
+      PCRItemType.ApproveNewSubcontrator,
     ];
 
     const project = context.testData.createProject();
@@ -91,16 +92,7 @@ describe("GetPCRItemTypesQuery", () => {
       test.each(commonPcrItemTypes)("with %s", async stubCompetitionType => {
         const { expectedTypes } = await competitionSetup(stubCompetitionType);
 
-        expect(expectedTypes).toStrictEqual([
-          PCRItemType.MultiplePartnerFinancialVirement,
-          PCRItemType.PartnerWithdrawal,
-          PCRItemType.PartnerAddition,
-          PCRItemType.ScopeChange,
-          PCRItemType.TimeExtension,
-          PCRItemType.AccountNameChange,
-          PCRItemType.ProjectSuspension,
-          PCRItemType.ProjectTermination,
-        ]);
+        expect(expectedTypes).toMatchSnapshot();
       });
     });
 

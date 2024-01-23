@@ -48,7 +48,10 @@ class ProjectChangeRequestItemApproveNewSubcontractorStepUpdateHandler extends Z
       subcontractorName: input.subcontractorName,
       subcontractorRegistrationNumber: input.subcontractorRegistrationNumber,
       subcontractorRelationship: input.subcontractorRelationship === "true",
-      subcontractorRelationshipJustification: input.subcontractorRelationshipJustification,
+
+      // If NO RELATIONSHIP selected, set field to empty string
+      subcontractorRelationshipJustification:
+        input.subcontractorRelationship === "true" ? input.subcontractorRelationshipJustification : "",
       subcontractorCost: input.subcontractorCost,
     };
   }
