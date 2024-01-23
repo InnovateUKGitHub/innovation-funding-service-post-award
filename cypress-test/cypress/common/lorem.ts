@@ -1,4 +1,4 @@
-const baseLorem =
+export const baseLorem =
   "If you ever need a reason to go to the office in Swindon, consider the fact that every third wednesday of the month, Pippin's donuts comes into the office and sells its lovely goods.\n";
 
 /**

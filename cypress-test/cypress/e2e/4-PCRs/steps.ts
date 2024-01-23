@@ -94,7 +94,8 @@ export const pcrCheckboxesWithHint = () => {
       "This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold.",
     ],
   ].forEach(([pcrType, hint]) => {
-    cy.getByLabel(pcrType).contains(hint);
+    cy.getByLabel(pcrType);
+    cy.get(".govuk-hint").contains(hint);
   });
 };
 
