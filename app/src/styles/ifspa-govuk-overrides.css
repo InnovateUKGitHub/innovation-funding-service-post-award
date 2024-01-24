@@ -755,6 +755,7 @@ p.govuk-body--multiline {
 }
 
 .acc-height-container {
+  display: block;
   max-height: 50vh;
 }
 

@@ -1,9 +1,11 @@
 import { marked } from "marked";
 import DOMPurify from "isomorphic-dompurify";
+import classNames from "classnames";
 
 export interface IMarkdownProps {
   value: string;
   trusted?: boolean;
+  verticalScrollbar?: boolean;
   style?: React.CSSProperties;
 }
 
@@ -27,7 +29,7 @@ renderer.link = (href, title, text) => {
  * between server side and client side. Especially if wrapped in other components
  * and parents. E.g. if `<Content>` wrapped in `<SimpleString>`
  */
-export function Markdown({ value, trusted = false, ...props }: IMarkdownProps) {
+export function Markdown({ value, trusted = false, verticalScrollbar, ...props }: IMarkdownProps) {
   if (!value.length) return null;
 
   let content = value;
@@ -82,7 +84,9 @@ export function Markdown({ value, trusted = false, ...props }: IMarkdownProps) {
   return (
     <span
       {...props}
-      className="govuk-body markdown"
+      className={classNames("govuk-body", "markdown", {
+        "acc-height-container acc-vertical-scrollbar": verticalScrollbar,
+      })}
       dangerouslySetInnerHTML={{ __html: marked.parse(content, { renderer }) }}
     ></span>
   );
