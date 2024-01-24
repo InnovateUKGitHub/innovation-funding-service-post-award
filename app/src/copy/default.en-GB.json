@@ -825,7 +825,7 @@
         "newLength": "New length (quarters)",
         "newEndDate": "New end date"
       },
-      "approveNewSubcontractorMessage": "Let us know if you are working with a new subcontractor. We will need to undertake viability checks, as stated in the application process.",
+      "approveNewSubcontractorMessage": "If you are requesting a change in subcontractor, please select this option.",
       "anotherPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to another PCR.",
       "anotherPcrAlreadyHasThisTypeMessage": "The PCR must be deleted if still in draft, or concluded by Innovate UK before a new one can be started.",
       "thisPcrAlreadyHasThisTypeTitle": "Some types are unavailable because they have already been added to this PCR.",
@@ -1445,7 +1445,7 @@
     "certificate": "Change of name certificate"
   },
   "pcrApproveNewSubcontractorLabels": {
-    "guidance": "Please let us know if you are working with a new subcontractor, as Innovate UK will need to undertake viability checks, as per the application process.",
+    "guidance": "Let us know if you are working with a new subcontractor. We will need to undertake viability checks, as stated in the application process.",
     "subcontractorName": "Company name of subcontractor",
     "subcontractorRegistrationNumber": "Company registration number",
     "subcontractorRelationship": "Is there a relationship between the partner and the subcontractor?",
