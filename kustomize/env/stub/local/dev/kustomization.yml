@@ -2,9 +2,7 @@ commonAnnotations:
   deployedWith: kustomize
   environment: local
 
-bases:
-  - ../../../env-base
-
 resources:
+  - ../../../env-base
   - ../../../../config-mgmt/env/local
   - ../../../../secrets-mgmt/env/local

@@ -2,8 +2,6 @@ commonAnnotations:
   deployedWith: kustomize
   environment: uat
 
-bases:
-  - ../aws-base
-
 resources:
+  - ../aws-base
   - ../../../config-mgmt/env/aws/uat

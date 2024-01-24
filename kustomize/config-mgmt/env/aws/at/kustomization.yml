@@ -5,5 +5,5 @@ commonAnnotations:
 resources:
   - ../../../base
 
-patchesStrategicMerge:
-  - acc-ui-configmap.yml
+patches:
+  - path: acc-ui-configmap.yml

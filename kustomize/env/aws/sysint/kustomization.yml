@@ -2,8 +2,6 @@ commonAnnotations:
   deployedWith: kustomize
   environment: sysint
 
-bases:
-  - ../aws-base
-
 resources:
+  - ../aws-base
   - ../../../config-mgmt/env/aws/sysint

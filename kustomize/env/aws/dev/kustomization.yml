@@ -2,8 +2,6 @@ commonAnnotations:
   deployedWith: kustomize
   environment: dev
 
-bases:
-  - ../aws-base
-
 resources:
+  - ../aws-base
   - ../../../config-mgmt/env/aws/dev
