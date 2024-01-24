@@ -89,7 +89,7 @@ const ApproveNewSubcontractorSummary = () => {
           {pcrItem.subcontractorRelationship && (
             <SummaryListItem
               label={x => x.pcrApproveNewSubcontractorLabels.subcontractorRelationshipJustification}
-              content={<Markdown value={pcrItem.subcontractorRelationshipJustification ?? ""} />}
+              content={<Markdown verticalScrollbar value={pcrItem.subcontractorRelationshipJustification ?? ""} />}
               qa="subcontractorRelationshipJustification"
               id="subcontractorRelationshipJustification"
               hasError={!!getFieldState("subcontractorRelationshipJustification")?.error}
@@ -106,7 +106,7 @@ const ApproveNewSubcontractorSummary = () => {
           />
           <SummaryListItem
             label={x => x.pcrApproveNewSubcontractorLabels.subcontractorDescription}
-            content={<Markdown value={pcrItem.subcontractorDescription ?? ""} />}
+            content={<Markdown verticalScrollbar value={pcrItem.subcontractorDescription ?? ""} />}
             qa="subcontractorDescription"
             id="subcontractorDescription"
             hasError={!!getFieldState("subcontractorDescription")?.error}
@@ -122,7 +122,7 @@ const ApproveNewSubcontractorSummary = () => {
           />
           <SummaryListItem
             label={x => x.pcrApproveNewSubcontractorLabels.subcontractorJustification}
-            content={<Markdown value={pcrItem.subcontractorJustification ?? ""} />}
+            content={<Markdown verticalScrollbar value={pcrItem.subcontractorJustification ?? ""} />}
             qa="subcontractorJustification"
             id="subcontractorJustification"
             hasError={!!getFieldState("subcontractorJustification")?.error}
