@@ -1795,11 +1795,20 @@ exports[`Storyshots IFSPA Renderer/Percentage Whole Number With Commas 1`] = `
   <span
     style={
       {
-        "whiteSpace": "nowrap",
+        "whiteSpace": "normal",
       }
     }
   >
-    4,815,162,342%
+    4
+    ,
+    <wbr />
+    815
+    ,
+    <wbr />
+    162
+    ,
+    <wbr />
+    342%
   </span>
 </div>
 `;

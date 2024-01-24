@@ -9,6 +9,9 @@ type FinancialVirementForCostsNode = GQL.PartialNode<{
   Acc_Profile__r: GQL.Maybe<{
     Id: GQL.Maybe<string>;
     Acc_CostCategory__c: GQL.Value<string>;
+    Acc_CostCategory__r?: GQL.Maybe<{
+      Acc_CostCategoryName__c: GQL.Value<string>;
+    }>;
   }>;
   Acc_ParticipantVirement__c: GQL.Value<string>;
 
@@ -40,6 +43,9 @@ const mapper: GQL.DtoMapper<
   },
   costCategoryId(node) {
     return (node?.Acc_Profile__r?.Acc_CostCategory__c?.value ?? "unknown cost category id") as CostCategoryId;
+  },
+  costCategoryName(node) {
+    return node?.Acc_Profile__r?.Acc_CostCategory__r?.Acc_CostCategoryName__c?.value ?? "";
   },
   originalEligibleCosts(node) {
     return node?.Acc_CurrentCosts__c?.value ?? 0;

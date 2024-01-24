@@ -26,7 +26,7 @@ export function roundCurrency(value: number) {
   return roundedValue / 100;
 }
 
-export const validCurrencyRegex = /^-?£?(\d+|\.|\d+\.|\.\d{1,2}|\d+\.\d{1,2})?$/;
+export const validCurrencyRegex = /^-?£?(?:\d+|\d*\.\d{0,2})$/;
 
 /**
  * returns difference between two numbers as a percentage to two decimal points

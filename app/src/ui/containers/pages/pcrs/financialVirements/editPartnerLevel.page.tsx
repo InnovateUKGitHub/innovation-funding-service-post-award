@@ -1,33 +1,28 @@
-import { useNavigate } from "react-router-dom";
-import { Pending } from "@shared/pending";
+import { useEffect } from "react";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks/content.hook";
-import { IRoutes } from "@ui/routing/routeConfig";
-import { EditorStatus } from "@ui/redux/constants/enums";
-import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos/financialVirementDto";
-import { PartnerDto } from "@framework/dtos/partnerDto";
-import { ProjectDto } from "@framework/dtos/projectDto";
 import { AwardRateOverridesMessage } from "@ui/components/atomicDesign/organisms/claims/AwardRateOverridesMessage/AwardRateOverridesMessage";
-import { createTypedForm } from "@ui/components/bjss/form/form";
-import { Page } from "@ui/components/bjss/Page/page";
-import { Section } from "@ui/components/atomicDesign/molecules/Section/section";
 import { BackLink } from "@ui/components/atomicDesign/atoms/Links/links";
-import { PageLoader } from "@ui/components/bjss/loading";
 import { Title } from "@ui/components/atomicDesign/organisms/projects/ProjectTitle/title";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
 import { Percentage } from "@ui/components/atomicDesign/atoms/Percentage/percentage";
-import { SimpleString } from "@ui/components/atomicDesign/atoms/SimpleString/simpleString";
-import { createTypedTable } from "@ui/components/atomicDesign/molecules/Table/Table";
-import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { useStores } from "@ui/redux/storesProvider";
-import {
-  FinancialVirementDtoValidator,
-  PartnerVirementsDtoValidator,
-} from "@ui/validation/validators/financialVirementDtoValidator";
-import { ValidationError } from "@ui/components/atomicDesign/molecules/validation/ValidationError/validationError";
-import { NumberInput } from "@ui/components/bjss/inputs/numberInput";
-
-const VirementForm = createTypedForm<FinancialVirementDto>();
+import { Page } from "@ui/components/atomicDesign/molecules/Page/Page";
+import { Section } from "@ui/components/atomicDesign/atoms/Section/Section";
+import { useEditPartnerLevelData } from "./editPartnerLevel.logic";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
+import { Form } from "@ui/components/atomicDesign/atoms/form/Form/Form";
+import { TBody, TD, TFoot, TH, THead, TR, Table } from "@ui/components/atomicDesign/atoms/table/tableComponents";
+import { Fieldset } from "@ui/components/atomicDesign/atoms/form/Fieldset/Fieldset";
+import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { useMapVirements } from "./mapFinancialVirements";
+import { useForm } from "react-hook-form";
+import { EditPartnerLevelSchema, editPartnerLevelSchema, errorMap } from "./editPartnerLevel.zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { NumberInput } from "@ui/components/atomicDesign/atoms/form/NumberInput/NumberInput";
+import { useRhfErrors } from "@framework/util/errorHelpers";
+import { sumBy } from "lodash";
+import { useOnUpdatePartnerLevel, getPayload } from "./editPartnerLevel.logic";
+import { ValidationError } from "@ui/components/atomicDesign/atoms/validation/ValidationError/ValidationError";
 
 /**
  * Hook returns content for edit partner view
@@ -37,7 +32,6 @@ export function useEditPartnerLevelContent() {
 
   return {
     saveButton: getContent(x => x.pages.financialVirementEditPartnerLevel.saveButton),
-
     remainingGrantInfoIntro: getContent(x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.intro),
     remainingGrantInfoCheckRules: getContent(
       x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.checkRules,
@@ -48,7 +42,6 @@ export function useEditPartnerLevelContent() {
     remainingGrantInfoFundingLevel: getContent(
       x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.fundingLevel,
     ),
-
     partnerName: getContent(x => x.financialVirementLabels.partnerName),
     partnerOriginalRemainingCosts: getContent(x => x.financialVirementLabels.partnerOriginalRemainingCosts),
     partnerOriginalRemainingGrant: getContent(x => x.financialVirementLabels.partnerOriginalRemainingGrant),
@@ -67,219 +60,189 @@ export interface FinancialVirementParams {
   itemId: PcrItemId;
 }
 
-interface EditPartnerLevelProps {
-  project: Pending<ProjectDto>;
-  partners: Pending<PartnerDto[]>;
-  editor: Pending<IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>>;
-  content: Record<string, string>;
-  routes: IRoutes;
-  onChange: (saving: boolean, dto: FinancialVirementDto) => void;
-}
-
-interface VirementTableData {
-  partner: PartnerDto;
-  virement: PartnerVirementsDto;
-  validator: PartnerVirementsDtoValidator | undefined;
-}
-const VirementTable = createTypedTable<VirementTableData>();
-
-const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirementParams) => {
-  const combined = Pending.combine({
-    project: props.project,
-    partners: props.partners,
-    editor: props.editor,
-  });
-
-  const updateValue = (partner: PartnerDto, val: number | null): void => {
-    const dto = props.editor.data?.data;
-
-    if (!dto) throw new Error("cannot find dto");
-
-    const item = dto.partners.find(x => x.partnerId === partner.id);
-    if (!item) {
-      return;
-    }
-    item.newRemainingGrant = val ?? 0;
-    item.newFundingLevel = (100 * (val || 0)) / item.newRemainingCosts;
-
-    dto.newRemainingGrant = dto.partners.reduce((total, current) => total + (current.newRemainingGrant || 0), 0);
-    dto.newFundingLevel = (100 * dto.newRemainingGrant) / dto.newRemainingCosts;
-
-    props.onChange(false, dto);
-  };
-
-  return (
-    <PageLoader
-      pending={combined}
-      render={({ project, partners, editor }) => {
-        const data = partners
-          .map(partner => {
-            const virement = editor.data.partners.find(x => x.partnerId === partner.id);
-            if (!virement) throw new Error(`Cannot find virement matching partnerId ${partner.id}`);
-            return {
-              partner,
-              virement,
-              validator: editor.validator.partners.results.find(x => x.model.partnerId === partner.id),
-            };
-          })
-          .filter(x => !!x.virement);
-
-        const backLink = (
-          <BackLink
-            route={props.routes.pcrPrepareItem.getLink({
-              projectId: props.projectId,
-              pcrId: props.pcrId,
-              itemId: props.itemId,
-            })}
-          >
-            {props.content.backToSummary}
-          </BackLink>
-        );
-        return (
-          <Page
-            backLink={backLink}
-            pageTitle={<Title {...project} />}
-            error={editor.error}
-            validator={editor.validator}
-          >
-            <Section>
-              <AwardRateOverridesMessage isNonFec={project.isNonFec} />
-              <SimpleString>{props.content.remainingGrantInfoIntro}</SimpleString>
-              <SimpleString>{props.content.remainingGrantInfoCheckRules}</SimpleString>
-              <SimpleString>{props.content.remainingGrantInfoRemainingGrant}</SimpleString>
-              <SimpleString>{props.content.remainingGrantInfoFundingLevel}</SimpleString>
-              <VirementForm.Form
-                editor={editor}
-                onChange={dto => props.onChange(false, dto)}
-                onSubmit={() => props.onChange(true, editor.data)}
-                qa="partner_level_form"
-              >
-                <VirementForm.Fieldset>
-                  <VirementTable.Table qa="partnerVirements" data={data} validationResult={data.map(x => x.validator)}>
-                    <VirementTable.String
-                      qa="partner"
-                      header={props.content.partnerName}
-                      value={x => x.partner.name}
-                      footer={props.content.projectTotals}
-                      isDivider="normal"
-                    />
-
-                    <VirementTable.Currency
-                      qa="remainingCosts"
-                      header={props.content.partnerOriginalRemainingCosts}
-                      value={x => x.virement.originalRemainingCosts}
-                      footer={<Currency value={editor.data.originalRemainingCosts} />}
-                    />
-
-                    <VirementTable.Currency
-                      qa="remainingGrant"
-                      header={props.content.partnerOriginalRemainingGrant}
-                      value={x => x.virement.originalRemainingGrant}
-                      footer={<Currency value={editor.data.originalRemainingGrant} />}
-                    />
-
-                    <VirementTable.Percentage
-                      qa="fundingLevel"
-                      header={props.content.originalFundingLevel}
-                      value={x => x.virement.originalFundingLevel}
-                      footer={<Percentage value={editor.data.originalFundingLevel} defaultIfInfinite={0} />}
-                      defaultIfInfinite={0}
-                      isDivider="normal"
-                    />
-
-                    <VirementTable.Currency
-                      qa="newCosts"
-                      header={props.content.partnerNewRemainingCosts}
-                      value={x => x.virement.newRemainingCosts}
-                      footer={<Currency value={editor.data.newRemainingCosts} />}
-                    />
-
-                    <VirementTable.Custom
-                      qa="newGrant"
-                      header={props.content.partnerNewRemainingGrant}
-                      value={x => (
-                        <>
-                          <ValidationError
-                            overrideMessage={`Invalid grant for ${x.partner.name}`}
-                            error={x.validator && x.validator.newRemainingGrant}
-                          />
-                          <NumberInput
-                            name={x.virement.partnerId}
-                            value={x.virement.newRemainingGrant}
-                            onChange={val => updateValue(x.partner, val)}
-                            width="full"
-                            ariaLabel={x.partner.name}
-                            disabled={editor.status === EditorStatus.Saving}
-                            enforceValidInput
-                          />
-                        </>
-                      )}
-                      footer={
-                        <>
-                          <ValidationError error={editor.validator.newRemainingGrant} />
-                          <Currency value={editor.data.newRemainingGrant} />
-                        </>
-                      }
-                      classSuffix="numeric"
-                    />
-                    <VirementTable.Percentage
-                      qa="newLevel"
-                      header={props.content.newFundingLevel}
-                      value={x => x.virement.newFundingLevel}
-                      defaultIfInfinite={0}
-                      footer={<Percentage value={editor.data.newFundingLevel} defaultIfInfinite={0} />}
-                    />
-                  </VirementTable.Table>
-                </VirementForm.Fieldset>
-                <VirementForm.Fieldset>
-                  <VirementForm.Submit>{props.content.saveButton}</VirementForm.Submit>
-                </VirementForm.Fieldset>
-              </VirementForm.Form>
-            </Section>
-          </Page>
-        );
-      }}
-    />
-  );
+type EditPartnerLevelErrors = {
+  virements: { newRemainingGrant: RhfError }[];
+  newRemainingGrant: RhfError;
 };
 
-const Container = (props: FinancialVirementParams & BaseProps) => {
-  const { projects, partners, financialVirements } = useStores();
-  const editPartnerLevelContent = useEditPartnerLevelContent();
-  const navigate = useNavigate();
+const EditPartnerLevelPage = (props: BaseProps & FinancialVirementParams) => {
+  const { project, financialVirementsForParticipants, financialVirementsForCosts, partners } = useEditPartnerLevelData({
+    projectId: props.projectId,
+    itemId: props.itemId,
+  });
+  const content = useEditPartnerLevelContent();
+
+  const { virementData } = useMapVirements({
+    financialVirementsForCosts,
+    financialVirementsForParticipants,
+    partners,
+  });
+
+  const { register, watch, formState, handleSubmit, getFieldState, setValue } = useForm<EditPartnerLevelSchema>({
+    defaultValues: {
+      virements: virementData.virements.map(x => ({
+        partnerId: x.partnerId,
+        newRemainingGrant: String(x.newRemainingGrant ?? 0),
+      })),
+      originalRemainingGrant: virementData.originalRemainingGrant,
+      newRemainingGrant: virementData.newRemainingGrant,
+      newRemainingCosts: virementData.newRemainingCosts,
+    },
+    resolver: zodResolver(editPartnerLevelSchema, {
+      errorMap,
+    }),
+  });
+
+  const navigateTo = props.routes.pcrPrepareItem.getLink({
+    projectId: props.projectId,
+    pcrId: props.pcrId,
+    itemId: props.itemId,
+  }).path;
+
+  const { isFetching, onUpdate, apiError } = useOnUpdatePartnerLevel(
+    props.projectId,
+    props.pcrId,
+    props.itemId,
+    navigateTo,
+  );
+
+  const validationErrors = useRhfErrors(formState?.errors) as EditPartnerLevelErrors;
+
+  const getNewFundingLevel = (index: number) => {
+    const value = Number(watch(`virements.${index}.newRemainingGrant`));
+    return (value / virementData.virements[index].newRemainingCosts) * 100;
+  };
+
+  const newRemainingGrantTotal = sumBy(watch("virements"), x => Number(x.newRemainingGrant.replace("£", "")) || 0);
+
+  useEffect(() => {
+    setValue("newRemainingGrant", newRemainingGrantTotal, { shouldValidate: formState.isSubmitted });
+  }, [newRemainingGrantTotal, setValue, formState.isSubmitted]);
+  const newFundingLevelTotal = (newRemainingGrantTotal / virementData.newRemainingCosts) * 100;
+
   return (
-    <EditPartnerLevelComponent
-      content={editPartnerLevelContent}
-      project={projects.getById(props.projectId)}
-      partners={partners.getPartnersForProject(props.projectId)}
-      editor={financialVirements.getFinancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
-      onChange={(saving, dto) =>
-        financialVirements.updateFinancialVirementEditor(
-          saving,
-          props.projectId,
-          props.pcrId,
-          props.itemId,
-          dto,
-          true,
-          () =>
-            navigate(
-              props.routes.pcrPrepareItem.getLink({
-                projectId: props.projectId,
-                pcrId: props.pcrId,
-                itemId: props.itemId,
-              }).path,
-            ),
-        )
+    <Page
+      validationErrors={validationErrors}
+      backLink={
+        <BackLink
+          route={props.routes.pcrPrepareItem.getLink({
+            projectId: props.projectId,
+            pcrId: props.pcrId,
+            itemId: props.itemId,
+          })}
+        >
+          {content.backToSummary}
+        </BackLink>
       }
-      {...props}
-    />
+      pageTitle={<Title title={project.title} projectNumber={project.projectNumber} />}
+      apiError={apiError}
+    >
+      <Section>
+        <AwardRateOverridesMessage isNonFec={project.isNonFec} />
+        <P>{content.remainingGrantInfoIntro}</P>
+        <P>{content.remainingGrantInfoCheckRules}</P>
+        <P>{content.remainingGrantInfoRemainingGrant}</P>
+        <P>{content.remainingGrantInfoFundingLevel}</P>
+      </Section>
+
+      <Section>
+        <Form
+          onSubmit={handleSubmit(data =>
+            onUpdate({
+              data: getPayload(data, virementData, props.itemId),
+            }),
+          )}
+        >
+          <Table data-qa="partner-virements">
+            <THead>
+              <TR>
+                <TH dividerRight>{content.partnerName}</TH>
+                <TH numeric>{content.partnerOriginalRemainingCosts}</TH>
+                <TH numeric>{content.partnerOriginalRemainingGrant}</TH>
+                <TH numeric dividerRight>
+                  {content.originalFundingLevel}
+                </TH>
+                <TH numeric>{content.partnerNewRemainingCosts}</TH>
+                <TH numeric>{content.partnerNewRemainingGrant}</TH>
+                <TH numeric>{content.newFundingLevel}</TH>
+              </TR>
+            </THead>
+            <TBody>
+              {virementData.virements.map((x, i) => (
+                <TR key={x.partnerId}>
+                  <TD dividerRight>{partners.find(p => p.id === x.partnerId)?.name}</TD>
+                  <TD numeric>
+                    <Currency value={x.originalRemainingCosts} />
+                  </TD>
+                  <TD numeric>
+                    <Currency value={x.originalRemainingGrant} />
+                  </TD>
+                  <TD numeric dividerRight>
+                    <Percentage defaultIfInfinite={0} value={x.originalFundingLevel} />
+                  </TD>
+                  <TD numeric>
+                    <Currency value={x.newRemainingCosts} />
+                  </TD>
+                  <TD numeric>
+                    <NumberInput
+                      inputWidth={10}
+                      aria-label={`${x.name} new remaining grant`}
+                      id={`virements_${i}_newRemainingGrant`}
+                      hasError={!!validationErrors?.virements?.[i]?.newRemainingGrant}
+                      {...register(`virements.${i}.newRemainingGrant`)}
+                      disabled={isFetching}
+                    />
+                  </TD>
+                  <TD numeric>
+                    <Percentage defaultIfInfinite={0} value={getNewFundingLevel(i)} />
+                  </TD>
+                </TR>
+              ))}
+            </TBody>
+            <TFoot>
+              <TR>
+                <TH dividerRight>{content.projectTotals}</TH>
+                <TH numeric>
+                  <Currency value={virementData.originalRemainingCosts} />
+                </TH>
+                <TH numeric>
+                  <Currency value={virementData.originalRemainingGrant} />
+                </TH>
+                <TH numeric dividerRight>
+                  <Percentage value={virementData.originalFundingLevel} />
+                </TH>
+                <TH numeric>
+                  <Currency value={virementData.newRemainingCosts} />
+                </TH>
+                <TH id="newRemainingGrant" numeric>
+                  <ValidationError error={getFieldState("newRemainingGrant").error} />
+                  <Currency value={newRemainingGrantTotal} />
+                </TH>
+                <TH numeric>
+                  <Percentage value={newFundingLevelTotal} />
+                </TH>
+              </TR>
+            </TFoot>
+          </Table>
+
+          <input type="hidden" {...register("originalRemainingGrant")} />
+          <Section>
+            <Fieldset>
+              <Button type="submit" disabled={isFetching}>
+                {content.saveButton}
+              </Button>
+            </Fieldset>
+          </Section>
+        </Form>
+      </Section>
+    </Page>
   );
 };
 
 export const FinancialVirementEditPartnerLevelRoute = defineRoute({
   routeName: "financial-virement-edit-partner-level",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/partner",
-  container: Container,
+  container: EditPartnerLevelPage,
   getParams: route => ({
     projectId: route.params.projectId as ProjectId,
     pcrId: route.params.pcrId as PcrId,

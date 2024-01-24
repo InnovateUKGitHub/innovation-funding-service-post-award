@@ -1,4 +1,5 @@
 import { isNumber } from "@framework/util/numberHelper";
+import { Fragment } from "react";
 
 export interface Props {
   value: number | null;
@@ -18,6 +19,9 @@ export const Percentage: React.FunctionComponent<Props> = ({ value, fractionDigi
   // Note: If the input matches a negative zero, then remove the change of a minus later on
   const absoluteNumber = Object.is(Math.sign(value), -0) ? Math.abs(value) : value;
 
+  const shouldWordWrap = absoluteNumber > 1_000_000_000;
+  const wordWrap = shouldWordWrap ? "normal" : "nowrap";
+
   // TODO we need to find out if Salesforce will be returning 0.75 vs 75 and possibly remove this "/100"
   const percentage = formatter.format(absoluteNumber / 100);
 
@@ -26,5 +30,22 @@ export const Percentage: React.FunctionComponent<Props> = ({ value, fractionDigi
     return <span style={{ whiteSpace: "nowrap" }}>{formatter.format(defaultIfInfinite)}</span>;
   }
 
-  return <span style={{ whiteSpace: "nowrap" }}>{percentage}</span>;
+  return (
+    <span style={{ whiteSpace: wordWrap }}>
+      {shouldWordWrap
+        ? percentage.split(",").map((x, i, a) => (
+            // Inject ZWSP after commas as a word wrap hint.
+            <Fragment key={i}>
+              {x}
+              {i < a.length - 1 && (
+                <>
+                  ,
+                  <wbr />
+                </>
+              )}
+            </Fragment>
+          ))
+        : percentage}
+    </span>
+  );
 };
