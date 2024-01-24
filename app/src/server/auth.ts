@@ -89,6 +89,10 @@ router.use((req, res, next) => {
     return res.redirect("/projects/dashboard");
   }
 
+  if (req?.session?.user?.email) {
+    req.session.last_reset = getCookieTimestamp();
+  }
+
   if (!sso.enabled) {
     // if user not logged in but we aren't using sso then set default user
     req.session ??= {};
@@ -112,7 +116,6 @@ router.use((req, res, next) => {
   }
 
   if (req?.session?.user?.email) {
-    req.session.last_reset = getCookieTimestamp();
     // Note: Proceed on as the user has been logged in
     return next();
   }
