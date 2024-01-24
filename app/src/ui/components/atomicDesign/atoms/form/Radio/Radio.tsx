@@ -72,7 +72,12 @@ const RadioConditional = ({ children, show }: { children: ReactNode; show?: bool
   const shown = isServer || show;
 
   return (
-    <div className={cx("govuk-radios__conditional", { "govuk-radios__conditional--hidden": !shown })}>{children}</div>
+    <div
+      className={cx("govuk-radios__conditional", { "govuk-radios__conditional--hidden": !shown })}
+      aria-hidden={!shown}
+    >
+      {children}
+    </div>
   );
 };
 
