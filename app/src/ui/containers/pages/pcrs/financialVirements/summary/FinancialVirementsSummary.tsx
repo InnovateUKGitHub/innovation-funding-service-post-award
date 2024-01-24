@@ -216,7 +216,13 @@ export const FinancialVirementSummary = () => {
               <TR key={x.virementParticipantId}>
                 <TD small className={colClass}>
                   <Link
-                    route={FinancialVirementEditRoute.getLink({ projectId, partnerId: x.partnerId, itemId, pcrId })}
+                    route={routes.pcrFinancialVirementDetails.getLink({
+                      projectId,
+                      partnerId: x.partnerId,
+                      itemId,
+                      pcrId,
+                      mode,
+                    })}
                   >
                     {x.isLead ? getContent(y => y.partnerLabels.leadPartner({ name: x.name })) : x.name}
                   </Link>
