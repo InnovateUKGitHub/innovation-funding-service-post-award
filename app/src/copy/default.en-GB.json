@@ -2177,6 +2177,22 @@
             "invalid": "Enter a valid cost of work."
           }
         }
+      },
+      "editPartnerLevel": {
+        "virements": {
+          "arrayType": {
+            "newRemainingGrant": {
+              "errors": {
+                "invalid_string": { "regex": "New remaining grant must be a valid currency value." }
+              }
+            }
+          }
+        },
+        "newRemainingGrant": {
+          "errors": {
+            "too_big": "The total grant cannot exceed the remaining grant."
+          }
+        }
       }
     },
     "projectSetupBankDetails": {

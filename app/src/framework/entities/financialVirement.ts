@@ -22,6 +22,7 @@ export interface PartnerFinancialVirement {
 }
 
 export interface CostCategoryFinancialVirement {
+  costCategoryName?: string;
   costCategoryId: CostCategoryId;
   id: FinancialVirementForCostsId;
   newEligibleCosts: number;

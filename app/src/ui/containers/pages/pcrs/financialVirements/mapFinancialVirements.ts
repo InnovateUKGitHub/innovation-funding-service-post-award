@@ -8,6 +8,7 @@ import { useMemo } from "react";
 type FinancialVirementForCost = Pick<
   FinancialVirementForCostsMapping,
   | "costCategoryId"
+  | "costCategoryName"
   | "id"
   | "newEligibleCosts"
   | "originalCostsClaimedToDate"
@@ -53,7 +54,6 @@ const mapCostCategory = ({ financialVirementsForParticipant, financialVirementsF
   return {
     virementCostId: financialVirementsForCost.id,
     virementParticipantId: financialVirementsForParticipant.id,
-    // name: financialVirementsForCost.name,
     originalEligibleCosts: financialVirementsForCost.originalEligibleCosts,
     newEligibleCosts: financialVirementsForCost.newEligibleCosts,
     originalCostsClaimedToDate: financialVirementsForCost.originalCostsClaimedToDate,
@@ -61,6 +61,8 @@ const mapCostCategory = ({ financialVirementsForParticipant, financialVirementsF
     newRemainingCosts,
     originalRemainingGrant,
     newRemainingGrant,
+    costCategoryId: financialVirementsForCost.costCategoryId,
+    costCategoryName: financialVirementsForCost.costCategoryName ?? "",
   };
 };
 
@@ -85,7 +87,6 @@ const mapProjectParticipant = ({
       newRemainingGrant = roundCurrency(newRemainingGrant + costCategoryVirement.newRemainingGrant);
       originalRemainingGrant = roundCurrency(originalRemainingGrant + costCategoryVirement.originalRemainingGrant);
       newEligibleCosts = roundCurrency(newEligibleCosts + costCategoryVirement.newEligibleCosts);
-
       return costCategoryVirement;
     });
 
@@ -99,7 +100,6 @@ const mapProjectParticipant = ({
     partnerId: financialVirementsForParticipant.partnerId,
     name: partner.name,
     isLead: partner.isLead,
-
     costsClaimedToDate,
     originalEligibleCosts,
     originalRemainingCosts,
@@ -109,9 +109,7 @@ const mapProjectParticipant = ({
     newRemainingGrant,
     costDifference,
     grantDifference,
-
     virements: costCategoryVirements,
-
     originalFundingLevel: financialVirementsForParticipant.originalFundingLevel,
     newFundingLevel: financialVirementsForParticipant.newFundingLevel,
   };

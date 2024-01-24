@@ -17,6 +17,7 @@ interface TableCellProps extends CommonTableProps {
   bold?: boolean;
   small?: boolean;
   centered?: boolean;
+  dividerRight?: boolean;
 }
 
 const TD = ({
@@ -25,6 +26,7 @@ const TD = ({
   bold,
   small,
   centered,
+  dividerRight,
   ...props
 }: HTMLProps<HTMLTableCellElement> & TableCellProps) => (
   <td
@@ -36,17 +38,30 @@ const TD = ({
         "govuk-!-font-weight-bold": bold,
         "govuk-body-s": small,
         "govuk-!-text-align-centre": centered,
+        "acc-table__cell-right-border": dividerRight,
       },
       className,
     )}
   />
 );
-const TH = ({ className, numeric, bold, small, ...props }: HTMLProps<HTMLTableCellElement> & TableCellProps) => (
+const TH = ({
+  className,
+  numeric,
+  bold,
+  small,
+  dividerRight,
+  ...props
+}: HTMLProps<HTMLTableCellElement> & TableCellProps) => (
   <th
     {...props}
     className={classNames(
       "govuk-table__header",
-      { "govuk-table__header--numeric": numeric, "govuk-!-font-weight-bold": bold, "govuk-body-s": small },
+      {
+        "govuk-table__header--numeric": numeric,
+        "govuk-!-font-weight-bold": bold,
+        "govuk-body-s": small,
+        "acc-table__cell-right-border": dividerRight,
+      },
       className,
     )}
   />
