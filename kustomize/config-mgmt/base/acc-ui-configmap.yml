@@ -10,6 +10,7 @@ data:
   NEW_RELIC_LOG: stdout
   NEW_RELIC_LOGGING: info
   NEW_RELIC_ENABLED: "true"
+  COOKIE_TIMEOUT_MINUTES: "30"
 
   # Values to overwrite per environment
   USE_SSO: "true"
