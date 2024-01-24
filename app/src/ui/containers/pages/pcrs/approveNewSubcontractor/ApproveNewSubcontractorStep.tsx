@@ -27,6 +27,7 @@ import {
   subcontractorRelationshipJustificationMaxChars,
 } from "./ApproveNewSubcontractor.zod";
 import { Button } from "@ui/components/atomicDesign/atoms/form/Button/Button";
+import { P } from "@ui/components/atomicDesign/atoms/Paragraph/Paragraph";
 
 const ApproveNewSubcontractorStep = () => {
   const { projectId, pcrId, itemId, fetchKey, onSave, isFetching, markedAsCompleteHasBeenChecked, useFormValidate } =
@@ -58,6 +59,7 @@ const ApproveNewSubcontractorStep = () => {
   return (
     <PcrPage validationErrors={validationErrors}>
       <Section qa="approve-a-new-subcontractor-step">
+        <P>{getContent(x => x.pcrApproveNewSubcontractorLabels.guidance)}</P>
         <Form
           onSubmit={handleSubmit(data => {
             onSave({
