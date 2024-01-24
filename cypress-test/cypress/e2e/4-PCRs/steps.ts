@@ -812,35 +812,8 @@ export const navigateToPartnerCosts = () => {
   cy.getByLabel("Collaborator").click();
   cy.getByLabel("Yes").click();
   cy.getByLabel("Business").click();
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("State aid eligibility");
-  cy.clickOn("Save and continue");
-  cy.get(`input[id="searchCompaniesHouse"]`).type("A").wait(500);
-  cy.get(`input[type="radio"]`).click();
-  cy.get(`input[id="organisationName"], [value="A LIMITED"]`);
-  cy.get(`input[id="registrationNumber"], [value="11790215"]`);
-  cy.get(`input[id="registeredAddress"], [value="Springfield Road"]`);
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Organisation details");
-  cy.getByLabel("Large").click();
-  cy.get(`input[id="numberOfEmployees"]`).type("1000");
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Financial details");
-  cy.get("#financialYearEndDate_month").type("03");
-  cy.get("#financialYearEndDate_year").type("2022");
-  cy.get("#financialYearEndTurnover").type("1000000");
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Project location", { timeout: 20000 });
-  cy.getByLabel("Inside the United Kingdom").click();
-  cy.getByLabel("Name of town or city").type("Swindon");
-  cy.getByLabel("Postcode").type("SN5");
-  cy.clickOn("Save and continue");
-  cy.get("h2").contains("Add person to organisation");
-  cy.getByLabel("First name").type("Joseph");
-  cy.getByLabel("Last name").type("Dredd");
-  cy.getByLabel("Phone number").type("01234567890");
-  cy.getByLabel("Email").type("Joseph.dredd@mc1.comtest");
-  cy.clickOn("Save and continue");
+  cy.clickOn("Save and return to summary");
+  cy.getListItemFromKey("Project costs for new partner", "Edit").click();
   cy.get("h2").contains("Project costs for new partner");
 };
 
@@ -931,7 +904,6 @@ export const addPartnerCostCat = () => {
     "Other costs 3",
     "Other costs 4",
     "Other costs 5",
-    "Total costs (£)",
   ].forEach(cat => cy.tableCell(cat));
 };
 
@@ -949,7 +921,6 @@ export const ktpAddPartnerCostCat = () => {
     "Other costs",
     "Additional associate support",
     "Subcontracting",
-    "Total costs (£)",
   ].forEach(cat => cy.tableCell(cat));
 };
 

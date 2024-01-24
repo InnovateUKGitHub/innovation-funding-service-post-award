@@ -68,7 +68,6 @@ import {
   accessPartnerAgreement,
   uploadTestFile,
   completeOtherSourceLine,
-  deleteCost,
   deleteCoste2e,
 } from "./add-partner-e2e-steps";
 import { learnFiles } from "common/fileComponentTests";

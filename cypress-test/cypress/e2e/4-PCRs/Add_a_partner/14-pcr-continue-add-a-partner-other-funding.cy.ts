@@ -37,7 +37,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
 
   it("Should display a cost category table", displayCostCatTable);
 
-  it("Should access the Labour section", () => navigateToCostCat("Labour", 0));
+  it("Should access the Labour section", () => navigateToCostCat("Labour", 1));
 
   it("Should click Add a cost", () => {
     cy.clickOn("Add a cost");
@@ -176,7 +176,7 @@ describe("PCR > Add partner > Continuing editing PCR project costs section", () 
   });
 
   it("Should display a file upload table once document is uploaded", () =>
-    pcrFileTable("Agreement to PCR", "Innovate UK"));
+    pcrFileTable("Agreement to PCR", "James Black"));
 
   it("Should allow the file to be deleted", () => {
     cy.button("Remove").click();

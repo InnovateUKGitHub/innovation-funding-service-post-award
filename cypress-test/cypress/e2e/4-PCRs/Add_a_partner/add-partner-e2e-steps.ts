@@ -37,17 +37,6 @@ export const addPartnerContinue = () => {
   cy.heading("Add a partner");
 };
 
-//export const correctGuidanceCopy = () => {
-//  cy.getByQA("validation-message-content").contains("You cannot change this information after you continue.");
-//  cy.getByLabel("Will the new partner's work on the project be mostly commercial or economic?");
-//  cy.get("#isCommercialWork-hint").contains(
-//    "This question applies to all organisations, including research organisations that normally act non-economically.",
-//  );
-//  cy.get("#partnerType-hint").contains(
-//    "If the new partner's organisation type is not listed, contact your monitoring officer.",
-//  );
-//};
-
 export const saveAndSummary = () => {
   cy.clickOn("Save and return to summary");
   cy.validationLink("Select a project role.");
@@ -130,24 +119,24 @@ export const saveAndReturnPromptingValidation = () => {
   ].forEach(valMsg => {
     cy.validationLink(valMsg);
   });
-  //[
-  //  "Organisation name",
-  //  "Registration number",
-  //  "Registered address",
-  //  "Size",
-  //  "Number of full time employees",
-  //  "End of financial year",
-  //  "Turnover",
-  //  "Project location",
-  //  "Name of town or city",
-  //  "First name",
-  //  "Last name",
-  //  "Phone number",
-  //  "Email",
-  //  "Funding level",
-  //].forEach(section => {
-  //  cy.get(".govuk-summary-list__row-summary-list__row--error").contains(section);
-  // });
+  [
+    "Organisation name",
+    "Registration number",
+    "Registered address",
+    "Size",
+    "Number of full time employees",
+    "End of financial year",
+    "Turnover",
+    "Project location",
+    "Name of town or city",
+    "First name",
+    "Last name",
+    "Phone number",
+    "Email",
+    "Funding level",
+  ].forEach(section => {
+    cy.get(".summary-list__row--error").contains(section);
+  });
 };
 
 export const validateWithoutOrganisation = () => {
