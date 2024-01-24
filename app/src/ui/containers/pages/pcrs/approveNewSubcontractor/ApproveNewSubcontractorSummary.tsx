@@ -18,6 +18,7 @@ import {
   approveNewSubcontractorSchema,
 } from "./ApproveNewSubcontractor.zod";
 import { Currency } from "@ui/components/atomicDesign/atoms/Currency/currency";
+import { Markdown } from "@ui/components/atomicDesign/atoms/Markdown/markdown";
 
 const ApproveNewSubcontractorSummary = () => {
   const { projectId, pcrId, itemId, fetchKey, displayCompleteForm } = usePcrWorkflowContext();
@@ -88,7 +89,7 @@ const ApproveNewSubcontractorSummary = () => {
           {pcrItem.subcontractorRelationship && (
             <SummaryListItem
               label={x => x.pcrApproveNewSubcontractorLabels.subcontractorRelationshipJustification}
-              content={pcrItem.subcontractorRelationshipJustification}
+              content={<Markdown value={pcrItem.subcontractorRelationshipJustification ?? ""} />}
               qa="subcontractorRelationshipJustification"
               id="subcontractorRelationshipJustification"
               hasError={!!getFieldState("subcontractorRelationshipJustification")?.error}
@@ -105,7 +106,7 @@ const ApproveNewSubcontractorSummary = () => {
           />
           <SummaryListItem
             label={x => x.pcrApproveNewSubcontractorLabels.subcontractorDescription}
-            content={pcrItem.subcontractorDescription}
+            content={<Markdown value={pcrItem.subcontractorDescription ?? ""} />}
             qa="subcontractorDescription"
             id="subcontractorDescription"
             hasError={!!getFieldState("subcontractorDescription")?.error}
@@ -121,7 +122,7 @@ const ApproveNewSubcontractorSummary = () => {
           />
           <SummaryListItem
             label={x => x.pcrApproveNewSubcontractorLabels.subcontractorJustification}
-            content={pcrItem.subcontractorJustification}
+            content={<Markdown value={pcrItem.subcontractorJustification ?? ""} />}
             qa="subcontractorJustification"
             id="subcontractorJustification"
             hasError={!!getFieldState("subcontractorJustification")?.error}
