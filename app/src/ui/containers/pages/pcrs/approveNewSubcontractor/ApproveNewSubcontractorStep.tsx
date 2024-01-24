@@ -115,7 +115,7 @@ const ApproveNewSubcontractorStep = () => {
                 {getContent(x => x.pcrApproveNewSubcontractorLabels.subcontractorRelationship)}
               </Label>
               <ValidationError error={getFieldState("subcontractorRelationship").error} />
-              <RadioList name="subcontractorRelationship" register={register}>
+              <RadioList id="subcontractorRelationship" name="subcontractorRelationship" register={register}>
                 <Radio
                   id="subcontractorRelationshipYes"
                   value="true"
