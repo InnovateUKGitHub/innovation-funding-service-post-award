@@ -1453,7 +1453,7 @@
     "subcontractorRelationshipNo": "No",
     "subcontractorRelationshipJustification": "Please describe the relationship between the collaborator and the new subcontractor",
     "subcontractorLocation": "Country where the subcontractor's work will be carried out",
-    "subcontractorDescription": "Description of work to be carried out by subcontractor",
+    "subcontractorDescription": "Brief description of work to be carried out by subcontractor",
     "subcontractorJustification": "Justification",
     "subcontractorCost": "Cost of work to be carried out by the new subcontractor"
   },
