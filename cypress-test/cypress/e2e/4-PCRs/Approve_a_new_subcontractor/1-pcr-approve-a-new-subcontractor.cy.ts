@@ -1,13 +1,41 @@
-import { loremIpsum100Char, loremIpsum16k, loremIpsum32k } from "common/lorem";
 import { pcrTidyUp } from "common/pcrtidyup";
 import { visitApp } from "common/visit";
-import { contractorName255, validateSubcontractorName } from "./subcontractor-steps";
+import {
+  approveSubcontractorBacklink,
+  approveSubcontractorPromptValidation,
+  approveSubcontractorTodoState,
+  briefDescriptionInput,
+  briefDescriptionSaved,
+  changeStateToIncomplete,
+  clickNoSaveContinue,
+  clickYesNoContents,
+  createApproveNewSubcontractor,
+  currencyLengthValidation,
+  decreaseBriefDescription,
+  displayCompletedRequest,
+  displaySavedRelationship,
+  increaseBriefDescription,
+  populateRelationshipSave,
+  reduceJustificationSave,
+  relationshipBoxInput,
+  relationshipButtons,
+  saveRelationshipBox,
+  subcontractorSaveAndReturn,
+  validateCountry,
+  validateJustificationInput,
+  validateNumericCurrency,
+  validateRegistrationNumber,
+  validateRelationshipBox,
+  validateSubcontractorName,
+  workingEditButtons,
+} from "./subcontractor-steps";
+import { markAsCompleteSave } from "../steps";
 
 const pm = "james.black@euimeabs.test";
-let currency = new Intl.NumberFormat("en-GB", {
-  style: "currency",
-  currency: "GBP",
-});
+//let currency = new Intl.NumberFormat("en-GB", {
+//  style: "currency",
+//  currency: "GBP",
+//});
 
 describe("PCR > Create 'Approve a new subcontractor'", () => {
   before(() => {
@@ -19,13 +47,7 @@ describe("PCR > Create 'Approve a new subcontractor'", () => {
     cy.deletePcr("328407");
   });
 
-  it("Should create a new 'Approve a new subcontractor' PCR", () => {
-    cy.getByLabel("Approve a new subcontractor").check();
-    cy.get(".govuk-hint").contains("If you are requesting a change in subcontractor, please select this option.");
-    cy.wait(500);
-    cy.button("Create request").click();
-    cy.heading("Request");
-  });
+  it("Should create a new 'Approve a new subcontractor' PCR", createApproveNewSubcontractor);
 
   //it("Should add 5 more types and correctly display them in the Request page", () => {
   //  cy.get("a").contains("Add types").click();
@@ -53,15 +75,9 @@ describe("PCR > Create 'Approve a new subcontractor'", () => {
   //  });
   //});
 
-  it("Should have a working backlink", () => {
-    cy.heading("Request");
-    cy.get("li").contains("Approve a new subcontractor").click();
-    cy.heading("Approve a new subcontractor");
-    cy.backLink("Back to request").click();
-    cy.heading("Request");
-    cy.get("li").contains("Approve a new subcontractor").click();
-    cy.heading("Approve a new subcontractor");
-  });
+  it("Should have a working backlink", approveSubcontractorBacklink);
+
+  it("Should display the Approve new subcontractor in the correct To do state", approveSubcontractorTodoState);
 
   it("Should have guidance copy at the top of the page", () => {
     cy.paragraph(
@@ -69,35 +85,10 @@ describe("PCR > Create 'Approve a new subcontractor'", () => {
     );
   });
 
-  it("Should mark 'yes', save and continue, then mark as 'I agree with this change' and click 'Submit request' prompting validation", () => {
-    cy.getByLabel("Yes").click();
-    cy.button("Save and continue").click();
-    [
-      "Company name of subcontractor",
-      "Company registration number",
-      "Is there a relationship between the partner and the subcontractor?",
-      "Please describe the relationship between the collaborator and the new subcontractor",
-      "Country where the subcontractor's work will be carried out",
-      "Brief description of work to be carried out by subcontractor",
-      "Justification",
-      "Cost of work to be carried out by the new subcontractor",
-    ].forEach(list => {
-      cy.getListItemFromKey(list, "Edit");
-    });
-    cy.get("legend").contains("Mark as complete");
-    cy.getByLabel("I agree with this change").click();
-    cy.button("Save and return to request").click();
-    [
-      "subcontractor's name.",
-      "subcontractor's registration number",
-      "country where the subcontractor's work will be carried out.",
-      "description of work to be carried out by the subcontractor.",
-      "cost of work to be carried out by the new subcontractor.",
-      "justification for including the subcontractor.",
-    ].forEach(pcrtype => {
-      cy.validationLink(`Enter the ${pcrtype}`);
-    });
-  });
+  it(
+    "Should mark 'yes', save and continue, then mark as 'I agree with this change' and click 'Submit request' prompting validation",
+    approveSubcontractorPromptValidation,
+  );
 
   it("Should return to previous screen by clicking an Edit button", () => {
     cy.getListItemFromKey("Company name of subcontractor", "Edit").click();
@@ -108,33 +99,18 @@ describe("PCR > Create 'Approve a new subcontractor'", () => {
     cy.reload();
   });
 
+  it("Should save and return to request and check for the updated status", subcontractorSaveAndReturn);
+
   it("Should validate the length of the company name input field to 255 characters", validateSubcontractorName);
 
-  it("Should validate that a maximum of 20 characters can be entered into registration number", () => {
-    cy.getByLabel("Company registration number");
-    cy.reload();
-    cy.getByLabel("Company registration number").clear().type("123456789123456789012");
-    cy.button("Save and continue").click();
-    cy.validationLink("Subcontractor's registration number must be 20 characters or less.");
-    cy.paragraph("Subcontractor's registration number must be 20 characters or less.");
-    cy.getByLabel("Company registration number").clear().type("Reg-1234591234567891");
-    cy.button("Save and continue").click();
-    cy.getListItemFromKey("Company registration number", "Reg-1234591234567891");
-    cy.getListItemFromKey("Company registration number", "Edit").click();
-  });
+  it(
+    "Should validate that a maximum of 20 characters can be entered into registration number",
+    validateRegistrationNumber,
+  );
 
-  it("Should have  'Is there a relationship' Yes/No radio buttons", () => {
-    cy.getByLabel("Is there a relationship between the partner and the subcontractor?");
-    cy.getByLabel("Yes");
-    cy.getByLabel("No").click();
-  });
+  it("Should have 'Is there a relationship' Yes/No radio buttons", relationshipButtons);
 
-  it("Should display an input box once 'yes' is selected", () => {
-    cy.get(".govuk-radios__conditional--hidden");
-    cy.getByLabel("Yes").click();
-    cy.get(".govuk-radios__conditional");
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor");
-  });
+  it("Should display an input box once 'yes' is selected", relationshipBoxInput);
 
   it("Should remove the input box if 'No' is selected", () => {
     cy.getByLabel("No").click();
@@ -146,207 +122,53 @@ describe("PCR > Create 'Approve a new subcontractor'", () => {
     cy.get(".govuk-radios__conditional");
   });
 
-  it("Should validate maximum 16k character input", () => {
-    cy.paragraph("You have 16000 characters remaining");
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor")
-      .invoke("val", loremIpsum16k)
-      .trigger("input");
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor")
-      .type("{moveToEnd}")
-      .type("t");
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor").type(
-      "{moveToEnd}{backspace}",
-    );
-    cy.paragraph("You have 0 characters remaining");
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor")
-      .type("{moveToEnd}")
-      .type("l");
-    cy.paragraph("You have 1 character too many");
-    cy.button("Save and continue").click();
-    cy.validationLink("Relationship between the partner and the subcontractor must be 16000 characters or less.");
-    cy.paragraph("Relationship between the partner and the subcontractor must be 16000 characters or less.");
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor").type(
-      "{moveToEnd}{backspace}",
-    );
-  });
+  it("Should validate maximum 16k character input", validateRelationshipBox);
 
-  it("Should save 16k characters and continue", () => {
-    cy.button("Save and continue").click();
-    cy.getListItemFromKey(
-      "Please describe the relationship between the collaborator and the new subcontractor",
-      "Pippin's",
-    );
-  });
+  it("Should save 16k characters and continue", saveRelationshipBox);
 
-  it("Should return and display the populated box", () => {
-    cy.getListItemFromKey(
-      "Please describe the relationship between the collaborator and the new subcontractor",
-      "Edit",
-    ).click();
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor").should(
-      "have.value",
-      loremIpsum16k,
-    );
-  });
+  it("Should return and display the populated box", displaySavedRelationship);
 
-  it("Should allow you to click 'No' and then save and continue", () => {
-    cy.getByLabel("No").click();
-    cy.get(".govuk-radios__conditional--hidden");
-    cy.button("Save and continue").click();
-    cy.get("dt").should(
-      "not.have.text",
-      "Please describe the relationship between the collaborator and the new subcontractor",
-    );
-    cy.getListItemFromKey("Company name of subcontractor", "Edit").click();
-  });
+  it("Should allow you to click 'No' and then save and continue", clickNoSaveContinue);
 
-  it("Click 'Yes' and the contents are no longer there.", () => {
-    cy.getByLabel("Yes").click();
-    cy.get(".govuk-radios__conditional");
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor").should(
-      "have.value",
-      "",
-    );
-  });
+  it("Click 'Yes' and the contents are no longer there.", clickYesNoContents);
 
-  it("Should populate the relationship information", () => {
-    cy.getByLabel("Please describe the relationship between the collaborator and the new subcontractor")
-      .invoke("val", loremIpsum16k)
-      .trigger("input");
-  });
+  it("Should populate the relationship information and save", populateRelationshipSave);
 
-  it("Should validate 'Country where the subcontractor's work will be carried out' for 100 characters", () => {
-    cy.getByLabel("Country where the subcontractor's work will be carried out")
-      .invoke("val", loremIpsum100Char)
-      .trigger("input");
-    cy.getByLabel("Country where the subcontractor's work will be carried out").type("{moveToEnd}").type("l");
-    cy.button("Save and continue").click();
-    cy.validationLink("Country where the subcontactor's work will be carried out must be 100 characters or less.");
-    cy.paragraph("Country where the subcontactor's work will be carried out must be 100 characters or less.");
-    cy.getByLabel("Country where the subcontractor's work will be carried out").type("{moveToEnd}{backspace}");
-    cy.button("Save and continue").click();
-    cy.getListItemFromKey("Country where the subcontractor's work will be carried out", loremIpsum100Char);
-    cy.getListItemFromKey("Country where the subcontractor's work will be carried out", "Edit").click();
-  });
+  it(
+    "Should validate 'Country where the subcontractor's work will be carried out' for 100 characters",
+    validateCountry,
+  );
 
-  it("Should have a 'Brief description of work to be carried out by subcontractor' input", () => {
-    cy.getByLabel("Brief description of work to be carried out by subcontractor")
-      .clear()
-      .invoke("val", contractorName255)
-      .trigger("input");
-    cy.getByLabel("Brief description of work to be carried out by subcontractor").type("{moveToEnd}").type("t");
-    cy.getByLabel("Brief description of work to be carried out by subcontractor").type("{moveToEnd}{backspace}");
-  });
+  it("Should have a 'Brief description of work to be carried out by subcontractor' input", briefDescriptionInput);
 
   it("Should not display character counter", () => {
     cy.get(".character-count").contains("You have 0 characters remaining");
   });
 
-  it("Should increase character count by one revealing character counter", () => {
-    cy.getByLabel("Brief description of work to be carried out by subcontractor").type("{moveToEnd}").type("t");
-    cy.get(".character-count");
-    cy.paragraph("You have 1 character too many");
-    cy.button("Save and continue").click();
-    cy.validationLink("Description of work to be carried out by the subcontractor must be 255 characters or less");
-    cy.paragraph("Description of work to be carried out by the subcontractor must be 255 characters or less");
+  it("Should increase character count by one revealing character counter", increaseBriefDescription);
+
+  it("Should reduce the number of characters to 255 and save and continue", decreaseBriefDescription);
+
+  it("Should have saved the Brief description and the box is populated", briefDescriptionSaved);
+
+  it("Should have a GBP currency input field that only accepts number input", validateNumericCurrency);
+
+  it("Should have a 12 numeric character limitation on the currency input field", currencyLengthValidation);
+
+  it("Should have a 'Justification' input which will accept 32k characters", validateJustificationInput);
+
+  it("Should reduce and save and continue", reduceJustificationSave);
+
+  it("Should display the completed request", displayCompletedRequest);
+
+  it("Should have a working Edit button against each list item", workingEditButtons);
+
+  it("Should have a mark as complete section", markAsCompleteSave);
+
+  it("Should show the section as complete", () => {
+    cy.get("li").contains("Approve a new subcontractor");
+    cy.get("li").contains("Complete");
   });
 
-  it("Should reduce the number of characters to 255 and save and continue", () => {
-    cy.getByLabel("Brief description of work to be carried out by subcontractor").type("{moveToEnd}{backspace}");
-    cy.paragraph("You have 0 characters remaining");
-    cy.button("Save and continue").click();
-    cy.getListItemFromKey("Brief description of work to be carried out by subcontractor", contractorName255);
-    cy.getListItemFromKey("Brief description of work to be carried out by subcontractor", "Edit").click();
-  });
-
-  it("Should have saved the Brief description and the box is populated", () => {
-    cy.getByLabel("Brief description of work to be carried out by subcontractor").should(
-      "have.value",
-      contractorName255,
-    );
-  });
-
-  it("Should have a GBP currency input field that only accepts number input", () => {
-    cy.get(".govuk-input__prefix").should("have.text", "£");
-    ["Lorem ipsum", "$^*", "*()", "/``/q", "99.999"].forEach(input => {
-      cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear().type(input);
-      cy.button("Save and continue").click();
-      cy.validationLink("Enter a valid cost of work.");
-      cy.paragraph("Enter a valid cost of work.");
-      cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear();
-    });
-  });
-
-  /**
-   * TODO: Double-check ACs
-   */
-  it("Should have a 11 numeric character limitation on the currency input field", () => {
-    cy.getByLabel("Cost of work to be carried out by the new subcontractor").type("999999999999");
-    cy.button("Save and continue").click();
-    cy.validationLink("Cost of work must be 11 characters or less.");
-    cy.paragraph("Cost of work must be 21 characters or less.");
-    cy.getByLabel("Cost of work to be carried out by the new subcontractor").type("{moveToEnd}{backspace}");
-    cy.button("Save and continue").click();
-    cy.getListItemFromKey("Cost of work to be carried out by the new subcontractor", "£99,999,999,999.00");
-    cy.getListItemFromKey("Cost of work to be carried out by the new subcontractor", "Edit").click();
-  });
-  /**
-   * TODO: TEMP STEP UNTIL BUG FIXED WITH CURRENCY BOX
-   */
-  it("Should clear currency box for now", () => {
-    cy.getByLabel("Cost of work to be carried out by the new subcontractor").clear();
-  });
-
-  it("Should have a 'Justification' input which will accept 32k characters", () => {
-    cy.getByLabel("Justification").invoke("val", loremIpsum32k).trigger("input");
-    cy.getByLabel("Justification").type("{moveToEnd}").type("1");
-    cy.paragraph("You have 1 character too many");
-    cy.button("Save and continue").click();
-    cy.validationLink("Justification for including the subcontractor must be 32000 characters or less");
-    cy.paragraph("Justification for including the subcontractor must be 32000 characters or less");
-  });
-
-  it("Should reduce and save and continue", () => {
-    cy.getByLabel("Justification").type("{moveToEnd}{backspace}");
-    cy.paragraph("You have 0 characters remaining");
-    cy.button("Save and continue").click();
-    cy.getListItemFromKey("Justification", "Pippin's");
-  });
-
-  it("Should display the completed request", () => {
-    [
-      ["Company name of subcontractor", ""],
-      ["Company registration number", ""],
-      ["Is there a relationship between the partner and the subcontractor?", ""],
-      ["Please describe the relationship between the collaborator and the new subcontractor", ""],
-      ["Country where the subcontractor's work will be carried out", ""],
-      ["Description of the work to be carried out by subcontractor", ""],
-      ["Justification", ""],
-      ["Cost of the work to be carried out by the new subcontractor", ""],
-    ].forEach(([key, item]) => {
-      cy.getListItemFromKey(key, item);
-    });
-  });
-
-  it("Should have a working Edit button against each list item", () => {
-    [
-      "Company name of subcontractor",
-      "Company registration number",
-      "Is there a relationship between the partner and the subcontractor?",
-      "Please describe the relationship between the collaborator and the new subcontractor",
-      "Country where the subcontractor's work will be carried out",
-      "Description of the work to be carried out by subcontractor",
-      "Justification",
-      "Cost of the work to be carried out by the new subcontractor",
-    ].forEach(listItem => {
-      cy.getListItemFromKey(listItem, "Edit").click();
-      cy.getByLabel("Company name of subcontractor");
-      cy.button("Save and continue").click();
-    });
-  });
-
-  it("Should have a mark as complete section", () => {
-    cy.get("legend").contains("Mark as complete");
-    cy.getByLabel("I agree with this change").click();
-  });
+  it("Should change the status to Incomplete by unticking 'I agree with this change'.", changeStateToIncomplete);
 });
